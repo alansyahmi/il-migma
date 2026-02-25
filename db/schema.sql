@@ -1,0 +1,294 @@
+-- ============================================================
+-- Il-Miġma' Database Schema
+-- Engine: Turso (libSQL / SQLite-compatible)
+-- Run via: turso db shell <db-name> < db/schema.sql
+-- ============================================================
+
+PRAGMA journal_mode = WAL;
+PRAGMA foreign_keys = ON;
+
+-- ─── Roots ────────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS roots (
+  id            TEXT PRIMARY KEY,
+  consonants    TEXT NOT NULL UNIQUE,  -- e.g. "k-t-b"
+  consonant_array TEXT NOT NULL,       -- JSON array e.g. ["k","t","b"]
+  notes         TEXT,
+  created_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_roots_consonants ON roots(consonants);
+
+-- ─── Patterns ─────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS patterns (
+  id              TEXT PRIMARY KEY,
+  cv_notation     TEXT NOT NULL UNIQUE,  -- e.g. "CaCaC"
+  wizen_notation  TEXT NOT NULL,         -- e.g. "Fagħal" (Arabised)
+  example_word    TEXT,
+  tags            TEXT,                  -- JSON array
+  created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- ─── Root-Pattern Junction ─────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS root_pattern_forms (
+  id            TEXT PRIMARY KEY,
+  root_id       TEXT NOT NULL REFERENCES roots(id) ON DELETE CASCADE,
+  pattern_id    TEXT NOT NULL REFERENCES patterns(id) ON DELETE CASCADE,
+  derived_form  TEXT NOT NULL,  -- surface realisation
+  UNIQUE(root_id, pattern_id, derived_form)
+);
+
+CREATE INDEX IF NOT EXISTS idx_rpf_root ON root_pattern_forms(root_id);
+CREATE INDEX IF NOT EXISTS idx_rpf_pattern ON root_pattern_forms(pattern_id);
+
+-- ─── Entries ───────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS entries (
+  id                    TEXT PRIMARY KEY,
+  headword              TEXT NOT NULL,
+  pos                   TEXT NOT NULL CHECK(pos IN (
+    'noun','verb','adjective','adverb','preposition',
+    'conjunction','particle','article','pronoun','interrogative',
+    'numeral','interjection'
+  )),
+  root_pattern_form_id  TEXT REFERENCES root_pattern_forms(id),
+  is_loanword           INTEGER NOT NULL DEFAULT 0,
+  source_language       TEXT,
+  tags                  TEXT,  -- JSON array
+
+  -- Noun morphology
+  noun_gender           TEXT CHECK(noun_gender IN ('masculine','feminine','common')),
+  noun_singular         TEXT,
+  noun_plural_forms     TEXT,  -- JSON array (multiple broken plurals)
+  noun_sound_plural     TEXT,
+  noun_dual             TEXT,
+  noun_diminutive       TEXT,
+  noun_collective       TEXT,
+  noun_singulative      TEXT,
+
+  -- Verb morphology
+  verb_class            TEXT CHECK(verb_class IN ('strong','weak','doubled','quadrilateral','loan')),
+  verb_transitivity     TEXT CHECK(verb_transitivity IN ('transitive','intransitive','both')),
+  verb_perfective_3sgm  TEXT,
+  verb_imperfective_3sgm TEXT,
+  verb_verbal_noun      TEXT,
+  verb_active_ptcp      TEXT,
+  verb_passive_ptcp     TEXT,
+
+  -- Adjective morphology
+  adj_masculine         TEXT,
+  adj_feminine          TEXT,
+  adj_plural            TEXT,
+  adj_elative           TEXT,
+
+  created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_entries_headword ON entries(headword);
+CREATE INDEX IF NOT EXISTS idx_entries_pos ON entries(pos);
+
+-- ─── Full-Text Search ──────────────────────────────────────────────────────
+CREATE VIRTUAL TABLE IF NOT EXISTS entries_fts USING fts5(
+  headword,
+  content='entries',
+  content_rowid='rowid'
+);
+
+-- ─── Definitions ──────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS definitions (
+  id            TEXT PRIMARY KEY,
+  entry_id      TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+  subentry_id   TEXT,  -- NULL if directly under entry
+  sense_number  INTEGER NOT NULL DEFAULT 1,
+  text_mt       TEXT NOT NULL,
+  text_en       TEXT NOT NULL,
+  register      TEXT CHECK(register IN ('formal','informal','archaic','technical','dialectal','colloquial')),
+  field         TEXT,  -- domain e.g. "Law", "Medicine"
+  sort_order    INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE INDEX IF NOT EXISTS idx_defs_entry ON definitions(entry_id);
+
+-- ─── Example Sentences ────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS example_sentences (
+  id            TEXT PRIMARY KEY,
+  definition_id TEXT NOT NULL REFERENCES definitions(id) ON DELETE CASCADE,
+  maltese       TEXT NOT NULL,
+  english       TEXT,
+  source        TEXT
+);
+
+-- ─── Sub-Entries ──────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS subentries (
+  id            TEXT PRIMARY KEY,
+  entry_id      TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+  headword      TEXT NOT NULL,
+  pos           TEXT,
+  tags          TEXT,  -- JSON array
+  sort_order    INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE INDEX IF NOT EXISTS idx_subentries_entry ON subentries(entry_id);
+
+-- ─── Phonetics ────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS phonetics (
+  id            TEXT PRIMARY KEY,
+  entry_id      TEXT REFERENCES entries(id) ON DELETE CASCADE,
+  subentry_id   TEXT REFERENCES subentries(id) ON DELETE CASCADE,
+  ipa           TEXT NOT NULL,
+  dialect       TEXT DEFAULT 'Standard',
+  notes         TEXT,
+  CHECK(entry_id IS NOT NULL OR subentry_id IS NOT NULL)
+);
+
+-- ─── Audio Files ──────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS audio_files (
+  id                TEXT PRIMARY KEY,
+  entry_id          TEXT REFERENCES entries(id) ON DELETE CASCADE,
+  subentry_id       TEXT REFERENCES subentries(id) ON DELETE CASCADE,
+  r2_object_key     TEXT NOT NULL UNIQUE,
+  dialect           TEXT DEFAULT 'standard',
+  is_ai_generated   INTEGER NOT NULL DEFAULT 1,
+  duration_seconds  REAL,
+  generated_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  CHECK(entry_id IS NOT NULL OR subentry_id IS NOT NULL)
+);
+
+-- ─── Lexical Sources (Authority Weights) ──────────────────────────────────
+CREATE TABLE IF NOT EXISTS lexical_sources (
+  id                 TEXT PRIMARY KEY,
+  name               TEXT NOT NULL UNIQUE,           -- short name e.g. "Aquilina"
+  full_title         TEXT NOT NULL,
+  author             TEXT,
+  year               INTEGER,
+  reliability_weight REAL NOT NULL CHECK(reliability_weight >= 0 AND reliability_weight <= 1),
+  source_type        TEXT NOT NULL CHECK(source_type IN (
+    'academic','official','peer_reviewed','crowdsourced','historical'
+  )),
+  url                TEXT
+);
+
+-- Seed authoritative sources
+INSERT OR IGNORE INTO lexical_sources VALUES
+  ('src-aquilina',   'Aquilina',           'Maltese-English Dictionary (2 vols)',                    'J. Aquilina',             1987, 0.92, 'academic',      NULL),
+  ('src-kunsill',    'Kunsill tal-Malti',  'Official decisions of the Kunsill tal-Malti',            'Kunsill tal-Malti',       NULL, 0.88, 'official',      'https://kunsilltalmalti.gov.mt'),
+  ('src-bartoli',    'Bartoli',            'Etymological studies on Maltese',                        'M. G. Bartoli',           1902, 0.80, 'historical',    NULL),
+  ('src-borg',       'Borg & AA',          'Maltese: A Functional Grammar for Students',             'A. Borg, M. Azzopardi-Alexander', 1997, 0.78, 'academic', NULL),
+  ('src-peer',       'Peer-Reviewed',      'Journal of Maltese Linguistics and related journals',   NULL,                      NULL, 0.70, 'peer_reviewed', NULL),
+  ('src-crowd',      'Crowdsourced',       'Community-submitted entries (unverified)',               NULL,                      NULL, 0.25, 'crowdsourced',  NULL);
+
+-- ─── Attestation Reliability ─────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS attestation_reliability (
+  id                TEXT PRIMARY KEY,
+  entry_id          TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+  reliability_index REAL NOT NULL CHECK(reliability_index >= 0 AND reliability_index <= 100),
+  computed_at       TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  UNIQUE(entry_id)
+);
+
+CREATE TABLE IF NOT EXISTS attestation_scores (
+  id                    TEXT PRIMARY KEY,
+  attestation_id        TEXT NOT NULL REFERENCES attestation_reliability(id) ON DELETE CASCADE,
+  source_id             TEXT NOT NULL REFERENCES lexical_sources(id),
+  attested              INTEGER NOT NULL DEFAULT 1,  -- 1 = confirmed, 0 = rejected
+  notes                 TEXT
+);
+
+-- ─── Etymologies ─────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS etymologies (
+  id              TEXT PRIMARY KEY,
+  entry_id        TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+  chain           TEXT NOT NULL,  -- JSON array of EtymologyNode objects
+  notes           TEXT
+);
+
+-- ─── Dialect Variants ────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS dialect_variants (
+  id            TEXT PRIMARY KEY,
+  entry_id      TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+  region        TEXT NOT NULL,
+  variant_form  TEXT NOT NULL,
+  notes         TEXT
+);
+
+-- ─── Users ────────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS users (
+  id              TEXT PRIMARY KEY,
+  clerk_id        TEXT NOT NULL UNIQUE,
+  email           TEXT NOT NULL UNIQUE,
+  display_name    TEXT,
+  tier            TEXT NOT NULL DEFAULT 'basic' CHECK(tier IN ('basic','pro','enterprise')),
+  ads_disabled    INTEGER NOT NULL DEFAULT 0,
+  audio_unlocked  INTEGER NOT NULL DEFAULT 0,
+  created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- ─── Subscriptions ────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS subscriptions (
+  id                        TEXT PRIMARY KEY,
+  user_id                   TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  tier                      TEXT NOT NULL CHECK(tier IN ('pro','enterprise')),
+  started_at                TEXT NOT NULL,
+  expires_at                TEXT,
+  stripe_subscription_id    TEXT UNIQUE,
+  is_lifetime               INTEGER NOT NULL DEFAULT 0
+);
+
+-- ─── API Keys (Enterprise) ───────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS api_keys (
+  id                    TEXT PRIMARY KEY,
+  user_id               TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  name                  TEXT NOT NULL,
+  key_hash              TEXT NOT NULL UNIQUE,   -- bcrypt hash, never store plain
+  key_prefix            TEXT NOT NULL,          -- first 8 chars for display
+  usage_count           INTEGER NOT NULL DEFAULT 0,
+  rate_limit_per_month  INTEGER NOT NULL DEFAULT 10000,
+  is_active             INTEGER NOT NULL DEFAULT 1,
+  created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  last_used_at          TEXT
+);
+
+-- ─── Flashcard Lists ─────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS flashcard_lists (
+  id          TEXT PRIMARY KEY,
+  user_id     TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  name        TEXT NOT NULL,
+  entry_ids   TEXT NOT NULL DEFAULT '[]',  -- JSON array
+  created_at  TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at  TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- ─── Suggested Entries ────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS suggested_entries (
+  id                    TEXT PRIMARY KEY,
+  submitted_by_user_id  TEXT REFERENCES users(id) ON DELETE SET NULL,
+  headword              TEXT NOT NULL,
+  notes                 TEXT NOT NULL,
+  status                TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','approved','rejected')),
+  vote_count            INTEGER NOT NULL DEFAULT 0,
+  submitted_at          TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- ─── Votes ────────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS votes (
+  id                    TEXT PRIMARY KEY,
+  user_id               TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  suggested_entry_id    TEXT NOT NULL REFERENCES suggested_entries(id) ON DELETE CASCADE,
+  value                 INTEGER NOT NULL CHECK(value IN (1, -1)),
+  reason                TEXT,
+  voted_at              TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  UNIQUE(user_id, suggested_entry_id)
+);
+
+-- ─── Blog Posts ───────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS blog_posts (
+  id              TEXT PRIMARY KEY,
+  slug            TEXT NOT NULL UNIQUE,
+  title           TEXT NOT NULL,
+  excerpt         TEXT,
+  content_md      TEXT NOT NULL,
+  author          TEXT NOT NULL DEFAULT 'Il-Miġma''',
+  published_at    TEXT,
+  tags            TEXT,  -- JSON array
+  cover_image_url TEXT
+);

@@ -1,0 +1,46 @@
+{
+  "name": "il-migma",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "import:dry": "node scripts/import-xls.mjs --dry-run",
+    "import:all": "node scripts/import-xls.mjs --execute",
+    "import:roots": "node scripts/import-xls.mjs --execute --roots-only",
+    "import:nouns": "node scripts/import-xls.mjs --execute --nouns-only"
+  },
+  "dependencies": {
+    "@clerk/clerk-react": "^5.30.0",
+    "@google/generative-ai": "^0.24.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.488.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.5.3",
+    "tailwind-merge": "^3.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@libsql/client": "^0.17.0",
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "dotenv": "^17.3.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "tailwindcss": "^4.1.11",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.48.0",
+    "vite": "^7.3.1",
+    "xlsx": "^0.18.5"
+  }
+}

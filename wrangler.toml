@@ -1,0 +1,13 @@
+name = "il-migma"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[r2_buckets]]
+binding = "AUDIO_BUCKET"
+bucket_name = "il-migma-audio"
+
+# Cloudflare Vectorize (Pro semantic search - stub)
+# [[vectorize]]
+# binding = "VECTORIZE"
+# index_name = "il-migma-entries"

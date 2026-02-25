@@ -1,0 +1,417 @@
+// ─── Linguistic Modes ──────────────────────────────────────────────────────
+export type LinguisticMode = 'standard' | 'arabised';
+
+// ─── Parts of Speech ───────────────────────────────────────────────────────
+export type POS =
+    | 'noun'
+    | 'verb'
+    | 'adjective'
+    | 'adverb'
+    | 'preposition'
+    | 'conjunction'
+    | 'particle'
+    | 'article'
+    | 'pronoun'
+    | 'interrogative'
+    | 'numeral'
+    | 'interjection';
+
+export type Gender = 'masculine' | 'feminine' | 'common';
+export type Transitivity = 'transitive' | 'intransitive' | 'both';
+export type VerbClass =
+    | 'strong'
+    | 'assimilative'
+    | 'defective-għ'
+    | 'defective-j/w'
+    | 'defective-gem'
+    | 'hollow'
+    | 'geminated'
+    | 'quadrilateral'
+    | 'form-ii-strong'
+    | 'form-ii-defective'
+    | 'form-ii-hollow'
+    | 'loan';
+export type SourceLanguage =
+    | 'Arabic'
+    | 'Sicilian'
+    | 'Italian'
+    | 'Latin'
+    | 'French'
+    | 'English'
+    | 'Spanish'
+    | 'Berber'
+    | 'Greek'
+    | 'Uncertain';
+
+// ─── Root / Pattern ────────────────────────────────────────────────────────
+export interface Root {
+    id: string;
+    consonants: string;        // e.g. "k-t-b"
+    consonant_array: string[]; // e.g. ["k","t","b"]
+    notes?: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Pattern {
+    id: string;
+    cv_notation: string;   // e.g. "CaCaC"
+    wizen_notation: string; // e.g. "Fagħal" — Arabised CV name
+    example_word?: string;
+    tags?: string[];
+    created_at: string;
+}
+
+export interface RootPatternForm {
+    id: string;
+    root_id: string;
+    pattern_id: string;
+    derived_form: string; // surface form
+    root?: Root;
+    pattern?: Pattern;
+}
+
+// ─── Morphology ────────────────────────────────────────────────────────────
+export interface NounMorphology {
+    gender: Gender;
+    singular: string;
+    plural_forms: string[];        // can have multiple broken plurals
+    sound_plural?: string;
+    dual?: string;
+    diminutive?: string;
+    collective?: string;           // for collective nouns (e.g. siġra/siġar)
+    singulative?: string;
+}
+
+export interface ConjugationRow {
+    person_mt: string;   // e.g. "jiena"
+    person_en: string;   // e.g. "I"
+    imperfect: string;          // base positive form (e.g. "nikteb")
+    imperfect_attached?: string; // vowel-adjusted stem for suffix attachment (e.g. "niktib")
+    perfect: string;            // perfect positive
+    perfect_neg?: string;       // perfect negative form (3sg may shift vowel grade)
+    // Stems used for automated suffix attachment (clitics)
+    stems?: {
+        /** Vowel-shifted stem for consonant-initial suffixes (-ni, -ha, -hom). e.g., jiktib- */
+        impfType1: string;
+        /** Syncopated/Shifted stem for vowel-initial suffixes (-u, -ok). e.g., jiktb- */
+        impfType2: string;
+        /** Perfect vowel-shifted stem. e.g., kitbit- */
+        perfType1: string;
+        /** Perfect base/syncopated stem. e.g., kitb- */
+        perfType2: string;
+    };
+}
+
+export interface VerbConjugationTable {
+    rows: ConjugationRow[];
+    imperative_sg: string;
+    imperative_pl: string;
+    /** Clitic attachment stems for imperative singular */
+    imperative_sg_stems?: { impfType1: string; impfType2: string };
+    /** Clitic attachment stems for imperative plural */
+    imperative_pl_stems?: { impfType1: string; impfType2: string };
+    // Negative forms (shown when polarity toggle = Negative)
+    imperative_sg_neg?: string;
+    imperative_pl_neg?: string;
+    /** Whether this verb blocks the automatic a->ie vowel shift (Imala) b/c of a final guttural */
+    blocksImala?: boolean;
+}
+
+export interface VerbMorphology {
+    verb_class: VerbClass;
+    transitivity: Transitivity;
+    perfective_3sg_m: string;      // citation form
+    imperfective_3sg_m: string;
+    verbal_noun?: string;          // misder
+    active_participle?: string;    // fiegħel
+    passive_participle?: string;   // mifgħul
+    // Verb form (I, II, III …)
+    form?: string;
+    // Root classification tags shown in sub-header
+    root_tags?: string[];          // e.g. ['BASE', 'STRONG'] or ['BASE', 'WEAK', 'HOLLOW']
+    // Vowel sets — stored separately per tense (may differ: e.g. bagħat has perfect a-a, imperfect i-a)
+    vowel_set_perfect?: string;    // e.g. "i-e" for kiteb (perfect)
+    vowel_set_imperfect?: string;  // e.g. "i-e" for kiteb (imperfect/attached)
+    vowel_set_imperative?: string; // e.g. "i-e" for kiteb (imperative)
+    // Legacy combined field — kept for backwards compat but prefer the per-tense fields
+    vowel_set_base?: string;       // deprecated: use vowel_set_perfect
+    vowel_set_attached?: string;   // deprecated: use vowel_set_imperfect
+    // Full conjugation paradigm (optional — engine auto-generates if absent)
+    conjugation?: VerbConjugationTable;
+    // Thesaurus
+    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    // Related entries from same root
+    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    // Source citation
+    source_citation?: string;
+}
+
+export interface AdjectiveMorphology {
+    masculine: string;
+    feminine: string;
+    plural: string;
+    elative?: string;             // "most X" form
+}
+
+// ─── Phonetics ─────────────────────────────────────────────────────────────
+export interface Phonetic {
+    id: string;
+    entry_id?: string;
+    subentry_id?: string;
+    ipa: string;
+    dialect?: string;            // e.g. "Standard", "Żejtun", "Valletta"
+    notes?: string;
+}
+
+// ─── Audio ─────────────────────────────────────────────────────────────────
+export interface AudioFile {
+    id: string;
+    entry_id?: string;
+    subentry_id?: string;
+    r2_object_key: string;
+    dialect?: string;
+    generated_at: string;
+    is_ai_generated: boolean;
+    duration_seconds?: number;
+}
+
+// ─── Lexical Sources & Attestation ────────────────────────────────────────
+export interface LexicalSource {
+    id: string;
+    name: string;              // e.g. "Aquilina"
+    full_title: string;
+    author?: string;
+    year?: number;
+    reliability_weight: number; // 0.0 – 1.0
+    source_type: 'academic' | 'official' | 'peer_reviewed' | 'crowdsourced' | 'historical';
+    url?: string;
+}
+
+export interface AttestationScore {
+    source_id: string;
+    source_name: string;
+    reliability_weight: number;
+    attested: boolean;          // did this source confirm this entry?
+    notes?: string;
+    source?: LexicalSource;
+}
+
+export interface AttestationReliability {
+    id: string;
+    entry_id: string;
+    reliability_index: number;  // 0–100 computed score
+    scores: AttestationScore[];
+    computed_at: string;
+}
+
+// ─── Etymology ─────────────────────────────────────────────────────────────
+export interface EtymologyNode {
+    language: SourceLanguage;
+    form: string;               // word form in source language
+    meaning?: string;
+    script?: string;            // e.g. Arabic script version
+    time_period?: string;
+}
+
+export interface Etymology {
+    id: string;
+    entry_id: string;
+    chain: EtymologyNode[];     // ordered oldest → newest
+    notes?: string;
+    attestation?: AttestationReliability;
+}
+
+// ─── SubEntry ──────────────────────────────────────────────────────────────
+export interface SubEntry {
+    id: string;
+    entry_id: string;
+    headword: string;
+    pos?: POS;
+    definitions: Definition[];
+    example_sentences?: ExampleSentence[];
+    phonetics?: Phonetic[];
+    audio?: AudioFile[];
+    tags?: string[];
+    sort_order: number;
+}
+
+// ─── Definitions & Examples ────────────────────────────────────────────────
+export interface Definition {
+    id: string;
+    sense_number: number;
+    text_mt: string;             // Maltese definition
+    text_en: string;             // English translation/gloss
+    register?: 'formal' | 'informal' | 'archaic' | 'technical' | 'dialectal' | 'colloquial';
+    field?: string;              // domain, e.g. "Law", "Medicine"
+    example_sentences?: ExampleSentence[];
+}
+
+export interface ExampleSentence {
+    id: string;
+    maltese: string;
+    english?: string;
+    source?: string;
+}
+
+// ─── Dialect Variant ───────────────────────────────────────────────────────
+export interface DialectVariant {
+    id: string;
+    entry_id: string;
+    region: string;             // e.g. "Valletta", "Gozo", "Żejtun"
+    variant_form: string;
+    phonetics?: Phonetic[];
+    audio?: AudioFile[];
+    notes?: string;
+}
+
+// ─── Main Entry ────────────────────────────────────────────────────────────
+export interface Entry {
+    id: string;
+    headword: string;
+    pos: POS;
+    root_pattern_form_id?: string;
+    root_pattern_form?: RootPatternForm;
+
+    // POS-specific morphology (only one will be populated)
+    noun_morphology?: NounMorphology;
+    verb_morphology?: VerbMorphology;
+    adjective_morphology?: AdjectiveMorphology;
+
+    definitions: Definition[];
+    subentries?: SubEntry[];
+    phonetics?: Phonetic[];
+    audio?: AudioFile[];
+    etymologies?: Etymology[];
+    dialect_variants?: DialectVariant[];
+
+    // Flags
+    is_loanword: boolean;
+    source_language?: SourceLanguage;
+    tags?: string[];
+
+    created_at: string;
+    updated_at: string;
+}
+
+// ─── User / Auth / Tiers ───────────────────────────────────────────────────
+export type Tier = 'basic' | 'pro' | 'enterprise';
+
+export interface User {
+    id: string;
+    clerk_id: string;
+    email: string;
+    display_name?: string;
+    tier: Tier;
+    ads_disabled: boolean;       // paid €2.99 lifetime to disable ads
+    audio_unlocked: boolean;     // paid €1.99 lifetime or Pro
+    created_at: string;
+}
+
+export interface Subscription {
+    id: string;
+    user_id: string;
+    tier: Tier;
+    started_at: string;
+    expires_at?: string;
+    stripe_subscription_id?: string;
+    is_lifetime: boolean;
+}
+
+export interface ApiKey {
+    id: string;
+    user_id: string;
+    name: string;
+    key_prefix: string;          // show first 8 chars only
+    usage_count: number;
+    rate_limit_per_month: number;
+    created_at: string;
+    last_used_at?: string;
+    is_active: boolean;
+}
+
+// ─── Flashcards ────────────────────────────────────────────────────────────
+export interface FlashcardList {
+    id: string;
+    user_id: string;
+    name: string;
+    entry_ids: string[];
+    created_at: string;
+    updated_at: string;
+}
+
+// ─── Community ─────────────────────────────────────────────────────────────
+export interface SuggestedEntry {
+    id: string;
+    submitted_by_user_id?: string;
+    headword: string;
+    notes: string;
+    status: 'pending' | 'approved' | 'rejected';
+    vote_count: number;
+    submitted_at: string;
+}
+
+export interface Vote {
+    id: string;
+    user_id: string;
+    suggested_entry_id: string;
+    value: 1 | -1;
+    reason?: string;
+    voted_at: string;
+}
+
+// ─── Search ────────────────────────────────────────────────────────────────
+export interface SearchResult {
+    entry: Entry;
+    score?: number;              // relevance score (semantic search)
+    match_type: 'exact' | 'prefix' | 'fulltext' | 'semantic';
+    highlight?: string;
+}
+
+export interface SearchFilters {
+    pos?: POS[];
+    source_language?: SourceLanguage[];
+    min_reliability?: number;
+    tags?: string[];
+}
+
+// ─── Chat ──────────────────────────────────────────────────────────────────
+export type ChatRole = 'user' | 'assistant' | 'system';
+
+export interface ChatMessage {
+    id: string;
+    role: ChatRole;
+    content: string;
+    timestamp: string;
+    dialect?: string;
+}
+
+// ─── Blog ──────────────────────────────────────────────────────────────────
+export interface BlogPost {
+    id: string;
+    slug: string;
+    title: string;
+    excerpt: string;
+    content_md: string;
+    author: string;
+    published_at: string;
+    tags?: string[];
+    cover_image_url?: string;
+}
+
+// ─── Feature gates ─────────────────────────────────────────────────────────
+export type Feature =
+    | 'semantic_search'
+    | 'unlimited_audio'
+    | 'dialect_variants'
+    | 'chatbot'
+    | 'inflector'
+    | 'semmej'
+    | 'grammar_checker'
+    | 'corpus_insights'
+    | 'suggest_dialect'
+    | 'export_flashcards'
+    | 'vote_suggestions'
+    | 'api_access'
+    | 'api_key_management';
