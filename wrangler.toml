@@ -2,7 +2,6 @@ name = "il-migma"
 pages_build_output_dir = "dist"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
-main = "src/index.ts"
 
 [assets]
 directory = "./dist"
