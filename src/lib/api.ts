@@ -94,3 +94,29 @@ export async function adminDeleteEntry(token: string, id: string) {
         headers: { Authorization: `Bearer ${token}` },
     });
 }
+
+// ── Roots Admin ─────────────────────────────────────────────────────────────
+
+export async function adminListRoots(token: string, q?: string) {
+    const params = new URLSearchParams();
+    if (q) params.set('q', q);
+    return apiFetch<{ roots: any[] }>(`/api/admin/roots?${params}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminCreateRoot(token: string, data: { consonants: string; notes?: string }) {
+    return apiFetch('/api/admin/roots', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function adminDeleteRoot(token: string, id: string) {
+    return apiFetch(`/api/admin/roots?id=${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+

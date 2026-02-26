@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { adminCreateEntry, adminDeleteEntry } from '@/lib/api';
+import { adminCreateEntry, adminUpdateEntry } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export const POS_OPTIONS = [
@@ -100,12 +100,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             };
             if (isEdit && entry) payload.id = entry.id;
 
-            // If editing, we actually delete and recreate in the mock API or just update
-            // For now follow the original logic in Admin.tsx
             if (isEdit && entry) {
-                await adminDeleteEntry(token, entry.id);
+                await adminUpdateEntry(token, payload);
+            } else {
+                await adminCreateEntry(token, payload);
             }
-            await adminCreateEntry(token, payload);
 
             onSaved();
         } catch (err: any) {
