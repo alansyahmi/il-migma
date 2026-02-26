@@ -182,7 +182,6 @@ function FilterHybrid({
 }
 
 const EGYPTIAN_BLUE = '#1034A6';
-const BLUE = '#1034A6';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface InflectionRow {
