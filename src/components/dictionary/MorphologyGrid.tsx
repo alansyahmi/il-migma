@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
-import { Tooltip } from '@/components/ui/Tooltip';
+
 import type { Entry } from '@/types';
 
 interface MorphologyGridProps {
@@ -10,6 +10,7 @@ interface MorphologyGridProps {
 
 export function MorphologyGrid({ entry }: MorphologyGridProps) {
     const { term } = useLinguisticMode();
+    const isTheoretical = entry.tags?.includes('THEORETICAL') || entry.verb_morphology?.root_tags?.includes('THEORETICAL');
 
     if (entry.pos === 'noun' && entry.noun_morphology) {
         const m = entry.noun_morphology;
@@ -47,13 +48,14 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     </span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 divide-x divide-y divide-[#ede9e1]">
-                    <Cell label="Perfettiv (3sg.m)" value={<strong className="font-headword">{m.perfective_3sg_m}</strong>} />
-                    <Cell label="Imperfettiv (3sg.m)" value={<strong className="font-headword">{m.imperfective_3sg_m}</strong>} />
-                    <Cell label="Klassi" value={m.verb_class} />
+                    <Cell label="Perfettiv (3sg.m)" value={<strong className="font-headword">{isTheoretical && '*'}{m.perfective_3sg_m}</strong>} />
+                    <Cell label="Imperfettiv (3sg.m)" value={<strong className="font-headword">{isTheoretical && '*'}{m.imperfective_3sg_m}</strong>} />
+                    <Cell label="Forma" value={m.form} />
+                    <Cell label="Saħħa" value={entry.root_pattern_form?.root?.strength === 'strong-hybrid' ? 'Strong' : entry.root_pattern_form?.root?.strength} />
                     <Cell label="Transittività" value={term(m.transitivity) ?? m.transitivity} />
-                    {m.verbal_noun && <Cell label="Nom verbal (masdar)" value={m.verbal_noun} />}
-                    {m.active_participle && <Cell label={term('participle') + ' attiv'} value={m.active_participle} />}
-                    {m.passive_participle && <Cell label={term('participle') + ' passiv'} value={m.passive_participle} />}
+                    {m.verbal_noun && <Cell label="Nom verbal (masdar)" value={(isTheoretical && !m.verbal_noun.startsWith('*') ? '*' : '') + m.verbal_noun} />}
+                    {m.active_participle && <Cell label={term('participle') + ' attiv'} value={(isTheoretical && !m.active_participle.startsWith('*') ? '*' : '') + m.active_participle} />}
+                    {m.passive_participle && <Cell label={term('participle') + ' passiv'} value={(isTheoretical && !m.passive_participle.startsWith('*') ? '*' : '') + m.passive_participle} />}
                 </div>
             </div>
         );

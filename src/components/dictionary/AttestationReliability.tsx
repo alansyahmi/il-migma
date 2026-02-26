@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatReliability, reliabilityBarColor, cn } from '@/lib/utils';
+import { reliabilityBarColor, cn } from '@/lib/utils';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { Info } from 'lucide-react';
 import type { AttestationReliability as AttestationReliabilityType } from '@/types';

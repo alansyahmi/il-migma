@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 interface TierGateProps {
     feature: Feature;
-    children: React.ReactNode;
+    children?: React.ReactNode;
     fallback?: React.ReactNode;
     className?: string;
 }

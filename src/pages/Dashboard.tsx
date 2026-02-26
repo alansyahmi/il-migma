@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SignIn, SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/Button';
-import { Card, CardBody, CardHeader } from '@/components/ui/Card';
+import { Card, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { TierGate } from '@/components/ui/TierGate';
 import { Tabs, TabContent } from '@/components/ui/Tabs';
 import { Key, Copy, Plus, Trash2, Check, Sparkles, BookMarked, CreditCard } from 'lucide-react';
 import { generateId } from '@/lib/utils';
-import { cn } from '@/lib/utils';
+
 
 const DASHBOARD_TABS = [
     { id: 'account', label: 'Kont' },

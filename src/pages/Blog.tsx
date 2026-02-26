@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/Badge';
 import { MOCK_BLOG_POSTS } from '@/data/mockData';

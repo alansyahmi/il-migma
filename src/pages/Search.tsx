@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search as SearchIcon, Keyboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -29,51 +29,7 @@ interface SearchResult {
     inflections: InflectionRow[];
 }
 
-// ── Mock data (ktb example) ────────────────────────────────────────────────
-const MOCK_RESULTS: SearchResult[] = [
-    {
-        id: 'kiteb', headword: 'kiteb', root: 'k-t-b', rootSlug: 'ktb',
-        pos: 'VERB', formLines: ['FORM I', 'BASE', 'STRONG'],
-        definitions: ['to write', 'to inscribe', 'to name sb. as the heir of sth.'],
-        inflections: [
-            { label: 'Imperfect', form: 'jikteb', hasPage: false },
-            { label: 'Passive', form: 'miktub', hasPage: false },
-            { label: 'Active', form: 'kieteb', hasPage: false, marker: '*' },
-            { label: 'Noun', form: 'ktib', hasPage: true },
-        ],
-    },
-    {
-        id: 'kitteb', headword: 'kitteb', root: 'k-t-b', rootSlug: 'ktb',
-        pos: 'VERB', formLines: ['FORM II', 'DERIVED', 'STRONG'],
-        definitions: ['to make someone write', 'to make someone inscribe'],
-        inflections: [
-            { label: 'Imperfect', form: 'jkitteb', hasPage: false },
-            { label: 'Passive', form: 'mkitteb', hasPage: false },
-            { label: 'Active', form: 'kittieb', hasPage: true },
-            { label: 'Noun', form: 'tiktib', hasPage: true },
-        ],
-    },
-    {
-        id: 'ktieb', headword: 'ktieb', root: 'k-t-b', rootSlug: 'ktb',
-        gender: 'masculine',
-        pos: 'NOUN', formLines: ['FORM I'],
-        definitions: ['book', 'ledger'],
-        inflections: [
-            { label: 'Dual', form: 'ktibejn', hasPage: false, marker: '✦' },
-            { label: 'Plural', form: 'kotba', hasPage: false },
-        ],
-    },
-    {
-        id: 'kittieb', headword: 'kittieb', root: 'k-t-b', rootSlug: 'ktb',
-        pos: 'NOUN', formLines: ['FORM I', 'ACTIVE'],
-        definitions: ['writer'],
-        inflections: [
-            { label: 'Feminine', form: 'kittieba', hasPage: false },
-            { label: 'Dual', form: 'kittibejn', hasPage: false, marker: '✦' },
-            { label: 'Plural', form: 'kittibin', hasPage: false },
-        ],
-    },
-];
+
 
 // ── Filter state ───────────────────────────────────────────────────────────
 interface Filters {
@@ -110,7 +66,7 @@ function FilterSelect({
     options: { value: string; label: string }[];
 }) {
     const [open, setOpen] = useState(false);
-    const ref = React.useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement>(null);
     const selectedLabel = options.find(o => o.value === value)?.label ?? options[0]?.label;
 
     // Close on outside click

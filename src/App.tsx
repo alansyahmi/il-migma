@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { ClerkProvider } from '@clerk/clerk-react';
 import { LinguisticModeProvider } from '@/contexts/LinguisticModeContext';

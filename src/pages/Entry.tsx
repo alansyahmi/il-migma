@@ -4,8 +4,9 @@ import { MOCK_ENTRIES } from '@/data/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import type { Entry } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
-import { generateConjugation, type VerbClass as EngineVerbClass } from '@/lib/conjugationEngine';
+import { generateConjugation } from '@/lib/conjugationEngine';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
@@ -112,6 +113,7 @@ function DerivedTermLink({ label, value }: { label: string; value: string }) {
 function VerbEntryView({ entry }: { entry: Entry }) {
     const { t } = useLanguage();
     const { term, mode } = useLinguisticMode();
+    const { isAdmin } = useAuth();
 
     const vm = entry.verb_morphology!;
     const ety = entry.etymologies?.[0];
@@ -126,33 +128,34 @@ function VerbEntryView({ entry }: { entry: Entry }) {
     const [ioIdx, setIoIdx] = useState<number | null>(null);
 
     const isNeg = polarity === 'Negative';
-    // Use new per-tense vowel sets (prefer new fields, fall back to legacy)
-    const vsetImpf = vm.vowel_set_imperfect ?? vm.vowel_set_base ?? 'i-e';
-    const vsetPerf = vm.vowel_set_perfect ?? vm.vowel_set_base ?? 'i-e';
-    const vsetImp = vm.vowel_set_imperative ?? vm.vowel_set_imperfect ?? 'i-e';
+    const isTheoretical = entry.tags?.includes('THEORETICAL') || vm.root_tags?.includes('THEORETICAL');
+    // Use new per-tense vowel sets
+    const vsetImpf = vm.vowel_set_imperfect;
+    const vsetPerf = vm.vowel_set_perfect;
+    const vsetImp = vm.vowel_set_imperative;
 
     // Derive or use stored conjugation
     const conj = useMemo(() => {
         if (vm.conjugation) return vm.conjugation;
         // Auto-generate
-        const root = entry.root_pattern_form?.root?.consonants;
-        if (!root) return null;
-        const verbClass = vm.verb_class as EngineVerbClass;
-        const knownClasses: EngineVerbClass[] = [
-            'strong', 'assimilative', 'defective-għ', 'defective-j/w',
-            'defective-gem', 'hollow', 'geminated', 'form-ii-strong',
-            'form-ii-defective', 'form-ii-hollow'
-        ];
-        if (!knownClasses.includes(verbClass)) return null;
+        const rootStr = entry.root_pattern_form?.root?.consonants;
+        const rootObj = entry.root_pattern_form?.root;
+        if (!rootStr || !rootObj) return null;
+
         try {
             return generateConjugation({
-                root,
-                verbClass,
+                root: rootStr,
+                form: vm.form,
+                strength: rootObj.strength,
+                weakClass: rootObj.weak_class,
+                isGeminate: rootObj.is_geminate,
+                isImalaBlocked: rootObj.is_imala_blocked,
                 vowelSetPerfect: vsetPerf,
                 vowelSetImperfect: vsetImpf,
                 vowelSetImperative: vsetImp,
             });
-        } catch {
+        } catch (e) {
+            console.error("Conjugation error:", e);
             return null;
         }
     }, [vm, vsetPerf, vsetImpf, vsetImp, entry]);
@@ -168,10 +171,13 @@ function VerbEntryView({ entry }: { entry: Entry }) {
     const ioLabels = getIoLabels(vsetImpf);
 
 
+    const strengthLabel = entry.root_pattern_form?.root?.strength === 'strong-hybrid' ? 'STRONG' : entry.root_pattern_form?.root?.strength?.toUpperCase();
+
     const subParts = [
         t('VERB', term('verb')).toUpperCase(),
         vm.form ? `FORM ${vm.form}` : null,
-        ...(vm.root_tags ?? []).map(tag => tag.toUpperCase())
+        strengthLabel,
+        ...(vm.root_tags ?? []).filter(tag => tag !== 'STRONG').map(tag => tag.toUpperCase())
     ].filter(Boolean);
 
     const patternLabel = mode === 'arabised' ? "Wiżen" : "CV";
@@ -188,7 +194,7 @@ function VerbEntryView({ entry }: { entry: Entry }) {
 
                 <div className="text-center mb-8">
                     <h1 className="font-serif font-bold text-[3rem] leading-none text-[#000] tracking-tight">
-                        {entry.headword}
+                        {isTheoretical && '*'}{entry.headword}
                     </h1>
                     <p className="text-xs font-sans text-black/40 tracking-[0.18em] mt-2 uppercase">
                         — {subParts.join(' • ')} —
@@ -272,14 +278,25 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                                     <span className="capitalize">{vm.transitivity === 'transitive' ? t('Transitive', term('Tranżittiv')) : vm.transitivity === 'intransitive' ? t('Intransitive', term('Intranżittiv')) : t('Both', term('It-Tnejn'))}</span>
                                 </PropRow>
 
-                                {(vm.vowel_set_perfect || vm.vowel_set_imperfect || vm.vowel_set_imperative || vm.vowel_set_base || vm.vowel_set_attached) && (
-                                    <PropRow label={t('Vowel Set', term("Sett ta' Vokali"))}>
-                                        <div className="space-y-0.5 text-sm">
-                                            {(vm.vowel_set_perfect ?? vm.vowel_set_base) && <p>{t('Perfect', term('Perfett'))} <span className="opacity-55 text-[0.7rem]">{t('(Past)', term('(Past)'))}</span>: <span className="font-mono">{vm.vowel_set_perfect ?? vm.vowel_set_base}</span></p>}
-                                            {(vm.vowel_set_imperfect ?? vm.vowel_set_attached) && <p>{t('Imperfect', term('Imperfett'))} <span className="opacity-55 text-[0.7rem]">{t('(Present)', term('(Present)'))}</span>: <span className="font-mono">{vm.vowel_set_imperfect ?? vm.vowel_set_attached}</span></p>}
-                                            {vm.vowel_set_imperative && <p>{t('Imperative', term('Imperattiv'))}: <span className="font-mono">{vm.vowel_set_imperative}</span></p>}
+                                <PropRow label={t('Vowel Set', term("Sett ta' Vokali"))}>
+                                    <div className="space-y-0.5 text-sm">
+                                        <p>{t('Perfect', term('Perfett'))} <span className="opacity-55 text-[0.7rem]">{t('(Past)', term('(Past)'))}</span>: <span className="font-mono">{vm.vowel_set_perfect}</span></p>
+                                        <p>{t('Imperfect', term('Imperfett'))} <span className="opacity-55 text-[0.7rem]">{t('(Present)', term('(Present)'))}</span>: <span className="font-mono">{vm.vowel_set_imperfect}</span></p>
+                                        <p>{t('Imperative', term('Imperattiv'))}: <span className="font-mono">{vm.vowel_set_imperative}</span></p>
+                                    </div>
+                                </PropRow>
+
+                                {/* Admin / Technical Metadata */}
+                                {isAdmin && entry.root_pattern_form?.root && (
+                                    <div className="mt-6 pt-6 border-t border-black/5">
+                                        <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">Internal Metadata</p>
+                                        <div className="text-[11px] font-mono space-y-1 text-black/50">
+                                            <p>Strength: {entry.root_pattern_form.root.strength}</p>
+                                            {entry.root_pattern_form.root.weak_class && <p>Weak Class: {entry.root_pattern_form.root.weak_class}</p>}
+                                            <p>Geminate: {entry.root_pattern_form.root.is_geminate ? 'Yes' : 'No'}</p>
+                                            <p>Imala Blocked: {entry.root_pattern_form.root.is_imala_blocked ? 'Yes' : 'No'}</p>
                                         </div>
-                                    </PropRow>
+                                    </div>
                                 )}
                             </div>
 
@@ -308,18 +325,19 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                                                         {t(row.person_en, row.person_mt)}
                                                     </td>
                                                     <td className="py-1.5 pr-4 font-serif font-normal text-[#000]">
-                                                        {buildVerbForm(
+                                                        {isTheoretical && '*'}{buildVerbForm(
                                                             row.imperfect,
                                                             isNeg,
                                                             doIdx,
                                                             ioIdx,
                                                             vsetImpf,
                                                             row.stems,
-                                                            conj?.blocksImala || false
+                                                            conj?.blocksImala || false,
+                                                            vm.form
                                                         )}
                                                     </td>
                                                     <td className="py-1.5 font-serif font-normal text-[#000]">
-                                                        {buildPerfectForm(
+                                                        {isTheoretical && '*'}{buildPerfectForm(
                                                             row.perfect,
                                                             row.perfect_neg ?? row.perfect,
                                                             isNeg,
@@ -327,7 +345,8 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                                                             ioIdx,
                                                             vsetPerf,
                                                             row.stems,
-                                                            conj?.blocksImala || false
+                                                            conj?.blocksImala || false,
+                                                            vm.form
                                                         )}
                                                     </td>
                                                 </tr>
@@ -351,8 +370,8 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                                                         impfType2: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1')
                                                     });
 
-                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false);
-                                                    return isNeg ? result.replace(/^ma /, '') : result;
+                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
+                                                    return (isTheoretical ? '*' : '') + (isNeg ? result.replace(/^ma /, '') : result);
                                                 })()}
                                             </p>
                                         </div>
@@ -369,8 +388,8 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                                                         impfType2: conj.imperative_pl
                                                     });
 
-                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false);
-                                                    return isNeg ? result.replace(/^ma /, '') : result;
+                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
+                                                    return (isTheoretical ? '*' : '') + (isNeg ? result.replace(/^ma /, '') : result);
                                                 })()}
                                             </p>
                                         </div>
@@ -421,9 +440,24 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                             <div>
                                 <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{t('Derived Terms', 'Termini Derivati')}</h2>
                                 <div className="flex gap-10 text-sm">
-                                    {vm.verbal_noun && <DerivedTermLink label={t('Verbal Noun', term('Nom Verbali'))} value={vm.verbal_noun} />}
-                                    {vm.passive_participle && <DerivedTermLink label={t('Passive Participle', term('Partiċipju Passiv'))} value={vm.passive_participle} />}
-                                    {vm.active_participle && <DerivedTermLink label={t('Active Participle', term('Partiċipju Attiv'))} value={vm.active_participle} />}
+                                    {vm.verbal_noun && (
+                                        <DerivedTermLink
+                                            label={t('Verbal Noun', term('Nom Verbali'))}
+                                            value={(isTheoretical && !vm.verbal_noun.startsWith('*') ? '*' : '') + vm.verbal_noun}
+                                        />
+                                    )}
+                                    {vm.passive_participle && (
+                                        <DerivedTermLink
+                                            label={t('Passive Participle', term('Partiċipju Passiv'))}
+                                            value={(isTheoretical && !vm.passive_participle.startsWith('*') ? '*' : '') + vm.passive_participle}
+                                        />
+                                    )}
+                                    {vm.active_participle && (
+                                        <DerivedTermLink
+                                            label={t('Active Participle', term('Partiċipju Attiv'))}
+                                            value={(isTheoretical && !vm.active_participle.startsWith('*') ? '*' : '') + vm.active_participle}
+                                        />
+                                    )}
                                 </div>
                             </div>
                         )}

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import type { LinguisticMode } from '@/types';
 import { resolveTerm } from '@/lib/terminology';
 

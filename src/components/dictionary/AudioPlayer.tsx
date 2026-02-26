@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Play, Pause, RefreshCw, Volume2 } from 'lucide-react';
 import { getAudioUrl } from '@/lib/r2';
 import { useAuth } from '@/contexts/AuthContext';
@@ -11,8 +11,8 @@ interface AudioPlayerProps {
     ipa?: string;
 }
 
-export function AudioPlayer({ audio, entryId, ipa }: AudioPlayerProps) {
-    const { audioUnlocked, hasAccess } = useAuth();
+export function AudioPlayer({ audio, ipa }: AudioPlayerProps) {
+    const { hasAccess } = useAuth();
     const [playing, setPlaying] = useState(false);
     const [loading, setLoading] = useState(false);
     const [selectedDialect, setSelectedDialect] = useState(audio[0]?.dialect ?? 'standard');

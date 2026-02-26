@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import type { Tier, Feature } from '@/types';
 
@@ -31,6 +31,7 @@ interface AuthContextValue {
     hasAccess: (feature: Feature) => boolean;
     adsEnabled: boolean;
     audioUnlocked: boolean;
+    isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -42,6 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const tier = (user?.publicMetadata?.tier as Tier | undefined) ?? 'basic';
     const adsEnabled = user?.publicMetadata?.ads_disabled !== true;
     const audioUnlocked = tier === 'pro' || tier === 'enterprise' || user?.publicMetadata?.audio_unlocked === true;
+    const isAdmin = user?.publicMetadata?.role === 'admin';
 
     const hasAccess = (feature: Feature): boolean => {
         const required = FEATURE_TIER_MAP[feature];
@@ -55,6 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             hasAccess,
             adsEnabled,
             audioUnlocked,
+            isAdmin,
         }}>
             {children}
         </AuthContext.Provider>

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { Card, CardBody } from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 import { BookOpen } from 'lucide-react';
 
 type Person = '1sg' | '2sg' | '3sg_m' | '3sg_f' | '1pl' | '2pl' | '3pl';
@@ -16,10 +16,8 @@ const PERSONS: { key: Person; label: string }[] = [
     { key: '3pl', label: 'huma' },
 ];
 
-// Minimal stub conjugation for k-t-b / kiteb (demo purposes only)
-function conjugateDemo(root: string, perf3sgm: string): Record<Person, { perf: string; imperf: string }> {
-    const c = perf3sgm.split('');
-    // Very rudimentary CaCaC pattern only — real inflector TODO
+function conjugateDemo(_perf3sgm: string): Record<Person, { perf: string; imperf: string }> {
+    // Very rudimentary CaCaC pattern only
     return {
         '1sg': { perf: 'ktibt', imperf: 'nikteb' },
         '2sg': { perf: 'ktibt', imperf: 'tikteb' },
@@ -38,7 +36,7 @@ export function Conjugator() {
 
     const handleConjugate = () => {
         if (!input.trim()) return;
-        setResult(conjugateDemo('k-t-b', input.trim()));
+        setResult(conjugateDemo(input.trim()));
     };
 
     return (
@@ -93,7 +91,7 @@ export function Conjugator() {
                     </div>
                     <div className="px-4 py-2 bg-amber-50 border-t border-amber-100">
                         <p className="text-xs text-amber-700">
-                            ⚠ Demo: bħalissa jagħti biss il-forma CaCaC (kiteb). Il-Konġugatur sħiħ jiġi breve.
+                            ⚠ Demo: bħalissa jagħti biss il-forma CaCaC (kiteb). Il-Konġugatur sħiħ jiġi dalwaqt.
                         </p>
                     </div>
                 </Card>

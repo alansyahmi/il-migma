@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { cn } from '@/lib/utils';
+
 import type { SubEntry } from '@/types';
 
 interface SubEntryBlockProps {

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, RefreshCw } from 'lucide-react';
 import { TierGate } from '@/components/ui/TierGate';
 import { Button } from '@/components/ui/Button';

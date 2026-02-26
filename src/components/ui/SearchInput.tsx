@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { debounce } from '@/lib/utils';
+
 
 interface SearchInputProps {
     value: string;

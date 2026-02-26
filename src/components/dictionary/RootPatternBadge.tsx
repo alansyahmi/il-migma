@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Tooltip } from '@/components/ui/Tooltip';
 import type { RootPatternForm } from '@/types';

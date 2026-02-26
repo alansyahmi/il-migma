@@ -18,19 +18,10 @@ export type POS =
 
 export type Gender = 'masculine' | 'feminine' | 'common';
 export type Transitivity = 'transitive' | 'intransitive' | 'both';
-export type VerbClass =
-    | 'strong'
-    | 'assimilative'
-    | 'defective-għ'
-    | 'defective-j/w'
-    | 'defective-gem'
-    | 'hollow'
-    | 'geminated'
-    | 'quadrilateral'
-    | 'form-ii-strong'
-    | 'form-ii-defective'
-    | 'form-ii-hollow'
-    | 'loan';
+
+export type VerbStrength = 'strong' | 'strong-hybrid' | 'weak';
+export type WeakClass = 'assimilative' | 'hollow' | 'defective';
+
 export type SourceLanguage =
     | 'Arabic'
     | 'Sicilian'
@@ -48,6 +39,13 @@ export interface Root {
     id: string;
     consonants: string;        // e.g. "k-t-b"
     consonant_array: string[]; // e.g. ["k","t","b"]
+
+    // Morphological Metadata (centralized)
+    strength: VerbStrength;
+    weak_class?: WeakClass;
+    is_geminate: boolean;
+    is_imala_blocked: boolean;
+
     notes?: string;
     created_at: string;
     updated_at: string;
@@ -55,7 +53,7 @@ export interface Root {
 
 export interface Pattern {
     id: string;
-    cv_notation: string;   // e.g. "CaCaC"
+    cv_notation: string;   // e.g. "CvCvC"
     wizen_notation: string; // e.g. "Fagħal" — Arabised CV name
     example_word?: string;
     tags?: string[];
@@ -119,7 +117,7 @@ export interface VerbConjugationTable {
 }
 
 export interface VerbMorphology {
-    verb_class: VerbClass;
+    // These are now derived from the root/form combo
     transitivity: Transitivity;
     perfective_3sg_m: string;      // citation form
     imperfective_3sg_m: string;
@@ -127,16 +125,13 @@ export interface VerbMorphology {
     active_participle?: string;    // fiegħel
     passive_participle?: string;   // mifgħul
     // Verb form (I, II, III …)
-    form?: string;
+    form: string;
     // Root classification tags shown in sub-header
     root_tags?: string[];          // e.g. ['BASE', 'STRONG'] or ['BASE', 'WEAK', 'HOLLOW']
-    // Vowel sets — stored separately per tense (may differ: e.g. bagħat has perfect a-a, imperfect i-a)
-    vowel_set_perfect?: string;    // e.g. "i-e" for kiteb (perfect)
-    vowel_set_imperfect?: string;  // e.g. "i-e" for kiteb (imperfect/attached)
-    vowel_set_imperative?: string; // e.g. "i-e" for kiteb (imperative)
-    // Legacy combined field — kept for backwards compat but prefer the per-tense fields
-    vowel_set_base?: string;       // deprecated: use vowel_set_perfect
-    vowel_set_attached?: string;   // deprecated: use vowel_set_imperfect
+    // Vowel sets — stored separately per tense
+    vowel_set_perfect: string;    // e.g. "i-e" for kiteb (perfect)
+    vowel_set_imperfect: string;  // e.g. "i-e" for kiteb (imperfect/attached)
+    vowel_set_imperative: string; // e.g. "i-e" for kiteb (imperative)
     // Full conjugation paradigm (optional — engine auto-generates if absent)
     conjugation?: VerbConjugationTable;
     // Thesaurus

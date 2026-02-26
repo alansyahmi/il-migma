@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Bookmark, BookmarkCheck, Share2, Flag } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
@@ -11,7 +11,6 @@ import { EtymologyChain } from './EtymologyChain';
 import { AudioPlayer } from './AudioPlayer';
 import { SubEntryBlock } from './SubEntryBlock';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { cn } from '@/lib/utils';
 import type { Entry } from '@/types';
 
 interface EntryCardProps {
@@ -30,6 +29,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
     const { term } = useLinguisticMode();
     const [activeTab, setActiveTab] = useState('definitions');
     const [saved, setSaved] = useState(false);
+    const isTheoretical = entry.tags?.includes('THEORETICAL') || entry.verb_morphology?.root_tags?.includes('THEORETICAL');
 
     const primaryIPA = entry.phonetics?.find(p => p.dialect === 'Standard')?.ipa
         ?? entry.phonetics?.[0]?.ipa;
@@ -48,10 +48,10 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                     to={`/entry/${entry.id}`}
                                     className="font-serif text-xl font-bold text-[#1034A6] hover:underline leading-tight"
                                 >
-                                    {entry.headword}
+                                    {isTheoretical && '*'}{entry.headword}
                                 </Link>
                             ) : (
-                                <span className="font-serif text-xl font-bold text-[#1B4D3E]">{entry.headword}</span>
+                                <span className="font-serif text-xl font-bold text-[#1B4D3E]">{isTheoretical && '*'}{entry.headword}</span>
                             )}
                             {primaryIPA && (
                                 <span className="ipa text-sm">[{primaryIPA}]</span>
@@ -94,7 +94,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                         <h1 className="font-serif text-4xl font-bold text-[#1B4D3E] leading-tight">
-                            {entry.headword}
+                            {isTheoretical && '*'}{entry.headword}
                         </h1>
 
                         {primaryIPA && (

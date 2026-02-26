@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -15,7 +15,7 @@ export function NotFound() {
             </p>
             <div className="flex gap-3">
                 <Link to="/">
-                    <Button variant="primary">Mur Lura d-Dar</Button>
+                    <Button variant="primary">Mur Lura lejn id-Dar</Button>
                 </Link>
                 <Link to="/search">
                     <Button variant="secondary" leftIcon={<Search size={14} />}>Fittex</Button>

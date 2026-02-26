@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon, Search } from 'lucide-react';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useDarkMode } from '@/contexts/DarkModeContext';
@@ -14,9 +14,22 @@ export function Navbar() {
     const { language, setLanguage, t } = useLanguage();
     const { dark, toggle: toggleDark } = useDarkMode();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
 
     const isArabised = mode === 'arabised';
     const { pathname } = useLocation();
+
+    const showSearch = !['/', '/search', '/advanced-search'].includes(pathname);
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+            setSearchQuery('');
+            setMenuOpen(false);
+        }
+    };
 
     const navLinks = [
         { label: t('Advanced Search', term('Tiftix Avvanzat')), href: '/advanced-search' },
@@ -29,33 +42,52 @@ export function Navbar() {
         <header className="sticky top-0 z-40 bg-[#F4F3F0]/95 backdrop-blur-sm border-b border-[#d8cfc0]/50">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
 
-                {/* Logo — Newsreader medium */}
-                <Link to="/" className="font-serif font-medium text-xl text-[#000] hover:opacity-70 transition-opacity shrink-0">
-                    Il-Migma'
-                </Link>
+                {/* Left Section (Logo + Nav) */}
+                <div className="flex items-center gap-6 lg:gap-8">
+                    {/* Logo — Newsreader medium */}
+                    <Link to="/" className="font-serif font-medium text-xl text-[#000] hover:opacity-70 transition-opacity shrink-0">
+                        Il-Migma'
+                    </Link>
 
-                {/* Desktop nav links */}
-                <nav className="hidden md:flex items-center gap-1">
-                    {navLinks.map(link => {
-                        const active = pathname === link.href || pathname.startsWith(link.href + '/');
-                        return (
-                            <Link
-                                key={link.href}
-                                to={link.href}
-                                className={cn(
-                                    'text-sm text-[#000] font-sans px-3 py-1.5 rounded-md transition-all',
-                                    'hover:shadow-[0_1px_6px_rgba(0,0,0,0.10)] hover:bg-white/60',
-                                    active ? 'font-semibold' : 'font-normal',
-                                )}
-                            >
-                                {link.label}
-                            </Link>
-                        );
-                    })}
-                </nav>
+                    {/* Desktop nav links */}
+                    <nav className="hidden md:flex items-center gap-1">
+                        {navLinks.map(link => {
+                            const active = pathname === link.href || pathname.startsWith(link.href + '/');
+                            return (
+                                <Link
+                                    key={link.href}
+                                    to={link.href}
+                                    className={cn(
+                                        'text-sm text-[#000] font-sans px-3 py-1.5 rounded-md transition-all',
+                                        'hover:shadow-[0_1px_6px_rgba(0,0,0,0.10)] hover:bg-white/60',
+                                        active ? 'font-semibold' : 'font-normal',
+                                    )}
+                                >
+                                    {link.label}
+                                </Link>
+                            );
+                        })}
+                    </nav>
+                </div>
 
                 {/* Right controls */}
                 <div className="flex items-center gap-1.5">
+
+                    {/* Desktop Search Bar */}
+                    {showSearch && (
+                        <div className="hidden md:block w-48 lg:w-64 mr-3">
+                            <form onSubmit={handleSearch} className="relative">
+                                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder={t('Search...', 'Fittex...')}
+                                    className="w-full bg-white/60 border border-[#d8cfc0] rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1034A6] focus:bg-white transition-all placeholder:text-gray-500 text-[#000]"
+                                />
+                            </form>
+                        </div>
+                    )}
 
                     {/* ① وزن / CV — Arabised vs Standard terminology */}
                     <button
@@ -128,6 +160,20 @@ export function Navbar() {
             {/* Mobile dropdown */}
             {menuOpen && (
                 <div className="md:hidden border-t border-[#d8cfc0]/50 bg-[#F4F3F0] px-4 py-3 space-y-0.5 animate-fade-in">
+                    {showSearch && (
+                        <div className="pb-3 mb-1 mt-1 border-b border-[#ede9e1]">
+                            <form onSubmit={handleSearch} className="relative">
+                                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder={t('Search...', 'Fittex...')}
+                                    className="w-full bg-white border border-[#d8cfc0] rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1034A6] placeholder:text-gray-400"
+                                />
+                            </form>
+                        </div>
+                    )}
                     {navLinks.map(link => {
                         const active = pathname === link.href || pathname.startsWith(link.href + '/');
                         return (

@@ -82,28 +82,27 @@ export function applyReverseImala(stem: string, blocksImala: boolean = false): s
 
 // ── ie-collapse ────────────────────────────────────────────────────────────
 
-export function collapseIe(word: string): string {
-    const isNeg = word.startsWith('ma ') && word.endsWith('x');
+export function collapseIe(word: string, verbForm?: string): string {
     const matches = [...word.matchAll(/ie/g)];
+    if (matches.length === 0) return word;
 
-    if (matches.length > 1) {
-        // Multi-ie case: leftmost reverts
+    const total = matches.length;
+
+    /** decide whether ie should shorten to 'e' (Form III root), 'i' (clitics/standard) */
+    const getShortForm = (offset: number) => {
+        if (verbForm === 'III' && offset < 6) return 'e';
+        return 'i';
+    };
+
+    if (total > 1) {
         let count = 0;
-        const total = matches.length;
-        return word.replace(/ie/g, () => {
+        return word.replace(/ie/g, (_match, offset) => {
             count++;
-            return count < total ? 'i' : 'ie';
+            if (count < total) {
+                return getShortForm(offset);
+            }
+            return 'ie';
         });
-    }
-
-    if (isNeg && matches.length === 1) {
-        // Single ie in negative form: collapse if not in the final syllable (before -x)
-        const match = matches[0];
-        const after = word.slice(match.index! + 2);
-        // If there's another vowel or a significant cluster after ie, it reverts due to stress shift
-        if (/[aeiouàèìòùâêîôû]/.test(after) || after.length > 2) {
-            return word.replace('ie', 'i');
-        }
     }
 
     return word;
@@ -112,8 +111,8 @@ export function collapseIe(word: string): string {
 // ── Negative wrap ──────────────────────────────────────────────────────────
 
 /** Wrap a suffixed stem: "ma <stem>x" */
-export function negWrap(stem: string, suffix: string): string {
-    return collapseIe(`ma ${stem}${suffix}x`);
+export function negWrap(stem: string, suffix: string, verbForm?: string): string {
+    return collapseIe(`ma ${stem}${suffix}x`, verbForm);
 }
 
 // ── Suffix tables ──────────────────────────────────────────────────────────
@@ -158,7 +157,7 @@ export interface SuffixResult {
  * @param doIdx 0=ni, 1=ek/ok, 2=u, 3=ha, 4=na, 5=kom, 6=hom
  * @param vset  Vowel set string, e.g. "i-e"
  */
-export function applyDo(stem: string, doIdx: number, vset: string): SuffixResult {
+export function applyDo(stem: string, doIdx: number, vset: string, verbForm?: string): SuffixResult {
     const round = isRound(vset);
     const last = stem[stem.length - 1];
     const isVowelEnd = /[aeiouw]/.test(last);
@@ -171,13 +170,13 @@ export function applyDo(stem: string, doIdx: number, vset: string): SuffixResult
         if (doIdx === 1) { // -ek/-ok -> -k
             return {
                 positive: modStem + 'k',
-                negative: collapseIe(`ma ${modStem}kx`),
+                negative: collapseIe(`ma ${modStem}kx`, verbForm),
             };
         }
         if (doIdx === 2) { // -u -> -h
             return {
                 positive: modStem + 'h',
-                negative: collapseIe(`ma ${modStem}hx`),
+                negative: collapseIe(`ma ${modStem}hx`, verbForm),
             };
         }
 
@@ -188,7 +187,7 @@ export function applyDo(stem: string, doIdx: number, vset: string): SuffixResult
             const negInner = round ? DO_NEG_ROUND_INNER[doIdx] : DO_NEG_INNER[doIdx];
             return {
                 positive: modStem + posSuffix,
-                negative: collapseIe(`ma ${modStem}${negInner}x`),
+                negative: collapseIe(`ma ${modStem}${negInner}x`, verbForm),
             };
         }
     }
@@ -198,7 +197,7 @@ export function applyDo(stem: string, doIdx: number, vset: string): SuffixResult
     const negInner = round ? DO_NEG_ROUND_INNER[doIdx] : DO_NEG_INNER[doIdx];
     return {
         positive: stem + posSuffix,
-        negative: negWrap(stem, negInner),
+        negative: negWrap(stem, negInner, verbForm),
     };
 }
 
@@ -206,7 +205,7 @@ export function applyDo(stem: string, doIdx: number, vset: string): SuffixResult
  * Apply Indirect Object suffix to an attached verb stem.
  * @param doIdx 0=li, 1=lek/lok, 2=lu, 3=lha/ilha, 4=lna/ilna, 5=lkom/ilkom, 6=lhom/ilhom
  */
-export function applyIo(stem: string, ioIdx: number, vset: string): SuffixResult {
+export function applyIo(stem: string, ioIdx: number, vset: string, verbForm?: string): SuffixResult {
     const round = isRound(vset);
     const il = needsIl(stem);
 
@@ -223,7 +222,7 @@ export function applyIo(stem: string, ioIdx: number, vset: string): SuffixResult
 
     return {
         positive: stem + posSuffix,
-        negative: negWrap(stem, negInner),
+        negative: negWrap(stem, negInner, verbForm),
     };
 }
 
@@ -236,6 +235,7 @@ export function applyDoIo(
     doIdx: number,
     ioIdx: number,
     vset: string,
+    verbForm?: string,
 ): SuffixResult {
     const homDoIdx = doIdx === 6; // DO=hom needs -lok for IO=2sg
     const round = isRound(vset);
@@ -267,7 +267,7 @@ export function applyDoIo(
             ? (ilNeg ? IO_NEG_IL_ROUND_INNER[ioIdx] : IO_NEG_ROUND_INNER[ioIdx])
             : (ilNeg ? IO_NEG_IL_INNER[ioIdx] : IO_NEG_INNER[ioIdx]);
     }
-    const negative = collapseIe(`ma ${midStemNeg}${ioNegInner}x`);
+    const negative = collapseIe(`ma ${midStemNeg}${ioNegInner}x`, verbForm);
 
     return { positive, negative };
 }
@@ -288,7 +288,8 @@ export function buildVerbForm(
     ioIdx: number | null,
     vset: string,
     stems?: { impfType1: string; impfType2: string },
-    blocksImala: boolean = false
+    blocksImala: boolean = false,
+    verbForm?: string
 ): string {
     // ── Handle Slashed Variants (e.g. mmur / nmur) ───────────────────────
     if (baseForm.includes(' / ')) {
@@ -301,7 +302,7 @@ export function buildVerbForm(
                 impfType1: partsT1[i] ?? partsT1[0],
                 impfType2: partsT2[i] ?? partsT2[0],
             };
-            return buildVerbForm(b, isNeg, doIdx, ioIdx, vset, s, blocksImala);
+            return buildVerbForm(b, isNeg, doIdx, ioIdx, vset, s, blocksImala, verbForm);
         });
         return results.join(' / ');
     }
@@ -315,7 +316,7 @@ export function buildVerbForm(
             if (blocksImala && baseForm.endsWith("'")) {
                 stem = baseForm.replace(/'$/, '');
             }
-            return collapseIe(`ma ${stem}x`);
+            return collapseIe(`ma ${stem}x`, verbForm);
         }
         return baseForm;
     }
@@ -327,22 +328,24 @@ export function buildVerbForm(
     let result: string;
     if (doIdx !== null && ioIdx !== null) {
         // Combined DO+IO: use Type 1 stem
-        const res = applyDoIo(t1, doIdx, ioIdx, vset);
+        const res = applyDoIo(t1, doIdx, ioIdx, vset, verbForm);
         result = isNeg ? res.negative : res.positive;
     } else if (doIdx !== null) {
         // DO idx 1 (-ek/-ok) and idx 2 (-u) are vowel-initial -> syncopated stem (Type 2)
-        const stem = (doIdx === 1 || doIdx === 2) ? t2 : t1;
-        const res = applyDo(stem, doIdx, vset);
+        // EXCEPTION: if the base stem ends in a vowel (Defective/Perfective), syncing produces illegal clusters
+        // or misses the -h/-k suffix variants. So we use t1.
+        const stem = (doIdx === 1 || doIdx === 2) ? (/[aeiouwàèìòùâêîôû]$/i.test(t1) ? t1 : t2) : t1;
+        const res = applyDo(stem, doIdx, vset, verbForm);
         result = isNeg ? res.negative : res.positive;
     } else {
         // IO only:
         // idx 3-6 (-lha/-lna/-lkom/-lhom) -> need Type 2 stem so -il- epenthesis fires
         const stem = (ioIdx! >= 3) ? t2 : t1;
-        const res = applyIo(stem, ioIdx!, vset);
+        const res = applyIo(stem, ioIdx!, vset, verbForm);
         result = isNeg ? res.negative : res.positive;
     }
 
-    return collapseIe(result);
+    return collapseIe(result, verbForm);
 }
 
 export function buildPerfectForm(
@@ -353,13 +356,14 @@ export function buildPerfectForm(
     ioIdx: number | null,
     vset: string,
     stems?: { perfType1: string; perfType2: string },
-    blocksImala: boolean = false
+    blocksImala: boolean = false,
+    verbForm?: string
 ): string {
     const base = isNeg ? perfectNeg : perfectPos;
 
     if (doIdx === null && ioIdx === null) {
         if (isNeg) {
-            return collapseIe(`ma ${applyReverseImala(perfectNeg, blocksImala)}x`);
+            return collapseIe(`ma ${applyReverseImala(perfectNeg, blocksImala)}x`, verbForm);
         }
         return perfectPos;
     }
@@ -371,7 +375,7 @@ export function buildPerfectForm(
     let finalResult: string;
 
     if (doIdx !== null && ioIdx !== null) {
-        const result = applyDoIo(t1, doIdx, ioIdx, vset);
+        const result = applyDoIo(t1, doIdx, ioIdx, vset, verbForm);
         finalResult = isNeg ? result.negative : result.positive;
     } else if (doIdx !== null) {
         let perfBase = t1;
@@ -381,21 +385,23 @@ export function buildPerfectForm(
                 perfBase = base.slice(0, -2) + 'it';
             } else if (base.endsWith('it')) {
                 perfBase = base;
+            } else if (/[aeiouwàèìòùâêîôû]$/i.test(t1)) {
+                perfBase = t1;
             } else if (!base.endsWith('na')) {
                 perfBase = t2;
             }
         } else if (doIdx === 1) {
             perfBase = base.endsWith('na') ? t1 : t2;
         }
-        const result = applyDo(perfBase, doIdx, vset);
+        const result = applyDo(perfBase, doIdx, vset, verbForm);
         finalResult = isNeg ? result.negative : result.positive;
     } else {
         const stem = (ioIdx! >= 3) ? (base.endsWith('na') ? t1 : t2) : t1;
-        const result = applyIo(stem, ioIdx!, vset);
+        const result = applyIo(stem, ioIdx!, vset, verbForm);
         finalResult = isNeg ? result.negative : result.positive;
     }
 
-    return collapseIe(finalResult);
+    return collapseIe(finalResult, verbForm);
 }
 
 // ── Label arrays for UI strips ─────────────────────────────────────────────

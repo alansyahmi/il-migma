@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TierGate } from '@/components/ui/TierGate';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { generateMalteseName } from '@/lib/gemini';
 import { Sparkles, Wand2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+
 
 export function IsSemmej() {
     const { hasAccess } = useAuth();
