@@ -3,7 +3,7 @@
  * Protected by Clerk JWT verification.
  */
 
-import { createClient } from '@libsql/client';
+import { createClient } from '@libsql/client/web';
 
 async function verifyAdmin(request, env) {
     const auth = request.headers.get('Authorization') ?? '';

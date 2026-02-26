@@ -5,7 +5,7 @@
  * Cloudflare Pages Function env vars: TURSO_URL, TURSO_AUTH_TOKEN
  */
 
-import { createClient } from '@libsql/client';
+import { createClient } from '@libsql/client/web';
 
 export async function onRequestGet({ params, env }) {
     const { id } = params;

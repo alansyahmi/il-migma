@@ -6,7 +6,7 @@
  *   TURSO_URL, TURSO_AUTH_TOKEN
  */
 
-import { createClient } from '@libsql/client';
+import { createClient } from '@libsql/client/web';
 
 export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
