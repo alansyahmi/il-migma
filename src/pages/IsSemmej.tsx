@@ -45,7 +45,7 @@ function SemmejInterface() {
             <div>
                 <div className="flex items-center gap-2 mb-1">
                     <Wand2 size={20} className="text-[#C9A84C]" />
-                    <h1 className="font-serif text-2xl font-bold text-[#1B4D3E]">Is-Semmej</h1>
+                    <h1 className="font-serif text-2xl font-bold text-[#1034A6]">Is-Semmej</h1>
                     <Badge variant="tier">Pro</Badge>
                 </div>
                 <p className="text-sm text-[#4a4a4a]">Agħti deskrizzjoni ta' xi ħaġa, u s-Semmej joħloq isem Malti ġenwin.</p>
@@ -53,7 +53,7 @@ function SemmejInterface() {
 
             <div className="bg-white border border-[#d8cfc0] rounded-xl p-5 space-y-4">
                 <div>
-                    <label className="block text-xs font-semibold text-[#1B4D3E] mb-1.5 uppercase tracking-wider">
+                    <label className="block text-xs font-semibold text-[#1034A6] mb-1.5 uppercase tracking-wider">
                         Deskrizzjoni tal-Kunċett *
                     </label>
                     <textarea
@@ -66,7 +66,7 @@ function SemmejInterface() {
                     />
                 </div>
                 <div>
-                    <label className="block text-xs font-semibold text-[#1B4D3E] mb-1.5 uppercase tracking-wider">
+                    <label className="block text-xs font-semibold text-[#1034A6] mb-1.5 uppercase tracking-wider">
                         Għeruq Preferiti (b'virgola, fakultattiv)
                     </label>
                     <input
@@ -84,12 +84,12 @@ function SemmejInterface() {
 
             {suggestions.length > 0 && (
                 <div className="space-y-3 animate-fade-in">
-                    <h2 className="text-sm font-semibold text-[#1B4D3E] uppercase tracking-wider">Suġġerimenti</h2>
+                    <h2 className="text-sm font-semibold text-[#1034A6] uppercase tracking-wider">Suġġerimenti</h2>
                     {suggestions.map((s, i) => (
                         <div key={i} className="bg-white border border-[#d8cfc0] rounded-xl p-4">
                             <div className="flex items-center gap-3 mb-2">
                                 <span className="text-[#C9A84C] font-semibold text-sm">{i + 1}.</span>
-                                <span className="font-serif text-2xl font-bold text-[#1B4D3E]">{s.word}</span>
+                                <span className="font-serif text-2xl font-bold text-[#1034A6]">{s.word}</span>
                             </div>
                             <p className="text-sm text-[#4a4a4a] leading-relaxed">{s.rationale}</p>
                         </div>

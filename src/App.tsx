@@ -19,6 +19,8 @@ import { Course } from '@/pages/Course';
 import { NotFound } from '@/pages/NotFound';
 import { Admin } from '@/pages/Admin';
 import { AdvancedSearch } from '@/pages/AdvancedSearch';
+import { RootSearch } from '@/pages/RootSearch';
+import { Root } from '@/pages/Root';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string;
 
@@ -52,6 +54,7 @@ export default function App() {
                     <Route index element={<Home />} />
                     <Route path="search" element={<Search />} />
                     <Route path="entry/:id" element={<Entry />} />
+                    <Route path="root/:id" element={<Root />} />
                     <Route path="chatbot" element={<Chatbot />} />
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="conjugator" element={<Conjugator />} />
@@ -61,6 +64,7 @@ export default function App() {
                     <Route path="course" element={<Course />} />
                     <Route path="admin" element={<Admin />} />
                     <Route path="advanced-search" element={<AdvancedSearch />} />
+                    <Route path="root-search" element={<RootSearch />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
                 </Routes>

@@ -22,7 +22,7 @@ export function Dashboard() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
             <SignedOut>
                 <div className="flex flex-col items-center justify-center py-12 gap-4">
-                    <h1 className="font-serif text-2xl font-bold text-[#1B4D3E]">Dashboard</h1>
+                    <h1 className="font-serif text-2xl font-bold text-[#1034A6]">Dashboard</h1>
                     <p className="text-[#4a4a4a] text-sm">Idħol biex taraw l-account tiegħek.</p>
                     <SignIn routing="hash" />
                 </div>
@@ -61,7 +61,7 @@ function DashboardContent() {
                     <img src={user.imageUrl} alt="" className="w-14 h-14 rounded-full border-2 border-[#C9A84C]" />
                 )}
                 <div>
-                    <h1 className="font-serif text-2xl font-bold text-[#1B4D3E]">
+                    <h1 className="font-serif text-2xl font-bold text-[#1034A6]">
                         {user?.fullName ?? user?.firstName ?? 'Utent'}
                     </h1>
                     <div className="flex items-center gap-2 mt-1">
@@ -101,7 +101,7 @@ function DashboardContent() {
                         {tier === 'basic' ? (
                             <div className="text-center py-8">
                                 <Sparkles size={32} className="text-[#C9A84C] mx-auto mb-3" />
-                                <h3 className="font-serif text-lg font-semibold text-[#1B4D3E]">Upgradja għal Pro</h3>
+                                <h3 className="font-serif text-lg font-semibold text-[#1034A6]">Upgradja għal Pro</h3>
                                 <p className="text-sm text-[#4a4a4a] mt-1 mb-4">
                                     Fittxija semantika, awdjo bla limitu, chatbot, u aktar.
                                 </p>
@@ -129,7 +129,7 @@ function DashboardContent() {
                         ) : (
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">
-                                    <h3 className="text-sm font-semibold text-[#1B4D3E]">API Keys</h3>
+                                    <h3 className="text-sm font-semibold text-[#1034A6]">API Keys</h3>
                                     <Button size="sm" leftIcon={<Plus size={14} />} onClick={() => {
                                         setMockKeys(prev => [...prev, {
                                             id: generateId(), name: 'New Key', key_prefix: 'im_key_' + generateId().slice(0, 6),
@@ -149,7 +149,7 @@ function DashboardContent() {
                                             </div>
                                             <span className="text-xs text-[#A07030]">{k.usage_count.toLocaleString()} calls</span>
                                             <button onClick={() => copyKey(k.id)} className="text-gray-400 hover:text-[#1034A6] transition-colors">
-                                                {copied === k.id ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+                                                {copied === k.id ? <Check size={14} className="text-blue-500" /> : <Copy size={14} />}
                                             </button>
                                             <button onClick={() => setMockKeys(prev => prev.filter(kk => kk.id !== k.id))}
                                                 className="text-gray-400 hover:text-[#B22222] transition-colors">
@@ -168,7 +168,7 @@ function DashboardContent() {
                 <TabContent tabId="lists" activeTab={activeTab}>
                     <CardBody>
                         <div className="text-center py-8 text-gray-400">
-                            <BookMarked size={28} className="mx-auto mb-2 text-[#1B4D3E]/30" />
+                            <BookMarked size={28} className="mx-auto mb-2 text-[#1034A6]/30" />
                             <p className="text-sm">Il-listi ta' flashcards jidhru hawn.</p>
                             <p className="text-xs mt-1">Agħfas "Save" fuq kwalunkwe entrata biex tibda.</p>
                         </div>

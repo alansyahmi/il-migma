@@ -24,7 +24,7 @@ export function RootPatternBadge({ form, size = 'md' }: RootPatternBadgeProps) {
         <Tooltip content={`${mode === 'arabised' ? 'Ġidra' : 'Għerq'}: ${rootLabel} | ${mode === 'arabised' ? 'Wiżen' : 'CV Pattern'}: ${patternLabel}`}>
             <div className={`inline-flex items-stretch rounded border border-[#C9A84C]/40 overflow-hidden ${isSmall ? 'text-xs' : 'text-xs'}`}>
                 {/* Root chip */}
-                <span className="bg-[#C9A84C] text-[#1B4D3E] font-mono font-bold px-2 py-0.5">
+                <span className="bg-[#C9A84C] text-[#1034A6] font-mono font-bold px-2 py-0.5">
                     {rootLabel}
                 </span>
                 {/* Pattern chip */}

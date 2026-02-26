@@ -60,11 +60,11 @@ export function EtymologyChain({ etymologies }: EtymologyChainProps) {
 
                         {/* Final arrow to Maltese */}
                         <ArrowRight size={14} className="text-[#A07030] flex-shrink-0" />
-                        <div className="rounded-lg border border-[#1B4D3E]/20 bg-[#1B4D3E]/5 px-3 py-2">
-                            <div className="text-[10px] uppercase tracking-wider font-semibold text-[#1B4D3E]/60 mb-0.5">
+                        <div className="rounded-lg border border-[#1034A6]/20 bg-[#1034A6]/5 px-3 py-2">
+                            <div className="text-[10px] uppercase tracking-wider font-semibold text-[#1034A6]/60 mb-0.5">
                                 Malti
                             </div>
-                            <div className="font-serif text-sm font-bold text-[#1B4D3E]">
+                            <div className="font-serif text-sm font-bold text-[#1034A6]">
                                 ← dan il-kelma
                             </div>
                         </div>

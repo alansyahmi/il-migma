@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
-import { Menu, X, Sun, Moon, Search } from 'lucide-react';
+import { Menu, X, Sun, Moon, Search, Eye, EyeOff, Shield } from 'lucide-react';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useDarkMode } from '@/contexts/DarkModeContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
 // Navigation links are now handled inside the component to support localization
@@ -13,6 +14,7 @@ export function Navbar() {
     const { mode, setMode, term } = useLinguisticMode();
     const { language, setLanguage, t } = useLanguage();
     const { dark, toggle: toggleDark } = useDarkMode();
+    const { isTrueAdmin, adminViewEnabled, setAdminViewEnabled, tier } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
@@ -24,15 +26,14 @@ export function Navbar() {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        if (searchQuery.trim()) {
-            navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-            setSearchQuery('');
-            setMenuOpen(false);
-        }
+        navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+        setSearchQuery('');
+        setMenuOpen(false);
     };
 
     const navLinks = [
         { label: t('Advanced Search', term('Tiftix Avvanzat')), href: '/advanced-search' },
+        { label: t('Root Search', term('Tiftix tal-Għeruq')), href: '/root-search' },
         { label: t('Suggest Entry', term('Issuġġerixxi Entrata')), href: '/suggest' },
         { label: t('Information', term('Informazzjoni')), href: '/blog' },
         { label: t('Help', 'Għajnuna'), href: '/help' },
@@ -43,7 +44,7 @@ export function Navbar() {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
 
                 {/* Left Section (Logo + Nav) */}
-                <div className="flex items-center gap-6 lg:gap-8">
+                <div className="flex items-center gap-6 lg:gap-8 shrink-0">
                     {/* Logo — Newsreader medium */}
                     <Link to="/" className="font-serif font-medium text-xl text-[#000] hover:opacity-70 transition-opacity shrink-0">
                         Il-Migma'
@@ -70,24 +71,26 @@ export function Navbar() {
                     </nav>
                 </div>
 
-                {/* Right controls */}
-                <div className="flex items-center gap-1.5">
+                {/* Desktop Search Bar — Dynamic Middle Section */}
+                {showSearch && (
+                    <div className="hidden md:block flex-1 max-w-md mx-6">
+                        <form onSubmit={handleSearch} className="relative group">
+                            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#1034A6] transition-colors pointer-events-none" />
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder={t('Search...', 'Fittex...')}
+                                className="w-full bg-white/60 border border-[#d8cfc0] rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1034A6] focus:bg-white transition-all placeholder:text-gray-500 text-[#000]"
+                            />
+                        </form>
+                    </div>
+                )}
 
-                    {/* Desktop Search Bar */}
-                    {showSearch && (
-                        <div className="hidden md:block w-48 lg:w-64 mr-3">
-                            <form onSubmit={handleSearch} className="relative">
-                                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                                <input
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder={t('Search...', 'Fittex...')}
-                                    className="w-full bg-white/60 border border-[#d8cfc0] rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1034A6] focus:bg-white transition-all placeholder:text-gray-500 text-[#000]"
-                                />
-                            </form>
-                        </div>
-                    )}
+                {/* Right controls */}
+                <div className="flex items-center gap-1.5 shrink-0">
+
+
 
                     {/* ① وزن / CV — Arabised vs Standard terminology */}
                     <button
@@ -128,7 +131,22 @@ export function Navbar() {
                         {dark ? <Moon size={15} /> : <Sun size={15} />}
                     </button>
 
-                    {/* ④ User avatar — Clerk */}
+                    {/* ④ Admin View Toggle — Minimal version */}
+                    {isTrueAdmin && (
+                        <button
+                            id="admin-view-toggle"
+                            onClick={() => setAdminViewEnabled(!adminViewEnabled)}
+                            className={cn(
+                                "flex items-center justify-center w-8 h-8 rounded-full transition-colors",
+                                adminViewEnabled ? "text-[#1034A6] hover:bg-[#1034A6]/10 shadow-sm border border-[#1034A6]/20" : "text-black/40 hover:bg-black/5"
+                            )}
+                            title={adminViewEnabled ? 'Switch to User View' : 'Switch to Admin View'}
+                        >
+                            {adminViewEnabled ? <Shield size={16} className="fill-current" /> : <Eye size={16} />}
+                        </button>
+                    )}
+
+                    {/* ⑤ User avatar — Clerk */}
                     <SignedOut>
                         <SignInButton mode="modal">
                             <button
@@ -143,7 +161,27 @@ export function Navbar() {
                         </SignInButton>
                     </SignedOut>
                     <SignedIn>
-                        <UserButton appearance={{ elements: { avatarBox: 'w-8 h-8' } }} />
+                        <UserButton appearance={{ elements: { avatarBox: 'w-8 h-8' } }}>
+                            {isTrueAdmin && (
+                                <UserButton.MenuItems>
+                                    <UserButton.Action
+                                        label={isTrueAdmin ? "System Role: ADMIN" : `Tier: ${tier.toUpperCase()}`}
+                                        labelIcon={<Shield size={16} className={isTrueAdmin ? "text-amber-600" : "text-blue-600"} />}
+                                        onClick={() => { }}
+                                    />
+                                    <UserButton.Link
+                                        label="Admin Dashboard"
+                                        labelIcon={<Shield size={16} />}
+                                        href="/admin"
+                                    />
+                                    <UserButton.Action
+                                        label={adminViewEnabled ? "Switch to User View" : "Switch to Admin View"}
+                                        labelIcon={adminViewEnabled ? <EyeOff size={16} /> : <Eye size={16} />}
+                                        onClick={() => setAdminViewEnabled(!adminViewEnabled)}
+                                    />
+                                </UserButton.MenuItems>
+                            )}
+                        </UserButton>
                     </SignedIn>
 
                     {/* Hamburger — mobile only */}
@@ -210,6 +248,20 @@ export function Navbar() {
                         <button onClick={toggleDark} className="text-[#000]">
                             {dark ? <Moon size={14} /> : <Sun size={14} />}
                         </button>
+                        {isTrueAdmin && (
+                            <>
+                                <span className="text-[#d8cfc0]">·</span>
+                                <button
+                                    onClick={() => setAdminViewEnabled(!adminViewEnabled)}
+                                    className={cn(
+                                        "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border",
+                                        adminViewEnabled ? "bg-[#1034A6] text-white border-[#1034A6]" : "text-black/40 border-black/10"
+                                    )}
+                                >
+                                    {adminViewEnabled ? 'Admin View' : 'User View'}
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
             )}

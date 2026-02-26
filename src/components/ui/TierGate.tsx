@@ -44,11 +44,11 @@ export function TierGate({ feature, children, fallback, className }: TierGatePro
             'border border-[#d8cfc0] text-center',
             className,
         )}>
-            <div className="w-12 h-12 rounded-full bg-[#1B4D3E]/10 flex items-center justify-center">
-                <Lock size={24} className="text-[#1B4D3E]" />
+            <div className="w-12 h-12 rounded-full bg-[#1034A6]/10 flex items-center justify-center">
+                <Lock size={24} className="text-[#1034A6]" />
             </div>
             <div>
-                <p className="font-serif text-lg font-semibold text-[#1B4D3E]">
+                <p className="font-serif text-lg font-semibold text-[#1034A6]">
                     {info.label} is a {info.tier === 'pro' ? 'Pro' : 'Enterprise'} feature
                 </p>
                 <p className="text-sm text-[#4a4a4a] mt-1">
@@ -60,7 +60,7 @@ export function TierGate({ feature, children, fallback, className }: TierGatePro
             <Link
                 to="/dashboard"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium
-          bg-[#1B4D3E] text-white hover:bg-[#123527] transition-colors"
+          bg-[#1034A6] text-white hover:bg-[#0D2A8A] transition-colors"
             >
                 <Sparkles size={14} />
                 Upgrade to {info.tier === 'pro' ? 'Pro' : 'Enterprise'}

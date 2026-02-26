@@ -95,7 +95,7 @@ function ChatInterface() {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="font-serif text-xl font-bold text-[#1B4D3E]">Chatbot Malti</h1>
+                    <h1 className="font-serif text-xl font-bold text-[#1034A6]">Chatbot Malti</h1>
                     <p className="text-xs text-[#4a4a4a]">Powered by Gemini Flash</p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -119,11 +119,11 @@ function ChatInterface() {
                     <div key={msg.id} className={cn('flex gap-2.5', msg.role === 'user' && 'flex-row-reverse')}>
                         <div className={cn(
                             'w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center',
-                            msg.role === 'user' ? 'bg-[#1034A6]/10' : 'bg-[#1B4D3E]/10',
+                            msg.role === 'user' ? 'bg-[#1034A6]/10' : 'bg-[#1034A6]/10',
                         )}>
                             {msg.role === 'user'
                                 ? <User size={14} className="text-[#1034A6]" />
-                                : <Bot size={14} className="text-[#1B4D3E]" />}
+                                : <Bot size={14} className="text-[#1034A6]" />}
                         </div>
                         <div className={cn(
                             'max-w-[80%] rounded-xl px-4 py-2.5 text-sm',
@@ -140,13 +140,13 @@ function ChatInterface() {
                 ))}
                 {loading && (
                     <div className="flex gap-2.5">
-                        <div className="w-7 h-7 rounded-full bg-[#1B4D3E]/10 flex items-center justify-center flex-shrink-0">
-                            <Bot size={14} className="text-[#1B4D3E]" />
+                        <div className="w-7 h-7 rounded-full bg-[#1034A6]/10 flex items-center justify-center flex-shrink-0">
+                            <Bot size={14} className="text-[#1034A6]" />
                         </div>
                         <div className="bg-[#f9f7f3] border border-[#ede9e1] rounded-xl rounded-tl-none px-4 py-3">
                             <div className="flex gap-1">
                                 {[0, 1, 2].map(i => (
-                                    <div key={i} className="w-1.5 h-1.5 bg-[#1B4D3E]/40 rounded-full animate-bounce"
+                                    <div key={i} className="w-1.5 h-1.5 bg-[#1034A6]/40 rounded-full animate-bounce"
                                         style={{ animationDelay: `${i * 0.15}s` }} />
                                 ))}
                             </div>

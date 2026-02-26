@@ -13,7 +13,7 @@ export function formatReliability(score: number): string {
 
 /** Get a color class for a reliability score */
 export function reliabilityColor(score: number): string {
-    if (score >= 80) return 'text-green-700';
+    if (score >= 80) return 'text-[#1034A6]';
     if (score >= 60) return 'text-yellow-700';
     if (score >= 40) return 'text-orange-600';
     return 'text-red-700';
@@ -21,7 +21,7 @@ export function reliabilityColor(score: number): string {
 
 /** Get the bar fill color for a reliability score */
 export function reliabilityBarColor(score: number): string {
-    if (score >= 80) return 'bg-green-500';
+    if (score >= 80) return 'bg-[#1034A6]';
     if (score >= 60) return 'bg-yellow-500';
     if (score >= 40) return 'bg-orange-500';
     return 'bg-red-500';

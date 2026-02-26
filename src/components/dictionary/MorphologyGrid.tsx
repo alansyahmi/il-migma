@@ -16,8 +16,8 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
         const m = entry.noun_morphology;
         return (
             <div className="rounded-lg border border-[#ede9e1] bg-[#f9f7f3] overflow-hidden">
-                <div className="px-3 py-1.5 bg-[#1B4D3E]/5 border-b border-[#ede9e1]">
-                    <span className="text-xs font-semibold text-[#1B4D3E] uppercase tracking-wider">
+                <div className="px-3 py-1.5 bg-[#1034A6]/5 border-b border-[#ede9e1]">
+                    <span className="text-xs font-semibold text-[#1034A6] uppercase tracking-wider">
                         Morfoloġija — {term('noun')}
                     </span>
                 </div>
@@ -42,8 +42,8 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
         const m = entry.verb_morphology;
         return (
             <div className="rounded-lg border border-[#ede9e1] bg-[#f9f7f3] overflow-hidden">
-                <div className="px-3 py-1.5 bg-[#1B4D3E]/5 border-b border-[#ede9e1]">
-                    <span className="text-xs font-semibold text-[#1B4D3E] uppercase tracking-wider">
+                <div className="px-3 py-1.5 bg-[#1034A6]/5 border-b border-[#ede9e1]">
+                    <span className="text-xs font-semibold text-[#1034A6] uppercase tracking-wider">
                         Morfoloġija — {term('verb')}
                     </span>
                 </div>
@@ -65,8 +65,8 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
         const m = entry.adjective_morphology;
         return (
             <div className="rounded-lg border border-[#ede9e1] bg-[#f9f7f3] overflow-hidden">
-                <div className="px-3 py-1.5 bg-[#1B4D3E]/5 border-b border-[#ede9e1]">
-                    <span className="text-xs font-semibold text-[#1B4D3E] uppercase tracking-wider">
+                <div className="px-3 py-1.5 bg-[#1034A6]/5 border-b border-[#ede9e1]">
+                    <span className="text-xs font-semibold text-[#1034A6] uppercase tracking-wider">
                         Morfoloġija — {term('adjective')}
                     </span>
                 </div>

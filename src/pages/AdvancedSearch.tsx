@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search as SearchIcon, Keyboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { MOCK_ENTRIES } from '@/data/mockData';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
@@ -180,6 +181,128 @@ function FilterHybrid({
     );
 }
 
+const EGYPTIAN_BLUE = '#1034A6';
+const BLUE = '#1034A6';
+
+// ── Types ──────────────────────────────────────────────────────────────────
+interface InflectionRow {
+    label: string;
+    form: string;
+    hasPage: boolean;
+    marker?: '*' | '✦'; // these + labels appear at black/55
+}
+
+interface SearchResult {
+    id: string;
+    headword: string;
+    root: string;
+    rootSlug: string;
+    gender?: string;    // shown as Egyptian Blue below root
+    pos: string;
+    formLines: string[];
+    definitions: string[];
+    inflections: InflectionRow[];
+}
+
+function InflectionCell({ row }: { row: InflectionRow }) {
+    const markerEl = row.marker && (
+        <span className="text-black/55 mr-0.5">{row.marker}</span>
+    );
+
+    if (row.hasPage) {
+        return (
+            <Link to={`/entry/${row.form}`} style={{ color: EGYPTIAN_BLUE }}
+                className="text-sm hover:underline">
+                {markerEl}{row.form}
+            </Link>
+        );
+    }
+    if (row.marker) {
+        return (
+            <span className="text-sm text-black/55">
+                {markerEl}{row.form}
+            </span>
+        );
+    }
+    return <span className="text-sm text-[#000]">{row.form}</span>;
+}
+
+function EntryCard({ result, index }: { result: SearchResult; index: number }) {
+    return (
+        <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3">
+            <div className="grid grid-cols-[11rem_5rem_1fr_11rem] min-h-[5rem]">
+
+                {/* Col 1: Index number | headword + root */}
+                <div className="px-4 py-4 flex items-start gap-2">
+                    <span className="text-xs text-black/30 font-sans w-5 shrink-0 pt-1">{index}.</span>
+                    <div>
+                        <Link to={`/entry/${result.id}`}
+                            className="font-serif font-extrabold text-[1.35rem] leading-tight text-[#000] hover:underline block">
+                            {result.headword}
+                        </Link>
+                        <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
+                            <Link to={`/search?root=${result.rootSlug}`}
+                                style={{ color: EGYPTIAN_BLUE }}
+                                className="text-xs hover:underline font-sans">
+                                {result.root}
+                            </Link>
+                            {result.gender && (
+                                <Link to={`/search?gender=${result.gender}`}
+                                    style={{ color: EGYPTIAN_BLUE }}
+                                    className="text-xs hover:underline font-sans">
+                                    {result.gender}
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Col 2: POS block */}
+                <div className="px-4 py-4 flex flex-col gap-0.5">
+                    <span className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug">
+                        {result.pos}
+                    </span>
+                    {result.formLines.map(line => (
+                        <span key={line} className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug">
+                            {line}
+                        </span>
+                    ))}
+                </div>
+
+                {/* Col 3: Definitions */}
+                <div className="px-5 py-4">
+                    {result.definitions.length === 1 ? (
+                        <p className="text-sm text-[#000]">{result.definitions[0]}</p>
+                    ) : (
+                        <ol className="space-y-0.5 list-none">
+                            {result.definitions.map((def, i) => (
+                                <li key={i} className="text-sm text-[#000]">
+                                    {i + 1}. {def}
+                                </li>
+                            ))}
+                        </ol>
+                    )}
+                </div>
+
+                {/* Col 4: Inflections */}
+                <div className="px-4 py-4 space-y-1">
+                    {result.inflections.map((row, i) => (
+                        <div key={i} className="flex items-baseline gap-3">
+                            <span className="text-xs text-black/55 font-sans w-[4.5rem] shrink-0 leading-snug">
+                                {row.label}
+                            </span>
+                            <InflectionCell row={row} />
+                        </div>
+                    ))}
+                </div>
+
+            </div>
+        </div>
+    );
+}
+
+
+
 // ── Root radical slot ──────────────────────────────────────────────────────
 function RootRadicalsInput({
     label, values, onChange,
@@ -199,7 +322,7 @@ function RootRadicalsInput({
                         maxLength={2}
                         value={v}
                         onChange={e => onChange(i, e.target.value)}
-                        className="w-10 text-center bg-white border border-black/10 rounded-md px-1 py-2 text-sm text-[#000] focus:outline-none focus:ring-1 focus:ring-black/20"
+                        className="w-10 text-center bg-white border border-black/10 rounded-md px-1 py-1.5 text-sm text-[#000] focus:outline-none focus:ring-1 focus:ring-black/20"
                         placeholder="—"
                     />
                 ))}
@@ -247,19 +370,63 @@ export function AdvancedSearch() {
     const { t } = useLanguage();
     const { term } = useLinguisticMode();
     const [searchParams, setSearchParams] = useSearchParams();
+
+    // Local state for results (only updates on action)
     const [query, setQuery] = useState(searchParams.get('q') ?? '');
-    const [submitted, setSubmitted] = useState(searchParams.get('q') ?? '');
-    const [filters, setFilters] = useState<AdvancedFilters>(DEFAULT_FILTERS);
+    const [filters, setFilters] = useState<AdvancedFilters>(() => {
+        // Sync initial state from URL
+        const f = { ...DEFAULT_FILTERS };
+        if (searchParams.has('pos')) f.pos = searchParams.get('pos')!;
+        if (searchParams.has('type')) f.rootType = searchParams.get('type')!;
+        if (searchParams.has('v')) f.vowelSet = searchParams.get('v')!;
+        if (searchParams.has('r1')) f.rootRadicals[0] = searchParams.get('r1')!;
+        if (searchParams.has('r2')) f.rootRadicals[1] = searchParams.get('r2')!;
+        if (searchParams.has('r3')) f.rootRadicals[2] = searchParams.get('r3')!;
+        if (searchParams.has('r4')) f.rootRadicals[3] = searchParams.get('r4')!;
+        return f;
+    });
+
+    // Effective search values (pulled from URL)
+    const submitted = searchParams.get('q') ?? '';
+    const activeFilters = useMemo(() => {
+        const f = { ...DEFAULT_FILTERS };
+        f.pos = searchParams.get('pos') ?? '';
+        f.rootType = searchParams.get('type') ?? '';
+        f.vowelSet = searchParams.get('v') ?? '';
+        f.rootRadicals = [
+            searchParams.get('r1') ?? '',
+            searchParams.get('r2') ?? '',
+            searchParams.get('r3') ?? '',
+            searchParams.get('r4') ?? '',
+        ];
+        return f;
+    }, [searchParams]);
+
+    const isSearchPerformed = searchParams.has('q') ||
+        searchParams.has('pos') ||
+        searchParams.has('type') ||
+        searchParams.has('r1');
 
     useEffect(() => {
         const q = searchParams.get('q') ?? '';
         setQuery(q);
-        setSubmitted(q);
     }, [searchParams]);
 
     const [kbOpen, setKbOpen] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const kbRef = useRef<HTMLButtonElement>(null);
+
+    const handleSearch = (e?: React.FormEvent) => {
+        e?.preventDefault();
+        const params: Record<string, string> = { q: query.trim() };
+        if (filters.pos) params.pos = filters.pos;
+        if (filters.rootType) params.type = filters.rootType;
+        if (filters.vowelSet) params.v = filters.vowelSet;
+        filters.rootRadicals.forEach((r, i) => {
+            if (r) params[`r${i + 1}`] = r;
+        });
+        setSearchParams(params);
+    };
 
     const insertChar = (char: string) => {
         const input = inputRef.current;
@@ -274,10 +441,65 @@ export function AdvancedSearch() {
         });
     };
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (query.trim()) setSearchParams({ q: query.trim() });
-    };
+    // Global Enter key listener
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.key === 'Enter') {
+                // If focus is NOT in another button or picker, trigger search
+                if (document.activeElement?.tagName !== 'BUTTON' && document.activeElement?.tagName !== 'A') {
+                    handleSearch();
+                }
+            }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    }, [query, filters]);
+
+    const results = useMemo(() => {
+        if (!isSearchPerformed) return [];
+
+        const s = submitted.trim().toLowerCase();
+        const { pos, rootType, rootRadicals, maxResults } = activeFilters;
+
+        return MOCK_ENTRIES.filter(e => {
+            // Text search (if submitted value exists)
+            if (s) {
+                const matchesHeadword = e.headword.toLowerCase().includes(s);
+                const matchesRoot = e.root_pattern_form?.root?.consonants.toLowerCase().includes(s);
+                const matchesGloss = e.definitions.some(d => d.text_en.toLowerCase().includes(s));
+                if (!matchesHeadword && !matchesRoot && !matchesGloss) return false;
+            }
+
+            // POS filter
+            if (pos && e.pos !== pos) return false;
+
+            // Root Type filter
+            if (rootType) {
+                const rt = e.root_pattern_form?.root?.strength;
+                const weakClass = e.root_pattern_form?.root?.weak_class;
+
+                if (rootType === 'strong' && rt !== 'strong') return false;
+                if (rootType === 'weak' && rt !== 'weak') return false;
+                if (rootType === 'weak initial' && (rt !== 'weak' || weakClass !== 'assimilative')) return false;
+                if (rootType === 'weak medial' && (rt !== 'weak' || weakClass !== 'hollow')) return false;
+                if (rootType === 'weak final' && (rt !== 'weak' || weakClass !== 'defective')) return false;
+                if (rootType === 'geminated' && !e.root_pattern_form?.root?.is_geminate) return false;
+            }
+
+            // Root radicals filter
+            if (rootRadicals.some(r => r.trim() !== '')) {
+                const consonants = e.root_pattern_form?.root?.consonant_array || [];
+                for (let i = 0; i < 4; i++) {
+                    const filterRad = rootRadicals[i].trim().toLowerCase();
+                    if (filterRad && (!consonants[i] || consonants[i].toLowerCase() !== filterRad)) return false;
+                }
+            }
+
+            return true;
+        }).slice(0, parseInt(maxResults));
+    }, [submitted, isSearchPerformed, activeFilters]);
+
+
 
     const setFilter = <K extends keyof AdvancedFilters>(key: K, value: AdvancedFilters[K]) =>
         setFilters(f => ({ ...f, [key]: value }));
@@ -309,7 +531,7 @@ export function AdvancedSearch() {
                                 {t(`Results for '${submitted}'`, `Riżultati għal '${submitted}'`)}
                             </h1>
                             <p className="text-sm text-black/40 mt-0.5">
-                                {t('0 of 0 entries shown', '0 minn 0 entrati murija')}
+                                {t(`${results.length} results shown`, `${results.length} riżultati murija`)}
                             </p>
                         </>
                     ) : (
@@ -501,36 +723,54 @@ export function AdvancedSearch() {
 
                     {/* ── Results area ── */}
                     <div className="flex-1 min-w-0">
-                        {submitted ? (
-                            <div className="bg-white/50 rounded-xl border border-white/40 shadow-sm p-10 text-right">
-                                <p className="text-sm text-[#000] mb-2">
-                                    {t(`No results found for '${submitted}'.`, `L-ebda riżultat ma nstab għal '${submitted}'.`)}
-                                    {' '}
-                                    {t("Try the 'include suggested results' option in the filter.", "Ipprova l-għażla 'inkludi riżultati ssuġġerew' fil-filtru.")}
-                                </p>
-                                <p className="text-sm text-[#000] mb-8">
-                                    {t("If you think this is a mistake, feel free to suggest this term into the database.", "Jekk taħseb li dan huwa żball, tħossok liberu li tissuġġerixxi dan it-terminu fid-database.")}
-                                </p>
-                                <div className="flex items-center justify-end gap-3">
-                                    <Link
-                                        to="/suggest"
-                                        className="bg-[#1034A6] text-white text-sm font-sans font-medium px-5 py-2.5 rounded-lg hover:bg-[#0c268c] transition-colors"
-                                    >
-                                        {t('Suggest Entry', term('suggest-entry'))}
-                                    </Link>
-                                    <button
-                                        className="bg-white text-[#000] text-sm font-sans font-medium px-5 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
-                                    >
-                                        {t('Random Entry', (term('entrata').charAt(0).toUpperCase() + term('entrata').slice(1)) + " " + term('Każwali'))}
-                                    </button>
-                                </div>
-                            </div>
+
+
+                        {results.length > 0 ? (
+                            results.map((r, i) => {
+                                // Map Entry to SearchResult for display
+                                const entry = r as any; // simplify for mapping
+                                const inflections: InflectionRow[] = [];
+                                const formLines: string[] = [];
+
+                                if (entry.verb_morphology) {
+                                    const vm = entry.verb_morphology;
+                                    formLines.push(`Form ${vm.form}`);
+                                    if (vm.transitivity) formLines.push(vm.transitivity);
+                                    if (vm.perfective_3sg_m) inflections.push({ label: 'Perfective', form: vm.perfective_3sg_m, hasPage: true });
+                                    if (vm.imperfective_3sg_m) inflections.push({ label: 'Imperfective', form: vm.imperfective_3sg_m, hasPage: false });
+                                } else if (entry.noun_morphology) {
+                                    const nm = entry.noun_morphology;
+                                    if (nm.plural_forms?.length) inflections.push({ label: 'Plural', form: nm.plural_forms[0], hasPage: false });
+                                }
+
+                                const displayResult: SearchResult = {
+                                    id: entry.id,
+                                    headword: entry.headword,
+                                    root: entry.root_pattern_form?.root?.consonants || '',
+                                    rootSlug: entry.root_pattern_form?.root?.consonants || '',
+                                    gender: entry.noun_morphology?.gender || (entry.adjective_morphology?.masculine ? 'masculine' : undefined),
+                                    pos: entry.pos,
+                                    formLines,
+                                    definitions: entry.definitions.map((d: any) => d.text_en),
+                                    inflections,
+                                };
+
+                                return <EntryCard key={displayResult.id} result={displayResult} index={i + 1} />;
+                            })
                         ) : (
                             <div className="bg-white/50 rounded-xl border border-white/40 shadow-sm p-10 text-right">
-                                <p className="text-sm text-black/30">
-                                    {t(
-                                        'Enter a search query and apply filters to begin.',
-                                        'Daħħal query tat-tiftix u applika l-filtri biex tibda.'
+                                <p className="text-sm text-[#000] mb-2">
+                                    {isSearchPerformed ? (
+                                        <>
+                                            {t(`No results found for your search.`, `L-ebda riżultat ma nstab għat-tiftix tiegħek.`)}
+                                            {' '}
+                                            {t("Try adjusting your filters.", "Ipprova biddel il-filtri tiegħek.")}
+                                        </>
+                                    ) : (
+                                        t(
+                                            'Enter a search query or apply filters to begin.',
+                                            'Daħħal query tat-tiftix jew applika l-filtri biex tibda.'
+                                        )
                                     )}
                                 </p>
                             </div>

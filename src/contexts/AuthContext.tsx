@@ -32,18 +32,40 @@ interface AuthContextValue {
     adsEnabled: boolean;
     audioUnlocked: boolean;
     isAdmin: boolean;
+    isTrueAdmin: boolean;
+    adminViewEnabled: boolean;
+    setAdminViewEnabled: (enabled: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { user, isLoaded } = useUser();
+
+    // Read from Clerk's unsafeMetadata (frontend-writable)
+    const adminViewEnabled = (user?.unsafeMetadata?.adminViewEnabled as boolean) ?? true;
+
+    const setAdminViewEnabled = async (enabled: boolean) => {
+        if (!user) return;
+        try {
+            await user.update({
+                unsafeMetadata: {
+                    ...user.unsafeMetadata,
+                    adminViewEnabled: enabled,
+                },
+            });
+        } catch (error) {
+            console.error('Failed to update admin view preference:', error);
+        }
+    };
+
     // In production, fetch tier from Turso via a Pages Function using the Clerk JWT.
     // For now, read from Clerk user public metadata.
     const tier = (user?.publicMetadata?.tier as Tier | undefined) ?? 'basic';
     const adsEnabled = user?.publicMetadata?.ads_disabled !== true;
     const audioUnlocked = tier === 'pro' || tier === 'enterprise' || user?.publicMetadata?.audio_unlocked === true;
-    const isAdmin = user?.publicMetadata?.role === 'admin';
+    const isTrueAdmin = user?.publicMetadata?.role === 'admin';
+    const isAdmin = isTrueAdmin && adminViewEnabled;
 
     const hasAccess = (feature: Feature): boolean => {
         const required = FEATURE_TIER_MAP[feature];
@@ -58,6 +80,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             adsEnabled,
             audioUnlocked,
             isAdmin,
+            isTrueAdmin,
+            adminViewEnabled,
+            setAdminViewEnabled,
         }}>
             {children}
         </AuthContext.Provider>

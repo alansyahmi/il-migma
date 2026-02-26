@@ -51,7 +51,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                     {isTheoretical && '*'}{entry.headword}
                                 </Link>
                             ) : (
-                                <span className="font-serif text-xl font-bold text-[#1B4D3E]">{isTheoretical && '*'}{entry.headword}</span>
+                                <span className="font-serif text-xl font-bold text-[#1034A6]">{isTheoretical && '*'}{entry.headword}</span>
                             )}
                             {primaryIPA && (
                                 <span className="ipa text-sm">[{primaryIPA}]</span>
@@ -93,7 +93,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
             <div className="bg-white rounded-xl border border-[#d8cfc0] shadow-sm p-5 sm:p-7">
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                        <h1 className="font-serif text-4xl font-bold text-[#1B4D3E] leading-tight">
+                        <h1 className="font-serif text-4xl font-bold text-[#1034A6] leading-tight">
                             {isTheoretical && '*'}{entry.headword}
                         </h1>
 
@@ -132,11 +132,11 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                     <div className="flex flex-col gap-2">
                         <button
                             onClick={() => setSaved(s => !s)}
-                            className="p-2 rounded-md hover:bg-[#1B4D3E]/10 text-[#1B4D3E] transition-colors"
+                            className="p-2 rounded-md hover:bg-[#1034A6]/10 text-[#1034A6] transition-colors"
                             aria-label={saved ? 'Remove from list' : 'Save to list'}
                             title={saved ? 'Remove from list' : 'Save to list'}
                         >
-                            {saved ? <BookmarkCheck size={18} className="fill-[#1B4D3E]" /> : <Bookmark size={18} />}
+                            {saved ? <BookmarkCheck size={18} className="fill-[#1034A6]" /> : <Bookmark size={18} />}
                         </button>
                         <button
                             className="p-2 rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
@@ -202,7 +202,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                         {/* Subentries */}
                         {entry.subentries && entry.subentries.length > 0 && (
                             <div className="pt-4 border-t border-[#ede9e1]">
-                                <h3 className="text-xs font-semibold text-[#1B4D3E] uppercase tracking-wider mb-3">
+                                <h3 className="text-xs font-semibold text-[#1034A6] uppercase tracking-wider mb-3">
                                     Taħt din il-Kelma
                                 </h3>
                                 <div className="space-y-2">

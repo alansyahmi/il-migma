@@ -27,8 +27,8 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
                         'flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium',
                         'border-b-2 transition-colors duration-150 -mb-[1px]',
                         activeTab === tab.id
-                            ? 'border-[#1B4D3E] text-[#1B4D3E]'
-                            : 'border-transparent text-gray-500 hover:text-[#1B4D3E] hover:border-[#C9A84C]',
+                            ? 'border-[#1034A6] text-[#1034A6]'
+                            : 'border-transparent text-gray-500 hover:text-[#1034A6] hover:border-[#C9A84C]',
                     )}
                 >
                     {tab.icon}

@@ -1,12 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { MOCK_ENTRIES } from '@/data/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import type { Entry } from '@/types';
+import { type Entry } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
 import { generateConjugation } from '@/lib/conjugationEngine';
+import { apiGetEntry } from '@/lib/api';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
@@ -524,7 +525,24 @@ function VerbEntryView({ entry }: { entry: Entry }) {
 
 export function Entry() {
     const { id } = useParams<{ id: string }>();
-    const entry = MOCK_ENTRIES.find(e => e.id === id) || MOCK_ENTRIES[0];
+    const [entry, setEntry] = useState<Entry | null>(() => MOCK_ENTRIES.find(e => e.id === id) || null);
+    const [loading, setLoading] = useState(!entry);
+
+    useEffect(() => {
+        if (!entry && id) {
+            setLoading(true);
+            apiGetEntry(id)
+                .then(res => setEntry(res.entry))
+                .catch(() => setEntry(null))
+                .finally(() => setLoading(false));
+        }
+    }, [id, entry]);
+
+    if (loading) return (
+        <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1034A6]"></div>
+        </div>
+    );
 
     if (!entry) return <Navigate to="/404" replace />;
 

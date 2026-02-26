@@ -48,7 +48,7 @@ export function AttestationReliability({ data, compact = false }: AttestationRel
                     </Tooltip>
                 </div>
                 <div className="text-right">
-                    <span className="text-2xl font-bold text-[#1B4D3E]">{pct}</span>
+                    <span className="text-2xl font-bold text-[#1034A6]">{pct}</span>
                     <p className="text-[11px] text-[#4a4a4a] -mt-0.5">{scoreLabel}</p>
                 </div>
             </div>
@@ -68,7 +68,7 @@ export function AttestationReliability({ data, compact = false }: AttestationRel
                         <div key={s.source_id} className="flex items-center gap-2">
                             <div className={cn(
                                 'w-2 h-2 rounded-full flex-shrink-0',
-                                s.attested ? 'bg-green-500' : 'bg-red-400'
+                                s.attested ? 'bg-blue-500' : 'bg-red-400'
                             )} />
                             <span className="text-xs text-[#000] flex-1">{s.source_name}</span>
                             <span className="text-xs text-[#A07030] font-medium">

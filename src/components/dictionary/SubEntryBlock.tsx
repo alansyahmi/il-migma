@@ -27,7 +27,7 @@ export function SubEntryBlock({ subentry, defaultOpen = false }: SubEntryBlockPr
                 {subentry.pos && (
                     <Badge variant="pos">{term(subentry.pos)}</Badge>
                 )}
-                <span className="ml-auto text-gray-400 group-hover:text-[#1B4D3E] transition-colors">
+                <span className="ml-auto text-gray-400 group-hover:text-[#1034A6] transition-colors">
                     {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                 </span>
             </button>

@@ -12,7 +12,7 @@ export function LinguisticToggle({ className }: LinguisticToggleProps) {
 
     return (
         <div className={cn('flex items-center gap-2', className)}>
-            <span className={cn('text-xs font-medium transition-colors', !isArabised ? 'text-[#1B4D3E]' : 'text-gray-400')}>
+            <span className={cn('text-xs font-medium transition-colors', !isArabised ? 'text-[#1034A6]' : 'text-gray-400')}>
                 Standard
             </span>
             <button
@@ -23,7 +23,7 @@ export function LinguisticToggle({ className }: LinguisticToggleProps) {
                     'relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent',
                     'transition-colors duration-200 ease-in-out focus-visible:outline-none',
                     'focus-visible:ring-2 focus-visible:ring-[#1034A6] focus-visible:ring-offset-2',
-                    isArabised ? 'bg-[#C9A84C]' : 'bg-[#1B4D3E]',
+                    isArabised ? 'bg-[#C9A84C]' : 'bg-[#1034A6]',
                 )}
                 title={`Switch to ${isArabised ? 'Standard' : 'Arabised'} Maltese terminology`}
             >

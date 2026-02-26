@@ -10,7 +10,7 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-    pos: 'bg-[#1B4D3E]/10 text-[#1B4D3E] border border-[#1B4D3E]/20',
+    pos: 'bg-[#1034A6]/10 text-[#1034A6] border border-[#1034A6]/20',
     root: 'bg-[#C9A84C]/15 text-[#7A5520] border border-[#C9A84C]/30 font-mono',
     source: 'bg-[#A07030]/10 text-[#A07030] border border-[#A07030]/20',
     tier: 'bg-[#1034A6]/10 text-[#1034A6] border border-[#1034A6]/20',

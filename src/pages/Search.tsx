@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search as SearchIcon, Keyboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { MOCK_ENTRIES } from '@/data/mockData';
 
 // ── Colours ────────────────────────────────────────────────────────────────
 const EGYPTIAN_BLUE = '#1034A6';
@@ -28,8 +29,6 @@ interface SearchResult {
     definitions: string[];
     inflections: InflectionRow[];
 }
-
-
 
 // ── Filter state ───────────────────────────────────────────────────────────
 interface Filters {
@@ -249,20 +248,116 @@ export function Search() {
     const { term } = useLinguisticMode();
     const [searchParams, setSearchParams] = useSearchParams();
     const [query, setQuery] = useState(searchParams.get('q') ?? '');
-    const [submitted, setSubmitted] = useState(searchParams.get('q') ?? '');
-    const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
-    const [results] = useState<SearchResult[]>([]); // Set to empty to test 'no results'
+    const [filters, setFilters] = useState<Filters>(() => {
+        const f = { ...DEFAULT_FILTERS };
+        if (searchParams.has('pos')) f.pos = searchParams.get('pos')!;
+        if (searchParams.has('type')) f.rootType = searchParams.get('type')!;
+        return f;
+    });
+
+    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type');
+    const submitted = searchParams.get('q') ?? '';
+
+    // Effective search values (pulled from URL)
+    const activeFilters = useMemo(() => {
+        const f = { ...DEFAULT_FILTERS };
+        f.pos = searchParams.get('pos') ?? '';
+        f.rootType = searchParams.get('type') ?? '';
+        return f;
+    }, [searchParams]);
+
+    // Filter and map results
+    const results = useMemo(() => {
+        if (!isSearchPerformed) return [];
+        const s = submitted.toLowerCase();
+        const { pos, rootType, maxResults } = activeFilters;
+
+        return MOCK_ENTRIES.filter(e => {
+            // Text search (if query exists)
+            if (s) {
+                const matchesHeadword = e.headword.toLowerCase().includes(s);
+                const matchesRoot = e.root_pattern_form?.root?.consonants.toLowerCase().includes(s);
+                const matchesGloss = e.definitions.some(d => d.text_en.toLowerCase().includes(s));
+                if (!matchesHeadword && !matchesRoot && !matchesGloss) return false;
+            }
+
+            // POS filter
+            if (pos && e.pos !== pos) return false;
+
+            // Root Type filter
+            if (rootType) {
+                const rt = e.root_pattern_form?.root?.strength;
+                const wc = e.root_pattern_form?.root?.weak_class;
+
+                if (rootType === 'strong' && rt !== 'strong') return false;
+                if (rootType === 'weak' && rt !== 'weak') return false;
+                if (rootType === 'doubled' && (rt !== 'strong' || !e.root_pattern_form?.root?.is_geminate)) return false; // approximate
+                if (rootType === 'defective' && wc !== 'defective') return false;
+                if (rootType === 'hollow' && wc !== 'hollow') return false;
+            }
+
+            return true;
+        }).map((e): SearchResult => {
+            // Map Entry to SearchResult
+            const inflections: InflectionRow[] = [];
+            const formLines: string[] = [];
+
+            if (e.verb_morphology) {
+                const vm = e.verb_morphology;
+                formLines.push(`Form ${vm.form}`);
+                if (vm.transitivity) formLines.push(vm.transitivity);
+
+                if (vm.perfective_3sg_m) inflections.push({ label: 'Perfective', form: vm.perfective_3sg_m, hasPage: true });
+                if (vm.imperfective_3sg_m) inflections.push({ label: 'Imperfective', form: vm.imperfective_3sg_m, hasPage: false });
+                if (vm.verbal_noun) inflections.push({ label: 'Verbal Noun', form: vm.verbal_noun, hasPage: false });
+            }
+
+            if (e.noun_morphology) {
+                const nm = e.noun_morphology;
+                if (nm.plural_forms?.length) {
+                    inflections.push({ label: 'Plural', form: nm.plural_forms[0], hasPage: false });
+                }
+            }
+
+            return {
+                id: e.id,
+                headword: e.headword,
+                root: e.root_pattern_form?.root?.consonants || '',
+                rootSlug: e.root_pattern_form?.root?.consonants || '',
+                gender: e.noun_morphology?.gender || (e.adjective_morphology?.masculine ? 'masculine' : undefined),
+                pos: e.pos,
+                formLines,
+                definitions: e.definitions.map(d => d.text_en),
+                inflections,
+            };
+        }).slice(0, parseInt(maxResults));
+    }, [submitted, isSearchPerformed, activeFilters]);
 
     useEffect(() => {
         const q = searchParams.get('q') ?? '';
         setQuery(q);
-        setSubmitted(q);
     }, [searchParams]);
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (query.trim()) setSearchParams({ q: query.trim() });
+    const handleSearch = (e?: React.FormEvent) => {
+        e?.preventDefault();
+        const params: Record<string, string> = { q: query.trim() };
+        if (filters.pos) params.pos = filters.pos;
+        if (filters.rootType) params.type = filters.rootType;
+        setSearchParams(params);
     };
+
+    // Global Enter key listener
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.key === 'Enter') {
+                if (document.activeElement?.tagName !== 'BUTTON' && document.activeElement?.tagName !== 'A') {
+                    handleSearch();
+                }
+            }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    }, [query, filters]);
 
     const bgStyle = {
         background: `linear-gradient(rgba(244,243,240,0.88), rgba(244,243,240,0.88)),
