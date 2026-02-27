@@ -131,9 +131,9 @@ function VerbEntryView({ entry }: { entry: Entry }) {
     const isNeg = polarity === 'Negative';
     const isTheoretical = entry.tags?.includes('THEORETICAL') || vm.root_tags?.includes('THEORETICAL');
     // Use new per-tense vowel sets
-    const vsetImpf = vm.vowel_set_imperfect;
-    const vsetPerf = vm.vowel_set_perfect;
-    const vsetImp = vm.vowel_set_imperative;
+    const vsetImpf = entry.verb_vowel_impf || vm.vowel_set_imperfect;
+    const vsetPerf = entry.verb_vowel_perf || vm.vowel_set_perfect;
+    const vsetImp = vm.vowel_set_imperative || 'o-o';
 
     // Derive or use stored conjugation
     const conj = useMemo(() => {
@@ -437,26 +437,26 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                         </div>
 
                         {/* Derived Terms */}
-                        {(vm.verbal_noun || vm.passive_participle || vm.active_participle) && (
+                        {((entry.verb_verbal_noun || vm.verbal_noun) || (entry.verb_passive_ptcp || vm.passive_participle) || (entry.verb_active_ptcp || vm.active_participle)) && (
                             <div>
                                 <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{t('Derived Terms', 'Termini Derivati')}</h2>
                                 <div className="flex gap-10 text-sm">
-                                    {vm.verbal_noun && (
+                                    {(entry.verb_verbal_noun || vm.verbal_noun) && (
                                         <DerivedTermLink
                                             label={t('Verbal Noun', term('Nom Verbali'))}
-                                            value={(isTheoretical && !vm.verbal_noun.startsWith('*') ? '*' : '') + vm.verbal_noun}
+                                            value={(isTheoretical && !(entry.verb_verbal_noun || vm.verbal_noun)!.startsWith('*') ? '*' : '') + (entry.verb_verbal_noun || vm.verbal_noun)}
                                         />
                                     )}
-                                    {vm.passive_participle && (
+                                    {(entry.verb_passive_ptcp || vm.passive_participle) && (
                                         <DerivedTermLink
                                             label={t('Passive Participle', term('Partiċipju Passiv'))}
-                                            value={(isTheoretical && !vm.passive_participle.startsWith('*') ? '*' : '') + vm.passive_participle}
+                                            value={(isTheoretical && !(entry.verb_passive_ptcp || vm.passive_participle)!.startsWith('*') ? '*' : '') + (entry.verb_passive_ptcp || vm.passive_participle)}
                                         />
                                     )}
-                                    {vm.active_participle && (
+                                    {(entry.verb_active_ptcp || vm.active_participle) && (
                                         <DerivedTermLink
                                             label={t('Active Participle', term('Partiċipju Attiv'))}
-                                            value={(isTheoretical && !vm.active_participle.startsWith('*') ? '*' : '') + vm.active_participle}
+                                            value={(isTheoretical && !(entry.verb_active_ptcp || vm.active_participle)!.startsWith('*') ? '*' : '') + (entry.verb_active_ptcp || vm.active_participle)}
                                         />
                                     )}
                                 </div>
@@ -525,18 +525,22 @@ function VerbEntryView({ entry }: { entry: Entry }) {
 
 export function Entry() {
     const { id } = useParams<{ id: string }>();
-    const [entry, setEntry] = useState<Entry | null>(() => MOCK_ENTRIES.find(e => e.id === id) || null);
-    const [loading, setLoading] = useState(!entry);
+    const [entry, setEntry] = useState<Entry | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!entry && id) {
+        if (id) {
             setLoading(true);
             apiGetEntry(id)
                 .then(res => setEntry(res.entry))
-                .catch(() => setEntry(null))
+                .catch(() => {
+                    // Fallback to mock if API fails
+                    const mock = MOCK_ENTRIES.find(e => e.id === id);
+                    setEntry(mock || null);
+                })
                 .finally(() => setLoading(false));
         }
-    }, [id, entry]);
+    }, [id]);
 
     if (loading) return (
         <div className="flex justify-center items-center h-64">

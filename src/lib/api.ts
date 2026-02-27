@@ -9,14 +9,30 @@ import type { Entry, SearchResult } from '@/types';
 const BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_APP_URL ?? '');
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-    const res = await fetch(`${BASE}${path}`, {
+    const url = `${BASE}${path}`;
+    const res = await fetch(url, {
         headers: { 'Content-Type': 'application/json', ...init?.headers },
         ...init,
     });
+
     if (!res.ok) {
-        const err = await res.json().catch(() => ({ error: res.statusText }));
-        throw new Error((err as any).error ?? res.statusText);
+        const text = await res.text();
+        let errorMessage = `API Error ${res.status}: ${res.statusText}`;
+        try {
+            const json = JSON.parse(text);
+            errorMessage = json.error || errorMessage;
+        } catch {
+            errorMessage = `${errorMessage} (Response: ${text.slice(0, 100)}...)`;
+        }
+        throw new Error(errorMessage);
     }
+
+    const contentType = res.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        throw new Error(`Expected JSON but got ${contentType || 'unknown'}. Preview: ${text.slice(0, 100)}...`);
+    }
+
     return res.json() as Promise<T>;
 }
 
@@ -39,10 +55,22 @@ export async function apiSearch(
     return apiFetch(`/api/search?${params}`);
 }
 
+export async function apiSearchRoots(radicals: string[]): Promise<{ roots: any[] }> {
+    const params = new URLSearchParams();
+    radicals.forEach((r, i) => {
+        if (r) params.set(`r${i + 1}`, r);
+    });
+    return apiFetch(`/api/roots/search?${params}`);
+}
+
 // ── Single Entry ─────────────────────────────────────────────────────────────
 
 export async function apiGetEntry(id: string): Promise<{ entry: Entry }> {
     return apiFetch(`/api/entry/${id}`);
+}
+
+export async function apiGetRoot(consonants: string): Promise<{ root: any }> {
+    return apiFetch(`/api/root/${encodeURIComponent(consonants)}`);
 }
 
 // ── Chat ─────────────────────────────────────────────────────────────────────
@@ -61,10 +89,11 @@ export async function apiChat(
 
 export async function adminListEntries(
     token: string,
-    opts: { q?: string; limit?: number; offset?: number } = {}
+    opts: { q?: string; pos?: string; limit?: number; offset?: number } = {}
 ) {
     const params = new URLSearchParams();
     if (opts.q) params.set('q', opts.q);
+    if (opts.pos) params.set('pos', opts.pos);
     if (opts.limit) params.set('limit', String(opts.limit));
     if (opts.offset) params.set('offset', String(opts.offset));
     return apiFetch(`/api/admin/entries?${params}`, {
@@ -105,9 +134,31 @@ export async function adminListRoots(token: string, q?: string) {
     });
 }
 
+export async function adminGetRoot(token: string, consonants: string) {
+    return apiFetch<{ root: any }>(`/api/admin/roots/${encodeURIComponent(consonants)}`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+}
+
 export async function adminCreateRoot(token: string, data: { consonants: string; notes?: string }) {
     return apiFetch('/api/admin/roots', {
         method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function adminUpdateRootHiddenForms(token: string, consonants: string, hiddenForms: string[]) {
+    return apiFetch(`/api/admin/roots/${encodeURIComponent(consonants)}/hidden-forms`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ hidden_forms: hiddenForms }),
+    });
+}
+
+export async function adminUpdateRoot(token: string, consonants: string, data: any) {
+    return apiFetch(`/api/admin/roots/${encodeURIComponent(consonants)}`, {
+        method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
     });

@@ -12,6 +12,12 @@ CREATE TABLE IF NOT EXISTS roots (
   id            TEXT PRIMARY KEY,
   consonants    TEXT NOT NULL UNIQUE,  -- e.g. "k-t-b"
   consonant_array TEXT NOT NULL,       -- JSON array e.g. ["k","t","b"]
+  strength      TEXT DEFAULT 'strong', -- strong, weak, geminated, etc.
+  weak_class    TEXT,                  -- hollow, assimilative, defective, etc.
+  gloss         TEXT,                  -- general meaning
+  etymology     TEXT,                  -- JSON string or plain text
+  source        TEXT,                  -- e.g. dictionary citation
+  hidden_forms    TEXT,                -- JSON array of hidden theoretic forms
   notes         TEXT,
   created_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
   updated_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
@@ -71,8 +77,11 @@ CREATE TABLE IF NOT EXISTS entries (
   verb_perfective_3sgm  TEXT,
   verb_imperfective_3sgm TEXT,
   verb_verbal_noun      TEXT,
-  verb_active_ptcp      TEXT,
   verb_passive_ptcp     TEXT,
+
+  -- Admin workflow state
+  verb_vowel_perf       TEXT,
+  verb_vowel_impf       TEXT,
 
   -- Adjective morphology
   adj_masculine         TEXT,

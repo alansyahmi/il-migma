@@ -11,15 +11,18 @@ export async function onRequestGet({ params, env }) {
     const { id } = params;
     if (!id) return json({ error: 'Missing id' }, 400);
 
-    const db = createClient({ url: env.TURSO_URL, authToken: env.TURSO_AUTH_TOKEN });
-
     try {
+        const url = env.TURSO_URL || env.VITE_TURSO_URL;
+        const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
+        const db = createClient({ url, authToken: token });
         // ── Entry core ──────────────────────────────────────────────────────────
         const entryRes = await db.execute({
             sql: `SELECT e.*,
                rpf.derived_form,
                r.consonants  AS root_consonants,
                r.id          AS root_id,
+               r.strength    AS root_strength,
+               r.weak_class  AS root_weak_class,
                pat.cv_notation, pat.wizen_notation, pat.id AS pattern_id
             FROM entries e
             LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
@@ -124,7 +127,12 @@ export async function onRequestGet({ params, env }) {
             subentries: subRes.rows,
             dialect_variants: dialRes.rows,
             root_pattern_form: (entry.root_consonants) ? {
-                root: { id: entry.root_id, consonants: entry.root_consonants },
+                root: {
+                    id: entry.root_id,
+                    consonants: entry.root_consonants,
+                    strength: entry.root_strength,
+                    weak_class: entry.root_weak_class
+                },
                 pattern: entry.pattern_id ? {
                     id: entry.pattern_id,
                     cv_notation: entry.cv_notation,

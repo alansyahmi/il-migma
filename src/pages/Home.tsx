@@ -1,9 +1,17 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Keyboard } from 'lucide-react';
+import {
+    Search, Keyboard, Layers, FileText,
+    Database, Globe, Settings,
+    ArrowRight, PlusCircle, LayoutDashboard,
+    Edit3
+} from 'lucide-react';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useUser } from '@clerk/clerk-react';
+import { Card } from '@/components/ui/Card';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const ARAB_GREEN = '#006233';  // Semitic entries
@@ -26,10 +34,11 @@ const getRomanceEntries = (t: (en: string, mt: string) => string) => [
     { word: 'lealtà', altForm: '', def: t('loyalty', "L-istat ta' jkun leali jew fidil."), slug: 'lealta' },
 ];
 
-// ── Component ──────────────────────────────────────────────────────────────
 export function Home() {
     const { t } = useLanguage();
     const { term } = useLinguisticMode();
+    const { isTrueAdmin } = useAuth();
+    const { user } = useUser();
     const [query, setQuery] = useState('');
     const navigate = useNavigate();
 
@@ -64,15 +73,114 @@ export function Home() {
                  url("/bg-pattern.png") center/cover no-repeat`,
     };
 
+    // ── ADMIN HOMEPAGE ──────────────────────────────────────────────────────
+    if (isTrueAdmin) {
+        return (
+            <div className="min-h-screen bg-[#F4F3F0]" style={bgStyle}>
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-10">
+
+                    {/* Welcome Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                        <div>
+                            <h2 className="text-[#1034A6] font-medium text-sm tracking-widest uppercase mb-1">Panil tal-Immaniġġjar</h2>
+                            <h1 className="font-serif text-4xl font-bold text-black leading-tight">
+                                Welcome back Admin {user?.firstName}!
+                            </h1>
+                        </div>
+                        <div className="flex gap-3">
+                            <Link
+                                to="/search"
+                                className="px-4 py-2 bg-white border border-black/10 rounded-xl text-sm font-semibold hover:bg-black/5 transition-colors flex items-center gap-2"
+                            >
+                                <Globe size={16} /> Live Site
+                            </Link>
+                            <Link
+                                to="/admin"
+                                className="px-4 py-2 bg-[#1034A6] text-white rounded-xl text-sm font-semibold hover:bg-[#0c268c] transition-colors flex items-center gap-2 shadow-lg shadow-[#1034A6]/20"
+                            >
+                                <Settings size={16} /> Dashboard
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* Quick Stats / Actions Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                        {/* Database Control */}
+                        <Card className="p-6 border-none shadow-sm bg-white/60 backdrop-blur-md relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 p-4 text-[#1034A6]/10 group-hover:text-[#1034A6]/20 transition-colors">
+                                <Database size={80} strokeWidth={1.5} />
+                            </div>
+                            <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+                                <Layers className="text-[#1034A6]" size={20} /> Apparat tal-Għeruq
+                            </h3>
+                            <p className="text-sm text-black/60 mb-6">Manager il-konsonanti, l-etimoloġija, u l-għeruq derivati tiegħek minn punt wieħed.</p>
+                            <Link to="/admin" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                Iftaħ Control Center <ArrowRight size={14} />
+                            </Link>
+                        </Card>
+
+                        {/* Entry Management */}
+                        <Card className="p-6 border-none shadow-sm bg-white/60 backdrop-blur-md relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 p-4 text-[#1034A6]/10 group-hover:text-[#1034A6]/20 transition-colors">
+                                <FileText size={80} strokeWidth={1.5} />
+                            </div>
+                            <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+                                <PlusCircle className="text-[#1034A6]" size={20} /> Entrati tal-Kliem
+                            </h3>
+                            <p className="text-sm text-black/60 mb-6">Żid kliem ġdid, aġġorna t-tifsiriet u l-IPA fil-libbrairja tiegħek ta' 300k+ entrati.</p>
+                            <Link to="/admin" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                Immaniġġja Vocab <ArrowRight size={14} />
+                            </Link>
+                        </Card>
+
+                        {/* Interactive Tools */}
+                        <Card className="p-6 border-none shadow-sm bg-white/60 backdrop-blur-md relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 p-4 text-[#1034A6]/10 group-hover:text-[#1034A6]/20 transition-colors">
+                                <LayoutDashboard size={80} strokeWidth={1.5} />
+                            </div>
+                            <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+                                <Edit3 className="text-[#1034A6]" size={20} /> Kontenut u Blog
+                            </h3>
+                            <p className="text-sm text-black/60 mb-6">Ippubblika artikli ġodda u żid eżempji ta' użu biex ttejjeb l-esperjenza tal-utent.</p>
+                            <Link to="/blog" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                Editja Blog <ArrowRight size={14} />
+                            </Link>
+                        </Card>
+                    </div>
+
+                    {/* Bottom Section: Search Preview */}
+                    <div className="bg-[#1034A6] rounded-3xl p-8 text-white relative overflow-hidden">
+                        <div className="absolute right-0 bottom-0 opacity-10 -mr-10 -mb-10 rotate-12">
+                            <h1 className="font-serif text-[12rem] select-none">M</h1>
+                        </div>
+                        <div className="max-w-xl relative z-10">
+                            <h2 className="text-2xl font-serif mb-4">Verification Quick-Search</h2>
+                            <p className="text-white/70 text-sm mb-6">Fittex malajr biex tivverifika jekk kelma hix diġà fid-database qabel ma żżidha.</p>
+                            <form onSubmit={handleSearch} className="flex gap-2">
+                                <input
+                                    type="text"
+                                    value={query}
+                                    onChange={e => setQuery(e.target.value)}
+                                    placeholder="Fittex kelma..."
+                                    className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-sm focus:bg-white/20 outline-none transition-all placeholder:text-white/40"
+                                />
+                                <button type="submit" className="bg-white text-[#1034A6] px-6 py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all">
+                                    Iċċekkja
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // ── PUBLIC HOMEPAGE ──────────────────────────────────────────────────────
     return (
         <div className="min-h-screen">
-            {/*
-        ── Single background wrapper: hero + cards sit together on the pattern.
-        ── Footer sits outside this div on Limestone Ochre.
-      */}
             <div style={bgStyle}>
-
-                {/* ── Hero ─────────────────────────────────────────────────────── */}
+                {/* Hero */}
                 <section className="text-center px-4 pt-16 pb-14 sm:pt-20 sm:pb-16 max-w-2xl mx-auto">
                     <h1 className="font-serif font-medium text-[2.6rem] sm:text-[3.2rem] leading-tight text-[#000] mb-3">
                         {t('A Comprehensive Digital', `${term('Dizzjunarju')} ${term('Komprensiv')}`)}<br />{t('Maltese-English Dictionary', `Malti-Ingliż ${term('Diġitali')}`)}
@@ -126,7 +234,7 @@ export function Home() {
                     <div className="flex items-center justify-center gap-3">
                         <Link
                             to="/search"
-                            className="bg-[#1034A6] text-white text-sm font-sans font-medium px-5 py-2.5 rounded-lg hover:bg-[#0c268c] transition-colors"
+                            className="bg-[#1034A6] text-white text-sm font-sans font-medium px-5 py-2.5 rounded-lg hover:bg-[#0c268c] transition-colors shadow-lg shadow-[#1034A6]/20"
                         >
                             {t('Browse Entries', 'Ifli l-' + (term('entrati').charAt(0).toUpperCase() + term('entrati').slice(1)))}
                         </Link>
@@ -139,38 +247,25 @@ export function Home() {
                     </div>
                 </section>
 
-                {/* ── Category Cards ────────────────────────────────────────────── */}
+                {/* Categories */}
                 <section className="px-4 sm:px-6 pb-16">
                     <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
-
                         {/* Semitic Entries */}
                         <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
-                            <h2
-                                className="font-sans text-base font-semibold mb-1"
-                                style={{ color: ARAB_GREEN }}
-                            >
+                            <h2 className="font-sans text-base font-semibold mb-1" style={{ color: ARAB_GREEN }}>
                                 {t('Semitic Entries', (term('entrati').charAt(0).toUpperCase() + term('entrati').slice(1)) + ' ' + term('Semitiku'))}
                             </h2>
                             <p className="text-xs text-[#666] mb-5 leading-snug">
-                                {t(
-                                    'Over 10,000 entries with 100,000 inflected word forms.',
-                                    `Aktar minn 10,000 ${term('entrati')} b'100,000 ${term('forma')} ta' kelma ${term('infletta')}.`
-                                )}
+                                {t('Over 10,000 entries with 100,000 inflected word forms.', `Aktar minn 10,000 ${term('entrati')} b'100,000 ${term('forma')} ta' kelma ${term('infletta')}.`)}
                             </p>
                             <div className="space-y-3">
-                                {SEMITIC_ENTRIES.map(e => (
+                                {SEMITIC_ENTRIES.map((e: any) => (
                                     <div key={e.word}>
                                         <div className="flex items-baseline gap-1.5 flex-wrap">
-                                            <Link
-                                                to={`/entry/${e.slug}`}
-                                                className="font-serif text-base font-semibold leading-none"
-                                                style={{ color: ARAB_GREEN }}
-                                            >
+                                            <Link to={`/entry/${e.slug}`} className="font-serif text-base font-semibold leading-none" style={{ color: ARAB_GREEN }}>
                                                 {e.word}
                                             </Link>
-                                            {e.altForm && (
-                                                <span className="text-xs text-[#555] font-serif">{e.altForm}</span>
-                                            )}
+                                            {e.altForm && <span className="text-xs text-[#555] font-serif">{e.altForm}</span>}
                                         </div>
                                         <p className="text-sm text-[#000] mt-0.5">{e.def}</p>
                                     </div>
@@ -180,32 +275,20 @@ export function Home() {
 
                         {/* Romance Entries */}
                         <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
-                            <h2
-                                className="font-sans text-base font-semibold mb-1"
-                                style={{ color: ROMAN_RED }}
-                            >
+                            <h2 className="font-sans text-base font-semibold mb-1" style={{ color: ROMAN_RED }}>
                                 {t('Romance Entries', (term('entrati').charAt(0).toUpperCase() + term('entrati').slice(1)) + ' ' + term('Rumanz'))}
                             </h2>
                             <p className="text-xs text-[#666] mb-5 leading-snug">
-                                {t(
-                                    'Over 10,000 entries with 98,000 inflected word forms.',
-                                    `Aktar minn 10,000 ${term('entrati')} bi 98,000 ${term('forma')} ta' kelma ${term('infletta')}.`
-                                )}
+                                {t('Over 10,000 entries with 98,000 inflected word forms.', `Aktar minn 10,000 ${term('entrati')} bi 98,000 ${term('forma')} ta' kelma ${term('infletta')}.`)}
                             </p>
                             <div className="space-y-3">
-                                {ROMANCE_ENTRIES.map(e => (
+                                {ROMANCE_ENTRIES.map((e: any) => (
                                     <div key={e.word}>
                                         <div className="flex items-baseline gap-1.5 flex-wrap">
-                                            <Link
-                                                to={`/entry/${e.slug}`}
-                                                className="font-serif text-base font-semibold leading-none"
-                                                style={{ color: ROMAN_RED }}
-                                            >
+                                            <Link to={`/entry/${e.slug}`} className="font-serif text-base font-semibold leading-none" style={{ color: ROMAN_RED }}>
                                                 {e.word}
                                             </Link>
-                                            {e.altForm && (
-                                                <span className="text-xs text-[#555] font-serif">{e.altForm}</span>
-                                            )}
+                                            {e.altForm && <span className="text-xs text-[#555] font-serif">{e.altForm}</span>}
                                         </div>
                                         <p className="text-sm text-[#000] mt-0.5">{e.def}</p>
                                     </div>
@@ -215,24 +298,16 @@ export function Home() {
 
                         {/* IPA & Audio */}
                         <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
-                            <h2
-                                className="font-sans text-base font-bold mb-1"
-                                style={{ color: IPA_GOLD }}
-                            >
+                            <h2 className="font-sans text-base font-bold mb-1" style={{ color: IPA_GOLD }}>
                                 {t('IPA & Audio Pronunciation', `IPA u ${term('Pronunzja')} b${term('l-Awdjo')}`)}
                             </h2>
                             <p className="text-xs text-[#666] leading-snug">
-                                {t(
-                                    'Every term will have its own IPA and audio to help learners.',
-                                    `Kull ${term('terminu')} se jkollu l-IPA u ${term('l-awdjo tiegħu')} biex jgħin lil dawk li jitgħallmu.`
-                                )}
+                                {t('Every term will have its own IPA and audio to help learners.', `Kull ${term('terminu')} se jkollu l-IPA u ${term('l-awdjo tiegħu')} biex jgħin lil dawk li jitgħallmu.`)}
                             </p>
                         </div>
-
                     </div>
                 </section>
-
-            </div>{/* end background wrapper */}
+            </div>
         </div>
     );
 }

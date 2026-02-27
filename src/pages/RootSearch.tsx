@@ -3,7 +3,9 @@ import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { MOCK_ENTRIES } from '@/data/mockData';
-import { generateRootForms, markGeneratedForms, type FormMarker } from '@/lib/rootGenerator';
+import { generateRootForms, markGeneratedForms, type FormMarker, type MarkedVerbForm } from '@/lib/conjugationEngine';
+import { apiSearchRoots } from '@/lib/api';
+import { Spinner } from '@/components/ui/Spinner';
 
 const MAX_RADICALS = 4;
 
@@ -24,18 +26,19 @@ function MarkedCell({ data }: { data: { value: string; marker: FormMarker } }) {
     );
 }
 
-function RootResultView({ rootRadicals }: { rootRadicals: string[] }) {
+function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: string[], extraRoots?: any[] }) {
     // Unique matching roots by consonants string
     const matchingRootsMap = new Map<string, any>();
 
+    // 1. Process Mock Data
     MOCK_ENTRIES.forEach(e => {
         const r = e.root_pattern_form?.root;
         if (!r || !r.consonant_array) return;
 
-        // Check each filled radical slot
         const isMatch = rootRadicals.every((rad, i) => {
-            if (!rad) return true; // Slot not provided, any radical matches
-            return r.consonant_array[i] === rad;
+            if (!rad) return true;
+            const rRad = (r.consonant_array[i] || '').toLowerCase().trim().normalize('NFC');
+            return rRad === decodeURIComponent(rad).toLowerCase().trim().normalize('NFC');
         });
 
         if (isMatch) {
@@ -48,6 +51,16 @@ function RootResultView({ rootRadicals }: { rootRadicals: string[] }) {
             if (e.pos === 'verb') {
                 matchingRootsMap.get(r.consonants).verbs.push(e);
             }
+        }
+    });
+
+    // 2. Process Extra/DB Data
+    extraRoots.forEach(r => {
+        if (!matchingRootsMap.has(r.consonants)) {
+            matchingRootsMap.set(r.consonants, {
+                rootObj: r,
+                verbs: [] // We might not have entries yet for DB-only roots in this view
+            });
         }
     });
 
@@ -89,10 +102,10 @@ function RootResultView({ rootRadicals }: { rootRadicals: string[] }) {
 
                             const rawGen = generateRootForms(
                                 rootObj.consonants,
-                                rootObj.strength,
-                                rootObj.weak_class,
                                 vm.vowel_set_perfect || 'a-a',
-                                vm.vowel_set_imperfect || 'i-a'
+                                vm.vowel_set_imperfect || 'i-a',
+                                rootObj.strength,
+                                rootObj.weak_class
                             );
 
                             const attestedLabels = new Set<string>();
@@ -118,7 +131,7 @@ function RootResultView({ rootRadicals }: { rootRadicals: string[] }) {
                                         </span>
                                     </td>
                                     {formLabels.map(fl => {
-                                        const rData = rowsData.find(r => r.form === fl);
+                                        const rData = rowsData.find((r: MarkedVerbForm) => r.form === fl);
                                         return (
                                             <td key={fl} className="px-4 py-4 text-sm font-serif min-w-[60px]">
                                                 {rData ? <MarkedCell data={rData.perfect} /> : '—'}
@@ -183,6 +196,8 @@ export function RootSearch() {
     const [rootRadicals, setRootRadicals] = useState<string[]>(parseRadicals());
     const [searchedRadicals, setSearchedRadicals] = useState<string[]>(parseRadicals());
     const [hasSearched, setHasSearched] = useState(false);
+    const [extraRoots, setExtraRoots] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
 
     // Sync with URL changes (e.g., back navigation)
     useEffect(() => {
@@ -190,8 +205,14 @@ export function RootSearch() {
         setRootRadicals(rads);
         setSearchedRadicals(rads);
         const hasContent = rads.some(r => r.trim() !== '');
+
         if (hasContent) {
             setHasSearched(true);
+            setLoading(true);
+            apiSearchRoots(rads)
+                .then(res => setExtraRoots(res.roots))
+                .catch(() => setExtraRoots([]))
+                .finally(() => setLoading(false));
         }
     }, [searchParams]);
 
@@ -232,7 +253,7 @@ export function RootSearch() {
 
     const handleRootRadicalChange = (index: number, val: string) => {
         const newRads = [...rootRadicals];
-        newRads[index] = val.toLowerCase();
+        newRads[index] = val.toLowerCase().trim().normalize('NFC');
         setRootRadicals(newRads);
     };
 
@@ -272,7 +293,7 @@ export function RootSearch() {
                                 }}
                                 className="px-4 py-2 text-sm font-medium text-black/60 bg-white border border-[#d8cfc0] rounded-md hover:bg-black/5 transition-colors"
                             >
-                                {t('Clear', 'Naddaf')}
+                                {t('Clear', 'Ħassar')}
                             </button>
                             <button
                                 type="submit"
@@ -285,8 +306,12 @@ export function RootSearch() {
                 </div>
 
                 {/* Results Area (Full Width) */}
-                {hasSearched && (
-                    <RootResultView rootRadicals={searchedRadicals} />
+                {loading ? (
+                    <div className="flex justify-center py-12">
+                        <Spinner />
+                    </div>
+                ) : hasSearched && (
+                    <RootResultView rootRadicals={searchedRadicals} extraRoots={extraRoots} />
                 )}
             </div>
         </div>

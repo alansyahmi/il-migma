@@ -15,6 +15,9 @@ export interface RootFormData {
     source: string;
     strength: string;
     weak_class?: string;
+    vowel_set_perf?: string;
+    vowel_set_impf?: string;
+    vowel_set_imp?: string;
 }
 
 interface RootFormModalProps {
@@ -163,6 +166,21 @@ export function RootFormModal({ data, onClose, onSaved, saving }: RootFormModalP
                                 </select>
                             </div>
                         )}
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4">
+                        <div>
+                            <label className={label}>{t('Vowel Set (Perf)', 'Vokali (Perf)')}</label>
+                            <input className={inp} value={form.vowel_set_perf || 'a-a'} onChange={e => setForm({ ...form, vowel_set_perf: e.target.value })} placeholder="e.g. a-a" />
+                        </div>
+                        <div>
+                            <label className={label}>{t('Vowel Set (Impf)', 'Vokali (Impf)')}</label>
+                            <input className={inp} value={form.vowel_set_impf || 'i-a'} onChange={e => setForm({ ...form, vowel_set_impf: e.target.value })} placeholder="e.g. i-a" />
+                        </div>
+                        <div>
+                            <label className={label}>{t('Vowel Set (Imp)', 'Vokali (Imp)')}</label>
+                            <input className={inp} value={form.vowel_set_imp || 'o-o'} onChange={e => setForm({ ...form, vowel_set_imp: e.target.value })} placeholder="e.g. o-o" />
+                        </div>
                     </div>
                 </div>
 

@@ -3,14 +3,14 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { MOCK_ENTRIES } from '@/data/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { generateRootForms, markGeneratedForms } from '@/lib/rootGenerator';
+import { generateRootForms, markGeneratedForms, type MarkedVerbForm } from '@/lib/conjugationEngine';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
-import { Plus, Edit2 } from 'lucide-react';
+import { Plus, Edit2, ArrowLeft } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { RootFormModal, type RootFormData } from '@/components/admin/RootFormModal';
 import { type Entry } from '@/types';
-import { apiSearch } from '@/lib/api';
+import { apiSearch, apiGetRoot } from '@/lib/api';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
@@ -80,12 +80,18 @@ export function Root() {
     const isActualAdmin = isAdmin && adminViewEnabled;
 
     const [extraEntries, setExtraEntries] = useState<Entry[]>([]);
+    const [dbRoot, setDbRoot] = useState<any | null>(null);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (id) {
             setLoading(true);
-            // Search for all entries matching this root consonants
+            // 1. Fetch root metadata
+            apiGetRoot(id)
+                .then(res => setDbRoot(res.root))
+                .catch(() => setDbRoot(null));
+
+            // 2. Search for all entries matching this root consonants
             apiSearch(id)
                 .then(res => {
                     // Filter results that have the matching root consonants
@@ -118,15 +124,42 @@ export function Root() {
         return rootEntries.find(e => e.pos === 'verb' && e.verb_morphology?.form === 'I') || rootEntries[0];
     }, [rootEntries]);
 
-    const rootObj = primaryEntry?.root_pattern_form?.root;
+    // The root metadata to use for conjugation
+    const rootObj = useMemo(() => {
+        if (dbRoot) return dbRoot;
+        return primaryEntry?.root_pattern_form?.root;
+    }, [dbRoot, primaryEntry]);
+
     const vm = primaryEntry?.verb_morphology;
+
+    const glossList = useMemo(() => {
+        if (dbRoot?.gloss) return [dbRoot.gloss];
+        return primaryEntry?.definitions?.map(d => d.text_en) || [];
+    }, [dbRoot, primaryEntry]);
+
+    const etymologyText = useMemo(() => {
+        if (dbRoot?.etymology) return dbRoot.etymology;
+        const ety = primaryEntry?.etymologies?.[0]?.chain?.[0];
+        if (ety) return `${ety.language} ${ety.form} (${ety.meaning})`;
+        return '';
+    }, [dbRoot, primaryEntry]);
+
+    const sourceText = useMemo(() => {
+        return dbRoot?.source || primaryEntry?.verb_morphology?.source_citation || '';
+    }, [dbRoot, primaryEntry]);
 
     // Generate engine data
     const generatedTable = useMemo(() => {
         if (!rootObj) return [];
-        const pvSet = vm?.vowel_set_perfect || 'a-a';
-        const ipvSet = vm?.vowel_set_imperfect || 'i-a';
-        const rawGen = generateRootForms(rootObj.consonants, rootObj.strength, rootObj.weak_class, pvSet, ipvSet);
+        const pvSet = vm?.vowel_set_perfect || rootObj.vowel_set_perf || 'a-a';
+        const ipvSet = vm?.vowel_set_imperfect || rootObj.vowel_set_impf || 'i-a';
+        const rawGen = generateRootForms(
+            rootObj.consonants,
+            pvSet,
+            ipvSet,
+            rootObj.strength || 'strong',
+            rootObj.weak_class
+        );
 
         // Collect attested forms from all rootEntries
         const attestedLemmas = new Set<string>();
@@ -173,7 +206,7 @@ export function Root() {
 
     if (!id) return <Navigate to="/404" replace />;
 
-    if (loading && rootEntries.length === 0) {
+    if (loading && !rootObj) {
         return (
             <div className="flex justify-center items-center h-64">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1034A6]"></div>
@@ -181,9 +214,14 @@ export function Root() {
         );
     }
 
-    if (!primaryEntry || !rootObj) {
+    if (!rootObj) {
         return (
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 text-black">
+                <div className="flex items-center gap-2 mb-4">
+                    <Link to="/root-search" className="text-sm text-black/40 hover:text-black flex items-center gap-1">
+                        <ArrowLeft size={16} /> Lura
+                    </Link>
+                </div>
                 <p className="text-sm text-black/40 italic">{t('Root not found in database.', 'Il-mamma ma nstabitx fid-database.')}</p>
             </div>
         );
@@ -198,9 +236,8 @@ export function Root() {
         rootObj?.is_geminate ? 'GEMINATED' : null
     ].filter(Boolean).join(' • ');
 
-    const titleGloss = primaryEntry.definitions?.[0]?.text_en.toUpperCase() || 'UNKNOWN';
+    const titleGloss = (dbRoot?.gloss || primaryEntry?.definitions?.[0]?.text_en || 'UNKNOWN').toUpperCase();
 
-    const ety = primaryEntry.etymologies?.[0];
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -235,29 +272,39 @@ export function Root() {
                     <div className="w-64 shrink-0 space-y-4">
                         <SideCard title={t('Gloss', term('Tifsira'))}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-[#000] marker:text-black/30">
-                                {primaryEntry.definitions.map(def => (
-                                    <li key={def.id}>{def.text_en}</li>
+                                {glossList.map((g, i) => (
+                                    <li key={i}>{g}</li>
                                 ))}
                             </ol>
                         </SideCard>
 
-                        {ety && ety.chain.length > 0 && (
+                        {etymologyText && (
                             <SideCard title={t('Etymology', term('Etimoloġija'))}>
                                 <p className="text-sm text-[#000] leading-relaxed">
-                                    {t('From ', 'Mill-')}
-                                    <span style={{ color: BLUE }} className="font-medium">
-                                        {t(ety.chain[0].language, term(ety.chain[0].language))}
-                                    </span>
-                                    {ety.chain[0].script && <> <span className="font-arabic">{ety.chain[0].script}</span></>}
-                                    {ety.chain[1] && <> ({ety.chain[1].form})</>}.
+                                    {etymologyText}
                                 </p>
                             </SideCard>
                         )}
 
-                        {primaryEntry.verb_morphology?.source_citation && (
+                        {sourceText && (
                             <SideCard title={t('Source', term('sors'))}>
-                                <span className="text-sm font-medium" style={{ color: GOLD }}>{primaryEntry.verb_morphology.source_citation}</span>
+                                <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceText}</span>
                             </SideCard>
+                        )}
+
+                        {isActualAdmin && (
+                            <div className="mt-8 pt-8 border-t border-black/5 space-y-4">
+                                <div>
+                                    <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">Internal Metadata</p>
+                                    <div className="text-[11px] font-mono space-y-1 text-black/50">
+                                        <p>Strength: {rootObj.strength}</p>
+                                        {rootObj.weak_class && <p>Weak Class: {rootObj.weak_class}</p>}
+                                        <p>Vow. Perf: {rootObj.vowel_set_perf || 'a-a'}</p>
+                                        <p>Vow. Impf: {rootObj.vowel_set_impf || 'i-a'}</p>
+                                        <p>Vow. Imp: {rootObj.vowel_set_imp || 'o-o'}</p>
+                                    </div>
+                                </div>
+                            </div>
                         )}
                     </div>
 
@@ -279,7 +326,7 @@ export function Root() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {generatedTable.map((row) => (
+                                    {generatedTable.map((row: MarkedVerbForm) => (
                                         <tr key={row.form} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] transition-colors">
                                             <td className="py-2.5 pr-4 text-black/60 font-serif">{row.form}</td>
                                             <td className="py-2.5 pr-4 font-serif">
@@ -435,15 +482,18 @@ export function Root() {
                 <RootFormModal
                     data={{
                         consonants: rootObj.consonants,
-                        glosses: primaryEntry.definitions.map(d => d.text_en),
+                        glosses: dbRoot?.gloss ? [dbRoot.gloss] : (primaryEntry.definitions.map(d => d.text_en) || ['']),
                         etymology: {
-                            language: primaryEntry.etymologies?.[0]?.chain[0]?.language || '',
-                            term: primaryEntry.etymologies?.[0]?.chain[0]?.form || '',
-                            definition: primaryEntry.etymologies?.[0]?.chain[0]?.meaning || ''
+                            language: '',
+                            term: '',
+                            definition: dbRoot?.etymology || primaryEntry.etymologies?.[0]?.chain[0]?.meaning || ''
                         },
-                        source: primaryEntry.verb_morphology?.source_citation || '',
+                        source: dbRoot?.source || primaryEntry.verb_morphology?.source_citation || '',
                         strength: rootObj.strength,
-                        weak_class: rootObj.weak_class || ''
+                        weak_class: rootObj.weak_class || '',
+                        vowel_set_perf: rootObj.vowel_set_perf,
+                        vowel_set_impf: rootObj.vowel_set_impf,
+                        vowel_set_imp: rootObj.vowel_set_imp
                     }}
                     onClose={() => setShowRootForm(false)}
                     saving={saving}
@@ -453,70 +503,35 @@ export function Root() {
                             const token = await getToken();
                             if (!token) throw new Error('Not authenticated');
 
-                            // Prepare the updated entry based on primaryEntry
-                            const updatedEntry: any = {
-                                ...primaryEntry,
-                                definitions: newData.glosses.map((g, i) => ({
-                                    id: primaryEntry.definitions[i]?.id || Math.random().toString(36).slice(2, 9),
-                                    sense_number: i + 1,
-                                    text_en: g,
-                                    text_mt: primaryEntry.definitions[i]?.text_mt || ''
-                                })),
-                                verb_morphology: {
-                                    ...primaryEntry.verb_morphology,
-                                    source_citation: newData.source
-                                },
-                                root_pattern_form: {
-                                    ...primaryEntry.root_pattern_form,
-                                    root: {
-                                        ...primaryEntry.root_pattern_form?.root,
-                                        consonants: newData.consonants,
-                                        strength: newData.strength,
-                                        weak_class: newData.weak_class
-                                    }
-                                }
-                            };
+                            // Update the root record directly
+                            const { adminUpdateRoot } = await import('@/lib/api');
+                            await adminUpdateRoot(token, newData.consonants, {
+                                strength: newData.strength,
+                                weak_class: newData.weak_class,
+                                gloss: newData.glosses[0] || '',
+                                etymology: newData.etymology.definition,
+                                source: newData.source,
+                                vowel_set_perf: newData.vowel_set_perf,
+                                vowel_set_impf: newData.vowel_set_impf,
+                                vowel_set_imp: newData.vowel_set_imp
+                            });
 
-                            // Update/Create etymology
-                            const etyNode = {
-                                language: newData.etymology.language,
-                                form: newData.etymology.term,
-                                meaning: newData.etymology.definition
-                            };
-
-                            if (updatedEntry.etymologies?.[0]) {
-                                updatedEntry.etymologies[0].chain[0] = etyNode;
-                            } else {
-                                updatedEntry.etymologies = [{
-                                    id: Math.random().toString(36).slice(2, 9),
-                                    entry_id: primaryEntry.id,
-                                    chain: [etyNode]
-                                }];
-                            }
-
-                            // Call API to persist
-                            const { adminUpdateEntry } = await import('@/lib/api');
-                            await adminUpdateEntry(token, updatedEntry as any);
-
-                            // Update local state for immediate feedback
-                            setExtraEntries(prev => {
-                                const exists = prev.find(e => e.id === primaryEntry.id);
-                                if (exists) {
-                                    return prev.map(e => e.id === primaryEntry.id ? (updatedEntry as Entry) : e);
-                                }
-                                return [...prev, updatedEntry as Entry];
+                            // Update local state
+                            setDbRoot({
+                                ...rootObj,
+                                ...newData,
+                                gloss: newData.glosses[0],
+                                etymology: newData.etymology.definition
                             });
 
                             setShowRootForm(false);
 
-                            // If consonants changed, redirect to new root page
                             if (newData.consonants !== rootObj.consonants) {
                                 window.location.href = `/root/${newData.consonants}`;
                             }
                         } catch (err: any) {
                             console.error("Failed to save root:", err);
-                            const errorMsg = err.message || "Unknown error";
-                            alert(`Failed to save root changes: ${errorMsg}\n\nNote: If you are editing a mock entry, persistence might not be supported on the live database.`);
+                            alert(`Failed to save root changes: ${err.message}`);
                         } finally {
                             setSaving(false);
                         }

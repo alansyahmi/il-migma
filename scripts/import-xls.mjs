@@ -133,6 +133,9 @@ async function importRoots() {
     const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
     console.log(`📖  roots.xls  → ${rows.length} rows`);
+    if (rows.length > 0) console.log('DEBUG: First row data:', JSON.stringify(rows[0], null, 2));
+    if (rows.length > 1) console.log('DEBUG: Second row data:', JSON.stringify(rows[1], null, 2));
+    if (rows.length > 2) console.log('DEBUG: Third row data:', JSON.stringify(rows[2], null, 2));
 
     let rootsInserted = 0;
     let verbsInserted = 0;
@@ -219,6 +222,7 @@ async function importBrokenPlurals() {
     const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
 
     console.log(`📖  broken_plural.xlsx → ${rows.length} rows`);
+    if (rows.length > 0) console.log('DEBUG (Nouns): First row keys:', Object.keys(rows[0]));
 
     let inserted = 0;
     let phoneticsInserted = 0;

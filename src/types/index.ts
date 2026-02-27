@@ -286,6 +286,13 @@ export interface Entry {
     source_language?: SourceLanguage;
     tags?: string[];
 
+    // Extracted flat verb fields (Admin DB workflow)
+    verb_vowel_perf?: string;
+    verb_vowel_impf?: string;
+    verb_verbal_noun?: string;
+    verb_active_ptcp?: string;
+    verb_passive_ptcp?: string;
+
     created_at: string;
     updated_at: string;
 }
