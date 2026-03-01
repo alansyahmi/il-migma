@@ -50,13 +50,13 @@ export function Modal({ open, onClose, title, children, size = 'md' }: ModalProp
             <div
                 ref={panelRef}
                 className={cn(
-                    'relative w-full bg-white rounded-xl shadow-2xl animate-fade-in',
+                    'relative w-full bg-white rounded-xl shadow-2xl animate-fade-in flex flex-col max-h-[90vh]',
                     'border border-[#d8cfc0]',
                     sizeClasses[size],
                 )}
             >
                 {title && (
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-[#ede9e1]">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-[#ede9e1] shrink-0">
                         <h2 className="font-serif text-lg font-semibold text-black">{title}</h2>
                         <button
                             onClick={onClose}
@@ -67,7 +67,7 @@ export function Modal({ open, onClose, title, children, size = 'md' }: ModalProp
                         </button>
                     </div>
                 )}
-                <div className="p-6">{children}</div>
+                <div className="p-6 overflow-hidden flex-1 flex flex-col">{children}</div>
             </div>
         </div>
     );

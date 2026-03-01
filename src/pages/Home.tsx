@@ -37,7 +37,7 @@ const getRomanceEntries = (t: (en: string, mt: string) => string) => [
 export function Home() {
     const { t } = useLanguage();
     const { term } = useLinguisticMode();
-    const { isTrueAdmin } = useAuth();
+    const { isAdmin } = useAuth();
     const { user } = useUser();
     const [query, setQuery] = useState('');
     const navigate = useNavigate();
@@ -74,7 +74,7 @@ export function Home() {
     };
 
     // ── ADMIN HOMEPAGE ──────────────────────────────────────────────────────
-    if (isTrueAdmin) {
+    if (isAdmin) {
         return (
             <div className="min-h-screen bg-[#F4F3F0]" style={bgStyle}>
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-10">
@@ -82,9 +82,9 @@ export function Home() {
                     {/* Welcome Header */}
                     <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                         <div>
-                            <h2 className="text-[#1034A6] font-medium text-sm tracking-widest uppercase mb-1">Panil tal-Immaniġġjar</h2>
+                            <h2 className="text-[#1034A6] font-medium text-sm tracking-widest uppercase mb-1">{t('Management Panel', 'Panil tal-Immaniġġjar')}</h2>
                             <h1 className="font-serif text-4xl font-bold text-black leading-tight">
-                                Welcome back Admin {user?.firstName}!
+                                {t(`Welcome back Admin ${user?.firstName}!`, `Merħba lura Admin ${user?.firstName}!`)}
                             </h1>
                         </div>
                         <div className="flex gap-3">
@@ -92,13 +92,13 @@ export function Home() {
                                 to="/search"
                                 className="px-4 py-2 bg-white border border-black/10 rounded-xl text-sm font-semibold hover:bg-black/5 transition-colors flex items-center gap-2"
                             >
-                                <Globe size={16} /> Live Site
+                                <Globe size={16} /> {t('Live Site', 'Is-Sit tal-Live')}
                             </Link>
                             <Link
                                 to="/admin"
                                 className="px-4 py-2 bg-[#1034A6] text-white rounded-xl text-sm font-semibold hover:bg-[#0c268c] transition-colors flex items-center gap-2 shadow-lg shadow-[#1034A6]/20"
                             >
-                                <Settings size={16} /> Dashboard
+                                <Settings size={16} /> {t('Dashboard', 'Dashboard')}
                             </Link>
                         </div>
                     </div>
@@ -112,11 +112,11 @@ export function Home() {
                                 <Database size={80} strokeWidth={1.5} />
                             </div>
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                                <Layers className="text-[#1034A6]" size={20} /> Apparat tal-Għeruq
+                                <Layers className="text-[#1034A6]" size={20} /> {t('Root Management', 'Ġestjoni tal-Għeruq')}
                             </h3>
-                            <p className="text-sm text-black/60 mb-6">Manager il-konsonanti, l-etimoloġija, u l-għeruq derivati tiegħek minn punt wieħed.</p>
-                            <Link to="/admin" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                Iftaħ Control Center <ArrowRight size={14} />
+                            <p className="text-sm text-black/60 mb-6">{t('Manage your consonants, etymology, and derived roots from one point.', 'Manage il-konsonanti, l-etimoloġija, u l-għeruq derivati tiegħek minn punt wieħed.')}</p>
+                            <Link to="/admin?tab=roots" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                {t('Open Root Management', 'Iftaħ Ġestjoni tal-Għeruq')} <ArrowRight size={14} />
                             </Link>
                         </Card>
 
@@ -126,11 +126,11 @@ export function Home() {
                                 <FileText size={80} strokeWidth={1.5} />
                             </div>
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                                <PlusCircle className="text-[#1034A6]" size={20} /> Entrati tal-Kliem
+                                <PlusCircle className="text-[#1034A6]" size={20} /> {t('Word Entries', 'Entrati tal-Kliem')}
                             </h3>
-                            <p className="text-sm text-black/60 mb-6">Żid kliem ġdid, aġġorna t-tifsiriet u l-IPA fil-libbrairja tiegħek ta' 300k+ entrati.</p>
+                            <p className="text-sm text-black/60 mb-6">{t('Add new words, update meanings and IPA in your library of 300k+ entries.', 'Żid kliem ġdid, aġġorna t-tifsiriet u l-IPA fil-librerija tiegħek ta\' 300k+ entrati.')}</p>
                             <Link to="/admin" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                Immaniġġja Vocab <ArrowRight size={14} />
+                                {t('Manage Entries', 'Immaniġġja l-Entrati')} <ArrowRight size={14} />
                             </Link>
                         </Card>
 
@@ -140,11 +140,11 @@ export function Home() {
                                 <LayoutDashboard size={80} strokeWidth={1.5} />
                             </div>
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                                <Edit3 className="text-[#1034A6]" size={20} /> Kontenut u Blog
+                                <Edit3 className="text-[#1034A6]" size={20} /> {t('Content and Blog', 'Kontenut u Blog')}
                             </h3>
-                            <p className="text-sm text-black/60 mb-6">Ippubblika artikli ġodda u żid eżempji ta' użu biex ttejjeb l-esperjenza tal-utent.</p>
+                            <p className="text-sm text-black/60 mb-6">{t('Publish new articles and add usage examples to enhance the user experience.', 'Ippubblika artikli ġodda u żid eżempji ta\' użu biex ttejjeb l-esperjenza tal-utent.')}</p>
                             <Link to="/blog" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                Editja Blog <ArrowRight size={14} />
+                                {t('Edit Blog', 'Editja Blog')} <ArrowRight size={14} />
                             </Link>
                         </Card>
                     </div>
@@ -155,18 +155,18 @@ export function Home() {
                             <h1 className="font-serif text-[12rem] select-none">M</h1>
                         </div>
                         <div className="max-w-xl relative z-10">
-                            <h2 className="text-2xl font-serif mb-4">Verification Quick-Search</h2>
-                            <p className="text-white/70 text-sm mb-6">Fittex malajr biex tivverifika jekk kelma hix diġà fid-database qabel ma żżidha.</p>
+                            <h2 className="text-2xl font-serif mb-4">{t('Quick-Search Verification', 'Verifikazzjoni Tiftix-Rapidu')}</h2>
+                            <p className="text-white/70 text-sm mb-6">{t('Quickly search to verify if a word is already in the database before adding it.', 'Fittex malajr biex tivverifika jekk kelma hix diġà fid-database qabel ma żżidha.')}</p>
                             <form onSubmit={handleSearch} className="flex gap-2">
                                 <input
                                     type="text"
                                     value={query}
                                     onChange={e => setQuery(e.target.value)}
-                                    placeholder="Fittex kelma..."
+                                    placeholder={t('Search for a word...', 'Fittex kelma...')}
                                     className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-sm focus:bg-white/20 outline-none transition-all placeholder:text-white/40"
                                 />
                                 <button type="submit" className="bg-white text-[#1034A6] px-6 py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all">
-                                    Iċċekkja
+                                    {t('Check', 'Iċċekkja')}
                                 </button>
                             </form>
                         </div>

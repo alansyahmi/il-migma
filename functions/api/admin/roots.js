@@ -90,8 +90,8 @@ export async function onRequestPost({ request, env }) {
         const consonant_array = JSON.stringify(consonants.split('-').map(c => c.trim().normalize('NFC')));
 
         await client.execute({
-            sql: `INSERT INTO roots (id, consonants, consonant_array, strength, weak_class, gloss, etymology, source, notes, vowel_set_perf, vowel_set_impf, vowel_set_imp, created_at, updated_at) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+            sql: `INSERT INTO roots (id, consonants, consonant_array, strength, weak_class, gloss, etymology, source, notes, vowel_set_perf, vowel_set_impf, vowel_set_imp, is_geminate, created_at, updated_at) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
             args: [
                 id,
                 consonants,
@@ -104,7 +104,8 @@ export async function onRequestPost({ request, env }) {
                 notes ?? '',
                 vowel_set_perf ?? 'a-a',
                 vowel_set_impf ?? 'i-a',
-                vowel_set_imp ?? 'o-o'
+                vowel_set_imp ?? 'o-o',
+                body.is_geminate ? 1 : 0
             ],
         });
 

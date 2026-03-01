@@ -85,9 +85,10 @@ export async function onRequestGet({ request, env }) {
 
         const client = db(env);
         let sql = `SELECT e.id, e.headword, e.pos, e.noun_gender, e.verb_class,
-                         e.is_loanword, e.source_language, e.created_at,
-                         d.text_en,
-                         r.consonants AS root_consonants
+                         e.is_loanword, e.source_language, e.created_at, e.verb_form,
+                         e.verb_vowel_perf, e.verb_vowel_impf, e.tags, e.noun_plural_forms,
+                         COALESCE(e.root_consonants, r.consonants) AS root_consonants,
+                         d.text_en
                   FROM entries e
                   LEFT JOIN definitions d ON d.entry_id = e.id AND d.sense_number = 1
                   LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
@@ -96,8 +97,8 @@ export async function onRequestGet({ request, env }) {
         const whereClauses = [];
 
         if (q) {
-            whereClauses.push('(e.headword LIKE ? OR r.consonants = ?)');
-            args.push(`%${q}%`, q);
+            whereClauses.push('(e.headword LIKE ? OR e.root_consonants = ? OR r.consonants = ?)');
+            args.push(`%${q}%`, q, q);
         }
         if (pos) {
             whereClauses.push('e.pos = ?');
@@ -111,7 +112,10 @@ export async function onRequestGet({ request, env }) {
         sql += ' ORDER BY e.headword ASC LIMIT ? OFFSET ?';
         args.push(limit, offset);
 
-        const countQuery = `SELECT COUNT(*) as total FROM entries e ${whereClauses.length ? ' WHERE ' + whereClauses.join(' AND ') : ''}`;
+        const countQuery = `SELECT COUNT(*) as total FROM entries e 
+                           LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
+                           LEFT JOIN roots r ON r.id = rpf.root_id
+                           ${whereClauses.length ? ' WHERE ' + whereClauses.join(' AND ') : ''}`;
         const countArgs = whereClauses.length ? args.slice(0, -2) : [];
 
         const [res, countRes] = await Promise.all([
@@ -136,7 +140,38 @@ export async function onRequestPost({ request, env }) {
 
         const body = await request.json();
         const client = db(env);
-        const id = uid();
+
+        let prefix = body.pos;
+        if (body.pos === 'participle') prefix = body.participle_type === 'active' ? 'ap' : 'pp';
+        else if (body.pos === 'adjective') prefix = 'adj';
+        else if (body.pos === 'verbal_noun') prefix = 'vn';
+
+        const safeHeadword = (body.headword || '').toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9àċġħżie-]/gi, '');
+
+        let baseId = `${prefix}-${safeHeadword}`;
+        let id = baseId;
+
+        // Handle collisions using numeral suffixes
+        const idCheckRes = await client.execute({
+            sql: `SELECT id FROM entries WHERE id LIKE ? OR id = ?`,
+            args: [`${baseId}-%`, baseId]
+        });
+
+        if (idCheckRes.rows.length > 0) {
+            let maxSuffix = 0;
+            idCheckRes.rows.forEach(r => {
+                if (r.id === baseId) maxSuffix = Math.max(maxSuffix, 1);
+                else {
+                    const match = r.id.match(new RegExp(`^${baseId}-(\\d+)$`));
+                    if (match && match[1]) {
+                        maxSuffix = Math.max(maxSuffix, parseInt(match[1], 10));
+                    }
+                }
+            });
+            id = `${baseId}-${maxSuffix + 1}`;
+        }
 
         const {
             headword, pos, noun_gender, noun_singular, noun_plural_forms,
@@ -147,7 +182,10 @@ export async function onRequestPost({ request, env }) {
             adj_masculine, adj_feminine, adj_plural, adj_elative,
             is_loanword = false, source_language, tags = [],
             definitions, etymology_chain,
-            ipa,
+            phonetics, participle_type,
+            _rootConsonants, _formLabel, noun_type, cv_pattern,
+            plural_pattern, sound_suffix, adj_pattern,
+            noun_feminine, noun_masculine,
         } = body;
 
         if (!headword || !pos) return json({ error: 'headword and pos are required' }, 400);
@@ -159,9 +197,11 @@ export async function onRequestPost({ request, env }) {
                 verb_class, verb_transitivity, verb_perfective_3sgm, verb_imperfective_3sgm,
                 verb_verbal_noun, verb_active_ptcp, verb_passive_ptcp, verb_vowel_perf, verb_vowel_impf,
                 adj_masculine, adj_feminine, adj_plural, adj_elative,
-                is_loanword, source_language, tags, created_at, updated_at
+                is_loanword, source_language, tags, participle_type, root_consonants, cv_pattern, verb_form,
+                noun_type, plural_pattern, sound_suffix, adj_pattern,
+                noun_feminine, noun_masculine, created_at, updated_at
               ) VALUES (
-                ?,?,?,  ?,?,?,?,?,?,  ?,?,?,?,  ?,?,?,?,?,  ?,?,?,?,  ?,?,?,?,?
+                ?,?,?,  ?,?,?,?,?,?,  ?,?,?,?,  ?,?,?,?,?,  ?,?,?,?,  ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
               )`,
             args: [
                 id, headword, pos,
@@ -175,6 +215,9 @@ export async function onRequestPost({ request, env }) {
                 n(adj_masculine), n(adj_feminine), n(adj_plural), n(adj_elative),
                 is_loanword ? 1 : 0, n(source_language),
                 tags.length ? JSON.stringify(tags) : null,
+                n(participle_type), n(_rootConsonants), n(cv_pattern), n(_formLabel), n(noun_type),
+                n(plural_pattern), n(sound_suffix), n(adj_pattern),
+                n(noun_feminine), n(noun_masculine),
                 now(), now(),
             ],
         });
@@ -184,9 +227,9 @@ export async function onRequestPost({ request, env }) {
                 const def = definitions[i];
                 if (!def.text_en) continue;
                 await client.execute({
-                    sql: `INSERT INTO definitions (id, entry_id, sense_number, text_mt, text_en, register, sort_order)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                    args: [uid(), id, i + 1, def.text_mt || def.text_en, def.text_en, n(def.register), i],
+                    sql: `INSERT INTO definitions (id, entry_id, sense_number, text_mt, text_en, register, nuance, sort_order)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                    args: [uid(), id, i + 1, def.text_mt || def.text_en, def.text_en, n(def.register), n(def.nuance), i],
                 });
             }
         }
@@ -198,11 +241,14 @@ export async function onRequestPost({ request, env }) {
             });
         }
 
-        if (ipa) {
-            await client.execute({
-                sql: `INSERT INTO phonetics (id, entry_id, ipa, dialect) VALUES (?, ?, ?, 'Standard')`,
-                args: [uid(), id, ipa],
-            });
+        if (phonetics && Array.isArray(phonetics)) {
+            for (const ph of phonetics) {
+                if (!ph.ipa && !ph.spelling) continue;
+                await client.execute({
+                    sql: `INSERT INTO phonetics (id, entry_id, ipa, dialect, notes) VALUES (?, ?, ?, ?, ?)`,
+                    args: [uid(), id, ph.ipa || '', ph.dialect || 'Standard', ph.spelling ? `Spelling: ${ph.spelling}` : null],
+                });
+            }
         }
 
         // Update FTS
@@ -220,16 +266,41 @@ export async function onRequestPut({ request, env }) {
         if (!(await verifyAdmin(request, env))) return unauthorized();
 
         const body = await request.json();
-        const { id, ...fields } = body;
+        const { id, old_id, ...fields } = body;
         if (!id) return json({ error: 'id required' }, 400);
 
         const client = db(env);
+
+        // Handle ID rename 
+        if (old_id && old_id !== id) {
+            try {
+                const columnsRes = await client.execute("PRAGMA table_info(entries)");
+                const colNames = columnsRes.rows.map(r => r.name).filter(n => n !== 'id');
+
+                await client.execute({
+                    sql: `INSERT INTO entries (id, ${colNames.join(', ')}) SELECT ?, ${colNames.join(', ')} FROM entries WHERE id = ?`,
+                    args: [id, old_id]
+                });
+
+                const childTables = ['definitions', 'etymologies', 'phonetics', 'subentries', 'attestation_reliability', 'dialect_variants', 'audio_files'];
+                for (const table of childTables) {
+                    await client.execute({ sql: `UPDATE ${table} SET entry_id = ? WHERE entry_id = ?`, args: [id, old_id] });
+                }
+
+                await client.execute({ sql: `DELETE FROM entries WHERE id = ?`, args: [old_id] });
+            } catch (e) {
+                return json({ error: 'Failed to rename ID: ' + e.message }, 400);
+            }
+        }
+
         const allowed = [
             'headword', 'pos', 'noun_gender', 'noun_singular', 'noun_plural_forms', 'noun_sound_plural',
-            'noun_dual', 'noun_diminutive', 'verb_class', 'verb_transitivity', 'verb_perfective_3sgm',
+            'noun_dual', 'noun_diminutive', 'noun_type', 'verb_class', 'verb_transitivity', 'verb_perfective_3sgm',
             'verb_imperfective_3sgm', 'verb_verbal_noun', 'verb_active_ptcp', 'verb_passive_ptcp',
-            'verb_vowel_perf', 'verb_vowel_impf',
-            'adj_masculine', 'adj_feminine', 'adj_plural', 'adj_elative', 'is_loanword', 'source_language', 'tags',
+            'verb_vowel_perf', 'verb_vowel_impf', 'verb_vowel_impv',
+            'adj_masculine', 'adj_feminine', 'adj_plural', 'adj_elative', 'is_loanword', 'source_language', 'tags', 'participle_type',
+            'cv_pattern', 'plural_pattern', 'sound_suffix', 'adj_pattern',
+            'noun_feminine', 'noun_masculine', 'verb_form'
         ];
 
         const setClauses = [];
@@ -241,6 +312,19 @@ export async function onRequestPut({ request, env }) {
             if (key === 'noun_plural_forms' || key === 'tags') val = val && val.length ? JSON.stringify(val) : null;
             if (key === 'is_loanword') val = val ? 1 : 0;
             setClauses.push(`${key} = ?`);
+            args.push(val);
+        }
+
+        if ('_rootConsonants' in fields) {
+            let val = n(fields['_rootConsonants']);
+            setClauses.push(`root_consonants = ?`);
+            args.push(val);
+        }
+
+        if ('_formLabel' in fields) {
+            let val = fields['_formLabel'];
+            if (val === '') val = null;
+            setClauses.push(`verb_form = ?`);
             args.push(val);
         }
 
@@ -260,9 +344,9 @@ export async function onRequestPut({ request, env }) {
                 const def = fields.definitions[i];
                 if (!def.text_en) continue;
                 await client.execute({
-                    sql: `INSERT INTO definitions (id, entry_id, sense_number, text_mt, text_en, register, sort_order)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                    args: [uid(), id, i + 1, def.text_mt || def.text_en, def.text_en, n(def.register), i],
+                    sql: `INSERT INTO definitions (id, entry_id, sense_number, text_mt, text_en, register, nuance, sort_order)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                    args: [uid(), id, i + 1, def.text_mt || def.text_en, def.text_en, n(def.register), n(def.nuance), i],
                 });
             }
         }
@@ -277,12 +361,13 @@ export async function onRequestPut({ request, env }) {
             }
         }
 
-        if ('ipa' in fields) {
+        if ('phonetics' in fields && Array.isArray(fields.phonetics)) {
             await client.execute({ sql: 'DELETE FROM phonetics WHERE entry_id = ?', args: [id] });
-            if (fields.ipa) {
+            for (const ph of fields.phonetics) {
+                if (!ph.ipa && !ph.spelling) continue;
                 await client.execute({
-                    sql: `INSERT INTO phonetics (id, entry_id, ipa, dialect) VALUES (?, ?, ?, 'Standard')`,
-                    args: [uid(), id, fields.ipa],
+                    sql: `INSERT INTO phonetics (id, entry_id, ipa, dialect, notes) VALUES (?, ?, ?, ?, ?)`,
+                    args: [uid(), id, ph.ipa || '', ph.dialect || 'Standard', ph.spelling ? `Spelling: ${ph.spelling}` : null],
                 });
             }
         }
@@ -338,7 +423,9 @@ function unauthorized() {
 }
 
 
-/** Convert empty/undefined to null for DB consistency */
+/** Convert empty/undefined to null for DB consistency, and normalize strings */
 function n(val) {
-    return (val === '' || val === undefined) ? null : val;
+    if (val === '' || val === undefined) return null;
+    if (typeof val === 'string') return val.trim().normalize('NFC');
+    return val;
 }

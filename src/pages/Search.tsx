@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search as SearchIcon, Keyboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { MOCK_ENTRIES } from '@/data/mockData';
+import { apiSearch } from '@/lib/api';
 
 // ── Colours ────────────────────────────────────────────────────────────────
 const EGYPTIAN_BLUE = '#1034A6';
@@ -182,7 +182,7 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                             {result.headword}
                         </Link>
                         <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
-                            <Link to={`/search?root=${result.rootSlug}`}
+                            <Link to={`/root/${result.rootSlug}`}
                                 style={{ color: EGYPTIAN_BLUE }}
                                 className="text-xs hover:underline font-sans">
                                 {result.root}
@@ -247,6 +247,71 @@ export function Search() {
     const { t } = useLanguage();
     const { term } = useLinguisticMode();
     const [searchParams, setSearchParams] = useSearchParams();
+    const [results, setResults] = useState<SearchResult[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [total, setTotal] = useState(0);
+
+    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type');
+    const submitted = searchParams.get('q') ?? '';
+
+    // Effect to fetch from API
+    useEffect(() => {
+        if (!isSearchPerformed) {
+            setResults([]);
+            setTotal(0);
+            return;
+        }
+
+        setLoading(true);
+        const q = searchParams.get('q') ?? '';
+        const pos = searchParams.get('pos') ?? '';
+        const limit = Number(searchParams.get('limit') ?? DEFAULT_FILTERS.maxResults);
+
+        apiSearch(q, { pos, limit })
+            .then(res => {
+                setTotal(res.total);
+                // Map API results to the local SearchResult interface
+                const mapped: SearchResult[] = res.results.map((r: any) => {
+                    const inflections: InflectionRow[] = [];
+                    const formLines: string[] = [];
+
+                    if (r.verb_morphology) {
+                        const vm = r.verb_morphology;
+                        if (vm.form) formLines.push(`Form ${vm.form}`);
+                        if (vm.transitivity) formLines.push(vm.transitivity);
+
+                        if (r.verb_perfective_3sgm) {
+                            inflections.push({ label: 'Perfective', form: r.verb_perfective_3sgm, hasPage: true });
+                        }
+                    }
+
+                    return {
+                        id: r.id,
+                        headword: r.headword,
+                        root: r.root_pattern_form?.root?.consonants || '',
+                        rootSlug: r.root_pattern_form?.root?.consonants || '',
+                        gender: r.noun_gender || (r.pos === 'adjective' ? 'masculine' : undefined),
+                        pos: r.pos,
+                        formLines,
+                        definitions: r.definition_en ? [r.definition_en] : [],
+                        inflections,
+                    };
+                });
+                setResults(mapped);
+            })
+            .catch(err => {
+                console.error("Search fetch error:", err);
+                setResults([]);
+            })
+            .finally(() => setLoading(false));
+    }, [searchParams, isSearchPerformed]);
+
+    // Filter and map results (Now handled by API effect, this useMemo is mostly for query state tracking)
+    useEffect(() => {
+        const q = searchParams.get('q') ?? '';
+        setQuery(q);
+    }, [searchParams]);
+
     const [query, setQuery] = useState(searchParams.get('q') ?? '');
     const [filters, setFilters] = useState<Filters>(() => {
         const f = { ...DEFAULT_FILTERS };
@@ -254,89 +319,6 @@ export function Search() {
         if (searchParams.has('type')) f.rootType = searchParams.get('type')!;
         return f;
     });
-
-    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type');
-    const submitted = searchParams.get('q') ?? '';
-
-    // Effective search values (pulled from URL)
-    const activeFilters = useMemo(() => {
-        const f = { ...DEFAULT_FILTERS };
-        f.pos = searchParams.get('pos') ?? '';
-        f.rootType = searchParams.get('type') ?? '';
-        return f;
-    }, [searchParams]);
-
-    // Filter and map results
-    const results = useMemo(() => {
-        if (!isSearchPerformed) return [];
-        const s = submitted.toLowerCase();
-        const { pos, rootType, maxResults } = activeFilters;
-
-        return MOCK_ENTRIES.filter(e => {
-            // Text search (if query exists)
-            if (s) {
-                const matchesHeadword = e.headword.toLowerCase().includes(s);
-                const matchesRoot = e.root_pattern_form?.root?.consonants.toLowerCase().includes(s);
-                const matchesGloss = e.definitions.some(d => d.text_en.toLowerCase().includes(s));
-                if (!matchesHeadword && !matchesRoot && !matchesGloss) return false;
-            }
-
-            // POS filter
-            if (pos && e.pos !== pos) return false;
-
-            // Root Type filter
-            if (rootType) {
-                const rt = e.root_pattern_form?.root?.strength;
-                const wc = e.root_pattern_form?.root?.weak_class;
-
-                if (rootType === 'strong' && rt !== 'strong') return false;
-                if (rootType === 'weak' && rt !== 'weak') return false;
-                if (rootType === 'doubled' && (rt !== 'strong' || !e.root_pattern_form?.root?.is_geminate)) return false; // approximate
-                if (rootType === 'defective' && wc !== 'defective') return false;
-                if (rootType === 'hollow' && wc !== 'hollow') return false;
-            }
-
-            return true;
-        }).map((e): SearchResult => {
-            // Map Entry to SearchResult
-            const inflections: InflectionRow[] = [];
-            const formLines: string[] = [];
-
-            if (e.verb_morphology) {
-                const vm = e.verb_morphology;
-                formLines.push(`Form ${vm.form}`);
-                if (vm.transitivity) formLines.push(vm.transitivity);
-
-                if (vm.perfective_3sg_m) inflections.push({ label: 'Perfective', form: vm.perfective_3sg_m, hasPage: true });
-                if (vm.imperfective_3sg_m) inflections.push({ label: 'Imperfective', form: vm.imperfective_3sg_m, hasPage: false });
-                if (vm.verbal_noun) inflections.push({ label: 'Verbal Noun', form: vm.verbal_noun, hasPage: false });
-            }
-
-            if (e.noun_morphology) {
-                const nm = e.noun_morphology;
-                if (nm.plural_forms?.length) {
-                    inflections.push({ label: 'Plural', form: nm.plural_forms[0], hasPage: false });
-                }
-            }
-
-            return {
-                id: e.id,
-                headword: e.headword,
-                root: e.root_pattern_form?.root?.consonants || '',
-                rootSlug: e.root_pattern_form?.root?.consonants || '',
-                gender: e.noun_morphology?.gender || (e.adjective_morphology?.masculine ? 'masculine' : undefined),
-                pos: e.pos,
-                formLines,
-                definitions: e.definitions.map(d => d.text_en),
-                inflections,
-            };
-        }).slice(0, parseInt(maxResults));
-    }, [submitted, isSearchPerformed, activeFilters]);
-
-    useEffect(() => {
-        const q = searchParams.get('q') ?? '';
-        setQuery(q);
-    }, [searchParams]);
 
     const handleSearch = (e?: React.FormEvent) => {
         e?.preventDefault();
@@ -397,7 +379,7 @@ export function Search() {
                                 {t(`Results for '${submitted}'`, `Riżultati għal '${submitted}'`)}
                             </h1>
                             <p className="text-sm text-black/40 mt-0.5">
-                                {t(`${results.length} of ${results.length} entries shown`, `${results.length} minn ${results.length} entrati murija`)}
+                                {t(`${results.length} of ${total} entries shown`, `${results.length} minn ${total} entrati murija`)}
                             </p>
                         </>
                     ) : (
@@ -532,7 +514,7 @@ export function Search() {
 
                     {/* Results list */}
                     <div className="flex-1 space-y-3 min-w-0">
-                        {results.length === 0 ? (
+                        {results.length === 0 && !loading && isSearchPerformed && (
                             <div className="bg-white/50 rounded-xl border border-white/40 shadow-sm p-10 text-left">
                                 <p className="text-sm text-[#000] mb-2">
                                     {t(`No results found for '${submitted}'.`, `L-ebda riżultat ma nstab għal '${submitted}'.`)}
@@ -556,11 +538,15 @@ export function Search() {
                                     </button>
                                 </div>
                             </div>
-                        ) : (
-                            results.map((r, i) => (
-                                <EntryCard key={r.id} result={r} index={i + 1} />
-                            ))
                         )}
+                        {loading && (
+                            <div className="flex justify-center p-10">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1034A6]"></div>
+                            </div>
+                        )}
+                        {!loading && results.map((r, i) => (
+                            <EntryCard key={r.id} result={r} index={i + 1} />
+                        ))}
                     </div>
 
                 </div>

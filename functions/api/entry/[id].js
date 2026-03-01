@@ -8,8 +8,14 @@
 import { createClient } from '@libsql/client/web';
 
 export async function onRequestGet({ params, env }) {
-    const { id } = params;
+    let { id } = params;
     if (!id) return json({ error: 'Missing id' }, 400);
+
+    try {
+        id = decodeURIComponent(id).normalize('NFC');
+    } catch (e) {
+        // Fallback to raw id
+    }
 
     try {
         const url = env.TURSO_URL || env.VITE_TURSO_URL;
@@ -19,14 +25,17 @@ export async function onRequestGet({ params, env }) {
         const entryRes = await db.execute({
             sql: `SELECT e.*,
                rpf.derived_form,
-               r.consonants  AS root_consonants,
+               COALESCE(e.root_consonants, r.consonants) AS resolved_root_consonants,
                r.id          AS root_id,
                r.strength    AS root_strength,
                r.weak_class  AS root_weak_class,
+               r.is_geminate AS root_is_geminate,
+               r.gloss       AS root_gloss,
+               r.etymology   AS root_etymology,
                pat.cv_notation, pat.wizen_notation, pat.id AS pattern_id
             FROM entries e
             LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
-            LEFT JOIN roots r   ON r.id  = rpf.root_id
+            LEFT JOIN roots r ON r.id = rpf.root_id OR r.consonants = e.root_consonants
             LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
             WHERE e.id = ?`,
             args: [id],
@@ -117,7 +126,10 @@ export async function onRequestGet({ params, env }) {
             noun_plural_forms: entry.noun_plural_forms ? JSON.parse(entry.noun_plural_forms) : [],
             tags: entry.tags ? JSON.parse(entry.tags) : [],
             definitions,
-            phonetics: phonRes.rows,
+            phonetics: phonRes.rows.map(ph => ({
+                ...ph,
+                spelling: ph.notes?.startsWith('Spelling: ') ? ph.notes.replace('Spelling: ', '') : ''
+            })),
             etymologies: etymRes.rows.map(e => ({
                 ...e,
                 chain: e.chain ? JSON.parse(e.chain) : [],
@@ -126,12 +138,15 @@ export async function onRequestGet({ params, env }) {
             audio: audioRes.rows,
             subentries: subRes.rows,
             dialect_variants: dialRes.rows,
-            root_pattern_form: (entry.root_consonants) ? {
+            root_pattern_form: (entry.resolved_root_consonants) ? {
                 root: {
-                    id: entry.root_id,
-                    consonants: entry.root_consonants,
-                    strength: entry.root_strength,
-                    weak_class: entry.root_weak_class
+                    id: entry.root_id || null,
+                    consonants: entry.resolved_root_consonants,
+                    strength: entry.root_strength || 'strong',
+                    weak_class: entry.root_weak_class || null,
+                    is_geminate: !!entry.root_is_geminate,
+                    gloss: entry.root_gloss || '',
+                    etymology: entry.root_etymology || ''
                 },
                 pattern: entry.pattern_id ? {
                     id: entry.pattern_id,
@@ -141,6 +156,39 @@ export async function onRequestGet({ params, env }) {
                 derived_form: entry.derived_form,
             } : null,
         };
+
+        // Attach Verb Morphology struct from flat DB rows as expected by Frontend
+        if (entry.pos === 'verb') {
+            let related_entries = [];
+            const rc = entry.resolved_root_consonants;
+            if (rc) {
+                const relRes = await db.execute({
+                    sql: `SELECT e.id, e.headword, d.text_en AS gloss_en, d.text_mt AS gloss_mt 
+                          FROM entries e
+                          LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
+                          LEFT JOIN roots r ON r.id = rpf.root_id
+                          LEFT JOIN definitions d ON d.entry_id = e.id AND d.sense_number = 1
+                          WHERE (e.root_consonants = ? OR r.consonants = ?) AND e.id != ? LIMIT 10`,
+                    args: [rc, rc, entry.id],
+                });
+                related_entries = relRes.rows;
+            }
+
+            payload.verb_morphology = {
+                transitivity: entry.verb_transitivity || 'both',
+                perfective_3sg_m: entry.verb_perfective_3sgm || entry.headword,
+                imperfective_3sg_m: entry.verb_imperfective_3sgm || '',
+                verbal_noun: entry.verb_verbal_noun,
+                active_participle: entry.verb_active_ptcp,
+                passive_participle: entry.verb_passive_ptcp,
+                form: entry.verb_form || 'I',
+                root_tags: entry.verb_class ? [entry.verb_class.toUpperCase()] : [],
+                vowel_set_perfect: entry.verb_vowel_perf || 'a-a',
+                vowel_set_imperfect: entry.verb_vowel_impf || 'a-a',
+                vowel_set_imperative: entry.verb_vowel_impv || entry.verb_vowel_impf || 'a-a',
+                related_entries,
+            };
+        }
 
         return json({ entry: payload });
     } catch (e) {

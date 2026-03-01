@@ -171,3 +171,36 @@ export async function adminDeleteRoot(token: string, id: string) {
     });
 }
 
+// ── Config Admin ─────────────────────────────────────────────────────────────
+
+export async function adminListConfig(token: string, category?: string) {
+    const params = new URLSearchParams();
+    if (category) params.set('category', category);
+    return apiFetch<{ config: any[] }>(`/api/admin/config?${params}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminCreateConfig(token: string, data: any) {
+    return apiFetch('/api/admin/config', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function adminUpdateConfig(token: string, data: any) {
+    return apiFetch('/api/admin/config', {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function adminDeleteConfig(token: string, id: string) {
+    return apiFetch(`/api/admin/config?id=${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+

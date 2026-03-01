@@ -19,6 +19,9 @@ CREATE TABLE IF NOT EXISTS roots (
   source        TEXT,                  -- e.g. dictionary citation
   hidden_forms    TEXT,                -- JSON array of hidden theoretic forms
   notes         TEXT,
+  vowel_set_perf TEXT,
+  vowel_set_impf TEXT,
+  vowel_set_imp  TEXT,
   created_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
   updated_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
@@ -54,8 +57,12 @@ CREATE TABLE IF NOT EXISTS entries (
   pos                   TEXT NOT NULL CHECK(pos IN (
     'noun','verb','adjective','adverb','preposition',
     'conjunction','particle','article','pronoun','interrogative',
-    'numeral','interjection'
+    'numeral','interjection','participle'
   )),
+  participle_type       TEXT CHECK(participle_type IN ('active','passive')),
+  root_consonants       TEXT,
+  cv_pattern            TEXT, -- e.g. "Fagħal" or "CCvC"
+  verb_form             TEXT, -- 'I', 'II', 'III' etc
   root_pattern_form_id  TEXT REFERENCES root_pattern_forms(id),
   is_loanword           INTEGER NOT NULL DEFAULT 0,
   source_language       TEXT,
@@ -63,6 +70,7 @@ CREATE TABLE IF NOT EXISTS entries (
 
   -- Noun morphology
   noun_gender           TEXT CHECK(noun_gender IN ('masculine','feminine','common')),
+  noun_type             TEXT,
   noun_singular         TEXT,
   noun_plural_forms     TEXT,  -- JSON array (multiple broken plurals)
   noun_sound_plural     TEXT,
@@ -70,6 +78,10 @@ CREATE TABLE IF NOT EXISTS entries (
   noun_diminutive       TEXT,
   noun_collective       TEXT,
   noun_singulative      TEXT,
+  plural_pattern        TEXT, -- for broken plural presets
+  sound_suffix          TEXT, -- for sound plural presets
+  noun_feminine         TEXT,
+  noun_masculine        TEXT,
 
   -- Verb morphology
   verb_class            TEXT CHECK(verb_class IN ('strong','weak','doubled','quadrilateral','loan')),
@@ -88,6 +100,7 @@ CREATE TABLE IF NOT EXISTS entries (
   adj_feminine          TEXT,
   adj_plural            TEXT,
   adj_elative           TEXT,
+  adj_pattern           TEXT, -- for adjective presets
 
   created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
   updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
@@ -111,7 +124,8 @@ CREATE TABLE IF NOT EXISTS definitions (
   sense_number  INTEGER NOT NULL DEFAULT 1,
   text_mt       TEXT NOT NULL,
   text_en       TEXT NOT NULL,
-  register      TEXT CHECK(register IN ('formal','informal','archaic','technical','dialectal','colloquial')),
+  register      TEXT CHECK(register IN ('formal','informal','archaic','obsolete','technical','dialectal','colloquial')),
+  nuance        TEXT CHECK(nuance IN ('noun','adjective')),
   field         TEXT,  -- domain e.g. "Law", "Medicine"
   sort_order    INTEGER NOT NULL DEFAULT 0
 );

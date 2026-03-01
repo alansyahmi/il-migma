@@ -7,6 +7,9 @@ import { type Entry } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
 import { generateConjugation } from '@/lib/conjugationEngine';
+import { useAuth as useClerkAuth } from '@clerk/clerk-react';
+import { Edit2 } from 'lucide-react';
+import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { apiGetEntry } from '@/lib/api';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
@@ -114,12 +117,17 @@ function DerivedTermLink({ label, value }: { label: string; value: string }) {
 function VerbEntryView({ entry }: { entry: Entry }) {
     const { t } = useLanguage();
     const { term, mode } = useLinguisticMode();
-    const { isAdmin } = useAuth();
+    const { isAdmin, adminViewEnabled } = useAuth();
+    const { getToken } = useClerkAuth();
+
+    const [showForm, setShowForm] = useState(false);
+    const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
+
+    const isActualAdmin = isAdmin && adminViewEnabled;
 
     const vm = entry.verb_morphology!;
     const ety = entry.etymologies?.[0];
-    const primaryIPA = entry.phonetics?.find(p => p.dialect === 'Standard')?.ipa
-        ?? entry.phonetics?.[0]?.ipa;
+
     const rootConsonants = entry.root_pattern_form?.root?.consonants;
     const pattern = entry.root_pattern_form?.pattern;
 
@@ -193,10 +201,27 @@ function VerbEntryView({ entry }: { entry: Entry }) {
         <div style={bgStyle}>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
 
-                <div className="text-center mb-8">
-                    <h1 className="font-serif font-bold text-[3rem] leading-none text-[#000] tracking-tight">
-                        {isTheoretical && '*'}{entry.headword}
-                    </h1>
+                <div className="text-center mb-8 relative group max-w-fit mx-auto">
+                    <div className="relative inline-flex items-center justify-center">
+                        <h1 className="font-serif font-bold text-[3rem] leading-none text-[#000] tracking-tight">
+                            {isTheoretical && '*'}{entry.headword}
+                        </h1>
+                        {isActualAdmin && (
+                            <button
+                                onClick={() => {
+                                    setEditEntry({
+                                        ...entry,
+                                        _rootConsonants: entry.root_pattern_form?.root?.consonants || ''
+                                    } as any);
+                                    setShowForm(true);
+                                }}
+                                className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
+                                title="Edit Entry"
+                            >
+                                <Edit2 size={16} />
+                            </button>
+                        )}
+                    </div>
                     <p className="text-xs font-sans text-black/40 tracking-[0.18em] mt-2 uppercase">
                         — {subParts.join(' • ')} —
                     </p>
@@ -261,9 +286,25 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                                     </PropRow>
                                 )}
 
-                                {primaryIPA && (
-                                    <PropRow label={t('IPA Phonetic', term('Fonetika AFI'))}>
-                                        <span className="font-mono">{primaryIPA}</span>
+                                {entry.phonetics && entry.phonetics.length > 0 && (
+                                    <PropRow label={t('Pronunciation', term('Pronunzja'))}>
+                                        <div className="space-y-1.5 mt-1">
+                                            {entry.phonetics.map((ph, idx) => {
+                                                const spellingMatch = ph.notes?.match(/Spelling: (.*)/);
+                                                const spelling = spellingMatch ? spellingMatch[1] : entry.headword;
+                                                return (
+                                                    <div key={idx} className="flex items-center gap-2">
+                                                        <span className="font-serif text-[#000]">{spelling}</span>
+                                                        {ph.ipa && <span className="font-mono text-black/50 text-xs italic">[{ph.ipa}]</span>}
+                                                        {ph.dialect && ph.dialect !== 'Standard' && (
+                                                            <span className="text-[0.6rem] bg-black/5 text-black/40 px-1 rounded uppercase tracking-tighter">
+                                                                {ph.dialect.replace(' (Għawdex)', '').replace(' (Arkajku)', '')}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
                                     </PropRow>
                                 )}
 
@@ -517,6 +558,18 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                     </div>
                 </div>
             </div>
+
+            {showForm && (
+                <EntryFormModal
+                    entry={editEntry}
+                    onClose={() => setShowForm(false)}
+                    onSaved={() => {
+                        setShowForm(false);
+                        window.location.reload();
+                    }}
+                    getToken={getToken}
+                />
+            )}
         </div>
     );
 }

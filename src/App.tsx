@@ -5,6 +5,7 @@ import { LinguisticModeProvider } from '@/contexts/LinguisticModeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { DarkModeProvider } from '@/contexts/DarkModeContext';
+import { AdminConfigProvider } from '@/lib/adminConfig';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Home } from '@/pages/Home';
@@ -48,27 +49,29 @@ export default function App() {
         <LanguageProvider>
           <LinguisticModeProvider>
             <AuthProvider>
-              <BrowserRouter>
-                <Routes>
-                  <Route element={<AppShell />}>
-                    <Route index element={<Home />} />
-                    <Route path="search" element={<Search />} />
-                    <Route path="entry/:id" element={<Entry />} />
-                    <Route path="root/:id" element={<Root />} />
-                    <Route path="chatbot" element={<Chatbot />} />
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="conjugator" element={<Conjugator />} />
-                    <Route path="semmej" element={<IsSemmej />} />
-                    <Route path="blog" element={<Blog />} />
-                    <Route path="blog/:slug" element={<BlogPost />} />
-                    <Route path="course" element={<Course />} />
-                    <Route path="admin" element={<Admin />} />
-                    <Route path="advanced-search" element={<AdvancedSearch />} />
-                    <Route path="root-search" element={<RootSearch />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Route>
-                </Routes>
-              </BrowserRouter>
+              <AdminConfigProvider>
+                <BrowserRouter>
+                  <Routes>
+                    <Route element={<AppShell />}>
+                      <Route index element={<Home />} />
+                      <Route path="search" element={<Search />} />
+                      <Route path="entry/:id" element={<Entry />} />
+                      <Route path="root/:id" element={<Root />} />
+                      <Route path="chatbot" element={<Chatbot />} />
+                      <Route path="dashboard" element={<Dashboard />} />
+                      <Route path="conjugator" element={<Conjugator />} />
+                      <Route path="semmej" element={<IsSemmej />} />
+                      <Route path="blog" element={<Blog />} />
+                      <Route path="blog/:slug" element={<BlogPost />} />
+                      <Route path="course" element={<Course />} />
+                      <Route path="admin" element={<Admin />} />
+                      <Route path="advanced-search" element={<AdvancedSearch />} />
+                      <Route path="root-search" element={<RootSearch />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Route>
+                  </Routes>
+                </BrowserRouter>
+              </AdminConfigProvider>
             </AuthProvider>
           </LinguisticModeProvider>
         </LanguageProvider>

@@ -83,12 +83,14 @@ export async function onRequestPut({ request, env, params }) {
         const { consonants } = params;
         const decodedCons = decodeURIComponent(consonants).normalize('NFC');
         const body = await request.json();
-        const { strength, weak_class, gloss, etymology, source, notes, hidden_forms, vowel_set_perf, vowel_set_impf, vowel_set_imp } = body;
+        const { consonants: newConsonants, strength, weak_class, gloss, etymology, source, notes, hidden_forms, vowel_set_perf, vowel_set_impf, vowel_set_imp, is_geminate } = body;
 
         const client = db(env);
 
         let sql = `UPDATE roots SET updated_at = datetime('now')`;
         const args = [];
+
+        if (newConsonants !== undefined && newConsonants !== decodedCons) { sql += `, consonants = ?`; args.push(newConsonants); }
 
         if (strength !== undefined) { sql += `, strength = ?`; args.push(strength); }
         if (weak_class !== undefined) { sql += `, weak_class = ?`; args.push(weak_class); }
@@ -99,6 +101,7 @@ export async function onRequestPut({ request, env, params }) {
         if (vowel_set_perf !== undefined) { sql += `, vowel_set_perf = ?`; args.push(vowel_set_perf); }
         if (vowel_set_impf !== undefined) { sql += `, vowel_set_impf = ?`; args.push(vowel_set_impf); }
         if (vowel_set_imp !== undefined) { sql += `, vowel_set_imp = ?`; args.push(vowel_set_imp); }
+        if (is_geminate !== undefined) { sql += `, is_geminate = ?`; args.push(is_geminate ? 1 : 0); }
 
         // Always recalculate consonant_array to fix existing data
         const normalized = decodedCons.toLowerCase().trim();

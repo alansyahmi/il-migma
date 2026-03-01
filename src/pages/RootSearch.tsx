@@ -3,7 +3,7 @@ import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { MOCK_ENTRIES } from '@/data/mockData';
-import { generateRootForms, markGeneratedForms, type FormMarker, type MarkedVerbForm } from '@/lib/conjugationEngine';
+import { generateRootForms, markGeneratedForms, type FormMarker, type MarkedVerbForm, type AttestedEntry } from '@/lib/conjugationEngine';
 import { apiSearchRoots } from '@/lib/api';
 import { Spinner } from '@/components/ui/Spinner';
 
@@ -102,20 +102,29 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
 
                             const rawGen = generateRootForms(
                                 rootObj.consonants,
-                                vm.vowel_set_perfect || 'a-a',
-                                vm.vowel_set_imperfect || 'i-a',
+                                rootObj.vowel_set_perf || vm.vowel_set_perfect || 'a-a',
+                                rootObj.vowel_set_impf || vm.vowel_set_imperfect || 'i-a',
                                 rootObj.strength,
                                 rootObj.weak_class
                             );
 
-                            const attestedLabels = new Set<string>();
+                            const attested: AttestedEntry[] = [];
                             verbs.forEach((v: any) => {
-                                if (v.verb_morphology?.perfective_3sg_m) attestedLabels.add(v.verb_morphology.perfective_3sg_m);
-                                if (v.headword) attestedLabels.add(v.headword);
-                                v.subentries?.forEach((s: any) => attestedLabels.add(s.headword));
+                                const form = v.verb_morphology?.form || '';
+                                if (!form) return;
+                                attested.push({ word: v.headword, id: v.id, form, type: 'lemma' });
+                                if (v.verb_morphology?.passive_participle) {
+                                    attested.push({ word: v.verb_morphology.passive_participle, id: v.id, form, type: 'passive' });
+                                }
+                                if (v.verb_morphology?.active_participle) {
+                                    attested.push({ word: v.verb_morphology.active_participle, id: v.id, form, type: 'active' });
+                                }
+                                if (v.verb_morphology?.verbal_noun) {
+                                    attested.push({ word: v.verb_morphology.verbal_noun, id: v.id, form, type: 'noun' });
+                                }
                             });
 
-                            const rowsData = markGeneratedForms(rawGen, attestedLabels);
+                            const rowsData = markGeneratedForms(rawGen, attested);
                             const strengthLabel = rootObj.strength.toUpperCase();
 
                             return (
@@ -126,8 +135,10 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                                         </Link>
                                     </td>
                                     <td className="px-4 py-4">
-                                        <span className="text-[10px] bg-black/5 px-1.5 py-0.5 rounded text-black/50 font-bold tracking-wider">
-                                            {strengthLabel}{rootObj.weak_class && ` • ${rootObj.weak_class.toUpperCase()}`}
+                                        <span className="text-[10px] bg-black/5 px-1.5 py-0.5 rounded text-black/50 font-bold tracking-wider space-x-1">
+                                            {rootObj.strength !== 'geminated' && <span>{strengthLabel}</span>}
+                                            {rootObj.weak_class && <span>• {rootObj.weak_class.toUpperCase()}</span>}
+                                            {(rootObj.is_geminate || rootObj.strength === 'geminated') && <span>• GEMINATED</span>}
                                         </span>
                                     </td>
                                     {formLabels.map(fl => {

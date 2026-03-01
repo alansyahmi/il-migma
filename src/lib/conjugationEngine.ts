@@ -77,6 +77,10 @@ function isGuttural(c: string) {
     return ['għ', 'ħ', 'h', 'q', "'"].includes(c);
 }
 
+function isPharyngeal(c: string) {
+    return ['għ'].includes(c);
+}
+
 function hasIorE(v: string) {
     return ['i', 'e'].includes(v);
 }
@@ -201,6 +205,7 @@ function genStrong(
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v2: iv2 } = parseVset(vsetImpf);
     const isGuttural = (c: string) => ['għ', 'ħ', 'q'].includes(c);
+    const isPharyngeal = (c: string) => ['għ'].includes(c);
 
     // ── Perfect ──────────────────────────────────────────────────────────
     const perfSyncRoot = `${C1}${pv1}${C2}${C3}`; // kitb-
@@ -1492,11 +1497,12 @@ function generateTriliteralStrong(C1: string, C2: string, C3: string, pv1: strin
 
     const f1_perf = `${C1}${pv1}${C2}${pv2}${C3}`;
     const f1_impf = `j${ipv1}${C1}${C2}${ipv2}${C3}`;
-    const f1_pass = `m${ipv1}${C1}${C2}u${C3}`;
+    const p1 = isGuttural(C1) ? 'a' : 'i';
+    const f1_pass = `m${p1}${C1}${C2}u${C3}`;
     const a1 = hasIorE(pv1) ? 'ie' : 'a';
     const a2 = isGuttural(C3) ? 'a' : 'e';
     const f1_act = `${C1}${a1}${C2}${a2}${C3}`;
-    const f1_vn = `${C1}${C2}i${C3}`;
+    const f1_vn = isPharyngeal(C1) ? `${C1}a${C2}i${C3}` : `${C1}${C2}i${C3}`;
 
     forms.push({ form: 'I', perfect: f1_perf, imperfect: f1_impf, passiveParticiple: f1_pass, activeParticiple: f1_act, verbalNoun: f1_vn });
 
@@ -1519,9 +1525,9 @@ function generateTriliteralStrong(C1: string, C2: string, C3: string, pv1: strin
 
     const f4_perf = `${ipv1}${C1}${C2}${ipv2}${C3}`;
     const f4_impf = `j${ipv1}${C1}${C2}${ipv2}${C3}`;
-    const f4_act = `mi${C1}${C2}${pv2}${C3}`;
+    const f4_act = `mi${C1}${C2}e${C3}`;
     const d1 = (pv1 === 'a' && pv2 === 'a') ? 'a' : 'ie';
-    const f4_vn = `i${C1}${C2}${d1}${C3}`;
+    const f4_vn = isPharyngeal(C1) ? `e${C1}${C2}${d1}${C3}` : `(i)${C1}${C2}${d1}${C3}`;
 
     forms.push({ form: 'IV', perfect: f4_perf, imperfect: f4_impf, passiveParticiple: '-', activeParticiple: f4_act, verbalNoun: f4_vn });
 
@@ -1536,10 +1542,12 @@ function generateTriliteralStrong(C1: string, C2: string, C3: string, pv1: strin
     forms.push({ form: 'VII', perfect: f7_perf, imperfect: `ji${f7_perf}`, passiveParticiple: `mi${f7_perf}`, activeParticiple: '-', verbalNoun: '-' });
 
     const f8_perf = `${C1}t${pv1}${C2}${pv2}${C3}`;
-    forms.push({ form: 'VIII', perfect: f8_perf, imperfect: `ji${f8_perf}`, passiveParticiple: `mi${f8_perf}`, activeParticiple: '-', verbalNoun: `${C1}t${pv1}${C2}i${C3}` });
+    const f8_perfPharyngeal = `e${C1}t${pv1}${C2}${pv2}${C3}`;
+    forms.push({ form: 'VIII', perfect: isPharyngeal(C1) ? f8_perfPharyngeal : f8_perf, imperfect: isGuttural(C1) ? `je${f8_perf}` : `ji${f8_perf}`, passiveParticiple: isGuttural(C1) ? `me${f8_perf}` : `mi${f8_perf}`, activeParticiple: '-', verbalNoun: isGuttural(C1) ? `e${C1}t${pv1}${C2}i${C3}` : `${C1}t${pv1}${C2}i${C3}` });
 
     const f9_perf = `${C1}${C2}${c1}${C3}`;
-    forms.push({ form: 'IX', perfect: f9_perf, imperfect: `ji${f9_perf}`, passiveParticiple: `mu${f9_perf}`, activeParticiple: '-', verbalNoun: f9_perf });
+    const f9_perfPharyngeal = `${C1}e${C2}${c1}${C3}`;
+    forms.push({ form: 'IX', perfect: isPharyngeal(C1) ? f9_perfPharyngeal : f9_perf, imperfect: `ji${f9_perf}`, passiveParticiple: `mu${f9_perf}`, activeParticiple: '-', verbalNoun: isPharyngeal(C1) ? f9_perfPharyngeal : f9_perf });
 
     const f10a_perf = `st${pv1}${C1}${C2}${pv2}${C3}`;
     forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}i${C3}` });
@@ -1554,13 +1562,13 @@ function generateTriliteralGeminated(C1: string, C2: string, C3: string, pv1: st
     const forms: GeneratedVerbForm[] = [];
 
     const f1_perf = `${C1}${pv1}${C2}${C3}`;
-    const f1_impf = `j${C1}${ipv2}${C2}${C3}`;
+    const f1_impf = `j${C1}${ipv1}${C2}${C3}`;
     const g1 = isGuttural(C1) ? 'a' : 'i';
     const f1_pass = `m${g1}${C1}${C2}u${C3}`;
     const a1 = hasIorE(pv1) ? 'ie' : 'a';
     const a2 = isGuttural(C3) ? 'a' : 'e';
     const f1_act = `${C1}${a1}${C2}${a2}${C3}`;
-    const f1_vn = `${C1}${C2}i${C3}`;
+    const f1_vn = isGuttural(C1) ? `${C1}e${pv1}${C2}${C3}` : `${C1}${pv1}${C2}${C3}`;
     forms.push({ form: 'I', perfect: f1_perf, imperfect: f1_impf, passiveParticiple: f1_pass, activeParticiple: f1_act, verbalNoun: f1_vn });
 
     const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}${C3}`;
@@ -1576,9 +1584,9 @@ function generateTriliteralGeminated(C1: string, C2: string, C3: string, pv1: st
     const f3_perf = `${C1}${c1}${C2}${pv2}${C3}`;
     forms.push({ form: 'III', perfect: f3_perf, imperfect: `j${f3_perf}`, passiveParticiple: `m${f3_perf}`, activeParticiple: '-', verbalNoun: '-' });
 
-    const f4_perf = `${ipv1}${C1}${C2}${ipv2}${C3}`;
-    const f4_impf = `j${ipv1}${C1}${C2}${ipv2}${C3}`;
-    const f4_act = `mi${C1}${C2}${pv2}${C3}`;
+    const f4_perf = `a${C1}a${C2}${C3}`;
+    const f4_impf = `j${C1}${ipv1}${C2}${C3}`;
+    const f4_act = `mi${C1}${pv2}${C2}${C3}`;
     const d1 = (pv1 === 'a' && pv2 === 'a') ? 'a' : 'ie';
     const f4_vn = `i${C1}${C2}${d1}${C3}`;
     forms.push({ form: 'IV', perfect: f4_perf, imperfect: f4_impf, passiveParticiple: '-', activeParticiple: f4_act, verbalNoun: f4_vn });
@@ -1587,19 +1595,19 @@ function generateTriliteralGeminated(C1: string, C2: string, C3: string, pv1: st
     forms.push({ form: 'V', perfect: f5_perf, imperfect: `ji${f5_perf}`, passiveParticiple: `mi${f5_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}` });
 
     const f6_perf = `t${f3_perf}`;
-    const e1 = ['i', 'e'].includes(pv1) ? 'e' : 'a';
+    const e1 = ['i', 'e'].includes(pv1) ? 'ie' : 'a';
     forms.push({ form: 'VI', perfect: f6_perf, imperfect: `ji${f6_perf}`, passiveParticiple: `mi${f6_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${e1}${C2}i${C3}` });
 
     const f7_perf = `n${f1_perf}`;
     forms.push({ form: 'VII', perfect: f7_perf, imperfect: `ji${f7_perf}`, passiveParticiple: `mi${f7_perf}`, activeParticiple: '-', verbalNoun: '-' });
 
-    const f8_perf = `${C1}t${pv1}${C2}${pv2}${C3}`;
+    const f8_perf = `${C1}t${pv1}${C2}${C3}`;
     forms.push({ form: 'VIII', perfect: f8_perf, imperfect: `ji${f8_perf}`, passiveParticiple: `mi${f8_perf}`, activeParticiple: '-', verbalNoun: `${C1}t${pv1}${C2}i${C3}` });
 
     const f9_perf = `${C1}${C2}${c1}${C3}`;
     forms.push({ form: 'IX', perfect: f9_perf, imperfect: `ji${f9_perf}`, passiveParticiple: `mu${f9_perf}`, activeParticiple: '-', verbalNoun: f9_perf });
 
-    const f10a_perf = `st${pv1}${C1}${C2}${pv2}${C3}`;
+    const f10a_perf = `st${C1}${pv1}${C2}${C3}`;
     forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}i${C3}` });
 
     const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}${C3}`;
@@ -1611,56 +1619,56 @@ function generateTriliteralGeminated(C1: string, C2: string, C3: string, pv1: st
 function generateTriliteralAssimilative(C1: string, C2: string, C3: string, pv1: string, pv2: string, ipv1: string, ipv2: string): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
-    const f1_perf = `${C1}${pv1}${C2}${pv2}${C3}`;
-    const f1_impf = `j${ipv1}${C2}${ipv2}${C3}`;
-    const f1_pass = `m${ipv1}${C2}u${C3}`;
+    const f1_perf = `${C1}${pv1}${C2}${pv2}`; // beda
+    const f1_impf = `j${ipv1}${C1}${C2}${ipv2}`; // jibda
+    const f1_pass = `m${ipv1}${C1}${C2}${ipv2}`; // mibda
     const a1 = hasIorE(pv1) ? 'ie' : 'a';
-    const a2 = isGuttural(C3) ? 'a' : 'e';
-    const f1_act = `${C1}${a1}${C2}${a2}${C3}`;
-    const f1_vn = `u${C2}i${C3}`;
+    const f1_act = `${C1}${a1}${C2}i`; // biedi
+    const f1_vn = `${C1}i${C2}i`; // bidi
     forms.push({ form: 'I', perfect: f1_perf, imperfect: f1_impf, passiveParticiple: f1_pass, activeParticiple: f1_act, verbalNoun: f1_vn });
 
-    const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}${C3}`;
-    const f2_impf = `j${f2_perf}`;
-    const f2_pass = `m${f2_perf}`;
-    const b1 = hasIorEorO(pv1) ? 'ie' : 'a';
-    const f2_act = `${C1}${pv1}${C2}${C2}${b1}${C3}`;
-    const f2_vn = `te${C1}${C2}i${C3}`;
+    const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}`;
+    const f2_impf = `j${C1}${pv1}${C2}${C2}i`;
+    const f2_pass = `m${C1}${pv1}${C2}${C2}i`;
+    const b1 = isGuttural(C2) ? 'a' : 'e';
+    const f2_act = `${C1}${pv1}${C2}${C2}${b1}j`; // beddej
+    const vnv1 = isGuttural(C1) ? 'a' : 'i';
+    const f2_vn = `t${vnv1}${C1}${C2}ija`; // tibdija
     forms.push({ form: 'II', perfect: f2_perf, imperfect: f2_impf, passiveParticiple: f2_pass, activeParticiple: f2_act, verbalNoun: f2_vn });
 
     const c1 = hasIorE(pv1) ? 'ie' : 'a';
-    const f3_perf = `${C1}${c1}${C2}${pv2}${C3}`;
-    forms.push({ form: 'III', perfect: f3_perf, imperfect: `j${f3_perf}`, passiveParticiple: `m${f3_perf}`, activeParticiple: '-', verbalNoun: '-' });
+    const f3 = `${C1}${c1}${C2}`;
+    forms.push({ form: 'III', perfect: f3 + pv2, imperfect: `j${f3}i`, passiveParticiple: `m${f3}i`, activeParticiple: '-', verbalNoun: '-' });
 
-    const f4_perf = `u${C2}${ipv2}${C3}`;
-    const f4_impf = `j${ipv1}${C2}${ipv2}${C3}`;
-    const f4_act = `mi${C1}${C2}${pv2}${C3}`;
+    const f4_perf = `i${C1}${C2}${ipv2}`;
+    const f4_impf = `j${ipv1}${C1}${C2}${ipv2}`;
+    const f4_act = `mi${C1}${C2}${ipv2}`;
     const h1 = C1 === 'w' ? 'u' : 'i';
     const h2 = (pv1 === 'a' && pv2 === 'a') ? 'a' : 'ie';
-    const f4_vn = `${h1}${C2}${h2}${C3}`;
+    const f4_vn = `${h1}${C1}${C2}${h2}ja`;
     forms.push({ form: 'IV', perfect: f4_perf, imperfect: f4_impf, passiveParticiple: '-', activeParticiple: f4_act, verbalNoun: f4_vn });
 
     const f5_perf = `t${f2_perf}`;
-    forms.push({ form: 'V', perfect: f5_perf, imperfect: `ji${f5_perf}`, passiveParticiple: `mi${f5_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}` });
+    forms.push({ form: 'V', perfect: f5_perf, imperfect: `ji${f5_perf}`, passiveParticiple: `mi${f5_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${pv1}${C2}${C2}ija` });
 
-    const f6_perf = `t${f3_perf}`;
+    const f6_perf = `t${f3}${pv2}`;
     const e1 = ['i', 'e'].includes(pv1) ? 'e' : 'a';
-    forms.push({ form: 'VI', perfect: f6_perf, imperfect: `ji${f6_perf}`, passiveParticiple: `mi${f6_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${e1}${C2}i${C3}` });
+    forms.push({ form: 'VI', perfect: f6_perf, imperfect: `ji${f6_perf}`, passiveParticiple: `mi${f6_perf}`, activeParticiple: '-', verbalNoun: `t${f3}ija` });
 
     const f7_perf = `n${f1_perf}`;
     forms.push({ form: 'VII', perfect: f7_perf, imperfect: `ji${f7_perf}`, passiveParticiple: `mi${f7_perf}`, activeParticiple: '-', verbalNoun: '-' });
 
-    const f8_perf = `${C1}t${pv1}${C2}${pv2}${C3}`;
-    forms.push({ form: 'VIII', perfect: f8_perf, imperfect: `ji${f8_perf}`, passiveParticiple: `mi${f8_perf}`, activeParticiple: '-', verbalNoun: `${C1}t${pv1}${C2}i${C3}` });
+    const f8_perf = `${C1}t${pv1}${C2}${pv2}`;
+    forms.push({ form: 'VIII', perfect: f8_perf, imperfect: `ji${f8_perf}`, passiveParticiple: `mi${f8_perf}`, activeParticiple: '-', verbalNoun: `${C1}t${pv1}${C2}ija` });
 
-    const f9_perf = `${C1}${C2}${c1}${C3}`;
+    const f9_perf = `${C1}${C2}${c1}`;
     forms.push({ form: 'IX', perfect: f9_perf, imperfect: `ji${f9_perf}`, passiveParticiple: `mu${f9_perf}`, activeParticiple: '-', verbalNoun: f9_perf });
 
-    const f10a_perf = `st${pv1}${C1}${C2}${pv2}${C3}`;
-    forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}i${C3}` });
+    const f10a_perf = `st${pv1}${C1}${C2}${pv2}`;
+    forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}ija` });
 
-    const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}${C3}`;
-    forms.push({ form: 'Xb', perfect: f10b_perf, imperfect: `ji${f10b_perf}`, passiveParticiple: `mi${f10b_perf}`, activeParticiple: '-', verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}` });
+    const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}`;
+    forms.push({ form: 'Xb', perfect: f10b_perf, imperfect: `ji${f10b_perf}`, passiveParticiple: `mi${f10b_perf}`, activeParticiple: '-', verbalNoun: `st${C1}${pv1}${C2}${C2}ija` });
 
     return forms;
 }
@@ -1668,13 +1676,14 @@ function generateTriliteralAssimilative(C1: string, C2: string, C3: string, pv1:
 function generateTriliteralHollow(C1: string, C2: string, C3: string, pv1: string, pv2: string, ipv1: string, ipv2: string): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
-    const f1_perf = `${C1}${pv1}${C3}`;
-    const f1_impf = `j${C1}${ipv2}${C3}`;
+    const a1 = hasIorEorO(pv1) ? 'ie' : 'a';
+    const f1_perf = `${C1}${a1}${C3}`;
+    const f1_impf = `j${C1}${ipv1}${C3}`;
     const i1 = isGuttural(C1) ? 'a' : 'i';
     const f1_pass = `m${i1}${C1}u${C3}`;
     const i2 = hasIorE(pv1) ? 'e' : 'a';
     const f1_act = `${C1}${i2}jje${C3}`;
-    const f1_vn = `${C1}${pv1}${C2}${C3}`;
+    const f1_vn = isGuttural(C1) ? `${C1}e${pv1}${C2}${C3}` : `${C1}${pv1}${C2}${C3}`;
     forms.push({ form: 'I', perfect: f1_perf, imperfect: f1_impf, passiveParticiple: f1_pass, activeParticiple: f1_act, verbalNoun: f1_vn });
 
     const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}${C3}`;
@@ -1702,14 +1711,14 @@ function generateTriliteralHollow(C1: string, C2: string, C3: string, pv1: strin
     const f7_perf = `n${f1_perf}`;
     forms.push({ form: 'VII', perfect: f7_perf, imperfect: `ji${f7_perf}`, passiveParticiple: `mi${f7_perf}`, activeParticiple: '-', verbalNoun: '-' });
 
-    const f8_perf = `${C1}t${pv1}${C2}${pv2}${C3}`;
-    forms.push({ form: 'VIII', perfect: f8_perf, imperfect: `ji${f8_perf}`, passiveParticiple: `mi${f8_perf}`, activeParticiple: '-', verbalNoun: `${C1}t${pv1}${C2}i${C3}` });
+    const f8_perf = `n${C1}t${a1}${C3}`;
+    forms.push({ form: 'VIII', perfect: f8_perf, imperfect: `ji${f8_perf}`, passiveParticiple: `mi${f8_perf}`, activeParticiple: '-', verbalNoun: `n${C1}t${a1}${C3}` });
 
-    const f9_perf = `${C1}${C2}${c1}${C3}`;
+    const f9_perf = `${C1}${C2}${a1}${C3}`;
     forms.push({ form: 'IX', perfect: f9_perf, imperfect: `ji${f9_perf}`, passiveParticiple: `mu${f9_perf}`, activeParticiple: '-', verbalNoun: f9_perf });
 
-    const f10a_perf = `st${pv1}${C1}${pv1}${C3}`;
-    forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}ie${C3}` });
+    const f10a_perf = `st${pv1}${C1}${a1}${C3}`;
+    forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}${a1}${C3}` });
 
     const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}${C3}`;
     forms.push({ form: 'Xb', perfect: f10b_perf, imperfect: `ji${f10b_perf}`, passiveParticiple: `mi${f10b_perf}`, activeParticiple: '-', verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}` });
@@ -1796,7 +1805,7 @@ export function generateRootForms(
     if (strength === 'weak' && weakClass === 'assimilative') {
         return generateTriliteralAssimilative(C1, C2, C3, pv1, pv2, ipv1, ipv2);
     }
-    if (strength === 'strong' && (C2 === C3 && C2 !== '')) {
+    if (strength === 'geminated' || (strength === 'strong' && (C2 === C3 && C2 !== ''))) {
         return generateTriliteralGeminated(C1, C2, C3, pv1, pv2, ipv1, ipv2);
     }
     return generateTriliteralStrong(C1, C2, C3, pv1, pv2, ipv1, ipv2);
@@ -1806,59 +1815,94 @@ export type FormMarker = 'plain' | 'theoretical' | 'auto_generated';
 
 export interface MarkedVerbForm {
     form: GenerativeVerbFormType;
-    perfect: { value: string; marker: FormMarker };
-    imperfect: { value: string; marker: FormMarker };
-    passiveParticiple: { value: string; marker: FormMarker };
-    activeParticiple: { value: string; marker: FormMarker };
-    verbalNoun: { value: string; marker: FormMarker };
+    perfect: { value: string; marker: FormMarker; entryId?: string };
+    imperfect: { value: string; marker: FormMarker; entryId?: string };
+    passiveParticiple: { value: string; marker: FormMarker; entryId?: string };
+    activeParticiple: { value: string; marker: FormMarker; entryId?: string };
+    verbalNoun: { value: string; marker: FormMarker; entryId?: string };
+}
+
+export interface AttestedEntry {
+    word: string;
+    id?: string;
+    form: string;
+    type: 'lemma' | 'passive' | 'active' | 'noun';
 }
 
 export function markGeneratedForms(
     generated: GeneratedVerbForm[],
-    attestedLemmas: Set<string>
+    attested: AttestedEntry[]
 ): MarkedVerbForm[] {
-    const attestedForms = new Set<GenerativeVerbFormType>();
-    for (const g of generated) {
-        if (attestedLemmas.has(g.perfect)) {
-            attestedForms.add(g.form);
-        }
-    }
+    const attestedRows = new Set<GenerativeVerbFormType>();
+
+    // First pass to find what is attested
+    const attestedG = generated.map(g => {
+        const isLemmaAttested = attested.some(a => a.word === g.perfect && a.form === g.form && a.type === 'lemma');
+        const isPassiveAttested = attested.some(a => a.word === g.passiveParticiple && a.form === g.form && a.type === 'passive');
+        const isActiveAttested = attested.some(a => a.word === g.activeParticiple && a.form === g.form && a.type === 'active');
+        const isVNAttested = attested.some(a => a.word === g.verbalNoun && a.form === g.form && a.type === 'noun');
+
+        const anyAttested = isLemmaAttested || isPassiveAttested || isActiveAttested || isVNAttested;
+        if (anyAttested) attestedRows.add(g.form);
+        return { form: g.form, isLemmaAttested, isPassiveAttested, isActiveAttested, isVNAttested, anyAttested };
+    });
 
     const reconstructableForms = new Set<GenerativeVerbFormType>();
-    if (attestedForms.has('VI')) reconstructableForms.add('III');
-    if (attestedForms.has('V')) reconstructableForms.add('II');
-    if (attestedForms.has('VIII')) reconstructableForms.add('I');
+
+    // Dependency Logic:
+    // If F1 exists -> F7 is probably reconstructable
+    if (attestedRows.has('I')) reconstructableForms.add('VII');
+    // If F2 exists -> F5
+    if (attestedRows.has('II')) reconstructableForms.add('V');
+    // If F3 exists -> F6
+    if (attestedRows.has('III')) reconstructableForms.add('VI');
+
+    // F8 -> F1
+    if (attestedRows.has('VIII')) reconstructableForms.add('I');
+
+    // NOTE: IV, IX, Xa, Xb are independent as requested.
 
     return generated.map((g) => {
-        const isReconstructableForm = reconstructableForms.has(g.form);
-        let lemmaMarker: FormMarker = 'auto_generated';
+        const ag = attestedG.find(x => x.form === g.form)!;
 
-        if (g.perfect === '-') {
-            lemmaMarker = 'plain';
-        } else if (attestedLemmas.has(g.perfect)) {
-            lemmaMarker = 'plain';
-        } else if (isReconstructableForm) {
-            lemmaMarker = 'theoretical';
-        }
+        // Row is theoretical if:
+        // 1. Any part of the row is attested
+        // 2. OR this form is reconstructable from another attested form
+        let rowTheoretical = false;
+        if (ag.anyAttested) rowTheoretical = true;
+        if (!ag.anyAttested && reconstructableForms.has(g.form)) rowTheoretical = true;
 
-        const applyMarker = (val: string, isLemma: boolean = false): { value: string; marker: FormMarker } => {
-            if (val === '-') return { value: val, marker: 'plain' };
-            if (attestedLemmas.has(val)) {
-                return { value: val, marker: 'plain' };
+        const applyMarker = (
+            generatedVal: string,
+            formType: 'lemma' | 'passive' | 'active' | 'noun',
+            isImperfect: boolean = false
+        ): { value: string; marker: FormMarker; entryId?: string } => {
+            if (generatedVal === '-') return { value: generatedVal, marker: 'plain' };
+
+            // Find the actual attested entry for this form and type
+            const att = attested.find(a => a.form === g.form && a.type === formType);
+
+            // If we have an exact match OR a form match, mark as plain and use the attested word/ID
+            if (att) {
+                return { value: att.word, marker: 'plain', entryId: att.id };
             }
-            if (!isLemma && lemmaMarker === 'plain') {
-                return { value: val, marker: 'theoretical' };
+
+            // The imperfect will always exist if the lemma exists
+            if (isImperfect && ag.isLemmaAttested) {
+                return { value: generatedVal, marker: 'plain' };
             }
-            return { value: val, marker: lemmaMarker };
+
+            if (rowTheoretical) return { value: generatedVal, marker: 'theoretical' };
+            return { value: generatedVal, marker: 'auto_generated' };
         };
 
         return {
             form: g.form,
-            perfect: applyMarker(g.perfect, true),
-            imperfect: applyMarker(g.imperfect),
-            passiveParticiple: applyMarker(g.passiveParticiple),
-            activeParticiple: applyMarker(g.activeParticiple),
-            verbalNoun: applyMarker(g.verbalNoun),
+            perfect: applyMarker(g.perfect, 'lemma'),
+            imperfect: applyMarker(g.imperfect, 'lemma', true), // Uses same ID as lemma
+            passiveParticiple: applyMarker(g.passiveParticiple, 'passive'),
+            activeParticiple: applyMarker(g.activeParticiple, 'active'),
+            verbalNoun: applyMarker(g.verbalNoun, 'noun'),
         };
     });
 }

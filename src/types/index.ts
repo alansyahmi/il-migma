@@ -19,7 +19,7 @@ export type POS =
 export type Gender = 'masculine' | 'feminine' | 'common';
 export type Transitivity = 'transitive' | 'intransitive' | 'both';
 
-export type VerbStrength = 'strong' | 'strong-hybrid' | 'weak';
+export type VerbStrength = 'strong' | 'strong-hybrid' | 'weak' | 'geminated';
 export type WeakClass = 'assimilative' | 'hollow' | 'defective';
 
 export type SourceLanguage =
@@ -289,6 +289,7 @@ export interface Entry {
     // Extracted flat verb fields (Admin DB workflow)
     verb_vowel_perf?: string;
     verb_vowel_impf?: string;
+    verb_vowel_impv?: string;
     verb_verbal_noun?: string;
     verb_active_ptcp?: string;
     verb_passive_ptcp?: string;

@@ -3,7 +3,7 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { MOCK_ENTRIES } from '@/data/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { generateRootForms, markGeneratedForms, type MarkedVerbForm } from '@/lib/conjugationEngine';
+import { generateRootForms, markGeneratedForms, type MarkedVerbForm, type AttestedEntry } from '@/lib/conjugationEngine';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Plus, Edit2, ArrowLeft } from 'lucide-react';
@@ -11,6 +11,19 @@ import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormMod
 import { RootFormModal, type RootFormData } from '@/components/admin/RootFormModal';
 import { type Entry } from '@/types';
 import { apiSearch, apiGetRoot } from '@/lib/api';
+
+const LANGUAGE_COLORS: Record<string, { bg: string; text: string }> = {
+    Arabic: { bg: 'bg-emerald-50', text: 'text-emerald-800' },
+    Sicilian: { bg: 'bg-orange-50', text: 'text-orange-800' },
+    Italian: { bg: 'bg-blue-50', text: 'text-blue-800' },
+    Latin: { bg: 'bg-purple-50', text: 'text-purple-800' },
+    French: { bg: 'bg-sky-50', text: 'text-sky-800' },
+    English: { bg: 'bg-gray-100', text: 'text-gray-700' },
+    Spanish: { bg: 'bg-yellow-50', text: 'text-yellow-800' },
+    Berber: { bg: 'bg-amber-50', text: 'text-amber-800' },
+    Greek: { bg: 'bg-indigo-50', text: 'text-indigo-800' },
+    Uncertain: { bg: 'bg-gray-100', text: 'text-gray-500' },
+};
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
@@ -30,21 +43,23 @@ function SideCard({ title, children }: { title: string; children: React.ReactNod
 function MarkedCell({
     data,
     isAdmin,
-    onEdit
+    onEdit,
+    noLink
 }: {
-    data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated' };
+    data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string };
     isAdmin?: boolean;
     onEdit?: () => void;
+    noLink?: boolean;
 }) {
     if (data.value === '-') return <span className="opacity-40">-</span>;
 
-    const content = data.marker === 'plain' ? (
-        <Link to={`/search?q=${data.value}`} style={{ color: BLUE }} className="hover:underline">
+    const content = (data.marker === 'plain' && !noLink) ? (
+        <Link to={`/entry/${data.entryId || data.value}`} className="text-[#1034A6] hover:underline">
             {data.value}
         </Link>
     ) : (
-        <span className="opacity-55 text-[#000]">
-            {data.marker === 'theoretical' ? '*' : '✦'}{data.value}
+        <span className={data.marker === 'plain' ? 'text-black' : 'opacity-45'}>
+            {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}{data.value}
         </span>
     );
 
@@ -79,7 +94,7 @@ export function Root() {
 
     const isActualAdmin = isAdmin && adminViewEnabled;
 
-    const [extraEntries, setExtraEntries] = useState<Entry[]>([]);
+    const [apiEntries, setApiEntries] = useState<Entry[]>([]);
     const [dbRoot, setDbRoot] = useState<any | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -95,9 +110,12 @@ export function Root() {
             apiSearch(id)
                 .then(res => {
                     // Filter results that have the matching root consonants
-                    const matched = res.results
-                        .filter(r => (r as any).root_pattern_form?.root?.consonants === id) as unknown as Entry[];
-                    setExtraEntries(matched);
+                    const matched = (res.results || [])
+                        .filter(r => {
+                            const rCons = (r as any).root_pattern_form?.root?.consonants || (r as any).root_consonants || '';
+                            return rCons.toLowerCase().trim().normalize('NFC') === id.toLowerCase().trim().normalize('NFC');
+                        }) as unknown as Entry[];
+                    setApiEntries(matched);
                 })
                 .catch(() => { })
                 .finally(() => setLoading(false));
@@ -106,18 +124,21 @@ export function Root() {
 
     // Find all entries associated with this root (Mock + Extra from API)
     const rootEntries = useMemo(() => {
-        const mock = MOCK_ENTRIES.filter(e => e.root_pattern_form?.root?.consonants === id);
-        // Deduplicate between mock and extra by ID
+        const mock = MOCK_ENTRIES.filter(e => {
+            const eCons = e.root_pattern_form?.root?.consonants || (e as any).root_consonants || '';
+            return eCons.toLowerCase().trim().normalize('NFC') === id?.toLowerCase().trim().normalize('NFC');
+        });
+        // Deduplicate between mock and api by ID
         const combined = [...mock];
         const seenIds = new Set(mock.map(m => m.id));
-        for (const e of extraEntries) {
+        for (const e of apiEntries) {
             if (!seenIds.has(e.id)) {
                 combined.push(e);
                 seenIds.add(e.id);
             }
         }
         return combined;
-    }, [id, extraEntries]);
+    }, [id, apiEntries]);
 
     // Find a primary verb entry (preferably Form I) to extract root metadata and meanings
     const primaryEntry = useMemo(() => {
@@ -133,15 +154,50 @@ export function Root() {
     const vm = primaryEntry?.verb_morphology;
 
     const glossList = useMemo(() => {
-        if (dbRoot?.gloss) return [dbRoot.gloss];
+        if (dbRoot?.gloss) {
+            try {
+                const parsed = JSON.parse(dbRoot.gloss);
+                if (Array.isArray(parsed)) return parsed.filter(Boolean);
+            } catch (e) {
+                // Fallback to split for legacy data
+            }
+            return dbRoot.gloss.split(';').map((s: string) => s.trim()).filter(Boolean);
+        }
         return primaryEntry?.definitions?.map(d => d.text_en) || [];
     }, [dbRoot, primaryEntry]);
 
-    const etymologyText = useMemo(() => {
-        if (dbRoot?.etymology) return dbRoot.etymology;
-        const ety = primaryEntry?.etymologies?.[0]?.chain?.[0];
-        if (ety) return `${ety.language} ${ety.form} (${ety.meaning})`;
-        return '';
+    const parsedEtymology = useMemo(() => {
+        let etyData = null;
+        if (dbRoot?.etymology) {
+            try {
+                etyData = JSON.parse(dbRoot.etymology);
+            } catch {
+                // Not JSON, wrap it
+                etyData = { definition: dbRoot.etymology };
+            }
+        } else {
+            const ety = primaryEntry?.etymologies?.[0]?.chain?.[0];
+            if (ety) {
+                // Map the first element of etymologies array
+                etyData = {
+                    relationship: 'From',
+                    language: ety.language || '',
+                    term: ety.form || '',
+                    pronunciation: '',
+                    definition: ety.meaning || ''
+                };
+            }
+        }
+
+        if (!etyData) return null;
+
+        return {
+            relationship: etyData.relationship || '',
+            language: etyData.language || '',
+            term: etyData.term || '',
+            pronunciation: etyData.pronunciation || '',
+            definition: etyData.definition || ''
+        };
     }, [dbRoot, primaryEntry]);
 
     const sourceText = useMemo(() => {
@@ -149,10 +205,10 @@ export function Root() {
     }, [dbRoot, primaryEntry]);
 
     // Generate engine data
-    const generatedTable = useMemo(() => {
-        if (!rootObj) return [];
-        const pvSet = vm?.vowel_set_perfect || rootObj.vowel_set_perf || 'a-a';
-        const ipvSet = vm?.vowel_set_imperfect || rootObj.vowel_set_impf || 'i-a';
+    const { generatedTable, shownIds } = useMemo(() => {
+        if (!rootObj) return { generatedTable: [], shownIds: new Set<string>() };
+        const pvSet = rootObj.vowel_set_perf || vm?.vowel_set_perfect || 'a-a';
+        const ipvSet = rootObj.vowel_set_impf || vm?.vowel_set_imperfect || 'i-a';
         const rawGen = generateRootForms(
             rootObj.consonants,
             pvSet,
@@ -162,47 +218,70 @@ export function Root() {
         );
 
         // Collect attested forms from all rootEntries
-        const attestedLemmas = new Set<string>();
-        for (const e of rootEntries) {
-            // Include main headwords
-            attestedLemmas.add(e.headword);
-            // Also subentries
-            if (e.subentries) {
-                for (const sub of e.subentries) {
-                    attestedLemmas.add(sub.headword);
-                }
-            }
-        }
+        const attested: AttestedEntry[] = [];
+        rootEntries.forEach(e => {
+            const form = e.verb_morphology?.form || '';
+            if (!form) return;
 
-        return markGeneratedForms(rawGen, attestedLemmas);
+            attested.push({ word: e.headword, id: e.id, form, type: 'lemma' });
+
+            if (e.verb_morphology?.passive_participle) {
+                attested.push({ word: e.verb_morphology.passive_participle, id: e.id, form, type: 'passive' });
+            }
+            if (e.verb_morphology?.active_participle) {
+                attested.push({ word: e.verb_morphology.active_participle, id: e.id, form, type: 'active' });
+            }
+            if (e.verb_morphology?.verbal_noun) {
+                attested.push({ word: e.verb_morphology.verbal_noun, id: e.id, form, type: 'noun' });
+            }
+        });
+
+        const rowsData = markGeneratedForms(rawGen, attested);
+
+        // Keep track of which entries are already shown in the table
+        const shownIds = new Set<string>();
+        rowsData.forEach(row => {
+            if (row.perfect.entryId) shownIds.add(row.perfect.entryId);
+            if (row.imperfect.entryId) shownIds.add(row.imperfect.entryId); // Added imperfect
+            if (row.passiveParticiple.entryId) shownIds.add(row.passiveParticiple.entryId);
+            if (row.activeParticiple.entryId) shownIds.add(row.activeParticiple.entryId);
+            if (row.verbalNoun.entryId) shownIds.add(row.verbalNoun.entryId);
+        });
+
+        return { generatedTable: rowsData, shownIds };
     }, [rootObj, vm, rootEntries]);
 
     // Derived Terms logic (gather from rootEntries)
-    // Actually, rootEntries itself contains Derived Terms (nouns, adjectives, etc.)
     const derivedTerms = useMemo(() => {
         const terms: { term: string, class: string, wizen: string, id: string }[] = [];
+
         for (const e of rootEntries) {
-            if (e.pos !== 'verb') {
+            // Include non-verbs OR verbs that aren't in the Form I-X table
+            if (e.pos !== 'verb' || !shownIds.has(e.id)) {
                 terms.push({
                     term: e.headword,
-                    class: (e.pos === 'noun' && e.root_pattern_form?.pattern?.cv_notation ? 'Noun' : 'Derived'),
+                    class: (e.pos === 'noun' && e.root_pattern_form?.pattern?.cv_notation ? 'Noun' :
+                        (e.pos === 'verb' ? 'Verb' :
+                            (e.pos === 'adjective' ? 'Adjective' : 'Derived'))),
                     wizen: e.root_pattern_form?.pattern?.wizen_notation || '-',
                     id: e.id
                 });
             }
+
+            // Also check subentries
             if (e.subentries) {
                 for (const sub of e.subentries) {
                     terms.push({
                         term: sub.headword,
                         class: sub.pos === 'noun' ? 'Noun' : (sub.pos === 'adjective' ? 'Adjective' : 'Derived'),
-                        wizen: '-', // Mock subentries don't have wizen populated easily
+                        wizen: '-',
                         id: sub.id
                     });
                 }
             }
         }
         return terms;
-    }, [rootEntries]);
+    }, [rootEntries, shownIds]);
 
     if (!id) return <Navigate to="/404" replace />;
 
@@ -230,13 +309,12 @@ export function Root() {
     const strengthLabel = rootObj.strength === 'strong-hybrid' ? 'STRONG' : rootObj.strength.toUpperCase();
     const rootTypeParts = [
         'TRILITTERAL', // Assuming all are triliteral for now or derived from consonants length
-        strengthLabel || '',
-        id?.toUpperCase() || '',
+        (rootObj.strength !== 'geminated' ? strengthLabel : null),
         rootObj?.weak_class?.toUpperCase() || null,
-        rootObj?.is_geminate ? 'GEMINATED' : null
+        (rootObj?.is_geminate || rootObj.strength === 'geminated') ? 'GEMINATED' : null
     ].filter(Boolean).join(' • ');
 
-    const titleGloss = (dbRoot?.gloss || primaryEntry?.definitions?.[0]?.text_en || 'UNKNOWN').toUpperCase();
+
 
 
     const bgStyle = {
@@ -249,19 +327,19 @@ export function Root() {
             <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
                 {/* Header */}
                 <div className="text-center mb-12 relative group max-w-fit mx-auto">
-                    <div className="flex items-center justify-center gap-4">
+                    <div className="relative inline-flex items-center justify-center">
                         <h1 className="font-serif font-bold text-[3rem] leading-none text-[#000] tracking-tight">{rootObj.consonants}</h1>
                         {isActualAdmin && (
                             <button
                                 onClick={() => setShowRootForm(true)}
-                                className="p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors opacity-0 group-hover:opacity-100 translate-y-1"
+                                className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
                                 title="Edit Root Metadata"
                             >
                                 <Edit2 size={16} />
                             </button>
                         )}
                     </div>
-                    <p className="text-sm font-serif text-black/60 mt-3 uppercase tracking-widest">"{titleGloss}"</p>
+                    <p className="text-sm font-serif text-black/60 mt-3 uppercase tracking-widest">"{glossList[0]}"</p>
                     <p className="text-[0.65rem] font-sans text-black/40 tracking-[0.18em] mt-3 uppercase">
                         — {rootTypeParts} —
                     </p>
@@ -271,17 +349,29 @@ export function Root() {
                     {/* Left Sidebar */}
                     <div className="w-64 shrink-0 space-y-4">
                         <SideCard title={t('Gloss', term('Tifsira'))}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-[#000] marker:text-black/30">
-                                {glossList.map((g, i) => (
-                                    <li key={i}>{g}</li>
-                                ))}
-                            </ol>
+                            {glossList.length === 1 ? (
+                                <p className="text-sm text-[#000]">{glossList[0]}</p>
+                            ) : (
+                                <ol className="list-decimal list-inside space-y-1 text-sm text-[#000] marker:text-black/30">
+                                    {glossList.map((g: string, i: number) => (
+                                        <li key={i}>{g}</li>
+                                    ))}
+                                </ol>
+                            )}
                         </SideCard>
 
-                        {etymologyText && (
+                        {parsedEtymology && (parsedEtymology.term || parsedEtymology.definition) && (
                             <SideCard title={t('Etymology', term('Etimoloġija'))}>
-                                <p className="text-sm text-[#000] leading-relaxed">
-                                    {etymologyText}
+                                <p className="text-sm text-[#000] leading-relaxed flex flex-wrap items-center gap-1.5">
+                                    {parsedEtymology.relationship && <span>{parsedEtymology.relationship}</span>}
+                                    {parsedEtymology.language && (
+                                        <span className={`font-semibold ${LANGUAGE_COLORS[parsedEtymology.language]?.text || 'text-gray-600'} ${LANGUAGE_COLORS[parsedEtymology.language]?.bg || 'bg-gray-100'} px-1.5 py-0.5 rounded text-[0.7rem] uppercase tracking-wider`}>
+                                            {parsedEtymology.language}
+                                        </span>
+                                    )}
+                                    {parsedEtymology.term && <span className="font-serif">{parsedEtymology.term}</span>}
+                                    {parsedEtymology.pronunciation && <span className="text-black/60 italic">({parsedEtymology.pronunciation})</span>}
+                                    {parsedEtymology.definition && <span>"{parsedEtymology.definition}"</span>}
                                 </p>
                             </SideCard>
                         )}
@@ -312,7 +402,7 @@ export function Root() {
                     <div className="flex-1 min-w-0 space-y-12">
 
                         {/* Verbal Forms Table */}
-                        <div>
+                        <div className="mb-12">
                             <h2 className="font-sans font-semibold text-[1.1rem] text-[#000] mb-4">Verbal Forms</h2>
                             <table className="w-full text-sm border-collapse text-left">
                                 <thead>
@@ -334,15 +424,13 @@ export function Root() {
                                                     data={row.perfect}
                                                     isAdmin={isActualAdmin}
                                                     onEdit={() => {
-                                                        const existing = rootEntries.find(e => e.headword === row.perfect.value);
+                                                        const existing = rootEntries.find(e => e.headword === row.perfect.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
                                                         if (existing) {
                                                             setEditEntry({
-                                                                id: existing.id,
-                                                                headword: existing.headword,
-                                                                pos: existing.pos,
-                                                                created_at: '',
-                                                                is_loanword: false
-                                                            });
+                                                                ...existing,
+                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                _formLabel: existing.verb_morphology?.form || row.form,
+                                                            } as any);
                                                             setInitialFormData(null);
                                                         } else {
                                                             setEditEntry(null);
@@ -350,9 +438,10 @@ export function Root() {
                                                                 headword: row.perfect.value,
                                                                 pos: 'verb',
                                                                 verb_class: rootObj?.strength || '',
-                                                                verb_perfective_3sgm: row.perfect.value,
-                                                                verb_imperfective_3sgm: row.imperfect.value,
-                                                                verb_verbal_noun: row.verbalNoun.value
+                                                                _rootConsonants: rootObj?.consonants || '',
+                                                                _formLabel: row.form,
+                                                                verb_vowel_perf: rootObj?.vowel_set_perf || '',
+                                                                verb_vowel_impf: rootObj?.vowel_set_impf || '',
                                                             });
                                                         }
                                                         setShowForm(true);
@@ -360,16 +449,87 @@ export function Root() {
                                                 />
                                             </td>
                                             <td className="py-2.5 pr-4 font-serif">
-                                                <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} />
+                                                <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} noLink />
                                             </td>
                                             <td className="py-2.5 pr-4 font-serif">
-                                                <MarkedCell data={row.passiveParticiple} isAdmin={isActualAdmin} />
+                                                <MarkedCell
+                                                    data={row.passiveParticiple}
+                                                    isAdmin={isActualAdmin}
+                                                    onEdit={() => {
+                                                        const existing = rootEntries.find(e => e.headword === row.passiveParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                        if (existing) {
+                                                            setEditEntry({
+                                                                ...existing,
+                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                _formLabel: existing.verb_morphology?.form || row.form,
+                                                            } as any);
+                                                            setInitialFormData(null);
+                                                        } else {
+                                                            setEditEntry(null);
+                                                            setInitialFormData({
+                                                                headword: row.passiveParticiple.value,
+                                                                pos: 'participle',
+                                                                participle_type: 'passive',
+                                                                _formLabel: row.form,
+                                                                _rootConsonants: rootObj?.consonants || '',
+                                                            });
+                                                        }
+                                                        setShowForm(true);
+                                                    }}
+                                                />
                                             </td>
                                             <td className="py-2.5 pr-4 font-serif">
-                                                <MarkedCell data={row.activeParticiple} isAdmin={isActualAdmin} />
+                                                <MarkedCell
+                                                    data={row.activeParticiple}
+                                                    isAdmin={isActualAdmin}
+                                                    onEdit={() => {
+                                                        const existing = rootEntries.find(e => e.headword === row.activeParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                        if (existing) {
+                                                            setEditEntry({
+                                                                ...existing,
+                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                _formLabel: existing.verb_morphology?.form || row.form,
+                                                            } as any);
+                                                            setInitialFormData(null);
+                                                        } else {
+                                                            setEditEntry(null);
+                                                            setInitialFormData({
+                                                                headword: row.activeParticiple.value,
+                                                                pos: 'participle',
+                                                                participle_type: 'active',
+                                                                _formLabel: row.form,
+                                                                _rootConsonants: rootObj?.consonants || '',
+                                                            });
+                                                        }
+                                                        setShowForm(true);
+                                                    }}
+                                                />
                                             </td>
                                             <td className="py-2.5 font-serif">
-                                                <MarkedCell data={row.verbalNoun} isAdmin={isActualAdmin} />
+                                                <MarkedCell
+                                                    data={row.verbalNoun}
+                                                    isAdmin={isActualAdmin}
+                                                    onEdit={() => {
+                                                        const existing = rootEntries.find(e => e.headword === row.verbalNoun.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                        if (existing) {
+                                                            setEditEntry({
+                                                                ...existing,
+                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                _formLabel: existing.verb_morphology?.form || row.form,
+                                                            } as any);
+                                                            setInitialFormData(null);
+                                                        } else {
+                                                            setEditEntry(null);
+                                                            setInitialFormData({
+                                                                headword: row.verbalNoun.value,
+                                                                pos: 'noun',
+                                                                _formLabel: row.form,
+                                                                _rootConsonants: rootObj?.consonants || '',
+                                                            });
+                                                        }
+                                                        setShowForm(true);
+                                                    }}
+                                                />
                                             </td>
                                         </tr>
                                     ))}
@@ -482,18 +642,27 @@ export function Root() {
                 <RootFormModal
                     data={{
                         consonants: rootObj.consonants,
-                        glosses: dbRoot?.gloss ? [dbRoot.gloss] : (primaryEntry.definitions.map(d => d.text_en) || ['']),
-                        etymology: {
+                        glosses: dbRoot?.gloss ? dbRoot.gloss.split('; ').filter(Boolean) : (primaryEntry?.definitions?.map(d => d.text_en) || ['']),
+                        etymology: parsedEtymology ? {
+                            relationship: parsedEtymology.relationship,
+                            language: parsedEtymology.language || '',
+                            term: parsedEtymology.term || '',
+                            pronunciation: parsedEtymology.pronunciation || '',
+                            definition: parsedEtymology.definition || ''
+                        } : {
+                            relationship: '',
                             language: '',
                             term: '',
-                            definition: dbRoot?.etymology || primaryEntry.etymologies?.[0]?.chain[0]?.meaning || ''
+                            pronunciation: '',
+                            definition: ''
                         },
-                        source: dbRoot?.source || primaryEntry.verb_morphology?.source_citation || '',
+                        source: dbRoot?.source || primaryEntry?.verb_morphology?.source_citation || '',
                         strength: rootObj.strength,
                         weak_class: rootObj.weak_class || '',
                         vowel_set_perf: rootObj.vowel_set_perf,
                         vowel_set_impf: rootObj.vowel_set_impf,
-                        vowel_set_imp: rootObj.vowel_set_imp
+                        vowel_set_imp: rootObj.vowel_set_imp,
+                        is_geminate: rootObj.is_geminate
                     }}
                     onClose={() => setShowRootForm(false)}
                     saving={saving}
@@ -503,25 +672,28 @@ export function Root() {
                             const token = await getToken();
                             if (!token) throw new Error('Not authenticated');
 
+                            const etymologyStringified = JSON.stringify(newData.etymology);
+
                             // Update the root record directly
                             const { adminUpdateRoot } = await import('@/lib/api');
                             await adminUpdateRoot(token, newData.consonants, {
                                 strength: newData.strength,
                                 weak_class: newData.weak_class,
-                                gloss: newData.glosses[0] || '',
-                                etymology: newData.etymology.definition,
+                                gloss: newData.glosses.filter(Boolean).join('; ') || '',
+                                etymology: etymologyStringified,
                                 source: newData.source,
                                 vowel_set_perf: newData.vowel_set_perf,
                                 vowel_set_impf: newData.vowel_set_impf,
-                                vowel_set_imp: newData.vowel_set_imp
+                                vowel_set_imp: newData.vowel_set_imp,
+                                is_geminate: newData.is_geminate
                             });
 
                             // Update local state
                             setDbRoot({
                                 ...rootObj,
                                 ...newData,
-                                gloss: newData.glosses[0],
-                                etymology: newData.etymology.definition
+                                gloss: newData.glosses.filter(Boolean).join('; '),
+                                etymology: etymologyStringified
                             });
 
                             setShowRootForm(false);
