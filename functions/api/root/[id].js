@@ -2,9 +2,9 @@
 import { createClient } from '@libsql/client/web';
 
 export async function onRequestGet({ env, params }) {
-    const { consonants } = params;
-    if (!consonants) {
-        return new Response(JSON.stringify({ error: 'Missing consonants' }), {
+    const { id } = params;
+    if (!id) {
+        return new Response(JSON.stringify({ error: 'Missing id' }), {
             status: 400,
             headers: { 'Content-Type': 'application/json' }
         });
@@ -15,11 +15,11 @@ export async function onRequestGet({ env, params }) {
         const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
         const db = createClient({ url, authToken: token });
 
-        const searchConsonants = decodeURIComponent(consonants).normalize('NFC');
+        const searchId = decodeURIComponent(id).normalize('NFC');
 
         const rootRes = await db.execute({
-            sql: `SELECT * FROM roots WHERE consonants = ?`,
-            args: [searchConsonants],
+            sql: `SELECT * FROM roots WHERE id = ?`,
+            args: [searchId],
         });
 
         if (!rootRes.rows.length) {
@@ -30,10 +30,19 @@ export async function onRequestGet({ env, params }) {
         }
 
         const root = rootRes.rows[0];
-        try {
-            root.hidden_forms = root.hidden_forms ? JSON.parse(root.hidden_forms) : [];
-        } catch (e) {
-            root.hidden_forms = [];
+        const jsonFields = ['hidden_forms', 'gloss', 'etymology', 'synonyms', 'antonyms', 'related_entries', 'tags', 'consonant_array'];
+        for (const field of jsonFields) {
+            try {
+                if (root[field]) {
+                    root[field] = JSON.parse(root[field]);
+                } else if (field === 'hidden_forms' || field === 'tags' || field === 'consonant_array' || field === 'synonyms' || field === 'antonyms' || field === 'related_entries') {
+                    root[field] = [];
+                }
+            } catch (e) {
+                if (field === 'hidden_forms' || field === 'tags' || field === 'consonant_array' || field === 'synonyms' || field === 'antonyms' || field === 'related_entries') {
+                    root[field] = [];
+                }
+            }
         }
 
         return new Response(JSON.stringify({ root }), {

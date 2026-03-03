@@ -46,8 +46,8 @@ export async function onRequestPut({ request, env, params }) {
     try {
         if (!(await verifyAdmin(request, env))) return unauthorized();
 
-        const { consonants } = params;
-        if (!consonants) return json({ error: 'consonants parameter required' }, 400);
+        const { id } = params;
+        if (!id) return json({ error: 'id parameter required' }, 400);
 
         const body = await request.json();
         const { hidden_forms } = body;
@@ -60,8 +60,8 @@ export async function onRequestPut({ request, env, params }) {
         const hiddenFormsJson = JSON.stringify(hidden_forms);
 
         await client.execute({
-            sql: `UPDATE roots SET hidden_forms = ?, updated_at = datetime('now') WHERE consonants = ?`,
-            args: [hiddenFormsJson, consonants],
+            sql: `UPDATE roots SET hidden_forms = ?, updated_at = datetime('now') WHERE id = ?`,
+            args: [hiddenFormsJson, id],
         });
 
         return json({ updated: true, hidden_forms });

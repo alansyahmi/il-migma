@@ -5,6 +5,8 @@
 
 import { createClient } from '@libsql/client/web';
 
+const now = () => new Date().toISOString();
+
 async function verifyAdmin(request, env) {
     const auth = request.headers.get('Authorization') ?? '';
     const token = auth.replace('Bearer ', '').trim();
@@ -80,34 +82,129 @@ export async function onRequestPost({ request, env }) {
         if (!(await verifyAdmin(request, env))) return unauthorized();
 
         const body = await request.json();
-        const { strength, weak_class, gloss, etymology, source, hidden_forms, vowel_set_perf, vowel_set_impf, vowel_set_imp } = body;
         const consonants = body.consonants?.trim().toLowerCase().normalize('NFC');
-        const notes = body.notes?.trim() ?? ''; // Trim notes
         if (!consonants) return json({ error: 'consonants required' }, 400);
 
         const client = db(env);
-        const id = Math.random().toString(36).slice(2, 11);
+        const force = body.force === true;
+
+        if (!force) {
+            const existingRes = await client.execute({
+                sql: `SELECT id, consonants FROM roots WHERE consonants = ?`,
+                args: [consonants]
+            });
+            if (existingRes.rows.length > 0) {
+                return json({
+                    error: 'DUPLICATE_CONSONANTS',
+                    message: `A root with consonants '${consonants}' already exists.`,
+                    existing: existingRes.rows[0]
+                }, 409);
+            }
+        }
+
+        const baseId = consonants;
+        let id = body.id || baseId;
+
+        // Check for ID collision if using baseId
+        if (!body.id) {
+            const idCheck = await client.execute({
+                sql: `SELECT id FROM roots WHERE id LIKE ? OR id = ?`,
+                args: [`${baseId}-%`, baseId]
+            });
+            if (idCheck.rows.length > 0) {
+                let maxSuffix = 0;
+                idCheck.rows.forEach(r => {
+                    if (r.id === baseId) maxSuffix = Math.max(maxSuffix, 1);
+                    else {
+                        const match = r.id.match(new RegExp(`^${baseId}-(\\d+)$`));
+                        if (match && match[1]) maxSuffix = Math.max(maxSuffix, parseInt(match[1], 10));
+                    }
+                });
+                id = `${baseId}-${maxSuffix + 1}`;
+            }
+        }
+
         const consonant_array = JSON.stringify(consonants.split('-').map(c => c.trim().normalize('NFC')));
 
+        // Dynamic column discovery
+        const tableInfo = await client.execute("PRAGMA table_info(roots)");
+        const columns = tableInfo.rows.map(r => r.name);
+
+        const insertColumns = ['id', 'created_at', 'updated_at', 'consonants', 'consonant_array'];
+        const insertArgs = [id, now(), now(), consonants, consonant_array];
+
+        const mapping = {
+            'synonyms': typeof body.synonyms === 'string' ? body.synonyms : JSON.stringify(body.synonyms || []),
+            'antonyms': typeof body.antonyms === 'string' ? body.antonyms : JSON.stringify(body.antonyms || []),
+            'related_entries': typeof body.related_entries === 'string' ? body.related_entries : JSON.stringify(body.related_entries || []),
+            'tags': typeof body.tags === 'string' ? body.tags : JSON.stringify(body.tags || [])
+        };
+
+        for (const col of columns) {
+            if (insertColumns.includes(col)) continue;
+
+            if (col in mapping) {
+                insertColumns.push(col);
+                insertArgs.push(n(mapping[col]));
+                continue;
+            }
+
+            if (col in body) {
+                insertColumns.push(col);
+                let val = body[col];
+                if (Array.isArray(val) || (val && typeof val === 'object' && col !== 'notes' && col !== 'source')) {
+                    val = JSON.stringify(val);
+                }
+                insertArgs.push(n(val));
+            }
+        }
+
+        const placeholders = insertColumns.map(() => '?').join(',');
         await client.execute({
-            sql: `INSERT INTO roots (id, consonants, consonant_array, strength, weak_class, gloss, etymology, source, notes, vowel_set_perf, vowel_set_impf, vowel_set_imp, is_geminate, created_at, updated_at) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-            args: [
-                id,
-                consonants,
-                consonant_array,
-                strength ?? 'strong',
-                weak_class ?? '',
-                gloss ?? '',
-                etymology ?? '',
-                source ?? '',
-                notes ?? '',
-                vowel_set_perf ?? 'a-a',
-                vowel_set_impf ?? 'i-a',
-                vowel_set_imp ?? 'o-o',
-                body.is_geminate ? 1 : 0
-            ],
+            sql: `INSERT INTO roots (${insertColumns.join(', ')}) VALUES (${placeholders})`,
+            args: insertArgs,
         });
+
+        // RECIPROCAL UPDATES
+        if (body.synonyms?.length > 0 || body.antonyms?.length > 0) {
+            const currentConsonants = consonants;
+            const newSyns = typeof body.synonyms === 'string' ? JSON.parse(body.synonyms) : (body.synonyms || []);
+            const newAnts = typeof body.antonyms === 'string' ? JSON.parse(body.antonyms) : (body.antonyms || []);
+
+            const glossVal = body.gloss || '';
+            let currentGloss = { en: '', mt: '' };
+            try {
+                const parsed = typeof glossVal === 'string' ? JSON.parse(glossVal) : glossVal;
+                if (Array.isArray(parsed) && typeof parsed[0] === 'object') {
+                    currentGloss = { en: parsed[0].en || '', mt: parsed[0].mt || '' };
+                } else if (typeof glossVal === 'string' && glossVal) {
+                    currentGloss = { en: glossVal, mt: '' };
+                }
+            } catch (e) {
+                if (glossVal && typeof glossVal === 'string') currentGloss = { en: glossVal, mt: '' };
+            }
+
+            const updateReciprocal = async (targetCons, relType) => {
+                if (!targetCons || targetCons === currentConsonants) return;
+                const targetRes = await client.execute({ sql: `SELECT synonyms, antonyms FROM roots WHERE consonants = ?`, args: [targetCons] });
+                if (targetRes.rows.length === 0) return;
+
+                const targetData = targetRes.rows[0];
+                let targetList = targetData[relType] ? (typeof targetData[relType] === 'string' ? JSON.parse(targetData[relType]) : targetData[relType]) : [];
+
+                const exists = targetList.some(item => item.id === currentConsonants || item.headword === currentConsonants);
+                if (!exists) {
+                    targetList.push({ id: currentConsonants, headword: currentConsonants, pos: 'ROOT', gloss_en: currentGloss.en, gloss_mt: currentGloss.mt });
+                    await client.execute({
+                        sql: `UPDATE roots SET ${relType} = ?, updated_at = datetime('now') WHERE consonants = ?`,
+                        args: [JSON.stringify(targetList), targetCons]
+                    });
+                }
+            };
+
+            for (const s of newSyns) await updateReciprocal(s.id || s.headword, 'synonyms');
+            for (const a of newAnts) await updateReciprocal(a.id || a.headword, 'antonyms');
+        }
 
         return json({ id, created: true }, 201);
     } catch (e) {
@@ -121,12 +218,27 @@ export async function onRequestDelete({ request, env }) {
 
         const url = new URL(request.url);
         const id = url.searchParams.get('id');
-        if (!id) return json({ error: 'id required' }, 400);
+        const ids = url.searchParams.get('ids');
+
+        if (!id && !ids) return json({ error: 'id or ids required' }, 400);
 
         const client = db(env);
-        await client.execute({ sql: 'DELETE FROM roots WHERE id = ?', args: [id] });
 
-        return json({ id, deleted: true });
+        if (ids) {
+            const idList = ids.split(',').map(s => s.trim()).filter(Boolean);
+            if (idList.length === 0) return json({ error: 'ids empty' }, 400);
+
+            // SQLite supports DELETE FROM table WHERE id IN (...)
+            const placeholders = idList.map(() => '?').join(',');
+            await client.execute({
+                sql: `DELETE FROM roots WHERE id IN (${placeholders})`,
+                args: idList
+            });
+            return json({ ids: idList, deleted: true });
+        } else {
+            await client.execute({ sql: 'DELETE FROM roots WHERE id = ?', args: [id] });
+            return json({ id, deleted: true });
+        }
     } catch (e) {
         return json({ error: e.message }, 500);
     }
@@ -144,4 +256,11 @@ function json(data, status = 200) {
 
 function unauthorized() {
     return json({ error: 'Unauthorized — admin role required' }, 401);
+}
+
+/** Convert empty/undefined to null for DB consistency, and normalize strings */
+function n(val) {
+    if (val === '' || val === undefined) return null;
+    if (typeof val === 'string') return val.trim().normalize('NFC');
+    return val;
 }

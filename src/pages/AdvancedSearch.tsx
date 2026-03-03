@@ -482,7 +482,7 @@ export function AdvancedSearch() {
                 if (rootType === 'weak initial' && (rt !== 'weak' || weakClass !== 'assimilative')) return false;
                 if (rootType === 'weak medial' && (rt !== 'weak' || weakClass !== 'hollow')) return false;
                 if (rootType === 'weak final' && (rt !== 'weak' || weakClass !== 'defective')) return false;
-                if (rootType === 'geminated' && !e.root_pattern_form?.root?.is_geminate) return false;
+                if (rootType === 'geminated' && rt !== 'geminated') return false;
             }
 
             // Root radicals filter

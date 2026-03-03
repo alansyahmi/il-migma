@@ -19,7 +19,7 @@ const CATEGORIES = [
     { id: 'source_language', label: 'Sources', icon: Library },
     { id: 'verb_preset', label: 'Verb Presets', icon: Settings },
     { id: 'broken_pattern', label: 'Broken Patterns', icon: Puzzle },
-    { id: 'adjective_pattern', label: 'Adj. Patterns', icon: Palette },
+    { id: 'cv_wizen_pattern', label: 'Patterns', icon: Palette },
     { id: 'sound_suffix', label: 'S. Plural Suffixes', icon: PlusSquare },
     { id: 'verb_form', label: 'Verb Forms', icon: Settings },
     { id: 'participle_nuance', label: 'Ptcp. Nuances', icon: Tag },
@@ -143,9 +143,19 @@ export function AdminSettings() {
                             <Card key={item.id} className="p-4 border-[#ede9e1] hover:border-[#1034A6]/30 transition-colors group">
                                 <div className="flex items-center justify-between">
                                     <div className="space-y-1">
-                                        <h3 className="font-bold text-lg text-black">{item.key}</h3>
+                                        <h3 className="font-bold text-lg text-black">
+                                            {typeof item.value === 'object' && ('cv' in item.value || 'wizen' in item.value)
+                                                ? (mode === 'standard' ? (item.value.cv || item.key) : (item.value.wizen || item.key))
+                                                : item.key}
+                                        </h3>
                                         <div className="text-xs font-mono text-black/40 bg-black/5 inline-block px-1.5 py-0.5 rounded">
-                                            {typeof item.value === 'object' ? JSON.stringify(item.value) : item.value}
+                                            {typeof item.value === 'object' ? (
+                                                <div className="flex gap-2">
+                                                    {Object.entries(item.value).map(([vk, vv]) => (
+                                                        <span key={vk} className="border-r border-black/10 last:border-0 pr-2">{vk}: {Array.isArray(vv) ? vv.join(', ') : String(vv)}</span>
+                                                    ))}
+                                                </div>
+                                            ) : item.value}
                                         </div>
                                     </div>
                                     <div className="flex gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
@@ -186,7 +196,7 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
     const [key, setKey] = useState(item?.key ?? '');
     const [value, setValue] = useState(item?.value ?? (
         category === 'verb_preset' ? { perfect: { cv: '', wizen: '' }, passive: { cv: '', wizen: '' }, active: { cv: '', wizen: '' }, verbal: { cv: '', wizen: '' } } :
-            (category === 'broken_pattern' || category === 'adjective_pattern') ? { cv: '', wizen: '' } : ''
+            (category === 'broken_pattern' || category === 'cv_wizen_pattern') ? { cv: '', wizen: '', pos_types: [] } : ''
     ));
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
@@ -204,7 +214,10 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
         }
     };
 
-    const isComplex = category === 'verb_preset' || category === 'broken_pattern' || category === 'adjective_pattern';
+    const isComplex = category === 'verb_preset' || category === 'broken_pattern' || category === 'cv_wizen_pattern';
+    const { getValues } = useAdminConfig();
+    const POS_OPTIONS = getValues('pos').filter(p => p !== 'verb');
+
     const inp = "w-full border border-[#d8cfc0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1034A6] bg-white text-black";
     const labelStyle = "block text-xs font-bold text-black/40 uppercase tracking-widest mb-1.5";
 
@@ -238,15 +251,45 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
                         ))}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className={labelStyle}>CV Notation</label>
-                            <input className={inp} value={value.cv} onChange={e => setValue({ ...value, cv: e.target.value })} placeholder="e.g. CvCvC" />
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className={labelStyle}>CV Notation</label>
+                                <input className={inp} value={value.cv} onChange={e => setValue({ ...value, cv: e.target.value })} placeholder="e.g. CvCvC" />
+                            </div>
+                            <div>
+                                <label className={labelStyle}>Wiżen Name</label>
+                                <input className={inp} value={value.wizen} onChange={e => setValue({ ...value, wizen: e.target.value })} placeholder="e.g. fagħal" />
+                            </div>
                         </div>
-                        <div>
-                            <label className={labelStyle}>Wizen Name</label>
-                            <input className={inp} value={value.wizen} onChange={e => setValue({ ...value, wizen: e.target.value })} placeholder="e.g. fagħal" />
-                        </div>
+
+                        {category === 'cv_wizen_pattern' && (
+                            <div>
+                                <label className={labelStyle}>Apply to POS (exclude verb)</label>
+                                <div className="flex flex-wrap gap-1.5 mt-2">
+                                    {POS_OPTIONS.map(p => {
+                                        const isSelected = (value.pos_types || []).includes(p);
+                                        return (
+                                            <button
+                                                key={p}
+                                                type="button"
+                                                onClick={() => {
+                                                    const current = value.pos_types || [];
+                                                    const next = isSelected ? current.filter((x: string) => x !== p) : [...current, p];
+                                                    setValue({ ...value, pos_types: next });
+                                                }}
+                                                className={cn(
+                                                    "px-3 py-1 text-[10px] font-bold rounded-lg border transition-all",
+                                                    isSelected ? "bg-[#1034A6] text-white border-[#1034A6]" : "bg-white text-black/40 border-black/10 hover:border-black/20"
+                                                )}
+                                            >
+                                                {p.toUpperCase()}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 

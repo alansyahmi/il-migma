@@ -29,7 +29,6 @@ export async function onRequestGet({ params, env }) {
                r.id          AS root_id,
                r.strength    AS root_strength,
                r.weak_class  AS root_weak_class,
-               r.is_geminate AS root_is_geminate,
                r.gloss       AS root_gloss,
                r.etymology   AS root_etymology,
                pat.cv_notation, pat.wizen_notation, pat.id AS pattern_id
@@ -144,14 +143,13 @@ export async function onRequestGet({ params, env }) {
                     consonants: entry.resolved_root_consonants,
                     strength: entry.root_strength || 'strong',
                     weak_class: entry.root_weak_class || null,
-                    is_geminate: !!entry.root_is_geminate,
                     gloss: entry.root_gloss || '',
                     etymology: entry.root_etymology || ''
                 },
-                pattern: entry.pattern_id ? {
-                    id: entry.pattern_id,
-                    cv_notation: entry.cv_notation,
-                    wizen_notation: entry.wizen_notation,
+                pattern: (entry.pattern_id || entry.cv_pattern) ? {
+                    id: entry.pattern_id || '',
+                    cv_notation: entry.cv_notation || entry.cv_pattern,
+                    wizen_notation: entry.wizen_notation || '',
                 } : null,
                 derived_form: entry.derived_form,
             } : null,

@@ -12,10 +12,11 @@ export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const q = url.searchParams.get('q')?.trim() ?? '';
     const pos = url.searchParams.get('pos') ?? '';
+    const rootId = url.searchParams.get('root_id') ?? '';
     const limit = Math.min(Number(url.searchParams.get('limit') ?? 20), 100);
     const offset = Number(url.searchParams.get('offset') ?? 0);
 
-    if (!q) {
+    if (!q && !rootId) {
         return json({ results: [], total: 0 });
     }
 
@@ -51,16 +52,30 @@ export async function onRequestGet({ request, env }) {
                    COALESCE(r.consonants, e.root_consonants) AS root_consonants,
                    r.strength AS root_strength, r.weak_class AS root_weak_class,
                    r.vowel_set_perf, r.vowel_set_impf, r.vowel_set_imp,
+                   r.gloss AS root_gloss,
                    r.id AS root_id,
-                   d.text_en, d.text_mt, p.ipa, ar.reliability_index
+                   d.text_en, d.text_mt, p.ipa, ar.reliability_index,
+                   pat.cv_notation, pat.wizen_notation
             FROM entries e
             LEFT JOIN roots r ON (e.root_consonants = r.consonants)
+            LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id OR e.root_pattern_form_id = rpf.id)
+            LEFT JOIN patterns pat ON (rpf.pattern_id = pat.id)
             LEFT JOIN definitions d ON d.entry_id = e.id AND d.sense_number = 1
             LEFT JOIN phonetics p   ON p.entry_id = e.id AND p.dialect = 'Standard'
             LEFT JOIN attestation_reliability ar ON ar.entry_id = e.id
-            WHERE (e.rowid IN (SELECT rowid FROM entries_fts WHERE entries_fts MATCH ?) OR r.consonants = ? OR e.root_consonants = ?)
+            WHERE 1=1
         `;
-        const args = [ftsQuery, normalizedQ, normalizedQ];
+        const args = [];
+
+        if (q) {
+            sql += ` AND (e.rowid IN (SELECT rowid FROM entries_fts WHERE entries_fts MATCH ?) OR r.consonants = ? OR e.root_consonants = ?)`;
+            args.push(ftsQuery, normalizedQ, normalizedQ);
+        }
+
+        if (rootId) {
+            sql += ` AND r.id = ?`;
+            args.push(rootId);
+        }
 
         if (pos) {
             sql += ' AND e.pos = ?';
@@ -100,11 +115,17 @@ export async function onRequestGet({ request, env }) {
                         vowel_set_perf: r.vowel_set_perf,
                         vowel_set_impf: r.vowel_set_impf,
                         vowel_set_imp: r.vowel_set_imp,
-                        is_geminate: false,
+                        gloss: r.root_gloss || '',
                         is_imala_blocked: false,
                         created_at: '',
                         updated_at: ''
-                    }
+                    },
+                    pattern: (r.cv_notation || r.cv_pattern) ? {
+                        id: '',
+                        cv_notation: r.cv_notation || r.cv_pattern || '',
+                        wizen_notation: r.wizen_notation || '',
+                        created_at: ''
+                    } : undefined
                 } : undefined
             };
         });

@@ -46,12 +46,13 @@ export interface SearchResponse {
 
 export async function apiSearch(
     q: string,
-    opts: { pos?: string; limit?: number; offset?: number } = {}
+    opts: { pos?: string; limit?: number; offset?: number; root_id?: string } = {}
 ): Promise<SearchResponse> {
     const params = new URLSearchParams({ q });
     if (opts.pos) params.set('pos', opts.pos);
     if (opts.limit) params.set('limit', String(opts.limit));
     if (opts.offset) params.set('offset', String(opts.offset));
+    if (opts.root_id) params.set('root_id', opts.root_id);
     return apiFetch(`/api/search?${params}`);
 }
 
@@ -69,8 +70,8 @@ export async function apiGetEntry(id: string): Promise<{ entry: Entry }> {
     return apiFetch(`/api/entry/${id}`);
 }
 
-export async function apiGetRoot(consonants: string): Promise<{ root: any }> {
-    return apiFetch(`/api/root/${encodeURIComponent(consonants)}`);
+export async function apiGetRoot(id: string): Promise<{ root: any }> {
+    return apiFetch(`/api/root/${encodeURIComponent(id)}`);
 }
 
 // ── Chat ─────────────────────────────────────────────────────────────────────
@@ -124,6 +125,13 @@ export async function adminDeleteEntry(token: string, id: string) {
     });
 }
 
+export async function adminBulkDeleteEntries(token: string, ids: string[]) {
+    return apiFetch(`/api/admin/entries?ids=${ids.join(',')}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
 // ── Roots Admin ─────────────────────────────────────────────────────────────
 
 export async function adminListRoots(token: string, q?: string) {
@@ -134,13 +142,13 @@ export async function adminListRoots(token: string, q?: string) {
     });
 }
 
-export async function adminGetRoot(token: string, consonants: string) {
-    return apiFetch<{ root: any }>(`/api/admin/roots/${encodeURIComponent(consonants)}`, {
+export async function adminGetRoot(token: string, id: string) {
+    return apiFetch<{ root: any }>(`/api/admin/roots/${encodeURIComponent(id)}`, {
         headers: { Authorization: `Bearer ${token}` }
     });
 }
 
-export async function adminCreateRoot(token: string, data: { consonants: string; notes?: string }) {
+export async function adminCreateRoot(token: string, data: any) {
     return apiFetch('/api/admin/roots', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
@@ -148,16 +156,16 @@ export async function adminCreateRoot(token: string, data: { consonants: string;
     });
 }
 
-export async function adminUpdateRootHiddenForms(token: string, consonants: string, hiddenForms: string[]) {
-    return apiFetch(`/api/admin/roots/${encodeURIComponent(consonants)}/hidden-forms`, {
+export async function adminUpdateRootHiddenForms(token: string, id: string, hiddenForms: string[]) {
+    return apiFetch(`/api/admin/roots/${encodeURIComponent(id)}/hidden-forms`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify({ hidden_forms: hiddenForms }),
     });
 }
 
-export async function adminUpdateRoot(token: string, consonants: string, data: any) {
-    return apiFetch(`/api/admin/roots/${encodeURIComponent(consonants)}`, {
+export async function adminUpdateRoot(token: string, id: string, data: any) {
+    return apiFetch(`/api/admin/roots/${encodeURIComponent(id)}`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
@@ -166,6 +174,13 @@ export async function adminUpdateRoot(token: string, consonants: string, data: a
 
 export async function adminDeleteRoot(token: string, id: string) {
     return apiFetch(`/api/admin/roots?id=${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminBulkDeleteRoots(token: string, ids: string[]) {
+    return apiFetch(`/api/admin/roots?ids=${encodeURIComponent(ids.join(','))}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
     });
@@ -204,3 +219,78 @@ export async function adminDeleteConfig(token: string, id: string) {
     });
 }
 
+// ── DB Tools Admin ───────────────────────────────────────────────────────────
+
+export async function adminDbToolsFetch<T>(token: string, action: string, data: Record<string, any> = {}): Promise<T> {
+    return apiFetch<T>('/api/admin/db-tools', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action, ...data }),
+    });
+}
+
+export async function adminDbQuery(token: string, sql: string, allowWrite = false) {
+    return adminDbToolsFetch<{
+        columns: string[];
+        rows: any[];
+        rowsAffected: number;
+        elapsed: number;
+        error?: string;
+        blocked?: boolean;
+    }>(token, 'query', { sql, allowWrite });
+}
+
+export async function adminDbExport(token: string, table: string) {
+    return adminDbToolsFetch<{
+        columns: string[];
+        rows: any[];
+        total: number;
+        table: string;
+    }>(token, 'export', { table });
+}
+
+export async function adminDbIntegrityCheck(token: string) {
+    return adminDbToolsFetch<{
+        issues: Array<{
+            category: string;
+            severity: 'error' | 'warning' | 'info';
+            count: number;
+            details: string[];
+            ids?: string[];
+        }>;
+        checkedAt: string;
+    }>(token, 'integrity-check');
+}
+
+export async function adminDbBulkUpdate(token: string, table: string, ids: string[], field: string, value: any) {
+    return adminDbToolsFetch<{ updated: number; table: string; field: string }>(token, 'bulk-update', { table, ids, field, value });
+}
+
+export async function adminDbMergeRoots(token: string, sourceId: string, targetId: string, preview = true) {
+    return adminDbToolsFetch<{
+        preview?: boolean;
+        merged?: boolean;
+        source?: any;
+        target?: any;
+        affectedEntries?: any[];
+        affectedForms?: any[];
+        sourceDeleted?: string;
+        targetKept?: string;
+        entriesReassigned?: number;
+        formsReassigned?: number;
+    }>(token, 'merge-roots', { sourceId, targetId, preview });
+}
+
+export async function adminDbTableInfo(token: string) {
+    return adminDbToolsFetch<{
+        tables: Array<{
+            name: string;
+            rowCount: number;
+            columns: Array<{ name: string; type: string; notnull: boolean; pk: boolean }>;
+        }>;
+    }>(token, 'table-info');
+}
+
+export async function adminCheckIdExists(token: string, table: string, id: string) {
+    return adminDbToolsFetch<{ exists: boolean; id: string; table: string }>(token, 'check-id', { table, id });
+}

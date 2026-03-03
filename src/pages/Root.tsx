@@ -1,16 +1,20 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { MOCK_ENTRIES } from '@/data/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { generateRootForms, markGeneratedForms, type MarkedVerbForm, type AttestedEntry } from '@/lib/conjugationEngine';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
-import { Plus, Edit2, ArrowLeft } from 'lucide-react';
+import { Plus, Edit2, ArrowLeft, Trash2 } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
-import { RootFormModal, type RootFormData } from '@/components/admin/RootFormModal';
-import { type Entry } from '@/types';
-import { apiSearch, apiGetRoot } from '@/lib/api';
+import { RootFormModal } from '@/components/admin/RootFormModal';
+import { type RootFormData } from '@/lib/adminUtils';
+import { RelationshipEditor } from '@/components/admin/RelationshipEditor';
+import { adminUpdateRoot, adminDeleteEntry } from '@/lib/api';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { useRootData } from '@/hooks/useRootData';
+import { type VerbStrength } from '@/types';
 
 const LANGUAGE_COLORS: Record<string, { bg: string; text: string }> = {
     Arabic: { bg: 'bg-emerald-50', text: 'text-emerald-800' },
@@ -44,11 +48,13 @@ function MarkedCell({
     data,
     isAdmin,
     onEdit,
+    onDelete,
     noLink
 }: {
     data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string };
     isAdmin?: boolean;
     onEdit?: () => void;
+    onDelete?: () => void;
     noLink?: boolean;
 }) {
     if (data.value === '-') return <span className="opacity-40">-</span>;
@@ -67,13 +73,24 @@ function MarkedCell({
         <div className="group flex items-center gap-1.5">
             {content}
             {isAdmin && onEdit && (
-                <button
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit(); }}
-                    className="opacity-70 hover:opacity-100 p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
-                    title={data.marker === 'plain' ? 'Edit Entry' : 'Add Entry'}
-                >
-                    {data.marker === 'plain' ? <Edit2 size={12} /> : <Plus size={12} />}
-                </button>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit(); }}
+                        className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
+                        title={data.marker === 'plain' ? 'Edit Entry' : 'Add Entry'}
+                    >
+                        {data.marker === 'plain' ? <Edit2 size={12} /> : <Plus size={12} />}
+                    </button>
+                    {data.marker === 'plain' && onDelete && (
+                        <button
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
+                            className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                            title="Delete Entry"
+                        >
+                            <Trash2 size={12} />
+                        </button>
+                    )}
+                </div>
             )}
         </div>
     );
@@ -82,63 +99,25 @@ function MarkedCell({
 export function Root() {
     const { id } = useParams<{ id: string }>();
     const { t } = useLanguage();
-    const { term } = useLinguisticMode();
+    const { mode, term } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
 
     const [showForm, setShowForm] = useState(false);
     const [showRootForm, setShowRootForm] = useState(false);
+    const [showNewRootForm, setShowNewRootForm] = useState(false);
     const [saving, setSaving] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
     const [initialFormData, setInitialFormData] = useState<any>(null);
+    const [activeRelEdit, setActiveRelEdit] = useState<'derived' | 'thesaurus' | null>(null);
+    const [relForm, setRelForm] = useState<{ synonyms: any[], antonyms: any[], related_entries: any[] }>({ synonyms: [], antonyms: [], related_entries: [] });
 
     const isActualAdmin = isAdmin && adminViewEnabled;
 
-    const [apiEntries, setApiEntries] = useState<Entry[]>([]);
-    const [dbRoot, setDbRoot] = useState<any | null>(null);
-    const [loading, setLoading] = useState(false);
+    const { root: dbRoot, entries: apiEntries, loading, normalized, refetch } = useRootData(id);
 
-    useEffect(() => {
-        if (id) {
-            setLoading(true);
-            // 1. Fetch root metadata
-            apiGetRoot(id)
-                .then(res => setDbRoot(res.root))
-                .catch(() => setDbRoot(null));
-
-            // 2. Search for all entries matching this root consonants
-            apiSearch(id)
-                .then(res => {
-                    // Filter results that have the matching root consonants
-                    const matched = (res.results || [])
-                        .filter(r => {
-                            const rCons = (r as any).root_pattern_form?.root?.consonants || (r as any).root_consonants || '';
-                            return rCons.toLowerCase().trim().normalize('NFC') === id.toLowerCase().trim().normalize('NFC');
-                        }) as unknown as Entry[];
-                    setApiEntries(matched);
-                })
-                .catch(() => { })
-                .finally(() => setLoading(false));
-        }
-    }, [id]);
-
-    // Find all entries associated with this root (Mock + Extra from API)
-    const rootEntries = useMemo(() => {
-        const mock = MOCK_ENTRIES.filter(e => {
-            const eCons = e.root_pattern_form?.root?.consonants || (e as any).root_consonants || '';
-            return eCons.toLowerCase().trim().normalize('NFC') === id?.toLowerCase().trim().normalize('NFC');
-        });
-        // Deduplicate between mock and api by ID
-        const combined = [...mock];
-        const seenIds = new Set(mock.map(m => m.id));
-        for (const e of apiEntries) {
-            if (!seenIds.has(e.id)) {
-                combined.push(e);
-                seenIds.add(e.id);
-            }
-        }
-        return combined;
-    }, [id, apiEntries]);
+    // Use entries from hook (removed MOCK_ENTRIES filter)
+    const rootEntries = apiEntries;
 
     // Find a primary verb entry (preferably Form I) to extract root metadata and meanings
     const primaryEntry = useMemo(() => {
@@ -146,63 +125,28 @@ export function Root() {
     }, [rootEntries]);
 
     // The root metadata to use for conjugation
-    const rootObj = useMemo(() => {
-        if (dbRoot) return dbRoot;
-        return primaryEntry?.root_pattern_form?.root;
-    }, [dbRoot, primaryEntry]);
+    const rootObj = dbRoot || primaryEntry?.root_pattern_form?.root;
 
     const vm = primaryEntry?.verb_morphology;
 
     const glossList = useMemo(() => {
-        if (dbRoot?.gloss) {
-            try {
-                const parsed = JSON.parse(dbRoot.gloss);
-                if (Array.isArray(parsed)) return parsed.filter(Boolean);
-            } catch (e) {
-                // Fallback to split for legacy data
-            }
-            return dbRoot.gloss.split(';').map((s: string) => s.trim()).filter(Boolean);
+        if (normalized?.glosses) {
+            return normalized.glosses.map(g => (mode === 'standard' ? g.en : (g.mt || g.en))).filter(Boolean);
         }
         return primaryEntry?.definitions?.map(d => d.text_en) || [];
-    }, [dbRoot, primaryEntry]);
+    }, [normalized, primaryEntry, mode]);
 
-    const parsedEtymology = useMemo(() => {
-        let etyData = null;
-        if (dbRoot?.etymology) {
-            try {
-                etyData = JSON.parse(dbRoot.etymology);
-            } catch {
-                // Not JSON, wrap it
-                etyData = { definition: dbRoot.etymology };
-            }
-        } else {
-            const ety = primaryEntry?.etymologies?.[0]?.chain?.[0];
-            if (ety) {
-                // Map the first element of etymologies array
-                etyData = {
-                    relationship: 'From',
-                    language: ety.language || '',
-                    term: ety.form || '',
-                    pronunciation: '',
-                    definition: ety.meaning || ''
-                };
-            }
-        }
+    const parsedEtymology = normalized?.etymology || null;
 
-        if (!etyData) return null;
-
-        return {
-            relationship: etyData.relationship || '',
-            language: etyData.language || '',
-            term: etyData.term || '',
-            pronunciation: etyData.pronunciation || '',
-            definition: etyData.definition || ''
-        };
-    }, [dbRoot, primaryEntry]);
+    const rootRelationships = useMemo(() => {
+        return normalized?.relationships || { synonyms: [], antonyms: [], related_entries: [] };
+    }, [normalized]);
 
     const sourceText = useMemo(() => {
         return dbRoot?.source || primaryEntry?.verb_morphology?.source_citation || '';
     }, [dbRoot, primaryEntry]);
+
+    const tags = normalized?.tags || [];
 
     // Generate engine data
     const { generatedTable, shownIds } = useMemo(() => {
@@ -213,18 +157,28 @@ export function Root() {
             rootObj.consonants,
             pvSet,
             ipvSet,
-            rootObj.strength || 'strong',
-            rootObj.weak_class
+            (rootObj.strength || 'strong') as VerbStrength,
+            rootObj.weak_class as any
         );
 
         // Collect attested forms from all rootEntries
         const attested: AttestedEntry[] = [];
-        rootEntries.forEach(e => {
-            const form = e.verb_morphology?.form || '';
+        rootEntries.forEach((e: any) => {
+            const form = e.verb_morphology?.form || e._formLabel || '';
             if (!form) return;
 
-            attested.push({ word: e.headword, id: e.id, form, type: 'lemma' });
+            // 1. Link the entry itself based on its POS
+            if (e.pos === 'verb') {
+                attested.push({ word: e.headword, id: e.id, form, type: 'lemma' });
+            } else if (e.pos === 'participle') {
+                const pt = e.verb_morphology?.participle_type || e.participle_type || 'active';
+                attested.push({ word: e.headword, id: e.id, form, type: pt === 'passive' ? 'passive' : 'active' });
+            } else if (e.pos === 'noun') {
+                // Nouns with an associated verb form in root view are treated as verbal nouns
+                attested.push({ word: e.headword, id: e.id, form, type: 'noun' });
+            }
 
+            // 2. Also check internal participle/noun fields within the entry (e.g. for legacy verbs)
             if (e.verb_morphology?.passive_participle) {
                 attested.push({ word: e.verb_morphology.passive_participle, id: e.id, form, type: 'passive' });
             }
@@ -234,6 +188,19 @@ export function Root() {
             if (e.verb_morphology?.verbal_noun) {
                 attested.push({ word: e.verb_morphology.verbal_noun, id: e.id, form, type: 'noun' });
             }
+
+            // 3. Similarly check subentries
+            if (e.subentries) {
+                e.subentries.forEach((sub: any) => {
+                    const subForm = sub.verb_morphology?.form || sub._formLabel || form;
+                    if (sub.pos === 'noun') {
+                        attested.push({ word: sub.headword, id: sub.id, form: subForm, type: 'noun' });
+                    } else if (sub.pos === 'participle') {
+                        const pt = sub.verb_morphology?.participle_type || sub.participle_type || 'active';
+                        attested.push({ word: sub.headword, id: sub.id, form: subForm, type: pt === 'passive' ? 'passive' : 'active' });
+                    }
+                });
+            }
         });
 
         const rowsData = markGeneratedForms(rawGen, attested);
@@ -242,7 +209,7 @@ export function Root() {
         const shownIds = new Set<string>();
         rowsData.forEach(row => {
             if (row.perfect.entryId) shownIds.add(row.perfect.entryId);
-            if (row.imperfect.entryId) shownIds.add(row.imperfect.entryId); // Added imperfect
+            //if (row.imperfect.entryId) shownIds.add(row.imperfect.entryId); // Added imperfect
             if (row.passiveParticiple.entryId) shownIds.add(row.passiveParticiple.entryId);
             if (row.activeParticiple.entryId) shownIds.add(row.activeParticiple.entryId);
             if (row.verbalNoun.entryId) shownIds.add(row.verbalNoun.entryId);
@@ -253,35 +220,107 @@ export function Root() {
 
     // Derived Terms logic (gather from rootEntries)
     const derivedTerms = useMemo(() => {
-        const terms: { term: string, class: string, wizen: string, id: string }[] = [];
+        const terms: { term: string, class: string, cv: string, id: string, gloss: string }[] = [];
+        const seenIds = new Set<string>();
 
+        const getPattern = (e: any) => {
+            const cv = (e as any).cv_pattern || e.root_pattern_form?.pattern?.cv_notation || '-';
+            const wizen = e.root_pattern_form?.pattern?.wizen_notation || cv;
+            return mode === 'standard' ? cv : wizen;
+        };
+
+        // 1. Core entries and subentries
         for (const e of rootEntries) {
-            // Include non-verbs OR verbs that aren't in the Form I-X table
-            if (e.pos !== 'verb' || !shownIds.has(e.id)) {
+            if (shownIds.has(e.id)) {
+                seenIds.add(e.id);
+                continue;
+            }
+
+            if (!seenIds.has(e.id)) {
+                seenIds.add(e.id);
                 terms.push({
                     term: e.headword,
-                    class: (e.pos === 'noun' && e.root_pattern_form?.pattern?.cv_notation ? 'Noun' :
+                    class: (e.pos === 'noun' ? 'Noun' :
                         (e.pos === 'verb' ? 'Verb' :
-                            (e.pos === 'adjective' ? 'Adjective' : 'Derived'))),
-                    wizen: e.root_pattern_form?.pattern?.wizen_notation || '-',
-                    id: e.id
+                            (e.pos === 'adjective' ? 'Adjective' : (e.pos.charAt(0).toUpperCase() + e.pos.slice(1))))),
+                    cv: getPattern(e),
+                    id: e.id,
+                    gloss: mode === 'standard'
+                        ? (e.definitions?.[0]?.text_en || (e as any).gloss_en || (e as any).text_en || '')
+                        : (e.definitions?.[0]?.text_mt || (e as any).gloss_mt || e.definitions?.[0]?.text_en || (e as any).gloss_en || '')
                 });
             }
 
             // Also check subentries
             if (e.subentries) {
                 for (const sub of e.subentries) {
-                    terms.push({
-                        term: sub.headword,
-                        class: sub.pos === 'noun' ? 'Noun' : (sub.pos === 'adjective' ? 'Adjective' : 'Derived'),
-                        wizen: '-',
-                        id: sub.id
-                    });
+                    if (!shownIds.has(sub.id) && !seenIds.has(sub.id)) {
+                        seenIds.add(sub.id);
+                        terms.push({
+                            term: sub.headword,
+                            class: sub.pos ? (sub.pos === 'noun' ? 'Noun' :
+                                (sub.pos === 'adjective' ? 'Adjective' : (sub.pos.charAt(0).toUpperCase() + sub.pos.slice(1)))) : 'Derived',
+                            cv: getPattern(sub),
+                            id: sub.id,
+                            gloss: mode === 'standard'
+                                ? (sub.definitions?.[0]?.text_en || (sub as any).gloss_en || (sub as any).text_en || '')
+                                : (sub.definitions?.[0]?.text_mt || (sub as any).gloss_mt || sub.definitions?.[0]?.text_en || (sub as any).gloss_en || '')
+                        });
+                    } else if (shownIds.has(sub.id)) {
+                        seenIds.add(sub.id);
+                    }
                 }
             }
         }
+
+        // 2. Add manually linked related entries only if they haven't been shown yet
+        if (rootRelationships.related_entries?.length) {
+            rootRelationships.related_entries.forEach((re: any) => {
+                if (!seenIds.has(re.id)) {
+                    seenIds.add(re.id);
+                    terms.push({
+                        term: re.headword,
+                        class: re.pos ? (re.pos.charAt(0).toUpperCase() + re.pos.toLowerCase().slice(1)) : 'Related',
+                        cv: mode === 'standard' ? (re.cv_pattern || re.wizen_pattern || '-') : (re.wizen_pattern || re.cv_pattern || '-'),
+                        id: re.id,
+                        gloss: mode === 'standard' ? (re.gloss_en || '') : (re.gloss_mt || re.gloss_en || '')
+                    });
+                }
+            });
+        }
+
         return terms;
-    }, [rootEntries, shownIds]);
+    }, [rootEntries, shownIds, rootRelationships.related_entries, mode]);
+
+    const handleDeleteEntry = async (entryId: string) => {
+        if (!confirm(t('Are you sure you want to delete this entry permanently?', 'Żgur li trid tħassar din l-entrata b\'mod permanenti?'))) return;
+        try {
+            const token = await getToken();
+            if (!token) throw new Error('Not authenticated');
+            await adminDeleteEntry(token, entryId);
+            refetch();
+        } catch (err: any) {
+            alert("Failed to delete entry: " + err.message);
+        }
+    };
+
+    const handleDeleteRootRelationship = async (type: 'synonyms' | 'antonyms' | 'related_entries', targetId: string) => {
+        if (!confirm(t('Are you sure you want to unlink this relationship?', 'Żgur li trid tneħħi din ir-relazzjoni?'))) return;
+        try {
+            const token = await getToken();
+            if (!token || !rootObj) return;
+
+            const nextRel = { ...rootRelationships };
+            nextRel[type] = nextRel[type].filter((r: any) => r.id !== targetId);
+
+            await adminUpdateRoot(token, rootObj.id, {
+                [type]: JSON.stringify(nextRel[type])
+            });
+            refetch();
+        } catch (err: any) {
+            alert("Failed to update relationship: " + err.message);
+        }
+    };
 
     if (!id) return <Navigate to="/404" replace />;
 
@@ -298,7 +337,7 @@ export function Root() {
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 text-black">
                 <div className="flex items-center gap-2 mb-4">
                     <Link to="/root-search" className="text-sm text-black/40 hover:text-black flex items-center gap-1">
-                        <ArrowLeft size={16} /> Lura
+                        <ArrowLeft size={16} /> {t('Back to Root Search', "Irġa' Lura lejn it-Tiftix tal-Għerq")}
                     </Link>
                 </div>
                 <p className="text-sm text-black/40 italic">{t('Root not found in database.', 'Il-mamma ma nstabitx fid-database.')}</p>
@@ -311,7 +350,8 @@ export function Root() {
         'TRILITTERAL', // Assuming all are triliteral for now or derived from consonants length
         (rootObj.strength !== 'geminated' ? strengthLabel : null),
         rootObj?.weak_class?.toUpperCase() || null,
-        (rootObj?.is_geminate || rootObj.strength === 'geminated') ? 'GEMINATED' : null
+        rootObj.strength === 'geminated' ? 'GEMINATED' : null,
+        ...tags.map((tag: string) => tag.toUpperCase()),
     ].filter(Boolean).join(' • ');
 
 
@@ -339,8 +379,8 @@ export function Root() {
                             </button>
                         )}
                     </div>
-                    <p className="text-sm font-serif text-black/60 mt-3 uppercase tracking-widest">"{glossList[0]}"</p>
-                    <p className="text-[0.65rem] font-sans text-black/40 tracking-[0.18em] mt-3 uppercase">
+                    <p className="text-sm font-serif text-black/55 mt-2 uppercase tracking-widest">"{glossList[0]}"</p>
+                    <p className="text-xs font-sans text-black/55 tracking-[0.18em] mt-2 uppercase">
                         — {rootTypeParts} —
                     </p>
                 </div>
@@ -380,6 +420,16 @@ export function Root() {
                             <SideCard title={t('Source', term('sors'))}>
                                 <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceText}</span>
                             </SideCard>
+                        )}
+
+                        {tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 px-1">
+                                {tags.map((tag: string) => (
+                                    <span key={tag} className="px-2 py-0.5 bg-black/5 text-black/40 rounded-full text-[10px] font-bold uppercase tracking-wider border border-black/5">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
                         )}
 
                         {isActualAdmin && (
@@ -423,6 +473,7 @@ export function Root() {
                                                 <MarkedCell
                                                     data={row.perfect}
                                                     isAdmin={isActualAdmin}
+                                                    onDelete={() => row.perfect.entryId && handleDeleteEntry(row.perfect.entryId)}
                                                     onEdit={() => {
                                                         const existing = rootEntries.find(e => e.headword === row.perfect.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
                                                         if (existing) {
@@ -455,6 +506,7 @@ export function Root() {
                                                 <MarkedCell
                                                     data={row.passiveParticiple}
                                                     isAdmin={isActualAdmin}
+                                                    onDelete={() => row.passiveParticiple.entryId && handleDeleteEntry(row.passiveParticiple.entryId)}
                                                     onEdit={() => {
                                                         const existing = rootEntries.find(e => e.headword === row.passiveParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
                                                         if (existing) {
@@ -482,6 +534,7 @@ export function Root() {
                                                 <MarkedCell
                                                     data={row.activeParticiple}
                                                     isAdmin={isActualAdmin}
+                                                    onDelete={() => row.activeParticiple.entryId && handleDeleteEntry(row.activeParticiple.entryId)}
                                                     onEdit={() => {
                                                         const existing = rootEntries.find(e => e.headword === row.activeParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
                                                         if (existing) {
@@ -509,6 +562,7 @@ export function Root() {
                                                 <MarkedCell
                                                     data={row.verbalNoun}
                                                     isAdmin={isActualAdmin}
+                                                    onDelete={() => row.verbalNoun.entryId && handleDeleteEntry(row.verbalNoun.entryId)}
                                                     onEdit={() => {
                                                         const existing = rootEntries.find(e => e.headword === row.verbalNoun.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
                                                         if (existing) {
@@ -538,47 +592,79 @@ export function Root() {
                         </div>
 
                         {/* Derived Terms Table */}
-                        {derivedTerms.length > 0 && (
+                        {(derivedTerms.length > 0 || isActualAdmin) && (
                             <div>
-                                <h2 className="font-sans font-semibold text-[1.1rem] text-[#000] mb-4">Derived Terms</h2>
-                                <table className="w-2/3 text-sm border-collapse text-left">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">Derived Terms</h2>
+                                    {isActualAdmin && (
+                                        <button
+                                            onClick={() => {
+                                                setRelForm({
+                                                    synonyms: rootRelationships.synonyms,
+                                                    antonyms: rootRelationships.antonyms,
+                                                    related_entries: rootRelationships.related_entries
+                                                });
+                                                setActiveRelEdit('derived');
+                                            }}
+                                            className="p-1 text-black/30 hover:text-[#1034A6] hover:bg-black/5 rounded transition-all"
+                                        >
+                                            <Edit2 size={14} />
+                                        </button>
+                                    )}
+                                </div>
+                                <table className="w-full text-sm border-collapse text-left">
                                     <thead>
                                         <tr className="border-b border-black/8 font-sans text-black/80">
-                                            <th className="font-semibold pb-2 pr-4">Term</th>
-                                            <th className="font-semibold pb-2 pr-4">Class</th>
-                                            <th className="font-semibold pb-2">Wiżen Pattern</th>
+                                            <th className="font-semibold pb-2 pr-4">{t('Term', 'Terminu')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{t('Class', 'Klassi')}</th>
+                                            <th className="font-semibold pb-2">{t(`${term('cv-pattern')}`, `${term('mudell-cv')}`)}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {derivedTerms.map((t, idx) => (
                                             <tr key={idx} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] group transition-colors">
-                                                <td className="py-1.5 pr-4 font-serif flex items-center gap-2">
-                                                    <Link to={`/entry/${t.id}`} style={{ color: BLUE }} className="hover:underline">{t.term}</Link>
-                                                    {isActualAdmin && (
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                const existing = rootEntries.find(re => re.id === t.id);
-                                                                if (existing) {
-                                                                    setEditEntry({
-                                                                        id: existing.id,
-                                                                        headword: existing.headword,
-                                                                        pos: existing.pos,
-                                                                        created_at: '',
-                                                                        is_loanword: false
-                                                                    });
-                                                                    setInitialFormData(null);
-                                                                    setShowForm(true);
-                                                                }
-                                                            }}
-                                                            className="opacity-70 hover:opacity-100 p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
-                                                        >
-                                                            <Edit2 size={12} />
-                                                        </button>
-                                                    )}
+                                                <td className="py-1.5 pr-4 font-serif">
+                                                    <div className="flex items-center gap-2">
+                                                        <Link to={`/entry/${t.id}`} style={{ color: BLUE }} className="hover:underline">{t.term}</Link>
+                                                        <span className="text-black/55 italic">
+                                                            {t.gloss}
+                                                        </span>
+                                                        {isActualAdmin && (
+                                                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        const existing = rootEntries.find(re => re.id === t.id);
+                                                                        if (existing) {
+                                                                            setEditEntry({
+                                                                                id: existing.id,
+                                                                                headword: existing.headword,
+                                                                                pos: existing.pos,
+                                                                                created_at: '',
+                                                                                is_loanword: false
+                                                                            });
+                                                                            setInitialFormData(null);
+                                                                            setShowForm(true);
+                                                                        }
+                                                                    }}
+                                                                    className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
+                                                                    title="Edit Entry"
+                                                                >
+                                                                    <Edit2 size={12} />
+                                                                </button>
+                                                                <button
+                                                                    onClick={(e) => { e.preventDefault(); handleDeleteEntry(t.id); }}
+                                                                    className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                                    title="Delete Entry"
+                                                                >
+                                                                    <Trash2 size={12} />
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </td>
                                                 <td className="py-1.5 pr-4 font-sans text-black/70">{t.class}</td>
-                                                <td className="py-1.5 font-sans" style={{ color: BLUE }}>{t.wizen}</td>
+                                                <td className="py-1.5 font-sans" style={{ color: BLUE }}>{t.cv}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -587,32 +673,79 @@ export function Root() {
                         )}
 
                         {/* Thesaurus */}
-                        {((vm?.synonyms?.length ?? 0) > 0 || (vm?.antonyms?.length ?? 0) > 0) && (
+                        {((vm?.synonyms?.length ?? 0) > 0 || (vm?.antonyms?.length ?? 0) > 0 || (rootRelationships.synonyms?.length ?? 0) > 0 || (rootRelationships.antonyms?.length ?? 0) > 0 || isActualAdmin) && (
                             <div className="border-t border-black/10 pt-6">
-                                <h2 className="font-sans font-semibold text-[1.1rem] text-[#000] mb-4">Thesaurus</h2>
+                                <div className="flex items-center gap-3 mb-4">
+                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">Thesaurus</h2>
+                                    {isActualAdmin && (
+                                        <button
+                                            onClick={() => {
+                                                setRelForm({
+                                                    synonyms: rootRelationships.synonyms,
+                                                    antonyms: rootRelationships.antonyms,
+                                                    related_entries: rootRelationships.related_entries
+                                                });
+                                                setActiveRelEdit('thesaurus');
+                                            }}
+                                            className="p-1 text-black/30 hover:text-[#1034A6] hover:bg-black/5 rounded transition-all"
+                                        >
+                                            <Edit2 size={14} />
+                                        </button>
+                                    )}
+                                </div>
                                 <div className="flex gap-16 text-sm">
-                                    {vm?.synonyms && vm.synonyms.length > 0 && (
+                                    {((vm?.synonyms && vm.synonyms.length > 0) || (rootRelationships.synonyms?.length > 0)) && (
                                         <div>
                                             <p className="font-semibold text-[#000] mb-1">Synonyms</p>
-                                            {vm.synonyms.map(s => (
-                                                <div key={s.id} className="mb-1">
-                                                    <Link to={`/search?q=${s.headword}`} style={{ color: BLUE }} className="hover:underline font-serif">
+                                            {[...(vm?.synonyms || []), ...(rootRelationships.synonyms || [])].map((s, idx) => (
+                                                <div key={s.id || idx} className="mb-1 flex items-center gap-2 group">
+                                                    <Link
+                                                        to={s.pos === 'ROOT' ? `/root/${s.id}` : `/search?q=${s.headword}`}
+                                                        style={{ color: BLUE }}
+                                                        className="hover:underline font-serif"
+                                                    >
                                                         -{s.headword}-
                                                     </Link>
-                                                    <span className="text-black/40 italic ml-2">"{s.gloss_en}"</span>
+                                                    <span className="text-black/40 italic ml-2">
+                                                        "{mode === 'standard' ? s.gloss_en : (s.gloss_mt || s.gloss_en)}"
+                                                    </span>
+                                                    {isActualAdmin && !vm?.synonyms?.some((v: any) => v.id === s.id) && (
+                                                        <button
+                                                            onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('synonyms', s.id); }}
+                                                            className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                            title="Unlink Synonym"
+                                                        >
+                                                            <Trash2 size={10} />
+                                                        </button>
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>
                                     )}
-                                    {vm?.antonyms && vm.antonyms.length > 0 && (
+                                    {((vm?.antonyms && vm.antonyms.length > 0) || (rootRelationships.antonyms?.length > 0)) && (
                                         <div>
                                             <p className="font-semibold text-[#000] mb-1">Antonyms</p>
-                                            {vm.antonyms.map(a => (
-                                                <div key={a.id} className="mb-1">
-                                                    <Link to={`/search?q=${a.headword}`} style={{ color: BLUE }} className="hover:underline font-serif">
+                                            {[...(vm?.antonyms || []), ...(rootRelationships.antonyms || [])].map((a, idx) => (
+                                                <div key={a.id || idx} className="mb-1 flex items-center gap-2 group">
+                                                    <Link
+                                                        to={a.pos === 'ROOT' ? `/root/${a.id}` : `/search?q=${a.headword}`}
+                                                        style={{ color: BLUE }}
+                                                        className="hover:underline font-serif"
+                                                    >
                                                         {a.headword}
                                                     </Link>
-                                                    <span className="text-black/40 italic ml-2">"{a.gloss_en}"</span>
+                                                    <span className="text-black/40 italic ml-2">
+                                                        "{mode === 'standard' ? a.gloss_en : (a.gloss_mt || a.gloss_en)}"
+                                                    </span>
+                                                    {isActualAdmin && !vm?.antonyms?.some((v: any) => v.id === a.id) && (
+                                                        <button
+                                                            onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('antonyms', a.id); }}
+                                                            className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                            title="Unlink Antonym"
+                                                        >
+                                                            <Trash2 size={10} />
+                                                        </button>
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>
@@ -625,6 +758,108 @@ export function Root() {
                 </div>
             </div>
 
+            {activeRelEdit && (
+                <Modal
+                    open
+                    onClose={() => setActiveRelEdit(null)}
+                    title={activeRelEdit === 'derived' ? t('Manage Derived Terms', 'Ġestjoni tat-Termini Derivati') : t('Manage Thesaurus', 'Ġestjoni tat-Teżawru')}
+                    size="lg"
+                >
+                    <div className="space-y-5 overflow-y-auto flex-1">
+                        <p className="text-xs text-black/40 leading-relaxed -mt-2">
+                            {activeRelEdit === 'derived'
+                                ? t('Link derived entries to this root. Enter the entry ID and press Enter to resolve.', "Aġġanċja entrati derivati ma' dan l-għerq. Ikteb l-ID u agħfas Enter biex tikkonferma.")
+                                : t('Link synonym and antonym roots. Enter the root consonants and press Enter to resolve.', "Aġġanċja għeruq sinonimi u antonimi. Ikteb l-għerq u agħfas Enter biex tikkonferma.")
+                            }
+                        </p>
+
+                        {activeRelEdit === 'derived' ? (
+                            <RelationshipEditor
+                                type="derived"
+                                title={t('Derived Terms', 'Termini Derivati')}
+                                items={relForm.related_entries}
+                                onChange={(items) => setRelForm(f => ({ ...f, related_entries: items }))}
+                                extraActions={[
+                                    {
+                                        label: t('New Entry', 'Entrata Ġdida'),
+                                        icon: <Plus size={12} />,
+                                        onClick: () => {
+                                            setEditEntry(null);
+                                            setInitialFormData({ _rootConsonants: rootObj.consonants });
+                                            setShowForm(true);
+                                        }
+                                    }
+                                ]}
+                            />
+                        ) : (
+                            <div className="space-y-6">
+                                <RelationshipEditor
+                                    type="thesaurus"
+                                    lookupType="root"
+                                    title={t('Synonyms', 'Sinonimi')}
+                                    items={relForm.synonyms}
+                                    onChange={(items) => setRelForm(f => ({ ...f, synonyms: items }))}
+                                    extraActions={[
+                                        {
+                                            label: t('New Root', 'Għerq Ġdid'),
+                                            icon: <Plus size={12} />,
+                                            onClick: () => setShowNewRootForm(true)
+                                        }
+                                    ]}
+                                />
+                                <RelationshipEditor
+                                    type="thesaurus"
+                                    lookupType="root"
+                                    title={t('Antonyms', 'Antonimi')}
+                                    items={relForm.antonyms}
+                                    onChange={(items) => setRelForm(f => ({ ...f, antonyms: items }))}
+                                    extraActions={[
+                                        {
+                                            label: t('New Root', 'Għerq Ġdid'),
+                                            icon: <Plus size={12} />,
+                                            onClick: () => setShowNewRootForm(true)
+                                        }
+                                    ]}
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-black/8 shrink-0">
+                        <button
+                            type="button"
+                            onClick={() => setActiveRelEdit(null)}
+                            className="px-4 py-2 text-sm font-medium text-black/60 hover:bg-black/5 rounded-md transition-colors"
+                        >
+                            {t('Cancel', 'Ikkanċella')}
+                        </button>
+                        <Button
+                            loading={saving}
+                            onClick={async () => {
+                                setSaving(true);
+                                try {
+                                    const token = await getToken();
+                                    if (!token) throw new Error('Not authenticated');
+                                    await adminUpdateRoot(token, rootObj.id, {
+                                        synonyms: JSON.stringify(relForm.synonyms),
+                                        antonyms: JSON.stringify(relForm.antonyms),
+                                        related_entries: JSON.stringify(relForm.related_entries)
+                                    });
+                                    refetch();
+                                    setActiveRelEdit(null);
+                                } catch (err: any) {
+                                    alert("Failed to save relationships: " + err.message);
+                                } finally {
+                                    setSaving(false);
+                                }
+                            }}
+                        >
+                            {t('Save Changes', 'Issevja l-Bidliet')}
+                        </Button>
+                    </div>
+                </Modal>
+            )}
+
             {showForm && (
                 <EntryFormModal
                     entry={editEntry}
@@ -632,84 +867,42 @@ export function Root() {
                     onClose={() => setShowForm(false)}
                     onSaved={() => {
                         setShowForm(false);
-                        // In a real app we'd re-fetch, here we just refresh
-                        window.location.reload();
+                        refetch();
                     }}
                     getToken={getToken}
                 />
             )}
+
             {showRootForm && rootObj && (
                 <RootFormModal
-                    data={{
-                        consonants: rootObj.consonants,
-                        glosses: dbRoot?.gloss ? dbRoot.gloss.split('; ').filter(Boolean) : (primaryEntry?.definitions?.map(d => d.text_en) || ['']),
-                        etymology: parsedEtymology ? {
-                            relationship: parsedEtymology.relationship,
-                            language: parsedEtymology.language || '',
-                            term: parsedEtymology.term || '',
-                            pronunciation: parsedEtymology.pronunciation || '',
-                            definition: parsedEtymology.definition || ''
-                        } : {
-                            relationship: '',
-                            language: '',
-                            term: '',
-                            pronunciation: '',
-                            definition: ''
-                        },
-                        source: dbRoot?.source || primaryEntry?.verb_morphology?.source_citation || '',
-                        strength: rootObj.strength,
-                        weak_class: rootObj.weak_class || '',
-                        vowel_set_perf: rootObj.vowel_set_perf,
-                        vowel_set_impf: rootObj.vowel_set_impf,
-                        vowel_set_imp: rootObj.vowel_set_imp,
-                        is_geminate: rootObj.is_geminate
-                    }}
+                    data={dbRoot || rootObj}
                     onClose={() => setShowRootForm(false)}
-                    saving={saving}
-                    onSaved={async (newData: RootFormData) => {
-                        setSaving(true);
-                        try {
-                            const token = await getToken();
-                            if (!token) throw new Error('Not authenticated');
-
-                            const etymologyStringified = JSON.stringify(newData.etymology);
-
-                            // Update the root record directly
-                            const { adminUpdateRoot } = await import('@/lib/api');
-                            await adminUpdateRoot(token, newData.consonants, {
-                                strength: newData.strength,
-                                weak_class: newData.weak_class,
-                                gloss: newData.glosses.filter(Boolean).join('; ') || '',
-                                etymology: etymologyStringified,
-                                source: newData.source,
-                                vowel_set_perf: newData.vowel_set_perf,
-                                vowel_set_impf: newData.vowel_set_impf,
-                                vowel_set_imp: newData.vowel_set_imp,
-                                is_geminate: newData.is_geminate
-                            });
-
-                            // Update local state
-                            setDbRoot({
-                                ...rootObj,
-                                ...newData,
-                                gloss: newData.glosses.filter(Boolean).join('; '),
-                                etymology: etymologyStringified
-                            });
-
-                            setShowRootForm(false);
-
-                            if (newData.consonants !== rootObj.consonants) {
-                                window.location.href = `/root/${newData.consonants}`;
-                            }
-                        } catch (err: any) {
-                            console.error("Failed to save root:", err);
-                            alert(`Failed to save root changes: ${err.message}`);
-                        } finally {
-                            setSaving(false);
+                    onSaved={(newData: RootFormData) => {
+                        // Update local state without full reload
+                        refetch();
+                        setShowRootForm(false);
+                        if (newData.consonants !== rootObj.consonants) {
+                            window.location.href = `/root/${newData.id || newData.consonants}`;
                         }
                     }}
+                    getToken={getToken}
                 />
             )}
+
+            {showNewRootForm && (
+                <RootFormModal
+                    data={{}}
+                    onClose={() => setShowNewRootForm(false)}
+                    onSaved={(newData) => {
+                        setShowNewRootForm(false);
+                        window.location.href = `/root/${newData.consonants}`;
+                    }}
+                    getToken={getToken}
+                    isNew={true}
+                />
+            )}
+
+
         </div>
     );
 }

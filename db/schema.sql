@@ -10,7 +10,7 @@ PRAGMA foreign_keys = ON;
 -- ─── Roots ────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS roots (
   id            TEXT PRIMARY KEY,
-  consonants    TEXT NOT NULL UNIQUE,  -- e.g. "k-t-b"
+  consonants    TEXT NOT NULL,  -- e.g. "k-t-b"
   consonant_array TEXT NOT NULL,       -- JSON array e.g. ["k","t","b"]
   strength      TEXT DEFAULT 'strong', -- strong, weak, geminated, etc.
   weak_class    TEXT,                  -- hollow, assimilative, defective, etc.
@@ -22,6 +22,9 @@ CREATE TABLE IF NOT EXISTS roots (
   vowel_set_perf TEXT,
   vowel_set_impf TEXT,
   vowel_set_imp  TEXT,
+  synonyms       TEXT,                  -- JSON array
+  antonyms       TEXT,                  -- JSON array
+  related_entries TEXT,                 -- JSON array
   created_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
   updated_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );

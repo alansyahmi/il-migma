@@ -43,8 +43,14 @@ export interface Root {
     // Morphological Metadata (centralized)
     strength: VerbStrength;
     weak_class?: WeakClass;
-    is_geminate: boolean;
     is_imala_blocked: boolean;
+
+    gloss: string;
+    etymology: string;
+    source?: string;
+    vowel_set_perf?: string;
+    vowel_set_impf?: string;
+    vowel_set_imp?: string;
 
     notes?: string;
     created_at: string;

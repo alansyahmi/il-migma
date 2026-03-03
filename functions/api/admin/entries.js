@@ -141,85 +141,98 @@ export async function onRequestPost({ request, env }) {
         const body = await request.json();
         const client = db(env);
 
-        let prefix = body.pos;
-        if (body.pos === 'participle') prefix = body.participle_type === 'active' ? 'ap' : 'pp';
-        else if (body.pos === 'adjective') prefix = 'adj';
-        else if (body.pos === 'verbal_noun') prefix = 'vn';
+        let id = body.id;
 
-        const safeHeadword = (body.headword || '').toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/[^a-z0-9àċġħżie-]/gi, '');
+        if (!id) {
+            const POS_PREFIXES = {
+                'noun': 'noun',
+                'verb': 'verb',
+                'adjective': 'adj',
+                'adverb': 'adv',
+                'preposition': 'prep',
+                'conjunction': 'conj',
+                'particle': 'part',
+                'article': 'art',
+                'pronoun': 'pron',
+                'interrogative': 'int',
+                'numeral': 'num',
+                'interjection': 'intj'
+            };
 
-        let baseId = `${prefix}-${safeHeadword}`;
-        let id = baseId;
+            let prefix = POS_PREFIXES[body.pos] || body.pos || 'entry';
+            if (body.pos === 'participle') prefix = body.participle_type === 'active' ? 'ap' : 'pp';
+            else if (body.pos === 'verbal_noun') prefix = 'vn';
 
-        // Handle collisions using numeral suffixes
-        const idCheckRes = await client.execute({
-            sql: `SELECT id FROM entries WHERE id LIKE ? OR id = ?`,
-            args: [`${baseId}-%`, baseId]
-        });
+            const safeHeadword = (body.headword || '').toLowerCase()
+                .replace(/\s+/g, '-')
+                .replace(/[^a-z0-9àċġħżie-]/gi, '');
 
-        if (idCheckRes.rows.length > 0) {
-            let maxSuffix = 0;
-            idCheckRes.rows.forEach(r => {
-                if (r.id === baseId) maxSuffix = Math.max(maxSuffix, 1);
-                else {
-                    const match = r.id.match(new RegExp(`^${baseId}-(\\d+)$`));
-                    if (match && match[1]) {
-                        maxSuffix = Math.max(maxSuffix, parseInt(match[1], 10));
-                    }
-                }
+            let baseId = `${prefix}-${safeHeadword}`;
+            id = baseId;
+
+            // Handle collisions using numeral suffixes
+            const idCheckRes = await client.execute({
+                sql: `SELECT id FROM entries WHERE id LIKE ? OR id = ?`,
+                args: [`${baseId}-%`, baseId]
             });
-            id = `${baseId}-${maxSuffix + 1}`;
+
+            if (idCheckRes.rows.length > 0) {
+                let maxSuffix = 0;
+                idCheckRes.rows.forEach(r => {
+                    if (r.id === baseId) maxSuffix = Math.max(maxSuffix, 1);
+                    else {
+                        const match = r.id.match(new RegExp(`^${baseId}-(\\d+)$`));
+                        if (match && match[1]) {
+                            maxSuffix = Math.max(maxSuffix, parseInt(match[1], 10));
+                        }
+                    }
+                });
+                id = `${baseId}-${maxSuffix + 1}`;
+            }
         }
 
         const {
-            headword, pos, noun_gender, noun_singular, noun_plural_forms,
-            noun_sound_plural, noun_dual, noun_diminutive,
-            verb_class, verb_transitivity, verb_perfective_3sgm, verb_imperfective_3sgm,
-            verb_verbal_noun, verb_active_ptcp, verb_passive_ptcp,
-            verb_vowel_perf, verb_vowel_impf,
-            adj_masculine, adj_feminine, adj_plural, adj_elative,
-            is_loanword = false, source_language, tags = [],
-            definitions, etymology_chain,
-            phonetics, participle_type,
-            _rootConsonants, _formLabel, noun_type, cv_pattern,
-            plural_pattern, sound_suffix, adj_pattern,
-            noun_feminine, noun_masculine,
+            headword, pos, tags, definitions, etymology_chain, phonetics, ...otherFields
         } = body;
 
         if (!headword || !pos) return json({ error: 'headword and pos are required' }, 400);
 
+        // Dynamic column discovery
+        const tableInfo = await client.execute("PRAGMA table_info(entries)");
+        const columns = tableInfo.rows.map(r => r.name);
+        const metaColumns = ['id', 'created_at', 'updated_at', 'tags', 'root_consonants', 'verb_form'];
+
+        const insertColumns = ['id', 'created_at', 'updated_at'];
+        const insertArgs = [id, now(), now()];
+
+        const mapping = {
+            'tags': tags?.length ? JSON.stringify(tags) : null,
+            'root_consonants': body._rootConsonants || body.root_consonants,
+            'verb_form': body._formLabel || body.verb_form
+        };
+
+        for (const col of columns) {
+            if (insertColumns.includes(col)) continue;
+
+            if (col in mapping) {
+                insertColumns.push(col);
+                insertArgs.push(n(mapping[col]));
+                continue;
+            }
+
+            if (col in body) {
+                insertColumns.push(col);
+                let val = body[col];
+                if (col === 'is_loanword') val = val ? 1 : 0;
+                else if (Array.isArray(val)) val = JSON.stringify(val);
+                insertArgs.push(n(val));
+            }
+        }
+
+        const placeholders = insertColumns.map(() => '?').join(',');
         await client.execute({
-            sql: `INSERT INTO entries (
-                id, headword, pos,
-                noun_gender, noun_singular, noun_plural_forms, noun_sound_plural, noun_dual, noun_diminutive,
-                verb_class, verb_transitivity, verb_perfective_3sgm, verb_imperfective_3sgm,
-                verb_verbal_noun, verb_active_ptcp, verb_passive_ptcp, verb_vowel_perf, verb_vowel_impf,
-                adj_masculine, adj_feminine, adj_plural, adj_elative,
-                is_loanword, source_language, tags, participle_type, root_consonants, cv_pattern, verb_form,
-                noun_type, plural_pattern, sound_suffix, adj_pattern,
-                noun_feminine, noun_masculine, created_at, updated_at
-              ) VALUES (
-                ?,?,?,  ?,?,?,?,?,?,  ?,?,?,?,  ?,?,?,?,?,  ?,?,?,?,  ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
-              )`,
-            args: [
-                id, headword, pos,
-                n(noun_gender), n(noun_singular),
-                noun_plural_forms?.length ? JSON.stringify(noun_plural_forms) : null,
-                n(noun_sound_plural), n(noun_dual), n(noun_diminutive),
-                n(verb_class), n(verb_transitivity),
-                n(verb_perfective_3sgm), n(verb_imperfective_3sgm),
-                n(verb_verbal_noun), n(verb_active_ptcp), n(verb_passive_ptcp),
-                n(verb_vowel_perf), n(verb_vowel_impf),
-                n(adj_masculine), n(adj_feminine), n(adj_plural), n(adj_elative),
-                is_loanword ? 1 : 0, n(source_language),
-                tags.length ? JSON.stringify(tags) : null,
-                n(participle_type), n(_rootConsonants), n(cv_pattern), n(_formLabel), n(noun_type),
-                n(plural_pattern), n(sound_suffix), n(adj_pattern),
-                n(noun_feminine), n(noun_masculine),
-                now(), now(),
-            ],
+            sql: `INSERT INTO entries (${insertColumns.join(', ')}) VALUES (${placeholders})`,
+            args: insertArgs,
         });
 
         if (definitions && Array.isArray(definitions)) {
@@ -293,50 +306,50 @@ export async function onRequestPut({ request, env }) {
             }
         }
 
-        const allowed = [
-            'headword', 'pos', 'noun_gender', 'noun_singular', 'noun_plural_forms', 'noun_sound_plural',
-            'noun_dual', 'noun_diminutive', 'noun_type', 'verb_class', 'verb_transitivity', 'verb_perfective_3sgm',
-            'verb_imperfective_3sgm', 'verb_verbal_noun', 'verb_active_ptcp', 'verb_passive_ptcp',
-            'verb_vowel_perf', 'verb_vowel_impf', 'verb_vowel_impv',
-            'adj_masculine', 'adj_feminine', 'adj_plural', 'adj_elative', 'is_loanword', 'source_language', 'tags', 'participle_type',
-            'cv_pattern', 'plural_pattern', 'sound_suffix', 'adj_pattern',
-            'noun_feminine', 'noun_masculine', 'verb_form'
-        ];
+        // Dynamic column discovery
+        const tableInfo = await client.execute("PRAGMA table_info(entries)");
+        const columns = tableInfo.rows.map(r => r.name).filter(c => !['id', 'created_at', 'updated_at'].includes(c));
+
+        const mapping = {
+            'tags': body.tags && Array.isArray(body.tags) ? JSON.stringify(body.tags) : undefined,
+            'root_consonants': body._rootConsonants !== undefined ? body._rootConsonants : body.root_consonants,
+            'verb_form': body._formLabel !== undefined ? body._formLabel : body.verb_form
+        };
 
         const setClauses = [];
         const args = [];
-        for (const key of allowed) {
-            if (!(key in fields)) continue;
-            let val = fields[key];
-            if (val === '') val = null;
-            if (key === 'noun_plural_forms' || key === 'tags') val = val && val.length ? JSON.stringify(val) : null;
-            if (key === 'is_loanword') val = val ? 1 : 0;
-            setClauses.push(`${key} = ?`);
-            args.push(val);
+
+        for (const col of columns) {
+            let val;
+            if (col in mapping && mapping[col] !== undefined) {
+                val = mapping[col];
+            } else if (col in fields) {
+                val = fields[col];
+            } else {
+                continue;
+            }
+
+            if (col === 'is_loanword') val = val ? 1 : 0;
+            else if (Array.isArray(val)) val = JSON.stringify(val);
+
+            setClauses.push(`${col} = ?`);
+            args.push(n(val));
         }
 
-        if ('_rootConsonants' in fields) {
-            let val = n(fields['_rootConsonants']);
-            setClauses.push(`root_consonants = ?`);
-            args.push(val);
+        if (!setClauses.length && !('definitions' in fields) && !('etymology_chain' in fields) && !('phonetics' in fields)) {
+            return json({ error: 'No fields to update' }, 400);
         }
 
-        if ('_formLabel' in fields) {
-            let val = fields['_formLabel'];
-            if (val === '') val = null;
-            setClauses.push(`verb_form = ?`);
-            args.push(val);
+        if (setClauses.length) {
+            setClauses.push('updated_at = ?');
+            args.push(now());
+            args.push(id);
+
+            await client.execute({
+                sql: `UPDATE entries SET ${setClauses.join(', ')} WHERE id = ?`,
+                args,
+            });
         }
-
-        if (!setClauses.length) return json({ error: 'No fields to update' }, 400);
-
-        setClauses.push('updated_at = ?');
-        args.push(now(), id);
-
-        await client.execute({
-            sql: `UPDATE entries SET ${setClauses.join(', ')} WHERE id = ?`,
-            args,
-        });
 
         if ('definitions' in fields && Array.isArray(fields.definitions)) {
             await client.execute({ sql: 'DELETE FROM definitions WHERE entry_id = ?', args: [id] });
@@ -387,12 +400,26 @@ export async function onRequestDelete({ request, env }) {
 
         const url = new URL(request.url);
         const id = url.searchParams.get('id');
-        if (!id) return json({ error: 'id required' }, 400);
+        const ids = url.searchParams.get('ids');
+
+        if (!id && !ids) return json({ error: 'id or ids required' }, 400);
 
         const client = db(env);
-        await client.execute({ sql: 'DELETE FROM entries WHERE id = ?', args: [id] });
 
-        return json({ id, deleted: true });
+        if (ids) {
+            const idList = ids.split(',').map(s => s.trim()).filter(Boolean);
+            if (idList.length === 0) return json({ error: 'ids empty' }, 400);
+
+            const placeholders = idList.map(() => '?').join(',');
+            await client.execute({
+                sql: `DELETE FROM entries WHERE id IN (${placeholders})`,
+                args: idList
+            });
+            return json({ ids: idList, deleted: true });
+        } else {
+            await client.execute({ sql: 'DELETE FROM entries WHERE id = ?', args: [id] });
+            return json({ id, deleted: true });
+        }
     } catch (e) {
         return json({ error: e.message }, 500);
     }

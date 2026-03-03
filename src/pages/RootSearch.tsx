@@ -130,7 +130,7 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                             return (
                                 <tr key={rootObj.id || rootObj.consonants} className="hover:bg-black/[0.01] transition-colors border-b border-black/5 last:border-0">
                                     <td className="px-4 py-4">
-                                        <Link to={`/root/${rootObj.consonants}`} className="font-serif font-bold text-lg text-[#000] hover:underline">
+                                        <Link to={`/root/${rootObj.id || rootObj.consonants}`} className="font-serif font-bold text-lg text-[#000] hover:underline">
                                             {rootObj.consonants}
                                         </Link>
                                     </td>
@@ -138,7 +138,7 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                                         <span className="text-[10px] bg-black/5 px-1.5 py-0.5 rounded text-black/50 font-bold tracking-wider space-x-1">
                                             {rootObj.strength !== 'geminated' && <span>{strengthLabel}</span>}
                                             {rootObj.weak_class && <span>• {rootObj.weak_class.toUpperCase()}</span>}
-                                            {(rootObj.is_geminate || rootObj.strength === 'geminated') && <span>• GEMINATED</span>}
+                                            {rootObj.strength === 'geminated' && <span>• GEMINATED</span>}
                                         </span>
                                     </td>
                                     {formLabels.map(fl => {

@@ -114,7 +114,7 @@ function DerivedTermLink({ label, value }: { label: string; value: string }) {
 
 // ── Verb View ──────────────────────────────────────────────────────────────
 
-function VerbEntryView({ entry }: { entry: Entry }) {
+function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
     const { t } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
@@ -157,7 +157,6 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                 form: vm.form,
                 strength: rootObj.strength,
                 weakClass: rootObj.weak_class,
-                isGeminate: rootObj.is_geminate,
                 isImalaBlocked: rootObj.is_imala_blocked,
                 vowelSetPerfect: vsetPerf,
                 vowelSetImperfect: vsetImpf,
@@ -335,7 +334,6 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                                         <div className="text-[11px] font-mono space-y-1 text-black/50">
                                             <p>Strength: {entry.root_pattern_form.root.strength}</p>
                                             {entry.root_pattern_form.root.weak_class && <p>Weak Class: {entry.root_pattern_form.root.weak_class}</p>}
-                                            <p>Geminate: {entry.root_pattern_form.root.is_geminate ? 'Yes' : 'No'}</p>
                                             <p>Imala Blocked: {entry.root_pattern_form.root.is_imala_blocked ? 'Yes' : 'No'}</p>
                                         </div>
                                     </div>
@@ -565,7 +563,8 @@ function VerbEntryView({ entry }: { entry: Entry }) {
                     onClose={() => setShowForm(false)}
                     onSaved={() => {
                         setShowForm(false);
-                        window.location.reload();
+                        if (onRefetch) onRefetch();
+                        else window.location.reload();
                     }}
                     getToken={getToken}
                 />
@@ -581,19 +580,25 @@ export function Entry() {
     const [entry, setEntry] = useState<Entry | null>(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (id) {
-            setLoading(true);
-            apiGetEntry(id)
-                .then(res => setEntry(res.entry))
-                .catch(() => {
-                    // Fallback to mock if API fails
-                    const mock = MOCK_ENTRIES.find(e => e.id === id);
-                    setEntry(mock || null);
-                })
-                .finally(() => setLoading(false));
-        }
+    const refetch = useMemo(() => {
+        return () => {
+            if (id) {
+                setLoading(true);
+                apiGetEntry(id)
+                    .then(res => setEntry(res.entry))
+                    .catch(() => {
+                        // Fallback to mock if API fails
+                        const mock = MOCK_ENTRIES.find(e => e.id === id);
+                        setEntry(mock || null);
+                    })
+                    .finally(() => setLoading(false));
+            }
+        };
     }, [id]);
+
+    useEffect(() => {
+        refetch();
+    }, [refetch]);
 
     if (loading) return (
         <div className="flex justify-center items-center h-64">
@@ -604,7 +609,7 @@ export function Entry() {
     if (!entry) return <Navigate to="/404" replace />;
 
     if (entry.pos === 'verb' && entry.verb_morphology) {
-        return <VerbEntryView entry={entry} />;
+        return <VerbEntryView entry={entry} onRefetch={refetch} />;
     }
 
     return (

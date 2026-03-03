@@ -49,8 +49,6 @@ export interface ConjugationInput {
     strength: VerbStrength;
     /** Sub-class for weak verbs */
     weakClass?: WeakClass;
-    /** Whether C2 and C3 are the same */
-    isGeminate: boolean;
     /** Whether the a->ie shift should be blocked (pharyngeal-leaning) */
     isImalaBlocked: boolean;
 
@@ -192,7 +190,7 @@ function negPerfect3sg(m3: string, f3: string, C3?: string, verbForm?: string): 
     return { m: shift(m3, 2), f: shift(f3, 3) };
 }
 
-// ── STRONG class ───────────────────────────────────────────────────────────
+// ── FORM I STRONG class ───────────────────────────────────────────────────────────
 
 function genStrong(
     C: string[],
@@ -205,7 +203,8 @@ function genStrong(
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v2: iv2 } = parseVset(vsetImpf);
     const isGuttural = (c: string) => ['għ', 'ħ', 'q'].includes(c);
-    const isPharyngeal = (c: string) => ['għ'].includes(c);
+    // @ts-ignore
+    const _isPharyngeal = (c: string) => ['għ'].includes(c);
 
     // ── Perfect ──────────────────────────────────────────────────────────
     const perfSyncRoot = `${C1}${pv1}${C2}${C3}`; // kitb-
@@ -1426,13 +1425,13 @@ export function genFormIIIDefective(
  */
 export function generateConjugation(input: ConjugationInput): VerbConjugationTable {
     const consonants = input.root.split('-').filter(Boolean);
-    const { form, strength, weakClass, isGeminate } = input;
+    const { form, strength, weakClass } = input;
 
     if (form === 'I') {
+        if (strength === 'geminated') {
+            return genGeminated(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative, form);
+        }
         if (strength === 'strong') {
-            if (isGeminate) {
-                return genGeminated(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative, form);
-            }
             return genStrong(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative, form);
         }
         if (strength === 'strong-hybrid') {
@@ -1558,7 +1557,7 @@ function generateTriliteralStrong(C1: string, C2: string, C3: string, pv1: strin
     return forms;
 }
 
-function generateTriliteralGeminated(C1: string, C2: string, C3: string, pv1: string, pv2: string, ipv1: string, ipv2: string): GeneratedVerbForm[] {
+function generateTriliteralGeminated(C1: string, C2: string, C3: string, pv1: string, pv2: string, ipv1: string, _ipv2: string): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
     const f1_perf = `${C1}${pv1}${C2}${C3}`;
@@ -1616,7 +1615,7 @@ function generateTriliteralGeminated(C1: string, C2: string, C3: string, pv1: st
     return forms;
 }
 
-function generateTriliteralAssimilative(C1: string, C2: string, C3: string, pv1: string, pv2: string, ipv1: string, ipv2: string): GeneratedVerbForm[] {
+function generateTriliteralAssimilative(C1: string, C2: string, _C3: string, pv1: string, pv2: string, ipv1: string, ipv2: string): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
     const f1_perf = `${C1}${pv1}${C2}${pv2}`; // beda
@@ -1652,7 +1651,6 @@ function generateTriliteralAssimilative(C1: string, C2: string, C3: string, pv1:
     forms.push({ form: 'V', perfect: f5_perf, imperfect: `ji${f5_perf}`, passiveParticiple: `mi${f5_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${pv1}${C2}${C2}ija` });
 
     const f6_perf = `t${f3}${pv2}`;
-    const e1 = ['i', 'e'].includes(pv1) ? 'e' : 'a';
     forms.push({ form: 'VI', perfect: f6_perf, imperfect: `ji${f6_perf}`, passiveParticiple: `mi${f6_perf}`, activeParticiple: '-', verbalNoun: `t${f3}ija` });
 
     const f7_perf = `n${f1_perf}`;
@@ -1696,9 +1694,9 @@ function generateTriliteralHollow(C1: string, C2: string, C3: string, pv1: strin
     forms.push({ form: 'III', perfect: f3_perf, imperfect: `j${f3_perf}`, passiveParticiple: `m${f3_perf}`, activeParticiple: '-', verbalNoun: '-' });
 
     const f4_perf = `${pv1}${C1}${C2}${pv2}${C3}`;
-    const f4_impf = `j${ipv1}${C1}${C2}${ipv2}${C3}`;
+    const f4_impf = `jo${C1}o${C3}`;
     const f4_act = `mi${C1}i${C3}`;
-    const f4_vn = `i${C1}${C2}${(pv1 === 'a' && pv2 === 'a') ? 'a' : 'ie'}${C3}`;
+    const f4_vn = `i${C1}${(pv1 === 'a' && pv2 === 'a') ? 'a' : 'ie'}${C3}`;
     forms.push({ form: 'IV', perfect: f4_perf, imperfect: f4_impf, passiveParticiple: '-', activeParticiple: f4_act, verbalNoun: f4_vn });
 
     const f5_perf = `t${f2_perf}`;
@@ -1805,7 +1803,7 @@ export function generateRootForms(
     if (strength === 'weak' && weakClass === 'assimilative') {
         return generateTriliteralAssimilative(C1, C2, C3, pv1, pv2, ipv1, ipv2);
     }
-    if (strength === 'geminated' || (strength === 'strong' && (C2 === C3 && C2 !== ''))) {
+    if (strength === 'geminated') {
         return generateTriliteralGeminated(C1, C2, C3, pv1, pv2, ipv1, ipv2);
     }
     return generateTriliteralStrong(C1, C2, C3, pv1, pv2, ipv1, ipv2);
@@ -1879,17 +1877,19 @@ export function markGeneratedForms(
         ): { value: string; marker: FormMarker; entryId?: string } => {
             if (generatedVal === '-') return { value: generatedVal, marker: 'plain' };
 
+            // The imperfect will always exist if the lemma exists.
+            // We use the generated value for the imperfect column, but still want to link it to the lemma entry if it exists.
+            if (isImperfect && ag.isLemmaAttested) {
+                const lemmaAtt = attested.find(a => a.form === g.form && a.type === 'lemma');
+                return { value: generatedVal, marker: 'plain', entryId: lemmaAtt?.id };
+            }
+
             // Find the actual attested entry for this form and type
             const att = attested.find(a => a.form === g.form && a.type === formType);
 
             // If we have an exact match OR a form match, mark as plain and use the attested word/ID
             if (att) {
                 return { value: att.word, marker: 'plain', entryId: att.id };
-            }
-
-            // The imperfect will always exist if the lemma exists
-            if (isImperfect && ag.isLemmaAttested) {
-                return { value: generatedVal, marker: 'plain' };
             }
 
             if (rowTheoretical) return { value: generatedVal, marker: 'theoretical' };
