@@ -3,31 +3,34 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { adminListEntries, adminDeleteEntry, adminListRoots, adminDeleteRoot, adminCreateRoot, adminUpdateRoot } from '@/lib/api';
+import { adminListEntries, adminDeleteEntry, adminListRoots, adminDeleteRoot } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Spinner';
 import { SearchInput } from '@/components/ui/SearchInput';
-import { RootFormModal, type RootFormData } from '@/components/admin/RootFormModal';
+import { RootFormModal } from '@/components/admin/RootFormModal';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { AdminSettings } from '@/components/admin/AdminSettings';
 import { useAdminConfig } from '@/lib/adminConfig';
 import {
     Plus, Trash2, Edit2, RefreshCw,
     Layers, FileText, CheckCircle, AlertCircle, ShieldAlert,
-    Book, Zap, Sparkles, HelpCircle, List, LayoutGrid, Settings
+    Book, Zap, Sparkles, HelpCircle, List, LayoutGrid, Settings,
+    Square, CheckSquare, X, Database
 } from 'lucide-react';
+import { DbTools } from '@/components/admin/DbTools';
 import { cn } from '@/lib/utils';
 
 // ── Main Admin Page ───────────────────────────────────────────────────────────
 
 export function Admin() {
     const { tier, isTrueAdmin } = useAuth();
+    const { getToken } = useClerkAuth();
     const [searchParams, setSearchParams] = useSearchParams();
-    const tab = (searchParams.get('tab') as 'entries' | 'roots' | 'settings') || 'entries';
+    const tab = (searchParams.get('tab') as 'entries' | 'roots' | 'settings' | 'db') || 'entries';
 
-    const setTab = (t: 'entries' | 'roots' | 'settings') => {
+    const setTab = (t: 'entries' | 'roots' | 'settings' | 'db') => {
         setSearchParams({ tab: t });
     };
 
@@ -77,10 +80,22 @@ export function Admin() {
                     >
                         <Settings size={16} /> {t('Settings', 'Settijiet')}
                     </button>
+                    <button
+                        onClick={() => setTab('db')}
+                        className={cn(
+                            "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2",
+                            tab === 'db' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
+                        )}
+                    >
+                        <Database size={16} /> {t('DB Tools', 'Għodda DB')}
+                    </button>
                 </div>
             </div>
 
-            {tab === 'entries' ? <EntryManager /> : tab === 'roots' ? <RootManager /> : <AdminSettings />}
+            {tab === 'entries' && <EntryManager />}
+            {tab === 'roots' && <RootManager />}
+            {tab === 'settings' && <AdminSettings />}
+            {tab === 'db' && <DbTools getToken={getToken} />}
         </div>
     );
 }
@@ -97,8 +112,39 @@ function EntryManager() {
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
     const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
+    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
     const PAGE_SIZE = 50;
+
+    const toggleSelect = (id: string) => {
+        const next = new Set(selectedIds);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        setSelectedIds(next);
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.size === entries.length) {
+            setSelectedIds(new Set());
+        } else {
+            setSelectedIds(new Set(entries.map(e => e.id)));
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        const count = selectedIds.size;
+        if (!confirm(`Żgur li trid tħassar ${count} entrati? Din ma tistax tinqaleb.`)) return;
+        try {
+            const token = await getToken();
+            const { adminBulkDeleteEntries } = await import('@/lib/api');
+            await adminBulkDeleteEntries(token!, Array.from(selectedIds));
+            showToast(`${count} entrati mħassra`);
+            setSelectedIds(new Set());
+            load();
+        } catch (e: any) {
+            showToast(e.message, false);
+        }
+    };
 
     const showToast = (msg: string, ok = true) => {
         setToast({ msg, ok });
@@ -248,13 +294,25 @@ function EntryManager() {
                                 </div>
                                 <h3 className="text-lg font-bold text-black uppercase tracking-tight">{pos}s</h3>
                                 <div className="h-px flex-1 bg-black/5" />
-                                <span className="text-xs font-bold text-black/20">{posEntries.length}</span>
+                                <span className="text-xs font-bold text-black/20">{posEntries.length} sibt</span>
                             </div>
 
                             {viewMode === 'grid' ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     {posEntries.map(e => (
-                                        <div key={e.id} className="group bg-white border border-[#ede9e1] rounded-2xl p-5 hover:shadow-xl hover:shadow-[#1034A6]/5 transition-all duration-300 flex flex-col justify-between">
+                                        <div key={e.id} className={cn(
+                                            "group bg-white border rounded-2xl p-5 transition-all duration-300 flex flex-col justify-between relative",
+                                            selectedIds.has(e.id) ? "border-[#1034A6] ring-1 ring-[#1034A6]/20 bg-[#1034A6]/[0.02]" : "border-[#ede9e1] hover:shadow-xl hover:shadow-[#1034A6]/5"
+                                        )}>
+                                            <button
+                                                onClick={() => toggleSelect(e.id)}
+                                                className={cn(
+                                                    "absolute top-3 left-3 z-10 p-1 rounded-md transition-all",
+                                                    selectedIds.has(e.id) ? "text-[#1034A6] bg-white shadow-sm" : "opacity-0 group-hover:opacity-100 text-black/20 hover:text-black/40 bg-black/5"
+                                                )}
+                                            >
+                                                {selectedIds.has(e.id) ? <CheckSquare size={16} /> : <Square size={16} />}
+                                            </button>
                                             <div>
                                                 <div className="flex justify-between items-start mb-3">
                                                     <div>
@@ -281,6 +339,17 @@ function EntryManager() {
                                                     {e.verb_form && <Badge variant="pos" className="bg-indigo-50 text-indigo-700">Form {e.verb_form}</Badge>}
                                                     {e.is_loanword && <Badge variant="pos" className="bg-amber-50 text-amber-700">Loanword</Badge>}
                                                     {e.source_language && <Badge variant="pos" className="bg-emerald-50 text-emerald-700">{e.source_language}</Badge>}
+                                                    {e.tags && (() => {
+                                                        try {
+                                                            const tagsArr = typeof e.tags === 'string' ? (e.tags.startsWith('[') ? JSON.parse(e.tags) : e.tags.split(',').map(s => s.trim())) : e.tags;
+                                                            if (Array.isArray(tagsArr)) {
+                                                                return tagsArr.map(t => (
+                                                                    <Badge key={t} variant="pos" className="bg-slate-50 text-slate-400 border-slate-100">{t}</Badge>
+                                                                ));
+                                                            }
+                                                        } catch (err) { }
+                                                        return null;
+                                                    })()}
                                                 </div>
                                             </div>
                                             <div className="mt-4 pt-4 border-t border-black/5 flex items-center justify-between">
@@ -295,6 +364,11 @@ function EntryManager() {
                                     <table className="w-full text-sm">
                                         <thead className="bg-[#f9f7f3] border-b border-[#ede9e1]">
                                             <tr>
+                                                <th className="p-4 w-10">
+                                                    <button onClick={toggleSelectAll} className="text-black/20 hover:text-black/40">
+                                                        {selectedIds.size === entries.length && entries.length > 0 ? <CheckSquare size={16} className="text-[#1034A6]" /> : <Square size={16} />}
+                                                    </button>
+                                                </th>
                                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">Kliem & ID</th>
                                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">Għerq & POS</th>
                                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">Definizzjoni</th>
@@ -304,7 +378,15 @@ function EntryManager() {
                                         </thead>
                                         <tbody>
                                             {posEntries.map(e => (
-                                                <tr key={e.id} className="border-b border-[#ede9e1] last:border-0 hover:bg-[#f9f7f3]">
+                                                <tr key={e.id} className={cn(
+                                                    "border-b border-[#ede9e1] last:border-0 transition-colors",
+                                                    selectedIds.has(e.id) ? "bg-[#1034A6]/[0.03]" : "hover:bg-[#f9f7f3]"
+                                                )}>
+                                                    <td className="p-4">
+                                                        <button onClick={() => toggleSelect(e.id)} className={cn("transition-colors", selectedIds.has(e.id) ? "text-[#1034A6]" : "text-black/10 hover:text-black/20")}>
+                                                            {selectedIds.has(e.id) ? <CheckSquare size={16} /> : <Square size={16} />}
+                                                        </button>
+                                                    </td>
                                                     <td className="p-4">
                                                         <Link to={`/entry/${e.id}`} className="font-serif font-bold text-[#1034A6] text-lg hover:underline block">{e.headword}</Link>
                                                         <span className="text-[10px] text-black/30 font-mono mt-0.5 inline-block">ID: {e.id}</span>
@@ -327,6 +409,17 @@ function EntryManager() {
                                                             {e.verb_form && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">Form {e.verb_form}</span>}
                                                             {e.is_loanword && <span className="text-[10px] bg-amber-50 px-1.5 py-0.5 rounded text-amber-700">Loan</span>}
                                                             {e.source_language && <span className="text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700">{e.source_language}</span>}
+                                                            {e.tags && (() => {
+                                                                try {
+                                                                    const tagsArr = typeof e.tags === 'string' ? (e.tags.startsWith('[') ? JSON.parse(e.tags) : e.tags.split(',').map(s => s.trim())) : e.tags;
+                                                                    if (Array.isArray(tagsArr)) {
+                                                                        return tagsArr.map(t => (
+                                                                            <span key={t} className="text-[10px] bg-slate-50 border border-slate-100 px-1.5 py-0.5 rounded text-slate-400">{t}</span>
+                                                                        ));
+                                                                    }
+                                                                } catch (err) { }
+                                                                return null;
+                                                            })()}
                                                         </div>
                                                     </td>
                                                     <td className="p-4 text-right">
@@ -354,6 +447,44 @@ function EntryManager() {
                     getToken={getToken}
                 />
             )}
+
+            {selectedIds.size > 0 && (
+                <BulkActionsBar
+                    count={selectedIds.size}
+                    onClear={() => setSelectedIds(new Set())}
+                    onDelete={handleBulkDelete}
+                />
+            )}
+        </div>
+    );
+}
+
+function BulkActionsBar({ count, onClear, onDelete }: { count: number; onClear: () => void; onDelete: () => void }) {
+    return (
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500">
+            <div className="bg-black text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-6 border border-white/10 backdrop-blur-md">
+                <div className="flex items-center gap-3">
+                    <div className="bg-[#1034A6] text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold">
+                        {count}
+                    </div>
+                    <span className="text-sm font-bold tracking-tight">Eżerċizzji magħżula</span>
+                </div>
+                <div className="h-4 w-px bg-white/10" />
+                <div className="flex gap-2">
+                    <button
+                        onClick={onClear}
+                        className="text-white/60 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 transition-colors"
+                    >
+                        <X size={14} /> Ħassar l-għażla
+                    </button>
+                    <button
+                        onClick={onDelete}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all active:scale-95"
+                    >
+                        <Trash2 size={14} /> Ħassar kollha
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
@@ -366,7 +497,36 @@ function RootManager() {
     const [showAdd, setShowAdd] = useState(false);
     const [editRoot, setEditRoot] = useState<any | null>(null);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
-    const [saving, setSaving] = useState(false);
+    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+    const toggleSelect = (id: string) => {
+        const next = new Set(selectedIds);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        setSelectedIds(next);
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.size === roots.length) {
+            setSelectedIds(new Set());
+        } else {
+            setSelectedIds(new Set(roots.map(r => r.id)));
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        const count = selectedIds.size;
+        if (!confirm(`Żgur li trid tħassar ${count} għeruq? Din ma tistax tinqaleb.`)) return;
+        try {
+            const token = await getToken();
+            const { adminBulkDeleteRoots } = await import('@/lib/api');
+            await adminBulkDeleteRoots(token!, Array.from(selectedIds));
+            setSelectedIds(new Set());
+            load();
+        } catch (e: any) {
+            alert(e.message);
+        }
+    };
 
     const load = useCallback(async () => {
         setLoading(true);
@@ -382,56 +542,6 @@ function RootManager() {
     }, [getToken, q]);
 
     useEffect(() => { load(); }, [load]);
-
-    const handleCreate = async (data: RootFormData) => {
-        setSaving(true);
-        try {
-            const token = await getToken();
-            await adminCreateRoot(token!, {
-                consonants: data.consonants,
-                strength: data.strength,
-                weak_class: data.weak_class,
-                is_geminate: data.is_geminate,
-                gloss: JSON.stringify(data.glosses),
-                etymology: JSON.stringify(data.etymology),
-                source: data.source,
-                vowel_set_perf: data.vowel_set_perf,
-                vowel_set_impf: data.vowel_set_impf,
-                vowel_set_imp: data.vowel_set_imp
-            } as any);
-            setShowAdd(false);
-            load();
-        } catch (e) {
-            alert("Spiċċa ħażin: " + (e as any).message);
-        } finally {
-            setSaving(false);
-        }
-    };
-
-    const handleUpdate = async (data: RootFormData) => {
-        setSaving(true);
-        try {
-            const token = await getToken();
-            await adminUpdateRoot(token!, editRoot.consonants, {
-                consonants: data.consonants,
-                strength: data.strength,
-                weak_class: data.weak_class,
-                is_geminate: data.is_geminate,
-                gloss: JSON.stringify(data.glosses),
-                etymology: JSON.stringify(data.etymology),
-                source: data.source,
-                vowel_set_perf: data.vowel_set_perf,
-                vowel_set_impf: data.vowel_set_impf,
-                vowel_set_imp: data.vowel_set_imp
-            });
-            setEditRoot(null);
-            load();
-        } catch (e) {
-            alert("Spiċċa ħażin: " + (e as any).message);
-        } finally {
-            setSaving(false);
-        }
-    };
 
     const handleDelete = async (id: string, cons: string) => {
         if (!confirm(`Żgur li trid tħassar l-għerq ${cons}?`)) return;
@@ -477,22 +587,53 @@ function RootManager() {
                     <table className="w-full text-sm">
                         <thead className="bg-[#f9f7f3] border-b border-[#ede9e1]">
                             <tr>
+                                <th className="p-4 w-10">
+                                    <button onClick={toggleSelectAll} className="text-black/20 hover:text-black/40">
+                                        {selectedIds.size === roots.length && roots.length > 0 ? <CheckSquare size={16} className="text-[#1034A6]" /> : <Square size={16} />}
+                                    </button>
+                                </th>
                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Konsonanti</th>
                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Tifsira</th>
                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Klassi</th>
                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Vokali</th>
                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Sors</th>
+                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Tags</th>
+                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Teżawru</th>
                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Data</th>
                                 <th className="text-right p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Azzjonijiet</th>
                             </tr>
                         </thead>
                         <tbody>
                             {roots.map(r => (
-                                <tr key={r.id} className="border-b border-[#ede9e1] last:border-0 hover:bg-[#f9f7f3]">
-                                    <td className="p-4 font-serif font-bold text-[#1034A6] text-lg">
-                                        <Link to={`/root/${encodeURIComponent(r.consonants)}`} className="hover:underline">{r.consonants}</Link>
+                                <tr key={r.id} className={cn(
+                                    "border-b border-[#ede9e1] last:border-0 transition-colors",
+                                    selectedIds.has(r.id) ? "bg-[#1034A6]/[0.03]" : "hover:bg-[#f9f7f3]"
+                                )}>
+                                    <td className="p-4">
+                                        <button onClick={() => toggleSelect(r.id)} className={cn("transition-colors", selectedIds.has(r.id) ? "text-[#1034A6]" : "text-black/10 hover:text-black/20")}>
+                                            {selectedIds.has(r.id) ? <CheckSquare size={16} /> : <Square size={16} />}
+                                        </button>
                                     </td>
-                                    <td className="p-4 text-black/80">{r.gloss || <span className="text-black/20 italic">nieqsa</span>}</td>
+                                    <td className="p-4 font-serif font-bold text-[#1034A6] text-lg">
+                                        <Link to={`/root/${encodeURIComponent(r.id)}`} className="hover:underline">{r.consonants}</Link>
+                                    </td>
+                                    <td className="p-4 text-black/80">
+                                        {(() => {
+                                            if (!r.gloss) return <span className="text-black/20 italic">nieqsa</span>;
+                                            if (typeof r.gloss === 'string' && r.gloss.includes('[object Object]')) return <span className="text-red-400 italic">data mħassra</span>;
+                                            try {
+                                                const parsed = JSON.parse(r.gloss);
+                                                if (Array.isArray(parsed) && parsed[0]) {
+                                                    const g = parsed[0];
+                                                    if (typeof g === 'object') {
+                                                        return (g.en || g.mt) ? `${g.en}${g.mt ? ` / ${g.mt}` : ''}` : <span className="text-black/20 italic">nieqsa</span>;
+                                                    }
+                                                    return String(g);
+                                                }
+                                            } catch (e) { }
+                                            return r.gloss || <span className="text-black/20 italic">nieqsa</span>;
+                                        })()}
+                                    </td>
                                     <td className="p-4">
                                         <span className="text-[10px] bg-black/5 px-2 py-0.5 rounded-full font-bold uppercase text-black/50">
                                             {r.strength} {r.weak_class && `• ${r.weak_class}`}
@@ -506,6 +647,42 @@ function RootManager() {
                                         </div>
                                     </td>
                                     <td className="p-4 text-black/60 italic">{r.source || '—'}</td>
+                                    <td className="p-4">
+                                        {r.tags && (() => {
+                                            try {
+                                                const tagsArr = typeof r.tags === 'string' ? JSON.parse(r.tags) : r.tags;
+                                                if (Array.isArray(tagsArr) && tagsArr.length > 0) {
+                                                    return (
+                                                        <div className="flex flex-wrap gap-1 max-w-[120px]">
+                                                            {tagsArr.map((tag: string) => (
+                                                                <span key={tag} className="px-1.5 py-0.5 bg-black/5 text-black/40 rounded text-[9px] font-bold uppercase tracking-widest border border-black/5">
+                                                                    {tag}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    );
+                                                }
+                                            } catch (e) {
+                                                return <span className="text-[9px] text-black/40 italic">{String(r.tags)}</span>;
+                                            }
+                                            return null;
+                                        })()}
+                                    </td>
+                                    <td className="p-4">
+                                        <div className="flex gap-1.5 mt-0.5">
+                                            {(() => {
+                                                const sCount = typeof r.synonyms === 'string' ? JSON.parse(r.synonyms || '[]').length : (r.synonyms?.length || 0);
+                                                const aCount = typeof r.antonyms === 'string' ? JSON.parse(r.antonyms || '[]').length : (r.antonyms?.length || 0);
+                                                if (sCount === 0 && aCount === 0) return <span className="text-[10px] text-black/20 italic">xejn</span>;
+                                                return (
+                                                    <>
+                                                        {sCount > 0 && <span className="text-[10px] bg-green-50 text-green-700 px-1.5 py-0.5 rounded-md font-bold uppercase">{sCount} sin.</span>}
+                                                        {aCount > 0 && <span className="text-[10px] bg-red-50 text-red-700 px-1.5 py-0.5 rounded-md font-bold uppercase">{aCount} ant.</span>}
+                                                    </>
+                                                );
+                                            })()}
+                                        </div>
+                                    </td>
                                     <td className="p-4 text-black/40 text-xs">{r.created_at?.slice(0, 10)}</td>
                                     <td className="p-4 text-right">
                                         <div className="flex justify-end gap-2">
@@ -521,9 +698,21 @@ function RootManager() {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {roots.map(r => (
-                        <div key={r.id} className="group bg-white border border-[#ede9e1] rounded-2xl p-5 hover:shadow-xl hover:shadow-[#1034A6]/5 transition-all duration-300">
-                            <div className="flex justify-between items-start mb-3">
-                                <Link to={`/root/${encodeURIComponent(r.consonants)}`}>
+                        <div key={r.id} className={cn(
+                            "group bg-white border rounded-2xl p-5 transition-all duration-300 relative flex flex-col justify-between h-full",
+                            selectedIds.has(r.id) ? "border-[#1034A6] ring-1 ring-[#1034A6]/20 bg-[#1034A6]/[0.02]" : "border-[#ede9e1] hover:shadow-xl hover:shadow-[#1034A6]/5"
+                        )}>
+                            <button
+                                onClick={() => toggleSelect(r.id)}
+                                className={cn(
+                                    "absolute top-3 left-3 z-10 p-1 rounded-md transition-all",
+                                    selectedIds.has(r.id) ? "text-[#1034A6] bg-white shadow-sm" : "opacity-0 group-hover:opacity-100 text-black/20 hover:text-black/40 bg-black/5"
+                                )}
+                            >
+                                {selectedIds.has(r.id) ? <CheckSquare size={16} /> : <Square size={16} />}
+                            </button>
+                            <div className="flex justify-between items-start mb-3 ml-6 group-hover:ml-0 transition-all">
+                                <Link to={`/root/${encodeURIComponent(r.id)}`} className="ml-1">
                                     <h4 className="font-serif text-2xl font-bold text-[#1034A6] group-hover:underline">{r.consonants}</h4>
                                 </Link>
                                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -531,10 +720,40 @@ function RootManager() {
                                     <button onClick={() => handleDelete(r.id, r.consonants)} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
                                 </div>
                             </div>
-                            <p className="text-sm text-black/60 mb-4 h-10 line-clamp-2">{r.gloss || <span className="italic opacity-50">L-ebda tifsira...</span>}</p>
+                            <p className="text-sm text-black/60 mb-4 h-10 line-clamp-2">
+                                {(() => {
+                                    if (!r.gloss) return <span className="italic opacity-50">L-ebda tifsira...</span>;
+                                    if (typeof r.gloss === 'string' && r.gloss.includes('[object Object]')) return <span className="text-red-400 italic">data mħassra</span>;
+                                    try {
+                                        const parsed = JSON.parse(r.gloss);
+                                        if (Array.isArray(parsed) && parsed[0]) {
+                                            const g = parsed[0];
+                                            if (typeof g === 'object') {
+                                                return `${g.en}${g.mt ? ` / ${g.mt}` : ''}`;
+                                            }
+                                            return String(g);
+                                        }
+                                    } catch (e) { }
+                                    return r.gloss || <span className="italic opacity-50">L-ebda tifsira...</span>;
+                                })()}
+                            </p>
                             <div className="flex items-center justify-between mt-auto">
-                                <span className="text-[9px] font-bold text-black/30 uppercase tracking-widest">{r.strength}</span>
-                                <Badge variant="source">{r.source || 'Standard'}</Badge>
+                                <div className="flex gap-1">
+                                    {(() => {
+                                        const sCount = typeof r.synonyms === 'string' ? JSON.parse(r.synonyms || '[]').length : (r.synonyms?.length || 0);
+                                        const aCount = typeof r.antonyms === 'string' ? JSON.parse(r.antonyms || '[]').length : (r.antonyms?.length || 0);
+                                        return (
+                                            <>
+                                                {sCount > 0 && <span className="text-[9px] bg-green-50 text-green-700 px-1.5 py-0.5 rounded-md font-bold uppercase">{sCount}</span>}
+                                                {aCount > 0 && <span className="text-[9px] bg-red-50 text-red-700 px-1.5 py-0.5 rounded-md font-bold uppercase">{aCount}</span>}
+                                            </>
+                                        );
+                                    })()}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-bold text-black/30 uppercase tracking-widest">{r.strength}</span>
+                                    <Badge variant="source">{r.source || 'Standard'}</Badge>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -543,45 +762,33 @@ function RootManager() {
 
             {showAdd && (
                 <RootFormModal
-                    data={{
-                        consonants: '',
-                        glosses: [''],
-                        etymology: { language: '', term: '', definition: '', relationship: '', pronunciation: '' },
-                        source: '',
-                        strength: 'strong'
-                    }}
-                    saving={saving}
+                    data={{}}
                     onClose={() => setShowAdd(false)}
-                    onSaved={handleCreate}
+                    onSaved={() => {
+                        setShowAdd(false);
+                        load();
+                    }}
+                    getToken={getToken}
+                    isNew={true}
                 />
             )}
 
             {editRoot && (
                 <RootFormModal
-                    data={{
-                        consonants: editRoot.consonants,
-                        glosses: (() => {
-                            try { return JSON.parse(editRoot.gloss); }
-                            catch (e) { return editRoot.gloss ? [editRoot.gloss] : []; }
-                        })(),
-                        etymology: (() => {
-                            try {
-                                const parsed = JSON.parse(editRoot.etymology);
-                                return typeof parsed === 'object' ? parsed : { language: '', term: '', definition: editRoot.etymology || '', relationship: '', pronunciation: '' };
-                            }
-                            catch (e) { return { language: '', term: '', definition: editRoot.etymology || '', relationship: '', pronunciation: '' }; }
-                        })(),
-                        source: editRoot.source || '',
-                        strength: editRoot.strength || 'strong',
-                        weak_class: editRoot.weak_class,
-                        is_geminate: !!editRoot.is_geminate,
-                        vowel_set_perf: editRoot.vowel_set_perf,
-                        vowel_set_impf: editRoot.vowel_set_impf,
-                        vowel_set_imp: editRoot.vowel_set_imp
-                    }}
-                    saving={saving}
+                    data={editRoot}
                     onClose={() => setEditRoot(null)}
-                    onSaved={handleUpdate}
+                    onSaved={() => {
+                        setEditRoot(null);
+                        load();
+                    }}
+                    getToken={getToken}
+                />
+            )}
+            {selectedIds.size > 0 && (
+                <BulkActionsBar
+                    count={selectedIds.size}
+                    onClear={() => setSelectedIds(new Set())}
+                    onDelete={handleBulkDelete}
                 />
             )}
         </div>

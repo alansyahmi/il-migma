@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { ArrowUp, ArrowDown, RotateCcw } from 'lucide-react';
+import { ArrowUp, ArrowDown, RotateCcw, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { adminCreateEntry, adminUpdateEntry } from '@/lib/api';
@@ -7,6 +7,12 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { generateRootForms } from '@/lib/conjugationEngine';
 import type { WeakClass } from '@/types';
 import { useAdminConfig } from '@/lib/adminConfig';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { RelationshipEditor } from './RelationshipEditor';
+import { buildEntryPayload, ENTRY_HANDLED_FIELDS } from '@/lib/adminSchema';
+import { Badge } from '@/components/ui/Badge';
+import { cn } from '@/lib/utils';
+import { AlertTriangle } from 'lucide-react';
 
 export interface AdminEntry {
     id: string;
@@ -22,6 +28,7 @@ export interface AdminEntry {
     verb_vowel_impf?: string;
     root_consonants?: string;
     verb_form?: string;
+    tags?: string | string[];
 }
 
 export interface EntryFormModalProps {
@@ -69,15 +76,64 @@ const INITIAL_FORM_STATE = {
     _weakClass: '',
     _hasDual: false,
     _pluralType: 'none',
+    _adjPluralType: 'none',
     cv_pattern: '',
     plural_pattern: '',
     sound_suffix: '',
     adj_pattern: '',
     noun_feminine: '',
     noun_masculine: '',
+    synonyms: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
+    antonyms: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
+    related_entries: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
 };
 
-// Top-level PARTICIPLE_NUANCES removed to favor dynamic getValues().
+// ── Verb CV pattern lookup ────────────────────────────────────────────────
+// Returns the canonical CV notation for a verb's lemma (perfect 3sg.m) based
+// on its derivation form and morphological class.
+function getVerbCvSuggestion(form: string, verbClass: string): { cv: string; wizen: string } | null {
+    const cls = verbClass.toLowerCase();
+    const isWeak = cls === 'weak';
+    const isHollow = cls === 'hollow';
+    const isDefective = cls === 'defective';
+    const isGeminated = cls === 'doubled' || cls === 'geminated';
+
+    switch (form) {
+        case 'I':
+            if (isHollow) return { cv: 'CâC', wizen: 'fâl' };
+            if (isDefective) return { cv: 'CvCa', wizen: 'fagħa' };
+            if (isGeminated) return { cv: 'CvCC', wizen: 'fall' };
+            if (isWeak) return { cv: 'CvCvC', wizen: 'wagħal' };
+            return { cv: 'CvCvC', wizen: 'fagħal' };
+        case 'II':
+            if (isDefective) return { cv: 'CvCCa', wizen: 'fagħgħa' };
+            return { cv: 'CvCCvC', wizen: 'fagħgħal' };
+        case 'III':
+            if (isDefective) return { cv: 'CâCa', wizen: 'fâgħa' };
+            return { cv: 'CâCvC', wizen: 'fâgħal' };
+        case 'IV':
+            return { cv: 'aCvCvC', wizen: 'akbar' };
+        case 'V':
+            if (isDefective) return { cv: 'tCvCCa', wizen: 'tfagħgħa' };
+            return { cv: 'tCvCCvC', wizen: 'tfagħgħal' };
+        case 'VI':
+            if (isDefective) return { cv: 'tCâCa', wizen: 'tfâgħa' };
+            return { cv: 'tCâCvC', wizen: 'tfâgħal' };
+        case 'VII':
+            return { cv: 'nCvCvC', wizen: 'nfagħal' };
+        case 'VIII':
+            return { cv: 'CtCvCvC', wizen: 'ftagħal' };
+        case 'IX':
+            return { cv: 'CCâC', wizen: 'fgħâl' };
+        case 'X':
+        case 'Xa':
+            return { cv: 'stvCCvC', wizen: 'stafgħal' };
+        case 'Xb':
+            return { cv: 'stCvCCvC', wizen: 'stfagħgħal' };
+        default:
+            return null;
+    }
+}
 
 function ResetButton({ onClick, title = "Reset" }: { onClick: () => void, title?: string }) {
     return (
@@ -121,6 +177,7 @@ function MorphologyPresetSelector({
 
 export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm }: EntryFormModalProps) {
     const { getValues } = useAdminConfig();
+    const { mode } = useLinguisticMode();
 
     // Dynamic options from admin config
     const POS_OPTIONS = getValues('pos');
@@ -130,12 +187,43 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const REGISTER_OPTIONS = getValues('register');
     const NOUN_TYPE_OPTIONS = getValues('noun_type');
     const SOUND_SUFFIXES = getValues('sound_suffix');
-    const BROKEN_PATTERNS = getValues('broken_pattern');
-    const ADJECTIVE_PATTERNS = getValues('adjective_pattern');
     const VERB_PRESETS_LIST = getValues('verb_preset');
     const VERB_FORM_OPTIONS = getValues('verb_form');
+    const CV_WIZEN_PATTERNS = getValues('cv_wizen_pattern');
+    const BROKEN_PATTERNS = getValues('broken_pattern');
     const PARTICIPLE_TYPES = ['active', 'passive'];
     const PARTICIPLE_NUANCES = getValues('participle_nuance');
+
+    // Filtered patterns based on POS
+    const filteredPatterns = useMemo(() => {
+        return CV_WIZEN_PATTERNS.filter((p: any) =>
+            !p.pos_types || p.pos_types.length === 0 || (initialForm?.pos ? p.pos_types.includes(initialForm.pos) : true)
+        ).map((p: any) => ({
+            label: mode === 'standard' ? p.cv : p.wizen,
+            value: p.cv,
+            sub: mode === 'standard' ? p.wizen : p.cv
+        }));
+    }, [CV_WIZEN_PATTERNS, initialForm?.pos, mode]);
+
+    const nounPatterns = useMemo(() => {
+        return BROKEN_PATTERNS.filter((p: any) =>
+            !p.pos_types || p.pos_types.length === 0 || p.pos_types.includes('noun')
+        ).map((p: any) => ({
+            label: mode === 'standard' ? p.cv : p.wizen,
+            value: p.cv,
+            sub: mode === 'standard' ? p.wizen : p.cv
+        }));
+    }, [BROKEN_PATTERNS, mode]);
+
+    const adjPatterns = useMemo(() => {
+        return BROKEN_PATTERNS.filter((p: any) =>
+            !p.pos_types || p.pos_types.length === 0 || p.pos_types.includes('adjective')
+        ).map((p: any) => ({
+            label: mode === 'standard' ? p.cv : p.wizen,
+            value: p.cv,
+            sub: mode === 'standard' ? p.wizen : p.cv
+        }));
+    }, [BROKEN_PATTERNS, mode]);
 
     // Convert verb presets list to the Record format used by the component
     const VERB_PRESETS = useMemo(() => {
@@ -151,6 +239,59 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [isLoadingFull, setIsLoadingFull] = useState(isEdit);
+    const [originalForm, setOriginalForm] = useState<any>(null);
+    const [idExists, setIdExists] = useState<boolean | null>(null);
+    const [suggestedId, setSuggestedId] = useState('');
+
+    const [form, setForm] = useState({
+        ...INITIAL_FORM_STATE,
+        id: entry?.id ?? initialForm?.id ?? '',
+        headword: entry?.headword ?? initialForm?.headword ?? '',
+        pos: entry?.pos ?? initialForm?.pos ?? 'noun',
+        noun_gender: (entry as any)?.noun_gender ?? initialForm?.noun_gender ?? '',
+        noun_singular: (entry as any)?.noun_singular ?? initialForm?.noun_singular ?? '',
+        verb_class: (entry as any)?.verb_class ?? (entry as any)?.verb_morphology?.verb_class ?? initialForm?.verb_class ?? '',
+        _formLabel: (entry as any)?.verb_form ?? (entry as any)?.verb_morphology?.form ?? initialForm?._formLabel ?? '',
+        verb_vowel_perf: (entry as any)?.verb_vowel_perf ?? (entry as any)?.verb_morphology?.vowel_set_perf ?? initialForm?.verb_vowel_perf ?? '',
+        verb_vowel_impf: (entry as any)?.verb_vowel_impf ?? (entry as any)?.verb_morphology?.vowel_set_impf ?? initialForm?.verb_vowel_impf ?? '',
+        verb_vowel_impv: (entry as any)?.verb_vowel_impv ?? (entry as any)?.verb_morphology?.vowel_set_imperative ?? initialForm?.verb_vowel_impv ?? '',
+        is_loanword: entry?.is_loanword ?? initialForm?.is_loanword ?? false,
+        source_language: entry?.source_language ?? initialForm?.source_language ?? '',
+        tags: Array.isArray((entry as any)?.tags) ? (entry as any).tags.join(', ') : ((entry as any)?.tags ?? initialForm?.tags ?? ''),
+        _rootConsonants: (entry as any)?._rootConsonants ?? (entry as any)?.root_pattern_form?.root?.consonants ?? (entry as any)?.root_consonants ?? initialForm?._rootConsonants ?? '',
+        _hasDual: !!((entry as any)?.noun_dual ?? initialForm?.noun_dual ?? false),
+        cv_pattern: (entry as any)?.cv_pattern ?? initialForm?.cv_pattern ?? '',
+        plural_pattern: (entry as any)?.plural_pattern ?? initialForm?.plural_pattern ?? '',
+        sound_suffix: (entry as any)?.sound_suffix ?? initialForm?.sound_suffix ?? '',
+        adj_pattern: (entry as any)?.adj_pattern ?? initialForm?.adj_pattern ?? '',
+        noun_feminine: (entry as any)?.noun_feminine ?? initialForm?.noun_feminine ?? '',
+        noun_masculine: (entry as any)?.noun_masculine ?? initialForm?.noun_masculine ?? '',
+        _pluralType: (((entry as any)?.noun_plural_forms?.length > 0) || !!initialForm?.noun_plural_forms) && ((entry as any)?.noun_sound_plural || !!initialForm?.noun_sound_plural) ? 'both' :
+            (((entry as any)?.noun_plural_forms?.length > 0) || !!initialForm?.noun_plural_forms) ? 'broken' :
+                (((entry as any)?.noun_sound_plural) || !!initialForm?.noun_sound_plural) ? 'sound' : 'none',
+        _adjPluralType: (((entry as any)?.adj_plural?.length > 0) || !!initialForm?.adj_plural) ? (entry as any)?.adj_pattern ? 'broken' : 'sound' : 'none',
+        noun_type: (entry as any)?.noun_type ?? initialForm?.noun_type ?? '',
+        definitions: (entry as any)?.definitions ?? [
+            { text_en: (entry as any)?.text_en ?? '', text_mt: '', register: '' }
+        ],
+        synonyms: (entry as any)?.verb_morphology?.synonyms ?? initialForm?.synonyms ?? [],
+        antonyms: (entry as any)?.verb_morphology?.antonyms ?? initialForm?.antonyms ?? [],
+        related_entries: (entry as any)?.verb_morphology?.related_entries ?? initialForm?.related_entries ?? [],
+        ...initialForm
+    });
+
+    const isDirty = useMemo(() => {
+        if (!originalForm) return false;
+        // Simple JSON comparison for dirty check
+        return JSON.stringify(form) !== JSON.stringify(originalForm);
+    }, [form, originalForm]);
+
+    // Initialize original form for dirty tracking
+    useEffect(() => {
+        if (!originalForm && !isLoadingFull) {
+            setOriginalForm(form);
+        }
+    }, [form, originalForm, isLoadingFull]);
 
     useEffect(() => {
         if (isEdit && entry?.id) {
@@ -195,55 +336,109 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 sound_suffix: full.sound_suffix || prev.sound_suffix,
                                 adj_pattern: full.adj_pattern || prev.adj_pattern,
                                 noun_feminine: full.noun_feminine || prev.noun_feminine,
-                                noun_masculine: full.noun_masculine || prev.noun_masculine,
+                                noun_masculine: full.noun_masculine || full.noun_morphology?.masculine || prev.noun_masculine,
+                                synonyms: full.synonyms || full.verb_morphology?.synonyms || prev.synonyms || [],
+                                antonyms: full.antonyms || full.verb_morphology?.antonyms || prev.antonyms || [],
+                                related_entries: full.related_entries || full.verb_morphology?.related_entries || prev.related_entries || [],
                                 _hasDual: !!(full.noun_dual || full.noun_morphology?.dual),
                                 _pluralType: (full.noun_plural_forms?.length || full.noun_morphology?.plural_forms?.length) && (full.noun_sound_plural || full.noun_morphology?.sound_plural) ? 'both'
                                     : (full.noun_plural_forms?.length || full.noun_morphology?.plural_forms?.length) ? 'broken'
                                         : (full.noun_sound_plural || full.noun_morphology?.sound_plural) ? 'sound'
                                             : 'none',
+                                _adjPluralType: full.adj_plural ? (full.adj_pattern ? 'broken' : 'sound') : 'none',
                             }));
+                            setOriginalForm(JSON.parse(JSON.stringify(form))); // Clone for baseline
                         }
                     })
-                    .catch(err => console.error("Error loading full entry", err))
+                    .catch(() => { })
                     .finally(() => setIsLoadingFull(false));
             });
         }
     }, [isEdit, entry?.id]);
 
-    const [form, setForm] = useState({
-        ...INITIAL_FORM_STATE,
-        id: entry?.id ?? initialForm?.id ?? '',
-        headword: entry?.headword ?? initialForm?.headword ?? '',
-        pos: entry?.pos ?? initialForm?.pos ?? 'noun',
-        noun_gender: (entry as any)?.noun_gender ?? initialForm?.noun_gender ?? '',
-        noun_singular: (entry as any)?.noun_singular ?? initialForm?.noun_singular ?? '',
-        verb_class: (entry as any)?.verb_class ?? (entry as any)?.verb_morphology?.verb_class ?? initialForm?.verb_class ?? '',
-        _formLabel: (entry as any)?.verb_form ?? (entry as any)?.verb_morphology?.form ?? initialForm?._formLabel ?? '',
-        verb_vowel_perf: (entry as any)?.verb_vowel_perf ?? (entry as any)?.verb_morphology?.vowel_set_perf ?? initialForm?.verb_vowel_perf ?? '',
-        verb_vowel_impf: (entry as any)?.verb_vowel_impf ?? (entry as any)?.verb_morphology?.vowel_set_impf ?? initialForm?.verb_vowel_impf ?? '',
-        verb_vowel_impv: (entry as any)?.verb_vowel_impv ?? (entry as any)?.verb_morphology?.vowel_set_imperative ?? initialForm?.verb_vowel_impv ?? '',
-        is_loanword: entry?.is_loanword ?? initialForm?.is_loanword ?? false,
-        source_language: entry?.source_language ?? initialForm?.source_language ?? '',
-        tags: Array.isArray((entry as any)?.tags) ? (entry as any).tags.join(', ') : ((entry as any)?.tags ?? initialForm?.tags ?? ''),
-        _rootConsonants: (entry as any)?._rootConsonants ?? (entry as any)?.root_pattern_form?.root?.consonants ?? (entry as any)?.root_consonants ?? initialForm?._rootConsonants ?? '',
-        _hasDual: !!((entry as any)?.noun_dual ?? initialForm?.noun_dual ?? false),
-        cv_pattern: (entry as any)?.cv_pattern ?? initialForm?.cv_pattern ?? '',
-        plural_pattern: (entry as any)?.plural_pattern ?? initialForm?.plural_pattern ?? '',
-        sound_suffix: (entry as any)?.sound_suffix ?? initialForm?.sound_suffix ?? '',
-        adj_pattern: (entry as any)?.adj_pattern ?? initialForm?.adj_pattern ?? '',
-        noun_feminine: (entry as any)?.noun_feminine ?? initialForm?.noun_feminine ?? '',
-        noun_masculine: (entry as any)?.noun_masculine ?? initialForm?.noun_masculine ?? '',
-        _pluralType: (((entry as any)?.noun_plural_forms?.length > 0) || !!initialForm?.noun_plural_forms) && ((entry as any)?.noun_sound_plural || !!initialForm?.noun_sound_plural) ? 'both' :
-            (((entry as any)?.noun_plural_forms?.length > 0) || !!initialForm?.noun_plural_forms) ? 'broken' :
-                (((entry as any)?.noun_sound_plural) || !!initialForm?.noun_sound_plural) ? 'sound' : 'none',
-        noun_type: (entry as any)?.noun_type ?? initialForm?.noun_type ?? '',
-        definitions: (entry as any)?.definitions ?? [
-            { text_en: (entry as any)?.text_en ?? '', text_mt: '', register: '' }
-        ],
-        ...initialForm
-    });
+    // ── AUTOMATION: Auto-ID Suggestion ──────────────────────────────────────
+    useEffect(() => {
+        if (isEdit || !form.headword || !form.pos) {
+            setSuggestedId('');
+            return;
+        }
+
+        const POS_MAP: Record<string, string> = {
+            verb: 'v', noun: 'n', adjective: 'adj', adverb: 'adv',
+            preposition: 'prep', conjunction: 'conj', particle: 'part',
+            article: 'art', pronoun: 'pron', numeral: 'num'
+        };
+
+        const suffix = POS_MAP[form.pos] || 'entry';
+        const safeHeadword = form.headword.toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove accents
+            .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+
+        const newId = `${suffix}-${safeHeadword}`;
+        setSuggestedId(newId);
+    }, [form.pos, form.headword, isEdit]);
+
+    // ── AUTOMATION: ID Existence Check ──────────────────────────────────────
+    useEffect(() => {
+        if (!form.id || form.id === entry?.id) {
+            setIdExists(null);
+            return;
+        }
+        const timer = setTimeout(async () => {
+            try {
+                const token = await getToken();
+                const { adminCheckIdExists } = await import('@/lib/api');
+                const res = await adminCheckIdExists(token!, 'entries', form.id);
+                setIdExists(res.exists);
+            } catch { }
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [form.id, getToken, entry?.id]);
+
+    // ── AUTOMATION: Smart Defaults ──────────────────────────────────────────
+    useEffect(() => {
+        // Auto-fill noun_singular from headword if empty
+        if (form.pos === 'noun' && form.headword && !form.noun_singular) {
+            setForm(prev => ({ ...prev, noun_singular: prev.headword }));
+        }
+    }, [form.headword, form.pos]);
+
+    // ── AUTOMATION: Invariable Tagging ──────────────────────────────────────
+    useEffect(() => {
+        if (!form.headword) return;
+
+        let isInvariable = false;
+        if (form.pos === 'adjective') {
+            const hasFem = form.adj_feminine && form.adj_feminine !== '';
+            const hasPlur = form.adj_plural && form.adj_plural !== '';
+            if (hasFem && hasPlur && form.adj_masculine === form.headword && form.adj_feminine === form.headword && form.adj_plural === form.headword) {
+                isInvariable = true;
+            }
+        } else if (form.pos === 'noun') {
+            const hasPlur = (form.noun_plural_forms || form.noun_sound_plural) ? true : false;
+            if (hasPlur && form.noun_singular === form.headword && (form.noun_plural_forms === form.headword || form.noun_sound_plural === form.headword)) {
+                isInvariable = true;
+            }
+        }
+
+        if (isInvariable) {
+            const tags = form.tags.split(',').map((s: string) => s.trim()).filter(Boolean);
+            if (!tags.includes('Invariable')) {
+                set('tags', [...tags, 'Invariable'].join(', '));
+            }
+        }
+    }, [form.headword, form.pos, form.adj_masculine, form.adj_feminine, form.adj_plural, form.noun_singular, form.noun_plural_forms, form.noun_sound_plural]);
 
     const set = (k: string, v: unknown) => setForm((f: any) => ({ ...f, [k]: v }));
+
+    // Context-aware CV pattern suggestion for verbs
+    const verbCvSuggestion = useMemo(() => {
+        if (form.pos !== 'verb' && form.pos !== 'participle') return null;
+        if (!form._formLabel) return null;
+        return getVerbCvSuggestion(form._formLabel, form.verb_class || 'strong');
+    }, [form.pos, form._formLabel, form.verb_class]);
+
+    const suggestionDiffersFromCurrent = verbCvSuggestion && form.cv_pattern !== verbCvSuggestion.cv;
 
     const moveDefinition = (index: number, direction: 'up' | 'down') => {
         const next = [...form.definitions];
@@ -253,7 +448,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         set('definitions', next);
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!form.headword.trim()) {
             setError(t('Headword is required', 'Mamma meħtieġa'));
@@ -264,21 +459,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         try {
             const token = await getToken();
             if (!token) throw new Error('Not authenticated');
-            const payload: Record<string, unknown> = {
-                ...form,
-                verb_form: form._formLabel, // Ensure Form toggle is persisted for all POS
-                cv_pattern: form.cv_pattern,
-                plural_pattern: form.plural_pattern,
-                sound_suffix: form.sound_suffix,
-                adj_pattern: form.adj_pattern,
-                noun_feminine: form.noun_feminine,
-                noun_masculine: form.noun_masculine,
-                noun_singular: form.pos === 'noun' ? (form.noun_singular || form.headword) : form.noun_singular,
-                noun_plural_forms: form.noun_plural_forms
-                    ? form.noun_plural_forms.split(',').map((s: string) => s.trim()).filter(Boolean)
-                    : [],
-                tags: form.tags ? form.tags.split(',').map((s: string) => s.trim()).filter(Boolean) : [],
-            };
+            const payload = buildEntryPayload(form);
             if (isEdit && entry) {
                 payload.id = form.id;
                 payload.old_id = entry.id;
@@ -287,7 +468,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             if (isEdit && entry) {
                 await adminUpdateEntry(token, payload);
             } else {
-                await adminCreateEntry(token, payload);
+                const res = await adminCreateEntry(token, payload);
+                // Feedback for auto-suffixed ID
+                if (res && (res as any).id && (res as any).id !== payload.id && payload.id) {
+                    alert(`${t('Duplicate ID handled:', 'ID duplikata ġiet immaniġġjata:')} ${payload.id} -> ${(res as any).id}`);
+                }
             }
 
             onSaved();
@@ -335,52 +520,107 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const sel = inp + " cursor-pointer";
     const label = "block text-xs font-semibold text-black uppercase tracking-wider mb-1";
 
+    const handleClose = () => {
+        if (isDirty) {
+            if (!confirm(t('You have unsaved changes. Are you sure you want to close?', 'Għandek tibdil mhux merfugħ. Żgur li trid tagħlaq?'))) {
+                return;
+            }
+        }
+        onClose();
+    };
+
     return (
         <Modal
-            open
-            onClose={onClose}
-            title={isEdit ? `${t('Edit', 'Editja')}: ${entry?.headword}` : t('New Entry', 'Entrata Ġdida')}
-            size="lg"
+            open={true}
+            onClose={handleClose}
+            title={isEdit ? t('Edit Entry', 'Editja l-Entrata') : t('New Entry', 'Entrata Ġdida')}
+            size="xl"
         >
-            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden relative">
-                {isLoadingFull && (
-                    <div className="absolute inset-0 z-50 bg-white/50 backdrop-blur-[1px] flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1034A6]"></div>
-                    </div>
-                )}
-                <div className="space-y-5 overflow-y-auto pr-2 flex-1">
+            <div className="flex flex-col h-full overflow-hidden">
+                <div className="flex-1 overflow-y-auto pr-2 space-y-8 p-1">
+                    {isLoadingFull && (
+                        <div className="absolute inset-0 z-50 bg-white/50 backdrop-blur-[1px] flex items-center justify-center">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1034A6]"></div>
+                        </div>
+                    )}
                     {error && (
                         <div className="bg-red-50 text-red-800 border border-red-200 rounded px-3 py-2 text-sm">
                             {error}
                         </div>
                     )}
 
-                    {/* Core */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className={label}>{t('Entry ID', 'ID tal-Entrata')}</label>
-                            <input className={inp} value={form.id} onChange={e => set('id', e.target.value)} placeholder="e.g. kiteb-v" />
+                    {/* ── CORE FIELDS ──────────────────────────────────────────────── */}
+                    <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="space-y-1.5 md:col-span-1">
+                            <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest flex items-center justify-between">
+                                {t('Entry ID', 'ID tal-Entrata')}
+                                {idExists === true && <span className="text-red-500 lowercase font-normal italic">{t('already exists', 'diġà teżisti')}</span>}
+                                {idExists === false && <span className="text-green-600 lowercase font-normal italic">{t('available', 'disponibbli')}</span>}
+                            </label>
+                            <input
+                                value={form.id}
+                                onChange={e => setForm({ ...form, id: e.target.value })}
+                                className={cn(
+                                    "w-full p-2 bg-white border rounded-lg text-sm transition-all font-mono",
+                                    idExists === true ? "border-red-500 ring-1 ring-red-500/20" : "border-black/10 focus:border-[#1034A6]"
+                                )}
+                                placeholder="e.g. v-fagħal"
+                            />
+                            {suggestedId && form.id !== suggestedId && (
+                                <button
+                                    onClick={() => setForm({ ...form, id: suggestedId })}
+                                    className="mt-1 text-[9px] font-bold text-[#1034A6] hover:underline flex items-center gap-1 uppercase tracking-tighter"
+                                >
+                                    <Plus size={10} /> {t('Suggest:', 'Suġġeriment:')} {suggestedId}
+                                </button>
+                            )}
                         </div>
-                        <div className="col-span-2 sm:col-span-1">
+                        <div className="space-y-1.5 md:col-span-1">
                             <label className={label}>{t('Headword', 'Mamma')} *</label>
                             <input className={inp} value={form.headword} onChange={e => set('headword', e.target.value)} required />
                         </div>
-                        <div>
+                        <div className="space-y-1.5 md:col-span-1">
                             <label className={label}>POS *</label>
                             <select className={sel} value={form.pos} onChange={e => set('pos', e.target.value)}>
                                 {POS_OPTIONS.map(p => <option key={p}>{p}</option>)}
                             </select>
                         </div>
-                        <div className="col-span-2 sm:col-span-1">
+                        <div className="space-y-1.5 md:col-span-1">
                             <div className="flex items-center justify-between mb-1">
                                 <label className={label + " mb-0"}>{t('Root Consonants', 'Għerq')}</label>
                                 <ResetButton onClick={() => set('_rootConsonants', (entry as any)?._rootConsonants ?? (entry as any)?.root_pattern_form?.root?.consonants ?? (entry as any)?.root_consonants ?? initialForm?._rootConsonants ?? '')} title={t('Reset to original', 'Irrisettja')} />
                             </div>
                             <input className={inp} value={form._rootConsonants || ''} onChange={e => set('_rootConsonants', e.target.value)} placeholder="e.g. k-t-b" />
                         </div>
-                        <div className="col-span-2 sm:col-span-1">
+                        <div className="space-y-1.5 md:col-span-2">
                             <label className={label}>{t('CV Pattern / Wiżen', 'Mudell (Wiżen)')}</label>
                             <input className={inp} value={form.cv_pattern || ''} onChange={e => set('cv_pattern', e.target.value)} placeholder="e.g. Fagħal or CCvC" />
+
+                            {/* Context-Aware suggestion banner */}
+                            {suggestionDiffersFromCurrent && (
+                                <div className="mt-1.5 flex items-center gap-2 px-2.5 py-1.5 bg-blue-50 border border-blue-100 rounded-md">
+                                    <span className="text-[10px] text-blue-700 font-mono font-bold shrink-0">
+                                        {verbCvSuggestion!.cv}
+                                    </span>
+                                    <span className="text-[10px] text-blue-500 shrink-0">({verbCvSuggestion!.wizen})</span>
+                                    <span className="text-[10px] text-blue-400 flex-1">{t('suggested for Form', 'suġġerit għal Forma')} {form._formLabel} {form.verb_class}</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => set('cv_pattern', verbCvSuggestion!.cv)}
+                                        className="text-[10px] font-bold text-blue-700 hover:text-blue-900 px-2 py-0.5 bg-blue-100 hover:bg-blue-200 rounded transition-colors shrink-0"
+                                    >
+                                        {t('Apply', 'Applika')}
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* Generic/Filtered Presets */}
+                            <MorphologyPresetSelector
+                                label={t('Pattern Presets', 'Mudelli Presets')}
+                                currentValue={form.cv_pattern}
+                                onSelect={(val) => set('cv_pattern', val)}
+                                options={filteredPatterns}
+                            />
 
                             {/* Verb Presets based on Form */}
                             {form._formLabel && (form.pos === 'verb' || form.pos === 'participle' || (form.pos === 'noun' && form.noun_type === 'verbal')) && (
@@ -389,13 +629,23 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     currentValue={form.cv_pattern}
                                     onSelect={(val) => set('cv_pattern', val)}
                                     options={[
+                                        ...(verbCvSuggestion ? [{ label: t('Base Pattern', 'Mudell Bażi'), value: verbCvSuggestion.cv, sub: verbCvSuggestion.wizen }] : []),
                                         { label: 'Perfect', value: VERB_PRESETS[form._formLabel]?.perfect?.cv, sub: VERB_PRESETS[form._formLabel]?.perfect?.wizen },
-                                        { label: 'Passive Ptcp.', value: VERB_PRESETS[form._formLabel]?.passive?.cv, sub: VERB_PRESETS[form._formLabel]?.passive?.wizen },
-                                        { label: 'Active Ptcp.', value: VERB_PRESETS[form._formLabel]?.active?.cv, sub: VERB_PRESETS[form._formLabel]?.active?.wizen },
+                                        { label: 'Passive Participle', value: VERB_PRESETS[form._formLabel]?.passive?.cv, sub: VERB_PRESETS[form._formLabel]?.passive?.wizen },
+                                        { label: 'Active Participle', value: VERB_PRESETS[form._formLabel]?.active?.cv, sub: VERB_PRESETS[form._formLabel]?.active?.wizen },
                                         { label: 'Verbal Noun', value: VERB_PRESETS[form._formLabel]?.verbal?.cv, sub: VERB_PRESETS[form._formLabel]?.verbal?.wizen },
                                     ].filter(o => o.value)}
                                 />
                             )}
+                        </div>
+                    </section>
+
+                    {/* Tags, Strength */}
+                    <div className="space-y-4">
+
+                        <div>
+                            <label className={label}>{t('Tags (comma separated)', 'Tikketti (separati bil-virgola)')}</label>
+                            <input className={inp} value={form.tags || ''} onChange={e => setForm({ ...form, tags: e.target.value })} placeholder="e.g. archaic, dialectal" />
                         </div>
                     </div>
 
@@ -537,20 +787,16 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                                     onChange={e => set('noun_plural_forms', e.target.value)} placeholder={t('e.g. kotba', 'eż. kotba')} />
 
                                                 <MorphologyPresetSelector
-                                                    label={t('Pattern', 'Mudell')}
+                                                    label={t('Broken Plural Pattern', 'Mudell tal-Plural Miksur')}
                                                     currentValue={form.plural_pattern}
-                                                    onSelect={(val) => {
-                                                        set('plural_pattern', val);
-                                                        // Strategy: if plural_pattern is selected, maybe we show it somewhere or use it to suggest?
-                                                        // For now just persistence as requested.
-                                                    }}
-                                                    options={BROKEN_PATTERNS.map(p => ({ label: p.cv, value: p.cv, sub: p.wizen }))}
+                                                    onSelect={(val) => set('plural_pattern', val)}
+                                                    options={nounPatterns}
                                                 />
                                             </div>
                                         )}
                                         {(form._pluralType === 'sound' || form._pluralType === 'both') && (
                                             <div>
-                                                <label className={label}>{t('Sound Plural', 'Plural sħiħ')}</label>
+                                                <label className={label}>{t('Sound Plural', 'Plural Sħiħ')}</label>
                                                 <input className={inp} value={form.noun_sound_plural} onChange={e => set('noun_sound_plural', e.target.value)} placeholder={t('e.g. tfajliet', 'eż. tfajliet')} />
 
                                                 <MorphologyPresetSelector
@@ -696,19 +942,71 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     <input className={inp} value={form.adj_plural} onChange={e => set('adj_plural', e.target.value)} />
                                 </div>
                             </div>
-                            <div className="mt-2">
-                                <MorphologyPresetSelector
-                                    label={t('Pattern Preset', 'Mudell Preset')}
-                                    currentValue={form.adj_pattern}
-                                    onSelect={(val) => {
-                                        set('adj_pattern', val);
-                                        const pattern = ADJECTIVE_PATTERNS.find(p => p.cv === val);
-                                        if (pattern && !form.cv_pattern) {
-                                            set('cv_pattern', pattern.cv);
-                                        }
-                                    }}
-                                    options={ADJECTIVE_PATTERNS.map(p => ({ label: p.cv, value: p.cv, sub: p.wizen }))}
-                                />
+
+                            <div className="mt-4">
+                                <label className={label}>{t('Plural Type', 'Tip ta\' Plural')}</label>
+                                <div className="flex gap-1.5 mb-2">
+                                    {['none', 'sound', 'broken'].map(type => (
+                                        <button
+                                            key={type}
+                                            type="button"
+                                            onClick={() => {
+                                                setForm(f => {
+                                                    const next = { ...f, _adjPluralType: type };
+                                                    if (type === 'none') {
+                                                        next.adj_plural = '';
+                                                        next.adj_pattern = '';
+                                                        next.sound_suffix = '';
+                                                    } else if (type === 'sound') {
+                                                        next.adj_pattern = '';
+                                                    } else if (type === 'broken') {
+                                                        next.sound_suffix = '';
+                                                    }
+                                                    return next;
+                                                });
+                                            }}
+                                            className={cn(
+                                                "px-3 py-1 text-xs font-semibold rounded-lg border transition-colors",
+                                                form._adjPluralType === type ? "bg-[#1034A6] text-white border-[#1034A6] shadow-sm" : "bg-white text-black/60 border-black/10 hover:bg-black/5 hover:border-black/20"
+                                            )}
+                                        >
+                                            {type === 'none' ? t('None', 'Xejn') : type === 'sound' ? t('Sound', 'Sħiħ') : t('Broken', 'Miksur')}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {form._adjPluralType === 'broken' && (
+                                    <div className="mt-3">
+                                        <MorphologyPresetSelector
+                                            label={t('Broken Plural Pattern', 'Mudell tal-Plural Miksur')}
+                                            currentValue={form.adj_pattern}
+                                            onSelect={(val) => {
+                                                set('adj_pattern', val);
+                                                const pattern = CV_WIZEN_PATTERNS.find((p: any) => p.cv === val);
+                                                if (pattern && !form.cv_pattern) {
+                                                    set('cv_pattern', pattern.cv);
+                                                }
+                                            }}
+                                            options={adjPatterns}
+                                        />
+                                    </div>
+                                )}
+
+                                {form._adjPluralType === 'sound' && (
+                                    <div className="mt-3">
+                                        <MorphologyPresetSelector
+                                            label={t('Sound Plural Suffix', 'Suffiss tal-Plural Sħiħ')}
+                                            currentValue={form.sound_suffix}
+                                            onSelect={(val) => {
+                                                set('sound_suffix', val);
+                                                if (!form.adj_plural && form.headword) {
+                                                    set('adj_plural', form.headword + val);
+                                                }
+                                            }}
+                                            options={SOUND_SUFFIXES.map(s => ({ label: `-${s}`, value: s }))}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </fieldset>
                     )}
@@ -834,6 +1132,38 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         ))}
                     </fieldset>
 
+                    {/* Relationships (Thesaurus & Derived Terms) */}
+                    <div className="space-y-6">
+                        <RelationshipEditor
+                            type="derived"
+                            title={t('Derived Terms', 'Termini Derivati')}
+                            items={form.related_entries || []}
+                            onChange={(items) => set('related_entries', items)}
+                            extraActions={[
+                                { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') },
+                                { label: t('New Root', 'Għerq Ġdid'), icon: <Plus size={12} />, onClick: () => window.open('/admin?tab=roots&new=root', '_blank') }
+                            ]}
+                        />
+                        <RelationshipEditor
+                            type="thesaurus"
+                            title={t('Synonyms', 'Sinonimi')}
+                            items={form.synonyms || []}
+                            onChange={(items) => set('synonyms', items)}
+                            extraActions={[
+                                { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
+                            ]}
+                        />
+                        <RelationshipEditor
+                            type="thesaurus"
+                            title={t('Antonyms', 'Antonimi')}
+                            items={form.antonyms || []}
+                            onChange={(items) => set('antonyms', items)}
+                            extraActions={[
+                                { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
+                            ]}
+                        />
+                    </div>
+
                     {/* Etymology Builder */}
                     <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-4">
                         <div className="flex justify-between items-center px-1">
@@ -893,22 +1223,71 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         )}
                     </fieldset>
 
-                    {/* Tags */}
-                    <div className="px-1">
-                        <label className={label}>{t('Tags (comma)', 'Tags (virgola)')}</label>
-                        <input className={inp} value={form.tags} onChange={e => set('tags', e.target.value)}
-                            placeholder={t('e.g. colloquial, archaic', 'eż. kollokjali, arkajku')} />
+                    {/* Dynamic Fields (for new DB columns) */}
+                    {Object.keys((entry as any) || {}).filter(key => {
+                        return !ENTRY_HANDLED_FIELDS.includes(key as any) && !key.startsWith('_');
+                    }).length > 0 && (
+                            <fieldset className="border border-amber-100 bg-amber-50/20 rounded-lg p-4 space-y-3">
+                                <legend className="text-[10px] font-bold text-amber-600 uppercase tracking-widest px-2">{t('Additional Fields', 'Ghelta Oħra')}</legend>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {Object.keys((entry as any) || {}).filter(key => {
+                                        return !ENTRY_HANDLED_FIELDS.includes(key as any) && !key.startsWith('_');
+                                    }).map(key => (
+                                        <div key={key}>
+                                            <label className={label}>{key}</label>
+                                            <input
+                                                className={inp}
+                                                value={(form as any)[key] ?? ''}
+                                                onChange={e => set(key, e.target.value)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </fieldset>
+                        )}
+                </div>
+
+                <div className="flex justify-between items-center pt-4 mt-4 border-t border-black/10 shrink-0">
+                    <div className="flex items-center gap-3">
+                        {isEdit && (
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                size="sm"
+                                className="text-xs"
+                                loading={saving}
+                                onClick={async () => {
+                                    setSaving(true);
+                                    try {
+                                        const token = await getToken();
+                                        if (!token) throw new Error("Not authenticated");
+                                        const payload = buildEntryPayload(form);
+                                        await adminCreateEntry(token, payload);
+                                        onSaved();
+                                    } catch (err: any) {
+                                        setError(err.message);
+                                    } finally {
+                                        setSaving(false);
+                                    }
+                                }}
+                            >
+                                <Plus size={14} className="mr-1" /> {t('Duplicate as New', 'Ikkopja bħala Ġdid')}
+                            </Button>
+                        )}
+                        {isDirty && (
+                            <Badge className="bg-amber-100 text-amber-700 animate-pulse border-amber-200">
+                                <AlertTriangle size={10} className="mr-1" /> {t('Unsaved Changes', 'Tibdil mhux merfugħ')}
+                            </Badge>
+                        )}
                     </div>
-
+                    <div className="flex gap-3">
+                        <Button type="button" variant="ghost" onClick={handleClose}>{t('Cancel', 'Ikkanċella')}</Button>
+                        <Button type="button" onClick={handleSave} loading={saving}>
+                            {isEdit ? t('Save Changes', 'Issejva l-Bidliet') : t('Create Entry', 'Oħloq Entrata')}
+                        </Button>
+                    </div>
                 </div>
-
-                <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-black/10 shrink-0">
-                    <Button type="button" variant="ghost" onClick={onClose}>{t('Cancel', 'Ikkanċella')}</Button>
-                    <Button type="submit" loading={saving}>
-                        {isEdit ? t('Save Changes', 'Issejva l-Bidliet') : t('Create Entry', 'Oħloq Entrata')}
-                    </Button>
-                </div>
-            </form >
-        </Modal >
+            </div>
+        </Modal>
     );
 }
