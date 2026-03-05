@@ -106,17 +106,21 @@ export function Navbar() {
                                     <Keyboard size={12} />
                                     <span className="text-[10px] text-gray-300">›</span>
                                 </button>
-                                <div className="relative flex-1">
-                                    <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#1034A6] transition-colors pointer-events-none" />
-                                    <input
-                                        ref={inputRef}
-                                        type="text"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        placeholder={t('Search...', 'Fittex...')}
-                                        className="w-full bg-transparent pl-8 pr-3 py-1.5 text-sm focus:outline-none placeholder:text-gray-500 text-[#000]"
-                                    />
-                                </div>
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder={t('Search...', 'Fittex...')}
+                                    className="flex-1 bg-transparent px-2.5 py-1.5 text-sm focus:outline-none placeholder:text-gray-500 text-[#000]"
+                                />
+                                <button
+                                    type="submit"
+                                    className="px-2.5 py-1.5 text-gray-400 hover:text-[#1034A6] transition-colors shrink-0"
+                                    aria-label={t('Search', 'Fittex')}
+                                >
+                                    <Search size={14} />
+                                </button>
                             </div>
                             <MalteseCharPicker
                                 open={kbOpen}
