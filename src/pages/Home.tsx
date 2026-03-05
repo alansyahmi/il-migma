@@ -51,11 +51,14 @@ export function Home() {
     };
 
     const [kbOpen, setKbOpen] = useState(false);
+    const [kbOpen2, setKbOpen2] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef2 = useRef<HTMLInputElement>(null);
     const kbRef = useRef<HTMLButtonElement>(null);
+    const kbRef2 = useRef<HTMLButtonElement>(null);
 
-    const insertChar = (char: string) => {
-        const input = inputRef.current;
+    const insertChar = (char: string, ref: React.RefObject<HTMLInputElement | null>) => {
+        const input = ref.current;
         if (!input) { setQuery(q => q + char); return; }
         const start = input.selectionStart ?? query.length;
         const end = input.selectionEnd ?? query.length;
@@ -157,17 +160,36 @@ export function Home() {
                         <div className="max-w-xl relative z-10">
                             <h2 className="text-2xl font-serif mb-4">{t('Quick-Search Verification', 'Verifikazzjoni Tiftix-Rapidu')}</h2>
                             <p className="text-white/70 text-sm mb-6">{t('Quickly search to verify if a word is already in the database before adding it.', 'Fittex malajr biex tivverifika jekk kelma hix diġà fid-database qabel ma żżidha.')}</p>
-                            <form onSubmit={handleSearch} className="flex gap-2">
-                                <input
-                                    type="text"
-                                    value={query}
-                                    onChange={e => setQuery(e.target.value)}
-                                    placeholder={t('Search for a word...', 'Fittex kelma...')}
-                                    className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-sm focus:bg-white/20 outline-none transition-all placeholder:text-white/40"
-                                />
-                                <button type="submit" className="bg-white text-[#1034A6] px-6 py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all">
+                            <form onSubmit={handleSearch} className="flex gap-2 relative">
+                                <div className="flex-1 flex items-center bg-white/10 border border-white/20 rounded-xl overflow-hidden focus-within:bg-white/20 transition-all">
+                                    <button
+                                        ref={kbRef2}
+                                        type="button"
+                                        onClick={() => setKbOpen2(o => !o)}
+                                        className={`flex items-center gap-1 px-3 border-r border-white/10 shrink-0 py-3 transition-colors ${kbOpen2 ? 'text-white bg-white/20' : 'text-white/60 hover:text-white'}`}
+                                        aria-label={t('Toggle Maltese character picker', 'I togglja l-għażla tal-karattri Maltin')}
+                                    >
+                                        <Keyboard size={14} />
+                                        <span className="text-xs text-white/30">›</span>
+                                    </button>
+                                    <input
+                                        ref={inputRef2}
+                                        type="text"
+                                        value={query}
+                                        onChange={e => setQuery(e.target.value)}
+                                        placeholder={t('Search for a word...', 'Fittex kelma...')}
+                                        className="flex-1 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-white/40 text-white"
+                                    />
+                                </div>
+                                <button type="submit" className="bg-white text-[#1034A6] px-6 py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all shrink-0">
                                     {t('Check', 'Iċċekkja')}
                                 </button>
+                                <MalteseCharPicker
+                                    open={kbOpen2}
+                                    onOpenChange={setKbOpen2}
+                                    onInsert={(c) => insertChar(c, inputRef2)}
+                                    triggerRef={kbRef2}
+                                />
                             </form>
                         </div>
                     </div>
@@ -225,7 +247,7 @@ export function Home() {
                         <MalteseCharPicker
                             open={kbOpen}
                             onOpenChange={setKbOpen}
-                            onInsert={insertChar}
+                            onInsert={(c) => insertChar(c, inputRef)}
                             triggerRef={kbRef}
                         />
                     </form>

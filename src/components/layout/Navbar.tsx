@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
-import { Menu, X, Sun, Moon, Search, Eye, EyeOff, Shield } from 'lucide-react';
+import { Menu, X, Sun, Moon, Search, Eye, EyeOff, Shield, Keyboard } from 'lucide-react';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useDarkMode } from '@/contexts/DarkModeContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { cn } from '@/lib/utils';
 
 // Navigation links are now handled inside the component to support localization
@@ -17,7 +18,23 @@ export function Navbar() {
     const { isTrueAdmin, adminViewEnabled, setAdminViewEnabled, tier } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [kbOpen, setKbOpen] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const kbRef = useRef<HTMLButtonElement>(null);
     const navigate = useNavigate();
+
+    const insertChar = (char: string) => {
+        const input = inputRef.current;
+        if (!input) { setSearchQuery(q => q + char); return; }
+        const start = input.selectionStart ?? searchQuery.length;
+        const end = input.selectionEnd ?? searchQuery.length;
+        const next = searchQuery.substring(0, start) + char + searchQuery.substring(end);
+        setSearchQuery(next);
+        setTimeout(() => {
+            input.focus();
+            input.setSelectionRange(start + char.length, start + char.length);
+        }, 0);
+    };
 
     const isArabised = mode === 'arabised';
     const { pathname } = useLocation();
@@ -75,13 +92,37 @@ export function Navbar() {
                 {showSearch && (
                     <div className="hidden md:block flex-1 max-w-md mx-6">
                         <form onSubmit={handleSearch} className="relative group">
-                            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#1034A6] transition-colors pointer-events-none" />
-                            <input
-                                type="text"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder={t('Search...', 'Fittex...')}
-                                className="w-full bg-white/60 border border-[#d8cfc0] rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1034A6] focus:bg-white transition-all placeholder:text-gray-500 text-[#000]"
+                            <div className="flex items-center bg-white/60 border border-[#d8cfc0] rounded-md overflow-hidden focus-within:bg-white focus-within:ring-1 focus-within:ring-[#1034A6] transition-all">
+                                <button
+                                    ref={kbRef}
+                                    type="button"
+                                    onClick={() => setKbOpen(o => !o)}
+                                    className={cn(
+                                        "flex items-center gap-1 px-2.5 border-r border-[#d8cfc0] shrink-0 py-1.5 transition-colors",
+                                        kbOpen ? "text-[#1034A6] bg-black/5" : "text-gray-400 hover:text-gray-600"
+                                    )}
+                                    aria-label={t('Toggle Maltese character picker', 'I togglja l-għażla tal-karattri Maltin')}
+                                >
+                                    <Keyboard size={12} />
+                                    <span className="text-[10px] text-gray-300">›</span>
+                                </button>
+                                <div className="relative flex-1">
+                                    <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#1034A6] transition-colors pointer-events-none" />
+                                    <input
+                                        ref={inputRef}
+                                        type="text"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder={t('Search...', 'Fittex...')}
+                                        className="w-full bg-transparent pl-8 pr-3 py-1.5 text-sm focus:outline-none placeholder:text-gray-500 text-[#000]"
+                                    />
+                                </div>
+                            </div>
+                            <MalteseCharPicker
+                                open={kbOpen}
+                                onOpenChange={setKbOpen}
+                                onInsert={insertChar}
+                                triggerRef={kbRef}
                             />
                         </form>
                     </div>
