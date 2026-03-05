@@ -84,7 +84,7 @@ export async function onRequestGet({ request, env }) {
         const pos = url.searchParams.get('pos')?.trim() ?? '';
 
         const client = db(env);
-        let sql = `SELECT e.id, e.headword, e.pos, e.noun_gender, e.verb_class,
+        let sql = `SELECT e.id, e.headword, e.pos, e.noun_gender, e.verb_class, e.verb_weak_class,
                          e.is_loanword, e.source_language, e.created_at, e.verb_form,
                          e.verb_vowel_perf, e.verb_vowel_impf, e.tags, e.noun_plural_forms,
                          COALESCE(e.root_consonants, r.consonants) AS root_consonants,

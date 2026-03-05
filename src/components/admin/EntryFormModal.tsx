@@ -1,8 +1,9 @@
-import { useState, useMemo, useEffect } from 'react';
-import { ArrowUp, ArrowDown, RotateCcw, Plus } from 'lucide-react';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { ArrowUp, ArrowDown, RotateCcw, Plus, Keyboard } from 'lucide-react';
+import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { adminCreateEntry, adminUpdateEntry } from '@/lib/api';
+import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { generateRootForms } from '@/lib/conjugationEngine';
 import type { WeakClass } from '@/types';
@@ -12,7 +13,8 @@ import { RelationshipEditor } from './RelationshipEditor';
 import { buildEntryPayload, ENTRY_HANDLED_FIELDS } from '@/lib/adminSchema';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Sparkles } from 'lucide-react';
+import { generateIPA, deriveFeminineFromPattern, deriveMasculineFromFeminine, detectPluralType, derivePattern, extractLongVowelFromPattern } from '@/lib/maltesePhonology';
 
 export interface AdminEntry {
     id: string;
@@ -62,6 +64,8 @@ const INITIAL_FORM_STATE = {
     adj_masculine: '',
     adj_feminine: '',
     adj_plural: '',
+    adj_comparative: '',
+    adj_gender: '' as 'masculine' | 'feminine' | '',
     participle_type: '' as 'active' | 'passive' | '',
     is_loanword: false,
     source_language: '',
@@ -147,29 +151,40 @@ function MorphologyPresetSelector({
     options,
     onSelect,
     currentValue,
+    highlightValue,
     label = "Presets"
 }: {
     options: { label: string; value: string; sub?: string }[];
     onSelect: (val: string) => void;
     currentValue?: string;
+    highlightValue?: string | null;
     label?: string;
 }) {
     return (
         <div className="mt-2">
             <label className="text-[10px] font-bold text-black/40 uppercase tracking-wider mb-1.5 block">{label}</label>
             <div className="flex flex-wrap gap-1.5">
-                {options.map(opt => (
-                    <button
-                        key={opt.label}
-                        type="button"
-                        onClick={() => onSelect(opt.value)}
-                        className={`px-2 py-0.5 text-[10px] rounded border transition-all ${currentValue === opt.value
-                            ? 'bg-[#1034A6] text-white border-[#1034A6]'
-                            : 'bg-white text-black/60 border-black/10 hover:border-black/30'}`}
-                    >
-                        {opt.label} {opt.sub && <span className="opacity-50 ml-1 font-normal">({opt.sub})</span>}
-                    </button>
-                ))}
+                {options.map(opt => {
+                    const isSelected = currentValue === opt.value;
+                    const isSuggested = !isSelected && highlightValue === opt.value;
+                    return (
+                        <button
+                            key={opt.label}
+                            type="button"
+                            onClick={() => onSelect(opt.value)}
+                            className={cn(
+                                'px-2 py-0.5 text-[10px] rounded border transition-all',
+                                isSelected ? 'bg-[#1034A6] text-white border-[#1034A6]' :
+                                    isSuggested ? 'bg-blue-50 text-blue-700 border-blue-300 ring-1 ring-blue-300' :
+                                        'bg-white text-black/60 border-black/10 hover:border-black/30'
+                            )}
+                            title={isSuggested ? 'Suggested based on headword + root' : undefined}
+                        >
+                            {opt.label} {opt.sub && <span className="opacity-50 ml-1 font-normal">({opt.sub})</span>}
+                            {isSuggested && <span className="ml-1 text-blue-400">✦</span>}
+                        </button>
+                    );
+                })}
             </div>
         </div>
     );
@@ -194,16 +209,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const PARTICIPLE_TYPES = ['active', 'passive'];
     const PARTICIPLE_NUANCES = getValues('participle_nuance');
 
-    // Filtered patterns based on POS
-    const filteredPatterns = useMemo(() => {
-        return CV_WIZEN_PATTERNS.filter((p: any) =>
-            !p.pos_types || p.pos_types.length === 0 || (initialForm?.pos ? p.pos_types.includes(initialForm.pos) : true)
-        ).map((p: any) => ({
-            label: mode === 'standard' ? p.cv : p.wizen,
-            value: p.cv,
-            sub: mode === 'standard' ? p.wizen : p.cv
-        }));
-    }, [CV_WIZEN_PATTERNS, initialForm?.pos, mode]);
+
 
     const nounPatterns = useMemo(() => {
         return BROKEN_PATTERNS.filter((p: any) =>
@@ -242,6 +248,33 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const [originalForm, setOriginalForm] = useState<any>(null);
     const [idExists, setIdExists] = useState<boolean | null>(null);
     const [suggestedId, setSuggestedId] = useState('');
+    const [autoFilledFields, setAutoFilledFields] = useState<Set<string>>(new Set());
+
+    const [kbOpen, setKbOpen] = useState(false);
+    const [activeInput, setActiveInput] = useState<string | null>(null);
+    const kbTriggerRef = useRef<HTMLButtonElement>(null);
+    const activeInputRef = useRef<HTMLInputElement>(null);
+
+    const insertChar = (char: string) => {
+        if (!activeInput || !activeInputRef.current) return;
+        const el = activeInputRef.current;
+        const start = el.selectionStart || 0;
+        const end = el.selectionEnd || 0;
+
+        setForm((prev: any) => {
+            const currentVal = prev[activeInput] || '';
+            const newVal = currentVal.substring(0, start) + char + currentVal.substring(end);
+            return {
+                ...prev,
+                [activeInput]: newVal
+            };
+        });
+
+        setTimeout(() => {
+            el.focus();
+            el.setSelectionRange(start + char.length, start + char.length);
+        }, 0);
+    };
 
     const [form, setForm] = useState({
         ...INITIAL_FORM_STATE,
@@ -251,6 +284,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         noun_gender: (entry as any)?.noun_gender ?? initialForm?.noun_gender ?? '',
         noun_singular: (entry as any)?.noun_singular ?? initialForm?.noun_singular ?? '',
         verb_class: (entry as any)?.verb_class ?? (entry as any)?.verb_morphology?.verb_class ?? initialForm?.verb_class ?? '',
+        _weakClass: (entry as any)?.verb_weak_class ?? (entry as any)?.weak_class ?? (entry as any)?.verb_morphology?.weak_class ?? initialForm?._weakClass ?? '',
         _formLabel: (entry as any)?.verb_form ?? (entry as any)?.verb_morphology?.form ?? initialForm?._formLabel ?? '',
         verb_vowel_perf: (entry as any)?.verb_vowel_perf ?? (entry as any)?.verb_morphology?.vowel_set_perf ?? initialForm?.verb_vowel_perf ?? '',
         verb_vowel_impf: (entry as any)?.verb_vowel_impf ?? (entry as any)?.verb_morphology?.vowel_set_impf ?? initialForm?.verb_vowel_impf ?? '',
@@ -310,6 +344,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 _rootConsonants: full.resolved_root_consonants || full.root_consonants || prev._rootConsonants,
                                 _formLabel: full.verb_form || full.verb_morphology?.form || prev._formLabel,
                                 verb_class: full.verb_class || full.verb_morphology?.verb_class || prev.verb_class,
+                                _weakClass: full.verb_weak_class || full.weak_class || full.verb_morphology?.weak_class || prev._weakClass,
                                 verb_vowel_perf: full.verb_vowel_perf || full.verb_morphology?.vowel_set_perf || prev.verb_vowel_perf,
                                 verb_vowel_impf: full.verb_vowel_impf || full.verb_morphology?.vowel_set_impf || prev.verb_vowel_impf,
                                 verb_vowel_impv: full.verb_vowel_impv || full.verb_morphology?.vowel_set_imperative || prev.verb_vowel_impv,
@@ -371,8 +406,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
         const suffix = POS_MAP[form.pos] || 'entry';
         const safeHeadword = form.headword.toLowerCase()
-            .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove accents
-            .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        //.replace(/ħ/g, 'h') // Explicitly handle Latin crossed h
+        //.normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove accents
+        //.replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
 
         const newId = `${suffix}-${safeHeadword}`;
         setSuggestedId(newId);
@@ -395,13 +431,140 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         return () => clearTimeout(timer);
     }, [form.id, getToken, entry?.id]);
 
+    // ── AUTOMATION: Root Metadata Inheritance ───────────────────────────────
+    useEffect(() => {
+        const rootStr = form._rootConsonants.trim();
+        if (!rootStr) return;
+
+        const timer = setTimeout(async () => {
+            try {
+                const root = await apiLookupRootByConsonants(rootStr);
+                if (root) {
+                    const rootStrength = root.strength?.toLowerCase();
+                    let suggestedClass = '';
+                    if (rootStrength === 'strong') suggestedClass = 'strong';
+                    else if (rootStrength === 'weak') suggestedClass = 'weak';
+                    else if (rootStrength === 'geminated') suggestedClass = 'doubled';
+
+                    setForm(prev => {
+                        const next = { ...prev };
+                        let hasChanges = false;
+                        const newFilled = new Set(autoFilledFields);
+
+                        if (suggestedClass && !prev.verb_class) {
+                            next.verb_class = suggestedClass;
+                            newFilled.add('verb_class');
+                            hasChanges = true;
+                        }
+
+                        if (root.weak_class && !prev._weakClass) {
+                            next._weakClass = root.weak_class;
+                            newFilled.add('_weakClass');
+                            hasChanges = true;
+                        }
+
+                        if (hasChanges) {
+                            setTimeout(() => setAutoFilledFields(newFilled), 0);
+                        }
+                        return next;
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to lookup root for auto-fill:', err);
+            }
+        }, 1000); // Debounce lookup
+
+        return () => clearTimeout(timer);
+    }, [form._rootConsonants, autoFilledFields]);
+
+    // Reset auto-filled status when POS changes
+    useEffect(() => {
+        if (autoFilledFields.size > 0) {
+            setAutoFilledFields(new Set());
+        }
+    }, [form.pos]);
+
+    // Filtered patterns based on LIVE POS
+    const filteredPatterns = useMemo(() => {
+        return CV_WIZEN_PATTERNS.filter((p: any) =>
+            !p.pos_types || p.pos_types.length === 0 || p.pos_types.includes(form.pos)
+        ).map((p: any) => ({
+            label: mode === 'standard' ? p.cv : p.wizen,
+            value: p.cv,
+            sub: mode === 'standard' ? p.wizen : p.cv,
+            stress: p.stress as number | undefined,
+        }));
+    }, [CV_WIZEN_PATTERNS, form.pos, mode]);
+
     // ── AUTOMATION: Smart Defaults ──────────────────────────────────────────
     useEffect(() => {
-        // Auto-fill noun_singular from headword if empty
-        if (form.pos === 'noun' && form.headword && !form.noun_singular) {
-            setForm(prev => ({ ...prev, noun_singular: prev.headword }));
+        if (form.headword && (form.pos === 'noun' || form.pos === 'adjective' || form.pos === 'participle')) {
+            setForm(prev => ({
+                ...prev,
+                // Adjective gender auto-fill: set the appropriate field from headword
+                adj_masculine: (prev.pos === 'adjective' || prev.pos === 'participle')
+                    ? (prev.adj_gender === 'masculine' ? prev.headword : (prev.adj_masculine || prev.headword))
+                    : prev.adj_masculine,
+                adj_feminine: (prev.pos === 'adjective' || prev.pos === 'participle') && prev.adj_gender === 'feminine'
+                    ? prev.headword
+                    : prev.adj_feminine,
+            }));
         }
-    }, [form.headword, form.pos]);
+    }, [form.headword, form.pos, form.adj_gender]);
+
+    // ── AUTOMATION: Pattern Auto-Suggest (from headword + root) ─────────────
+    const suggestedPattern = useMemo(() => {
+        if (!form.headword || !form._rootConsonants) return null;
+        return derivePattern(form.headword, form._rootConsonants);
+    }, [form.headword, form._rootConsonants]);
+
+    // ── AUTOMATION: Broken Plural Pattern Auto-Suggest ───────────────────────
+    const suggestedBrokenPattern = useMemo(() => {
+        if (!form.noun_plural_forms || !form._rootConsonants) return null;
+        // Use first comma-separated value
+        const firstPlural = form.noun_plural_forms.split(',')[0].trim();
+        if (!firstPlural) return null;
+        return derivePattern(firstPlural, form._rootConsonants);
+    }, [form.noun_plural_forms, form._rootConsonants]);
+
+    // ── AUTOMATION: Feminine Suggestion ─────────────────────────────────────
+    const suggestedFeminine = useMemo(() => {
+        const isMasc = form.pos === 'noun'
+            ? form.noun_gender === 'masculine'
+            : (form.pos === 'adjective' || form.pos === 'participle') && form.adj_gender !== 'feminine';
+        if (!form.headword || !isMasc) return null;
+        if (form.pos !== 'noun' && form.pos !== 'adjective' && form.pos !== 'participle') return null;
+        const base = form.adj_masculine || form.noun_singular || form.headword;
+        return deriveFeminineFromPattern(form.cv_pattern, base);
+    }, [form.headword, form.cv_pattern, form.pos, form.noun_gender, form.adj_gender, form.adj_masculine, form.noun_singular]);
+
+    // ── AUTOMATION: Masculine Suggestion (for feminine adj/nouns) ────────────
+    const suggestedMasculine = useMemo(() => {
+        const isFem = form.pos === 'noun'
+            ? form.noun_gender === 'feminine'
+            : (form.pos === 'adjective' || form.pos === 'participle') && form.adj_gender === 'feminine';
+        if (!form.headword || !isFem) return null;
+        return deriveMasculineFromFeminine(form.headword);
+    }, [form.headword, form.pos, form.noun_gender, form.adj_gender]);
+
+    // ── AUTOMATION: IPA Suggestion ──────────────────────────────────────────
+    const suggestedIPA = useMemo(() => {
+        if (!form.headword || form.phonetics.some(p => p.dialect === 'Standard' && p.ipa)) return null;
+        // Look up stress position and long vowel marker from selected pattern
+        const patternData = CV_WIZEN_PATTERNS.find((p: any) => p.cv === form.cv_pattern);
+        const stressOverride = patternData?.stress as number | undefined;
+        // 'V' (uppercase) in the cv notation marks which vowel is long
+        const patternToExtract = patternData?.cv || form.cv_pattern;
+        const longVowelIdx = patternToExtract ? extractLongVowelFromPattern(patternToExtract as string) : undefined;
+        return generateIPA(form.headword, stressOverride, longVowelIdx);
+    }, [form.headword, form.phonetics, form.cv_pattern, CV_WIZEN_PATTERNS]);
+
+
+    // ── AUTOMATION: Plural Type Suggestion ──────────────────────────────────
+    const pluralSuggestion = useMemo(() => {
+        if (!form.headword || form._pluralType !== 'none') return null;
+        return detectPluralType(form.headword, SOUND_SUFFIXES);
+    }, [form.headword, form._pluralType, SOUND_SUFFIXES]);
 
     // ── AUTOMATION: Invariable Tagging ──────────────────────────────────────
     useEffect(() => {
@@ -427,7 +590,16 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 set('tags', [...tags, 'Invariable'].join(', '));
             }
         }
-    }, [form.headword, form.pos, form.adj_masculine, form.adj_feminine, form.adj_plural, form.noun_singular, form.noun_plural_forms, form.noun_sound_plural]);
+
+        // Diminutive tagging
+        const isDim = form.headword.includes('ejj') || form.headword.includes('ajj') || form.cv_pattern === 'CCvjjvC';
+        if (isDim) {
+            const tags = form.tags.split(',').map((s: string) => s.trim()).filter(Boolean);
+            if (!tags.includes('Diminutive')) {
+                set('tags', [...tags, 'Diminutive'].join(', '));
+            }
+        }
+    }, [form.headword, form.pos, form.adj_masculine, form.adj_feminine, form.adj_plural, form.noun_singular, form.noun_plural_forms, form.noun_sound_plural, form.cv_pattern]);
 
     const set = (k: string, v: unknown) => setForm((f: any) => ({ ...f, [k]: v }));
 
@@ -594,7 +766,35 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         </div>
                         <div className="space-y-1.5 md:col-span-2">
                             <label className={label}>{t('CV Pattern / Wiżen', 'Mudell (Wiżen)')}</label>
-                            <input className={inp} value={form.cv_pattern || ''} onChange={e => set('cv_pattern', e.target.value)} placeholder="e.g. Fagħal or CCvC" />
+                            <div className="flex gap-2 relative">
+                                <input
+                                    className={cn(inp, "flex-1")}
+                                    value={form.cv_pattern || ''}
+                                    onChange={e => set('cv_pattern', e.target.value)}
+                                    onFocus={(e) => {
+                                        setActiveInput('cv_pattern');
+                                        activeInputRef.current = e.target;
+                                    }}
+                                    placeholder="e.g. Fagħal or CCvC"
+                                />
+                                <button
+                                    ref={kbTriggerRef}
+                                    type="button"
+                                    onClick={() => setKbOpen(!kbOpen)}
+                                    className={cn(
+                                        "px-3 border border-black/10 rounded-lg transition-colors shrink-0",
+                                        kbOpen ? "bg-[#1034A6] text-white border-[#1034A6]" : "bg-white text-black/40 hover:text-black/60 hover:bg-black/5"
+                                    )}
+                                >
+                                    <Keyboard size={16} />
+                                </button>
+                                <MalteseCharPicker
+                                    open={kbOpen}
+                                    onOpenChange={setKbOpen}
+                                    onInsert={insertChar}
+                                    triggerRef={kbTriggerRef}
+                                />
+                            </div>
 
                             {/* Context-Aware suggestion banner */}
                             {suggestionDiffersFromCurrent && (
@@ -618,6 +818,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             <MorphologyPresetSelector
                                 label={t('Pattern Presets', 'Mudelli Presets')}
                                 currentValue={form.cv_pattern}
+                                highlightValue={suggestedPattern}
                                 onSelect={(val) => set('cv_pattern', val)}
                                 options={filteredPatterns}
                             />
@@ -653,10 +854,30 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-4">
                         <div className="flex justify-between items-center px-1">
                             <legend className="text-xs font-semibold text-black uppercase tracking-tight">{t('Phonetics & Dialects', 'Fonetika u Djaletti')}</legend>
-                            <Button type="button" variant="ghost" size="sm" className="h-7 text-xs"
-                                onClick={() => set('phonetics', [...form.phonetics, { dialect: 'Standard', spelling: '', ipa: '' }])}>
-                                + {t('Add Variant', 'Żid Varjant')}
-                            </Button>
+                            <div className="flex items-center gap-2">
+                                {suggestedIPA && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const standard = form.phonetics.findIndex(p => p.dialect === 'Standard');
+                                            if (standard !== -1) {
+                                                const next = [...form.phonetics];
+                                                next[standard].ipa = suggestedIPA;
+                                                set('phonetics', next);
+                                            } else {
+                                                set('phonetics', [...form.phonetics, { dialect: 'Standard', spelling: '', ipa: suggestedIPA }]);
+                                            }
+                                        }}
+                                        className="flex items-center gap-1.5 px-2 py-1 bg-blue-50 text-[10px] font-bold text-blue-700 rounded border border-blue-100 hover:bg-blue-100 transition-colors"
+                                    >
+                                        <Sparkles size={10} /> {t('Suggest IPA:', 'Suġġerixxi IPA:')} {suggestedIPA}
+                                    </button>
+                                )}
+                                <Button type="button" variant="ghost" size="sm" className="h-7 text-xs"
+                                    onClick={() => set('phonetics', [...form.phonetics, { dialect: 'Standard', spelling: '', ipa: '' }])}>
+                                    + {t('Add Variant', 'Żid Varjant')}
+                                </Button>
+                            </div>
                         </div>
 
                         {form.phonetics.map((ph: any, i: number) => (
@@ -726,6 +947,34 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         {NOUN_TYPE_OPTIONS.map(t => <option key={t}>{t}</option>)}
                                     </select>
                                 </div>
+                                {/* Feminine Suggestion Banner */}
+                                {suggestedFeminine && (form.pos === 'noun' && !form.noun_feminine) && (
+                                    <div className="mt-1.5 flex items-center gap-2 px-2.5 py-1.5 bg-purple-50 border border-purple-100 rounded-md">
+                                        <Sparkles size={12} className="text-purple-600" />
+                                        <span className="text-[10px] text-purple-700 flex-1">{t('Suggested feminine:', 'Femminil suġġerit:')} <strong className="font-bold">{suggestedFeminine}</strong></span>
+                                        <button
+                                            type="button"
+                                            onClick={() => set('noun_feminine', suggestedFeminine)}
+                                            className="text-[10px] font-bold text-purple-700 hover:text-purple-900 px-2 py-0.5 bg-purple-100 hover:bg-purple-200 rounded transition-colors shrink-0"
+                                        >
+                                            {t('Apply', 'Applika')}
+                                        </button>
+                                    </div>
+                                )}
+                                {/* Masculine Suggestion Banner */}
+                                {suggestedMasculine && (form.pos === 'noun' && form.noun_gender === 'feminine' && !form.noun_masculine) && (
+                                    <div className="mt-1.5 flex items-center gap-2 px-2.5 py-1.5 bg-purple-50 border border-purple-100 rounded-md">
+                                        <Sparkles size={12} className="text-purple-600" />
+                                        <span className="text-[10px] text-purple-700 flex-1">{t('Suggested masculine:', 'Maskil suġġerit:')} <strong className="font-bold">{suggestedMasculine}</strong></span>
+                                        <button
+                                            type="button"
+                                            onClick={() => set('noun_masculine', suggestedMasculine)}
+                                            className="text-[10px] font-bold text-purple-700 hover:text-purple-900 px-2 py-0.5 bg-purple-100 hover:bg-purple-200 rounded transition-colors shrink-0"
+                                        >
+                                            {t('Apply', 'Applika')}
+                                        </button>
+                                    </div>
+                                )}
                                 <div className="col-span-2">
                                     <label className={label}>{t('Form Association', 'Assoċjazzjoni mal-Forma')}</label>
                                     <div className="flex flex-wrap gap-1.5 mt-1.5">
@@ -744,10 +993,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         ))}
                                     </div>
                                 </div>
-                                <div>
-                                    <label className={label}>{t('Singular', 'Singular')}</label>
-                                    <input className={inp} value={form.noun_singular} onChange={e => set('noun_singular', e.target.value)} placeholder={form.headword || t('Same as headword', 'L-istess bħall-mamma')} />
-                                </div>
+                                {/* Singular removed: headword is the singular form */}
 
                                 <div className="col-span-2">
                                     <label className={label}>{t('Plural Type', 'Tip ta\' Plural')}</label>
@@ -779,16 +1025,32 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                             </button>
                                         ))}
                                     </div>
+                                    {pluralSuggestion && (
+                                        <div className="mt-2 flex items-center gap-2">
+                                            <Badge className="text-[9px] py-0 border-blue-200 bg-blue-50 text-blue-700 flex items-center gap-1">
+                                                <Sparkles size={8} /> {t('Likely', 'Probabbli')}: {pluralSuggestion.type.toUpperCase()}
+                                            </Badge>
+                                            <button
+                                                type="button"
+                                                onClick={() => set('_pluralType', pluralSuggestion.type)}
+                                                className="text-[9px] font-bold text-[#1034A6] hover:underline uppercase"
+                                            >
+                                                {t('Apply', 'Applika')}
+                                            </button>
+                                        </div>
+                                    )}
+
                                     <div className="grid grid-cols-2 gap-3 mt-3">
                                         {(form._pluralType === 'broken' || form._pluralType === 'both') && (
                                             <div>
-                                                <label className={label}>{t('Broken Plural', 'Plural miksur')}</label>
+                                                <label className={label}>{t('Broken Plural (comma-separated)', 'Plural Miksur (separati bil-virgola)')}</label>
                                                 <input className={inp} value={form.noun_plural_forms}
-                                                    onChange={e => set('noun_plural_forms', e.target.value)} placeholder={t('e.g. kotba', 'eż. kotba')} />
+                                                    onChange={e => set('noun_plural_forms', e.target.value)} placeholder={t('e.g. kotba, ktieb', 'eż. kotba, ktieb')} />
 
                                                 <MorphologyPresetSelector
                                                     label={t('Broken Plural Pattern', 'Mudell tal-Plural Miksur')}
                                                     currentValue={form.plural_pattern}
+                                                    highlightValue={suggestedBrokenPattern}
                                                     onSelect={(val) => set('plural_pattern', val)}
                                                     options={nounPatterns}
                                                 />
@@ -804,7 +1066,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                                     currentValue={form.sound_suffix}
                                                     onSelect={(val) => {
                                                         set('sound_suffix', val);
-                                                        if (!form.noun_sound_plural && form.headword) {
+                                                        // Always auto-fill: headword + suffix
+                                                        if (form.headword) {
                                                             set('noun_sound_plural', form.headword + val);
                                                         }
                                                     }}
@@ -868,11 +1131,84 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
                                     <label className={label}>{t('Class', 'Klassi')}</label>
-                                    <select className={sel} value={form.verb_class} onChange={e => set('verb_class', e.target.value)}>
+                                    <select className={sel} value={form.verb_class} onChange={e => {
+                                        set('verb_class', e.target.value);
+                                        // Clear subclass when no longer weak
+                                        if (e.target.value !== 'weak') set('_weakClass', '');
+
+                                        if (autoFilledFields.has('verb_class')) {
+                                            const next = new Set(autoFilledFields);
+                                            next.delete('verb_class');
+                                            setAutoFilledFields(next);
+                                        }
+                                    }}>
                                         <option value="">—</option>
                                         {VERB_CLASS_OPTIONS.map(c => <option key={c}>{c}</option>)}
                                     </select>
+                                    {autoFilledFields.has('verb_class') && (
+                                        <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse">
+                                            <span>✦</span>
+                                            <span>{t('Inherited from root', 'Miret mill-għerq')}</span>
+                                            <button
+                                                type="button"
+                                                className="ml-1 hover:text-blue-700 underline"
+                                                onClick={() => {
+                                                    set('verb_class', '');
+                                                    const next = new Set(autoFilledFields);
+                                                    next.delete('verb_class');
+                                                    setAutoFilledFields(next);
+                                                }}
+                                            >
+                                                {t('reset', 'irrisettja')}
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
+                                {form.verb_class === 'weak' && (
+                                    <div>
+                                        <label className={label}>{t('Subclass', 'Sottoklassi')}</label>
+                                        <div className="flex gap-1.5 mt-1">
+                                            {(['assimilative', 'hollow', 'defective'] as const).map(sub => (
+                                                <button
+                                                    key={sub}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        set('_weakClass', form._weakClass === sub ? '' : sub);
+                                                        if (autoFilledFields.has('_weakClass')) {
+                                                            const next = new Set(autoFilledFields);
+                                                            next.delete('_weakClass');
+                                                            setAutoFilledFields(next);
+                                                        }
+                                                    }}
+                                                    className={`flex-1 py-1.5 text-[10px] font-semibold rounded-lg border transition-all capitalize ${form._weakClass === sub
+                                                        ? 'bg-[#1034A6] text-white border-[#1034A6] shadow-sm'
+                                                        : 'bg-white text-black/60 border-black/10 hover:bg-black/5 hover:border-black/20'
+                                                        }`}
+                                                >
+                                                    {sub}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {autoFilledFields.has('_weakClass') && (
+                                    <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse col-span-2">
+                                        <span>✦</span>
+                                        <span>{t('Subclass inherited from root', 'Sottoklassi mirtet mill-għerq')}</span>
+                                        <button
+                                            type="button"
+                                            className="ml-1 hover:text-blue-700 underline"
+                                            onClick={() => {
+                                                set('_weakClass', '');
+                                                const next = new Set(autoFilledFields);
+                                                next.delete('_weakClass');
+                                                setAutoFilledFields(next);
+                                            }}
+                                        >
+                                            {t('reset', 'irrisettja')}
+                                        </button>
+                                    </div>
+                                )}
                                 <div>
                                     <label className={label}>{t('Perfect Vowels', 'Vokali - Perfett')}</label>
                                     <input className={inp} value={form.verb_vowel_perf}
@@ -928,20 +1264,75 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     {form.pos === 'adjective' && (
                         <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-3">
                             <legend className="text-xs font-semibold text-black px-2 text-black">{t('Adjective', 'Aġġettiv')}</legend>
-                            <div className="grid grid-cols-3 gap-3">
+                            <div className="grid grid-cols-2 gap-3">
+                                {/* Gender — determines which field is auto-filled from headword */}
                                 <div>
-                                    <label className={label}>{t('Masculine', 'Maskil')}</label>
-                                    <input className={inp} value={form.adj_masculine} onChange={e => set('adj_masculine', e.target.value)} />
+                                    <label className={label}>{t('Gender', 'Ġens')}</label>
+                                    <select className={sel} value={form.adj_gender} onChange={e => set('adj_gender', e.target.value as 'masculine' | 'feminine' | '')}>
+                                        <option value="">—</option>
+                                        {GENDER_OPTIONS.filter((g: string) => g !== 'neutral').map((g: string) => <option key={g}>{g}</option>)}
+                                    </select>
                                 </div>
+                                {/* Comparative */}
                                 <div>
-                                    <label className={label}>{t('Feminine', 'Femminil')}</label>
-                                    <input className={inp} value={form.adj_feminine} onChange={e => set('adj_feminine', e.target.value)} />
+                                    <label className={label}>{t('Comparative', 'Komparattiv')}</label>
+                                    <input className={inp} value={form.adj_comparative} onChange={e => set('adj_comparative', e.target.value)} placeholder={t('e.g. akbar', 'eż. akbar')} />
                                 </div>
+                                {/* Masculine — shown as auto-filled when gender=masculine, or editable override when gender=feminine */}
+                                {(form.adj_gender === 'masculine' || !form.adj_gender) && (
+                                    <div>
+                                        <label className={label}>{t('Masculine Form', 'Maskil')}</label>
+                                        <input className={inp} value={form.adj_masculine} onChange={e => set('adj_masculine', e.target.value)} placeholder={form.headword} />
+                                    </div>
+                                )}
+                                {form.adj_gender === 'feminine' && (
+                                    <div>
+                                        <label className={label}>{t('Masculine Form', 'Maskil')}</label>
+                                        <input className={inp} value={form.adj_masculine} onChange={e => set('adj_masculine', e.target.value)} placeholder={t('e.g. kbir', 'eż. kbir')} />
+                                    </div>
+                                )}
+                                {/* Feminine */}
+                                {(form.adj_gender === 'masculine' || !form.adj_gender) && (
+                                    <div>
+                                        <label className={label}>{t('Feminine Form', 'Femminil')}</label>
+                                        <input className={inp} value={form.adj_feminine} onChange={e => set('adj_feminine', e.target.value)} placeholder={t('e.g. kbira', 'eż. kbira')} />
+                                    </div>
+                                )}
+                                {form.adj_gender === 'feminine' && (
+                                    <div>
+                                        <label className={label}>{t('Feminine Form', 'Femminil')}</label>
+                                        <input className={inp} value={form.adj_feminine} onChange={e => set('adj_feminine', e.target.value)} placeholder={form.headword} />
+                                    </div>
+                                )}
+                                {/* Plural */}
                                 <div>
                                     <label className={label}>{t('Plural', 'Plural')}</label>
                                     <input className={inp} value={form.adj_plural} onChange={e => set('adj_plural', e.target.value)} />
                                 </div>
                             </div>
+
+                            {/* Feminine suggestion (when masculine) */}
+                            {suggestedFeminine && form.adj_gender !== 'feminine' && !form.adj_feminine && (
+                                <div className="flex items-center gap-2 px-2.5 py-1.5 bg-purple-50 border border-purple-100 rounded-md">
+                                    <Sparkles size={12} className="text-purple-600" />
+                                    <span className="text-[10px] text-purple-700 flex-1">{t('Suggested feminine:', 'Femminil suġġerit:')} <strong>{suggestedFeminine}</strong></span>
+                                    <button type="button" onClick={() => set('adj_feminine', suggestedFeminine)}
+                                        className="text-[10px] font-bold text-purple-700 hover:text-purple-900 px-2 py-0.5 bg-purple-100 hover:bg-purple-200 rounded shrink-0">
+                                        {t('Apply', 'Applika')}
+                                    </button>
+                                </div>
+                            )}
+                            {/* Masculine suggestion (when feminine) */}
+                            {suggestedMasculine && form.adj_gender === 'feminine' && !form.adj_masculine && (
+                                <div className="flex items-center gap-2 px-2.5 py-1.5 bg-purple-50 border border-purple-100 rounded-md">
+                                    <Sparkles size={12} className="text-purple-600" />
+                                    <span className="text-[10px] text-purple-700 flex-1">{t('Suggested masculine:', 'Maskil suġġerit:')} <strong>{suggestedMasculine}</strong></span>
+                                    <button type="button" onClick={() => set('adj_masculine', suggestedMasculine)}
+                                        className="text-[10px] font-bold text-purple-700 hover:text-purple-900 px-2 py-0.5 bg-purple-100 hover:bg-purple-200 rounded shrink-0">
+                                        {t('Apply', 'Applika')}
+                                    </button>
+                                </div>
+                            )}
 
                             <div className="mt-4">
                                 <label className={label}>{t('Plural Type', 'Tip ta\' Plural')}</label>
@@ -980,6 +1371,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         <MorphologyPresetSelector
                                             label={t('Broken Plural Pattern', 'Mudell tal-Plural Miksur')}
                                             currentValue={form.adj_pattern}
+                                            highlightValue={suggestedBrokenPattern}
                                             onSelect={(val) => {
                                                 set('adj_pattern', val);
                                                 const pattern = CV_WIZEN_PATTERNS.find((p: any) => p.cv === val);
@@ -999,7 +1391,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                             currentValue={form.sound_suffix}
                                             onSelect={(val) => {
                                                 set('sound_suffix', val);
-                                                if (!form.adj_plural && form.headword) {
+                                                // Always auto-fill: headword + suffix
+                                                if (form.headword) {
                                                     set('adj_plural', form.headword + val);
                                                 }
                                             }}
@@ -1287,7 +1680,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         </Button>
                     </div>
                 </div>
-            </div>
-        </Modal>
+            </div >
+        </Modal >
     );
 }

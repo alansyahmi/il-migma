@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS entries (
   tags                  TEXT,  -- JSON array
 
   -- Noun morphology
-  noun_gender           TEXT CHECK(noun_gender IN ('masculine','feminine','common')),
+  noun_gender           TEXT CHECK(noun_gender IN ('masculine','feminine','neutral')),
   noun_type             TEXT,
   noun_singular         TEXT,
   noun_plural_forms     TEXT,  -- JSON array (multiple broken plurals)
@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS entries (
 
   -- Verb morphology
   verb_class            TEXT CHECK(verb_class IN ('strong','weak','doubled','quadrilateral','loan')),
+  verb_weak_class       TEXT CHECK(verb_weak_class IN ('assimilative','hollow','defective')),
   verb_transitivity     TEXT CHECK(verb_transitivity IN ('transitive','intransitive','both')),
   verb_perfective_3sgm  TEXT,
   verb_imperfective_3sgm TEXT,

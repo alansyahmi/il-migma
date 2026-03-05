@@ -277,11 +277,11 @@ export function Search() {
 
                     if (r.verb_morphology) {
                         const vm = r.verb_morphology;
-                        if (vm.form) formLines.push(`Form ${vm.form}`);
-                        if (vm.transitivity) formLines.push(vm.transitivity);
+                        if (vm.form) formLines.push(`${t('Form', 'Sura')} ${vm.form}`);
+                        if (vm.transitivity) formLines.push(t(vm.transitivity, term(vm.transitivity.toLowerCase())));
 
                         if (r.verb_perfective_3sgm) {
-                            inflections.push({ label: 'Perfective', form: r.verb_perfective_3sgm, hasPage: true });
+                            inflections.push({ label: t('Perfective', 'Perfettiv'), form: r.verb_perfective_3sgm, hasPage: true });
                         }
                     }
 
@@ -438,10 +438,10 @@ export function Search() {
 
                     {/* Filters sidebar */}
                     <aside className="w-64 shrink-0 bg-white rounded-xl border border-black/8 shadow-sm p-5 space-y-4 sticky top-20">
-                        <h2 className="font-sans font-semibold text-sm text-[#000]">Filters</h2>
+                        <h2 className="font-sans font-semibold text-sm text-[#000]">{t('Filters', 'Filtri')}</h2>
 
                         <FilterSelect
-                            label="Maximum Results Shown"
+                            label={t("Maximum Results Shown", "Massimu ta' Riżultati")}
                             value={filters.maxResults}
                             onChange={v => setFilter('maxResults', v)}
                             options={[
@@ -453,60 +453,60 @@ export function Search() {
                         />
 
                         <FilterSelect
-                            label="Part-of-Speech"
+                            label={t("Part-of-Speech", "Parti mid-Diskors")}
                             value={filters.pos}
                             onChange={v => setFilter('pos', v)}
                             options={[
-                                { value: '', label: 'All' },
-                                { value: 'verb', label: 'Verb' },
-                                { value: 'noun', label: 'Noun' },
-                                { value: 'adj', label: 'Adjective' },
-                                { value: 'adv', label: 'Adverb' },
-                                { value: 'prep', label: 'Preposition' },
+                                { value: '', label: t('All', 'Kollha') },
+                                { value: 'verb', label: t('Verb', 'Verb') },
+                                { value: 'noun', label: t('Noun', 'Nom') },
+                                { value: 'adj', label: t('Adjective', 'Aġġettiv') },
+                                { value: 'adv', label: t('Adverb', 'Avverbju') },
+                                { value: 'prep', label: t('Preposition', 'Prepożizzjoni') },
                             ]}
                         />
 
                         <FilterSelect
-                            label="Root Type"
+                            label={t("Root Type", "Tip ta' Għerq")}
                             value={filters.rootType}
                             onChange={v => setFilter('rootType', v)}
                             options={[
-                                { value: '', label: 'All' },
-                                { value: 'strong', label: 'Strong' },
-                                { value: 'weak', label: 'Weak' },
-                                { value: 'doubled', label: 'Doubled' },
-                                { value: 'defective', label: 'Defective' },
-                                { value: 'hollow', label: 'Hollow' },
+                                { value: '', label: t('All', 'Kollha') },
+                                { value: 'strong', label: t('Strong', 'Qawwi') },
+                                { value: 'weak', label: t('Weak', 'Dgħajjef') },
+                                { value: 'doubled', label: t('Doubled', 'Mirdum') },
+                                { value: 'defective', label: t('Defective', 'Difettuż') },
+                                { value: 'hollow', label: t('Hollow', 'Moħfi') },
                             ]}
                         />
 
                         <FilterSelect
-                            label="Source"
+                            label={t("Source", "Sors")}
                             value={filters.source}
                             onChange={v => setFilter('source', v)}
                             options={[
-                                { value: '', label: 'All' },
+                                { value: '', label: t('All', 'Kollha') },
                                 { value: 'spagnol2011', label: 'Spagnol (2011)' },
                                 { value: 'mayer2013', label: 'Mayer (2013)' },
                                 { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
-                                { value: 'maltese_academy', label: 'Maltese Academy' },
+                                { value: 'maltese_academy', label: t('Maltese Academy', 'L-Akkademja tal-Malti') },
                             ]}
                         />
 
                         <div className="border-t border-black/8 pt-4 space-y-2.5">
-                            <FilterCheckbox label="Search lemma"
+                            <FilterCheckbox label={t("Search lemma", "Fittex fil-lemma")}
                                 checked={filters.searchLemma}
                                 onChange={v => setFilter('searchLemma', v)} />
-                            <FilterCheckbox label="Search word forms only"
+                            <FilterCheckbox label={t("Search word forms only", "Fittex f'forom tal-kliem biss")}
                                 checked={filters.searchWordForms}
                                 onChange={v => setFilter('searchWordForms', v)} />
-                            <FilterCheckbox label="Search in English gloss only"
+                            <FilterCheckbox label={t("Search in English gloss only", "Fittex fit-tifsira Ingliża biss")}
                                 checked={filters.searchEnglishGloss}
                                 onChange={v => setFilter('searchEnglishGloss', v)} />
-                            <FilterCheckbox label="Include suggested results"
+                            <FilterCheckbox label={t("Include suggested results", "Inkludi riżultati ssuġġeriti")}
                                 checked={filters.includeSuggested}
                                 onChange={v => setFilter('includeSuggested', v)} />
-                            <FilterCheckbox label="Include pending entries"
+                            <FilterCheckbox label={t("Include pending entries", "Inkludi entrati pendenti")}
                                 checked={filters.includePending}
                                 onChange={v => setFilter('includePending', v)} />
                         </div>

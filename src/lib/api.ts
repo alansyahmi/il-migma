@@ -64,6 +64,15 @@ export async function apiSearchRoots(radicals: string[]): Promise<{ roots: any[]
     return apiFetch(`/api/roots/search?${params}`);
 }
 
+/** Specific helper for auto-populating entry fields from root data */
+export async function apiLookupRootByConsonants(consonants: string): Promise<any | null> {
+    if (!consonants.trim()) return null;
+    const radicals = consonants.toLowerCase().split('-').map(r => r.trim());
+    const res = await apiSearchRoots(radicals);
+    // Find exact match just in case
+    return res.roots.find(r => r.consonants.toLowerCase() === consonants.toLowerCase()) || res.roots[0] || null;
+}
+
 // ── Single Entry ─────────────────────────────────────────────────────────────
 
 export async function apiGetEntry(id: string): Promise<{ entry: Entry }> {

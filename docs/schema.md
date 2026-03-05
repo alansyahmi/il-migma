@@ -86,7 +86,7 @@ The central table. Every word in the dictionary is an entry.
 | `root_pattern_form_id` | FK to the junction table (may be NULL for loanwords) |
 | `is_loanword` | `0` = Semitic / `1` = Romance/borrowed |
 | `source_language` | Origin language when `is_loanword = 1` |
-| `noun_gender` | `'masculine'`, `'feminine'`, `'common'` |
+| `noun_gender` | `'masculine'`, `'feminine'`, `'neutral'` |
 | `noun_plural_forms` | JSON array — a noun can have **multiple broken plurals** (e.g. *ktieb* → *kotba, ktejjeb*) |
 | `noun_sound_plural` | Regular sound plural suffix form (e.g. *-iet*, *-jiet*) |
 | `noun_dual` | Dual form (archaic/limited use in Maltese) |

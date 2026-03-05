@@ -57,6 +57,7 @@ function MarkedCell({
     onDelete?: () => void;
     noLink?: boolean;
 }) {
+    const { t } = useLanguage();
     if (data.value === '-') return <span className="opacity-40">-</span>;
 
     const content = (data.marker === 'plain' && !noLink) ? (
@@ -77,7 +78,7 @@ function MarkedCell({
                     <button
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit(); }}
                         className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
-                        title={data.marker === 'plain' ? 'Edit Entry' : 'Add Entry'}
+                        title={data.marker === 'plain' ? t('Edit Entry', 'Editja l-Entrata') : t('Add Entry', 'Żid l-Entrata')}
                     >
                         {data.marker === 'plain' ? <Edit2 size={12} /> : <Plus size={12} />}
                     </button>
@@ -85,7 +86,7 @@ function MarkedCell({
                         <button
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
                             className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                            title="Delete Entry"
+                            title={t('Delete Entry', 'Ħassar l-Entrata')}
                         >
                             <Trash2 size={12} />
                         </button>
@@ -240,9 +241,9 @@ export function Root() {
                 seenIds.add(e.id);
                 terms.push({
                     term: e.headword,
-                    class: (e.pos === 'noun' ? 'Noun' :
-                        (e.pos === 'verb' ? 'Verb' :
-                            (e.pos === 'adjective' ? 'Adjective' : (e.pos.charAt(0).toUpperCase() + e.pos.slice(1))))),
+                    class: (e.pos === 'noun' ? t('Noun', 'Nom') :
+                        (e.pos === 'verb' ? t('Verb', 'Verb') :
+                            (e.pos === 'adjective' ? t('Adjective', 'Aġġettiv') : (e.pos.charAt(0).toUpperCase() + e.pos.slice(1))))),
                     cv: getPattern(e),
                     id: e.id,
                     gloss: mode === 'standard'
@@ -258,8 +259,8 @@ export function Root() {
                         seenIds.add(sub.id);
                         terms.push({
                             term: sub.headword,
-                            class: sub.pos ? (sub.pos === 'noun' ? 'Noun' :
-                                (sub.pos === 'adjective' ? 'Adjective' : (sub.pos.charAt(0).toUpperCase() + sub.pos.slice(1)))) : 'Derived',
+                            class: sub.pos ? (sub.pos === 'noun' ? t('Noun', 'Nom') :
+                                (sub.pos === 'adjective' ? t('Adjective', 'Aġġettiv') : (sub.pos.charAt(0).toUpperCase() + sub.pos.slice(1)))) : t('Derived', 'Derivat'),
                             cv: getPattern(sub),
                             id: sub.id,
                             gloss: mode === 'standard'
@@ -300,7 +301,7 @@ export function Root() {
             await adminDeleteEntry(token, entryId);
             refetch();
         } catch (err: any) {
-            alert("Failed to delete entry: " + err.message);
+            alert(t("Failed to delete entry: ", "Il-ħassir tal-entrata falla: ") + err.message);
         }
     };
 
@@ -318,7 +319,7 @@ export function Root() {
             });
             refetch();
         } catch (err: any) {
-            alert("Failed to update relationship: " + err.message);
+            alert(t("Failed to update relationship: ", "L-aġġornament tar-relazzjoni falla: ") + err.message);
         }
     };
 
@@ -435,13 +436,13 @@ export function Root() {
                         {isActualAdmin && (
                             <div className="mt-8 pt-8 border-t border-black/5 space-y-4">
                                 <div>
-                                    <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">Internal Metadata</p>
+                                    <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{t('Internal Metadata', 'Metadata Interna')}</p>
                                     <div className="text-[11px] font-mono space-y-1 text-black/50">
-                                        <p>Strength: {rootObj.strength}</p>
-                                        {rootObj.weak_class && <p>Weak Class: {rootObj.weak_class}</p>}
-                                        <p>Vow. Perf: {rootObj.vowel_set_perf || 'a-a'}</p>
-                                        <p>Vow. Impf: {rootObj.vowel_set_impf || 'i-a'}</p>
-                                        <p>Vow. Imp: {rootObj.vowel_set_imp || 'o-o'}</p>
+                                        <p>{t('Strength', 'Saħħa')}: {rootObj.strength}</p>
+                                        {rootObj.weak_class && <p>{t('Weak Class', 'Klassi Dgħajfa')}: {rootObj.weak_class}</p>}
+                                        <p>{t('Vow. Perf', 'Vow. Perf')}: {rootObj.vowel_set_perf || 'a-a'}</p>
+                                        <p>{t('Vow. Impf', 'Vow. Impf')}: {rootObj.vowel_set_impf || 'i-a'}</p>
+                                        <p>{t('Vow. Imp', 'Vow. Imp')}: {rootObj.vowel_set_imp || 'o-o'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -453,16 +454,16 @@ export function Root() {
 
                         {/* Verbal Forms Table */}
                         <div className="mb-12">
-                            <h2 className="font-sans font-semibold text-[1.1rem] text-[#000] mb-4">Verbal Forms</h2>
+                            <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{t('Verbal Forms', 'Forom Verbali')}</h2>
                             <table className="w-full text-sm border-collapse text-left">
                                 <thead>
                                     <tr className="border-b border-black/8 font-sans text-black/80">
-                                        <th className="font-semibold pb-2 pr-4 w-12">Form</th>
-                                        <th className="font-semibold pb-2 pr-4">Lemma</th>
-                                        <th className="font-semibold pb-2 pr-4">Imperfect</th>
-                                        <th className="font-semibold pb-2 pr-4">Passive</th>
-                                        <th className="font-semibold pb-2 pr-4">Active</th>
-                                        <th className="font-semibold pb-2">Noun</th>
+                                        <th className="font-semibold pb-2 pr-4 w-12">{t('Form', 'Sura')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{t('Lemma', 'Lemma')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{t('Imperfect', 'Imperfett')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{t('Passive', 'Passiv')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{t('Active', 'Attiv')}</th>
+                                        <th className="font-semibold pb-2">{t('Noun', 'Nom')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -595,7 +596,7 @@ export function Root() {
                         {(derivedTerms.length > 0 || isActualAdmin) && (
                             <div>
                                 <div className="flex items-center gap-3 mb-4">
-                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">Derived Terms</h2>
+                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{t('Derived Terms', 'Termini Derivati')}</h2>
                                     {isActualAdmin && (
                                         <button
                                             onClick={() => {
@@ -617,7 +618,7 @@ export function Root() {
                                         <tr className="border-b border-black/8 font-sans text-black/80">
                                             <th className="font-semibold pb-2 pr-4">{t('Term', 'Terminu')}</th>
                                             <th className="font-semibold pb-2 pr-4">{t('Class', 'Klassi')}</th>
-                                            <th className="font-semibold pb-2">{t(`${term('cv-pattern')}`, `${term('mudell-cv')}`)}</th>
+                                            <th className="font-semibold pb-2">{term('cv-pattern')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -676,7 +677,7 @@ export function Root() {
                         {((vm?.synonyms?.length ?? 0) > 0 || (vm?.antonyms?.length ?? 0) > 0 || (rootRelationships.synonyms?.length ?? 0) > 0 || (rootRelationships.antonyms?.length ?? 0) > 0 || isActualAdmin) && (
                             <div className="border-t border-black/10 pt-6">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">Thesaurus</h2>
+                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{t('Thesaurus', 'Teżawru')}</h2>
                                     {isActualAdmin && (
                                         <button
                                             onClick={() => {
@@ -696,7 +697,7 @@ export function Root() {
                                 <div className="flex gap-16 text-sm">
                                     {((vm?.synonyms && vm.synonyms.length > 0) || (rootRelationships.synonyms?.length > 0)) && (
                                         <div>
-                                            <p className="font-semibold text-[#000] mb-1">Synonyms</p>
+                                            <p className="font-semibold text-[#000] mb-1">{t('Synonyms', 'Sinonimi')}</p>
                                             {[...(vm?.synonyms || []), ...(rootRelationships.synonyms || [])].map((s, idx) => (
                                                 <div key={s.id || idx} className="mb-1 flex items-center gap-2 group">
                                                     <Link
@@ -724,7 +725,7 @@ export function Root() {
                                     )}
                                     {((vm?.antonyms && vm.antonyms.length > 0) || (rootRelationships.antonyms?.length > 0)) && (
                                         <div>
-                                            <p className="font-semibold text-[#000] mb-1">Antonyms</p>
+                                            <p className="font-semibold text-[#000] mb-1">{t('Antonyms', 'Antonimi')}</p>
                                             {[...(vm?.antonyms || []), ...(rootRelationships.antonyms || [])].map((a, idx) => (
                                                 <div key={a.id || idx} className="mb-1 flex items-center gap-2 group">
                                                     <Link
@@ -848,7 +849,7 @@ export function Root() {
                                     refetch();
                                     setActiveRelEdit(null);
                                 } catch (err: any) {
-                                    alert("Failed to save relationships: " + err.message);
+                                    alert(t("Failed to save relationships: ", "L-isseyvjar tar-relazzjonijiet falla: ") + err.message);
                                 } finally {
                                     setSaving(false);
                                 }

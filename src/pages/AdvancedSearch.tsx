@@ -733,13 +733,13 @@ export function AdvancedSearch() {
 
                                 if (entry.verb_morphology) {
                                     const vm = entry.verb_morphology;
-                                    formLines.push(`Form ${vm.form}`);
-                                    if (vm.transitivity) formLines.push(vm.transitivity);
-                                    if (vm.perfective_3sg_m) inflections.push({ label: 'Perfective', form: vm.perfective_3sg_m, hasPage: true });
-                                    if (vm.imperfective_3sg_m) inflections.push({ label: 'Imperfective', form: vm.imperfective_3sg_m, hasPage: false });
+                                    formLines.push(`${t('Form', 'Sura')} ${vm.form}`);
+                                    if (vm.transitivity) formLines.push(t(vm.transitivity, term(vm.transitivity.toLowerCase())));
+                                    if (vm.perfective_3sg_m) inflections.push({ label: t('Perfective', 'Perfettiv'), form: vm.perfective_3sg_m, hasPage: true });
+                                    if (vm.imperfective_3sg_m) inflections.push({ label: t('Imperfective', 'Imperfettiv'), form: vm.imperfective_3sg_m, hasPage: false });
                                 } else if (entry.noun_morphology) {
                                     const nm = entry.noun_morphology;
-                                    if (nm.plural_forms?.length) inflections.push({ label: 'Plural', form: nm.plural_forms[0], hasPage: false });
+                                    if (nm.plural_forms?.length) inflections.push({ label: t('Plural', 'Plural'), form: nm.plural_forms[0], hasPage: false });
                                 }
 
                                 const displayResult: SearchResult = {

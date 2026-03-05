@@ -26,7 +26,7 @@ const AdminConfigContext = createContext<AdminConfigContextType | undefined>(und
 // Fallbacks for critical lists
 const FALLBACKS: Record<string, string[]> = {
     pos: ['noun', 'verb', 'adjective', 'adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'interrogative', 'numeral', 'interjection', 'participle'],
-    gender: ['masculine', 'feminine', 'common'],
+    gender: ['masculine', 'feminine', 'neutral'],
     verb_class: ['strong', 'weak', 'doubled', 'quadrilateral', 'loan'],
     register: ['formal', 'informal', 'archaic', 'obsolete', 'technical', 'dialectal', 'colloquial'],
     dialect: ['Standard', 'Qormi', 'Birkirkara', 'Żejtun', 'Żurrieq', 'Sannat', 'Mosta', 'Nadur (Għawdex)', 'Żebbuġ', 'Marsaxlokk', 'Xewkija (Għawdex)', 'Għarb', 'Victoria (Għawdex)', 'Vassalli (Arkajku)'],

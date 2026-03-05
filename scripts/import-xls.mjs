@@ -78,7 +78,7 @@ function parseGender(raw) {
     const g = String(raw ?? '').trim().toLowerCase();
     if (g.startsWith('f')) return 'feminine';
     if (g.startsWith('m')) return 'masculine';
-    return 'common';
+    return 'neutral';
 }
 
 /** Best guess at verb_class from root consonants */

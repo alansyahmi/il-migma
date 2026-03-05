@@ -16,7 +16,7 @@ export type POS =
     | 'numeral'
     | 'interjection';
 
-export type Gender = 'masculine' | 'feminine' | 'common';
+export type Gender = 'masculine' | 'feminine' | 'neutral';
 export type Transitivity = 'transitive' | 'intransitive' | 'both';
 
 export type VerbStrength = 'strong' | 'strong-hybrid' | 'weak' | 'geminated';
@@ -132,6 +132,8 @@ export interface VerbMorphology {
     passive_participle?: string;   // mifgħul
     // Verb form (I, II, III …)
     form: string;
+    verb_class?: string;
+    weak_class?: string;
     // Root classification tags shown in sub-header
     root_tags?: string[];          // e.g. ['BASE', 'STRONG'] or ['BASE', 'WEAK', 'HOLLOW']
     // Vowel sets — stored separately per tense
@@ -293,6 +295,8 @@ export interface Entry {
     tags?: string[];
 
     // Extracted flat verb fields (Admin DB workflow)
+    verb_class?: string;
+    verb_weak_class?: string;
     verb_vowel_perf?: string;
     verb_vowel_impf?: string;
     verb_vowel_impv?: string;

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -30,6 +31,7 @@ function conjugateDemo(_perf3sgm: string): Record<Person, { perf: string; imperf
 }
 
 export function Conjugator() {
+    const { t } = useLanguage();
     const { term } = useLinguisticMode();
     const [input, setInput] = useState('');
     const [result, setResult] = useState<Record<Person, { perf: string; imperf: string }> | null>(null);
@@ -45,10 +47,10 @@ export function Conjugator() {
                 <div className="flex items-center gap-2 mb-1">
                     <BookOpen size={20} className="text-[#1B4D3E]" />
                     <h1 className="font-serif text-2xl font-bold text-[#1B4D3E]">{term('conjugation')} tal-{term('verb')}</h1>
-                    <Badge variant="tag">Basic</Badge>
+                    <Badge variant="tag">{t('Basic', 'Bażiku')}</Badge>
                 </div>
                 <p className="text-sm text-[#4a4a4a]">
-                    Daħħal {term('verb')} fil-forma 3sg.m perfettiv (eż. kiteb, niżel, fetaħ).
+                    {t('Enter a verb in the 3sg.m perfective form (e.g. kiteb, niżel, fetaħ).', 'Daħħal verb fil-forma 3sg.m perfettiv (eż. kiteb, niżel, fetaħ).')}
                 </p>
             </div>
 
@@ -57,11 +59,11 @@ export function Conjugator() {
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && handleConjugate()}
-                    placeholder="eż. kiteb"
+                    placeholder={t('e.g. kiteb', 'eż. kiteb')}
                     className="flex-1 border border-[#d8cfc0] rounded-lg px-3 py-2.5 text-sm
             font-serif focus:outline-none focus:ring-2 focus:ring-[#1034A6]"
                 />
-                <Button onClick={handleConjugate}>Conjugate</Button>
+                <Button onClick={handleConjugate}>{t('Conjugate', 'Ikkonġuga')}</Button>
             </div>
 
             {result && (
@@ -73,9 +75,9 @@ export function Conjugator() {
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="border-b border-[#ede9e1] bg-[#f9f7f3]">
-                                    <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">Persuna</th>
-                                    <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">Perfettiv</th>
-                                    <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">Imperfettiv</th>
+                                    <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">{t('Person', 'Persuna')}</th>
+                                    <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">{t('Perfective', 'Perfettiv')}</th>
+                                    <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">{t('Imperfective', 'Imperfettiv')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -91,7 +93,7 @@ export function Conjugator() {
                     </div>
                     <div className="px-4 py-2 bg-amber-50 border-t border-amber-100">
                         <p className="text-xs text-amber-700">
-                            ⚠ Demo: bħalissa jagħti biss il-forma CaCaC (kiteb). Il-Konġugatur sħiħ jiġi dalwaqt.
+                            ⚠ {t('Demo: currently only gives the CaCaC form (kiteb). Full Conjugator coming soon.', 'Demo: bħalissa jagħti biss il-forma CaCaC (kiteb). Il-Konġugatur sħiħ jiġi dalwaqt.')}
                         </p>
                     </div>
                 </Card>

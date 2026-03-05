@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 
 interface SearchInputProps {
@@ -26,12 +27,15 @@ export function SearchInput({
     value,
     onChange,
     onSubmit,
-    placeholder = 'Fittex…',
+    placeholder,
     size = 'md',
     autoFocus = false,
     className,
     id = 'search-input',
 }: SearchInputProps) {
+    const { t } = useLanguage();
+    const defaultPlaceholder = t('Search…', 'Fittex…');
+    const finalPlaceholder = placeholder || defaultPlaceholder;
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -56,7 +60,7 @@ export function SearchInput({
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={placeholder}
+                placeholder={finalPlaceholder}
                 autoComplete="off"
                 spellCheck="false"
                 className={cn(
@@ -72,7 +76,7 @@ export function SearchInput({
                     className={cn(
                         'absolute top-1/2 -translate-y-1/2 right-3 text-gray-400 hover:text-gray-600 transition-colors',
                     )}
-                    aria-label="Clear search"
+                    aria-label={t('Clear search', 'Naddaf it-tfittxija')}
                 >
                     <X size={iconSizes[size]} />
                 </button>

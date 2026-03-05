@@ -17,7 +17,7 @@ const DIALECT_OPTIONS = [
     'Standard', 'Qormi', 'Birkirkara', 'Żejtun', 'Żurrieq', 'Sannat',
     'Mosta', 'Nadur (Għawdex)', 'Żebbuġ', 'Marsaxlokk', 'Xewkija (Għawdex)', 'Għarb', 'Victoria (Għawdex)', 'Vassalli (Arkajku)'
 ];
-const GENDER_OPTIONS = ['masculine', 'feminine', 'common'];
+const GENDER_OPTIONS = ['masculine', 'feminine', 'neutral'];
 const VERB_CLASS_OPTIONS = ['strong', 'weak', 'doubled', 'quadrilateral', 'loan'];
 const REGISTER_OPTIONS = ['formal', 'informal', 'archaic', 'obsolete', 'technical', 'dialectal', 'colloquial'];
 const NOUN_TYPE_OPTIONS = ['common', 'proper', 'verbal', 'actor', 'tool', 'place', 'collective', 'unit', 'diminutive'];

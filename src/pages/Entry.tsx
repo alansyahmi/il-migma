@@ -115,7 +115,7 @@ function DerivedTermLink({ label, value }: { label: string; value: string }) {
 // ── Verb View ──────────────────────────────────────────────────────────────
 
 function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
@@ -155,8 +155,8 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
             return generateConjugation({
                 root: rootStr,
                 form: vm.form,
-                strength: rootObj.strength,
-                weakClass: rootObj.weak_class,
+                strength: (entry.verb_class as 'strong' | 'weak' | 'geminated') || rootObj.strength,
+                weakClass: (entry.verb_weak_class as 'assimilative' | 'hollow' | 'defective') || rootObj.weak_class,
                 isImalaBlocked: rootObj.is_imala_blocked,
                 vowelSetPerfect: vsetPerf,
                 vowelSetImperfect: vsetImpf,
@@ -179,17 +179,19 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const ioLabels = getIoLabels(vsetImpf);
 
 
-    const strengthLabel = entry.root_pattern_form?.root?.strength === 'strong-hybrid' ? 'STRONG' : entry.root_pattern_form?.root?.strength?.toUpperCase();
+    const strengthLabel = entry.verb_class?.toUpperCase() || (entry.root_pattern_form?.root?.strength === 'strong-hybrid' ? 'STRONG' : entry.root_pattern_form?.root?.strength?.toUpperCase());
+    const weakClassLabel = entry.verb_weak_class || entry.root_pattern_form?.root?.weak_class || vm.weak_class;
 
     const subParts = [
         t('VERB', term('verb')).toUpperCase(),
-        vm.form ? `FORM ${vm.form}` : null,
+        vm.form ? `${t('FORM', term('FORMA'))} ${vm.form}` : null,
         strengthLabel,
-        ...(vm.root_tags ?? []).filter(tag => tag !== 'STRONG').map(tag => tag.toUpperCase())
+        weakClassLabel ? weakClassLabel.toUpperCase() : null,
+        ...(vm.root_tags ?? []).filter(tag => tag !== 'STRONG' && tag !== 'WEAK' && tag !== strengthLabel && tag !== weakClassLabel?.toUpperCase()).map(tag => tag.toUpperCase())
     ].filter(Boolean);
 
-    const patternLabel = mode === 'arabised' ? "Wiżen" : "CV";
-    const patternValue = mode === 'arabised' ? pattern?.wizen_notation : pattern?.cv_notation;
+    const patternLabel = term('cv-pattern');
+    const patternValue = mode === 'arabised' ? (pattern?.wizen_notation || pattern?.cv_notation) : pattern?.cv_notation;
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -232,7 +234,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         <SideCard title={t('Gloss', term('Tifsira'))}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-[#000] marker:text-black/30">
                                 {entry.definitions.map(def => (
-                                    <li key={def.id}>{def.text_en}</li>
+                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
                                 ))}
                             </ol>
                         </SideCard>
@@ -289,12 +291,9 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     <PropRow label={t('Pronunciation', term('Pronunzja'))}>
                                         <div className="space-y-1.5 mt-1">
                                             {entry.phonetics.map((ph, idx) => {
-                                                const spellingMatch = ph.notes?.match(/Spelling: (.*)/);
-                                                const spelling = spellingMatch ? spellingMatch[1] : entry.headword;
                                                 return (
-                                                    <div key={idx} className="flex items-center gap-2">
-                                                        <span className="font-serif text-[#000]">{spelling}</span>
-                                                        {ph.ipa && <span className="font-mono text-black/50 text-xs italic">[{ph.ipa}]</span>}
+                                                    <div key={idx} className="flex flex-col items-start gap-2">
+                                                        {ph.ipa && <span className="text-[14px] tracking-tight font-mono">{ph.ipa}</span>}
                                                         {ph.dialect && ph.dialect !== 'Standard' && (
                                                             <span className="text-[0.6rem] bg-black/5 text-black/40 px-1 rounded uppercase tracking-tighter">
                                                                 {ph.dialect.replace(' (Għawdex)', '').replace(' (Arkajku)', '')}
@@ -330,11 +329,11 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 {/* Admin / Technical Metadata */}
                                 {isAdmin && entry.root_pattern_form?.root && (
                                     <div className="mt-6 pt-6 border-t border-black/5">
-                                        <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">Internal Metadata</p>
+                                        <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{t('Internal Metadata', 'Metadata Interna')}</p>
                                         <div className="text-[11px] font-mono space-y-1 text-black/50">
-                                            <p>Strength: {entry.root_pattern_form.root.strength}</p>
-                                            {entry.root_pattern_form.root.weak_class && <p>Weak Class: {entry.root_pattern_form.root.weak_class}</p>}
-                                            <p>Imala Blocked: {entry.root_pattern_form.root.is_imala_blocked ? 'Yes' : 'No'}</p>
+                                            <p>{t('Strength', 'Saħħa')}: {entry.verb_class || entry.root_pattern_form.root.strength}</p>
+                                            {(entry.verb_weak_class || entry.root_pattern_form.root.weak_class) && <p>{t('Weak Class', 'Klassi Dgħajfa')}: {entry.verb_weak_class || entry.root_pattern_form.root.weak_class}</p>}
+                                            <p>{t('Imala Blocked', 'Imala Imblukkata')}: {entry.root_pattern_form.root.is_imala_blocked ? t('Yes', 'Iva') : t('No', 'Le')}</p>
                                         </div>
                                     </div>
                                 )}
@@ -576,6 +575,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 // ── Entry Shell ────────────────────────────────────────────────────────────
 
 export function Entry() {
+    const { t } = useLanguage();
     const { id } = useParams<{ id: string }>();
     const [entry, setEntry] = useState<Entry | null>(null);
     const [loading, setLoading] = useState(true);
@@ -614,7 +614,9 @@ export function Entry() {
 
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-            <p className="text-sm text-black/40 italic">Full entry view for {entry.pos} coming soon.</p>
+            <p className="text-sm text-black/40 italic">
+                {t(`Full entry view for ${entry.pos} coming soon.`, `Il-veduta sħiħa għal ${entry.pos} ġejja dalwaqt.`)}
+            </p>
         </div>
     );
 }

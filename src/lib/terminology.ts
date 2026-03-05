@@ -9,12 +9,13 @@ export const TERMINOLOGY: Record<string, { standard: string; arabised: string }>
     // Example: (term('entrati').charAt(0).toUpperCase() + term('entrati').slice(1))
     // Morphological patterns
     'cv-pattern': { standard: 'CV Pattern', arabised: 'Wiżen Pattern' },
-    'mudell-cv': { standard: "Mudell ta' CV", arabised: "Sura ta' Wiżen" },
+    'mudell-cv': { standard: "Mudell ta' CV", arabised: "Xbieha ta' Wiżen" },
     'demonym': { standard: 'Demonym', arabised: 'Nisba' },
     // TODO: confirm Ġidra vs Ġadar for root
     'Għerq': { standard: 'Għerq', arabised: 'Ġidra' },
     'Dgħajjef': { standard: 'Dgħajjef', arabised: 'Magħlul' },
     'Trux': { standard: 'Trux', arabised: 'Imżewweġ' },
+    'FORMA': { standard: 'FORMA', arabised: 'SURA' },
 
     // Parts of Speech
     'verb': { standard: 'Verb', arabised: 'Fagħal' },
@@ -87,7 +88,7 @@ export const TERMINOLOGY: Record<string, { standard: string; arabised: string }>
     "Rumanza": { standard: 'Rumanza', arabised: 'Rumanzija' },
     "l-awdjo tiegħu": { standard: 'l-awdjo tiegħu', arabised: 'ħossu' },
     "l-Awdjo": { standard: 'l-Awdjo', arabised: 'il-Ħoss' },
-    "Pronunzja": { standard: 'Pronunzja', arabised: 'Tlissen' },
+    "Pronunzja": { standard: 'Pronunzja', arabised: 'Tlissin' },
     'entrata': { standard: 'entrata', arabised: 'madħla' },
     'entrati': { standard: 'entrati', arabised: 'madħliet' },
     'forma': { standard: 'forma', arabised: 'sura' },

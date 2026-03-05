@@ -31,11 +31,14 @@ export async function onRequestGet({ params, env }) {
                r.weak_class  AS root_weak_class,
                r.gloss       AS root_gloss,
                r.etymology   AS root_etymology,
-               pat.cv_notation, pat.wizen_notation, pat.id AS pattern_id
+               COALESCE(pat.cv_notation, pat2.cv_notation) AS cv_notation,
+               COALESCE(pat.wizen_notation, pat2.wizen_notation) AS wizen_notation,
+               COALESCE(pat.id, pat2.id) AS pattern_id
             FROM entries e
             LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
             LEFT JOIN roots r ON r.id = rpf.root_id OR r.consonants = e.root_consonants
             LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
+            LEFT JOIN patterns pat2 ON pat2.cv_notation = e.cv_pattern AND pat.id IS NULL
             WHERE e.id = ?`,
             args: [id],
         });
@@ -153,6 +156,9 @@ export async function onRequestGet({ params, env }) {
                 } : null,
                 derived_form: entry.derived_form,
             } : null,
+            // Expose weak_class at top level for easy modal loading
+            // Prefer entry-level verb_weak_class; fall back to root's weak_class
+            weak_class: entry.verb_weak_class || entry.root_weak_class || null,
         };
 
         // Attach Verb Morphology struct from flat DB rows as expected by Frontend
@@ -180,6 +186,8 @@ export async function onRequestGet({ params, env }) {
                 active_participle: entry.verb_active_ptcp,
                 passive_participle: entry.verb_passive_ptcp,
                 form: entry.verb_form || 'I',
+                verb_class: entry.verb_class || null,
+                weak_class: entry.verb_weak_class || entry.root_weak_class || null,
                 root_tags: entry.verb_class ? [entry.verb_class.toUpperCase()] : [],
                 vowel_set_perfect: entry.verb_vowel_perf || 'a-a',
                 vowel_set_imperfect: entry.verb_vowel_impf || 'a-a',

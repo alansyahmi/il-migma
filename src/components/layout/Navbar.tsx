@@ -115,7 +115,7 @@ export function Navbar() {
                     <button
                         id="language-toggle"
                         onClick={() => setLanguage(language === 'en' ? 'mt' : 'en')}
-                        title={language === 'en' ? 'Switch to Maltese interface' : 'Switch to English interface'}
+                        title={t('Switch to Maltese language', 'Aqleb lill-lingwa Maltija')}
                         className="hidden sm:flex items-center justify-center rounded-md px-2 py-1 text-sm font-sans font-medium text-[#000] hover:bg-[#d8cfc0]/40 transition-colors"
                     >
                         {language === 'en' ? 'EN' : 'MT'}
@@ -140,7 +140,7 @@ export function Navbar() {
                                 "flex items-center justify-center w-8 h-8 rounded-full transition-colors",
                                 adminViewEnabled ? "text-[#1034A6] hover:bg-[#1034A6]/10 shadow-sm border border-[#1034A6]/20" : "text-black/40 hover:bg-black/5"
                             )}
-                            title={adminViewEnabled ? 'Switch to User View' : 'Switch to Admin View'}
+                            title={adminViewEnabled ? t('Switch to User View', 'Aqleb lill-Veduta tal-Utent') : t('Switch to Admin View', 'Aqleb lill-Veduta tal-Amministratur')}
                         >
                             {adminViewEnabled ? <Shield size={16} className="fill-current" /> : <Eye size={16} />}
                         </button>
@@ -165,17 +165,17 @@ export function Navbar() {
                             {isTrueAdmin && (
                                 <UserButton.MenuItems>
                                     <UserButton.Action
-                                        label={isTrueAdmin ? "System Role: ADMIN" : `Tier: ${tier.toUpperCase()}`}
+                                        label={isTrueAdmin ? t("System Role: ADMIN", "Rwol tas-Sistema: ADMIN") : `${t('Tier', 'Livell')}: ${tier.toUpperCase()}`}
                                         labelIcon={<Shield size={16} className={isTrueAdmin ? "text-amber-600" : "text-blue-600"} />}
                                         onClick={() => { }}
                                     />
                                     <UserButton.Link
-                                        label="Admin Dashboard"
+                                        label={t("Admin Dashboard", "Dashboard tal-Amministratur")}
                                         labelIcon={<Shield size={16} />}
                                         href="/admin"
                                     />
                                     <UserButton.Action
-                                        label={adminViewEnabled ? "Switch to User View" : "Switch to Admin View"}
+                                        label={adminViewEnabled ? t("Switch to User View", "Aqleb lill-Veduta tal-Utent") : t("Switch to Admin View", "Aqleb lill-Veduta tal-Amministratur")}
                                         labelIcon={adminViewEnabled ? <EyeOff size={16} /> : <Eye size={16} />}
                                         onClick={() => setAdminViewEnabled(!adminViewEnabled)}
                                     />
@@ -258,7 +258,7 @@ export function Navbar() {
                                         adminViewEnabled ? "bg-[#1034A6] text-white border-[#1034A6]" : "text-black/40 border-black/10"
                                     )}
                                 >
-                                    {adminViewEnabled ? 'Admin View' : 'User View'}
+                                    {adminViewEnabled ? t('Admin View', 'Veduta Admin') : t('User View', 'Veduta Utent')}
                                 </button>
                             </>
                         )}

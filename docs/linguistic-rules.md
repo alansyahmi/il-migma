@@ -22,12 +22,20 @@ flowchart LR
     GF2D["genFormIIDefective"]
     GF3S["genFormIIIStrong"]
     GF3D["genFormIIIDefective"]
+    GF4["genFormIV"]
+    GF5["genFormV"]
+    GF6["genFormVI"]
+    GF7["genFormVII"]
+    GF8["genFormVIII"]
+    GF9["genFormIX"]
+    GFXa["genFormXa"]
+    GFXb["genFormXb"]
 
     Table["VerbConjugationTable\n(18 rows × 2 tenses × 2 polarities\n+ imperative + stems)"]
 
     Input --> Dispatch
-    Dispatch --> GS & GA & GH & GG & GD & GDG & GF2S & GF2H & GF2D & GF3S & GF3D
-    GS & GA & GH & GG & GD & GDG & GF2S & GF2H & GF2D & GF3S & GF3D --> Table
+    Dispatch --> GS & GA & GH & GG & GD & GDG & GF2S & GF2H & GF2D & GF3S & GF3D & GF4 & GF5 & GF6 & GF7 & GF8 & GF9 & GFXa & GFXb
+    GS & GA & GH & GG & GD & GDG & GF2S & GF2H & GF2D & GF3S & GF3D & GF4 & GF5 & GF6 & GF7 & GF8 & GF9 & GFXa & GFXb --> Table
 ```
 
 ### Input Structure
@@ -109,6 +117,55 @@ Pattern: `C1 + ie + C2 + V + C3`
 
 - Strong: *bierek* (he blessed) / *jbierek*
 - Defective: *bieda* (he began with) / *jbiedi*
+
+### Form IV — Passive/Reflexive (theoretical)
+
+Pattern: `V + C1 + C2 + V + C3`
+
+- *akbar* (he grew) / *jokbor*
+
+### Form V — t-prefixed Form II
+
+Pattern: `t + C1 + V + C2C2 + V + C3`
+
+- *tħabbat* (he wrestled) / *jitħabbat*
+
+### Form VI — t-prefixed Form III
+
+Pattern: `t + C1 + ie + C2 + V + C3`
+
+- *tqatel* (he fought) / *jitqatel*
+
+### Form VII — n-prefixed Form I (passive)
+
+Pattern: `n + C1 + V + C2 + V + C3`
+
+- *nkiteb* (it was written) / *jinkiteb*
+
+### Form VIII — Infixed -t- (reflexive)
+
+Pattern: `C1 + t + V + C2 + V + C3`
+
+- Strong: *ftakar* (he remembered) / *jiftakar*
+- Pharyngeal C1: *eħtaġ* (he needed) / *jeħtieġ*
+
+### Form IX — Stative/Colour
+
+Pattern: `C1 + C2 + ie + C3`
+
+- *ħmier* (he reddened) / *jiħmier*
+
+### Form Xa — Causative
+
+Pattern: `st + V + C1 + C2 + V + C3`
+
+- *stagħġeb* (he was amazed) / *jistagħġeb*
+
+### Form Xb — Causative Intensive
+
+Pattern: `st + C1 + V + C2C2 + V + C3`
+
+- *stħarreg* (he investigated) / *jistħarreg*
 
 ---
 

@@ -114,7 +114,7 @@ export function Home() {
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
                                 <Layers className="text-[#1034A6]" size={20} /> {t('Root Management', 'Ġestjoni tal-Għeruq')}
                             </h3>
-                            <p className="text-sm text-black/60 mb-6">{t('Manage your consonants, etymology, and derived roots from one point.', 'Manage il-konsonanti, l-etimoloġija, u l-għeruq derivati tiegħek minn punt wieħed.')}</p>
+                            <p className="text-sm text-black/60 mb-6">{t('Manage your consonants, etymology, and derived roots from one point.', 'Immaniġġja l-konsonanti, l-etimoloġija, u l-għeruq derivati tiegħek minn punt wieħed.')}</p>
                             <Link to="/admin?tab=roots" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
                                 {t('Open Root Management', 'Iftaħ Ġestjoni tal-Għeruq')} <ArrowRight size={14} />
                             </Link>

@@ -1,6 +1,7 @@
 
 import { cn } from '@/lib/utils';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface LinguisticToggleProps {
     className?: string;
@@ -8,12 +9,13 @@ interface LinguisticToggleProps {
 
 export function LinguisticToggle({ className }: LinguisticToggleProps) {
     const { mode, setMode } = useLinguisticMode();
+    const { t } = useLanguage();
     const isArabised = mode === 'arabised';
 
     return (
         <div className={cn('flex items-center gap-2', className)}>
             <span className={cn('text-xs font-medium transition-colors', !isArabised ? 'text-[#1034A6]' : 'text-gray-400')}>
-                Standard
+                {t('Standard', 'Standard')}
             </span>
             <button
                 role="switch"
@@ -25,7 +27,7 @@ export function LinguisticToggle({ className }: LinguisticToggleProps) {
                     'focus-visible:ring-2 focus-visible:ring-[#1034A6] focus-visible:ring-offset-2',
                     isArabised ? 'bg-[#C9A84C]' : 'bg-[#1034A6]',
                 )}
-                title={`Switch to ${isArabised ? 'Standard' : 'Arabised'} Maltese terminology`}
+                title={isArabised ? t('Switch to Standard Maltese terminology', 'Aqleb għat-terminoloġija Standard') : t('Switch to Arabised Maltese terminology', 'Aqleb għat-terminoloġija Għarbija')}
             >
                 <span
                     className={cn(
@@ -36,7 +38,7 @@ export function LinguisticToggle({ className }: LinguisticToggleProps) {
                 />
             </button>
             <span className={cn('text-xs font-medium transition-colors', isArabised ? 'text-[#C9A84C]' : 'text-gray-400')}>
-                Arabised
+                {t('Arabised', 'Għarbi')}
             </span>
         </div>
     );

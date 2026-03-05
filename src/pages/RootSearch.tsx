@@ -19,14 +19,16 @@ function MarkedCell({ data }: { data: { value: string; marker: FormMarker } }) {
         );
     }
     const mark = data.marker === 'theoretical' ? '*' : '✦';
+    const { t } = useLanguage();
     return (
-        <span className="opacity-55 text-[#000]" title={data.marker === 'theoretical' ? 'Theoretical' : 'Auto-generated'}>
+        <span className="opacity-55 text-[#000]" title={data.marker === 'theoretical' ? t('Theoretical', 'Teoretiku') : t('Auto-generated', 'Iġġenerat Awtomatikament')}>
             {mark}{data.value}
         </span>
     );
 }
 
 function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: string[], extraRoots?: any[] }) {
+    const { t } = useLanguage();
     // Unique matching roots by consonants string
     const matchingRootsMap = new Map<string, any>();
 
@@ -72,9 +74,9 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
 
         return (
             <div className="bg-white rounded-xl border border-black/8 shadow-sm p-6 mt-8 text-center max-w-2xl mx-auto">
-                <p className="text-sm text-black/55">No attested data for root {joined}.</p>
+                <p className="text-sm text-black/55">{t(`No attested data for root ${joined}.`, `L-ebda dejta attestata għall-għerq ${joined}.`)}</p>
                 <Link to={`/root/${joined}`} className="text-xs font-semibold text-[#1034A6] mt-2 block hover:underline">
-                    Attempt to view root page anyway →
+                    {t('Attempt to view root page anyway →', 'Ipprova ara l-paġna tal-għerq xorta waħda →')}
                 </Link>
             </div>
         );
@@ -88,8 +90,8 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                 <table className="w-full text-left border-collapse min-w-[900px]">
                     <thead>
                         <tr className="bg-black/5 border-b border-black/10 text-black/40">
-                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider">Root</th>
-                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider">Class</th>
+                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider">{t('Root', 'Għerq')}</th>
+                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider">{t('Class', 'Klassi')}</th>
                             {formLabels.map(f => (
                                 <th key={f} className="px-4 py-3 text-[10px] font-bold tracking-wider">{f}</th>
                             ))}
@@ -138,7 +140,7 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                                         <span className="text-[10px] bg-black/5 px-1.5 py-0.5 rounded text-black/50 font-bold tracking-wider space-x-1">
                                             {rootObj.strength !== 'geminated' && <span>{strengthLabel}</span>}
                                             {rootObj.weak_class && <span>• {rootObj.weak_class.toUpperCase()}</span>}
-                                            {rootObj.strength === 'geminated' && <span>• GEMINATED</span>}
+                                            {rootObj.strength === 'geminated' && <span>• {t('GEMINATED', 'MIRDUM')}</span>}
                                         </span>
                                     </td>
                                     {formLabels.map(fl => {
