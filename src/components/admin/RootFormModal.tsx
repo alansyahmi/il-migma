@@ -156,7 +156,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                     )}
 
                     {/* Consonants & Type & ID */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="col-span-1 md:col-span-1">
                             <label className={label}>{t('Root Consonants', 'Konsonanti')}</label>
                             <input className={inp} value={form.consonants} onChange={e => setForm({ ...form, consonants: e.target.value })} placeholder="e.g. f-għ-l" />
@@ -185,7 +185,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                             <input className={inp} value={form.tags || ''} onChange={e => setForm({ ...form, tags: e.target.value })} placeholder="e.g. archaic, dialectal" />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label className={label}>{t('Strength', 'Saħħa')}</label>
                                 <select
@@ -216,7 +216,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                         </div>
                     </div>
                     {/* Vowel Sets */}
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label className={label}>{t('Vowel Set (Perf)', 'Vokali (Perf)')}</label>
                             <input className={inp} value={form.vowel_set_perf || 'a-a'} onChange={e => {
@@ -313,7 +313,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                     {/* Etymology Section */}
                     <fieldset className="border border-[#ede9e1] rounded-xl p-4 pt-3">
                         <legend className="text-[0.65rem] font-bold text-black px-2 uppercase tracking-widest">{t('Etymology', 'Etimoloġija')}</legend>
-                        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mt-1">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mt-1">
                             <div>
                                 <label className={label}>Relationship</label>
                                 <select className={sel} value={form.etymology.relationship || 'From'} onChange={e => setEtymology('relationship', e.target.value)}>
@@ -397,7 +397,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                     }).length > 0 && (
                             <fieldset className="border border-amber-100 bg-amber-50/20 rounded-xl p-4 space-y-3">
                                 <legend className="text-[10px] font-bold text-amber-600 uppercase tracking-widest px-2">{t('Additional Fields', 'Ghelta Oħra')}</legend>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {Object.keys(data || {}).filter(key => {
                                         return !ROOT_HANDLED_FIELDS.includes(key as any);
                                     }).map(key => (

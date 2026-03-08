@@ -885,8 +885,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         </div>
 
                         {form.phonetics.map((ph: any, i: number) => (
-                            <div key={i} className="flex gap-2 items-end">
-                                <div className="flex-1 w-1/4">
+                            <div key={i} className="flex flex-col sm:flex-row gap-2 sm:items-end">
+                                <div className="flex-1 w-full sm:w-1/4">
                                     {i === 0 && <label className={label}>{term('dialect')}</label>}
                                     <select className={sel} value={ph.dialect} onChange={e => {
                                         const next = [...form.phonetics];
@@ -904,7 +904,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         set('phonetics', next);
                                     }} />
                                 </div>
-                                <div className="flex-1 w-2/4">
+                                <div className="flex-1 w-full sm:w-2/4">
                                     {i === 0 && <label className={label}>{t('IPA', 'IPA')}</label>}
                                     <input className={inp} value={ph.ipa} placeholder="/ˈkɪtɛp/" onChange={e => {
                                         const next = [...form.phonetics];
@@ -924,7 +924,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     {form.pos === 'noun' && (
                         <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-4">
                             <legend className="text-xs font-semibold text-black px-2">{term('noun')}</legend>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label className={label}>{term('gender')}</label>
                                     <select className={sel} value={form.noun_gender} onChange={e => set('noun_gender', e.target.value)}>
@@ -1044,7 +1044,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         </div>
                                     )}
 
-                                    <div className="grid grid-cols-2 gap-3 mt-3">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                                         {(form._pluralType === 'broken' || form._pluralType === 'both') && (
                                             <div>
                                                 <label className={label}>{t('Broken Plural (comma-separated)', 'Plural Miksur (separati bil-virgola)')}</label>
@@ -1134,7 +1134,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
                                     <label className={label}>{t('Class', 'Klassi')}</label>
                                     <select className={sel} value={form.verb_class} onChange={e => {
@@ -1254,7 +1254,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             {conjugationPreview && (
                                 <div className="mt-4 p-3 bg-blue-50/50 rounded border border-blue-100/50">
                                     <legend className="text-xs font-semibold text-blue-900 mb-2">{t('Auto-Generated Preview', 'Dehra Minn Qabel (Magna)')}</legend>
-                                    <div className="grid grid-cols-2 gap-4 text-sm font-arabic">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm font-arabic">
                                         <div>
                                             <span className="text-xs text-blue-800/60 uppercase block mb-1">Perfect (3sg.m)</span>
                                             <strong>{conjugationPreview.perfect !== '-' ? conjugationPreview.perfect : 'N/A'}</strong>
@@ -1286,7 +1286,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     {form.pos === 'adjective' && (
                         <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-3">
                             <legend className="text-xs font-semibold text-black px-2 text-black">{term('adjective')}</legend>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {/* Gender — determines which field is auto-filled from headword */}
                                 <div>
                                     <label className={label}>{term('gender')}</label>
@@ -1444,7 +1444,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     {form.pos === 'participle' && (
                         <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-3">
                             <legend className="text-xs font-semibold text-black px-2 text-black">{t('Participle', 'Partiċipju')}</legend>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
                                     <div className="flex items-center justify-between mb-1">
                                         <label className={label + " mb-0"}>{t('Type', 'Tip')}</label>
@@ -1515,7 +1515,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         </button>
                                     )}
                                 </div>
-                                <div className="grid grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div className="col-span-2">
                                         <label className={label}>{t('Sense', 'Sens')} {i + 1}: {t('English', 'Ingliż')} *</label>
                                         <input className={inp} value={def.text_en} onChange={e => {

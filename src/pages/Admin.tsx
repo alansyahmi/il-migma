@@ -63,9 +63,9 @@ export function Admin() {
                 </div>
             )}
 
-            <div className="flex items-center justify-between border-b border-black/5 pb-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-black/5 pb-4">
                 <h1 className="font-serif text-3xl font-bold text-black">{term('admin-dashboard')}</h1>
-                <div className="flex bg-black/5 p-1 rounded-xl">
+                <div className="flex flex-wrap gap-1 bg-black/5 p-1 rounded-xl">
                     <button
                         onClick={() => setTab('entries')}
                         className={cn(
@@ -381,7 +381,7 @@ function EntryManager() {
                                     ))}
                                 </div>
                             ) : (
-                                <Card className="overflow-hidden border-[#ede9e1]">
+                                <Card className="overflow-hidden border-[#ede9e1] overflow-x-auto">
                                     <table className="w-full text-sm">
                                         <thead className="bg-[#f9f7f3] border-b border-[#ede9e1]">
                                             <tr>
@@ -487,8 +487,8 @@ function EntryManager() {
 function BulkActionsBar({ count, onClear, onDelete }: { count: number; onClear: () => void; onDelete: () => void }) {
     const { term } = useLinguisticMode();
     return (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500">
-            <div className="bg-black text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-6 border border-white/10 backdrop-blur-md">
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500 w-[90%] sm:w-auto max-w-lg">
+            <div className="bg-black text-white px-4 sm:px-6 py-3 rounded-2xl shadow-2xl flex flex-col sm:flex-row items-center gap-4 sm:gap-6 border border-white/10 backdrop-blur-md">
                 <div className="flex items-center gap-3">
                     <div className="bg-[#1034A6] text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold">
                         {count}
@@ -584,7 +584,7 @@ function RootManager() {
 
     return (
         <div className="space-y-4">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <p className="text-sm text-[#4a4a4a] font-medium">{roots.length} {term('roots')} {term('found')}</p>
                 <div className="flex gap-2">
                     <div className="flex bg-black/5 p-1 rounded-lg mr-2">
@@ -611,7 +611,7 @@ function RootManager() {
             {loading ? (
                 <div className="flex justify-center py-12"><Spinner /></div>
             ) : viewMode === 'list' ? (
-                <Card className="overflow-hidden border-[#ede9e1]">
+                <Card className="overflow-hidden border-[#ede9e1] overflow-x-auto">
                     <table className="w-full text-sm">
                         <thead className="bg-[#f9f7f3] border-b border-[#ede9e1]">
                             <tr>

@@ -421,9 +421,9 @@ export function Root() {
                     </p>
                 </div>
 
-                <div className="flex gap-10 items-start">
+                <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
                     {/* Left Sidebar */}
-                    <div className="w-64 shrink-0 space-y-4">
+                    <div className="w-full md:w-64 shrink-0 space-y-4">
                         <SideCard title={term('gloss')}>
                             {glossList.length === 1 ? (
                                 <p className="text-sm text-[#000]">{glossList[0]}</p>
@@ -490,141 +490,143 @@ export function Root() {
                         {/* Verbal Forms Table */}
                         <div className="mb-12">
                             <h2 className="font-sans font-semibold text-[1.1rem] text-[#000] mb-3">{term('verbal forms')}</h2>
-                            <table className="w-full text-sm border-collapse text-left">
-                                <thead>
-                                    <tr className="border-b border-black/8 font-sans text-black/80">
-                                        <th className="font-semibold pb-2 pr-4 w-12">{term('forma')}</th>
-                                        <th className="font-semibold pb-2 pr-4">{term('lemma')}</th>
-                                        <th className="font-semibold pb-2 pr-4">{term('imperfett')}</th>
-                                        <th className="font-semibold pb-2 pr-4">{term('passive')}</th>
-                                        <th className="font-semibold pb-2 pr-4">{term('active')}</th>
-                                        <th className="font-semibold pb-2">{term('nom')}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {generatedTable.map((row: MarkedVerbForm) => (
-                                        <tr key={row.form} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] transition-colors">
-                                            <td className="py-2.5 pr-4 text-black/60 font-serif">{row.form}</td>
-                                            <td className="py-2.5 pr-4 font-serif">
-                                                <MarkedCell
-                                                    data={row.perfect}
-                                                    isAdmin={isActualAdmin}
-                                                    onDelete={() => row.perfect.entryId && handleDeleteEntry(row.perfect.entryId)}
-                                                    onEdit={() => {
-                                                        const existing = rootEntries.find(e => e.headword === row.perfect.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                        if (existing) {
-                                                            setEditEntry({
-                                                                ...existing,
-                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                                _formLabel: existing.verb_morphology?.form || row.form,
-                                                            } as any);
-                                                            setInitialFormData(null);
-                                                        } else {
-                                                            setEditEntry(null);
-                                                            setInitialFormData({
-                                                                headword: row.perfect.value,
-                                                                pos: 'verb',
-                                                                verb_class: rootObj?.strength || '',
-                                                                _rootConsonants: rootObj?.consonants || '',
-                                                                _formLabel: row.form,
-                                                                verb_vowel_perf: rootObj?.vowel_set_perf || '',
-                                                                verb_vowel_impf: rootObj?.vowel_set_impf || '',
-                                                            });
-                                                        }
-                                                        setShowForm(true);
-                                                    }}
-                                                />
-                                            </td>
-                                            <td className="py-2.5 pr-4 font-serif">
-                                                <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} noLink />
-                                            </td>
-                                            <td className="py-2.5 pr-4 font-serif">
-                                                <MarkedCell
-                                                    data={row.passiveParticiple}
-                                                    isAdmin={isActualAdmin}
-                                                    onDelete={() => row.passiveParticiple.entryId && handleDeleteEntry(row.passiveParticiple.entryId)}
-                                                    onEdit={() => {
-                                                        const existing = rootEntries.find(e => e.headword === row.passiveParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                        if (existing) {
-                                                            setEditEntry({
-                                                                ...existing,
-                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                                _formLabel: existing.verb_morphology?.form || row.form,
-                                                            } as any);
-                                                            setInitialFormData(null);
-                                                        } else {
-                                                            setEditEntry(null);
-                                                            setInitialFormData({
-                                                                headword: row.passiveParticiple.value,
-                                                                pos: 'participle',
-                                                                participle_type: 'passive',
-                                                                _formLabel: row.form,
-                                                                _rootConsonants: rootObj?.consonants || '',
-                                                            });
-                                                        }
-                                                        setShowForm(true);
-                                                    }}
-                                                />
-                                            </td>
-                                            <td className="py-2.5 pr-4 font-serif">
-                                                <MarkedCell
-                                                    data={row.activeParticiple}
-                                                    isAdmin={isActualAdmin}
-                                                    onDelete={() => row.activeParticiple.entryId && handleDeleteEntry(row.activeParticiple.entryId)}
-                                                    onEdit={() => {
-                                                        const existing = rootEntries.find(e => e.headword === row.activeParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                        if (existing) {
-                                                            setEditEntry({
-                                                                ...existing,
-                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                                _formLabel: existing.verb_morphology?.form || row.form,
-                                                            } as any);
-                                                            setInitialFormData(null);
-                                                        } else {
-                                                            setEditEntry(null);
-                                                            setInitialFormData({
-                                                                headword: row.activeParticiple.value,
-                                                                pos: 'participle',
-                                                                participle_type: 'active',
-                                                                _formLabel: row.form,
-                                                                _rootConsonants: rootObj?.consonants || '',
-                                                            });
-                                                        }
-                                                        setShowForm(true);
-                                                    }}
-                                                />
-                                            </td>
-                                            <td className="py-2.5 font-serif">
-                                                <MarkedCell
-                                                    data={row.verbalNoun}
-                                                    isAdmin={isActualAdmin}
-                                                    onDelete={() => row.verbalNoun.entryId && handleDeleteEntry(row.verbalNoun.entryId)}
-                                                    onEdit={() => {
-                                                        const existing = rootEntries.find(e => e.headword === row.verbalNoun.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                        if (existing) {
-                                                            setEditEntry({
-                                                                ...existing,
-                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                                _formLabel: existing.verb_morphology?.form || row.form,
-                                                            } as any);
-                                                            setInitialFormData(null);
-                                                        } else {
-                                                            setEditEntry(null);
-                                                            setInitialFormData({
-                                                                headword: row.verbalNoun.value,
-                                                                pos: 'noun',
-                                                                _formLabel: row.form,
-                                                                _rootConsonants: rootObj?.consonants || '',
-                                                            });
-                                                        }
-                                                        setShowForm(true);
-                                                    }}
-                                                />
-                                            </td>
+                            <div className="overflow-x-auto pb-4">
+                                <table className="w-full text-sm border-collapse text-left min-w-[600px]">
+                                    <thead>
+                                        <tr className="border-b border-black/8 font-sans text-black/80">
+                                            <th className="font-semibold pb-2 pr-4 w-12">{term('forma')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{term('lemma')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{term('imperfett')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{term('passive')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{term('active')}</th>
+                                            <th className="font-semibold pb-2">{term('nom')}</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {generatedTable.map((row: MarkedVerbForm) => (
+                                            <tr key={row.form} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] transition-colors">
+                                                <td className="py-2.5 pr-4 text-black/60 font-serif">{row.form}</td>
+                                                <td className="py-2.5 pr-4 font-serif">
+                                                    <MarkedCell
+                                                        data={row.perfect}
+                                                        isAdmin={isActualAdmin}
+                                                        onDelete={() => row.perfect.entryId && handleDeleteEntry(row.perfect.entryId)}
+                                                        onEdit={() => {
+                                                            const existing = rootEntries.find(e => e.headword === row.perfect.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                            if (existing) {
+                                                                setEditEntry({
+                                                                    ...existing,
+                                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                    _formLabel: existing.verb_morphology?.form || row.form,
+                                                                } as any);
+                                                                setInitialFormData(null);
+                                                            } else {
+                                                                setEditEntry(null);
+                                                                setInitialFormData({
+                                                                    headword: row.perfect.value,
+                                                                    pos: 'verb',
+                                                                    verb_class: rootObj?.strength || '',
+                                                                    _rootConsonants: rootObj?.consonants || '',
+                                                                    _formLabel: row.form,
+                                                                    verb_vowel_perf: rootObj?.vowel_set_perf || '',
+                                                                    verb_vowel_impf: rootObj?.vowel_set_impf || '',
+                                                                });
+                                                            }
+                                                            setShowForm(true);
+                                                        }}
+                                                    />
+                                                </td>
+                                                <td className="py-2.5 pr-4 font-serif">
+                                                    <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} noLink />
+                                                </td>
+                                                <td className="py-2.5 pr-4 font-serif">
+                                                    <MarkedCell
+                                                        data={row.passiveParticiple}
+                                                        isAdmin={isActualAdmin}
+                                                        onDelete={() => row.passiveParticiple.entryId && handleDeleteEntry(row.passiveParticiple.entryId)}
+                                                        onEdit={() => {
+                                                            const existing = rootEntries.find(e => e.headword === row.passiveParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                            if (existing) {
+                                                                setEditEntry({
+                                                                    ...existing,
+                                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                    _formLabel: existing.verb_morphology?.form || row.form,
+                                                                } as any);
+                                                                setInitialFormData(null);
+                                                            } else {
+                                                                setEditEntry(null);
+                                                                setInitialFormData({
+                                                                    headword: row.passiveParticiple.value,
+                                                                    pos: 'participle',
+                                                                    participle_type: 'passive',
+                                                                    _formLabel: row.form,
+                                                                    _rootConsonants: rootObj?.consonants || '',
+                                                                });
+                                                            }
+                                                            setShowForm(true);
+                                                        }}
+                                                    />
+                                                </td>
+                                                <td className="py-2.5 pr-4 font-serif">
+                                                    <MarkedCell
+                                                        data={row.activeParticiple}
+                                                        isAdmin={isActualAdmin}
+                                                        onDelete={() => row.activeParticiple.entryId && handleDeleteEntry(row.activeParticiple.entryId)}
+                                                        onEdit={() => {
+                                                            const existing = rootEntries.find(e => e.headword === row.activeParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                            if (existing) {
+                                                                setEditEntry({
+                                                                    ...existing,
+                                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                    _formLabel: existing.verb_morphology?.form || row.form,
+                                                                } as any);
+                                                                setInitialFormData(null);
+                                                            } else {
+                                                                setEditEntry(null);
+                                                                setInitialFormData({
+                                                                    headword: row.activeParticiple.value,
+                                                                    pos: 'participle',
+                                                                    participle_type: 'active',
+                                                                    _formLabel: row.form,
+                                                                    _rootConsonants: rootObj?.consonants || '',
+                                                                });
+                                                            }
+                                                            setShowForm(true);
+                                                        }}
+                                                    />
+                                                </td>
+                                                <td className="py-2.5 font-serif">
+                                                    <MarkedCell
+                                                        data={row.verbalNoun}
+                                                        isAdmin={isActualAdmin}
+                                                        onDelete={() => row.verbalNoun.entryId && handleDeleteEntry(row.verbalNoun.entryId)}
+                                                        onEdit={() => {
+                                                            const existing = rootEntries.find(e => e.headword === row.verbalNoun.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                            if (existing) {
+                                                                setEditEntry({
+                                                                    ...existing,
+                                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                    _formLabel: existing.verb_morphology?.form || row.form,
+                                                                } as any);
+                                                                setInitialFormData(null);
+                                                            } else {
+                                                                setEditEntry(null);
+                                                                setInitialFormData({
+                                                                    headword: row.verbalNoun.value,
+                                                                    pos: 'noun',
+                                                                    _formLabel: row.form,
+                                                                    _rootConsonants: rootObj?.consonants || '',
+                                                                });
+                                                            }
+                                                            setShowForm(true);
+                                                        }}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         {/* Derived Terms Table */}
@@ -648,66 +650,68 @@ export function Root() {
                                         </button>
                                     )}
                                 </div>
-                                <table className="w-full text-sm border-collapse text-left">
-                                    <thead>
-                                        <tr className="border-b border-black/8 font-sans text-black/80">
-                                            <th className="font-semibold pb-2 pr-4">{term('term')}</th>
-                                            <th className="font-semibold pb-2 pr-4">{term('class')}</th>
-                                            <th className="font-semibold pb-2">
-                                                {term('cv-pattern')}
-                                                {rootObj.strength === 'geminated' && <span> • {term('trux').toUpperCase()}</span>}
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {derivedTerms.map((termObj, idx) => (
-                                            <tr key={idx} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] group transition-colors">
-                                                <td className="py-1.5 pr-4 font-serif">
-                                                    <div className="flex items-center gap-2">
-                                                        <Link to={`/entry/${termObj.id}`} style={{ color: BLUE }} className="hover:underline">{termObj.term}</Link>
-                                                        <span className="text-black/55 italic">
-                                                            {termObj.gloss}
-                                                        </span>
-                                                        {isActualAdmin && (
-                                                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                <button
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault();
-                                                                        const existing = rootEntries.find(re => re.id === termObj.id);
-                                                                        if (existing) {
-                                                                            setEditEntry({
-                                                                                id: existing.id,
-                                                                                headword: existing.headword,
-                                                                                pos: existing.pos,
-                                                                                created_at: '',
-                                                                                is_loanword: false
-                                                                            });
-                                                                            setInitialFormData(null);
-                                                                            setShowForm(true);
-                                                                        }
-                                                                    }}
-                                                                    className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
-                                                                    title={term('edit-entry')}
-                                                                >
-                                                                    <Edit2 size={12} />
-                                                                </button>
-                                                                <button
-                                                                    onClick={(e) => { e.preventDefault(); handleDeleteEntry(termObj.id); }}
-                                                                    className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                                                                    title={term('delete-entry')}
-                                                                >
-                                                                    <Trash2 size={12} />
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </td>
-                                                <td className="py-1.5 pr-4 font-sans text-black/70">{termObj.class}</td>
-                                                <td className="py-1.5 font-sans" style={{ color: BLUE }}>{termObj.cv}</td>
+                                <div className="overflow-x-auto pb-4">
+                                    <table className="w-full text-sm border-collapse text-left min-w-[500px]">
+                                        <thead>
+                                            <tr className="border-b border-black/8 font-sans text-black/80">
+                                                <th className="font-semibold pb-2 pr-4">{term('term')}</th>
+                                                <th className="font-semibold pb-2 pr-4">{term('class')}</th>
+                                                <th className="font-semibold pb-2">
+                                                    {term('cv-pattern')}
+                                                    {rootObj.strength === 'geminated' && <span> • {term('trux').toUpperCase()}</span>}
+                                                </th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {derivedTerms.map((termObj, idx) => (
+                                                <tr key={idx} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] group transition-colors">
+                                                    <td className="py-1.5 pr-4 font-serif">
+                                                        <div className="flex items-center gap-2">
+                                                            <Link to={`/entry/${termObj.id}`} style={{ color: BLUE }} className="hover:underline">{termObj.term}</Link>
+                                                            <span className="text-black/55 italic">
+                                                                {termObj.gloss}
+                                                            </span>
+                                                            {isActualAdmin && (
+                                                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            const existing = rootEntries.find(re => re.id === termObj.id);
+                                                                            if (existing) {
+                                                                                setEditEntry({
+                                                                                    id: existing.id,
+                                                                                    headword: existing.headword,
+                                                                                    pos: existing.pos,
+                                                                                    created_at: '',
+                                                                                    is_loanword: false
+                                                                                });
+                                                                                setInitialFormData(null);
+                                                                                setShowForm(true);
+                                                                            }
+                                                                        }}
+                                                                        className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
+                                                                        title={term('edit-entry')}
+                                                                    >
+                                                                        <Edit2 size={12} />
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={(e) => { e.preventDefault(); handleDeleteEntry(termObj.id); }}
+                                                                        className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                                        title={term('delete-entry')}
+                                                                    >
+                                                                        <Trash2 size={12} />
+                                                                    </button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-1.5 pr-4 font-sans text-black/70">{termObj.class}</td>
+                                                    <td className="py-1.5 font-sans" style={{ color: BLUE }}>{termObj.cv}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         )}
 
@@ -732,7 +736,7 @@ export function Root() {
                                         </button>
                                     )}
                                 </div>
-                                <div className="flex gap-16 text-sm">
+                                <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm">
                                     {((vm?.synonyms && vm.synonyms.length > 0) || (rootRelationships.synonyms?.length > 0)) && (
                                         <div>
                                             <p className="font-semibold text-[#000] mb-1">{term('sinonimi')}</p>

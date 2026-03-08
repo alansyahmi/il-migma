@@ -58,7 +58,7 @@ export function Conjugator() {
                 </p>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
                 <input
                     value={input}
                     onChange={e => setInput(e.target.value)}
