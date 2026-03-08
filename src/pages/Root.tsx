@@ -402,38 +402,35 @@ export function Root() {
                     </Link>
                 </div>
                 {/* Header */}
-                <div className="text-center mb-10 relative group max-w-2xl mx-auto px-4">
-                    <div className="relative inline-flex flex-col items-center justify-center">
-                        <h1 className="font-serif font-bold text-[3rem] sm:text-[4.5rem] leading-none text-[#000] tracking-tight mb-2">
-                            {rootObj.consonants}
-                        </h1>
+                <div className="text-center mb-12 relative group max-w-fit mx-auto">
+                    <div className="relative inline-flex items-center justify-center">
+                        <h1 className="font-serif font-bold text-[3rem] leading-none text-[#000] tracking-tight">{rootObj.consonants}</h1>
                         {isActualAdmin && (
                             <button
                                 onClick={() => setShowRootForm(true)}
-                                className="sm:absolute sm:left-[calc(100%+12px)] sm:top-1/2 sm:-translate-y-1/2 p-2 px-2.5 text-[#1034A6] hover:bg-[#1034A6]/5 rounded-xl border border-[#1034A6]/10 transition-colors bg-white shadow-sm flex items-center gap-2 mb-4 sm:mb-0"
+                                className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
                                 title={term('edit-root-metadata')}
                             >
                                 <Edit2 size={16} />
-                                <span className="text-xs font-bold sm:hidden">{term('edit')}</span>
                             </button>
                         )}
-                        <p className="text-base sm:text-lg font-serif text-black/60 italic mb-2">"{glossList[0]}"</p>
-                        <p className="text-[10px] sm:text-xs font-sans text-black/50 tracking-[0.15em] uppercase font-bold bg-black/[0.03] px-4 py-1.5 rounded-full inline-block">
-                            — {rootTypeParts} —
-                        </p>
                     </div>
+                    <p className="text-sm font-serif text-black/55 mt-2 uppercase tracking-widest">"{glossList[0]}"</p>
+                    <p className="text-xs font-sans text-black/55 tracking-[0.18em] mt-2 uppercase">
+                        — {rootTypeParts} —
+                    </p>
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+                <div className="flex gap-10 items-start">
                     {/* Left Sidebar */}
-                    <div className="w-full lg:w-72 shrink-0 space-y-5 order-2 lg:order-1">
+                    <div className="w-64 shrink-0 space-y-4">
                         <SideCard title={term('gloss')}>
                             {glossList.length === 1 ? (
-                                <p className="text-base lg:text-sm text-[#333] leading-relaxed font-medium">{glossList[0]}</p>
+                                <p className="text-sm text-[#000]">{glossList[0]}</p>
                             ) : (
-                                <ol className="list-decimal list-inside space-y-2 text-base lg:text-sm text-[#333] marker:text-black/20">
+                                <ol className="list-decimal list-inside space-y-1 text-sm text-[#000] marker:text-black/30">
                                     {glossList.map((g: string, i: number) => (
-                                        <li key={i} className="leading-relaxed">{g}</li>
+                                        <li key={i}>{g}</li>
                                     ))}
                                 </ol>
                             )}
@@ -441,30 +438,30 @@ export function Root() {
 
                         {parsedEtymology && (parsedEtymology.term || parsedEtymology.definition) && (
                             <SideCard title={term('etymology')}>
-                                <div className="text-sm text-[#333] leading-relaxed flex flex-wrap items-center gap-2">
-                                    {parsedEtymology.relationship && <span className="w-full sm:w-auto">{parsedEtymology.relationship}</span>}
+                                <p className="text-sm text-[#000] leading-relaxed flex flex-wrap items-center gap-1.5">
+                                    {parsedEtymology.relationship && <span>{parsedEtymology.relationship}</span>}
                                     {parsedEtymology.language && (
-                                        <span className={`font-bold ${LANGUAGE_COLORS[parsedEtymology.language]?.text || 'text-gray-600'} ${LANGUAGE_COLORS[parsedEtymology.language]?.bg || 'bg-gray-100'} px-2 py-0.5 rounded text-[10px] uppercase tracking-wider`}>
+                                        <span className={`font-semibold ${LANGUAGE_COLORS[parsedEtymology.language]?.text || 'text-gray-600'} ${LANGUAGE_COLORS[parsedEtymology.language]?.bg || 'bg-gray-100'} px-1.5 py-0.5 rounded text-[0.7rem] uppercase tracking-wider`}>
                                             {parsedEtymology.language}
                                         </span>
                                     )}
-                                    {parsedEtymology.term && <span className="font-serif text-lg font-bold" style={{ color: BLUE }}>{parsedEtymology.term}</span>}
-                                    {parsedEtymology.pronunciation && <span className="text-black/40 italic font-mono text-xs"> /{parsedEtymology.pronunciation}/</span>}
-                                    {parsedEtymology.definition && <span className="italic block sm:inline">"{parsedEtymology.definition}"</span>}
-                                </div>
+                                    {parsedEtymology.term && <span className="font-serif">{parsedEtymology.term}</span>}
+                                    {parsedEtymology.pronunciation && <span className="text-black/60 italic">({parsedEtymology.pronunciation})</span>}
+                                    {parsedEtymology.definition && <span>"{parsedEtymology.definition}"</span>}
+                                </p>
                             </SideCard>
                         )}
 
                         {sourceText && (
                             <SideCard title={term('sors')}>
-                                <span className="text-xs font-bold px-2 py-1 bg-[#A07030]/10 rounded border border-[#A07030]/20" style={{ color: GOLD }}>{sourceText}</span>
+                                <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceText}</span>
                             </SideCard>
                         )}
 
                         {tags.length > 0 && (
-                            <div className="flex flex-wrap gap-2 px-1">
+                            <div className="flex flex-wrap gap-1 px-1">
                                 {tags.map((tag: string) => (
-                                    <span key={tag} className="px-2.5 py-1 bg-black/[0.03] text-black/40 rounded-lg text-[10px] font-bold uppercase tracking-wider border border-black/5">
+                                    <span key={tag} className="px-2 py-0.5 bg-black/5 text-black/40 rounded-full text-[10px] font-bold uppercase tracking-wider border border-black/5">
                                         {tag}
                                     </span>
                                 ))}
@@ -472,176 +469,169 @@ export function Root() {
                         )}
 
                         {isActualAdmin && (
-                            <div className="mt-2 p-5 bg-white rounded-xl border border-dashed border-black/10">
-                                <p className="text-[10px] uppercase tracking-widest text-[#1034A6] mb-3 font-bold">{term('internal-metadata')}</p>
-                                <div className="grid grid-cols-2 md:grid-cols-1 gap-4 text-[11px] font-mono text-black/60">
-                                    <p><span className="opacity-50">{term('strength')}:</span> {rootObj.strength}</p>
-                                    {rootObj.weak_class && <p><span className="opacity-50">{term('weak-class')}:</span> {rootObj.weak_class}</p>}
-                                    <p><span className="opacity-50">{term('vowel_set_perfect')}:</span> {rootObj.vowel_set_perf || 'a-a'}</p>
-                                    <p><span className="opacity-50">{term('vowel_set_imperfect')}:</span> {rootObj.vowel_set_impf || 'i-a'}</p>
-                                    <p><span className="opacity-50">{term('vowel_set_imperative')}:</span> {rootObj.vowel_set_imp || 'o-o'}</p>
+                            <div className="mt-8 pt-8 border-t border-black/5 space-y-4">
+                                <div>
+                                    <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
+                                    <div className="text-[11px] font-mono space-y-1 text-black/50">
+                                        <p>{term('strength')}: {rootObj.strength}</p>
+                                        {rootObj.weak_class && <p>{term('weak-class')}: {rootObj.weak_class}</p>}
+                                        <p>{term('vowel_set_perfect')}: {rootObj.vowel_set_perf || 'a-a'}</p>
+                                        <p>{term('vowel_set_imperfect')}: {rootObj.vowel_set_impf || 'i-a'}</p>
+                                        <p>{term('vowel_set_imperative')}: {rootObj.vowel_set_imp || 'o-o'}</p>
+                                    </div>
                                 </div>
                             </div>
                         )}
                     </div>
 
                     {/* Right Content */}
-                    <div className="flex-1 min-w-0 space-y-12 order-1 lg:order-2 w-full">
+                    <div className="flex-1 min-w-0 space-y-12">
 
                         {/* Verbal Forms Table */}
                         <div className="mb-12">
-                            <h2 className="font-sans font-bold text-[1.1rem] uppercase tracking-widest text-[#000]/60 mb-4 flex items-center gap-2">
-                                <div className="w-8 h-[2px] bg-[#1034A6]/20"></div>
-                                {term('verbal forms')}
-                            </h2>
-
-                            <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
-                                <table className="w-full text-base sm:text-sm border-collapse text-left min-w-[600px]">
-                                    <thead>
-                                        <tr className="border-b border-[#d8cfc0] font-sans text-black/30 text-[10px] uppercase tracking-widest">
-                                            <th className="font-bold pb-3 pr-4 w-12">{term('forma')}</th>
-                                            <th className="font-bold pb-3 pr-4">{term('lemma')}</th>
-                                            <th className="font-bold pb-3 pr-4">{term('imperfett')}</th>
-                                            <th className="font-bold pb-3 pr-4">{term('passive')}</th>
-                                            <th className="font-bold pb-3 pr-4">{term('active')}</th>
-                                            <th className="font-bold pb-3">{term('nom')}</th>
+                            <h2 className="font-sans font-semibold text-[1.1rem] text-[#000] mb-3">{term('verbal forms')}</h2>
+                            <table className="w-full text-sm border-collapse text-left">
+                                <thead>
+                                    <tr className="border-b border-black/8 font-sans text-black/80">
+                                        <th className="font-semibold pb-2 pr-4 w-12">{term('forma')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{term('lemma')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{term('imperfett')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{term('passive')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{term('active')}</th>
+                                        <th className="font-semibold pb-2">{term('nom')}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {generatedTable.map((row: MarkedVerbForm) => (
+                                        <tr key={row.form} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] transition-colors">
+                                            <td className="py-2.5 pr-4 text-black/60 font-serif">{row.form}</td>
+                                            <td className="py-2.5 pr-4 font-serif">
+                                                <MarkedCell
+                                                    data={row.perfect}
+                                                    isAdmin={isActualAdmin}
+                                                    onDelete={() => row.perfect.entryId && handleDeleteEntry(row.perfect.entryId)}
+                                                    onEdit={() => {
+                                                        const existing = rootEntries.find(e => e.headword === row.perfect.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                        if (existing) {
+                                                            setEditEntry({
+                                                                ...existing,
+                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                _formLabel: existing.verb_morphology?.form || row.form,
+                                                            } as any);
+                                                            setInitialFormData(null);
+                                                        } else {
+                                                            setEditEntry(null);
+                                                            setInitialFormData({
+                                                                headword: row.perfect.value,
+                                                                pos: 'verb',
+                                                                verb_class: rootObj?.strength || '',
+                                                                _rootConsonants: rootObj?.consonants || '',
+                                                                _formLabel: row.form,
+                                                                verb_vowel_perf: rootObj?.vowel_set_perf || '',
+                                                                verb_vowel_impf: rootObj?.vowel_set_impf || '',
+                                                            });
+                                                        }
+                                                        setShowForm(true);
+                                                    }}
+                                                />
+                                            </td>
+                                            <td className="py-2.5 pr-4 font-serif">
+                                                <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} noLink />
+                                            </td>
+                                            <td className="py-2.5 pr-4 font-serif">
+                                                <MarkedCell
+                                                    data={row.passiveParticiple}
+                                                    isAdmin={isActualAdmin}
+                                                    onDelete={() => row.passiveParticiple.entryId && handleDeleteEntry(row.passiveParticiple.entryId)}
+                                                    onEdit={() => {
+                                                        const existing = rootEntries.find(e => e.headword === row.passiveParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                        if (existing) {
+                                                            setEditEntry({
+                                                                ...existing,
+                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                _formLabel: existing.verb_morphology?.form || row.form,
+                                                            } as any);
+                                                            setInitialFormData(null);
+                                                        } else {
+                                                            setEditEntry(null);
+                                                            setInitialFormData({
+                                                                headword: row.passiveParticiple.value,
+                                                                pos: 'participle',
+                                                                participle_type: 'passive',
+                                                                _formLabel: row.form,
+                                                                _rootConsonants: rootObj?.consonants || '',
+                                                            });
+                                                        }
+                                                        setShowForm(true);
+                                                    }}
+                                                />
+                                            </td>
+                                            <td className="py-2.5 pr-4 font-serif">
+                                                <MarkedCell
+                                                    data={row.activeParticiple}
+                                                    isAdmin={isActualAdmin}
+                                                    onDelete={() => row.activeParticiple.entryId && handleDeleteEntry(row.activeParticiple.entryId)}
+                                                    onEdit={() => {
+                                                        const existing = rootEntries.find(e => e.headword === row.activeParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                        if (existing) {
+                                                            setEditEntry({
+                                                                ...existing,
+                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                _formLabel: existing.verb_morphology?.form || row.form,
+                                                            } as any);
+                                                            setInitialFormData(null);
+                                                        } else {
+                                                            setEditEntry(null);
+                                                            setInitialFormData({
+                                                                headword: row.activeParticiple.value,
+                                                                pos: 'participle',
+                                                                participle_type: 'active',
+                                                                _formLabel: row.form,
+                                                                _rootConsonants: rootObj?.consonants || '',
+                                                            });
+                                                        }
+                                                        setShowForm(true);
+                                                    }}
+                                                />
+                                            </td>
+                                            <td className="py-2.5 font-serif">
+                                                <MarkedCell
+                                                    data={row.verbalNoun}
+                                                    isAdmin={isActualAdmin}
+                                                    onDelete={() => row.verbalNoun.entryId && handleDeleteEntry(row.verbalNoun.entryId)}
+                                                    onEdit={() => {
+                                                        const existing = rootEntries.find(e => e.headword === row.verbalNoun.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                        if (existing) {
+                                                            setEditEntry({
+                                                                ...existing,
+                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                _formLabel: existing.verb_morphology?.form || row.form,
+                                                            } as any);
+                                                            setInitialFormData(null);
+                                                        } else {
+                                                            setEditEntry(null);
+                                                            setInitialFormData({
+                                                                headword: row.verbalNoun.value,
+                                                                pos: 'noun',
+                                                                _formLabel: row.form,
+                                                                _rootConsonants: rootObj?.consonants || '',
+                                                            });
+                                                        }
+                                                        setShowForm(true);
+                                                    }}
+                                                />
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {generatedTable.map((row: MarkedVerbForm) => (
-                                            <tr key={row.form} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] transition-colors">
-                                                <td className="py-2.5 pr-4 text-black/60 font-serif">{row.form}</td>
-                                                <td className="py-2.5 pr-4 font-serif">
-                                                    <MarkedCell
-                                                        data={row.perfect}
-                                                        isAdmin={isActualAdmin}
-                                                        onDelete={() => row.perfect.entryId && handleDeleteEntry(row.perfect.entryId)}
-                                                        onEdit={() => {
-                                                            const existing = rootEntries.find(e => e.headword === row.perfect.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                            if (existing) {
-                                                                setEditEntry({
-                                                                    ...existing,
-                                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                                    _formLabel: existing.verb_morphology?.form || row.form,
-                                                                } as any);
-                                                                setInitialFormData(null);
-                                                            } else {
-                                                                setEditEntry(null);
-                                                                setInitialFormData({
-                                                                    headword: row.perfect.value,
-                                                                    pos: 'verb',
-                                                                    verb_class: rootObj?.strength || '',
-                                                                    _rootConsonants: rootObj?.consonants || '',
-                                                                    _formLabel: row.form,
-                                                                    verb_vowel_perf: rootObj?.vowel_set_perf || '',
-                                                                    verb_vowel_impf: rootObj?.vowel_set_impf || '',
-                                                                });
-                                                            }
-                                                            setShowForm(true);
-                                                        }}
-                                                    />
-                                                </td>
-                                                <td className="py-2.5 pr-4 font-serif">
-                                                    <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} noLink />
-                                                </td>
-                                                <td className="py-2.5 pr-4 font-serif">
-                                                    <MarkedCell
-                                                        data={row.passiveParticiple}
-                                                        isAdmin={isActualAdmin}
-                                                        onDelete={() => row.passiveParticiple.entryId && handleDeleteEntry(row.passiveParticiple.entryId)}
-                                                        onEdit={() => {
-                                                            const existing = rootEntries.find(e => e.headword === row.passiveParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                            if (existing) {
-                                                                setEditEntry({
-                                                                    ...existing,
-                                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                                    _formLabel: existing.verb_morphology?.form || row.form,
-                                                                } as any);
-                                                                setInitialFormData(null);
-                                                            } else {
-                                                                setEditEntry(null);
-                                                                setInitialFormData({
-                                                                    headword: row.passiveParticiple.value,
-                                                                    pos: 'participle',
-                                                                    participle_type: 'passive',
-                                                                    _formLabel: row.form,
-                                                                    _rootConsonants: rootObj?.consonants || '',
-                                                                });
-                                                            }
-                                                            setShowForm(true);
-                                                        }}
-                                                    />
-                                                </td>
-                                                <td className="py-2.5 pr-4 font-serif">
-                                                    <MarkedCell
-                                                        data={row.activeParticiple}
-                                                        isAdmin={isActualAdmin}
-                                                        onDelete={() => row.activeParticiple.entryId && handleDeleteEntry(row.activeParticiple.entryId)}
-                                                        onEdit={() => {
-                                                            const existing = rootEntries.find(e => e.headword === row.activeParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                            if (existing) {
-                                                                setEditEntry({
-                                                                    ...existing,
-                                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                                    _formLabel: existing.verb_morphology?.form || row.form,
-                                                                } as any);
-                                                                setInitialFormData(null);
-                                                            } else {
-                                                                setEditEntry(null);
-                                                                setInitialFormData({
-                                                                    headword: row.activeParticiple.value,
-                                                                    pos: 'participle',
-                                                                    participle_type: 'active',
-                                                                    _formLabel: row.form,
-                                                                    _rootConsonants: rootObj?.consonants || '',
-                                                                });
-                                                            }
-                                                            setShowForm(true);
-                                                        }}
-                                                    />
-                                                </td>
-                                                <td className="py-2.5 font-serif">
-                                                    <MarkedCell
-                                                        data={row.verbalNoun}
-                                                        isAdmin={isActualAdmin}
-                                                        onDelete={() => row.verbalNoun.entryId && handleDeleteEntry(row.verbalNoun.entryId)}
-                                                        onEdit={() => {
-                                                            const existing = rootEntries.find(e => e.headword === row.verbalNoun.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                            if (existing) {
-                                                                setEditEntry({
-                                                                    ...existing,
-                                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                                    _formLabel: existing.verb_morphology?.form || row.form,
-                                                                } as any);
-                                                                setInitialFormData(null);
-                                                            } else {
-                                                                setEditEntry(null);
-                                                                setInitialFormData({
-                                                                    headword: row.verbalNoun.value,
-                                                                    pos: 'noun',
-                                                                    _formLabel: row.form,
-                                                                    _rootConsonants: rootObj?.consonants || '',
-                                                                });
-                                                            }
-                                                            setShowForm(true);
-                                                        }}
-                                                    />
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
 
                         {/* Derived Terms Table */}
                         {(derivedTerms.length > 0 || isActualAdmin) && (
-                            <div className="mb-12">
+                            <div>
                                 <div className="flex items-center gap-3 mb-4">
-                                    <h2 className="font-sans font-bold text-[1.1rem] uppercase tracking-widest text-[#000]/60 flex items-center gap-2">
-                                        <div className="w-8 h-[2px] bg-[#1034A6]/20"></div>
-                                        {term('termini derivati')}
-                                    </h2>
+                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{term('termini derivati')}</h2>
                                     {isActualAdmin && (
                                         <button
                                             onClick={() => {
@@ -652,87 +642,80 @@ export function Root() {
                                                 });
                                                 setActiveRelEdit('derived');
                                             }}
-                                            className="p-1 px-1.5 text-black/30 hover:text-[#1034A6] hover:bg-[#1034A6]/5 rounded border border-transparent hover:border-[#1034A6]/10 transition-all flex items-center gap-1.5"
+                                            className="p-1 text-black/30 hover:text-[#1034A6] hover:bg-black/5 rounded transition-all"
                                         >
-                                            <Edit2 size={12} />
-                                            <span className="text-[10px] font-bold uppercase">{term('edit')}</span>
+                                            <Edit2 size={14} />
                                         </button>
                                     )}
                                 </div>
-
-                                <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
-                                    <table className="w-full text-base sm:text-sm border-collapse text-left min-w-[500px]">
-                                        <thead>
-                                            <tr className="border-b border-[#d8cfc0] font-sans text-black/30 text-[10px] uppercase tracking-widest">
-                                                <th className="font-bold pb-3 pr-4">{term('term')}</th>
-                                                <th className="font-bold pb-3 pr-4">{term('class')}</th>
-                                                <th className="font-bold pb-3">
-                                                    {term('cv-pattern')}
-                                                    {rootObj.strength === 'geminated' && <span> • {term('trux')}</span>}
-                                                </th>
+                                <table className="w-full text-sm border-collapse text-left">
+                                    <thead>
+                                        <tr className="border-b border-black/8 font-sans text-black/80">
+                                            <th className="font-semibold pb-2 pr-4">{term('term')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{term('class')}</th>
+                                            <th className="font-semibold pb-2">
+                                                {term('cv-pattern')}
+                                                {rootObj.strength === 'geminated' && <span> • {term('trux').toUpperCase()}</span>}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {derivedTerms.map((termObj, idx) => (
+                                            <tr key={idx} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] group transition-colors">
+                                                <td className="py-1.5 pr-4 font-serif">
+                                                    <div className="flex items-center gap-2">
+                                                        <Link to={`/entry/${termObj.id}`} style={{ color: BLUE }} className="hover:underline">{termObj.term}</Link>
+                                                        <span className="text-black/55 italic">
+                                                            {termObj.gloss}
+                                                        </span>
+                                                        {isActualAdmin && (
+                                                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        const existing = rootEntries.find(re => re.id === termObj.id);
+                                                                        if (existing) {
+                                                                            setEditEntry({
+                                                                                id: existing.id,
+                                                                                headword: existing.headword,
+                                                                                pos: existing.pos,
+                                                                                created_at: '',
+                                                                                is_loanword: false
+                                                                            });
+                                                                            setInitialFormData(null);
+                                                                            setShowForm(true);
+                                                                        }
+                                                                    }}
+                                                                    className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
+                                                                    title={term('edit-entry')}
+                                                                >
+                                                                    <Edit2 size={12} />
+                                                                </button>
+                                                                <button
+                                                                    onClick={(e) => { e.preventDefault(); handleDeleteEntry(termObj.id); }}
+                                                                    className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                                    title={term('delete-entry')}
+                                                                >
+                                                                    <Trash2 size={12} />
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                <td className="py-1.5 pr-4 font-sans text-black/70">{termObj.class}</td>
+                                                <td className="py-1.5 font-sans" style={{ color: BLUE }}>{termObj.cv}</td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {derivedTerms.map((termObj, idx) => (
-                                                <tr key={idx} className="border-b border-[#d8cfc0]/30 last:border-0 hover:bg-black/[0.01] group transition-colors">
-                                                    <td className="py-2.5 pr-4 font-serif">
-                                                        <div className="flex flex-wrap items-center gap-2">
-                                                            <Link to={`/entry/${termObj.id}`} style={{ color: BLUE }} className="hover:underline font-bold text-[1.1rem] sm:text-[1rem]">{termObj.term}</Link>
-                                                            <span className="text-black/40 italic text-xs sm:text-sm">
-                                                                {termObj.gloss}
-                                                            </span>
-                                                            {isActualAdmin && (
-                                                                <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                    <button
-                                                                        onClick={(e) => {
-                                                                            e.preventDefault();
-                                                                            const existing = rootEntries.find(re => re.id === termObj.id);
-                                                                            if (existing) {
-                                                                                setEditEntry({
-                                                                                    id: existing.id,
-                                                                                    headword: existing.headword,
-                                                                                    pos: existing.pos,
-                                                                                    created_at: '',
-                                                                                    is_loanword: false
-                                                                                });
-                                                                                setInitialFormData(null);
-                                                                                setShowForm(true);
-                                                                            }
-                                                                        }}
-                                                                        className="p-1 rounded hover:bg-[#1034A6]/5 text-[#1034A6] transition-all"
-                                                                        title={term('edit-entry')}
-                                                                    >
-                                                                        <Edit2 size={12} />
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={(e) => { e.preventDefault(); handleDeleteEntry(termObj.id); }}
-                                                                        className="p-1 rounded hover:bg-red-50 text-red-500 transition-all"
-                                                                        title={term('delete-entry')}
-                                                                    >
-                                                                        <Trash2 size={12} />
-                                                                    </button>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-2.5 pr-4 font-sans text-black/50 text-[11px] font-bold uppercase tracking-widest">{termObj.class}</td>
-                                                    <td className="py-2.5 font-sans font-bold" style={{ color: BLUE }}>{termObj.cv}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         )}
 
                         {/* Thesaurus */}
                         {((vm?.synonyms?.length ?? 0) > 0 || (vm?.antonyms?.length ?? 0) > 0 || (rootRelationships.synonyms?.length ?? 0) > 0 || (rootRelationships.antonyms?.length ?? 0) > 0 || isActualAdmin) && (
-                            <div className="border-t border-[#d8cfc0] pt-10 pb-6">
-                                <div className="flex items-center gap-3 mb-6">
-                                    <h2 className="font-sans font-bold text-[1.1rem] uppercase tracking-widest text-[#000]/60 flex items-center gap-2">
-                                        <div className="w-8 h-[2px] bg-[#1034A6]/20"></div>
-                                        {term('tesawru')}
-                                    </h2>
+                            <div className="border-t border-black/10 pt-6">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{term('tesawru')}</h2>
                                     {isActualAdmin && (
                                         <button
                                             onClick={() => {
@@ -743,23 +726,22 @@ export function Root() {
                                                 });
                                                 setActiveRelEdit('thesaurus');
                                             }}
-                                            className="p-1 px-1.5 text-black/30 hover:text-[#1034A6] hover:bg-[#1034A6]/5 rounded border border-transparent hover:border-[#1034A6]/10 transition-all flex items-center gap-1.5"
+                                            className="p-1 text-black/30 hover:text-[#1034A6] hover:bg-black/5 rounded transition-all"
                                         >
-                                            <Edit2 size={12} />
-                                            <span className="text-[10px] font-bold uppercase">{term('edit')}</span>
+                                            <Edit2 size={14} />
                                         </button>
                                     )}
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 text-base sm:text-sm">
+                                <div className="flex gap-16 text-sm">
                                     {((vm?.synonyms && vm.synonyms.length > 0) || (rootRelationships.synonyms?.length > 0)) && (
-                                        <div className="space-y-3">
-                                            <p className="font-bold text-[#000] text-[10px] uppercase tracking-widest opacity-40 mb-2">{term('sinonimi')}</p>
+                                        <div>
+                                            <p className="font-semibold text-[#000] mb-1">{term('sinonimi')}</p>
                                             {[...(vm?.synonyms || []), ...(rootRelationships.synonyms || [])].map((s, idx) => (
-                                                <div key={s.id || idx} className="flex items-center gap-2 group p-2 rounded-lg hover:bg-[#1034A6]/5 transition-colors border border-transparent hover:border-[#1034A6]/10">
+                                                <div key={s.id || idx} className="mb-1 flex items-center gap-2 group">
                                                     <Link
                                                         to={s.pos === 'ROOT' ? `/root/${s.id}` : `/search?q=${s.headword}`}
                                                         style={{ color: BLUE }}
-                                                        className="hover:underline font-serif font-bold text-lg sm:text-base"
+                                                        className="hover:underline font-serif"
                                                     >
                                                         -{s.headword}-
                                                     </Link>
@@ -769,10 +751,10 @@ export function Root() {
                                                     {isActualAdmin && !vm?.synonyms?.some((v: any) => v.id === s.id) && (
                                                         <button
                                                             onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('synonyms', s.id); }}
-                                                            className="opacity-100 sm:opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-red-50 text-red-400 hover:text-red-500 transition-all ml-auto"
+                                                            className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
                                                             title="Unlink Synonym"
                                                         >
-                                                            <Trash2 size={14} />
+                                                            <Trash2 size={10} />
                                                         </button>
                                                     )}
                                                 </div>
@@ -780,14 +762,14 @@ export function Root() {
                                         </div>
                                     )}
                                     {((vm?.antonyms && vm.antonyms.length > 0) || (rootRelationships.antonyms?.length > 0)) && (
-                                        <div className="space-y-3">
-                                            <p className="font-bold text-[#000] text-[10px] uppercase tracking-widest opacity-40 mb-2">{term('antonimi')}</p>
+                                        <div>
+                                            <p className="font-semibold text-[#000] mb-1">{term('antonimi')}</p>
                                             {[...(vm?.antonyms || []), ...(rootRelationships.antonyms || [])].map((a, idx) => (
-                                                <div key={a.id || idx} className="flex items-center gap-2 group p-2 rounded-lg hover:bg-black/[0.03] transition-colors border border-transparent hover:border-black/5">
+                                                <div key={a.id || idx} className="mb-1 flex items-center gap-2 group">
                                                     <Link
                                                         to={a.pos === 'ROOT' ? `/root/${a.id}` : `/search?q=${a.headword}`}
                                                         style={{ color: BLUE }}
-                                                        className="hover:underline font-serif font-bold text-lg sm:text-base"
+                                                        className="hover:underline font-serif"
                                                     >
                                                         {a.headword}
                                                     </Link>
@@ -797,10 +779,10 @@ export function Root() {
                                                     {isActualAdmin && !vm?.antonyms?.some((v: any) => v.id === a.id) && (
                                                         <button
                                                             onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('antonyms', a.id); }}
-                                                            className="opacity-100 sm:opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-red-50 text-red-400 hover:text-red-500 transition-all ml-auto"
+                                                            className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
                                                             title="Unlink Antonym"
                                                         >
-                                                            <Trash2 size={14} />
+                                                            <Trash2 size={10} />
                                                         </button>
                                                     )}
                                                 </div>

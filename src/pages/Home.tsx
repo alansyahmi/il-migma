@@ -12,7 +12,6 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUser } from '@clerk/clerk-react';
 import { Card } from '@/components/ui/Card';
-import { cn } from '@/lib/utils';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const ARAB_GREEN = '#006233';  // Semitic entries
@@ -208,11 +207,11 @@ export function Home() {
         <div className="min-h-screen">
             <div style={bgStyle}>
                 {/* Hero */}
-                <section className="text-center px-4 pt-12 pb-10 sm:pt-20 sm:pb-16 max-w-4xl mx-auto">
-                    <h1 className="font-serif font-semibold text-[2.2rem] sm:text-[3.2rem] lg:text-[4rem] leading-[1.1] text-[#000] mb-6">
+                <section className="text-center px-4 pt-16 pb-14 sm:pt-20 sm:pb-16 max-w-2xl mx-auto">
+                    <h1 className="font-serif font-medium text-[2.6rem] sm:text-[3.2rem] leading-tight text-[#000] mb-3">
                         {t('A Comprehensive Digital', `${term('Dizzjunarju')} ${term('Komprensiv')}`)}<br />{t('Maltese-English Dictionary', `Malti-Ingliż ${term('Diġitali')}`)}
                     </h1>
-                    <p className="text-[#4a4a4a] text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-10 px-2 opacity-90">
+                    <p className="text-[#4a4a4a] text-sm leading-relaxed max-w-lg mx-auto mb-10">
                         {t(
                             'An ever-growing online tool for learners and researchers to the meaning, history, and usage of over 300,000 words in Maltese and its dialects.',
                             `Għodda ${term('online')} li dejjem tikber għal dawk li jitgħallmu u għall-${term('researchers')} dwar it-tifsira, l-istorja u l-użu ta' aktar minn 300,000 kelma bil-Malti u l-${term('dialects')} tiegħu.`
@@ -220,19 +219,16 @@ export function Home() {
                     </p>
 
                     {/* Search bar */}
-                    <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-8 relative px-2">
-                        <div className="flex items-center bg-white border border-[#d8cfc0] rounded-2xl overflow-hidden shadow-xl shadow-black/5 focus-within:ring-2 focus-within:ring-[#1034A6]/20 transition-all">
+                    <form onSubmit={handleSearch} className="max-w-md mx-auto mb-5 relative">
+                        <div className="flex items-center bg-white border border-black/10 rounded-lg overflow-hidden shadow-sm">
                             <button
                                 ref={kbRef}
                                 type="button"
                                 onClick={() => setKbOpen(o => !o)}
-                                className={cn(
-                                    "flex items-center gap-1.5 px-4 border-r border-[#d8cfc0] shrink-0 py-4 transition-colors",
-                                    kbOpen ? "text-[#1034A6] bg-black/5" : "text-[#555] hover:text-[#000]"
-                                )}
+                                className={`flex items-center gap-1 px-3 border-r border-black/10 shrink-0 py-2.5 transition-colors ${kbOpen ? 'text-[#000] bg-black/5' : 'text-[#555] hover:text-[#000]'}`}
                                 aria-label={t('Toggle Maltese character picker', 'I togglja l-għażla tal-karattri Maltin')}
                             >
-                                <Keyboard size={18} />
+                                <Keyboard size={14} />
                                 <span className="text-xs text-[#aaa]">›</span>
                             </button>
                             <input
@@ -240,16 +236,16 @@ export function Home() {
                                 type="text"
                                 value={query}
                                 onChange={e => setQuery(e.target.value)}
-                                className="flex-1 px-5 py-4 text-base sm:text-lg bg-transparent focus:outline-none font-sans text-[#000] placeholder:text-gray-400"
+                                className="flex-1 px-3 py-2.5 text-sm bg-transparent focus:outline-none font-sans text-[#000]"
                                 aria-label={t('Search the dictionary', 'Fittex fid-dizzjunarju')}
-                                placeholder={t('Search for words, phrases…', 'Fittex kliem, frażijiet…')}
+                                placeholder={t('Search…', 'Fittex…')}
                             />
                             <button
                                 type="submit"
-                                className="px-5 py-4 text-[#1034A6] hover:bg-black/5 transition-colors shrink-0"
+                                className="px-3 py-2.5 text-[#555] hover:text-[#000] transition-colors shrink-0"
                                 aria-label={t('Search', 'Fittex')}
                             >
-                                <Search size={20} />
+                                <Search size={16} />
                             </button>
                         </div>
                         <MalteseCharPicker
@@ -278,63 +274,60 @@ export function Home() {
                 </section>
 
                 {/* Categories */}
-                <section className="px-4 sm:px-6 pb-20">
-                    <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                <section className="px-4 sm:px-6 pb-16">
+                    <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
                         {/* Semitic Entries */}
-                        <div className="bg-white rounded-2xl border border-black/5 p-8 shadow-sm hover:shadow-md transition-shadow">
-                            <h2 className="font-sans text-lg font-bold mb-2" style={{ color: ARAB_GREEN }}>
+                        <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
+                            <h2 className="font-sans text-base font-semibold mb-1" style={{ color: ARAB_GREEN }}>
                                 {t('Semitic Entries', (term('entrati').charAt(0).toUpperCase() + term('entrati').slice(1)) + ' ' + term('Semitiku'))}
                             </h2>
-                            <p className="text-sm text-[#666] mb-8 leading-relaxed">
+                            <p className="text-xs text-[#666] mb-5 leading-snug">
                                 {t('Over 10,000 entries with 100,000 inflected word forms.', `Aktar minn 10,000 ${term('entrati')} b'100,000 ${term('forma')} ta' kelma ${term('infletta')}.`)}
                             </p>
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 {SEMITIC_ENTRIES.map((e: any) => (
-                                    <div key={e.word} className="pb-4 border-b border-black/[0.03] last:border-0 last:pb-0">
-                                        <div className="flex items-baseline gap-2 flex-wrap mb-1">
-                                            <Link to={`/entry/${e.slug}`} className="font-serif text-lg font-bold hover:underline" style={{ color: ARAB_GREEN }}>
+                                    <div key={e.word}>
+                                        <div className="flex items-baseline gap-1.5 flex-wrap">
+                                            <Link to={`/entry/${e.slug}`} className="font-serif text-base font-semibold leading-none" style={{ color: ARAB_GREEN }}>
                                                 {e.word}
                                             </Link>
-                                            {e.altForm && <span className="text-sm text-[#555] font-serif italic">{e.altForm}</span>}
+                                            {e.altForm && <span className="text-xs text-[#555] font-serif">{e.altForm}</span>}
                                         </div>
-                                        <p className="text-sm text-[#333] leading-relaxed">{e.def}</p>
+                                        <p className="text-sm text-[#000] mt-0.5">{e.def}</p>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
                         {/* Romance Entries */}
-                        <div className="bg-white rounded-2xl border border-black/5 p-8 shadow-sm hover:shadow-md transition-shadow">
-                            <h2 className="font-sans text-lg font-bold mb-2" style={{ color: ROMAN_RED }}>
+                        <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
+                            <h2 className="font-sans text-base font-semibold mb-1" style={{ color: ROMAN_RED }}>
                                 {t('Romance Entries', (term('entrati').charAt(0).toUpperCase() + term('entrati').slice(1)) + ' ' + term('Rumanz'))}
                             </h2>
-                            <p className="text-sm text-[#666] mb-8 leading-relaxed">
+                            <p className="text-xs text-[#666] mb-5 leading-snug">
                                 {t('Over 10,000 entries with 98,000 inflected word forms.', `Aktar minn 10,000 ${term('entrati')} bi 98,000 ${term('forma')} ta' kelma ${term('infletta')}.`)}
                             </p>
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 {ROMANCE_ENTRIES.map((e: any) => (
-                                    <div key={e.word} className="pb-4 border-b border-black/[0.03] last:border-0 last:pb-0">
-                                        <div className="flex items-baseline gap-2 flex-wrap mb-1">
-                                            <Link to={`/entry/${e.slug}`} className="font-serif text-lg font-bold hover:underline" style={{ color: ROMAN_RED }}>
+                                    <div key={e.word}>
+                                        <div className="flex items-baseline gap-1.5 flex-wrap">
+                                            <Link to={`/entry/${e.slug}`} className="font-serif text-base font-semibold leading-none" style={{ color: ROMAN_RED }}>
                                                 {e.word}
                                             </Link>
-                                            {e.altForm && <span className="text-sm text-[#555] font-serif italic">{e.altForm}</span>}
+                                            {e.altForm && <span className="text-xs text-[#555] font-serif">{e.altForm}</span>}
                                         </div>
-                                        <p className="text-sm text-[#333] leading-relaxed">{e.def}</p>
+                                        <p className="text-sm text-[#000] mt-0.5">{e.def}</p>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
                         {/* IPA & Audio */}
-                        <div className="bg-white rounded-2xl border border-black/5 p-8 shadow-sm flex flex-col justify-center text-center hover:shadow-md transition-shadow">
-                            <div className="w-16 h-16 bg-[#A07030]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <Search size={24} style={{ color: IPA_GOLD }} />
-                            </div>
-                            <h2 className="font-sans text-lg font-bold mb-3" style={{ color: IPA_GOLD }}>
+                        <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
+                            <h2 className="font-sans text-base font-bold mb-1" style={{ color: IPA_GOLD }}>
                                 {t('IPA & Audio Pronunciation', `IPA u ${term('Pronunzja')} b${term('l-Awdjo')}`)}
                             </h2>
-                            <p className="text-sm text-[#666] leading-relaxed">
+                            <p className="text-xs text-[#666] leading-snug">
                                 {t('Every term will have its own IPA and audio to help learners.', `Kull ${term('terminu')} se jkollu l-IPA u ${term('l-awdjo tiegħu')} biex jgħin lil dawk li jitgħallmu.`)}
                             </p>
                         </div>

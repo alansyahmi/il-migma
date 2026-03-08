@@ -240,17 +240,17 @@ export function Navbar() {
 
             {/* Mobile dropdown */}
             {menuOpen && (
-                <div className="md:hidden border-t border-[#d8cfc0]/50 bg-[#F4F3F0] px-4 py-4 space-y-1 animate-fade-in shadow-xl">
+                <div className="md:hidden border-t border-[#d8cfc0]/50 bg-[#F4F3F0] px-4 py-3 space-y-0.5 animate-fade-in">
                     {showSearch && (
-                        <div className="pb-4 mb-2 mt-1 border-b border-[#ede9e1]">
+                        <div className="pb-3 mb-1 mt-1 border-b border-[#ede9e1]">
                             <form onSubmit={handleSearch} className="relative">
-                                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                                 <input
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder={term('search-placeholder')}
-                                    className="w-full bg-white border border-[#d8cfc0] rounded-xl pl-10 pr-4 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-[#1034A6]/20 transition-all placeholder:text-gray-400 shadow-sm"
+                                    className="w-full bg-white border border-[#d8cfc0] rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1034A6] placeholder:text-gray-400"
                                 />
                             </form>
                         </div>
@@ -263,8 +263,8 @@ export function Navbar() {
                                 to={link.href}
                                 onClick={() => setMenuOpen(false)}
                                 className={cn(
-                                    'block py-3.5 px-2 text-base text-[#000] border-b border-[#ede9e1]/50 last:border-0 rounded-lg hover:bg-black/5 active:bg-black/10 transition-colors',
-                                    active ? 'font-bold bg-white/40' : 'font-normal',
+                                    'block py-2.5 text-sm text-[#000] border-b border-[#ede9e1] last:border-0',
+                                    active ? 'font-semibold' : 'font-normal',
                                 )}
                             >
                                 {link.label}
@@ -272,48 +272,36 @@ export function Navbar() {
                         );
                     })}
 
-                    {/* Mobile: show all three toggles in a row with better spacing */}
-                    <div className="pt-6 pb-2 flex items-center justify-around bg-white/30 rounded-2xl border border-[#d8cfc0]/30 mt-4">
+                    {/* Mobile: show all three toggles in a row */}
+                    <div className="pt-3 flex items-center gap-3">
                         <button
                             onClick={() => setMode(isArabised ? 'standard' : 'arabised')}
-                            className="flex flex-col items-center gap-1 min-w-[60px] py-1"
+                            className="text-sm font-medium text-[#000]"
                         >
-                            {isArabised ? <span className="font-arabic text-xl leading-none">وزن</span> : <span className="text-xs font-bold tracking-widest uppercase">CV</span>}
-                            <span className="text-[10px] text-black/40 uppercase tracking-tighter">{term('mode')}</span>
+                            {isArabised ? <span className="font-arabic text-base">وزن</span> : 'CV'}
                         </button>
-
-                        <div className="w-[1px] h-8 bg-[#d8cfc0]/50"></div>
-
+                        <span className="text-[#d8cfc0]">·</span>
                         <button
                             onClick={() => setLanguage(language === 'en' ? 'mt' : 'en')}
-                            className="flex flex-col items-center gap-1 min-w-[60px] py-1"
+                            className="text-sm font-medium text-[#000]"
                         >
-                            <span className="text-sm font-bold">{language === 'en' ? 'EN' : 'MT'}</span>
-                            <span className="text-[10px] text-black/40 uppercase tracking-tighter">{term('language')}</span>
+                            {language === 'en' ? 'EN' : 'MT'}
                         </button>
-
-                        <div className="w-[1px] h-8 bg-[#d8cfc0]/50"></div>
-
-                        <button
-                            onClick={toggleDark}
-                            className="flex flex-col items-center gap-1 min-w-[60px] py-1"
-                        >
-                            {dark ? <Moon size={18} /> : <Sun size={18} />}
-                            <span className="text-[10px] text-black/40 uppercase tracking-tighter">{dark ? 'Dark' : 'Light'}</span>
+                        <span className="text-[#d8cfc0]">·</span>
+                        <button onClick={toggleDark} className="text-[#000]">
+                            {dark ? <Moon size={14} /> : <Sun size={14} />}
                         </button>
-
                         {isTrueAdmin && (
                             <>
-                                <div className="w-[1px] h-8 bg-[#d8cfc0]/50"></div>
+                                <span className="text-[#d8cfc0]">·</span>
                                 <button
                                     onClick={() => setAdminViewEnabled(!adminViewEnabled)}
                                     className={cn(
-                                        "flex flex-col items-center gap-1 min-w-[60px] py-1 transition-colors",
-                                        adminViewEnabled ? "text-[#1034A6]" : "text-black/40"
+                                        "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border",
+                                        adminViewEnabled ? "bg-[#1034A6] text-white border-[#1034A6]" : "text-black/40 border-black/10"
                                     )}
                                 >
-                                    {adminViewEnabled ? <Shield size={18} /> : <Eye size={18} />}
-                                    <span className="text-[10px] font-bold uppercase tracking-tighter">{adminViewEnabled ? 'Admin' : 'User'}</span>
+                                    {adminViewEnabled ? term('admin-view') : term('user-view')}
                                 </button>
                             </>
                         )}

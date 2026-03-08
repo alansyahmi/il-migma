@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { ArrowUp, ArrowDown, RotateCcw, Plus, Keyboard, Trash2, AlertTriangle, Sparkles } from 'lucide-react';
+import { ArrowUp, ArrowDown, RotateCcw, Plus, Keyboard } from 'lucide-react';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
@@ -13,7 +13,7 @@ import { RelationshipEditor } from './RelationshipEditor';
 import { buildEntryPayload, ENTRY_HANDLED_FIELDS } from '@/lib/adminSchema';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
-
+import { AlertTriangle, Sparkles } from 'lucide-react';
 import { generateIPA, deriveFeminineFromPattern, deriveMasculineFromFeminine, detectPluralType, derivePattern, extractLongVowelFromPattern } from '@/lib/maltesePhonology';
 
 export interface AdminEntry {
@@ -726,8 +726,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     )}
 
                     {/* ── CORE FIELDS ──────────────────────────────────────────────── */}
-                    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div className="space-y-1.5">
+                    <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="space-y-1.5 md:col-span-1">
                             <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest flex items-center justify-between">
                                 {t('Entry ID', 'ID tal-Entrata')}
                                 {idExists === true && <span className="text-red-500 lowercase font-normal italic">{t('already exists', 'diġà teżisti')}</span>}
@@ -751,24 +751,24 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 </button>
                             )}
                         </div>
-                        <div className="space-y-1.5">
+                        <div className="space-y-1.5 md:col-span-1">
                             <label className={label}>{t('Headword', 'Mamma')} *</label>
                             <input className={inp} value={form.headword} onChange={e => set('headword', e.target.value)} required />
                         </div>
-                        <div className="space-y-1.5">
+                        <div className="space-y-1.5 md:col-span-1">
                             <label className={label}>POS *</label>
                             <select className={sel} value={form.pos} onChange={e => set('pos', e.target.value)}>
                                 {POS_OPTIONS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
                             </select>
                         </div>
-                        <div className="space-y-1.5">
+                        <div className="space-y-1.5 md:col-span-1">
                             <div className="flex items-center justify-between mb-1">
                                 <label className={label + " mb-0"}>{t('Root Consonants', 'Għerq')}</label>
                                 <ResetButton onClick={() => set('_rootConsonants', (entry as any)?._rootConsonants ?? (entry as any)?.root_pattern_form?.root?.consonants ?? (entry as any)?.root_consonants ?? initialForm?._rootConsonants ?? '')} title={t('Reset to original', 'Irrisettja')} />
                             </div>
                             <input className={inp} value={form._rootConsonants || ''} onChange={e => set('_rootConsonants', e.target.value)} placeholder="e.g. k-t-b" />
                         </div>
-                        <div className="space-y-1.5 sm:col-span-2 lg:col-span-2">
+                        <div className="space-y-1.5 md:col-span-2">
                             <label className={label}>{t('CV Pattern / Wiżen', 'Mudell (Wiżen)')}</label>
                             <div className="flex gap-2 relative">
                                 <input
@@ -885,9 +885,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         </div>
 
                         {form.phonetics.map((ph: any, i: number) => (
-                            <div key={i} className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-end bg-black/5 sm:bg-transparent p-4 sm:p-0 rounded-xl">
-                                <div className="flex-1 sm:w-1/4">
-                                    <label className={label}>{term('dialect')}</label>
+                            <div key={i} className="flex gap-2 items-end">
+                                <div className="flex-1 w-1/4">
+                                    {i === 0 && <label className={label}>{term('dialect')}</label>}
                                     <select className={sel} value={ph.dialect} onChange={e => {
                                         const next = [...form.phonetics];
                                         next[i].dialect = e.target.value;
@@ -896,16 +896,16 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         {DIALECT_OPTIONS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
                                     </select>
                                 </div>
-                                <div className="flex-1 sm:w-1/4">
-                                    <label className={label}>{t('Spelling', 'Kitba')}</label>
+                                <div className="flex-1 w-1/4">
+                                    {i === 0 && <label className={label}>{t('Spelling', 'Kitba')}</label>}
                                     <input className={inp} value={ph.spelling} placeholder={form.headword || "Headword"} onChange={e => {
                                         const next = [...form.phonetics];
                                         next[i].spelling = e.target.value;
                                         set('phonetics', next);
                                     }} />
                                 </div>
-                                <div className="flex-1 sm:w-2/4">
-                                    <label className={label}>{t('IPA', 'IPA')}</label>
+                                <div className="flex-1 w-2/4">
+                                    {i === 0 && <label className={label}>{t('IPA', 'IPA')}</label>}
                                     <input className={inp} value={ph.ipa} placeholder="/ˈkɪtɛp/" onChange={e => {
                                         const next = [...form.phonetics];
                                         next[i].ipa = e.target.value;
@@ -913,10 +913,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     }} />
                                 </div>
                                 <button type="button" onClick={() => set('phonetics', form.phonetics.filter((_: any, idx: number) => idx !== i))}
-                                    className="self-end sm:mb-2 text-slate-400 hover:text-red-500 px-2 sm:px-1 shrink-0 bg-red-50 sm:bg-transparent py-2 sm:py-0 rounded-lg sm:rounded-none w-full sm:w-auto flex justify-center border border-red-100 sm:border-0 mt-2 sm:mt-0">
-                                    <Trash2 size={16} className="sm:hidden mr-2" />
-                                    <span className="sm:hidden font-bold text-xs uppercase tracking-widest">{t('Remove', 'Tneħħi')}</span>
-                                    <span className="hidden sm:inline text-xl">&times;</span>
+                                    className="mb-2 text-slate-400 hover:text-red-500 px-1 shrink-0">
+                                    &times;
                                 </button>
                             </div>
                         ))}
@@ -926,7 +924,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     {form.pos === 'noun' && (
                         <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-4">
                             <legend className="text-xs font-semibold text-black px-2">{term('noun')}</legend>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className={label}>{term('gender')}</label>
                                     <select className={sel} value={form.noun_gender} onChange={e => set('noun_gender', e.target.value)}>
@@ -934,6 +932,18 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         {GENDER_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
                                     </select>
                                 </div>
+                                {form.noun_gender === 'masculine' && (
+                                    <div>
+                                        <label className={label}>{t('Feminine Form', 'Femminil')}</label>
+                                        <input className={inp} value={form.noun_feminine} onChange={e => set('noun_feminine', e.target.value)} placeholder={t('e.g. għalliema', 'eż. għalliema')} />
+                                    </div>
+                                )}
+                                {form.noun_gender === 'feminine' && (
+                                    <div>
+                                        <label className={label}>{t('Masculine Form', 'Maskil')}</label>
+                                        <input className={inp} value={form.noun_masculine} onChange={e => set('noun_masculine', e.target.value)} placeholder={t('e.g. għalliem', 'eż. għalliem')} />
+                                    </div>
+                                )}
                                 <div>
                                     <label className={label}>{term('noun type')}</label>
                                     <select className={sel} value={form.noun_type} onChange={e => set('noun_type', e.target.value)}>
@@ -941,18 +951,6 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         {NOUN_TYPE_OPTIONS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                                     </select>
                                 </div>
-                                {form.noun_gender === 'masculine' && (
-                                    <div className="sm:col-span-2">
-                                        <label className={label}>{t('Feminine Form', 'Femminil')}</label>
-                                        <input className={inp} value={form.noun_feminine} onChange={e => set('noun_feminine', e.target.value)} placeholder={t('e.g. għalliema', 'eż. għalliema')} />
-                                    </div>
-                                )}
-                                {form.noun_gender === 'feminine' && (
-                                    <div className="sm:col-span-2">
-                                        <label className={label}>{t('Masculine Form', 'Maskil')}</label>
-                                        <input className={inp} value={form.noun_masculine} onChange={e => set('noun_masculine', e.target.value)} placeholder={t('e.g. għalliem', 'eż. għalliem')} />
-                                    </div>
-                                )}
                                 {/* Feminine Suggestion Banner */}
                                 {suggestedFeminine && (form.pos === 'noun' && !form.noun_feminine) && (
                                     <div className="mt-1.5 flex items-center gap-2 px-2.5 py-1.5 bg-purple-50 border border-purple-100 rounded-md">
@@ -1046,14 +1044,12 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         </div>
                                     )}
 
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-3">
+                                    <div className="grid grid-cols-2 gap-3 mt-3">
                                         {(form._pluralType === 'broken' || form._pluralType === 'both') && (
-                                            <div className="space-y-4">
-                                                <div>
-                                                    <label className={label}>{t('Broken Plural (comma-separated)', 'Plural Miksur (separati bil-virgola)')}</label>
-                                                    <input className={inp} value={form.noun_plural_forms}
-                                                        onChange={e => set('noun_plural_forms', e.target.value)} placeholder={t('e.g. kotba, ktieb', 'eż. kotba, ktieb')} />
-                                                </div>
+                                            <div>
+                                                <label className={label}>{t('Broken Plural (comma-separated)', 'Plural Miksur (separati bil-virgola)')}</label>
+                                                <input className={inp} value={form.noun_plural_forms}
+                                                    onChange={e => set('noun_plural_forms', e.target.value)} placeholder={t('e.g. kotba, ktieb', 'eż. kotba, ktieb')} />
 
                                                 <MorphologyPresetSelector
                                                     label={t('Broken Plural Pattern', 'Mudell tal-Plural Miksur')}
@@ -1065,11 +1061,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                             </div>
                                         )}
                                         {(form._pluralType === 'sound' || form._pluralType === 'both') && (
-                                            <div className="space-y-4">
-                                                <div>
-                                                    <label className={label}>{t('Sound Plural', 'Plural Sħiħ')}</label>
-                                                    <input className={inp} value={form.noun_sound_plural} onChange={e => set('noun_sound_plural', e.target.value)} placeholder={t('e.g. tfajliet', 'eż. tfajliet')} />
-                                                </div>
+                                            <div>
+                                                <label className={label}>{t('Sound Plural', 'Plural Sħiħ')}</label>
+                                                <input className={inp} value={form.noun_sound_plural} onChange={e => set('noun_sound_plural', e.target.value)} placeholder={t('e.g. tfajliet', 'eż. tfajliet')} />
 
                                                 <MorphologyPresetSelector
                                                     label={t('Suffix', 'Suffiss')}
@@ -1140,48 +1134,46 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-2 gap-3">
                                 <div>
                                     <label className={label}>{t('Class', 'Klassi')}</label>
-                                    <div className="flex flex-col gap-1">
-                                        <select className={sel} value={form.verb_class} onChange={e => {
-                                            set('verb_class', e.target.value);
-                                            // Clear subclass when no longer weak
-                                            if (e.target.value !== 'weak') set('_weakClass', '');
+                                    <select className={sel} value={form.verb_class} onChange={e => {
+                                        set('verb_class', e.target.value);
+                                        // Clear subclass when no longer weak
+                                        if (e.target.value !== 'weak') set('_weakClass', '');
 
-                                            if (autoFilledFields.has('verb_class')) {
-                                                const next = new Set(autoFilledFields);
-                                                next.delete('verb_class');
-                                                setAutoFilledFields(next);
-                                            }
-                                        }}>
-                                            <option value="">—</option>
-                                            {VERB_CLASS_OPTIONS.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-                                        </select>
-                                        {autoFilledFields.has('verb_class') && (
-                                            <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse">
-                                                <span>✦</span>
-                                                <span>{t('Inherited from root', 'Miret mill-għerq')}</span>
-                                                <button
-                                                    type="button"
-                                                    className="ml-1 hover:text-blue-700 underline"
-                                                    onClick={() => {
-                                                        set('verb_class', '');
-                                                        const next = new Set(autoFilledFields);
-                                                        next.delete('verb_class');
-                                                        setAutoFilledFields(next);
-                                                    }}
-                                                >
-                                                    {t('reset', 'irrisettja')}
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
+                                        if (autoFilledFields.has('verb_class')) {
+                                            const next = new Set(autoFilledFields);
+                                            next.delete('verb_class');
+                                            setAutoFilledFields(next);
+                                        }
+                                    }}>
+                                        <option value="">—</option>
+                                        {VERB_CLASS_OPTIONS.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                                    </select>
+                                    {autoFilledFields.has('verb_class') && (
+                                        <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse">
+                                            <span>✦</span>
+                                            <span>{t('Inherited from root', 'Miret mill-għerq')}</span>
+                                            <button
+                                                type="button"
+                                                className="ml-1 hover:text-blue-700 underline"
+                                                onClick={() => {
+                                                    set('verb_class', '');
+                                                    const next = new Set(autoFilledFields);
+                                                    next.delete('verb_class');
+                                                    setAutoFilledFields(next);
+                                                }}
+                                            >
+                                                {t('reset', 'irrisettja')}
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                                 {form.verb_class === 'weak' && (
-                                    <div className="sm:col-span-1 lg:col-span-2">
+                                    <div>
                                         <label className={label}>{t('Subclass', 'Sottoklassi')}</label>
-                                        <div className="flex flex-wrap gap-1.5 mt-1">
+                                        <div className="flex gap-1.5 mt-1">
                                             {(['assimilative', 'hollow', 'defective'] as const).map(sub => (
                                                 <button
                                                     key={sub}
@@ -1194,7 +1186,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                                             setAutoFilledFields(next);
                                                         }
                                                     }}
-                                                    className={`flex-1 py-2 sm:py-1.5 text-[10px] font-semibold rounded-lg border transition-all capitalize min-h-[40px] sm:min-h-0 ${form._weakClass === sub
+                                                    className={`flex-1 py-1.5 text-[10px] font-semibold rounded-lg border transition-all capitalize ${form._weakClass === sub
                                                         ? 'bg-[#1034A6] text-white border-[#1034A6] shadow-sm'
                                                         : 'bg-white text-black/60 border-black/10 hover:bg-black/5 hover:border-black/20'
                                                         }`}
@@ -1203,24 +1195,24 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                                 </button>
                                             ))}
                                         </div>
-                                        {autoFilledFields.has('_weakClass') && (
-                                            <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse">
-                                                <span>✦</span>
-                                                <span>{t('Subclass inherited from root', 'Sottoklassi mirtet mill-għerq')}</span>
-                                                <button
-                                                    type="button"
-                                                    className="ml-1 hover:text-blue-700 underline"
-                                                    onClick={() => {
-                                                        set('_weakClass', '');
-                                                        const next = new Set(autoFilledFields);
-                                                        next.delete('_weakClass');
-                                                        setAutoFilledFields(next);
-                                                    }}
-                                                >
-                                                    {t('reset', 'irrisettja')}
-                                                </button>
-                                            </div>
-                                        )}
+                                    </div>
+                                )}
+                                {autoFilledFields.has('_weakClass') && (
+                                    <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse col-span-2">
+                                        <span>✦</span>
+                                        <span>{t('Subclass inherited from root', 'Sottoklassi mirtet mill-għerq')}</span>
+                                        <button
+                                            type="button"
+                                            className="ml-1 hover:text-blue-700 underline"
+                                            onClick={() => {
+                                                set('_weakClass', '');
+                                                const next = new Set(autoFilledFields);
+                                                next.delete('_weakClass');
+                                                setAutoFilledFields(next);
+                                            }}
+                                        >
+                                            {t('reset', 'irrisettja')}
+                                        </button>
                                     </div>
                                 )}
                                 <div>
@@ -1523,8 +1515,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         </button>
                                     )}
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <div className="sm:col-span-2">
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="col-span-2">
                                         <label className={label}>{t('Sense', 'Sens')} {i + 1}: {t('English', 'Ingliż')} *</label>
                                         <input className={inp} value={def.text_en} onChange={e => {
                                             const next = [...form.definitions];
@@ -1552,7 +1544,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         </select>
                                     </div>
                                     {form.pos === 'participle' && (
-                                        <div className="sm:col-span-2">
+                                        <div>
                                             <label className={label}>{t('Nuance', 'Sfumatura')}</label>
                                             <select className={sel} value={def.nuance || ''} onChange={e => {
                                                 const next = [...form.definitions];
@@ -1619,9 +1611,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         </div>
 
                         {form.etymology_chain.map((ety: any, i: number) => (
-                            <div key={i} className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-end bg-black/5 sm:bg-transparent p-4 sm:p-0 rounded-xl relative group">
+                            <div key={i} className="flex gap-2 items-end">
                                 <div className="flex-1">
-                                    <label className={label}>{t('Language', 'Lingwa')}</label>
+                                    {i === 0 && <label className={label}>{t('Language', 'Lingwa')}</label>}
                                     <input className={inp} value={ety.language} placeholder="e.g. Arabic" onChange={e => {
                                         const next = [...form.etymology_chain];
                                         next[i].language = e.target.value;
@@ -1629,7 +1621,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     }} />
                                 </div>
                                 <div className="flex-1">
-                                    <label className={label}>{t('Term', 'Kelma')}</label>
+                                    {i === 0 && <label className={label}>{t('Term', 'Kelma')}</label>}
                                     <input className={inp} value={ety.form} placeholder="e.g. kataba" onChange={e => {
                                         const next = [...form.etymology_chain];
                                         next[i].form = e.target.value;
@@ -1637,7 +1629,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     }} />
                                 </div>
                                 <div className="flex-1">
-                                    <label className={label}>{t('Meaning', 'Tifsira')}</label>
+                                    {i === 0 && <label className={label}>{t('Meaning', 'Tifsira')}</label>}
                                     <input className={inp} value={ety.meaning} placeholder="e.g. to write" onChange={e => {
                                         const next = [...form.etymology_chain];
                                         next[i].meaning = e.target.value;
@@ -1645,10 +1637,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     }} />
                                 </div>
                                 <button type="button" onClick={() => set('etymology_chain', form.etymology_chain.filter((_: any, idx: number) => idx !== i))}
-                                    className="self-end sm:mb-2 text-slate-400 hover:text-red-500 px-2 sm:px-1 shrink-0 bg-red-50 sm:bg-transparent py-2 sm:py-0 rounded-lg sm:rounded-none w-full sm:w-auto flex justify-center border border-red-100 sm:border-0 mt-2 sm:mt-0">
-                                    <Trash2 size={16} className="sm:hidden mr-2" />
-                                    <span className="sm:hidden font-bold text-xs uppercase tracking-widest">{t('Remove', 'Tneħħi')}</span>
-                                    <span className="hidden sm:inline text-xl">&times;</span>
+                                    className="mb-2 text-slate-400 hover:text-red-500 px-1">
+                                    &times;
                                 </button>
                             </div>
                         ))}
@@ -1686,14 +1676,14 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         )}
                 </div>
 
-                <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center pt-4 mt-4 border-t border-black/10 shrink-0 gap-4 sm:gap-0">
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div className="flex justify-between items-center pt-4 mt-4 border-t border-black/10 shrink-0">
+                    <div className="flex items-center gap-3">
                         {isEdit && (
                             <Button
                                 type="button"
                                 variant="secondary"
                                 size="sm"
-                                className="text-xs h-10 sm:h-8"
+                                className="text-xs"
                                 loading={saving}
                                 onClick={async () => {
                                     setSaving(true);
@@ -1714,14 +1704,14 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             </Button>
                         )}
                         {isDirty && (
-                            <Badge className="bg-amber-100 text-amber-700 animate-pulse border-amber-200 py-2 sm:py-1 flex justify-center">
+                            <Badge className="bg-amber-100 text-amber-700 animate-pulse border-amber-200">
                                 <AlertTriangle size={10} className="mr-1" /> {t('Unsaved Changes', 'Tibdil mhux merfugħ')}
                             </Badge>
                         )}
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                        <Button type="button" variant="ghost" className="h-10 sm:h-9" onClick={handleClose}>{t('Cancel', 'Ikkanċella')}</Button>
-                        <Button type="button" className="h-10 sm:h-9" onClick={handleSave} loading={saving}>
+                    <div className="flex gap-3">
+                        <Button type="button" variant="ghost" onClick={handleClose}>{t('Cancel', 'Ikkanċella')}</Button>
+                        <Button type="button" onClick={handleSave} loading={saving}>
                             {isEdit ? t('Save Changes', 'Issejva l-Bidliet') : t('Create Entry', 'Oħloq Entrata')}
                         </Button>
                     </div>
