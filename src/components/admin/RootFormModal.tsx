@@ -156,18 +156,18 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                     )}
 
                     {/* Consonants & Type & ID */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="col-span-1 md:col-span-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="col-span-1">
                             <label className={label}>{t('Root Consonants', 'Konsonanti')}</label>
                             <input className={inp} value={form.consonants} onChange={e => setForm({ ...form, consonants: e.target.value })} placeholder="e.g. f-għ-l" />
                         </div>
-                        <div className="col-span-1 md:col-span-1">
+                        <div className="col-span-1">
                             <label className={label}>{t('Root Class', 'Klassi tal-Għerq')}</label>
                             <div className="px-3 py-2 text-sm font-semibold text-black/40 bg-black/5 rounded-lg border border-black/5 h-[38px] flex items-center">
                                 {rootClass}
                             </div>
                         </div>
-                        <div className="col-span-2 md:col-span-2">
+                        <div className="sm:col-span-2">
                             <label className={label}>{t('Root ID', 'ID tal-Għerq')}</label>
                             <input
                                 className={inp + " font-mono text-[10px]"}
@@ -216,7 +216,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                         </div>
                     </div>
                     {/* Vowel Sets */}
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div>
                             <label className={label}>{t('Vowel Set (Perf)', 'Vokali (Perf)')}</label>
                             <input className={inp} value={form.vowel_set_perf || 'a-a'} onChange={e => {
@@ -313,7 +313,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                     {/* Etymology Section */}
                     <fieldset className="border border-[#ede9e1] rounded-xl p-4 pt-3">
                         <legend className="text-[0.65rem] font-bold text-black px-2 uppercase tracking-widest">{t('Etymology', 'Etimoloġija')}</legend>
-                        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mt-1">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-1">
                             <div>
                                 <label className={label}>Relationship</label>
                                 <select className={sel} value={form.etymology.relationship || 'From'} onChange={e => setEtymology('relationship', e.target.value)}>
@@ -337,7 +337,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                                 <label className={label}>Pronunciation</label>
                                 <input className={inp} value={form.etymology.pronunciation || ''} onChange={e => setEtymology('pronunciation', e.target.value)} placeholder="e.g. bada'a" />
                             </div>
-                            <div>
+                            <div className="sm:col-span-2 lg:col-span-1">
                                 <label className={label}>{t('Definition', 'Tifsira')}</label>
                                 <input className={inp} value={form.etymology.definition} onChange={e => setEtymology('definition', e.target.value)} placeholder="e.g. to begin" />
                             </div>
@@ -414,14 +414,14 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                             </fieldset>
                         )}
                 </div>
-                <div className="flex justify-between items-center pt-4 mt-4 border-t border-black/10 shrink-0">
+                <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center pt-4 mt-4 border-t border-black/10 shrink-0 gap-4 sm:gap-0">
                     <div>
                         {!isNew && (
                             <Button
                                 type="button"
                                 variant="secondary"
                                 size="sm"
-                                className="text-xs"
+                                className="text-xs h-10 sm:h-8 w-full sm:w-auto"
                                 loading={saving}
                                 onClick={async () => {
                                     setSaving(true);
@@ -442,9 +442,9 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                             </Button>
                         )}
                     </div>
-                    <div className="flex gap-3">
-                        <Button type="button" variant="ghost" onClick={onClose}>{t('Cancel', 'Ikkanċella')}</Button>
-                        <Button type="submit" loading={saving}>{t('Save Changes', 'Issejva l-Bidliet')}</Button>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <Button type="button" variant="ghost" className="h-10 sm:h-9" onClick={onClose}>{t('Cancel', 'Ikkanċella')}</Button>
+                        <Button type="submit" className="h-10 sm:h-9" loading={saving}>{t('Save Changes', 'Issejva l-Bidliet')}</Button>
                     </div>
                 </div>
             </form>

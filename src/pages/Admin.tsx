@@ -7,7 +7,6 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { adminListEntries, adminDeleteEntry, adminListRoots, adminDeleteRoot } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Spinner';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { RootFormModal } from '@/components/admin/RootFormModal';
@@ -53,7 +52,7 @@ export function Admin() {
     }, [tab, t, term]);
 
     return (
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8">
             {!hasAdminRights && (
                 <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-3 text-amber-900 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
                     <ShieldAlert className="shrink-0" size={20} />
@@ -63,45 +62,48 @@ export function Admin() {
                 </div>
             )}
 
-            <div className="flex items-center justify-between border-b border-black/5 pb-4">
-                <h1 className="font-serif text-3xl font-bold text-black">{term('admin-dashboard')}</h1>
-                <div className="flex bg-black/5 p-1 rounded-xl">
-                    <button
-                        onClick={() => setTab('entries')}
-                        className={cn(
-                            "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2",
-                            tab === 'entries' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
-                        )}
-                    >
-                        <FileText size={16} /> {term('entries')}
-                    </button>
-                    <button
-                        onClick={() => setTab('roots')}
-                        className={cn(
-                            "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2",
-                            tab === 'roots' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
-                        )}
-                    >
-                        <Layers size={16} /> {term('roots')}
-                    </button>
-                    <button
-                        onClick={() => setTab('settings')}
-                        className={cn(
-                            "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2",
-                            tab === 'settings' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
-                        )}
-                    >
-                        <Settings size={16} /> {term('settings')}
-                    </button>
-                    <button
-                        onClick={() => setTab('db')}
-                        className={cn(
-                            "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2",
-                            tab === 'db' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
-                        )}
-                    >
-                        <Database size={16} /> {term('db-tools')}
-                    </button>
+            <div className="flex flex-col gap-6 border-b border-black/5 pb-6">
+                <h1 className="font-serif text-3xl sm:text-4xl font-bold text-black text-center sm:text-left">{term('admin-dashboard')}</h1>
+
+                <div className="flex bg-black/5 p-1 rounded-xl overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-1">
+                    <div className="flex min-w-max gap-1">
+                        <button
+                            onClick={() => setTab('entries')}
+                            className={cn(
+                                "px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap",
+                                tab === 'entries' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
+                            )}
+                        >
+                            <FileText size={16} /> {term('entries')}
+                        </button>
+                        <button
+                            onClick={() => setTab('roots')}
+                            className={cn(
+                                "px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap",
+                                tab === 'roots' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
+                            )}
+                        >
+                            <Layers size={16} /> {term('roots')}
+                        </button>
+                        <button
+                            onClick={() => setTab('settings')}
+                            className={cn(
+                                "px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap",
+                                tab === 'settings' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
+                            )}
+                        >
+                            <Settings size={16} /> {term('settings')}
+                        </button>
+                        <button
+                            onClick={() => setTab('db')}
+                            className={cn(
+                                "px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap",
+                                tab === 'db' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
+                            )}
+                        >
+                            <Database size={16} /> {term('db-tools')}
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -218,27 +220,29 @@ function EntryManager() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
-                    <h2 className="text-sm font-bold text-black/40 uppercase tracking-widest">{total.toLocaleString()} {term('entries')} {term('found')}</h2>
+                    <h2 className="text-[10px] font-bold text-black/30 uppercase tracking-[0.2em]">{total.toLocaleString()} {term('entries')} {term('found')}</h2>
                 </div>
-                <div className="flex gap-2">
-                    <div className="flex bg-black/5 p-1 rounded-lg mr-2">
+                <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex bg-black/5 p-1 rounded-xl">
                         <button
                             onClick={() => setViewMode('grid')}
-                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'grid' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
+                            className={cn("p-2 rounded-lg transition-all", viewMode === 'grid' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
                         >
-                            <LayoutGrid size={16} />
+                            <LayoutGrid size={18} />
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'list' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
+                            className={cn("p-2 rounded-lg transition-all", viewMode === 'list' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
                         >
-                            <List size={16} />
+                            <List size={18} />
                         </button>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={load} leftIcon={<RefreshCw size={14} className={cn(loading && "animate-spin")} />}>{term('refresh')}</Button>
-                    <Button size="sm" onClick={() => { setEditEntry(null); setShowForm(true); }} leftIcon={<Plus size={14} />}>{term('new-entry')}</Button>
+                    <div className="flex gap-2 flex-grow sm:flex-grow-0">
+                        <Button variant="ghost" className="flex-1 sm:flex-none border border-black/5 bg-white shadow-sm" size="sm" onClick={load} leftIcon={<RefreshCw size={14} className={cn(loading && "animate-spin")} />}>{term('refresh')}</Button>
+                        <Button className="flex-1 sm:flex-none py-4" size="sm" onClick={() => { setEditEntry(null); setShowForm(true); }} leftIcon={<Plus size={14} />}>{term('new-entry')}</Button>
+                    </div>
                 </div>
             </div>
 
@@ -260,36 +264,38 @@ function EntryManager() {
                 </div>
             )}
 
-            <div className="space-y-4">
+            <div className="space-y-6">
                 <SearchInput value={query} onChange={setQuery} onSubmit={load} placeholder={term('search-entry') + "..."} />
 
                 {/* POS Filter Chips */}
-                <div className="flex flex-wrap gap-2 pb-2">
-                    <button
-                        onClick={() => setSelectedPos('all')}
-                        className={cn(
-                            "px-3 py-1.5 rounded-full text-xs font-bold transition-all border",
-                            selectedPos === 'all'
-                                ? "bg-[#1034A6] text-white border-[#1034A6]"
-                                : "bg-white text-black/60 border-black/10 hover:border-black/20"
-                        )}
-                    >
-                        {term('all').toUpperCase()}
-                    </button>
-                    {useAdminConfig().getValues('pos').map((pos: string) => (
+                <div className="flex bg-black/[0.03] p-1 rounded-2xl overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-1">
+                    <div className="flex min-w-max gap-1">
                         <button
-                            key={pos}
-                            onClick={() => setSelectedPos(pos)}
+                            onClick={() => setSelectedPos('all')}
                             className={cn(
-                                "px-3 py-1.5 rounded-full text-xs font-bold transition-all border uppercase tracking-wider",
-                                selectedPos === pos
-                                    ? "bg-[#1034A6] text-white border-[#1034A6]"
-                                    : "bg-white text-black/60 border-black/10 hover:border-black/20"
+                                "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
+                                selectedPos === 'all'
+                                    ? "bg-[#1034A6] text-white shadow-lg shadow-[#1034A6]/20"
+                                    : "text-black/40 hover:text-black/60"
                             )}
                         >
-                            {pos}
+                            {term('all').toUpperCase()}
                         </button>
-                    ))}
+                        {useAdminConfig().getValues('pos').map((pos: string) => (
+                            <button
+                                key={pos}
+                                onClick={() => setSelectedPos(pos)}
+                                className={cn(
+                                    "px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap uppercase tracking-widest",
+                                    selectedPos === pos
+                                        ? "bg-[#1034A6] text-white shadow-lg shadow-[#1034A6]/20"
+                                        : "text-black/40 hover:text-black/60"
+                                )}
+                            >
+                                {pos}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
@@ -381,20 +387,20 @@ function EntryManager() {
                                     ))}
                                 </div>
                             ) : (
-                                <Card className="overflow-hidden border-[#ede9e1]">
-                                    <table className="w-full text-sm">
-                                        <thead className="bg-[#f9f7f3] border-b border-[#ede9e1]">
+                                <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
+                                    <table className="w-full text-sm border-collapse min-w-[800px]">
+                                        <thead className="bg-[#fdfaf5] border-b border-[#ede9e1]">
                                             <tr>
                                                 <th className="p-4 w-10">
-                                                    <button onClick={toggleSelectAll} className="text-black/20 hover:text-black/40">
-                                                        {selectedIds.size === entries.length && entries.length > 0 ? <CheckSquare size={16} className="text-[#1034A6]" /> : <Square size={16} />}
+                                                    <button onClick={toggleSelectAll} className="text-black/10 hover:text-black/30">
+                                                        {selectedIds.size === entries.length && entries.length > 0 ? <CheckSquare size={18} className="text-[#1034A6]" /> : <Square size={18} />}
                                                     </button>
                                                 </th>
-                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">{term('word')} & ID</th>
-                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">{term('root')} & POS</th>
-                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">{term('meaning')}</th>
-                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">{term('details')}</th>
-                                                <th className="text-right p-4 text-xs font-bold text-black/40 uppercase">{term('actions')}</th>
+                                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('word')} & ID</th>
+                                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('root')} & POS</th>
+                                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('meaning')}</th>
+                                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('details')}</th>
+                                                <th className="text-right p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('actions')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -457,7 +463,7 @@ function EntryManager() {
                                             ))}
                                         </tbody>
                                     </table>
-                                </Card>
+                                </div>
                             )}
                         </div>
                     ))}
@@ -487,25 +493,25 @@ function EntryManager() {
 function BulkActionsBar({ count, onClear, onDelete }: { count: number; onClear: () => void; onDelete: () => void }) {
     const { term } = useLinguisticMode();
     return (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500">
-            <div className="bg-black text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-6 border border-white/10 backdrop-blur-md">
-                <div className="flex items-center gap-3">
-                    <div className="bg-[#1034A6] text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold">
+        <div className="fixed bottom-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500">
+            <div className="bg-black text-white px-4 sm:px-6 py-4 sm:py-3 rounded-2xl shadow-2xl flex flex-col sm:flex-row items-center gap-4 sm:gap-6 border border-white/10 backdrop-blur-md max-w-lg mx-auto">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <div className="bg-[#1034A6] text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0">
                         {count}
                     </div>
                     <span className="text-sm font-bold tracking-tight">{term('selected-entries')}</span>
                 </div>
-                <div className="h-4 w-px bg-white/10" />
-                <div className="flex gap-2">
+                <div className="hidden sm:block h-4 w-px bg-white/10" />
+                <div className="flex gap-2 w-full sm:w-auto">
                     <button
                         onClick={onClear}
-                        className="text-white/60 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 transition-colors"
+                        className="flex-1 sm:flex-none text-white/60 hover:text-white text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 transition-colors border border-white/5 bg-white/5 py-2 px-3 rounded-lg"
                     >
                         <X size={14} /> {term('clear-selection')}
                     </button>
                     <button
                         onClick={onDelete}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all active:scale-95"
+                        className="flex-1 sm:flex-none bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-lg shadow-red-500/20"
                     >
                         <Trash2 size={14} /> {term('delete-all')}
                     </button>
@@ -584,25 +590,27 @@ function RootManager() {
 
     return (
         <div className="space-y-4">
-            <div className="flex justify-between items-center">
-                <p className="text-sm text-[#4a4a4a] font-medium">{roots.length} {term('roots')} {term('found')}</p>
-                <div className="flex gap-2">
-                    <div className="flex bg-black/5 p-1 rounded-lg mr-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <p className="text-[10px] font-bold text-black/30 uppercase tracking-[0.2em]">{roots.length} {term('roots')} {term('found')}</p>
+                <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex bg-black/5 p-1 rounded-xl">
                         <button
                             onClick={() => setViewMode('grid')}
-                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'grid' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
+                            className={cn("p-2 rounded-lg transition-all", viewMode === 'grid' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
                         >
-                            <LayoutGrid size={16} />
+                            <LayoutGrid size={18} />
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'list' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
+                            className={cn("p-2 rounded-lg transition-all", viewMode === 'list' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
                         >
-                            <List size={16} />
+                            <List size={18} />
                         </button>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={load} leftIcon={<RefreshCw size={14} />}>{term('refresh')}</Button>
-                    <Button size="sm" onClick={() => setShowAdd(true)} leftIcon={<Plus size={14} />}>{term('new-root')}</Button>
+                    <div className="flex gap-2 flex-grow sm:flex-grow-0">
+                        <Button variant="ghost" className="flex-1 sm:flex-none border border-black/5 bg-white shadow-sm" size="sm" onClick={load} leftIcon={<RefreshCw size={14} />}>{term('refresh')}</Button>
+                        <Button className="flex-1 sm:flex-none py-4" size="sm" onClick={() => setShowAdd(true)} leftIcon={<Plus size={14} />}>{term('new-root')}</Button>
+                    </div>
                 </div>
             </div>
 
@@ -611,24 +619,24 @@ function RootManager() {
             {loading ? (
                 <div className="flex justify-center py-12"><Spinner /></div>
             ) : viewMode === 'list' ? (
-                <Card className="overflow-hidden border-[#ede9e1]">
-                    <table className="w-full text-sm">
-                        <thead className="bg-[#f9f7f3] border-b border-[#ede9e1]">
+                <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
+                    <table className="w-full text-sm border-collapse min-w-[1000px]">
+                        <thead className="bg-[#fdfaf5] border-b border-[#ede9e1]">
                             <tr>
                                 <th className="p-4 w-10">
-                                    <button onClick={toggleSelectAll} className="text-black/20 hover:text-black/40">
-                                        {selectedIds.size === roots.length && roots.length > 0 ? <CheckSquare size={16} className="text-[#1034A6]" /> : <Square size={16} />}
+                                    <button onClick={toggleSelectAll} className="text-black/10 hover:text-black/30">
+                                        {selectedIds.size === roots.length && roots.length > 0 ? <CheckSquare size={18} className="text-[#1034A6]" /> : <Square size={18} />}
                                     </button>
                                 </th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('consonants')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('meaning')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('class')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('vowels')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('source')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Tags</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('thesaurus')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('date')}</th>
-                                <th className="text-right p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('actions')}</th>
+                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('consonants')}</th>
+                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('meaning')}</th>
+                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('class')}</th>
+                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('vowels')}</th>
+                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('source')}</th>
+                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">Tags</th>
+                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('thesaurus')}</th>
+                                <th className="text-left p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('date')}</th>
+                                <th className="text-right p-4 text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -722,7 +730,7 @@ function RootManager() {
                             ))}
                         </tbody>
                     </table>
-                </Card>
+                </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {roots.map(r => (

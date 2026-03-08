@@ -67,8 +67,8 @@ function SuffixStrip({ labels, activeIdx, onToggle, disabledIndices = [] }: {
 }) {
     const dis = disabledIndices || [];
     return (
-        <div className="flex flex-wrap gap-1">
-            <div className="inline-flex rounded-md border border-black/10 overflow-hidden text-xs">
+        <div className="flex overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
+            <div className="inline-flex rounded-lg border border-[#d8cfc0] overflow-hidden text-[11px] bg-white shadow-sm shrink-0">
                 {labels.map((lbl, i) => {
                     const isDisabled = dis.includes(i);
                     return (
@@ -76,11 +76,11 @@ function SuffixStrip({ labels, activeIdx, onToggle, disabledIndices = [] }: {
                             key={lbl}
                             disabled={isDisabled}
                             onClick={() => onToggle(i)}
-                            className={`px-2.5 py-1 transition-colors font-mono border-r border-black/5 last:border-r-0 ${activeIdx === i
+                            className={`px-3 py-2 transition-colors font-mono border-r border-[#d8cfc0]/30 last:border-r-0 min-w-[32px] ${activeIdx === i
                                 ? 'bg-[#1034A6] text-white'
                                 : isDisabled
                                     ? 'bg-black/5 text-black/20 cursor-not-allowed'
-                                    : 'bg-white text-[#555] hover:bg-black/5'
+                                    : 'bg-white text-[#555] hover:bg-black/5 active:bg-black/10'
                                 }`}
                         >
                             {lbl}
@@ -214,9 +214,9 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                     </Link>
                 </div>
 
-                <div className="text-center mb-8 relative group max-w-fit mx-auto">
-                    <div className="relative inline-flex items-center justify-center">
-                        <h1 className="font-serif font-bold text-[3rem] leading-none text-[#000] tracking-tight">
+                <div className="text-center mb-10 relative group max-w-2xl mx-auto px-4">
+                    <div className="relative inline-flex flex-col items-center justify-center">
+                        <h1 className="font-serif font-bold text-[2.5rem] sm:text-[3.5rem] leading-none text-[#000] tracking-tight mb-3">
                             {isTheoretical && '*'}{entry.headword}
                         </h1>
                         {isActualAdmin && (
@@ -228,49 +228,54 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     } as any);
                                     setShowForm(true);
                                 }}
-                                className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
+                                className="sm:absolute sm:left-[calc(100%+12px)] sm:top-1/2 sm:-translate-y-1/2 p-2 px-2.5 text-[#1034A6] hover:bg-[#1034A6]/5 rounded-xl border border-[#1034A6]/10 transition-colors bg-white shadow-sm flex items-center gap-2 mb-4 sm:mb-0"
                                 title={term('edit-entry')}
                             >
                                 <Edit2 size={16} />
+                                <span className="text-xs font-bold sm:hidden">{term('edit')}</span>
                             </button>
                         )}
+                        <p className="text-[10px] sm:text-xs font-sans text-black/50 tracking-[0.15em] uppercase font-bold bg-black/[0.03] px-4 py-1.5 rounded-full inline-block">
+                            — {subParts.join(' • ')} —
+                        </p>
                     </div>
-                    <p className="text-xs font-sans text-black/40 tracking-[0.18em] mt-2">
-                        — {subParts.join(' • ')} —
-                    </p>
                 </div>
 
-                <div className="flex gap-6 items-start">
+                <div className="flex flex-col lg:flex-row gap-8 items-start">
                     {/* Left Sidebar */}
-                    <div className="w-64 shrink-0 space-y-4">
+                    <div className="w-full lg:w-72 shrink-0 space-y-5 order-2 lg:order-1">
                         <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-[#000] marker:text-black/30">
-                                {entry.definitions.map(def => (
-                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                            <ol className="list-decimal list-inside space-y-2 text-base lg:text-sm text-[#333] marker:text-black/20">
+                                {entry.definitions.map((def, i) => (
+                                    <li key={def.id} className="leading-relaxed">
+                                        <span className={i === 0 ? "font-medium text-black" : ""}>
+                                            {language === 'mt' && def.text_mt ? def.text_mt : def.text_en}
+                                        </span>
+                                    </li>
                                 ))}
                             </ol>
                         </SideCard>
 
                         {ety && ety.chain.length > 0 && (
                             <SideCard title={term('etymology')}>
-                                <p className="text-sm text-[#000] leading-relaxed">
+                                <p className="text-sm text-[#333] leading-relaxed">
                                     {term('from')}
-                                    <span style={{ color: BLUE }} className="font-medium mx-1">
+                                    <span style={{ color: BLUE }} className="font-bold mx-1">
                                         {term(ety.chain[0].language)}
                                     </span>
-                                    {ety.chain[0].script && <> <span className="font-arabic">{ety.chain[0].script}</span></>}
-                                    {ety.chain[1] && <> ({ety.chain[1].form})</>}.
+                                    {ety.chain[0].script && <> <span className="font-arabic text-lg">{ety.chain[0].script}</span></>}
+                                    {ety.chain[1] && <span className="italic"> ({ety.chain[1].form})</span>}.
                                 </p>
                             </SideCard>
                         )}
 
                         {vm.related_entries && vm.related_entries.length > 0 && (
                             <SideCard title={term('entrati relatati')}>
-                                <div className="space-y-1">
+                                <div className="space-y-2">
                                     {vm.related_entries.map(rel => (
-                                        <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
-                                            {rel.headword}{' '}
-                                            <span className="opacity-55 font-sans text-xs text-[#000]">
+                                        <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-base lg:text-sm font-serif group" style={{ color: BLUE }}>
+                                            <span className="font-bold group-hover:underline">{rel.headword}</span>{' '}
+                                            <span className="opacity-55 font-sans text-xs text-black block">
                                                 "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
                                             </span>
                                         </Link>
@@ -281,19 +286,19 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                         {vm.source_citation && (
                             <SideCard title={term('sors')}>
-                                <span className="text-sm font-medium" style={{ color: GOLD }}>{vm.source_citation}</span>
+                                <span className="text-xs font-bold px-2 py-1 bg-[#A07030]/10 rounded border border-[#A07030]/20" style={{ color: GOLD }}>{vm.source_citation}</span>
                             </SideCard>
                         )}
                     </div>
 
                     {/* Right Column */}
-                    <div className="flex-1 min-w-0 space-y-8">
-                        <div className="flex gap-8 items-start">
+                    <div className="flex-1 min-w-0 space-y-10 order-1 lg:order-2 w-full">
+                        <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-start">
                             {/* Properties */}
-                            <div className="w-52 shrink-0">
+                            <div className="w-full md:w-56 shrink-0 grid grid-cols-2 md:grid-cols-1 gap-x-4">
                                 {rootConsonants && (
                                     <PropRow label={term('għerq')}>
-                                        <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
+                                        <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-bold hover:underline text-lg md:text-base">
                                             {rootConsonants}
                                         </Link>
                                     </PropRow>
@@ -301,112 +306,99 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                 {entry.phonetics && entry.phonetics.length > 0 && (
                                     <PropRow label={term('pronunzja')}>
-                                        <div className="space-y-1.5 mt-1">
-                                            {entry.phonetics.map((ph, idx) => {
-                                                return (
-                                                    <div key={idx} className="flex flex-col items-start gap-2">
-                                                        {ph.ipa && <span className="text-[14px] tracking-tight font-mono">{ph.ipa}</span>}
-                                                        {ph.dialect && ph.dialect !== 'Standard' && (
-                                                            <span className="text-[0.6rem] bg-black/5 text-black/40 px-1 rounded uppercase tracking-tighter">
-                                                                {ph.dialect.replace(' (Għawdex)', '').replace(' (Arkajku)', '')}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                );
-                                            })}
+                                        <div className="flex flex-wrap md:flex-col gap-3 md:gap-1.5 mt-1">
+                                            {entry.phonetics.map((ph, idx) => (
+                                                <div key={idx} className="flex flex-col items-start gap-1">
+                                                    {ph.ipa && <span className="text-[15px] md:text-[14px] font-mono bg-white px-1.5 py-0.5 rounded border border-[#d8cfc0]/30">{ph.ipa}</span>}
+                                                    {ph.dialect && ph.dialect !== 'Standard' && (
+                                                        <span className="text-[0.6rem] font-bold text-black/30 uppercase tracking-tighter">
+                                                            {ph.dialect.replace(' (Għawdex)', '').replace(' (Arkajku)', '')}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            ))}
                                         </div>
                                     </PropRow>
                                 )}
 
                                 {patternValue && (
                                     <PropRow label={patternLabel}>
-                                        <Link to={`/pattern/${pattern?.id}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
+                                        <Link to={`/pattern/${pattern?.id}`} style={{ color: BLUE }} className="font-sans font-bold hover:underline text-lg md:text-base tracking-wider">
                                             {patternValue}
                                         </Link>
                                     </PropRow>
                                 )}
 
                                 <PropRow label={term('tranżittività')}>
-                                    <span className="capitalize">{term(vm.transitivity || 'both')}</span>
+                                    <span className="capitalize font-medium">{term(vm.transitivity || 'both')}</span>
                                 </PropRow>
 
                                 <PropRow label={term("sett ta' vokali")}>
-                                    <div className="space-y-0.5 text-sm">
-                                        <p>{term('perfett')} <span className="opacity-55 text-[0.7rem]">{term('(past)')}</span>: <span className="font-mono">{vm.vowel_set_perfect}</span></p>
-                                        <p>{term('imperfett')} <span className="opacity-55 text-[0.7rem]">{term('(present)')}</span>: <span className="font-mono">{vm.vowel_set_imperfect}</span></p>
-                                        <p>{term('imperattiv')}: <span className="font-mono">{vm.vowel_set_imperative}</span></p>
+                                    <div className="space-y-1 text-sm bg-black/[0.02] p-3 rounded-lg border border-[#d8cfc0]/20">
+                                        <p className="flex justify-between items-center"><span className="opacity-50 text-[0.65rem] uppercase font-bold">{term('perfett')}</span> <span className="font-mono font-bold">{vm.vowel_set_perfect}</span></p>
+                                        <p className="flex justify-between items-center"><span className="opacity-50 text-[0.65rem] uppercase font-bold">{term('imperfett')}</span> <span className="font-mono font-bold">{vm.vowel_set_imperfect}</span></p>
+                                        <p className="flex justify-between items-center"><span className="opacity-50 text-[0.65rem] uppercase font-bold">{term('imperattiv')}</span> <span className="font-mono font-bold">{vm.vowel_set_imperative}</span></p>
                                     </div>
                                 </PropRow>
-
-                                {/* Admin / Technical Metadata */}
-                                {isAdmin && entry.root_pattern_form?.root && (
-                                    <div className="mt-6 pt-6 border-t border-black/5">
-                                        <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
-                                        <div className="text-[11px] font-mono space-y-1 text-black/50">
-                                            <p>{term('strength')}: {entry.verb_class || entry.root_pattern_form.root.strength}</p>
-                                            {(entry.verb_weak_class || entry.root_pattern_form.root.weak_class) && <p>{term('weak-class')}: {entry.verb_weak_class || entry.root_pattern_form.root.weak_class}</p>}
-                                            <p>{term('imala-blocked')}: {entry.root_pattern_form.root.is_imala_blocked ? term('yes') : term('no')}</p>
-                                        </div>
-                                    </div>
-                                )}
                             </div>
 
                             {/* Conjugation Table */}
                             {conj && (
-                                <div className="flex-1 min-w-0">
-                                    <h2 className="font-sans font-semibold text-[1.25rem] text-[#000] mb-3">
+                                <div className="flex-1 min-w-0 w-full">
+                                    <h2 className="font-sans font-bold text-[1.1rem] uppercase tracking-widest text-[#000]/60 mb-4 flex items-center gap-2">
+                                        <div className="w-8 h-[2px] bg-[#1034A6]/20"></div>
                                         {term('conjugation table')}
                                     </h2>
-                                    <table className="w-full text-sm border-collapse">
-                                        <thead>
-                                            <tr className="border-b border-black/8 font-sans">
-                                                <th className="text-left font-semibold text-[#000] pb-2 pr-4 w-32">{term('person')}</th>
-                                                <th className="text-left font-semibold text-[#000] pb-2 pr-4">
-                                                    {term('imperfett')} <span className="opacity-55 font-normal text-xs">{term('(present)')}</span>
-                                                </th>
-                                                <th className="text-left font-semibold text-[#000] pb-2">
-                                                    {term('perfett')} <span className="opacity-55 font-normal text-xs">{term('(past)')}</span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {conj.rows.map(row => (
-                                                <tr key={row.person_mt} className="border-b border-black/4">
-                                                    <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
-                                                        {term(row.person_mt)}
-                                                    </td>
-                                                    <td className="py-1.5 pr-4 font-serif font-normal text-[#000]">
-                                                        {isTheoretical && '*'}{buildVerbForm(
-                                                            row.imperfect,
-                                                            isNeg,
-                                                            doIdx,
-                                                            ioIdx,
-                                                            vsetImpf,
-                                                            row.stems,
-                                                            conj?.blocksImala || false,
-                                                            vm.form
-                                                        )}
-                                                    </td>
-                                                    <td className="py-1.5 font-serif font-normal text-[#000]">
-                                                        {isTheoretical && '*'}{buildPerfectForm(
-                                                            row.perfect,
-                                                            row.perfect_neg ?? row.perfect,
-                                                            isNeg,
-                                                            doIdx,
-                                                            ioIdx,
-                                                            vsetPerf,
-                                                            row.stems,
-                                                            conj?.blocksImala || false,
-                                                            vm.form
-                                                        )}
-                                                    </td>
+
+                                    <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
+                                        <table className="w-full text-base sm:text-sm border-collapse min-w-[320px]">
+                                            <thead>
+                                                <tr className="border-b border-[#d8cfc0] font-sans">
+                                                    <th className="text-left font-bold text-black/30 text-[10px] uppercase tracking-widest pb-3 pr-4 w-28 lg:w-32">{term('person')}</th>
+                                                    <th className="text-left font-bold text-[#1034A6] pb-3 pr-4">
+                                                        {term('imperfett')} <span className="opacity-40 font-normal text-[0.65rem] block sm:inline">{term('(present)')}</span>
+                                                    </th>
+                                                    <th className="text-left font-bold text-[#1034A6] pb-3">
+                                                        {term('perfett')} <span className="opacity-40 font-normal text-[0.65rem] block sm:inline">{term('(past)')}</span>
+                                                    </th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-
-
-                                    <div className="mt-4 grid grid-cols-3 gap-2 text-sm border-t border-black/8 pt-3">
+                                            </thead>
+                                            <tbody>
+                                                {conj.rows.map(row => (
+                                                    <tr key={row.person_mt} className="border-b border-[#d8cfc0]/30 hover:bg-black/[0.01] transition-colors">
+                                                        <td className="py-2.5 pr-4 text-black/50 text-[11px] font-bold uppercase tracking-tighter sm:tracking-normal">
+                                                            {term(row.person_mt)}
+                                                        </td>
+                                                        <td className="py-2.5 pr-4 font-serif font-bold text-[1.1rem] sm:text-[1rem] text-[#000]">
+                                                            {isTheoretical && '*'}{buildVerbForm(
+                                                                row.imperfect,
+                                                                isNeg,
+                                                                doIdx,
+                                                                ioIdx,
+                                                                vsetImpf,
+                                                                row.stems,
+                                                                conj?.blocksImala || false,
+                                                                vm.form
+                                                            )}
+                                                        </td>
+                                                        <td className="py-2.5 font-serif font-bold text-[1.1rem] sm:text-[1rem] text-[#000]">
+                                                            {isTheoretical && '*'}{buildPerfectForm(
+                                                                row.perfect,
+                                                                row.perfect_neg ?? row.perfect,
+                                                                isNeg,
+                                                                doIdx,
+                                                                ioIdx,
+                                                                vsetPerf,
+                                                                row.stems,
+                                                                conj?.blocksImala || false,
+                                                                vm.form
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>        <div className="mt-4 grid grid-cols-3 gap-2 text-sm border-t border-black/8 pt-3">
                                         <p className="font-sans font-semibold text-[#000] self-center">{term('imperattiv')}</p>
                                         <div>
                                             <p className="text-xs text-black/40 mb-0.5">{term('singular')}</p>
@@ -447,9 +439,9 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     </div>
 
 
-                                    <div className="mt-4 pt-3 border-t border-black/8 space-y-4">
+                                    <div className="mt-6 pt-5 border-t border-[#d8cfc0] space-y-8">
                                         <div>
-                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{term('polarità')}</p>
+                                            <p className="text-[10px] text-black/40 mb-3 font-bold uppercase tracking-widest">{term('polarità')}</p>
                                             <TogglePill
                                                 options={['Positive', 'Negative']}
                                                 active={polarity}
@@ -458,7 +450,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             />
                                         </div>
                                         <div>
-                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{term('oġġett dirett')}</p>
+                                            <p className="text-[10px] text-black/40 mb-3 font-bold uppercase tracking-widest">{term('oġġett dirett')}</p>
                                             <SuffixStrip
                                                 labels={doLabels}
                                                 activeIdx={doIdx}
@@ -467,7 +459,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             />
                                         </div>
                                         <div>
-                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{term('oġġett indirett')}</p>
+                                            <p className="text-[10px] text-black/40 mb-3 font-bold uppercase tracking-widest">{term('oġġett indirett')}</p>
                                             <SuffixStrip
                                                 labels={ioLabels}
                                                 activeIdx={ioIdx}
@@ -485,6 +477,18 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </div>
                             )}
                         </div>
+
+                        {/* Administrative Meta for MD+ screens moved to bottom of content on mobile */}
+                        {isAdmin && entry.root_pattern_form?.root && (
+                            <div className="mt-2 p-5 bg-white rounded-xl border border-dashed border-black/10">
+                                <p className="text-[10px] uppercase tracking-widest text-[#1034A6] mb-3 font-bold">{term('internal-metadata')}</p>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-[11px] font-mono text-black/60">
+                                    <p><span className="opacity-50">{term('strength')}:</span> {entry.verb_class || entry.root_pattern_form.root.strength}</p>
+                                    {(entry.verb_weak_class || entry.root_pattern_form.root.weak_class) && <p><span className="opacity-50">{term('weak-class')}:</span> {entry.verb_weak_class || entry.root_pattern_form.root.weak_class}</p>}
+                                    <p><span className="opacity-50">{term('imala-blocked')}:</span> {entry.root_pattern_form.root.is_imala_blocked ? term('yes') : term('no')}</p>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Derived Terms */}
                         {((entry.verb_verbal_noun || vm.verbal_noun) || (entry.verb_passive_ptcp || vm.passive_participle) || (entry.verb_active_ptcp || vm.active_participle)) && (

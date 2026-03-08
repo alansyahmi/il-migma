@@ -172,27 +172,27 @@ function InflectionCell({ row }: { row: InflectionRow }) {
 function EntryCard({ result, index }: { result: SearchResult; index: number }) {
     const { term } = useLinguisticMode();
     return (
-        <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden">
-            <div className="grid grid-cols-[11rem_5rem_1fr_11rem] min-h-[5rem]">
+        <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden hover:border-black/20 transition-colors">
+            <div className="flex flex-col md:grid md:grid-cols-[14rem_6rem_1fr_12rem] min-h-[5rem]">
 
                 {/* Col 1: Index number | headword + root */}
-                <div className="px-4 py-4 flex items-start gap-2">
+                <div className="px-4 py-4 flex items-start gap-2 border-b md:border-b-0 md:border-r border-black/[0.03]">
                     <span className="text-xs text-black/30 font-sans w-5 shrink-0 pt-1">{index}.</span>
                     <div>
                         <Link to={`/entry/${result.id}`}
-                            className="font-serif font-extrabold text-[1.35rem] leading-tight text-[#000] hover:underline block">
+                            className="font-serif font-extrabold text-[1.5rem] md:text-[1.35rem] leading-tight text-[#000] hover:underline block">
                             {result.headword}
                         </Link>
-                        <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
+                        <div className="flex flex-wrap items-center gap-x-2 mt-1">
                             <Link to={`/root/${result.rootSlug}`}
                                 style={{ color: EGYPTIAN_BLUE }}
-                                className="text-xs hover:underline font-sans">
+                                className="text-xs hover:underline font-sans font-medium">
                                 {result.root}
                             </Link>
                             {result.gender && (
                                 <Link to={`/search?gender=${result.gender}`}
                                     style={{ color: EGYPTIAN_BLUE }}
-                                    className="text-xs hover:underline font-sans">
+                                    className="text-xs hover:underline font-sans font-medium">
                                     {term(result.gender)}
                                 </Link>
                             )}
@@ -201,26 +201,26 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
                 {/* Col 2: POS block */}
-                <div className="px-4 py-4 flex flex-col gap-0.5">
-                    <span className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug">
+                <div className="px-4 py-3 md:py-4 flex md:flex-col items-center md:items-start gap-2 border-b md:border-b-0 md:border-r border-black/[0.03] bg-black/[0.01] md:bg-transparent">
+                    <span className="text-[10px] md:text-xs text-[#000] font-sans font-bold uppercase tracking-wider leading-none md:leading-snug bg-black/5 md:bg-transparent px-1.5 py-0.5 md:p-0 rounded">
                         {term(result.pos)}
                     </span>
                     {result.formLines.map(line => (
-                        <span key={line} className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug">
+                        <span key={line} className="text-[10px] md:text-xs text-[#000] font-sans uppercase tracking-wide leading-snug hidden md:block opacity-60">
                             {line}
                         </span>
                     ))}
                 </div>
 
                 {/* Col 3: Definitions */}
-                <div className="px-5 py-4">
+                <div className="px-5 py-4 md:py-4 border-b md:border-b-0 md:border-r border-black/[0.03]">
                     {result.definitions.length === 1 ? (
-                        <p className="text-sm text-[#000]">{result.definitions[0]}</p>
+                        <p className="text-base md:text-sm text-[#000] leading-relaxed">{result.definitions[0]}</p>
                     ) : (
-                        <ol className="space-y-0.5 list-none">
+                        <ol className="space-y-1 md:space-y-0.5 list-none">
                             {result.definitions.map((def, i) => (
-                                <li key={i} className="text-sm text-[#000]">
-                                    {i + 1}. {def}
+                                <li key={i} className="text-base md:text-sm text-[#000] leading-relaxed">
+                                    <span className="text-black/30 mr-1.5 font-sans text-xs">{i + 1}.</span> {def}
                                 </li>
                             ))}
                         </ol>
@@ -228,10 +228,10 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
                 {/* Col 4: Inflections */}
-                <div className="px-4 py-4 space-y-1">
+                <div className="px-5 py-4 bg-black/[0.01] md:bg-transparent space-y-2 md:space-y-1">
                     {result.inflections.map((row, i) => (
                         <div key={i} className="flex items-baseline gap-3">
-                            <span className="text-xs text-black/55 font-sans w-[4.5rem] shrink-0 leading-snug">
+                            <span className="text-[10px] md:text-xs text-black/40 font-sans w-20 md:w-[4.5rem] shrink-0 leading-snug uppercase tracking-tighter">
                                 {row.label}
                             </span>
                             <InflectionCell row={row} />
@@ -388,15 +388,17 @@ export function Search() {
     const setFilter = <K extends keyof Filters>(key: K, value: Filters[K]) =>
         setFilters(f => ({ ...f, [key]: value }));
 
+    const [showFilters, setShowFilters] = useState(false);
+
     return (
         <div style={bgStyle}>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
 
                 {/* ── Page heading ── */}
                 <div className="mb-6">
                     {submitted ? (
                         <>
-                            <h1 className="font-serif font-medium text-[2rem] leading-tight text-[#000]">
+                            <h1 className="font-serif font-medium text-[2.2rem] sm:text-[2.5rem] leading-tight text-[#000]">
                                 {term('results-for').replace('{q}', submitted)}
                             </h1>
                             <p className="text-black/40 text-sm font-sans mt-1">
@@ -405,10 +407,10 @@ export function Search() {
                         </>
                     ) : (
                         <>
-                            <h1 className="font-serif font-medium text-[2rem] leading-tight text-[#000]">
+                            <h1 className="font-serif font-medium text-[2.2rem] sm:text-[2.5rem] leading-tight text-[#000]">
                                 {term('search-results')}
                             </h1>
-                            <p className="text-black/40 text-sm font-sans mt-2">
+                            <p className="text-black/40 text-sm font-sans mt-2 italic shadow-sm inline-block">
                                 {term('search-desc')}
                             </p>
                         </>
@@ -416,20 +418,20 @@ export function Search() {
                 </div>
 
                 {/* ── Inline search bar ── */}
-                <form onSubmit={handleSearch} className="max-w-2xl mb-8 relative">
-                    <div className="flex items-center bg-white border border-black/10 rounded-lg overflow-hidden shadow-sm">
+                <form onSubmit={handleSearch} className="max-w-3xl mb-8 relative">
+                    <div className="flex items-center bg-white border border-[#d8cfc0] rounded-xl overflow-hidden shadow-lg shadow-black/5 focus-within:ring-2 focus-within:ring-[#1034A6]/20 transition-all">
                         {/* Keyboard toggle */}
                         <button
                             ref={kbRef}
                             type="button"
                             onClick={() => setKbOpen(o => !o)}
                             className={cn(
-                                'flex items-center gap-1 px-3 border-r border-black/10 shrink-0 py-2.5 transition-colors',
-                                kbOpen ? 'text-[#000] bg-black/5' : 'text-[#555] hover:text-[#000]',
+                                'flex items-center gap-1.5 px-4 border-r border-[#d8cfc0] shrink-0 py-3.5 transition-colors',
+                                kbOpen ? 'text-[#1034A6] bg-black/5' : 'text-[#555] hover:text-[#000]',
                             )}
                             aria-label={term('toggle-picker')}
                         >
-                            <Keyboard size={14} />
+                            <Keyboard size={18} />
                             <span className="text-xs text-[#aaa]">›</span>
                         </button>
                         <input
@@ -438,12 +440,12 @@ export function Search() {
                             value={query}
                             onChange={e => setQuery(e.target.value)}
                             placeholder={term('search') + '…'}
-                            className="flex-1 px-3 py-2.5 text-sm bg-transparent focus:outline-none font-sans text-[#000]"
+                            className="flex-1 px-4 py-3.5 text-base sm:text-lg bg-transparent focus:outline-none font-sans text-[#000] placeholder:text-gray-400"
                         />
                         <button type="submit"
-                            className="px-3 py-2.5 text-[#555] hover:text-[#000] transition-colors shrink-0"
+                            className="px-5 py-3.5 text-[#1034A6] hover:bg-black/5 transition-colors shrink-0"
                             aria-label={term('search')}>
-                            <SearchIcon size={16} />
+                            <SearchIcon size={20} />
                         </button>
                     </div>
                     <MalteseCharPicker
@@ -454,53 +456,70 @@ export function Search() {
                     />
                 </form>
 
+                {/* ── Mobile Filters Toggle ── */}
+                <button
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="lg:hidden w-full mb-6 py-3 px-4 bg-white border border-[#d8cfc0] rounded-xl text-[#1034A6] font-bold text-sm flex items-center justify-between shadow-sm active:bg-black/5 transition-colors"
+                >
+                    <div className="flex items-center gap-2">
+                        <Layers size={16} />
+                        {term('filters')}
+                    </div>
+                    <span>{showFilters ? '−' : '+'}</span>
+                </button>
+
                 {/* ── Two-column layout ── */}
-                <div className="flex gap-6 items-start">
+                <div className="flex flex-col lg:flex-row gap-8 items-start">
 
                     {/* Filters sidebar */}
-                    <aside className="w-64 shrink-0 bg-white rounded-xl border border-black/8 shadow-sm p-5 space-y-4 sticky top-20">
-                        <h2 className="font-sans font-semibold text-sm text-[#000]">{term('filters')}</h2>
+                    <aside className={cn(
+                        "w-full lg:w-72 shrink-0 bg-white rounded-2xl border border-[#d8cfc0]/40 shadow-sm p-6 space-y-6 sticky top-24 transition-all duration-300",
+                        !showFilters && "hidden lg:block"
+                    )}>
+                        <h2 className="font-sans font-bold text-base text-[#000] border-b border-[#d8cfc0]/30 pb-3 hidden lg:block">{term('filters')}</h2>
 
-                        <FilterSelect
-                            label={term("max-results")}
-                            value={filters.maxResults}
-                            onChange={v => setFilter('maxResults', v)}
-                            options={[
-                                { value: '10', label: '10' },
-                                { value: '25', label: '25' },
-                                { value: '50', label: '50' },
-                                { value: '100', label: '100' },
-                            ]}
-                        />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6 sm:gap-4 lg:gap-6">
+                            <FilterSelect
+                                label={term("max-results")}
+                                value={filters.maxResults}
+                                onChange={v => setFilter('maxResults', v)}
+                                options={[
+                                    { value: '10', label: '10' },
+                                    { value: '25', label: '25' },
+                                    { value: '50', label: '50' },
+                                    { value: '100', label: '100' },
+                                ]}
+                            />
 
-                        <FilterSelect
-                            label={term("part-of-speech")}
-                            value={filters.pos}
-                            onChange={v => setFilter('pos', v)}
-                            options={POS_FILTER_OPTIONS}
-                        />
+                            <FilterSelect
+                                label={term("part-of-speech")}
+                                value={filters.pos}
+                                onChange={v => setFilter('pos', v)}
+                                options={POS_FILTER_OPTIONS}
+                            />
 
-                        <FilterSelect
-                            label={term("root") + " (" + term("form") + ")"}
-                            value={filters.rootType}
-                            onChange={v => setFilter('rootType', v)}
-                            options={ROOT_TYPE_FILTER_OPTIONS}
-                        />
+                            <FilterSelect
+                                label={term("root") + " (" + term("form") + ")"}
+                                value={filters.rootType}
+                                onChange={v => setFilter('rootType', v)}
+                                options={ROOT_TYPE_FILTER_OPTIONS}
+                            />
 
-                        <FilterSelect
-                            label={term("source")}
-                            value={filters.source}
-                            onChange={v => setFilter('source', v)}
-                            options={[
-                                { value: '', label: term('all') },
-                                { value: 'spagnol2011', label: 'Spagnol (2011)' },
-                                { value: 'mayer2013', label: 'Mayer (2013)' },
-                                { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
-                                { value: 'maltese-academy', label: term('maltese-academy') },
-                            ]}
-                        />
+                            <FilterSelect
+                                label={term("source")}
+                                value={filters.source}
+                                onChange={v => setFilter('source', v)}
+                                options={[
+                                    { value: '', label: term('all') },
+                                    { value: 'spagnol2011', label: 'Spagnol (2011)' },
+                                    { value: 'mayer2013', label: 'Mayer (2013)' },
+                                    { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
+                                    { value: 'maltese-academy', label: term('maltese-academy') },
+                                ]}
+                            />
+                        </div>
 
-                        <div className="border-t border-black/8 pt-4 space-y-2.5">
+                        <div className="border-t border-[#d8cfc0]/30 pt-6 space-y-3">
                             <FilterCheckbox label={term('search-lemma')}
                                 checked={filters.searchLemma} onChange={v => setFilters(f => ({ ...f, searchLemma: v }))} />
                             <FilterCheckbox label={term('search-word-forms')}
@@ -513,36 +532,41 @@ export function Search() {
                                 checked={filters.includePending}
                                 onChange={v => setFilter('includePending', v)} />
                         </div>
+
+                        <button
+                            onClick={() => { handleSearch(); if (window.innerWidth < 1024) setShowFilters(false); }}
+                            className="w-full py-3 bg-[#1034A6] text-white rounded-xl font-bold text-sm hover:bg-[#0c268c] transition-colors shadow-lg shadow-[#1034A6]/20"
+                        >
+                            {term('apply-filters')}
+                        </button>
                     </aside>
 
                     {/* Results list */}
-                    <div className="flex-1 space-y-3 min-w-0">
+                    <div className="flex-1 space-y-4 min-w-0 w-full">
                         {results.length === 0 && !loading && isSearchPerformed && (
-                            <div className="bg-white/50 rounded-xl border border-white/40 shadow-sm p-10 text-left">
-                                <p className="text-sm text-[#000] mb-2">
+                            <div className="bg-white/50 rounded-2xl border border-[#d8cfc0]/30 shadow-sm p-8 sm:p-12 text-left">
+                                <p className="text-lg text-[#000] font-sans font-medium mb-3">
                                     {term('no-results-found').replace('{q}', submitted)}
                                 </p>
-                                <p className="text-xs text-black/40 mt-1 mb-4">
-                                    {term('include-suggested-desc')}
+                                <p className="text-sm text-black/40 mt-1 mb-6 leading-relaxed">
+                                    {term('include-suggested-desc')} {term('no-results-desc')}
                                 </p>
-                                <p className="text-black/40 text-sm mb-6 max-w-md">
-                                    {term('no-results-desc')}
-                                </p>
-                                <div className="flex items-center justify-end gap-3">
-                                    <Link to={`/suggest?q=${submitted}`} className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/90 transition-colors text-sm font-medium">
-                                        <MessageSquare size={16} />
+                                <div className="flex flex-col sm:flex-row items-center justify-start gap-3">
+                                    <Link to={`/suggest?q=${submitted}`} className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-black text-white rounded-xl hover:bg-black/90 transition-colors text-sm font-bold">
+                                        <MessageSquare size={18} />
                                         {term('suggest-entry')}
                                     </Link>
-                                    <Link to="/random" className="flex items-center gap-2 px-4 py-2 border border-black/10 text-black rounded-lg hover:bg-black/5 transition-colors text-sm font-medium">
-                                        <Layers size={16} />
+                                    <Link to="/search?q=a&random=1" className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 border border-black/10 text-black rounded-xl hover:bg-black/5 transition-colors text-sm font-bold bg-white">
+                                        <Layers size={18} />
                                         {term('każwali')}
                                     </Link>
                                 </div>
                             </div>
                         )}
                         {loading && (
-                            <div className="flex justify-center p-10">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1034A6]"></div>
+                            <div className="flex flex-col items-center justify-center p-20 gap-4">
+                                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#1034A6]"></div>
+                                <span className="text-xs font-bold text-[#1034A6] uppercase tracking-widest">{term('loading')}...</span>
                             </div>
                         )}
                         {!loading && results.map((r, i) => (
