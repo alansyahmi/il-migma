@@ -1664,7 +1664,8 @@ function genFormXaDefective(
                 impfType2: `st${impV1}${C1}${C2}${C3}`,
             },
             blocksImala:
-                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+                isImalaBlocked ||
+                (C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a"))),
         },
         C3,
         verbForm,
@@ -1794,7 +1795,7 @@ function genFormXbStrong(
             impSg,
             impPl,
             impSgStems: {
-                impfType1: `st${C1}${impV1}${C2D}i${C3}`,
+                impfType1: `st${C1}${impV1}${C2D}${applyAttachedShift(impV2, C3)}${C3}`,
                 impfType2: `st${C1}${impV1}${C2D}${C3}`,
             },
             blocksImala:
