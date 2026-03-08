@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { MOCK_ENTRIES } from '@/data/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
 import { generateConjugation } from '@/lib/conjugationEngine';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
-import { Edit2 } from 'lucide-react';
+import { Edit2, ArrowLeft, Search } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { apiGetEntry } from '@/lib/api';
 
@@ -115,7 +115,7 @@ function DerivedTermLink({ label, value }: { label: string; value: string }) {
 // ── Verb View ──────────────────────────────────────────────────────────────
 
 function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
-    const { t, language } = useLanguage();
+    const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
@@ -179,15 +179,22 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const ioLabels = getIoLabels(vsetImpf);
 
 
-    const strengthLabel = entry.verb_class?.toUpperCase() || (entry.root_pattern_form?.root?.strength === 'strong-hybrid' ? 'STRONG' : entry.root_pattern_form?.root?.strength?.toUpperCase());
-    const weakClassLabel = entry.verb_weak_class || entry.root_pattern_form?.root?.weak_class || vm.weak_class;
+    const strengthRaw = entry.verb_class || entry.root_pattern_form?.root?.strength || 'strong';
+    const strengthLabel = term(strengthRaw === 'strong-hybrid' ? 'strong-hybrid' : strengthRaw);
+    const weakClassRaw = entry.verb_weak_class || entry.root_pattern_form?.root?.weak_class || vm.weak_class;
+    const weakClassLabel = weakClassRaw ? term(weakClassRaw) : null;
 
     const subParts = [
-        t('VERB', term('verb')).toUpperCase(),
-        vm.form ? `${t('FORM', term('FORMA'))} ${vm.form}` : null,
-        strengthLabel,
-        weakClassLabel ? weakClassLabel.toUpperCase() : null,
-        ...(vm.root_tags ?? []).filter(tag => tag !== 'STRONG' && tag !== 'WEAK' && tag !== strengthLabel && tag !== weakClassLabel?.toUpperCase()).map(tag => tag.toUpperCase())
+        term('verb').toUpperCase(),
+        vm.form ? `${term('forma-label')} ${vm.form}` : null,
+        strengthLabel?.toUpperCase(),
+        weakClassLabel?.toUpperCase(),
+        ...(vm.root_tags ?? [])
+            .filter(tag => {
+                const upperTag = tag.toUpperCase();
+                return upperTag !== 'STRONG' && upperTag !== 'WEAK' && upperTag !== strengthRaw.toUpperCase() && upperTag !== weakClassRaw?.toUpperCase();
+            })
+            .map(tag => term(tag).toUpperCase())
     ].filter(Boolean);
 
     const patternLabel = term('cv-pattern');
@@ -200,7 +207,12 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
     return (
         <div style={bgStyle}>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-10">
+                <div className="flex items-center gap-2 mb-8">
+                    <Link to="/search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-search')}
+                    </Link>
+                </div>
 
                 <div className="text-center mb-8 relative group max-w-fit mx-auto">
                     <div className="relative inline-flex items-center justify-center">
@@ -217,13 +229,13 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     setShowForm(true);
                                 }}
                                 className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
-                                title="Edit Entry"
+                                title={term('edit-entry')}
                             >
                                 <Edit2 size={16} />
                             </button>
                         )}
                     </div>
-                    <p className="text-xs font-sans text-black/40 tracking-[0.18em] mt-2 uppercase">
+                    <p className="text-xs font-sans text-black/40 tracking-[0.18em] mt-2">
                         — {subParts.join(' • ')} —
                     </p>
                 </div>
@@ -231,7 +243,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                 <div className="flex gap-6 items-start">
                     {/* Left Sidebar */}
                     <div className="w-64 shrink-0 space-y-4">
-                        <SideCard title={t('Gloss', term('Tifsira'))}>
+                        <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-[#000] marker:text-black/30">
                                 {entry.definitions.map(def => (
                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
@@ -240,11 +252,11 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         </SideCard>
 
                         {ety && ety.chain.length > 0 && (
-                            <SideCard title={t('Etymology', term('Etimoloġija'))}>
+                            <SideCard title={term('etymology')}>
                                 <p className="text-sm text-[#000] leading-relaxed">
-                                    {t('From ', 'Mill-')}
-                                    <span style={{ color: BLUE }} className="font-medium">
-                                        {t(ety.chain[0].language, term(ety.chain[0].language))}
+                                    {term('from')}
+                                    <span style={{ color: BLUE }} className="font-medium mx-1">
+                                        {term(ety.chain[0].language)}
                                     </span>
                                     {ety.chain[0].script && <> <span className="font-arabic">{ety.chain[0].script}</span></>}
                                     {ety.chain[1] && <> ({ety.chain[1].form})</>}.
@@ -253,7 +265,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         )}
 
                         {vm.related_entries && vm.related_entries.length > 0 && (
-                            <SideCard title={t('Related Entries', term('Entrati Relatati'))}>
+                            <SideCard title={term('entrati relatati')}>
                                 <div className="space-y-1">
                                     {vm.related_entries.map(rel => (
                                         <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
@@ -268,7 +280,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         )}
 
                         {vm.source_citation && (
-                            <SideCard title={t('Source', term('sors'))}>
+                            <SideCard title={term('sors')}>
                                 <span className="text-sm font-medium" style={{ color: GOLD }}>{vm.source_citation}</span>
                             </SideCard>
                         )}
@@ -280,7 +292,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             {/* Properties */}
                             <div className="w-52 shrink-0">
                                 {rootConsonants && (
-                                    <PropRow label={t('Root', term('Għerq'))}>
+                                    <PropRow label={term('għerq')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
                                             {rootConsonants}
                                         </Link>
@@ -288,7 +300,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 )}
 
                                 {entry.phonetics && entry.phonetics.length > 0 && (
-                                    <PropRow label={t('Pronunciation', term('Pronunzja'))}>
+                                    <PropRow label={term('pronunzja')}>
                                         <div className="space-y-1.5 mt-1">
                                             {entry.phonetics.map((ph, idx) => {
                                                 return (
@@ -314,26 +326,26 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     </PropRow>
                                 )}
 
-                                <PropRow label={t('Transitivity', term('Tranżittività'))}>
-                                    <span className="capitalize">{vm.transitivity === 'transitive' ? t('Transitive', term('Tranżittiv')) : vm.transitivity === 'intransitive' ? t('Intransitive', term('Intranżittiv')) : t('Both', term('It-Tnejn'))}</span>
+                                <PropRow label={term('tranżittività')}>
+                                    <span className="capitalize">{term(vm.transitivity || 'both')}</span>
                                 </PropRow>
 
-                                <PropRow label={t('Vowel Set', term("Sett ta' Vokali"))}>
+                                <PropRow label={term("sett ta' vokali")}>
                                     <div className="space-y-0.5 text-sm">
-                                        <p>{t('Perfect', term('Perfett'))} <span className="opacity-55 text-[0.7rem]">{t('(Past)', term('(Past)'))}</span>: <span className="font-mono">{vm.vowel_set_perfect}</span></p>
-                                        <p>{t('Imperfect', term('Imperfett'))} <span className="opacity-55 text-[0.7rem]">{t('(Present)', term('(Present)'))}</span>: <span className="font-mono">{vm.vowel_set_imperfect}</span></p>
-                                        <p>{t('Imperative', term('Imperattiv'))}: <span className="font-mono">{vm.vowel_set_imperative}</span></p>
+                                        <p>{term('perfett')} <span className="opacity-55 text-[0.7rem]">{term('(past)')}</span>: <span className="font-mono">{vm.vowel_set_perfect}</span></p>
+                                        <p>{term('imperfett')} <span className="opacity-55 text-[0.7rem]">{term('(present)')}</span>: <span className="font-mono">{vm.vowel_set_imperfect}</span></p>
+                                        <p>{term('imperattiv')}: <span className="font-mono">{vm.vowel_set_imperative}</span></p>
                                     </div>
                                 </PropRow>
 
                                 {/* Admin / Technical Metadata */}
                                 {isAdmin && entry.root_pattern_form?.root && (
                                     <div className="mt-6 pt-6 border-t border-black/5">
-                                        <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{t('Internal Metadata', 'Metadata Interna')}</p>
+                                        <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
                                         <div className="text-[11px] font-mono space-y-1 text-black/50">
-                                            <p>{t('Strength', 'Saħħa')}: {entry.verb_class || entry.root_pattern_form.root.strength}</p>
-                                            {(entry.verb_weak_class || entry.root_pattern_form.root.weak_class) && <p>{t('Weak Class', 'Klassi Dgħajfa')}: {entry.verb_weak_class || entry.root_pattern_form.root.weak_class}</p>}
-                                            <p>{t('Imala Blocked', 'Imala Imblukkata')}: {entry.root_pattern_form.root.is_imala_blocked ? t('Yes', 'Iva') : t('No', 'Le')}</p>
+                                            <p>{term('strength')}: {entry.verb_class || entry.root_pattern_form.root.strength}</p>
+                                            {(entry.verb_weak_class || entry.root_pattern_form.root.weak_class) && <p>{term('weak-class')}: {entry.verb_weak_class || entry.root_pattern_form.root.weak_class}</p>}
+                                            <p>{term('imala-blocked')}: {entry.root_pattern_form.root.is_imala_blocked ? term('yes') : term('no')}</p>
                                         </div>
                                     </div>
                                 )}
@@ -343,17 +355,17 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             {conj && (
                                 <div className="flex-1 min-w-0">
                                     <h2 className="font-sans font-semibold text-[1.25rem] text-[#000] mb-3">
-                                        {t('Conjugation Table', term('Tabella tal-') + term('konjugazzjoni'))}
+                                        {term('conjugation table')}
                                     </h2>
                                     <table className="w-full text-sm border-collapse">
                                         <thead>
                                             <tr className="border-b border-black/8 font-sans">
-                                                <th className="text-left font-semibold text-[#000] pb-2 pr-4 w-32">{t('Person', term('Persuna'))}</th>
+                                                <th className="text-left font-semibold text-[#000] pb-2 pr-4 w-32">{term('person')}</th>
                                                 <th className="text-left font-semibold text-[#000] pb-2 pr-4">
-                                                    {t('Imperfect', term('Imperfett'))} <span className="opacity-55 font-normal text-xs">{t('(Present)', term('(Present)'))}</span>
+                                                    {term('imperfett')} <span className="opacity-55 font-normal text-xs">{term('(present)')}</span>
                                                 </th>
                                                 <th className="text-left font-semibold text-[#000] pb-2">
-                                                    {t('Perfect', term('Perfett'))} <span className="opacity-55 font-normal text-xs">{t('(Past)', term('(Past)'))}</span>
+                                                    {term('perfett')} <span className="opacity-55 font-normal text-xs">{term('(past)')}</span>
                                                 </th>
                                             </tr>
                                         </thead>
@@ -361,7 +373,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             {conj.rows.map(row => (
                                                 <tr key={row.person_mt} className="border-b border-black/4">
                                                     <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
-                                                        {t(row.person_en, row.person_mt)}
+                                                        {term(row.person_mt)}
                                                     </td>
                                                     <td className="py-1.5 pr-4 font-serif font-normal text-[#000]">
                                                         {isTheoretical && '*'}{buildVerbForm(
@@ -395,9 +407,9 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
 
                                     <div className="mt-4 grid grid-cols-3 gap-2 text-sm border-t border-black/8 pt-3">
-                                        <p className="font-sans font-semibold text-[#000] self-center">{t('Imperative', term('Imperattiv'))}</p>
+                                        <p className="font-sans font-semibold text-[#000] self-center">{term('imperattiv')}</p>
                                         <div>
-                                            <p className="text-xs text-black/40 mb-0.5">{t('Singular', term('singular'))}</p>
+                                            <p className="text-xs text-black/40 mb-0.5">{term('singular')}</p>
                                             <p className="font-serif font-normal text-[#000]">
                                                 {(() => {
                                                     const row = conj.rows[1]; // inti
@@ -415,7 +427,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             </p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-black/40 mb-0.5">{t('Plural', term('plural'))}</p>
+                                            <p className="text-xs text-black/40 mb-0.5">{term('plural')}</p>
                                             <p className="font-serif font-normal text-[#000]">
                                                 {(() => {
                                                     const row = conj.rows[5]; // intom
@@ -437,16 +449,16 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                     <div className="mt-4 pt-3 border-t border-black/8 space-y-4">
                                         <div>
-                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{t('Polarity', term('Polarità'))}</p>
+                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{term('polarità')}</p>
                                             <TogglePill
                                                 options={['Positive', 'Negative']}
                                                 active={polarity}
-                                                labels={[t('Positive', term('Positive')), t('Negative', term('Negative'))]}
+                                                labels={[term('positive'), term('negative')]}
                                                 onChange={v => setPolarity(v as any)}
                                             />
                                         </div>
                                         <div>
-                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{t('Direct Object', term('Oġġett Dirett'))}</p>
+                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{term('oġġett dirett')}</p>
                                             <SuffixStrip
                                                 labels={doLabels}
                                                 activeIdx={doIdx}
@@ -455,7 +467,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             />
                                         </div>
                                         <div>
-                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{t('Indirect Object', term('Oġġett Indirett'))}</p>
+                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{term('oġġett indirett')}</p>
                                             <SuffixStrip
                                                 labels={ioLabels}
                                                 activeIdx={ioIdx}
@@ -477,23 +489,23 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         {/* Derived Terms */}
                         {((entry.verb_verbal_noun || vm.verbal_noun) || (entry.verb_passive_ptcp || vm.passive_participle) || (entry.verb_active_ptcp || vm.active_participle)) && (
                             <div>
-                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{t('Derived Terms', 'Termini Derivati')}</h2>
+                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{term('termini derivati')}</h2>
                                 <div className="flex gap-10 text-sm">
                                     {(entry.verb_verbal_noun || vm.verbal_noun) && (
                                         <DerivedTermLink
-                                            label={t('Verbal Noun', term('Nom Verbali'))}
+                                            label={term('nom verbali')}
                                             value={(isTheoretical && !(entry.verb_verbal_noun || vm.verbal_noun)!.startsWith('*') ? '*' : '') + (entry.verb_verbal_noun || vm.verbal_noun)}
                                         />
                                     )}
                                     {(entry.verb_passive_ptcp || vm.passive_participle) && (
                                         <DerivedTermLink
-                                            label={t('Passive Participle', term('Partiċipju Passiv'))}
+                                            label={term('partiċipju passiv')}
                                             value={(isTheoretical && !(entry.verb_passive_ptcp || vm.passive_participle)!.startsWith('*') ? '*' : '') + (entry.verb_passive_ptcp || vm.passive_participle)}
                                         />
                                     )}
                                     {(entry.verb_active_ptcp || vm.active_participle) && (
                                         <DerivedTermLink
-                                            label={t('Active Participle', term('Partiċipju Attiv'))}
+                                            label={term('partiċipju attiv')}
                                             value={(isTheoretical && !(entry.verb_active_ptcp || vm.active_participle)!.startsWith('*') ? '*' : '') + (entry.verb_active_ptcp || vm.active_participle)}
                                         />
                                     )}
@@ -504,7 +516,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         {/* Usage Example */}
                         {entry.definitions[0]?.example_sentences && entry.definitions[0].example_sentences.length > 0 && (
                             <div>
-                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{t('Usage Example', "Eżempju ta' Użu")}</h2>
+                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{term('eżempju ta\' użu')}</h2>
                                 {entry.definitions[0].example_sentences.slice(0, 1).map(ex => (
                                     <div key={ex.id}>
                                         <p className="text-sm text-[#000] font-serif">{ex.maltese}</p>
@@ -521,11 +533,11 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         {/* Thesaurus */}
                         {((vm.synonyms?.length ?? 0) > 0 || (vm.antonyms?.length ?? 0) > 0) && (
                             <div>
-                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{t('Thesaurus', 'Tesawru')}</h2>
+                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{term('tesawru')}</h2>
                                 <div className="flex gap-16 text-sm">
                                     {vm.synonyms && vm.synonyms.length > 0 && (
                                         <div>
-                                            <p className="font-semibold text-[#000] mb-1">{t('Synonyms', 'Sinonimi')}</p>
+                                            <p className="font-semibold text-[#000] mb-1">{term('sinonimi')}</p>
                                             {vm.synonyms.map(s => (
                                                 <Link key={s.id} to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline">
                                                     {s.headword}{' '}
@@ -538,7 +550,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     )}
                                     {vm.antonyms && vm.antonyms.length > 0 && (
                                         <div>
-                                            <p className="font-semibold text-[#000] mb-1">{t('Antonyms', 'Antonimi')}</p>
+                                            <p className="font-semibold text-[#000] mb-1">{term('antonimi')}</p>
                                             {vm.antonyms.map(a => (
                                                 <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline">
                                                     {a.headword}{' '}
@@ -575,7 +587,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 // ── Entry Shell ────────────────────────────────────────────────────────────
 
 export function Entry() {
-    const { t } = useLanguage();
+    const { term } = useLinguisticMode();
     const { id } = useParams<{ id: string }>();
     const [entry, setEntry] = useState<Entry | null>(null);
     const [loading, setLoading] = useState(true);
@@ -597,6 +609,14 @@ export function Entry() {
     }, [id]);
 
     useEffect(() => {
+        if (entry) {
+            document.title = `${entry.headword} | Il-Miġma'`;
+        } else {
+            document.title = "Il-Miġma'";
+        }
+    }, [entry]);
+
+    useEffect(() => {
         refetch();
     }, [refetch]);
 
@@ -606,7 +626,45 @@ export function Entry() {
         </div>
     );
 
-    if (!entry) return <Navigate to="/404" replace />;
+    if (!entry) {
+        return (
+            <div style={{
+                background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+                minHeight: '60vh'
+            }} className="flex flex-col items-center justify-center px-4 text-center">
+                <div className="flex items-center gap-2 mb-8">
+                    <Link to="/search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-search')}
+                    </Link>
+                </div>
+
+                <div className="bg-white/50 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm p-10 max-w-lg w-full">
+                    <h2 className="font-serif text-2xl font-bold text-[#000] mb-3">
+                        {term('entry-not-found')}
+                    </h2>
+                    <p className="text-[#4a4a4a] text-sm mb-8 leading-relaxed">
+                        {term('entry-not-found-desc').replace('{id}', id || '')}
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                        <Link
+                            to={`/suggest?type=entry&q=${id}`}
+                            className="w-full sm:w-auto bg-[#1034A6] text-white text-sm font-sans font-medium px-6 py-2.5 rounded-lg hover:bg-[#0c268c] transition-colors shadow-lg shadow-[#1034A6]/20"
+                        >
+                            {term('suggest-adding-entry')}
+                        </Link>
+                        <Link
+                            to="/search"
+                            className="w-full sm:w-auto bg-white text-[#000] text-sm font-sans font-medium px-6 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
+                        >
+                            <Search size={16} className="inline mr-1" />
+                            {term('search-dictionary')}
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     if (entry.pos === 'verb' && entry.verb_morphology) {
         return <VerbEntryView entry={entry} onRefetch={refetch} />;
@@ -615,7 +673,7 @@ export function Entry() {
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
             <p className="text-sm text-black/40 italic">
-                {t(`Full entry view for ${entry.pos} coming soon.`, `Il-veduta sħiħa għal ${entry.pos} ġejja dalwaqt.`)}
+                {term('full-entry-view-coming-soon').replace('{pos}', term(entry.pos))}
             </p>
         </div>
     );

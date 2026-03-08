@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { SignIn, SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/Button';
@@ -36,6 +37,7 @@ export function Dashboard() {
 }
 
 function DashboardContent() {
+    const { t } = useLanguage();
     const { user } = useUser();
     const { tier, hasAccess } = useAuth();
     const [activeTab, setActiveTab] = useState('account');
@@ -43,6 +45,17 @@ function DashboardContent() {
         { id: 'k1', name: 'Production', key_prefix: 'im_prod_1', usage_count: 4821, is_active: true, created_at: '2025-01-01' },
     ]);
     const [copied, setCopied] = useState<string | null>(null);
+
+    useEffect(() => {
+        const labels: Record<string, string> = {
+            account: t('Account', 'Kont'),
+            subscription: t('Subscription', 'Abbonament'),
+            api: t('API Keys', 'API Keys'),
+            lists: t('Lists', 'Listi'),
+        };
+        const activeLabel = labels[activeTab] || t('Dashboard', 'Dashboard');
+        document.title = `${activeLabel} | Il-Miġma'`;
+    }, [activeTab, t]);
 
     const copyKey = (id: string) => {
         navigator.clipboard.writeText('im_prod_••••••••••••[masked]');

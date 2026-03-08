@@ -60,8 +60,6 @@ function unauthorized() {
 // ── GET — list config ────────────────────────────────────────────────────────
 export async function onRequestGet({ request, env }) {
     try {
-        if (!(await verifyAdmin(request, env))) return unauthorized();
-
         const url = new URL(request.url);
         const category = url.searchParams.get('category');
 

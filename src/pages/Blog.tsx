@@ -1,9 +1,14 @@
-
+import { useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/Badge';
 import { MOCK_BLOG_POSTS } from '@/data/mockData';
 
 export function Blog() {
+    const { t } = useLanguage();
+    useEffect(() => {
+        document.title = `${t('Blog Lingwistiku', 'Blog Lingwistiku')} | Il-Miġma'`;
+    }, [t]);
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
             <h1 className="font-serif text-3xl font-bold text-[#1034A6]">Blog Lingwistiku</h1>
@@ -34,6 +39,10 @@ export function Blog() {
 }
 
 export function BlogPost() {
+    const { t } = useLanguage();
+    useEffect(() => {
+        document.title = `${t('Artiklu tal-Blog', 'Blog Post')} | Il-Miġma'`;
+    }, [t]);
     return (
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
             <Link to="/blog" className="text-sm text-[#1034A6] hover:underline mb-6 block">← Lura għall-Blog</Link>

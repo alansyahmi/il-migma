@@ -39,6 +39,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
             vowel_set_perf: data.vowel_set_perf || 'a-a',
             vowel_set_impf: data.vowel_set_impf || 'i-a',
             vowel_set_imp: data.vowel_set_imp || 'i-a',
+            is_imala_blocked: !!data.is_imala_blocked,
             tags: Array.isArray(data.tags) ? data.tags.join(', ') : (typeof data.tags === 'string' && data.tags.startsWith('[') ? JSON.parse(data.tags).join(', ') : (data.tags || '')),
             synonyms: normalizeRootRelationships(data.synonyms),
             antonyms: normalizeRootRelationships(data.antonyms),
@@ -137,7 +138,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
 
     // Auto-calculate type based on consonants
     const consonantsArray = form.consonants.split('-').filter(Boolean);
-    const rootClass = consonantsArray.length === 4 ? 'QUADRILITERAL' : 'TRILITTERAL';
+    const rootClass = consonantsArray.length === 4 ? 'QUADRILITERAL' : 'TRILITERAL';
 
     const inp = "w-full border border-[#d8cfc0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1034A6] bg-white text-black placeholder:text-black/20";
     const sel = inp + " cursor-pointer";
@@ -218,15 +219,40 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                     <div className="grid grid-cols-3 gap-4">
                         <div>
                             <label className={label}>{t('Vowel Set (Perf)', 'Vokali (Perf)')}</label>
-                            <input className={inp} value={form.vowel_set_perf || 'a-a'} onChange={e => setForm({ ...form, vowel_set_perf: e.target.value })} placeholder="e.g. a-a" />
+                            <input className={inp} value={form.vowel_set_perf || 'a-a'} onChange={e => {
+                                const val = e.target.value;
+                                setForm({ ...form, vowel_set_perf: val, is_imala_blocked: form.is_imala_blocked || val === 'a-a' });
+                            }} placeholder="e.g. a-a" />
                         </div>
                         <div>
                             <label className={label}>{t('Vowel Set (Impf)', 'Vokali (Impf)')}</label>
-                            <input className={inp} value={form.vowel_set_impf || 'i-a'} onChange={e => setForm({ ...form, vowel_set_impf: e.target.value })} placeholder="e.g. i-a" />
+                            <input className={inp} value={form.vowel_set_impf || 'i-a'} onChange={e => {
+                                const val = e.target.value;
+                                setForm({ ...form, vowel_set_impf: val, is_imala_blocked: form.is_imala_blocked || val === 'a-a' });
+                            }} placeholder="e.g. i-a" />
                         </div>
                         <div>
                             <label className={label}>{t('Vowel Set (Imp)', 'Vokali (Imp)')}</label>
-                            <input className={inp} value={form.vowel_set_imp || 'i-a'} onChange={e => setForm({ ...form, vowel_set_imp: e.target.value })} placeholder="e.g. i-a" />
+                            <input className={inp} value={form.vowel_set_imp || 'i-a'} onChange={e => {
+                                const val = e.target.value;
+                                setForm({ ...form, vowel_set_imp: val, is_imala_blocked: form.is_imala_blocked || val === 'a-a' });
+                            }} placeholder="e.g. i-a" />
+                        </div>
+                        <div className="flex flex-col justify-end pb-2">
+                            <label className="flex items-center gap-2 cursor-pointer group">
+                                <input
+                                    type="checkbox"
+                                    className="w-4 h-4 rounded border-black/20 text-[#1034A6] focus:ring-[#1034A6]"
+                                    checked={!!form.is_imala_blocked}
+                                    onChange={(e) => setForm({ ...form, is_imala_blocked: e.target.checked })}
+                                />
+                                <span className="text-xs font-semibold text-black uppercase tracking-wider group-hover:text-[#1034A6] transition-colors">
+                                    {t('Imala Blocked', 'Imala Imblukkata')}
+                                </span>
+                            </label>
+                            <p className="text-[9px] text-black/40 mt-1 leading-tight w-[100%]">
+                                Applies 'a' instead of 'ie' to verb suffixes. Auto-checks if 'a-a' is used.
+                            </p>
                         </div>
                     </div>
 

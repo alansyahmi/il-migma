@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
@@ -35,6 +35,10 @@ export function Conjugator() {
     const { term } = useLinguisticMode();
     const [input, setInput] = useState('');
     const [result, setResult] = useState<Record<Person, { perf: string; imperf: string }> | null>(null);
+
+    useEffect(() => {
+        document.title = `${t('Conjugator', term('conjugation'))} | Il-Miġma'`;
+    }, [t, term]);
 
     const handleConjugate = () => {
         if (!input.trim()) return;

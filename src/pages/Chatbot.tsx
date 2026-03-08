@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Send, Bot, User, RefreshCw } from 'lucide-react';
 import { TierGate } from '@/components/ui/TierGate';
 import { Button } from '@/components/ui/Button';
@@ -12,7 +13,12 @@ import type { ChatSession } from '@google/generative-ai';
 const DIALECTS = ['Standard', 'Valletta', 'Żejtun', 'Qormi', 'Għawdex'];
 
 export function Chatbot() {
+    const { t } = useLanguage();
     const { hasAccess } = useAuth();
+
+    useEffect(() => {
+        document.title = `${t('Chatbot Malti', 'Chatbot Malti')} | Il-Miġma'`;
+    }, [t]);
 
     if (!hasAccess('chatbot')) {
         return (

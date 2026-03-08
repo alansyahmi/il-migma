@@ -22,6 +22,8 @@ import { Admin } from '@/pages/Admin';
 import { AdvancedSearch } from '@/pages/AdvancedSearch';
 import { RootSearch } from '@/pages/RootSearch';
 import { Root } from '@/pages/Root';
+import { Suggest } from '@/pages/Suggest';
+
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string;
 
@@ -47,9 +49,9 @@ export default function App() {
     <ClerkProvider publishableKey={PUBLISHABLE_KEY ?? 'pk_test_placeholder'}>
       <DarkModeProvider>
         <LanguageProvider>
-          <LinguisticModeProvider>
-            <AuthProvider>
-              <AdminConfigProvider>
+          <AdminConfigProvider>
+            <LinguisticModeProvider>
+              <AuthProvider>
                 <BrowserRouter>
                   <Routes>
                     <Route element={<AppShell />}>
@@ -67,13 +69,14 @@ export default function App() {
                       <Route path="admin" element={<Admin />} />
                       <Route path="advanced-search" element={<AdvancedSearch />} />
                       <Route path="root-search" element={<RootSearch />} />
+                      <Route path="suggest" element={<Suggest />} />
                       <Route path="*" element={<NotFound />} />
                     </Route>
                   </Routes>
                 </BrowserRouter>
-              </AdminConfigProvider>
-            </AuthProvider>
-          </LinguisticModeProvider>
+              </AuthProvider>
+            </LinguisticModeProvider>
+          </AdminConfigProvider>
         </LanguageProvider>
       </DarkModeProvider>
     </ClerkProvider>

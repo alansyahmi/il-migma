@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useAdminConfig } from '@/lib/adminConfig';
 import { MOCK_ENTRIES } from '@/data/mockData';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
@@ -227,6 +228,7 @@ function InflectionCell({ row }: { row: InflectionRow }) {
 }
 
 function EntryCard({ result, index }: { result: SearchResult; index: number }) {
+    const { term } = useLinguisticMode();
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3">
             <div className="grid grid-cols-[11rem_5rem_1fr_11rem] min-h-[5rem]">
@@ -249,7 +251,7 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                                 <Link to={`/search?gender=${result.gender}`}
                                     style={{ color: EGYPTIAN_BLUE }}
                                     className="text-xs hover:underline font-sans">
-                                    {result.gender}
+                                    {term(result.gender)}
                                 </Link>
                             )}
                         </div>
@@ -259,7 +261,7 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 {/* Col 2: POS block */}
                 <div className="px-4 py-4 flex flex-col gap-0.5">
                     <span className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug">
-                        {result.pos}
+                        {term(result.pos)}
                     </span>
                     {result.formLines.map(line => (
                         <span key={line} className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug">
@@ -366,9 +368,21 @@ const DEFAULT_FILTERS: AdvancedFilters = {
 };
 
 export function AdvancedSearch() {
-    const { t } = useLanguage();
-    const { term } = useLinguisticMode();
+    const { language, t } = useLanguage();
+    const { term, mode } = useLinguisticMode();
+    const { getOptions } = useAdminConfig();
     const [searchParams, setSearchParams] = useSearchParams();
+
+    // Dynamic options
+    const POS_FILTER_OPTIONS = useMemo(() => [
+        { value: '', label: term('all') },
+        ...getOptions('pos', mode, language)
+    ], [getOptions, mode, language, term]);
+
+    const ROOT_TYPE_FILTER_OPTIONS = useMemo(() => [
+        { value: '', label: term('all') },
+        ...getOptions('verb_class', mode, language)
+    ], [getOptions, mode, language, term]);
 
     // Local state for results (only updates on action)
     const [query, setQuery] = useState(searchParams.get('q') ?? '');
@@ -409,7 +423,12 @@ export function AdvancedSearch() {
     useEffect(() => {
         const q = searchParams.get('q') ?? '';
         setQuery(q);
-    }, [searchParams]);
+        if (q.trim()) {
+            document.title = `${t('Advanced Search', term('advanced-search'))}: ${q} | Il-Miġma'`;
+        } else {
+            document.title = `${t('Advanced Search', term('advanced-search'))} | Il-Miġma'`;
+        }
+    }, [searchParams, t, term]);
 
     const [kbOpen, setKbOpen] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -612,47 +631,29 @@ export function AdvancedSearch() {
                         />
 
                         <FilterSelect
-                            label={t('Part-of-Speech', term('parti tad-diskors'))}
+                            label={term('parti tad-diskors')}
                             value={filters.pos}
                             onChange={v => setFilter('pos', v)}
-                            options={[
-                                { value: '', label: t('All', 'Kollox') },
-                                { value: 'verb', label: t('Verb', term('verb')) },
-                                { value: 'noun', label: t('Noun', term('nom')) },
-                                { value: 'adj', label: t('Adjective', term('aġġettiv')) },
-                                { value: 'adv', label: t('Adverb', term('avverbju')) },
-                                { value: 'prep', label: t('Preposition', term('prepożizzjoni')) },
-                                { value: 'conj', label: t('Conjunction', term('konġunzjoni')) },
-                                { value: 'particle', label: t('Particle', term('partiklu')) },
-                                { value: 'pronoun', label: t('Pronoun', term('pronom')) },
-                            ]}
+                            options={POS_FILTER_OPTIONS}
                         />
 
                         <FilterSelect
-                            label={t('Root Type', ('Tip ta\' ' + term('Għerq')))}
+                            label={term('għerq') + ' (' + term('forma') + ')'}
                             value={filters.rootType}
                             onChange={v => setFilter('rootType', v)}
-                            options={[
-                                { value: '', label: t('All', 'Kollox') },
-                                { value: 'strong', label: t('Strong', 'Sħiħ') },
-                                { value: 'weak', label: t('Weak', term('Dgħajjef')) },
-                                { value: 'weak initial', label: t('Weak Initial', 'Xebbiehi') },
-                                { value: 'weak medial', label: t('Weak Medial', 'Moħfi') },
-                                { value: 'weak final', label: t('Weak Final', 'Nieqes') },
-                                { value: 'geminated', label: t('Geminated', term('Trux')) },
-                            ]}
+                            options={ROOT_TYPE_FILTER_OPTIONS}
                         />
 
                         <FilterSelect
-                            label={t('Source', term('sors'))}
+                            label={term('sors')}
                             value={filters.source}
                             onChange={v => setFilter('source', v)}
                             options={[
-                                { value: '', label: t('All', 'Kollox') },
+                                { value: '', label: term('all') },
                                 { value: 'spagnol2011', label: 'Spagnol (2011)' },
                                 { value: 'mayer2013', label: 'Mayer (2013)' },
                                 { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
-                                { value: 'maltese_academy', label: t('Maltese Academy', 'Akkademja Maltija') },
+                                { value: 'maltese_academy', label: term('maltese-academy') },
                             ]}
                         />
 

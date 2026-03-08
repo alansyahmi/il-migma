@@ -27,6 +27,7 @@ export interface RootFormData {
     vowel_set_perf?: string;
     vowel_set_impf?: string;
     vowel_set_imp?: string;
+    is_imala_blocked?: boolean;
     tags?: string; // Comma-separated
     synonyms?: { id: string; headword: string; gloss_en: string; gloss_mt?: string }[];
     antonyms?: { id: string; headword: string; gloss_en: string; gloss_mt?: string }[];

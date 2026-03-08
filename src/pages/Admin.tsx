@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { adminListEntries, adminDeleteEntry, adminListRoots, adminDeleteRoot } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -38,6 +39,18 @@ export function Admin() {
     const hasAdminRights = isTrueAdmin || tier === 'enterprise';
 
     const { t } = useLanguage();
+    const { term } = useLinguisticMode();
+
+    useEffect(() => {
+        const tabLabels: Record<string, string> = {
+            entries: term('entries'),
+            roots: term('roots'),
+            settings: term('settings'),
+            db: term('db-tools')
+        };
+        const activeLabel = tabLabels[tab] || term('dashboard');
+        document.title = `Admin: ${activeLabel} | Il-Miġma'`;
+    }, [tab, t, term]);
 
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -45,13 +58,13 @@ export function Admin() {
                 <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-3 text-amber-900 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
                     <ShieldAlert className="shrink-0" size={20} />
                     <div className="text-sm">
-                        <span className="font-bold">{t('Attention:', 'Attenzjoni:')}</span> {t('The system does not recognize you as an official Admin in Clerk Metadata. We are letting you in for testing for now.', 'Is-sistema ma tagħrfekx bħala Admin uffiċjali fil-Clerk Metadata. Għalissa qed inħalluk tidħol biex tittestja.')}
+                        <span className="font-bold">{term('attention')}</span> {t('The system does not recognize you as an official Admin in Clerk Metadata. We are letting you in for testing for now.', 'Is-sistema ma tagħrfekx bħala Admin uffiċjali fil-Clerk Metadata. Għalissa qed inħalluk tidħol biex tittestja.')}
                     </div>
                 </div>
             )}
 
             <div className="flex items-center justify-between border-b border-black/5 pb-4">
-                <h1 className="font-serif text-3xl font-bold text-black">{t('Admin Dashboard', 'Dashboard tal-Admin')}</h1>
+                <h1 className="font-serif text-3xl font-bold text-black">{term('admin-dashboard')}</h1>
                 <div className="flex bg-black/5 p-1 rounded-xl">
                     <button
                         onClick={() => setTab('entries')}
@@ -60,7 +73,7 @@ export function Admin() {
                             tab === 'entries' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
                         )}
                     >
-                        <FileText size={16} /> {t('Entries', 'Entrati')}
+                        <FileText size={16} /> {term('entries')}
                     </button>
                     <button
                         onClick={() => setTab('roots')}
@@ -69,7 +82,7 @@ export function Admin() {
                             tab === 'roots' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
                         )}
                     >
-                        <Layers size={16} /> {t('Roots', 'Għeruq')}
+                        <Layers size={16} /> {term('roots')}
                     </button>
                     <button
                         onClick={() => setTab('settings')}
@@ -78,7 +91,7 @@ export function Admin() {
                             tab === 'settings' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
                         )}
                     >
-                        <Settings size={16} /> {t('Settings', 'Settijiet')}
+                        <Settings size={16} /> {term('settings')}
                     </button>
                     <button
                         onClick={() => setTab('db')}
@@ -87,7 +100,7 @@ export function Admin() {
                             tab === 'db' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
                         )}
                     >
-                        <Database size={16} /> {t('DB Tools', 'Għodda DB')}
+                        <Database size={16} /> {term('db-tools')}
                     </button>
                 </div>
             </div>
@@ -102,6 +115,8 @@ export function Admin() {
 
 function EntryManager() {
     const { getToken } = useClerkAuth();
+    const { t } = useLanguage();
+    const { term } = useLinguisticMode();
     const [entries, setEntries] = useState<AdminEntry[]>([]);
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -133,12 +148,12 @@ function EntryManager() {
 
     const handleBulkDelete = async () => {
         const count = selectedIds.size;
-        if (!confirm(`Żgur li trid tħassar ${count} entrati? Din ma tistax tinqaleb.`)) return;
+        if (!confirm(t(`Are you sure you want to delete ${count} entries? This cannot be undone.`, `Żgur li trid tħassar ${count} entrati? Din ma tistax tinqaleb.`))) return;
         try {
             const token = await getToken();
             const { adminBulkDeleteEntries } = await import('@/lib/api');
             await adminBulkDeleteEntries(token!, Array.from(selectedIds));
-            showToast(`${count} entrati mħassra`);
+            showToast(t(`${count} entries deleted`, `${count} entrati mħassra`));
             setSelectedIds(new Set());
             load();
         } catch (e: any) {
@@ -175,11 +190,11 @@ function EntryManager() {
     useEffect(() => { load(); }, [load]);
 
     const handleDelete = async (id: string, headword: string) => {
-        if (!confirm(`TĦASSAR "${headword}"? Din ma tistax tinqaleb.`)) return;
+        if (!confirm(t(`DELETE "${headword}"? This cannot be undone.`, `TĦASSAR "${headword}"? Din ma tistax tinqaleb.`))) return;
         try {
             const token = await getToken();
             await adminDeleteEntry(token!, id);
-            showToast(`"${headword}" imħassra`);
+            showToast(t(`"${headword}" deleted`, `"${headword}" imħassra`));
             load();
         } catch (e: any) {
             showToast(e.message, false);
@@ -205,7 +220,7 @@ function EntryManager() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-sm font-bold text-black/40 uppercase tracking-widest">{total.toLocaleString()} entrati sibt</h2>
+                    <h2 className="text-sm font-bold text-black/40 uppercase tracking-widest">{total.toLocaleString()} {term('entries')} {term('found')}</h2>
                 </div>
                 <div className="flex gap-2">
                     <div className="flex bg-black/5 p-1 rounded-lg mr-2">
@@ -222,8 +237,8 @@ function EntryManager() {
                             <List size={16} />
                         </button>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={load} leftIcon={<RefreshCw size={14} className={cn(loading && "animate-spin")} />}>Aġġorna</Button>
-                    <Button size="sm" onClick={() => { setEditEntry(null); setShowForm(true); }} leftIcon={<Plus size={14} />}>Entrata Ġdida</Button>
+                    <Button variant="ghost" size="sm" onClick={load} leftIcon={<RefreshCw size={14} className={cn(loading && "animate-spin")} />}>{term('refresh')}</Button>
+                    <Button size="sm" onClick={() => { setEditEntry(null); setShowForm(true); }} leftIcon={<Plus size={14} />}>{term('new-entry')}</Button>
                 </div>
             </div>
 
@@ -246,7 +261,7 @@ function EntryManager() {
             )}
 
             <div className="space-y-4">
-                <SearchInput value={query} onChange={setQuery} onSubmit={load} placeholder="Fittex entrata..." />
+                <SearchInput value={query} onChange={setQuery} onSubmit={load} placeholder={term('search-entry') + "..."} />
 
                 {/* POS Filter Chips */}
                 <div className="flex flex-wrap gap-2 pb-2">
@@ -259,7 +274,7 @@ function EntryManager() {
                                 : "bg-white text-black/60 border-black/10 hover:border-black/20"
                         )}
                     >
-                        KOLLHA
+                        {term('all').toUpperCase()}
                     </button>
                     {useAdminConfig().getValues('pos').map((pos: string) => (
                         <button
@@ -282,7 +297,7 @@ function EntryManager() {
                 <div className="flex justify-center py-20"><Spinner /></div>
             ) : entries.length === 0 ? (
                 <div className="text-center py-20 bg-[#f9f7f3] rounded-3xl border-2 border-dashed border-black/5">
-                    <p className="text-black/40 font-serif italic text-lg">Ma sibt l-ebda riżultat...</p>
+                    <p className="text-black/40 font-serif italic text-lg">{term('no-results-found')}</p>
                 </div>
             ) : (
                 <div className="space-y-10">
@@ -294,7 +309,7 @@ function EntryManager() {
                                 </div>
                                 <h3 className="text-lg font-bold text-black uppercase tracking-tight">{pos}s</h3>
                                 <div className="h-px flex-1 bg-black/5" />
-                                <span className="text-xs font-bold text-black/20">{posEntries.length} sibt</span>
+                                <span className="text-xs font-bold text-black/20">{posEntries.length} {term('found')}</span>
                             </div>
 
                             {viewMode === 'grid' ? (
@@ -321,7 +336,7 @@ function EntryManager() {
                                                         </Link>
                                                         {e.root_consonants && (
                                                             <Link to={`/root/${e.root_consonants}`} className="text-xs font-bold text-slate-500 hover:text-[#1034A6] mt-1 inline-block" style={{ fontFamily: 'monospace', letterSpacing: '0.1em' }}>
-                                                                Għerq: {e.root_consonants}
+                                                                {term('root')}: {e.root_consonants}
                                                             </Link>
                                                         )}
                                                         <p className="text-[10px] text-black/30 font-mono mt-1">ID: {e.id}</p>
@@ -331,20 +346,26 @@ function EntryManager() {
                                                         <button onClick={() => handleDelete(e.id, e.headword)} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
                                                     </div>
                                                 </div>
-                                                <p className="text-sm text-black/60 line-clamp-2 italic">{e.text_en || 'L-ebda definizzjoni...'}</p>
+                                                <p className="text-sm text-black/60 line-clamp-2 italic">{e.text_en || (term('no-definition') + '...')}</p>
 
                                                 <div className="mt-3 flex flex-wrap gap-1.5">
-                                                    {e.noun_gender && <Badge variant="pos" className="bg-sky-50 text-sky-700">{e.noun_gender}</Badge>}
-                                                    {e.verb_class && <Badge variant="pos" className="bg-purple-50 text-purple-700">{e.verb_class}</Badge>}
-                                                    {e.verb_form && <Badge variant="pos" className="bg-indigo-50 text-indigo-700">Form {e.verb_form}</Badge>}
-                                                    {e.is_loanword && <Badge variant="pos" className="bg-amber-50 text-amber-700">Loanword</Badge>}
-                                                    {e.source_language && <Badge variant="pos" className="bg-emerald-50 text-emerald-700">{e.source_language}</Badge>}
+                                                    <span className="text-[10px] font-bold text-black/30 uppercase tracking-tighter">{term(e.pos || 'pos')}</span>
+                                                    {e.noun_gender && <Badge variant="pos" className="bg-sky-50 text-sky-700">{term(e.noun_gender)}</Badge>}
+                                                    {e.verb_class && <Badge variant="pos" className="bg-purple-50 text-purple-700">{term(e.verb_class)}</Badge>}
+                                                    {e.verb_transitivity && (
+                                                        <Badge variant="pos" className="bg-indigo-50 text-indigo-700">
+                                                            {term(e.verb_transitivity)}
+                                                        </Badge>
+                                                    )}
+                                                    {e.verb_form && <Badge variant="pos" className="bg-indigo-50 text-indigo-700">{term('form')} {e.verb_form}</Badge>}
+                                                    {e.is_loanword && <Badge variant="pos" className="bg-amber-50 text-amber-700">{term('loanword')}</Badge>}
+                                                    {e.source_language && <Badge variant="pos" className="bg-emerald-50 text-emerald-700">{term(e.source_language)}</Badge>}
                                                     {e.tags && (() => {
                                                         try {
                                                             const tagsArr = typeof e.tags === 'string' ? (e.tags.startsWith('[') ? JSON.parse(e.tags) : e.tags.split(',').map(s => s.trim())) : e.tags;
                                                             if (Array.isArray(tagsArr)) {
                                                                 return tagsArr.map(t => (
-                                                                    <Badge key={t} variant="pos" className="bg-slate-50 text-slate-400 border-slate-100">{t}</Badge>
+                                                                    <Badge key={t} variant="pos" className="bg-slate-50 text-slate-400 border-slate-100">{term(t)}</Badge>
                                                                 ));
                                                             }
                                                         } catch (err) { }
@@ -353,7 +374,7 @@ function EntryManager() {
                                                 </div>
                                             </div>
                                             <div className="mt-4 pt-4 border-t border-black/5 flex items-center justify-between">
-                                                <Badge variant="pos" className="bg-slate-100 text-slate-600 border-0">{e.pos}</Badge>
+                                                <Badge variant="pos" className="bg-slate-100 text-slate-600 border-0">{term(e.pos || 'pos')}</Badge>
                                                 <span className="text-[10px] text-black/20 font-bold uppercase">{e.created_at?.slice(0, 10)}</span>
                                             </div>
                                         </div>
@@ -369,11 +390,11 @@ function EntryManager() {
                                                         {selectedIds.size === entries.length && entries.length > 0 ? <CheckSquare size={16} className="text-[#1034A6]" /> : <Square size={16} />}
                                                     </button>
                                                 </th>
-                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">Kliem & ID</th>
-                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">Għerq & POS</th>
-                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">Definizzjoni</th>
-                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">Dettalji</th>
-                                                <th className="text-right p-4 text-xs font-bold text-black/40 uppercase">Azzjonijiet</th>
+                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">{term('word')} & ID</th>
+                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">{term('root')} & POS</th>
+                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">{term('meaning')}</th>
+                                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">{term('details')}</th>
+                                                <th className="text-right p-4 text-xs font-bold text-black/40 uppercase">{term('actions')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -398,17 +419,21 @@ function EntryManager() {
                                                                     {e.root_consonants}
                                                                 </Link>
                                                             ) : <span className="text-black/20">—</span>}
-                                                            <span className="italic text-black/40 text-[11px] uppercase tracking-wider">{e.pos}</span>
+                                                            <span className="italic text-black/40 text-[11px] uppercase tracking-wider">{term(e.pos || 'pos')}</span>
                                                         </div>
                                                     </td>
-                                                    <td className="p-4 text-black/60 italic max-w-[200px] truncate">{e.text_en || '—'}</td>
+                                                    <td className="p-4 text-black/60 italic max-w-[200px] truncate">{e.text_en || term('missing')}</td>
                                                     <td className="p-4">
+                                                        <div className="text-xs font-bold text-black/80">{term(e.pos || 'pos')}</div>
                                                         <div className="flex flex-wrap gap-1 max-w-[200px]">
-                                                            {e.noun_gender && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{e.noun_gender}</span>}
-                                                            {e.verb_class && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{e.verb_class}</span>}
-                                                            {e.verb_form && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">Form {e.verb_form}</span>}
-                                                            {e.is_loanword && <span className="text-[10px] bg-amber-50 px-1.5 py-0.5 rounded text-amber-700">Loan</span>}
-                                                            {e.source_language && <span className="text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700">{e.source_language}</span>}
+                                                            {e.noun_gender && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term(e.noun_gender)}</span>}
+                                                            {e.verb_class && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term(e.verb_class)}</span>}
+                                                            {e.verb_transitivity && <span className="text-[10px] bg-sky-50 px-1.5 py-0.5 rounded text-sky-700">
+                                                                {term(e.verb_transitivity)}
+                                                            </span>}
+                                                            {e.verb_form && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term('form')} {e.verb_form}</span>}
+                                                            {e.is_loanword && <span className="text-[10px] bg-amber-50 px-1.5 py-0.5 rounded text-amber-700">{term('loanword')}</span>}
+                                                            {e.source_language && <span className="text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700">{term(e.source_language)}</span>}
                                                             {e.tags && (() => {
                                                                 try {
                                                                     const tagsArr = typeof e.tags === 'string' ? (e.tags.startsWith('[') ? JSON.parse(e.tags) : e.tags.split(',').map(s => s.trim())) : e.tags;
@@ -460,6 +485,7 @@ function EntryManager() {
 }
 
 function BulkActionsBar({ count, onClear, onDelete }: { count: number; onClear: () => void; onDelete: () => void }) {
+    const { term } = useLinguisticMode();
     return (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500">
             <div className="bg-black text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-6 border border-white/10 backdrop-blur-md">
@@ -467,7 +493,7 @@ function BulkActionsBar({ count, onClear, onDelete }: { count: number; onClear: 
                     <div className="bg-[#1034A6] text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold">
                         {count}
                     </div>
-                    <span className="text-sm font-bold tracking-tight">Eżerċizzji magħżula</span>
+                    <span className="text-sm font-bold tracking-tight">{term('selected-entries')}</span>
                 </div>
                 <div className="h-4 w-px bg-white/10" />
                 <div className="flex gap-2">
@@ -475,13 +501,13 @@ function BulkActionsBar({ count, onClear, onDelete }: { count: number; onClear: 
                         onClick={onClear}
                         className="text-white/60 hover:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 transition-colors"
                     >
-                        <X size={14} /> Ħassar l-għażla
+                        <X size={14} /> {term('clear-selection')}
                     </button>
                     <button
                         onClick={onDelete}
                         className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all active:scale-95"
                     >
-                        <Trash2 size={14} /> Ħassar kollha
+                        <Trash2 size={14} /> {term('delete-all')}
                     </button>
                 </div>
             </div>
@@ -491,6 +517,8 @@ function BulkActionsBar({ count, onClear, onDelete }: { count: number; onClear: 
 
 function RootManager() {
     const { getToken } = useClerkAuth();
+    const { t } = useLanguage();
+    const { term } = useLinguisticMode();
     const [roots, setRoots] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [q, setQ] = useState('');
@@ -516,7 +544,7 @@ function RootManager() {
 
     const handleBulkDelete = async () => {
         const count = selectedIds.size;
-        if (!confirm(`Żgur li trid tħassar ${count} għeruq? Din ma tistax tinqaleb.`)) return;
+        if (!confirm(t(`Are you sure you want to delete ${count} roots? This cannot be undone.`, `Żgur li trid tħassar ${count} għeruq? Din ma tistax tinqaleb.`))) return;
         try {
             const token = await getToken();
             const { adminBulkDeleteRoots } = await import('@/lib/api');
@@ -544,7 +572,7 @@ function RootManager() {
     useEffect(() => { load(); }, [load]);
 
     const handleDelete = async (id: string, cons: string) => {
-        if (!confirm(`Żgur li trid tħassar l-għerq ${cons}?`)) return;
+        if (!confirm(t(`Are you sure you want to delete the root ${cons}?`, `Żgur li trid tħassar l-għerq ${cons}?`))) return;
         try {
             const token = await getToken();
             await adminDeleteRoot(token!, id);
@@ -557,7 +585,7 @@ function RootManager() {
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center">
-                <p className="text-sm text-[#4a4a4a] font-medium">{roots.length} għeruq sibt</p>
+                <p className="text-sm text-[#4a4a4a] font-medium">{roots.length} {term('roots')} {term('found')}</p>
                 <div className="flex gap-2">
                     <div className="flex bg-black/5 p-1 rounded-lg mr-2">
                         <button
@@ -573,12 +601,12 @@ function RootManager() {
                             <List size={16} />
                         </button>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={load} leftIcon={<RefreshCw size={14} />}>Aġġorna</Button>
-                    <Button size="sm" onClick={() => setShowAdd(true)} leftIcon={<Plus size={14} />}>Għerq Ġdid</Button>
+                    <Button variant="ghost" size="sm" onClick={load} leftIcon={<RefreshCw size={14} />}>{term('refresh')}</Button>
+                    <Button size="sm" onClick={() => setShowAdd(true)} leftIcon={<Plus size={14} />}>{term('new-root')}</Button>
                 </div>
             </div>
 
-            <SearchInput value={q} onChange={setQ} onSubmit={load} placeholder="Fittex għerq (eż. k-t-b)..." />
+            <SearchInput value={q} onChange={setQ} onSubmit={load} placeholder={term('search-root') + "..."} />
 
             {loading ? (
                 <div className="flex justify-center py-12"><Spinner /></div>
@@ -592,15 +620,15 @@ function RootManager() {
                                         {selectedIds.size === roots.length && roots.length > 0 ? <CheckSquare size={16} className="text-[#1034A6]" /> : <Square size={16} />}
                                     </button>
                                 </th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Konsonanti</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Tifsira</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Klassi</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Vokali</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Sors</th>
+                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('consonants')}</th>
+                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('meaning')}</th>
+                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('class')}</th>
+                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('vowels')}</th>
+                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('source')}</th>
                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Tags</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Teżawru</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Data</th>
-                                <th className="text-right p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Azzjonijiet</th>
+                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('thesaurus')}</th>
+                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('date')}</th>
+                                <th className="text-right p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -619,19 +647,19 @@ function RootManager() {
                                     </td>
                                     <td className="p-4 text-black/80">
                                         {(() => {
-                                            if (!r.gloss) return <span className="text-black/20 italic">nieqsa</span>;
-                                            if (typeof r.gloss === 'string' && r.gloss.includes('[object Object]')) return <span className="text-red-400 italic">data mħassra</span>;
+                                            if (!r.gloss) return <span className="text-black/20 italic">{term('missing')}</span>;
+                                            if (typeof r.gloss === 'string' && r.gloss.includes('[object Object]')) return <span className="text-red-400 italic">{term('corrupted-data')}</span>;
                                             try {
                                                 const parsed = JSON.parse(r.gloss);
                                                 if (Array.isArray(parsed) && parsed[0]) {
                                                     const g = parsed[0];
                                                     if (typeof g === 'object') {
-                                                        return (g.en || g.mt) ? `${g.en}${g.mt ? ` / ${g.mt}` : ''}` : <span className="text-black/20 italic">nieqsa</span>;
+                                                        return (g.en || g.mt) ? `${g.en}${g.mt ? ` / ${g.mt}` : ''}` : <span className="text-black/20 italic">{term('missing')}</span>;
                                                     }
                                                     return String(g);
                                                 }
                                             } catch (e) { }
-                                            return r.gloss || <span className="text-black/20 italic">nieqsa</span>;
+                                            return r.gloss || <span className="text-black/20 italic">{term('missing')}</span>;
                                         })()}
                                     </td>
                                     <td className="p-4">
@@ -646,7 +674,7 @@ function RootManager() {
                                             <span className="text-[9px] text-black/30 font-bold uppercase">M:{r.vowel_set_imp || 'o-o'}</span>
                                         </div>
                                     </td>
-                                    <td className="p-4 text-black/60 italic">{r.source || '—'}</td>
+                                    <td className="p-4 text-black/60 italic">{r.source || term('none')}</td>
                                     <td className="p-4">
                                         {r.tags && (() => {
                                             try {
@@ -673,7 +701,7 @@ function RootManager() {
                                             {(() => {
                                                 const sCount = typeof r.synonyms === 'string' ? JSON.parse(r.synonyms || '[]').length : (r.synonyms?.length || 0);
                                                 const aCount = typeof r.antonyms === 'string' ? JSON.parse(r.antonyms || '[]').length : (r.antonyms?.length || 0);
-                                                if (sCount === 0 && aCount === 0) return <span className="text-[10px] text-black/20 italic">xejn</span>;
+                                                if (sCount === 0 && aCount === 0) return <span className="text-[10px] text-black/20 italic">{term('none')}</span>;
                                                 return (
                                                     <>
                                                         {sCount > 0 && <span className="text-[10px] bg-green-50 text-green-700 px-1.5 py-0.5 rounded-md font-bold uppercase">{sCount} sin.</span>}
@@ -722,7 +750,7 @@ function RootManager() {
                             </div>
                             <p className="text-sm text-black/60 mb-4 h-10 line-clamp-2">
                                 {(() => {
-                                    if (!r.gloss) return <span className="italic opacity-50">L-ebda tifsira...</span>;
+                                    if (!r.gloss) return <span className="italic opacity-50">{term('no-definition')}...</span>;
                                     if (typeof r.gloss === 'string' && r.gloss.includes('[object Object]')) return <span className="text-red-400 italic">data mħassra</span>;
                                     try {
                                         const parsed = JSON.parse(r.gloss);
@@ -734,7 +762,7 @@ function RootManager() {
                                             return String(g);
                                         }
                                     } catch (e) { }
-                                    return r.gloss || <span className="italic opacity-50">L-ebda tifsira...</span>;
+                                    return r.gloss || <span className="italic opacity-50">{term('no-definition')}...</span>;
                                 })()}
                             </p>
                             <div className="flex items-center justify-between mt-auto">

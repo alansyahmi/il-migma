@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { MOCK_ENTRIES } from '@/data/mockData';
 import { generateRootForms, markGeneratedForms, type FormMarker, type MarkedVerbForm, type AttestedEntry } from '@/lib/conjugationEngine';
@@ -19,16 +18,16 @@ function MarkedCell({ data }: { data: { value: string; marker: FormMarker } }) {
         );
     }
     const mark = data.marker === 'theoretical' ? '*' : '✦';
-    const { t } = useLanguage();
+    const { term } = useLinguisticMode();
     return (
-        <span className="opacity-55 text-[#000]" title={data.marker === 'theoretical' ? t('Theoretical', 'Teoretiku') : t('Auto-generated', 'Iġġenerat Awtomatikament')}>
+        <span className="opacity-55 text-[#000]" title={data.marker === 'theoretical' ? term('theoretical') : term('auto-generated')}>
             {mark}{data.value}
         </span>
     );
 }
 
 function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: string[], extraRoots?: any[] }) {
-    const { t } = useLanguage();
+    const { term } = useLinguisticMode();
     // Unique matching roots by consonants string
     const matchingRootsMap = new Map<string, any>();
 
@@ -74,9 +73,9 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
 
         return (
             <div className="bg-white rounded-xl border border-black/8 shadow-sm p-6 mt-8 text-center max-w-2xl mx-auto">
-                <p className="text-sm text-black/55">{t(`No attested data for root ${joined}.`, `L-ebda dejta attestata għall-għerq ${joined}.`)}</p>
+                <p className="text-sm text-black/55">{term('no-attested-data').replace('{q}', joined)}</p>
                 <Link to={`/root/${joined}`} className="text-xs font-semibold text-[#1034A6] mt-2 block hover:underline">
-                    {t('Attempt to view root page anyway →', 'Ipprova ara l-paġna tal-għerq xorta waħda →')}
+                    {term('view-root-anyway')}
                 </Link>
             </div>
         );
@@ -90,8 +89,8 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                 <table className="w-full text-left border-collapse min-w-[900px]">
                     <thead>
                         <tr className="bg-black/5 border-b border-black/10 text-black/40">
-                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider">{t('Root', 'Għerq')}</th>
-                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider">{t('Class', 'Klassi')}</th>
+                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider">{term('għerq')}</th>
+                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider">{term('class')}</th>
                             {formLabels.map(f => (
                                 <th key={f} className="px-4 py-3 text-[10px] font-bold tracking-wider">{f}</th>
                             ))}
@@ -139,8 +138,8 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                                     <td className="px-4 py-4">
                                         <span className="text-[10px] bg-black/5 px-1.5 py-0.5 rounded text-black/50 font-bold tracking-wider space-x-1">
                                             {rootObj.strength !== 'geminated' && <span>{strengthLabel}</span>}
-                                            {rootObj.weak_class && <span>• {rootObj.weak_class.toUpperCase()}</span>}
-                                            {rootObj.strength === 'geminated' && <span>• {t('GEMINATED', 'MIRDUM')}</span>}
+                                            {rootObj.weak_class && <span>• {term(rootObj.weak_class).toUpperCase()}</span>}
+                                            {rootObj.strength === 'geminated' && <span>• {term('trux').toUpperCase()}</span>}
                                         </span>
                                     </td>
                                     {formLabels.map(fl => {
@@ -192,7 +191,6 @@ function RootRadicalsInput({
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
 
 export function RootSearch() {
-    const { t } = useLanguage();
     const { term } = useLinguisticMode();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -222,12 +220,17 @@ export function RootSearch() {
         if (hasContent) {
             setHasSearched(true);
             setLoading(true);
+            const joined = rads.filter(Boolean).join('-');
+            document.title = `${term('root-search')}: ${joined} | Il-Miġma'`;
+
             apiSearchRoots(rads)
                 .then(res => setExtraRoots(res.roots))
                 .catch(() => setExtraRoots([]))
                 .finally(() => setLoading(false));
+        } else {
+            document.title = `${term('root-search')} | Il-Miġma'`;
         }
-    }, [searchParams]);
+    }, [searchParams, term]);
 
     const handleSearch = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -280,18 +283,17 @@ export function RootSearch() {
         <div style={bgStyle}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
                 <h1 className="text-3xl font-serif font-bold text-[#000] mb-2 text-center">
-                    {t('Root Search', term('Tiftix tal-Għeruq'))}
+                    {term('root-search')}
                 </h1>
                 <p className="text-sm text-black/60 mb-8 max-w-2xl mx-auto text-center leading-relaxed">
-                    {t('Explore the morphological derivation of verbs and nouns from their base triliteral and quadriliteral roots. Enter consonants below to find matching root families.',
-                        'Esplora d-derivazzjoni morfoloġika ta\' verbi u nomi mill-għeruq bażiċi trilitteri u kwadrilitteri. Daħħal il-konsonanti hawn taħt biex issib familji ta\' għeruq kompatibbli.')}
+                    {term('root-search-desc')}
                 </p>
 
                 {/* Horizontal Filter Bar */}
                 <div className="bg-[#F4F3F0] border border-[#d8cfc0] rounded-xl p-6 shadow-sm max-w-2xl mx-auto mb-8">
                     <form onSubmit={handleSearch} className="root-radical-input-group flex flex-col items-center gap-6">
                         <RootRadicalsInput
-                            label={t('Root Radicals', 'Konsonanti tal-Għerq')}
+                            label={term('root-radicals')}
                             values={rootRadicals}
                             onChange={handleRootRadicalChange}
                         />
@@ -306,13 +308,13 @@ export function RootSearch() {
                                 }}
                                 className="px-4 py-2 text-sm font-medium text-black/60 bg-white border border-[#d8cfc0] rounded-md hover:bg-black/5 transition-colors"
                             >
-                                {t('Clear', 'Ħassar')}
+                                {term('clear')}
                             </button>
                             <button
                                 type="submit"
                                 className="bg-[#1034A6] text-white px-8 py-2 rounded-md font-medium text-sm hover:bg-[#1034A6]/90 transition-colors shadow-sm"
                             >
-                                {t('Search Roots', 'Fittex l-Għeruq')}
+                                {term('search-roots')}
                             </button>
                         </div>
                     </form>

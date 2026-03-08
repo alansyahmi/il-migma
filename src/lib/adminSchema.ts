@@ -12,7 +12,7 @@ export const ROOT_HANDLED_FIELDS = [
     'id', 'consonants', 'consonant_array', 'strength', 'weak_class',
     'gloss', 'etymology', 'source', 'notes', 'vowel_set_perf',
     'vowel_set_impf', 'vowel_set_imp', 'tags', 'synonyms', 'antonyms',
-    'related_entries', 'created_at', 'updated_at', 'hidden_forms',
+    'related_entries', 'created_at', 'updated_at', 'hidden_forms', 'is_imala_blocked'
 ] as const;
 
 /** Builds the root API payload, serializing complex fields to JSON */
@@ -32,6 +32,7 @@ export function buildRootPayload(form: RootFormData): Record<string, any> {
         synonyms: JSON.stringify(form.synonyms || []),
         antonyms: JSON.stringify(form.antonyms || []),
         related_entries: JSON.stringify(form.related_entries || []),
+        is_imala_blocked: !!form.is_imala_blocked || form.vowel_set_perf === 'a-a' || form.vowel_set_impf === 'a-a' || form.vowel_set_imp === 'a-a',
     };
 }
 

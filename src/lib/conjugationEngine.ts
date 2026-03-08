@@ -13,7 +13,7 @@
  * Supported verb classes (Form I triliteral):
  *   strong          kiteb / jikteb
  *   assimilative    wiret / jiret (C1 w/għ drops in imperfect)
- *   hollow          dar   / jdur    (C2 assimilates into long vowel)   
+ *   hollow          dar   / jdur    (C2 assimilates into long vowel)
  *   defective-għ  laqa' / jilqa' (C3 = għ, surfaces as final -a, affect 3rd sg, 1st, 2nd sg & pl only)
  *   defective-j/w   beda  / jibda or heda / jehda   (C3 = j/w)
  *   defective-gem  ħeja  / jeħji   (C3 assimilates to V2)
@@ -36,7 +36,12 @@
  *      (e.g., jikteb -> jiktb-u vs jaħrab -> jaħarb-u).
  */
 
-import type { VerbConjugationTable, ConjugationRow, VerbStrength, WeakClass } from '@/types';
+import type {
+    VerbConjugationTable,
+    ConjugationRow,
+    VerbStrength,
+    WeakClass,
+} from "@/types";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -60,7 +65,19 @@ export interface ConjugationInput {
     vowelSetImperative: string;
 }
 
-export type GenerativeVerbFormType = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII' | 'VIII' | 'IX' | 'X' | 'Xa' | 'Xb';
+export type GenerativeVerbFormType =
+    | "I"
+    | "II"
+    | "III"
+    | "IV"
+    | "V"
+    | "VI"
+    | "VII"
+    | "VIII"
+    | "IX"
+    | "X"
+    | "Xa"
+    | "Xb";
 
 export interface GeneratedVerbForm {
     form: GenerativeVerbFormType;
@@ -71,61 +88,239 @@ export interface GeneratedVerbForm {
     verbalNoun: string;
 }
 
+export interface StemRecipe {
+    // Perfect stems
+    perfFull: string; // 3sg.m (kiteb)
+    perfSync: string; // syncopated (kitbu / kitb-)
+    perfReduced: string; // suffix-attached (ktib-)
+    perf3f: string; // 3sg.f (kitbet)
+
+    // Imperfect stem builders
+    impfBase: (person: number) => string; // Base form for 1-3rd person sg
+    impfType1: (person: number) => string; // Attached form (e -> i shift)
+    impfType2: (person: number) => string; // Syncopated form (before vowel suffixes)
+    impfPlural: (person: number) => string; // Plural form (endsWith -u)
+
+    // Negative overrides
+    negM?: string;
+    negF?: string;
+
+    // Stem type overrides
+    perfType1Builder?: (perfRow: string, pIdx: number) => string;
+
+    // Imperative
+    impSg: string;
+    impPl: string;
+    impSgStems?: { impfType1: string; impfType2: string };
+    impPlStems?: { impfType1: string; impfType2: string };
+
+    // Metadata
+    blocksImala: boolean;
+}
+
+// ── Engine Core ────────────────────────────────────────────────────────────
+
+function buildConjugationTable(
+    recipe: StemRecipe,
+    C3?: string,
+    verbForm?: string,
+): VerbConjugationTable {
+    const perf3mpVtheme =
+        verbForm != "I" && (C3 === "j" || C3 === "w") ? "e" : "";
+    const perf3mpV = C3 === "j" || C3 === "w" ? "w" : "u";
+    const perfRows = [
+        recipe.perfReduced + "t", // jiena
+        recipe.perfReduced + "t", // inti
+        recipe.perfFull, // huwa
+        recipe.perf3f, // hija
+        recipe.perfReduced + "na", // aħna
+        recipe.perfReduced + "tu", // intom
+        recipe.perfSync + perf3mpVtheme + perf3mpV, // huma
+    ];
+
+    const { m: defaultNegM, f: defaultNegF } = negPerfect3sg(
+        recipe.perfFull,
+        recipe.perf3f,
+        C3,
+        verbForm,
+        recipe.blocksImala,
+    );
+    const negM = recipe.negM ?? defaultNegM;
+    const negF = recipe.negF ?? defaultNegF;
+
+    const impfForms: string[] = [];
+    const stemsList: any[] = [];
+
+    for (let i = 0; i < 7; i++) {
+        // Build Base Imperfect
+        const base = i >= 4 ? recipe.impfPlural(i) : recipe.impfBase(i);
+        impfForms.push(base);
+
+        // perfType1: Attached version (e -> i shift usually) unless overridden
+        let p1 = recipe.perfType1Builder
+            ? recipe.perfType1Builder(perfRows[i], i)
+            : perfRows[i].replace(/e([^aeiou])$/, "i$1");
+
+        // perfType2: Syncopated version
+        let p2 = i === 2 ? recipe.perfSync : perfRows[i];
+        if (recipe.perfType1Builder && i === 3) {
+            p2 = recipe.perfType1Builder(perfRows[i], i);
+        }
+
+        stemsList.push({
+            impfType1: i >= 4 ? recipe.impfPlural(i) : recipe.impfType1(i),
+            impfType2: i >= 4 ? recipe.impfPlural(i) : recipe.impfType2(i),
+            perfType1: p1,
+            perfType2: p2,
+        });
+    }
+
+    const persons = [
+        { mt: "jiena", en: "I" },
+        { mt: "inti", en: "you (sg.)" },
+        { mt: "huwa", en: "he" },
+        { mt: "hija", en: "she" },
+        { mt: "aħna", en: "we" },
+        { mt: "intom", en: "you (pl.)" },
+        { mt: "huma", en: "they" },
+    ];
+
+    const rows: ConjugationRow[] = persons.map((p, i) => ({
+        person_mt: p.mt,
+        person_en: p.en,
+        imperfect: impfForms[i],
+        perfect: perfRows[i],
+        perfect_neg:
+            i === 2 ? negM : i === 3 ? negF : perfRows[i].replace("ie", "e"),
+        stems: stemsList[i],
+    }));
+
+    return {
+        rows,
+        imperative_sg: recipe.impSg,
+        imperative_pl: recipe.impPl,
+        imperative_sg_stems: recipe.impSgStems ?? {
+            impfType1: recipe.impSg,
+            impfType2: recipe.impSg,
+        },
+        imperative_pl_stems: recipe.impPlStems ?? {
+            impfType1: recipe.impPl.replace("ie", "e"),
+            impfType2: recipe.impPl,
+        },
+        blocksImala: recipe.blocksImala,
+    };
+}
+
 function isGuttural(c: string) {
-    return ['għ', 'ħ', 'h', 'q', "'"].includes(c);
+    return ["għ", "ħ", "h", "q", "'"].includes(c);
 }
 
 function isPharyngeal(c: string) {
-    return ['għ'].includes(c);
+    return ["għ"].includes(c);
 }
 
 function hasIorE(v: string) {
-    return ['i', 'e'].includes(v);
+    return ["i", "e"].includes(v);
 }
 
 function hasIorEorO(v: string) {
-    return ['i', 'e', 'o'].includes(v);
+    return ["i", "e", "o"].includes(v);
+}
+/**
+ * deriveTable
+ * Morphs a base conjugation table (e.g. Form II) into a derived one (e.g. Form V)
+ * by applying string replacements or prefixes to specific columns.
+ */
+function deriveTable(
+    base: VerbConjugationTable,
+    perfPrefix: string,
+    impfTransform: (baseImpf: string, pIdx: number) => string,
+): VerbConjugationTable {
+    const mapRow = (row: ConjugationRow, pIdx: number): ConjugationRow => ({
+        ...row,
+        perfect: perfPrefix + row.perfect,
+        perfect_neg: row.perfect_neg
+            ? `ma ${perfPrefix}${row.perfect_neg.replace(/^ma /, "")}`
+            : undefined,
+        imperfect: impfTransform(row.imperfect, pIdx),
+        imperfect_attached: row.imperfect_attached
+            ? impfTransform(row.imperfect_attached, pIdx)
+            : undefined,
+        stems: row.stems
+            ? {
+                impfType1: impfTransform(row.stems.impfType1, pIdx),
+                impfType2: impfTransform(row.stems.impfType2, pIdx),
+                perfType1: perfPrefix + row.stems.perfType1,
+                perfType2: perfPrefix + row.stems.perfType2,
+            }
+            : undefined,
+    });
+
+    return {
+        ...base,
+        rows: base.rows.map(mapRow),
+        imperative_sg: perfPrefix + base.imperative_sg,
+        imperative_pl: perfPrefix + base.imperative_pl,
+        imperative_sg_neg: base.imperative_sg_neg
+            ? `la ${impfTransform(base.imperative_sg_neg.replace(/^la /, ""), 1)}`
+            : undefined,
+        imperative_pl_neg: base.imperative_pl_neg
+            ? `la ${impfTransform(base.imperative_pl_neg.replace(/^la /, ""), 5)}`
+            : undefined,
+        imperative_sg_stems: base.imperative_sg_stems
+            ? {
+                impfType1: perfPrefix + base.imperative_sg_stems.impfType1,
+                impfType2: perfPrefix + base.imperative_sg_stems.impfType2,
+            }
+            : undefined,
+        imperative_pl_stems: base.imperative_pl_stems
+            ? {
+                impfType1: perfPrefix + base.imperative_pl_stems.impfType1,
+                impfType2: perfPrefix + base.imperative_pl_stems.impfType2,
+            }
+            : undefined,
+    };
 }
 
 // ── Vowel helpers ──────────────────────────────────────────────────────────
 
 function parseVset(vset: string): { v1: string; v2: string } {
-    const parts = vset.split('-');
-    return { v1: parts[0] ?? 'i', v2: parts[1] ?? '' };
+    const parts = vset.split("-");
+    return { v1: parts[0] ?? "i", v2: parts[1] ?? "" };
 }
 
 /** Derive the imperfect prefix vowel from the vowel set */
 function prefixVowel(vset: string): string {
     const { v1 } = parseVset(vset);
     // The prefix vowel is the first character encoded in the V1 theme vowel
-    return v1.charAt(0) || 'i';
+    return v1.charAt(0);
 }
 
 /** Build the imperfect prefix for a given person number + vowel set */
 function buildPrefix(person: number, vset: string): string {
     const v = prefixVowel(vset);
-    const consonants = ['n', 't', 'j', 't', 'n', 't', 'j'];
-    const pfx = consonants[person] ?? 'j';
+    const consonants = ["n", "t", "j", "t", "n", "t", "j"];
+    const pfx = consonants[person] ?? "j";
     return pfx + v;
 }
 
-/** 
- * Safely combine a prefix (e.g. "n", "ti-") with a stem, 
+/**
+ * Safely combine a prefix (e.g. "n", "ti-") with a stem,
  * applying assimilation rules.
  */
 function combinePrefix(prefix: string, stem: string): string {
     if (!prefix || !stem) return prefix + stem;
-    const pfx = prefix.replace(/[aeiou]+$/, '');
+    const pfx = prefix.replace(/[aeiou]+$/, "");
     const hasVowel = /[aeiou]/.test(prefix);
 
     // Assimilation only happens if the prefix consonant is directly adjacent to stem
     if (!hasVowel && pfx.length === 1) {
         // t- matches ċ, d, s, x, ż, z
-        if (pfx === 't' && /^[ċdsxżzt]/.test(stem)) {
+        if (pfx === "t" && /^[ċdsxżzt]/.test(stem)) {
             return stem[0] + stem;
         }
         // n- optional matches r, m
-        if (pfx === 'n' && /^[rm]/.test(stem)) {
+        if (pfx === "n" && /^[rm]/.test(stem)) {
             return `${stem[0]}${stem} / n${stem}`;
         }
     }
@@ -134,10 +329,17 @@ function combinePrefix(prefix: string, stem: string): string {
 }
 
 /** Parallel to combinePrefix for plural forms (handles slash variants) */
-function combinePrefixPlural(prefix: string, stem: string, suffix: string): string {
+function combinePrefixPlural(
+    prefix: string,
+    stem: string,
+    suffix: string,
+): string {
     const combined = combinePrefix(prefix, stem);
-    if (combined.includes(' / ')) {
-        return combined.split(' / ').map(f => f + suffix).join(' / ');
+    if (combined.includes(" / ")) {
+        return combined
+            .split(" / ")
+            .map((f) => f + suffix)
+            .join(" / ");
     }
     return combined + suffix;
 }
@@ -145,47 +347,66 @@ function combinePrefixPlural(prefix: string, stem: string, suffix: string): stri
 // ── Negative perfect vowel shift ───────────────────────────────────────────
 
 /**
- * Handles vowel shifts for suffix attachment (clitics) and negation.
- * - Strong/Assimilative: e -> i (kiteb -> kitib-)
- * - Final-weak: a -> ie (beda -> bdie-)
- * - Pharyngeal exception: a' -> a (laqa' -> laqagħ-)
  */
-function applyAttachedShift(vowel: string, C3?: string, isDerived: boolean = false): string {
-    if (C3 === 'għ' && vowel === 'a') return 'a'; // exception for CvCv'
-    if (vowel === 'a') return isDerived ? 'i' : 'a';
-    if (vowel === 'e') return 'i';
+function applyAttachedShift(
+    vowel: string,
+    C3?: string,
+    isFinalWeak: boolean = false,
+): string {
+    if (C3 === "għ" && (vowel === "a" || vowel === "e")) return "a";
+    if (vowel === "a" && isFinalWeak) return "ie";
+    if (vowel === "e" || vowel === "a") return "i";
     return vowel;
 }
 
-function negPerfect3sg(m3: string, f3: string, C3?: string, verbForm?: string): { m: string; f: string } {
+/**
+ * Normalizes theme vowels for base lemma generation,
+ * ensuring pharyngeal compatibility (e.g. laqqa' instead of laqqe').
+ */
+function cleanThemeVowel(vowel: string, C3?: string): string {
+    if (C3 === "għ") return "a";
+    return vowel;
+}
+
+function negPerfect3sg(
+    m3: string,
+    f3: string,
+    C3?: string,
+    verbForm?: string,
+    blocksImala: boolean = false,
+): { m: string; f: string } {
     const getShortForm = (offset: number) => {
-        if (verbForm === 'III' && offset < 6) return 'e';
-        return 'i';
+        if (verbForm === "III" && offset < 6) return "e";
+        return "i";
     };
 
     const shift = (s: string, offset: number) => {
-        if (C3 === 'għ' && s.endsWith("'")) return s.replace(/'$/, '');
+        if (C3 === "għ" && s.endsWith("'")) return s.replace(/'$/, "");
 
         // Form III / Hollow shortening: ie-vowel -> e-vowel
         // We handle both v-cons (strong) and v-vowel (defective)
-        if (s.includes('ie')) {
-            const shortened = s.replace('ie', getShortForm(offset));
+        if (s.includes("ie")) {
+            const shortened = s.replace("ie", getShortForm(offset));
             // If it ends in e + cons, it becomes i + cons
             if (/e([^aeiou])$/.test(shortened)) {
-                return shortened.replace(/e([^aeiou])$/, 'i$1');
+                return shortened.replace(/e([^aeiou])$/, "i$1");
             }
             // If it ends in a vowel (defective), handle terminal shift
-            if (shortened.endsWith('a')) {
-                return shortened.replace(/a$/, 'ie');
+            if (shortened.endsWith("a")) {
+                if (blocksImala) return shortened;
+                return shortened.replace(/a$/, "ie");
             }
             return s;
         }
 
         // Generic a -> ie shift for negation
-        if (s.endsWith('a')) return s.replace(/a$/, 'ie');
+        if (s.endsWith("a")) {
+            if (blocksImala) return s;
+            return s.replace(/a$/, "ie");
+        }
 
         // Generic e -> i shift for strong/assimilative
-        return s.replace(/e([^aeiou])$/, 'i$1');
+        return s.replace(/e([^aeiou])$/, "i$1");
     };
     return { m: shift(m3, 2), f: shift(f3, 3) };
 }
@@ -198,127 +419,61 @@ function genStrong(
     vsetImpf: string,
     vsetImp: string,
     verbForm: string,
+    isImalaBlocked: boolean = false,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v2: iv2 } = parseVset(vsetImpf);
-    const isGuttural = (c: string) => ['għ', 'ħ', 'q'].includes(c);
-    // @ts-ignore
-    const _isPharyngeal = (c: string) => ['għ'].includes(c);
 
-    // ── Perfect ──────────────────────────────────────────────────────────
-    const perfSyncRoot = `${C1}${pv1}${C2}${C3}`; // kitb-
-    const perfRedRoot = `${C1}${C2}${pv1}${C3}`;   // ktib
-    const perfFull = `${C1}${pv1}${C2}${pv2}${C3}`; // kiteb
-    const perf3f = `${perfSyncRoot}et`;
+    const isSonorant = (c: string) => ["l", "m", "n", "r"].includes(c);
+    const isGutturalLocal = (c: string) => ["għ", "ħ", "q"].includes(c);
 
-    const perfRows = [
-        perfRedRoot + 't',    // jiena
-        perfRedRoot + 't',    // inti
-        perfFull,             // huwa
-        perf3f,               // hija
-        perfRedRoot + 'na',   // aħna
-        perfRedRoot + 'tu',   // intom
-        perfSyncRoot + 'u',    // huma
-    ];
+    const perfSyncRoot = `${C1}${pv1}${C2}${C3}`;
+    const perfRedRoot = `${C1}${C2}${pv1}${C3}`;
+    const perfFull = `${C1}${pv1}${C2}${pv2}${C3}`;
 
-    const { m: negM, f: negF } = negPerfect3sg(perfFull, perf3f, C3, verbForm);
-
-    // ── Imperfect ────────────────────────────────────────────────────────
-
-    const isSonorant = (c: string) => ['l', 'm', 'n', 'r'].includes(c);
-
-    // Type 1: Attached (Prefix + C1C2 + assimilated V2 + C3)
-    const getImpfT1 = (prefix: string, themeV?: string) => {
-        const v = themeV !== undefined ? themeV : (iv2 || '');
-        return `${prefix}${C1}${C2}${applyAttachedShift(v, C3)}${C3}`;
+    const impfT1 = (pfx: string) =>
+        `${pfx}${C1}${C2}${applyAttachedShift(iv2 || "", C3)}${C3}`;
+    const impfT2 = (pfx: string) => {
+        const theme = iv2 || "i";
+        if (isGutturalLocal(C2) || isSonorant(C2))
+            return `${pfx}${C1}${theme}${C2}${C3}`;
+        return `${pfx}${C1}${C2}${C3}`;
     };
 
-    // Type 2: Syncopated / Shifted (Prefix + C1 + (V2 if shifted) + C2 + C3)
-    const getImpfT2 = (prefix: string, themeV?: string) => {
-        const theme = themeV !== undefined ? themeV : (iv2 || 'i');
-        // METATHESIS: If C2 is guttural or sonorant, the vowel moves before C2 to license the cluster.
-        // e.g. jifagħlu (C2=għ), jaħarbu (C2=r)
-        // We do NOT add a license vowel for C3 here; that's handled by the suffix engine or plurals.
-        if (isGuttural(C2) || isSonorant(C2)) {
-            return `${prefix}${C1}${theme}${C2}${C3}`;
-        }
-        // Normal Syncopated: Prefix + C1C2 + C3
-        return `${prefix}${C1}${C2}${C3}`;
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, vsetImpf);
+        return i >= 4 ? `${impfT2(pfx)}u` : `${pfx}${C1}${C2}${iv2}${C3}`;
     };
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    // ── CLITIC ATTACHMENT STEMS ──────────────────────────────────────────
-    /**
-     * These stems are pre-calculated for the Suffix Engine to allow instant attachment
-     * of object pronouns (clitics) without re-running morphological rules.
-     * 
-     * Types:
-     * - impfType1: Attached version. Usually shifts theme vowel (e -> i) to license 
-     *              consonant-initial suffixes like -ni, -ha, -hom (e.g. jiktib-).
-     * - impfType2: Syncopated version. Drops theme vowel or applies metathesis for 
-     *              vowel-initial suffixes like -u, -ok (e.g. jiktb- or jaħarb-).
-     * - perfType1: Perfect vowel-shifted stem. e.g., kitbit-
-     * - perfType2: Perfect base/syncopated stem. e.g., kitb-
-     */
-    for (let i = 0; i < 7; i++) {
-        const prefix = buildPrefix(i, vsetImpf);
-        const t1 = getImpfT1(prefix);
-        const t2 = getImpfT2(prefix);
-
-        // Base form uses the original iv2 (e.g. jikteb)
-        const base = i >= 4 ? `${t2}u` : `${prefix}${C1}${C2}${iv2}${C3}`;
-        impfForms.push(base);
-
-        // perfType1: Attached version (e -> i shift)
-        // e.g. kiteb -> kitib, kitbet -> kitbit
-        const p1 = perfRows[i].replace(/e([^aeiou])$/, 'i$1');
-        stemsList.push({
-            impfType1: i >= 4 ? base : t1,
-            impfType2: i >= 4 ? base : t2,
-            perfType1: p1,
-            perfType2: (i === 2) ? perfSyncRoot : perfRows[i], // perfType2 is mostly for huwa syncopation (kiteb -> kitbu)
-        });
-    }
-
-    // ── Imperative ────────────────────────────────────────────────────────
     const { v1: impV1 } = parseVset(vsetImp);
-    const pfx = buildPrefix(1, vsetImpf);
-    const impSg = impfForms[1].replace(pfx, impV1);
-    const impPl = impfForms[5].replace(pfx, impV1);
+    const pfx1 = buildPrefix(1, vsetImpf);
+    const impSg = impfBase(1).replace(pfx1, impV1);
+    const impPl = impfBase(5).replace(pfx1, impV1);
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: {
-            impfType1: stemsList[1].impfType1.replace(pfx, impV1),
-            impfType2: stemsList[1].impfType2.replace(pfx, impV1),
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync: perfSyncRoot,
+            perfReduced: perfRedRoot,
+            perf3f: `${perfSyncRoot}et`,
+            impfBase,
+            impfType1: (i) => impfT1(buildPrefix(i, vsetImpf)),
+            impfType2: (i) => impfT2(buildPrefix(i, vsetImpf)),
+            impfPlural: (i) => `${impfT2(buildPrefix(i, vsetImpf))}u`,
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: impfT1(pfx1).replace(pfx1, impV1),
+                impfType2: impfT2(pfx1).replace(pfx1, impV1),
+            },
+            blocksImala:
+                isImalaBlocked ||
+                (C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a"))),
         },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (typeof C3 !== 'undefined' && C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a')))
-    };
+        C3,
+        verbForm,
+    );
 }
 
 // ── ASSIMILATIVE class ─────────────────────────────────────────────────────
@@ -330,103 +485,65 @@ function genAssimilative(
     vsetImpf: string,
     vsetImp: string,
     verbForm: string,
+    isImalaBlocked: boolean = false,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v2: iv2 } = parseVset(vsetImpf);
 
-    // Perfect: C1 present — CvCvC pattern
-    const perfFull = `${C1}${pv1}${C2}${pv2}${C3}`; // wiret
-    const perfSyncRoot = `${C1}${pv1}${C2}${C3}`; // wirt-
-    const perfReduced = `${C1}${C2}${pv1}${C3}`;  // writt, C1 stays, v2 drops
+    const perfFull = `${C1}${pv1}${C2}${pv2}${C3}`;
+    const perfSync = `${C1}${pv1}${C2}${C3}`;
+    const perfReduced = `${C1}${C2}${pv1}${C3}`;
 
-    const perfRows = [
-        perfReduced + 't',
-        perfReduced + 't',
-        perfFull,
-        perfSyncRoot + 'et',
-        perfReduced + 'na',
-        perfReduced + 'tu',
-        perfSyncRoot + 'u',
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfFull, perfSyncRoot + 'it', C3, verbForm);
-
-    // Imperfect: C1 drops
-    // Prefix: j+iv1 (e.g. ji- for wiret, je- for weħel), then C2+iv2+C3
-    // Type 1: Attached (Prefix + C1C2 + assimilated V2 + C3)
-    const getImpfT1 = (prefix: string, themeV?: string) => {
-        const v = themeV !== undefined ? themeV : (iv2 || '');
-        return `${prefix}${C2}${applyAttachedShift(v, C3)}${C3}`;
+    const impfBase = (person: number) => {
+        const pfx = buildPrefix(person, vsetImpf);
+        const pfxCons = pfx.replace(/[aeiou]+$/, "");
+        const stem = `${C2}${iv2}${C3}`;
+        return person >= 4
+            ? combinePrefixPlural(pfxCons, `${C2}${C3}`, "u")
+            : combinePrefix(pfxCons, stem);
     };
 
-    // Type 2: Syncopated / Shifted (Prefix + C1 + (V2 if shifted) + C2 + C3)
-    const getImpfT2 = (prefix: string, _themeV?: string) => `${prefix}${C2}${C3}`;
-
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    // ── CLITIC ATTACHMENT STEMS ──────────────────────────────────────────
-    /**
-     * Pre-calculated stems for Assimilative verbs.
-     * Note: Assimilative verbs have similar stems to strong, minus the dropped C1.
-     */
-    for (let i = 0; i < 7; i++) {
-        const prefix = buildPrefix(i, vsetImpf);
-        const t1 = getImpfT1(prefix);
-        const t2 = getImpfT2(prefix);
-
-        // Base form uses the original iv2 (e.g. jiret)
-        const base = i >= 4 ? `${t2}u` : `${prefix}${C2}${iv2}${C3}`;
-        impfForms.push(base);
-
-        // perfType1: Attached version (e -> i shift)
-        // e.g. wiret -> wirit, wirtet -> wirtit
-        const p1 = perfRows[i].replace(/e([^aeiou])$/, 'i$1');
-        stemsList.push({
-            impfType1: i >= 4 ? base : t1,
-            impfType2: i >= 4 ? base : t2,
-            perfType1: p1,
-            perfType2: (i === 2) ? perfSyncRoot : perfRows[i], // perfType2 is mostly for huwa syncopation (kiteb -> kitbu)
-        });
-    }
-
-    // ── Imperative ────────────────────────────────────────────────────────
     const { v1: impV1 } = parseVset(vsetImp);
-    const pfx = buildPrefix(1, vsetImpf);
-    const impSg = impfForms[1].replace(pfx, impV1);
-    const impPl = impfForms[5].replace(pfx, impV1);
+    const pfx1 = buildPrefix(1, vsetImpf);
+    const impSg = impfBase(1).replace(pfx1, impV1);
+    const impPl = impfBase(5).replace(pfx1, impV1);
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: {
-            impfType1: stemsList[1].impfType1.replace(pfx, impV1),
-            impfType2: stemsList[1].impfType2.replace(pfx, impV1),
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) => {
+                const p = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+                return combinePrefix(
+                    p,
+                    `${C2}${applyAttachedShift(iv2 || "", C3)}${C3}`,
+                );
+            },
+            impfType2: (i) => {
+                const p = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+                return combinePrefix(p, `${C2}${C3}`);
+            },
+            impfPlural: (i) => {
+                const p = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+                return combinePrefixPlural(p, `${C2}${C3}`, "u");
+            },
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: impSg,
+                impfType2: impSg.replace(/[aeiou]([^aeiou]*)$/, "$1"),
+            },
+            blocksImala:
+                isImalaBlocked ||
+                (C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a"))),
         },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (typeof C3 !== 'undefined' && C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a')))
-    };
+        C3,
+        verbForm,
+    );
 }
 
 // ── HOLLOW class ──────────────────────────────────────────────────────────
@@ -439,102 +556,52 @@ function genHollow(
     vsetImp: string,
     verbForm: string,
 ): VerbConjugationTable {
-    const [C1, _C2, C3] = C; // C2 assimilates into long vowel — not used directly
+    const [C1, _C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1 } = parseVset(vsetImpf);
 
-    // Perfect: Full form uses pv2 if available (long vowel), else pv1.
-    // e.g. dar/u-a -> pv2='a' is the long vowel for "dar"
-    // Reduced form uses pv1.
-    // e.g. dar/u-a -> pv1='u' is the reduction for "durt"
     const longV = pv2 || pv1;
     const shortV = pv1;
 
-    const perfFull = `${C1}${longV}${C3}`;   // CvC (long v written as single in std orthography)
-    const perf3f = `${C1}${longV}${C3}et`; // e.g. daret
-    const perfReduced = `${C1}${shortV}${C3}`; // e.g. dur-
+    const perfFull = `${C1}${longV}${C3}`;
+    const perfReduced = `${C1}${shortV}${C3}`;
 
-    const perfRows = [
-        perfReduced + 't',
-        perfReduced + 't',
-        perfFull,
-        perf3f,
-        perfReduced + 'na',
-        perfReduced + 'tu',
-        perfFull + 'u',
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfFull, perf3f, C3, verbForm);
-
-    // Imperfect: jCvvC (prefix + C1 + long vowel + C3)
-    // No vowel between prefix and C1!
     const impfBase = (person: number) => {
-        const rawPrefix = buildPrefix(person, vsetImpf);
-        const pfxCons = rawPrefix.replace(/[aeiou]+$/, '');
+        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, "");
         const stem = `${C1}${iv1}${C3}`;
         return combinePrefix(pfxCons, stem);
     };
-    const impfPlural = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = `${C1}${iv1}${C3}`;
-        return combinePrefixPlural(pfxCons, stem, 'u');
-    };
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-    // ── CLITIC ATTACHMENT STEMS ──────────────────────────────────────────
-    /**
-     * Hollow verbs use a stable stem in the imperfect as the long vowel prevents 
-     * syncopation. perfType1 handles the e->i shift for 3sg.f (daret -> darit-).
-     */
-    for (let i = 0; i < 7; i++) {
-        const base = i >= 4 ? impfPlural(i) : impfBase(i);
-        impfForms.push(base);
-        const p1 = perfRows[i].replace(/e([^aeiou])$/, 'i$1');
-        stemsList.push({
-            impfType1: base,
-            impfType2: base,
-            perfType1: p1,
-            perfType2: p1,
-        });
-    }
-
-    // ── Imperative ────────────────────────────────────────────────────────
     const { v1: impV1 } = parseVset(vsetImp);
-    const pfx = buildPrefix(1, vsetImpf);
-    const impSg = impfForms[1].replace(pfx, impV1);
-    const impPl = impfForms[5].replace(pfx, impV1);
+    const pfx1 = buildPrefix(1, vsetImpf);
+    const impSg = impfBase(1).replace(pfx1, impV1);
+    const impPl = impfBase(5).replace(pfx1, impV1);
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        stems: stemsList[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: {
-            impfType1: stemsList[1].impfType1.replace(pfx, impV1),
-            impfType2: stemsList[1].impfType2.replace(pfx, impV1),
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync: perfFull,
+            perfReduced,
+            perf3f: `${perfFull}et`,
+            impfBase,
+            impfType1: (i) => impfBase(i),
+            impfType2: (i) => impfBase(i),
+            impfPlural: (i) => {
+                const p = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+                return combinePrefixPlural(p, `${C1}${iv1}${C3}`, "u");
+            },
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: impfBase(1).replace(pfx1, impV1),
+                impfType2: impfBase(1).replace(pfx1, impV1),
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
         },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (typeof C3 !== 'undefined' && C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a')))
-    };
+        C3,
+        verbForm,
+    );
 }
 
 // ── GEMINATED class ───────────────────────────────────────────────────────
@@ -547,94 +614,48 @@ function genGeminated(
     vsetImp: string,
     verbForm: string,
 ): VerbConjugationTable {
-    const [C1, C2, C3] = C; // C3 = C2
+    const [C1, C2, C3] = C;
     const { v1: pv1 } = parseVset(vsetPerf);
     const { v1: iv1 } = parseVset(vsetImpf);
 
-    // Perfect: C1-v-C2C2  e.g. dell, ħabb
     const perfFull = `${C1}${pv1}${C2}${C2}`;
-    const perf3f = `${perfFull}et`;
-    const perfReduced = perfFull; // geminate stem unchanged for suffixed persons
 
-    const perfRows = [
-        perfReduced + 't',
-        perfReduced + 't',
-        perfFull,
-        perf3f,
-        perfReduced + 'na',
-        perfReduced + 'tu',
-        perfFull + 'u',
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfFull, perf3f, C3, verbForm);
-
-    // Imperfect: jC1vC2C2 (no vowel between prefix-cons and C1)
-    // e.g. jdell, tħobb
     const impfBase = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
+        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, "");
         const stem = `${C1}${iv1}${C2}${C2}`;
         return combinePrefix(pfxCons, stem);
     };
-    // Plural: geminate may reduce/remain — jdellu
-    const impfPlural = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = `${C1}${iv1}${C2}${C2}`;
-        return combinePrefixPlural(pfxCons, stem, 'u');
-    };
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-    // ── CLITIC ATTACHMENT STEMS ──────────────────────────────────────────
-    /**
-     * Geminated stems preserve the double consonant (e.g. jdell / jdellu).
-     */
-    for (let i = 0; i < 7; i++) {
-        const base = i >= 4 ? impfPlural(i) : impfBase(i);
-        impfForms.push(base);
-        stemsList.push({
-            impfType1: base,
-            impfType2: base,
-            perfType1: perfRows[i],
-            perfType2: perfRows[i],
-        });
-    }
-
-    // ── Imperative ────────────────────────────────────────────────────────
     const { v1: impV1 } = parseVset(vsetImp);
-    const pfx = buildPrefix(1, vsetImpf);
-    const impSg = impfForms[1].replace(pfx, impV1);
-    const impPl = impfForms[5].replace(pfx, impV1);
+    const pfx1 = buildPrefix(1, vsetImpf);
+    const impSg = impfBase(1).replace(pfx1, impV1);
+    const impPl = impfBase(5).replace(pfx1, impV1);
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: {
-            impfType1: stemsList[1].impfType1.replace(pfx, impV1),
-            impfType2: stemsList[1].impfType2.replace(pfx, impV1),
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync: perfFull,
+            perfReduced: perfFull,
+            perf3f: `${perfFull}et`,
+            impfBase,
+            impfType1: (i) => impfBase(i),
+            impfType2: (i) => impfBase(i),
+            impfPlural: (i) => {
+                const p = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+                return combinePrefixPlural(p, `${C1}${iv1}${C2}${C2}`, "u");
+            },
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: impfBase(1).replace(pfx1, impV1),
+                impfType2: impfBase(1).replace(pfx1, impV1),
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
         },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (typeof C3 !== 'undefined' && C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a')))
-    };
+        C3,
+        verbForm,
+    );
 }
 
 // ── DEFECTIVE-GĦ class ──────────────────────────────────────────────────
@@ -644,109 +665,66 @@ function genDefectiveGħ(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
-    vsetImp: string
+    vsetImp: string,
+    verbForm: string,
+    isImalaBlocked: boolean = false,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v2: iv2 } = parseVset(vsetImpf);
 
-    // ── Perfect ──────────────────────────────────────────────────────────
-    const perfFull = `${C1}${pv1}${C2}${pv2}`; // laqa' 
-    const perf3 = `${C1}${pv1}${C2}${C3}`;       // laqgħ-
-    const perfReduced = `${C1}${C2}${pv1}j`;    // lqaj-
+    const perfFull = isGuttural(C1)
+        ? `${C1}e${pv1}${C2}${pv2}`
+        : `${C1}${pv1}${C2}${pv2}`;
+    const perfSync = isGuttural(C1)
+        ? `${C1}e${pv1}${C2}${pv2}`
+        : `${C1}${C2}${pv2}`;
+    const perfReduced = isGuttural(C1) ? `${C1}e${C2}` : `${C1}${C2}${pv1}j`;
 
-    const perfRows = [
-        perfReduced + 't',   // lqajt
-        perfReduced + 't',   // lqajt
-        perfFull + `'`,           // laqa'
-        perf3 + 'et',       // laqgħet
-        perfReduced + 'na', // lqajna
-        perfReduced + 'tu', // lqajtu
-        perf3 + 'u',        // laqgħu
-    ];
-
-    // negate helper: "all forms with ' only have it removed"
-    const negateFull = (s: string) => `${s.replace(/'$/, '')}`;
-
-    // ── Imperfect ────────────────────────────────────────────────────────
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
+    const impfBase = (i: number) => {
         const pfx = buildPrefix(i, vsetImpf);
-
-        // Singular: jilqa' | Plural: jilqgħu
-        const base = (i < 4)
-            ? `${pfx}${C1}${C2}${iv2}'`
-            : `${pfx}${C1}${C2}${C3}u`;
-
-        impfForms.push(base);
-
-        // Clitic Stems
-        // impfType1: Attached version (e.g. jilqagħ-ha)
-        const it1 = (i < 4)
-            ? `${pfx}${C1}${C2}${iv2}${C3}`
-            : base;
-
-        // impfType2: Syncopated version (e.g. jilqgħ-ek)
-        const it2 = (i < 4)
-            ? `${pfx}${C1}${C2}${C3}`
-            : base;
-
-        // perfType1: Attached version
-        let pt1 = perfRows[i].replace(/e([^aeiou])$/, 'i$1');
-        if (i === 2) pt1 = `${C1}${pv1}${C2}${pv2}${C3}`; // laqa' -> laqagħ-ha
-        else if (i === 3) pt1 = perf3 + 'it'; // laqgħet -> laqgħit-ha
-
-        // perfType2: Syncopated version (e.g. laqgħ-ek)
-        let pt2 = (i === 2) ? `${C1}${pv1}${C2}${C3}` : perfRows[i];
-
-        stemsList.push({
-            impfType1: it1,
-            impfType2: it2,
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
-
-    // ── Imperative ────────────────────────────────────────────────────────
-    const { v1: impV1 } = parseVset(vsetImp);
-    const pfx2 = buildPrefix(1, vsetImpf);
-    const impSg = impfForms[1].replace(pfx2, impV1);
-    const impPl = impfForms[5].replace(pfx2, impV1);
-
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (singular)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (plural)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: negateFull(perfRows[i]),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_neg: negateFull(impSg), // ma ilqax
-        imperative_pl_neg: negateFull(impPl), // ma tilqgħux
-        imperative_sg_stems: {
-            impfType1: stemsList[1].impfType1.replace(pfx2, impV1),
-            impfType2: stemsList[1].impfType2.replace(pfx2, impV1),
-        },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: true
+        return i >= 4 ? `${pfx}${C1}${C2}${C3}u` : `${pfx}${C1}${C2}${iv2}'`;
     };
+
+    const { v1: impV1 } = parseVset(vsetImp);
+    const pfx1 = buildPrefix(1, vsetImpf);
+    const impSg = impfBase(1).replace(pfx1, impV1);
+    const impPl = impfBase(5).replace(pfx1, impV1);
+
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced,
+            perf3f: pv2 === "a" ? `${perfSync}t` : `${perfSync}et`,
+            perfType1Builder: (perfRow, pIdx) => {
+                if (pIdx === 2) return `${C1}${pv1}${C2}${pv2}${C3}`;
+                if (pIdx === 3) return `${perfSync}it`;
+                return perfRow.replace(/e([^aeiou])$/, "i$1");
+            },
+            impfBase,
+            impfType1: (i) => {
+                const pfx = buildPrefix(i, vsetImpf);
+                return i >= 4
+                    ? `${pfx}${C1}${C2}${C3}u`
+                    : `${pfx}${C1}${C2}${iv2}${C3}`;
+            },
+            impfType2: (i) => {
+                const pfx = buildPrefix(i, vsetImpf);
+                return i >= 4 ? `${pfx}${C1}${C2}${C3}u` : `${pfx}${C1}${C2}${C3}`;
+            },
+            impfPlural: (i) => `${buildPrefix(i, vsetImpf)}${C1}${C2}${C3}u`,
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `${impV1}${C1}${C2}${iv2}${C3}`,
+                impfType2: `${impV1}${C1}${C2}${C3}`,
+            },
+            blocksImala: isImalaBlocked || true,
+        },
+        C3,
+        verbForm,
+    );
 }
 
 // ── DEFECTIVE class (j/w and geminated) ────────────────────────────────────
@@ -759,90 +737,82 @@ function genDefective(
     vsetImpf: string,
     vsetImp: string,
     verbForm: string,
+    isImalaBlocked: boolean = false,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
-    const { v1: pv1 } = parseVset(vsetPerf);
-    const { v2: iv2 } = parseVset(vsetImpf);
+    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
+    const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
 
-    const perfFull = `${C1}${pv1}${C2}a`;
-    const perf3f = `${C1}${C2}iet`;
-    const perfReduced = `${C1}${C2}${pv1}`;
+    const perfFull = `${C1}${pv1}${C2}${pv2}`;
+    const perf3f = pv1 === "a" && pv2 === "a" ? `${C1}${C2}at` : `${C1}${C2}iet`;
+    const perfReduced = isPharyngeal(C1)
+        ? `${C1}${pv1}${C2}${pv1}`
+        : `${C1}${C2}${pv1}`;
 
-    const perfRows = [
-        perfReduced + 'jt',
-        perfReduced + 'jt',
-        perfFull,
-        perf3f,
-        perfReduced + 'jna',
-        perfReduced + 'jtu',
-        perfReduced + 'w',
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfFull, perf3f, C3, verbForm);
+    const imalaBlocked = isImalaBlocked;
+    const attV = applyAttachedShift(iv2 || "a", C3, true);
+    const attVj = attV === "ie" ? "iej" : imalaBlocked ? "aj" : "ij";
 
     const impfBase = (person: number) => {
         const prefix = buildPrefix(person, vsetImpf);
-        const themeEnd = iv2 || 'a';
+        const themeEnd = iv2 || "a";
         return `${prefix}${C1}${C2}${themeEnd}`;
     };
     const impfPlural = (person: number) => {
         const prefix = buildPrefix(person, vsetImpf);
-        // If theme is i, plural is -ju (e.g. jaħju)
-        // If theme is a, plural is -dew (e.g. jibdew)
-        const suffix = (iv2 === 'i') ? 'u' : 'ew';
+        const suffix = iv1 === "i" ? "u" : iv1 === "a" && iv2 === "a" ? "aw" : "ew";
         return `${prefix}${C1}${C2}${suffix}`;
     };
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-        const base = i >= 4 ? impfPlural(i) : impfBase(i);
-        impfForms.push(base);
-        stemsList.push({
-            impfType1: base,
-            impfType2: base,
-            perfType1: perfRows[i],
-            perfType2: perfRows[i],
-        });
-    }
-
-    // ── Imperative ────────────────────────────────────────────────────────
-    const { v1: impV1 } = parseVset(vsetImp);
-    const pfx = buildPrefix(1, vsetImpf);
-    const impSg = impfForms[1].replace(pfx, impV1);
-    const impPl = impfForms[5].replace(pfx, impV1);
-
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: i === 2 ? `${negM}` : i === 3 ? `${negF}` : perfRows[i],
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: {
-            impfType1: stemsList[1].impfType1.replace(pfx, impV1),
-            impfType2: stemsList[1].impfType2.replace(pfx, impV1),
-        },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (typeof C3 !== 'undefined' && C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a')))
+    const impfType1 = (person: number) => {
+        if (person >= 4) return impfPlural(person);
+        return `${buildPrefix(person, vsetImpf)}${C1}${C2}${attV}`;
     };
+
+    const impfType2 = (person: number) => {
+        if (person >= 4) return impfPlural(person);
+        return `${buildPrefix(person, vsetImpf)}${C1}${C2}${attVj}`;
+    };
+
+    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
+    const suffix = iv1 === "i" ? "u" : iv1 === "a" && iv2 === "a" ? "aw" : "ew";
+    const impSg = `${impV1}${C1}${C2}${impV2}`;
+    const impPl = `${impV1}${C1}${C2}${suffix}`;
+
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync: `${perfReduced}`,
+            perfReduced: `${perfReduced}j`,
+            perf3f,
+            perfType1Builder: (perfRow, pIdx) => {
+                if (pIdx === 2 && pv2 === "a") return `${C1}${pv1}${C2}ie`;
+                else if (pIdx === 3) return `${perf3f.slice(0, -1)}t`;
+                return perfRow;
+            },
+            impfBase,
+            impfType1,
+            impfType2,
+            impfPlural,
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `${impV1}${C1}${C2}${attV}`,
+                impfType2: `${impV1}${C1}${C2}${attVj}`,
+            },
+            impPlStems: {
+                impfType1: impPl,
+                impfType2: impPl,
+            },
+            blocksImala:
+                imalaBlocked ||
+                (typeof C3 !== "undefined" &&
+                    C3 === "għ" &&
+                    (vsetImpf.endsWith("a") || vsetPerf.endsWith("a"))),
+        },
+        C3,
+        verbForm,
+    );
 }
 
 // ── FORM II STRONG ─────────────────────────────────────────────────────────
@@ -852,112 +822,67 @@ function genFormIIStrong(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
-    vsetImp: string
+    vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
-
-    // Doubled C2
     const C2D = C2 + C2;
 
-    // Perfect: CvCCvC pattern
-    const perfFull = `${C1}${pv1}${C2D}${pv2}${C3}`; // fettaħ
-    const perfSyncRoot = `${C1}${pv1}${C2D}${C3}`;   // fettħ-
+    const perfFull = `${C1}${pv1}${C2D}${cleanThemeVowel(pv2, C3)}${C3}`;
+    const perfSync = `${C1}${pv1}${C2D}${C3}`;
 
-    const perfRows = [
-        perfFull + 't',    // jiena
-        perfFull + 't',    // inti
-        perfFull,          // huwa
-        perfSyncRoot + 'et', // hija
-        perfFull + 'na',   // aħna
-        perfFull + 'tu',   // intom
-        perfSyncRoot + 'u',  // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfFull, perfSyncRoot + 'it', C3);
-
-    const impfT1stem = `${C1}${iv1}${C2D}${iv2}${C3}`;
+    const impfT1stem = `${C1}${iv1}${C2D}${applyAttachedShift(iv2, C3)}${C3}`;
     const impfT2stem = `${C1}${iv1}${C2D}${C3}`;
 
-    // Imperfect: prefix + CvCCvC (j-fettaħ)
-    const impfBase = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = impfT1stem;
-        return combinePrefix(pfxCons, stem);
-    };
-    const impfSync = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = impfT2stem;
-        return combinePrefix(pfxCons, stem);
-    };
-    // Plural: prefix + CvCCC + suffix (j-fettħ-u)
-    const impfPlural = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = impfT2stem;
-        return combinePrefixPlural(pfxCons, stem, 'u');
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+        const stem = `${C1}${iv1}${C2D}${iv2}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, impfT2stem, "u")
+            : combinePrefix(pfx, stem);
     };
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-        const ipt1 = i >= 4 ? impfPlural(i) : impfBase(i);
-        const ipt2 = i >= 4 ? impfPlural(i) : impfSync(i);
-
-        impfForms.push(ipt1);
-
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSyncRoot : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        stemsList.push({
-            // USER: Type 1 (-ek, -u): CvCCC, Type 2 (rest): CvCCvC
-            // My engine convention: Type 1 = Attached (Full), Type 2 = Syncopated
-            impfType1: ipt1,
-            impfType2: ipt2,
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
     const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
     const impSg = `${C1}${impV1}${C2D}${impV2}${C3}`;
     const impPl = `${C1}${impV1}${C2D}${C3}u`;
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: { impfType1: impSg, impfType2: impSg.replace(/a([^aeiou])$/, '$1') },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a')))
-    };
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: `${C1}${pv1}${C2D}${applyAttachedShift(pv2, C3)}${C3}`,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT1stem,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT2stem,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT2stem,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `${C1}${impV1}${C2D}${applyAttachedShift(impV2, C3)}${C3}`,
+                impfType2: `${C1}${impV1}${C2D}${C3}`,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+        },
+        C3,
+        verbForm,
+    );
 }
 // ── FORM II Hollow ─────────────────────────────────────────────────────────
 // Doubled C2: CvCCvC pattern (e.g. dawwar / jdawwar)
@@ -966,112 +891,67 @@ function genFormIIHollow(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
-    vsetImp: string
+    vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
-
-    // Doubled C2
     const C2D = C2 + C2;
 
-    // Perfect: CvCCvC pattern
-    const perfFull = `${C1}${pv1}${C2D}${pv2}${C3}`; // fettaħ
-    const perfSyncRoot = `${C1}${pv1}${C2}${C3}`;   // fettħ-
+    const perfFull = `${C1}${pv1}${C2D}${cleanThemeVowel(pv2, C3)}${C3}`;
+    const perfSync = `${C1}${pv1}${C2}${C3}`;
 
-    const perfRows = [
-        perfFull + 't',    // jiena
-        perfFull + 't',    // inti
-        perfFull,          // huwa
-        perfSyncRoot + 'et', // hija
-        perfFull + 'na',   // aħna
-        perfFull + 'tu',   // intom
-        perfSyncRoot + 'u',  // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfFull, perfSyncRoot + 'it', C3);
-
-    const impfT1stem = `${C1}${iv1}${C2D}${iv2}${C3}`;
+    const impfT1stem = `${C1}${iv1}${C2D}${applyAttachedShift(iv2, C3)}${C3}`;
     const impfT2stem = `${C1}${iv1}${C2}${C3}`;
 
-    // Imperfect: prefix + CvCCvC (j-fettaħ)
-    const impfBase = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = impfT1stem;
-        return combinePrefix(pfxCons, stem);
-    };
-    const impfSync = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = impfT2stem;
-        return combinePrefix(pfxCons, stem);
-    };
-    // Plural: prefix + CvCCC + suffix (j-fettħ-u)
-    const impfPlural = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = impfT2stem;
-        return combinePrefixPlural(pfxCons, stem, 'u');
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+        const stem = `${C1}${iv1}${C2D}${iv2}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, impfT2stem, "u")
+            : combinePrefix(pfx, stem);
     };
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-        const ipt1 = i >= 4 ? impfPlural(i) : impfBase(i);
-        const ipt2 = i >= 4 ? impfPlural(i) : impfSync(i);
-
-        impfForms.push(ipt1);
-
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSyncRoot : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        stemsList.push({
-            // USER: Type 1 (-ek, -u): CvCCC, Type 2 (rest): CvCCvC
-            // My engine convention: Type 1 = Attached (Full), Type 2 = Syncopated
-            impfType1: ipt1,
-            impfType2: ipt2,
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
     const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
     const impSg = `${C1}${impV1}${C2D}${impV2}${C3}`;
     const impPl = `${C1}${impV1}${C2}${C3}u`;
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: { impfType1: impSg, impfType2: impSg.replace(/a([^aeiou])$/, '$1') },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a')))
-    };
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: `${C1}${pv1}${C2D}${applyAttachedShift(pv2, C3)}${C3}`,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT1stem,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT2stem,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT2stem,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `${C1}${impV1}${C2D}${applyAttachedShift(impV2, C3)}${C3}`,
+                impfType2: `${C1}${impV1}${C2}${C3}`,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+        },
+        C3,
+        verbForm,
+    );
 }
 // ── FORM II DEFECTIVE ──────────────────────────────────────────────────────
 // Defective Form II (e.g. maħħa / jmaħħi)
@@ -1081,98 +961,83 @@ function genFormIIDefective(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
-    vsetImp: string
+    vsetImp: string,
+    verbForm: string,
+    isImalaBlocked: boolean = false,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
-    const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
-
-    // Doubled C2
+    const { v1: _iv1, v2: iv2 } = parseVset(vsetImpf);
     const C2D = C2 + C2;
 
-    // Perfect: CvCCv pattern
-    const perfFull = `${C1}${pv1}${C2D}${pv2}`; // maħħa
-    const perfSyncRoot = `${C1}${pv1}${C2D}`;   // maħħ-
+    const perfFull = `${C1}${pv1}${C2D}${pv2}`; // nessa
+    const perf3f = `${C1}${pv1}${C2D}iet`; // nessiet
+    const perfReduced = `${C1}${pv1}${C2D}`; // -ness-
 
-    const perfRows = [
-        perfSyncRoot + 'ejt',    // jiena
-        perfSyncRoot + 'ejt',    // inti
-        perfFull,          // huwa
-        perfSyncRoot + 'iet', // hija
-        perfSyncRoot + 'ejna',   // aħna
-        perfSyncRoot + 'ejtu',   // intom
-        perfSyncRoot + 'u',  // huma
-    ];
+    const imalaBlocked = isImalaBlocked;
+    const attV = applyAttachedShift(iv2 || "a", C3, true);
+    const attVj = attV === "ie" ? "iej" : imalaBlocked ? "aj" : "ej";
 
-    const { m: negM, f: negF } = negPerfect3sg(perfFull, perfSyncRoot + 'it', C3);
-    // If theme is i, plural is -u (e.g. jmaħħu)
-    // If theme is a, plural is -ew (e.g. jmaħħew)
-    const suffix = (iv2 === 'i') ? 'u' : 'ew';
-
-    // Imperfect: prefix + CvCCvC (j-fettaħ)
-    const impfFull = (pfxCons: string) => `${pfxCons}${C1}${iv1}${C2D}${iv2}`; // j-maħħ-i
-    const impfSync = (pfxCons: string) => `${pfxCons}${C1}${iv1}${C2D}${suffix}`; // j-maħħ-u
-
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-    const pfxs = ['n', 't', 'j', 't', 'n', 't', 'j'];
-
-    for (let i = 0; i < 7; i++) {
-        const pfx = pfxs[i];
-        const base = i >= 4 ? `${impfSync(pfx)}` : impfFull(pfx);
-        impfForms.push(base);
-
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('iet')) {
-            pt1 = perfRows[i].slice(0, -3) + 'it';
-        }
-        let pt2 = i === 2 ? perfSyncRoot : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('iet')) {
-            pt2 = perfRows[i].slice(0, -3) + 'it';
-        }
-
-        stemsList.push({
-            // USER: Type 1 (-ek, -u): CvCCC, Type 2 (rest): CvCCvC
-            // My engine convention: Type 1 = Attached (Full), Type 2 = Syncopated
-            impfType1: impfSync(pfx),
-            impfType2: impfFull(pfx),
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
-    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
-    const impSg = `${C1}${impV1}${C2D}${impV2}`;
-    const impPl = `${C1}${impV1}${C2D}${suffix}`;
-
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: { impfType1: impSg, impfType2: impSg.replace(/a([^aeiou])$/, '$1') },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a')))
+    const impfBase = (person: number) => {
+        const prefix = buildPrefix(person, "");
+        return `${prefix}${perfReduced}${iv2}`;
     };
+    const impfPlural = (person: number) => {
+        const prefix = buildPrefix(person, "");
+        const suffix = iv2 === "i" ? "u" : pv1 === "a" && pv2 === "a" ? "aw" : "ew";
+        return `${prefix}${perfReduced}${suffix}`;
+    };
+
+    const impfType1 = (person: number) => {
+        if (person >= 4) return impfPlural(person);
+        return `${buildPrefix(person, "")}${perfReduced}${attV}`;
+    };
+
+    const impfType2 = (person: number) => {
+        if (person >= 4) return impfPlural(person);
+        return `${buildPrefix(person, "")}${perfReduced}${attVj}`;
+    };
+
+    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
+    const suffix = impV2 === "i" ? "u" : pv1 === "a" && pv2 === "a" ? "aw" : "ew";
+    const impSg = `${perfReduced}${impV2}`;
+    const impPl = `${perfReduced}${suffix}`;
+
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync: `${perfReduced}`,
+            perfReduced: `${perfReduced}ej`,
+            perf3f,
+            perfType1Builder: (perfRow, pIdx) => {
+                if (pIdx === 2 && pv2 === "a") return `${C1}${pv1}${C2D}a`;
+                else if (pIdx === 3) return `${perf3f.slice(0, -1)}t`;
+                else if (pIdx === 7) return `${perfReduced}ew`;
+                return perfRow;
+            },
+            impfBase,
+            impfType1,
+            impfType2,
+            impfPlural,
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `${impV1}${C1}${C2}${attV}`,
+                impfType2: `${impV1}${C1}${C2}${attVj}`,
+            },
+            impPlStems: {
+                impfType1: impPl,
+                impfType2: impPl,
+            },
+            blocksImala:
+                imalaBlocked ||
+                (typeof C3 !== "undefined" &&
+                    C3 === "għ" &&
+                    (vsetImpf.endsWith("a") || vsetPerf.endsWith("a"))),
+        },
+        C3,
+        verbForm,
+    );
 }
 
 // ── FORM III STRONG ─────────────────────────────────────────────────────────
@@ -1182,117 +1047,72 @@ export function genFormIIIStrong(
     vsetPerf: string,
     vsetImpf: string,
     vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
-    const ImalaBlockedVowel = (pv1 === 'ie') ? 'e' : 'a';
+    const ImalaBlockedVowel = pv1 === "ie" ? "e" : "a";
 
-    // Perfect: CieCvC
-    const perfBase = `${C1}${pv1}${C2}${pv2}${C3}`;
-    const perfSync = `${C1}${pv1}${C2}${C3}`; // bierek -> bierk-et
-    const perfImalaBlocked = `${C1}${ImalaBlockedVowel}${C2}i${C3}`; // bierek -> berik-t
+    const perfFull = `${C1}${pv1}${C2}${pv2}${C3}`;
+    const perfSync = `${C1}${pv1}${C2}${C3}`;
+    const perfImalaBlocked = `${C1}${ImalaBlockedVowel}${C2}i${C3}`;
 
-    const perfRows = [
-        perfImalaBlocked + 't',   // jiena
-        perfImalaBlocked + 't',   // inti
-        perfBase,         // huwa
-        perfSync + 'et',  // hija
-        perfImalaBlocked + 'na',  // aħna
-        perfImalaBlocked + 'tu',  // intom
-        perfSync + 'u',   // huma
-    ];
+    const impfT1stem = `${C1}${iv1 === "ie" ? "e" : iv1}${C2}${applyAttachedShift(iv2, C3)}${C3}`;
+    const impfT2stem = `${C1}${iv1}${C2}${C3}`;
 
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}et`, C3);
-
-    // Imperfect: prefix + CieCvC
-    const iv2Shifted = applyAttachedShift(iv2, C3, true);
-    const impfT1V1 = (iv1 === 'ie') ? 'e' : iv1;
-    const impfT1stem = `${C1}${impfT1V1}${C2}${iv2Shifted}${C3}`; // -berik
-    const impfT2stem = `${C1}${iv1}${C2}${C3}`; // -bierk-
-
-    const impfBase = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = `${C1}${iv1}${C2}${iv2}${C3}`; // -bierek
-        return combinePrefix(pfxCons, stem);
-    };
-    // Syncopated: prefix + CieCC (j-berk-)
-    const impfSync = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = impfT2stem;
-        return combinePrefix(pfxCons, stem);
-    };
-    // Plural: prefix + CieCC + suffix (j-bierk-u)
-    const impfPlural = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = impfT2stem;
-        return combinePrefixPlural(pfxCons, stem, 'u');
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+        const stem = `${C1}${iv1}${C2}${iv2}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, impfT2stem, "u")
+            : combinePrefix(pfx, stem);
     };
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-        const pfxStr = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, '');
-        const ipt1 = i >= 4 ? impfPlural(i) : combinePrefix(pfxStr, impfT1stem);
-        const ipt2 = i >= 4 ? impfPlural(i) : impfSync(i);
-
-        impfForms.push(i >= 4 ? ipt1 : impfBase(i));
-
-        let pt1 = perfRows[i];
-        if (i === 2) {
-            pt1 = perfRows[i].replace(/e([^aeiou])$/, 'i$1').replace(/a$/, 'i');
-        } else if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        stemsList.push({
-            impfType1: ipt1.replace('ie', 'e'),
-            impfType2: ipt2,
-            perfType1: pt1.replace('ie', 'e'),
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
     const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
     const impSg = `${C1}${impV1}${C2}${impV2}${C3}`;
     const impPl = `${C1}${impV1}${C2}${C3}u`;
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: {
-            impfType1: `${C1}${impV1 === 'ie' ? 'e' : impV1}${C2}${applyAttachedShift(impV2, C3, true)}${C3}`,
-            impfType2: `${C1}${impV1}${C2}${C3}`,
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: perfImalaBlocked,
+            perf3f: `${perfSync}et`,
+            perfType1Builder: (perfRow, pIdx) => {
+                if (pIdx === 2) return perfRow.replace(/e([^aeiou])$/, "i$1");
+                if (pIdx === 3) return `${perfSync}it`;
+                return perfRow;
+            },
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT1stem,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT2stem,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT2stem,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `${C1}${impV1 === "ie" ? "e" : impV1}${C2}${applyAttachedShift(impV2, C3)}${C3}`,
+                impfType2: `${C1}${impV1}${C2}${C3}`,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
         },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a')))
-    };
+        C3,
+        verbForm,
+    );
 }
 // ── FORM III Defective ─────────────────────────────────────────────────────────
 // Long vowel pattern: CieCvC (e.g. bieda / jbiedi)
@@ -1301,683 +1121,311 @@ export function genFormIIIDefective(
     vsetPerf: string,
     vsetImpf: string,
     vsetImp: string,
+    verbForm: string,
+    isImalaBlocked: boolean = false,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
-    const ImalaBlockedVowel = (pv1 === 'ie') ? 'e' : 'a';
-    const suffixPV2assimilation = (pv2 === 'a') ? 'ew' : 'u';
-    const suffixIV2assimilation = (iv2 === 'i') ? 'u' : 'ew';
+    const ImalaBlockedVowel = pv1 === "ie" ? "e" : "a";
+    const suffixIV2assimilation = iv2 === "i" ? "u" : "ew";
 
-    // Perfect: CieCv
-    const perfBase = `${C1}${pv1}${C2}${pv2}`; // bieda
-    const perfSync = `${C1}${pv1}${C2}`; // bieda -> bied-u
-    const perfImalaBlocked = `${C1}${ImalaBlockedVowel}${C2}`; // bieda -> bed-et
+    const perfFull = `${C1}${pv1}${C2}${pv2}`;
+    const perfImalaBlocked = `${C1}${ImalaBlockedVowel}${C2}`;
 
-    const perfRows = [
-        perfImalaBlocked + 'ejt',   // jiena
-        perfImalaBlocked + 'ejt',   // inti
-        perfBase,         // huwa
-        perfImalaBlocked + 'iet',  // hija
-        perfImalaBlocked + 'ejna',  // aħna
-        perfImalaBlocked + 'ejtu',  // intom
-        perfImalaBlocked + suffixPV2assimilation,   // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}et`, C3);
-
-    // Imperfect: prefix + CieCv
-    const iv2Shifted = applyAttachedShift(iv2, C3, true);
-    const impfT1V1 = (iv1 === 'ie') ? 'e' : iv1;
-    const impfT1stem = `${C1}${impfT1V1}${C2}${iv2Shifted}`; // -bedi
-    const impfT2stem = `${C1}${iv1}${C2}`; // -bied-
-
-    const impfBase = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = `${C1}${iv1}${C2}${iv2}`; // -biedi
-        return combinePrefix(pfxCons, stem);
-    };
-    // Syncopated: prefix + CieCC (j-bied-)
-    const impfSync = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = impfT2stem;
-        return combinePrefix(pfxCons, stem);
-    };
-    // Plural: prefix + CieCC + suffix (j-bied-u)
-    const impfPlural = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        const stem = impfT2stem;
-        return combinePrefixPlural(pfxCons, stem, suffixIV2assimilation);
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+        return i >= 4
+            ? `${pfx}${C1}${iv1}${C2}${suffixIV2assimilation}`
+            : `${pfx}${C1}${iv1}${C2}${iv2}`;
     };
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-        const pfxStr = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, '');
-        const ipt1 = i >= 4 ? impfPlural(i) : combinePrefix(pfxStr, impfT1stem);
-        const ipt2 = i >= 4 ? impfPlural(i) : impfSync(i);
-
-        impfForms.push(i >= 4 ? ipt1 : impfBase(i));
-
-        let pt1 = perfRows[i];
-        if (i === 2) {
-            pt1 = perfRows[i].replace(/e([^aeiou])$/, 'i$1').replace(/a$/, 'i');
-        } else if (i === 3 && perfRows[i].endsWith('iet')) {
-            pt1 = perfRows[i].slice(0, -3) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('iet')) {
-            pt2 = perfRows[i].slice(0, -3) + 'it';
-        }
-
-        stemsList.push({
-            impfType1: ipt1.replace('ie', 'e'),
-            impfType2: ipt2,
-            perfType1: pt1.replace('ie', 'e'),
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
     const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
     const impSg = `${C1}${impV1}${C2}${impV2}`;
     const impPl = `${C1}${impV1}${C2}u`;
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: {
-            impfType1: `${C1}${impV1 === 'ie' ? 'e' : impV1}${C2}${applyAttachedShift(impV2, C3, true)}`,
-            impfType2: `${C1}${impV1}${C2}`,
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync: perfImalaBlocked,
+            perfReduced: perfImalaBlocked + "ej",
+            perf3f: `${perfImalaBlocked}iet`,
+            perfType1Builder: (perfRow, pIdx) => {
+                if (pIdx === 3) return `${perfImalaBlocked}it`;
+                return perfRow;
+            },
+            impfBase,
+            impfType1: (i) =>
+                buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "") +
+                C1 +
+                (iv1 === "ie" ? "e" : iv1) +
+                C2 +
+                (suffixIV2assimilation === "u" ? "i" : "a"),
+            impfType2: (i) =>
+                buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "") +
+                C1 +
+                iv1 +
+                C2 +
+                suffixIV2assimilation,
+            impfPlural: (i) =>
+                buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "") +
+                C1 +
+                iv1 +
+                C2 +
+                suffixIV2assimilation,
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `${C1}${impV1 === "ie" ? "e" : impV1}${C2}i`,
+                impfType2: `${C1}${impV1}${C2}${suffixIV2assimilation}`,
+            },
+            blocksImala:
+                isImalaBlocked ||
+                (C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a"))),
         },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a')))
-    };
+        C3,
+        verbForm,
+    );
 }
 
 // ── FORM IV ────────────────────────────────────────────────────────────────
 // Passive/reflexive of I: vCCvC / jvCCvC (e.g. akbar / jokbor)
 // This is largely a theoretical form; concrete verbs may override via stored data.
-export function genFormIV(
+function genFormIV(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
     vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
 
-    // Perfect: vC1C2vC3 (akbar)
-    const perfBase = `${pv1}${C1}${C2}${pv2}${C3}`;
+    const perfFull = `${pv1}${C1}${C2}${pv2}${C3}`;
     const perfSync = `${pv1}${C1}${C2}${C3}`;
 
-    const perfRows = [
-        perfBase + 't',    // jiena
-        perfBase + 't',    // inti
-        perfBase,          // huwa
-        perfSync + 'et',   // hija
-        perfBase + 'na',   // aħna
-        perfBase + 'tu',   // intom
-        perfSync + 'u',    // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}et`, C3);
-
-    // Imperfect: jvC1C2vC3 (jokbor) — uniform ji-/jo- prefix
-    const impfStem = `${C1}${C2}${iv2}${C3}`;
+    const impfStemT1 = `${C1}${C2}${applyAttachedShift(iv2, C3, true)}${C3}`;
     const impfStemSync = `${C1}${C2}${C3}`;
-    const iv2Shifted = applyAttachedShift(iv2, C3, true);
-    const impfStemT1 = `${C1}${C2}${iv2Shifted}${C3}`;
 
-    const impfBase = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        return combinePrefix(pfxCons, `${iv1}${impfStem}`);
-    };
-    const impfPlural = (person: number) => {
-        const pfxCons = buildPrefix(person, vsetImpf).replace(/[aeiou]+$/, '');
-        return combinePrefixPlural(pfxCons, `${iv1}${impfStemSync}`, 'u');
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+        const stem = `${iv1}${C1}${C2}${iv2}${C3}`;
+        const sync = `${iv1}${C1}${C2}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, sync, "u")
+            : combinePrefix(pfx, stem);
     };
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-        const pfxCons = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, '');
-        impfForms.push(i >= 4 ? impfPlural(i) : impfBase(i));
-
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        const ipt1Full = combinePrefix(pfxCons, `${iv1}${impfStemT1}`);
-        const ipt2Full = combinePrefix(pfxCons, `${iv1}${impfStemSync}`);
-
-        stemsList.push({
-            impfType1: i >= 4 ? impfPlural(i) : ipt1Full,
-            impfType2: i >= 4 ? impfPlural(i) : ipt2Full,
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
     const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
     const impSg = `${impV1}${C1}${C2}${impV2}${C3}`;
     const impPl = `${impV1}${C1}${C2}${C3}u`;
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i],
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: { impfType1: impSg, impfType2: `${impV1}${C1}${C2}${C3}` },
-        imperative_pl_stems: { impfType1: impPl, impfType2: impPl },
-        blocksImala: false,
-    };
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: perfFull,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    `${iv1}${impfStemT1}`,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    `${iv1}${impfStemSync}`,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    `${iv1}${impfStemSync}`,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `${impV1}${C1}${C2}${applyAttachedShift(impV2, C3, true)}${C3}`,
+                impfType2: `${impV1}${C1}${C2}${C3}`,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+        },
+        C3,
+        verbForm,
+    );
 }
 
 // ── FORM V ─────────────────────────────────────────────────────────────────
 // t- + Form II: tC1vC2C2vC3 / jitC1vC2C2vC3 (e.g. tħabbat / jitħabbat)
-export function genFormVStrong(
+function genFormVStrong(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
     vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
-    const [C1, C2, C3] = C;
-    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
-    const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
-    const C2D = C2 + C2;
-
-    // Perfect: tCvCCvC (tħabbat)
-    const perfBase = `t${C1}${pv1}${C2D}${pv2}${C3}`;
-    const perfSync = `t${C1}${pv1}${C2D}${C3}`;
-
-    const perfRows = [
-        perfBase + 't',    // jiena
-        perfBase + 't',    // inti
-        perfBase,          // huwa
-        perfSync + 'et',   // hija
-        perfBase + 'na',   // aħna
-        perfBase + 'tu',   // intom
-        perfSync + 'u',    // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}et`, C3);
-
-    // Imperfect: ji- + stem (jitħabbat)
-    const impfStem = `t${C1}${iv1}${C2D}${iv2}${C3}`;
-    const iv2Shifted = applyAttachedShift(iv2, C3, true);
-    const impfStemT1 = `t${C1}${iv1}${C2D}${iv2Shifted}${C3}`;
-    const impfStemSync = `t${C1}${iv1}${C2D}${C3}`;
-
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-        const pfxCons = buildPrefix(i, 'i-i').replace(/[aeiou]+$/, '');
-        const base = combinePrefix(pfxCons, `i${impfStem}`);
-        const plural = combinePrefixPlural(pfxCons, `i${impfStemSync}`, 'u');
-
-        impfForms.push(i >= 4 ? plural : base);
-
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        stemsList.push({
-            impfType1: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemT1}`),
-            impfType2: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemSync}`),
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
-    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
-    const impSg = `t${C1}${impV1}${C2D}${impV2}${C3}`;
-    const impPl = `t${C1}${impV1}${C2D}${C3}u`;
-
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i],
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: { impfType1: impSg, impfType2: `t${C1}${impV1}${C2D}${C3}` },
-        imperative_pl_stems: { impfType1: impPl, impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a'))),
-    };
+    const baseTable = genFormIIStrong(C, vsetPerf, vsetImpf, vsetImp, verbForm);
+    return deriveTable(baseTable, "t", (str) => str[0] + "it" + str.slice(1));
 }
-export function genFormVDefective(
+function genFormVDefective(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
     vsetImp: string,
+    verbForm: string,
+    isImalaBlocked: boolean = false,
 ): VerbConjugationTable {
-    const [C1, C2, C3] = C;
-    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
-    const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
-    const C2D = C2 + C2;
-
-    // Perfect: t CvCCv (tnessa)
-    const perfBase = `t${C1}${pv1}${C2D}${pv2}`; // tnessa
-    const perfSync = `t${C1}${pv1}${C2D}`; // tness
-
-    const perfRows = [
-        perfBase + (isGuttural(C3) ? 'ajt' : 'ejt'),    // jiena
-        perfBase + (isGuttural(C3) ? 'ajt' : 'ejt'),    // inti
-        perfBase,          // huwa
-        perfSync + 'iet',   // hija
-        perfBase + 'ina',   // aħna
-        perfBase + 'itu',   // intom
-        perfSync + (isGuttural(C3) ? 'aw' : 'ew'),    // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}iet`, C3);
-
-    // Imperfect: ji- + stem (jitnessa)
-    const impfStem = `t${C1}${iv1}${C2D}${iv2}`;
-    const iv2Shifted = applyAttachedShift(iv2, C3, true);
-    const impfStemT1 = `t${C1}${iv1}${C2D}${iv2Shifted}`;
-    const impfStemSync = `t${C1}${iv1}${C2D}`;
-
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-        const pfxCons = buildPrefix(i, 'i-i').replace(/[aeiou]+$/, '');
-        const base = combinePrefix(pfxCons, `i${impfStem}`);
-        const plural = combinePrefixPlural(pfxCons, `i${impfStemSync}`, 'u');
-
-        impfForms.push(i >= 4 ? plural : base);
-
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        stemsList.push({
-            impfType1: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemT1}`),
-            impfType2: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemSync}`),
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
-    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
-    const impSg = `t${C1}${impV1}${C2D}${impV2}${C3}`;
-    const impPl = `t${C1}${impV1}${C2D}${C3}u`;
-
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i],
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: { impfType1: impSg, impfType2: `t${C1}${impV1}${C2D}${C3}` },
-        imperative_pl_stems: { impfType1: impPl, impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a'))),
-    };
+    const baseTable = genFormIIDefective(
+        C,
+        vsetPerf,
+        vsetImpf,
+        vsetImp,
+        verbForm,
+        isImalaBlocked,
+    );
+    return deriveTable(baseTable, "t", (str) => str[0] + "it" + str.slice(1));
 }
 
 // ── FORM VI ────────────────────────────────────────────────────────────────
 // t- + Form III: tC1ieC2vC3 / jitC1ieC2vC3 (e.g. tqatel / jitqatel)
-export function genFormVI(
+function genFormVI(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
     vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
-    const [C1, C2, C3] = C;
-    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
-    const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
-    const ImalaBlockedVowel = (pv1 === 'ie') ? 'e' : 'a';
+    const baseTable = genFormIIIStrong(C, vsetPerf, vsetImpf, vsetImp, verbForm);
+    return deriveTable(baseTable, "t", (str) => str[0] + "it" + str.slice(1));
+}
 
-    // Perfect: tC1ieC2vC3 (tqatel)
-    const perfBase = `t${C1}${pv1}${C2}${pv2}${C3}`;
-    const perfSync = `t${C1}${pv1}${C2}${C3}`;
-    const perfImalaBlocked = `t${C1}${ImalaBlockedVowel}${C2}i${C3}`;
-
-    const perfRows = [
-        perfImalaBlocked + 't',   // jiena
-        perfImalaBlocked + 't',   // inti
-        perfBase,                  // huwa
-        perfSync + 'et',           // hija
-        perfImalaBlocked + 'na',   // aħna
-        perfImalaBlocked + 'tu',   // intom
-        perfSync + 'u',            // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}et`, C3);
-
-    // Imperfect: ji- + tCieC2vC3 (jitqatel)
-    const iv2Shifted = applyAttachedShift(iv2, C3, true);
-    const impfT1V1 = (iv1 === 'ie') ? 'e' : iv1;
-    const impfStem = `t${C1}${iv1}${C2}${iv2}${C3}`;
-    const impfStemT1 = `t${C1}${impfT1V1}${C2}${iv2Shifted}${C3}`;
-    const impfStemSync = `t${C1}${iv1}${C2}${C3}`;
-
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-        const pfxCons = buildPrefix(i, 'i-i').replace(/[aeiou]+$/, '');
-        const base = combinePrefix(pfxCons, `i${impfStem}`);
-        const plural = combinePrefixPlural(pfxCons, `i${impfStemSync}`, 'u');
-
-        impfForms.push(i >= 4 ? plural : base);
-
-        let pt1 = perfRows[i];
-        if (i === 2) {
-            pt1 = perfRows[i].replace(/e([^aeiou])$/, 'i$1').replace(/a$/, 'i');
-        } else if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        stemsList.push({
-            impfType1: i >= 4 ? plural.replace('ie', 'e') : combinePrefix(pfxCons, `i${impfStemT1}`).replace('ie', 'e'),
-            impfType2: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemSync}`),
-            perfType1: pt1.replace('ie', 'e'),
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
-    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
-    const impSg = `t${C1}${impV1}${C2}${impV2}${C3}`;
-    const impPl = `t${C1}${impV1}${C2}${C3}u`;
-
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: {
-            impfType1: `t${C1}${impV1 === 'ie' ? 'e' : impV1}${C2}${applyAttachedShift(impV2, C3, true)}${C3}`,
-            impfType2: `t${C1}${impV1}${C2}${C3}`,
-        },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a'))),
-    };
+// ── FORM VI DEFECTIVE ──────────────────────────────────────────────────────
+// t- + Form III Defective: tC1ieC2a / jitC1ieC2ew
+function genFormVIDefective(
+    C: string[],
+    vsetPerf: string,
+    vsetImpf: string,
+    vsetImp: string,
+    verbForm: string,
+    isImalaBlocked: boolean = false,
+): VerbConjugationTable {
+    const baseTable = genFormIIIDefective(
+        C,
+        vsetPerf,
+        vsetImpf,
+        vsetImp,
+        verbForm,
+        isImalaBlocked,
+    );
+    return deriveTable(baseTable, "t", (str) => str[0] + "it" + str.slice(1));
 }
 
 // ── FORM VII ───────────────────────────────────────────────────────────────
 // n- + Form I: nC1vC2vC3 / jinC1vC2vC3 (e.g. nkiteb / jinkiteb)
-export function genFormVII(
+function genFormVII(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
     vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
 
-    // Perfect: nC1vC2vC3 (nkiteb)
-    const perfBase = `n${C1}${pv1}${C2}${pv2}${C3}`;
+    const perfFull = `n${C1}${pv1}${C2}${pv2}${C3}`;
     const perfSync = `n${C1}${pv1}${C2}${C3}`;
 
-    const perfRows = [
-        perfBase + 't',    // jiena
-        perfBase + 't',    // inti
-        perfBase,          // huwa
-        perfSync + 'et',   // hija
-        perfBase + 'na',   // aħna
-        perfBase + 'tu',   // intom
-        perfSync + 'u',    // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}et`, C3);
-
-    // Imperfect: jin- + C1vC2vC3 (jinkiteb)
-    const impfStem = `n${C1}${iv1}${C2}${iv2}${C3}`;
-    const iv2Shifted = applyAttachedShift(iv2, C3, true);
-    const impfStemT1 = `n${C1}${iv1}${C2}${iv2Shifted}${C3}`;
+    const impfStemT1 = `n${C1}${iv1}${C2}${applyAttachedShift(iv2, C3)}${C3}`;
     const impfStemSync = `n${C1}${iv1}${C2}${C3}`;
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, "i-i").replace(/[aeiou]+$/, "");
+        const stem = `i${impfStemSync.slice(0, -C3.length)}${iv2}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, `i${impfStemSync}`, "u")
+            : combinePrefix(pfx, stem);
+    };
 
-    for (let i = 0; i < 7; i++) {
-        const pfxCons = buildPrefix(i, 'i-i').replace(/[aeiou]+$/, '');
-        const base = combinePrefix(pfxCons, `i${impfStem}`);
-        const plural = combinePrefixPlural(pfxCons, `i${impfStemSync}`, 'u');
-
-        impfForms.push(i >= 4 ? plural : base);
-
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        stemsList.push({
-            impfType1: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemT1}`),
-            impfType2: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemSync}`),
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
     const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
     const impSg = `n${C1}${impV1}${C2}${impV2}${C3}`;
     const impPl = `n${C1}${impV1}${C2}${C3}u`;
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i],
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: { impfType1: impSg, impfType2: `n${C1}${impV1}${C2}${C3}` },
-        imperative_pl_stems: { impfType1: impPl, impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a'))),
-    };
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: `n${C1}${pv1}${C2}${applyAttachedShift(pv2, C3)}${C3}`,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemT1}`,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemSync}`,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemSync}`,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `n${C1}${impV1}${C2}${applyAttachedShift(impV2, C3)}${C3}`,
+                impfType2: `n${C1}${impV1}${C2}${C3}`,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+        },
+        C3,
+        verbForm,
+    );
 }
 
 // ── FORM VIII ──────────────────────────────────────────────────────────────
 // Infixed -t-: C1tvC2vC3 / jiC1tvC2vC3 (e.g. ftakar / jiftakar)
 // Pharyngeal C1 variant: eC1tvC2vC3 (e.g. eħtaġ / jeħtieġ)
-export function genFormVIII(
+function genFormVIII(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
     vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
     const pharyngealC1 = isPharyngeal(C1);
     const gutturalC1 = isGuttural(C1);
-    const pfxV = gutturalC1 ? 'e' : 'i';
+    const pfxV = gutturalC1 ? "e" : "i";
 
-    // Perfect: C1tvC2vC3 (ftakar) or eC1tvC2vC3 (eħtaġ)
-    const perfBase = pharyngealC1
+    const perfFull = pharyngealC1
         ? `e${C1}t${pv1}${C2}${pv2}${C3}`
         : `${C1}t${pv1}${C2}${pv2}${C3}`;
     const perfSync = pharyngealC1
         ? `e${C1}t${pv1}${C2}${C3}`
         : `${C1}t${pv1}${C2}${C3}`;
 
-    const perfRows = [
-        perfBase + 't',    // jiena
-        perfBase + 't',    // inti
-        perfBase,          // huwa
-        perfSync + 'et',   // hija
-        perfBase + 'na',   // aħna
-        perfBase + 'tu',   // intom
-        perfSync + 'u',    // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}et`, C3);
-
-    // Imperfect: ji/jeC1tvC2vC3 (jiftakar / jeħtieġ)
-    const impfCore = `${C1}t${iv1}${C2}${iv2}${C3}`;
-    const iv2Shifted = applyAttachedShift(iv2, C3, true);
-    const impfCoreT1 = `${C1}t${iv1}${C2}${iv2Shifted}${C3}`;
+    const impfCoreT1 = `${C1}t${iv1}${C2}${applyAttachedShift(iv2, C3)}${C3}`;
     const impfCoreSync = `${C1}t${iv1}${C2}${C3}`;
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, "i-i").replace(/[aeiou]+$/, "");
+        const stem = `${pfxV}${C1}t${iv1}${C2}${iv2}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, `${pfxV}${impfCoreSync}`, "u")
+            : combinePrefix(pfx, stem);
+    };
 
-    for (let i = 0; i < 7; i++) {
-        const pfxCons = buildPrefix(i, 'i-i').replace(/[aeiou]+$/, '');
-        const base = combinePrefix(pfxCons, `${pfxV}${impfCore}`);
-        const plural = combinePrefixPlural(pfxCons, `${pfxV}${impfCoreSync}`, 'u');
-
-        impfForms.push(i >= 4 ? plural : base);
-
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        stemsList.push({
-            impfType1: i >= 4 ? plural : combinePrefix(pfxCons, `${pfxV}${impfCoreT1}`),
-            impfType2: i >= 4 ? plural : combinePrefix(pfxCons, `${pfxV}${impfCoreSync}`),
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
     const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
     const impSg = pharyngealC1
         ? `e${C1}t${impV1}${C2}${impV2}${C3}`
@@ -1986,326 +1434,531 @@ export function genFormVIII(
         ? `e${C1}t${impV1}${C2}${C3}u`
         : `${C1}t${impV1}${C2}${C3}u`;
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i],
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: {
-            impfType1: impSg,
-            impfType2: pharyngealC1 ? `e${C1}t${impV1}${C2}${C3}` : `${C1}t${impV1}${C2}${C3}`,
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: pharyngealC1
+                ? `e${C1}t${pv1}${C2}${applyAttachedShift(pv2, C3)}${C3}`
+                : `${C1}t${pv1}${C2}${applyAttachedShift(pv2, C3)}${C3}`,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `${pfxV}${impfCoreT1}`,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `${pfxV}${impfCoreSync}`,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `${pfxV}${impfCoreSync}`,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1:
+                    (pharyngealC1 ? "e" : "") +
+                    C1 +
+                    "t" +
+                    impV1 +
+                    C2 +
+                    applyAttachedShift(impV2, C3, true) +
+                    C3,
+                impfType2: (pharyngealC1 ? "e" : "") + C1 + "t" + impV1 + C2 + C3,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
         },
-        imperative_pl_stems: { impfType1: impPl, impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a'))),
-    };
+        C3,
+        verbForm,
+    );
 }
 
 // ── FORM IX ────────────────────────────────────────────────────────────────
 // Stative/colour: C1C2ieC3 / jiC1C2ieC3 (e.g. ħmier / jiħmier)
-export function genFormIX(
+function genFormIX(
     C: string[],
     _vsetPerf: string,
     _vsetImpf: string,
     _vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const pharyngealC1 = isPharyngeal(C1);
 
-    // Perfect: C1C2ieC3 (ħmier) or C1eC2ieC3 for pharyngeal C1
-    const perfBase = pharyngealC1
-        ? `${C1}e${C2}ie${C3}`
-        : `${C1}${C2}ie${C3}`;
-    const perfSync = pharyngealC1
-        ? `${C1}e${C2}i${C3}`
-        : `${C1}${C2}i${C3}`;
+    const perfBase = pharyngealC1 ? `${C1}e${C2}ie${C3}` : `${C1}${C2}ie${C3}`;
+    const perfSync = pharyngealC1 ? `${C1}e${C2}i${C3}` : `${C1}${C2}i${C3}`;
 
-    const perfRows = [
-        perfSync + 't',    // jiena
-        perfSync + 't',    // inti
-        perfBase,           // huwa
-        perfSync + 'et',    // hija
-        perfSync + 'na',    // aħna
-        perfSync + 'tu',    // intom
-        perfSync + 'u',     // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}et`, C3);
-
-    // Imperfect: jiC1C2ieC3 (jiħmier)
-    const impfStem = pharyngealC1
-        ? `${C1}e${C2}ie${C3}`
-        : `${C1}${C2}ie${C3}`;
-    const impfStemSync = pharyngealC1
-        ? `${C1}e${C2}i${C3}`
-        : `${C1}${C2}i${C3}`;
-
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
-
-    for (let i = 0; i < 7; i++) {
-        const pfxCons = buildPrefix(i, 'i-i').replace(/[aeiou]+$/, '');
-        const base = combinePrefix(pfxCons, `i${impfStem}`);
-        const plural = combinePrefixPlural(pfxCons, `i${impfStemSync}`, 'u');
-
-        impfForms.push(i >= 4 ? plural : base);
-
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        stemsList.push({
-            impfType1: i >= 4 ? plural.replace('ie', 'e') : combinePrefix(pfxCons, `i${impfStemSync}`),
-            impfType2: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemSync}`),
-            perfType1: pt1.replace('ie', 'e'),
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative — Form IX rarely has imperative, but we generate for completeness
-    const impSg = perfBase;
-    const impPl = perfSync + 'u';
-
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i].replace('ie', 'e'),
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: { impfType1: perfSync, impfType2: perfSync },
-        imperative_pl_stems: { impfType1: impPl.replace('ie', 'e'), impfType2: impPl },
-        blocksImala: false,
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, "i-i").replace(/[aeiou]+$/, "");
+        const stem = `i${perfBase}`;
+        return combinePrefix(pfx, stem);
     };
+
+    const impSg = perfBase;
+    const impPl = perfSync + "u";
+
+    return buildConjugationTable(
+        {
+            perfFull: perfBase,
+            perfSync,
+            perfReduced: perfSync,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${perfBase}`,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${perfSync}`,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${perfSync}`,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: { impfType1: perfSync, impfType2: perfSync },
+            blocksImala: false,
+        },
+        C3,
+        verbForm,
+    );
 }
 
 // ── FORM Xa ────────────────────────────────────────────────────────────────
 // Causative: stvC1C2vC3 / jistvC1C2vC3 (e.g. stagħġeb / jistagħġeb)
-export function genFormXa(
+function genFormXaStrong(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
     vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
 
-    // Perfect: stv1C1C2v2C3 (stagħġeb)
-    const perfBase = `st${pv1}${C1}${C2}${pv2}${C3}`;
+    const perfFull = `st${pv1}${C1}${C2}${pv2}${C3}`;
     const perfSync = `st${pv1}${C1}${C2}${C3}`;
 
-    const perfRows = [
-        perfBase + 't',    // jiena
-        perfBase + 't',    // inti
-        perfBase,          // huwa
-        perfSync + 'et',   // hija
-        perfBase + 'na',   // aħna
-        perfBase + 'tu',   // intom
-        perfSync + 'u',    // huma
-    ];
-
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}et`, C3);
-
-    // Imperfect: ji- + stv1C1C2v2C3 (jistagħġeb)
-    const impfStem = `st${iv1}${C1}${C2}${iv2}${C3}`;
-    const iv2Shifted = applyAttachedShift(iv2, C3, true);
-    const impfStemT1 = `st${iv1}${C1}${C2}${iv2Shifted}${C3}`;
+    const impfStemT1 = `st${iv1}${C1}${C2}${applyAttachedShift(iv2, C3)}${C3}`;
     const impfStemSync = `st${iv1}${C1}${C2}${C3}`;
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, "i-i").replace(/[aeiou]+$/, "");
+        const stem = `i${impfStemSync.slice(0, -C3.length)}${iv2}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, `i${impfStemSync}`, "u")
+            : combinePrefix(pfx, stem);
+    };
 
-    for (let i = 0; i < 7; i++) {
-        const pfxCons = buildPrefix(i, 'i-i').replace(/[aeiou]+$/, '');
-        const base = combinePrefix(pfxCons, `i${impfStem}`);
-        const plural = combinePrefixPlural(pfxCons, `i${impfStemSync}`, 'u');
-
-        impfForms.push(i >= 4 ? plural : base);
-
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
-
-        stemsList.push({
-            impfType1: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemT1}`),
-            impfType2: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemSync}`),
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
-
-    // Imperative
     const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
     const impSg = `st${impV1}${C1}${C2}${impV2}${C3}`;
     const impPl = `st${impV1}${C1}${C2}${C3}u`;
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
-
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i],
-        stems: stemsList[i]
-    }));
-
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: { impfType1: impSg, impfType2: `st${impV1}${C1}${C2}${C3}` },
-        imperative_pl_stems: { impfType1: impPl, impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a'))),
-    };
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: `st${pv1}${C1}${C2}${applyAttachedShift(pv2, C3)}${C3}`,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemT1}`,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemSync}`,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemSync}`,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `st${impV1}${C1}${C2}${applyAttachedShift(impV2, C3)}${C3}`,
+                impfType2: `st${impV1}${C1}${C2}${C3}`,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+        },
+        C3,
+        verbForm,
+    );
 }
-
-// ── FORM Xb ────────────────────────────────────────────────────────────────
-// Causative intensive: stC1vC2C2vC3 / jistC1vC2C2vC3 (e.g. stħarreg / jistħarreg)
-export function genFormXb(
+function genFormXaDefective(
     C: string[],
     vsetPerf: string,
     vsetImpf: string,
     vsetImp: string,
+    verbForm: string,
+    isImalaBlocked: boolean = false,
+): VerbConjugationTable {
+    const [C1, C2, C3] = C;
+    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
+    const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
+
+    const perfFull = `st${pv1}${C1}${C2}${pv2}${C3}`;
+    const perfSync = `st${pv1}${C1}${C2}${C3}`;
+
+    const impfStemT1 = `st${iv1}${C1}${C2}${applyAttachedShift(iv2, C3)}${C3}`;
+    const impfStemSync = `st${iv1}${C1}${C2}${C3}`;
+
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, "i-i").replace(/[aeiou]+$/, "");
+        const stem = `i${impfStemSync.slice(0, -C3.length)}${iv2}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, `i${impfStemSync}`, "u")
+            : combinePrefix(pfx, stem);
+    };
+
+    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
+    const impSg = `st${impV1}${C1}${C2}${impV2}${C3}`;
+    const impPl = `st${impV1}${C1}${C2}${C3}u`;
+
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: `st${pv1}${C1}${C2}${applyAttachedShift(pv2, C3)}${C3}`,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemT1}`,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemSync}`,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemSync}`,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `st${impV1}${C1}${C2}${applyAttachedShift(impV2, C3)}${C3}`,
+                impfType2: `st${impV1}${C1}${C2}${C3}`,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+        },
+        C3,
+        verbForm,
+    );
+}
+function genFormXaGeminated(
+    C: string[],
+    vsetPerf: string,
+    vsetImpf: string,
+    vsetImp: string,
+    verbForm: string,
+): VerbConjugationTable {
+    const [C1, C2, C3] = C;
+    const { v1: pv1 } = parseVset(vsetPerf);
+    const { v1: iv1 } = parseVset(vsetImpf);
+
+    const perfFull = `st${C1}${pv1}${C2}${C3}`; // stħaqq
+    const perfSync = perfFull; // stħaqq
+
+    const impfStemT1 = `st${C1}${iv1}${C2}${C3}`;
+    const impfStemSync = impfStemT1;
+
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, "i-i").replace(/[aeiou]+$/, "");
+        const stem = `i${impfStemSync.slice(0, -C3.length)}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, `i${impfStemSync}`, "u")
+            : combinePrefix(pfx, stem);
+    };
+
+    const { v1: impV1 } = parseVset(vsetImp);
+    const impSg = `st${C1}${impV1}${C2}${C3}`; // stħoqq
+    const impPl = `st${C1}${impV1}${C2}${C3}u`; // stħoqqu
+
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: perfFull,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemT1}`,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemSync}`,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, "i-i").replace(/[aeiou]+$/, ""),
+                    `i${impfStemSync}`,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: impSg,
+                impfType2: impSg,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+        },
+        C3,
+        verbForm,
+    );
+}
+
+// ── FORM Xb ────────────────────────────────────────────────────────────────
+// Causative intensive: stC1vC2C2vC3 / jistC1vC2C2vC3 (e.g. stħarreg / jistħarreg)
+function genFormXbStrong(
+    C: string[],
+    vsetPerf: string,
+    vsetImpf: string,
+    vsetImp: string,
+    verbForm: string,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
     const C2D = C2 + C2;
 
-    // Perfect: stC1vC2C2vC3 (stħarreg)
-    const perfBase = `st${C1}${pv1}${C2D}${pv2}${C3}`;
+    const perfFull = `st${C1}${pv1}${C2D}${cleanThemeVowel(pv2, C3)}${C3}`;
     const perfSync = `st${C1}${pv1}${C2D}${C3}`;
 
-    const perfRows = [
-        perfBase + 't',    // jiena
-        perfBase + 't',    // inti
-        perfBase,          // huwa
-        perfSync + 'et',   // hija
-        perfBase + 'na',   // aħna
-        perfBase + 'tu',   // intom
-        perfSync + 'u',    // huma
-    ];
+    const impfT1stem = `ist${C1}${iv1}${C2D}${applyAttachedShift(iv2, C3)}${C3}`;
+    const impfT2stem = `ist${C1}${iv1}${C2D}${C3}`;
 
-    const { m: negM, f: negF } = negPerfect3sg(perfBase, `${perfSync}et`, C3);
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+        const stem = `ist${C1}${iv1}${C2D}${iv2}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, impfT2stem, "u")
+            : combinePrefix(pfx, stem);
+    };
 
-    // Imperfect: ji- + stC1vC2C2vC3 (jistħarreg)
-    const impfStem = `st${C1}${iv1}${C2D}${iv2}${C3}`;
-    const iv2Shifted = applyAttachedShift(iv2, C3, true);
-    const impfStemT1 = `st${C1}${iv1}${C2D}${iv2Shifted}${C3}`;
-    const impfStemSync = `st${C1}${iv1}${C2D}${C3}`;
+    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
+    const impSg = perfFull;
+    const impPl = perfSync + "u";
 
-    const impfForms: string[] = [];
-    const stemsList: any[] = [];
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: `st${C1}${pv1}${C2D}${applyAttachedShift(pv2, C3)}${C3}`,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT1stem,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT2stem,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT2stem,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `st${C1}${impV1}${C2D}i${C3}`,
+                impfType2: `st${C1}${impV1}${C2D}${C3}`,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+        },
+        C3,
+        verbForm,
+    );
+}
+// ── FORM Xb Hollow ─────────────────────────────────────────────────────────
+// Doubled C2: stCvCCvC pattern (e.g. stħajjel / jistħajjel)
 
-    for (let i = 0; i < 7; i++) {
-        const pfxCons = buildPrefix(i, 'i-i').replace(/[aeiou]+$/, '');
-        const base = combinePrefix(pfxCons, `i${impfStem}`);
-        const plural = combinePrefixPlural(pfxCons, `i${impfStemSync}`, 'u');
+function genFormXbHollow(
+    C: string[],
+    vsetPerf: string,
+    vsetImpf: string,
+    vsetImp: string,
+    verbForm: string,
+): VerbConjugationTable {
+    const [C1, C2, C3] = C;
+    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
+    const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
+    const C2D = C2 + C2;
 
-        impfForms.push(i >= 4 ? plural : base);
+    const perfFull = `st${C1}${pv1}${C2D}${cleanThemeVowel(pv2, C3)}${C3}`;
+    const perfSync = `st${C1}${pv1}${C2}${C3}`;
 
-        let pt1 = perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt1 = perfRows[i].slice(0, -2) + 'it';
-        }
-        let pt2 = i === 2 ? perfSync : perfRows[i];
-        if (i === 3 && perfRows[i].endsWith('et')) {
-            pt2 = perfRows[i].slice(0, -2) + 'it';
-        }
+    const impfT1stem = `ist${C1}${iv1}${C2D}${applyAttachedShift(iv2, C3)}${C3}`;
+    const impfT2stem = `ist${C1}${iv1}${C2}${C3}`;
 
-        stemsList.push({
-            impfType1: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemT1}`),
-            impfType2: i >= 4 ? plural : combinePrefix(pfxCons, `i${impfStemSync}`),
-            perfType1: pt1,
-            perfType2: pt2,
-        });
-    }
+    const impfBase = (i: number) => {
+        const pfx = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+        const stem = `st${C1}${iv1}${C2D}${iv2}${C3}`;
+        return i >= 4
+            ? combinePrefixPlural(pfx, impfT2stem, "u")
+            : combinePrefix(pfx, stem);
+    };
 
-    // Imperative
     const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
     const impSg = `st${C1}${impV1}${C2D}${impV2}${C3}`;
-    const impPl = `st${C1}${impV1}${C2D}${C3}u`;
+    const impPl = `st${C1}${impV1}${C2}${C3}u`;
 
-    const persons = [
-        { mt: 'jiena', en: 'I' },
-        { mt: 'inti', en: 'you (sg.)' },
-        { mt: 'huwa', en: 'he' },
-        { mt: 'hija', en: 'she' },
-        { mt: 'aħna', en: 'we' },
-        { mt: 'intom', en: 'you (pl.)' },
-        { mt: 'huma', en: 'they' },
-    ];
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync,
+            perfReduced: `st${C1}${pv1}${C2D}${applyAttachedShift(pv2, C3)}${C3}`,
+            perf3f: `${perfSync}et`,
+            impfBase,
+            impfType1: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT1stem,
+                ),
+            impfType2: (i) =>
+                combinePrefix(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT2stem,
+                ),
+            impfPlural: (i) =>
+                combinePrefixPlural(
+                    buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, ""),
+                    impfT2stem,
+                    "u",
+                ),
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `st${C1}${impV1}${C2D}${applyAttachedShift(impV2, C3)}${C3}`,
+                impfType2: `st${C1}${impV1}${C2}${C3}`,
+            },
+            blocksImala:
+                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+        },
+        C3,
+        verbForm,
+    );
+}
+// ── FORM Xb DEFECTIVE ──────────────────────────────────────────────────────
+// Defective Form Xb (e.g. sthewwa / sthewwa)
+// C3 is dropped/vocalized.
 
-    const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
-        person_en: p.en,
-        imperfect: impfForms[i],
-        perfect: perfRows[i],
-        perfect_neg: (i === 2) ? negM : (i === 3) ? negF : perfRows[i],
-        stems: stemsList[i]
-    }));
+function genFormXbDefective(
+    C: string[],
+    vsetPerf: string,
+    vsetImpf: string,
+    vsetImp: string,
+    verbForm: string,
+    isImalaBlocked: boolean = false,
+): VerbConjugationTable {
+    const [C1, C2, C3] = C;
+    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
+    const { v1: _iv1, v2: iv2 } = parseVset(vsetImpf);
+    const C2D = C2 + C2;
 
-    return {
-        rows,
-        imperative_sg: impSg,
-        imperative_pl: impPl,
-        imperative_sg_stems: { impfType1: impSg, impfType2: `st${C1}${impV1}${C2D}${C3}` },
-        imperative_pl_stems: { impfType1: impPl, impfType2: impPl },
-        blocksImala: (C3 === 'għ' && (vsetImpf.endsWith('a') || vsetPerf.endsWith('a'))),
+    const perfFull = `st${C1}${pv1}${C2D}${pv2}`; // nessa
+    const perf3f = `st${C1}${pv1}${C2D}iet`; // nessiet
+    const perfReduced = `st${C1}${pv1}${C2D}`; // -ness-
+
+    const imalaBlocked = isImalaBlocked;
+    const attV = applyAttachedShift(iv2 || "a", C3, true);
+    const attVj = attV === "ie" ? "iej" : imalaBlocked ? "aj" : "ej";
+
+    const impfBase = (person: number) => {
+        const prefix = buildPrefix(person, "");
+        return `${prefix}i${perfReduced}${iv2}`;
     };
+    const impfPlural = (person: number) => {
+        const prefix = buildPrefix(person, "");
+        const suffix =
+            impV2 === "i" ? "u" : pv1 === "a" && pv2 === "a" ? "aw" : "ew";
+        return `${prefix}i${perfReduced}${suffix}`;
+    };
+
+    const impfType1 = (person: number) => {
+        if (person >= 4) return impfPlural(person);
+        return `${buildPrefix(person, "")}i${perfReduced}${attV}`;
+    };
+
+    const impfType2 = (person: number) => {
+        if (person >= 4) return impfPlural(person);
+        return `${buildPrefix(person, "")}${perfReduced}${attVj}`;
+    };
+
+    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
+    const suffix = impV2 === "i" ? "u" : pv1 === "a" && pv2 === "a" ? "aw" : "ew";
+    const impSg = `${perfReduced}${impV2}`;
+    const impPl = `${perfReduced}${suffix}`;
+
+    return buildConjugationTable(
+        {
+            perfFull,
+            perfSync: `${perfReduced}`,
+            perfReduced: `${perfReduced}ej`,
+            perf3f,
+            perfType1Builder: (perfRow, pIdx) => {
+                if (pIdx === 2 && pv2 === "a") return `st${C1}${pv1}${C2D}ie`;
+                else if (pIdx === 3) return `${perf3f.slice(0, -1)}t`;
+                else if (pIdx === 7) return `${perfReduced}ew`;
+                return perfRow;
+            },
+            impfBase,
+            impfType1,
+            impfType2,
+            impfPlural,
+            impSg,
+            impPl,
+            impSgStems: {
+                impfType1: `${impV1}st${C1}${C2}${attV}`,
+                impfType2: `${impV1}st${C1}${C2}${attVj}`,
+            },
+            impPlStems: {
+                impfType1: impPl,
+                impfType2: impPl,
+            },
+            blocksImala:
+                imalaBlocked ||
+                (typeof C3 !== "undefined" &&
+                    C3 === "għ" &&
+                    (vsetImpf.endsWith("a") || vsetPerf.endsWith("a"))),
+        },
+        C3,
+        verbForm,
+    );
 }
 
 // ── Main entry point ───────────────────────────────────────────────────────
@@ -2316,374 +1969,1026 @@ export function genFormXb(
  *
  * For verbs with manually stored conjugation data, prefer using that directly.
  */
-export function generateConjugation(input: ConjugationInput): VerbConjugationTable {
-    const consonants = input.root.split('-').filter(Boolean);
-    const { form, strength, weakClass } = input;
+export function generateConjugation(
+    input: ConjugationInput,
+): VerbConjugationTable {
+    const consonants = input.root.split("-").filter(Boolean);
+    const form = input.form;
+    const strength = (input.strength || "strong").toLowerCase();
+    const weakClass = input.weakClass?.toLowerCase();
 
-    if (form === 'I') {
-        if (strength === 'geminated') {
-            return genGeminated(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative, form);
+    if (form === "I") {
+        if (strength === "geminated") {
+            return genGeminated(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+            );
         }
-        if (strength === 'strong') {
-            return genStrong(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative, form);
+        if (strength === "strong") {
+            return genStrong(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+                input.isImalaBlocked,
+            );
         }
-        if (strength === 'strong-hybrid') {
-            return genDefectiveGħ(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+        if (strength === "strong-hybrid") {
+            return genDefectiveGħ(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+                input.isImalaBlocked,
+            );
         }
-        if (strength === 'weak') {
+        if (strength === "weak") {
             switch (weakClass) {
-                case 'assimilative':
-                    return genAssimilative(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative, form);
-                case 'hollow':
-                    return genHollow(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative, form);
-                case 'defective':
-                    return genDefective(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative, form);
+                case "assimilative":
+                    return genAssimilative(
+                        consonants,
+                        input.vowelSetPerfect,
+                        input.vowelSetImperfect,
+                        input.vowelSetImperative,
+                        form,
+                        input.isImalaBlocked,
+                    );
+                case "hollow":
+                    return genHollow(
+                        consonants,
+                        input.vowelSetPerfect,
+                        input.vowelSetImperfect,
+                        input.vowelSetImperative,
+                        form,
+                    );
+                case "defective":
+                    return genDefective(
+                        consonants,
+                        input.vowelSetPerfect,
+                        input.vowelSetImperfect,
+                        input.vowelSetImperative,
+                        form,
+                        input.isImalaBlocked,
+                    );
                 default:
-                    throw new Error(`Unknown weak classification for Form I: ${weakClass}`);
+                    throw new Error(
+                        `Unknown weak classification for Form I: ${weakClass}`,
+                    );
             }
         }
     }
 
-    if (form === 'II') {
-        if (strength === 'strong') {
-            return genFormIIStrong(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+    if (form === "II") {
+        if (strength === "strong") {
+            return genFormIIStrong(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+            );
         }
-        if (strength === 'weak') {
-            if (weakClass === 'assimilative') {
-                return genFormIIStrong(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+        if (strength === "weak") {
+            if (weakClass === "assimilative") {
+                return genFormIIStrong(
+                    consonants,
+                    input.vowelSetPerfect,
+                    input.vowelSetImperfect,
+                    input.vowelSetImperative,
+                    form,
+                );
             }
-            if (weakClass === 'hollow') {
-                return genFormIIHollow(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+            if (weakClass === "hollow") {
+                return genFormIIHollow(
+                    consonants,
+                    input.vowelSetPerfect,
+                    input.vowelSetImperfect,
+                    input.vowelSetImperative,
+                    form,
+                );
             }
-            if (weakClass === 'defective') {
-                return genFormIIDefective(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+            if (weakClass === "defective") {
+                return genFormIIDefective(
+                    consonants,
+                    input.vowelSetPerfect,
+                    input.vowelSetImperfect,
+                    input.vowelSetImperative,
+                    form,
+                    input.isImalaBlocked,
+                );
             }
+        }
+        if (strength === "geminated") {
+            return genFormIIHollow(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+            );
         }
     }
 
-    if (form === 'III') {
-        if (strength === 'strong') {
-            return genFormIIIStrong(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+    if (form === "III") {
+        if (strength === "strong") {
+            return genFormIIIStrong(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+            );
         }
-        if (strength === 'weak') {
-            if (weakClass === 'assimilative') {
-                return genFormIIIStrong(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+        if (strength === "weak") {
+            if (weakClass === "assimilative") {
+                return genFormIIIStrong(
+                    consonants,
+                    input.vowelSetPerfect,
+                    input.vowelSetImperfect,
+                    input.vowelSetImperative,
+                    form,
+                );
             }
-            if (weakClass === 'hollow') {
-                return genFormIIIStrong(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+            if (weakClass === "hollow") {
+                return genFormIIIStrong(
+                    consonants,
+                    input.vowelSetPerfect,
+                    input.vowelSetImperfect,
+                    input.vowelSetImperative,
+                    form,
+                );
             }
-            if (weakClass === 'defective') {
-                return genFormIIIDefective(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+            if (weakClass === "defective") {
+                return genFormIIIDefective(
+                    consonants,
+                    input.vowelSetPerfect,
+                    input.vowelSetImperfect,
+                    input.vowelSetImperative,
+                    form,
+                    input.isImalaBlocked,
+                );
             }
         }
     }
 
     // ── Higher forms (IV–Xb) — class-neutral ────────────────────────────
-    if (form === 'IV') return genFormIV(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
-    if (form === 'V') {
-        if (strength === 'weak' && weakClass === 'defective') {
-            return genFormVDefective(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+    if (form === "IV")
+        return genFormIV(
+            consonants,
+            input.vowelSetPerfect,
+            input.vowelSetImperfect,
+            input.vowelSetImperative,
+            form,
+        );
+    if (form === "V") {
+        if (strength === "weak" && weakClass === "defective") {
+            return genFormVDefective(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+                input.isImalaBlocked,
+            );
         }
-        return genFormVStrong(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+        return genFormVStrong(
+            consonants,
+            input.vowelSetPerfect,
+            input.vowelSetImperfect,
+            input.vowelSetImperative,
+            form,
+        );
     }
-    if (form === 'VI') return genFormVI(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
-    if (form === 'VII') return genFormVII(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
-    if (form === 'VIII') return genFormVIII(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
-    if (form === 'IX') return genFormIX(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
-    if (form === 'Xa') return genFormXa(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
-    if (form === 'Xb') return genFormXb(consonants, input.vowelSetPerfect, input.vowelSetImperfect, input.vowelSetImperative);
+    if (form === "VI") {
+        if (strength === "weak" && weakClass === "defective") {
+            return genFormVIDefective(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+                input.isImalaBlocked,
+            );
+        }
+        return genFormVI(
+            consonants,
+            input.vowelSetPerfect,
+            input.vowelSetImperfect,
+            input.vowelSetImperative,
+            form,
+        );
+    }
+    if (form === "VII")
+        return genFormVII(
+            consonants,
+            input.vowelSetPerfect,
+            input.vowelSetImperfect,
+            input.vowelSetImperative,
+            form,
+        );
+    if (form === "VIII")
+        return genFormVIII(
+            consonants,
+            input.vowelSetPerfect,
+            input.vowelSetImperfect,
+            input.vowelSetImperative,
+            form,
+        );
+    if (form === "IX")
+        return genFormIX(
+            consonants,
+            input.vowelSetPerfect,
+            input.vowelSetImperfect,
+            input.vowelSetImperative,
+            form,
+        );
+    if (form === "Xa") {
+        if (strength === "weak" && weakClass === "defective") {
+            return genFormXaDefective(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+                input.isImalaBlocked,
+            );
+        }
+        if (strength === "geminated") {
+            return genFormXaGeminated(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+            );
+        }
+        return genFormXaStrong(
+            consonants,
+            input.vowelSetPerfect,
+            input.vowelSetImperfect,
+            input.vowelSetImperative,
+            form,
+        );
+    }
+    if (form === "Xb") {
+        if (strength === "weak" && weakClass === "defective") {
+            return genFormXbDefective(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+                input.isImalaBlocked,
+            );
+        } else if (strength === "weak" && weakClass === "hollow") {
+            return genFormXbHollow(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+            );
+        }
+        return genFormXbStrong(
+            consonants,
+            input.vowelSetPerfect,
+            input.vowelSetImperfect,
+            input.vowelSetImperative,
+            form,
+        );
+    }
 
-    throw new Error(`Unsupported verb configuration: Form ${form}, Strength ${strength}, WeakClass ${weakClass}`);
+    throw new Error(
+        `Unsupported verb configuration: Form ${form}, Strength ${strength}, WeakClass ${weakClass}`,
+    );
 }
 
 // ── Root Form Generation Engine ────────────────────────────────────────────
 
 // Triliteral Strong (from rootGenerator.ts)
-function generateTriliteralStrong(C1: string, C2: string, C3: string, pv1: string, pv2: string, ipv1: string, ipv2: string): GeneratedVerbForm[] {
+function generateTriliteralStrong(
+    C1: string,
+    C2: string,
+    C3: string,
+    pv1: string,
+    pv2: string,
+    ipv1: string,
+    ipv2: string,
+): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
     const f1_perf = `${C1}${pv1}${C2}${pv2}${C3}`;
     const f1_impf = `j${ipv1}${C1}${C2}${ipv2}${C3}`;
-    const p1 = isGuttural(C1) ? 'a' : 'i';
+    const p1 = isGuttural(C1) ? "a" : "i";
     const f1_pass = `m${p1}${C1}${C2}u${C3}`;
-    const a1 = hasIorE(pv1) ? 'ie' : 'a';
-    const a2 = isGuttural(C3) ? 'a' : 'e';
+    const a1 = hasIorE(pv1) ? "ie" : "a";
+    const a2 = isGuttural(C3) ? "a" : "e";
     const f1_act = `${C1}${a1}${C2}${a2}${C3}`;
     const f1_vn = isPharyngeal(C1) ? `${C1}a${C2}i${C3}` : `${C1}${C2}i${C3}`;
 
-    forms.push({ form: 'I', perfect: f1_perf, imperfect: f1_impf, passiveParticiple: f1_pass, activeParticiple: f1_act, verbalNoun: f1_vn });
+    forms.push({
+        form: "I",
+        perfect: f1_perf,
+        imperfect: f1_impf,
+        passiveParticiple: f1_pass,
+        activeParticiple: f1_act,
+        verbalNoun: f1_vn,
+    });
 
     const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}${C3}`;
     const f2_impf = `j${f2_perf}`;
     const f2_pass = `m${f2_perf}`;
-    const b1 = hasIorEorO(pv1) ? 'ie' : 'a';
+    const b1 = hasIorEorO(pv1) ? "ie" : "a";
     const f2_act = `${C1}${pv1}${C2}${C2}${b1}${C3}`;
-    const b2 = isGuttural(C1) || (pv1 === 'a' && pv2 === 'a') ? 'a' : 'i';
+    const b2 = isGuttural(C1) ? "a" : "i";
     const f2_vn = `t${b2}${C1}${C2}i${C3}`;
 
-    forms.push({ form: 'II', perfect: f2_perf, imperfect: f2_impf, passiveParticiple: f2_pass, activeParticiple: f2_act, verbalNoun: f2_vn });
+    forms.push({
+        form: "II",
+        perfect: f2_perf,
+        imperfect: f2_impf,
+        passiveParticiple: f2_pass,
+        activeParticiple: f2_act,
+        verbalNoun: f2_vn,
+    });
 
-    const c1 = hasIorE(pv1) ? 'ie' : 'a';
+    const c1 = hasIorE(pv1) ? "ie" : "a";
     const f3_perf = `${C1}${c1}${C2}${pv2}${C3}`;
     const f3_impf = `j${f3_perf}`;
     const f3_pass = `m${f3_perf}`;
 
-    forms.push({ form: 'III', perfect: f3_perf, imperfect: f3_impf, passiveParticiple: f3_pass, activeParticiple: '-', verbalNoun: '-' });
+    forms.push({
+        form: "III",
+        perfect: f3_perf,
+        imperfect: f3_impf,
+        passiveParticiple: f3_pass,
+        activeParticiple: "-",
+        verbalNoun: "-",
+    });
 
     const f4_perf = `${ipv1}${C1}${C2}${ipv2}${C3}`;
-    const f4_impf = `j${ipv1}${C1}${C2}${ipv2}${C3}`;
+    const f4_impf = `jo${C1}${C2}o${C3}`;
     const f4_act = `mi${C1}${C2}e${C3}`;
-    const d1 = (pv1 === 'a' && pv2 === 'a') ? 'a' : 'ie';
-    const f4_vn = isPharyngeal(C1) ? `e${C1}${C2}${d1}${C3}` : `(i)${C1}${C2}${d1}${C3}`;
+    const d1 = pv1 === "a" && pv2 === "a" ? "a" : "ie";
+    const f4_vn = isPharyngeal(C1)
+        ? `e${C1}${C2}${d1}${C3}`
+        : `(i)${C1}${C2}${d1}${C3}`;
 
-    forms.push({ form: 'IV', perfect: f4_perf, imperfect: f4_impf, passiveParticiple: '-', activeParticiple: f4_act, verbalNoun: f4_vn });
+    forms.push({
+        form: "IV",
+        perfect: f4_perf,
+        imperfect: f4_impf,
+        passiveParticiple: "-",
+        activeParticiple: f4_act,
+        verbalNoun: f4_vn,
+    });
 
     const f5_perf = `t${f2_perf}`;
-    forms.push({ form: 'V', perfect: f5_perf, imperfect: `ji${f5_perf}`, passiveParticiple: `mi${f5_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}` });
+    forms.push({
+        form: "V",
+        perfect: f5_perf,
+        imperfect: `ji${f5_perf}`,
+        passiveParticiple: `mi${f5_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}`,
+    });
 
     const f6_perf = `t${f3_perf}`;
-    const e1 = hasIorE(pv1) ? 'ie' : 'a';
-    forms.push({ form: 'VI', perfect: f6_perf, imperfect: `ji${f6_perf}`, passiveParticiple: `mi${f6_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${e1}${C2}i${C3}` });
+    const e1 = hasIorE(pv1) ? "ie" : "a";
+    forms.push({
+        form: "VI",
+        perfect: f6_perf,
+        imperfect: `ji${f6_perf}`,
+        passiveParticiple: `mi${f6_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `t${C1}${e1}${C2}i${C3}`,
+    });
 
     const f7_perf = `n${f1_perf}`;
-    forms.push({ form: 'VII', perfect: f7_perf, imperfect: `ji${f7_perf}`, passiveParticiple: `mi${f7_perf}`, activeParticiple: '-', verbalNoun: '-' });
+    forms.push({
+        form: "VII",
+        perfect: f7_perf,
+        imperfect: `ji${f7_perf}`,
+        passiveParticiple: `mi${f7_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `n${f1_vn}`,
+    });
 
     const f8_perf = `${C1}t${pv1}${C2}${pv2}${C3}`;
     const f8_perfPharyngeal = `e${C1}t${pv1}${C2}${pv2}${C3}`;
-    forms.push({ form: 'VIII', perfect: isPharyngeal(C1) ? f8_perfPharyngeal : f8_perf, imperfect: isGuttural(C1) ? `je${f8_perf}` : `ji${f8_perf}`, passiveParticiple: isGuttural(C1) ? `me${f8_perf}` : `mi${f8_perf}`, activeParticiple: '-', verbalNoun: isGuttural(C1) ? `e${C1}t${pv1}${C2}i${C3}` : `${C1}t${pv1}${C2}i${C3}` });
+    forms.push({
+        form: "VIII",
+        perfect: isPharyngeal(C1) ? f8_perfPharyngeal : f8_perf,
+        imperfect: isGuttural(C1) ? `je${f8_perf}` : `ji${f8_perf}`,
+        passiveParticiple: isGuttural(C1) ? `me${f8_perf}` : `mi${f8_perf}`,
+        activeParticiple: "-",
+        verbalNoun: isGuttural(C1)
+            ? `e${C1}t${pv1}${C2}i${C3}`
+            : `${C1}t${pv1}${C2}i${C3}`,
+    });
 
     const f9_perf = `${C1}${C2}${c1}${C3}`;
     const f9_perfPharyngeal = `${C1}e${C2}${c1}${C3}`;
-    forms.push({ form: 'IX', perfect: isPharyngeal(C1) ? f9_perfPharyngeal : f9_perf, imperfect: `ji${f9_perf}`, passiveParticiple: `mu${f9_perf}`, activeParticiple: '-', verbalNoun: isPharyngeal(C1) ? f9_perfPharyngeal : f9_perf });
+    forms.push({
+        form: "IX",
+        perfect: isPharyngeal(C1) ? f9_perfPharyngeal : f9_perf,
+        imperfect: `ji${f9_perf}`,
+        passiveParticiple: `mu${f9_perf}`,
+        activeParticiple: "-",
+        verbalNoun: isPharyngeal(C1) ? f9_perfPharyngeal : f9_perf,
+    });
 
     const f10a_perf = `st${pv1}${C1}${C2}${pv2}${C3}`;
-    forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}i${C3}` });
+    forms.push({
+        form: "Xa",
+        perfect: f10a_perf,
+        imperfect: `ji${f10a_perf}`,
+        passiveParticiple: `mi${f10a_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `st${pv1}${C1}${C2}i${C3}`,
+    });
 
     const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}${C3}`;
-    forms.push({ form: 'Xb', perfect: f10b_perf, imperfect: `ji${f10b_perf}`, passiveParticiple: `mi${f10b_perf}`, activeParticiple: '-', verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}` });
+    forms.push({
+        form: "Xb",
+        perfect: f10b_perf,
+        imperfect: `ji${f10b_perf}`,
+        passiveParticiple: `mi${f10b_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}`,
+    });
 
     return forms;
 }
 
-function generateTriliteralGeminated(C1: string, C2: string, C3: string, pv1: string, pv2: string, ipv1: string, _ipv2: string): GeneratedVerbForm[] {
+function generateTriliteralGeminated(
+    C1: string,
+    C2: string,
+    C3: string,
+    pv1: string,
+    pv2: string,
+    ipv1: string,
+    _ipv2: string,
+): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
     const f1_perf = `${C1}${pv1}${C2}${C3}`;
     const f1_impf = `j${C1}${ipv1}${C2}${C3}`;
-    const g1 = isGuttural(C1) ? 'a' : 'i';
+    const g1 = isGuttural(C1) ? "a" : "i";
     const f1_pass = `m${g1}${C1}${C2}u${C3}`;
-    const a1 = hasIorE(pv1) ? 'ie' : 'a';
-    const a2 = isGuttural(C3) ? 'a' : 'e';
+    const a1 = hasIorE(pv1) ? "ie" : "a";
+    const a2 = isGuttural(C3) ? "a" : "e";
     const f1_act = `${C1}${a1}${C2}${a2}${C3}`;
-    const f1_vn = isGuttural(C1) ? `${C1}e${pv1}${C2}${C3}` : `${C1}${pv1}${C2}${C3}`;
-    forms.push({ form: 'I', perfect: f1_perf, imperfect: f1_impf, passiveParticiple: f1_pass, activeParticiple: f1_act, verbalNoun: f1_vn });
+    const f1_vn = isGuttural(C1)
+        ? `${C1}e${pv1}${C2}${C3}`
+        : `${C1}${pv1}${C2}${C3}`;
+    forms.push({
+        form: "I",
+        perfect: f1_perf,
+        imperfect: f1_impf,
+        passiveParticiple: f1_pass,
+        activeParticiple: f1_act,
+        verbalNoun: f1_vn,
+    });
 
     const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}${C3}`;
     const f2_impf = `j${f2_perf}`;
     const f2_pass = `m${f2_perf}`;
-    const b1 = hasIorEorO(pv1) ? 'ie' : 'a';
+    const b1 = hasIorEorO(pv1) ? "ie" : "a";
     const f2_act = `${C1}${pv1}${C2}${C2}${b1}${C3}`;
-    const b2 = isGuttural(C1) || (pv1 === 'a' && pv2 === 'a') ? 'a' : 'i';
+    const b2 = isGuttural(C1) ? "a" : "i";
     const f2_vn = `t${b2}${C1}${C2}i${C3}`;
-    forms.push({ form: 'II', perfect: f2_perf, imperfect: f2_impf, passiveParticiple: f2_pass, activeParticiple: f2_act, verbalNoun: f2_vn });
+    forms.push({
+        form: "II",
+        perfect: f2_perf,
+        imperfect: f2_impf,
+        passiveParticiple: f2_pass,
+        activeParticiple: f2_act,
+        verbalNoun: f2_vn,
+    });
 
-    const c1 = hasIorE(pv1) ? 'ie' : 'a';
+    const c1 = hasIorE(pv1) ? "ie" : "a";
     const f3_perf = `${C1}${c1}${C2}${pv2}${C3}`;
-    forms.push({ form: 'III', perfect: f3_perf, imperfect: `j${f3_perf}`, passiveParticiple: `m${f3_perf}`, activeParticiple: '-', verbalNoun: '-' });
+    forms.push({
+        form: "III",
+        perfect: f3_perf,
+        imperfect: `j${f3_perf}`,
+        passiveParticiple: `m${f3_perf}`,
+        activeParticiple: "-",
+        verbalNoun: "-",
+    });
 
     const f4_perf = `a${C1}a${C2}${C3}`;
-    const f4_impf = `j${C1}${ipv1}${C2}${C3}`;
+    const f4_impf = `j${C1}o${C2}${C3}`;
     const f4_act = `mi${C1}${pv2}${C2}${C3}`;
-    const d1 = (pv1 === 'a' && pv2 === 'a') ? 'a' : 'ie';
+    const d1 = pv1 === "a" && pv2 === "a" ? "a" : "ie";
     const f4_vn = `i${C1}${C2}${d1}${C3}`;
-    forms.push({ form: 'IV', perfect: f4_perf, imperfect: f4_impf, passiveParticiple: '-', activeParticiple: f4_act, verbalNoun: f4_vn });
+    forms.push({
+        form: "IV",
+        perfect: f4_perf,
+        imperfect: f4_impf,
+        passiveParticiple: "-",
+        activeParticiple: f4_act,
+        verbalNoun: f4_vn,
+    });
 
     const f5_perf = `t${f2_perf}`;
-    forms.push({ form: 'V', perfect: f5_perf, imperfect: `ji${f5_perf}`, passiveParticiple: `mi${f5_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}` });
+    forms.push({
+        form: "V",
+        perfect: f5_perf,
+        imperfect: `ji${f5_perf}`,
+        passiveParticiple: `mi${f5_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}`,
+    });
 
     const f6_perf = `t${f3_perf}`;
-    const e1 = ['i', 'e'].includes(pv1) ? 'ie' : 'a';
-    forms.push({ form: 'VI', perfect: f6_perf, imperfect: `ji${f6_perf}`, passiveParticiple: `mi${f6_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${e1}${C2}i${C3}` });
+    const e1 = ["i", "e"].includes(pv1) ? "ie" : "a";
+    forms.push({
+        form: "VI",
+        perfect: f6_perf,
+        imperfect: `ji${f6_perf}`,
+        passiveParticiple: `mi${f6_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `t${C1}${e1}${C2}i${C3}`,
+    });
 
     const f7_perf = `n${f1_perf}`;
-    forms.push({ form: 'VII', perfect: f7_perf, imperfect: `ji${f7_perf}`, passiveParticiple: `mi${f7_perf}`, activeParticiple: '-', verbalNoun: '-' });
+    forms.push({
+        form: "VII",
+        perfect: f7_perf,
+        imperfect: `ji${f7_perf}`,
+        passiveParticiple: `mi${f7_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `n${f1_vn}`,
+    });
 
     const f8_perf = `${C1}t${pv1}${C2}${C3}`;
-    forms.push({ form: 'VIII', perfect: f8_perf, imperfect: `ji${f8_perf}`, passiveParticiple: `mi${f8_perf}`, activeParticiple: '-', verbalNoun: `${C1}t${pv1}${C2}i${C3}` });
+    forms.push({
+        form: "VIII",
+        perfect: f8_perf,
+        imperfect: `ji${f8_perf}`,
+        passiveParticiple: `mi${f8_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `${C1}t${pv1}${C2}i${C3}`,
+    });
 
     const f9_perf = `${C1}${C2}${c1}${C3}`;
-    forms.push({ form: 'IX', perfect: f9_perf, imperfect: `ji${f9_perf}`, passiveParticiple: `mu${f9_perf}`, activeParticiple: '-', verbalNoun: f9_perf });
+    forms.push({
+        form: "IX",
+        perfect: f9_perf,
+        imperfect: `ji${f9_perf}`,
+        passiveParticiple: `mu${f9_perf}`,
+        activeParticiple: "-",
+        verbalNoun: f9_perf,
+    });
 
     const f10a_perf = `st${C1}${pv1}${C2}${C3}`;
-    forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}i${C3}` });
+    forms.push({
+        form: "Xa",
+        perfect: f10a_perf,
+        imperfect: `ji${f10a_perf}`,
+        passiveParticiple: `mi${f10a_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `st${pv1}${C1}${C2}i${C3}`,
+    });
 
     const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}${C3}`;
-    forms.push({ form: 'Xb', perfect: f10b_perf, imperfect: `ji${f10b_perf}`, passiveParticiple: `mi${f10b_perf}`, activeParticiple: '-', verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}` });
+    forms.push({
+        form: "Xb",
+        perfect: f10b_perf,
+        imperfect: `ji${f10b_perf}`,
+        passiveParticiple: `mi${f10b_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}`,
+    });
 
     return forms;
 }
 
-function generateTriliteralAssimilative(C1: string, C2: string, _C3: string, pv1: string, pv2: string, ipv1: string, ipv2: string): GeneratedVerbForm[] {
+function generateTriliteralAssimilative(
+    C1: string,
+    C2: string,
+    _C3: string,
+    pv1: string,
+    pv2: string,
+    ipv1: string,
+    ipv2: string,
+): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
     const f1_perf = `${C1}${pv1}${C2}${pv2}`; // beda
     const f1_impf = `j${ipv1}${C1}${C2}${ipv2}`; // jibda
     const f1_pass = `m${ipv1}${C1}${C2}${ipv2}`; // mibda
-    const a1 = hasIorE(pv1) ? 'ie' : 'a';
+    const a1 = hasIorE(pv1) ? "ie" : "a";
     const f1_act = `${C1}${a1}${C2}i`; // biedi
     const f1_vn = `${C1}i${C2}i`; // bidi
-    forms.push({ form: 'I', perfect: f1_perf, imperfect: f1_impf, passiveParticiple: f1_pass, activeParticiple: f1_act, verbalNoun: f1_vn });
+    forms.push({
+        form: "I",
+        perfect: f1_perf,
+        imperfect: f1_impf,
+        passiveParticiple: f1_pass,
+        activeParticiple: f1_act,
+        verbalNoun: f1_vn,
+    });
 
     const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}`;
     const f2_impf = `j${C1}${pv1}${C2}${C2}i`;
     const f2_pass = `m${C1}${pv1}${C2}${C2}i`;
-    const b1 = isGuttural(C2) ? 'a' : 'e';
+    const b1 = isGuttural(C2) ? "a" : "e";
     const f2_act = `${C1}${pv1}${C2}${C2}${b1}j`; // beddej
-    const vnv1 = isGuttural(C1) ? 'a' : 'i';
+    const vnv1 = isGuttural(C1) ? "a" : "i";
     const f2_vn = `t${vnv1}${C1}${C2}ija`; // tibdija
-    forms.push({ form: 'II', perfect: f2_perf, imperfect: f2_impf, passiveParticiple: f2_pass, activeParticiple: f2_act, verbalNoun: f2_vn });
+    forms.push({
+        form: "II",
+        perfect: f2_perf,
+        imperfect: f2_impf,
+        passiveParticiple: f2_pass,
+        activeParticiple: f2_act,
+        verbalNoun: f2_vn,
+    });
 
-    const c1 = hasIorE(pv1) ? 'ie' : 'a';
+    const c1 = hasIorE(pv1) ? "ie" : "a";
     const f3 = `${C1}${c1}${C2}`;
-    forms.push({ form: 'III', perfect: f3 + pv2, imperfect: `j${f3}i`, passiveParticiple: `m${f3}i`, activeParticiple: '-', verbalNoun: '-' });
+    forms.push({
+        form: "III",
+        perfect: f3 + pv2,
+        imperfect: `j${f3}i`,
+        passiveParticiple: `m${f3}i`,
+        activeParticiple: "-",
+        verbalNoun: "-",
+    });
 
-    const f4_perf = `i${C1}${C2}${ipv2}`;
-    const f4_impf = `j${ipv1}${C1}${C2}${ipv2}`;
+    const f4_perf = `${ipv1}${C1}${C2}${ipv2}`;
+    const f4_impf = `jo${C1}${C2}${ipv2}`;
     const f4_act = `mi${C1}${C2}${ipv2}`;
-    const h1 = C1 === 'w' ? 'u' : 'i';
-    const h2 = (pv1 === 'a' && pv2 === 'a') ? 'a' : 'ie';
+    const h1 = C1 === "w" ? "u" : "i";
+    const h2 = pv1 === "a" && pv2 === "a" ? "a" : "ie";
     const f4_vn = `${h1}${C1}${C2}${h2}ja`;
-    forms.push({ form: 'IV', perfect: f4_perf, imperfect: f4_impf, passiveParticiple: '-', activeParticiple: f4_act, verbalNoun: f4_vn });
+    forms.push({
+        form: "IV",
+        perfect: f4_perf,
+        imperfect: f4_impf,
+        passiveParticiple: "-",
+        activeParticiple: f4_act,
+        verbalNoun: f4_vn,
+    });
 
     const f5_perf = `t${f2_perf}`;
-    forms.push({ form: 'V', perfect: f5_perf, imperfect: `ji${f5_perf}`, passiveParticiple: `mi${f5_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${pv1}${C2}${C2}ija` });
+    forms.push({
+        form: "V",
+        perfect: f5_perf,
+        imperfect: `ji${f5_perf}`,
+        passiveParticiple: `mi${f5_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `t${C1}${pv1}${C2}${C2}ija`,
+    });
 
     const f6_perf = `t${f3}${pv2}`;
-    forms.push({ form: 'VI', perfect: f6_perf, imperfect: `ji${f6_perf}`, passiveParticiple: `mi${f6_perf}`, activeParticiple: '-', verbalNoun: `t${f3}ija` });
+    forms.push({
+        form: "VI",
+        perfect: f6_perf,
+        imperfect: `ji${f6_perf}`,
+        passiveParticiple: `mi${f6_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `t${f3}ija`,
+    });
 
     const f7_perf = `n${f1_perf}`;
-    forms.push({ form: 'VII', perfect: f7_perf, imperfect: `ji${f7_perf}`, passiveParticiple: `mi${f7_perf}`, activeParticiple: '-', verbalNoun: '-' });
+    forms.push({
+        form: "VII",
+        perfect: f7_perf,
+        imperfect: `ji${f7_perf}`,
+        passiveParticiple: `mi${f7_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `n${f1_vn}`,
+    });
 
     const f8_perf = `${C1}t${pv1}${C2}${pv2}`;
-    forms.push({ form: 'VIII', perfect: f8_perf, imperfect: `ji${f8_perf}`, passiveParticiple: `mi${f8_perf}`, activeParticiple: '-', verbalNoun: `${C1}t${pv1}${C2}ija` });
+    forms.push({
+        form: "VIII",
+        perfect: f8_perf,
+        imperfect: `ji${f8_perf}`,
+        passiveParticiple: `mi${f8_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `${C1}t${pv1}${C2}ija`,
+    });
 
     const f9_perf = `${C1}${C2}${c1}`;
-    forms.push({ form: 'IX', perfect: f9_perf, imperfect: `ji${f9_perf}`, passiveParticiple: `mu${f9_perf}`, activeParticiple: '-', verbalNoun: f9_perf });
+    forms.push({
+        form: "IX",
+        perfect: f9_perf,
+        imperfect: `ji${f9_perf}`,
+        passiveParticiple: `mu${f9_perf}`,
+        activeParticiple: "-",
+        verbalNoun: f9_perf,
+    });
 
     const f10a_perf = `st${pv1}${C1}${C2}${pv2}`;
-    forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}ija` });
+    forms.push({
+        form: "Xa",
+        perfect: f10a_perf,
+        imperfect: `ji${f10a_perf}`,
+        passiveParticiple: `mi${f10a_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `st${pv1}${C1}${C2}ija`,
+    });
 
     const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}`;
-    forms.push({ form: 'Xb', perfect: f10b_perf, imperfect: `ji${f10b_perf}`, passiveParticiple: `mi${f10b_perf}`, activeParticiple: '-', verbalNoun: `st${C1}${pv1}${C2}${C2}ija` });
+    forms.push({
+        form: "Xb",
+        perfect: f10b_perf,
+        imperfect: `ji${f10b_perf}`,
+        passiveParticiple: `mi${f10b_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `st${C1}${pv1}${C2}${C2}ija`,
+    });
 
     return forms;
 }
 
-function generateTriliteralHollow(C1: string, C2: string, C3: string, pv1: string, pv2: string, ipv1: string, ipv2: string): GeneratedVerbForm[] {
+function generateTriliteralHollow(
+    C1: string,
+    C2: string,
+    C3: string,
+    pv1: string,
+    pv2: string,
+    ipv1: string,
+    _ipv2: string,
+): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
-    const a1 = hasIorEorO(pv1) ? 'ie' : 'a';
+    const a1 = hasIorEorO(pv1) ? "ie" : "a";
     const f1_perf = `${C1}${a1}${C3}`;
     const f1_impf = `j${C1}${ipv1}${C3}`;
-    const i1 = isGuttural(C1) ? 'a' : 'i';
+    const i1 = isGuttural(C1) ? "a" : "i";
     const f1_pass = `m${i1}${C1}u${C3}`;
-    const i2 = hasIorE(pv1) ? 'e' : 'a';
+    const i2 = hasIorE(pv1) ? "e" : "a";
     const f1_act = `${C1}${i2}jje${C3}`;
-    const f1_vn = isGuttural(C1) ? `${C1}e${pv1}${C2}${C3}` : `${C1}${pv1}${C2}${C3}`;
-    forms.push({ form: 'I', perfect: f1_perf, imperfect: f1_impf, passiveParticiple: f1_pass, activeParticiple: f1_act, verbalNoun: f1_vn });
+    const f1_vn = isGuttural(C1)
+        ? `${C1}e${pv1}${C2}${C3}`
+        : `${C1}${pv1}${C2}${C3}`;
+    forms.push({
+        form: "I",
+        perfect: f1_perf,
+        imperfect: f1_impf,
+        passiveParticiple: f1_pass,
+        activeParticiple: f1_act,
+        verbalNoun: f1_vn,
+    });
 
     const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}${C3}`;
-    const b1 = hasIorEorO(pv1) ? 'ie' : 'a';
-    const b2 = isGuttural(C1) || (pv1 === 'a' && pv2 === 'a') ? 'a' : 'i';
-    forms.push({ form: 'II', perfect: f2_perf, imperfect: `j${f2_perf}`, passiveParticiple: `m${f2_perf}`, activeParticiple: `${C1}${pv1}${C2}${C2}${b1}${C3}`, verbalNoun: `t${b2}${C1}${C2}i${C3}` });
+    const b1 = hasIorEorO(pv1) ? "ie" : "a";
+    const b2 = isGuttural(C1) ? "a" : "i";
+    forms.push({
+        form: "II",
+        perfect: f2_perf,
+        imperfect: `j${f2_perf}`,
+        passiveParticiple: `m${f2_perf}`,
+        activeParticiple: `${C1}${pv1}${C2}${C2}${b1}${C3}`,
+        verbalNoun: `t${b2}${C1}${C2}i${C3}`,
+    });
 
-    const c1 = hasIorE(pv1) ? 'ie' : 'a';
+    const c1 = hasIorE(pv1) ? "ie" : "a";
     const f3_perf = `${C1}${c1}${C2}${pv2}${C3}`;
-    forms.push({ form: 'III', perfect: f3_perf, imperfect: `j${f3_perf}`, passiveParticiple: `m${f3_perf}`, activeParticiple: '-', verbalNoun: '-' });
+    forms.push({
+        form: "III",
+        perfect: f3_perf,
+        imperfect: `j${f3_perf}`,
+        passiveParticiple: `m${f3_perf}`,
+        activeParticiple: "-",
+        verbalNoun: "-",
+    });
 
     const f4_perf = `${pv1}${C1}${C2}${pv2}${C3}`;
-    const f4_impf = `jo${C1}o${C3}`;
+    const f4_impf = `j${C1}i${C3}`;
     const f4_act = `mi${C1}i${C3}`;
-    const f4_vn = `i${C1}${(pv1 === 'a' && pv2 === 'a') ? 'a' : 'ie'}${C3}`;
-    forms.push({ form: 'IV', perfect: f4_perf, imperfect: f4_impf, passiveParticiple: '-', activeParticiple: f4_act, verbalNoun: f4_vn });
+    const f4_vn = `i${C1}${pv1 === "a" && pv2 === "a" ? "a" : "ie"}${C3}`;
+    forms.push({
+        form: "IV",
+        perfect: f4_perf,
+        imperfect: f4_impf,
+        passiveParticiple: "-",
+        activeParticiple: f4_act,
+        verbalNoun: f4_vn,
+    });
 
     const f5_perf = `t${f2_perf}`;
-    forms.push({ form: 'V', perfect: f5_perf, imperfect: `ji${f5_perf}`, passiveParticiple: `mi${f5_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}` });
+    forms.push({
+        form: "V",
+        perfect: f5_perf,
+        imperfect: `ji${f5_perf}`,
+        passiveParticiple: `mi${f5_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}`,
+    });
 
     const f6_perf = `t${f3_perf}`;
-    const e1 = ['i', 'e'].includes(pv1) ? 'e' : 'a';
-    forms.push({ form: 'VI', perfect: f6_perf, imperfect: `ji${f6_perf}`, passiveParticiple: `mi${f6_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${e1}${C2}i${C3}` });
+    const e1 = ["i", "e"].includes(pv1) ? "e" : "a";
+    forms.push({
+        form: "VI",
+        perfect: f6_perf,
+        imperfect: `ji${f6_perf}`,
+        passiveParticiple: `mi${f6_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `t${C1}${e1}${C2}i${C3}`,
+    });
 
     const f7_perf = `n${f1_perf}`;
-    forms.push({ form: 'VII', perfect: f7_perf, imperfect: `ji${f7_perf}`, passiveParticiple: `mi${f7_perf}`, activeParticiple: '-', verbalNoun: '-' });
+    forms.push({
+        form: "VII",
+        perfect: f7_perf,
+        imperfect: `ji${f7_perf}`,
+        passiveParticiple: `mi${f7_perf}`,
+        activeParticiple: `n${C1}${C2}i${C3}`,
+        verbalNoun: `n${f1_vn}`,
+    });
 
     const f8_perf = `n${C1}t${a1}${C3}`;
-    forms.push({ form: 'VIII', perfect: f8_perf, imperfect: `ji${f8_perf}`, passiveParticiple: `mi${f8_perf}`, activeParticiple: '-', verbalNoun: `n${C1}t${a1}${C3}` });
+    forms.push({
+        form: "VIII",
+        perfect: f8_perf,
+        imperfect: `ji${f8_perf}`,
+        passiveParticiple: `mi${f8_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `n${C1}t${a1}${C3}`,
+    });
 
     const f9_perf = `${C1}${C2}${a1}${C3}`;
-    forms.push({ form: 'IX', perfect: f9_perf, imperfect: `ji${f9_perf}`, passiveParticiple: `mu${f9_perf}`, activeParticiple: '-', verbalNoun: f9_perf });
+    forms.push({
+        form: "IX",
+        perfect: f9_perf,
+        imperfect: `ji${f9_perf}`,
+        passiveParticiple: `mu${f9_perf}`,
+        activeParticiple: "-",
+        verbalNoun: f9_perf,
+    });
 
     const f10a_perf = `st${pv1}${C1}${a1}${C3}`;
-    forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}${a1}${C3}` });
+    forms.push({
+        form: "Xa",
+        perfect: f10a_perf,
+        imperfect: `ji${f10a_perf}`,
+        passiveParticiple: `mi${f10a_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `st${pv1}${C1}${C2}${a1}${C3}`,
+    });
 
     const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}${C3}`;
-    forms.push({ form: 'Xb', perfect: f10b_perf, imperfect: `ji${f10b_perf}`, passiveParticiple: `mi${f10b_perf}`, activeParticiple: '-', verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}` });
+    forms.push({
+        form: "Xb",
+        perfect: f10b_perf,
+        imperfect: `ji${f10b_perf}`,
+        passiveParticiple: `mi${f10b_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}`,
+    });
 
     return forms;
 }
 
-function generateTriliteralDefective(C1: string, C2: string, C3: string, pv1: string, pv2: string, ipv1: string, ipv2: string): GeneratedVerbForm[] {
+function generateTriliteralDefective(
+    C1: string,
+    C2: string,
+    C3: string,
+    pv1: string,
+    pv2: string,
+    ipv1: string,
+    ipv2: string,
+): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
     const f1_perf = `${C1}${pv1}${C2}${pv2}`;
     const f1_impf = `j${ipv1}${C1}${C2}${ipv2}`;
     const f1_pass = `m${ipv1}${C1}${C2}i`;
-    const f1_act = `${C1}${hasIorE(pv1) ? 'ie' : 'a'}${C2}i`;
+    const f1_act = `${C1}${hasIorE(pv1) ? "ie" : "a"}${C2}i`;
     const f1_vn = `${C1}${pv1}${C2}u`;
-    forms.push({ form: 'I', perfect: f1_perf, imperfect: f1_impf, passiveParticiple: f1_pass, activeParticiple: f1_act, verbalNoun: f1_vn });
+    forms.push({
+        form: "I",
+        perfect: f1_perf,
+        imperfect: f1_impf,
+        passiveParticiple: f1_pass,
+        activeParticiple: f1_act,
+        verbalNoun: f1_vn,
+    });
 
     const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}`;
     const f2_impf = `j${C1}${ipv1}${C2}${C2}${ipv2}`;
     const f2_pass = `m${C1}${ipv1}${C2}${C2}${ipv2}`;
     const f2_act = `${C1}${pv1}${C2}${C2}ej`;
-    const b2 = isGuttural(C1) || (pv1 === 'a' && pv2 === 'a') ? 'a' : 'i';
+    const b2 = isGuttural(C1) ? "a" : "i";
     const f2_vn = `t${b2}${C1}${C2}ija`;
-    forms.push({ form: 'II', perfect: f2_perf, imperfect: f2_impf, passiveParticiple: f2_pass, activeParticiple: f2_act, verbalNoun: f2_vn });
+    forms.push({
+        form: "II",
+        perfect: f2_perf,
+        imperfect: f2_impf,
+        passiveParticiple: f2_pass,
+        activeParticiple: f2_act,
+        verbalNoun: f2_vn,
+    });
 
-    const c1 = hasIorE(pv1) ? 'ie' : 'a';
+    const c1 = hasIorE(pv1) ? "ie" : "a";
     const f3_perf = `${C1}${c1}${C2}${pv2}`;
     const f3_impf = `j${C1}${c1}${C2}${pv2}`;
     const f3_pass = `m${C1}${c1}${C2}i`;
-    forms.push({ form: 'III', perfect: f3_perf, imperfect: f3_impf, passiveParticiple: f3_pass, activeParticiple: '-', verbalNoun: '-' });
+    forms.push({
+        form: "III",
+        perfect: f3_perf,
+        imperfect: f3_impf,
+        passiveParticiple: f3_pass,
+        activeParticiple: "-",
+        verbalNoun: "-",
+    });
 
     const f4_perf = `${ipv1}${C1}${C2}${ipv2}`;
     const f4_impf = `jo${C1}${C2}i`;
     const f4_act = `mo${C1}${C2}i`;
-    const h2 = (pv1 === 'a' && pv2 === 'a') ? 'a' : 'ie';
+    const h2 = pv1 === "a" && pv2 === "a" ? "a" : "ie";
     const f4_vn = `(i)${C1}${C2}${h2}ja`;
-    forms.push({ form: 'IV', perfect: f4_perf, imperfect: f4_impf, passiveParticiple: '-', activeParticiple: f4_act, verbalNoun: f4_vn });
+    forms.push({
+        form: "IV",
+        perfect: f4_perf,
+        imperfect: f4_impf,
+        passiveParticiple: "-",
+        activeParticiple: f4_act,
+        verbalNoun: f4_vn,
+    });
 
     const f5_perf = `t${C1}${pv1}${C2}${C2}${pv2}`;
-    forms.push({ form: 'V', perfect: f5_perf, imperfect: `ji${f5_perf}`, passiveParticiple: `mi${f5_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}a`.replace(/undefined/g, '') });
+    forms.push({
+        form: "V",
+        perfect: f5_perf,
+        imperfect: `ji${f5_perf}`,
+        passiveParticiple: `mi${f5_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}a`.replace(/undefined/g, ""),
+    });
 
     const f6_perf = `t${f3_perf}`;
-    const e1 = ['i', 'e'].includes(pv1) ? 'e' : 'a';
-    forms.push({ form: 'VI', perfect: f6_perf, imperfect: `ji${f6_perf}`, passiveParticiple: `mi${f6_perf}`, activeParticiple: '-', verbalNoun: `t${C1}${e1}${C2}i${C3}a`.replace(/undefined/g, '') });
+    const e1 = ["i", "e"].includes(pv1) ? "e" : "a";
+    forms.push({
+        form: "VI",
+        perfect: f6_perf,
+        imperfect: `ji${f6_perf}`,
+        passiveParticiple: `mi${f6_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `t${C1}${e1}${C2}i${C3}a`.replace(/undefined/g, ""),
+    });
 
     const f7_perf = `n${f1_perf}`;
-    forms.push({ form: 'VII', perfect: f7_perf, imperfect: `ji${f7_perf}`, passiveParticiple: `mi${f7_perf}`, activeParticiple: '-', verbalNoun: '-' });
+    forms.push({
+        form: "VII",
+        perfect: f7_perf,
+        imperfect: `ji${f7_perf}`,
+        passiveParticiple: `mi${f7_perf}`,
+        activeParticiple: `n${C1}${C2}i${C3}`,
+        verbalNoun: `n${f1_vn}`,
+    });
 
     const f8_perf = `${C1}t${pv1}${C2}${pv2}`;
-    forms.push({ form: 'VIII', perfect: f8_perf, imperfect: `ji${f8_perf}`, passiveParticiple: `mi${f8_perf}`, activeParticiple: '-', verbalNoun: `${C1}t${pv1}${C2}${pv2}` });
+    forms.push({
+        form: "VIII",
+        perfect: f8_perf,
+        imperfect: `ji${f8_perf}`,
+        passiveParticiple: `mi${f8_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `${C1}t${pv1}${C2}${pv2}`,
+    });
 
     const f9_perf = `${C1}${C2}${c1}`;
-    forms.push({ form: 'IX', perfect: f9_perf, imperfect: `ji${f9_perf}`, passiveParticiple: `mu${f9_perf}`, activeParticiple: '-', verbalNoun: f9_perf });
+    forms.push({
+        form: "IX",
+        perfect: f9_perf,
+        imperfect: `ji${f9_perf}`,
+        passiveParticiple: `mu${f9_perf}`,
+        activeParticiple: "-",
+        verbalNoun: f9_perf,
+    });
 
     const f10a_perf = `st${pv1}${C1}${C2}${pv2}`;
-    forms.push({ form: 'Xa', perfect: f10a_perf, imperfect: `ji${f10a_perf}`, passiveParticiple: `mi${f10a_perf}`, activeParticiple: '-', verbalNoun: `st${pv1}${C1}${C2}ija` });
+    forms.push({
+        form: "Xa",
+        perfect: f10a_perf,
+        imperfect: `ji${f10a_perf}`,
+        passiveParticiple: `mi${f10a_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `st${pv1}${C1}${C2}ija`,
+    });
 
     const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}`;
-    forms.push({ form: 'Xb', perfect: f10b_perf, imperfect: `ji${f10b_perf}`, passiveParticiple: `mi${f10b_perf}`, activeParticiple: '-', verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}a`.replace(/undefined/g, '') });
+    forms.push({
+        form: "Xb",
+        perfect: f10b_perf,
+        imperfect: `ji${f10b_perf}`,
+        passiveParticiple: `mi${f10b_perf}`,
+        activeParticiple: "-",
+        verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}a`.replace(/undefined/g, ""),
+    });
 
     return forms;
 }
@@ -2692,32 +2997,37 @@ export function generateRootForms(
     consonants: string,
     pvSet: string,
     ipvSet: string,
-    strength: VerbStrength = 'strong',
-    weakClass?: WeakClass
+    strengthStr: string = "strong",
+    weakClassStr?: string,
 ): GeneratedVerbForm[] {
-    const arr = consonants.includes('-') ? consonants.split('-') : consonants.split('');
-    const C1 = arr[0] || '';
-    const C2 = arr[1] || '';
-    const C3 = arr[2] || '';
-    const [pv1 = 'a', pv2 = 'a'] = pvSet.split('-');
-    const [ipv1 = 'i', ipv2 = 'a'] = ipvSet.split('-');
+    const arr = consonants.includes("-")
+        ? consonants.split("-")
+        : consonants.split("");
+    const C1 = arr[0] || "";
+    const C2 = arr[1] || "";
+    const C3 = arr[2] || "";
+    const [pv1 = "a", pv2 = "a"] = pvSet.split("-");
+    const [ipv1 = "i", ipv2 = "a"] = ipvSet.split("-");
 
-    if (strength === 'weak' && weakClass === 'defective') {
+    const strength = strengthStr.toLowerCase();
+    const weakClass = weakClassStr?.toLowerCase();
+
+    if (strength === "weak" && weakClass === "defective") {
         return generateTriliteralDefective(C1, C2, C3, pv1, pv2, ipv1, ipv2);
     }
-    if (strength === 'weak' && weakClass === 'hollow') {
+    if (strength === "weak" && weakClass === "hollow") {
         return generateTriliteralHollow(C1, C2, C3, pv1, pv2, ipv1, ipv2);
     }
-    if (strength === 'weak' && weakClass === 'assimilative') {
+    if (strength === "weak" && weakClass === "assimilative") {
         return generateTriliteralAssimilative(C1, C2, C3, pv1, pv2, ipv1, ipv2);
     }
-    if (strength === 'geminated') {
+    if (strength === "geminated") {
         return generateTriliteralGeminated(C1, C2, C3, pv1, pv2, ipv1, ipv2);
     }
     return generateTriliteralStrong(C1, C2, C3, pv1, pv2, ipv1, ipv2);
 }
 
-export type FormMarker = 'plain' | 'theoretical' | 'auto_generated';
+export type FormMarker = "plain" | "theoretical" | "auto_generated";
 
 export interface MarkedVerbForm {
     form: GenerativeVerbFormType;
@@ -2732,85 +3042,112 @@ export interface AttestedEntry {
     word: string;
     id?: string;
     form: string;
-    type: 'lemma' | 'passive' | 'active' | 'noun';
+    type: "lemma" | "passive" | "active" | "noun";
 }
 
 export function markGeneratedForms(
     generated: GeneratedVerbForm[],
-    attested: AttestedEntry[]
+    attested: AttestedEntry[],
 ): MarkedVerbForm[] {
     const attestedRows = new Set<GenerativeVerbFormType>();
 
     // First pass to find what is attested
-    const attestedG = generated.map(g => {
-        const isLemmaAttested = attested.some(a => a.word === g.perfect && a.form === g.form && a.type === 'lemma');
-        const isPassiveAttested = attested.some(a => a.word === g.passiveParticiple && a.form === g.form && a.type === 'passive');
-        const isActiveAttested = attested.some(a => a.word === g.activeParticiple && a.form === g.form && a.type === 'active');
-        const isVNAttested = attested.some(a => a.word === g.verbalNoun && a.form === g.form && a.type === 'noun');
+    const attestedG = generated.map((g) => {
+        const isLemmaAttested = attested.some(
+            (a) => a.word === g.perfect && a.form === g.form && a.type === "lemma",
+        );
+        const isPassiveAttested = attested.some(
+            (a) =>
+                a.word === g.passiveParticiple &&
+                a.form === g.form &&
+                a.type === "passive",
+        );
+        const isActiveAttested = attested.some(
+            (a) =>
+                a.word === g.activeParticiple &&
+                a.form === g.form &&
+                a.type === "active",
+        );
+        const isVNAttested = attested.some(
+            (a) => a.word === g.verbalNoun && a.form === g.form && a.type === "noun",
+        );
 
-        const anyAttested = isLemmaAttested || isPassiveAttested || isActiveAttested || isVNAttested;
+        const anyAttested =
+            isLemmaAttested || isPassiveAttested || isActiveAttested || isVNAttested;
         if (anyAttested) attestedRows.add(g.form);
-        return { form: g.form, isLemmaAttested, isPassiveAttested, isActiveAttested, isVNAttested, anyAttested };
+        return {
+            form: g.form,
+            isLemmaAttested,
+            isPassiveAttested,
+            isActiveAttested,
+            isVNAttested,
+            anyAttested,
+        };
     });
 
     const reconstructableForms = new Set<GenerativeVerbFormType>();
 
     // Dependency Logic:
     // If F1 exists -> F7 is probably reconstructable
-    if (attestedRows.has('I')) reconstructableForms.add('VII');
+    if (attestedRows.has("I")) reconstructableForms.add("VII");
     // If F2 exists -> F5
-    if (attestedRows.has('II')) reconstructableForms.add('V');
+    if (attestedRows.has("II")) reconstructableForms.add("V");
     // If F3 exists -> F6
-    if (attestedRows.has('III')) reconstructableForms.add('VI');
+    if (attestedRows.has("III")) reconstructableForms.add("VI");
 
     // F8 -> F1
-    if (attestedRows.has('VIII')) reconstructableForms.add('I');
+    if (attestedRows.has("VIII")) reconstructableForms.add("I");
 
     // NOTE: IV, IX, Xa, Xb are independent as requested.
 
     return generated.map((g) => {
-        const ag = attestedG.find(x => x.form === g.form)!;
+        const ag = attestedG.find((x) => x.form === g.form)!;
 
         // Row is theoretical if:
         // 1. Any part of the row is attested
         // 2. OR this form is reconstructable from another attested form
         let rowTheoretical = false;
         if (ag.anyAttested) rowTheoretical = true;
-        if (!ag.anyAttested && reconstructableForms.has(g.form)) rowTheoretical = true;
+        if (!ag.anyAttested && reconstructableForms.has(g.form))
+            rowTheoretical = true;
 
         const applyMarker = (
             generatedVal: string,
-            formType: 'lemma' | 'passive' | 'active' | 'noun',
-            isImperfect: boolean = false
+            formType: "lemma" | "passive" | "active" | "noun",
+            isImperfect: boolean = false,
         ): { value: string; marker: FormMarker; entryId?: string } => {
-            if (generatedVal === '-') return { value: generatedVal, marker: 'plain' };
+            if (generatedVal === "-") return { value: generatedVal, marker: "plain" };
 
             // The imperfect will always exist if the lemma exists.
             // We use the generated value for the imperfect column, but still want to link it to the lemma entry if it exists.
             if (isImperfect && ag.isLemmaAttested) {
-                const lemmaAtt = attested.find(a => a.form === g.form && a.type === 'lemma');
-                return { value: generatedVal, marker: 'plain', entryId: lemmaAtt?.id };
+                const lemmaAtt = attested.find(
+                    (a) => a.form === g.form && a.type === "lemma",
+                );
+                return { value: generatedVal, marker: "plain", entryId: lemmaAtt?.id };
             }
 
             // Find the actual attested entry for this form and type
-            const att = attested.find(a => a.form === g.form && a.type === formType);
+            const att = attested.find(
+                (a) => a.form === g.form && a.type === formType,
+            );
 
             // If we have an exact match OR a form match, mark as plain and use the attested word/ID
             if (att) {
-                return { value: att.word, marker: 'plain', entryId: att.id };
+                return { value: att.word, marker: "plain", entryId: att.id };
             }
 
-            if (rowTheoretical) return { value: generatedVal, marker: 'theoretical' };
-            return { value: generatedVal, marker: 'auto_generated' };
+            if (rowTheoretical) return { value: generatedVal, marker: "theoretical" };
+            return { value: generatedVal, marker: "auto_generated" };
         };
 
         return {
             form: g.form,
-            perfect: applyMarker(g.perfect, 'lemma'),
-            imperfect: applyMarker(g.imperfect, 'lemma', true), // Uses same ID as lemma
-            passiveParticiple: applyMarker(g.passiveParticiple, 'passive'),
-            activeParticiple: applyMarker(g.activeParticiple, 'active'),
-            verbalNoun: applyMarker(g.verbalNoun, 'noun'),
+            perfect: applyMarker(g.perfect, "lemma"),
+            imperfect: applyMarker(g.imperfect, "lemma", true), // Uses same ID as lemma
+            passiveParticiple: applyMarker(g.passiveParticiple, "passive"),
+            activeParticiple: applyMarker(g.activeParticiple, "active"),
+            verbalNoun: applyMarker(g.verbalNoun, "noun"),
         };
     });
 }

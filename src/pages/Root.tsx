@@ -1,6 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { generateRootForms, markGeneratedForms, type MarkedVerbForm, type AttestedEntry } from '@/lib/conjugationEngine';
 import { useAuth } from '@/contexts/AuthContext';
@@ -57,7 +56,7 @@ function MarkedCell({
     onDelete?: () => void;
     noLink?: boolean;
 }) {
-    const { t } = useLanguage();
+    const { term } = useLinguisticMode();
     if (data.value === '-') return <span className="opacity-40">-</span>;
 
     const content = (data.marker === 'plain' && !noLink) ? (
@@ -78,7 +77,7 @@ function MarkedCell({
                     <button
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit(); }}
                         className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
-                        title={data.marker === 'plain' ? t('Edit Entry', 'Editja l-Entrata') : t('Add Entry', 'Żid l-Entrata')}
+                        title={data.marker === 'plain' ? term('edit-entry') : term('add-entry')}
                     >
                         {data.marker === 'plain' ? <Edit2 size={12} /> : <Plus size={12} />}
                     </button>
@@ -86,7 +85,7 @@ function MarkedCell({
                         <button
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
                             className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                            title={t('Delete Entry', 'Ħassar l-Entrata')}
+                            title={term('delete-entry')}
                         >
                             <Trash2 size={12} />
                         </button>
@@ -99,7 +98,6 @@ function MarkedCell({
 
 export function Root() {
     const { id } = useParams<{ id: string }>();
-    const { t } = useLanguage();
     const { mode, term } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
@@ -115,7 +113,20 @@ export function Root() {
 
     const isActualAdmin = isAdmin && adminViewEnabled;
 
+    const bgStyle = {
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        minHeight: '100vh',
+    };
+
     const { root: dbRoot, entries: apiEntries, loading, normalized, refetch } = useRootData(id);
+
+    useEffect(() => {
+        if (dbRoot) {
+            document.title = `${dbRoot.consonants} | Il-Miġma'`;
+        } else {
+            document.title = "Il-Miġma'";
+        }
+    }, [dbRoot]);
 
     // Use entries from hook (removed MOCK_ENTRIES filter)
     const rootEntries = apiEntries;
@@ -241,9 +252,7 @@ export function Root() {
                 seenIds.add(e.id);
                 terms.push({
                     term: e.headword,
-                    class: (e.pos === 'noun' ? t('Noun', 'Nom') :
-                        (e.pos === 'verb' ? t('Verb', 'Verb') :
-                            (e.pos === 'adjective' ? t('Adjective', 'Aġġettiv') : (e.pos.charAt(0).toUpperCase() + e.pos.slice(1))))),
+                    class: term(e.pos || 'derived'),
                     cv: getPattern(e),
                     id: e.id,
                     gloss: mode === 'standard'
@@ -259,8 +268,7 @@ export function Root() {
                         seenIds.add(sub.id);
                         terms.push({
                             term: sub.headword,
-                            class: sub.pos ? (sub.pos === 'noun' ? t('Noun', 'Nom') :
-                                (sub.pos === 'adjective' ? t('Adjective', 'Aġġettiv') : (sub.pos.charAt(0).toUpperCase() + sub.pos.slice(1)))) : t('Derived', 'Derivat'),
+                            class: term(sub.pos || 'derived'),
                             cv: getPattern(sub),
                             id: sub.id,
                             gloss: mode === 'standard'
@@ -281,7 +289,7 @@ export function Root() {
                     seenIds.add(re.id);
                     terms.push({
                         term: re.headword,
-                        class: re.pos ? (re.pos.charAt(0).toUpperCase() + re.pos.toLowerCase().slice(1)) : 'Related',
+                        class: term(re.pos || 'related'),
                         cv: mode === 'standard' ? (re.cv_pattern || re.wizen_pattern || '-') : (re.wizen_pattern || re.cv_pattern || '-'),
                         id: re.id,
                         gloss: mode === 'standard' ? (re.gloss_en || '') : (re.gloss_mt || re.gloss_en || '')
@@ -294,19 +302,19 @@ export function Root() {
     }, [rootEntries, shownIds, rootRelationships.related_entries, mode]);
 
     const handleDeleteEntry = async (entryId: string) => {
-        if (!confirm(t('Are you sure you want to delete this entry permanently?', 'Żgur li trid tħassar din l-entrata b\'mod permanenti?'))) return;
+        if (!confirm(term('confirm-delete-entry'))) return;
         try {
             const token = await getToken();
             if (!token) throw new Error('Not authenticated');
             await adminDeleteEntry(token, entryId);
             refetch();
         } catch (err: any) {
-            alert(t("Failed to delete entry: ", "Il-ħassir tal-entrata falla: ") + err.message);
+            alert(term('failed-delete-entry') + err.message);
         }
     };
 
     const handleDeleteRootRelationship = async (type: 'synonyms' | 'antonyms' | 'related_entries', targetId: string) => {
-        if (!confirm(t('Are you sure you want to unlink this relationship?', 'Żgur li trid tneħħi din ir-relazzjoni?'))) return;
+        if (!confirm(term('confirm-unlink'))) return;
         try {
             const token = await getToken();
             if (!token || !rootObj) return;
@@ -319,7 +327,7 @@ export function Root() {
             });
             refetch();
         } catch (err: any) {
-            alert(t("Failed to update relationship: ", "L-aġġornament tar-relazzjoni falla: ") + err.message);
+            alert(term('failed-update-rel') + err.message);
         }
     };
 
@@ -335,37 +343,64 @@ export function Root() {
 
     if (!rootObj) {
         return (
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 text-black">
-                <div className="flex items-center gap-2 mb-4">
-                    <Link to="/root-search" className="text-sm text-black/40 hover:text-black flex items-center gap-1">
-                        <ArrowLeft size={16} /> {t('Back to Root Search', "Irġa' Lura lejn it-Tiftix tal-Għerq")}
+            <div style={bgStyle} className="flex flex-col items-center justify-center px-4 text-center min-h-[60vh]">
+                <div className="flex items-center gap-2 mb-8">
+                    <Link to="/root-search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-root-search')}
                     </Link>
                 </div>
-                <p className="text-sm text-black/40 italic">{t('Root not found in database.', 'Il-mamma ma nstabitx fid-database.')}</p>
+
+                <div className="bg-white/50 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm p-10 max-w-lg w-full">
+                    <h2 className="font-serif text-2xl font-bold text-[#000] mb-3">
+                        {term('root-not-found')}
+                    </h2>
+                    <p className="text-[#4a4a4a] text-sm mb-8 leading-relaxed">
+                        {term('root-not-found-desc').replace('{id}', id || '')}
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                        <Link
+                            to={`/suggest?type=root&q=${id}`}
+                            className="w-full sm:w-auto bg-[#1034A6] text-white text-sm font-sans font-medium px-6 py-2.5 rounded-lg hover:bg-[#0c268c] transition-colors shadow-lg shadow-[#1034A6]/20"
+                        >
+                            {term('suggest-adding-root')}
+                        </Link>
+                        <Link
+                            to="/root-search"
+                            className="w-full sm:w-auto bg-white text-[#000] text-sm font-sans font-medium px-6 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
+                        >
+                            {term('search-another-root')}
+                        </Link>
+                    </div>
+                </div>
             </div>
         );
     }
 
-    const strengthLabel = rootObj.strength === 'strong-hybrid' ? 'STRONG' : rootObj.strength.toUpperCase();
+    const strengthRaw = rootObj.strength || 'strong';
+    const strengthLabel = term(strengthRaw === 'strong-hybrid' ? 'strong-hybrid' : strengthRaw).toUpperCase();
+    const weakClassLabel = rootObj.weak_class ? term(rootObj.weak_class).toUpperCase() : null;
+
     const rootTypeParts = [
-        'TRILITTERAL', // Assuming all are triliteral for now or derived from consonants length
+        term('triliteral').toUpperCase(),
         (rootObj.strength !== 'geminated' ? strengthLabel : null),
-        rootObj?.weak_class?.toUpperCase() || null,
-        rootObj.strength === 'geminated' ? 'GEMINATED' : null,
-        ...tags.map((tag: string) => tag.toUpperCase()),
+        weakClassLabel,
+        rootObj.strength === 'geminated' ? term('geminated').toUpperCase() : null,
+        ...tags.map((tag: string) => term(tag).toUpperCase()),
     ].filter(Boolean).join(' • ');
 
 
 
 
-    const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
-        minHeight: '100vh',
-    };
 
     return (
         <div style={bgStyle}>
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 pb-10">
+                <div className="flex items-center gap-2 mb-8">
+                    <Link to="/root-search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-root-search')}
+                    </Link>
+                </div>
                 {/* Header */}
                 <div className="text-center mb-12 relative group max-w-fit mx-auto">
                     <div className="relative inline-flex items-center justify-center">
@@ -374,7 +409,7 @@ export function Root() {
                             <button
                                 onClick={() => setShowRootForm(true)}
                                 className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
-                                title="Edit Root Metadata"
+                                title={term('edit-root-metadata')}
                             >
                                 <Edit2 size={16} />
                             </button>
@@ -389,7 +424,7 @@ export function Root() {
                 <div className="flex gap-10 items-start">
                     {/* Left Sidebar */}
                     <div className="w-64 shrink-0 space-y-4">
-                        <SideCard title={t('Gloss', term('Tifsira'))}>
+                        <SideCard title={term('gloss')}>
                             {glossList.length === 1 ? (
                                 <p className="text-sm text-[#000]">{glossList[0]}</p>
                             ) : (
@@ -402,7 +437,7 @@ export function Root() {
                         </SideCard>
 
                         {parsedEtymology && (parsedEtymology.term || parsedEtymology.definition) && (
-                            <SideCard title={t('Etymology', term('Etimoloġija'))}>
+                            <SideCard title={term('etymology')}>
                                 <p className="text-sm text-[#000] leading-relaxed flex flex-wrap items-center gap-1.5">
                                     {parsedEtymology.relationship && <span>{parsedEtymology.relationship}</span>}
                                     {parsedEtymology.language && (
@@ -418,7 +453,7 @@ export function Root() {
                         )}
 
                         {sourceText && (
-                            <SideCard title={t('Source', term('sors'))}>
+                            <SideCard title={term('sors')}>
                                 <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceText}</span>
                             </SideCard>
                         )}
@@ -436,13 +471,13 @@ export function Root() {
                         {isActualAdmin && (
                             <div className="mt-8 pt-8 border-t border-black/5 space-y-4">
                                 <div>
-                                    <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{t('Internal Metadata', 'Metadata Interna')}</p>
+                                    <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
                                     <div className="text-[11px] font-mono space-y-1 text-black/50">
-                                        <p>{t('Strength', 'Saħħa')}: {rootObj.strength}</p>
-                                        {rootObj.weak_class && <p>{t('Weak Class', 'Klassi Dgħajfa')}: {rootObj.weak_class}</p>}
-                                        <p>{t('Vow. Perf', 'Vow. Perf')}: {rootObj.vowel_set_perf || 'a-a'}</p>
-                                        <p>{t('Vow. Impf', 'Vow. Impf')}: {rootObj.vowel_set_impf || 'i-a'}</p>
-                                        <p>{t('Vow. Imp', 'Vow. Imp')}: {rootObj.vowel_set_imp || 'o-o'}</p>
+                                        <p>{term('strength')}: {rootObj.strength}</p>
+                                        {rootObj.weak_class && <p>{term('weak-class')}: {rootObj.weak_class}</p>}
+                                        <p>{term('vowel_set_perfect')}: {rootObj.vowel_set_perf || 'a-a'}</p>
+                                        <p>{term('vowel_set_imperfect')}: {rootObj.vowel_set_impf || 'i-a'}</p>
+                                        <p>{term('vowel_set_imperative')}: {rootObj.vowel_set_imp || 'o-o'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -454,16 +489,16 @@ export function Root() {
 
                         {/* Verbal Forms Table */}
                         <div className="mb-12">
-                            <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{t('Verbal Forms', 'Forom Verbali')}</h2>
+                            <h2 className="font-sans font-semibold text-[1.1rem] text-[#000] mb-3">{term('verbal forms')}</h2>
                             <table className="w-full text-sm border-collapse text-left">
                                 <thead>
                                     <tr className="border-b border-black/8 font-sans text-black/80">
-                                        <th className="font-semibold pb-2 pr-4 w-12">{t('Form', 'Sura')}</th>
-                                        <th className="font-semibold pb-2 pr-4">{t('Lemma', 'Lemma')}</th>
-                                        <th className="font-semibold pb-2 pr-4">{t('Imperfect', 'Imperfett')}</th>
-                                        <th className="font-semibold pb-2 pr-4">{t('Passive', 'Passiv')}</th>
-                                        <th className="font-semibold pb-2 pr-4">{t('Active', 'Attiv')}</th>
-                                        <th className="font-semibold pb-2">{t('Noun', 'Nom')}</th>
+                                        <th className="font-semibold pb-2 pr-4 w-12">{term('forma')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{term('lemma')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{term('imperfett')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{term('passive')}</th>
+                                        <th className="font-semibold pb-2 pr-4">{term('active')}</th>
+                                        <th className="font-semibold pb-2">{term('nom')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -596,7 +631,7 @@ export function Root() {
                         {(derivedTerms.length > 0 || isActualAdmin) && (
                             <div>
                                 <div className="flex items-center gap-3 mb-4">
-                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{t('Derived Terms', 'Termini Derivati')}</h2>
+                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{term('termini derivati')}</h2>
                                     {isActualAdmin && (
                                         <button
                                             onClick={() => {
@@ -616,26 +651,29 @@ export function Root() {
                                 <table className="w-full text-sm border-collapse text-left">
                                     <thead>
                                         <tr className="border-b border-black/8 font-sans text-black/80">
-                                            <th className="font-semibold pb-2 pr-4">{t('Term', 'Terminu')}</th>
-                                            <th className="font-semibold pb-2 pr-4">{t('Class', 'Klassi')}</th>
-                                            <th className="font-semibold pb-2">{term('cv-pattern')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{term('term')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{term('class')}</th>
+                                            <th className="font-semibold pb-2">
+                                                {term('cv-pattern')}
+                                                {rootObj.strength === 'geminated' && <span> • {term('trux').toUpperCase()}</span>}
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {derivedTerms.map((t, idx) => (
+                                        {derivedTerms.map((termObj, idx) => (
                                             <tr key={idx} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] group transition-colors">
                                                 <td className="py-1.5 pr-4 font-serif">
                                                     <div className="flex items-center gap-2">
-                                                        <Link to={`/entry/${t.id}`} style={{ color: BLUE }} className="hover:underline">{t.term}</Link>
+                                                        <Link to={`/entry/${termObj.id}`} style={{ color: BLUE }} className="hover:underline">{termObj.term}</Link>
                                                         <span className="text-black/55 italic">
-                                                            {t.gloss}
+                                                            {termObj.gloss}
                                                         </span>
                                                         {isActualAdmin && (
                                                             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                                                 <button
                                                                     onClick={(e) => {
                                                                         e.preventDefault();
-                                                                        const existing = rootEntries.find(re => re.id === t.id);
+                                                                        const existing = rootEntries.find(re => re.id === termObj.id);
                                                                         if (existing) {
                                                                             setEditEntry({
                                                                                 id: existing.id,
@@ -649,14 +687,14 @@ export function Root() {
                                                                         }
                                                                     }}
                                                                     className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
-                                                                    title="Edit Entry"
+                                                                    title={term('edit-entry')}
                                                                 >
                                                                     <Edit2 size={12} />
                                                                 </button>
                                                                 <button
-                                                                    onClick={(e) => { e.preventDefault(); handleDeleteEntry(t.id); }}
+                                                                    onClick={(e) => { e.preventDefault(); handleDeleteEntry(termObj.id); }}
                                                                     className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                                                                    title="Delete Entry"
+                                                                    title={term('delete-entry')}
                                                                 >
                                                                     <Trash2 size={12} />
                                                                 </button>
@@ -664,8 +702,8 @@ export function Root() {
                                                         )}
                                                     </div>
                                                 </td>
-                                                <td className="py-1.5 pr-4 font-sans text-black/70">{t.class}</td>
-                                                <td className="py-1.5 font-sans" style={{ color: BLUE }}>{t.cv}</td>
+                                                <td className="py-1.5 pr-4 font-sans text-black/70">{termObj.class}</td>
+                                                <td className="py-1.5 font-sans" style={{ color: BLUE }}>{termObj.cv}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -677,7 +715,7 @@ export function Root() {
                         {((vm?.synonyms?.length ?? 0) > 0 || (vm?.antonyms?.length ?? 0) > 0 || (rootRelationships.synonyms?.length ?? 0) > 0 || (rootRelationships.antonyms?.length ?? 0) > 0 || isActualAdmin) && (
                             <div className="border-t border-black/10 pt-6">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{t('Thesaurus', 'Teżawru')}</h2>
+                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{term('tesawru')}</h2>
                                     {isActualAdmin && (
                                         <button
                                             onClick={() => {
@@ -697,7 +735,7 @@ export function Root() {
                                 <div className="flex gap-16 text-sm">
                                     {((vm?.synonyms && vm.synonyms.length > 0) || (rootRelationships.synonyms?.length > 0)) && (
                                         <div>
-                                            <p className="font-semibold text-[#000] mb-1">{t('Synonyms', 'Sinonimi')}</p>
+                                            <p className="font-semibold text-[#000] mb-1">{term('sinonimi')}</p>
                                             {[...(vm?.synonyms || []), ...(rootRelationships.synonyms || [])].map((s, idx) => (
                                                 <div key={s.id || idx} className="mb-1 flex items-center gap-2 group">
                                                     <Link
@@ -725,7 +763,7 @@ export function Root() {
                                     )}
                                     {((vm?.antonyms && vm.antonyms.length > 0) || (rootRelationships.antonyms?.length > 0)) && (
                                         <div>
-                                            <p className="font-semibold text-[#000] mb-1">{t('Antonyms', 'Antonimi')}</p>
+                                            <p className="font-semibold text-[#000] mb-1">{term('antonimi')}</p>
                                             {[...(vm?.antonyms || []), ...(rootRelationships.antonyms || [])].map((a, idx) => (
                                                 <div key={a.id || idx} className="mb-1 flex items-center gap-2 group">
                                                     <Link
@@ -763,26 +801,26 @@ export function Root() {
                 <Modal
                     open
                     onClose={() => setActiveRelEdit(null)}
-                    title={activeRelEdit === 'derived' ? t('Manage Derived Terms', 'Ġestjoni tat-Termini Derivati') : t('Manage Thesaurus', 'Ġestjoni tat-Teżawru')}
+                    title={activeRelEdit === 'derived' ? term('manage-derived') : term('manage-thesaurus')}
                     size="lg"
                 >
                     <div className="space-y-5 overflow-y-auto flex-1">
                         <p className="text-xs text-black/40 leading-relaxed -mt-2">
                             {activeRelEdit === 'derived'
-                                ? t('Link derived entries to this root. Enter the entry ID and press Enter to resolve.', "Aġġanċja entrati derivati ma' dan l-għerq. Ikteb l-ID u agħfas Enter biex tikkonferma.")
-                                : t('Link synonym and antonym roots. Enter the root consonants and press Enter to resolve.', "Aġġanċja għeruq sinonimi u antonimi. Ikteb l-għerq u agħfas Enter biex tikkonferma.")
+                                ? term('link-derived-desc')
+                                : term('link-thesaurus-desc')
                             }
                         </p>
 
                         {activeRelEdit === 'derived' ? (
                             <RelationshipEditor
                                 type="derived"
-                                title={t('Derived Terms', 'Termini Derivati')}
+                                title={term('termini derivati')}
                                 items={relForm.related_entries}
                                 onChange={(items) => setRelForm(f => ({ ...f, related_entries: items }))}
                                 extraActions={[
                                     {
-                                        label: t('New Entry', 'Entrata Ġdida'),
+                                        label: term('new-entry'),
                                         icon: <Plus size={12} />,
                                         onClick: () => {
                                             setEditEntry(null);
@@ -797,12 +835,12 @@ export function Root() {
                                 <RelationshipEditor
                                     type="thesaurus"
                                     lookupType="root"
-                                    title={t('Synonyms', 'Sinonimi')}
+                                    title={term('sinonimi')}
                                     items={relForm.synonyms}
                                     onChange={(items) => setRelForm(f => ({ ...f, synonyms: items }))}
                                     extraActions={[
                                         {
-                                            label: t('New Root', 'Għerq Ġdid'),
+                                            label: term('new-root'),
                                             icon: <Plus size={12} />,
                                             onClick: () => setShowNewRootForm(true)
                                         }
@@ -811,12 +849,12 @@ export function Root() {
                                 <RelationshipEditor
                                     type="thesaurus"
                                     lookupType="root"
-                                    title={t('Antonyms', 'Antonimi')}
+                                    title={term('antonimi')}
                                     items={relForm.antonyms}
                                     onChange={(items) => setRelForm(f => ({ ...f, antonyms: items }))}
                                     extraActions={[
                                         {
-                                            label: t('New Root', 'Għerq Ġdid'),
+                                            label: term('new-root'),
                                             icon: <Plus size={12} />,
                                             onClick: () => setShowNewRootForm(true)
                                         }
@@ -832,7 +870,7 @@ export function Root() {
                             onClick={() => setActiveRelEdit(null)}
                             className="px-4 py-2 text-sm font-medium text-black/60 hover:bg-black/5 rounded-md transition-colors"
                         >
-                            {t('Cancel', 'Ikkanċella')}
+                            {term('cancel')}
                         </button>
                         <Button
                             loading={saving}
@@ -849,13 +887,13 @@ export function Root() {
                                     refetch();
                                     setActiveRelEdit(null);
                                 } catch (err: any) {
-                                    alert(t("Failed to save relationships: ", "L-isseyvjar tar-relazzjonijiet falla: ") + err.message);
+                                    alert(term('failed-save-rels') + err.message);
                                 } finally {
                                     setSaving(false);
                                 }
                             }}
                         >
-                            {t('Save Changes', 'Issevja l-Bidliet')}
+                            {term('save-changes')}
                         </Button>
                     </div>
                 </Modal>

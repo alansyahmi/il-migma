@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { TierGate } from '@/components/ui/TierGate';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -8,6 +9,11 @@ import { Sparkles, Wand2 } from 'lucide-react';
 
 
 export function IsSemmej() {
+    const { t } = useLanguage();
+
+    useEffect(() => {
+        document.title = `${t('Is-Semmej — Name Generator', 'Is-Semmej — Ġeneratur tal-Ismijiet')} | Il-Miġma'`;
+    }, [t]);
     const { hasAccess } = useAuth();
 
     if (!hasAccess('semmej')) {

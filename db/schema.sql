@@ -57,12 +57,8 @@ CREATE INDEX IF NOT EXISTS idx_rpf_pattern ON root_pattern_forms(pattern_id);
 CREATE TABLE IF NOT EXISTS entries (
   id                    TEXT PRIMARY KEY,
   headword              TEXT NOT NULL,
-  pos                   TEXT NOT NULL CHECK(pos IN (
-    'noun','verb','adjective','adverb','preposition',
-    'conjunction','particle','article','pronoun','interrogative',
-    'numeral','interjection','participle'
-  )),
-  participle_type       TEXT CHECK(participle_type IN ('active','passive')),
+  pos                   TEXT NOT NULL,
+  participle_type       TEXT,
   root_consonants       TEXT,
   cv_pattern            TEXT, -- e.g. "Fagħal" or "CCvC"
   verb_form             TEXT, -- 'I', 'II', 'III' etc
@@ -72,7 +68,7 @@ CREATE TABLE IF NOT EXISTS entries (
   tags                  TEXT,  -- JSON array
 
   -- Noun morphology
-  noun_gender           TEXT CHECK(noun_gender IN ('masculine','feminine','neutral')),
+  noun_gender           TEXT,
   noun_type             TEXT,
   noun_singular         TEXT,
   noun_plural_forms     TEXT,  -- JSON array (multiple broken plurals)
@@ -87,9 +83,9 @@ CREATE TABLE IF NOT EXISTS entries (
   noun_masculine        TEXT,
 
   -- Verb morphology
-  verb_class            TEXT CHECK(verb_class IN ('strong','weak','doubled','quadrilateral','loan')),
-  verb_weak_class       TEXT CHECK(verb_weak_class IN ('assimilative','hollow','defective')),
-  verb_transitivity     TEXT CHECK(verb_transitivity IN ('transitive','intransitive','both')),
+  verb_class            TEXT,
+  verb_weak_class       TEXT,
+  verb_transitivity     TEXT,
   verb_perfective_3sgm  TEXT,
   verb_imperfective_3sgm TEXT,
   verb_verbal_noun      TEXT,
@@ -128,8 +124,8 @@ CREATE TABLE IF NOT EXISTS definitions (
   sense_number  INTEGER NOT NULL DEFAULT 1,
   text_mt       TEXT NOT NULL,
   text_en       TEXT NOT NULL,
-  register      TEXT CHECK(register IN ('formal','informal','archaic','obsolete','technical','dialectal','colloquial')),
-  nuance        TEXT CHECK(nuance IN ('noun','adjective')),
+  register      TEXT,
+  nuance        TEXT,
   field         TEXT,  -- domain e.g. "Law", "Medicine"
   sort_order    INTEGER NOT NULL DEFAULT 0
 );
@@ -189,9 +185,7 @@ CREATE TABLE IF NOT EXISTS lexical_sources (
   author             TEXT,
   year               INTEGER,
   reliability_weight REAL NOT NULL CHECK(reliability_weight >= 0 AND reliability_weight <= 1),
-  source_type        TEXT NOT NULL CHECK(source_type IN (
-    'academic','official','peer_reviewed','crowdsourced','historical'
-  )),
+  source_type        TEXT NOT NULL,
   url                TEXT
 );
 
@@ -244,7 +238,7 @@ CREATE TABLE IF NOT EXISTS users (
   clerk_id        TEXT NOT NULL UNIQUE,
   email           TEXT NOT NULL UNIQUE,
   display_name    TEXT,
-  tier            TEXT NOT NULL DEFAULT 'basic' CHECK(tier IN ('basic','pro','enterprise')),
+  tier            TEXT NOT NULL DEFAULT 'basic',
   ads_disabled    INTEGER NOT NULL DEFAULT 0,
   audio_unlocked  INTEGER NOT NULL DEFAULT 0,
   created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
@@ -254,7 +248,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS subscriptions (
   id                        TEXT PRIMARY KEY,
   user_id                   TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  tier                      TEXT NOT NULL CHECK(tier IN ('pro','enterprise')),
+  tier                      TEXT NOT NULL,
   started_at                TEXT NOT NULL,
   expires_at                TEXT,
   stripe_subscription_id    TEXT UNIQUE,
@@ -291,7 +285,7 @@ CREATE TABLE IF NOT EXISTS suggested_entries (
   submitted_by_user_id  TEXT REFERENCES users(id) ON DELETE SET NULL,
   headword              TEXT NOT NULL,
   notes                 TEXT NOT NULL,
-  status                TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','approved','rejected')),
+  status                TEXT NOT NULL DEFAULT 'pending',
   vote_count            INTEGER NOT NULL DEFAULT 0,
   submitted_at          TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );

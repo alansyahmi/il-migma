@@ -5,10 +5,10 @@ import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { generateRootForms } from '@/lib/conjugationEngine';
 import type { WeakClass } from '@/types';
 import { useAdminConfig } from '@/lib/adminConfig';
-import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { RelationshipEditor } from './RelationshipEditor';
 import { buildEntryPayload, ENTRY_HANDLED_FIELDS } from '@/lib/adminSchema';
 import { Badge } from '@/components/ui/Badge';
@@ -28,6 +28,7 @@ export interface AdminEntry {
     text_en?: string;
     verb_vowel_perf?: string;
     verb_vowel_impf?: string;
+    verb_transitivity?: string;
     root_consonants?: string;
     verb_form?: string;
     tags?: string | string[];
@@ -84,6 +85,8 @@ const INITIAL_FORM_STATE = {
     cv_pattern: '',
     plural_pattern: '',
     sound_suffix: '',
+    _sound_suffix: '',
+    _adj_sound_suffix: '',
     adj_pattern: '',
     noun_feminine: '',
     noun_masculine: '',
@@ -191,23 +194,25 @@ function MorphologyPresetSelector({
 }
 
 export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm }: EntryFormModalProps) {
-    const { getValues } = useAdminConfig();
-    const { mode } = useLinguisticMode();
+    const { getValues, getOptions } = useAdminConfig();
+    const { mode, term } = useLinguisticMode();
+    const { language, t } = useLanguage();
 
     // Dynamic options from admin config
-    const POS_OPTIONS = getValues('pos');
-    const DIALECT_OPTIONS = getValues('dialect');
-    const GENDER_OPTIONS = getValues('gender');
-    const VERB_CLASS_OPTIONS = getValues('verb_class');
-    const REGISTER_OPTIONS = getValues('register');
-    const NOUN_TYPE_OPTIONS = getValues('noun_type');
+    const POS_OPTIONS = useMemo(() => getOptions('pos', mode, language), [getOptions, mode, language]);
+    const DIALECT_OPTIONS = useMemo(() => getOptions('dialect', mode, language), [getOptions, mode, language]);
+    const GENDER_OPTIONS = useMemo(() => getOptions('gender', mode, language), [getOptions, mode, language]);
+    const VERB_CLASS_OPTIONS = useMemo(() => getOptions('verb_class', mode, language), [getOptions, mode, language]);
+    const REGISTER_OPTIONS = useMemo(() => getOptions('register', mode, language), [getOptions, mode, language]);
+    const NOUN_TYPE_OPTIONS = useMemo(() => getOptions('noun_type', mode, language), [getOptions, mode, language]);
     const SOUND_SUFFIXES = getValues('sound_suffix');
     const VERB_PRESETS_LIST = getValues('verb_preset');
     const VERB_FORM_OPTIONS = getValues('verb_form');
     const CV_WIZEN_PATTERNS = getValues('cv_wizen_pattern');
     const BROKEN_PATTERNS = getValues('broken_pattern');
-    const PARTICIPLE_TYPES = ['active', 'passive'];
-    const PARTICIPLE_NUANCES = getValues('participle_nuance');
+    const PARTICIPLE_NUANCES = useMemo(() => getOptions('participle_nuance', mode, language), [getOptions, mode, language]);
+    const VERB_TRANSITIVITY_OPTIONS = useMemo(() => getOptions('verb_transitivity', mode, language), [getOptions, mode, language]);
+    const PARTICIPLE_TYPES = useMemo(() => getOptions('participle_type', mode, language), [getOptions, mode, language]);
 
 
 
@@ -241,7 +246,6 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     }, [VERB_PRESETS_LIST]);
 
     const isEdit = Boolean(entry);
-    const { t } = useLanguage();
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [isLoadingFull, setIsLoadingFull] = useState(isEdit);
@@ -754,7 +758,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         <div className="space-y-1.5 md:col-span-1">
                             <label className={label}>POS *</label>
                             <select className={sel} value={form.pos} onChange={e => set('pos', e.target.value)}>
-                                {POS_OPTIONS.map(p => <option key={p}>{p}</option>)}
+                                {POS_OPTIONS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
                             </select>
                         </div>
                         <div className="space-y-1.5 md:col-span-1">
@@ -831,10 +835,10 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     onSelect={(val) => set('cv_pattern', val)}
                                     options={[
                                         ...(verbCvSuggestion ? [{ label: t('Base Pattern', 'Mudell Bażi'), value: verbCvSuggestion.cv, sub: verbCvSuggestion.wizen }] : []),
-                                        { label: 'Perfect', value: VERB_PRESETS[form._formLabel]?.perfect?.cv, sub: VERB_PRESETS[form._formLabel]?.perfect?.wizen },
-                                        { label: 'Passive Participle', value: VERB_PRESETS[form._formLabel]?.passive?.cv, sub: VERB_PRESETS[form._formLabel]?.passive?.wizen },
-                                        { label: 'Active Participle', value: VERB_PRESETS[form._formLabel]?.active?.cv, sub: VERB_PRESETS[form._formLabel]?.active?.wizen },
-                                        { label: 'Verbal Noun', value: VERB_PRESETS[form._formLabel]?.verbal?.cv, sub: VERB_PRESETS[form._formLabel]?.verbal?.wizen },
+                                        { label: t('Perfect', 'Perfett'), value: VERB_PRESETS[form._formLabel]?.perfect?.cv, sub: VERB_PRESETS[form._formLabel]?.perfect?.wizen },
+                                        { label: t('Passive Participle', 'Partiċipju Passiv'), value: VERB_PRESETS[form._formLabel]?.passive?.cv, sub: VERB_PRESETS[form._formLabel]?.passive?.wizen },
+                                        { label: t('Active Participle', 'Partiċipju Attiv'), value: VERB_PRESETS[form._formLabel]?.active?.cv, sub: VERB_PRESETS[form._formLabel]?.active?.wizen },
+                                        { label: t('Verbal Noun', 'Nom Verb'), value: VERB_PRESETS[form._formLabel]?.verbal?.cv, sub: VERB_PRESETS[form._formLabel]?.verbal?.wizen },
                                     ].filter(o => o.value)}
                                 />
                             )}
@@ -883,13 +887,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         {form.phonetics.map((ph: any, i: number) => (
                             <div key={i} className="flex gap-2 items-end">
                                 <div className="flex-1 w-1/4">
-                                    {i === 0 && <label className={label}>{t('Dialect', 'Djalett')}</label>}
+                                    {i === 0 && <label className={label}>{term('dialect')}</label>}
                                     <select className={sel} value={ph.dialect} onChange={e => {
                                         const next = [...form.phonetics];
                                         next[i].dialect = e.target.value;
                                         set('phonetics', next);
                                     }}>
-                                        {DIALECT_OPTIONS.map(d => <option key={d}>{d}</option>)}
+                                        {DIALECT_OPTIONS.map(d => <option key={d.value} value={d.value}>{d.label}</option>)}
                                     </select>
                                 </div>
                                 <div className="flex-1 w-1/4">
@@ -919,13 +923,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     {/* Noun fields */}
                     {form.pos === 'noun' && (
                         <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-4">
-                            <legend className="text-xs font-semibold text-black px-2">{t('Noun', 'Nom')}</legend>
+                            <legend className="text-xs font-semibold text-black px-2">{term('noun')}</legend>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className={label}>{t('Gender', 'Ġeneru')}</label>
+                                    <label className={label}>{term('gender')}</label>
                                     <select className={sel} value={form.noun_gender} onChange={e => set('noun_gender', e.target.value)}>
                                         <option value="">—</option>
-                                        {GENDER_OPTIONS.map(g => <option key={g}>{g}</option>)}
+                                        {GENDER_OPTIONS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
                                     </select>
                                 </div>
                                 {form.noun_gender === 'masculine' && (
@@ -941,10 +945,10 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     </div>
                                 )}
                                 <div>
-                                    <label className={label}>{t('Noun Type', 'Tip ta\' Nom')}</label>
+                                    <label className={label}>{term('noun type')}</label>
                                     <select className={sel} value={form.noun_type} onChange={e => set('noun_type', e.target.value)}>
                                         <option value="">—</option>
-                                        {NOUN_TYPE_OPTIONS.map(t => <option key={t}>{t}</option>)}
+                                        {NOUN_TYPE_OPTIONS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                                     </select>
                                 </div>
                                 {/* Feminine Suggestion Banner */}
@@ -1063,15 +1067,17 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
                                                 <MorphologyPresetSelector
                                                     label={t('Suffix', 'Suffiss')}
-                                                    currentValue={form.sound_suffix}
+                                                    currentValue={form._sound_suffix || ''}
                                                     onSelect={(val) => {
-                                                        set('sound_suffix', val);
-                                                        // Always auto-fill: headword + suffix
+                                                        set('_sound_suffix', val);
                                                         if (form.headword) {
                                                             set('noun_sound_plural', form.headword + val);
                                                         }
                                                     }}
-                                                    options={SOUND_SUFFIXES.map(s => ({ label: `-${s}`, value: s }))}
+                                                    options={SOUND_SUFFIXES.map(s => ({
+                                                        label: s.startsWith('-') ? term(s) : `-${term(s)}`,
+                                                        value: s
+                                                    }))}
                                                 />
                                             </div>
                                         )}
@@ -1079,7 +1085,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 </div>
 
                                 <div className="col-span-2">
-                                    <label className={label}>{t('Dual', 'Imtenni')}</label>
+                                    <label className={label}>{term('dual')}</label>
                                     <div className="flex gap-1.5 mb-2">
                                         <button
                                             type="button"
@@ -1107,7 +1113,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     {/* Verb fields */}
                     {form.pos === 'verb' && (
                         <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-3">
-                            <legend className="text-xs font-semibold text-black px-2 text-black">{t('Verb', 'Verb')}</legend>
+                            <legend className="text-xs font-semibold text-black px-2 text-black">{term('verb')}</legend>
 
                             <div className="mb-4">
                                 <label className={label}>{t('Form (Stem)', 'Forma (Zokk)')}</label>
@@ -1143,7 +1149,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         }
                                     }}>
                                         <option value="">—</option>
-                                        {VERB_CLASS_OPTIONS.map(c => <option key={c}>{c}</option>)}
+                                        {VERB_CLASS_OPTIONS.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                                     </select>
                                     {autoFilledFields.has('verb_class') && (
                                         <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse">
@@ -1227,6 +1233,22 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         placeholder="e.g. i-a"
                                         onChange={e => set('verb_vowel_impv', e.target.value)} />
                                 </div>
+                                <div>
+                                    <label className={label}>{t('Transitivity', term('Tranżittività'))}</label>
+                                    <select className={sel} value={form.verb_transitivity} onChange={e => {
+                                        set('verb_transitivity', e.target.value);
+                                        if (autoFilledFields.has('verb_transitivity')) {
+                                            const next = new Set(autoFilledFields);
+                                            next.delete('verb_transitivity');
+                                            setAutoFilledFields(next);
+                                        }
+                                    }}>
+                                        <option value="">—</option>
+                                        {VERB_TRANSITIVITY_OPTIONS.map(opt => (
+                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
 
                             {conjugationPreview && (
@@ -1263,14 +1285,14 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     {/* Adjective fields */}
                     {form.pos === 'adjective' && (
                         <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-3">
-                            <legend className="text-xs font-semibold text-black px-2 text-black">{t('Adjective', 'Aġġettiv')}</legend>
+                            <legend className="text-xs font-semibold text-black px-2 text-black">{term('adjective')}</legend>
                             <div className="grid grid-cols-2 gap-3">
                                 {/* Gender — determines which field is auto-filled from headword */}
                                 <div>
-                                    <label className={label}>{t('Gender', 'Ġens')}</label>
+                                    <label className={label}>{term('gender')}</label>
                                     <select className={sel} value={form.adj_gender} onChange={e => set('adj_gender', e.target.value as 'masculine' | 'feminine' | '')}>
                                         <option value="">—</option>
-                                        {GENDER_OPTIONS.filter((g: string) => g !== 'neutral').map((g: string) => <option key={g}>{g}</option>)}
+                                        {GENDER_OPTIONS.filter(g => g.value !== 'neutral').map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
                                     </select>
                                 </div>
                                 {/* Comparative */}
@@ -1306,7 +1328,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 )}
                                 {/* Plural */}
                                 <div>
-                                    <label className={label}>{t('Plural', 'Plural')}</label>
+                                    <label className={label}>{term('plural')}</label>
                                     <input className={inp} value={form.adj_plural} onChange={e => set('adj_plural', e.target.value)} />
                                 </div>
                             </div>
@@ -1398,6 +1420,20 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                             }}
                                             options={SOUND_SUFFIXES.map(s => ({ label: `-${s}`, value: s }))}
                                         />
+                                        <MorphologyPresetSelector
+                                            label={t('Suffix', 'Suffiss')}
+                                            currentValue={form._adj_sound_suffix || ''}
+                                            onSelect={(val) => {
+                                                set('_adj_sound_suffix', val);
+                                                if (form.headword) {
+                                                    set('adj_sound_plural', form.headword + val);
+                                                }
+                                            }}
+                                            options={SOUND_SUFFIXES.map(s => ({
+                                                label: s.startsWith('-') ? term(s) : `-${term(s)}`,
+                                                value: s
+                                            }))}
+                                        />
                                     </div>
                                 )}
                             </div>
@@ -1416,7 +1452,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     </div>
                                     <select className={sel} value={form.participle_type} onChange={e => set('participle_type', e.target.value)}>
                                         <option value="">—</option>
-                                        {PARTICIPLE_TYPES.map(t => <option key={t}>{t}</option>)}
+                                        {PARTICIPLE_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                                     </select>
                                 </div>
                                 <div>
@@ -1497,14 +1533,14 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         }} />
                                     </div>
                                     <div>
-                                        <label className={label}>{t('Register', 'Reġistru')}</label>
+                                        <label className={label}>{term('register')}</label>
                                         <select className={sel} value={def.register} onChange={e => {
                                             const next = [...form.definitions];
                                             next[i].register = e.target.value;
                                             set('definitions', next);
                                         }}>
                                             <option value="">—</option>
-                                            {REGISTER_OPTIONS.map(r => <option key={r}>{r}</option>)}
+                                            {REGISTER_OPTIONS.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
                                         </select>
                                     </div>
                                     {form.pos === 'participle' && (
@@ -1516,7 +1552,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                                 set('definitions', next);
                                             }}>
                                                 <option value="">—</option>
-                                                {PARTICIPLE_NUANCES.map((n: string) => <option key={n}>{n}</option>)}
+                                                {PARTICIPLE_NUANCES.map(n => <option key={n.value} value={n.value}>{n.label}</option>)}
                                             </select>
                                         </div>
                                     )}

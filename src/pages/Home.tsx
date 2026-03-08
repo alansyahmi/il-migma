@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
     Search, Keyboard, Layers, FileText,
@@ -41,6 +41,10 @@ export function Home() {
     const { user } = useUser();
     const [query, setQuery] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = t("Il-Miġma' — Online Maltese Dictionary & Conjugator", "Il-Miġma' — Dizzjunarju u Konjugatur tal-Malti Online");
+    }, [t]);
 
     const SEMITIC_ENTRIES = getSemiticEntries(t);
     const ROMANCE_ENTRIES = getRomanceEntries(t);
@@ -85,7 +89,7 @@ export function Home() {
                     {/* Welcome Header */}
                     <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                         <div>
-                            <h2 className="text-[#1034A6] font-medium text-sm tracking-widest uppercase mb-1">{t('Management Panel', 'Panil tal-Immaniġġjar')}</h2>
+                            <h2 className="text-[#1034A6] font-medium text-sm tracking-widest uppercase mb-1">{term('management-panel')}</h2>
                             <h1 className="font-serif text-4xl font-bold text-black leading-tight">
                                 {t(`Welcome back Admin ${user?.firstName}!`, `Merħba lura Admin ${user?.firstName}!`)}
                             </h1>
@@ -95,13 +99,13 @@ export function Home() {
                                 to="/search"
                                 className="px-4 py-2 bg-white border border-black/10 rounded-xl text-sm font-semibold hover:bg-black/5 transition-colors flex items-center gap-2"
                             >
-                                <Globe size={16} /> {t('Live Site', 'Is-Sit tal-Live')}
+                                <Globe size={16} /> {term('live-site')}
                             </Link>
                             <Link
                                 to="/admin"
                                 className="px-4 py-2 bg-[#1034A6] text-white rounded-xl text-sm font-semibold hover:bg-[#0c268c] transition-colors flex items-center gap-2 shadow-lg shadow-[#1034A6]/20"
                             >
-                                <Settings size={16} /> {t('Dashboard', 'Dashboard')}
+                                <Settings size={16} /> {term('admin-dashboard')}
                             </Link>
                         </div>
                     </div>
@@ -115,7 +119,7 @@ export function Home() {
                                 <Database size={80} strokeWidth={1.5} />
                             </div>
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                                <Layers className="text-[#1034A6]" size={20} /> {t('Root Management', 'Ġestjoni tal-Għeruq')}
+                                <Layers className="text-[#1034A6]" size={20} /> {term('root-management')}
                             </h3>
                             <p className="text-sm text-black/60 mb-6">{t('Manage your consonants, etymology, and derived roots from one point.', 'Immaniġġja l-konsonanti, l-etimoloġija, u l-għeruq derivati tiegħek minn punt wieħed.')}</p>
                             <Link to="/admin?tab=roots" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
@@ -129,7 +133,7 @@ export function Home() {
                                 <FileText size={80} strokeWidth={1.5} />
                             </div>
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                                <PlusCircle className="text-[#1034A6]" size={20} /> {t('Word Entries', 'Entrati tal-Kliem')}
+                                <PlusCircle className="text-[#1034A6]" size={20} /> {term('word-entries')}
                             </h3>
                             <p className="text-sm text-black/60 mb-6">{t('Add new words, update meanings and IPA in your library of 300k+ entries.', 'Żid kliem ġdid, aġġorna t-tifsiriet u l-IPA fil-librerija tiegħek ta\' 300k+ entrati.')}</p>
                             <Link to="/admin" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
@@ -143,7 +147,7 @@ export function Home() {
                                 <LayoutDashboard size={80} strokeWidth={1.5} />
                             </div>
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                                <Edit3 className="text-[#1034A6]" size={20} /> {t('Content and Blog', 'Kontenut u Blog')}
+                                <Edit3 className="text-[#1034A6]" size={20} /> {term('content-and-blog')}
                             </h3>
                             <p className="text-sm text-black/60 mb-6">{t('Publish new articles and add usage examples to enhance the user experience.', 'Ippubblika artikli ġodda u żid eżempji ta\' użu biex ttejjeb l-esperjenza tal-utent.')}</p>
                             <Link to="/blog" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
@@ -158,7 +162,7 @@ export function Home() {
                             <h1 className="font-serif text-[12rem] select-none">M</h1>
                         </div>
                         <div className="max-w-xl relative z-10">
-                            <h2 className="text-2xl font-serif mb-4">{t('Quick-Search Verification', 'Verifikazzjoni Tiftix-Rapidu')}</h2>
+                            <h2 className="text-2xl font-serif mb-4">{term('quick-search-verification')}</h2>
                             <p className="text-white/70 text-sm mb-6">{t('Quickly search to verify if a word is already in the database before adding it.', 'Fittex malajr biex tivverifika jekk kelma hix diġà fid-database qabel ma żżidha.')}</p>
                             <form onSubmit={handleSearch} className="flex gap-2 relative">
                                 <div className="flex-1 flex items-center bg-white/10 border border-white/20 rounded-xl overflow-hidden focus-within:bg-white/20 transition-all">
@@ -182,7 +186,7 @@ export function Home() {
                                     />
                                 </div>
                                 <button type="submit" className="bg-white text-[#1034A6] px-6 py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all shrink-0">
-                                    {t('Check', 'Iċċekkja')}
+                                    {term('check')}
                                 </button>
                                 <MalteseCharPicker
                                     open={kbOpen2}
@@ -258,13 +262,13 @@ export function Home() {
                             to="/search"
                             className="bg-[#1034A6] text-white text-sm font-sans font-medium px-5 py-2.5 rounded-lg hover:bg-[#0c268c] transition-colors shadow-lg shadow-[#1034A6]/20"
                         >
-                            {t('Browse Entries', 'Ifli l-' + (term('entrati').charAt(0).toUpperCase() + term('entrati').slice(1)))}
+                            {term('browse-entries')}
                         </Link>
                         <button
                             onClick={handleRandom}
                             className="bg-white text-[#000] text-sm font-sans font-medium px-5 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
                         >
-                            {t('Random Entry', (term('entrata').charAt(0).toUpperCase() + term('entrata').slice(1)) + " " + term('Każwali'))}
+                            {term('random-entry')}
                         </button>
                     </div>
                 </section>

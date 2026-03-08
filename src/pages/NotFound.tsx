@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Home as HomeIcon } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -6,6 +7,10 @@ const CREAM_RGBA = 'rgba(244,243,240,0.88)';
 
 export function NotFound() {
     const { t } = useLanguage();
+
+    useEffect(() => {
+        document.title = `404 | Il-Miġma'`;
+    }, []);
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,

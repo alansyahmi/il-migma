@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 
 export function Navbar() {
     const { mode, setMode, term } = useLinguisticMode();
-    const { language, setLanguage, t } = useLanguage();
+    const { language, setLanguage } = useLanguage();
     const { dark, toggle: toggleDark } = useDarkMode();
     const { isTrueAdmin, adminViewEnabled, setAdminViewEnabled, tier } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
@@ -49,11 +49,11 @@ export function Navbar() {
     };
 
     const navLinks = [
-        { label: t('Advanced Search', term('Tiftix Avvanzat')), href: '/advanced-search' },
-        { label: t('Root Search', term('Tiftix tal-Għeruq')), href: '/root-search' },
-        { label: t('Suggest Entry', term('Issuġġerixxi Entrata')), href: '/suggest' },
-        { label: t('Information', term('Informazzjoni')), href: '/blog' },
-        { label: t('Help', 'Għajnuna'), href: '/help' },
+        { label: term('advanced-search'), href: '/advanced-search' },
+        { label: term('root-search'), href: '/root-search' },
+        { label: term('suggest-entry'), href: '/suggest' },
+        { label: term('information'), href: '/blog' },
+        { label: term('help'), href: '/help' },
     ];
 
     return (
@@ -101,7 +101,7 @@ export function Navbar() {
                                         "flex items-center gap-1 px-2.5 border-r border-[#d8cfc0] shrink-0 py-1.5 transition-colors",
                                         kbOpen ? "text-[#1034A6] bg-black/5" : "text-gray-400 hover:text-gray-600"
                                     )}
-                                    aria-label={t('Toggle Maltese character picker', 'I togglja l-għażla tal-karattri Maltin')}
+                                    aria-label={term('toggle-picker')}
                                 >
                                     <Keyboard size={12} />
                                     <span className="text-[10px] text-gray-300">›</span>
@@ -111,13 +111,13 @@ export function Navbar() {
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder={t('Search...', 'Fittex...')}
+                                    placeholder={term('search-placeholder')}
                                     className="flex-1 bg-transparent px-2.5 py-1.5 text-sm focus:outline-none placeholder:text-gray-500 text-[#000]"
                                 />
                                 <button
                                     type="submit"
                                     className="px-2.5 py-1.5 text-gray-400 hover:text-[#1034A6] transition-colors shrink-0"
-                                    aria-label={t('Search', 'Fittex')}
+                                    aria-label={term('search')}
                                 >
                                     <Search size={14} />
                                 </button>
@@ -141,9 +141,7 @@ export function Navbar() {
                     <button
                         id="terminology-toggle"
                         onClick={() => setMode(isArabised ? 'standard' : 'arabised')}
-                        title={isArabised
-                            ? t('Switch to Standard CV terminology', 'Aqleb għat-terminoloġija Standard CV')
-                            : t('Switch to Arabised وزن terminology', 'Aqleb għat-terminoloġija Għarbija وزن')}
+                        title={isArabised ? term('toggle-terminology-standard') : term('toggle-terminology-arabised')}
                         className={cn(
                             'hidden sm:flex items-center justify-center rounded-md px-2 py-1 text-sm transition-colors',
                             'hover:bg-[#d8cfc0]/40',
@@ -160,7 +158,7 @@ export function Navbar() {
                     <button
                         id="language-toggle"
                         onClick={() => setLanguage(language === 'en' ? 'mt' : 'en')}
-                        title={t('Switch to Maltese language', 'Aqleb lill-lingwa Maltija')}
+                        title={language === 'en' ? term('toggle-language-mt') : term('toggle-language-en')}
                         className="hidden sm:flex items-center justify-center rounded-md px-2 py-1 text-sm font-sans font-medium text-[#000] hover:bg-[#d8cfc0]/40 transition-colors"
                     >
                         {language === 'en' ? 'EN' : 'MT'}
@@ -170,7 +168,7 @@ export function Navbar() {
                     <button
                         id="dark-mode-toggle"
                         onClick={toggleDark}
-                        title={dark ? t('Switch to light mode', 'Aqleb għall-mod ċar') : t('Switch to dark mode', 'Aqleb għall-mod skur')}
+                        title={dark ? term('toggle-light-mode') : term('toggle-dark-mode')}
                         className="flex items-center justify-center w-8 h-8 rounded-full text-[#000] hover:bg-[#d8cfc0]/40 transition-colors"
                     >
                         {dark ? <Moon size={15} /> : <Sun size={15} />}
@@ -185,7 +183,7 @@ export function Navbar() {
                                 "flex items-center justify-center w-8 h-8 rounded-full transition-colors",
                                 adminViewEnabled ? "text-[#1034A6] hover:bg-[#1034A6]/10 shadow-sm border border-[#1034A6]/20" : "text-black/40 hover:bg-black/5"
                             )}
-                            title={adminViewEnabled ? t('Switch to User View', 'Aqleb lill-Veduta tal-Utent') : t('Switch to Admin View', 'Aqleb lill-Veduta tal-Amministratur')}
+                            title={adminViewEnabled ? term('user-view') : term('admin-view')}
                         >
                             {adminViewEnabled ? <Shield size={16} className="fill-current" /> : <Eye size={16} />}
                         </button>
@@ -197,7 +195,7 @@ export function Navbar() {
                             <button
                                 id="sign-in-btn"
                                 className="w-8 h-8 flex items-center justify-center rounded-full bg-[#000] text-white hover:bg-[#222] transition-colors"
-                                aria-label={t('Sign in', 'Idħol')}
+                                aria-label={term('sign-in')}
                             >
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
@@ -210,17 +208,17 @@ export function Navbar() {
                             {isTrueAdmin && (
                                 <UserButton.MenuItems>
                                     <UserButton.Action
-                                        label={isTrueAdmin ? t("System Role: ADMIN", "Rwol tas-Sistema: ADMIN") : `${t('Tier', 'Livell')}: ${tier.toUpperCase()}`}
+                                        label={isTrueAdmin ? term("system-role-admin") : `${term('tier')}: ${tier.toUpperCase()}`}
                                         labelIcon={<Shield size={16} className={isTrueAdmin ? "text-amber-600" : "text-blue-600"} />}
                                         onClick={() => { }}
                                     />
                                     <UserButton.Link
-                                        label={t("Admin Dashboard", "Dashboard tal-Amministratur")}
+                                        label={term("admin-dashboard")}
                                         labelIcon={<Shield size={16} />}
                                         href="/admin"
                                     />
                                     <UserButton.Action
-                                        label={adminViewEnabled ? t("Switch to User View", "Aqleb lill-Veduta tal-Utent") : t("Switch to Admin View", "Aqleb lill-Veduta tal-Amministratur")}
+                                        label={adminViewEnabled ? term('user-view') : term('admin-view')}
                                         labelIcon={adminViewEnabled ? <EyeOff size={16} /> : <Eye size={16} />}
                                         onClick={() => setAdminViewEnabled(!adminViewEnabled)}
                                     />
@@ -233,7 +231,7 @@ export function Navbar() {
                     <button
                         className="md:hidden w-8 h-8 flex items-center justify-center rounded hover:bg-[#d8cfc0]/40 transition-colors"
                         onClick={() => setMenuOpen(o => !o)}
-                        aria-label={t('Toggle menu', 'I togglja l-menu')}
+                        aria-label={term('toggle-menu')}
                     >
                         {menuOpen ? <X size={18} /> : <Menu size={18} />}
                     </button>
@@ -251,7 +249,7 @@ export function Navbar() {
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder={t('Search...', 'Fittex...')}
+                                    placeholder={term('search-placeholder')}
                                     className="w-full bg-white border border-[#d8cfc0] rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1034A6] placeholder:text-gray-400"
                                 />
                             </form>
@@ -303,7 +301,7 @@ export function Navbar() {
                                         adminViewEnabled ? "bg-[#1034A6] text-white border-[#1034A6]" : "text-black/40 border-black/10"
                                     )}
                                 >
-                                    {adminViewEnabled ? t('Admin View', 'Veduta Admin') : t('User View', 'Veduta Utent')}
+                                    {adminViewEnabled ? term('admin-view') : term('user-view')}
                                 </button>
                             </>
                         )}

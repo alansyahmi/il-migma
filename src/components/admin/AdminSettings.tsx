@@ -16,6 +16,7 @@ const CATEGORIES = [
     { id: 'gender', label: 'Genders', icon: Users },
     { id: 'dialect', label: 'Dialects', icon: Globe },
     { id: 'verb_class', label: 'Verb Classes', icon: Zap },
+    { id: 'verb_transitivity', label: 'Transitivity', icon: ClipboardList },
     { id: 'register', label: 'Registers', icon: ClipboardList },
     { id: 'noun_type', label: 'Noun Types', icon: Package },
     { id: 'source_language', label: 'Sources', icon: Library },
@@ -28,6 +29,7 @@ const CATEGORIES = [
     { id: 'root_relationship', label: 'Root Relationships', icon: Globe },
     { id: 'root_strength', label: 'Root Strengths', icon: Zap },
     { id: 'weak_class', label: 'Weak Classes', icon: HelpCircle },
+    { id: 'ui_terminology', label: 'UI Terminology', icon: Languages },
 ];
 
 export function AdminSettings() {
@@ -36,8 +38,8 @@ export function AdminSettings() {
     const [editItem, setEditItem] = useState<ConfigItem | null>(null);
     const [showAdd, setShowAdd] = useState(false);
     const [posFilter, setPosFilter] = useState<string>('all');
-    const { language, setLanguage } = useLanguage();
-    const { mode, setMode } = useLinguisticMode();
+    const { language, setLanguage, t } = useLanguage();
+    const { mode, setMode, term } = useLinguisticMode();
     const { user } = useUser();
 
     // Reordering state
@@ -151,7 +153,7 @@ export function AdminSettings() {
                             <GripVertical size={14} className="opacity-0 group-hover:opacity-40 hover:!opacity-100 transition-opacity cursor-grab active:cursor-grabbing text-black" />
                             <span className="flex items-center gap-2 flex-1">
                                 <cat.icon size={16} className={cn("transition-colors", activeTab === cat.id ? "text-[#1034A6]" : "text-black/20 group-hover:text-black/40")} />
-                                {cat.label}
+                                {t(cat.label, term(cat.label))}
                             </span>
                             <span className="text-[10px] bg-black/5 px-1.5 rounded opacity-50 group-hover:opacity-100 mr-2">
                                 {getCategoryItems(cat.id).length}
@@ -207,6 +209,20 @@ export function AdminSettings() {
 
             {/* Content Area */}
             <div className="md:col-span-3 space-y-4">
+                <div className="flex items-center gap-2 mb-8">
+                    <h2 className="text-2xl font-bold text-black flex items-center gap-2">
+                        <Settings className="text-[#1034A6]" size={24} /> Admin Settings
+                    </h2>
+                    {import.meta.env.DEV && (
+                        <div className="ml-auto bg-blue-50 border border-blue-100 p-3 rounded-lg flex items-start gap-3 max-w-md">
+                            <HelpCircle className="text-blue-500 shrink-0 mt-0.5" size={18} />
+                            <div className="text-xs text-blue-800 leading-relaxed">
+                                <p className="font-bold mb-1">Development Tip: Sync to Code</p>
+                                <p>To persist these changes in the source code, update <code className="bg-blue-100 px-1 rounded">src/lib/terminology.ts</code> manually. This ensures your settings survive database resets and deployments.</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
                 <div className="flex items-center justify-between mb-2">
                     <h2 className="text-xl font-bold text-black flex items-center gap-2">
                         {CATEGORIES.find(c => c.id === activeTab)?.label}
@@ -250,19 +266,46 @@ export function AdminSettings() {
                             <Card key={item.id} className="p-4 border-[#ede9e1] hover:border-[#1034A6]/30 transition-colors group">
                                 <div className="flex items-center justify-between">
                                     <div className="space-y-1">
-                                        <h3 className="font-bold text-lg text-black">
-                                            {typeof item.value === 'object' && ('cv' in item.value || 'wizen' in item.value)
-                                                ? (mode === 'standard' ? (item.value.cv || item.key) : (item.value.wizen || item.key))
-                                                : item.key}
+                                        <h3 className="font-bold text-lg text-black uppercase tracking-tight">
+                                            {item.key}
                                         </h3>
+                                        <div className="flex items-center gap-2 text-xs font-medium text-black/50 italic mb-1">
+                                            {(() => {
+                                                if (typeof item.value === 'object' && item.value !== null) {
+                                                    if ('mt_standard' in item.value || 'mt_arabised' in item.value) {
+                                                        return (
+                                                            <>
+                                                                <span>{item.value.mt_standard || '-'}</span>
+                                                                <span className="opacity-30">/</span>
+                                                                <span>{item.value.mt_arabised || '-'}</span>
+                                                            </>
+                                                        );
+                                                    }
+                                                    if ('cv' in item.value || 'wizen' in item.value) {
+                                                        return (
+                                                            <>
+                                                                <span className="font-mono">{item.value.cv || '-'}</span>
+                                                                <span className="opacity-30">/</span>
+                                                                <span>{item.value.wizen || '-'}</span>
+                                                            </>
+                                                        );
+                                                    }
+                                                }
+                                                return null;
+                                            })()}
+                                        </div>
                                         <div className="text-xs font-mono text-black/40 bg-black/5 inline-block px-1.5 py-0.5 rounded">
-                                            {typeof item.value === 'object' ? (
+                                            {typeof item.value === 'object' && item.value !== null ? (
                                                 <div className="flex gap-2">
                                                     {Object.entries(item.value).map(([vk, vv]) => (
-                                                        <span key={vk} className="border-r border-black/10 last:border-0 pr-2">{vk}: {Array.isArray(vv) ? vv.join(', ') : String(vv)}</span>
+                                                        <span key={vk} className="first:border-l-0 border-l border-black/10 pl-2">{vk}: {Array.isArray(vv) ? vv.join(', ') : String(vv)}</span>
                                                     ))}
                                                 </div>
-                                            ) : item.value}
+                                            ) : (
+                                                <div className="flex gap-2">
+                                                    <span className="border-l border-black/10 pl-2">Value: {String(item.value)}</span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="flex gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
@@ -273,8 +316,8 @@ export function AdminSettings() {
                             </Card>
                         ));
                     })()}
-                </div>
-            </div>
+                </div >
+            </div >
 
             {/* Modals */}
             {
@@ -303,34 +346,41 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
     onSave: (val: any) => Promise<void>;
 }) {
     const [key, setKey] = useState(item?.key ?? '');
-    const [value, setValue] = useState(item?.value ?? (
-        category === 'verb_preset' ? { perfect: { cv: '', wizen: '' }, passive: { cv: '', wizen: '' }, active: { cv: '', wizen: '' }, verbal: { cv: '', wizen: '' } } :
-            (category === 'broken_pattern' || category === 'cv_wizen_pattern') ? { cv: '', wizen: '', pos_types: [], stress: 2 } : ''
-    ));
+    const [value, setValue] = useState<any>(() => {
+        if (item) return item.value;
+        if (category === 'verb_preset') {
+            return {
+                en: '', mt_standard: '', mt_arabised: '',
+                perfect: { cv: '', wizen: '' },
+                passive: { cv: '', wizen: '' },
+                active: { cv: '', wizen: '' },
+                verbal: { cv: '', wizen: '' }
+            };
+        }
+        if (category === 'broken_pattern' || category === 'cv_wizen_pattern') {
+            return { cv: '', wizen: '', stress: 2, pos_types: [] };
+        }
+        return { en: '', mt_standard: '', mt_arabised: '' };
+    });
     const [saving, setSaving] = useState(false);
-    const [error, setError] = useState('');
+    const [error, setError] = useState<string | null>(null);
+
     const [kbOpen, setKbOpen] = useState(false);
-    const [activeInput, setActiveInput] = useState<string | null>(null);
+    const [activeInput, setActiveInput] = useState<'key' | 'cv' | 'wizen' | null>(null);
+    const activeInputRef = useRef<HTMLInputElement | null>(null);
     const kbTriggerRef = useRef<HTMLButtonElement>(null);
-    const activeInputRef = useRef<HTMLInputElement>(null);
 
     const insertChar = (char: string) => {
-        if (!activeInput || !activeInputRef.current) return;
         const el = activeInputRef.current;
+        if (!el) return;
         const start = el.selectionStart || 0;
         const end = el.selectionEnd || 0;
+        const val = el.value;
 
-        const updater = (prevVal: string) => {
-            return prevVal.substring(0, start) + char + prevVal.substring(end);
-        };
-
-        if (activeInput === 'key') setKey((prev: string) => updater(prev));
-        else if (activeInput === 'value') setValue((prev: any) => typeof prev === 'string' ? updater(prev) : prev);
-        else if (activeInput.startsWith('verb_')) {
-            const [_, f, k] = activeInput.split('_');
-            setValue((prev: any) => ({ ...prev, [f]: { ...prev[f], [k]: updater(prev[f][k] || '') } }));
-        } else {
-            setValue((prev: any) => ({ ...prev, [activeInput]: updater(prev[activeInput] || '') }));
+        const nextVal = val.substring(0, start) + char + val.substring(end);
+        if (activeInput === 'key') setKey(nextVal);
+        else if (activeInput === 'cv' || activeInput === 'wizen') {
+            setValue({ ...value, [activeInput]: nextVal });
         }
 
         setTimeout(() => {
@@ -361,100 +411,140 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
 
     return (
         <Modal open onClose={onClose} title={item ? `Edit Item` : `Add New ${category}`} size={isComplex ? 'lg' : 'md'}>
-            <form onSubmit={handleSubmit} className="space-y-6">
-                {error && <div className="bg-red-50 text-red-800 p-3 rounded-xl text-sm border border-red-100">{error}</div>}
+            <form onSubmit={handleSubmit} className="flex flex-col h-full max-h-[85vh]">
+                {error && <div className="px-6 py-3"><div className="bg-red-50 text-red-800 p-3 rounded-xl text-sm border border-red-100">{error}</div></div>}
 
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="col-span-1">
-                        <label className={labelStyle}>Identifier (Key)</label>
-                        <div className="relative">
-                            <input className={inp} value={key} onChange={e => setKey(e.target.value)} onFocus={(e) => { setActiveInput('key'); activeInputRef.current = e.target; }} placeholder="e.g. noun, masculine, I..." />
+                <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-200">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="col-span-1">
+                            <label className={labelStyle}>In-code ID / Key</label>
+                            <div className="relative">
+                                <input className={inp} value={key} onChange={e => setKey(e.target.value)} onFocus={(e) => { setActiveInput('key'); activeInputRef.current = e.target; }} placeholder="e.g. noun, transitive, I..." />
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {!isComplex ? (
-                    <div>
-                        <label className={labelStyle}>Value</label>
-                        <input className={inp} value={value} onChange={e => setValue(e.target.value)} placeholder="Display value..." />
-                    </div>
-                ) : category === 'verb_preset' ? (
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-                        {['perfect', 'passive', 'active', 'verbal'].map(form => (
-                            <div key={form} className="space-y-2 border-l-2 border-slate-100 pl-3">
-                                <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-tighter">{form}</h4>
-                                <div className="grid grid-cols-2 gap-2">
-                                    <input className={inp} value={value[form]?.cv} onChange={e => setValue({ ...value, [form]: { ...value[form], cv: e.target.value } })} placeholder="CV notation" />
-                                    <input className={inp} value={value[form]?.wizen} onChange={e => setValue({ ...value, [form]: { ...value[form], wizen: e.target.value } })} placeholder="Wizen name" />
+                    <div className="space-y-4 pt-4 border-t border-black/5">
+                        <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-tighter">Translations / Display Labels</h4>
+                        <div>
+                            <label className={labelStyle}>English Label {category === 'verb_preset' ? '(Form Name)' : ''}</label>
+                            <input className={inp} value={typeof value === 'object' ? (value.en || '') : value} onChange={e => {
+                                if (typeof value === 'object') setValue({ ...value, en: e.target.value });
+                                else setValue({ en: e.target.value, mt_standard: '', mt_arabised: '' });
+                            }} placeholder={category === 'verb_preset' ? "e.g. Form I" : "English display name..."} />
+                        </div>
+                        {/* Only show these for non-pattern items to avoid redundancy */}
+                        {category !== 'broken_pattern' && category !== 'cv_wizen_pattern' && (
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className={labelStyle}>Maltese (CV / Standard) {category === 'verb_preset' ? '(Form Name)' : ''}</label>
+                                    <input className={inp} value={typeof value === 'object' ? (value.mt_standard || '') : ''} onChange={e => {
+                                        if (typeof value === 'object') setValue({ ...value, mt_standard: e.target.value });
+                                        else setValue({ en: '', mt_standard: e.target.value, mt_arabised: '' });
+                                    }} placeholder={category === 'verb_preset' ? "e.g. Forma I" : "Standard Maltese label..."} />
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-3 gap-4">
-                            <div className="relative">
-                                <label className={labelStyle}>CV Notation <span className="text-black/30 normal-case font-normal">(v = short, V = long vowel)</span></label>
-                                <input className={inp} value={value.cv} onChange={e => setValue({ ...value, cv: e.target.value })} onFocus={(e) => { setActiveInput('cv'); activeInputRef.current = e.target; }} placeholder="e.g. CvCVC  (V = long vowel)" />
-                            </div>
-                            <div className="relative">
-                                <label className={labelStyle}>Wiżen Name</label>
-                                <input className={inp} value={value.wizen} onChange={e => setValue({ ...value, wizen: e.target.value })} onFocus={(e) => { setActiveInput('wizen'); activeInputRef.current = e.target; }} placeholder="e.g. fagħal" />
-                            </div>
-                            <div>
-                                <label className={labelStyle}>Stress (syllable from end)</label>
-                                <input className={inp} type="number" min={1} max={5} value={value.stress ?? 2} onChange={e => setValue({ ...value, stress: parseInt(e.target.value) || 2 })} placeholder="2 = penultimate" />
-                            </div>
-                        </div>
-
-                        <div className="flex justify-start">
-                            <button
-                                ref={kbTriggerRef}
-                                type="button"
-                                onClick={() => setKbOpen(!kbOpen)}
-                                className={cn(
-                                    "flex items-center gap-2 px-3 py-1.5 rounded-lg border text-[10px] font-bold transition-all",
-                                    kbOpen ? "bg-[#1034A6] text-white border-[#1034A6]" : "bg-white text-black/40 border-black/10 hover:border-black/20"
-                                )}
-                            >
-                                <Keyboard size={12} /> {kbOpen ? 'Close Keyboard' : 'Open Keyboard'}
-                            </button>
-                            <div className="relative">
-                                <MalteseCharPicker open={kbOpen} onOpenChange={setKbOpen} onInsert={insertChar} triggerRef={kbTriggerRef} />
-                            </div>
-                        </div>
-
-                        {category === 'cv_wizen_pattern' && (
-                            <div>
-                                <label className={labelStyle}>Apply to POS (exclude verb)</label>
-                                <div className="flex flex-wrap gap-1.5 mt-2">
-                                    {POS_OPTIONS.map(p => {
-                                        const isSelected = (value.pos_types || []).includes(p);
-                                        return (
-                                            <button
-                                                key={p}
-                                                type="button"
-                                                onClick={() => {
-                                                    const current = value.pos_types || [];
-                                                    const next = isSelected ? current.filter((x: string) => x !== p) : [...current, p];
-                                                    setValue({ ...value, pos_types: next });
-                                                }}
-                                                className={cn(
-                                                    "px-3 py-1 text-[10px] font-bold rounded-lg border transition-all",
-                                                    isSelected ? "bg-[#1034A6] text-white border-[#1034A6]" : "bg-white text-black/40 border-black/10 hover:border-black/20"
-                                                )}
-                                            >
-                                                {p.toUpperCase()}
-                                            </button>
-                                        );
-                                    })}
+                                <div>
+                                    <label className={labelStyle}>Maltese (Wiżen / Arabised) {category === 'verb_preset' ? '(Form Name)' : ''}</label>
+                                    <input className={inp} value={typeof value === 'object' ? (value.mt_arabised || '') : ''} onChange={e => {
+                                        if (typeof value === 'object') setValue({ ...value, mt_arabised: e.target.value });
+                                        else setValue({ en: '', mt_standard: '', mt_arabised: e.target.value });
+                                    }} placeholder={category === 'verb_preset' ? "e.g. Forma I" : "Arabised Maltese label..."} />
                                 </div>
                             </div>
                         )}
                     </div>
-                )}
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-black/5">
+                    {isComplex && (
+                        <div className="pt-4 border-t border-black/5 space-y-4">
+                            <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-tighter">Specific Configuration</h4>
+                            {category === 'verb_preset' ? (
+                                <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                                    {['perfect', 'passive', 'active', 'verbal'].map(form => (
+                                        <div key={form} className="space-y-2 border-l-2 border-slate-100 pl-3">
+                                            <h4 className="text-[10px] font-bold text-black/40 uppercase tracking-tighter">{form}</h4>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div className="relative">
+                                                    <label className="text-[10px] text-black/50 block mb-1">Standard (CV)</label>
+                                                    <input className={inp} value={value[form]?.cv} onChange={e => setValue({ ...value, [form]: { ...value[form], cv: e.target.value } })} placeholder="CV notation" />
+                                                </div>
+                                                <div className="relative">
+                                                    <label className="text-[10px] text-black/50 block mb-1">Arabised (Wiżen)</label>
+                                                    <input className={inp} value={value[form]?.wizen} onChange={e => setValue({ ...value, [form]: { ...value[form], wizen: e.target.value } })} placeholder="Wizen name" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="relative">
+                                            <label className={labelStyle}>Maltese (CV / Standard) <span className="text-black/30 normal-case font-normal">(v = short, V = long vowel)</span></label>
+                                            <input className={inp} value={value.cv} onChange={e => setValue({ ...value, cv: e.target.value })} onFocus={(e) => { setActiveInput('cv'); activeInputRef.current = e.target; }} placeholder="e.g. CvCVC  (V = long vowel)" />
+                                        </div>
+                                        <div className="relative">
+                                            <label className={labelStyle}>Maltese (Wiżen / Arabised)</label>
+                                            <input className={inp} value={value.wizen} onChange={e => setValue({ ...value, wizen: e.target.value })} onFocus={(e) => { setActiveInput('wizen'); activeInputRef.current = e.target; }} placeholder="e.g. fagħal" />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <label className={labelStyle}>Stress (syllable from end)</label>
+                                            <input className={inp} type="number" min={1} max={5} value={value.stress ?? 2} onChange={e => setValue({ ...value, stress: parseInt(e.target.value) || 2 })} placeholder="2 = penultimate" />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-start">
+                                        <button
+                                            ref={kbTriggerRef}
+                                            type="button"
+                                            onClick={() => setKbOpen(!kbOpen)}
+                                            className={cn(
+                                                "flex items-center gap-2 px-3 py-1.5 rounded-lg border text-[10px] font-bold transition-all",
+                                                kbOpen ? "bg-[#1034A6] text-white border-[#1034A6]" : "bg-white text-black/40 border-black/10 hover:border-black/20"
+                                            )}
+                                        >
+                                            <Keyboard size={12} /> {kbOpen ? 'Close Keyboard' : 'Open Keyboard'}
+                                        </button>
+                                        <div className="relative">
+                                            <MalteseCharPicker open={kbOpen} onOpenChange={setKbOpen} onInsert={insertChar} triggerRef={kbTriggerRef} />
+                                        </div>
+                                    </div>
+
+                                    {category === 'cv_wizen_pattern' && (
+                                        <div>
+                                            <label className={labelStyle}>Apply to POS (exclude verb)</label>
+                                            <div className="flex flex-wrap gap-1.5 mt-2">
+                                                {POS_OPTIONS.map(p => {
+                                                    const isSelected = (value.pos_types || []).includes(p);
+                                                    return (
+                                                        <button
+                                                            key={p}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                const current = value.pos_types || [];
+                                                                const next = isSelected ? current.filter((x: string) => x !== p) : [...current, p];
+                                                                setValue({ ...value, pos_types: next });
+                                                            }}
+                                                            className={cn(
+                                                                "px-3 py-1 text-[10px] font-bold rounded-lg border transition-all",
+                                                                isSelected ? "bg-[#1034A6] text-white border-[#1034A6]" : "bg-white text-black/40 border-black/10 hover:border-black/20"
+                                                            )}
+                                                        >
+                                                            {p.toUpperCase()}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex justify-end gap-3 px-6 py-4 border-t border-black/5 bg-slate-50/50 rounded-b-2xl">
                     <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
                     <Button type="submit" disabled={saving} leftIcon={saving ? <RotateCcw className="animate-spin" size={14} /> : <Save size={14} />}>
                         {saving ? 'Saving...' : 'Save Config'}

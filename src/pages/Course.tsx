@@ -1,8 +1,14 @@
+import { useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { GraduationCap, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
 export function Course() {
+    const { t } = useLanguage();
+    useEffect(() => {
+        document.title = `${t('Course', 'Kors')} | Il-Miġma'`;
+    }, [t]);
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 text-center space-y-6">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1B4D3E]/10">
