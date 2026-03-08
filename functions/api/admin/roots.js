@@ -186,7 +186,12 @@ export async function onRequestPost({ request, env }) {
 
             const updateReciprocal = async (targetCons, relType) => {
                 if (!targetCons || targetCons === currentConsonants) return;
-                const targetRes = await client.execute({ sql: `SELECT synonyms, antonyms FROM roots WHERE consonants = ?`, args: [targetCons] });
+                // Fetch current root's gloss for reciprocal entries
+                const currentRootRes = await client.execute({
+                    sql: `SELECT gloss, consonants FROM roots WHERE id = ? OR LOWER(consonants) = LOWER(?)`,
+                    args: [id, consonants]
+                });
+                const targetRes = await client.execute({ sql: `SELECT synonyms, antonyms FROM roots WHERE id = ? OR LOWER(consonants) = LOWER(?)`, args: [targetCons, targetCons] });
                 if (targetRes.rows.length === 0) return;
 
                 const targetData = targetRes.rows[0];
@@ -236,7 +241,7 @@ export async function onRequestDelete({ request, env }) {
             });
             return json({ ids: idList, deleted: true });
         } else {
-            await client.execute({ sql: 'DELETE FROM roots WHERE id = ?', args: [id] });
+            await client.execute({ sql: 'DELETE FROM roots WHERE id = ? OR LOWER(consonants) = LOWER(?)', args: [id, id] });
             return json({ id, deleted: true });
         }
     } catch (e) {

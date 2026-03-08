@@ -11,6 +11,7 @@ import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Edit2, ArrowLeft, Search } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { apiGetEntry } from '@/lib/api';
+import { cn } from '@/lib/utils';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
@@ -29,10 +30,10 @@ function SideCard({ title, children }: { title: string; children: React.ReactNod
     );
 }
 
-function PropRow({ label, children }: { label: string; children: React.ReactNode }) {
+function PropRow({ label, children, className }: { label: string; children: React.ReactNode; className?: string }) {
     return (
-        <div className="mb-4">
-            <p className="text-xs font-semibold text-black/40 mb-0.5">{label}</p>
+        <div className={cn("flex flex-col", className)}>
+            <p className="text-xs font-semibold text-black/40 mb-0.5 uppercase tracking-wider">{label}</p>
             <div className="text-sm text-[#000]">{children}</div>
         </div>
     );
@@ -66,27 +67,46 @@ function SuffixStrip({ labels, activeIdx, onToggle, disabledIndices = [] }: {
     disabledIndices?: number[];
 }) {
     const dis = disabledIndices || [];
+
+    // Split into 4 and 3 for mobile layout
+    const firstRow = labels.slice(0, 4);
+    const secondRow = labels.slice(4);
+
+    const renderRow = (rowLabels: string[], offset: number, isMobile: boolean = false) => (
+        <div className={`${isMobile ? 'flex w-full' : 'inline-flex'} rounded-md border border-black/10 overflow-hidden text-[11px]`}>
+            {rowLabels.map((lbl, i) => {
+                const actualIdx = i + offset;
+                const isDisabled = dis.includes(actualIdx);
+                return (
+                    <button
+                        key={lbl}
+                        disabled={isDisabled}
+                        onClick={() => onToggle(actualIdx)}
+                        className={`px-0.5 py-2 transition-colors font-mono border-r border-black/5 last:border-r-0 flex items-center justify-center text-center ${isMobile ? 'flex-1 h-6' : 'px-1'} ${activeIdx === actualIdx
+                            ? 'bg-[#1034A6] text-white border-[#1034A6]'
+                            : isDisabled
+                                ? 'bg-black/5 text-black/20 cursor-not-allowed'
+                                : 'bg-white text-[#555] hover:bg-black/5'
+                            }`}
+                    >
+                        <span className="leading-tight">{lbl}</span>
+                    </button>
+                );
+            })}
+        </div>
+    );
+
     return (
-        <div className="flex flex-wrap gap-1">
-            <div className="inline-flex rounded-md border border-black/10 overflow-hidden text-xs">
-                {labels.map((lbl, i) => {
-                    const isDisabled = dis.includes(i);
-                    return (
-                        <button
-                            key={lbl}
-                            disabled={isDisabled}
-                            onClick={() => onToggle(i)}
-                            className={`px-2.5 py-1 transition-colors font-mono border-r border-black/5 last:border-r-0 ${activeIdx === i
-                                ? 'bg-[#1034A6] text-white'
-                                : isDisabled
-                                    ? 'bg-black/5 text-black/20 cursor-not-allowed'
-                                    : 'bg-white text-[#555] hover:bg-black/5'
-                                }`}
-                        >
-                            {lbl}
-                        </button>
-                    );
-                })}
+        <div className="flex flex-col md:flex-row flex-wrap gap-2 w-full md:w-auto">
+            {/* Desktop View: Single Row */}
+            <div className="hidden md:flex">
+                {renderRow(labels, 0)}
+            </div>
+
+            {/* Mobile View: Two Rows */}
+            <div className="flex md:hidden flex-col items-start gap-1 w-full">
+                {renderRow(firstRow, 0, true)}
+                {renderRow(secondRow, 4, true)}
             </div>
         </div>
     );
@@ -128,7 +148,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const vm = entry.verb_morphology!;
     const ety = entry.etymologies?.[0];
 
-    const rootConsonants = entry.root_pattern_form?.root?.consonants;
+    const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants;
     const pattern = entry.root_pattern_form?.pattern;
 
     // State
@@ -206,17 +226,17 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     };
 
     return (
-        <div style={bgStyle}>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-10">
+        <div style={bgStyle} className="w-full overflow-hidden">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-10 w-full">
                 <div className="flex items-center gap-2 mb-8">
                     <Link to="/search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-search')}
                     </Link>
                 </div>
 
-                <div className="text-center mb-8 relative group max-w-fit mx-auto">
+                <div className="text-center mb-8 relative group max-w-fit mx-auto px-4">
                     <div className="relative inline-flex items-center justify-center">
-                        <h1 className="font-serif font-bold text-[3rem] leading-none text-[#000] tracking-tight">
+                        <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-[#000] tracking-tight break-words">
                             {isTheoretical && '*'}{entry.headword}
                         </h1>
                         {isActualAdmin && (
@@ -240,9 +260,20 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                     </p>
                 </div>
 
-                <div className="flex gap-6 items-start">
-                    {/* Left Sidebar */}
-                    <div className="w-64 shrink-0 space-y-4">
+                <div className="flex flex-col md:flex-row gap-6 items-start w-full">
+                    {/* Top Mobile Gloss */}
+                    <div className="w-full block md:hidden mb-6 max-w-[340px] mx-auto">
+                        <SideCard title={term('gloss')}>
+                            <ol className="list-decimal list-inside space-y-1 text-sm text-[#000] marker:text-black/30">
+                                {entry.definitions.map(def => (
+                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                ))}
+                            </ol>
+                        </SideCard>
+                    </div>
+
+                    {/* Left Sidebar (Desktop Only) */}
+                    <div className="w-full md:w-64 shrink-0 space-y-4 hidden md:block">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-[#000] marker:text-black/30">
                                 {entry.definitions.map(def => (
@@ -287,10 +318,10 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                     </div>
 
                     {/* Right Column */}
-                    <div className="flex-1 min-w-0 space-y-8">
-                        <div className="flex gap-8 items-start">
+                    <div className="flex-1 min-w-0 space-y-8 w-full">
+                        <div className="flex flex-col md:flex-row gap-8 items-start w-full">
                             {/* Properties */}
-                            <div className="w-52 shrink-0">
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-2 md:grid-cols-1 md:block gap-y-6 gap-x-8 max-w-[340px] mx-auto mb-8 md:mb-0">
                                 {rootConsonants && (
                                     <PropRow label={term('għerq')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
@@ -330,7 +361,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     <span className="capitalize">{term(vm.transitivity || 'both')}</span>
                                 </PropRow>
 
-                                <PropRow label={term("sett ta' vokali")}>
+                                <PropRow label={term("sett ta' vokali")} className="col-span-2 sm:col-span-1 md:col-span-1">
                                     <div className="space-y-0.5 text-sm">
                                         <p>{term('perfett')} <span className="opacity-55 text-[0.7rem]">{term('(past)')}</span>: <span className="font-mono">{vm.vowel_set_perfect}</span></p>
                                         <p>{term('imperfett')} <span className="opacity-55 text-[0.7rem]">{term('(present)')}</span>: <span className="font-mono">{vm.vowel_set_imperfect}</span></p>
@@ -353,103 +384,219 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                             {/* Conjugation Table */}
                             {conj && (
-                                <div className="flex-1 min-w-0">
-                                    <h2 className="font-sans font-semibold text-[1.25rem] text-[#000] mb-3">
+                                <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
+                                    <h2 className="font-sans font-semibold text-[1.25rem] text-[#000] mb-3 md:text-left text-center">
                                         {term('conjugation table')}
                                     </h2>
-                                    <table className="w-full text-sm border-collapse">
-                                        <thead>
-                                            <tr className="border-b border-black/8 font-sans">
-                                                <th className="text-left font-semibold text-[#000] pb-2 pr-4 w-32">{term('person')}</th>
-                                                <th className="text-left font-semibold text-[#000] pb-2 pr-4">
-                                                    {term('imperfett')} <span className="opacity-55 font-normal text-xs">{term('(present)')}</span>
-                                                </th>
-                                                <th className="text-left font-semibold text-[#000] pb-2">
-                                                    {term('perfett')} <span className="opacity-55 font-normal text-xs">{term('(past)')}</span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {conj.rows.map(row => (
-                                                <tr key={row.person_mt} className="border-b border-black/4">
-                                                    <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
-                                                        {term(row.person_mt)}
-                                                    </td>
-                                                    <td className="py-1.5 pr-4 font-serif font-normal text-[#000]">
-                                                        {isTheoretical && '*'}{buildVerbForm(
-                                                            row.imperfect,
-                                                            isNeg,
-                                                            doIdx,
-                                                            ioIdx,
-                                                            vsetImpf,
-                                                            row.stems,
-                                                            conj?.blocksImala || false,
-                                                            vm.form
-                                                        )}
-                                                    </td>
-                                                    <td className="py-1.5 font-serif font-normal text-[#000]">
-                                                        {isTheoretical && '*'}{buildPerfectForm(
-                                                            row.perfect,
-                                                            row.perfect_neg ?? row.perfect,
-                                                            isNeg,
-                                                            doIdx,
-                                                            ioIdx,
-                                                            vsetPerf,
-                                                            row.stems,
-                                                            conj?.blocksImala || false,
-                                                            vm.form
-                                                        )}
-                                                    </td>
+
+                                    {/* Desktop Table View */}
+                                    <div className="hidden md:block overflow-x-auto overflow-y-hidden pb-4">
+                                        <table className="w-full text-sm border-collapse md:min-w-[500px]">
+                                            <thead>
+                                                <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                    <th className="text-left font-semibold text-[#000] pb-2 pr-4 w-32">{term('person')}</th>
+                                                    <th className="text-left font-semibold text-[#000] pb-2 pr-4">
+                                                        {term('imperfett')} <span className="opacity-55 font-normal text-xs">{term('(present)')}</span>
+                                                    </th>
+                                                    <th className="text-left font-semibold text-[#000] pb-2">
+                                                        {term('perfett')} <span className="opacity-55 font-normal text-xs">{term('(past)')}</span>
+                                                    </th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                {conj.rows.map(row => (
+                                                    <tr key={row.person_mt} className="border-b border-black/4 whitespace-nowrap">
+                                                        <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
+                                                            {term(row.person_mt)}
+                                                        </td>
+                                                        <td className="py-1.5 pr-4 font-serif font-normal text-[#000]">
+                                                            {isTheoretical && '*'}{buildVerbForm(
+                                                                row.imperfect,
+                                                                isNeg,
+                                                                doIdx,
+                                                                ioIdx,
+                                                                vsetImpf,
+                                                                row.stems,
+                                                                conj?.blocksImala || false,
+                                                                vm.form
+                                                            )}
+                                                        </td>
+                                                        <td className="py-1.5 font-serif font-normal text-[#000]">
+                                                            {isTheoretical && '*'}{buildPerfectForm(
+                                                                row.perfect,
+                                                                row.perfect_neg ?? row.perfect,
+                                                                isNeg,
+                                                                doIdx,
+                                                                ioIdx,
+                                                                vsetPerf,
+                                                                row.stems,
+                                                                conj?.blocksImala || false,
+                                                                vm.form
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
 
+                                        <div className="mt-4 grid grid-cols-3 gap-2 text-sm border-t border-black/8 pt-3">
+                                            <p className="font-sans font-semibold text-[#000] self-center">{term('imperattiv')}</p>
+                                            <div>
+                                                <p className="text-xs text-black/40 mb-0.5">{term('singular')}</p>
+                                                <p className="font-serif font-normal text-[#000]">
+                                                    {(() => {
+                                                        const row = conj.rows[1]; // inti
+                                                        const base = isNeg ? row.imperfect : conj.imperative_sg;
 
-                                    <div className="mt-4 grid grid-cols-3 gap-2 text-sm border-t border-black/8 pt-3">
-                                        <p className="font-sans font-semibold text-[#000] self-center">{term('imperattiv')}</p>
-                                        <div>
-                                            <p className="text-xs text-black/40 mb-0.5">{term('singular')}</p>
-                                            <p className="font-serif font-normal text-[#000]">
-                                                {(() => {
-                                                    const row = conj.rows[1]; // inti
-                                                    const base = isNeg ? row.imperfect : conj.imperative_sg;
+                                                        // Prefer engine-provided stems, fallback to basic logic
+                                                        const stems = isNeg ? row.stems : (conj.imperative_sg_stems || {
+                                                            impfType1: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1'),
+                                                            impfType2: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1')
+                                                        });
 
-                                                    // Prefer engine-provided stems, fallback to basic logic
-                                                    const stems = isNeg ? row.stems : (conj.imperative_sg_stems || {
-                                                        impfType1: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1'),
-                                                        impfType2: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1')
-                                                    });
+                                                        const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
+                                                        return (isTheoretical ? '*' : '') + (isNeg ? result.replace(/^ma /, '') : result);
+                                                    })()}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs text-black/40 mb-0.5">{term('plural')}</p>
+                                                <p className="font-serif font-normal text-[#000]">
+                                                    {(() => {
+                                                        const row = conj.rows[5]; // intom
+                                                        const base = isNeg ? row.imperfect : conj.imperative_pl;
 
-                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
-                                                    return (isTheoretical ? '*' : '') + (isNeg ? result.replace(/^ma /, '') : result);
-                                                })()}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className="text-xs text-black/40 mb-0.5">{term('plural')}</p>
-                                            <p className="font-serif font-normal text-[#000]">
-                                                {(() => {
-                                                    const row = conj.rows[5]; // intom
-                                                    const base = isNeg ? row.imperfect : conj.imperative_pl;
+                                                        // Prefer engine-provided stems, fallback to basic logic
+                                                        const stems = isNeg ? row.stems : (conj.imperative_pl_stems || {
+                                                            impfType1: conj.imperative_pl,
+                                                            impfType2: conj.imperative_pl
+                                                        });
 
-                                                    // Prefer engine-provided stems, fallback to basic logic
-                                                    const stems = isNeg ? row.stems : (conj.imperative_pl_stems || {
-                                                        impfType1: conj.imperative_pl,
-                                                        impfType2: conj.imperative_pl
-                                                    });
-
-                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
-                                                    return (isTheoretical ? '*' : '') + (isNeg ? result.replace(/^ma /, '') : result);
-                                                })()}
-                                            </p>
+                                                        const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
+                                                        return (isTheoretical ? '*' : '') + (isNeg ? result.replace(/^ma /, '') : result);
+                                                    })()}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
 
-
-                                    <div className="mt-4 pt-3 border-t border-black/8 space-y-4">
+                                    {/* Mobile Unspooled View */}
+                                    <div className="block md:hidden space-y-6">
+                                        {/* Perfect */}
                                         <div>
-                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{term('polarità')}</p>
+                                            <h3 className="font-sans font-semibold text-[#000] mb-3">{term('perfett')}</h3>
+                                            <div className="w-full overflow-hidden">
+                                                <table className="w-full border-collapse table-fixed">
+                                                    <thead>
+                                                        <tr className="border-b border-black/8 font-semibold text-[10px] uppercase tracking-wider text-black/40">
+                                                            <th className="text-left pb-1 w-24 sm:w-[130px]">{term('person')}</th>
+                                                            <th className="text-right pb-1">{term('conjugation')}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-black/2">
+                                                        {conj.rows.map(row => (
+                                                            <tr key={`perf-${row.person_mt}`}>
+                                                                <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term(row.person_mt)}</td>
+                                                                <td className="py-2 font-serif text-[#000] text-right break-all text-sm">
+                                                                    {isTheoretical && '*'}{buildPerfectForm(
+                                                                        row.perfect,
+                                                                        row.perfect_neg ?? row.perfect,
+                                                                        isNeg,
+                                                                        doIdx,
+                                                                        ioIdx,
+                                                                        vsetPerf,
+                                                                        row.stems,
+                                                                        conj?.blocksImala || false,
+                                                                        vm.form
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        {/* Imperfect */}
+                                        <div>
+                                            <h3 className="font-sans font-semibold text-[#000] mb-3">{term('imperfett')}</h3>
+                                            <div className="w-full overflow-hidden">
+                                                <table className="w-full border-collapse table-fixed">
+                                                    <thead>
+                                                        <tr className="border-b border-black/8 font-semibold text-[10px] uppercase tracking-wider text-black/40">
+                                                            <th className="text-left pb-1 w-24 sm:w-[130px]">{term('person')}</th>
+                                                            <th className="text-right pb-1">{term('conjugation')}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-black/2">
+                                                        {conj.rows.map(row => (
+                                                            <tr key={`impf-${row.person_mt}`}>
+                                                                <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term(row.person_mt)}</td>
+                                                                <td className="py-2 font-serif text-[#000] text-right break-all text-sm">
+                                                                    {isTheoretical && '*'}{buildVerbForm(
+                                                                        row.imperfect,
+                                                                        isNeg,
+                                                                        doIdx,
+                                                                        ioIdx,
+                                                                        vsetImpf,
+                                                                        row.stems,
+                                                                        conj?.blocksImala || false,
+                                                                        vm.form
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        {/* Imperative */}
+                                        <div>
+                                            <h3 className="font-sans font-semibold text-[#000] mb-3">{term('imperattiv')}</h3>
+                                            <div className="w-full overflow-hidden">
+                                                <table className="w-full border-collapse table-fixed">
+                                                    <thead>
+                                                        <tr className="border-b border-black/8 font-semibold text-[10px] uppercase tracking-wider text-black/40">
+                                                            <th className="text-left pb-1 w-24 sm:w-[130px]">{term('person')}</th>
+                                                            <th className="text-right pb-1">{term('conjugation')}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-black/2">
+                                                        <tr>
+                                                            <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term('singular')}</td>
+                                                            <td className="py-2 font-serif text-[#000] text-right break-all text-sm">
+                                                                {(() => {
+                                                                    const row = conj.rows[1];
+                                                                    const base = isNeg ? row.imperfect : conj.imperative_sg;
+                                                                    const stems = isNeg ? row.stems : (conj.imperative_sg_stems || { impfType1: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1'), impfType2: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1') });
+                                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
+                                                                    return (isTheoretical ? '*' : '') + (isNeg ? result.replace(/^ma /, '') : result);
+                                                                })()}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term('plural')}</td>
+                                                            <td className="py-2 font-serif text-[#000] text-right break-all text-sm">
+                                                                {(() => {
+                                                                    const row = conj.rows[5];
+                                                                    const base = isNeg ? row.imperfect : conj.imperative_pl;
+                                                                    const stems = isNeg ? row.stems : (conj.imperative_pl_stems || { impfType1: conj.imperative_pl, impfType2: conj.imperative_pl });
+                                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
+                                                                    return (isTheoretical ? '*' : '') + (isNeg ? result.replace(/^ma /, '') : result);
+                                                                })()}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Controls (Polarity & Pronouns) */}
+                                    <div className="mt-4 pt-6 border-t border-black/8 space-y-4 w-full max-w-[340px] mx-auto">
+                                        <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                                            <p className="text-xs text-[#000] font-semibold mb-1.5 font-sans">{term('polarità')}</p>
                                             <TogglePill
                                                 options={['Positive', 'Negative']}
                                                 active={polarity}
@@ -457,29 +604,30 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                 onChange={v => setPolarity(v as any)}
                                             />
                                         </div>
-                                        <div>
-                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{term('oġġett dirett')}</p>
-                                            <SuffixStrip
-                                                labels={doLabels}
-                                                activeIdx={doIdx}
-                                                disabledIndices={ioIdx !== null ? [0, 1, 4, 5] : []}
-                                                onToggle={idx => setDoIdx(prev => prev === idx ? null : idx)}
-                                            />
-                                        </div>
-                                        <div>
-                                            <p className="text-xs text-black/40 mb-1.5 font-sans">{term('oġġett indirett')}</p>
-                                            <SuffixStrip
-                                                labels={ioLabels}
-                                                activeIdx={ioIdx}
-                                                onToggle={idx => {
-                                                    const newIoIdx = ioIdx === idx ? null : idx;
-                                                    setIoIdx(newIoIdx);
-                                                    // If selecting an IO, check if active DO is restricted (ni, k, na, kom)
-                                                    if (newIoIdx !== null && doIdx !== null && [0, 1, 4, 5].includes(doIdx)) {
-                                                        setDoIdx(null);
-                                                    }
-                                                }}
-                                            />
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                                            <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                                                <p className="text-xs text-[#000] font-semibold mb-1.5 font-sans">{term('oġġett dirett')}</p>
+                                                <SuffixStrip
+                                                    labels={doLabels}
+                                                    activeIdx={doIdx}
+                                                    disabledIndices={ioIdx !== null ? [0, 1, 4, 5] : []}
+                                                    onToggle={idx => setDoIdx(prev => prev === idx ? null : idx)}
+                                                />
+                                            </div>
+                                            <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                                                <p className="text-xs text-[#000] font-semibold mb-1.5 font-sans">{term('oġġett indirett')}</p>
+                                                <SuffixStrip
+                                                    labels={ioLabels}
+                                                    activeIdx={ioIdx}
+                                                    onToggle={idx => {
+                                                        const newIoIdx = ioIdx === idx ? null : idx;
+                                                        setIoIdx(newIoIdx);
+                                                        if (newIoIdx !== null && doIdx !== null && [0, 1, 4, 5].includes(doIdx)) {
+                                                            setDoIdx(null);
+                                                        }
+                                                    }}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -488,9 +636,9 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                         {/* Derived Terms */}
                         {((entry.verb_verbal_noun || vm.verbal_noun) || (entry.verb_passive_ptcp || vm.passive_participle) || (entry.verb_active_ptcp || vm.active_participle)) && (
-                            <div>
-                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{term('termini derivati')}</h2>
-                                <div className="flex gap-10 text-sm">
+                            <div className="sm:max-w-sm mx-auto md:max-w-none w-full">
+                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3 text-center md:text-left">{term('termini derivati')}</h2>
+                                <div className="flex flex-col sm:flex-row gap-4 sm:gap-10 text-sm mt-3 items-center md:items-start text-center md:text-left">
                                     {(entry.verb_verbal_noun || vm.verbal_noun) && (
                                         <DerivedTermLink
                                             label={term('nom verbali')}
@@ -515,15 +663,18 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                         {/* Usage Example */}
                         {entry.definitions[0]?.example_sentences && entry.definitions[0].example_sentences.length > 0 && (
-                            <div>
-                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{term('eżempju ta\' użu')}</h2>
+                            <div className="max-w-[340px] mx-auto md:max-w-none w-full">
+                                <h2 className="font-sans font-semibold text-[1.25rem] text-[#000] mb-3 text-center md:text-left">{term('eżempju ta\' użu')}</h2>
                                 {entry.definitions[0].example_sentences.slice(0, 1).map(ex => (
                                     <div key={ex.id}>
-                                        <p className="text-sm text-[#000] font-serif">{ex.maltese}</p>
+                                        <p className="text-sm text-[#000] font-serif text-center md:text-left">{ex.maltese}</p>
                                         {ex.english && (
-                                            <p className="text-xs text-black/40 italic mt-1 pl-4 border-l-2 border-black/10 font-sans">
-                                                {ex.english}
-                                            </p>
+                                            <div className="flex mt-1 justify-center md:justify-start">
+                                                <div className="hidden md:block w-2 h-2 border-l border-b border-black/20 mr-2 -translate-y-1"></div>
+                                                <p className="text-[13px] text-black/60 italic font-sans flex-1 text-center md:text-left max-w-full sm:max-w-[280px] md:max-w-none">
+                                                    {ex.english}
+                                                </p>
+                                            </div>
                                         )}
                                     </div>
                                 ))}
@@ -532,9 +683,9 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                         {/* Thesaurus */}
                         {((vm.synonyms?.length ?? 0) > 0 || (vm.antonyms?.length ?? 0) > 0) && (
-                            <div>
-                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3">{term('tesawru')}</h2>
-                                <div className="flex gap-16 text-sm">
+                            <div className="max-w-[340px] mx-auto md:max-w-none w-full">
+                                <h2 className="font-serif font-semibold text-[1.25rem] text-[#000] mb-3 text-center md:text-left">{term('tesawru')}</h2>
+                                <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-center md:items-start text-center md:text-left">
                                     {vm.synonyms && vm.synonyms.length > 0 && (
                                         <div>
                                             <p className="font-semibold text-[#000] mb-1">{term('sinonimi')}</p>
@@ -564,6 +715,43 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </div>
                             </div>
                         )}
+
+                        {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
+                        <div className="block md:hidden space-y-4 pt-4 max-w-[340px] mx-auto w-full">
+                            {ety && ety.chain.length > 0 && (
+                                <SideCard title={term('etymology')}>
+                                    <p className="text-sm text-[#000] leading-relaxed">
+                                        {term('from')}
+                                        <span style={{ color: BLUE }} className="font-medium mx-1">
+                                            {term(ety.chain[0].language)}
+                                        </span>
+                                        {ety.chain[0].script && <> <span className="font-arabic">{ety.chain[0].script}</span></>}
+                                        {ety.chain[1] && <> ({ety.chain[1].form})</>}.
+                                    </p>
+                                </SideCard>
+                            )}
+
+                            {vm.related_entries && vm.related_entries.length > 0 && (
+                                <SideCard title={term('entrati relatati')}>
+                                    <div className="space-y-1">
+                                        {vm.related_entries.map(rel => (
+                                            <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {rel.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-[#000]">
+                                                    "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                                </span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </SideCard>
+                            )}
+
+                            {vm.source_citation && (
+                                <SideCard title={term('sors')}>
+                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{vm.source_citation}</span>
+                                </SideCard>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

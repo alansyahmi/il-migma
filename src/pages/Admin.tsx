@@ -643,7 +643,7 @@ function RootManager() {
                                         </button>
                                     </td>
                                     <td className="p-4 font-serif font-bold text-[#1034A6] text-lg">
-                                        <Link to={`/root/${encodeURIComponent(r.id)}`} className="hover:underline">{r.consonants}</Link>
+                                        <Link to={`/root/${r.consonants}`} className="hover:underline">{r.consonants}</Link>
                                     </td>
                                     <td className="p-4 text-black/80">
                                         {(() => {
@@ -740,7 +740,7 @@ function RootManager() {
                                 {selectedIds.has(r.id) ? <CheckSquare size={16} /> : <Square size={16} />}
                             </button>
                             <div className="flex justify-between items-start mb-3 ml-6 group-hover:ml-0 transition-all">
-                                <Link to={`/root/${encodeURIComponent(r.id)}`} className="ml-1">
+                                <Link to={`/root/${r.consonants}`} className="ml-1">
                                     <h4 className="font-serif text-2xl font-bold text-[#1034A6] group-hover:underline">{r.consonants}</h4>
                                 </Link>
                                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

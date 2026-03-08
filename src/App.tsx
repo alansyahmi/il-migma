@@ -8,6 +8,7 @@ import { DarkModeProvider } from '@/contexts/DarkModeContext';
 import { AdminConfigProvider } from '@/lib/adminConfig';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import ScrollToTop from '@/components/utils/ScrollToTop';
 import { Home } from '@/pages/Home';
 import { Search } from '@/pages/Search';
 import { Entry } from '@/pages/Entry';
@@ -53,6 +54,7 @@ export default function App() {
             <LinguisticModeProvider>
               <AuthProvider>
                 <BrowserRouter>
+                  <ScrollToTop />
                   <Routes>
                     <Route element={<AppShell />}>
                       <Route index element={<Home />} />

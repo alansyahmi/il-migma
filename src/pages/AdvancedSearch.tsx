@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { Search as SearchIcon, Keyboard } from 'lucide-react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { Search as SearchIcon, Keyboard, Filter, ChevronDown, ChevronUp } from 'lucide-react';
+import { generateRootForms } from '@/lib/conjugationEngine';
 import { cn } from '@/lib/utils';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -227,14 +228,15 @@ function InflectionCell({ row }: { row: InflectionRow }) {
     return <span className="text-sm text-[#000]">{row.form}</span>;
 }
 
+
 function EntryCard({ result, index }: { result: SearchResult; index: number }) {
     const { term } = useLinguisticMode();
     return (
-        <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3">
-            <div className="grid grid-cols-[11rem_5rem_1fr_11rem] min-h-[5rem]">
+        <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3 w-full">
+            <div className="flex flex-col md:grid md:grid-cols-[11rem_5rem_1fr_11rem] min-h-[5rem]">
 
                 {/* Col 1: Index number | headword + root */}
-                <div className="px-4 py-4 flex items-start gap-2">
+                <div className="px-5 py-4 flex items-start gap-2 border-b md:border-b-0 md:border-r border-black/5">
                     <span className="text-xs text-black/30 font-sans w-5 shrink-0 pt-1">{index}.</span>
                     <div>
                         <Link to={`/entry/${result.id}`}
@@ -259,26 +261,26 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
                 {/* Col 2: POS block */}
-                <div className="px-4 py-4 flex flex-col gap-0.5">
-                    <span className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug">
+                <div className="px-5 py-3 md:py-4 flex flex-row md:flex-col flex-wrap gap-2 md:gap-0.5 border-b md:border-b-0 md:border-r border-black/5 bg-black/[0.01] md:bg-transparent">
+                    <span className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug font-bold md:font-normal">
                         {term(result.pos)}
                     </span>
                     {result.formLines.map(line => (
-                        <span key={line} className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug">
+                        <span key={line} className="text-[10px] md:text-xs text-[#000] font-sans uppercase tracking-wide leading-snug opacity-60 md:opacity-100 bg-black/5 md:bg-transparent px-1 md:px-0 rounded md:rounded-none">
                             {line}
                         </span>
                     ))}
                 </div>
 
                 {/* Col 3: Definitions */}
-                <div className="px-5 py-4">
+                <div className="px-5 py-4 border-b md:border-b-0 md:border-r border-black/5">
                     {result.definitions.length === 1 ? (
-                        <p className="text-sm text-[#000]">{result.definitions[0]}</p>
+                        <p className="text-sm text-[#000] leading-relaxed">{result.definitions[0]}</p>
                     ) : (
-                        <ol className="space-y-0.5 list-none">
+                        <ol className="space-y-1 md:space-y-0.5 list-none">
                             {result.definitions.map((def, i) => (
                                 <li key={i} className="text-sm text-[#000]">
-                                    {i + 1}. {def}
+                                    <span className="text-black/30 mr-1.5 font-sans text-xs">{i + 1}.</span> {def}
                                 </li>
                             ))}
                         </ol>
@@ -286,10 +288,10 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
                 {/* Col 4: Inflections */}
-                <div className="px-4 py-4 space-y-1">
+                <div className="px-5 py-4 space-y-2 md:space-y-1 bg-black/[0.01] md:bg-transparent">
                     {result.inflections.map((row, i) => (
                         <div key={i} className="flex items-baseline gap-3">
-                            <span className="text-xs text-black/55 font-sans w-[4.5rem] shrink-0 leading-snug">
+                            <span className="text-[10px] md:text-xs text-black/40 md:text-black/55 font-sans w-[4.5rem] shrink-0 leading-snug uppercase tracking-tight md:tracking-normal">
                                 {row.label}
                             </span>
                             <InflectionCell row={row} />
@@ -298,11 +300,10 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
             </div>
+
         </div>
     );
 }
-
-
 
 // ── Root radical slot ──────────────────────────────────────────────────────
 function RootRadicalsInput({
@@ -431,6 +432,7 @@ export function AdvancedSearch() {
     }, [searchParams, t, term]);
 
     const [kbOpen, setKbOpen] = useState(false);
+    const [showFiltersMobile, setShowFiltersMobile] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const kbRef = useRef<HTMLButtonElement>(null);
 
@@ -444,6 +446,7 @@ export function AdvancedSearch() {
             if (r) params[`r${i + 1}`] = r;
         });
         setSearchParams(params);
+        setShowFiltersMobile(false);
     };
 
     const insertChar = (char: string) => {
@@ -545,7 +548,7 @@ export function AdvancedSearch() {
                 <div className="mb-6">
                     {submitted ? (
                         <>
-                            <h1 className="font-serif font-medium text-[2rem] leading-tight text-[#000]">
+                            <h1 className="font-serif font-medium text-4xl leading-tight text-[#000]">
                                 {t(`Results for '${submitted}'`, `Riżultati għal '${submitted}'`)}
                             </h1>
                             <p className="text-sm text-black/40 mt-0.5">
@@ -554,7 +557,7 @@ export function AdvancedSearch() {
                         </>
                     ) : (
                         <>
-                            <h1 className="font-serif font-medium text-[2rem] leading-tight text-[#000]">
+                            <h1 className="font-serif font-medium text-4xl leading-tight text-[#000]">
                                 {t('Advanced Search', term('advanced-search'))}
                             </h1>
                             <p className="text-sm text-black/40 mt-0.5">
@@ -568,7 +571,7 @@ export function AdvancedSearch() {
                 </div>
 
                 {/* ── Search bar ── */}
-                <form onSubmit={handleSearch} className="max-w-2xl mb-8 relative">
+                <form onSubmit={handleSearch} className="w-full md:max-w-2xl mb-8 relative">
                     <div className="flex items-center bg-white border border-black/10 rounded-lg overflow-hidden shadow-sm">
                         {/* Keyboard toggle */}
                         <button
@@ -609,117 +612,144 @@ export function AdvancedSearch() {
                     />
                 </form>
 
+
                 {/* ── Two-column layout ── */}
-                <div className="flex gap-6 items-start">
+                <div className="flex flex-col md:flex-row gap-8 md:items-start w-full">
 
-                    {/* ── Filter sidebar ── */}
-                    <aside className="w-56 shrink-0 bg-white rounded-xl border border-black/8 shadow-sm p-5 space-y-4 sticky top-20">
-                        <h2 className="font-sans font-semibold text-sm text-[#000]">
-                            {t('Filters', 'Filtri')}
-                        </h2>
-
-                        <FilterSelect
-                            label={t('Maximum Results Shown', term('Massimu ta\' Riżultati'))}
-                            value={filters.maxResults}
-                            onChange={v => setFilter('maxResults', v)}
-                            options={[
-                                { value: '10', label: '10' },
-                                { value: '25', label: '25' },
-                                { value: '50', label: '50' },
-                                { value: '100', label: '100' },
-                            ]}
-                        />
-
-                        <FilterSelect
-                            label={term('parti tad-diskors')}
-                            value={filters.pos}
-                            onChange={v => setFilter('pos', v)}
-                            options={POS_FILTER_OPTIONS}
-                        />
-
-                        <FilterSelect
-                            label={term('għerq') + ' (' + term('forma') + ')'}
-                            value={filters.rootType}
-                            onChange={v => setFilter('rootType', v)}
-                            options={ROOT_TYPE_FILTER_OPTIONS}
-                        />
-
-                        <FilterSelect
-                            label={term('sors')}
-                            value={filters.source}
-                            onChange={v => setFilter('source', v)}
-                            options={[
-                                { value: '', label: term('all') },
-                                { value: 'spagnol2011', label: 'Spagnol (2011)' },
-                                { value: 'mayer2013', label: 'Mayer (2013)' },
-                                { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
-                                { value: 'maltese_academy', label: term('maltese-academy') },
-                            ]}
-                        />
-
-                        <RootRadicalsInput
-                            label={t('Root Radicals', term('Konsonanti tal-Għerq'))}
-                            values={filters.rootRadicals}
-                            onChange={setRadical}
-                        />
-
-                        <FilterText
-                            label={cvPatternLabel}
-                            value={filters.wizenPattern}
-                            onChange={v => setFilter('wizenPattern', v)}
-                            placeholder="e.g. CVCC"
-                        />
-
-                        <FilterHybrid
-                            label={t('Vowel Set', 'Sett ta\' Vokali')}
-                            value={filters.vowelSet}
-                            onChange={v => setFilter('vowelSet', v)}
-                            placeholder="e.g. i–e"
-                            options={['--a', '--e', '--i', '--o', '--u', 'i–e', 'a–a', 'a-e', 'i-a', 'ie-e', 'a–i', 'e-a', 'e-e', 'e-i', 'o–o', 'i-i', 'i-u', 'u-u']}
-                        />
-
-                        <FilterHybrid
-                            label={t('Dual Pattern', term('Mudell tal-Imtenni'))}
-                            value={filters.dualPattern}
-                            onChange={v => setFilter('dualPattern', v)}
-                            options={['-ejn', '-ajn', '-tejn', '-tajn']}
-                        />
-
-                        <FilterHybrid
-                            label={t('Plural Pattern', term('Mudell tal-Plural'))}
-                            value={filters.pluralPattern}
-                            onChange={v => setFilter('pluralPattern', v)}
-                            options={['-i', '-iet', '-at', '-ijiet', 'Break Plural']}
-                        />
-
-                        <div className="border-t border-black/8 pt-4 space-y-2.5">
-                            <FilterCheckbox
-                                label={t('Search lemma', 'Fittex il-lemma')}
-                                checked={filters.searchLemma}
-                                onChange={v => setFilter('searchLemma', v)}
-                            />
-                            <FilterCheckbox
-                                label={t('Search word forms only', 'Fittex forom tal-kelma biss')}
-                                checked={filters.searchWordForms}
-                                onChange={v => setFilter('searchWordForms', v)}
-                            />
-                            <FilterCheckbox
-                                label={t('Search in English gloss only', 'Fittex fil-gloss bl-Ingliż biss')}
-                                checked={filters.searchEnglishGloss}
-                                onChange={v => setFilter('searchEnglishGloss', v)}
-                            />
-                            <FilterCheckbox
-                                label={t('Include suggested results', 'Inkludi riżultati suġġeriti')}
-                                checked={filters.includeSuggested}
-                                onChange={v => setFilter('includeSuggested', v)}
-                            />
-                            <FilterCheckbox
-                                label={t('Include pending entries', 'Inkludi entrati pendenti')}
-                                checked={filters.includePending}
-                                onChange={v => setFilter('includePending', v)}
-                            />
+                    {/* Filter Sidebar Container (Unified on Mobile) */}
+                    <div className="w-full md:w-56 shrink-0 flex flex-col md:sticky md:top-20">
+                        {/* Mobile Filter Toggle */}
+                        <div className="md:hidden w-full">
+                            <button
+                                onClick={() => setShowFiltersMobile(!showFiltersMobile)}
+                                className={cn(
+                                    "w-full flex items-center justify-between bg-white border border-black/10 px-5 py-4 shadow-sm transition-all",
+                                    showFiltersMobile ? "rounded-t-xl border-b-0" : "rounded-xl"
+                                )}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <Filter size={18} className="text-[#1034A6]" />
+                                    <span className="font-sans font-semibold text-sm text-[#000]">
+                                        {t('Filter Options', 'Għażliet tal-Filtru')}
+                                    </span>
+                                </div>
+                                {showFiltersMobile ? <ChevronUp size={18} className="text-black/30" /> : <ChevronDown size={18} className="text-black/30" />}
+                            </button>
                         </div>
-                    </aside>
+
+                        {/* ── Filter sidebar ── */}
+                        <aside className={cn(
+                            "w-full bg-white border border-black/10 md:border-black/8 shadow-sm p-5 space-y-4 transition-all duration-300 overflow-hidden",
+                            "md:rounded-xl md:block",
+                            showFiltersMobile ? "rounded-b-xl block" : "hidden"
+                        )}>
+                            <h2 className="hidden md:block font-sans font-semibold text-sm text-[#000]">
+                                {t('Filters', 'Filtri')}
+                            </h2>
+
+                            <FilterSelect
+                                label={t('Maximum Results Shown', term('Massimu ta\' Riżultati'))}
+                                value={filters.maxResults}
+                                onChange={v => setFilter('maxResults', v)}
+                                options={[
+                                    { value: '10', label: '10' },
+                                    { value: '25', label: '25' },
+                                    { value: '50', label: '50' },
+                                    { value: '100', label: '100' },
+                                ]}
+                            />
+
+                            <FilterSelect
+                                label={term('parti tad-diskors')}
+                                value={filters.pos}
+                                onChange={v => setFilter('pos', v)}
+                                options={POS_FILTER_OPTIONS}
+                            />
+
+                            <FilterSelect
+                                label={term('għerq') + ' (' + term('forma') + ')'}
+                                value={filters.rootType}
+                                onChange={v => setFilter('rootType', v)}
+                                options={ROOT_TYPE_FILTER_OPTIONS}
+                            />
+
+                            <FilterSelect
+                                label={term('sors')}
+                                value={filters.source}
+                                onChange={v => setFilter('source', v)}
+                                options={[
+                                    { value: '', label: term('all') },
+                                    { value: 'spagnol2011', label: 'Spagnol (2011)' },
+                                    { value: 'mayer2013', label: 'Mayer (2013)' },
+                                    { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
+                                    { value: 'maltese_academy', label: term('maltese-academy') },
+                                ]}
+                            />
+
+                            <RootRadicalsInput
+                                label={t('Root Radicals', term('Konsonanti tal-Għerq'))}
+                                values={filters.rootRadicals}
+                                onChange={setRadical}
+                            />
+
+                            <FilterText
+                                label={cvPatternLabel}
+                                value={filters.wizenPattern}
+                                onChange={v => setFilter('wizenPattern', v)}
+                                placeholder="e.g. CVCC"
+                            />
+
+                            <FilterHybrid
+                                label={t('Vowel Set', 'Sett ta\' Vokali')}
+                                value={filters.vowelSet}
+                                onChange={v => setFilter('vowelSet', v)}
+                                placeholder="e.g. i–e"
+                                options={['--a', '--e', '--i', '--o', '--u', 'i–e', 'a–a', 'a-e', 'i-a', 'ie-e', 'a–i', 'e-a', 'e-e', 'e-i', 'o–o', 'i-i', 'i-u', 'u-u']}
+                            />
+
+                            <FilterHybrid
+                                label={t('Dual Pattern', term('Mudell tal-Imtenni'))}
+                                value={filters.dualPattern}
+                                onChange={v => setFilter('dualPattern', v)}
+                                options={['-ejn', '-ajn', '-tejn', '-tajn']}
+                            />
+
+                            <FilterHybrid
+                                label={t('Plural Pattern', term('Mudell tal-Plural'))}
+                                value={filters.pluralPattern}
+                                onChange={v => setFilter('pluralPattern', v)}
+                                options={['-i', '-iet', '-at', '-ijiet', 'Break Plural']}
+                            />
+
+                            <div className="border-t border-black/8 pt-4 space-y-2.5">
+                                <FilterCheckbox
+                                    label={t('Search lemma', 'Fittex il-lemma')}
+                                    checked={filters.searchLemma}
+                                    onChange={v => setFilter('searchLemma', v)}
+                                />
+                                <FilterCheckbox
+                                    label={t('Search word forms only', 'Fittex forom tal-kelma biss')}
+                                    checked={filters.searchWordForms}
+                                    onChange={v => setFilter('searchWordForms', v)}
+                                />
+                                <FilterCheckbox
+                                    label={t('Search in English gloss only', 'Fittex fil-gloss bl-Ingliż biss')}
+                                    checked={filters.searchEnglishGloss}
+                                    onChange={v => setFilter('searchEnglishGloss', v)}
+                                />
+                                <FilterCheckbox
+                                    label={t('Include suggested results', 'Inkludi riżultati suġġeriti')}
+                                    checked={filters.includeSuggested}
+                                    onChange={v => setFilter('includeSuggested', v)}
+                                />
+                                <FilterCheckbox
+                                    label={t('Include pending entries', 'Inkludi entrati pendenti')}
+                                    checked={filters.includePending}
+                                    onChange={v => setFilter('includePending', v)}
+                                />
+                            </div>
+                        </aside>
+                    </div>
 
                     {/* ── Results area ── */}
                     <div className="flex-1 min-w-0">
@@ -736,8 +766,43 @@ export function AdvancedSearch() {
                                     const vm = entry.verb_morphology;
                                     formLines.push(`${t('Form', 'Sura')} ${vm.form}`);
                                     if (vm.transitivity) formLines.push(t(vm.transitivity, term(vm.transitivity.toLowerCase())));
-                                    if (vm.perfective_3sg_m) inflections.push({ label: t('Perfective', 'Perfettiv'), form: vm.perfective_3sg_m, hasPage: true });
-                                    if (vm.imperfective_3sg_m) inflections.push({ label: t('Imperfective', 'Imperfettiv'), form: vm.imperfective_3sg_m, hasPage: false });
+
+                                    // Auto-generate missing forms using the engine if enough data exists
+                                    let generated: any = null;
+                                    const rc = entry.root_pattern_form?.root?.consonants;
+                                    if (rc && (!vm.imperfective_3sg_m || !vm.imperative_sg)) {
+                                        try {
+                                            const forms = generateRootForms(
+                                                rc,
+                                                vm.vowel_set_perfect || 'a-a',
+                                                vm.vowel_set_imperfect || 'i-a',
+                                                entry.root_pattern_form.root.strength || 'strong',
+                                                entry.root_pattern_form.root.weak_class
+                                            );
+                                            generated = forms.find((f: any) => f.form === vm.form);
+                                        } catch (e) {
+                                            console.warn("Advanced search conjugation error:", e);
+                                        }
+                                    }
+
+                                    if (vm.perfective_3sg_m) {
+                                        inflections.push({ label: term('perfett'), form: vm.perfective_3sg_m, hasPage: true });
+                                    }
+
+                                    const impf = vm.imperfective_3sg_m || generated?.imperfect;
+                                    if (impf) {
+                                        inflections.push({ label: term('imperfett'), form: impf, hasPage: false });
+                                    }
+
+                                    const impv = vm.imperative_sg || (generated as any)?.imperative_sg;
+                                    if (impv && impv !== '-') {
+                                        inflections.push({ label: term('imperattiv'), form: impv, hasPage: true });
+                                    }
+
+                                    const vn = vm.verbal_noun;
+                                    if (vn && vn !== '-') {
+                                        inflections.push({ label: term('nom verbali'), form: vn, hasPage: true });
+                                    }
                                 } else if (entry.noun_morphology) {
                                     const nm = entry.noun_morphology;
                                     if (nm.plural_forms?.length) inflections.push({ label: t('Plural', 'Plural'), form: nm.plural_forms[0], hasPage: false });
@@ -751,7 +816,7 @@ export function AdvancedSearch() {
                                     gender: entry.noun_morphology?.gender || (entry.adjective_morphology?.masculine ? 'masculine' : undefined),
                                     pos: entry.pos,
                                     formLines,
-                                    definitions: entry.definitions.map((d: any) => d.text_en),
+                                    definitions: entry.definition_en ? [entry.definition_en] : (entry.definitions?.length ? entry.definitions.map((d: any) => d.text_en) : []),
                                     inflections,
                                 };
 

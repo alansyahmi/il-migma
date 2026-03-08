@@ -54,7 +54,7 @@ export function Conjugator() {
                     <Badge variant="tag">{t('Basic', 'Bażiku')}</Badge>
                 </div>
                 <p className="text-sm text-[#4a4a4a]">
-                    {t('Enter a verb in the 3sg.m perfective form (e.g. kiteb, niżel, fetaħ).', 'Daħħal verb fil-forma 3sg.m perfettiv (eż. kiteb, niżel, fetaħ).')}
+                    {t('Enter a verb in the 3sg.m perfect form (e.g. kiteb, niżel, fetaħ).', 'Daħħal verb fil-forma 3sg.m perfett (eż. kiteb, niżel, fetaħ).')}
                 </p>
             </div>
 
@@ -80,8 +80,8 @@ export function Conjugator() {
                             <thead>
                                 <tr className="border-b border-[#ede9e1] bg-[#f9f7f3]">
                                     <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">{t('Person', 'Persuna')}</th>
-                                    <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">{t('Perfective', 'Perfettiv')}</th>
-                                    <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">{t('Imperfective', 'Imperfettiv')}</th>
+                                    <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">{term('perfett')}</th>
+                                    <th className="text-left px-4 py-2 text-xs text-[#A07030] uppercase font-semibold">{term('imperfett')}</th>
                                 </tr>
                             </thead>
                             <tbody>

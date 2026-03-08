@@ -12,7 +12,7 @@ export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const q = url.searchParams.get('q')?.trim() ?? '';
     const pos = url.searchParams.get('pos') ?? '';
-    const rootId = url.searchParams.get('root_id') ?? '';
+    const rootId = url.searchParams.get('root_id')?.trim().normalize('NFC') ?? '';
     const limit = Math.min(Number(url.searchParams.get('limit') ?? 20), 100);
     const offset = Number(url.searchParams.get('offset') ?? 0);
 
@@ -39,6 +39,15 @@ export async function onRequestGet({ request, env }) {
             await db.execute("ALTER TABLE entries ADD COLUMN noun_masculine TEXT").catch(() => { });
             await db.execute("ALTER TABLE entries ADD COLUMN root_consonants TEXT").catch(() => { });
             await db.execute("ALTER TABLE entries ADD COLUMN verb_form TEXT").catch(() => { });
+            await db.execute("ALTER TABLE entries ADD COLUMN verb_transitivity TEXT").catch(() => { });
+            await db.execute("ALTER TABLE entries ADD COLUMN verb_perfective_3sgm TEXT").catch(() => { });
+            await db.execute("ALTER TABLE entries ADD COLUMN verb_imperfective_3sgm TEXT").catch(() => { });
+            await db.execute("ALTER TABLE entries ADD COLUMN verb_verbal_noun TEXT").catch(() => { });
+            await db.execute("ALTER TABLE entries ADD COLUMN verb_active_ptcp TEXT").catch(() => { });
+            await db.execute("ALTER TABLE entries ADD COLUMN verb_passive_ptcp TEXT").catch(() => { });
+            await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_perf TEXT").catch(() => { });
+            await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_impf TEXT").catch(() => { });
+            await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_impv TEXT").catch(() => { });
         } catch (e) {
             // Ignore errors if columns already exist
         }
@@ -73,8 +82,9 @@ export async function onRequestGet({ request, env }) {
         }
 
         if (rootId) {
-            sql += ` AND r.id = ?`;
-            args.push(rootId);
+            const lowerRootId = rootId.toLowerCase();
+            sql += ` AND (r.id = ? OR LOWER(r.consonants) = ? OR LOWER(e.root_consonants) = ?)`;
+            args.push(rootId, lowerRootId, lowerRootId);
         }
 
         if (pos) {
@@ -95,12 +105,17 @@ export async function onRequestGet({ request, env }) {
                 is_loanword: Boolean(r.is_loanword),
                 verb_morphology: (r.pos === 'verb' || r.verb_form) ? {
                     form: r.verb_form || '',
+                    transitivity: r.verb_transitivity || 'both',
+                    perfective_3sg_m: r.verb_perfective_3sgm || r.headword,
+                    imperfective_3sg_m: r.verb_imperfective_3sgm || '',
                     vowel_set_perfect: r.verb_vowel_perf || '',
                     vowel_set_imperfect: r.verb_vowel_impf || '',
                     verbal_noun: r.verb_verbal_noun || '',
                     active_participle: r.verb_active_ptcp || '',
                     passive_participle: r.verb_passive_ptcp || '',
                 } : undefined,
+                definition_en: r.text_en,
+                definition_mt: r.text_mt,
                 root_pattern_form: r.root_consonants ? {
                     id: '',
                     root_id: r.root_id || '',
@@ -108,8 +123,8 @@ export async function onRequestGet({ request, env }) {
                     derived_form: r.headword,
                     root: {
                         id: r.root_id || '',
-                        consonants: r.root_consonants,
-                        consonant_array: r.root_consonants.split('-'),
+                        consonants: r.root_consonants || '',
+                        consonant_array: r.root_consonants ? r.root_consonants.split('-') : [],
                         strength: r.root_strength || 'strong',
                         weak_class: r.root_weak_class || undefined,
                         vowel_set_perf: r.vowel_set_perf,

@@ -53,8 +53,8 @@ export async function onRequestGet({ request, env, params }) {
 
         const client = db(env);
         const rootRes = await client.execute({
-            sql: `SELECT * FROM roots WHERE id = ?`,
-            args: [decodedId],
+            sql: `SELECT * FROM roots WHERE id = ? OR LOWER(consonants) = LOWER(?)`,
+            args: [decodedId, decodedId],
         });
 
         if (rootRes.rows.length === 0) {
@@ -130,8 +130,8 @@ export async function onRequestPut({ request, env, params }) {
 
         if (setClauses.length <= 1) return json({ error: 'No fields to update' }, 400);
 
-        const sql = `UPDATE roots SET ${setClauses.join(', ')} WHERE id = ?`;
-        args.push(decodedId);
+        const sql = `UPDATE roots SET ${setClauses.join(', ')} WHERE id = ? OR LOWER(consonants) = LOWER(?)`;
+        args.push(decodedId, decodedId);
 
         // Handle ID rename 
         const oldId = body._oldId;
@@ -170,7 +170,10 @@ export async function onRequestPut({ request, env, params }) {
             const newAnts = typeof body.antonyms === 'string' ? JSON.parse(body.antonyms) : (body.antonyms || []);
 
             // Fetch current root's gloss for reciprocal entries
-            const currentRootRes = await client.execute({ sql: `SELECT gloss, consonants FROM roots WHERE id = ?`, args: [currentId] });
+            const currentRootRes = await client.execute({
+                sql: `SELECT gloss, consonants FROM roots WHERE id = ? OR LOWER(consonants) = LOWER(?)`,
+                args: [currentId, currentId]
+            });
             const currentConsonants = currentRootRes.rows[0]?.consonants || '';
             const currentGlossRaw = currentRootRes.rows[0]?.gloss || '';
             let currentGloss = { en: '', mt: '' };

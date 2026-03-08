@@ -18,8 +18,8 @@ export async function onRequestGet({ env, params }) {
         const searchId = decodeURIComponent(id).normalize('NFC');
 
         const rootRes = await db.execute({
-            sql: `SELECT * FROM roots WHERE id = ?`,
-            args: [searchId],
+            sql: `SELECT * FROM roots WHERE id = ? OR LOWER(consonants) = LOWER(?)`,
+            args: [searchId, searchId],
         });
 
         if (!rootRes.rows.length) {

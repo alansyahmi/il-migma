@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Search as SearchIcon, Keyboard, MessageSquare, Layers } from 'lucide-react';
+import { Search as SearchIcon, Keyboard, MessageSquare, Layers, Filter, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { apiSearch } from '@/lib/api';
 import { useAdminConfig } from '@/lib/adminConfig';
+import { generateRootForms } from '@/lib/conjugationEngine';
 
 // ── Colours ────────────────────────────────────────────────────────────────
 const EGYPTIAN_BLUE = '#1034A6';
@@ -169,14 +170,15 @@ function InflectionCell({ row }: { row: InflectionRow }) {
     return <span className="text-sm text-[#000]">{row.form}</span>;
 }
 
+
 function EntryCard({ result, index }: { result: SearchResult; index: number }) {
     const { term } = useLinguisticMode();
     return (
-        <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden">
-            <div className="grid grid-cols-[11rem_5rem_1fr_11rem] min-h-[5rem]">
+        <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3 w-full">
+            <div className="flex flex-col md:grid md:grid-cols-[11rem_5rem_1fr_11rem] min-h-[5rem]">
 
                 {/* Col 1: Index number | headword + root */}
-                <div className="px-4 py-4 flex items-start gap-2">
+                <div className="px-5 py-4 flex items-start gap-2 border-b md:border-b-0 md:border-r border-black/5">
                     <span className="text-xs text-black/30 font-sans w-5 shrink-0 pt-1">{index}.</span>
                     <div>
                         <Link to={`/entry/${result.id}`}
@@ -184,7 +186,7 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                             {result.headword}
                         </Link>
                         <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
-                            <Link to={`/root/${result.rootSlug}`}
+                            <Link to={`/search?root=${result.rootSlug}`}
                                 style={{ color: EGYPTIAN_BLUE }}
                                 className="text-xs hover:underline font-sans">
                                 {result.root}
@@ -201,26 +203,26 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
                 {/* Col 2: POS block */}
-                <div className="px-4 py-4 flex flex-col gap-0.5">
-                    <span className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug">
+                <div className="px-5 py-3 md:py-4 flex flex-row md:flex-col flex-wrap gap-2 md:gap-0.5 border-b md:border-b-0 md:border-r border-black/5 bg-black/[0.01] md:bg-transparent">
+                    <span className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug font-bold md:font-normal">
                         {term(result.pos)}
                     </span>
                     {result.formLines.map(line => (
-                        <span key={line} className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug">
+                        <span key={line} className="text-[10px] md:text-xs text-[#000] font-sans uppercase tracking-wide leading-snug opacity-60 md:opacity-100 bg-black/5 md:bg-transparent px-1 md:px-0 rounded md:rounded-none">
                             {line}
                         </span>
                     ))}
                 </div>
 
                 {/* Col 3: Definitions */}
-                <div className="px-5 py-4">
+                <div className="px-5 py-4 border-b md:border-b-0 md:border-r border-black/5">
                     {result.definitions.length === 1 ? (
-                        <p className="text-sm text-[#000]">{result.definitions[0]}</p>
+                        <p className="text-sm text-[#000] leading-relaxed">{result.definitions[0]}</p>
                     ) : (
-                        <ol className="space-y-0.5 list-none">
+                        <ol className="space-y-1 md:space-y-0.5 list-none">
                             {result.definitions.map((def, i) => (
                                 <li key={i} className="text-sm text-[#000]">
-                                    {i + 1}. {def}
+                                    <span className="text-black/30 mr-1.5 font-sans text-xs">{i + 1}.</span> {def}
                                 </li>
                             ))}
                         </ol>
@@ -228,10 +230,10 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
                 {/* Col 4: Inflections */}
-                <div className="px-4 py-4 space-y-1">
+                <div className="px-5 py-4 space-y-2 md:space-y-1 bg-black/[0.01] md:bg-transparent">
                     {result.inflections.map((row, i) => (
                         <div key={i} className="flex items-baseline gap-3">
-                            <span className="text-xs text-black/55 font-sans w-[4.5rem] shrink-0 leading-snug">
+                            <span className="text-[10px] md:text-xs text-black/40 md:text-black/55 font-sans w-[4.5rem] shrink-0 leading-snug uppercase tracking-tight md:tracking-normal">
                                 {row.label}
                             </span>
                             <InflectionCell row={row} />
@@ -240,18 +242,20 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
             </div>
+
         </div>
     );
 }
 
 // ── Main page ──────────────────────────────────────────────────────────────
 export function Search() {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { getOptions } = useAdminConfig();
     const [searchParams, setSearchParams] = useSearchParams();
     const [results, setResults] = useState<SearchResult[]>([]);
     const [loading, setLoading] = useState(false);
+    const [showFiltersMobile, setShowFiltersMobile] = useState(false);
     const [total, setTotal] = useState(0);
 
     const POS_FILTER_OPTIONS = useMemo(() => [
@@ -290,11 +294,50 @@ export function Search() {
 
                     if (r.verb_morphology) {
                         const vm = r.verb_morphology;
-                        if (vm.form) formLines.push(`${term('form')} ${vm.form}`);
-                        if (vm.transitivity) formLines.push(term(vm.transitivity.toLowerCase()));
+                        formLines.push(`${t('Form', 'Sura')} ${vm.form}`);
+                        if (vm.transitivity) formLines.push(t(vm.transitivity, term(vm.transitivity.toLowerCase())));
 
-                        if (r.verb_perfective_3sgm) {
-                            inflections.push({ label: term('perfett'), form: r.verb_perfective_3sgm, hasPage: true });
+                        // Auto-generate missing forms using the engine if enough data exists
+                        let generated: any = null;
+                        const rc = r.root_pattern_form?.root?.consonants;
+                        if (rc && (!vm.imperfective_3sg_m || !vm.imperative_sg)) {
+                            try {
+                                const forms = generateRootForms(
+                                    rc,
+                                    vm.vowel_set_perfect || 'a-a',
+                                    vm.vowel_set_imperfect || 'i-a',
+                                    r.root_pattern_form.root.strength || 'strong',
+                                    r.root_pattern_form.root.weak_class
+                                );
+                                generated = forms.find((f: any) => f.form === vm.form);
+                            } catch (e) {
+                                console.warn("Search conjugation error:", e);
+                            }
+                        }
+
+                        if (vm.perfective_3sg_m) {
+                            inflections.push({ label: term('perfett'), form: vm.perfective_3sg_m, hasPage: true });
+                        }
+
+                        const impf = vm.imperfective_3sg_m || generated?.imperfect;
+                        if (impf) {
+                            inflections.push({ label: term('imperfett'), form: impf, hasPage: false });
+                        }
+
+                        const impv = vm.imperative_sg || (generated as any)?.imperative_sg;
+                        if (impv && impv !== '-') {
+                            inflections.push({ label: term('imperattiv'), form: impv, hasPage: true });
+                        }
+
+                        const vn = vm.verbal_noun;
+                        if (vn && vn !== '-') {
+                            inflections.push({ label: term('nom verbali'), form: vn, hasPage: true });
+                        }
+                    } else if (r.noun_morphology || r.noun_plural_forms?.length) {
+                        const nm = r.noun_morphology;
+                        const pluralForms = r.noun_plural_forms || nm?.plural_forms;
+                        if (pluralForms?.length) {
+                            inflections.push({ label: t('Plural', 'Plural'), form: pluralForms[0], hasPage: false });
                         }
                     }
 
@@ -303,10 +346,10 @@ export function Search() {
                         headword: r.headword,
                         root: r.root_pattern_form?.root?.consonants || '',
                         rootSlug: r.root_pattern_form?.root?.consonants || '',
-                        gender: r.noun_gender || (r.pos === 'adjective' ? 'masculine' : undefined),
+                        gender: r.noun_gender || r.noun_morphology?.gender || (r.adjective_morphology?.masculine ? 'masculine' : undefined),
                         pos: r.pos,
                         formLines,
-                        definitions: r.definition_en ? [r.definition_en] : [],
+                        definitions: r.definition_en ? [r.definition_en] : (r.definitions?.length ? r.definitions.map((d: any) => d.text_en) : []),
                         inflections,
                     };
                 });
@@ -347,6 +390,7 @@ export function Search() {
         if (filters.pos) params.pos = filters.pos;
         if (filters.rootType) params.type = filters.rootType;
         setSearchParams(params);
+        setShowFiltersMobile(false);
     };
 
     // Global Enter key listener
@@ -396,7 +440,7 @@ export function Search() {
                 <div className="mb-6">
                     {submitted ? (
                         <>
-                            <h1 className="font-serif font-medium text-[2rem] leading-tight text-[#000]">
+                            <h1 className="font-serif font-medium text-4xl leading-tight text-[#000]">
                                 {term('results-for').replace('{q}', submitted)}
                             </h1>
                             <p className="text-black/40 text-sm font-sans mt-1">
@@ -405,7 +449,7 @@ export function Search() {
                         </>
                     ) : (
                         <>
-                            <h1 className="font-serif font-medium text-[2rem] leading-tight text-[#000]">
+                            <h1 className="font-serif font-medium text-4xl leading-tight text-[#000]">
                                 {term('search-results')}
                             </h1>
                             <p className="text-black/40 text-sm font-sans mt-2">
@@ -416,7 +460,7 @@ export function Search() {
                 </div>
 
                 {/* ── Inline search bar ── */}
-                <form onSubmit={handleSearch} className="max-w-2xl mb-8 relative">
+                <form onSubmit={handleSearch} className="w-full md:max-w-2xl mb-8 relative">
                     <div className="flex items-center bg-white border border-black/10 rounded-lg overflow-hidden shadow-sm">
                         {/* Keyboard toggle */}
                         <button
@@ -455,68 +499,94 @@ export function Search() {
                 </form>
 
                 {/* ── Two-column layout ── */}
-                <div className="flex gap-6 items-start">
+                <div className="flex flex-col md:flex-row gap-8 md:items-start w-full">
 
-                    {/* Filters sidebar */}
-                    <aside className="w-64 shrink-0 bg-white rounded-xl border border-black/8 shadow-sm p-5 space-y-4 sticky top-20">
-                        <h2 className="font-sans font-semibold text-sm text-[#000]">{term('filters')}</h2>
-
-                        <FilterSelect
-                            label={term("max-results")}
-                            value={filters.maxResults}
-                            onChange={v => setFilter('maxResults', v)}
-                            options={[
-                                { value: '10', label: '10' },
-                                { value: '25', label: '25' },
-                                { value: '50', label: '50' },
-                                { value: '100', label: '100' },
-                            ]}
-                        />
-
-                        <FilterSelect
-                            label={term("part-of-speech")}
-                            value={filters.pos}
-                            onChange={v => setFilter('pos', v)}
-                            options={POS_FILTER_OPTIONS}
-                        />
-
-                        <FilterSelect
-                            label={term("root") + " (" + term("form") + ")"}
-                            value={filters.rootType}
-                            onChange={v => setFilter('rootType', v)}
-                            options={ROOT_TYPE_FILTER_OPTIONS}
-                        />
-
-                        <FilterSelect
-                            label={term("source")}
-                            value={filters.source}
-                            onChange={v => setFilter('source', v)}
-                            options={[
-                                { value: '', label: term('all') },
-                                { value: 'spagnol2011', label: 'Spagnol (2011)' },
-                                { value: 'mayer2013', label: 'Mayer (2013)' },
-                                { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
-                                { value: 'maltese-academy', label: term('maltese-academy') },
-                            ]}
-                        />
-
-                        <div className="border-t border-black/8 pt-4 space-y-2.5">
-                            <FilterCheckbox label={term('search-lemma')}
-                                checked={filters.searchLemma} onChange={v => setFilters(f => ({ ...f, searchLemma: v }))} />
-                            <FilterCheckbox label={term('search-word-forms')}
-                                checked={filters.searchWordForms} onChange={v => setFilters(f => ({ ...f, searchWordForms: v }))} />
-                            <FilterCheckbox label={term('search-english-gloss')}
-                                checked={filters.searchEnglishGloss} onChange={v => setFilters(f => ({ ...f, searchEnglishGloss: v }))} />
-                            <FilterCheckbox label={term('include-suggested')}
-                                checked={filters.includeSuggested} onChange={v => setFilters(f => ({ ...f, includeSuggested: v }))} />
-                            <FilterCheckbox label={term('include-pending')}
-                                checked={filters.includePending}
-                                onChange={v => setFilter('includePending', v)} />
+                    {/* Filter Sidebar Container (Unified on Mobile) */}
+                    <div className="w-full md:w-64 shrink-0 flex flex-col md:sticky md:top-20">
+                        {/* Mobile Filter Toggle */}
+                        <div className="md:hidden w-full">
+                            <button
+                                onClick={() => setShowFiltersMobile(!showFiltersMobile)}
+                                className={cn(
+                                    "w-full flex items-center justify-between bg-white border border-black/10 px-5 py-4 shadow-sm transition-all",
+                                    showFiltersMobile ? "rounded-t-xl border-b-0" : "rounded-xl"
+                                )}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <Filter size={18} className="text-[#1034A6]" />
+                                    <span className="font-sans font-semibold text-sm text-[#000]">
+                                        {t('Filter Options', 'Għażliet tal-Filtru')}
+                                    </span>
+                                </div>
+                                {showFiltersMobile ? <ChevronUp size={18} className="text-black/30" /> : <ChevronDown size={18} className="text-black/30" />}
+                            </button>
                         </div>
-                    </aside>
+
+                        {/* ── Filter sidebar ── */}
+                        <aside className={cn(
+                            "w-full bg-white border border-black/10 md:border-black/8 shadow-sm p-5 space-y-4 transition-all duration-300 overflow-hidden",
+                            "md:rounded-xl md:block",
+                            showFiltersMobile ? "rounded-b-xl block" : "hidden"
+                        )}>
+                            <h2 className="hidden md:block font-sans font-semibold text-sm text-[#000]">{term('filters')}</h2>
+
+                            <FilterSelect
+                                label={term("max-results")}
+                                value={filters.maxResults}
+                                onChange={v => setFilter('maxResults', v)}
+                                options={[
+                                    { value: '10', label: '10' },
+                                    { value: '25', label: '25' },
+                                    { value: '50', label: '50' },
+                                    { value: '100', label: '100' },
+                                ]}
+                            />
+
+                            <FilterSelect
+                                label={term("part-of-speech")}
+                                value={filters.pos}
+                                onChange={v => setFilter('pos', v)}
+                                options={POS_FILTER_OPTIONS}
+                            />
+
+                            <FilterSelect
+                                label={term("root") + " (" + term("form") + ")"}
+                                value={filters.rootType}
+                                onChange={v => setFilter('rootType', v)}
+                                options={ROOT_TYPE_FILTER_OPTIONS}
+                            />
+
+                            <FilterSelect
+                                label={term("source")}
+                                value={filters.source}
+                                onChange={v => setFilter('source', v)}
+                                options={[
+                                    { value: '', label: term('all') },
+                                    { value: 'spagnol2011', label: 'Spagnol (2011)' },
+                                    { value: 'mayer2013', label: 'Mayer (2013)' },
+                                    { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
+                                    { value: 'maltese-academy', label: term('maltese-academy') },
+                                ]}
+                            />
+
+                            <div className="border-t border-black/8 pt-4 space-y-2.5">
+                                <FilterCheckbox label={term('search-lemma')}
+                                    checked={filters.searchLemma} onChange={v => setFilters(f => ({ ...f, searchLemma: v }))} />
+                                <FilterCheckbox label={term('search-word-forms')}
+                                    checked={filters.searchWordForms} onChange={v => setFilters(f => ({ ...f, searchWordForms: v }))} />
+                                <FilterCheckbox label={term('search-english-gloss')}
+                                    checked={filters.searchEnglishGloss} onChange={v => setFilters(f => ({ ...f, searchEnglishGloss: v }))} />
+                                <FilterCheckbox label={term('include-suggested')}
+                                    checked={filters.includeSuggested} onChange={v => setFilters(f => ({ ...f, includeSuggested: v }))} />
+                                <FilterCheckbox label={term('include-pending')}
+                                    checked={filters.includePending}
+                                    onChange={v => setFilter('includePending', v)} />
+                            </div>
+                        </aside>
+                    </div>
 
                     {/* Results list */}
-                    <div className="flex-1 space-y-3 min-w-0">
+                    <div className="flex-1 space-y-3 min-w-0 w-full">
                         {results.length === 0 && !loading && isSearchPerformed && (
                             <div className="bg-white/50 rounded-xl border border-white/40 shadow-sm p-10 text-left">
                                 <p className="text-sm text-[#000] mb-2">

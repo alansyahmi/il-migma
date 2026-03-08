@@ -394,8 +394,8 @@ export function Root() {
 
 
     return (
-        <div style={bgStyle}>
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 pb-10">
+        <div style={bgStyle} className="w-full overflow-hidden">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 pb-10 w-full">
                 <div className="flex items-center gap-2 mb-8">
                     <Link to="/root-search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-root-search')}
@@ -485,15 +485,15 @@ export function Root() {
                     </div>
 
                     {/* Right Content */}
-                    <div className="flex-1 min-w-0 space-y-12">
+                    <div className="flex-1 min-w-0 space-y-12 w-full max-w-full">
 
                         {/* Verbal Forms Table */}
-                        <div className="mb-12">
+                        <div className="mb-12 w-full max-w-full">
                             <h2 className="font-sans font-semibold text-[1.1rem] text-[#000] mb-3">{term('verbal forms')}</h2>
-                            <div className="overflow-x-auto pb-4">
+                            <div className="overflow-x-auto overflow-y-hidden pb-4 w-full">
                                 <table className="w-full text-sm border-collapse text-left min-w-[600px]">
                                     <thead>
-                                        <tr className="border-b border-black/8 font-sans text-black/80">
+                                        <tr className="border-b border-black/8 font-sans text-black/80 whitespace-nowrap">
                                             <th className="font-semibold pb-2 pr-4 w-12">{term('forma')}</th>
                                             <th className="font-semibold pb-2 pr-4">{term('lemma')}</th>
                                             <th className="font-semibold pb-2 pr-4">{term('imperfett')}</th>
@@ -504,7 +504,7 @@ export function Root() {
                                     </thead>
                                     <tbody>
                                         {generatedTable.map((row: MarkedVerbForm) => (
-                                            <tr key={row.form} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] transition-colors">
+                                            <tr key={row.form} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] transition-colors whitespace-nowrap">
                                                 <td className="py-2.5 pr-4 text-black/60 font-serif">{row.form}</td>
                                                 <td className="py-2.5 pr-4 font-serif">
                                                     <MarkedCell
@@ -631,7 +631,7 @@ export function Root() {
 
                         {/* Derived Terms Table */}
                         {(derivedTerms.length > 0 || isActualAdmin) && (
-                            <div>
+                            <div className="w-full max-w-full">
                                 <div className="flex items-center gap-3 mb-4">
                                     <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{term('termini derivati')}</h2>
                                     {isActualAdmin && (
@@ -650,8 +650,8 @@ export function Root() {
                                         </button>
                                     )}
                                 </div>
-                                <div className="overflow-x-auto pb-4">
-                                    <table className="w-full text-sm border-collapse text-left min-w-[500px]">
+                                <div className="overflow-x-auto overflow-y-hidden pb-4 w-full">
+                                    <table className="w-full text-sm border-collapse text-left">
                                         <thead>
                                             <tr className="border-b border-black/8 font-sans text-black/80">
                                                 <th className="font-semibold pb-2 pr-4">{term('term')}</th>
@@ -925,7 +925,7 @@ export function Root() {
                         refetch();
                         setShowRootForm(false);
                         if (newData.consonants !== rootObj.consonants) {
-                            window.location.href = `/root/${newData.id || newData.consonants}`;
+                            window.location.href = `/root/${newData.consonants}`;
                         }
                     }}
                     getToken={getToken}

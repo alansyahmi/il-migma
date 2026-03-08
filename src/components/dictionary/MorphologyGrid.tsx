@@ -48,8 +48,8 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     </span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 divide-x divide-y divide-[#ede9e1]">
-                    <Cell label="Perfettiv (3sg.m)" value={<strong className="font-headword">{isTheoretical && '*'}{m.perfective_3sg_m}</strong>} />
-                    <Cell label="Imperfettiv (3sg.m)" value={<strong className="font-headword">{isTheoretical && '*'}{m.imperfective_3sg_m}</strong>} />
+                    <Cell label={term('perfett') + " (3sg.m)"} value={<strong className="font-headword">{isTheoretical && '*'}{m.perfective_3sg_m}</strong>} />
+                    <Cell label={term('imperfett') + " (3sg.m)"} value={<strong className="font-headword">{isTheoretical && '*'}{m.imperfective_3sg_m}</strong>} />
                     <Cell label="Forma" value={m.form} />
                     <Cell label="Saħħa" value={entry.root_pattern_form?.root?.strength === 'strong-hybrid' ? 'Strong' : entry.root_pattern_form?.root?.strength} />
                     <Cell label="Transittività" value={term(m.transitivity) ?? m.transitivity} />

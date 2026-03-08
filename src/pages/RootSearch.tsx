@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { MOCK_ENTRIES } from '@/data/mockData';
 import { generateRootForms, markGeneratedForms, type FormMarker, type MarkedVerbForm, type AttestedEntry } from '@/lib/conjugationEngine';
 import { apiSearchRoots } from '@/lib/api';
 import { Spinner } from '@/components/ui/Spinner';
@@ -31,31 +30,7 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
     // Unique matching roots by consonants string
     const matchingRootsMap = new Map<string, any>();
 
-    // 1. Process Mock Data
-    MOCK_ENTRIES.forEach(e => {
-        const r = e.root_pattern_form?.root;
-        if (!r || !r.consonant_array) return;
-
-        const isMatch = rootRadicals.every((rad, i) => {
-            if (!rad) return true;
-            const rRad = (r.consonant_array[i] || '').toLowerCase().trim().normalize('NFC');
-            return rRad === decodeURIComponent(rad).toLowerCase().trim().normalize('NFC');
-        });
-
-        if (isMatch) {
-            if (!matchingRootsMap.has(r.consonants)) {
-                matchingRootsMap.set(r.consonants, {
-                    rootObj: r,
-                    verbs: []
-                });
-            }
-            if (e.pos === 'verb') {
-                matchingRootsMap.get(r.consonants).verbs.push(e);
-            }
-        }
-    });
-
-    // 2. Process Extra/DB Data
+    // 1. Process DB Data
     extraRoots.forEach(r => {
         if (!matchingRootsMap.has(r.consonants)) {
             matchingRootsMap.set(r.consonants, {
@@ -89,8 +64,8 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                 <table className="w-full text-left border-collapse min-w-[900px]">
                     <thead>
                         <tr className="bg-black/5 border-b border-black/10 text-black/40">
-                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider">{term('għerq')}</th>
-                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider">{term('class')}</th>
+                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap min-w-[100px]">{term('għerq')}</th>
+                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">{term('class')}</th>
                             {formLabels.map(f => (
                                 <th key={f} className="px-4 py-3 text-[10px] font-bold tracking-wider">{f}</th>
                             ))}
@@ -130,13 +105,13 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
 
                             return (
                                 <tr key={rootObj.id || rootObj.consonants} className="hover:bg-black/[0.01] transition-colors border-b border-black/5 last:border-0">
-                                    <td className="px-4 py-4">
-                                        <Link to={`/root/${rootObj.id || rootObj.consonants}`} className="font-serif font-bold text-lg text-[#000] hover:underline">
+                                    <td className="px-4 py-4 whitespace-nowrap">
+                                        <Link to={`/root/${rootObj.consonants}`} className="font-serif font-bold text-xl text-[#000] hover:underline">
                                             {rootObj.consonants}
                                         </Link>
                                     </td>
-                                    <td className="px-4 py-4">
-                                        <span className="text-[10px] bg-black/5 px-1.5 py-0.5 rounded text-black/50 font-bold tracking-wider space-x-1">
+                                    <td className="px-4 py-4 whitespace-nowrap">
+                                        <span className="inline-flex items-center text-[10px] bg-black/5 px-2 py-1 rounded text-black/50 font-bold tracking-wider gap-1.5 leading-none">
                                             {rootObj.strength !== 'geminated' && <span>{strengthLabel}</span>}
                                             {rootObj.weak_class && <span>• {term(rootObj.weak_class).toUpperCase()}</span>}
                                             {rootObj.strength === 'geminated' && <span>• {term('trux').toUpperCase()}</span>}

@@ -58,7 +58,7 @@ export function Suggest() {
                     <Link to={-1 as any} className="group text-sm text-black/40 hover:text-black flex items-center gap-1 mb-4 transition-all">
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back')}
                     </Link>
-                    <h1 className="font-serif text-4xl font-bold text-[#000] tracking-tight">
+                    <h1 className="font-serif text-4xl font-medium text-[#000] tracking-tight">
                         {term('suggest-addition')}
                     </h1>
                     <p className="text-black/55 mt-2">
