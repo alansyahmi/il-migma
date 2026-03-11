@@ -46,13 +46,46 @@ export interface SearchResponse {
 
 export async function apiSearch(
     q: string,
-    opts: { pos?: string; limit?: number; offset?: number; root_id?: string } = {}
+    opts: {
+        pos?: string;
+        type?: string;
+        limit?: number;
+        offset?: number;
+        root_id?: string;
+        v?: string;
+        wizen?: string;
+        source?: string;
+        radicals?: string[];
+        random?: string;
+        regex?: boolean;
+        searchLemma?: boolean;
+        searchWordForms?: boolean;
+        searchEnglishGloss?: boolean;
+        includeSuggested?: boolean;
+        includePending?: boolean;
+    } = {}
 ): Promise<SearchResponse> {
     const params = new URLSearchParams({ q });
     if (opts.pos) params.set('pos', opts.pos);
+    if (opts.type) params.set('type', opts.type);
     if (opts.limit) params.set('limit', String(opts.limit));
     if (opts.offset) params.set('offset', String(opts.offset));
     if (opts.root_id) params.set('root_id', opts.root_id);
+    if (opts.v) params.set('v', opts.v);
+    if (opts.wizen) params.set('wizen', opts.wizen);
+    if (opts.source) params.set('source', opts.source);
+    if (opts.random) params.set('random', opts.random);
+    if (opts.regex) params.set('regex', 'true');
+    if (opts.searchLemma) params.set('lemma', 'true');
+    if (opts.searchWordForms) params.set('word_forms', 'true');
+    if (opts.searchEnglishGloss) params.set('gloss', 'true');
+    if (opts.includeSuggested) params.set('suggested', 'true');
+    if (opts.includePending) params.set('pending', 'true');
+    if (opts.radicals) {
+        opts.radicals.forEach((r, i) => {
+            if (r) params.set(`r${i + 1}`, r);
+        });
+    }
     return apiFetch(`/api/search?${params}`);
 }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Lock, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import type { Feature, Tier } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -12,36 +13,38 @@ interface TierGateProps {
     className?: string;
 }
 
-const FEATURE_TIER_LABELS: Record<Feature, { tier: Tier; label: string }> = {
-    semantic_search: { tier: 'pro', label: 'Semantic Search' },
-    unlimited_audio: { tier: 'pro', label: 'Unlimited Audio' },
-    dialect_variants: { tier: 'pro', label: 'Dialect Variants' },
-    chatbot: { tier: 'pro', label: 'Dialect Chatbot' },
-    inflector: { tier: 'pro', label: 'Semitic Inflector' },
-    semmej: { tier: 'pro', label: 'Is-Semmej' },
-    grammar_checker: { tier: 'pro', label: 'Grammar Checker' },
-    corpus_insights: { tier: 'pro', label: 'Corpus Insights' },
-    suggest_dialect: { tier: 'pro', label: 'Dialect Suggestions' },
-    export_flashcards: { tier: 'pro', label: 'Flashcard Export' },
-    vote_suggestions: { tier: 'pro', label: 'Voting' },
-    api_access: { tier: 'enterprise', label: 'API Access' },
-    api_key_management: { tier: 'enterprise', label: 'API Key Management' },
+const FEATURE_TIER_CONFIG: Record<Feature, { tier: Tier; key: string }> = {
+    semantic_search: { tier: 'pro', key: 'semantic-search' },
+    unlimited_audio: { tier: 'pro', key: 'unlimited-audio' },
+    dialect_variants: { tier: 'pro', key: 'dialect-variants' },
+    chatbot: { tier: 'pro', key: 'dialect-chatbot' },
+    inflector: { tier: 'pro', key: 'semitic-inflector' },
+    semmej: { tier: 'pro', key: 'semmej' },
+    grammar_checker: { tier: 'pro', key: 'grammar-checker' },
+    corpus_insights: { tier: 'pro', key: 'corpus-insights' },
+    suggest_dialect: { tier: 'pro', key: 'dialect-suggestions' },
+    export_flashcards: { tier: 'pro', key: 'flashcard-export' },
+    vote_suggestions: { tier: 'pro', key: 'voting' },
+    api_access: { tier: 'enterprise', key: 'api-access' },
+    api_key_management: { tier: 'enterprise', key: 'api-key-management' },
 };
 
 export function TierGate({ feature, children, fallback, className }: TierGateProps) {
     const { hasAccess } = useAuth();
+    const { term } = useLinguisticMode();
 
     if (hasAccess(feature)) return <>{children}</>;
 
     if (fallback) return <>{fallback}</>;
 
-    const info = FEATURE_TIER_LABELS[feature];
+    const config = FEATURE_TIER_CONFIG[feature];
+    const tierLabel = config.tier === 'pro' ? term('pro-label') : term('enterprise-label');
 
     return (
         <div className={cn(
             'flex flex-col items-center justify-center gap-3 py-12 px-6',
-            'bg-gradient-to-br from-[#F4F3F0] to-[#e8e6e0] rounded-xl',
-            'border border-[#d8cfc0] text-center',
+            'bg-surface-soft rounded-xl shadow-sm',
+            'border border-border text-center',
             className,
         )}>
             <div className="w-12 h-12 rounded-full bg-[#1034A6]/10 flex items-center justify-center">
@@ -49,12 +52,14 @@ export function TierGate({ feature, children, fallback, className }: TierGatePro
             </div>
             <div>
                 <p className="font-serif text-lg font-semibold text-[#1034A6]">
-                    {info.label} is a {info.tier === 'pro' ? 'Pro' : 'Enterprise'} feature
+                    {term('is-a-feature')
+                        .replace('{label}', term(config.key))
+                        .replace('{tier}', tierLabel)}
                 </p>
-                <p className="text-sm text-[#4a4a4a] mt-1">
-                    {info.tier === 'pro'
-                        ? 'Upgrade to Pro to unlock this and many more features.'
-                        : 'Enterprise plan required. Contact us to get started.'}
+                <p className="text-sm text-text-muted mt-1">
+                    {config.tier === 'pro'
+                        ? term('feature-pro-desc')
+                        : term('feature-enterprise-desc')}
                 </p>
             </div>
             <Link
@@ -63,7 +68,7 @@ export function TierGate({ feature, children, fallback, className }: TierGatePro
           bg-[#1034A6] text-white hover:bg-[#0D2A8A] transition-colors"
             >
                 <Sparkles size={14} />
-                Upgrade to {info.tier === 'pro' ? 'Pro' : 'Enterprise'}
+                {term('upgrade-to').replace('{tier}', tierLabel)}
             </Link>
         </div>
     );

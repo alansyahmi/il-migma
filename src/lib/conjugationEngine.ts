@@ -83,6 +83,7 @@ export interface GeneratedVerbForm {
     form: GenerativeVerbFormType;
     perfect: string;
     imperfect: string;
+    imperative?: string;
     passiveParticiple: string;
     activeParticiple: string;
     verbalNoun: string;
@@ -2280,22 +2281,26 @@ function generateTriliteralStrong(
     pv2: string,
     ipv1: string,
     ipv2: string,
+    isImalaBlocked: boolean = false,
 ): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
     const f1_perf = `${C1}${pv1}${C2}${pv2}${C3}`;
     const f1_impf = `j${ipv1}${C1}${C2}${ipv2}${C3}`;
     const p1 = isGuttural(C1) ? "a" : "i";
-    const f1_pass = `m${p1}${C1}${C2}u${C3}`;
+    const passV = isImalaBlocked ? "u" : "u"; // Simplified for now but placeholder for later if different
+    const f1_pass = `m${p1}${C1}${C2}${passV}${C3}`;
     const a1 = hasIorE(pv1) ? "ie" : "a";
     const a2 = isGuttural(C3) ? "a" : "e";
     const f1_act = `${C1}${a1}${C2}${a2}${C3}`;
     const f1_vn = isPharyngeal(C1) ? `${C1}a${C2}i${C3}` : `${C1}${C2}i${C3}`;
+    const f1_impv = `${ipv1}${C1}${C2}${ipv2}${C3}`;
 
     forms.push({
         form: "I",
         perfect: f1_perf,
         imperfect: f1_impf,
+        imperative: f1_impv,
         passiveParticiple: f1_pass,
         activeParticiple: f1_act,
         verbalNoun: f1_vn,
@@ -2313,6 +2318,7 @@ function generateTriliteralStrong(
         form: "II",
         perfect: f2_perf,
         imperfect: f2_impf,
+        imperative: f2_perf,
         passiveParticiple: f2_pass,
         activeParticiple: f2_act,
         verbalNoun: f2_vn,
@@ -2327,6 +2333,7 @@ function generateTriliteralStrong(
         form: "III",
         perfect: f3_perf,
         imperfect: f3_impf,
+        imperative: f3_perf,
         passiveParticiple: f3_pass,
         activeParticiple: "-",
         verbalNoun: "-",
@@ -2344,6 +2351,7 @@ function generateTriliteralStrong(
         form: "IV",
         perfect: f4_perf,
         imperfect: f4_impf,
+        imperative: f4_perf,
         passiveParticiple: "-",
         activeParticiple: f4_act,
         verbalNoun: f4_vn,
@@ -2354,6 +2362,7 @@ function generateTriliteralStrong(
         form: "V",
         perfect: f5_perf,
         imperfect: `ji${f5_perf}`,
+        imperative: f5_perf,
         passiveParticiple: `mi${f5_perf}`,
         activeParticiple: "-",
         verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}`,
@@ -2365,6 +2374,7 @@ function generateTriliteralStrong(
         form: "VI",
         perfect: f6_perf,
         imperfect: `ji${f6_perf}`,
+        imperative: f6_perf,
         passiveParticiple: `mi${f6_perf}`,
         activeParticiple: "-",
         verbalNoun: `t${C1}${e1}${C2}i${C3}`,
@@ -2375,6 +2385,7 @@ function generateTriliteralStrong(
         form: "VII",
         perfect: f7_perf,
         imperfect: `ji${f7_perf}`,
+        imperative: f7_perf,
         passiveParticiple: `mi${f7_perf}`,
         activeParticiple: "-",
         verbalNoun: `n${f1_vn}`,
@@ -2386,6 +2397,7 @@ function generateTriliteralStrong(
         form: "VIII",
         perfect: isPharyngeal(C1) ? f8_perfPharyngeal : f8_perf,
         imperfect: isGuttural(C1) ? `je${f8_perf}` : `ji${f8_perf}`,
+        imperative: isPharyngeal(C1) ? f8_perfPharyngeal : f8_perf,
         passiveParticiple: isGuttural(C1) ? `me${f8_perf}` : `mi${f8_perf}`,
         activeParticiple: "-",
         verbalNoun: isGuttural(C1)
@@ -2399,6 +2411,7 @@ function generateTriliteralStrong(
         form: "IX",
         perfect: isPharyngeal(C1) ? f9_perfPharyngeal : f9_perf,
         imperfect: `ji${f9_perf}`,
+        imperative: isPharyngeal(C1) ? f9_perfPharyngeal : f9_perf,
         passiveParticiple: `mu${f9_perf}`,
         activeParticiple: "-",
         verbalNoun: isPharyngeal(C1) ? f9_perfPharyngeal : f9_perf,
@@ -2409,6 +2422,7 @@ function generateTriliteralStrong(
         form: "Xa",
         perfect: f10a_perf,
         imperfect: `ji${f10a_perf}`,
+        imperative: f10a_perf,
         passiveParticiple: `mi${f10a_perf}`,
         activeParticiple: "-",
         verbalNoun: `st${pv1}${C1}${C2}i${C3}`,
@@ -2419,6 +2433,7 @@ function generateTriliteralStrong(
         form: "Xb",
         perfect: f10b_perf,
         imperfect: `ji${f10b_perf}`,
+        imperative: f10b_perf,
         passiveParticiple: `mi${f10b_perf}`,
         activeParticiple: "-",
         verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}`,
@@ -2435,6 +2450,7 @@ function generateTriliteralGeminated(
     pv2: string,
     ipv1: string,
     _ipv2: string,
+    isImalaBlocked: boolean = false,
 ): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
@@ -2448,10 +2464,13 @@ function generateTriliteralGeminated(
     const f1_vn = isGuttural(C1)
         ? `${C1}e${pv1}${C2}${C3}`
         : `${C1}${pv1}${C2}${C3}`;
+    const f1_impv = `${C1}${ipv1}${C2}${C3}`;
+
     forms.push({
         form: "I",
         perfect: f1_perf,
         imperfect: f1_impf,
+        imperative: f1_impv,
         passiveParticiple: f1_pass,
         activeParticiple: f1_act,
         verbalNoun: f1_vn,
@@ -2580,19 +2599,23 @@ function generateTriliteralAssimilative(
     pv2: string,
     ipv1: string,
     ipv2: string,
+    isImalaBlocked: boolean = false,
 ): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
-    const f1_perf = `${C1}${pv1}${C2}${pv2}`; // beda
-    const f1_impf = `j${ipv1}${C1}${C2}${ipv2}`; // jibda
-    const f1_pass = `m${ipv1}${C1}${C2}${ipv2}`; // mibda
+    const f1_perf = `${C1}${pv1}${C2}${pv2}`;
+    const f1_impf = `j${ipv1}${C1}${C2}${ipv2}`;
+    const f1_pass = `m${ipv1}${C1}${C2}${ipv2}`;
     const a1 = hasIorE(pv1) ? "ie" : "a";
-    const f1_act = `${C1}${a1}${C2}i`; // biedi
-    const f1_vn = `${C1}i${C2}i`; // bidi
+    const f1_act = `${C1}${a1}${C2}i`;
+    const f1_vn = `${C1}i${C2}i`;
+    const f1_impv = `${ipv1}${C1}${C2}${ipv2}`;
+
     forms.push({
         form: "I",
         perfect: f1_perf,
         imperfect: f1_impf,
+        imperative: f1_impv,
         passiveParticiple: f1_pass,
         activeParticiple: f1_act,
         verbalNoun: f1_vn,
@@ -2721,6 +2744,7 @@ function generateTriliteralHollow(
     pv2: string,
     ipv1: string,
     _ipv2: string,
+    isImalaBlocked: boolean = false,
 ): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
@@ -2734,10 +2758,13 @@ function generateTriliteralHollow(
     const f1_vn = isGuttural(C1)
         ? `${C1}e${pv1}${C2}${C3}`
         : `${C1}${pv1}${C2}${C3}`;
+    const f1_impv = `${C1}${ipv1}${C3}`;
+
     forms.push({
         form: "I",
         perfect: f1_perf,
         imperfect: f1_impf,
+        imperative: f1_impv,
         passiveParticiple: f1_pass,
         activeParticiple: f1_act,
         verbalNoun: f1_vn,
@@ -2750,6 +2777,7 @@ function generateTriliteralHollow(
         form: "II",
         perfect: f2_perf,
         imperfect: `j${f2_perf}`,
+        imperative: "-",
         passiveParticiple: `m${f2_perf}`,
         activeParticiple: `${C1}${pv1}${C2}${C2}${b1}${C3}`,
         verbalNoun: `t${b2}${C1}${C2}i${C3}`,
@@ -2761,6 +2789,7 @@ function generateTriliteralHollow(
         form: "III",
         perfect: f3_perf,
         imperfect: `j${f3_perf}`,
+        imperative: "-",
         passiveParticiple: `m${f3_perf}`,
         activeParticiple: "-",
         verbalNoun: "-",
@@ -2774,6 +2803,7 @@ function generateTriliteralHollow(
         form: "IV",
         perfect: f4_perf,
         imperfect: f4_impf,
+        imperative: "-",
         passiveParticiple: "-",
         activeParticiple: f4_act,
         verbalNoun: f4_vn,
@@ -2861,18 +2891,22 @@ function generateTriliteralDefective(
     pv2: string,
     ipv1: string,
     ipv2: string,
+    isImalaBlocked: boolean = false,
 ): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
     const f1_perf = `${C1}${pv1}${C2}${pv2}`;
     const f1_impf = `j${ipv1}${C1}${C2}${ipv2}`;
-    const f1_pass = `m${ipv1}${C1}${C2}i`;
+    const f1_pass = `m${ipv1}${C1}${C2}${isImalaBlocked ? "a" : "i"}`; // Rough approximation
     const f1_act = `${C1}${hasIorE(pv1) ? "ie" : "a"}${C2}i`;
     const f1_vn = `${C1}${pv1}${C2}u`;
+    const f1_impv = `${ipv1}${C1}${C2}${ipv2}`;
+
     forms.push({
         form: "I",
         perfect: f1_perf,
         imperfect: f1_impf,
+        imperative: f1_impv,
         passiveParticiple: f1_pass,
         activeParticiple: f1_act,
         verbalNoun: f1_vn,
@@ -2888,6 +2922,7 @@ function generateTriliteralDefective(
         form: "II",
         perfect: f2_perf,
         imperfect: f2_impf,
+        imperative: f2_perf,
         passiveParticiple: f2_pass,
         activeParticiple: f2_act,
         verbalNoun: f2_vn,
@@ -2901,6 +2936,7 @@ function generateTriliteralDefective(
         form: "III",
         perfect: f3_perf,
         imperfect: f3_impf,
+        imperative: f3_perf,
         passiveParticiple: f3_pass,
         activeParticiple: "-",
         verbalNoun: "-",
@@ -2915,6 +2951,7 @@ function generateTriliteralDefective(
         form: "IV",
         perfect: f4_perf,
         imperfect: f4_impf,
+        imperative: f4_perf,
         passiveParticiple: "-",
         activeParticiple: f4_act,
         verbalNoun: f4_vn,
@@ -2925,6 +2962,7 @@ function generateTriliteralDefective(
         form: "V",
         perfect: f5_perf,
         imperfect: `ji${f5_perf}`,
+        imperative: f5_perf,
         passiveParticiple: `mi${f5_perf}`,
         activeParticiple: "-",
         verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}a`.replace(/undefined/g, ""),
@@ -2936,6 +2974,7 @@ function generateTriliteralDefective(
         form: "VI",
         perfect: f6_perf,
         imperfect: `ji${f6_perf}`,
+        imperative: f6_perf,
         passiveParticiple: `mi${f6_perf}`,
         activeParticiple: "-",
         verbalNoun: `t${C1}${e1}${C2}i${C3}a`.replace(/undefined/g, ""),
@@ -2946,6 +2985,7 @@ function generateTriliteralDefective(
         form: "VII",
         perfect: f7_perf,
         imperfect: `ji${f7_perf}`,
+        imperative: f7_perf,
         passiveParticiple: `mi${f7_perf}`,
         activeParticiple: `n${C1}${C2}i${C3}`,
         verbalNoun: `n${f1_vn}`,
@@ -2956,6 +2996,7 @@ function generateTriliteralDefective(
         form: "VIII",
         perfect: f8_perf,
         imperfect: `ji${f8_perf}`,
+        imperative: f8_perf,
         passiveParticiple: `mi${f8_perf}`,
         activeParticiple: "-",
         verbalNoun: `${C1}t${pv1}${C2}${pv2}`,
@@ -2966,6 +3007,7 @@ function generateTriliteralDefective(
         form: "IX",
         perfect: f9_perf,
         imperfect: `ji${f9_perf}`,
+        imperative: f9_perf,
         passiveParticiple: `mu${f9_perf}`,
         activeParticiple: "-",
         verbalNoun: f9_perf,
@@ -2976,6 +3018,7 @@ function generateTriliteralDefective(
         form: "Xa",
         perfect: f10a_perf,
         imperfect: `ji${f10a_perf}`,
+        imperative: f10a_perf,
         passiveParticiple: `mi${f10a_perf}`,
         activeParticiple: "-",
         verbalNoun: `st${pv1}${C1}${C2}ija`,
@@ -2986,6 +3029,7 @@ function generateTriliteralDefective(
         form: "Xb",
         perfect: f10b_perf,
         imperfect: `ji${f10b_perf}`,
+        imperative: f10b_perf,
         passiveParticiple: `mi${f10b_perf}`,
         activeParticiple: "-",
         verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}a`.replace(/undefined/g, ""),
@@ -3000,7 +3044,9 @@ export function generateRootForms(
     ipvSet: string,
     strengthStr: string = "strong",
     weakClassStr?: string,
+    isImalaBlockedManual?: boolean,
 ): GeneratedVerbForm[] {
+    const isImalaBlocked = isImalaBlockedManual || /[\u0127q]|g\u0127|h/i.test(consonants);
     const arr = consonants.includes("-")
         ? consonants.split("-")
         : consonants.split("");
@@ -3014,18 +3060,18 @@ export function generateRootForms(
     const weakClass = weakClassStr?.toLowerCase();
 
     if (strength === "weak" && weakClass === "defective") {
-        return generateTriliteralDefective(C1, C2, C3, pv1, pv2, ipv1, ipv2);
+        return generateTriliteralDefective(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
     }
     if (strength === "weak" && weakClass === "hollow") {
-        return generateTriliteralHollow(C1, C2, C3, pv1, pv2, ipv1, ipv2);
+        return generateTriliteralHollow(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
     }
     if (strength === "weak" && weakClass === "assimilative") {
-        return generateTriliteralAssimilative(C1, C2, C3, pv1, pv2, ipv1, ipv2);
+        return generateTriliteralAssimilative(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
     }
     if (strength === "geminated") {
-        return generateTriliteralGeminated(C1, C2, C3, pv1, pv2, ipv1, ipv2);
+        return generateTriliteralGeminated(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
     }
-    return generateTriliteralStrong(C1, C2, C3, pv1, pv2, ipv1, ipv2);
+    return generateTriliteralStrong(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
 }
 
 export type FormMarker = "plain" | "theoretical" | "auto_generated";
@@ -3034,6 +3080,7 @@ export interface MarkedVerbForm {
     form: GenerativeVerbFormType;
     perfect: { value: string; marker: FormMarker; entryId?: string };
     imperfect: { value: string; marker: FormMarker; entryId?: string };
+    imperative: { value: string; marker: FormMarker; entryId?: string };
     passiveParticiple: { value: string; marker: FormMarker; entryId?: string };
     activeParticiple: { value: string; marker: FormMarker; entryId?: string };
     verbalNoun: { value: string; marker: FormMarker; entryId?: string };
@@ -3043,7 +3090,7 @@ export interface AttestedEntry {
     word: string;
     id?: string;
     form: string;
-    type: "lemma" | "passive" | "active" | "noun";
+    type: "lemma" | "passive" | "active" | "noun" | "imperfect" | "imperative";
 }
 
 export function markGeneratedForms(
@@ -3114,7 +3161,7 @@ export function markGeneratedForms(
 
         const applyMarker = (
             generatedVal: string,
-            formType: "lemma" | "passive" | "active" | "noun",
+            formType: "lemma" | "passive" | "active" | "noun" | "imperfect" | "imperative",
             isImperfect: boolean = false,
         ): { value: string; marker: FormMarker; entryId?: string } => {
             if (generatedVal === "-") return { value: generatedVal, marker: "plain" };
@@ -3145,10 +3192,104 @@ export function markGeneratedForms(
         return {
             form: g.form,
             perfect: applyMarker(g.perfect, "lemma"),
-            imperfect: applyMarker(g.imperfect, "lemma", true), // Uses same ID as lemma
+            imperfect: applyMarker(g.imperfect, "imperfect", true),
+            imperative: applyMarker(g.imperative || "-", "imperative", true),
             passiveParticiple: applyMarker(g.passiveParticiple, "passive"),
             activeParticiple: applyMarker(g.activeParticiple, "active"),
             verbalNoun: applyMarker(g.verbalNoun, "noun"),
         };
     });
+}
+
+/**
+ * Gather all attested word-to-ID mappings from an array of Entry objects,
+ * including subentries and internal morphology fields, to assist markGeneratedForms.
+ */
+export function getAttestedEntries(entries: any[]): AttestedEntry[] {
+    const attested: AttestedEntry[] = [];
+    entries.forEach((e: any) => {
+        const form = e.verb_morphology?.form || e._formLabel || "";
+        if (!form) return;
+
+        // 1. Link the entry itself based on its POS
+        if (e.pos === "verb") {
+            attested.push({ word: e.headword, id: e.id, form, type: "lemma" });
+        } else if (e.pos === "participle") {
+            const pt =
+                e.verb_morphology?.participle_type || e.participle_type || "active";
+            attested.push({
+                word: e.headword,
+                id: e.id,
+                form,
+                type: pt === "passive" ? "passive" : "active",
+            });
+        } else if (e.pos === "noun") {
+            attested.push({ word: e.headword, id: e.id, form, type: "noun" });
+        }
+
+        // 2. Also check internal fields within the entry (e.g. for legacy verbs)
+        if (e.verb_morphology?.passive_participle) {
+            attested.push({
+                word: e.verb_morphology.passive_participle,
+                id: e.id,
+                form,
+                type: "passive",
+            });
+        }
+        if (e.verb_morphology?.active_participle) {
+            attested.push({
+                word: e.verb_morphology.active_participle,
+                id: e.id,
+                form,
+                type: "active",
+            });
+        }
+        if (e.verb_morphology?.verbal_noun) {
+            attested.push({
+                word: e.verb_morphology.verbal_noun,
+                id: e.id,
+                form,
+                type: "noun",
+            });
+        }
+        if (e.verb_morphology?.imperfective_3sg_m) {
+            attested.push({
+                word: e.verb_morphology.imperfective_3sg_m,
+                id: e.id,
+                form,
+                type: "imperfect",
+            });
+        }
+        if (e.verb_morphology?.imperative_sg) {
+            attested.push({
+                word: e.verb_morphology.imperative_sg,
+                id: e.id,
+                form,
+                type: "imperative",
+            });
+        }
+
+        // 3. Similarly check subentries
+        if (e.subentries) {
+            e.subentries.forEach((sub: any) => {
+                const subForm = sub.verb_morphology?.form || sub._formLabel || form;
+                if (sub.pos === "noun") {
+                    attested.push({ word: sub.headword, id: sub.id, form: subForm, type: "noun" });
+                } else if (sub.pos === "participle") {
+                    const pt =
+                        sub.verb_morphology?.participle_type ||
+                        sub.participle_type ||
+                        "active";
+                    attested.push({
+                        word: sub.headword,
+                        id: sub.id,
+                        form: subForm,
+                        type: pt === "passive" ? "passive" : "active",
+                    });
+                }
+            });
+        }
+    });
+
+    return attested;
 }

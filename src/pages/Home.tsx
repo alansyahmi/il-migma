@@ -35,7 +35,7 @@ const getRomanceEntries = (t: (en: string, mt: string) => string) => [
 ];
 
 export function Home() {
-    const { t } = useLanguage();
+    const { language } = useLanguage(); // Keep language for getSemiticEntries/getRomanceEntries
     const { term } = useLinguisticMode();
     const { isAdmin } = useAuth();
     const { user } = useUser();
@@ -43,11 +43,11 @@ export function Home() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        document.title = t("Il-Miġma' — Online Maltese Dictionary & Conjugator", "Il-Miġma' — Dizzjunarju u Konjugatur tal-Malti Online");
-    }, [t]);
+        document.title = "Il-Miġma' | " + term('dictionary-title');
+    }, [term]);
 
-    const SEMITIC_ENTRIES = getSemiticEntries(t);
-    const ROMANCE_ENTRIES = getRomanceEntries(t);
+    const SEMITIC_ENTRIES = getSemiticEntries((en, mt) => language === 'en' ? en : mt);
+    const ROMANCE_ENTRIES = getRomanceEntries((en, mt) => language === 'en' ? en : mt);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -73,7 +73,7 @@ export function Home() {
         });
     };
 
-    const handleRandom = () => navigate('/search?q=a&random=1');
+    const handleRandom = () => navigate('/search?q=&random=1');
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}),
@@ -84,14 +84,14 @@ export function Home() {
     if (isAdmin) {
         return (
             <div className="min-h-screen bg-[#F4F3F0]" style={bgStyle}>
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-10">
+                <div className="max-w-6xl mx-auto px-7 sm:px-8 py-12 space-y-10">
 
                     {/* Welcome Header */}
                     <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                         <div>
                             <h2 className="text-[#1034A6] font-medium text-sm tracking-widest uppercase mb-1">{term('management-panel')}</h2>
                             <h1 className="font-serif text-4xl font-bold text-black leading-tight">
-                                {t(`Welcome back Admin ${user?.firstName}!`, `Merħba lura Admin ${user?.firstName}!`)}
+                                {term('welcome-admin').replace('{name}', user?.firstName || '')}
                             </h1>
                         </div>
                         <div className="flex gap-3">
@@ -103,7 +103,7 @@ export function Home() {
                             </Link>
                             <Link
                                 to="/admin"
-                                className="px-4 py-2 bg-[#1034A6] text-white rounded-xl text-sm font-semibold hover:bg-[#0c268c] transition-colors flex items-center gap-2 shadow-lg shadow-[#1034A6]/20"
+                                className="px-4 py-2 bg-link text-white rounded-xl text-sm font-semibold hover:bg-link-hover transition-colors flex items-center gap-2 shadow-lg shadow-link/20"
                             >
                                 <Settings size={16} /> {term('admin-dashboard')}
                             </Link>
@@ -121,9 +121,9 @@ export function Home() {
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
                                 <Layers className="text-[#1034A6]" size={20} /> {term('root-management')}
                             </h3>
-                            <p className="text-sm text-black/60 mb-6">{t('Manage your consonants, etymology, and derived roots from one point.', 'Immaniġġja l-konsonanti, l-etimoloġija, u l-għeruq derivati tiegħek minn punt wieħed.')}</p>
+                            <p className="text-sm text-black/60 mb-6">{term('root-mgmt-desc')}</p>
                             <Link to="/admin?tab=roots" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                {t('Open Root Management', 'Iftaħ Ġestjoni tal-Għeruq')} <ArrowRight size={14} />
+                                {term('root-mgmt-open')} <ArrowRight size={14} />
                             </Link>
                         </Card>
 
@@ -135,9 +135,9 @@ export function Home() {
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
                                 <PlusCircle className="text-[#1034A6]" size={20} /> {term('word-entries')}
                             </h3>
-                            <p className="text-sm text-black/60 mb-6">{t('Add new words, update meanings and IPA in your library of 300k+ entries.', 'Żid kliem ġdid, aġġorna t-tifsiriet u l-IPA fil-librerija tiegħek ta\' 300k+ entrati.')}</p>
+                            <p className="text-sm text-black/60 mb-6">{term('word-entries-desc')}</p>
                             <Link to="/admin" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                {t('Manage Entries', 'Immaniġġja l-Entrati')} <ArrowRight size={14} />
+                                {term('manage-entries')} <ArrowRight size={14} />
                             </Link>
                         </Card>
 
@@ -149,9 +149,9 @@ export function Home() {
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
                                 <Edit3 className="text-[#1034A6]" size={20} /> {term('content-and-blog')}
                             </h3>
-                            <p className="text-sm text-black/60 mb-6">{t('Publish new articles and add usage examples to enhance the user experience.', 'Ippubblika artikli ġodda u żid eżempji ta\' użu biex ttejjeb l-esperjenza tal-utent.')}</p>
+                            <p className="text-sm text-black/60 mb-6">{term('content-blog-desc')}</p>
                             <Link to="/blog" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                {t('Edit Blog', 'Editja Blog')} <ArrowRight size={14} />
+                                {term('edit-blog')} <ArrowRight size={14} />
                             </Link>
                         </Card>
                     </div>
@@ -163,7 +163,7 @@ export function Home() {
                         </div>
                         <div className="max-w-xl relative z-10">
                             <h2 className="text-2xl font-serif mb-4">{term('quick-search-verification')}</h2>
-                            <p className="text-white/70 text-sm mb-6">{t('Quickly search to verify if a word is already in the database before adding it.', 'Fittex malajr biex tivverifika jekk kelma hix diġà fid-database qabel ma żżidha.')}</p>
+                            <p className="text-white/70 text-sm mb-6">{term('quick-search-verification-desc')}</p>
                             <form onSubmit={handleSearch} className="flex gap-2 relative">
                                 <div className="flex-1 flex items-center bg-white/10 border border-white/20 rounded-xl overflow-hidden focus-within:bg-white/20 transition-all">
                                     <button
@@ -171,7 +171,7 @@ export function Home() {
                                         type="button"
                                         onClick={() => setKbOpen2(o => !o)}
                                         className={`flex items-center gap-1 px-3 border-r border-white/10 shrink-0 py-3 transition-colors ${kbOpen2 ? 'text-white bg-white/20' : 'text-white/60 hover:text-white'}`}
-                                        aria-label={t('Toggle Maltese character picker', 'I togglja l-għażla tal-karattri Maltin')}
+                                        aria-label={term('toggle-picker')}
                                     >
                                         <Keyboard size={14} />
                                         <span className="text-xs text-white/30">›</span>
@@ -181,7 +181,7 @@ export function Home() {
                                         type="text"
                                         value={query}
                                         onChange={e => setQuery(e.target.value)}
-                                        placeholder={t('Search for a word...', 'Fittex kelma...')}
+                                        placeholder={term('search-word-placeholder')}
                                         className="flex-1 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-white/40 text-white"
                                     />
                                 </div>
@@ -208,14 +208,11 @@ export function Home() {
             <div style={bgStyle}>
                 {/* Hero */}
                 <section className="text-center px-4 pt-16 pb-14 sm:pt-20 sm:pb-16 max-w-2xl mx-auto">
-                    <h1 className="font-serif font-medium text-[2.6rem] sm:text-[3.2rem] leading-tight text-[#000] mb-3">
-                        {t('A Comprehensive Digital', `${term('Dizzjunarju')} ${term('Komprensiv')}`)}<br />{t('Maltese-English Dictionary', `Malti-Ingliż ${term('Diġitali')}`)}
+                    <h1 className="font-serif font-medium text-[2.6rem] sm:text-[3.2rem] leading-tight text-black mb-3">
+                        {term('dictionary-title')}
                     </h1>
-                    <p className="text-[#4a4a4a] text-sm leading-relaxed max-w-lg mx-auto mb-10">
-                        {t(
-                            'An ever-growing online tool for learners and researchers to the meaning, history, and usage of over 300,000 words in Maltese and its dialects.',
-                            `Għodda ${term('online')} li dejjem tikber għal dawk li jitgħallmu u għall-${term('researchers')} dwar it-tifsira, l-istorja u l-użu ta' aktar minn 300,000 kelma bil-Malti u l-${term('dialects')} tiegħu.`
-                        )}
+                    <p className="text-text-muted text-sm leading-relaxed max-w-lg mx-auto mb-10">
+                        {term('home-desc')}
                     </p>
 
                     {/* Search bar */}
@@ -225,8 +222,8 @@ export function Home() {
                                 ref={kbRef}
                                 type="button"
                                 onClick={() => setKbOpen(o => !o)}
-                                className={`flex items-center gap-1 px-3 border-r border-black/10 shrink-0 py-2.5 transition-colors ${kbOpen ? 'text-[#000] bg-black/5' : 'text-[#555] hover:text-[#000]'}`}
-                                aria-label={t('Toggle Maltese character picker', 'I togglja l-għażla tal-karattri Maltin')}
+                                className={`flex items-center gap-1 px-3 border-r border-black/10 shrink-0 py-2.5 transition-colors ${kbOpen ? 'text-black bg-black/5' : 'text-[#555] hover:text-black'}`}
+                                aria-label={term('toggle-picker')}
                             >
                                 <Keyboard size={14} />
                                 <span className="text-xs text-[#aaa]">›</span>
@@ -236,14 +233,14 @@ export function Home() {
                                 type="text"
                                 value={query}
                                 onChange={e => setQuery(e.target.value)}
-                                className="flex-1 px-3 py-2.5 text-sm bg-transparent focus:outline-none font-sans text-[#000]"
-                                aria-label={t('Search the dictionary', 'Fittex fid-dizzjunarju')}
-                                placeholder={t('Search…', 'Fittex…')}
+                                className="flex-1 px-3 py-2.5 text-sm bg-transparent focus:outline-none font-sans text-black"
+                                aria-label={term('search')}
+                                placeholder={term('search') + '…'}
                             />
                             <button
                                 type="submit"
-                                className="px-3 py-2.5 text-[#555] hover:text-[#000] transition-colors shrink-0"
-                                aria-label={t('Search', 'Fittex')}
+                                className="px-3 py-2.5 text-[#555] hover:text-black transition-colors shrink-0"
+                                aria-label={term('search')}
                             >
                                 <Search size={16} />
                             </button>
@@ -260,13 +257,13 @@ export function Home() {
                     <div className="flex items-center justify-center gap-3">
                         <Link
                             to="/search"
-                            className="bg-[#1034A6] text-white text-sm font-sans font-medium px-5 py-2.5 rounded-lg hover:bg-[#0c268c] transition-colors shadow-lg shadow-[#1034A6]/20"
+                            className="bg-link text-white text-sm font-sans font-medium px-5 py-2.5 rounded-lg hover:bg-link-hover transition-colors shadow-lg shadow-link/20"
                         >
                             {term('browse-entries')}
                         </Link>
                         <button
                             onClick={handleRandom}
-                            className="bg-white text-[#000] text-sm font-sans font-medium px-5 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
+                            className="bg-white text-black text-sm font-sans font-medium px-5 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
                         >
                             {term('random-entry')}
                         </button>
@@ -274,15 +271,15 @@ export function Home() {
                 </section>
 
                 {/* Categories */}
-                <section className="px-4 sm:px-6 pb-16">
+                <section className="px-7 sm:px-8 pb-16">
                     <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
                         {/* Semitic Entries */}
                         <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
                             <h2 className="font-sans text-base font-semibold mb-1" style={{ color: ARAB_GREEN }}>
-                                {t('Semitic Entries', (term('entrati').charAt(0).toUpperCase() + term('entrati').slice(1)) + ' ' + term('Semitiku'))}
+                                {term('semitic-entries-title')}
                             </h2>
                             <p className="text-xs text-[#666] mb-5 leading-snug">
-                                {t('Over 10,000 entries with 100,000 inflected word forms.', `Aktar minn 10,000 ${term('entrati')} b'100,000 ${term('forma')} ta' kelma ${term('infletta')}.`)}
+                                {term('semitic-entries-desc')}
                             </p>
                             <div className="space-y-3">
                                 {SEMITIC_ENTRIES.map((e: any) => (
@@ -293,7 +290,7 @@ export function Home() {
                                             </Link>
                                             {e.altForm && <span className="text-xs text-[#555] font-serif">{e.altForm}</span>}
                                         </div>
-                                        <p className="text-sm text-[#000] mt-0.5">{e.def}</p>
+                                        <p className="text-sm text-black mt-0.5">{e.def}</p>
                                     </div>
                                 ))}
                             </div>
@@ -302,10 +299,10 @@ export function Home() {
                         {/* Romance Entries */}
                         <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
                             <h2 className="font-sans text-base font-semibold mb-1" style={{ color: ROMAN_RED }}>
-                                {t('Romance Entries', (term('entrati').charAt(0).toUpperCase() + term('entrati').slice(1)) + ' ' + term('Rumanz'))}
+                                {term('romance-entries-title')}
                             </h2>
                             <p className="text-xs text-[#666] mb-5 leading-snug">
-                                {t('Over 10,000 entries with 98,000 inflected word forms.', `Aktar minn 10,000 ${term('entrati')} bi 98,000 ${term('forma')} ta' kelma ${term('infletta')}.`)}
+                                {term('romance-entries-desc')}
                             </p>
                             <div className="space-y-3">
                                 {ROMANCE_ENTRIES.map((e: any) => (
@@ -316,7 +313,7 @@ export function Home() {
                                             </Link>
                                             {e.altForm && <span className="text-xs text-[#555] font-serif">{e.altForm}</span>}
                                         </div>
-                                        <p className="text-sm text-[#000] mt-0.5">{e.def}</p>
+                                        <p className="text-sm text-black mt-0.5">{e.def}</p>
                                     </div>
                                 ))}
                             </div>
@@ -325,10 +322,10 @@ export function Home() {
                         {/* IPA & Audio */}
                         <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
                             <h2 className="font-sans text-base font-bold mb-1" style={{ color: IPA_GOLD }}>
-                                {t('IPA & Audio Pronunciation', `IPA u ${term('Pronunzja')} b${term('l-Awdjo')}`)}
+                                {term('ipa-audio-title')}
                             </h2>
                             <p className="text-xs text-[#666] leading-snug">
-                                {t('Every term will have its own IPA and audio to help learners.', `Kull ${term('terminu')} se jkollu l-IPA u ${term('l-awdjo tiegħu')} biex jgħin lil dawk li jitgħallmu.`)}
+                                {term('ipa-audio-desc')}
                             </p>
                         </div>
                     </div>

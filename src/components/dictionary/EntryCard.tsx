@@ -19,10 +19,10 @@ interface EntryCardProps {
     linkToFull?: boolean;    // if compact, show link to full entry
 }
 
-const ENTRY_TABS = [
-    { id: 'definitions', label: 'Tifsiriet' },
-    { id: 'morphology', label: 'Morfoloġija' },
-    { id: 'etymology', label: 'Oriġini' },
+const getEntryTabs = (term: (key: string) => string) => [
+    { id: 'definitions', label: term('definitions') },
+    { id: 'morphology', label: term('morphology') },
+    { id: 'etymology', label: term('etymology') },
 ];
 
 export function EntryCard({ entry, compact = false, linkToFull = false }: EntryCardProps) {
@@ -68,7 +68,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
 
                         {/* First definition */}
                         {entry.definitions[0] && (
-                            <p className="text-sm text-[#000] mt-2 line-clamp-2">
+                            <p className="text-sm text-black mt-2 line-clamp-2">
                                 <span className="text-[#A07030] font-semibold mr-1">1.</span>
                                 {entry.definitions[0].text_en}
                             </p>
@@ -77,7 +77,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
 
                     {/* Right: reliability compact */}
                     {primaryAttestation && (
-                        <div className="flex-shrink-0 pt-1">
+                        <div className="shrink-0 pt-1">
                             <AttestationReliability data={primaryAttestation} compact />
                         </div>
                     )}
@@ -90,7 +90,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
     return (
         <article className="animate-fade-in space-y-5">
             {/* ── Headword block ───────────────────────────────────────────── */}
-            <div className="bg-white rounded-xl border border-[#d8cfc0] shadow-sm p-5 sm:p-7">
+            <div className="bg-white rounded-xl border border-border shadow-sm p-5 sm:p-7">
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                         <h1 className="font-serif text-4xl font-bold text-[#1034A6] leading-tight">
@@ -98,7 +98,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                         </h1>
 
                         {primaryIPA && (
-                            <p className="ipa text-base text-[#4a4a4a] mt-1">[{primaryIPA}]</p>
+                            <p className="ipa text-base text-text-muted mt-1">[{primaryIPA}]</p>
                         )}
 
                         {/* Audio */}
@@ -133,22 +133,22 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                         <button
                             onClick={() => setSaved(s => !s)}
                             className="p-2 rounded-md hover:bg-[#1034A6]/10 text-[#1034A6] transition-colors"
-                            aria-label={saved ? 'Remove from list' : 'Save to list'}
-                            title={saved ? 'Remove from list' : 'Save to list'}
+                            aria-label={saved ? term('remove-from-list') : term('save-to-list')}
+                            title={saved ? term('remove-from-list') : term('save-to-list')}
                         >
                             {saved ? <BookmarkCheck size={18} className="fill-[#1034A6]" /> : <Bookmark size={18} />}
                         </button>
                         <button
                             className="p-2 rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
-                            aria-label="Share"
-                            title="Aqsam"
+                            aria-label={term('share')}
+                            title={term('share')}
                         >
                             <Share2 size={18} />
                         </button>
                         <button
                             className="p-2 rounded-md hover:bg-red-50 text-gray-500 hover:text-[#B22222] transition-colors"
-                            aria-label="Report"
-                            title="Irrapporta"
+                            aria-label={term('report')}
+                            title={term('report')}
                         >
                             <Flag size={18} />
                         </button>
@@ -157,15 +157,15 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
 
                 {/* Attestation bar */}
                 {primaryAttestation && (
-                    <div className="mt-5 pt-4 border-t border-[#ede9e1]">
+                    <div className="mt-5 pt-4 border-t border-border-light">
                         <AttestationReliability data={primaryAttestation} />
                     </div>
                 )}
             </div>
 
             {/* ── Tab content block ────────────────────────────────────────── */}
-            <div className="bg-white rounded-xl border border-[#d8cfc0] shadow-sm overflow-hidden">
-                <Tabs tabs={ENTRY_TABS} activeTab={activeTab} onChange={setActiveTab} />
+            <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
+                <Tabs tabs={getEntryTabs(term)} activeTab={activeTab} onChange={setActiveTab} />
 
                 {/* Definitions tab */}
                 <TabContent tabId="definitions" activeTab={activeTab}>
@@ -176,9 +176,9 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                     {def.sense_number}.
                                 </span>
                                 <div className="flex-1 space-y-1">
-                                    <p className="text-[#000]">{def.text_en}</p>
+                                    <p className="text-black">{def.text_en}</p>
                                     {def.text_mt && (
-                                        <p className="text-sm text-[#4a4a4a] italic">{def.text_mt}</p>
+                                        <p className="text-sm text-text-muted italic">{def.text_mt}</p>
                                     )}
                                     <div className="flex items-center gap-2 flex-wrap">
                                         {def.register && <Badge variant="register">{def.register}</Badge>}
@@ -186,9 +186,9 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                     </div>
                                     {def.example_sentences?.map(ex => (
                                         <div key={ex.id} className="mt-2 pl-3 border-l-2 border-[#C9A84C]/30">
-                                            <p className="text-sm italic text-[#000]">"{ex.maltese}"</p>
+                                            <p className="text-sm italic text-black">"{ex.maltese}"</p>
                                             {ex.english && (
-                                                <p className="text-sm text-[#4a4a4a] mt-0.5">"{ex.english}"</p>
+                                                <p className="text-sm text-text-muted mt-0.5">"{ex.english}"</p>
                                             )}
                                             {ex.source && (
                                                 <p className="text-[11px] text-[#A07030] mt-0.5">— {ex.source}</p>
@@ -201,9 +201,9 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
 
                         {/* Subentries */}
                         {entry.subentries && entry.subentries.length > 0 && (
-                            <div className="pt-4 border-t border-[#ede9e1]">
+                            <div className="pt-4 border-t border-border-light">
                                 <h3 className="text-xs font-semibold text-[#1034A6] uppercase tracking-wider mb-3">
-                                    Taħt din il-Kelma
+                                    {term('under-this-word')}
                                 </h3>
                                 <div className="space-y-2">
                                     {entry.subentries
@@ -230,7 +230,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                         {entry.etymologies && entry.etymologies.length > 0 ? (
                             <EtymologyChain etymologies={entry.etymologies} />
                         ) : (
-                            <p className="text-sm text-gray-400 italic">L-oriġini mhux disponibbli.</p>
+                            <p className="text-sm text-gray-400 italic">{term('etymology-not-available')}</p>
                         )}
                     </div>
                 </TabContent>

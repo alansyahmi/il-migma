@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import { ClerkProvider } from '@clerk/clerk-react';
 import { LinguisticModeProvider } from '@/contexts/LinguisticModeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -29,58 +29,61 @@ import { Suggest } from '@/pages/Suggest';
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string;
 
 if (!PUBLISHABLE_KEY) {
-  console.warn('[Il-Miġma] Missing VITE_CLERK_PUBLISHABLE_KEY — Auth will not function.');
+    console.warn('[Il-Miġma] Missing VITE_CLERK_PUBLISHABLE_KEY — Auth will not function.');
 }
 
 /** The layout shell: Navbar + <Outlet> + Footer */
 function AppShell() {
-  return (
-    <div className="min-h-screen flex flex-col bg-[#F4F3F0]">
-      <Navbar />
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
-  );
+    const { pathname } = useLocation();
+    const hideFooter = pathname === '/suggest';
+
+    return (
+        <div className="min-h-screen flex flex-col bg-[#F4F3F0] overflow-x-hidden">
+            <Navbar />
+            <main className="flex-1 min-h-0 flex flex-col">
+                <Outlet />
+            </main>
+            {!hideFooter && <Footer />}
+        </div>
+    );
 }
 
 export default function App() {
-  return (
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY ?? 'pk_test_placeholder'}>
-      <DarkModeProvider>
-        <LanguageProvider>
-          <AdminConfigProvider>
-            <LinguisticModeProvider>
-              <AuthProvider>
-                <BrowserRouter>
-                  <ScrollToTop />
-                  <Routes>
-                    <Route element={<AppShell />}>
-                      <Route index element={<Home />} />
-                      <Route path="search" element={<Search />} />
-                      <Route path="entry/:id" element={<Entry />} />
-                      <Route path="root/:id" element={<Root />} />
-                      <Route path="chatbot" element={<Chatbot />} />
-                      <Route path="dashboard" element={<Dashboard />} />
-                      <Route path="conjugator" element={<Conjugator />} />
-                      <Route path="semmej" element={<IsSemmej />} />
-                      <Route path="blog" element={<Blog />} />
-                      <Route path="blog/:slug" element={<BlogPost />} />
-                      <Route path="course" element={<Course />} />
-                      <Route path="admin" element={<Admin />} />
-                      <Route path="advanced-search" element={<AdvancedSearch />} />
-                      <Route path="root-search" element={<RootSearch />} />
-                      <Route path="suggest" element={<Suggest />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Route>
-                  </Routes>
-                </BrowserRouter>
-              </AuthProvider>
-            </LinguisticModeProvider>
-          </AdminConfigProvider>
-        </LanguageProvider>
-      </DarkModeProvider>
-    </ClerkProvider>
-  );
+    return (
+        <ClerkProvider publishableKey={PUBLISHABLE_KEY ?? 'pk_test_placeholder'}>
+            <DarkModeProvider>
+                <LanguageProvider>
+                    <AdminConfigProvider>
+                        <LinguisticModeProvider>
+                            <AuthProvider>
+                                <BrowserRouter>
+                                    <ScrollToTop />
+                                    <Routes>
+                                        <Route element={<AppShell />}>
+                                            <Route index element={<Home />} />
+                                            <Route path="search" element={<Search />} />
+                                            <Route path="entry/:id" element={<Entry />} />
+                                            <Route path="root/:id" element={<Root />} />
+                                            <Route path="chatbot" element={<Chatbot />} />
+                                            <Route path="dashboard" element={<Dashboard />} />
+                                            <Route path="conjugator" element={<Conjugator />} />
+                                            <Route path="semmej" element={<IsSemmej />} />
+                                            <Route path="blog" element={<Blog />} />
+                                            <Route path="blog/:slug" element={<BlogPost />} />
+                                            <Route path="course" element={<Course />} />
+                                            <Route path="admin" element={<Admin />} />
+                                            <Route path="advanced-search" element={<AdvancedSearch />} />
+                                            <Route path="root-search" element={<RootSearch />} />
+                                            <Route path="suggest" element={<Suggest />} />
+                                            <Route path="*" element={<NotFound />} />
+                                        </Route>
+                                    </Routes>
+                                </BrowserRouter>
+                            </AuthProvider>
+                        </LinguisticModeProvider>
+                    </AdminConfigProvider>
+                </LanguageProvider>
+            </DarkModeProvider>
+        </ClerkProvider>
+    );
 }

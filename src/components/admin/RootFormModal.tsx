@@ -159,7 +159,20 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="col-span-1 md:col-span-1">
                             <label className={label}>{t('Root Consonants', 'Konsonanti')}</label>
-                            <input className={inp} value={form.consonants} onChange={e => setForm({ ...form, consonants: e.target.value })} placeholder="e.g. f-għ-l" />
+                            <input
+                                className={inp}
+                                value={form.consonants}
+                                onChange={e => {
+                                    const val = e.target.value;
+                                    const isBlocked = /[\u0127q]|g\u0127|h/i.test(val);
+                                    setForm({
+                                        ...form,
+                                        consonants: val,
+                                        is_imala_blocked: form.is_imala_blocked || isBlocked
+                                    });
+                                }}
+                                placeholder="e.g. f-għ-l"
+                            />
                         </div>
                         <div className="col-span-1 md:col-span-1">
                             <label className={label}>{t('Root Class', 'Klassi tal-Għerq')}</label>
@@ -250,7 +263,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                                     {t('Imala Blocked', 'Imala Imblukkata')}
                                 </span>
                             </label>
-                            <p className="text-[9px] text-black/40 mt-1 leading-tight w-[100%]">
+                            <p className="text-[9px] text-black/40 mt-1 leading-tight w-full">
                                 Applies 'a' instead of 'ie' to verb suffixes. Auto-checks if 'a-a' is used.
                             </p>
                         </div>
@@ -311,7 +324,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                     </div>
 
                     {/* Etymology Section */}
-                    <fieldset className="border border-[#ede9e1] rounded-xl p-4 pt-3">
+                    <fieldset className="border border-border-light rounded-xl p-4 pt-3">
                         <legend className="text-[0.65rem] font-bold text-black px-2 uppercase tracking-widest">{t('Etymology', 'Etimoloġija')}</legend>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mt-1">
                             <div>

@@ -1,18 +1,42 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Search as SearchIcon, Keyboard, Filter, ChevronDown, ChevronUp } from 'lucide-react';
-import { generateRootForms } from '@/lib/conjugationEngine';
+import { Search as SearchIcon, Keyboard, Filter, ChevronDown, ChevronUp, MessageSquare, Shuffle } from 'lucide-react';
+import { generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
 import { cn } from '@/lib/utils';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig } from '@/lib/adminConfig';
-import { MOCK_ENTRIES } from '@/data/mockData';
+import { apiSearch } from '@/lib/api';
+import { SubParts } from '@/components/dictionary/SubParts';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
+const EGYPTIAN_BLUE = '#1034A6';
+
+// ── Types ──────────────────────────────────────────────────────────────────
+interface InflectionRow {
+    label: string;
+    form: string;
+    hasPage: boolean;
+    entryId?: string;
+    marker?: 'plain' | 'theoretical' | 'auto_generated'; // matching Search.tsx
+}
+
+interface SearchResult {
+    id: string;
+    headword: string;
+    root: string;
+    rootSlug: string;
+    gender?: string;    // shown as Egyptian Blue below root
+    pos: string;
+    definitions: string[];
+    inflections: InflectionRow[];
+    entry: any;         // matching Search.tsx
+}
 
 // ── Sub-components ─────────────────────────────────────────────────────────
+
 function FilterSelect({
     label, value, onChange, options,
 }: {
@@ -37,12 +61,12 @@ function FilterSelect({
 
     return (
         <div>
-            <p className="text-xs font-medium text-[#000] mb-1.5">{label}</p>
+            <p className="text-xs font-medium text-black mb-1.5">{label}</p>
             <div ref={ref} className="relative">
                 <button
                     type="button"
                     onClick={() => setOpen(o => !o)}
-                    className="w-full flex items-center justify-between bg-white border border-black/10 rounded-md px-3 py-2 text-sm text-[#000] focus:outline-none focus:ring-1 focus:ring-black/20 cursor-pointer text-left"
+                    className="w-full flex items-center justify-between bg-white border border-black/10 rounded-md px-3 py-2 text-sm text-black focus:outline-none focus:ring-1 focus:ring-black/20 cursor-pointer text-left"
                 >
                     <span>{selectedLabel}</span>
                     <span
@@ -53,14 +77,14 @@ function FilterSelect({
                     </span>
                 </button>
                 {open && (
-                    <ul className="absolute z-50 w-full mt-1 bg-white border border-black/10 rounded-md shadow-md overflow-hidden text-sm">
+                    <ul className="absolute z-50 w-full mt-1 bg-white border border-black/10 rounded-md shadow-md overflow-hidden text-sm max-h-48 overflow-y-auto">
                         {options.map(o => (
                             <li
                                 key={o.value}
                                 onClick={() => { onChange(o.value); setOpen(false); }}
                                 className={cn(
                                     'px-3 py-2 cursor-pointer hover:bg-black/5 transition-colors',
-                                    o.value === value ? 'font-medium text-[#000]' : 'text-[#333]',
+                                    o.value === value ? 'font-medium text-black' : 'text-[#333]',
                                 )}
                             >
                                 {o.label}
@@ -83,13 +107,13 @@ function FilterText({
 }) {
     return (
         <div>
-            <p className="text-xs font-medium text-[#000] mb-1.5">{label}</p>
+            <p className="text-xs font-medium text-black mb-1.5">{label}</p>
             <input
                 type="text"
                 value={value}
                 onChange={e => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full bg-white border border-black/10 rounded-md px-3 py-2 text-sm text-[#000] focus:outline-none focus:ring-1 focus:ring-black/20 placeholder:text-black/25"
+                className="w-full bg-white border border-black/10 rounded-md px-3 py-2 text-sm text-black focus:outline-none focus:ring-1 focus:ring-black/20 placeholder:text-black/25"
             />
         </div>
     );
@@ -105,7 +129,7 @@ function FilterCheckbox({
             <div
                 className={cn(
                     'w-4 h-4 border rounded-sm flex items-center justify-center shrink-0 transition-colors',
-                    checked ? 'bg-[#000] border-[#000]' : 'bg-white border-black/25',
+                    checked ? 'bg-black border-black' : 'bg-white border-black/25',
                 )}
                 onClick={() => onChange(!checked)}
             >
@@ -115,7 +139,7 @@ function FilterCheckbox({
                     </svg>
                 )}
             </div>
-            <span className="text-sm text-[#000]">{label}</span>
+            <span className="text-sm text-black">{label}</span>
         </label>
     );
 }
@@ -144,7 +168,7 @@ function FilterHybrid({
 
     return (
         <div>
-            <p className="text-xs font-medium text-[#000] mb-1.5">{label}</p>
+            <p className="text-xs font-medium text-black mb-1.5">{label}</p>
             <div ref={ref} className="relative group">
                 <div className="flex items-center bg-white border border-black/10 rounded-md overflow-hidden focus-within:ring-1 focus-within:ring-black/20">
                     <input
@@ -152,12 +176,12 @@ function FilterHybrid({
                         value={value}
                         onChange={e => onChange(e.target.value)}
                         placeholder={placeholder}
-                        className="flex-1 px-3 py-2 text-sm text-[#000] focus:outline-none placeholder:text-black/25 min-w-0"
+                        className="flex-1 px-3 py-2 text-sm text-black focus:outline-none placeholder:text-black/25 min-w-0"
                     />
                     <button
                         type="button"
                         onClick={() => setOpen(o => !o)}
-                        className="px-2 py-2 text-[#999] hover:text-[#000] border-l border-black/5 transition-colors"
+                        className="px-2 py-2 text-[#999] hover:text-black border-l border-black/5 transition-colors"
                     >
                         <span className="text-[12px] block transform transition-transform" style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                             ▲
@@ -183,49 +207,26 @@ function FilterHybrid({
     );
 }
 
-const EGYPTIAN_BLUE = '#1034A6';
-
-// ── Types ──────────────────────────────────────────────────────────────────
-interface InflectionRow {
-    label: string;
-    form: string;
-    hasPage: boolean;
-    marker?: '*' | '✦'; // these + labels appear at black/55
-}
-
-interface SearchResult {
-    id: string;
-    headword: string;
-    root: string;
-    rootSlug: string;
-    gender?: string;    // shown as Egyptian Blue below root
-    pos: string;
-    formLines: string[];
-    definitions: string[];
-    inflections: InflectionRow[];
-}
-
 function InflectionCell({ row }: { row: InflectionRow }) {
-    const markerEl = row.marker && (
-        <span className="text-black/55 mr-0.5">{row.marker}</span>
-    );
+    const markerEl = row.marker === 'theoretical' ? (
+        <span className="text-black/55 mr-0.5">*</span>
+    ) : row.marker === 'auto_generated' ? (
+        <span className="text-black/55 mr-0.5">✦</span>
+    ) : null;
 
-    if (row.hasPage) {
+    if (row.hasPage || row.entryId) {
         return (
-            <Link to={`/entry/${row.form}`} style={{ color: EGYPTIAN_BLUE }}
+            <Link to={`/entry/${row.entryId || row.form}`} style={{ color: EGYPTIAN_BLUE }}
                 className="text-sm hover:underline">
                 {markerEl}{row.form}
             </Link>
         );
     }
-    if (row.marker) {
-        return (
-            <span className="text-sm text-black/55">
-                {markerEl}{row.form}
-            </span>
-        );
-    }
-    return <span className="text-sm text-[#000]">{row.form}</span>;
+    return (
+        <span className={cn("text-sm", row.marker ? "text-black/55" : "text-black")}>
+            {markerEl}{row.form}
+        </span>
+    );
 }
 
 
@@ -233,14 +234,14 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
     const { term } = useLinguisticMode();
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3 w-full">
-            <div className="flex flex-col md:grid md:grid-cols-[11rem_5rem_1fr_11rem] min-h-[5rem]">
+            <div className="flex flex-col md:grid md:grid-cols-[12rem_8rem_1fr_16rem] min-h-20">
 
                 {/* Col 1: Index number | headword + root */}
                 <div className="px-5 py-4 flex items-start gap-2 border-b md:border-b-0 md:border-r border-black/5">
                     <span className="text-xs text-black/30 font-sans w-5 shrink-0 pt-1">{index}.</span>
                     <div>
                         <Link to={`/entry/${result.id}`}
-                            className="font-serif font-extrabold text-[1.35rem] leading-tight text-[#000] hover:underline block">
+                            className="font-serif font-extrabold text-[1.35rem] leading-tight text-black hover:underline block">
                             {result.headword}
                         </Link>
                         <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
@@ -261,25 +262,18 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
                 {/* Col 2: POS block */}
-                <div className="px-5 py-3 md:py-4 flex flex-row md:flex-col flex-wrap gap-2 md:gap-0.5 border-b md:border-b-0 md:border-r border-black/5 bg-black/[0.01] md:bg-transparent">
-                    <span className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug font-bold md:font-normal">
-                        {term(result.pos)}
-                    </span>
-                    {result.formLines.map(line => (
-                        <span key={line} className="text-[10px] md:text-xs text-[#000] font-sans uppercase tracking-wide leading-snug opacity-60 md:opacity-100 bg-black/5 md:bg-transparent px-1 md:px-0 rounded md:rounded-none">
-                            {line}
-                        </span>
-                    ))}
+                <div className="px-5 py-3 md:py-4 flex flex-row md:flex-col flex-wrap gap-2 md:gap-0.5 border-b md:border-b-0 md:border-r border-black/5 bg-black/1 md:bg-transparent">
+                    <SubParts entry={result.entry} layout="lines" showTransitivity />
                 </div>
 
                 {/* Col 3: Definitions */}
                 <div className="px-5 py-4 border-b md:border-b-0 md:border-r border-black/5">
                     {result.definitions.length === 1 ? (
-                        <p className="text-sm text-[#000] leading-relaxed">{result.definitions[0]}</p>
+                        <p className="text-sm text-black leading-relaxed">{result.definitions[0]}</p>
                     ) : (
                         <ol className="space-y-1 md:space-y-0.5 list-none">
                             {result.definitions.map((def, i) => (
-                                <li key={i} className="text-sm text-[#000]">
+                                <li key={i} className="text-sm text-black">
                                     <span className="text-black/30 mr-1.5 font-sans text-xs">{i + 1}.</span> {def}
                                 </li>
                             ))}
@@ -288,10 +282,10 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
                 {/* Col 4: Inflections */}
-                <div className="px-5 py-4 space-y-2 md:space-y-1 bg-black/[0.01] md:bg-transparent">
+                <div className="px-5 py-4 space-y-2 md:space-y-1 bg-black/1 md:bg-transparent">
                     {result.inflections.map((row, i) => (
                         <div key={i} className="flex items-baseline gap-3">
-                            <span className="text-[10px] md:text-xs text-black/40 md:text-black/55 font-sans w-[4.5rem] shrink-0 leading-snug uppercase tracking-tight md:tracking-normal">
+                            <span className="text-[10px] md:text-xs text-black/40 md:text-black/55 font-sans w-24 shrink-0 leading-snug uppercase tracking-tight md:tracking-normal">
                                 {row.label}
                             </span>
                             <InflectionCell row={row} />
@@ -315,7 +309,7 @@ function RootRadicalsInput({
 }) {
     return (
         <div>
-            <p className="text-xs font-medium text-[#000] mb-1.5">{label}</p>
+            <p className="text-xs font-medium text-black mb-1.5">{label}</p>
             <div className="flex gap-1.5">
                 {values.map((v, i) => (
                     <input
@@ -324,7 +318,7 @@ function RootRadicalsInput({
                         maxLength={2}
                         value={v}
                         onChange={e => onChange(i, e.target.value)}
-                        className="w-10 text-center bg-white border border-black/10 rounded-md px-1 py-1.5 text-sm text-[#000] focus:outline-none focus:ring-1 focus:ring-black/20"
+                        className="w-10 text-center bg-white border border-black/10 rounded-md px-1 py-1.5 text-sm text-black focus:outline-none focus:ring-1 focus:ring-black/20"
                         placeholder="—"
                     />
                 ))}
@@ -349,6 +343,7 @@ interface AdvancedFilters {
     searchEnglishGloss: boolean;
     includeSuggested: boolean;
     includePending: boolean;
+    isRegex: boolean;
 }
 
 const DEFAULT_FILTERS: AdvancedFilters = {
@@ -366,10 +361,11 @@ const DEFAULT_FILTERS: AdvancedFilters = {
     searchEnglishGloss: false,
     includeSuggested: false,
     includePending: true,
+    isRegex: false,
 };
 
 export function AdvancedSearch() {
-    const { language, t } = useLanguage();
+    const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { getOptions } = useAdminConfig();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -385,51 +381,164 @@ export function AdvancedSearch() {
         ...getOptions('verb_class', mode, language)
     ], [getOptions, mode, language, term]);
 
-    // Local state for results (only updates on action)
+    // Local state for UI controls
     const [query, setQuery] = useState(searchParams.get('q') ?? '');
     const [filters, setFilters] = useState<AdvancedFilters>(() => {
-        // Sync initial state from URL
         const f = { ...DEFAULT_FILTERS };
         if (searchParams.has('pos')) f.pos = searchParams.get('pos')!;
         if (searchParams.has('type')) f.rootType = searchParams.get('type')!;
         if (searchParams.has('v')) f.vowelSet = searchParams.get('v')!;
+        if (searchParams.has('wizen')) f.wizenPattern = searchParams.get('wizen')!;
+        if (searchParams.has('source')) f.source = searchParams.get('source')!;
         if (searchParams.has('r1')) f.rootRadicals[0] = searchParams.get('r1')!;
         if (searchParams.has('r2')) f.rootRadicals[1] = searchParams.get('r2')!;
         if (searchParams.has('r3')) f.rootRadicals[2] = searchParams.get('r3')!;
         if (searchParams.has('r4')) f.rootRadicals[3] = searchParams.get('r4')!;
+        if (searchParams.has('regex')) f.isRegex = searchParams.get('regex') === 'true';
+        if (searchParams.has('lemma')) f.searchLemma = searchParams.get('lemma') === 'true';
+        if (searchParams.has('word_forms')) f.searchWordForms = searchParams.get('word_forms') === 'true';
+        if (searchParams.has('gloss')) f.searchEnglishGloss = searchParams.get('gloss') === 'true';
+        if (searchParams.has('suggested')) f.includeSuggested = searchParams.get('suggested') === 'true';
+        if (searchParams.has('pending')) f.includePending = searchParams.get('pending') !== 'false';
         return f;
     });
 
-    // Effective search values (pulled from URL)
-    const submitted = searchParams.get('q') ?? '';
-    const activeFilters = useMemo(() => {
-        const f = { ...DEFAULT_FILTERS };
-        f.pos = searchParams.get('pos') ?? '';
-        f.rootType = searchParams.get('type') ?? '';
-        f.vowelSet = searchParams.get('v') ?? '';
-        f.rootRadicals = [
-            searchParams.get('r1') ?? '',
-            searchParams.get('r2') ?? '',
-            searchParams.get('r3') ?? '',
-            searchParams.get('r4') ?? '',
-        ];
-        return f;
-    }, [searchParams]);
+    // Effective results state
+    const [results, setResults] = useState<SearchResult[]>([]);
+    const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(false);
 
+    const submitted = searchParams.get('q') ?? '';
     const isSearchPerformed = searchParams.has('q') ||
         searchParams.has('pos') ||
         searchParams.has('type') ||
+        searchParams.has('v') ||
+        searchParams.has('wizen') ||
+        searchParams.has('source') ||
         searchParams.has('r1');
 
     useEffect(() => {
         const q = searchParams.get('q') ?? '';
         setQuery(q);
-        if (q.trim()) {
-            document.title = `${t('Advanced Search', term('advanced-search'))}: ${q} | Il-Miġma'`;
-        } else {
-            document.title = `${t('Advanced Search', term('advanced-search'))} | Il-Miġma'`;
-        }
-    }, [searchParams, t, term]);
+        document.title = q.trim()
+            ? `${term('advanced-search-title')}: ${q} | Il-Miġma'`
+            : `${term('advanced-search-title')} | Il-Miġma'`;
+
+        setLoading(true);
+        const pos = searchParams.get('pos') || undefined;
+        const rootType = searchParams.get('type') || undefined;
+        const vowelSet = searchParams.get('v') || undefined;
+        const wizen = searchParams.get('wizen') || undefined;
+        const source = searchParams.get('source') || undefined;
+        const radicals = [
+            searchParams.get('r1') || '',
+            searchParams.get('r2') || '',
+            searchParams.get('r3') || '',
+            searchParams.get('r4') || '',
+        ];
+
+        apiSearch(q, {
+            pos,
+            type: rootType,
+            wizen: wizen || undefined,
+            source: source || undefined,
+            limit: parseInt(filters.maxResults),
+            v: vowelSet,
+            random: searchParams.get('random') || undefined,
+            radicals: radicals.some(r => r) ? radicals : undefined,
+            regex: searchParams.get('regex') === 'true',
+            searchLemma: searchParams.get('lemma') === 'true',
+            searchWordForms: searchParams.get('word_forms') === 'true',
+            searchEnglishGloss: searchParams.get('gloss') === 'true',
+            includeSuggested: searchParams.get('suggested') === 'true',
+            includePending: searchParams.get('pending') !== 'false',
+        })
+            .then(res => {
+                setTotal(res.total);
+                const mapped: SearchResult[] = res.results.map((r: any) => {
+                    const inflections: InflectionRow[] = [];
+                    const vm = r.verb_morphology;
+                    let generated: any = null;
+
+                    if (vm) {
+                        const rc = r.root_pattern_form?.root?.consonants;
+                        if (rc) {
+                            try {
+                                const forms = generateRootForms(
+                                    rc,
+                                    vm.vowel_set_perfect || 'a-a',
+                                    vm.vowel_set_imperfect || 'i-a',
+                                    r.verb_class || r.root_pattern_form.root.strength || 'strong',
+                                    r.verb_weak_class || r.root_pattern_form.root.weak_class,
+                                    r.root_pattern_form.root.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rc)
+                                );
+                                const attestedEntries = getAttestedEntries(r.root_pattern_form?.root?.entries || [r]);
+                                const marked = markGeneratedForms(forms, attestedEntries);
+                                generated = marked.find((f: any) => f.form === vm.form);
+                            } catch (e) {
+                                console.warn("Advanced search conjugation error:", e);
+                            }
+                        }
+
+                        const pushMarked = (label: string, data: any) => {
+                            if (!data || data.value === '-') return;
+                            inflections.push({
+                                label,
+                                form: data.value,
+                                hasPage: !!data.entryId,
+                                entryId: data.entryId,
+                                marker: data.marker,
+                            });
+                        };
+
+                        if (generated?.imperfect) {
+                            inflections.push({
+                                label: term('imperfect'),
+                                form: generated.imperfect.value,
+                                hasPage: false,
+                            });
+                        }
+                        if (generated?.imperative && generated.imperative.value !== '-') {
+                            inflections.push({
+                                label: term('imperative'),
+                                form: generated.imperative.value,
+                                hasPage: false,
+                            });
+                        }
+                        pushMarked(term('passive'), generated?.passiveParticiple);
+                        pushMarked(term('verbal-noun'), generated?.verbalNoun && {
+                            ...generated.verbalNoun,
+                            marker: generated.verbalNoun.entryId ? undefined : 'theoretical'
+                        });
+                    } else if (r.noun_morphology || r.noun_plural_forms?.length) {
+                        const nm = r.noun_morphology;
+                        const pluralForms = r.noun_plural_forms || nm?.plural_forms;
+                        if (pluralForms?.length) {
+                            inflections.push({ label: term('plural'), form: pluralForms[0], hasPage: false });
+                        }
+                    }
+
+                    return {
+                        id: r.id,
+                        headword: r.headword,
+                        root: r.root_pattern_form?.root?.consonants || '',
+                        rootSlug: r.root_pattern_form?.root?.consonants || '',
+                        gender: r.noun_gender || r.noun_morphology?.gender || (r.adjective_morphology?.masculine ? 'masculine' : undefined),
+                        pos: r.pos,
+                        definitions: r.definition_en ? [r.definition_en] : (r.definitions?.length ? r.definitions.map((d: any) => d.text_en) : []),
+                        inflections,
+                        entry: r,
+                    };
+                });
+                setResults(mapped);
+            })
+            .catch(err => {
+                console.error("Advanced Search fetch error:", err);
+                setResults([]);
+            })
+            .finally(() => setLoading(false));
+    }, [searchParams.toString(), term, isSearchPerformed, filters.maxResults]);
+
 
     const [kbOpen, setKbOpen] = useState(false);
     const [showFiltersMobile, setShowFiltersMobile] = useState(false);
@@ -442,9 +551,17 @@ export function AdvancedSearch() {
         if (filters.pos) params.pos = filters.pos;
         if (filters.rootType) params.type = filters.rootType;
         if (filters.vowelSet) params.v = filters.vowelSet;
+        if (filters.wizenPattern) params.wizen = filters.wizenPattern;
+        if (filters.source) params.source = filters.source;
         filters.rootRadicals.forEach((r, i) => {
             if (r) params[`r${i + 1}`] = r;
         });
+        if (filters.isRegex) params.regex = 'true';
+        if (filters.searchLemma) params.lemma = 'true';
+        if (filters.searchWordForms) params.word_forms = 'true';
+        if (filters.searchEnglishGloss) params.gloss = 'true';
+        if (filters.includeSuggested) params.suggested = 'true';
+        if (!filters.includePending) params.pending = 'false';
         setSearchParams(params);
         setShowFiltersMobile(false);
     };
@@ -476,52 +593,6 @@ export function AdvancedSearch() {
         return () => window.removeEventListener('keydown', handler);
     }, [query, filters]);
 
-    const results = useMemo(() => {
-        if (!isSearchPerformed) return [];
-
-        const s = submitted.trim().toLowerCase();
-        const { pos, rootType, rootRadicals, maxResults } = activeFilters;
-
-        return MOCK_ENTRIES.filter(e => {
-            // Text search (if submitted value exists)
-            if (s) {
-                const matchesHeadword = e.headword.toLowerCase().includes(s);
-                const matchesRoot = e.root_pattern_form?.root?.consonants.toLowerCase().includes(s);
-                const matchesGloss = e.definitions.some(d => d.text_en.toLowerCase().includes(s));
-                if (!matchesHeadword && !matchesRoot && !matchesGloss) return false;
-            }
-
-            // POS filter
-            if (pos && e.pos !== pos) return false;
-
-            // Root Type filter
-            if (rootType) {
-                const rt = e.root_pattern_form?.root?.strength;
-                const weakClass = e.root_pattern_form?.root?.weak_class;
-
-                if (rootType === 'strong' && rt !== 'strong') return false;
-                if (rootType === 'weak' && rt !== 'weak') return false;
-                if (rootType === 'weak initial' && (rt !== 'weak' || weakClass !== 'assimilative')) return false;
-                if (rootType === 'weak medial' && (rt !== 'weak' || weakClass !== 'hollow')) return false;
-                if (rootType === 'weak final' && (rt !== 'weak' || weakClass !== 'defective')) return false;
-                if (rootType === 'geminated' && rt !== 'geminated') return false;
-            }
-
-            // Root radicals filter
-            if (rootRadicals.some(r => r.trim() !== '')) {
-                const consonants = e.root_pattern_form?.root?.consonant_array || [];
-                for (let i = 0; i < 4; i++) {
-                    const filterRad = rootRadicals[i].trim().toLowerCase();
-                    if (filterRad && (!consonants[i] || consonants[i].toLowerCase() !== filterRad)) return false;
-                }
-            }
-
-            return true;
-        }).slice(0, parseInt(maxResults));
-    }, [submitted, isSearchPerformed, activeFilters]);
-
-
-
     const setFilter = <K extends keyof AdvancedFilters>(key: K, value: AdvancedFilters[K]) =>
         setFilters(f => ({ ...f, [key]: value }));
 
@@ -538,33 +609,32 @@ export function AdvancedSearch() {
         minHeight: '100vh',
     };
 
-    const cvPatternLabel = term('mudell-cv');
+    const cvPatternLabel = term('cv-pattern');
 
     return (
         <div style={bgStyle}>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8">
 
                 {/* ── Page header ── */}
                 <div className="mb-6">
                     {submitted ? (
                         <>
-                            <h1 className="font-serif font-medium text-4xl leading-tight text-[#000]">
-                                {t(`Results for '${submitted}'`, `Riżultati għal '${submitted}'`)}
+                            <h1 className="font-serif font-medium text-4xl leading-tight text-black">
+                                {term('results-for').replace('{q}', submitted)}
                             </h1>
-                            <p className="text-sm text-black/40 mt-0.5">
-                                {t(`${results.length} results shown`, `${results.length} riżultati murija`)}
+                            <p className="text-sm text-black/40 font-sans mt-1">
+                                {term('entries-shown-simple').replace('{count}', total.toString())}
                             </p>
                         </>
                     ) : (
                         <>
-                            <h1 className="font-serif font-medium text-4xl leading-tight text-[#000]">
-                                {t('Advanced Search', term('advanced-search'))}
+                            <h1 className="font-serif font-medium text-4xl leading-tight text-black">
+                                {term('advanced-search-title')}
                             </h1>
-                            <p className="text-sm text-black/40 mt-0.5">
-                                {t(
-                                    'Utilise our advanced search function to narrow down the search further.',
-                                    'Uża l-funzjoni tat-tiftix avvanzat sabiex tnaqqas ir-riżultati.'
-                                )}
+                            <p className="text-sm text-black/40 font-sans mt-2">
+                                {results.length > 0 && !submitted && !isSearchPerformed
+                                    ? term('random-entries-desc')
+                                    : term('advanced-search-desc')}
                             </p>
                         </>
                     )}
@@ -580,9 +650,9 @@ export function AdvancedSearch() {
                             onClick={() => setKbOpen(o => !o)}
                             className={cn(
                                 'flex items-center gap-1 px-3 border-r border-black/10 shrink-0 py-2.5 transition-colors',
-                                kbOpen ? 'text-[#000] bg-black/5' : 'text-[#555] hover:text-[#000]',
+                                kbOpen ? 'text-black bg-black/5' : 'text-[#555] hover:text-black',
                             )}
-                            aria-label={t('Toggle Maltese character picker', 'I togglja l-għażla tal-karattri Maltin')}
+                            aria-label={term('toggle-picker')}
                         >
                             <Keyboard size={14} />
                             <span className="text-xs text-[#aaa]">›</span>
@@ -592,14 +662,14 @@ export function AdvancedSearch() {
                             type="text"
                             value={query}
                             onChange={e => setQuery(e.target.value)}
-                            placeholder={t('Search…', 'Fittex…')}
-                            className="flex-1 px-3 py-2.5 text-sm bg-transparent focus:outline-none font-sans text-[#000]"
-                            aria-label={t('Search the dictionary', 'Fittex fid-dizzjunarju')}
+                            placeholder={term('search') + '…'}
+                            className="flex-1 px-3 py-2.5 text-sm bg-transparent focus:outline-none font-sans text-black"
+                            aria-label={term('search')}
                         />
                         <button
                             type="submit"
-                            className="px-3 py-2.5 text-[#555] hover:text-[#000] transition-colors shrink-0"
-                            aria-label={t('Search', 'Fittex')}
+                            className="px-3 py-2.5 text-[#555] hover:text-black transition-colors shrink-0"
+                            aria-label={term('search')}
                         >
                             <SearchIcon size={16} />
                         </button>
@@ -610,14 +680,33 @@ export function AdvancedSearch() {
                         onInsert={insertChar}
                         triggerRef={kbRef}
                     />
-                </form>
 
+                    <div className="mt-3 px-1 space-y-3">
+                        <FilterCheckbox
+                            label={term('use-regular-expression') || 'Use Regular Expression'}
+                            checked={filters.isRegex}
+                            onChange={v => setFilter('isRegex', v)}
+                        />
+                        {filters.isRegex && (
+                            <div className="bg-white/80 border border-black/10 rounded-md p-3 text-sm text-black/70 shadow-sm">
+                                <p className="font-semibold mb-1 text-black">Regex Search Help</p>
+                                <ul className="list-disc pl-5 space-y-1">
+                                    <li>Use <code className="bg-black/5 px-1 rounded text-[#1034A6]">^</code> to match the beginning of a word (e.g., <code className="bg-black/5 px-1 rounded text-[#1034A6]">^s.*</code>).</li>
+                                    <li>Use <code className="bg-black/5 px-1 rounded text-[#1034A6]">$</code> to match the end of a word (e.g., <code className="bg-black/5 px-1 rounded text-[#1034A6]">.*iet$</code>).</li>
+                                    <li>Use <code className="bg-black/5 px-1 rounded text-[#1034A6]">.</code> for any single character.</li>
+                                    <li>Use <code className="bg-black/5 px-1 rounded text-[#1034A6]">.*</code> for any sequence of characters.</li>
+                                    <li><i>Note: Full-text search sorting and fuzziness are disabled when Regex is active.</i></li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                </form>
 
                 {/* ── Two-column layout ── */}
                 <div className="flex flex-col md:flex-row gap-8 md:items-start w-full">
 
                     {/* Filter Sidebar Container (Unified on Mobile) */}
-                    <div className="w-full md:w-56 shrink-0 flex flex-col md:sticky md:top-20">
+                    <div className="w-full md:w-64 shrink-0 flex flex-col md:sticky md:top-20">
                         {/* Mobile Filter Toggle */}
                         <div className="md:hidden w-full">
                             <button
@@ -629,8 +718,8 @@ export function AdvancedSearch() {
                             >
                                 <div className="flex items-center gap-2">
                                     <Filter size={18} className="text-[#1034A6]" />
-                                    <span className="font-sans font-semibold text-sm text-[#000]">
-                                        {t('Filter Options', 'Għażliet tal-Filtru')}
+                                    <span className="font-sans font-semibold text-sm text-black">
+                                        {term('filter-options')}
                                     </span>
                                 </div>
                                 {showFiltersMobile ? <ChevronUp size={18} className="text-black/30" /> : <ChevronDown size={18} className="text-black/30" />}
@@ -643,12 +732,12 @@ export function AdvancedSearch() {
                             "md:rounded-xl md:block",
                             showFiltersMobile ? "rounded-b-xl block" : "hidden"
                         )}>
-                            <h2 className="hidden md:block font-sans font-semibold text-sm text-[#000]">
-                                {t('Filters', 'Filtri')}
+                            <h2 className="hidden md:block font-sans font-semibold text-sm text-black">
+                                {term('filters')}
                             </h2>
 
                             <FilterSelect
-                                label={t('Maximum Results Shown', term('Massimu ta\' Riżultati'))}
+                                label={term("max-results")}
                                 value={filters.maxResults}
                                 onChange={v => setFilter('maxResults', v)}
                                 options={[
@@ -660,21 +749,21 @@ export function AdvancedSearch() {
                             />
 
                             <FilterSelect
-                                label={term('parti tad-diskors')}
+                                label={term("part-of-speech")}
                                 value={filters.pos}
                                 onChange={v => setFilter('pos', v)}
                                 options={POS_FILTER_OPTIONS}
                             />
 
                             <FilterSelect
-                                label={term('għerq') + ' (' + term('forma') + ')'}
+                                label={term("root") + " (" + term("form") + ")"}
                                 value={filters.rootType}
                                 onChange={v => setFilter('rootType', v)}
                                 options={ROOT_TYPE_FILTER_OPTIONS}
                             />
 
                             <FilterSelect
-                                label={term('sors')}
+                                label={term("source")}
                                 value={filters.source}
                                 onChange={v => setFilter('source', v)}
                                 options={[
@@ -682,12 +771,12 @@ export function AdvancedSearch() {
                                     { value: 'spagnol2011', label: 'Spagnol (2011)' },
                                     { value: 'mayer2013', label: 'Mayer (2013)' },
                                     { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
-                                    { value: 'maltese_academy', label: term('maltese-academy') },
+                                    { value: 'maltese-academy', label: term('maltese-academy') },
                                 ]}
                             />
 
                             <RootRadicalsInput
-                                label={t('Root Radicals', term('Konsonanti tal-Għerq'))}
+                                label={term('root-radicals')}
                                 values={filters.rootRadicals}
                                 onChange={setRadical}
                             />
@@ -700,7 +789,7 @@ export function AdvancedSearch() {
                             />
 
                             <FilterHybrid
-                                label={t('Vowel Set', 'Sett ta\' Vokali')}
+                                label={term('vowel-set')}
                                 value={filters.vowelSet}
                                 onChange={v => setFilter('vowelSet', v)}
                                 placeholder="e.g. i–e"
@@ -708,14 +797,14 @@ export function AdvancedSearch() {
                             />
 
                             <FilterHybrid
-                                label={t('Dual Pattern', term('Mudell tal-Imtenni'))}
+                                label={term('dual-pattern')}
                                 value={filters.dualPattern}
                                 onChange={v => setFilter('dualPattern', v)}
                                 options={['-ejn', '-ajn', '-tejn', '-tajn']}
                             />
 
                             <FilterHybrid
-                                label={t('Plural Pattern', term('Mudell tal-Plural'))}
+                                label={term('plural-pattern')}
                                 value={filters.pluralPattern}
                                 onChange={v => setFilter('pluralPattern', v)}
                                 options={['-i', '-iet', '-at', '-ijiet', 'Break Plural']}
@@ -723,27 +812,27 @@ export function AdvancedSearch() {
 
                             <div className="border-t border-black/8 pt-4 space-y-2.5">
                                 <FilterCheckbox
-                                    label={t('Search lemma', 'Fittex il-lemma')}
+                                    label={term('search-lemma')}
                                     checked={filters.searchLemma}
                                     onChange={v => setFilter('searchLemma', v)}
                                 />
                                 <FilterCheckbox
-                                    label={t('Search word forms only', 'Fittex forom tal-kelma biss')}
+                                    label={term('search-word-forms')}
                                     checked={filters.searchWordForms}
                                     onChange={v => setFilter('searchWordForms', v)}
                                 />
                                 <FilterCheckbox
-                                    label={t('Search in English gloss only', 'Fittex fil-gloss bl-Ingliż biss')}
+                                    label={term('search-english-gloss')}
                                     checked={filters.searchEnglishGloss}
                                     onChange={v => setFilter('searchEnglishGloss', v)}
                                 />
                                 <FilterCheckbox
-                                    label={t('Include suggested results', 'Inkludi riżultati suġġeriti')}
+                                    label={term('include-suggested')}
                                     checked={filters.includeSuggested}
                                     onChange={v => setFilter('includeSuggested', v)}
                                 />
                                 <FilterCheckbox
-                                    label={t('Include pending entries', 'Inkludi entrati pendenti')}
+                                    label={term('include-pending')}
                                     checked={filters.includePending}
                                     onChange={v => setFilter('includePending', v)}
                                 />
@@ -752,92 +841,41 @@ export function AdvancedSearch() {
                     </div>
 
                     {/* ── Results area ── */}
-                    <div className="flex-1 min-w-0">
-
-
-                        {results.length > 0 ? (
-                            results.map((r, i) => {
-                                // Map Entry to SearchResult for display
-                                const entry = r as any; // simplify for mapping
-                                const inflections: InflectionRow[] = [];
-                                const formLines: string[] = [];
-
-                                if (entry.verb_morphology) {
-                                    const vm = entry.verb_morphology;
-                                    formLines.push(`${t('Form', 'Sura')} ${vm.form}`);
-                                    if (vm.transitivity) formLines.push(t(vm.transitivity, term(vm.transitivity.toLowerCase())));
-
-                                    // Auto-generate missing forms using the engine if enough data exists
-                                    let generated: any = null;
-                                    const rc = entry.root_pattern_form?.root?.consonants;
-                                    if (rc && (!vm.imperfective_3sg_m || !vm.imperative_sg)) {
-                                        try {
-                                            const forms = generateRootForms(
-                                                rc,
-                                                vm.vowel_set_perfect || 'a-a',
-                                                vm.vowel_set_imperfect || 'i-a',
-                                                entry.root_pattern_form.root.strength || 'strong',
-                                                entry.root_pattern_form.root.weak_class
-                                            );
-                                            generated = forms.find((f: any) => f.form === vm.form);
-                                        } catch (e) {
-                                            console.warn("Advanced search conjugation error:", e);
-                                        }
-                                    }
-
-                                    if (vm.perfective_3sg_m) {
-                                        inflections.push({ label: term('perfett'), form: vm.perfective_3sg_m, hasPage: true });
-                                    }
-
-                                    const impf = vm.imperfective_3sg_m || generated?.imperfect;
-                                    if (impf) {
-                                        inflections.push({ label: term('imperfett'), form: impf, hasPage: false });
-                                    }
-
-                                    const impv = vm.imperative_sg || (generated as any)?.imperative_sg;
-                                    if (impv && impv !== '-') {
-                                        inflections.push({ label: term('imperattiv'), form: impv, hasPage: true });
-                                    }
-
-                                    const vn = vm.verbal_noun;
-                                    if (vn && vn !== '-') {
-                                        inflections.push({ label: term('nom verbali'), form: vn, hasPage: true });
-                                    }
-                                } else if (entry.noun_morphology) {
-                                    const nm = entry.noun_morphology;
-                                    if (nm.plural_forms?.length) inflections.push({ label: t('Plural', 'Plural'), form: nm.plural_forms[0], hasPage: false });
-                                }
-
-                                const displayResult: SearchResult = {
-                                    id: entry.id,
-                                    headword: entry.headword,
-                                    root: entry.root_pattern_form?.root?.consonants || '',
-                                    rootSlug: entry.root_pattern_form?.root?.consonants || '',
-                                    gender: entry.noun_morphology?.gender || (entry.adjective_morphology?.masculine ? 'masculine' : undefined),
-                                    pos: entry.pos,
-                                    formLines,
-                                    definitions: entry.definition_en ? [entry.definition_en] : (entry.definitions?.length ? entry.definitions.map((d: any) => d.text_en) : []),
-                                    inflections,
-                                };
-
-                                return <EntryCard key={displayResult.id} result={displayResult} index={i + 1} />;
-                            })
+                    <div className="flex-1 space-y-3 min-w-0 w-full">
+                        {loading ? (
+                            <div className="space-y-3">
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} className="bg-white rounded-xl border border-black/5 h-24 animate-pulse" />
+                                ))}
+                            </div>
+                        ) : results.length > 0 ? (
+                            results.map((r, i) => (
+                                <EntryCard key={r.id} result={r} index={i + 1} />
+                            ))
                         ) : (
-                            <div className="bg-white/50 rounded-xl border border-white/40 shadow-sm p-10 text-right">
-                                <p className="text-sm text-[#000] mb-2">
-                                    {isSearchPerformed ? (
-                                        <>
-                                            {t(`No results found for your search.`, `L-ebda riżultat ma nstab għat-tiftix tiegħek.`)}
-                                            {' '}
-                                            {t("Try adjusting your filters.", "Ipprova biddel il-filtri tiegħek.")}
-                                        </>
-                                    ) : (
-                                        t(
-                                            'Enter a search query or apply filters to begin.',
-                                            'Daħħal query tat-tiftix jew applika l-filtri biex tibda.'
-                                        )
-                                    )}
+                            <div className="bg-white/50 rounded-xl border border-white/40 shadow-sm p-10 text-left">
+                                <p className="text-sm text-black mb-2">
+                                    {term('no-results-found').replace('{q}', submitted || '...')}
                                 </p>
+                                <p className="text-xs text-black/40 mt-1 mb-4">
+                                    {term('include-suggested-desc')}
+                                </p>
+                                <p className="text-black/40 text-sm mb-6 max-w-md">
+                                    {term('no-results-desc')}
+                                </p>
+                                <div className="flex items-center justify-end gap-3">
+                                    <Link to={`/suggest?q=${submitted}`} className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/90 transition-colors text-sm font-medium">
+                                        <MessageSquare size={16} />
+                                        {term('suggest-entry')}
+                                    </Link>
+                                    <button
+                                        onClick={() => setSearchParams({ random: 'true' })}
+                                        className="flex items-center gap-2 px-4 py-2 border border-black/10 text-black rounded-lg hover:bg-black/5 transition-colors text-sm font-medium"
+                                    >
+                                        <Shuffle size={16} />
+                                        {term('random')}
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>

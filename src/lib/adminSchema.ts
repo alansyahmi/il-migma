@@ -32,7 +32,11 @@ export function buildRootPayload(form: RootFormData): Record<string, any> {
         synonyms: JSON.stringify(form.synonyms || []),
         antonyms: JSON.stringify(form.antonyms || []),
         related_entries: JSON.stringify(form.related_entries || []),
-        is_imala_blocked: !!form.is_imala_blocked || form.vowel_set_perf === 'a-a' || form.vowel_set_impf === 'a-a' || form.vowel_set_imp === 'a-a',
+        is_imala_blocked: !!form.is_imala_blocked ||
+            form.vowel_set_perf === 'a-a' ||
+            form.vowel_set_impf === 'a-a' ||
+            form.vowel_set_imp === 'a-a' ||
+            /[\u0127q]|g\u0127|h/i.test(form.consonants),
     };
 }
 

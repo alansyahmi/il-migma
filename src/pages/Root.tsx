@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { generateRootForms, markGeneratedForms, type MarkedVerbForm, type AttestedEntry } from '@/lib/conjugationEngine';
+import { generateRootForms, markGeneratedForms, getAttestedEntries, type MarkedVerbForm } from '@/lib/conjugationEngine';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Plus, Edit2, ArrowLeft, Trash2 } from 'lucide-react';
@@ -37,7 +37,7 @@ const GOLD = '#A07030';
 function SideCard({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm p-5 space-y-2">
-            <h2 className="font-sans font-bold text-[0.95rem] text-[#000]">{title}</h2>
+            <h2 className="font-sans font-bold text-[0.95rem] text-black">{title}</h2>
             <div>{children}</div>
         </div>
     );
@@ -73,7 +73,7 @@ function MarkedCell({
         <div className="group flex items-center gap-1.5">
             {content}
             {isAdmin && onEdit && (
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center gap-1">
                     <button
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit(); }}
                         className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
@@ -122,7 +122,7 @@ export function Root() {
 
     useEffect(() => {
         if (dbRoot) {
-            document.title = `${dbRoot.consonants} | Il-Miġma'`;
+            document.title = `${dbRoot.consonants} — ${term('root')} | Il-Miġma'`;
         } else {
             document.title = "Il-Miġma'";
         }
@@ -174,46 +174,7 @@ export function Root() {
         );
 
         // Collect attested forms from all rootEntries
-        const attested: AttestedEntry[] = [];
-        rootEntries.forEach((e: any) => {
-            const form = e.verb_morphology?.form || e._formLabel || '';
-            if (!form) return;
-
-            // 1. Link the entry itself based on its POS
-            if (e.pos === 'verb') {
-                attested.push({ word: e.headword, id: e.id, form, type: 'lemma' });
-            } else if (e.pos === 'participle') {
-                const pt = e.verb_morphology?.participle_type || e.participle_type || 'active';
-                attested.push({ word: e.headword, id: e.id, form, type: pt === 'passive' ? 'passive' : 'active' });
-            } else if (e.pos === 'noun') {
-                // Nouns with an associated verb form in root view are treated as verbal nouns
-                attested.push({ word: e.headword, id: e.id, form, type: 'noun' });
-            }
-
-            // 2. Also check internal participle/noun fields within the entry (e.g. for legacy verbs)
-            if (e.verb_morphology?.passive_participle) {
-                attested.push({ word: e.verb_morphology.passive_participle, id: e.id, form, type: 'passive' });
-            }
-            if (e.verb_morphology?.active_participle) {
-                attested.push({ word: e.verb_morphology.active_participle, id: e.id, form, type: 'active' });
-            }
-            if (e.verb_morphology?.verbal_noun) {
-                attested.push({ word: e.verb_morphology.verbal_noun, id: e.id, form, type: 'noun' });
-            }
-
-            // 3. Similarly check subentries
-            if (e.subentries) {
-                e.subentries.forEach((sub: any) => {
-                    const subForm = sub.verb_morphology?.form || sub._formLabel || form;
-                    if (sub.pos === 'noun') {
-                        attested.push({ word: sub.headword, id: sub.id, form: subForm, type: 'noun' });
-                    } else if (sub.pos === 'participle') {
-                        const pt = sub.verb_morphology?.participle_type || sub.participle_type || 'active';
-                        attested.push({ word: sub.headword, id: sub.id, form: subForm, type: pt === 'passive' ? 'passive' : 'active' });
-                    }
-                });
-            }
-        });
+        const attested = getAttestedEntries(rootEntries);
 
         const rowsData = markGeneratedForms(rawGen, attested);
 
@@ -351,23 +312,23 @@ export function Root() {
                 </div>
 
                 <div className="bg-white/50 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm p-10 max-w-lg w-full">
-                    <h2 className="font-serif text-2xl font-bold text-[#000] mb-3">
+                    <h2 className="font-serif text-2xl font-bold text-black mb-3">
                         {term('root-not-found')}
                     </h2>
-                    <p className="text-[#4a4a4a] text-sm mb-8 leading-relaxed">
+                    <p className="text-text-muted text-sm mb-8 leading-relaxed">
                         {term('root-not-found-desc').replace('{id}', id || '')}
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                         <Link
                             to={`/suggest?type=root&q=${id}`}
-                            className="w-full sm:w-auto bg-[#1034A6] text-white text-sm font-sans font-medium px-6 py-2.5 rounded-lg hover:bg-[#0c268c] transition-colors shadow-lg shadow-[#1034A6]/20"
+                            className="w-full sm:w-auto bg-link text-white text-sm font-sans font-medium px-6 py-2.5 rounded-lg hover:bg-link-hover transition-colors shadow-lg shadow-link/20"
                         >
                             {term('suggest-adding-root')}
                         </Link>
                         <Link
                             to="/root-search"
-                            className="w-full sm:w-auto bg-white text-[#000] text-sm font-sans font-medium px-6 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
+                            className="w-full sm:w-auto bg-white text-black text-sm font-sans font-medium px-6 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
                         >
                             {term('search-another-root')}
                         </Link>
@@ -395,7 +356,7 @@ export function Root() {
 
     return (
         <div style={bgStyle} className="w-full overflow-hidden">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 pb-10 w-full">
+            <div className="max-w-5xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full">
                 <div className="flex items-center gap-2 mb-8">
                     <Link to="/root-search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-root-search')}
@@ -404,7 +365,7 @@ export function Root() {
                 {/* Header */}
                 <div className="text-center mb-12 relative group max-w-fit mx-auto">
                     <div className="relative inline-flex items-center justify-center">
-                        <h1 className="font-serif font-bold text-[3rem] leading-none text-[#000] tracking-tight">{rootObj.consonants}</h1>
+                        <h1 className="font-serif font-bold text-[3rem] leading-none text-black tracking-tight">{rootObj.consonants}</h1>
                         {isActualAdmin && (
                             <button
                                 onClick={() => setShowRootForm(true)}
@@ -426,9 +387,9 @@ export function Root() {
                     <div className="w-full md:w-64 shrink-0 space-y-4">
                         <SideCard title={term('gloss')}>
                             {glossList.length === 1 ? (
-                                <p className="text-sm text-[#000]">{glossList[0]}</p>
+                                <p className="text-sm text-black">{glossList[0]}</p>
                             ) : (
-                                <ol className="list-decimal list-inside space-y-1 text-sm text-[#000] marker:text-black/30">
+                                <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
                                     {glossList.map((g: string, i: number) => (
                                         <li key={i}>{g}</li>
                                     ))}
@@ -438,7 +399,7 @@ export function Root() {
 
                         {parsedEtymology && (parsedEtymology.term || parsedEtymology.definition) && (
                             <SideCard title={term('etymology')}>
-                                <p className="text-sm text-[#000] leading-relaxed flex flex-wrap items-center gap-1.5">
+                                <p className="text-sm text-black leading-relaxed flex flex-wrap items-center gap-1.5">
                                     {parsedEtymology.relationship && <span>{parsedEtymology.relationship}</span>}
                                     {parsedEtymology.language && (
                                         <span className={`font-semibold ${LANGUAGE_COLORS[parsedEtymology.language]?.text || 'text-gray-600'} ${LANGUAGE_COLORS[parsedEtymology.language]?.bg || 'bg-gray-100'} px-1.5 py-0.5 rounded text-[0.7rem] uppercase tracking-wider`}>
@@ -453,7 +414,7 @@ export function Root() {
                         )}
 
                         {sourceText && (
-                            <SideCard title={term('sors')}>
+                            <SideCard title={term('sources')}>
                                 <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceText}</span>
                             </SideCard>
                         )}
@@ -475,9 +436,9 @@ export function Root() {
                                     <div className="text-[11px] font-mono space-y-1 text-black/50">
                                         <p>{term('strength')}: {rootObj.strength}</p>
                                         {rootObj.weak_class && <p>{term('weak-class')}: {rootObj.weak_class}</p>}
-                                        <p>{term('vowel_set_perfect')}: {rootObj.vowel_set_perf || 'a-a'}</p>
-                                        <p>{term('vowel_set_imperfect')}: {rootObj.vowel_set_impf || 'i-a'}</p>
-                                        <p>{term('vowel_set_imperative')}: {rootObj.vowel_set_imp || 'o-o'}</p>
+                                        <p>{term('vowel-set-perfect')}: {rootObj.vowel_set_perf || 'a-a'}</p>
+                                        <p>{term('vowel-set-imperfect')}: {rootObj.vowel_set_impf || 'i-a'}</p>
+                                        <p>{term('vowel-set-imperative')}: {rootObj.vowel_set_imp || 'o-o'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -489,22 +450,23 @@ export function Root() {
 
                         {/* Verbal Forms Table */}
                         <div className="mb-12 w-full max-w-full">
-                            <h2 className="font-sans font-semibold text-[1.1rem] text-[#000] mb-3">{term('verbal forms')}</h2>
+                            <h2 className="font-sans font-semibold text-[1.1rem] text-black mb-3">{term('verbal-forms')}</h2>
                             <div className="overflow-x-auto overflow-y-hidden pb-4 w-full">
                                 <table className="w-full text-sm border-collapse text-left min-w-[600px]">
                                     <thead>
                                         <tr className="border-b border-black/8 font-sans text-black/80 whitespace-nowrap">
-                                            <th className="font-semibold pb-2 pr-4 w-12">{term('forma')}</th>
+                                            <th className="font-semibold pb-2 pr-4 w-12">{term('form')}</th>
                                             <th className="font-semibold pb-2 pr-4">{term('lemma')}</th>
-                                            <th className="font-semibold pb-2 pr-4">{term('imperfett')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{term('imperfect')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{term('imperative')}</th>
                                             <th className="font-semibold pb-2 pr-4">{term('passive')}</th>
                                             <th className="font-semibold pb-2 pr-4">{term('active')}</th>
-                                            <th className="font-semibold pb-2">{term('nom')}</th>
+                                            <th className="font-semibold pb-2">{term('verbal-noun')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {generatedTable.map((row: MarkedVerbForm) => (
-                                            <tr key={row.form} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] transition-colors whitespace-nowrap">
+                                            <tr key={row.form} className="border-b border-black/4 last:border-0 hover:bg-black/2 transition-colors whitespace-nowrap">
                                                 <td className="py-2.5 pr-4 text-black/60 font-serif">{row.form}</td>
                                                 <td className="py-2.5 pr-4 font-serif">
                                                     <MarkedCell
@@ -538,6 +500,9 @@ export function Root() {
                                                 </td>
                                                 <td className="py-2.5 pr-4 font-serif">
                                                     <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} noLink />
+                                                </td>
+                                                <td className="py-2.5 pr-4 font-serif">
+                                                    <MarkedCell data={row.imperative} isAdmin={isActualAdmin} noLink />
                                                 </td>
                                                 <td className="py-2.5 pr-4 font-serif">
                                                     <MarkedCell
@@ -633,7 +598,7 @@ export function Root() {
                         {(derivedTerms.length > 0 || isActualAdmin) && (
                             <div className="w-full max-w-full">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{term('termini derivati')}</h2>
+                                    <h2 className="font-sans font-semibold text-[1.1rem] text-black">{term('derived-terms')}</h2>
                                     {isActualAdmin && (
                                         <button
                                             onClick={() => {
@@ -658,13 +623,13 @@ export function Root() {
                                                 <th className="font-semibold pb-2 pr-4">{term('class')}</th>
                                                 <th className="font-semibold pb-2">
                                                     {term('cv-pattern')}
-                                                    {rootObj.strength === 'geminated' && <span> • {term('trux').toUpperCase()}</span>}
+                                                    {rootObj.strength === 'geminated' && <span> • {term('geminated').toUpperCase()}</span>}
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {derivedTerms.map((termObj, idx) => (
-                                                <tr key={idx} className="border-b border-black/4 last:border-0 hover:bg-black/[0.02] group transition-colors">
+                                                <tr key={idx} className="border-b border-black/4 last:border-0 hover:bg-black/2 group transition-colors">
                                                     <td className="py-1.5 pr-4 font-serif">
                                                         <div className="flex items-center gap-2">
                                                             <Link to={`/entry/${termObj.id}`} style={{ color: BLUE }} className="hover:underline">{termObj.term}</Link>
@@ -719,7 +684,7 @@ export function Root() {
                         {((vm?.synonyms?.length ?? 0) > 0 || (vm?.antonyms?.length ?? 0) > 0 || (rootRelationships.synonyms?.length ?? 0) > 0 || (rootRelationships.antonyms?.length ?? 0) > 0 || isActualAdmin) && (
                             <div className="border-t border-black/10 pt-6">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <h2 className="font-sans font-semibold text-[1.1rem] text-[#000]">{term('tesawru')}</h2>
+                                    <h2 className="font-sans font-semibold text-[1.1rem] text-black">{term('thesaurus')}</h2>
                                     {isActualAdmin && (
                                         <button
                                             onClick={() => {
@@ -739,7 +704,7 @@ export function Root() {
                                 <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm">
                                     {((vm?.synonyms && vm.synonyms.length > 0) || (rootRelationships.synonyms?.length > 0)) && (
                                         <div>
-                                            <p className="font-semibold text-[#000] mb-1">{term('sinonimi')}</p>
+                                            <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
                                             {[...(vm?.synonyms || []), ...(rootRelationships.synonyms || [])].map((s, idx) => (
                                                 <div key={s.id || idx} className="mb-1 flex items-center gap-2 group">
                                                     <Link
@@ -767,7 +732,7 @@ export function Root() {
                                     )}
                                     {((vm?.antonyms && vm.antonyms.length > 0) || (rootRelationships.antonyms?.length > 0)) && (
                                         <div>
-                                            <p className="font-semibold text-[#000] mb-1">{term('antonimi')}</p>
+                                            <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
                                             {[...(vm?.antonyms || []), ...(rootRelationships.antonyms || [])].map((a, idx) => (
                                                 <div key={a.id || idx} className="mb-1 flex items-center gap-2 group">
                                                     <Link
@@ -819,7 +784,7 @@ export function Root() {
                         {activeRelEdit === 'derived' ? (
                             <RelationshipEditor
                                 type="derived"
-                                title={term('termini derivati')}
+                                title={term('derived-terms')}
                                 items={relForm.related_entries}
                                 onChange={(items) => setRelForm(f => ({ ...f, related_entries: items }))}
                                 extraActions={[

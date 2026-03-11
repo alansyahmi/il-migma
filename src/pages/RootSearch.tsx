@@ -19,7 +19,7 @@ function MarkedCell({ data }: { data: { value: string; marker: FormMarker } }) {
     const mark = data.marker === 'theoretical' ? '*' : '✦';
     const { term } = useLinguisticMode();
     return (
-        <span className="opacity-55 text-[#000]" title={data.marker === 'theoretical' ? term('theoretical') : term('auto-generated')}>
+        <span className="opacity-55 text-black" title={data.marker === 'theoretical' ? term('theoretical') : term('auto-generated')}>
             {mark}{data.value}
         </span>
     );
@@ -59,12 +59,12 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
     const formLabels = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'Xa', 'Xb'];
 
     return (
-        <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mt-8 max-w-screen-xl mx-auto">
+        <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mt-8 max-w-7xl mx-auto">
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[900px]">
                     <thead>
                         <tr className="bg-black/5 border-b border-black/10 text-black/40">
-                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap min-w-[100px]">{term('għerq')}</th>
+                            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap min-w-[100px]">{term('root')}</th>
                             <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">{term('class')}</th>
                             {formLabels.map(f => (
                                 <th key={f} className="px-4 py-3 text-[10px] font-bold tracking-wider">{f}</th>
@@ -104,9 +104,9 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                             const strengthLabel = rootObj.strength.toUpperCase();
 
                             return (
-                                <tr key={rootObj.id || rootObj.consonants} className="hover:bg-black/[0.01] transition-colors border-b border-black/5 last:border-0">
+                                <tr key={rootObj.id || rootObj.consonants} className="hover:bg-black/1 transition-colors border-b border-black/5 last:border-0">
                                     <td className="px-4 py-4 whitespace-nowrap">
-                                        <Link to={`/root/${rootObj.consonants}`} className="font-serif font-bold text-xl text-[#000] hover:underline">
+                                        <Link to={`/root/${rootObj.consonants}`} className="font-serif font-bold text-xl text-black hover:underline">
                                             {rootObj.consonants}
                                         </Link>
                                     </td>
@@ -114,7 +114,7 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                                         <span className="inline-flex items-center text-[10px] bg-black/5 px-2 py-1 rounded text-black/50 font-bold tracking-wider gap-1.5 leading-none">
                                             {rootObj.strength !== 'geminated' && <span>{strengthLabel}</span>}
                                             {rootObj.weak_class && <span>• {term(rootObj.weak_class).toUpperCase()}</span>}
-                                            {rootObj.strength === 'geminated' && <span>• {term('trux').toUpperCase()}</span>}
+                                            {rootObj.strength === 'geminated' && <span>• {term('geminated').toUpperCase()}</span>}
                                         </span>
                                     </td>
                                     {formLabels.map(fl => {
@@ -145,7 +145,7 @@ function RootRadicalsInput({
 }) {
     return (
         <div className="flex flex-col items-center">
-            <p className="text-xs font-medium text-[#000] mb-2">{label}</p>
+            <p className="text-xs font-medium text-black mb-2">{label}</p>
             <div className="flex gap-2">
                 {values.map((v, i) => (
                     <input
@@ -154,7 +154,7 @@ function RootRadicalsInput({
                         maxLength={2}
                         value={v}
                         onChange={e => onChange(i, e.target.value)}
-                        className="w-12 h-12 text-center bg-white border border-black/10 rounded-lg text-lg text-[#000] font-serif shadow-sm focus:outline-none focus:border-[#1034A6] focus:ring-1 focus:ring-[#1034A6]"
+                        className="w-12 h-12 text-center bg-white border border-black/10 rounded-lg text-lg text-black font-serif shadow-sm focus:outline-none focus:border-[#1034A6] focus:ring-1 focus:ring-[#1034A6]"
                         placeholder="—"
                     />
                 ))}
@@ -256,8 +256,8 @@ export function RootSearch() {
 
     return (
         <div style={bgStyle}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
-                <h1 className="text-3xl font-serif font-bold text-[#000] mb-2 text-center">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8 animate-fade-in">
+                <h1 className="text-3xl font-serif font-bold text-black mb-2 text-center">
                     {term('root-search')}
                 </h1>
                 <p className="text-sm text-black/60 mb-8 max-w-2xl mx-auto text-center leading-relaxed">
@@ -265,7 +265,7 @@ export function RootSearch() {
                 </p>
 
                 {/* Horizontal Filter Bar */}
-                <div className="bg-[#F4F3F0] border border-[#d8cfc0] rounded-xl p-6 shadow-sm max-w-2xl mx-auto mb-8">
+                <div className="bg-[#F4F3F0] border border-border rounded-xl p-6 shadow-sm max-w-2xl mx-auto mb-8">
                     <form onSubmit={handleSearch} className="root-radical-input-group flex flex-col items-center gap-6">
                         <RootRadicalsInput
                             label={term('root-radicals')}
@@ -281,7 +281,7 @@ export function RootSearch() {
                                     navigate('/root-search');
                                     setHasSearched(false);
                                 }}
-                                className="px-4 py-2 text-sm font-medium text-black/60 bg-white border border-[#d8cfc0] rounded-md hover:bg-black/5 transition-colors"
+                                className="px-4 py-2 text-sm font-medium text-black/60 bg-white border border-border rounded-md hover:bg-black/5 transition-colors"
                             >
                                 {term('clear')}
                             </button>

@@ -1,23 +1,23 @@
 
 import { Link } from 'react-router-dom';
 import { Instagram, Linkedin } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 
-const getInfoCol1 = (t: (en: string, mt: string) => string) => [
-    { label: t('Maltese Alphabets', 'Alfabetti Maltin'), href: '/blog/alphabets' },
-    { label: t('Morphology', 'Morfoloġija'), href: '/blog/morphology' },
+const getInfoCol1 = (term: (key: string) => string) => [
+    { label: term('maltese-alphabets'), href: '/blog/alphabets' },
+    { label: term('morphology'), href: '/blog/morphology' },
 ];
-const getInfoCol2 = (t: (en: string, mt: string) => string) => [
-    { label: t('Terminologies', 'Terminoloġiji'), href: '/blog/terminologies' },
-    { label: t('Dialects', 'Djaletti'), href: '/blog/dialects' },
+const getInfoCol2 = (term: (key: string) => string) => [
+    { label: term('terminologies'), href: '/blog/terminologies' },
+    { label: term('dialects'), href: '/blog/dialects' },
 ];
-const getContributeCol1 = (t: (en: string, mt: string) => string) => [
-    { label: t('Suggest Entry', 'Issuġġerixxi Entrata'), href: '/suggest' },
-    { label: t('Suggest Dialect Entry', 'Issuġġerixxi Entrata Djalettali'), href: '/suggest-dialect' },
+const getContributeCol1 = (term: (key: string) => string) => [
+    { label: term('suggest-entry'), href: '/suggest' },
+    { label: term('suggest-dialect-entry'), href: '/suggest-dialect' },
 ];
-const getContributeCol2 = (t: (en: string, mt: string) => string) => [
-    { label: t('Report Error', 'Irrapporta Żball'), href: '/report' },
-    { label: t('Submit Feedback', 'Ibgħat Feedback'), href: '/feedback' },
+const getContributeCol2 = (term: (key: string) => string) => [
+    { label: term('report-error'), href: '/report' },
+    { label: term('submit-feedback'), href: '/feedback' },
 ];
 
 function FooterLink({ label, href }: { label: string; href: string }) {
@@ -35,33 +35,30 @@ function FooterLink({ label, href }: { label: string; href: string }) {
 }
 
 export function Footer() {
-    const { t } = useLanguage();
-    const INFO_COL1 = getInfoCol1(t);
-    const INFO_COL2 = getInfoCol2(t);
-    const CONTRIBUTE_COL1 = getContributeCol1(t);
-    const CONTRIBUTE_COL2 = getContributeCol2(t);
+    const { term } = useLinguisticMode();
+    const INFO_COL1 = getInfoCol1(term);
+    const INFO_COL2 = getInfoCol2(term);
+    const CONTRIBUTE_COL1 = getContributeCol1(term);
+    const CONTRIBUTE_COL2 = getContributeCol2(term);
 
     return (
         <footer style={{ backgroundColor: '#161613' }} className="text-white">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-10 sm:py-12">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 
                     {/* Brand */}
                     <div className="lg:col-span-1">
                         <Link to="/" className="font-serif font-medium text-xl text-white block mb-3">
-                            Il-Migma'
+                            {term('brand-name')}
                         </Link>
                         <p className="text-[11px] italic leading-relaxed text-[#777] max-w-[220px]">
-                            {t(
-                                'Il-Miġma\' is a comprehensive digital dictionary and linguistic resource dedicated to the preservation and analysis of the Maltese language. By bridging traditional Semitic morphological patterns with modern computational linguistics, we provide researchers and learners with an unprecedented depth of data, from phonetic transcriptions to historical etymologies.',
-                                'Il-Miġma\' huwa dizzjunarju diġitali komprensiv u riżorsa lingwistika ddedikata għall-preservazzjoni u l-analiżi tal-lingwa Maltija. Billi ngħaqqdu x-xejriet morfoloġiċi Semitiċi tradizzjonali mal-lingwistika komputazzjonali moderna, nipprovdu lir-riċerkaturi u lil dawk li jitgħallmu fond ta\' dejta bla preċedent, minn traskrizzjonijiet fonetiċi sa etimoloġiji storiċi.'
-                            )}
+                            {term('brand-desc')}
                         </p>
                     </div>
 
                     {/* Information */}
                     <div>
-                        <h3 className="font-sans font-semibold text-sm text-white mb-3">{t('Information', 'Informazzjoni')}</h3>
+                        <h3 className="font-sans font-semibold text-sm text-white mb-3">{term('information')}</h3>
                         <ul className="space-y-2">
                             {INFO_COL1.map(l => <FooterLink key={l.href} {...l} />)}
                         </ul>
@@ -72,8 +69,8 @@ export function Footer() {
 
                     {/* Contribute — 2 sub-columns */}
                     <div className="lg:col-span-2">
-                        <h3 className="font-sans font-semibold text-sm text-white mb-3">{t('Contribute', 'Ikkontribwixxi')}</h3>
-                        <div className="grid grid-cols-2 gap-x-4">
+                        <h3 className="font-sans font-semibold text-sm text-white mb-3">{term('contribute')}</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
                             <ul className="space-y-2">
                                 {CONTRIBUTE_COL1.map(l => <FooterLink key={l.href} {...l} />)}
                             </ul>

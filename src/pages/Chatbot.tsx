@@ -102,14 +102,14 @@ function ChatInterface() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="font-serif text-xl font-bold text-[#1034A6]">Chatbot Malti</h1>
-                    <p className="text-xs text-[#4a4a4a]">Powered by Gemini Flash</p>
+                    <p className="text-xs text-text-muted">Powered by Gemini Flash</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <select
                         value={dialect}
                         onChange={e => setDialect(e.target.value)}
-                        className="text-sm border border-[#d8cfc0] rounded-md px-2 py-1.5 bg-white text-[#000]
-              focus:outline-none focus:ring-2 focus:ring-[#1034A6]"
+                        className="text-sm border border-border rounded-md px-2 py-1.5 bg-white text-black
+              focus:outline-none focus:ring-2 focus:ring-link"
                     >
                         {DIALECTS.map(d => <option key={d}>{d}</option>)}
                     </select>
@@ -120,11 +120,11 @@ function ChatInterface() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto space-y-4 bg-white rounded-xl border border-[#d8cfc0] p-4">
+            <div className="flex-1 overflow-y-auto space-y-4 bg-white rounded-xl border border-border p-4">
                 {messages.map(msg => (
                     <div key={msg.id} className={cn('flex gap-2.5', msg.role === 'user' && 'flex-row-reverse')}>
                         <div className={cn(
-                            'w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center',
+                            'w-7 h-7 rounded-full shrink-0 flex items-center justify-center',
                             msg.role === 'user' ? 'bg-[#1034A6]/10' : 'bg-[#1034A6]/10',
                         )}>
                             {msg.role === 'user'
@@ -135,10 +135,10 @@ function ChatInterface() {
                             'max-w-[80%] rounded-xl px-4 py-2.5 text-sm',
                             msg.role === 'user'
                                 ? 'bg-[#1034A6] text-white rounded-tr-none'
-                                : 'bg-[#f9f7f3] text-[#000] rounded-tl-none border border-[#ede9e1]',
+                                : 'bg-surface-soft text-black rounded-tl-none border border-border-light',
                         )}>
                             <p className="whitespace-pre-wrap">{msg.content}</p>
-                            <p className={cn('text-[10px] mt-1', msg.role === 'user' ? 'text-white/50' : 'text-gray-400')}>
+                            <p className={cn('text-[10px] mt-1', msg.role === 'user' ? 'text-white/50' : 'text-text-muted')}>
                                 {new Date(msg.timestamp).toLocaleTimeString('mt', { hour: '2-digit', minute: '2-digit' })}
                             </p>
                         </div>
@@ -146,10 +146,10 @@ function ChatInterface() {
                 ))}
                 {loading && (
                     <div className="flex gap-2.5">
-                        <div className="w-7 h-7 rounded-full bg-[#1034A6]/10 flex items-center justify-center flex-shrink-0">
+                        <div className="w-7 h-7 rounded-full bg-[#1034A6]/10 flex items-center justify-center shrink-0">
                             <Bot size={14} className="text-[#1034A6]" />
                         </div>
-                        <div className="bg-[#f9f7f3] border border-[#ede9e1] rounded-xl rounded-tl-none px-4 py-3">
+                        <div className="bg-surface-soft border border-border-light rounded-xl rounded-tl-none px-4 py-3">
                             <div className="flex gap-1">
                                 {[0, 1, 2].map(i => (
                                     <div key={i} className="w-1.5 h-1.5 bg-[#1034A6]/40 rounded-full animate-bounce"
@@ -170,8 +170,8 @@ function ChatInterface() {
                     onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
                     placeholder={`Ikteb bil-Malti (${dialect})…`}
                     disabled={loading}
-                    className="flex-1 border border-[#d8cfc0] rounded-lg px-3 py-2.5 text-sm
-            focus:outline-none focus:ring-2 focus:ring-[#1034A6] bg-white"
+                    className="flex-1 border border-border rounded-lg px-3 py-2.5 text-sm
+            focus:outline-none focus:ring-2 focus:ring-link bg-white"
                 />
                 <Button onClick={handleSend} disabled={loading || !input.trim()} leftIcon={<Send size={15} />}>
                     Ibgħat

@@ -12,24 +12,39 @@ export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const q = url.searchParams.get('q')?.trim() ?? '';
     const pos = url.searchParams.get('pos') ?? '';
+    const rootType = url.searchParams.get('type') ?? '';
+    const vowelSet = url.searchParams.get('v') ?? '';
+    const wizen = url.searchParams.get('wizen') ?? '';
+    const source = url.searchParams.get('source') ?? '';
     const rootId = url.searchParams.get('root_id')?.trim().normalize('NFC') ?? '';
+
+    // Radicals
+    const r1 = url.searchParams.get('r1') ?? '';
+    const r2 = url.searchParams.get('r2') ?? '';
+    const r3 = url.searchParams.get('r3') ?? '';
+    const r4 = url.searchParams.get('r4') ?? '';
+
     const limit = Math.min(Number(url.searchParams.get('limit') ?? 20), 100);
     const offset = Number(url.searchParams.get('offset') ?? 0);
 
-    if (!q && !rootId) {
-        return json({ results: [], total: 0 });
-    }
+    const isRandom = url.searchParams.get('random') === '1' || url.searchParams.get('random') === 'true';
+    const isRegex = url.searchParams.get('regex') === 'true';
+
+    const searchLemma = url.searchParams.get('lemma') === 'true';
+    const searchWordForms = url.searchParams.get('word_forms') === 'true';
+    const searchEnglishGloss = url.searchParams.get('gloss') === 'true';
+    const includeSuggested = url.searchParams.get('suggested') === 'true';
+    const includePending = url.searchParams.get('pending') === 'true';
 
     try {
-        const url = env.TURSO_URL || env.VITE_TURSO_URL;
-        const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
-        const db = createClient({ url, authToken: token });
+        const tursoUrl = env.TURSO_URL || env.VITE_TURSO_URL;
+        const dbToken = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
+        const db = createClient({ url: tursoUrl, authToken: dbToken });
 
         // Normalize search string for better matches
         const normalizedQ = q.toLowerCase().trim().normalize('NFC');
 
-        // HOTFIX: Ensure new columns exist in the database being used
-        // This handles cases where the local or remote DB is out of sync with the code.
+        // HOTFIX: Ensure new columns exist
         try {
             await db.execute("ALTER TABLE entries ADD COLUMN cv_pattern TEXT").catch(() => { });
             await db.execute("ALTER TABLE entries ADD COLUMN plural_pattern TEXT").catch(() => { });
@@ -48,23 +63,13 @@ export async function onRequestGet({ request, env }) {
             await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_perf TEXT").catch(() => { });
             await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_impf TEXT").catch(() => { });
             await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_impv TEXT").catch(() => { });
-        } catch (e) {
-            // Ignore errors if columns already exist
-        }
+        } catch (e) { }
 
-        // FTS5 MATCH query — safely enclose in double quotes to prevent syntax errors with hyphens, etc.
+        // FTS5 MATCH query
         const safeQuery = normalizedQ.replace(/"/g, ' ').trim();
         const ftsQuery = `"${safeQuery}"*`;
 
         let sql = `
-            SELECT e.*,
-                   COALESCE(r.consonants, e.root_consonants) AS root_consonants,
-                   r.strength AS root_strength, r.weak_class AS root_weak_class,
-                   r.vowel_set_perf, r.vowel_set_impf, r.vowel_set_imp,
-                   r.gloss AS root_gloss,
-                   r.id AS root_id,
-                   d.text_en, d.text_mt, p.ipa, ar.reliability_index,
-                   pat.cv_notation, pat.wizen_notation
             FROM entries e
             LEFT JOIN roots r ON (e.root_consonants = r.consonants)
             LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id OR e.root_pattern_form_id = rpf.id)
@@ -76,9 +81,76 @@ export async function onRequestGet({ request, env }) {
         `;
         const args = [];
 
+        let globStr = '';
         if (q) {
-            sql += ` AND (e.rowid IN (SELECT rowid FROM entries_fts WHERE entries_fts MATCH ?) OR r.consonants = ? OR e.root_consonants = ?)`;
-            args.push(ftsQuery, normalizedQ, normalizedQ);
+            let conditions = [];
+            let qArgs = [];
+            const hasFieldFilter = searchLemma || searchWordForms || searchEnglishGloss;
+
+            if (isRegex) {
+                // Since REGEXP is unreliable in some SQLite environments, we use GLOB
+                // with a translation layer for common regex patterns.
+                globStr = q;
+                const hasStartAnchor = globStr.startsWith('^');
+                const hasEndAnchor = globStr.endsWith('$');
+
+                // Strip anchors for GLOB (which is inherently anchored)
+                globStr = globStr.replace(/^\^/, '').replace(/\$$/, '');
+
+                // Translate wildcards: .* -> *, . -> ?
+                globStr = globStr.replace(/\.\*/g, '*').replace(/\./g, '?');
+
+                // If no anchors were provided, wrap with * to match anywhere
+                if (!hasStartAnchor) globStr = '*' + globStr;
+                if (!hasEndAnchor) globStr = globStr + '*';
+
+                if (searchLemma || !hasFieldFilter) {
+                    conditions.push("LOWER(e.headword) GLOB LOWER(?)");
+                    qArgs.push(globStr);
+                }
+                if (searchEnglishGloss) {
+                    conditions.push("LOWER(d.text_en) GLOB LOWER(?)");
+                    qArgs.push(globStr);
+                }
+                if (searchWordForms) {
+                    conditions.push("LOWER(e.noun_plural_forms) GLOB LOWER(?)");
+                    conditions.push("LOWER(e.verb_verbal_noun) GLOB LOWER(?)");
+                    qArgs.push(globStr, globStr);
+                }
+                // Only search roots if no specific field filter is applied
+                if (!hasFieldFilter) {
+                    conditions.push("LOWER(r.consonants) GLOB LOWER(?)");
+                    conditions.push("LOWER(e.root_consonants) GLOB LOWER(?)");
+                    qArgs.push(globStr, globStr);
+                }
+            } else {
+                if (searchLemma || !hasFieldFilter) {
+                    conditions.push("e.headword = ?");
+                    conditions.push("e.rowid IN (SELECT rowid FROM entries_fts WHERE entries_fts MATCH ?)");
+                    const safeQuery = q.toLowerCase().replace(/"/g, ' ').trim();
+                    const ftsQuery = `"${safeQuery}"*`;
+                    qArgs.push(normalizedQ, ftsQuery);
+                }
+                if (searchEnglishGloss) {
+                    conditions.push("d.text_en LIKE ?");
+                    qArgs.push(`%${q}%`);
+                }
+                if (searchWordForms) {
+                    conditions.push("e.noun_plural_forms LIKE ?");
+                    conditions.push("e.verb_verbal_noun LIKE ?");
+                    qArgs.push(`%${q}%`, `%${q}%`);
+                }
+                if (!hasFieldFilter) {
+                    conditions.push("r.consonants = ?");
+                    conditions.push("e.root_consonants = ?");
+                    qArgs.push(normalizedQ, normalizedQ);
+                }
+            }
+
+            if (conditions.length > 0) {
+                sql += ` AND (${conditions.join(' OR ')})`;
+                args.push(...qArgs);
+            }
         }
 
         if (rootId) {
@@ -92,10 +164,74 @@ export async function onRequestGet({ request, env }) {
             args.push(pos);
         }
 
-        sql += ' ORDER BY e.headword ASC LIMIT ? OFFSET ?';
+        if (rootType) {
+            sql += ' AND (r.strength = ? OR e.verb_class = ?)';
+            args.push(rootType, rootType);
+        }
+
+        if (vowelSet) {
+            sql += ' AND (r.vowel_set_perf = ? OR e.verb_vowel_perf = ?)';
+            args.push(vowelSet, vowelSet);
+        }
+
+        if (wizen) {
+            sql += ' AND (pat.wizen_notation = ? OR pat.cv_notation = ? OR e.cv_pattern = ?)';
+            args.push(wizen, wizen, wizen);
+        }
+
+        if (source) {
+            sql += ' AND (r.source = ? OR e.source = ?)';
+            args.push(source, source);
+        }
+
+        if (r1) { sql += " AND (json_extract(r.consonant_array, '$[0]') = ? OR e.root_consonants LIKE ?)"; args.push(r1.toLowerCase(), r1.toLowerCase() + '-%'); }
+        if (r2) { sql += " AND (json_extract(r.consonant_array, '$[1]') = ? OR e.root_consonants LIKE ?)"; args.push(r2.toLowerCase(), '%-' + r2.toLowerCase() + '-%'); }
+        if (r3) { sql += " AND (json_extract(r.consonant_array, '$[2]') = ? OR e.root_consonants LIKE ?)"; args.push(r3.toLowerCase(), '%-' + r3.toLowerCase() + (r4 ? '-%' : '')); }
+        if (r4) { sql += " AND (json_extract(r.consonant_array, '$[3]') = ? OR e.root_consonants LIKE ?)"; args.push(r4.toLowerCase(), '%-' + r4.toLowerCase()); }
+
+        const total = Number((await db.execute({ sql: `SELECT COUNT(*) as total ${sql}`, args })).rows[0]?.total ?? 0);
+
+        // Random logic: only randomize if explicitly asked OR if it's a completely blank search.
+        const hasCriteria = q || rootId || pos || rootType || vowelSet || wizen || source || r1 || r2 || r3 || r4;
+        let isRandomSearch = (isRandom || !hasCriteria) && !q;
+
+        let finalSql = `
+            SELECT e.*,
+                COALESCE(r.consonants, e.root_consonants) AS root_consonants,
+                r.strength AS root_strength, r.weak_class AS root_weak_class,
+                r.vowel_set_perf, r.vowel_set_impf, r.vowel_set_imp,
+                r.gloss AS root_gloss,
+                r.id AS root_id,
+                d.text_en, d.text_mt, p.ipa, ar.reliability_index,
+                pat.cv_notation, pat.wizen_notation
+            ${sql}
+                `;
+
+        if (isRandomSearch) {
+            finalSql += ' ORDER BY RANDOM() LIMIT ? OFFSET ?';
+        } else {
+            // Sort by match priority: Headword > Root Consonants > (rest)
+            let prioritySql = '0';
+            if (isRegex && globStr) {
+                prioritySql = `(CASE 
+                    WHEN LOWER(e.headword) GLOB LOWER(?) THEN 0 
+                    WHEN (LOWER(r.consonants) GLOB LOWER(?) OR LOWER(e.root_consonants) GLOB LOWER(?)) THEN 1
+                    ELSE 2 END)`;
+                args.push(globStr, globStr, globStr);
+            } else if (q) {
+                prioritySql = `(CASE 
+                    WHEN e.headword = ? THEN 0 
+                    WHEN e.headword LIKE ? THEN 1
+                    WHEN (r.consonants = ? OR e.root_consonants = ?) THEN 2
+                    ELSE 3 END)`;
+                args.push(normalizedQ, normalizedQ + '%', normalizedQ, normalizedQ);
+            }
+
+            finalSql += ` ORDER BY ${prioritySql}, e.headword ASC LIMIT ? OFFSET ?`;
+        }
         args.push(limit, offset);
 
-        const result = await db.execute({ sql, args });
+        const result = await db.execute({ sql: finalSql, args });
 
         // Map database columns to the Entry interface expected by the UI
         const rows = result.rows.map(r => {
@@ -145,7 +281,7 @@ export async function onRequestGet({ request, env }) {
             };
         });
 
-        return json({ results: rows, total: rows.length, query: q });
+        return json({ results: rows, total, query: q });
     } catch (e) {
         console.error("API SEARCH ERROR:", e);
         return json({ error: e.message, stack: e.stack, query: q }, 500);

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import type { LinguisticMode } from '@/types';
 import { resolveTerm as resolveHardcodedTerm } from '@/lib/terminology';
 import { useAdminConfig } from '@/lib/adminConfig';
@@ -27,7 +27,7 @@ export function LinguisticModeProvider({ children }: { children: React.ReactNode
         localStorage.setItem(STORAGE_KEY, newMode);
     };
 
-    const term = (key: string) => {
+    const term = useCallback((key: string) => {
         if (!key) return '';
         const lowerKey = key.toLowerCase();
         const isEn = language === 'en';
@@ -49,10 +49,12 @@ export function LinguisticModeProvider({ children }: { children: React.ReactNode
 
         // 2. Fallback to hardcoded terminology
         return resolveHardcodedTerm(lowerKey, mode, isEn ? 'en' : 'mt');
-    };
+    }, [config, language, mode]);
+
+    const contextValue = React.useMemo(() => ({ mode, setMode, term }), [mode, term]);
 
     return (
-        <LinguisticModeContext.Provider value={{ mode, setMode, term }}>
+        <LinguisticModeContext.Provider value={contextValue}>
             {children}
         </LinguisticModeContext.Provider>
     );

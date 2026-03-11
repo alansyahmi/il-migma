@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { adminListEntries, adminDeleteEntry, adminListRoots, adminDeleteRoot } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
@@ -38,7 +37,6 @@ export function Admin() {
     // For development, we allow access but show a warning if not tag as admin
     const hasAdminRights = isTrueAdmin || tier === 'enterprise';
 
-    const { t } = useLanguage();
     const { term } = useLinguisticMode();
 
     useEffect(() => {
@@ -50,7 +48,7 @@ export function Admin() {
         };
         const activeLabel = tabLabels[tab] || term('dashboard');
         document.title = `Admin: ${activeLabel} | Il-Miġma'`;
-    }, [tab, t, term]);
+    }, [tab, term]);
 
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -58,7 +56,7 @@ export function Admin() {
                 <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-3 text-amber-900 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
                     <ShieldAlert className="shrink-0" size={20} />
                     <div className="text-sm">
-                        <span className="font-bold">{term('attention')}</span> {t('The system does not recognize you as an official Admin in Clerk Metadata. We are letting you in for testing for now.', 'Is-sistema ma tagħrfekx bħala Admin uffiċjali fil-Clerk Metadata. Għalissa qed inħalluk tidħol biex tittestja.')}
+                        <span className="font-bold">{term('attention')}</span> {term('admin-warning')}
                     </div>
                 </div>
             )}
@@ -70,7 +68,7 @@ export function Admin() {
                         onClick={() => setTab('entries')}
                         className={cn(
                             "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2",
-                            tab === 'entries' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
+                            tab === 'entries' ? "bg-white text-link shadow-sm" : "text-black/40 hover:text-black/60"
                         )}
                     >
                         <FileText size={16} /> {term('entries')}
@@ -79,7 +77,7 @@ export function Admin() {
                         onClick={() => setTab('roots')}
                         className={cn(
                             "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2",
-                            tab === 'roots' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
+                            tab === 'roots' ? "bg-white text-link shadow-sm" : "text-black/40 hover:text-black/60"
                         )}
                     >
                         <Layers size={16} /> {term('roots')}
@@ -88,7 +86,7 @@ export function Admin() {
                         onClick={() => setTab('settings')}
                         className={cn(
                             "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2",
-                            tab === 'settings' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
+                            tab === 'settings' ? "bg-white text-link shadow-sm" : "text-black/40 hover:text-black/60"
                         )}
                     >
                         <Settings size={16} /> {term('settings')}
@@ -97,7 +95,7 @@ export function Admin() {
                         onClick={() => setTab('db')}
                         className={cn(
                             "px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2",
-                            tab === 'db' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40 hover:text-black/60"
+                            tab === 'db' ? "bg-white text-link shadow-sm" : "text-black/40 hover:text-black/60"
                         )}
                     >
                         <Database size={16} /> {term('db-tools')}
@@ -115,7 +113,6 @@ export function Admin() {
 
 function EntryManager() {
     const { getToken } = useClerkAuth();
-    const { t } = useLanguage();
     const { term } = useLinguisticMode();
     const [entries, setEntries] = useState<AdminEntry[]>([]);
     const [total, setTotal] = useState(0);
@@ -148,12 +145,12 @@ function EntryManager() {
 
     const handleBulkDelete = async () => {
         const count = selectedIds.size;
-        if (!confirm(t(`Are you sure you want to delete ${count} entries? This cannot be undone.`, `Żgur li trid tħassar ${count} entrati? Din ma tistax tinqaleb.`))) return;
+        if (!confirm(term('bulk-delete-confirm').replace('{count}', count.toString()))) return;
         try {
             const token = await getToken();
             const { adminBulkDeleteEntries } = await import('@/lib/api');
             await adminBulkDeleteEntries(token!, Array.from(selectedIds));
-            showToast(t(`${count} entries deleted`, `${count} entrati mħassra`));
+            showToast(term('items-deleted').replace('{count}', count.toString()));
             setSelectedIds(new Set());
             load();
         } catch (e: any) {
@@ -190,11 +187,11 @@ function EntryManager() {
     useEffect(() => { load(); }, [load]);
 
     const handleDelete = async (id: string, headword: string) => {
-        if (!confirm(t(`DELETE "${headword}"? This cannot be undone.`, `TĦASSAR "${headword}"? Din ma tistax tinqaleb.`))) return;
+        if (!confirm(term('delete-entry-confirm').replace('{headword}', headword))) return;
         try {
             const token = await getToken();
             await adminDeleteEntry(token!, id);
-            showToast(t(`"${headword}" deleted`, `"${headword}" imħassra`));
+            showToast(term('entry-deleted').replace('{headword}', headword));
             load();
         } catch (e: any) {
             showToast(e.message, false);
@@ -226,13 +223,13 @@ function EntryManager() {
                     <div className="flex bg-black/5 p-1 rounded-lg mr-2">
                         <button
                             onClick={() => setViewMode('grid')}
-                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'grid' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
+                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'grid' ? "bg-white text-link shadow-sm" : "text-black/40")}
                         >
                             <LayoutGrid size={16} />
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'list' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
+                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'list' ? "bg-white text-link shadow-sm" : "text-black/40")}
                         >
                             <List size={16} />
                         </button>
@@ -255,7 +252,7 @@ function EntryManager() {
 
             {error && (
                 <div className="bg-amber-50 border border-amber-200 text-amber-800 rounded-xl px-4 py-3 text-sm flex items-start gap-2 animate-in slide-in-from-top-2">
-                    <AlertCircle size={14} className="mt-0.5 flex-shrink-0" />
+                    <AlertCircle size={14} className="mt-0.5 shrink-0" />
                     {error}
                 </div>
             )}
@@ -270,7 +267,7 @@ function EntryManager() {
                         className={cn(
                             "px-3 py-1.5 rounded-full text-xs font-bold transition-all border",
                             selectedPos === 'all'
-                                ? "bg-[#1034A6] text-white border-[#1034A6]"
+                                ? "bg-link text-white border-link"
                                 : "bg-white text-black/60 border-black/10 hover:border-black/20"
                         )}
                     >
@@ -283,7 +280,7 @@ function EntryManager() {
                             className={cn(
                                 "px-3 py-1.5 rounded-full text-xs font-bold transition-all border uppercase tracking-wider",
                                 selectedPos === pos
-                                    ? "bg-[#1034A6] text-white border-[#1034A6]"
+                                    ? "bg-link text-white border-link"
                                     : "bg-white text-black/60 border-black/10 hover:border-black/20"
                             )}
                         >
@@ -296,7 +293,7 @@ function EntryManager() {
             {loading && entries.length === 0 ? (
                 <div className="flex justify-center py-20"><Spinner /></div>
             ) : entries.length === 0 ? (
-                <div className="text-center py-20 bg-[#f9f7f3] rounded-3xl border-2 border-dashed border-black/5">
+                <div className="text-center py-20 bg-surface-soft rounded-3xl border-2 border-dashed border-black/5">
                     <p className="text-black/40 font-serif italic text-lg">{term('no-results-found')}</p>
                 </div>
             ) : (
@@ -304,7 +301,7 @@ function EntryManager() {
                     {Object.entries(selectedPos === 'all' ? groupedEntries : { [selectedPos]: entries }).map(([pos, posEntries]) => (
                         <div key={pos} className="space-y-4">
                             <div className="flex items-center gap-3 px-1">
-                                <div className="p-2 bg-[#1034A6]/5 text-[#1034A6] rounded-lg">
+                                <div className="p-2 bg-link/5 text-link rounded-lg">
                                     {posIcons[pos] || posIcons.default}
                                 </div>
                                 <h3 className="text-lg font-bold text-black uppercase tracking-tight">{pos}s</h3>
@@ -317,13 +314,13 @@ function EntryManager() {
                                     {posEntries.map(e => (
                                         <div key={e.id} className={cn(
                                             "group bg-white border rounded-2xl p-5 transition-all duration-300 flex flex-col justify-between relative",
-                                            selectedIds.has(e.id) ? "border-[#1034A6] ring-1 ring-[#1034A6]/20 bg-[#1034A6]/[0.02]" : "border-[#ede9e1] hover:shadow-xl hover:shadow-[#1034A6]/5"
+                                            selectedIds.has(e.id) ? "border-[#1034A6] ring-1 ring-[#1034A6]/20 bg-link/2" : "border-border-light hover:shadow-xl hover:shadow-[#1034A6]/5"
                                         )}>
                                             <button
                                                 onClick={() => toggleSelect(e.id)}
                                                 className={cn(
                                                     "absolute top-3 left-3 z-10 p-1 rounded-md transition-all",
-                                                    selectedIds.has(e.id) ? "text-[#1034A6] bg-white shadow-sm" : "opacity-0 group-hover:opacity-100 text-black/20 hover:text-black/40 bg-black/5"
+                                                    selectedIds.has(e.id) ? "text-link bg-white shadow-sm" : "opacity-0 group-hover:opacity-100 text-black/20 hover:text-black/40 bg-black/5"
                                                 )}
                                             >
                                                 {selectedIds.has(e.id) ? <CheckSquare size={16} /> : <Square size={16} />}
@@ -332,17 +329,17 @@ function EntryManager() {
                                                 <div className="flex justify-between items-start mb-3">
                                                     <div>
                                                         <Link to={`/entry/${e.id}`} className="group">
-                                                            <h4 className="font-serif text-xl font-bold text-[#1034A6] group-hover:scale-105 transition-transform origin-left">{e.headword}</h4>
+                                                            <h4 className="font-serif text-xl font-bold text-link group-hover:scale-105 transition-transform origin-left">{e.headword}</h4>
                                                         </Link>
                                                         {e.root_consonants && (
-                                                            <Link to={`/root/${e.root_consonants}`} className="text-xs font-bold text-slate-500 hover:text-[#1034A6] mt-1 inline-block" style={{ fontFamily: 'monospace', letterSpacing: '0.1em' }}>
+                                                            <Link to={`/root/${e.root_consonants}`} className="text-xs font-bold text-slate-500 hover:text-link mt-1 inline-block" style={{ fontFamily: 'monospace', letterSpacing: '0.1em' }}>
                                                                 {term('root')}: {e.root_consonants}
                                                             </Link>
                                                         )}
                                                         <p className="text-[10px] text-black/30 font-mono mt-1">ID: {e.id}</p>
                                                     </div>
                                                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <button onClick={() => { setEditEntry(e); setShowForm(true); }} className="p-1.5 text-[#1034A6] hover:bg-[#1034A6]/10 rounded-lg"><Edit2 size={14} /></button>
+                                                        <button onClick={() => { setEditEntry(e); setShowForm(true); }} className="p-1.5 text-link hover:bg-link/10 rounded-lg"><Edit2 size={14} /></button>
                                                         <button onClick={() => handleDelete(e.id, e.headword)} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
                                                     </div>
                                                 </div>
@@ -381,13 +378,13 @@ function EntryManager() {
                                     ))}
                                 </div>
                             ) : (
-                                <Card className="overflow-hidden border-[#ede9e1] overflow-x-auto">
+                                <Card className="overflow-hidden border-border-light overflow-x-auto">
                                     <table className="w-full text-sm">
-                                        <thead className="bg-[#f9f7f3] border-b border-[#ede9e1]">
+                                        <thead className="bg-surface-soft border-b border-border-light">
                                             <tr>
                                                 <th className="p-4 w-10">
                                                     <button onClick={toggleSelectAll} className="text-black/20 hover:text-black/40">
-                                                        {selectedIds.size === entries.length && entries.length > 0 ? <CheckSquare size={16} className="text-[#1034A6]" /> : <Square size={16} />}
+                                                        {selectedIds.size === entries.length && entries.length > 0 ? <CheckSquare size={16} className="text-link" /> : <Square size={16} />}
                                                     </button>
                                                 </th>
                                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase">{term('word')} & ID</th>
@@ -400,22 +397,22 @@ function EntryManager() {
                                         <tbody>
                                             {posEntries.map(e => (
                                                 <tr key={e.id} className={cn(
-                                                    "border-b border-[#ede9e1] last:border-0 transition-colors",
-                                                    selectedIds.has(e.id) ? "bg-[#1034A6]/[0.03]" : "hover:bg-[#f9f7f3]"
+                                                    "border-b border-border-light last:border-0 transition-colors",
+                                                    selectedIds.has(e.id) ? "bg-link/3" : "hover:bg-surface-soft"
                                                 )}>
                                                     <td className="p-4">
-                                                        <button onClick={() => toggleSelect(e.id)} className={cn("transition-colors", selectedIds.has(e.id) ? "text-[#1034A6]" : "text-black/10 hover:text-black/20")}>
+                                                        <button onClick={() => toggleSelect(e.id)} className={cn("transition-colors", selectedIds.has(e.id) ? "text-link" : "text-black/10 hover:text-black/20")}>
                                                             {selectedIds.has(e.id) ? <CheckSquare size={16} /> : <Square size={16} />}
                                                         </button>
                                                     </td>
                                                     <td className="p-4">
-                                                        <Link to={`/entry/${e.id}`} className="font-serif font-bold text-[#1034A6] text-lg hover:underline block">{e.headword}</Link>
+                                                        <Link to={`/entry/${e.id}`} className="font-serif font-bold text-link text-lg hover:underline block">{e.headword}</Link>
                                                         <span className="text-[10px] text-black/30 font-mono mt-0.5 inline-block">ID: {e.id}</span>
                                                     </td>
                                                     <td className="p-4">
                                                         <div className="flex flex-col gap-1">
                                                             {e.root_consonants ? (
-                                                                <Link to={`/root/${e.root_consonants}`} className="font-bold text-slate-600 hover:text-[#1034A6] hover:underline" style={{ fontFamily: 'monospace', letterSpacing: '0.1em' }}>
+                                                                <Link to={`/root/${e.root_consonants}`} className="font-bold text-slate-600 hover:text-link hover:underline" style={{ fontFamily: 'monospace', letterSpacing: '0.1em' }}>
                                                                     {e.root_consonants}
                                                                 </Link>
                                                             ) : <span className="text-black/20">—</span>}
@@ -488,9 +485,9 @@ function BulkActionsBar({ count, onClear, onDelete }: { count: number; onClear: 
     const { term } = useLinguisticMode();
     return (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500 w-[90%] sm:w-auto max-w-lg">
-            <div className="bg-black text-white px-4 sm:px-6 py-3 rounded-2xl shadow-2xl flex flex-col sm:flex-row items-center gap-4 sm:gap-6 border border-white/10 backdrop-blur-md">
+            <div className="bg-black text-white px-7 sm:px-8 py-3 rounded-2xl shadow-2xl flex flex-col sm:flex-row items-center gap-4 sm:gap-6 border border-white/10 backdrop-blur-md">
                 <div className="flex items-center gap-3">
-                    <div className="bg-[#1034A6] text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold">
+                    <div className="bg-link text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold">
                         {count}
                     </div>
                     <span className="text-sm font-bold tracking-tight">{term('selected-entries')}</span>
@@ -517,7 +514,6 @@ function BulkActionsBar({ count, onClear, onDelete }: { count: number; onClear: 
 
 function RootManager() {
     const { getToken } = useClerkAuth();
-    const { t } = useLanguage();
     const { term } = useLinguisticMode();
     const [roots, setRoots] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
@@ -544,7 +540,7 @@ function RootManager() {
 
     const handleBulkDelete = async () => {
         const count = selectedIds.size;
-        if (!confirm(t(`Are you sure you want to delete ${count} roots? This cannot be undone.`, `Żgur li trid tħassar ${count} għeruq? Din ma tistax tinqaleb.`))) return;
+        if (!confirm(term('bulk-delete-confirm').replace('{count}', count.toString()))) return;
         try {
             const token = await getToken();
             const { adminBulkDeleteRoots } = await import('@/lib/api');
@@ -572,7 +568,7 @@ function RootManager() {
     useEffect(() => { load(); }, [load]);
 
     const handleDelete = async (id: string, cons: string) => {
-        if (!confirm(t(`Are you sure you want to delete the root ${cons}?`, `Żgur li trid tħassar l-għerq ${cons}?`))) return;
+        if (!confirm(term('delete-root-confirm').replace('{cons}', cons))) return;
         try {
             const token = await getToken();
             await adminDeleteRoot(token!, id);
@@ -585,18 +581,18 @@ function RootManager() {
     return (
         <div className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <p className="text-sm text-[#4a4a4a] font-medium">{roots.length} {term('roots')} {term('found')}</p>
+                <p className="text-sm text-text-muted font-medium">{roots.length} {term('roots')} {term('found')}</p>
                 <div className="flex gap-2">
                     <div className="flex bg-black/5 p-1 rounded-lg mr-2">
                         <button
                             onClick={() => setViewMode('grid')}
-                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'grid' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
+                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'grid' ? "bg-white text-link shadow-sm" : "text-black/40")}
                         >
                             <LayoutGrid size={16} />
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'list' ? "bg-white text-[#1034A6] shadow-sm" : "text-black/40")}
+                            className={cn("p-1.5 rounded-md transition-all", viewMode === 'list' ? "bg-white text-link shadow-sm" : "text-black/40")}
                         >
                             <List size={16} />
                         </button>
@@ -611,13 +607,13 @@ function RootManager() {
             {loading ? (
                 <div className="flex justify-center py-12"><Spinner /></div>
             ) : viewMode === 'list' ? (
-                <Card className="overflow-hidden border-[#ede9e1] overflow-x-auto">
+                <Card className="overflow-hidden border-border-light overflow-x-auto">
                     <table className="w-full text-sm">
-                        <thead className="bg-[#f9f7f3] border-b border-[#ede9e1]">
+                        <thead className="bg-surface-soft border-b border-border-light">
                             <tr>
                                 <th className="p-4 w-10">
                                     <button onClick={toggleSelectAll} className="text-black/20 hover:text-black/40">
-                                        {selectedIds.size === roots.length && roots.length > 0 ? <CheckSquare size={16} className="text-[#1034A6]" /> : <Square size={16} />}
+                                        {selectedIds.size === roots.length && roots.length > 0 ? <CheckSquare size={16} className="text-link" /> : <Square size={16} />}
                                     </button>
                                 </th>
                                 <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('consonants')}</th>
@@ -634,15 +630,15 @@ function RootManager() {
                         <tbody>
                             {roots.map(r => (
                                 <tr key={r.id} className={cn(
-                                    "border-b border-[#ede9e1] last:border-0 transition-colors",
-                                    selectedIds.has(r.id) ? "bg-[#1034A6]/[0.03]" : "hover:bg-[#f9f7f3]"
+                                    "border-b border-border-light last:border-0 transition-colors",
+                                    selectedIds.has(r.id) ? "bg-link/3" : "hover:bg-surface-soft"
                                 )}>
                                     <td className="p-4">
-                                        <button onClick={() => toggleSelect(r.id)} className={cn("transition-colors", selectedIds.has(r.id) ? "text-[#1034A6]" : "text-black/10 hover:text-black/20")}>
+                                        <button onClick={() => toggleSelect(r.id)} className={cn("transition-colors", selectedIds.has(r.id) ? "text-link" : "text-black/10 hover:text-black/20")}>
                                             {selectedIds.has(r.id) ? <CheckSquare size={16} /> : <Square size={16} />}
                                         </button>
                                     </td>
-                                    <td className="p-4 font-serif font-bold text-[#1034A6] text-lg">
+                                    <td className="p-4 font-serif font-bold text-link text-lg">
                                         <Link to={`/root/${r.consonants}`} className="hover:underline">{r.consonants}</Link>
                                     </td>
                                     <td className="p-4 text-black/80">
@@ -704,8 +700,8 @@ function RootManager() {
                                                 if (sCount === 0 && aCount === 0) return <span className="text-[10px] text-black/20 italic">{term('none')}</span>;
                                                 return (
                                                     <>
-                                                        {sCount > 0 && <span className="text-[10px] bg-green-50 text-green-700 px-1.5 py-0.5 rounded-md font-bold uppercase">{sCount} sin.</span>}
-                                                        {aCount > 0 && <span className="text-[10px] bg-red-50 text-red-700 px-1.5 py-0.5 rounded-md font-bold uppercase">{aCount} ant.</span>}
+                                                        {sCount > 0 && <span className="text-[10px] bg-green-50 text-green-700 px-1.5 py-0.5 rounded-md font-bold uppercase">{sCount} {term('synonym-abbr')}</span>}
+                                                        {aCount > 0 && <span className="text-[10px] bg-red-50 text-red-700 px-1.5 py-0.5 rounded-md font-bold uppercase">{aCount} {term('antonym-abbr')}</span>}
                                                     </>
                                                 );
                                             })()}
@@ -728,30 +724,30 @@ function RootManager() {
                     {roots.map(r => (
                         <div key={r.id} className={cn(
                             "group bg-white border rounded-2xl p-5 transition-all duration-300 relative flex flex-col justify-between h-full",
-                            selectedIds.has(r.id) ? "border-[#1034A6] ring-1 ring-[#1034A6]/20 bg-[#1034A6]/[0.02]" : "border-[#ede9e1] hover:shadow-xl hover:shadow-[#1034A6]/5"
+                            selectedIds.has(r.id) ? "border-link ring-1 ring-link/20 bg-link/2" : "border-border-light hover:shadow-xl hover:shadow-link/5"
                         )}>
                             <button
                                 onClick={() => toggleSelect(r.id)}
                                 className={cn(
                                     "absolute top-3 left-3 z-10 p-1 rounded-md transition-all",
-                                    selectedIds.has(r.id) ? "text-[#1034A6] bg-white shadow-sm" : "opacity-0 group-hover:opacity-100 text-black/20 hover:text-black/40 bg-black/5"
+                                    selectedIds.has(r.id) ? "text-link bg-white shadow-sm" : "opacity-0 group-hover:opacity-100 text-black/20 hover:text-black/40 bg-black/5"
                                 )}
                             >
                                 {selectedIds.has(r.id) ? <CheckSquare size={16} /> : <Square size={16} />}
                             </button>
                             <div className="flex justify-between items-start mb-3 ml-6 group-hover:ml-0 transition-all">
                                 <Link to={`/root/${r.consonants}`} className="ml-1">
-                                    <h4 className="font-serif text-2xl font-bold text-[#1034A6] group-hover:underline">{r.consonants}</h4>
+                                    <h4 className="font-serif text-2xl font-bold text-link group-hover:underline">{r.consonants}</h4>
                                 </Link>
                                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button onClick={() => setEditRoot(r)} className="p-1.5 text-[#1034A6] hover:bg-[#1034A6]/10 rounded-lg"><Edit2 size={14} /></button>
+                                    <button onClick={() => setEditRoot(r)} className="p-1.5 text-link hover:bg-link/10 rounded-lg"><Edit2 size={14} /></button>
                                     <button onClick={() => handleDelete(r.id, r.consonants)} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
                                 </div>
                             </div>
                             <p className="text-sm text-black/60 mb-4 h-10 line-clamp-2">
                                 {(() => {
                                     if (!r.gloss) return <span className="italic opacity-50">{term('no-definition')}...</span>;
-                                    if (typeof r.gloss === 'string' && r.gloss.includes('[object Object]')) return <span className="text-red-400 italic">data mħassra</span>;
+                                    if (typeof r.gloss === 'string' && r.gloss.includes('[object Object]')) return <span className="text-red-400 italic">{term('corrupted-data')}</span>;
                                     try {
                                         const parsed = JSON.parse(r.gloss);
                                         if (Array.isArray(parsed) && parsed[0]) {

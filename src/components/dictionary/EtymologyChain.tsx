@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Info } from 'lucide-react';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import type { Etymology } from '@/types';
 
 interface EtymologyChainProps {
@@ -20,6 +21,7 @@ const LANGUAGE_COLORS: Record<string, { bg: string; text: string }> = {
 };
 
 export function EtymologyChain({ etymologies }: EtymologyChainProps) {
+    const { term } = useLinguisticMode();
     if (!etymologies?.length) return null;
 
     return (
@@ -52,28 +54,28 @@ export function EtymologyChain({ etymologies }: EtymologyChainProps) {
                                         )}
                                     </div>
                                     {i < ety.chain.length - 1 && (
-                                        <ArrowRight size={14} className="text-[#A07030] flex-shrink-0" />
+                                        <ArrowRight size={14} className="text-[#A07030] shrink-0" />
                                     )}
                                 </React.Fragment>
                             );
                         })}
 
                         {/* Final arrow to Maltese */}
-                        <ArrowRight size={14} className="text-[#A07030] flex-shrink-0" />
+                        <ArrowRight size={14} className="text-[#A07030] shrink-0" />
                         <div className="rounded-lg border border-[#1034A6]/20 bg-[#1034A6]/5 px-3 py-2">
                             <div className="text-[10px] uppercase tracking-wider font-semibold text-[#1034A6]/60 mb-0.5">
-                                Malti
+                                {term('maltese')}
                             </div>
                             <div className="font-serif text-sm font-bold text-[#1034A6]">
-                                ← dan il-kelma
+                                ← {term('this-word')}
                             </div>
                         </div>
                     </div>
 
                     {/* Notes */}
                     {ety.notes && (
-                        <p className="text-xs text-[#4a4a4a] bg-[#f9f7f3] border border-[#ede9e1] rounded px-3 py-2 leading-relaxed flex gap-2">
-                            <Info size={12} className="text-[#A07030] mt-0.5 flex-shrink-0" />
+                        <p className="text-xs text-text-muted bg-surface-soft border border-border-light rounded px-3 py-2 leading-relaxed flex gap-2">
+                            <Info size={12} className="text-[#A07030] mt-0.5 shrink-0" />
                             {ety.notes}
                         </p>
                     )}

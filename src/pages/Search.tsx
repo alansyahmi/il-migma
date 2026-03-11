@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Search as SearchIcon, Keyboard, MessageSquare, Layers, Filter, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search as SearchIcon, Keyboard, MessageSquare, Filter, ChevronDown, ChevronUp, Shuffle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { apiSearch } from '@/lib/api';
 import { useAdminConfig } from '@/lib/adminConfig';
-import { generateRootForms } from '@/lib/conjugationEngine';
+import { generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
+import { SubParts } from '@/components/dictionary/SubParts';
 
 // ── Colours ────────────────────────────────────────────────────────────────
 const EGYPTIAN_BLUE = '#1034A6';
@@ -17,7 +18,8 @@ interface InflectionRow {
     label: string;
     form: string;
     hasPage: boolean;
-    marker?: '*' | '✦'; // these + labels appear at black/55
+    entryId?: string;
+    marker?: 'plain' | 'theoretical' | 'auto_generated'; // these + labels appear at black/55
 }
 
 interface SearchResult {
@@ -27,9 +29,9 @@ interface SearchResult {
     rootSlug: string;
     gender?: string;    // shown as Egyptian Blue below root
     pos: string;
-    formLines: string[];
     definitions: string[];
     inflections: InflectionRow[];
+    entry: any;
 }
 
 // ── Filter state ───────────────────────────────────────────────────────────
@@ -83,13 +85,13 @@ function FilterSelect({
 
     return (
         <div>
-            <p className="text-xs font-medium text-[#000] mb-1.5">{label}</p>
+            <p className="text-xs font-medium text-black mb-1.5">{label}</p>
             <div ref={ref} className="relative">
                 {/* Trigger */}
                 <button
                     type="button"
                     onClick={() => setOpen(o => !o)}
-                    className="w-full flex items-center justify-between bg-white border border-black/10 rounded-md px-3 py-2 text-sm text-[#000] focus:outline-none focus:ring-1 focus:ring-black/20 cursor-pointer text-left"
+                    className="w-full flex items-center justify-between bg-white border border-black/10 rounded-md px-3 py-2 text-sm text-black focus:outline-none focus:ring-1 focus:ring-black/20 cursor-pointer text-left"
                 >
                     <span>{selectedLabel}</span>
                     <span
@@ -109,7 +111,7 @@ function FilterSelect({
                                 onClick={() => { onChange(o.value); setOpen(false); }}
                                 className={cn(
                                     'px-3 py-2 cursor-pointer hover:bg-black/5 transition-colors',
-                                    o.value === value ? 'font-medium text-[#000]' : 'text-[#333]',
+                                    o.value === value ? 'font-medium text-black' : 'text-[#333]',
                                 )}
                             >
                                 {o.label}
@@ -132,7 +134,7 @@ function FilterCheckbox({
             <div
                 className={cn(
                     'w-4 h-4 border rounded-sm flex items-center justify-center shrink-0 transition-colors',
-                    checked ? 'bg-[#000] border-[#000]' : 'bg-white border-black/25',
+                    checked ? 'bg-black border-black' : 'bg-white border-black/25',
                 )}
                 onClick={() => onChange(!checked)}
             >
@@ -142,32 +144,31 @@ function FilterCheckbox({
                     </svg>
                 )}
             </div>
-            <span className="text-sm text-[#000]">{label}</span>
+            <span className="text-sm text-black">{label}</span>
         </label>
     );
 }
 
 function InflectionCell({ row }: { row: InflectionRow }) {
-    const markerEl = row.marker && (
-        <span className="text-black/55 mr-0.5">{row.marker}</span>
-    );
+    const markerEl = row.marker === 'theoretical' ? (
+        <span className="text-black/55 mr-0.5">*</span>
+    ) : row.marker === 'auto_generated' ? (
+        <span className="text-black/55 mr-0.5">✦</span>
+    ) : null;
 
-    if (row.hasPage) {
+    if (row.hasPage || row.entryId) {
         return (
-            <Link to={`/entry/${row.form}`} style={{ color: EGYPTIAN_BLUE }}
+            <Link to={`/entry/${row.entryId || row.form}`} style={{ color: EGYPTIAN_BLUE }}
                 className="text-sm hover:underline">
                 {markerEl}{row.form}
             </Link>
         );
     }
-    if (row.marker) {
-        return (
-            <span className="text-sm text-black/55">
-                {markerEl}{row.form}
-            </span>
-        );
-    }
-    return <span className="text-sm text-[#000]">{row.form}</span>;
+    return (
+        <span className={cn("text-sm", row.marker ? "text-black/55" : "text-black")}>
+            {markerEl}{row.form}
+        </span>
+    );
 }
 
 
@@ -175,14 +176,14 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
     const { term } = useLinguisticMode();
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3 w-full">
-            <div className="flex flex-col md:grid md:grid-cols-[11rem_5rem_1fr_11rem] min-h-[5rem]">
+            <div className="flex flex-col md:grid md:grid-cols-[12rem_8rem_1fr_16rem] min-h-20">
 
                 {/* Col 1: Index number | headword + root */}
                 <div className="px-5 py-4 flex items-start gap-2 border-b md:border-b-0 md:border-r border-black/5">
                     <span className="text-xs text-black/30 font-sans w-5 shrink-0 pt-1">{index}.</span>
                     <div>
                         <Link to={`/entry/${result.id}`}
-                            className="font-serif font-extrabold text-[1.35rem] leading-tight text-[#000] hover:underline block">
+                            className="font-serif font-extrabold text-[1.35rem] leading-tight text-black hover:underline block">
                             {result.headword}
                         </Link>
                         <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
@@ -203,25 +204,18 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
                 {/* Col 2: POS block */}
-                <div className="px-5 py-3 md:py-4 flex flex-row md:flex-col flex-wrap gap-2 md:gap-0.5 border-b md:border-b-0 md:border-r border-black/5 bg-black/[0.01] md:bg-transparent">
-                    <span className="text-xs text-[#000] font-sans uppercase tracking-wide leading-snug font-bold md:font-normal">
-                        {term(result.pos)}
-                    </span>
-                    {result.formLines.map(line => (
-                        <span key={line} className="text-[10px] md:text-xs text-[#000] font-sans uppercase tracking-wide leading-snug opacity-60 md:opacity-100 bg-black/5 md:bg-transparent px-1 md:px-0 rounded md:rounded-none">
-                            {line}
-                        </span>
-                    ))}
+                <div className="px-5 py-3 md:py-4 flex flex-row md:flex-col flex-wrap gap-2 md:gap-0.5 border-b md:border-b-0 md:border-r border-black/5 bg-black/1 md:bg-transparent">
+                    <SubParts entry={result.entry} layout="lines" showTransitivity />
                 </div>
 
                 {/* Col 3: Definitions */}
                 <div className="px-5 py-4 border-b md:border-b-0 md:border-r border-black/5">
                     {result.definitions.length === 1 ? (
-                        <p className="text-sm text-[#000] leading-relaxed">{result.definitions[0]}</p>
+                        <p className="text-sm text-black leading-relaxed">{result.definitions[0]}</p>
                     ) : (
                         <ol className="space-y-1 md:space-y-0.5 list-none">
                             {result.definitions.map((def, i) => (
-                                <li key={i} className="text-sm text-[#000]">
+                                <li key={i} className="text-sm text-black">
                                     <span className="text-black/30 mr-1.5 font-sans text-xs">{i + 1}.</span> {def}
                                 </li>
                             ))}
@@ -230,10 +224,10 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                 </div>
 
                 {/* Col 4: Inflections */}
-                <div className="px-5 py-4 space-y-2 md:space-y-1 bg-black/[0.01] md:bg-transparent">
+                <div className="px-5 py-4 space-y-2 md:space-y-1 bg-black/1 md:bg-transparent">
                     {result.inflections.map((row, i) => (
                         <div key={i} className="flex items-baseline gap-3">
-                            <span className="text-[10px] md:text-xs text-black/40 md:text-black/55 font-sans w-[4.5rem] shrink-0 leading-snug uppercase tracking-tight md:tracking-normal">
+                            <span className="text-[10px] md:text-xs text-black/40 md:text-black/55 font-sans w-24 shrink-0 leading-snug uppercase tracking-tight md:tracking-normal">
                                 {row.label}
                             </span>
                             <InflectionCell row={row} />
@@ -249,7 +243,7 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
 
 // ── Main page ──────────────────────────────────────────────────────────────
 export function Search() {
-    const { language, t } = useLanguage();
+    const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { getOptions } = useAdminConfig();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -268,76 +262,84 @@ export function Search() {
         ...getOptions('verb_class', mode, language)
     ], [getOptions, mode, language, term]);
 
-    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type');
+    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type') || searchParams.has('source');
     const submitted = searchParams.get('q') ?? '';
 
     // Effect to fetch from API
     useEffect(() => {
-        if (!isSearchPerformed) {
-            setResults([]);
-            setTotal(0);
-            return;
-        }
-
         setLoading(true);
         const q = searchParams.get('q') ?? '';
-        const pos = searchParams.get('pos') ?? '';
+        const pos = searchParams.get('pos') || undefined;
+        const type = searchParams.get('type') || undefined;
+        const source = searchParams.get('source') || undefined;
         const limit = Number(searchParams.get('limit') ?? DEFAULT_FILTERS.maxResults);
+        const random = searchParams.get('random') || undefined;
 
-        apiSearch(q, { pos, limit })
+        apiSearch(q, { pos, type, source, limit, random })
             .then(res => {
                 setTotal(res.total);
                 // Map API results to the local SearchResult interface
                 const mapped: SearchResult[] = res.results.map((r: any) => {
                     const inflections: InflectionRow[] = [];
-                    const formLines: string[] = [];
+                    const vm = r.verb_morphology;
+                    let generated: any = null;
 
-                    if (r.verb_morphology) {
-                        const vm = r.verb_morphology;
-                        formLines.push(`${t('Form', 'Sura')} ${vm.form}`);
-                        if (vm.transitivity) formLines.push(t(vm.transitivity, term(vm.transitivity.toLowerCase())));
-
-                        // Auto-generate missing forms using the engine if enough data exists
-                        let generated: any = null;
+                    if (vm) {
                         const rc = r.root_pattern_form?.root?.consonants;
-                        if (rc && (!vm.imperfective_3sg_m || !vm.imperative_sg)) {
+                        if (rc) {
                             try {
                                 const forms = generateRootForms(
                                     rc,
                                     vm.vowel_set_perfect || 'a-a',
                                     vm.vowel_set_imperfect || 'i-a',
-                                    r.root_pattern_form.root.strength || 'strong',
-                                    r.root_pattern_form.root.weak_class
+                                    r.verb_class || r.root_pattern_form.root.strength || 'strong',
+                                    r.verb_weak_class || r.root_pattern_form.root.weak_class,
+                                    r.root_pattern_form.root.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rc)
                                 );
-                                generated = forms.find((f: any) => f.form === vm.form);
+                                const attestedEntries = getAttestedEntries(r.root_pattern_form?.root?.entries || [r]);
+                                const marked = markGeneratedForms(forms, attestedEntries);
+                                generated = marked.find((f: any) => f.form === vm.form);
                             } catch (e) {
                                 console.warn("Search conjugation error:", e);
                             }
                         }
 
-                        if (vm.perfective_3sg_m) {
-                            inflections.push({ label: term('perfett'), form: vm.perfective_3sg_m, hasPage: true });
-                        }
+                        const pushMarked = (label: string, data: any) => {
+                            if (!data || data.value === '-') return;
+                            inflections.push({
+                                label,
+                                form: data.value,
+                                hasPage: !!data.entryId,
+                                entryId: data.entryId,
+                                marker: data.marker,
+                            });
+                        };
 
-                        const impf = vm.imperfective_3sg_m || generated?.imperfect;
-                        if (impf) {
-                            inflections.push({ label: term('imperfett'), form: impf, hasPage: false });
+                        if (generated?.imperfect) {
+                            inflections.push({
+                                label: term('imperfect'),
+                                form: generated.imperfect.value,
+                                hasPage: false,
+                            });
                         }
+                        if (generated?.imperative && generated.imperative.value !== '-') {
+                            inflections.push({
+                                label: term('imperative'),
+                                form: generated.imperative.value,
+                                hasPage: false,
+                            });
+                        }
+                        pushMarked(term('passive'), generated?.passiveParticiple);
 
-                        const impv = vm.imperative_sg || (generated as any)?.imperative_sg;
-                        if (impv && impv !== '-') {
-                            inflections.push({ label: term('imperattiv'), form: impv, hasPage: true });
-                        }
-
-                        const vn = vm.verbal_noun;
-                        if (vn && vn !== '-') {
-                            inflections.push({ label: term('nom verbali'), form: vn, hasPage: true });
-                        }
+                        pushMarked(term('verbal-noun'), generated?.verbalNoun && {
+                            ...generated.verbalNoun,
+                            marker: generated.verbalNoun.entryId ? undefined : 'theoretical'
+                        });
                     } else if (r.noun_morphology || r.noun_plural_forms?.length) {
                         const nm = r.noun_morphology;
                         const pluralForms = r.noun_plural_forms || nm?.plural_forms;
                         if (pluralForms?.length) {
-                            inflections.push({ label: t('Plural', 'Plural'), form: pluralForms[0], hasPage: false });
+                            inflections.push({ label: term('plural'), form: pluralForms[0], hasPage: false });
                         }
                     }
 
@@ -348,9 +350,9 @@ export function Search() {
                         rootSlug: r.root_pattern_form?.root?.consonants || '',
                         gender: r.noun_gender || r.noun_morphology?.gender || (r.adjective_morphology?.masculine ? 'masculine' : undefined),
                         pos: r.pos,
-                        formLines,
                         definitions: r.definition_en ? [r.definition_en] : (r.definitions?.length ? r.definitions.map((d: any) => d.text_en) : []),
                         inflections,
+                        entry: r,
                     };
                 });
                 setResults(mapped);
@@ -360,7 +362,7 @@ export function Search() {
                 setResults([]);
             })
             .finally(() => setLoading(false));
-    }, [searchParams, isSearchPerformed, term]);
+    }, [searchParams.toString(), isSearchPerformed, term]);
 
     // Filter and map results (Now handled by API effect, this useMemo is mostly for query state tracking)
     useEffect(() => {
@@ -373,6 +375,7 @@ export function Search() {
         const f = { ...DEFAULT_FILTERS };
         if (searchParams.has('pos')) f.pos = searchParams.get('pos')!;
         if (searchParams.has('type')) f.rootType = searchParams.get('type')!;
+        if (searchParams.has('source')) f.source = searchParams.get('source')!;
         return f;
     });
 
@@ -389,6 +392,7 @@ export function Search() {
         const params: Record<string, string> = { q: query.trim() };
         if (filters.pos) params.pos = filters.pos;
         if (filters.rootType) params.type = filters.rootType;
+        if (filters.source) params.source = filters.source;
         setSearchParams(params);
         setShowFiltersMobile(false);
     };
@@ -432,15 +436,19 @@ export function Search() {
     const setFilter = <K extends keyof Filters>(key: K, value: Filters[K]) =>
         setFilters(f => ({ ...f, [key]: value }));
 
+    const handleRandom = () => {
+        setSearchParams({ random: 'true' });
+    };
+
     return (
         <div style={bgStyle}>
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8">
 
                 {/* ── Page heading ── */}
                 <div className="mb-6">
                     {submitted ? (
                         <>
-                            <h1 className="font-serif font-medium text-4xl leading-tight text-[#000]">
+                            <h1 className="font-serif font-medium text-4xl leading-tight text-black">
                                 {term('results-for').replace('{q}', submitted)}
                             </h1>
                             <p className="text-black/40 text-sm font-sans mt-1">
@@ -449,11 +457,13 @@ export function Search() {
                         </>
                     ) : (
                         <>
-                            <h1 className="font-serif font-medium text-4xl leading-tight text-[#000]">
+                            <h1 className="font-serif font-medium text-4xl leading-tight text-black">
                                 {term('search-results')}
                             </h1>
                             <p className="text-black/40 text-sm font-sans mt-2">
-                                {term('search-desc')}
+                                {results.length > 0 && !submitted && !searchParams.has('pos') && !searchParams.has('type')
+                                    ? term('random-entries-desc')
+                                    : term('search-desc')}
                             </p>
                         </>
                     )}
@@ -469,7 +479,7 @@ export function Search() {
                             onClick={() => setKbOpen(o => !o)}
                             className={cn(
                                 'flex items-center gap-1 px-3 border-r border-black/10 shrink-0 py-2.5 transition-colors',
-                                kbOpen ? 'text-[#000] bg-black/5' : 'text-[#555] hover:text-[#000]',
+                                kbOpen ? 'text-black bg-black/5' : 'text-[#555] hover:text-black',
                             )}
                             aria-label={term('toggle-picker')}
                         >
@@ -482,10 +492,10 @@ export function Search() {
                             value={query}
                             onChange={e => setQuery(e.target.value)}
                             placeholder={term('search') + '…'}
-                            className="flex-1 px-3 py-2.5 text-sm bg-transparent focus:outline-none font-sans text-[#000]"
+                            className="flex-1 px-3 py-2.5 text-sm bg-transparent focus:outline-none font-sans text-black"
                         />
                         <button type="submit"
-                            className="px-3 py-2.5 text-[#555] hover:text-[#000] transition-colors shrink-0"
+                            className="px-3 py-2.5 text-[#555] hover:text-black transition-colors shrink-0"
                             aria-label={term('search')}>
                             <SearchIcon size={16} />
                         </button>
@@ -514,8 +524,8 @@ export function Search() {
                             >
                                 <div className="flex items-center gap-2">
                                     <Filter size={18} className="text-[#1034A6]" />
-                                    <span className="font-sans font-semibold text-sm text-[#000]">
-                                        {t('Filter Options', 'Għażliet tal-Filtru')}
+                                    <span className="font-sans font-semibold text-sm text-black">
+                                        {term('filter-options')}
                                     </span>
                                 </div>
                                 {showFiltersMobile ? <ChevronUp size={18} className="text-black/30" /> : <ChevronDown size={18} className="text-black/30" />}
@@ -528,7 +538,7 @@ export function Search() {
                             "md:rounded-xl md:block",
                             showFiltersMobile ? "rounded-b-xl block" : "hidden"
                         )}>
-                            <h2 className="hidden md:block font-sans font-semibold text-sm text-[#000]">{term('filters')}</h2>
+                            <h2 className="hidden md:block font-sans font-semibold text-sm text-black">{term('filters')}</h2>
 
                             <FilterSelect
                                 label={term("max-results")}
@@ -589,7 +599,7 @@ export function Search() {
                     <div className="flex-1 space-y-3 min-w-0 w-full">
                         {results.length === 0 && !loading && isSearchPerformed && (
                             <div className="bg-white/50 rounded-xl border border-white/40 shadow-sm p-10 text-left">
-                                <p className="text-sm text-[#000] mb-2">
+                                <p className="text-sm text-black mb-2">
                                     {term('no-results-found').replace('{q}', submitted)}
                                 </p>
                                 <p className="text-xs text-black/40 mt-1 mb-4">
@@ -603,10 +613,13 @@ export function Search() {
                                         <MessageSquare size={16} />
                                         {term('suggest-entry')}
                                     </Link>
-                                    <Link to="/random" className="flex items-center gap-2 px-4 py-2 border border-black/10 text-black rounded-lg hover:bg-black/5 transition-colors text-sm font-medium">
-                                        <Layers size={16} />
-                                        {term('każwali')}
-                                    </Link>
+                                    <button
+                                        onClick={handleRandom}
+                                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-black bg-surface-soft hover:bg-hover border border-border rounded-full transition-colors"
+                                    >
+                                        <Shuffle size={16} />
+                                        {term('random')}
+                                    </button>
                                 </div>
                             </div>
                         )}

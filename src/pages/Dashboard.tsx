@@ -20,11 +20,11 @@ const DASHBOARD_TABS = [
 
 export function Dashboard() {
     return (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        <div className="max-w-4xl mx-auto px-7 sm:px-8 py-8">
             <SignedOut>
                 <div className="flex flex-col items-center justify-center py-12 gap-4">
                     <h1 className="font-serif text-2xl font-bold text-[#1034A6]">Dashboard</h1>
-                    <p className="text-[#4a4a4a] text-sm">Idħol biex taraw l-account tiegħek.</p>
+                    <p className="text-text-muted text-sm">Idħol biex taraw l-account tiegħek.</p>
                     <SignIn routing="hash" />
                 </div>
             </SignedOut>
@@ -79,7 +79,7 @@ function DashboardContent() {
                     </h1>
                     <div className="flex items-center gap-2 mt-1">
                         <Badge variant={TIER_BADGE[tier]}>{TIER_LABELS[tier]}</Badge>
-                        <span className="text-xs text-[#4a4a4a]">{user?.primaryEmailAddress?.emailAddress}</span>
+                        <span className="text-xs text-text-muted">{user?.primaryEmailAddress?.emailAddress}</span>
                     </div>
                 </div>
             </div>
@@ -94,15 +94,15 @@ function DashboardContent() {
                         <div className="grid sm:grid-cols-2 gap-4">
                             <div>
                                 <label className="text-xs font-semibold text-[#A07030] uppercase">Isem</label>
-                                <p className="text-sm text-[#000] mt-0.5">{user?.fullName ?? '—'}</p>
+                                <p className="text-sm text-black mt-0.5">{user?.fullName ?? '—'}</p>
                             </div>
                             <div>
                                 <label className="text-xs font-semibold text-[#A07030] uppercase">Email</label>
-                                <p className="text-sm text-[#000] mt-0.5">{user?.primaryEmailAddress?.emailAddress}</p>
+                                <p className="text-sm text-black mt-0.5">{user?.primaryEmailAddress?.emailAddress}</p>
                             </div>
                             <div>
                                 <label className="text-xs font-semibold text-[#A07030] uppercase">Tier</label>
-                                <p className="text-sm text-[#000] mt-0.5">{TIER_LABELS[tier]}</p>
+                                <p className="text-sm text-black mt-0.5">{TIER_LABELS[tier]}</p>
                             </div>
                         </div>
                     </CardBody>
@@ -115,7 +115,7 @@ function DashboardContent() {
                             <div className="text-center py-8">
                                 <Sparkles size={32} className="text-[#C9A84C] mx-auto mb-3" />
                                 <h3 className="font-serif text-lg font-semibold text-[#1034A6]">Upgradja għal Pro</h3>
-                                <p className="text-sm text-[#4a4a4a] mt-1 mb-4">
+                                <p className="text-sm text-text-muted mt-1 mb-4">
                                     Fittxija semantika, awdjo bla limitu, chatbot, u aktar.
                                 </p>
                                 <Button leftIcon={<CreditCard size={15} />}>
@@ -128,7 +128,7 @@ function DashboardContent() {
                                 <p className="text-sm">
                                     <strong>Pjan:</strong> {TIER_LABELS[tier]}
                                 </p>
-                                <p className="text-sm text-[#4a4a4a]">Il-ġestjoni tal-abbonament tiġi minn Stripe (aktar tard).</p>
+                                <p className="text-sm text-text-muted">Il-ġestjoni tal-abbonament tiġi minn Stripe (aktar tard).</p>
                             </div>
                         )}
                     </CardBody>
@@ -154,10 +154,10 @@ function DashboardContent() {
                                 </div>
                                 <div className="space-y-2">
                                     {mockKeys.map(k => (
-                                        <div key={k.id} className="flex items-center gap-3 p-3 rounded-lg border border-[#ede9e1] bg-[#f9f7f3]">
-                                            <Key size={14} className="text-[#A07030] flex-shrink-0" />
+                                        <div key={k.id} className="flex items-center gap-3 p-3 rounded-lg border border-border-light bg-surface-soft">
+                                            <Key size={14} className="text-[#A07030] shrink-0" />
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium text-[#000]">{k.name}</p>
+                                                <p className="text-sm font-medium text-black">{k.name}</p>
                                                 <p className="text-xs text-gray-400 font-mono">{k.key_prefix}••••••</p>
                                             </div>
                                             <span className="text-xs text-[#A07030]">{k.usage_count.toLocaleString()} calls</span>
@@ -171,7 +171,7 @@ function DashboardContent() {
                                         </div>
                                     ))}
                                 </div>
-                                <p className="text-xs text-[#4a4a4a]">Rata: €99/xahar + €0.10 / 1k calls wara l-limitu.</p>
+                                <p className="text-xs text-text-muted">Rata: €99/xahar + €0.10 / 1k calls wara l-limitu.</p>
                             </div>
                         )}
                     </CardBody>

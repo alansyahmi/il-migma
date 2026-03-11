@@ -52,19 +52,19 @@ export function Navbar() {
         { label: term('advanced-search'), href: '/advanced-search' },
         { label: term('root-search'), href: '/root-search' },
         { label: term('suggest-entry'), href: '/suggest' },
-        { label: term('information'), href: '/blog' },
+        { label: term('blog'), href: '/blog' },
         { label: term('help'), href: '/help' },
     ];
 
     return (
-        <header className="sticky top-0 z-40 bg-[#F4F3F0]/95 backdrop-blur-sm border-b border-[#d8cfc0]/50">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+        <header className="sticky top-0 z-40 bg-[#F4F3F0]/95 backdrop-blur-sm border-b border-border/50">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 flex items-center justify-between h-14">
 
                 {/* Left Section (Logo + Nav) */}
                 <div className="flex items-center gap-6 lg:gap-8 shrink-0">
                     {/* Logo — Newsreader medium */}
-                    <Link to="/" className="font-serif font-medium text-xl text-[#000] hover:opacity-70 transition-opacity shrink-0">
-                        Il-Migma'
+                    <Link to="/" className="font-serif font-medium text-xl text-black hover:opacity-70 transition-opacity shrink-0">
+                        {term('brand-name')}
                     </Link>
 
                     {/* Desktop nav links */}
@@ -76,7 +76,7 @@ export function Navbar() {
                                     key={link.href}
                                     to={link.href}
                                     className={cn(
-                                        'text-sm text-[#000] font-sans px-3 py-1.5 rounded-md transition-all',
+                                        'text-sm text-black font-sans px-3 py-1.5 rounded-md transition-all',
                                         'hover:shadow-[0_1px_6px_rgba(0,0,0,0.10)] hover:bg-white/60',
                                         active ? 'font-semibold' : 'font-normal',
                                     )}
@@ -92,19 +92,19 @@ export function Navbar() {
                 {showSearch && (
                     <div className="hidden md:block flex-1 max-w-md mx-6">
                         <form onSubmit={handleSearch} className="relative group">
-                            <div className="flex items-center bg-white/60 border border-[#d8cfc0] rounded-md overflow-hidden focus-within:bg-white focus-within:ring-1 focus-within:ring-[#1034A6] transition-all">
+                            <div className="flex items-center bg-white/60 border border-border rounded-md overflow-hidden focus-within:bg-white focus-within:ring-1 focus-within:ring-[#1034A6] transition-all">
                                 <button
                                     ref={kbRef}
                                     type="button"
                                     onClick={() => setKbOpen(o => !o)}
                                     className={cn(
-                                        "flex items-center gap-1 px-2.5 border-r border-[#d8cfc0] shrink-0 py-1.5 transition-colors",
-                                        kbOpen ? "text-[#1034A6] bg-black/5" : "text-gray-400 hover:text-gray-600"
+                                        "flex items-center gap-1 px-3 border-r border-black/10 shrink-0 py-2.5 transition-colors",
+                                        kbOpen ? "text-black bg-black/5" : "text-text-muted hover:text-black"
                                     )}
                                     aria-label={term('toggle-picker')}
                                 >
-                                    <Keyboard size={12} />
-                                    <span className="text-[10px] text-gray-300">›</span>
+                                    <Keyboard size={14} />
+                                    <span className="text-xs text-black/30">›</span>
                                 </button>
                                 <input
                                     ref={inputRef}
@@ -112,14 +112,14 @@ export function Navbar() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder={term('search-placeholder')}
-                                    className="flex-1 bg-transparent px-2.5 py-1.5 text-sm focus:outline-none placeholder:text-gray-500 text-[#000]"
+                                    className="flex-1 bg-transparent px-3 py-2.5 text-sm focus:outline-none placeholder:text-text-muted text-black"
                                 />
                                 <button
                                     type="submit"
-                                    className="px-2.5 py-1.5 text-gray-400 hover:text-[#1034A6] transition-colors shrink-0"
+                                    className="px-3 py-2.5 text-text-muted hover:text-black transition-colors shrink-0"
                                     aria-label={term('search')}
                                 >
-                                    <Search size={14} />
+                                    <Search size={16} />
                                 </button>
                             </div>
                             <MalteseCharPicker
@@ -144,13 +144,13 @@ export function Navbar() {
                         title={isArabised ? term('toggle-terminology-standard') : term('toggle-terminology-arabised')}
                         className={cn(
                             'hidden sm:flex items-center justify-center rounded-md px-2 py-1 text-sm transition-colors',
-                            'hover:bg-[#d8cfc0]/40',
+                            'hover:bg-border/40',
                         )}
                     >
                         {/* Show Arabic وزن when in standard mode; show CV when in arabised mode */}
                         {isArabised
-                            ? <span className="font-arabic text-base leading-none text-[#000]">وزن</span>
-                            : <span className="font-sans font-medium text-[#000] tracking-wider text-xs">CV</span>
+                            ? <span className="font-arabic text-base leading-none text-black">وزن</span>
+                            : <span className="font-sans font-medium text-black tracking-wider text-xs">CV</span>
                         }
                     </button>
 
@@ -159,7 +159,7 @@ export function Navbar() {
                         id="language-toggle"
                         onClick={() => setLanguage(language === 'en' ? 'mt' : 'en')}
                         title={language === 'en' ? term('toggle-language-mt') : term('toggle-language-en')}
-                        className="hidden sm:flex items-center justify-center rounded-md px-2 py-1 text-sm font-sans font-medium text-[#000] hover:bg-[#d8cfc0]/40 transition-colors"
+                        className="hidden sm:flex items-center justify-center rounded-md px-2 py-1 text-sm font-sans font-medium text-black hover:bg-border/40 transition-colors"
                     >
                         {language === 'en' ? 'EN' : 'MT'}
                     </button>
@@ -169,7 +169,7 @@ export function Navbar() {
                         id="dark-mode-toggle"
                         onClick={toggleDark}
                         title={dark ? term('toggle-light-mode') : term('toggle-dark-mode')}
-                        className="flex items-center justify-center w-8 h-8 rounded-full text-[#000] hover:bg-[#d8cfc0]/40 transition-colors"
+                        className="flex items-center justify-center w-8 h-8 rounded-full text-black hover:bg-border/40 transition-colors"
                     >
                         {dark ? <Moon size={15} /> : <Sun size={15} />}
                     </button>
@@ -194,7 +194,7 @@ export function Navbar() {
                         <SignInButton mode="modal">
                             <button
                                 id="sign-in-btn"
-                                className="w-8 h-8 flex items-center justify-center rounded-full bg-[#000] text-white hover:bg-[#222] transition-colors"
+                                className="w-8 h-8 flex items-center justify-center rounded-full bg-black text-white hover:bg-[#222] transition-colors"
                                 aria-label={term('sign-in')}
                             >
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -229,7 +229,7 @@ export function Navbar() {
 
                     {/* Hamburger — mobile only */}
                     <button
-                        className="md:hidden w-8 h-8 flex items-center justify-center rounded hover:bg-[#d8cfc0]/40 transition-colors"
+                        className="md:hidden w-8 h-8 flex items-center justify-center rounded hover:bg-border/40 transition-colors"
                         onClick={() => setMenuOpen(o => !o)}
                         aria-label={term('toggle-menu')}
                     >
@@ -240,9 +240,9 @@ export function Navbar() {
 
             {/* Mobile dropdown */}
             {menuOpen && (
-                <div className="md:hidden border-t border-[#d8cfc0]/50 bg-[#F4F3F0] px-4 py-3 space-y-0.5 animate-fade-in">
+                <div className="md:hidden border-t border-border/50 bg-[#F4F3F0] px-4 py-3 space-y-0.5 animate-fade-in">
                     {showSearch && (
-                        <div className="pb-3 mb-1 mt-1 border-b border-[#ede9e1]">
+                        <div className="pb-3 mb-1 mt-1 border-b border-border-light">
                             <form onSubmit={handleSearch} className="relative">
                                 <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                                 <input
@@ -250,7 +250,7 @@ export function Navbar() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder={term('search-placeholder')}
-                                    className="w-full bg-white border border-[#d8cfc0] rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1034A6] placeholder:text-gray-400"
+                                    className="w-full bg-white border border-border rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1034A6] placeholder:text-gray-400"
                                 />
                             </form>
                         </div>
@@ -263,7 +263,7 @@ export function Navbar() {
                                 to={link.href}
                                 onClick={() => setMenuOpen(false)}
                                 className={cn(
-                                    'block py-2.5 text-sm text-[#000] border-b border-[#ede9e1] last:border-0',
+                                    'block py-2.5 text-sm text-black border-b border-border-light last:border-0',
                                     active ? 'font-semibold' : 'font-normal',
                                 )}
                             >
@@ -276,24 +276,24 @@ export function Navbar() {
                     <div className="pt-3 flex items-center gap-3">
                         <button
                             onClick={() => setMode(isArabised ? 'standard' : 'arabised')}
-                            className="text-sm font-medium text-[#000]"
+                            className="text-sm font-medium text-black"
                         >
-                            {isArabised ? <span className="font-arabic text-base">وزن</span> : 'CV'}
+                            {isArabised ? <span className="font-arabic text-base">وزن</span> : <span className="font-sans font-medium text-sm">CV</span>}
                         </button>
-                        <span className="text-[#d8cfc0]">·</span>
+                        <span className="text-border">·</span>
                         <button
                             onClick={() => setLanguage(language === 'en' ? 'mt' : 'en')}
-                            className="text-sm font-medium text-[#000]"
+                            className="text-sm font-medium text-black"
                         >
                             {language === 'en' ? 'EN' : 'MT'}
                         </button>
-                        <span className="text-[#d8cfc0]">·</span>
-                        <button onClick={toggleDark} className="text-[#000]">
+                        <span className="text-border">·</span>
+                        <button onClick={toggleDark} className="text-black">
                             {dark ? <Moon size={14} /> : <Sun size={14} />}
                         </button>
                         {isTrueAdmin && (
                             <>
-                                <span className="text-[#d8cfc0]">·</span>
+                                <span className="text-border">·</span>
                                 <button
                                     onClick={() => setAdminViewEnabled(!adminViewEnabled)}
                                     className={cn(
