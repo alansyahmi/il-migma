@@ -2450,7 +2450,7 @@ function generateTriliteralGeminated(
     pv2: string,
     ipv1: string,
     _ipv2: string,
-    isImalaBlocked: boolean = false,
+    _isImalaBlocked: boolean = false,
 ): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
@@ -2599,7 +2599,7 @@ function generateTriliteralAssimilative(
     pv2: string,
     ipv1: string,
     ipv2: string,
-    isImalaBlocked: boolean = false,
+    _isImalaBlocked: boolean = false,
 ): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
@@ -2744,7 +2744,7 @@ function generateTriliteralHollow(
     pv2: string,
     ipv1: string,
     _ipv2: string,
-    isImalaBlocked: boolean = false,
+    _isImalaBlocked: boolean = false,
 ): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
