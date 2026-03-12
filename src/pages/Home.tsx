@@ -7,11 +7,12 @@ import {
     Edit3
 } from 'lucide-react';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUser } from '@clerk/clerk-react';
 import { Card } from '@/components/ui/Card';
+import { apiSearch } from '@/lib/api';
+import type { Entry } from '@/types';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const ARAB_GREEN = '#006233';  // Semitic entries
@@ -21,33 +22,46 @@ const IPA_GOLD = '#A07030';  // IPA & Audio
 // ── Limestone Ochre background (rgba for gradient overlay) ─────────────────
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
 
-// ── Featured entry data ────────────────────────────────────────────────────
-const getSemiticEntries = (t: (en: string, mt: string) => string) => [
-    { word: "wasa'", altForm: "(wiesa')", def: t("wide; broad; spacious", "Xi ħadd jew xi ħaġa li għandu wisa."), slug: 'wasa' },
-    { word: 'kiteb', altForm: '', def: t('to write', "Jifforma ittri, kliem jew simboli fuq xi wiċċ sabiex jikkomunika."), slug: 'kiteb' },
-    { word: "għomor", altForm: '', def: t("age, one's lifetime", 'Età, il-ħajja ta’ wieħed.'), slug: 'ghomor' },
-];
-
-const getRomanceEntries = (t: (en: string, mt: string) => string) => [
-    { word: 'rringrazzja', altForm: '', def: t('to give thanks', 'Jagħti grazzi lil xi ħadd.'), slug: 'rringrazzja' },
-    { word: 'università', altForm: '', def: t('university', "Istituzzjoni ta' edukazzjoni għolja li tipprovdi faċilitajiet għat-tagħlim, ir-riċerka, u l-għoti ta' gradi akkademiċi fil-livelli ta' undergraduate, postgraduate, u spiss professjonali."), slug: 'universita' },
-    { word: 'lealtà', altForm: '', def: t('loyalty', "L-istat ta' jkun leali jew fidil."), slug: 'lealta' },
-];
 
 export function Home() {
-    const { language } = useLanguage(); // Keep language for getSemiticEntries/getRomanceEntries
     const { term } = useLinguisticMode();
     const { isAdmin } = useAuth();
     const { user } = useUser();
     const [query, setQuery] = useState('');
+    const [recentEntries, setRecentEntries] = useState<Entry[]>([]);
+    const [loadingRecent, setLoadingRecent] = useState(true);
+    const [counts, setCounts] = useState<{ semitic: number; romance: number; total: number }>({ semitic: 0, romance: 0, total: 0 });
     const navigate = useNavigate();
 
     useEffect(() => {
         document.title = "Il-Miġma' | " + term('dictionary-title');
+
+        // Fetch more recent entries for categorization
+        apiSearch('', { recent: true, limit: 50 })
+            .then(res => setRecentEntries(res.results as any))
+            .catch(err => console.error("Failed to fetch recent entries:", err))
+            .finally(() => setLoadingRecent(false));
+
+        // Fetch counts
+        apiSearch('', { type: 'semitic', limit: 0 })
+            .then(res => setCounts(prev => ({ ...prev, semitic: res.total })))
+            .catch(err => console.error("Failed to fetch semitic count:", err));
+        apiSearch('', { type: 'romance', limit: 0 })
+            .then(res => setCounts(prev => ({ ...prev, romance: res.total })))
+            .catch(err => console.error("Failed to fetch romance count:", err));
+        apiSearch('', { limit: 0 })
+            .then(res => setCounts(prev => ({ ...prev, total: res.total })))
+            .catch(err => console.error("Failed to fetch total count:", err));
     }, [term]);
 
-    const SEMITIC_ENTRIES = getSemiticEntries((en, mt) => language === 'en' ? en : mt);
-    const ROMANCE_ENTRIES = getRomanceEntries((en, mt) => language === 'en' ? en : mt);
+    const SEMITIC_LANGS = ['Arabic', 'Berber'];
+    const ROMANCE_LANGS = ['Sicilian', 'Italian', 'Latin', 'French', 'Spanish'];
+
+    const categorizedRecent = {
+        semitic: recentEntries.filter(e => !e.source_language || SEMITIC_LANGS.includes(e.source_language as string)),
+        romance: recentEntries.filter(e => e.source_language && ROMANCE_LANGS.includes(e.source_language as string)),
+    };
+
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -135,7 +149,11 @@ export function Home() {
                             <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
                                 <PlusCircle className="text-[#1034A6]" size={20} /> {term('word-entries')}
                             </h3>
-                            <p className="text-sm text-black/60 mb-6">{term('word-entries-desc')}</p>
+                            <p className="text-sm text-black/60 mb-6">
+                                {counts.total > 0
+                                    ? term('word-entries-desc').replace('300k+', (Math.floor(counts.total / 1000) + 'k+'))
+                                    : term('word-entries-desc')}
+                            </p>
                             <Link to="/admin" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
                                 {term('manage-entries')} <ArrowRight size={14} />
                             </Link>
@@ -212,7 +230,9 @@ export function Home() {
                         {term('dictionary-title')}
                     </h1>
                     <p className="text-text-muted text-sm leading-relaxed max-w-lg mx-auto mb-10">
-                        {term('home-desc')}
+                        {counts.total > 0
+                            ? term('home-desc').replace('300,000', counts.total.toLocaleString())
+                            : term('home-desc')}
                     </p>
 
                     {/* Search bar */}
@@ -256,7 +276,7 @@ export function Home() {
                     {/* Buttons */}
                     <div className="flex items-center justify-center gap-3">
                         <Link
-                            to="/search"
+                            to="/browse"
                             className="bg-link text-white text-sm font-sans font-medium px-5 py-2.5 rounded-lg hover:bg-link-hover transition-colors shadow-lg shadow-link/20"
                         >
                             {term('browse-entries')}
@@ -271,62 +291,137 @@ export function Home() {
                 </section>
 
                 {/* Categories */}
-                <section className="px-7 sm:px-8 pb-16">
-                    <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
-                        {/* Semitic Entries */}
-                        <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
-                            <h2 className="font-sans text-base font-semibold mb-1" style={{ color: ARAB_GREEN }}>
-                                {term('semitic-entries-title')}
-                            </h2>
-                            <p className="text-xs text-[#666] mb-5 leading-snug">
-                                {term('semitic-entries-desc')}
-                            </p>
-                            <div className="space-y-3">
-                                {SEMITIC_ENTRIES.map((e: any) => (
-                                    <div key={e.word}>
-                                        <div className="flex items-baseline gap-1.5 flex-wrap">
-                                            <Link to={`/entry/${e.slug}`} className="font-serif text-base font-semibold leading-none" style={{ color: ARAB_GREEN }}>
-                                                {e.word}
-                                            </Link>
-                                            {e.altForm && <span className="text-xs text-[#555] font-serif">{e.altForm}</span>}
-                                        </div>
-                                        <p className="text-sm text-black mt-0.5">{e.def}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                <section className="px-7 sm:px-8 pb-20">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
 
-                        {/* Romance Entries */}
-                        <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
-                            <h2 className="font-sans text-base font-semibold mb-1" style={{ color: ROMAN_RED }}>
-                                {term('romance-entries-title')}
-                            </h2>
-                            <p className="text-xs text-[#666] mb-5 leading-snug">
-                                {term('romance-entries-desc')}
-                            </p>
-                            <div className="space-y-3">
-                                {ROMANCE_ENTRIES.map((e: any) => (
-                                    <div key={e.word}>
-                                        <div className="flex items-baseline gap-1.5 flex-wrap">
-                                            <Link to={`/entry/${e.slug}`} className="font-serif text-base font-semibold leading-none" style={{ color: ROMAN_RED }}>
-                                                {e.word}
-                                            </Link>
-                                            {e.altForm && <span className="text-xs text-[#555] font-serif">{e.altForm}</span>}
-                                        </div>
-                                        <p className="text-sm text-black mt-0.5">{e.def}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                            {/* Semitic Entries */}
+                            <Card className="lg:col-span-12 xl:col-span-4 border border-black/5 bg-surface-soft rounded-3xl overflow-hidden relative group transition-all duration-300 min-h-[320px]">
+                                {/* Watermark */}
+                                <div className="absolute right-0 bottom-0 rotate-12 -mr-8 -mb-10 pointer-events-none select-none">
+                                    <span className="font-serif text-[18rem] text-black opacity-[0.03]">ع</span>
+                                </div>
 
-                        {/* IPA & Audio */}
-                        <div className="bg-white rounded-xl border border-black/8 p-6 shadow-sm">
-                            <h2 className="font-sans text-base font-bold mb-1" style={{ color: IPA_GOLD }}>
-                                {term('ipa-audio-title')}
-                            </h2>
-                            <p className="text-xs text-[#666] leading-snug">
-                                {term('ipa-audio-desc')}
-                            </p>
+                                <div className="p-8 relative z-10 h-full flex flex-col">
+                                    <h2 className="font-serif text-[1.8rem] font-bold mb-1" style={{ color: ARAB_GREEN }}>
+                                        {term('semitic-entries-title')}
+                                    </h2>
+                                    <p className="text-sm text-text-muted mb-8 leading-relaxed max-w-sm">
+                                        {counts.semitic.toLocaleString()} {term('entries')} {term('recorded').toLowerCase()}.
+                                    </p>
+
+                                    <div className="flex-1">
+                                        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/30 mb-4">{term('recently-added')}</h3>
+                                        {loadingRecent ? (
+                                            <div className="space-y-3">
+                                                {[...Array(3)].map((_, i) => <div key={i} className="h-6 bg-black/5 rounded animate-pulse" />)}
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-4">
+                                                {categorizedRecent.semitic.slice(0, 3).map((entry: any) => (
+                                                    <div key={entry.id} className="space-y-1">
+                                                        <Link
+                                                            to={`/entry/${entry.id}`}
+                                                            className="flex items-center gap-3 group/link py-1"
+                                                        >
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-black/10 group-hover/link:bg-link transition-colors" />
+                                                            <span className="font-serif text-[1.1rem] font-bold text-black group-hover/link:text-link transition-colors">
+                                                                {entry.headword}
+                                                            </span>
+                                                            <span className="text-[10px] text-text-muted uppercase font-sans tracking-wider opacity-60">
+                                                                {entry.pos}
+                                                            </span>
+                                                        </Link>
+                                                        {(entry.definition_en || (entry.definitions && entry.definitions[0])) && (
+                                                            <p className="text-[13px] text-text-muted pl-4.5 line-clamp-1 italic">
+                                                                {entry.definition_en || entry.definitions[0].text_en}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                                {categorizedRecent.semitic.length > 0 && (
+                                                    <Link to="/search?type=semitic" className="text-[11px] font-bold text-link hover:underline mt-2 inline-block">
+                                                        {term('view-all')}
+                                                    </Link>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </Card>
+
+                            {/* Romance Entries */}
+                            <Card className="lg:col-span-12 xl:col-span-4 border border-black/5 bg-surface-soft rounded-3xl overflow-hidden relative group transition-all duration-300 min-h-[320px]">
+                                {/* Watermark */}
+                                <div className="absolute right-0 bottom-0 rotate-12 -mr-6 -mb-8 pointer-events-none select-none">
+                                    <span className="font-serif text-[18rem] text-black opacity-[0.03]">R</span>
+                                </div>
+
+                                <div className="p-8 relative z-10 h-full flex flex-col">
+                                    <h2 className="font-serif text-[1.8rem] font-bold mb-1" style={{ color: ROMAN_RED }}>
+                                        {term('romance-entries-title')}
+                                    </h2>
+                                    <p className="text-sm text-text-muted mb-8 leading-relaxed max-w-sm">
+                                        {counts.romance.toLocaleString()} {term('entries')} {term('recorded').toLowerCase()}.
+                                    </p>
+
+                                    <div className="flex-1">
+                                        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/30 mb-4">{term('recently-added')}</h3>
+                                        {loadingRecent ? (
+                                            <div className="space-y-3">
+                                                {[...Array(3)].map((_, i) => <div key={i} className="h-6 bg-black/5 rounded animate-pulse" />)}
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-4">
+                                                {categorizedRecent.romance.slice(0, 3).map((entry: any) => (
+                                                    <div key={entry.id} className="space-y-1">
+                                                        <Link
+                                                            to={`/entry/${entry.id}`}
+                                                            className="flex items-center gap-3 group/link py-1"
+                                                        >
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-black/10 group-hover/link:bg-link transition-colors" />
+                                                            <span className="font-serif text-[1.1rem] font-bold text-black group-hover/link:text-link transition-colors">
+                                                                {entry.headword}
+                                                            </span>
+                                                            <span className="text-[10px] text-text-muted uppercase font-sans tracking-wider opacity-60">
+                                                                {entry.pos}
+                                                            </span>
+                                                        </Link>
+                                                        {(entry.definition_en || (entry.definitions && entry.definitions[0])) && (
+                                                            <p className="text-[13px] text-text-muted pl-4.5 line-clamp-1 italic">
+                                                                {entry.definition_en || entry.definitions[0].text_en}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                                {categorizedRecent.romance.length > 0 && (
+                                                    <Link to="/search?type=romance" className="text-[11px] font-bold text-link hover:underline mt-2 inline-block">
+                                                        {term('view-all')}
+                                                    </Link>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </Card>
+
+                            {/* IPA & Audio (sidebar card) */}
+                            <Card className="lg:col-span-12 xl:col-span-4 border border-black/5 bg-surface-soft rounded-3xl overflow-hidden relative group transition-all duration-300">
+                                <div className="p-8 h-full flex flex-col">
+                                    <h2 className="font-serif text-[1.4rem] font-bold mb-1" style={{ color: IPA_GOLD }}>
+                                        {term('ipa-audio-title')}
+                                    </h2>
+                                    <p className="text-[13px] text-text-muted leading-relaxed mb-6">
+                                        {term('ipa-audio-desc')}
+                                    </p>
+                                    <div className="mt-auto aspect-square rounded-2xl bg-linear-to-br from-[#A07030]/5 to-[#A07030]/20 flex items-center justify-center p-8 text-center group-hover:scale-[1.02] transition-transform duration-500 border border-[#A07030]/10">
+                                        <div className="space-y-2">
+                                            <Globe size={40} style={{ color: IPA_GOLD }} className="mx-auto opacity-30" />
+                                            <p className="text-[10px] font-bold tracking-[0.2em] uppercase opacity-40" style={{ color: IPA_GOLD }}>Coming Soon</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
                         </div>
                     </div>
                 </section>

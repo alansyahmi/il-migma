@@ -77,7 +77,7 @@ export function MalteseCharPicker({ open, onOpenChange, onInsert, triggerRef }: 
                 e.preventDefault(); // prevent input blur
                 onInsert(ch);
             }}
-            className="flex items-center justify-center w-9 h-9 rounded-md bg-white border border-black/10 text-sm font-serif text-[#000] hover:bg-black/5 hover:border-black/20 transition-colors shadow-sm"
+            className="flex items-center justify-center w-9 h-9 rounded-md bg-white border border-black/10 text-sm font-serif text-black hover:bg-black/5 hover:border-black/20 transition-colors shadow-sm"
         >
             {ch}
         </button>
@@ -86,7 +86,7 @@ export function MalteseCharPicker({ open, onOpenChange, onInsert, triggerRef }: 
     const content = (
         <div
             ref={ref}
-            className="fixed z-[9999] bg-[#F4F3F0] border border-black/10 rounded-xl shadow-lg p-3"
+            className="fixed z-9999 bg-[#F4F3F0] border border-black/10 rounded-xl shadow-lg p-3"
             style={{
                 minWidth: '22rem',
                 top: coords?.top ?? -9999,

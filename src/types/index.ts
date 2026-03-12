@@ -85,6 +85,11 @@ export interface NounMorphology {
     diminutive?: string;
     collective?: string;           // for collective nouns (e.g. siġra/siġar)
     singulative?: string;
+    // Common metadata
+    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    source_citation?: string;
 }
 
 export interface ConjugationRow {
@@ -156,6 +161,7 @@ export interface AdjectiveMorphology {
     feminine: string;
     plural: string;
     elative?: string;             // "most X" form
+    source_citation?: string;
 }
 
 // ─── Phonetics ─────────────────────────────────────────────────────────────

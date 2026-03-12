@@ -1,0 +1,291 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Search as SearchIcon } from 'lucide-react';
+import { Card } from '@/components/ui/Card';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { apiSearch } from '@/lib/api';
+import { cn } from '@/lib/utils';
+
+// -- Constants --
+const POS_LIST = [
+    { key: 'verb', label: 'verb' },
+    { key: 'noun', label: 'noun' },
+    { key: 'adjective', label: 'adjective' },
+    { key: 'adverb', label: 'adverb' },
+    { key: 'numeral', label: 'numeral' },
+    { key: 'other', label: 'other' }
+] as const;
+
+type POSKey = typeof POS_LIST[number]['key'];
+
+interface SubcategoryData {
+    label: string;
+    group?: string;
+    filter: Record<string, string>;
+    entries: any[];
+    total: number;
+    loading: boolean;
+}
+
+export function Browse() {
+    const { term } = useLinguisticMode();
+    const [selectedPOS, setSelectedPOS] = useState<POSKey>('verb');
+    const [subcategories, setSubcategories] = useState<SubcategoryData[]>([]);
+
+    const ALPHABET = [
+        'A', 'B', 'Ċ', 'D', 'E', 'F', 'Ġ', 'G', 'GĦ', 'H', 'Ħ', 'I', 'IE', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Ż', 'Z'
+    ];
+
+    useEffect(() => {
+        document.title = `${term('browse-entries')} | Il-Miġma'`;
+    }, [term]);
+
+    // Define subcategories based on selected POS
+    useEffect(() => {
+        let configs: { label: string; filter: Record<string, string> }[] = [];
+
+        if (selectedPOS === 'verb') {
+            const triForms = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+            const triConfigs = triForms.map(f => ({
+                label: `Form ${f}`,
+                group: term('triliteral'),
+                filter: { pos: 'verb', form: f, verb_type: 'triliteral' }
+            }));
+
+            const quadForms = ['I', 'II'];
+            const quadConfigs = quadForms.map(f => ({
+                label: `Form ${f}`,
+                group: term('quadriliteral'),
+                filter: { pos: 'verb', form: f, verb_type: 'quadriliteral' }
+            }));
+
+            configs = [...triConfigs, ...quadConfigs];
+        } else if (selectedPOS === 'noun') {
+            configs = [
+                { label: term('masculine'), filter: { pos: 'noun', gender: 'masculine' } },
+                { label: term('feminine'), filter: { pos: 'noun', gender: 'feminine' } },
+                { label: term('semitic'), filter: { pos: 'noun', type: 'semitic' } },
+                { label: term('romance'), filter: { pos: 'noun', type: 'romance' } },
+            ];
+        } else if (selectedPOS === 'other') {
+            configs = [
+                { label: term('preposition'), filter: { pos: 'preposition' } },
+                { label: term('conjunction'), filter: { pos: 'conjunction' } },
+                { label: term('particle'), filter: { pos: 'particle' } },
+                { label: term('article'), filter: { pos: 'article' } },
+                { label: term('interjection'), filter: { pos: 'interjection' } },
+            ];
+        } else {
+            // Adjective, Adverb, Numeral
+            configs = [{ label: term(selectedPOS), filter: { pos: selectedPOS } }];
+        }
+
+        const initialSubcategories = configs.map(c => ({
+            ...c,
+            entries: [],
+            total: 0,
+            loading: true
+        }));
+
+        setSubcategories(initialSubcategories);
+
+        // Fetch data for each subcategory
+        initialSubcategories.forEach((sub, index) => {
+            apiSearch('', { ...sub.filter, limit: 3, includePending: true, includeSuggested: true })
+                .then(res => {
+                    setSubcategories(prev => {
+                        const next = [...prev];
+                        if (next[index]) {
+                            next[index] = {
+                                ...next[index],
+                                entries: res.results,
+                                total: res.total,
+                                loading: false
+                            };
+                        }
+                        return next;
+                    });
+                })
+                .catch(err => {
+                    console.error(`Failed to fetch ${sub.label}:`, err);
+                    setSubcategories(prev => {
+                        const next = [...prev];
+                        if (next[index]) {
+                            next[index].loading = false;
+                        }
+                        return next;
+                    });
+                });
+        });
+
+    }, [selectedPOS, term]);
+
+    const bgStyle = {
+        background: `linear-gradient(rgba(244,243,240,0.88), rgba(244,243,240,0.88)),
+                 url("/bg-pattern.png") center/cover no-repeat`,
+        minHeight: '100vh',
+    };
+
+    return (
+        <div style={bgStyle}>
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-12">
+
+                {/* ── Page header ── */}
+                <div className="mb-6">
+                    <h1 className="font-serif font-medium text-4xl leading-tight text-black">
+                        {term('browse-entries')}
+                    </h1>
+                    <p className="text-text-muted text-sm max-w-2xl">
+                        {term('home-desc')}
+                    </p>
+                </div>
+
+                {/* POS Ribbon */}
+                <div className="flex flex-wrap items-center gap-x-8 gap-y-4 mb-12 border-b border-black/5 pb-6">
+                    {POS_LIST.map(pos => (
+                        <button
+                            key={pos.key}
+                            onClick={() => setSelectedPOS(pos.key)}
+                            className={cn(
+                                "text-sm font-sans font-bold uppercase tracking-widest transition-all relative pb-2",
+                                selectedPOS === pos.key
+                                    ? "text-link"
+                                    : "text-black/40 hover:text-black"
+                            )}
+                        >
+                            {term(pos.label)}
+                            {selectedPOS === pos.key && (
+                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-link animate-in fade-in slide-in-from-bottom-1" />
+                            )}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Subcategory Grid with Grouping */}
+                <div className="space-y-16 mb-20">
+                    {(() => {
+                        const groups: { name?: string; subs: SubcategoryData[] }[] = [];
+                        subcategories.forEach(sub => {
+                            const lastGroup = groups[groups.length - 1];
+                            if (!lastGroup || lastGroup.name !== sub.group) {
+                                groups.push({ name: sub.group, subs: [sub] });
+                            } else {
+                                lastGroup.subs.push(sub);
+                            }
+                        });
+
+                        return groups.map((g, gi) => (
+                            <div key={gi} className="space-y-8">
+                                {g.name && (
+                                    <div className="flex items-center gap-4">
+                                        <h2 className="font-serif text-2xl font-bold text-black border-l-4 border-link pl-4">
+                                            {g.name}
+                                        </h2>
+                                        <div className="h-px flex-1 bg-black/5" />
+                                    </div>
+                                )}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                    {g.subs.map((sub, i) => (
+                                        <Card key={i} className="border border-black/5 bg-white/60 backdrop-blur-md rounded-3xl overflow-hidden flex flex-col min-h-[300px] group transition-all duration-300 hover:shadow-xl hover:shadow-black/5">
+                                            <div className="p-8 flex flex-col h-full">
+                                                <div className="flex items-center justify-between mb-6">
+                                                    <h3 className="font-serif text-2xl font-bold text-black group-hover:text-link transition-colors">
+                                                        {sub.label}
+                                                    </h3>
+                                                    <div className="text-right">
+                                                        <p className="text-[10px] font-bold uppercase tracking-wider text-black/30">Total</p>
+                                                        <p className="text-sm font-bold text-black">{sub.total.toLocaleString()}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex-1">
+                                                    {sub.loading ? (
+                                                        <div className="space-y-4">
+                                                            {[...Array(3)].map((_, j) => (
+                                                                <div key={j} className="h-12 bg-black/5 rounded-xl animate-pulse" />
+                                                            ))}
+                                                        </div>
+                                                    ) : sub.entries.length > 0 ? (
+                                                        <div className="space-y-5">
+                                                            {sub.entries.map((entry) => (
+                                                                <div key={entry.id} className="space-y-1">
+                                                                    <Link
+                                                                        to={`/entry/${entry.id}`}
+                                                                        className="flex items-center gap-3 group/entry py-0.5"
+                                                                    >
+                                                                        <div className="w-1.5 h-1.5 rounded-full bg-black/10 group-hover/entry:bg-link transition-colors" />
+                                                                        <span className="font-serif text-[1.1rem] font-bold text-black group-hover/entry:text-link transition-colors">
+                                                                            {entry.headword}
+                                                                        </span>
+                                                                        <span className="text-[9px] text-text-muted uppercase font-sans tracking-wider opacity-60">
+                                                                            {entry.pos}
+                                                                        </span>
+                                                                    </Link>
+                                                                    {(entry.definition_en || (entry.definitions && entry.definitions[0])) && (
+                                                                        <p className="text-[12px] text-text-muted pl-4.5 line-clamp-1 italic">
+                                                                            {entry.definition_en || entry.definitions[0].text_en}
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex flex-col items-center justify-center h-full py-12 text-center opacity-30">
+                                                            <SearchIcon size={32} className="mb-2" />
+                                                            <p className="text-xs font-medium uppercase tracking-wider">No entries yet</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {!sub.loading && sub.total > 0 && (
+                                                    <div className="mt-8 pt-6 border-t border-black/5">
+                                                        <Link
+                                                            to={`/search?${new URLSearchParams(sub.filter).toString()}`}
+                                                            className="inline-flex items-center gap-2 text-xs font-bold text-link hover:underline uppercase tracking-wider"
+                                                        >
+                                                            {term('view-all')} <ArrowRight size={12} />
+                                                        </Link>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </Card>
+                                    ))}
+                                </div>
+                            </div>
+                        ));
+                    })()}
+                </div>
+
+                {/* Alphabet Index */}
+                <div className="bg-white/40 backdrop-blur-sm rounded-3xl p-10 border border-black/5">
+                    <h2 className="font-serif text-2xl font-bold text-black mb-8 flex items-center justify-center sm:justify-start gap-3">
+                        {term('browse-by-letter')}
+                    </h2>
+
+                    <div className="flex flex-wrap gap-2.5 justify-center">
+                        {ALPHABET.map(letter => (
+                            <Link
+                                key={letter}
+                                to={`/search?q=${letter}&lemma=true`}
+                                className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl bg-white border border-black/5 text-lg font-serif font-bold text-black hover:bg-link hover:text-white hover:border-link transition-all duration-200 shadow-sm hover:shadow-link/20"
+                            >
+                                {letter}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Footer Link */}
+                <div className="mt-16 text-center">
+                    <Link
+                        to="/search"
+                        className="inline-flex items-center gap-2 text-black/40 text-sm font-medium hover:text-black transition-colors"
+                    >
+                        {term('advanced-search-title')} <ArrowRight size={14} />
+                    </Link>
+                </div>
+
+            </div>
+        </div>
+    );
+}

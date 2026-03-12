@@ -177,17 +177,17 @@ function buildConjugationTable(
     }
 
     const persons = [
-        { mt: "jiena", en: "I" },
-        { mt: "inti", en: "you (sg.)" },
-        { mt: "huwa", en: "he" },
-        { mt: "hija", en: "she" },
-        { mt: "aħna", en: "we" },
-        { mt: "intom", en: "you (pl.)" },
-        { mt: "huma", en: "they" },
+        { id: "1s", mt: "jiena", en: "I" },
+        { id: "2s", mt: "inti", en: "you (sg.)" },
+        { id: "3ms", mt: "huwa", en: "he" },
+        { id: "3fs", mt: "hija", en: "she" },
+        { id: "1p", mt: "aħna", en: "we" },
+        { id: "2p", mt: "intom", en: "you (pl.)" },
+        { id: "3p", mt: "huma", en: "they" },
     ];
 
     const rows: ConjugationRow[] = persons.map((p, i) => ({
-        person_mt: p.mt,
+        person_mt: p.id,
         person_en: p.en,
         imperfect: impfForms[i],
         perfect: perfRows[i],
@@ -241,7 +241,7 @@ function deriveTable(
         ...row,
         perfect: perfPrefix + row.perfect,
         perfect_neg: row.perfect_neg
-            ? `ma ${perfPrefix}${row.perfect_neg.replace(/^ma /, "")}`
+            ? `${perfPrefix}${row.perfect_neg.replace(/^ma /, "")}`
             : undefined,
         imperfect: impfTransform(row.imperfect, pIdx),
         imperfect_attached: row.imperfect_attached
@@ -377,7 +377,7 @@ function negPerfect3sg(
     blocksImala: boolean = false,
 ): { m: string; f: string } {
     const getShortForm = (offset: number) => {
-        if (verbForm === "III" && offset < 6) return "e";
+        if ((verbForm === "III" || verbForm === "VI") && offset < 6) return "e";
         return "i";
     };
 
@@ -2341,6 +2341,7 @@ function generateTriliteralStrong(
 
     const f4_perf = `${ipv1}${C1}${C2}${ipv2}${C3}`;
     const f4_impf = `jo${C1}${C2}o${C3}`;
+    const f4_imp = `o${C1}${C2}o${C3}`;
     const f4_act = `mi${C1}${C2}e${C3}`;
     const d1 = pv1 === "a" && pv2 === "a" ? "a" : "ie";
     const f4_vn = isPharyngeal(C1)
@@ -2351,7 +2352,7 @@ function generateTriliteralStrong(
         form: "IV",
         perfect: f4_perf,
         imperfect: f4_impf,
-        imperative: f4_perf,
+        imperative: f4_imp,
         passiveParticiple: "-",
         activeParticiple: f4_act,
         verbalNoun: f4_vn,

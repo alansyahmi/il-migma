@@ -53,6 +53,7 @@ const INITIAL_FORM_STATE = {
     noun_dual: '',
     noun_type: '',
     verb_class: '',
+    verb_type: '',
     verb_transitivity: '',
     verb_perfective_3sgm: '',
     verb_imperfective_3sgm: '',
@@ -70,6 +71,7 @@ const INITIAL_FORM_STATE = {
     participle_type: '' as 'active' | 'passive' | '',
     is_loanword: false,
     source_language: '',
+    source_citation: '',
     definitions: [
         { text_en: '', text_mt: '', register: '' }
     ],
@@ -83,6 +85,7 @@ const INITIAL_FORM_STATE = {
     _pluralType: 'none',
     _adjPluralType: 'none',
     cv_pattern: '',
+    _inheritedPattern: '',
     plural_pattern: '',
     sound_suffix: '',
     _sound_suffix: '',
@@ -288,6 +291,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         noun_gender: (entry as any)?.noun_gender ?? initialForm?.noun_gender ?? '',
         noun_singular: (entry as any)?.noun_singular ?? initialForm?.noun_singular ?? '',
         verb_class: (entry as any)?.verb_class ?? (entry as any)?.verb_morphology?.verb_class ?? initialForm?.verb_class ?? '',
+        verb_type: (entry as any)?.verb_type ?? initialForm?.verb_type ?? '',
         _weakClass: (entry as any)?.verb_weak_class ?? (entry as any)?.weak_class ?? (entry as any)?.verb_morphology?.weak_class ?? initialForm?._weakClass ?? '',
         _formLabel: (entry as any)?.verb_form ?? (entry as any)?.verb_morphology?.form ?? initialForm?._formLabel ?? '',
         verb_vowel_perf: (entry as any)?.verb_vowel_perf ?? (entry as any)?.verb_morphology?.vowel_set_perf ?? initialForm?.verb_vowel_perf ?? '',
@@ -309,12 +313,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 (((entry as any)?.noun_sound_plural) || !!initialForm?.noun_sound_plural) ? 'sound' : 'none',
         _adjPluralType: (((entry as any)?.adj_plural?.length > 0) || !!initialForm?.adj_plural) ? (entry as any)?.adj_pattern ? 'broken' : 'sound' : 'none',
         noun_type: (entry as any)?.noun_type ?? initialForm?.noun_type ?? '',
+        source_citation: (entry as any)?.source_citation ?? (entry as any)?.verb_morphology?.source_citation ?? (entry as any)?.noun_morphology?.source_citation ?? initialForm?.source_citation ?? '',
         definitions: (entry as any)?.definitions ?? [
             { text_en: (entry as any)?.text_en ?? '', text_mt: '', register: '' }
         ],
-        synonyms: (entry as any)?.verb_morphology?.synonyms ?? initialForm?.synonyms ?? [],
-        antonyms: (entry as any)?.verb_morphology?.antonyms ?? initialForm?.antonyms ?? [],
-        related_entries: (entry as any)?.verb_morphology?.related_entries ?? initialForm?.related_entries ?? [],
+        synonyms: (entry as any)?.verb_morphology?.synonyms ?? (entry as any)?.noun_morphology?.synonyms ?? initialForm?.synonyms ?? [],
+        antonyms: (entry as any)?.verb_morphology?.antonyms ?? (entry as any)?.noun_morphology?.antonyms ?? initialForm?.antonyms ?? [],
+        related_entries: (entry as any)?.verb_morphology?.related_entries ?? (entry as any)?.noun_morphology?.related_entries ?? initialForm?.related_entries ?? [],
         ...initialForm
     });
 
@@ -349,6 +354,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 _formLabel: full.verb_form || full.verb_morphology?.form || prev._formLabel,
                                 verb_class: full.verb_class || full.verb_morphology?.verb_class || prev.verb_class,
                                 _weakClass: full.verb_weak_class || full.weak_class || full.verb_morphology?.weak_class || prev._weakClass,
+                                verb_type: full.verb_type || prev.verb_type,
                                 verb_vowel_perf: full.verb_vowel_perf || full.verb_morphology?.vowel_set_perf || prev.verb_vowel_perf,
                                 verb_vowel_impf: full.verb_vowel_impf || full.verb_morphology?.vowel_set_impf || prev.verb_vowel_impf,
                                 verb_vowel_impv: full.verb_vowel_impv || full.verb_morphology?.vowel_set_imperative || prev.verb_vowel_impv,
@@ -367,18 +373,20 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 adj_plural: full.adj_plural || full.adjective_morphology?.plural || prev.adj_plural,
                                 is_loanword: typeof full.is_loanword === 'boolean' ? full.is_loanword : prev.is_loanword,
                                 source_language: full.source_language || prev.source_language,
+                                source_citation: full.source_citation || full.verb_morphology?.source_citation || full.noun_morphology?.source_citation || prev.source_citation,
                                 phonetics: full.phonetics?.length ? full.phonetics : prev.phonetics,
                                 etymology_chain: full.etymologies?.[0]?.chain?.length ? full.etymologies[0].chain : prev.etymology_chain,
                                 noun_type: full.noun_type || prev.noun_type,
-                                cv_pattern: full.cv_pattern || prev.cv_pattern,
+                                cv_pattern: full.cv_pattern || full.cv_notation || prev.cv_pattern,
+                                _inheritedPattern: !full.cv_pattern && (full.cv_notation || full.resolved_cv),
                                 plural_pattern: full.plural_pattern || prev.plural_pattern,
                                 sound_suffix: full.sound_suffix || prev.sound_suffix,
                                 adj_pattern: full.adj_pattern || prev.adj_pattern,
                                 noun_feminine: full.noun_feminine || prev.noun_feminine,
                                 noun_masculine: full.noun_masculine || full.noun_morphology?.masculine || prev.noun_masculine,
-                                synonyms: full.synonyms || full.verb_morphology?.synonyms || prev.synonyms || [],
-                                antonyms: full.antonyms || full.verb_morphology?.antonyms || prev.antonyms || [],
-                                related_entries: full.related_entries || full.verb_morphology?.related_entries || prev.related_entries || [],
+                                synonyms: full.synonyms || full.verb_morphology?.synonyms || full.noun_morphology?.synonyms || prev.synonyms || [],
+                                antonyms: full.antonyms || full.verb_morphology?.antonyms || full.noun_morphology?.antonyms || prev.antonyms || [],
+                                related_entries: full.related_entries || full.verb_morphology?.related_entries || full.noun_morphology?.related_entries || prev.related_entries || [],
                                 _hasDual: !!(full.noun_dual || full.noun_morphology?.dual),
                                 _pluralType: (full.noun_plural_forms?.length || full.noun_morphology?.plural_forms?.length) && (full.noun_sound_plural || full.noun_morphology?.sound_plural) ? 'both'
                                     : (full.noun_plural_forms?.length || full.noun_morphology?.plural_forms?.length) ? 'broken'
@@ -410,13 +418,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
         const suffix = POS_MAP[form.pos] || 'entry';
         const safeHeadword = form.headword.toLowerCase()
-        //.replace(/ħ/g, 'h') // Explicitly handle Latin crossed h
-        //.normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove accents
-        //.replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9àċġħżie-]/gi, '');
 
-        const newId = `${suffix}-${safeHeadword}`;
+        const formSuffix = (form.pos === 'verb' && form._formLabel) ? `-${form._formLabel.toLowerCase()}` : '';
+        const newId = `${suffix}-${safeHeadword}${formSuffix}`;
         setSuggestedId(newId);
-    }, [form.pos, form.headword, isEdit]);
+    }, [form.pos, form.headword, form._formLabel, isEdit]);
 
     // ── AUTOMATION: ID Existence Check ──────────────────────────────────────
     useEffect(() => {
@@ -434,6 +442,18 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         }, 500);
         return () => clearTimeout(timer);
     }, [form.id, getToken, entry?.id]);
+
+    // ── AUTOMATION: Verb Type/Category from Root ──────────────────────────────
+    useEffect(() => {
+        if (form.pos !== 'verb') return;
+        const rootClean = form._rootConsonants.replace(/-/g, '').trim();
+        if (!rootClean) return;
+
+        const detected = rootClean.length >= 4 ? 'quadrilateral' : 'triliteral';
+        if (form.verb_type !== detected) {
+            set('verb_type', detected);
+        }
+    }, [form._rootConsonants, form.pos]);
 
     // ── AUTOMATION: Root Metadata Inheritance ───────────────────────────────
     useEffect(() => {
@@ -467,9 +487,52 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             hasChanges = true;
                         }
 
+                        if (root.source && !prev.source_citation) {
+                            next.source_citation = root.source;
+                            newFilled.add('source_citation');
+                            hasChanges = true;
+                        }
+
+                        if (root.etymology && (!prev.etymology_chain || prev.etymology_chain.length === 0)) {
+                            try {
+                                // Try parsing as JSON first
+                                const parsed = JSON.parse(root.etymology);
+                                if (Array.isArray(parsed)) {
+                                    next.etymology_chain = parsed.map(p => ({
+                                        language: p.language || '',
+                                        form: p.form || '',
+                                        meaning: p.meaning || ''
+                                    }));
+                                    newFilled.add('etymology_chain');
+                                    hasChanges = true;
+                                } else if (typeof parsed === 'object') {
+                                    next.etymology_chain = [{
+                                        language: parsed.language || '',
+                                        form: parsed.form || '',
+                                        meaning: parsed.meaning || ''
+                                    }];
+                                    newFilled.add('etymology_chain');
+                                    hasChanges = true;
+                                }
+                            } catch (e) {
+                                // Fallback to regex for plain strings
+                                const match = root.etymology.match(/^([A-Za-z]+)\s+(.+)$/);
+                                if (match) {
+                                    next.etymology_chain = [{ language: match[1], form: match[2], meaning: '' }];
+                                    newFilled.add('etymology_chain');
+                                    hasChanges = true;
+                                } else if (root.etymology.length > 0) {
+                                    next.etymology_chain = [{ language: 'Root', form: root.etymology, meaning: '' }];
+                                    newFilled.add('etymology_chain');
+                                    hasChanges = true;
+                                }
+                            }
+                        }
+
                         if (hasChanges) {
                             setTimeout(() => setAutoFilledFields(newFilled), 0);
                         }
+
                         return next;
                     });
                 }
@@ -779,8 +842,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         setActiveInput('cv_pattern');
                                         activeInputRef.current = e.target;
                                     }}
-                                    placeholder="e.g. Fagħal or CCvC"
+                                    placeholder={form._inheritedPattern ? `${form._inheritedPattern} (inherited)` : "e.g. Fagħal or CCvC"}
                                 />
+                                {form._inheritedPattern && !form.cv_pattern && (
+                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-black/25 font-mono text-sm">
+                                        {form._inheritedPattern} <span className="text-[10px] italic">(inherited)</span>
+                                    </div>
+                                )}
                                 <button
                                     ref={kbTriggerRef}
                                     type="button"
@@ -855,7 +923,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     </div>
 
                     {/* Phonetics & Dialects Builder */}
-                    <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-4">
+                    <fieldset className="border border-border-light rounded-lg p-4 space-y-4">
                         <div className="flex justify-between items-center px-1">
                             <legend className="text-xs font-semibold text-black uppercase tracking-tight">{t('Phonetics & Dialects', 'Fonetika u Djaletti')}</legend>
                             <div className="flex items-center gap-2">
@@ -922,7 +990,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
                     {/* Noun fields */}
                     {form.pos === 'noun' && (
-                        <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-4">
+                        <fieldset className="border border-border-light rounded-lg p-4 space-y-4">
                             <legend className="text-xs font-semibold text-black px-2">{term('noun')}</legend>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
@@ -1112,8 +1180,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
                     {/* Verb fields */}
                     {form.pos === 'verb' && (
-                        <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-3">
-                            <legend className="text-xs font-semibold text-black px-2 text-black">{term('verb')}</legend>
+                        <fieldset className="border border-border-light rounded-lg p-4 space-y-3">
+                            <legend className="text-xs font-semibold text-black px-2">{term('verb')}</legend>
 
                             <div className="mb-4">
                                 <label className={label}>{t('Form (Stem)', 'Forma (Zokk)')}</label>
@@ -1125,10 +1193,34 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                             onClick={() => set('_formLabel', form._formLabel === f ? '' : f)}
                                             className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg border transition-all ${form._formLabel === f
                                                 ? 'bg-[#1034A6] text-white border-[#1034A6] shadow-sm'
-                                                : 'bg-white text-black/60 border-black/10 hover:bg-black/5 hover:border-black/20 text-black'
+                                                : 'bg-white text-black/60 border-black/10 hover:bg-black/5 hover:border-black/20'
                                                 }`}
                                         >
                                             {f}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className={label}>{t('Verb Category', 'Kategorija tal-Verb')}</label>
+                                <div className="flex gap-2 mt-1.5">
+                                    {[
+                                        { value: 'triliteral', label: t('Triliteral', 'Trilitteral') },
+                                        { value: 'quadrilateral', label: t('Quadrilateral', 'Kwadrilitteral') }
+                                    ].map(cat => (
+                                        <button
+                                            key={cat.value}
+                                            type="button"
+                                            onClick={() => set('verb_type', cat.value)}
+                                            className={cn(
+                                                "flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all",
+                                                form.verb_type === cat.value
+                                                    ? "bg-[#1034A6] text-white border-[#1034A6] shadow-sm"
+                                                    : "bg-white text-black/60 border-black/10 hover:bg-black/5"
+                                            )}
+                                        >
+                                            {cat.label}
                                         </button>
                                     ))}
                                 </div>
@@ -1284,8 +1376,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
                     {/* Adjective fields */}
                     {form.pos === 'adjective' && (
-                        <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-3">
-                            <legend className="text-xs font-semibold text-black px-2 text-black">{term('adjective')}</legend>
+                        <fieldset className="border border-border-light rounded-lg p-4 space-y-3">
+                            <legend className="text-xs font-semibold text-black px-2">{term('adjective')}</legend>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {/* Gender — determines which field is auto-filled from headword */}
                                 <div>
@@ -1442,8 +1534,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
                     {/* Participle fields */}
                     {form.pos === 'participle' && (
-                        <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-3">
-                            <legend className="text-xs font-semibold text-black px-2 text-black">{t('Participle', 'Partiċipju')}</legend>
+                        <fieldset className="border border-border-light rounded-lg p-4 space-y-3">
+                            <legend className="text-xs font-semibold text-black px-2">{t('Participle', 'Partiċipju')}</legend>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
                                     <div className="flex items-center justify-between mb-1">
@@ -1486,7 +1578,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     )}
 
                     {/* Definitions */}
-                    <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-4">
+                    <fieldset className="border border-border-light rounded-lg p-4 space-y-4">
                         <div className="flex justify-between items-center px-1">
                             <legend className="text-xs font-semibold text-black uppercase tracking-tight">{t('Definitions', 'Definizzjonijiet')}</legend>
                             <Button type="button" variant="ghost" size="sm" className="h-7 text-xs"
@@ -1594,7 +1686,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     </div>
 
                     {/* Etymology Builder */}
-                    <fieldset className="border border-[#ede9e1] rounded-lg p-4 space-y-4">
+                    <fieldset className="border border-border-light rounded-lg p-4 space-y-4">
                         <div className="flex justify-between items-center px-1">
                             <legend className="text-xs font-semibold text-black uppercase tracking-tight">{t('Etymology Builder', 'Oriġini tal-Kelma')}</legend>
                             <Button type="button" variant="ghost" size="sm" className="h-7 text-xs"
@@ -1602,6 +1694,19 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 + {t('Add Step', 'Żid Pass')}
                             </Button>
                         </div>
+
+                        {autoFilledFields.has('etymology_chain') && (
+                            <div className="flex items-center gap-1 px-1 mb-2 text-[10px] text-blue-500 animate-pulse">
+                                <span>✦</span>
+                                <span>{t('Inherited from root', 'Miret mill-għerq')}</span>
+                                <button type="button" className="ml-1 hover:text-blue-700 underline" onClick={() => {
+                                    set('etymology_chain', []);
+                                    const next = new Set(autoFilledFields);
+                                    next.delete('etymology_chain');
+                                    setAutoFilledFields(next);
+                                }}>{t('reset', 'irrisettja')}</button>
+                            </div>
+                        )}
 
                         <div className="flex items-center gap-2 px-1 mb-2">
                             <input type="checkbox" id="loanword" checked={form.is_loanword}
@@ -1650,6 +1755,38 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     onChange={e => set('source_language', e.target.value)} placeholder={t('e.g. Italian', 'eż. Taljan')} />
                             </div>
                         )}
+
+                        <div className="pt-2">
+                            <label className={label}>{t('Source Citation', 'Sors / Referenza')}</label>
+                            <input className={inp} value={form.source_citation}
+                                onChange={e => {
+                                    set('source_citation', e.target.value);
+                                    if (autoFilledFields.has('source_citation')) {
+                                        const next = new Set(autoFilledFields);
+                                        next.delete('source_citation');
+                                        setAutoFilledFields(next);
+                                    }
+                                }}
+                                placeholder={t('e.g. Aquilina1987', 'eż. Aquilina1987')} />
+                            {autoFilledFields.has('source_citation') && (
+                                <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse">
+                                    <span>✦</span>
+                                    <span>{t('Inherited from root', 'Miret mill-għerq')}</span>
+                                    <button
+                                        type="button"
+                                        className="ml-1 hover:text-blue-700 underline"
+                                        onClick={() => {
+                                            set('source_citation', '');
+                                            const next = new Set(autoFilledFields);
+                                            next.delete('source_citation');
+                                            setAutoFilledFields(next);
+                                        }}
+                                    >
+                                        {t('reset', 'irrisettja')}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </fieldset>
 
                     {/* Dynamic Fields (for new DB columns) */}

@@ -53,7 +53,9 @@ export async function apiSearch(
         offset?: number;
         root_id?: string;
         v?: string;
+        form?: string;
         wizen?: string;
+        verb_type?: string;
         source?: string;
         radicals?: string[];
         random?: string;
@@ -63,16 +65,20 @@ export async function apiSearch(
         searchEnglishGloss?: boolean;
         includeSuggested?: boolean;
         includePending?: boolean;
+        recent?: boolean;
     } = {}
 ): Promise<SearchResponse> {
-    const params = new URLSearchParams({ q });
+    const params = new URLSearchParams();
+    if (q) params.set('q', q);
     if (opts.pos) params.set('pos', opts.pos);
     if (opts.type) params.set('type', opts.type);
     if (opts.limit) params.set('limit', String(opts.limit));
     if (opts.offset) params.set('offset', String(opts.offset));
     if (opts.root_id) params.set('root_id', opts.root_id);
     if (opts.v) params.set('v', opts.v);
+    if (opts.form) params.set('form', opts.form);
     if (opts.wizen) params.set('wizen', opts.wizen);
+    if (opts.verb_type) params.set('verb_type', opts.verb_type);
     if (opts.source) params.set('source', opts.source);
     if (opts.random) params.set('random', opts.random);
     if (opts.regex) params.set('regex', 'true');
@@ -81,6 +87,7 @@ export async function apiSearch(
     if (opts.searchEnglishGloss) params.set('gloss', 'true');
     if (opts.includeSuggested) params.set('suggested', 'true');
     if (opts.includePending) params.set('pending', 'true');
+    if (opts.recent) params.set('recent', 'true');
     if (opts.radicals) {
         opts.radicals.forEach((r, i) => {
             if (r) params.set(`r${i + 1}`, r);

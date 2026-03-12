@@ -130,11 +130,11 @@ function DerivedTermLink({
     if (data.value === '-') return null;
 
     const content = (data.marker === 'plain' && data.entryId) ? (
-        <Link to={`/entry/${data.entryId}`} style={{ color: BLUE }} className="font-serif font-semibold hover:underline">
+        <Link to={`/entry/${data.entryId}`} style={{ color: BLUE }} className="font-serif hover:underline">
             {data.value}
         </Link>
     ) : (
-        <span className={`font-serif font-semibold ${data.marker !== 'plain' ? 'opacity-55' : ''} text-black`}>
+        <span className={`font-serif ${data.marker !== 'plain' ? 'opacity-45' : ''} text-black`}>
             {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}
             {data.value}
         </span>
@@ -142,7 +142,7 @@ function DerivedTermLink({
 
     return (
         <div className="group relative">
-            <p className="text-xs text-black/40 mb-1">{label}</p>
+            <p className="text-xs text-black/55 mb-1.5 font-sans">{label}</p>
             <div className="flex items-center gap-2 justify-center md:justify-start">
                 {content}
                 {isAdmin && onEdit && (
@@ -166,6 +166,419 @@ function DerivedTermLink({
                     </div>
                 )}
             </div>
+        </div>
+    );
+}
+
+// ── Noun View ──────────────────────────────────────────────────────────────
+
+function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
+    const { language } = useLanguage();
+    const { term, mode } = useLinguisticMode();
+    const { isAdmin, adminViewEnabled } = useAuth();
+    const { getToken } = useClerkAuth();
+
+    const [showForm, setShowForm] = useState(false);
+    const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
+
+    const isActualAdmin = isAdmin && adminViewEnabled;
+    const nm = entry.noun_morphology!;
+    const ety = entry.etymologies?.[0];
+
+    const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants;
+    const pattern = entry.root_pattern_form?.pattern;
+
+    const patternLabel = term('cv-pattern');
+    const patternValue = mode === 'arabised' ? (pattern?.wizen_notation || (entry as any).cv_pattern || pattern?.cv_notation) : ((entry as any).cv_pattern || pattern?.cv_notation);
+
+    // Suffix logic
+    const POSSESSIVE_SUFFIXES = [
+        { key: '1s', suffix: 'i' },
+        { key: '2s', suffix: 'ek' },
+        { key: '3ms', suffix: 'u' },
+        { key: '3fs', suffix: 'ha' },
+        { key: '1p', suffix: 'na' },
+        { key: '2p', suffix: 'kom' },
+        { key: '3p', suffix: 'hom' },
+    ];
+
+    const syncopate = (word: string) => {
+        // Drop the last weak vowel (o/e) in CVCVC pattern
+        // e.g., kotob -> kotb
+        return word.replace(/([aeiou])([^aeiou])([oe])([^aeiou])$/i, '$1$2$4');
+    };
+
+    const applySuffix = (base: string, suffix: string) => {
+        //if (!base || base === '-') return '-';
+        const isVowelSuffix = /^[aeiou]/i.test(suffix);
+
+        // Specific logic for plural of ktieb (kotba) as requested by user
+        if (base === 'kotba') {
+            const stem = isVowelSuffix ? 'kotb' : 'kotob';
+            let finalSuffix = suffix;
+            if (suffix === 'ek' && stem === 'kotb') finalSuffix = 'ok';
+            return `${stem}${finalSuffix}`;
+        }
+
+        // Generic rule: drop final -a for vowel suffixes
+        let stem = base;
+        if (isVowelSuffix && base.endsWith('a')) {
+            stem = base.slice(0, -1);
+        } else if (isVowelSuffix) {
+            stem = syncopate(base);
+        }
+
+        // Vowel set harmony for -ek/-ok
+        let finalSuffix = suffix;
+        if (suffix === 'ek') {
+            // Check last non-terminal vowel for 'o'
+            const vowels = stem.match(/[aeiouàèìòùâêîôû]/gi);
+            const lastVowel = vowels ? vowels[vowels.length - 1].toLowerCase() : '';
+            if (lastVowel === 'o') finalSuffix = 'ok';
+        }
+
+        return `${stem}${finalSuffix}`;
+    };
+
+    const bgStyle = {
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        minHeight: '100vh',
+    };
+
+    return (
+        <div style={bgStyle} className="w-full overflow-hidden">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-10 w-full mt-2 sm:mt-10">
+                <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
+                    <div className="relative inline-flex items-center justify-center">
+                        <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
+                            {entry.headword}
+                        </h1>
+                        {isActualAdmin && (
+                            <button
+                                onClick={() => {
+                                    setEditEntry({
+                                        ...entry,
+                                        _rootConsonants: entry.root_pattern_form?.root?.consonants || ''
+                                    } as any);
+                                    setShowForm(true);
+                                }}
+                                className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
+                                title={term('edit-entry')}
+                            >
+                                <Edit2 size={16} />
+                            </button>
+                        )}
+                    </div>
+                    <SubParts entry={entry} />
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-6 items-start w-full">
+                    {/* Top Mobile Gloss */}
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
+                        <SideCard title={term('gloss')}>
+                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                {entry.definitions.map(def => (
+                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                ))}
+                            </ol>
+                        </SideCard>
+                    </div>
+
+                    {/* Left Sidebar (Desktop Only) */}
+                    <div className="w-full md:w-64 shrink-0 space-y-4 hidden md:block">
+                        <SideCard title={term('gloss')}>
+                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                {entry.definitions.map(def => (
+                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                ))}
+                            </ol>
+                        </SideCard>
+
+                        {ety && ety.chain.length > 0 && (
+                            <SideCard title={term('etymology')}>
+                                <p className="text-sm text-black leading-relaxed">
+                                    {term('from')}
+                                    {ety.chain.map((c, i) => (
+                                        <React.Fragment key={i}>
+                                            {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
+                                            <span style={{ color: BLUE }} className="font-medium mx-1">
+                                                {term(c.language)}
+                                            </span>
+                                            {c.form && <span className="font-serif italic font-medium">{c.form}</span>}
+                                            {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
+                                        </React.Fragment>
+                                    ))}.
+                                </p>
+                            </SideCard>
+                        )}
+
+                        {nm.related_entries && nm.related_entries.length > 0 && (
+                            <SideCard title={term('related-entries')}>
+                                <div className="space-y-1">
+                                    {nm.related_entries.map(rel => (
+                                        <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                            {rel.headword}{' '}
+                                            <span className="opacity-55 font-sans text-xs text-black">
+                                                "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                            </span>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </SideCard>
+                        )}
+
+                        {nm.source_citation && (
+                            <SideCard title={term('sources')}>
+                                <span className="text-sm font-medium" style={{ color: GOLD }}>{nm.source_citation}</span>
+                            </SideCard>
+                        )}
+                    </div>
+
+                    {/* Right Column */}
+                    <div className="flex-1 min-w-0 space-y-0 w-full">
+                        <div className="flex flex-col md:flex-row gap-8 items-start w-full">
+                            {/* Properties */}
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
+                                {rootConsonants && (
+                                    <PropRow label={term('root')}>
+                                        <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
+                                            {rootConsonants}
+                                        </Link>
+                                    </PropRow>
+                                )}
+
+                                {entry.phonetics && entry.phonetics.length > 0 && (
+                                    <PropRow label={term('pronunciation')}>
+                                        <div className="space-y-0 mt-1">
+                                            {entry.phonetics.map((ph, idx) => (
+                                                <div key={idx} className="flex flex-col sm:flex-row sm:items-center sm:gap-1 mb-0 last:mb-0">
+                                                    {ph.dialect && (
+                                                        <span className="text-[10px] font-bold text-black/40 uppercase tracking-tighter">
+                                                            {ph.dialect.replace(' (Għawdex)', '').replace(' (Arkajku)', '')}:
+                                                        </span>
+                                                    )}
+                                                    {ph.ipa && <span className="text-[14px] tracking-tighter font-mono whitespace-nowrap">{ph.ipa}</span>}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </PropRow>
+                                )}
+
+                                {patternValue && (
+                                    <PropRow label={patternLabel}>
+                                        <Link to={`/pattern/${pattern?.id}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
+                                            {patternValue}
+                                        </Link>
+                                    </PropRow>
+                                )}
+
+                                <PropRow label={term('gender')}>
+                                    <span className="capitalize">{term(nm.gender)}</span>
+                                </PropRow>
+
+                                <PropRow label={term('plural')} className="col-span-2 sm:col-span-1 md:col-span-1">
+                                    <div className="space-y-1 text-sm">
+                                        {nm.plural_forms.map((f, i) => (
+                                            <p key={i}><span className="opacity-55 text-[0.7rem]">{term('broken-plural')}:</span> <span className="font-serif">{f}</span></p>
+                                        ))}
+                                        {nm.sound_plural && (
+                                            <p><span className="opacity-55 text-[0.7rem]">{term('sound-plural')}:</span> <span className="font-serif">{nm.sound_plural}</span></p>
+                                        )}
+                                        {nm.dual && (
+                                            <p><span className="opacity-55 text-[0.7rem]">{term('dual')}:</span> <span className="font-serif">{nm.dual}</span></p>
+                                        )}
+                                    </div>
+                                </PropRow>
+
+                                {(nm.collective || nm.singulative || nm.diminutive) && (
+                                    <PropRow label={term('morphology')} className="col-span-2 sm:col-span-1 md:col-span-1">
+                                        <div className="space-y-1 text-sm">
+                                            {nm.collective && <p><span className="opacity-55 text-[0.7rem]">{term('collective')}:</span> <span className="font-serif">{nm.collective}</span></p>}
+                                            {nm.singulative && <p><span className="opacity-55 text-[0.7rem]">{term('singulative')}:</span> <span className="font-serif">{nm.singulative}</span></p>}
+                                            {nm.diminutive && <p><span className="opacity-55 text-[0.7rem]">{term('diminutive')}:</span> <span className="font-serif">{nm.diminutive}</span></p>}
+                                        </div>
+                                    </PropRow>
+                                )}
+                            </div>
+
+                            {/* Inflection Table */}
+                            <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
+                                <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                                    {term('inflection-table')}
+                                </h2>
+
+                                {/* Desktop Table View */}
+                                <div className="hidden md:block overflow-x-auto overflow-y-hidden pb-4">
+                                    <table className="w-full text-sm border-collapse md:min-w-[500px]">
+                                        <thead>
+                                            <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('person')}</th>
+                                                <th className="text-left font-semibold text-black pb-2 pr-4">
+                                                    {term('singular')}
+                                                </th>
+                                                <th className="text-left font-semibold text-black pb-2">
+                                                    {term('plural')}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {POSSESSIVE_SUFFIXES.map(suffixObj => (
+                                                <tr key={suffixObj.key} className="border-b border-black/4 whitespace-nowrap">
+                                                    <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
+                                                        {term(suffixObj.key)}
+                                                    </td>
+                                                    <td className="py-1.5 pr-4 font-serif font-normal text-black">
+                                                        {applySuffix(entry.headword, suffixObj.suffix)}
+                                                    </td>
+                                                    <td className="py-1.5 font-serif font-normal text-black">
+                                                        {nm.plural_forms[0] ? applySuffix(nm.plural_forms[0], suffixObj.suffix) : '-'}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {/* Mobile Unspooled View */}
+                                <div className="block md:hidden space-y-6">
+                                    <div className="w-full overflow-hidden">
+                                        <table className="w-full border-collapse table-fixed">
+                                            <thead>
+                                                <tr className="border-b border-black/8 font-semibold text-[10px] uppercase tracking-wider text-black/40">
+                                                    <th className="text-left pb-1 w-24 sm:w-[130px]">{term('person')}</th>
+                                                    <th className="text-left pb-1">{term('singular')}</th>
+                                                    <th className="text-right pb-1">{term('plural')}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-black/2">
+                                                {POSSESSIVE_SUFFIXES.map(suffixObj => (
+                                                    <tr key={`mobile-${suffixObj.key}`}>
+                                                        <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term(suffixObj.key)}</td>
+                                                        <td className="py-2 font-serif text-black text-left break-all text-sm">
+                                                            {applySuffix(entry.headword, suffixObj.suffix)}
+                                                        </td>
+                                                        <td className="py-2 font-serif text-black text-right break-all text-sm">
+                                                            {nm.plural_forms[0] ? applySuffix(nm.plural_forms[0], suffixObj.suffix) : '-'}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                {/* Derived Terms, Usage, and Thesaurus regions */}
+                                <div className="mt-16 md:mt-12 space-y-16 md:space-y-12">
+                                    {/* Usage Example */}
+                                    {entry.definitions[0]?.example_sentences && entry.definitions[0].example_sentences.length > 0 && (
+                                        <div className="w-full">
+                                            <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('usage-example')}</h2>
+                                            {entry.definitions[0].example_sentences.slice(0, 1).map(ex => (
+                                                <div key={ex.id}>
+                                                    <p className="text-sm text-black font-serif text-center md:text-left">{ex.maltese}</p>
+                                                    {ex.english && (
+                                                        <div className="flex mt-1 justify-center md:justify-start">
+                                                            <div className="hidden md:block w-2 h-2 border-l border-b border-black/20 mr-2 -translate-y-1"></div>
+                                                            <p className="text-[13px] text-black/60 italic font-sans flex-1 text-center md:text-left max-w-full sm:max-w-[280px] md:max-w-none">
+                                                                {ex.english}
+                                                            </p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Thesaurus */}
+                                    {((nm.synonyms?.length ?? 0) > 0 || (nm.antonyms?.length ?? 0) > 0) && (
+                                        <div className="w-full">
+                                            <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
+                                            <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-center md:items-start text-center md:text-left">
+                                                {nm.synonyms && nm.synonyms.length > 0 && (
+                                                    <div>
+                                                        <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
+                                                        {nm.synonyms.map(s => (
+                                                            <Link key={s.id} to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline">
+                                                                {s.headword}{' '}
+                                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                                    "{mode === 'standard' ? (s.gloss_en ?? '') : (s.gloss_mt ?? s.gloss_en ?? '')}"
+                                                                </span>
+                                                            </Link>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                                {nm.antonyms && nm.antonyms.length > 0 && (
+                                                    <div>
+                                                        <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
+                                                        {nm.antonyms.map(a => (
+                                                            <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline">
+                                                                {a.headword}{' '}
+                                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                                    "{mode === 'standard' ? (a.gloss_en ?? '') : (a.gloss_mt ?? a.gloss_en ?? '')}"
+                                                                </span>
+                                                            </Link>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
+                        <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
+                            {ety && ety.chain.length > 0 && (
+                                <SideCard title={term('etymology')}>
+                                    <p className="text-sm text-black leading-relaxed">
+                                        {term('from')}
+                                        <span style={{ color: BLUE }} className="font-medium mx-1">
+                                            {term(ety.chain[0].language)}
+                                        </span>
+                                        {ety.chain[0].script && <> <span className="font-arabic">{ety.chain[0].script}</span></>}
+                                        {ety.chain[1] && <> ({ety.chain[1].form})</>}.
+                                    </p>
+                                </SideCard>
+                            )}
+
+                            {nm.related_entries && nm.related_entries.length > 0 && (
+                                <SideCard title={term('related-entries')}>
+                                    <div className="space-y-1">
+                                        {nm.related_entries.map(rel => (
+                                            <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {rel.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                                </span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </SideCard>
+                            )}
+
+                            {nm.source_citation && (
+                                <SideCard title={term('sources')}>
+                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{nm.source_citation}</span>
+                                </SideCard>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {showForm && (
+                <EntryFormModal
+                    entry={editEntry}
+                    onClose={() => setShowForm(false)}
+                    onSaved={() => {
+                        setShowForm(false);
+                        if (onRefetch) onRefetch();
+                        else window.location.reload();
+                    }}
+                    getToken={getToken}
+                />
+            )}
         </div>
     );
 }
@@ -235,13 +648,20 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         const rootStr = entry.root_pattern_form?.root?.consonants;
         const rootObj = entry.root_pattern_form?.root;
         if (!rootStr || !rootObj || !vm.form) return null;
+
+        // Use root-level primary vowels for auto-derivation matching Root.tsx
+        const f1 = rootEntries?.find(e => e.pos === 'verb' && e.verb_morphology?.form === 'I');
+        const f1vm = f1?.verb_morphology;
+        const pvSet = rootObj.vowel_set_perf || f1vm?.vowel_set_perfect || 'a-a';
+        const ipvSet = rootObj.vowel_set_impf || f1vm?.vowel_set_imperfect || 'i-a';
+
         try {
             const rawGen = generateRootForms(
                 rootStr,
-                vsetPerf,
-                vsetImpf,
-                (entry.verb_class || rootObj.strength) as any,
-                (entry.verb_weak_class || rootObj.weak_class) as any,
+                pvSet,
+                ipvSet,
+                (rootObj.strength || f1vm?.verb_class || 'strong') as any,
+                (rootObj.weak_class || f1vm?.weak_class) as any,
                 rootObj.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rootStr)
             );
             // Use siblings if available, otherwise just itself
@@ -252,7 +672,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
             console.error("Auto-derivation error:", e);
             return null;
         }
-    }, [entry, vsetPerf, vsetImpf, vm.form, rootEntries]);
+    }, [entry, rootEntries, vm.form]);
 
     const handleDeleteEntry = async (id: string) => {
         if (!confirm(term('confirm-delete-entry') || 'Are you sure you want to delete this entry permanently?')) return;
@@ -724,18 +1144,9 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             <div className="w-full">
                                                 <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('derived-terms')}</h2>
                                                 <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-10 text-sm mt-3 items-center md:items-start text-center md:text-left">
-                                                    {autoDerived.verbalNoun.value !== '-' && (
-                                                        <DerivedTermLink
-                                                            label={term('verbal-noun')}
-                                                            data={autoDerived.verbalNoun}
-                                                            isAdmin={isActualAdmin}
-                                                            onDelete={() => autoDerived!.verbalNoun.entryId && handleDeleteEntry(autoDerived!.verbalNoun.entryId)}
-                                                            onEdit={() => handleEditDerived(autoDerived!.verbalNoun, 'noun')}
-                                                        />
-                                                    )}
                                                     {autoDerived.passiveParticiple.value !== '-' && (
                                                         <DerivedTermLink
-                                                            label={term('passive-participle')}
+                                                            label={term('passive')}
                                                             data={autoDerived.passiveParticiple}
                                                             isAdmin={isActualAdmin}
                                                             onDelete={() => autoDerived!.passiveParticiple.entryId && handleDeleteEntry(autoDerived!.passiveParticiple.entryId)}
@@ -744,11 +1155,20 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                     )}
                                                     {autoDerived.activeParticiple.value !== '-' && (
                                                         <DerivedTermLink
-                                                            label={term('active-participle')}
+                                                            label={term('active')}
                                                             data={autoDerived.activeParticiple}
                                                             isAdmin={isActualAdmin}
                                                             onDelete={() => autoDerived!.activeParticiple.entryId && handleDeleteEntry(autoDerived!.activeParticiple.entryId)}
                                                             onEdit={() => handleEditDerived(autoDerived!.activeParticiple, 'active')}
+                                                        />
+                                                    )}
+                                                    {autoDerived.verbalNoun.value !== '-' && (
+                                                        <DerivedTermLink
+                                                            label={term('verbal-noun')}
+                                                            data={autoDerived.verbalNoun}
+                                                            isAdmin={isActualAdmin}
+                                                            onDelete={() => autoDerived!.verbalNoun.entryId && handleDeleteEntry(autoDerived!.verbalNoun.entryId)}
+                                                            onEdit={() => handleEditDerived(autoDerived!.verbalNoun, 'noun')}
                                                         />
                                                     )}
                                                 </div>
@@ -955,6 +1375,10 @@ export function Entry() {
 
     if (entry.pos === 'verb' && entry.verb_morphology) {
         return <VerbEntryView entry={entry} onRefetch={refetch} />;
+    }
+
+    if (entry.pos === 'noun' && entry.noun_morphology) {
+        return <NounEntryView entry={entry} onRefetch={refetch} />;
     }
 
     return (

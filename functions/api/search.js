@@ -15,6 +15,8 @@ export async function onRequestGet({ request, env }) {
     const rootType = url.searchParams.get('type') ?? '';
     const vowelSet = url.searchParams.get('v') ?? '';
     const wizen = url.searchParams.get('wizen') ?? '';
+    const form = url.searchParams.get('form') ?? '';
+    const verbType = url.searchParams.get('verb_type') ?? '';
     const source = url.searchParams.get('source') ?? '';
     const rootId = url.searchParams.get('root_id')?.trim().normalize('NFC') ?? '';
 
@@ -35,6 +37,7 @@ export async function onRequestGet({ request, env }) {
     const searchEnglishGloss = url.searchParams.get('gloss') === 'true';
     const includeSuggested = url.searchParams.get('suggested') === 'true';
     const includePending = url.searchParams.get('pending') === 'true';
+    const isRecent = url.searchParams.get('recent') === 'true';
 
     try {
         const tursoUrl = env.TURSO_URL || env.VITE_TURSO_URL;
@@ -63,6 +66,7 @@ export async function onRequestGet({ request, env }) {
             await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_perf TEXT").catch(() => { });
             await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_impf TEXT").catch(() => { });
             await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_impv TEXT").catch(() => { });
+            await db.execute("ALTER TABLE entries ADD COLUMN verb_type TEXT").catch(() => { });
         } catch (e) { }
 
         // FTS5 MATCH query
@@ -165,8 +169,14 @@ export async function onRequestGet({ request, env }) {
         }
 
         if (rootType) {
-            sql += ' AND (r.strength = ? OR e.verb_class = ?)';
-            args.push(rootType, rootType);
+            if (rootType === 'semitic') {
+                sql += " AND (e.source_language IS NULL OR e.source_language IN ('Arabic', 'Berber'))";
+            } else if (rootType === 'romance') {
+                sql += " AND e.source_language IN ('Sicilian', 'Italian', 'Latin', 'French', 'Spanish')";
+            } else {
+                sql += ' AND (r.strength = ? OR e.verb_class = ?)';
+                args.push(rootType, rootType);
+            }
         }
 
         if (vowelSet) {
@@ -177,6 +187,16 @@ export async function onRequestGet({ request, env }) {
         if (wizen) {
             sql += ' AND (pat.wizen_notation = ? OR pat.cv_notation = ? OR e.cv_pattern = ?)';
             args.push(wizen, wizen, wizen);
+        }
+
+        if (form) {
+            sql += ' AND e.verb_form = ?';
+            args.push(form);
+        }
+
+        if (verbType) {
+            sql += ' AND e.verb_type = ?';
+            args.push(verbType);
         }
 
         if (source) {
@@ -190,6 +210,10 @@ export async function onRequestGet({ request, env }) {
         if (r4) { sql += " AND (json_extract(r.consonant_array, '$[3]') = ? OR e.root_consonants LIKE ?)"; args.push(r4.toLowerCase(), '%-' + r4.toLowerCase()); }
 
         const total = Number((await db.execute({ sql: `SELECT COUNT(*) as total ${sql}`, args })).rows[0]?.total ?? 0);
+
+        if (limit === 0) {
+            return json({ results: [], total, query: q });
+        }
 
         // Random logic: only randomize if explicitly asked OR if it's a completely blank search.
         const hasCriteria = q || rootId || pos || rootType || vowelSet || wizen || source || r1 || r2 || r3 || r4;
@@ -207,7 +231,9 @@ export async function onRequestGet({ request, env }) {
             ${sql}
                 `;
 
-        if (isRandomSearch) {
+        if (isRecent) {
+            finalSql += ' ORDER BY e.created_at DESC LIMIT ? OFFSET ?';
+        } else if (isRandomSearch) {
             finalSql += ' ORDER BY RANDOM() LIMIT ? OFFSET ?';
         } else {
             // Sort by match priority: Headword > Root Consonants > (rest)
@@ -227,7 +253,7 @@ export async function onRequestGet({ request, env }) {
                 args.push(normalizedQ, normalizedQ + '%', normalizedQ, normalizedQ);
             }
 
-            finalSql += ` ORDER BY ${prioritySql}, e.headword ASC LIMIT ? OFFSET ?`;
+            finalSql += ` ORDER BY ${prioritySql && prioritySql !== '0' ? prioritySql + ',' : ''} e.headword ASC LIMIT ? OFFSET ?`;
         }
         args.push(limit, offset);
 

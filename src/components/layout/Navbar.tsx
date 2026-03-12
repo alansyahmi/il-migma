@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import { Menu, X, Sun, Moon, Search, Eye, EyeOff, Shield, Keyboard } from 'lucide-react';
@@ -21,6 +21,8 @@ export function Navbar() {
     const [kbOpen, setKbOpen] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const kbRef = useRef<HTMLButtonElement>(null);
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
+    const hamburgerRef = useRef<HTMLButtonElement>(null);
     const navigate = useNavigate();
 
     const insertChar = (char: string) => {
@@ -55,6 +57,17 @@ export function Navbar() {
         { label: term('blog'), href: '/blog' },
         { label: term('help'), href: '/help' },
     ];
+
+    useEffect(() => {
+        if (!menuOpen) return;
+        const handler = (e: MouseEvent) => {
+            if (mobileMenuRef.current?.contains(e.target as Node)) return;
+            if (hamburgerRef.current?.contains(e.target as Node)) return;
+            setMenuOpen(false);
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, [menuOpen]);
 
     return (
         <header className="sticky top-0 z-40 bg-[#F4F3F0]/95 backdrop-blur-sm border-b border-border/50">
@@ -229,6 +242,7 @@ export function Navbar() {
 
                     {/* Hamburger — mobile only */}
                     <button
+                        ref={hamburgerRef}
                         className="md:hidden w-8 h-8 flex items-center justify-center rounded hover:bg-border/40 transition-colors"
                         onClick={() => setMenuOpen(o => !o)}
                         aria-label={term('toggle-menu')}
@@ -240,7 +254,10 @@ export function Navbar() {
 
             {/* Mobile dropdown */}
             {menuOpen && (
-                <div className="md:hidden border-t border-border/50 bg-[#F4F3F0] px-4 py-3 space-y-0.5 animate-fade-in">
+                <div
+                    ref={mobileMenuRef}
+                    className="md:hidden border-t border-border/50 bg-[#F4F3F0] px-4 py-3 space-y-0.5 animate-fade-in"
+                >
                     {showSearch && (
                         <div className="pb-3 mb-1 mt-1 border-b border-border-light">
                             <form onSubmit={handleSearch} className="relative">

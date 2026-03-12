@@ -83,6 +83,9 @@ export function applyReverseImala(stem: string, blocksImala: boolean = false): s
 // ── ie-collapse ────────────────────────────────────────────────────────────
 
 export function collapseIe(word: string, verbForm?: string): string {
+    const vowelsRegex = /(ie|[aeiouàèìòùâêîôû])/gi;
+    const vowelCount = (word.match(vowelsRegex) || []).length;
+
     const matches = [...word.matchAll(/ie/g)];
     if (matches.length === 0) return word;
 
@@ -90,18 +93,34 @@ export function collapseIe(word: string, verbForm?: string): string {
 
     /** decide whether ie should shorten to 'e' (Form III root), 'i' (clitics/standard) */
     const getShortForm = (offset: number) => {
-        if (verbForm === 'III' && offset < 6) return 'e';
+        // Offset check needs to account for possible 'ma ' prefix (3 chars)
+        const rootOffset = word.startsWith('ma ') ? offset - 3 : offset;
+        if ((verbForm === 'III' || verbForm === 'VI') && rootOffset < 6) return 'e';
         return 'i';
     };
 
     if (total > 1) {
         let count = 0;
-        return word.replace(/ie/g, (_match, offset) => {
+        return word.replace(/ie/g, (match, offset) => {
             count++;
             if (count < total) {
                 return getShortForm(offset);
             }
-            return 'ie';
+            // Check single 'ie' rule even for the last match if it's the root 'ie'
+            const rootOffset = word.startsWith('ma ') ? offset - 3 : offset;
+            if ((verbForm === 'III' || verbForm === 'VI') && vowelCount > 2 && rootOffset < 6) {
+                return 'e';
+            }
+            return match;
+        });
+    }
+
+    // Special case for single 'ie' in Form III/VI verbs when they expand (e.g. with suffixes)
+    if ((verbForm === 'III' || verbForm === 'VI') && vowelCount > 2) {
+        return word.replace(/ie/g, (match, offset) => {
+            const rootOffset = word.startsWith('ma ') ? offset - 3 : offset;
+            if (rootOffset < 6) return 'e';
+            return match;
         });
     }
 

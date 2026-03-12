@@ -249,8 +249,8 @@ export async function onRequestPost({ request, env }) {
 
         if (etymology_chain && Array.isArray(etymology_chain) && etymology_chain.length > 0) {
             await client.execute({
-                sql: `INSERT INTO etymologies (id, entry_id, chain, created_at) VALUES (?, ?, ?, ?)`,
-                args: [uid(), id, JSON.stringify(etymology_chain), now()],
+                sql: `INSERT INTO etymologies (id, entry_id, chain) VALUES (?, ?, ?)`,
+                args: [uid(), id, JSON.stringify(etymology_chain)],
             });
         }
 
@@ -368,8 +368,8 @@ export async function onRequestPut({ request, env }) {
             await client.execute({ sql: 'DELETE FROM etymologies WHERE entry_id = ?', args: [id] });
             if (fields.etymology_chain.length > 0) {
                 await client.execute({
-                    sql: `INSERT INTO etymologies (id, entry_id, chain, created_at) VALUES (?, ?, ?, ?)`,
-                    args: [uid(), id, JSON.stringify(fields.etymology_chain), now()],
+                    sql: `INSERT INTO etymologies (id, entry_id, chain) VALUES (?, ?, ?)`,
+                    args: [uid(), id, JSON.stringify(fields.etymology_chain)],
                 });
             }
         }

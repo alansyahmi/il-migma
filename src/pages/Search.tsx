@@ -272,10 +272,14 @@ export function Search() {
         const pos = searchParams.get('pos') || undefined;
         const type = searchParams.get('type') || undefined;
         const source = searchParams.get('source') || undefined;
+        const v = searchParams.get('v') || undefined;
+        const form = searchParams.get('form') || undefined;
+        const pending = searchParams.get('pending') === 'true' || searchParams.get('pending') === null; // default to true if not present to match DEFAULT_FILTERS
+        const suggested = searchParams.get('suggested') === 'true';
         const limit = Number(searchParams.get('limit') ?? DEFAULT_FILTERS.maxResults);
         const random = searchParams.get('random') || undefined;
 
-        apiSearch(q, { pos, type, source, limit, random })
+        apiSearch(q, { pos, type, source, limit, random, v, form, includePending: pending, includeSuggested: suggested })
             .then(res => {
                 setTotal(res.total);
                 // Map API results to the local SearchResult interface

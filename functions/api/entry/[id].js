@@ -127,6 +127,9 @@ export async function onRequestGet({ params, env }) {
             ...Object.fromEntries(Object.entries(entry).filter(([, v]) => v !== null)),
             noun_plural_forms: entry.noun_plural_forms ? JSON.parse(entry.noun_plural_forms) : [],
             tags: entry.tags ? JSON.parse(entry.tags) : [],
+            synonyms: entry.synonyms ? JSON.parse(entry.synonyms) : [],
+            antonyms: entry.antonyms ? JSON.parse(entry.antonyms) : [],
+            related_entries: entry.related_entries ? JSON.parse(entry.related_entries) : [],
             definitions,
             phonetics: phonRes.rows.map(ph => ({
                 ...ph,
@@ -149,9 +152,9 @@ export async function onRequestGet({ params, env }) {
                     gloss: entry.root_gloss || '',
                     etymology: entry.root_etymology || ''
                 },
-                pattern: (entry.pattern_id || entry.cv_pattern) ? {
+                pattern: (entry.pattern_id || entry.cv_notation || entry.cv_pattern) ? {
                     id: entry.pattern_id || '',
-                    cv_notation: entry.cv_notation || entry.cv_pattern,
+                    cv_notation: entry.cv_notation || entry.cv_pattern || '',
                     wizen_notation: entry.wizen_notation || '',
                 } : null,
                 derived_form: entry.derived_form,
@@ -161,23 +164,24 @@ export async function onRequestGet({ params, env }) {
             weak_class: entry.verb_weak_class || entry.root_weak_class || null,
         };
 
+        // ── Shared Related Entries ──────────────────────────────────────────────
+        let related_entries = [];
+        const rc = entry.resolved_root_consonants;
+        if (rc) {
+            const relRes = await db.execute({
+                sql: `SELECT e.id, e.headword, d.text_en AS gloss_en, d.text_mt AS gloss_mt 
+                      FROM entries e
+                      LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
+                      LEFT JOIN roots r ON r.id = rpf.root_id
+                      LEFT JOIN definitions d ON d.entry_id = e.id AND d.sense_number = 1
+                      WHERE (e.root_consonants = ? OR r.consonants = ?) AND e.id != ? LIMIT 10`,
+                args: [rc, rc, entry.id],
+            });
+            related_entries = relRes.rows;
+        }
+
         // Attach Verb Morphology struct from flat DB rows as expected by Frontend
         if (entry.pos === 'verb') {
-            let related_entries = [];
-            const rc = entry.resolved_root_consonants;
-            if (rc) {
-                const relRes = await db.execute({
-                    sql: `SELECT e.id, e.headword, d.text_en AS gloss_en, d.text_mt AS gloss_mt 
-                          FROM entries e
-                          LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
-                          LEFT JOIN roots r ON r.id = rpf.root_id
-                          LEFT JOIN definitions d ON d.entry_id = e.id AND d.sense_number = 1
-                          WHERE (e.root_consonants = ? OR r.consonants = ?) AND e.id != ? LIMIT 10`,
-                    args: [rc, rc, entry.id],
-                });
-                related_entries = relRes.rows;
-            }
-
             payload.verb_morphology = {
                 transitivity: entry.verb_transitivity || 'both',
                 perfective_3sg_m: entry.verb_perfective_3sgm || entry.headword,
@@ -192,7 +196,28 @@ export async function onRequestGet({ params, env }) {
                 vowel_set_perfect: entry.verb_vowel_perf || 'a-a',
                 vowel_set_imperfect: entry.verb_vowel_impf || 'a-a',
                 vowel_set_imperative: entry.verb_vowel_impv || entry.verb_vowel_impf || 'a-a',
-                related_entries,
+                synonyms: payload.synonyms,
+                antonyms: payload.antonyms,
+                related_entries: related_entries.length ? related_entries : payload.related_entries,
+                source_citation: entry.source_citation || null,
+            };
+        }
+
+        // Attach Noun Morphology struct
+        if (entry.pos === 'noun') {
+            payload.noun_morphology = {
+                gender: entry.noun_gender || 'masculine',
+                singular: entry.noun_singular || entry.headword,
+                plural_forms: payload.noun_plural_forms,
+                sound_plural: entry.noun_sound_plural || null,
+                dual: entry.noun_dual || null,
+                diminutive: entry.noun_diminutive || null,
+                collective: entry.noun_collective || null,
+                singulative: entry.noun_singulative || null,
+                synonyms: payload.synonyms,
+                antonyms: payload.antonyms,
+                related_entries: related_entries.length ? related_entries : payload.related_entries,
+                source_citation: entry.source_citation || null,
             };
         }
 

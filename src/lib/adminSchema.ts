@@ -49,10 +49,10 @@ export const ENTRY_HANDLED_FIELDS = [
     'verb_perfective_3sgm', 'verb_imperfective_3sgm', 'verb_verbal_noun', 'verb_vowel_perf',
     'verb_vowel_impf', 'verb_vowel_impv', 'verb_active_ptcp', 'verb_passive_ptcp',
     'adj_masculine', 'adj_feminine', 'adj_plural', 'adj_comparative', 'adj_gender', 'participle_type', 'is_loanword',
-    'source_language', 'definitions', 'etymology_chain', 'phonetics', 'tags',
+    'source_language', 'source_citation', 'definitions', 'etymology_chain', 'phonetics', 'tags',
     'cv_pattern', 'plural_pattern', 'sound_suffix', 'adj_pattern', 'noun_feminine',
     'noun_masculine', 'synonyms', 'antonyms', 'related_entries', 'created_at', 'updated_at',
-    'root_consonants', 'verb_form', 'root_pattern_form_id', 'verb_weak_class'
+    'root_consonants', 'verb_form', 'root_pattern_form_id', 'verb_weak_class', 'verb_type'
 ] as const;
 
 /** Internal-only UI fields that should be stripped from the payload */

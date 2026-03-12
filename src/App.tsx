@@ -24,6 +24,7 @@ import { AdvancedSearch } from '@/pages/AdvancedSearch';
 import { RootSearch } from '@/pages/RootSearch';
 import { Root } from '@/pages/Root';
 import { Suggest } from '@/pages/Suggest';
+import { Browse } from '@/pages/Browse';
 
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string;
@@ -75,6 +76,7 @@ export default function App() {
                                             <Route path="advanced-search" element={<AdvancedSearch />} />
                                             <Route path="root-search" element={<RootSearch />} />
                                             <Route path="suggest" element={<Suggest />} />
+                                            <Route path="browse" element={<Browse />} />
                                             <Route path="*" element={<NotFound />} />
                                         </Route>
                                     </Routes>
