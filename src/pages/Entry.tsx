@@ -338,7 +338,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                     <div className="flex-1 min-w-0 space-y-0 w-full">
                         <div className="flex flex-col md:flex-row gap-8 items-start w-full">
                             {/* Properties */}
-                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
+                            <div className="w-full md:w-96 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-2 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
                                 {rootConsonants && (
                                     <PropRow label={term('root')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
@@ -376,7 +376,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     <span className="capitalize">{term(nm.gender)}</span>
                                 </PropRow>
 
-                                <PropRow label={term('plural')} className="col-span-2 sm:col-span-1 md:col-span-1">
+                                <PropRow label={term('plural')} className="col-span-2 sm:col-span-1">
                                     <div className="space-y-1 text-sm">
                                         {nm.plural_forms.map((f, i) => (
                                             <p key={i}><span className="opacity-55 text-[0.7rem]">{term('broken-plural')}:</span> <span className="font-serif">{f}</span></p>
@@ -391,7 +391,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </PropRow>
 
                                 {(nm.collective || nm.singulative || nm.diminutive) && (
-                                    <PropRow label={term('morphology')} className="col-span-2 sm:col-span-1 md:col-span-1">
+                                    <PropRow label={term('morphology')} className="col-span-2 sm:col-span-1">
                                         <div className="space-y-1 text-sm">
                                             {nm.collective && <p><span className="opacity-55 text-[0.7rem]">{term('collective')}:</span> <span className="font-serif">{nm.collective}</span></p>}
                                             {nm.singulative && <p><span className="opacity-55 text-[0.7rem]">{term('singulative')}:</span> <span className="font-serif">{nm.singulative}</span></p>}
@@ -823,7 +823,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                     <div className="flex-1 min-w-0 space-y-0 w-full">
                         <div className="flex flex-col md:flex-row gap-8 items-start w-full">
                             {/* Properties */}
-                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
+                            <div className="w-full md:w-96 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-2 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
                                 {rootConsonants && (
                                     <PropRow label={term('root')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
@@ -863,7 +863,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </PropRow>
 
 
-                                <PropRow label={term("vowel-set")} className="col-span-2 sm:col-span-1 md:col-span-1">
+                                <PropRow label={term("vowel-set")} className="col-span-2 sm:col-span-1">
                                     <div className="space-y-0 text-sm">
                                         <p>{term('perfect')} <span className="opacity-55 text-[0.7rem]">{term('(past)')}</span>: <span className="font-mono">{vm.vowel_set_perfect}</span></p>
                                         <p>{term('imperfect')} <span className="opacity-55 text-[0.7rem]">{term('(present)')}</span>: <span className="font-mono">{vm.vowel_set_imperfect}</span></p>
