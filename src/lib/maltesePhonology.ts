@@ -391,6 +391,139 @@ export function detectPluralType(headword: string, _soundSuffixes: string[]): Pl
     return null;
 }
 
+// ── DUAL ENGINE ────────────────────────────────────────────────────────────
+
+/**
+ * Generates a theoretical dual form for a noun.
+ * Appends -ajn if the word ends with a guttural (għ, ħ, q, h), otherwise -ejn.
+ * Drops final -a before appending the suffix.
+ */
+export function generateTheoreticalDual(word: string): string {
+    if (!word) return '';
+    const norm = word.toLowerCase().trim().normalize('NFC');
+    
+    // Drop final -a
+    let stem = norm;
+    if (norm.endsWith('a')) {
+        stem = norm.slice(0, -1);
+    }
+    
+    // Check for guttural ending (għ, ħ, q, h)
+    const isGuttural = stem.endsWith('għ') || stem.endsWith('ħ') || stem.endsWith('q') || stem.endsWith('h');
+    const suffix = isGuttural ? 'ajn' : 'ejn';
+
+    // Shorten 'ie' to 'i' in stem before suffix if it follows a consonant
+    // e.g., lsien -> lsin-ejn, ktieb -> ktib-ejn
+    if (stem.endsWith('ie' + (isGuttural ? stem.slice(-2) : stem.slice(-1)))) {
+        // This is complex b/c of guttural digraphs. 
+        // Simpler approach: replace 'ie' with 'i' if it's in the last syllable
+        stem = stem.replace(/ie([^aeiouàèìòùâêîôû]*)$/i, 'i$1');
+    }
+    
+    return stem + suffix;
+}
+
 // ── CONSONANT SET ──────────────────────────────────────────────────────────
+
+
+// ── ELATIVE ENGINE ─────────────────────────────────────────────────────────
+
+/**
+ * Generates theoretical Elative forms for an adjective.
+ * Masc: aCCaC, aCaCC, iCCeC/iCeCC, or iCCaC/iCaCC
+ * Fem: CoCCa
+ */
+export function generateElative(rootConsonants: string, headword: string): { masculine: string; feminine: string } | null {
+    if (!rootConsonants) return null;
+    const roots = rootConsonants.toLowerCase().replace(/[-.,\s]+/g, '-').split('-').filter(Boolean);
+    if (roots.length < 3) return null;
+
+    const c1 = roots[0];
+    const c2 = roots[1];
+    const c3 = roots[2];
+    const isGeminated = c2 === c3;
+    const isGuttural = (c: string) => ['għ', 'ħ', 'q', 'h'].includes(c);
+    
+    // Check headword vowels
+    const headwordVowels = headword.toLowerCase().split('').filter(isVowel);
+    const allVowelsA = headwordVowels.length > 0 && headwordVowels.every(v => v === 'a' || v === 'à' || v === 'â');
+
+    let masc = '';
+    if (allVowelsA) {
+        masc = `a${c1}${c2}a${c3}`;
+    } else if (isGeminated) {
+        masc = `a${c1}a${c2}${c3}`;
+    } else {
+        const v2 = (isGuttural(c1) || isGuttural(c2)) ? 'a' : 'e';
+        // Check if we should use iCCvC or iCvCC (usually triliteral roots use iCCvC)
+        // Most elatives are iCCvC (e.g. iħla, iqsar, itwal)
+        // But for doubled roots we handle separately.
+        masc = `i${c1}${c2}${v2}${c3}`;
+    }
+
+    const fem = `${c1}o${c2}${c3}a`;
+
+    return { masculine: masc, feminine: fem };
+}
+
+// ── NUMERAL ENGINE ─────────────────────────────────────────────────────────
+
+export interface NumeralAutoForms {
+    ordinal?: string;
+    adverbial?: string;
+    fractional_semitic?: string;
+    multiplier_form1?: string;
+    multiplier_form2?: string;
+    distributive?: string;
+    attributive_short?: string;
+    attributive_long?: string;
+}
+
+/**
+ * Generates theoretical numeral-derived forms based on Semitic patterns.
+ */
+export function generateNumeralForms(masculine: string, root_consonants: string): NumeralAutoForms {
+    if (!masculine || !root_consonants) return {};
+    const roots = root_consonants.toLowerCase().replace(/[-.,\s]+/g, '-').split('-').filter(Boolean);
+    if (roots.length < 3) return {};
+
+    const c1 = roots[0];
+    const c2 = roots[1];
+    const c3 = roots[2];
+
+    const forms: NumeralAutoForms = {};
+
+    // 1. Ordinal: CâCeC (fâgħel)
+    // Note: Irregularities like tielet (t-l-t), raba' (r-b-għ), ħames (ħ-m-s)
+    forms.ordinal = `${c1}â${c2}e${c3}`;
+    if (c3 === 'għ' || c3 === 'ħ' || c3 === 'q') {
+        forms.ordinal = `${c1}â${c2}a${c3}`; // Guttural adjustment
+    }
+
+    // 2. Adverbial: masc form + darbiet
+    forms.adverbial = `${masculine} darbiet`;
+
+    // 3. Fractional (Semitic): CoCuC
+    forms.fractional_semitic = `${c1}o${c2}u${c3}`;
+    if (c3 === 'għ' || c3 === 'ħ' || c3 === 'q') {
+        forms.fractional_semitic = `${c1}o${c2}u'`; // e.g. robu'
+    }
+
+    // 4. Multiplier: CCieCi or passive ptcp of Form II (mCeCCet)
+    forms.multiplier_form1 = `${c1}${c2}ie${c3}i`;
+    forms.multiplier_form2 = `m${c1}e${c2}${c3}${c3}et`; // simplified Form II passive ptcp logic
+    if (c3 === 'għ') forms.multiplier_form2 = `m${c1}e${c2}${c2}a'`; // e.g. mrabba'
+
+    // 5. Distributive: CCieC
+    forms.distributive = `${c1}${c2}ie${c3}`;
+
+    // 6. Attributive Forms
+    // Short: masculine/lemma itself usually (e.g. tliet)
+    forms.attributive_short = masculine;
+    // Long: masculine/lemma + t (e.g. tlitt, erbat)
+    forms.attributive_long = masculine.endsWith("'") ? masculine.slice(0, -1) + 'at' : masculine + 't';
+
+    return forms;
+}
 
 export { MALTESE_CONSONANTS, VOWELS };

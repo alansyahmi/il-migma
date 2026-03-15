@@ -84,9 +84,9 @@ export async function onRequestGet({ request, env }) {
         const pos = url.searchParams.get('pos')?.trim() ?? '';
 
         const client = db(env);
-        let sql = `SELECT e.id, e.headword, e.pos, e.noun_gender, e.verb_class, e.verb_weak_class,
+        let sql = `SELECT e.id, e.headword, e.pos, e.gender, e.verb_class, e.verb_weak_class,
                          e.is_loanword, e.source_language, e.created_at, e.verb_form,
-                         e.verb_vowel_perf, e.verb_vowel_impf, e.tags, e.noun_plural_forms,
+                         e.verb_vowel_perf, e.verb_vowel_impf, e.tags, e.inflections_pl,
                          COALESCE(e.root_consonants, r.consonants) AS root_consonants,
                          d.text_en
                   FROM entries e
@@ -267,6 +267,14 @@ export async function onRequestPost({ request, env }) {
         // Update FTS
         try { await client.execute(`INSERT INTO entries_fts(entries_fts) VALUES('rebuild')`); } catch { }
 
+        // Reciprocal Updates
+        const syns = body.synonyms || [];
+        const ants = body.antonyms || [];
+        const related = body.related_entries || [];
+        if (syns.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'synonyms', syns);
+        if (ants.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'antonyms', ants);
+        if (related.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'related_entries', related);
+
         return json({ id, created: true }, 201);
     } catch (e) {
         return json({ error: e.message }, 500);
@@ -387,6 +395,17 @@ export async function onRequestPut({ request, env }) {
 
         try { await client.execute(`INSERT INTO entries_fts(entries_fts) VALUES('rebuild')`); } catch { }
 
+        // Reciprocal Updates
+        const currentHeadword = body.headword || (await client.execute({ sql: 'SELECT headword FROM entries WHERE id = ?', args: [id] })).rows[0]?.headword;
+        const currentPos = body.pos || (await client.execute({ sql: 'SELECT pos FROM entries WHERE id = ?', args: [id] })).rows[0]?.pos;
+        
+        const syns = body.synonyms || [];
+        const ants = body.antonyms || [];
+        const related = body.related_entries || [];
+        if (syns.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'synonyms', syns);
+        if (ants.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'antonyms', ants);
+        if (related.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'related_entries', related);
+
         return json({ id, updated: true });
     } catch (e) {
         return json({ error: e.message }, 500);
@@ -447,6 +466,58 @@ function json(data, status = 200) {
 
 function unauthorized() {
     return json({ error: 'Unauthorized — admin role required' }, 401);
+}
+
+async function syncReciprocalRelationships(client, currentId, currentHeadword, currentPos, relType, targetItems) {
+    if (!targetItems || !Array.isArray(targetItems)) return;
+    
+    // Fetch current entry's first definition for the reciprocal gloss
+    const currentDefRes = await client.execute({
+        sql: `SELECT text_en, text_mt FROM definitions WHERE entry_id = ? AND sense_number = 1`,
+        args: [currentId]
+    });
+    const currentGlossEn = currentDefRes.rows[0]?.text_en || '';
+    const currentGlossMt = currentDefRes.rows[0]?.text_mt || '';
+
+    for (const target of targetItems) {
+        const targetId = target.id || target.headword; // Fallback to headword if ID is missing (though unlikely in UI)
+        if (!targetId || targetId === currentId) continue;
+
+        const targetRes = await client.execute({
+            sql: `SELECT synonyms, antonyms, related_entries FROM entries WHERE id = ? OR headword = ?`,
+            args: [targetId, targetId]
+        });
+        if (targetRes.rows.length === 0) continue;
+
+        const targetData = targetRes.rows[0];
+        const actualTargetId = targetData.id;
+        
+        // Don't recurse infinitely
+        if (actualTargetId === currentId) continue;
+
+        let targetList = [];
+        try {
+            const raw = targetData[relType];
+            targetList = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : [];
+        } catch (e) {
+            targetList = [];
+        }
+
+        const exists = targetList.some(item => item.id === currentId || item.headword === currentHeadword);
+        if (!exists) {
+            targetList.push({
+                id: currentId,
+                headword: currentHeadword,
+                pos: currentPos,
+                gloss_en: currentGlossEn,
+                gloss_mt: currentGlossMt
+            });
+            await client.execute({
+                sql: `UPDATE entries SET ${relType} = ?, updated_at = ? WHERE id = ?`,
+                args: [JSON.stringify(targetList), now(), actualTargetId]
+            });
+        }
+    }
 }
 
 

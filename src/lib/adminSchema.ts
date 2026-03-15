@@ -1,13 +1,12 @@
 /**
  * src/lib/adminSchema.ts
- * Single source of truth for admin data field definitions and payload construction.
+ * Refactored for Normalized Semitic Morphology.
  */
 
 import type { RootFormData } from './adminUtils';
 
 // ── ROOTS ───────────────────────────────────────────────────────────────────
 
-/** Fields explicitly handled by the RootFormModal */
 export const ROOT_HANDLED_FIELDS = [
     'id', 'consonants', 'consonant_array', 'strength', 'weak_class',
     'gloss', 'etymology', 'source', 'notes', 'vowel_set_perf',
@@ -15,7 +14,6 @@ export const ROOT_HANDLED_FIELDS = [
     'related_entries', 'created_at', 'updated_at', 'hidden_forms', 'is_imala_blocked'
 ] as const;
 
-/** Builds the root API payload, serializing complex fields to JSON */
 export function buildRootPayload(form: RootFormData): Record<string, any> {
     return {
         id: form.id,
@@ -32,6 +30,7 @@ export function buildRootPayload(form: RootFormData): Record<string, any> {
         synonyms: JSON.stringify(form.synonyms || []),
         antonyms: JSON.stringify(form.antonyms || []),
         related_entries: JSON.stringify(form.related_entries || []),
+        // Linguistic logic for Maltese phonology
         is_imala_blocked: !!form.is_imala_blocked ||
             form.vowel_set_perf === 'a-a' ||
             form.vowel_set_impf === 'a-a' ||
@@ -40,30 +39,77 @@ export function buildRootPayload(form: RootFormData): Record<string, any> {
     };
 }
 
-// ── ENTRIES ─────────────────────────────────────────────────────────────────
+// ── ENTRIES (REFACTORED) ─────────────────────────────────────────────────────
 
-/** Fields explicitly handled by the EntryFormModal */
+/** * Unified Fields: 
+ * - gender: Replaces noun_gender, adj_gender, participle_gender
+ * - lemma_base: Replaces noun_singular, adj_masculine
+ * - inflections_pl: Replaces noun_plural_forms, adj_plural
+ * - form_fem: Replaces noun_feminine, adj_feminine
+ */
 export const ENTRY_HANDLED_FIELDS = [
-    'id', 'headword', 'pos', 'noun_gender', 'noun_singular', 'noun_plural_forms',
-    'noun_sound_plural', 'noun_dual', 'noun_type', 'verb_class', 'verb_transitivity',
-    'verb_perfective_3sgm', 'verb_imperfective_3sgm', 'verb_verbal_noun', 'verb_vowel_perf',
+    'id', 'headword', 'pos', 'gender', 'lemma_base', 'inflections_pl',
+    'form_fem', 'form_masc', 'dual_form', 'diminutive_form',
+    'is_collective', 'is_singulative', 'vowel_set_sg', 'vowel_set_pl',
+    'vowel_set_opp', 'vowel_set_dual',
+    'verb_class', 'verb_transitivity', 'verb_perfective_3sgm',
+    'verb_imperfective_3sgm', 'verb_verbal_noun', 'verb_vowel_perf',
     'verb_vowel_impf', 'verb_vowel_impv', 'verb_active_ptcp', 'verb_passive_ptcp',
-    'adj_masculine', 'adj_feminine', 'adj_plural', 'adj_comparative', 'adj_gender', 'participle_type', 'is_loanword',
-    'source_language', 'source_citation', 'definitions', 'etymology_chain', 'phonetics', 'tags',
-    'cv_pattern', 'plural_pattern', 'sound_suffix', 'adj_pattern', 'noun_feminine',
-    'noun_masculine', 'synonyms', 'antonyms', 'related_entries', 'created_at', 'updated_at',
-    'root_consonants', 'verb_form', 'root_pattern_form_id', 'verb_weak_class', 'verb_type'
+    'elative_form', 'participle_type', 'is_loanword',
+    'numeral_type', 'form_attributive_short', 'form_attributive_long',
+    'source_language', 'source_citation', 'definitions', 'etymology_chain',
+    'phonetics', 'tags', 'cv_pattern', 'morph_pattern', 'sound_suffix',
+    'synonyms', 'antonyms', 'related_entries', 'created_at', 'updated_at',
+    'root_consonants', 'verb_form', 'root_pattern_form_id', 'verb_weak_class', 'verb_type',
+    'is_inflectable', 'usage_example', 'usage_example_en'
 ] as const;
 
-/** Internal-only UI fields that should be stripped from the payload */
 export const ENTRY_PRIVATE_FIELDS = [
     '_rootConsonants', '_formLabel', '_hasDual', '_pluralType', '_adjPluralType', '_weakClass',
+    '_sound_suffix', '_adj_sound_suffix', '_inheritedPattern'
 ] as const;
 
-/** 
- * Builds the entry API payload.
- * Strips private fields and serializes arrays/objects correctly.
+const COMMON_FIELDS = [
+    'id', 'headword', 'pos', 'is_loanword', 'source_language',
+    'source_citation', 'definitions', 'etymology_chain', 'phonetics', 'tags',
+    'synonyms', 'antonyms', 'related_entries', 'is_inflectable',
+    'usage_example', 'usage_example_en', 'root_consonants'
+];
+
+/** * Mapping POS to the Unified Database Columns.
+ * UI will interpret 'lemma_base' as 'Singular' for Nouns and 'Masc' for Adjectives.
  */
+const POS_FEATURES: Record<string, string[]> = {
+    'noun': [
+        ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc',
+        'inflections_pl', 'dual_form', 'diminutive_form', 'is_collective',
+        'is_singulative', 'morph_pattern', 'sound_suffix', 
+        'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'
+    ],
+    'verb': [
+        ...COMMON_FIELDS, 'verb_class', 'verb_transitivity', 'verb_perfective_3sgm',
+        'verb_imperfective_3sgm', 'verb_verbal_noun', 'verb_vowel_perf',
+        'verb_vowel_impf', 'verb_vowel_impv', 'verb_active_ptcp', 'verb_passive_ptcp',
+        'cv_pattern', 'verb_form', 'verb_weak_class', 'verb_type'
+    ],
+    'adjective': [
+        ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc', 'inflections_pl',
+        'dual_form', 'diminutive_form', 'elative_form', 'morph_pattern', 'sound_suffix',
+        'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'
+    ],
+    'participle': [
+        ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc', 'inflections_pl',
+        'dual_form', 'diminutive_form', 'elative_form', 'participle_type', 'morph_pattern',
+        'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'
+    ],
+    'pronoun': [...COMMON_FIELDS, 'gender', 'lemma_base', 'inflections_pl'],
+    'numeral': [
+        ...COMMON_FIELDS, 'gender', 'lemma_base', 'inflections_pl', 'morph_pattern',
+        'form_fem', 'form_masc', 'vowel_set_sg', 'vowel_set_pl',
+        'numeral_type', 'form_attributive_short', 'form_attributive_long'
+    ],
+};
+
 export function buildEntryPayload(form: any): Record<string, any> {
     const payload: Record<string, any> = { ...form };
 
@@ -72,34 +118,44 @@ export function buildEntryPayload(form: any): Record<string, any> {
         delete payload[f];
     });
 
-    // Map special UI-only fields back to DB names if needed
-    // In this case, modal uses form._formLabel -> payload.verb_form
-    // and form._rootConsonants -> payload.root_consonants
-    // and form._weakClass -> payload.verb_weak_class
+    const pos = form.pos?.toLowerCase() || '';
+    const allowedFields = POS_FEATURES[pos] || COMMON_FIELDS;
+
+    // UI-to-DB Logic Mapping
     payload.verb_form = form._formLabel;
     payload.root_consonants = form._rootConsonants;
     payload.verb_weak_class = form._weakClass || null;
 
-    // Normalization of complex fields
-    payload.noun_singular = form.pos === 'noun' ? (form.noun_singular || form.headword) : form.noun_singular;
+    // Filter to only allowed fields
+    Object.keys(payload).forEach(key => {
+        if (!allowedFields.includes(key)) {
+            delete payload[key];
+        }
+    });
 
-    // Convert comma-separated strings to arrays
-    if (typeof form.noun_plural_forms === 'string') {
-        payload.noun_plural_forms = form.noun_plural_forms.split(',').map((s: string) => s.trim()).filter(Boolean);
-    }
-    if (typeof form.tags === 'string') {
-        payload.tags = form.tags.split(',').map((s: string) => s.trim()).filter(Boolean);
-    }
+    // Serialization & Normalization
+    payload.is_collective = form.is_collective ? 1 : 0;
+    payload.is_singulative = form.is_singulative ? 1 : 0;
+    payload.is_loanword = form.is_loanword ? 1 : 0;
+    payload.is_inflectable = form.is_inflectable ? 1 : 0;
 
-    // Ensure boolean -> boolean (api handles 0/1)
-    payload.is_loanword = !!form.is_loanword;
+    // Ensure array consistency
+    const toArray = (val: any) => typeof val === 'string'
+        ? val.split(',').map(s => s.trim()).filter(Boolean)
+        : (val || []);
+
+    payload.tags = toArray(form.tags);
+    payload.inflections_pl = toArray(payload.inflections_pl);
+
+    // JSON fields
+    const jsonFields = ['definitions', 'phonetics', 'etymology_chain', 'synonyms', 'antonyms', 'related_entries'];
+    jsonFields.forEach(field => {
+        payload[field] = form[field] || [];
+    });
 
     return payload;
 }
 
-// ── SHARED ──────────────────────────────────────────────────────────────────
-
-/** Shared null normalizer for DB consistency */
 export function n(val: unknown): unknown {
     if (val === '' || val === undefined) return null;
     if (typeof val === 'string') return val.trim().normalize('NFC');

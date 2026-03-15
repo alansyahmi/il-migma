@@ -10,6 +10,17 @@ interface SubPartsProps {
 export function SubParts({ entry, showTransitivity = false, layout = 'dots' }: SubPartsProps) {
     const { term } = useLinguisticMode();
 
+    const tagsArr: string[] = Array.isArray(entry.tags)
+        ? entry.tags
+        : (typeof entry.tags === 'string' && entry.tags
+            ? (() => { try { return JSON.parse(entry.tags as any); } catch { return []; } })()
+            : []);
+
+    const titleTags = tagsArr
+        .filter(t => t.startsWith('\\'))
+        .map(t => t.slice(1).replace('$', '').trim().toUpperCase())
+        .filter(Boolean);
+
     if (entry.pos === 'verb' && entry.verb_morphology) {
         const vm = entry.verb_morphology;
         const strengthRaw = entry.verb_class || entry.root_pattern_form?.root?.strength || 'strong';
@@ -27,7 +38,8 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots' }: S
                     const upperTag = tag.toUpperCase();
                     return upperTag !== 'STRONG' && upperTag !== 'WEAK' && upperTag !== strengthRaw.toUpperCase() && upperTag !== (weakClassRaw?.toUpperCase() ?? '');
                 })
-                .map(tag => term(tag).toUpperCase())
+                .map(tag => term(tag).toUpperCase()),
+            ...titleTags
         ].filter(Boolean) as string[];
 
         if (showTransitivity && vm.transitivity) {
@@ -37,12 +49,21 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots' }: S
     }
 
     // Noun / Adjective / Other
+    // `tags` may arrive as a raw JSON string from the search API — parse it safely.
+
+    const gender = entry.noun_morphology?.gender || 
+        entry.adjective_morphology?.gender || 
+        entry.participle_gender || 
+        (entry as any).noun_gender || 
+        (entry as any).adj_gender || 
+        (entry as any).gender;
+
     const parts = [
         term(entry.pos).toUpperCase(),
+        gender ? term(gender).toUpperCase() : null,
         (entry as any).noun_type ? term((entry as any).noun_type).toUpperCase() : null,
-        (entry as any).noun_gender ? term((entry as any).noun_gender).toUpperCase() : null,
-        entry.tags ? entry.tags.map(t => term(t.trim()).toUpperCase()) : null
-    ].flat().filter(Boolean) as string[];
+        ...titleTags
+    ].filter(Boolean) as string[];
 
     return <SubPartsRenderer parts={parts} layout={layout} />;
 }
@@ -72,4 +93,3 @@ function SubPartsRenderer({ parts, layout }: { parts: string[], layout: 'dots' |
     );
 }
 
-// Remove the old return logic from main component

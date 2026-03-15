@@ -5,7 +5,8 @@ import type { LinguisticMode } from '@/types';
 
 export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabised: string }> = {
     // Morphological patterns
-    'cv-pattern': { en: 'CV Pattern', standard: "Mudell ta' CV", arabised: "Mudell ta' Wiżen" },
+    'cv-pattern': { en: 'CV Pattern', standard: "Mudell ta' CV", arabised: "Mudell ta' CV" },
+    'wizen-pattern': { en: 'Wiżen Pattern', standard: "Mudell ta' Wiżen", arabised: "Mudell ta' Wiżen" },
     'demonym': { en: 'Demonym', standard: 'Demonym', arabised: 'Nisba' },
     'root': { en: 'Root', standard: 'Għerq', arabised: 'Ġidra' },
     'weak': { en: 'Weak', standard: 'Dgħajjef', arabised: 'Magħlul' },

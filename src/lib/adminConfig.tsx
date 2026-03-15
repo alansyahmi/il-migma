@@ -68,6 +68,13 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const getValues = (category: string) => {
         const items = getCategoryItems(category);
         if (items.length > 0) {
+            if (category === 'verb_preset') {
+                return items.map(i => ({ form: i.key, data: i.value }));
+            }
+            if (category === 'cv_wizen_pattern' || category === 'broken_pattern' || category === 'adjective_pattern') {
+                return items.map(i => i.value);
+            }
+            
             const first = items[0];
             const isComplex = typeof first.value === 'object' && first.value !== null && !('en' in first.value);
             if (isComplex) {

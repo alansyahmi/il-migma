@@ -125,7 +125,7 @@ export async function onRequestGet({ params, env }) {
 
         const payload = {
             ...Object.fromEntries(Object.entries(entry).filter(([, v]) => v !== null)),
-            noun_plural_forms: entry.noun_plural_forms ? JSON.parse(entry.noun_plural_forms) : [],
+            inflections_pl: entry.inflections_pl ? JSON.parse(entry.inflections_pl) : [],
             tags: entry.tags ? JSON.parse(entry.tags) : [],
             synonyms: entry.synonyms ? JSON.parse(entry.synonyms) : [],
             antonyms: entry.antonyms ? JSON.parse(entry.antonyms) : [],
@@ -200,25 +200,58 @@ export async function onRequestGet({ params, env }) {
                 antonyms: payload.antonyms,
                 related_entries: related_entries.length ? related_entries : payload.related_entries,
                 source_citation: entry.source_citation || null,
+                is_inflectable: entry.is_inflectable,
+                usage_example: entry.usage_example,
+                usage_example_en: entry.usage_example_en,
             };
         }
 
         // Attach Noun Morphology struct
         if (entry.pos === 'noun') {
+            const isColl = Boolean(entry.is_collective);
+            const isSing = Boolean(entry.is_singulative);
             payload.noun_morphology = {
-                gender: entry.noun_gender || 'masculine',
-                singular: entry.noun_singular || entry.headword,
-                plural_forms: payload.noun_plural_forms,
-                sound_plural: entry.noun_sound_plural || null,
-                dual: entry.noun_dual || null,
-                diminutive: entry.noun_diminutive || null,
-                collective: entry.noun_collective || null,
-                singulative: entry.noun_singulative || null,
+                gender: entry.gender || 'masculine',
+                singular: entry.lemma_base || entry.headword,
+                plural_forms: payload.inflections_pl,
+                sound_plural: entry.sound_suffix || null,
+                dual: entry.dual_form || null,
+                diminutive: entry.diminutive_form || null,
+                collective: isSing ? entry.form_fem : null,
+                singulative: isColl ? entry.form_fem : null,
+                feminine: (!isColl && !isSing && entry.gender === 'masculine') ? entry.form_fem : null,
+                masculine: (!isColl && !isSing && entry.gender === 'feminine') ? entry.form_masc : null,
+                is_inflectable: Boolean(entry.is_inflectable),
+                usage_example: entry.usage_example,
+                usage_example_en: entry.usage_example_en,
                 synonyms: payload.synonyms,
                 antonyms: payload.antonyms,
                 related_entries: related_entries.length ? related_entries : payload.related_entries,
                 source_citation: entry.source_citation || null,
+                morph_pattern: entry.morph_pattern || null,
             };
+        }
+
+        // Attach Adjective Morphology struct
+        if (entry.pos === 'adjective' || entry.pos === 'participle') {
+            payload.adjective_morphology = {
+                masculine: entry.lemma_base || entry.headword,
+                feminine: entry.form_fem || null,
+                plural: payload.inflections_pl?.join(', ') || null, 
+                elative: entry.elative_form || null,
+                // Optional vowel sets
+                vowel_set_sg: entry.vowel_set_sg || null,
+                vowel_set_pl: entry.vowel_set_pl || null,
+                synonyms: payload.synonyms,
+                antonyms: payload.antonyms,
+                related_entries: related_entries.length ? related_entries : payload.related_entries,
+                source_citation: entry.source_citation || null,
+                morph_pattern: entry.morph_pattern || null,
+            };
+            // Participles use adjective morphology but have a type
+            if (entry.pos === 'participle') {
+                payload.participle_type = entry.participle_type || 'active';
+            }
         }
 
         return json({ entry: payload });

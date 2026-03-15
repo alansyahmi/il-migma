@@ -176,8 +176,11 @@ export const MOCK_ENTRIES: Entry[] = [
             gender: 'masculine',
             singular: 'ktieb',
             plural_forms: ['kotba'],
+            plural_pattern: 'CvCCa',
             diminutive: 'ktejjeb',
         },
+        cv_pattern: 'CCâC',
+        plural_pattern: 'CvCCa',
         definitions: [
             {
                 id: 'def-ktieb-1',
@@ -941,6 +944,26 @@ export const MOCK_ENTRIES: Entry[] = [
         definitions: [
             { id: 'def-bieda-1', sense_number: 1, text_en: 'to till the land in a group', text_mt: "li jbeddja l-art b'grupp" }
         ],
+        is_loanword: false,
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+    },
+    {
+        id: 'entry-lsien',
+        headword: 'lsien',
+        pos: 'noun',
+        cv_pattern: 'CCâC',
+        plural_pattern: 'iCCCa',
+        definitions: [
+            { id: 'def-lsien-1', sense_number: 1, text_en: 'tongue', text_mt: 'lsien' },
+            { id: 'def-lsien-2', sense_number: 2, text_en: 'language', text_mt: 'ilsien' }
+        ],
+        noun_morphology: {
+            gender: 'masculine',
+            singular: 'lsien',
+            plural_forms: ['ilsna'],
+            plural_pattern: 'iCCCa',
+        },
         is_loanword: false,
         created_at: '2024-01-01T00:00:00Z',
         updated_at: '2024-01-01T00:00:00Z',

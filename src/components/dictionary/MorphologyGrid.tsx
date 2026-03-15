@@ -10,7 +10,8 @@ interface MorphologyGridProps {
 
 export function MorphologyGrid({ entry }: MorphologyGridProps) {
     const { term } = useLinguisticMode();
-    const isTheoretical = entry.tags?.includes('THEORETICAL') || entry.verb_morphology?.root_tags?.includes('THEORETICAL');
+    const isTheoretical = entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || entry.verb_morphology?.root_tags?.includes('THEORETICAL');
+    const isElativeDisabled = entry.tags?.some(tag => tag && tag.includes('$'));
 
     if (entry.pos === 'noun' && entry.noun_morphology) {
         const m = entry.noun_morphology;
@@ -70,11 +71,60 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                         {term('morphology')} — {term('adjective')}
                     </span>
                 </div>
-                <div className="grid grid-cols-3 divide-x divide-y divide-border-light">
+                {/* Mobile: vertical layout (3 columns) */}
+                <div className="grid grid-cols-3 md:hidden divide-x divide-y divide-border-light">
                     <Cell label={term('masculine')} value={<strong className="font-headword">{m.masculine}</strong>} />
                     <Cell label={term('feminine')} value={<strong className="font-headword">{m.feminine}</strong>} />
                     <Cell label={term('plural')} value={<strong className="font-headword">{m.plural}</strong>} />
-                    {m.elative && <Cell label={term('elative')} value={m.elative} />}
+                    {m.elative && !isElativeDisabled && <Cell label={term('elative')} value={m.elative} />}
+                </div>
+                {/* Desktop: horizontal layout (row) */}
+                <div className="hidden md:grid grid-cols-1 divide-y divide-border-light">
+                    <div className="grid grid-cols-4 divide-x divide-border-light">
+                        <Cell label={term('masculine')} value={<strong className="font-headword">{m.masculine}</strong>} />
+                        <Cell label={term('feminine')} value={<strong className="font-headword">{m.feminine}</strong>} />
+                        <Cell label={term('plural')} value={<strong className="font-headword">{m.plural}</strong>} />
+                        {m.elative && !isElativeDisabled ? 
+                            <Cell label={term('elative')} value={m.elative} /> : 
+                            <div></div> /* Empty cell to maintain grid */
+                        }
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (entry.pos === 'participle') {
+        return (
+            <div className="rounded-lg border border-border-light bg-surface-soft overflow-hidden">
+                <div className="px-3 py-1.5 bg-[#1034A6]/5 border-b border-border-light">
+                    <span className="text-xs font-semibold text-[#1034A6] uppercase tracking-wider">
+                        {term('morphology')} — {term('participle')}
+                    </span>
+                </div>
+                {/* Mobile: vertical layout */}
+                <div className="grid grid-cols-2 md:hidden divide-x divide-y divide-border-light">
+                    <Cell 
+                        label={term('type')} 
+                        value={<Badge variant="pos">{term(entry.participle_type || 'participle')}</Badge>} 
+                    />
+                    <Cell 
+                        label={term('gender')} 
+                        value={<Badge variant="pos">{term(entry.participle_gender || 'neutral')}</Badge>} 
+                    />
+                </div>
+                {/* Desktop: horizontal layout (row) */}
+                <div className="hidden md:grid grid-cols-1 divide-y divide-border-light">
+                    <div className="grid grid-cols-2 divide-x divide-border-light">
+                        <Cell 
+                            label={term('type')} 
+                            value={<Badge variant="pos">{term(entry.participle_type || 'participle')}</Badge>} 
+                        />
+                        <Cell 
+                            label={term('gender')} 
+                            value={<Badge variant="pos">{term(entry.participle_gender || 'neutral')}</Badge>} 
+                        />
+                    </div>
                 </div>
             </div>
         );

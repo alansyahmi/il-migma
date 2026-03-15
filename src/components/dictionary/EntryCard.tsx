@@ -29,7 +29,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
     const { term } = useLinguisticMode();
     const [activeTab, setActiveTab] = useState('definitions');
     const [saved, setSaved] = useState(false);
-    const isTheoretical = entry.tags?.includes('THEORETICAL') || entry.verb_morphology?.root_tags?.includes('THEORETICAL');
+    const isTheoretical = entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || entry.verb_morphology?.root_tags?.includes('THEORETICAL');
 
     const primaryIPA = entry.phonetics?.find(p => p.dialect === 'Standard')?.ipa
         ?? entry.phonetics?.[0]?.ipa;
@@ -122,9 +122,11 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                 <Badge variant="source">← {entry.source_language}</Badge>
                             )}
                             <RootPatternBadge form={entry.root_pattern_form} />
-                            {entry.tags?.map(t => (
-                                <Badge key={t} variant="tag">{t}</Badge>
-                            ))}
+                            {entry.tags?.filter(t => !t.startsWith('\\')).map(t => {
+                                const clean = t.replace('$', '').trim();
+                                if (!clean) return null;
+                                return <Badge key={t} variant="tag">{clean}</Badge>;
+                            })}
                         </div>
                     </div>
 

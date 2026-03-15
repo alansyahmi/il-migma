@@ -14,6 +14,7 @@ export type POS =
     | 'pronoun'
     | 'interrogative'
     | 'numeral'
+    | 'participle'
     | 'interjection';
 
 export type Gender = 'masculine' | 'feminine' | 'neutral';
@@ -83,8 +84,21 @@ export interface NounMorphology {
     sound_plural?: string;
     dual?: string;
     diminutive?: string;
-    collective?: string;           // for collective nouns (e.g. siġra/siġar)
-    singulative?: string;
+    collective?: string;           // collective form
+    singulative?: string;          // singulative form
+    is_collective?: boolean;       // flag if the lemma itself is collective
+    is_singulative?: boolean;      // flag if the lemma itself is singulative
+    vowel_set_sg?: string;
+    vowel_set_pl?: string;
+    vowel_set_opp?: string;
+    vowel_set_dual?: string;
+    feminine?: string;
+    masculine?: string;
+    morph_pattern?: string;
+    plural_pattern?: string; // keeping for internal use during transition
+    is_inflectable?: boolean;
+    usage_example?: string;
+    usage_example_en?: string;
     // Common metadata
     synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
     antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
@@ -141,10 +155,12 @@ export interface VerbMorphology {
     weak_class?: string;
     // Root classification tags shown in sub-header
     root_tags?: string[];          // e.g. ['BASE', 'STRONG'] or ['BASE', 'WEAK', 'HOLLOW']
-    // Vowel sets — stored separately per tense
     vowel_set_perfect: string;    // e.g. "i-e" for kiteb (perfect)
     vowel_set_imperfect: string;  // e.g. "i-e" for kiteb (imperfect/attached)
     vowel_set_imperative: string; // e.g. "i-e" for kiteb (imperative)
+    is_inflectable?: boolean;
+    usage_example?: string;
+    usage_example_en?: string;
     // Full conjugation paradigm (optional — engine auto-generates if absent)
     conjugation?: VerbConjugationTable;
     // Thesaurus
@@ -156,11 +172,38 @@ export interface VerbMorphology {
     source_citation?: string;
 }
 
+export interface NumeralMorphology {
+    numeral_type: 'cardinal' | 'ordinal' | 'adverbial' | 'fractional' | 'multiplier' | 'distributive';
+    lemma_masc: string;
+    lemma_fem: string;
+    form_attributive_short?: string;
+    form_attributive_long?: string;
+    form_opposite?: string;
+    inflections_pl?: string[];
+    // Common metadata
+    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    morph_pattern?: string;
+    source_citation?: string;
+}
+
 export interface AdjectiveMorphology {
+    gender?: Gender;
     masculine: string;
     feminine: string;
     plural: string;
     elative?: string;             // "most X" form
+    vowel_set_sg?: string;
+    vowel_set_pl?: string;
+    vowel_set_opp?: string;
+    vowel_set_dual?: string;
+    // Thesaurus
+    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    // Related entries
+    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    morph_pattern?: string;
     source_citation?: string;
 }
 
@@ -287,6 +330,7 @@ export interface Entry {
     noun_morphology?: NounMorphology;
     verb_morphology?: VerbMorphology;
     adjective_morphology?: AdjectiveMorphology;
+    numeral_morphology?: NumeralMorphology;
 
     definitions: Definition[];
     subentries?: SubEntry[];
@@ -300,7 +344,25 @@ export interface Entry {
     source_language?: SourceLanguage;
     tags?: string[];
 
-    // Extracted flat verb fields (Admin DB workflow)
+    // Unified Normalised Fields
+    gender?: string;
+    lemma_base?: string;
+    inflections_pl?: string[];
+    form_fem?: string;
+    form_masc?: string;
+    morph_pattern?: string;
+    dual_form?: string;
+    diminutive_form?: string;
+    elative_form?: string;
+    numeral_type?: string;
+    form_attributive_short?: string;
+    form_attributive_long?: string;
+    form_opposite?: string;
+
+    // Verb specifics (maintained for display logic)
+    cv_pattern?: string;
+    plural_pattern?: string;
+    wizen_notation?: string;
     verb_class?: string;
     verb_weak_class?: string;
     verb_vowel_perf?: string;
@@ -309,6 +371,24 @@ export interface Entry {
     verb_verbal_noun?: string;
     verb_active_ptcp?: string;
     verb_passive_ptcp?: string;
+    is_inflectable?: boolean;
+    usage_example?: string;
+    usage_example_en?: string;
+    verb_type?: string;
+
+    // Participle specifics
+    participle_type?: 'active' | 'passive';
+    participle_gender?: Gender;
+
+    // Noun specifics
+    is_collective?: boolean;
+    is_singulative?: boolean;
+
+    // Noun/Adj additions for Admin/Display
+    vowel_set_sg?: string;
+    vowel_set_pl?: string;
+    vowel_set_opp?: string;
+    vowel_set_dual?: string;
 
     created_at: string;
     updated_at: string;

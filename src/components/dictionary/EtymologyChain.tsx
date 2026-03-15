@@ -47,7 +47,7 @@ export function EtymologyChain({ etymologies }: EtymologyChainProps) {
                                             <em>{node.form}</em>
                                         </div>
                                         {node.meaning && (
-                                            <div className="text-[11px] text-gray-500 mt-0.5 italic">"{node.meaning}"</div>
+                                            <div className="text-[11px] text-gray-500 mt-0.5">"{node.meaning}"</div>
                                         )}
                                         {node.time_period && (
                                             <div className="text-[10px] text-gray-400 mt-0.5">{node.time_period}</div>

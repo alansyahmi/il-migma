@@ -31,6 +31,14 @@ const BROKEN_PATTERNS = [
     { cv: 'CCvC', wizen: 'fgħaj' },
 ];
 
+const CV_WIZEN_PATTERNS = [
+    { cv: 'CCâC', wizen: 'fgħâl' },
+    { cv: 'CvCCa', wizen: 'fagħla' },
+    { cv: 'iCCCa', wizen: 'ifgħla' },
+    { cv: 'CCîC', wizen: 'fgħîl' },
+    { cv: 'CvCC', wizen: 'fagħl' },
+];
+
 const ADJECTIVE_PATTERNS = [
     { cv: 'CaCiC', wizen: 'fagħil' },
     { cv: 'CaCC', wizen: 'fagħl' },
@@ -110,9 +118,9 @@ const VERB_PRESETS = {
 
 async function run() {
     try {
-        console.log('Creating admin_config table...');
+        console.log('Creating configs table...');
         await db.execute(`
-            CREATE TABLE IF NOT EXISTS admin_config (
+            CREATE TABLE IF NOT EXISTS configs (
                 id TEXT PRIMARY KEY,
                 category TEXT NOT NULL,
                 key TEXT NOT NULL,
@@ -130,7 +138,7 @@ async function run() {
         const addSimple = (category, list) => {
             list.forEach((item, i) => {
                 queries.push({
-                    sql: `INSERT OR IGNORE INTO admin_config (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
+                    sql: `INSERT OR IGNORE INTO configs (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
                     args: [Math.random().toString(36).slice(2, 11), category, item, JSON.stringify(item), i]
                 });
             });
@@ -147,21 +155,28 @@ async function run() {
 
         BROKEN_PATTERNS.forEach((p, i) => {
             queries.push({
-                sql: `INSERT OR IGNORE INTO admin_config (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
+                sql: `INSERT OR IGNORE INTO configs (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
                 args: [Math.random().toString(36).slice(2, 11), 'broken_pattern', p.cv, JSON.stringify(p), i]
+            });
+        });
+
+        CV_WIZEN_PATTERNS.forEach((p, i) => {
+            queries.push({
+                sql: `INSERT OR IGNORE INTO configs (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
+                args: [Math.random().toString(36).slice(2, 11), 'cv_wizen_pattern', p.cv, JSON.stringify(p), i]
             });
         });
 
         ADJECTIVE_PATTERNS.forEach((p, i) => {
             queries.push({
-                sql: `INSERT OR IGNORE INTO admin_config (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
+                sql: `INSERT OR IGNORE INTO configs (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
                 args: [Math.random().toString(36).slice(2, 11), 'adjective_pattern', p.cv, JSON.stringify(p), i]
             });
         });
 
         Object.entries(VERB_PRESETS).forEach(([key, val], i) => {
             queries.push({
-                sql: `INSERT OR IGNORE INTO admin_config (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
+                sql: `INSERT OR IGNORE INTO configs (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
                 args: [Math.random().toString(36).slice(2, 11), 'verb_preset', key, JSON.stringify(val), i]
             });
         });

@@ -58,49 +58,55 @@ CREATE TABLE IF NOT EXISTS entries (
   id                    TEXT PRIMARY KEY,
   headword              TEXT NOT NULL,
   pos                   TEXT NOT NULL,
+  gender                TEXT, -- Replaces noun_gender, adj_gender, ptcp_gender
+  lemma_base            TEXT, -- Replaces noun_singular, adj_masculine
+  inflections_pl        TEXT, -- JSON array; Replaces noun_plural_forms, adj_plural
+  form_fem              TEXT, -- Replaces noun_feminine, adj_feminine
+  form_masc             TEXT, -- Replaces noun_masculine
+  dual_form             TEXT, -- Replaces noun_dual
+  diminutive_form       TEXT, -- Replaces noun_diminutive
+  elative_form          TEXT, -- Replaces adj_elative
+  is_collective         INTEGER NOT NULL DEFAULT 0,
+  is_singulative        INTEGER NOT NULL DEFAULT 0,
   participle_type       TEXT,
   root_consonants       TEXT,
   cv_pattern            TEXT, -- e.g. "Fagħal" or "CCvC"
+  morph_pattern         TEXT, -- Replaces plural_pattern, adj_pattern
   verb_form             TEXT, -- 'I', 'II', 'III' etc
   root_pattern_form_id  TEXT REFERENCES root_pattern_forms(id),
   is_loanword           INTEGER NOT NULL DEFAULT 0,
+  is_inflectable        INTEGER NOT NULL DEFAULT 1,
   source_language       TEXT,
   tags                  TEXT,  -- JSON array
+  sound_suffix          TEXT,
+  vowel_set_sg          TEXT,
+  vowel_set_pl          TEXT,
+  numeral_type          TEXT,
+  form_attributive_short TEXT,
+  form_attributive_long TEXT,
+  form_opposite         TEXT,
 
-  -- Noun morphology
-  noun_gender           TEXT,
-  noun_type             TEXT,
-  noun_singular         TEXT,
-  noun_plural_forms     TEXT,  -- JSON array (multiple broken plurals)
-  noun_sound_plural     TEXT,
-  noun_dual             TEXT,
-  noun_diminutive       TEXT,
-  noun_collective       TEXT,
-  noun_singulative      TEXT,
-  plural_pattern        TEXT, -- for broken plural presets
-  sound_suffix          TEXT, -- for sound plural presets
-  noun_feminine         TEXT,
-  noun_masculine        TEXT,
-
-  -- Verb morphology
+  -- Verb specific morphology (still relatively unique)
   verb_class            TEXT,
   verb_weak_class       TEXT,
   verb_transitivity     TEXT,
   verb_perfective_3sgm  TEXT,
   verb_imperfective_3sgm TEXT,
   verb_verbal_noun      TEXT,
+  verb_active_ptcp      TEXT,
   verb_passive_ptcp     TEXT,
-
-  -- Admin workflow state
   verb_vowel_perf       TEXT,
   verb_vowel_impf       TEXT,
-
-  -- Adjective morphology
-  adj_masculine         TEXT,
-  adj_feminine          TEXT,
-  adj_plural            TEXT,
-  adj_elative           TEXT,
-  adj_pattern           TEXT, -- for adjective presets
+  verb_vowel_impv       TEXT,
+  verb_type             TEXT,
+  
+  -- Relationship metadata
+  synonyms              TEXT,  -- JSON array
+  antonyms              TEXT,  -- JSON array
+  related_entries       TEXT,  -- JSON array
+  source_citation       TEXT,
+  usage_example         TEXT,
+  usage_example_en      TEXT,
 
   created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
   updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))

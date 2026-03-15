@@ -47,28 +47,6 @@ export async function onRequestGet({ request, env }) {
         // Normalize search string for better matches
         const normalizedQ = q.toLowerCase().trim().normalize('NFC');
 
-        // HOTFIX: Ensure new columns exist
-        try {
-            await db.execute("ALTER TABLE entries ADD COLUMN cv_pattern TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN plural_pattern TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN sound_suffix TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN adj_pattern TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN noun_feminine TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN noun_masculine TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN root_consonants TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_form TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_transitivity TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_perfective_3sgm TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_imperfective_3sgm TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_verbal_noun TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_active_ptcp TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_passive_ptcp TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_perf TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_impf TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_vowel_impv TEXT").catch(() => { });
-            await db.execute("ALTER TABLE entries ADD COLUMN verb_type TEXT").catch(() => { });
-        } catch (e) { }
-
         // FTS5 MATCH query
         const safeQuery = normalizedQ.replace(/"/g, ' ').trim();
         const ftsQuery = `"${safeQuery}"*`;
@@ -93,18 +71,11 @@ export async function onRequestGet({ request, env }) {
 
             if (isRegex) {
                 // Since REGEXP is unreliable in some SQLite environments, we use GLOB
-                // with a translation layer for common regex patterns.
                 globStr = q;
                 const hasStartAnchor = globStr.startsWith('^');
                 const hasEndAnchor = globStr.endsWith('$');
-
-                // Strip anchors for GLOB (which is inherently anchored)
                 globStr = globStr.replace(/^\^/, '').replace(/\$$/, '');
-
-                // Translate wildcards: .* -> *, . -> ?
                 globStr = globStr.replace(/\.\*/g, '*').replace(/\./g, '?');
-
-                // If no anchors were provided, wrap with * to match anywhere
                 if (!hasStartAnchor) globStr = '*' + globStr;
                 if (!hasEndAnchor) globStr = globStr + '*';
 
@@ -117,11 +88,10 @@ export async function onRequestGet({ request, env }) {
                     qArgs.push(globStr);
                 }
                 if (searchWordForms) {
-                    conditions.push("LOWER(e.noun_plural_forms) GLOB LOWER(?)");
+                    conditions.push("LOWER(e.inflections_pl) GLOB LOWER(?)");
                     conditions.push("LOWER(e.verb_verbal_noun) GLOB LOWER(?)");
                     qArgs.push(globStr, globStr);
                 }
-                // Only search roots if no specific field filter is applied
                 if (!hasFieldFilter) {
                     conditions.push("LOWER(r.consonants) GLOB LOWER(?)");
                     conditions.push("LOWER(e.root_consonants) GLOB LOWER(?)");
@@ -140,7 +110,7 @@ export async function onRequestGet({ request, env }) {
                     qArgs.push(`%${q}%`);
                 }
                 if (searchWordForms) {
-                    conditions.push("e.noun_plural_forms LIKE ?");
+                    conditions.push("e.inflections_pl LIKE ?");
                     conditions.push("e.verb_verbal_noun LIKE ?");
                     qArgs.push(`%${q}%`, `%${q}%`);
                 }
@@ -156,18 +126,18 @@ export async function onRequestGet({ request, env }) {
                 args.push(...qArgs);
             }
         }
+        // ... (rest of filters remain similar, updating column names if needed)
+        // [Existing filters for rootId, pos, rootType, vowelSet, wizen, form, verbType, source, r1-r4]
 
         if (rootId) {
             const lowerRootId = rootId.toLowerCase();
             sql += ` AND (r.id = ? OR LOWER(r.consonants) = ? OR LOWER(e.root_consonants) = ?)`;
             args.push(rootId, lowerRootId, lowerRootId);
         }
-
         if (pos) {
             sql += ' AND e.pos = ?';
             args.push(pos);
         }
-
         if (rootType) {
             if (rootType === 'semitic') {
                 sql += " AND (e.source_language IS NULL OR e.source_language IN ('Arabic', 'Berber'))";
@@ -178,44 +148,38 @@ export async function onRequestGet({ request, env }) {
                 args.push(rootType, rootType);
             }
         }
-
         if (vowelSet) {
             sql += ' AND (r.vowel_set_perf = ? OR e.verb_vowel_perf = ?)';
             args.push(vowelSet, vowelSet);
         }
-
         if (wizen) {
             sql += ' AND (pat.wizen_notation = ? OR pat.cv_notation = ? OR e.cv_pattern = ?)';
             args.push(wizen, wizen, wizen);
         }
-
         if (form) {
             sql += ' AND e.verb_form = ?';
             args.push(form);
         }
-
         if (verbType) {
             sql += ' AND e.verb_type = ?';
             args.push(verbType);
         }
-
         if (source) {
             sql += ' AND (r.source = ? OR e.source = ?)';
             args.push(source, source);
         }
-
         if (r1) { sql += " AND (json_extract(r.consonant_array, '$[0]') = ? OR e.root_consonants LIKE ?)"; args.push(r1.toLowerCase(), r1.toLowerCase() + '-%'); }
         if (r2) { sql += " AND (json_extract(r.consonant_array, '$[1]') = ? OR e.root_consonants LIKE ?)"; args.push(r2.toLowerCase(), '%-' + r2.toLowerCase() + '-%'); }
         if (r3) { sql += " AND (json_extract(r.consonant_array, '$[2]') = ? OR e.root_consonants LIKE ?)"; args.push(r3.toLowerCase(), '%-' + r3.toLowerCase() + (r4 ? '-%' : '')); }
         if (r4) { sql += " AND (json_extract(r.consonant_array, '$[3]') = ? OR e.root_consonants LIKE ?)"; args.push(r4.toLowerCase(), '%-' + r4.toLowerCase()); }
 
-        const total = Number((await db.execute({ sql: `SELECT COUNT(*) as total ${sql}`, args })).rows[0]?.total ?? 0);
+        const totalRes = await db.execute({ sql: `SELECT COUNT(*) as total ${sql}`, args });
+        const total = Number(totalRes.rows[0]?.total ?? 0);
 
         if (limit === 0) {
             return json({ results: [], total, query: q });
         }
 
-        // Random logic: only randomize if explicitly asked OR if it's a completely blank search.
         const hasCriteria = q || rootId || pos || rootType || vowelSet || wizen || source || r1 || r2 || r3 || r4;
         let isRandomSearch = (isRandom || !hasCriteria) && !q;
 
@@ -236,7 +200,6 @@ export async function onRequestGet({ request, env }) {
         } else if (isRandomSearch) {
             finalSql += ' ORDER BY RANDOM() LIMIT ? OFFSET ?';
         } else {
-            // Sort by match priority: Headword > Root Consonants > (rest)
             let prioritySql = '0';
             if (isRegex && globStr) {
                 prioritySql = `(CASE 
@@ -252,19 +215,20 @@ export async function onRequestGet({ request, env }) {
                     ELSE 3 END)`;
                 args.push(normalizedQ, normalizedQ + '%', normalizedQ, normalizedQ);
             }
-
             finalSql += ` ORDER BY ${prioritySql && prioritySql !== '0' ? prioritySql + ',' : ''} e.headword ASC LIMIT ? OFFSET ?`;
         }
         args.push(limit, offset);
 
         const result = await db.execute({ sql: finalSql, args });
 
-        // Map database columns to the Entry interface expected by the UI
         const rows = result.rows.map(r => {
+            const inflections_pl = r.inflections_pl ? JSON.parse(r.inflections_pl) : [];
             return {
                 ...r,
-                noun_plural_forms: r.noun_plural_forms ? JSON.parse(r.noun_plural_forms) : [],
+                tags: r.tags ? (() => { try { return JSON.parse(r.tags); } catch { return []; } })() : [],
                 is_loanword: Boolean(r.is_loanword),
+                // Map to legacy names for frontend compatibility if needed, or keep unified
+                noun_plural_forms: inflections_pl, 
                 verb_morphology: (r.pos === 'verb' || r.verb_form) ? {
                     form: r.verb_form || '',
                     transitivity: r.verb_transitivity || 'both',
@@ -275,6 +239,16 @@ export async function onRequestGet({ request, env }) {
                     verbal_noun: r.verb_verbal_noun || '',
                     active_participle: r.verb_active_ptcp || '',
                     passive_participle: r.verb_passive_ptcp || '',
+                } : undefined,
+                noun_morphology: r.pos === 'noun' ? {
+                    gender: r.gender,
+                    singular: r.lemma_base || r.headword,
+                    plural_forms: inflections_pl
+                } : undefined,
+                adjective_morphology: r.pos === 'adjective' ? {
+                    gender: r.gender,
+                    masculine: r.lemma_base || r.headword,
+                    plural: inflections_pl.join(', ')
                 } : undefined,
                 definition_en: r.text_en,
                 definition_mt: r.text_mt,
