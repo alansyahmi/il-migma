@@ -7,6 +7,9 @@
 | Document | What it covers |
 |---|---|
 | [schema.md](./schema.md) | Data Schema — every table and field, with semantic explanations |
+| [data-model.md](./data-model.md) | Contributor-first data model overview and relationship map |
+| [import-pipeline.md](./import-pipeline.md) | Spreadsheet import workflow and operational checks |
+| [search-api.md](./search-api.md) | Query parameters, filters, and examples for `/api/search` |
 | [database.md](./database.md) | Database Management — hosting, CLI usage, and manual manipulation |
 | [conventions.md](./conventions.md) | Naming Conventions — files, functions, DB columns, IDs |
 | [edge-cases.md](./edge-cases.md) | Edge Case Encyclopedia — bugs we fixed, and how to never repeat them |
