@@ -14,4 +14,5 @@ Status:
 Note: The browser test showed the adjective entry is displaying, but the morphology section still appears to be in vertical layout. Need to check if there are any CSS issues or if the media query is working correctly.
 
 
-- [ ] entry gender refectoring, finish remaining POS entry.tsx views, polishing entry.tsx UI
+- [ ] entry gender refactoring, finish remaining POS entry.tsx views, polishing entry.tsx UI
+- [ ] refactor AdvancedSearch filters
