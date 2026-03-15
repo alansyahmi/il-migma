@@ -173,8 +173,11 @@ export async function onRequestGet({ request, env }) {
             args.push(source, source);
         }
         if (gender) {
-            sql += ' AND e.gender = ?';
-            args.push(gender);
+            sql += ` AND (
+                LOWER(COALESCE(e.gender, '')) = ?
+                OR LOWER(COALESCE(json_extract(e.noun_morphology, '$.gender'), '')) = ?
+            )`;
+            args.push(gender, gender);
         }
         if (r1) { sql += " AND (json_extract(r.consonant_array, '$[0]') = ? OR e.root_consonants LIKE ?)"; args.push(r1.toLowerCase(), r1.toLowerCase() + '-%'); }
         if (r2) { sql += " AND (json_extract(r.consonant_array, '$[1]') = ? OR e.root_consonants LIKE ?)"; args.push(r2.toLowerCase(), '%-' + r2.toLowerCase() + '-%'); }

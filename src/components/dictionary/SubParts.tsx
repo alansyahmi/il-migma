@@ -1,5 +1,6 @@
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { type Entry } from '@/types';
+import { resolveEntryGender } from '@/lib/gender';
 
 interface SubPartsProps {
     entry: Entry;
@@ -51,12 +52,9 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots' }: S
     // Noun / Adjective / Other
     // `tags` may arrive as a raw JSON string from the search API — parse it safely.
 
-    const gender = entry.noun_morphology?.gender || 
-        entry.adjective_morphology?.gender || 
-        entry.participle_gender || 
-        (entry as any).noun_gender || 
-        (entry as any).adj_gender || 
-        (entry as any).gender;
+    const gender = resolveEntryGender(entry as any) ||
+        entry.adjective_morphology?.gender ||
+        entry.participle_gender;
 
     const parts = [
         term(entry.pos).toUpperCase(),
