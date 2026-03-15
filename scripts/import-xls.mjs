@@ -73,12 +73,19 @@ const FORM_LABEL = {
     'IX': 'IX', 'X': 'X',
 };
 
-/** Derive noun_gender from the gender field */
+const ALLOWED_NOUN_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
+
+/**
+ * Derive noun_gender from the source gender field.
+ * Unknown/invalid values are set to null for later review instead of being forced.
+ */
 function parseGender(raw) {
     const g = String(raw ?? '').trim().toLowerCase();
+    if (!g) return null;
     if (g.startsWith('f')) return 'feminine';
     if (g.startsWith('m')) return 'masculine';
-    return 'neutral';
+    if (g.startsWith('n')) return 'neutral';
+    return null;
 }
 
 /** Best guess at verb_class from root consonants */
@@ -279,15 +286,16 @@ async function importBrokenPlurals() {
         const pluralFormsJson = plural ? JSON.stringify([plural]) : '[]';
 
         if (DRY_RUN) {
-            console.log(`  NOUN  ${singular}  (pl: ${plural || '—'}, gender: ${gender}, gloss: ${gloss || '—'})`);
+            console.log(`  NOUN  ${singular}  (pl: ${plural || '—'}, gender: ${gender ?? 'NULL/review'}, gloss: ${gloss || '—'})`);
             if (singTrans) console.log(`        IPA: /${singTrans}/ → /${plurTrans}/`);
         } else {
             try {
+                const canonicalGender = ALLOWED_NOUN_GENDERS.has(gender) ? gender : null;
                 await db.execute({
                     sql: `INSERT OR IGNORE INTO entries
                   (id, headword, pos, noun_gender, noun_singular, noun_plural_forms, created_at, updated_at)
                 VALUES (?, ?, 'noun', ?, ?, ?, ?, ?)`,
-                    args: [entryId, singular, gender, singular, pluralFormsJson, now(), now()],
+                    args: [entryId, singular, canonicalGender, singular, pluralFormsJson, now(), now()],
                 });
                 inserted++;
             } catch (e) {

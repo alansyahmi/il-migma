@@ -8,7 +8,7 @@ CREATE TABLE entries_new (
   id                    TEXT PRIMARY KEY,
   headword              TEXT NOT NULL,
   pos                   TEXT NOT NULL,
-  gender                TEXT,
+  gender                TEXT CHECK(gender IN ('masculine','feminine','neutral')),
   lemma_base            TEXT,
   inflections_pl        TEXT,
   form_fem              TEXT,

@@ -72,6 +72,29 @@ function now() {
     return new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
 }
 
+function normalizeNounGender(value) {
+    if (value === undefined || value === null) return null;
+    const normalized = String(value).trim().toLowerCase();
+    if (!normalized) return null;
+    if (['masculine', 'masc', 'm'].includes(normalized)) return 'masculine';
+    if (['feminine', 'fem', 'f'].includes(normalized)) return 'feminine';
+    if (['neutral', 'neut', 'n'].includes(normalized)) return 'neutral';
+    return null;
+}
+
+function validateAndNormalizeEntryGender(body) {
+    const candidate = body.noun_gender ?? body.gender;
+    if (candidate === undefined) return;
+
+    const normalized = normalizeNounGender(candidate);
+    if (normalized === null && String(candidate).trim() !== '') {
+        throw new Error("Invalid noun_gender. Allowed values: masculine, feminine, neutral.");
+    }
+
+    if ('noun_gender' in body) body.noun_gender = normalized;
+    if ('gender' in body) body.gender = normalized;
+}
+
 // ── GET — list entries ────────────────────────────────────────────────────────
 export async function onRequestGet({ request, env }) {
     try {
@@ -139,6 +162,7 @@ export async function onRequestPost({ request, env }) {
         if (!(await verifyAdmin(request, env))) return unauthorized();
 
         const body = await request.json();
+        validateAndNormalizeEntryGender(body);
         const client = db(env);
 
         let id = body.id;
@@ -287,6 +311,7 @@ export async function onRequestPut({ request, env }) {
         if (!(await verifyAdmin(request, env))) return unauthorized();
 
         const body = await request.json();
+        validateAndNormalizeEntryGender(body);
         const { id, old_id, ...fields } = body;
         if (!id) return json({ error: 'id required' }, 400);
 
