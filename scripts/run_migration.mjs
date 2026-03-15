@@ -228,6 +228,7 @@ async function main() {
     // Step 6: Recreate indices
     await client.execute('CREATE INDEX IF NOT EXISTS idx_entries_headword ON entries(headword)');
     await client.execute('CREATE INDEX IF NOT EXISTS idx_entries_pos ON entries(pos)');
+    await client.execute('CREATE INDEX IF NOT EXISTS idx_entries_gender ON entries(gender)');
     console.log('  ✅ Indices recreated\n');
 
     // Final check

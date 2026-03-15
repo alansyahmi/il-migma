@@ -8,6 +8,8 @@
 
 import { createClient } from '@libsql/client/web';
 
+const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
+
 export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const q = url.searchParams.get('q')?.trim() ?? '';
@@ -18,7 +20,8 @@ export async function onRequestGet({ request, env }) {
     const form = url.searchParams.get('form') ?? '';
     const verbType = url.searchParams.get('verb_type') ?? '';
     const source = url.searchParams.get('source') ?? '';
-    const gender = url.searchParams.get('gender')?.trim().toLowerCase() ?? '';
+    const requestedGender = url.searchParams.get('gender')?.trim().toLowerCase() ?? '';
+    const gender = CANONICAL_GENDERS.has(requestedGender) ? requestedGender : '';
     const rootId = url.searchParams.get('root_id')?.trim().normalize('NFC') ?? '';
 
     // Radicals
@@ -170,12 +173,8 @@ export async function onRequestGet({ request, env }) {
             args.push(source, source);
         }
         if (gender) {
-            sql += ` AND (
-                LOWER(e.noun_gender) = ?
-                OR LOWER(COALESCE(e.gender, '')) = ?
-                OR LOWER(COALESCE(json_extract(e.noun_morphology, '$.gender'), '')) = ?
-            )`;
-            args.push(gender, gender, gender);
+            sql += ' AND e.gender = ?';
+            args.push(gender);
         }
         if (r1) { sql += " AND (json_extract(r.consonant_array, '$[0]') = ? OR e.root_consonants LIKE ?)"; args.push(r1.toLowerCase(), r1.toLowerCase() + '-%'); }
         if (r2) { sql += " AND (json_extract(r.consonant_array, '$[1]') = ? OR e.root_consonants LIKE ?)"; args.push(r2.toLowerCase(), '%-' + r2.toLowerCase() + '-%'); }
