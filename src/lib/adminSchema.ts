@@ -59,6 +59,7 @@ export const ENTRY_HANDLED_FIELDS = [
     'numeral_type', 'form_attributive_short', 'form_attributive_long',
     'source_language', 'source_citation', 'definitions', 'etymology_chain',
     'phonetics', 'tags', 'cv_pattern', 'morph_pattern', 'sound_suffix',
+    'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
     'synonyms', 'antonyms', 'related_entries', 'created_at', 'updated_at',
     'root_consonants', 'verb_form', 'root_pattern_form_id', 'verb_weak_class', 'verb_type',
     'is_inflectable', 'usage_example', 'usage_example_en'
@@ -83,7 +84,8 @@ export const POS_FEATURES: Record<string, string[]> = {
     'noun': [
         ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc',
         'inflections_pl', 'dual_form', 'diminutive_form', 'is_collective',
-        'is_singulative', 'morph_pattern', 'sound_suffix', 
+        'is_singulative', 'morph_pattern', 'sound_suffix',
+        'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
         'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'
     ],
     'verb': [
@@ -95,17 +97,23 @@ export const POS_FEATURES: Record<string, string[]> = {
     'adjective': [
         ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc', 'inflections_pl',
         'dual_form', 'diminutive_form', 'elative_form', 'morph_pattern', 'sound_suffix',
+        'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
         'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'
     ],
     'participle': [
         ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc', 'inflections_pl',
         'dual_form', 'diminutive_form', 'elative_form', 'participle_type', 'morph_pattern',
+        'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
         'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'
     ],
-    'pronoun': [...COMMON_FIELDS, 'gender', 'lemma_base', 'inflections_pl'],
+    'pronoun': [
+        ...COMMON_FIELDS, 'gender', 'lemma_base', 'inflections_pl',
+        'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
+    ],
     'numeral': [
         ...COMMON_FIELDS, 'gender', 'lemma_base', 'inflections_pl', 'morph_pattern',
         'form_fem', 'form_masc', 'vowel_set_sg', 'vowel_set_pl',
+        'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
         'numeral_type', 'form_attributive_short', 'form_attributive_long'
     ],
 };

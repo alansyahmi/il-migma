@@ -8,6 +8,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { apiSearch } from '@/lib/api';
+import { derivePattern } from '@/lib/maltesePhonology';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { resolveEntryGender } from '@/lib/gender';
 
@@ -339,6 +340,12 @@ interface AdvancedFilters {
     vowelSet: string;
     dualPattern: string;
     pluralPattern: string;
+    lemmaPattern: string;
+    femininePattern: string;
+    masculinePattern: string;
+    vowelSetSg: string;
+    vowelSetOpp: string;
+    vowelSetPl: string;
     searchLemma: boolean;
     searchWordForms: boolean;
     searchEnglishGloss: boolean;
@@ -357,6 +364,12 @@ const DEFAULT_FILTERS: AdvancedFilters = {
     vowelSet: '',
     dualPattern: '',
     pluralPattern: '',
+    lemmaPattern: '',
+    femininePattern: '',
+    masculinePattern: '',
+    vowelSetSg: '',
+    vowelSetOpp: '',
+    vowelSetPl: '',
     searchLemma: false,
     searchWordForms: false,
     searchEnglishGloss: false,
@@ -390,6 +403,12 @@ export function AdvancedSearch() {
         if (searchParams.has('type')) f.rootType = searchParams.get('type')!;
         if (searchParams.has('v')) f.vowelSet = searchParams.get('v')!;
         if (searchParams.has('wizen')) f.wizenPattern = searchParams.get('wizen')!;
+        if (searchParams.has('lp')) f.lemmaPattern = searchParams.get('lp')!;
+        if (searchParams.has('fp')) f.femininePattern = searchParams.get('fp')!;
+        if (searchParams.has('mp')) f.masculinePattern = searchParams.get('mp')!;
+        if (searchParams.has('vs_sg')) f.vowelSetSg = searchParams.get('vs_sg')!;
+        if (searchParams.has('vs_opp')) f.vowelSetOpp = searchParams.get('vs_opp')!;
+        if (searchParams.has('vs_pl')) f.vowelSetPl = searchParams.get('vs_pl')!;
         if (searchParams.has('source')) f.source = searchParams.get('source')!;
         if (searchParams.has('r1')) f.rootRadicals[0] = searchParams.get('r1')!;
         if (searchParams.has('r2')) f.rootRadicals[1] = searchParams.get('r2')!;
@@ -415,6 +434,12 @@ export function AdvancedSearch() {
         searchParams.has('type') ||
         searchParams.has('v') ||
         searchParams.has('wizen') ||
+        searchParams.has('lp') ||
+        searchParams.has('fp') ||
+        searchParams.has('mp') ||
+        searchParams.has('vs_sg') ||
+        searchParams.has('vs_opp') ||
+        searchParams.has('vs_pl') ||
         searchParams.has('source') ||
         searchParams.has('gender') ||
         searchParams.has('r1');
@@ -433,6 +458,12 @@ export function AdvancedSearch() {
         const wizen = searchParams.get('wizen') || undefined;
         const source = searchParams.get('source') || undefined;
         const gender = searchParams.get('gender') || undefined;
+        const lemmaPatternFilter = searchParams.get('lp') || '';
+        const femininePatternFilter = searchParams.get('fp') || '';
+        const masculinePatternFilter = searchParams.get('mp') || '';
+        const vowelSetSgFilter = searchParams.get('vs_sg') || '';
+        const vowelSetOppFilter = searchParams.get('vs_opp') || '';
+        const vowelSetPlFilter = searchParams.get('vs_pl') || '';
         const radicals = [
             searchParams.get('r1') || '',
             searchParams.get('r2') || '',
@@ -534,7 +565,59 @@ export function AdvancedSearch() {
                         entry: r,
                     };
                 });
-                setResults(mapped);
+
+                const norm = (s: unknown) => String(s || '').trim().toLowerCase();
+                const includesPattern = (candidate: unknown, expected: string) => {
+                    if (!expected) return true;
+                    return norm(candidate).includes(norm(expected));
+                };
+
+                const filtered = mapped.filter((result) => {
+                    const entry = result.entry || {};
+                    const isNonVerb = entry.pos !== 'verb';
+
+                    const hasNonVerbFormFilters = Boolean(
+                        lemmaPatternFilter || femininePatternFilter || masculinePatternFilter ||
+                        vowelSetSgFilter || vowelSetOppFilter || vowelSetPlFilter
+                    );
+
+                    if (hasNonVerbFormFilters && !isNonVerb) return false;
+                    if (!isNonVerb) return true;
+
+                    const root = entry.root_pattern_form?.root?.consonants || entry.root_consonants || '';
+                    const inferPattern = (surface: string, fallback = '') => {
+                        if (!surface || !root) return fallback;
+                        const inferred = derivePattern(surface, root);
+                        return inferred || fallback;
+                    };
+
+                    const lemmaPattern = entry.cv_pattern || inferPattern(entry.lemma_base || entry.headword);
+                    const femininePattern = entry.form_fem_pattern || inferPattern(entry.form_fem);
+                    const masculinePattern = entry.form_masc_pattern || inferPattern(entry.form_masc);
+
+                    const pluralForms = Array.isArray(entry.noun_plural_forms)
+                        ? entry.noun_plural_forms
+                        : (Array.isArray(entry.inflections_pl) ? entry.inflections_pl : []);
+                    const pluralPatterns = [
+                        entry.morph_pattern,
+                        ...pluralForms.map((pf: string) => inferPattern(pf)).filter(Boolean),
+                    ].filter(Boolean);
+
+                    const matchesPluralPattern = !filters.pluralPattern || pluralPatterns.some((p) => includesPattern(p, filters.pluralPattern));
+
+                    return (
+                        includesPattern(lemmaPattern, lemmaPatternFilter) &&
+                        includesPattern(femininePattern, femininePatternFilter) &&
+                        includesPattern(masculinePattern, masculinePatternFilter) &&
+                        matchesPluralPattern &&
+                        includesPattern(entry.vowel_set_sg, vowelSetSgFilter) &&
+                        includesPattern(entry.vowel_set_opp, vowelSetOppFilter) &&
+                        includesPattern(entry.vowel_set_pl, vowelSetPlFilter)
+                    );
+                });
+
+                setResults(filtered);
+                setTotal(filtered.length);
             })
             .catch(err => {
                 console.error("Advanced Search fetch error:", err);
@@ -556,6 +639,12 @@ export function AdvancedSearch() {
         if (filters.rootType) params.type = filters.rootType;
         if (filters.vowelSet) params.v = filters.vowelSet;
         if (filters.wizenPattern) params.wizen = filters.wizenPattern;
+        if (filters.lemmaPattern) params.lp = filters.lemmaPattern;
+        if (filters.femininePattern) params.fp = filters.femininePattern;
+        if (filters.masculinePattern) params.mp = filters.masculinePattern;
+        if (filters.vowelSetSg) params.vs_sg = filters.vowelSetSg;
+        if (filters.vowelSetOpp) params.vs_opp = filters.vowelSetOpp;
+        if (filters.vowelSetPl) params.vs_pl = filters.vowelSetPl;
         if (filters.source) params.source = filters.source;
         filters.rootRadicals.forEach((r, i) => {
             if (r) params[`r${i + 1}`] = r;
@@ -812,6 +901,48 @@ export function AdvancedSearch() {
                                 value={filters.pluralPattern}
                                 onChange={v => setFilter('pluralPattern', v)}
                                 options={['-i', '-iet', '-at', '-ijiet', 'Break Plural']}
+                            />
+
+                            <FilterText
+                                label={term('cv-pattern') + ' (' + term('singular') + ')'}
+                                value={filters.lemmaPattern}
+                                onChange={v => setFilter('lemmaPattern', v)}
+                                placeholder="e.g. CVCVC"
+                            />
+
+                            <FilterText
+                                label={term('cv-pattern') + ' (' + term('feminine') + ')'}
+                                value={filters.femininePattern}
+                                onChange={v => setFilter('femininePattern', v)}
+                                placeholder="e.g. CVCVC"
+                            />
+
+                            <FilterText
+                                label={term('cv-pattern') + ' (' + term('masculine') + ')'}
+                                value={filters.masculinePattern}
+                                onChange={v => setFilter('masculinePattern', v)}
+                                placeholder="e.g. CVCVC"
+                            />
+
+                            <FilterText
+                                label={term('vowel-set') + ' (' + term('singular') + ')'}
+                                value={filters.vowelSetSg}
+                                onChange={v => setFilter('vowelSetSg', v)}
+                                placeholder="e.g. i-a"
+                            />
+
+                            <FilterText
+                                label={term('vowel-set') + ' (' + term('feminine') + '/' + term('masculine') + ')'}
+                                value={filters.vowelSetOpp}
+                                onChange={v => setFilter('vowelSetOpp', v)}
+                                placeholder="e.g. i-e"
+                            />
+
+                            <FilterText
+                                label={term('vowel-set') + ' (' + term('plural') + ')'}
+                                value={filters.vowelSetPl}
+                                onChange={v => setFilter('vowelSetPl', v)}
+                                placeholder="e.g. u-a"
                             />
 
                             <div className="border-t border-black/8 pt-4 space-y-2.5">
