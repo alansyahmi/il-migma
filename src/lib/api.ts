@@ -67,6 +67,11 @@ export async function apiSearch(
         includeSuggested?: boolean;
         includePending?: boolean;
         recent?: boolean;
+        lp?: string;
+        fp?: string;
+        mp?: string;
+        pp?: string;
+        dp?: string;
     } = {}
 ): Promise<SearchResponse> {
     const params = new URLSearchParams();
@@ -90,6 +95,11 @@ export async function apiSearch(
     if (opts.includeSuggested) params.set('suggested', 'true');
     if (opts.includePending) params.set('pending', 'true');
     if (opts.recent) params.set('recent', 'true');
+    if (opts.lp) params.set('lp', opts.lp);
+    if (opts.fp) params.set('fp', opts.fp);
+    if (opts.mp) params.set('mp', opts.mp);
+    if (opts.pp) params.set('pp', opts.pp);
+    if (opts.dp) params.set('dp', opts.dp);
     if (opts.radicals) {
         opts.radicals.forEach((r, i) => {
             if (r) params.set(`r${i + 1}`, r);

@@ -95,7 +95,13 @@ export interface NounMorphology {
     feminine?: string;
     masculine?: string;
     morph_pattern?: string;
+    lemma_pattern?: string;
+    form_fem_pattern?: string;
+    form_masc_pattern?: string;
+    form_plural_pattern?: string;
+    dual_pattern?: string;
     plural_pattern?: string; // keeping for internal use during transition
+    sound_suffix?: string;
     is_inflectable?: boolean;
     usage_example?: string;
     usage_example_en?: string;
@@ -185,6 +191,11 @@ export interface NumeralMorphology {
     antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
     related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
     morph_pattern?: string;
+    lemma_pattern?: string;
+    form_fem_pattern?: string;
+    form_masc_pattern?: string;
+    form_plural_pattern?: string;
+    dual_pattern?: string;
     source_citation?: string;
 }
 
@@ -204,6 +215,11 @@ export interface AdjectiveMorphology {
     // Related entries
     related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
     morph_pattern?: string;
+    lemma_pattern?: string;
+    form_fem_pattern?: string;
+    form_masc_pattern?: string;
+    form_plural_pattern?: string;
+    dual_pattern?: string;
     source_citation?: string;
 }
 
@@ -358,10 +374,18 @@ export interface Entry {
     form_attributive_short?: string;
     form_attributive_long?: string;
     form_opposite?: string;
+    lemma_pattern?: string;
+    form_fem_pattern?: string;
+    form_masc_pattern?: string;
+    form_plural_pattern?: string;
+    dual_pattern?: string;
+    plural_pattern?: string;
+    sound_suffix?: string;
 
     // Verb specifics (maintained for display logic)
     cv_pattern?: string;
-    plural_pattern?: string;
+    plural_pattern_verb?: string; // disambiguated from shared plural_pattern if needed, but let's just keep one plural_pattern if possible.
+
     wizen_notation?: string;
     verb_class?: string;
     verb_weak_class?: string;
