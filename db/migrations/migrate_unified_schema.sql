@@ -105,3 +105,4 @@ ALTER TABLE entries_new RENAME TO entries;
 -- 4. Recreate indices
 CREATE INDEX IF NOT EXISTS idx_entries_headword ON entries(headword);
 CREATE INDEX IF NOT EXISTS idx_entries_pos ON entries(pos);
+CREATE INDEX IF NOT EXISTS idx_entries_gender ON entries(gender);

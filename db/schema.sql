@@ -114,6 +114,7 @@ CREATE TABLE IF NOT EXISTS entries (
 
 CREATE INDEX IF NOT EXISTS idx_entries_headword ON entries(headword);
 CREATE INDEX IF NOT EXISTS idx_entries_pos ON entries(pos);
+CREATE INDEX IF NOT EXISTS idx_entries_gender ON entries(gender);
 
 -- ─── Full-Text Search ──────────────────────────────────────────────────────
 CREATE VIRTUAL TABLE IF NOT EXISTS entries_fts USING fts5(

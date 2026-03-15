@@ -8,6 +8,8 @@
 
 import { createClient } from '@libsql/client/web';
 
+const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
+
 export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const q = url.searchParams.get('q')?.trim() ?? '';
@@ -18,7 +20,8 @@ export async function onRequestGet({ request, env }) {
     const form = url.searchParams.get('form') ?? '';
     const verbType = url.searchParams.get('verb_type') ?? '';
     const source = url.searchParams.get('source') ?? '';
-    const gender = url.searchParams.get('gender')?.trim().toLowerCase() ?? '';
+    const requestedGender = url.searchParams.get('gender')?.trim().toLowerCase() ?? '';
+    const gender = CANONICAL_GENDERS.has(requestedGender) ? requestedGender : '';
     const rootId = url.searchParams.get('root_id')?.trim().normalize('NFC') ?? '';
 
     // Radicals
