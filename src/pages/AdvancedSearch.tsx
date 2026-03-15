@@ -416,6 +416,7 @@ export function AdvancedSearch() {
         searchParams.has('v') ||
         searchParams.has('wizen') ||
         searchParams.has('source') ||
+        searchParams.has('gender') ||
         searchParams.has('r1');
 
     useEffect(() => {
@@ -431,6 +432,7 @@ export function AdvancedSearch() {
         const vowelSet = searchParams.get('v') || undefined;
         const wizen = searchParams.get('wizen') || undefined;
         const source = searchParams.get('source') || undefined;
+        const gender = searchParams.get('gender') || undefined;
         const radicals = [
             searchParams.get('r1') || '',
             searchParams.get('r2') || '',
@@ -443,6 +445,7 @@ export function AdvancedSearch() {
             type: rootType,
             wizen: wizen || undefined,
             source: source || undefined,
+            gender,
             limit: parseInt(filters.maxResults),
             v: vowelSet,
             random: searchParams.get('random') || undefined,

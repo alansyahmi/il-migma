@@ -18,6 +18,7 @@ export async function onRequestGet({ request, env }) {
     const form = url.searchParams.get('form') ?? '';
     const verbType = url.searchParams.get('verb_type') ?? '';
     const source = url.searchParams.get('source') ?? '';
+    const gender = url.searchParams.get('gender')?.trim().toLowerCase() ?? '';
     const rootId = url.searchParams.get('root_id')?.trim().normalize('NFC') ?? '';
 
     // Radicals
@@ -168,6 +169,14 @@ export async function onRequestGet({ request, env }) {
             sql += ' AND (r.source = ? OR e.source = ?)';
             args.push(source, source);
         }
+        if (gender) {
+            sql += ` AND (
+                LOWER(e.noun_gender) = ?
+                OR LOWER(COALESCE(e.gender, '')) = ?
+                OR LOWER(COALESCE(json_extract(e.noun_morphology, '$.gender'), '')) = ?
+            )`;
+            args.push(gender, gender, gender);
+        }
         if (r1) { sql += " AND (json_extract(r.consonant_array, '$[0]') = ? OR e.root_consonants LIKE ?)"; args.push(r1.toLowerCase(), r1.toLowerCase() + '-%'); }
         if (r2) { sql += " AND (json_extract(r.consonant_array, '$[1]') = ? OR e.root_consonants LIKE ?)"; args.push(r2.toLowerCase(), '%-' + r2.toLowerCase() + '-%'); }
         if (r3) { sql += " AND (json_extract(r.consonant_array, '$[2]') = ? OR e.root_consonants LIKE ?)"; args.push(r3.toLowerCase(), '%-' + r3.toLowerCase() + (r4 ? '-%' : '')); }
@@ -180,7 +189,7 @@ export async function onRequestGet({ request, env }) {
             return json({ results: [], total, query: q });
         }
 
-        const hasCriteria = q || rootId || pos || rootType || vowelSet || wizen || source || r1 || r2 || r3 || r4;
+        const hasCriteria = q || rootId || pos || rootType || vowelSet || wizen || source || gender || r1 || r2 || r3 || r4;
         let isRandomSearch = (isRandom || !hasCriteria) && !q;
 
         let finalSql = `
