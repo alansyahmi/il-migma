@@ -12,11 +12,16 @@ import { generateRootForms } from '@/lib/conjugationEngine';
 import type { WeakClass } from '@/types';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { RelationshipEditor } from './RelationshipEditor';
-import { buildEntryPayload, ENTRY_HANDLED_FIELDS } from '@/lib/adminSchema';
+import { entryToForm, formToPayload, INITIAL_FORM_STATE } from '@/lib/entryAdapter';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
-import { generateIPA, deriveFeminineFromPattern, deriveMasculineFromFeminine, detectPluralType, derivePattern, extractLongVowelFromPattern, generateNumeralForms } from '@/lib/maltesePhonology';
+import { 
+    generateIPA, deriveFeminineFromPattern, deriveMasculineFromFeminine, 
+    detectPluralType, derivePattern, extractLongVowelFromPattern, 
+    generateNumeralForms 
+} from '@/lib/maltesePhonology';
 import { resolveEntryGender } from '@/lib/gender';
+import { ENTRY_HANDLED_FIELDS } from '@/lib/adminSchema';
 
 export interface AdminEntry {
     id: string;
@@ -49,69 +54,6 @@ export interface EntryFormModalProps {
     initialForm?: Partial<typeof INITIAL_FORM_STATE>;
 }
 
-const INITIAL_FORM_STATE = {
-    id: '',
-    headword: '',
-    pos: 'noun',
-    gender: '',
-    lemma_base: '',
-    inflections_pl: '',  // comma-separated
-    sound_suffix: '',
-    dual_form: '',
-    noun_type: '',
-    diminutive_form: '',
-    form_fem: '',
-    form_masc: '',
-    is_collective: false,
-    is_singulative: false,
-    vowel_set_sg: '',
-    vowel_set_pl: '',
-    vowel_set_opp: '',
-    vowel_set_dual: '',
-    verb_class: '',
-    verb_type: '',
-    verb_transitivity: '',
-    verb_perfective_3sgm: '',
-    verb_imperfective_3sgm: '',
-    verb_verbal_noun: '',
-    verb_vowel_perf: '',
-    verb_vowel_impf: '',
-    verb_vowel_impv: '',
-    verb_active_ptcp: '',
-    verb_passive_ptcp: '',
-    elative_form: '',
-    participle_type: '' as 'active' | 'passive' | '',
-    is_loanword: false,
-    source_language: '',
-    source_citation: '',
-    definitions: [
-        { text_en: '', text_mt: '', register: '' }
-    ],
-    etymology_chain: [] as { language: string; form: string; meaning: string }[],
-    phonetics: [] as { dialect: string; spelling: string; ipa: string }[],
-    tags: '',
-    _formLabel: '',
-    _rootConsonants: '',
-    _weakClass: '',
-    _hasDual: false,
-    _pluralType: 'none',
-    _adjPluralType: 'none',
-    cv_pattern: '',
-    _inheritedPattern: '',
-    morph_pattern: '',
-    _sound_suffix: '',
-    _adj_sound_suffix: '',
-    synonyms: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
-    antonyms: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
-    related_entries: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
-    is_inflectable: false,
-    usage_example: '',
-    usage_example_en: '',
-    numeral_type: '',
-    form_attributive_short: '',
-    form_attributive_long: '',
-    form_opposite: '',
-};
 
 // ── Components for Morphology Fields ──────────────────────────────────────
 
@@ -872,73 +814,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         }, 0);
     };
 
-    const [form, setForm] = useState({
-        ...INITIAL_FORM_STATE,
-        id: entry?.id ?? initialForm?.id ?? '',
-        headword: entry?.headword ?? initialForm?.headword ?? '',
-        pos: entry?.pos ?? initialForm?.pos ?? 'noun',
-        lemma_base: (entry as any)?.lemma_base ?? (entry as any)?.noun_morphology?.singular ?? (entry as any)?.adjective_morphology?.masculine ?? initialForm?.lemma_base ?? '',
-        gender: resolveEntryGender(entry as any) ?? resolveEntryGender(initialForm as any) ?? '',
-        noun_type: (entry as any)?.noun_type ?? (entry as any)?.noun_morphology?.noun_type ?? initialForm?.noun_type ?? '',
-        diminutive_form: (entry as any)?.diminutive_form ?? (entry as any)?.noun_morphology?.diminutive ?? initialForm?.diminutive_form ?? '',
-        form_fem: (entry as any)?.form_fem ?? (entry as any)?.noun_morphology?.feminine ?? (entry as any)?.adjective_morphology?.feminine ?? initialForm?.form_fem ?? '',
-        form_masc: (entry as any)?.form_masc ?? (entry as any)?.noun_morphology?.masculine ?? initialForm?.form_masc ?? '',
-        is_collective: Boolean((entry as any)?.is_collective ?? (entry as any)?.noun_morphology?.is_collective ?? initialForm?.is_collective ?? false),
-        is_singulative: Boolean((entry as any)?.is_singulative ?? (entry as any)?.noun_morphology?.is_singulative ?? initialForm?.is_singulative ?? false),
-        vowel_set_sg: (entry as any)?.vowel_set_sg ?? (entry as any)?.noun_morphology?.vowel_set_sg ?? (entry as any)?.adjective_morphology?.vowel_set_sg ?? initialForm?.vowel_set_sg ?? '',
-        vowel_set_pl: (entry as any)?.vowel_set_pl ?? (entry as any)?.noun_morphology?.vowel_set_pl ?? (entry as any)?.adjective_morphology?.vowel_set_pl ?? initialForm?.vowel_set_pl ?? '',
-        verb_class: (entry as any)?.verb_class ?? (entry as any)?.verb_morphology?.verb_class ?? initialForm?.verb_class ?? '',
-        verb_type: (entry as any)?.verb_type ?? initialForm?.verb_type ?? '',
-        _weakClass: (entry as any)?.verb_weak_class ?? (entry as any)?.weak_class ?? (entry as any)?.verb_morphology?.weak_class ?? initialForm?._weakClass ?? '',
-        _formLabel: (entry as any)?.verb_form ?? (entry as any)?.verb_morphology?.form ?? initialForm?._formLabel ?? '',
-        verb_vowel_perf: (entry as any)?.verb_vowel_perf ?? (entry as any)?.verb_morphology?.vowel_set_perfect ?? initialForm?.verb_vowel_perf ?? '',
-        verb_vowel_impf: (entry as any)?.verb_vowel_impf ?? (entry as any)?.verb_morphology?.vowel_set_imperfect ?? initialForm?.verb_vowel_impf ?? '',
-        verb_vowel_impv: (entry as any)?.verb_vowel_impv ?? (entry as any)?.verb_morphology?.vowel_set_imperative ?? initialForm?.verb_vowel_impv ?? '',
-        verb_active_ptcp: (entry as any)?.verb_active_ptcp ?? (entry as any)?.verb_morphology?.active_participle ?? initialForm?.verb_active_ptcp ?? '',
-        verb_passive_ptcp: (entry as any)?.verb_passive_ptcp ?? (entry as any)?.verb_morphology?.passive_participle ?? initialForm?.verb_passive_ptcp ?? '',
-        verb_transitivity: (entry as any)?.verb_transitivity ?? (entry as any)?.verb_morphology?.transitivity ?? initialForm?.verb_transitivity ?? '',
-        verb_perfective_3sgm: (entry as any)?.verb_perfective_3sgm ?? (entry as any)?.verb_morphology?.perfective_3sg_m ?? initialForm?.verb_perfective_3sgm ?? '',
-        verb_imperfective_3sgm: (entry as any)?.verb_imperfective_3sgm ?? (entry as any)?.verb_morphology?.imperfective_3sg_m ?? initialForm?.verb_imperfective_3sgm ?? '',
-        verb_verbal_noun: (entry as any)?.verb_verbal_noun ?? (entry as any)?.verb_morphology?.verbal_noun ?? initialForm?.verb_verbal_noun ?? '',
-        is_loanword: entry?.is_loanword ?? initialForm?.is_loanword ?? false,
-        source_language: entry?.source_language ?? initialForm?.source_language ?? '',
-        tags: Array.isArray((entry as any)?.tags) ? (entry as any).tags.join(', ') : ((entry as any)?.tags ?? initialForm?.tags ?? ''),
-        numeral_type: (entry as any)?.numeral_type ?? (entry as any)?.numeral_morphology?.numeral_type ?? initialForm?.numeral_type ?? '',
-        form_attributive_short: (entry as any)?.form_attributive_short ?? (entry as any)?.numeral_morphology?.form_attributive_short ?? initialForm?.form_attributive_short ?? '',
-        form_attributive_long: (entry as any)?.form_attributive_long ?? (entry as any)?.numeral_morphology?.form_attributive_long ?? initialForm?.form_attributive_long ?? '',
-        form_opposite: (entry as any)?.form_opposite ?? (entry as any)?.numeral_morphology?.form_opposite ?? initialForm?.form_opposite ?? '',
-        _rootConsonants: (entry as any)?._rootConsonants ?? (entry as any)?.root_pattern_form?.root?.consonants ?? (entry as any)?.root_consonants ?? initialForm?._rootConsonants ?? '',
-        _hasDual: !!((entry as any)?.dual_form ?? (entry as any)?.noun_morphology?.dual ?? initialForm?.dual_form ?? false),
-        cv_pattern: (entry as any)?.cv_pattern ?? initialForm?.cv_pattern ?? '',
-        morph_pattern: (entry as any)?.morph_pattern ?? (entry as any)?.plural_pattern ?? (entry as any)?.adj_pattern ?? initialForm?.morph_pattern ?? '',
-        inflections_pl: (() => {
-            const pl = (entry as any)?.inflections_pl ?? (entry as any)?.noun_morphology?.plural_forms ?? (entry as any)?.adjective_morphology?.plural ?? initialForm?.inflections_pl ?? '';
-            return Array.isArray(pl) ? pl.join(', ') : pl;
-        })(),
-        sound_suffix: (entry as any)?.sound_suffix ?? (entry as any)?.noun_morphology?.sound_plural ?? initialForm?.sound_suffix ?? '',
-        _pluralType: (() => {
-            const hasBroken = ((entry as any)?.inflections_pl || (entry as any)?.noun_morphology?.plural_forms)?.length > 0 || !!initialForm?.inflections_pl;
-            const hasSound = !!((entry as any)?.sound_suffix || (entry as any)?.noun_morphology?.sound_plural || initialForm?.sound_suffix);
-            if (hasBroken && hasSound) return 'both';
-            if (hasBroken) return 'broken';
-            if (hasSound) return 'sound';
-            return 'none';
-        })(),
-        _adjPluralType: (() => {
-            const hasPl = ((entry as any)?.inflections_pl || (entry as any)?.adjective_morphology?.plural)?.length > 0 || !!initialForm?.inflections_pl;
-            if (!hasPl) return 'none';
-            return ((entry as any)?.morph_pattern || (entry as any)?.adjective_morphology?.adj_pattern) ? 'broken' : 'sound';
-        })(),
-        is_inflectable: !!((entry as any)?.is_inflectable ?? (entry as any)?.noun_morphology?.is_inflectable ?? (entry as any)?.verb_morphology?.is_inflectable ?? initialForm?.is_inflectable ?? true),
-        usage_example: (entry as any)?.usage_example ?? (entry as any)?.noun_morphology?.usage_example ?? (entry as any)?.verb_morphology?.usage_example ?? initialForm?.usage_example ?? '',
-        usage_example_en: (entry as any)?.usage_example_en ?? (entry as any)?.noun_morphology?.usage_example_en ?? (entry as any)?.verb_morphology?.usage_example_en ?? initialForm?.usage_example_en ?? '',
-        source_citation: (entry as any)?.source_citation ?? (entry as any)?.verb_morphology?.source_citation ?? (entry as any)?.noun_morphology?.source_citation ?? (entry as any)?.adjective_morphology?.source_citation ?? initialForm?.source_citation ?? '',
-        definitions: (entry as any)?.definitions ?? initialForm?.definitions ?? [{ text_en: '', text_mt: '', register: '' }],
-        synonyms: (entry as any)?.synonyms ?? (entry as any)?.noun_morphology?.synonyms ?? (entry as any)?.verb_morphology?.synonyms ?? (entry as any)?.adjective_morphology?.synonyms ?? initialForm?.synonyms ?? [],
-        antonyms: (entry as any)?.antonyms ?? (entry as any)?.noun_morphology?.antonyms ?? (entry as any)?.verb_morphology?.antonyms ?? (entry as any)?.adjective_morphology?.antonyms ?? initialForm?.antonyms ?? [],
-        related_entries: (entry as any)?.related_entries ?? (entry as any)?.noun_morphology?.related_entries ?? (entry as any)?.verb_morphology?.related_entries ?? (entry as any)?.adjective_morphology?.related_entries ?? initialForm?.related_entries ?? [],
-        ...initialForm
-    });
+    const [form, setForm] = useState(() => entryToForm(entry, initialForm));
 
     const isDirty = useMemo(() => {
         if (!originalForm) return false;
@@ -1057,6 +933,15 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     form_opposite: full.form_opposite || full.numeral_morphology?.form_opposite || prev.form_opposite,
                                     _pluralType,
                                     _adjPluralType,
+                                    extraFields: (() => {
+                                        const extras: Record<string, any> = {};
+                                        Object.keys(full).forEach(key => {
+                                            if (!ENTRY_HANDLED_FIELDS.includes(key as any) && !key.startsWith('_')) {
+                                                extras[key] = full[key];
+                                            }
+                                        });
+                                        return extras;
+                                    })(),
                                 };
                             });
                             setOriginalForm(full);
@@ -1254,7 +1139,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const suggestedBrokenPattern = useMemo(() => {
         const pl = form.inflections_pl;
         if (!pl || !form._rootConsonants) return null;
-        const firstPlural = (typeof pl === 'string' ? pl : pl.join(','))
+        const firstPlural = (typeof pl === 'string' ? pl : (pl as string[]).join(','))
             .split(',')[0].trim();
         if (!firstPlural) return null;
         return derivePattern(firstPlural, form._rootConsonants);
@@ -1378,7 +1263,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             const token = await getToken();
             if (!token) throw new Error('Not authenticated');
 
-            const payload = buildEntryPayload({
+            const payload = formToPayload({
                 ...form,
                 pos: currentPos
             });
@@ -2009,21 +1894,23 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     </fieldset>
 
                     {/* Dynamic Fields (for new DB columns) */}
-                    {Object.keys((entry as any) || {}).filter(key => {
-                        return !ENTRY_HANDLED_FIELDS.includes(key as any) && !key.startsWith('_');
-                    }).length > 0 && (
+                    {Object.keys(form.extraFields || {}).length > 0 && (
                             <fieldset className="border border-amber-100 bg-amber-50/20 rounded-lg p-4 space-y-3">
                                 <legend className="text-[10px] font-bold text-amber-600 uppercase tracking-widest px-2">{t('Additional Fields', 'Ghelta Oħra')}</legend>
                                 <div className="grid grid-cols-2 gap-4">
-                                    {Object.keys((entry as any) || {}).filter(key => {
-                                        return !ENTRY_HANDLED_FIELDS.includes(key as any) && !key.startsWith('_');
-                                    }).map(key => (
+                                    {Object.keys(form.extraFields).map(key => (
                                         <div key={key}>
                                             <label className={label}>{key}</label>
                                             <input
                                                 className={inp}
-                                                value={(form as any)[key] ?? ''}
-                                                onChange={e => set(key, e.target.value)}
+                                                value={form.extraFields[key] ?? ''}
+                                                onChange={e => setForm(prev => ({
+                                                    ...prev,
+                                                    extraFields: {
+                                                        ...prev.extraFields,
+                                                        [key]: e.target.value
+                                                    }
+                                                }))}
                                             />
                                         </div>
                                     ))}
@@ -2046,7 +1933,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     try {
                                         const token = await getToken();
                                         if (!token) throw new Error("Not authenticated");
-                                        const payload = buildEntryPayload(form);
+                                        const payload = formToPayload(form);
                                         await adminCreateEntry(token, payload);
                                         onSaved();
                                     } catch (err: any) {

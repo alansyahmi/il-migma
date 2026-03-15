@@ -69,17 +69,17 @@ export const ENTRY_PRIVATE_FIELDS = [
     '_sound_suffix', '_adj_sound_suffix', '_inheritedPattern'
 ] as const;
 
-const COMMON_FIELDS = [
+export const COMMON_FIELDS = [
     'id', 'headword', 'pos', 'is_loanword', 'source_language',
     'source_citation', 'definitions', 'etymology_chain', 'phonetics', 'tags',
     'synonyms', 'antonyms', 'related_entries', 'is_inflectable',
-    'usage_example', 'usage_example_en', 'root_consonants'
+    'usage_example', 'usage_example_en', 'root_consonants', 'cv_pattern'
 ];
 
 /** * Mapping POS to the Unified Database Columns.
  * UI will interpret 'lemma_base' as 'Singular' for Nouns and 'Masc' for Adjectives.
  */
-const POS_FEATURES: Record<string, string[]> = {
+export const POS_FEATURES: Record<string, string[]> = {
     'noun': [
         ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc',
         'inflections_pl', 'dual_form', 'diminutive_form', 'is_collective',
@@ -90,7 +90,7 @@ const POS_FEATURES: Record<string, string[]> = {
         ...COMMON_FIELDS, 'verb_class', 'verb_transitivity', 'verb_perfective_3sgm',
         'verb_imperfective_3sgm', 'verb_verbal_noun', 'verb_vowel_perf',
         'verb_vowel_impf', 'verb_vowel_impv', 'verb_active_ptcp', 'verb_passive_ptcp',
-        'cv_pattern', 'verb_form', 'verb_weak_class', 'verb_type'
+        'verb_form', 'verb_weak_class', 'verb_type'
     ],
     'adjective': [
         ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc', 'inflections_pl',
@@ -110,8 +110,13 @@ const POS_FEATURES: Record<string, string[]> = {
     ],
 };
 
+export const FORBIDDEN_FIELDS = [
+    'id', 'created_at', 'updated_at', 'root_id', 'root_pattern_form_id'
+] as const;
+
 export function buildEntryPayload(form: any): Record<string, any> {
     const payload: Record<string, any> = { ...form };
+    const extraFields = form.extraFields || {};
 
     // Strip private fields
     ENTRY_PRIVATE_FIELDS.forEach(f => {
@@ -130,6 +135,18 @@ export function buildEntryPayload(form: any): Record<string, any> {
     Object.keys(payload).forEach(key => {
         if (!allowedFields.includes(key)) {
             delete payload[key];
+        }
+    });
+
+    // Merge extraFields (passthrough unknown keys unchanged)
+    // Guardrails: skip private fields, forbidden/system fields, and already handled schema fields
+    Object.keys(extraFields).forEach(key => {
+        const isPrivate = key.startsWith('_');
+        const isForbidden = FORBIDDEN_FIELDS.includes(key as any);
+        const isSchema = allowedFields.includes(key);
+
+        if (!isPrivate && !isForbidden && !isSchema) {
+            payload[key] = extraFields[key];
         }
     });
 
