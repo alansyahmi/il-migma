@@ -16,6 +16,7 @@ import { buildEntryPayload, ENTRY_HANDLED_FIELDS } from '@/lib/adminSchema';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
 import { generateIPA, deriveFeminineFromPattern, deriveMasculineFromFeminine, detectPluralType, derivePattern, extractLongVowelFromPattern, generateNumeralForms } from '@/lib/maltesePhonology';
+import { resolveEntryGender } from '@/lib/gender';
 
 export interface AdminEntry {
     id: string;
@@ -877,7 +878,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         headword: entry?.headword ?? initialForm?.headword ?? '',
         pos: entry?.pos ?? initialForm?.pos ?? 'noun',
         lemma_base: (entry as any)?.lemma_base ?? (entry as any)?.noun_morphology?.singular ?? (entry as any)?.adjective_morphology?.masculine ?? initialForm?.lemma_base ?? '',
-        gender: (entry as any)?.gender ?? (entry as any)?.noun_morphology?.gender ?? (entry as any)?.adjective_morphology?.gender ?? initialForm?.gender ?? '',
+        gender: resolveEntryGender(entry as any) ?? resolveEntryGender(initialForm as any) ?? '',
         noun_type: (entry as any)?.noun_type ?? (entry as any)?.noun_morphology?.noun_type ?? initialForm?.noun_type ?? '',
         diminutive_form: (entry as any)?.diminutive_form ?? (entry as any)?.noun_morphology?.diminutive ?? initialForm?.diminutive_form ?? '',
         form_fem: (entry as any)?.form_fem ?? (entry as any)?.noun_morphology?.feminine ?? (entry as any)?.adjective_morphology?.feminine ?? initialForm?.form_fem ?? '',
@@ -972,7 +973,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 const pos = full.pos || prev.pos;
 
                                 const lemma_base = full.lemma_base || full.noun_morphology?.singular || full.adjective_morphology?.masculine || prev.lemma_base;
-                                const gender = full.gender || full.noun_morphology?.gender || full.adjective_morphology?.gender || prev.gender;
+                                const gender = resolveEntryGender(full) || resolveEntryGender(prev) || undefined;
                                 const inflections_pl_raw = parseArray(full.inflections_pl || full.noun_morphology?.plural_forms || full.adjective_morphology?.plural || prev.inflections_pl);
                                 const inflections_pl = Array.isArray(inflections_pl_raw) ? inflections_pl_raw.join(', ') : (inflections_pl_raw || '');
                                 const sound_suffix = full.sound_suffix || full.noun_morphology?.sound_plural || prev.sound_suffix;

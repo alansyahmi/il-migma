@@ -9,6 +9,7 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { apiSearch } from '@/lib/api';
 import { SubParts } from '@/components/dictionary/SubParts';
+import { resolveEntryGender } from '@/lib/gender';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
@@ -523,7 +524,7 @@ export function AdvancedSearch() {
                         headword: r.headword,
                         root: r.root_pattern_form?.root?.consonants || '',
                         rootSlug: r.root_pattern_form?.root?.consonants || '',
-                        gender: r.noun_gender || r.noun_morphology?.gender || (r.adjective_morphology?.masculine ? 'masculine' : undefined),
+                        gender: resolveEntryGender(r) || undefined,
                         pos: r.pos,
                         definitions: r.definition_en ? [r.definition_en] : (r.definitions?.length ? r.definitions.map((d: any) => d.text_en) : []),
                         inflections,

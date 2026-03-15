@@ -6,6 +6,7 @@
  */
 
 import { createClient } from '@libsql/client/web';
+import { resolveEntryGender } from '../../../src/lib/gender.js';
 
 export async function onRequestGet({ params, env }) {
     let { id } = params;
@@ -211,7 +212,7 @@ export async function onRequestGet({ params, env }) {
             const isColl = Boolean(entry.is_collective);
             const isSing = Boolean(entry.is_singulative);
             payload.noun_morphology = {
-                gender: entry.gender || 'masculine',
+                gender: resolveEntryGender(entry),
                 singular: entry.lemma_base || entry.headword,
                 plural_forms: payload.inflections_pl,
                 sound_plural: entry.sound_suffix || null,
