@@ -5,7 +5,7 @@
  */
 
 import { buildEntryPayload, ENTRY_HANDLED_FIELDS } from './adminSchema.ts';
-import { resolveEntryGender } from './gender.js';
+import { resolveEntryGender } from './gender';
 
 export const INITIAL_FORM_STATE = {
     id: '',
@@ -143,7 +143,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         vowel_set_opp: full.vowel_set_opp || '',
         vowel_set_dual: full.vowel_set_dual || '',
         inflections_pl,
-        sound_suffix,
+        sound_suffix: sound_suffix || full.sound_suffix || '',
         morph_pattern,
         lemma_pattern: full.lemma_pattern || '',
         form_fem_pattern: full.form_fem_pattern || '',

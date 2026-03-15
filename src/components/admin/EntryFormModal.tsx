@@ -143,27 +143,51 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options }: Morp
                 </div>
                 {(!form.gender || form.gender === '') && (
                     <>
+                        <div className="space-y-4">
+                            <div>
+                                <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
+                                <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} placeholder="e.g. kelliem" />
+                            </div>
+                            <div>
+                                <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
+                                <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} placeholder="e.g. CaCCaC" />
+                            </div>
+                        </div>
+                        <div className="space-y-4">
+                            <div>
+                                <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
+                                <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} placeholder="e.g. kelliema" />
+                            </div>
+                            <div>
+                                <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
+                                <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} placeholder="e.g. CaCCaCa" />
+                            </div>
+                        </div>
+                    </>
+                )}
+                {form.gender?.toLowerCase() === 'masculine' && (
+                    <>
+                        <div>
+                            <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
+                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} placeholder="e.g. kelliema" />
+                        </div>
+                        <div>
+                            <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
+                            <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} placeholder="e.g. CaCCaCa" />
+                        </div>
+                    </>
+                )}
+                {form.gender?.toLowerCase() === 'feminine' && (
+                    <>
                         <div>
                             <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
                             <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} placeholder="e.g. kelliem" />
                         </div>
                         <div>
-                            <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
-                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} placeholder="e.g. kelliema" />
+                            <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
+                            <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} placeholder="e.g. CaCCaC" />
                         </div>
                     </>
-                )}
-                {form.gender?.toLowerCase() === 'masculine' && (
-                    <div>
-                        <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
-                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} placeholder="e.g. kelliema" />
-                    </div>
-                )}
-                {form.gender?.toLowerCase() === 'feminine' && (
-                    <div>
-                        <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
-                        <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} placeholder="e.g. kelliem" />
-                    </div>
                 )}
             </div>
 
@@ -179,26 +203,44 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options }: Morp
             </div>
 
             <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>
-                        {form.is_collective ? t('Collective Form', 'Forma Kollettiva') :
-                            form.is_singulative ? t('Singulative Form', 'Forma Singulattiva') :
-                                t('Singular', 'Singular')}
-                    </label>
-                    <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
+                <div className="space-y-4">
+                    <div>
+                        <label className={styles.label}>
+                            {form.is_collective ? t('Collective Form', 'Forma Kollettiva') :
+                                form.is_singulative ? t('Singulative Form', 'Forma Singulattiva') :
+                                    t('Singular', 'Singular')}
+                        </label>
+                        <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
+                    </div>
+                    <div>
+                        <label className={styles.label}>{t('Lemma Pattern', 'Mudell tal-Lemma')}</label>
+                        <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} placeholder="e.g. CaCC" />
+                    </div>
                 </div>
-                <div>
-                    <label className={styles.label}>
-                        {isCollectiveOrSingulative ? t('Singulative Form', 'Forma Singulattiva') : t('Plural (Broken)', 'Plural (Miksur)')}
-                    </label>
-                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} placeholder="e.g. klieb, djar" />
+                <div className="space-y-4">
+                    <div>
+                        <label className={styles.label}>
+                            {isCollectiveOrSingulative ? t('Singulative Form', 'Forma Singulattiva') : t('Plural (Broken)', 'Plural (Miksur)')}
+                        </label>
+                        <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} placeholder="e.g. klieb, djar" />
+                    </div>
+                    <div>
+                        <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
+                        <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} placeholder="e.g. CCieC" />
+                    </div>
                 </div>
             </div>
 
             <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>{t('Dual Form', 'Forma Doppja')}</label>
-                    <input className={styles.inp} value={form.dual_form || ''} onChange={e => set('dual_form', e.target.value)} placeholder="e.g. xahrejn" />
+                <div className="space-y-4">
+                    <div>
+                        <label className={styles.label}>{t('Dual Form', 'Forma Doppja')}</label>
+                        <input className={styles.inp} value={form.dual_form || ''} onChange={e => set('dual_form', e.target.value)} placeholder="e.g. xahrejn" />
+                    </div>
+                    <div>
+                        <label className={styles.label}>{t('Dual Pattern', 'Mudell tad-Doppja')}</label>
+                        <input className={styles.inp} value={form.dual_pattern || ''} onChange={e => set('dual_pattern', e.target.value)} placeholder="e.g. CaCCejn" />
+                    </div>
                 </div>
                 <div>
                     <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
@@ -306,33 +348,63 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus }:
             </div>
             {(!form.gender || form.gender === '') && (
                 <>
+                    <div className="space-y-4">
+                        <div>
+                            <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
+                            <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
+                        </div>
+                        <div>
+                            <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
+                            <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <div>
+                            <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
+                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                        </div>
+                        <div>
+                            <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
+                            <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                        </div>
+                    </div>
+                </>
+            )}
+            {form.gender?.toLowerCase() === 'masculine' && (
+                <>
+                    <div>
+                        <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
+                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                    </div>
+                    <div>
+                        <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
+                        <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                    </div>
+                </>
+            )}
+            {form.gender?.toLowerCase() === 'feminine' && (
+                <>
                     <div>
                         <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
                         <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
-                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                        <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
+                        <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
                     </div>
                 </>
             )}
-            {form.gender?.toLowerCase() === 'masculine' && (
-                <div>
-                    <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
-                    <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
-                </div>
-            )}
-            {form.gender?.toLowerCase() === 'feminine' && (
-                <div>
-                    <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
-                    <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
-                </div>
-            )}
         </div>
         <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Plural', 'Plural')}</label>
-                <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
+            <div className="space-y-4">
+                <div>
+                    <label className={styles.label}>{t('Plural', 'Plural')}</label>
+                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
+                    <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} />
+                </div>
             </div>
             <div>
                 <label className={styles.label}>{t('Elative (Comparative)', 'Elattiv (Komparattiv)')}</label>
@@ -341,9 +413,15 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus }:
         </div>
 
         <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Dual Form', 'Forma Doppja')}</label>
-                <input className={styles.inp} value={form.dual_form || ''} onChange={e => set('dual_form', e.target.value)} />
+            <div className="space-y-4">
+                <div>
+                    <label className={styles.label}>{t('Dual Form', 'Forma Doppja')}</label>
+                    <input className={styles.inp} value={form.dual_form || ''} onChange={e => set('dual_form', e.target.value)} />
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Dual Pattern', 'Mudell tad-Doppja')}</label>
+                    <input className={styles.inp} value={form.dual_pattern || ''} onChange={e => set('dual_pattern', e.target.value)} />
+                </div>
             </div>
             <div>
                 <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
@@ -484,38 +562,74 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus }
             </div>
             {(!form.gender || form.gender === '') && (
                 <>
+                    <div className="space-y-4">
+                        <div>
+                            <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
+                            <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
+                        </div>
+                        <div>
+                            <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
+                            <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <div>
+                            <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
+                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                        </div>
+                        <div>
+                            <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
+                            <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                        </div>
+                    </div>
+                </>
+            )}
+            {form.gender?.toLowerCase() === 'masculine' && (
+                <>
+                    <div>
+                        <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
+                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                    </div>
+                    <div>
+                        <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
+                        <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                    </div>
+                </>
+            )}
+            {form.gender?.toLowerCase() === 'feminine' && (
+                <>
                     <div>
                         <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
                         <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
-                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                        <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
+                        <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
                     </div>
                 </>
             )}
-            {form.gender?.toLowerCase() === 'masculine' && (
+            <div className="space-y-4">
                 <div>
-                    <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
-                    <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                    <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
+                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
                 </div>
-            )}
-            {form.gender?.toLowerCase() === 'feminine' && (
                 <div>
-                    <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
-                    <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
+                    <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
+                    <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} />
                 </div>
-            )}
-            <div>
-                <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
-                <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
             </div>
         </div>
 
         <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Dual Form', 'Forma Doppja')}</label>
-                <input className={styles.inp} value={form.dual_form || ''} onChange={e => set('dual_form', e.target.value)} />
+            <div className="space-y-4">
+                <div>
+                    <label className={styles.label}>{t('Dual Form', 'Forma Doppja')}</label>
+                    <input className={styles.inp} value={form.dual_form || ''} onChange={e => set('dual_form', e.target.value)} />
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Dual Pattern', 'Mudell tad-Doppja')}</label>
+                    <input className={styles.inp} value={form.dual_pattern || ''} onChange={e => set('dual_pattern', e.target.value)} />
+                </div>
             </div>
             <div>
                 <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
@@ -556,33 +670,67 @@ const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => (
             </div>
             {(!form.gender || form.gender === '') && (
                 <>
+                    <div className="space-y-4">
+                        <div>
+                            <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
+                            <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
+                        </div>
+                        <div>
+                            <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
+                            <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} />
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <div>
+                            <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
+                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                        </div>
+                        <div>
+                            <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
+                            <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                        </div>
+                    </div>
+                </>
+            )}
+            {form.gender?.toLowerCase() === 'masculine' && (
+                <>
+                    <div>
+                        <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
+                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                    </div>
+                    <div>
+                        <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
+                        <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                    </div>
+                </>
+            )}
+            {form.gender?.toLowerCase() === 'feminine' && (
+                <>
                     <div>
                         <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
                         <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
-                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                        <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
+                        <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} />
                     </div>
                 </>
             )}
-            {form.gender?.toLowerCase() === 'masculine' && (
-                <div>
-                    <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
-                    <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
-                </div>
-            )}
-            {form.gender?.toLowerCase() === 'feminine' && (
-                <div>
-                    <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
-                    <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
-                </div>
-            )}
         </div>
         <div className={styles.grid}>
+            <div className="space-y-4">
+                <div>
+                    <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
+                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
+                    <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} />
+                </div>
+            </div>
             <div>
-                <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
-                <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
+                <label className={styles.label}>{t('Lemma Pattern', 'Mudell tal-Lemma')}</label>
+                <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
             </div>
         </div>
 
@@ -612,38 +760,74 @@ const NumeralFields = ({ form, set, t, styles, options, onApplyDerivedTerms }: M
             </div>
             {(!form.gender || form.gender === '') && (
                 <>
+                    <div className="space-y-4">
+                        <div>
+                            <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
+                            <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
+                        </div>
+                        <div>
+                            <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
+                            <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} />
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <div>
+                            <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
+                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                        </div>
+                        <div>
+                            <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
+                            <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                        </div>
+                    </div>
+                </>
+            )}
+            {form.gender?.toLowerCase() === 'masculine' && (
+                <>
+                    <div>
+                        <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
+                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                    </div>
+                    <div>
+                        <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
+                        <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                    </div>
+                </>
+            )}
+            {form.gender?.toLowerCase() === 'feminine' && (
+                <>
                     <div>
                         <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
                         <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
-                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                        <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
+                        <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} />
                     </div>
                 </>
-            )}
-            {form.gender?.toLowerCase() === 'masculine' && (
-                <div>
-                    <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
-                    <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
-                </div>
-            )}
-            {form.gender?.toLowerCase() === 'feminine' && (
-                <div>
-                    <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
-                    <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
-                </div>
             )}
         </div>
 
         <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Singular', 'Singular')}</label>
-                <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
+            <div className="space-y-4">
+                <div>
+                    <label className={styles.label}>{t('Singular', 'Singular')}</label>
+                    <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Lemma Pattern', 'Mudell tal-Lemma')}</label>
+                    <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
+                </div>
             </div>
-            <div>
-                <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
-                <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
+            <div className="space-y-4">
+                <div>
+                    <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
+                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
+                    <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} />
+                </div>
             </div>
         </div>
 

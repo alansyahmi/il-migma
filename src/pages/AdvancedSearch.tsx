@@ -406,6 +406,8 @@ export function AdvancedSearch() {
         if (searchParams.has('lp')) f.lemmaPattern = searchParams.get('lp')!;
         if (searchParams.has('fp')) f.femininePattern = searchParams.get('fp')!;
         if (searchParams.has('mp')) f.masculinePattern = searchParams.get('mp')!;
+        if (searchParams.has('pp')) f.pluralPattern = searchParams.get('pp')!;
+        if (searchParams.has('dp')) f.dualPattern = searchParams.get('dp')!;
         if (searchParams.has('vs_sg')) f.vowelSetSg = searchParams.get('vs_sg')!;
         if (searchParams.has('vs_opp')) f.vowelSetOpp = searchParams.get('vs_opp')!;
         if (searchParams.has('vs_pl')) f.vowelSetPl = searchParams.get('vs_pl')!;
@@ -437,6 +439,8 @@ export function AdvancedSearch() {
         searchParams.has('lp') ||
         searchParams.has('fp') ||
         searchParams.has('mp') ||
+        searchParams.has('pp') ||
+        searchParams.has('dp') ||
         searchParams.has('vs_sg') ||
         searchParams.has('vs_opp') ||
         searchParams.has('vs_pl') ||
@@ -461,6 +465,8 @@ export function AdvancedSearch() {
         const lemmaPatternFilter = searchParams.get('lp') || '';
         const femininePatternFilter = searchParams.get('fp') || '';
         const masculinePatternFilter = searchParams.get('mp') || '';
+        const pluralPatternFilter = searchParams.get('pp') || '';
+        const dualPatternFilter = searchParams.get('dp') || '';
         const vowelSetSgFilter = searchParams.get('vs_sg') || '';
         const vowelSetOppFilter = searchParams.get('vs_opp') || '';
         const vowelSetPlFilter = searchParams.get('vs_pl') || '';
@@ -487,6 +493,11 @@ export function AdvancedSearch() {
             searchEnglishGloss: searchParams.get('gloss') === 'true',
             includeSuggested: searchParams.get('suggested') === 'true',
             includePending: searchParams.get('pending') !== 'false',
+            lp: lemmaPatternFilter || undefined,
+            fp: femininePatternFilter || undefined,
+            mp: masculinePatternFilter || undefined,
+            pp: pluralPatternFilter || undefined,
+            dp: dualPatternFilter || undefined,
         })
             .then(res => {
                 setTotal(res.total);
@@ -642,6 +653,8 @@ export function AdvancedSearch() {
         if (filters.lemmaPattern) params.lp = filters.lemmaPattern;
         if (filters.femininePattern) params.fp = filters.femininePattern;
         if (filters.masculinePattern) params.mp = filters.masculinePattern;
+        if (filters.pluralPattern) params.pp = filters.pluralPattern;
+        if (filters.dualPattern) params.dp = filters.dualPattern;
         if (filters.vowelSetSg) params.vs_sg = filters.vowelSetSg;
         if (filters.vowelSetOpp) params.vs_opp = filters.vowelSetOpp;
         if (filters.vowelSetPl) params.vs_pl = filters.vowelSetPl;

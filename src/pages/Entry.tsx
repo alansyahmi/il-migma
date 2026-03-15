@@ -62,7 +62,7 @@ function PropRow({ label, children, className }: { label: string; children: Reac
     );
 }
 
-function MorphologyTable({ title, rows }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode }[] }) {
+function MorphologyTable({ title, rows }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string }[] }) {
     const { term } = useLinguisticMode();
     const activeRows = rows.filter(r => r.show !== false && r.value && r.value !== '-');
     if (activeRows.length === 0) return null;
@@ -78,6 +78,7 @@ function MorphologyTable({ title, rows }: { title: string; rows: { label: string
                         <tr className="border-b border-black/8 font-sans">
                             <th className="text-left font-semibold text-black pb-2 pr-4 w-32 sm:w-40">{term('feature') || 'Feature'}</th>
                             <th className="text-left font-semibold text-black pb-2">{term('form') || 'Form'}</th>
+                            <th className="text-left font-semibold text-black pb-2 w-24 sm:w-32">{term('pattern') || 'Pattern'}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,6 +94,9 @@ function MorphologyTable({ title, rows }: { title: string; rows: { label: string
                                         )}
                                         {row.extra}
                                     </div>
+                                </td>
+                                <td className="py-2.5 text-black/40 text-[10px] font-sans tracking-tight">
+                                    {row.pattern || '-'}
                                 </td>
                             </tr>
                         ))}
@@ -560,79 +564,46 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                 <VowelSetGrid morphology={{ ...entry, ...nm }} />
 
-                                <PropRow label={term('morphology')} className="col-span-2 sm:col-span-1 md:col-span-1">
-                                    <div className="space-y-1 text-sm">
-                                        {(() => {
-                                            const items = [
-                                                {
-                                                    show: nm.gender?.toLowerCase() === 'masculine' && nm.feminine,
-                                                    label: term('feminine'),
-                                                    value: <MarkedValue val={nm.feminine} />
-                                                },
-                                                {
-                                                    show: nm.gender?.toLowerCase() === 'feminine' && nm.masculine,
-                                                    label: term('masculine'),
-                                                    value: <MarkedValue val={nm.masculine} />
-                                                }
-                                            ];
-
-                                            const dualItem = {
-                                                label: term('dual'),
-                                                value: nm.dual ? (
-                                                    <MarkedValue val={nm.dual} />
-                                                ) : (
-                                                    <MarkedValue val={generateTheoreticalDual(entry.headword)} theoretical={true} />
-                                                )
-                                            }
-                                            {/*{!nm.dual && ( // DONT REMOVE THIS, FOR FUTURE RECONSIDERATION
-                                                    <span className="ml-1 text-[9px] uppercase font-sans tracking-tighter opacity-60">
-                                                        ({term('theoretical')})
-                                                    </span>
-                                                )
-                                            */}
-
-                                            const pluralItems = [
-                                                ...nm.plural_forms.map((f) => ({
-                                                    label: term('broken-plural'),
-                                                    value: <MarkedValue val={f} />,
-                                                    extra: (entry.morph_pattern || nm?.morph_pattern) && (
-                                                        <span className="ml-1.5 text-[10px] font-sans tracking-tighter opacity-70">
-                                                            {entry.morph_pattern || nm?.morph_pattern}
-                                                        </span>
-                                                    )
-                                                })),
-                                                {
-                                                    show: !!nm.sound_plural,
-                                                    label: term('sound-plural'),
-                                                    value: <MarkedValue val={nm.sound_plural} />
-                                                }
-                                            ];
-
-                                            const others = [
-                                                { show: !!nm.collective, label: (entry as any).is_singulative ? term('collective') : term('unit-form') || 'Unit Form', value: <MarkedValue val={nm.collective} /> },
-                                                { show: !!nm.singulative, label: (entry as any).is_collective ? term('singulative') : term('individual-form') || 'Individual Form', value: <MarkedValue val={nm.singulative} /> },
-                                                { show: !!nm.diminutive, label: term('diminutive'), value: <MarkedValue val={nm.diminutive} /> }
-                                            ];
-
-                                            // Smart ordering: if dual is attested, it goes above plurals
-                                            const sorted = [
-                                                ...items.filter(i => i.show !== false),
-                                                ...(nm.dual ? [dualItem] : []),
-                                                ...pluralItems.filter(i => (i as any).show !== false),
-                                                ...(!nm.dual ? [dualItem] : []),
-                                                ...others.filter(i => i.show !== false)
-                                            ];
-
-                                            return sorted.map((item: any, idx) => (
-                                                <p key={idx}>
-                                                    <span className="opacity-55 text-[0.7rem] uppercase tracking-tighter pr-1">{item.label}:</span>
-                                                    {item.value}
-                                                    {item.extra}
-                                                </p>
-                                            ));
-                                        })()}
-                                    </div>
-                                </PropRow>
+                                <MorphologyTable
+                                    title={term('morphology')}
+                                    rows={[
+                                        {
+                                            show: nm.gender?.toLowerCase() === 'masculine' && !!nm.feminine,
+                                            label: term('feminine'),
+                                            value: <MarkedValue val={nm.feminine} />,
+                                            pattern: nm.form_fem_pattern || entry.form_fem_pattern
+                                        },
+                                        {
+                                            show: nm.gender?.toLowerCase() === 'feminine' && !!nm.masculine,
+                                            label: term('masculine'),
+                                            value: <MarkedValue val={nm.masculine} />,
+                                            pattern: nm.form_masc_pattern || entry.form_masc_pattern
+                                        },
+                                        {
+                                            label: term('dual'),
+                                            value: nm.dual ? (
+                                                <MarkedValue val={nm.dual} />
+                                            ) : (
+                                                <MarkedValue val={generateTheoreticalDual(entry.headword)} theoretical={true} />
+                                            ),
+                                            pattern: nm.dual_pattern || entry.dual_pattern
+                                        },
+                                        ...nm.plural_forms.map((f, i) => ({
+                                            label: term('broken-plural'),
+                                            value: <MarkedValue val={f} />,
+                                            pattern: i === 0 ? (entry.morph_pattern || nm?.morph_pattern || entry.form_plural_pattern || nm?.form_plural_pattern) : undefined
+                                        })),
+                                        {
+                                            show: !!nm.sound_plural,
+                                            label: term('sound-plural'),
+                                            value: <MarkedValue val={nm.sound_plural} />,
+                                            pattern: entry.sound_suffix || nm.sound_suffix
+                                        },
+                                        { show: !!nm.collective, label: (entry as any).is_singulative ? term('collective') : term('unit-form') || 'Unit Form', value: <MarkedValue val={nm.collective} /> },
+                                        { show: !!nm.singulative, label: (entry as any).is_collective ? term('singulative') : term('individual-form') || 'Individual Form', value: <MarkedValue val={nm.singulative} /> },
+                                        { show: !!nm.diminutive, label: term('diminutive'), value: <MarkedValue val={nm.diminutive} /> }
+                                    ]}
+                                />
                             </div>
 
                             {/* Inflection Table */}
@@ -1892,11 +1863,15 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                         },
                                         {
                                             label: term('masculine'),
-                                            value: nm?.lemma_masc || entry.form_masc || entry.headword
+                                            value: nm?.lemma_masc || entry.form_masc || entry.headword,
+                                            pattern: nm?.gender?.toLowerCase() === 'masculine' ? (nm.lemma_pattern || entry.lemma_pattern) : (nm?.form_masc_pattern || entry.form_masc_pattern)
                                         },
                                         {
                                             label: term('feminine'),
-                                            value: nm?.lemma_fem || entry.form_fem
+                                            value: nm?.lemma_fem || entry.form_fem,
+                                            pattern: (nm?.gender?.toLowerCase() === 'feminine' && !nm.form_fem_pattern && !entry.form_fem_pattern)
+                                                ? (nm.lemma_pattern || entry.lemma_pattern)
+                                                : (nm?.form_fem_pattern || entry.form_fem_pattern)
                                         },
                                         {
                                             label: term('short-attributive') || 'Short',
@@ -1912,11 +1887,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                             label: term('plural'),
                                             value: nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || (entry.headword === 'wieħed' ? 'uħud' : null),
                                             show: !!(nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || entry.headword === 'wieħed'),
-                                            extra: (entry.morph_pattern || nm?.morph_pattern) && (
-                                                <span className="ml-1.5 text-[10px] font-sans tracking-tighter opacity-70">
-                                                    {entry.morph_pattern || nm?.morph_pattern}
-                                                </span>
-                                            )
+                                            pattern: entry.morph_pattern || nm?.morph_pattern || entry.form_plural_pattern || nm?.form_plural_pattern
                                         },
                                         {
                                             label: term('ordinal') || 'Ordinal',
@@ -2186,21 +2157,21 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                         {
                                             label: term('masculine'),
                                             value: am.masculine || (am.gender !== 'feminine' ? entry.headword : null),
-                                            show: am.gender !== 'feminine' || !!am.masculine
+                                            show: am.gender !== 'feminine' || !!am.masculine,
+                                            pattern: am.gender?.toLowerCase() === 'masculine' ? (am.lemma_pattern || entry.lemma_pattern) : (am.form_masc_pattern || entry.form_masc_pattern)
                                         },
                                         {
                                             label: term('feminine'),
                                             value: am.feminine || (am.gender === 'feminine' ? entry.headword : null),
-                                            show: am.gender === 'feminine' || !!am.feminine
+                                            show: am.gender === 'feminine' || !!am.feminine,
+                                            pattern: (am.gender?.toLowerCase() === 'feminine' && !am.form_fem_pattern && !entry.form_fem_pattern)
+                                                ? (am.lemma_pattern || entry.lemma_pattern)
+                                                : (am.form_fem_pattern || entry.form_fem_pattern)
                                         },
                                         {
                                             label: term('plural') || 'Plural',
                                             value: am.plural,
-                                            extra: (entry.morph_pattern || am?.morph_pattern) && (
-                                                <span className="ml-1.5 text-[10px] font-sans tracking-tighter opacity-70">
-                                                    {entry.morph_pattern || am?.morph_pattern}
-                                                </span>
-                                            )
+                                            pattern: entry.morph_pattern || am?.morph_pattern || entry.form_plural_pattern || am?.form_plural_pattern
                                         },
                                         {
                                             label: term('elative-masculine') || 'Elative (Masc)',
@@ -2472,16 +2443,21 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                         {
                                             label: term('masculine'),
                                             value: (entry as any).adj_masculine || (entry.participle_gender !== 'feminine' ? entry.headword : null),
-                                            show: entry.participle_gender !== 'feminine' || !!(entry as any).adj_masculine
+                                            show: entry.participle_gender !== 'feminine' || !!(entry as any).adj_masculine,
+                                            pattern: entry.participle_gender?.toLowerCase() === 'masculine' ? entry.lemma_pattern : entry.form_masc_pattern
                                         },
                                         {
                                             label: term('feminine'),
                                             value: (entry as any).adj_feminine || (entry.participle_gender === 'feminine' ? entry.headword : null),
-                                            show: entry.participle_gender === 'feminine' || !!(entry as any).adj_feminine
+                                            show: entry.participle_gender === 'feminine' || !!(entry as any).adj_feminine,
+                                            pattern: (entry.participle_gender?.toLowerCase() === 'feminine' && !entry.form_fem_pattern)
+                                                ? entry.lemma_pattern
+                                                : entry.form_fem_pattern
                                         },
                                         {
                                             label: term('plural'),
-                                            value: (entry as any).adj_plural
+                                            value: (entry as any).adj_plural,
+                                            pattern: entry.morph_pattern || entry.form_plural_pattern
                                         },
                                         {
                                             label: term('elative') || 'Elative',
