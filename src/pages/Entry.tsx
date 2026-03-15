@@ -326,6 +326,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
+    const [initialFormData, setInitialFormData] = useState<any>(null);
 
     const isActualAdmin = isAdmin && adminViewEnabled;
     const nm = entry.noun_morphology!;
@@ -2001,6 +2002,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
 
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
+    const [initialFormData, setInitialFormData] = useState<any>(null);
 
     const isActualAdmin = isAdmin && adminViewEnabled;
     const am = entry.adjective_morphology!;
@@ -2318,6 +2320,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
 
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
+    const [initialFormData, setInitialFormData] = useState<any>(null);
 
     const isActualAdmin = isAdmin && adminViewEnabled;
     const ety = entry.etymologies?.[0];
