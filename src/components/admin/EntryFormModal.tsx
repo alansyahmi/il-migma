@@ -109,6 +109,7 @@ const INITIAL_FORM_STATE = {
     numeral_type: '',
     form_attributive_short: '',
     form_attributive_long: '',
+    form_opposite: '',
 };
 
 // ── Components for Morphology Fields ──────────────────────────────────────
