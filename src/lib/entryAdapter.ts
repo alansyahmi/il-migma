@@ -103,7 +103,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
     const inflections_pl_raw = parseArray(full.inflections_pl || full.noun_morphology?.plural_forms || full.adjective_morphology?.plural);
     const inflections_pl = Array.isArray(inflections_pl_raw) ? inflections_pl_raw.join(', ') : (inflections_pl_raw || '');
     const sound_suffix = full.sound_suffix || full.noun_morphology?.sound_plural || '';
-    const morph_pattern = full.morph_pattern || full.plural_pattern || full.adj_pattern || '';
+    const morph_pattern = full.morph_pattern || '';
     
     const hasBroken = inflections_pl?.length > 0;
     const hasSound = sound_suffix?.length > 0;
@@ -145,11 +145,11 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         inflections_pl,
         sound_suffix: sound_suffix || full.sound_suffix || '',
         morph_pattern,
-        lemma_pattern: full.lemma_pattern || full.noun_morphology?.lemma_pattern || full.adjective_morphology?.lemma_pattern || full.numeral_morphology?.lemma_pattern || '',
-        form_fem_pattern: full.form_fem_pattern || full.noun_morphology?.form_fem_pattern || full.adjective_morphology?.form_fem_pattern || full.numeral_morphology?.form_fem_pattern || '',
-        form_masc_pattern: full.form_masc_pattern || full.noun_morphology?.form_masc_pattern || full.adjective_morphology?.form_masc_pattern || full.numeral_morphology?.form_masc_pattern || '',
-        form_plural_pattern: full.form_plural_pattern || full.noun_morphology?.form_plural_pattern || full.adjective_morphology?.form_plural_pattern || full.numeral_morphology?.form_plural_pattern || '',
-        dual_pattern: full.dual_pattern || full.noun_morphology?.dual_pattern || full.adjective_morphology?.dual_pattern || full.numeral_morphology?.dual_pattern || '',
+        lemma_pattern: full.lemma_pattern || '',
+        form_fem_pattern: full.form_fem_pattern || '',
+        form_masc_pattern: full.form_masc_pattern || '',
+        form_plural_pattern: full.form_plural_pattern || '',
+        dual_pattern: full.dual_pattern || '',
         dual_form,
         _hasDual: !!dual_form,
         _pluralType,

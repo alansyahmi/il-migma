@@ -133,7 +133,6 @@ export function buildEntryPayload(form: any): Record<string, any> {
 
     const pos = form.pos?.toLowerCase() || '';
     const allowedFields = POS_FEATURES[pos] || COMMON_FIELDS;
-
     // UI-to-DB Logic Mapping
     payload.verb_form = form._formLabel;
     payload.root_consonants = form._rootConsonants;
