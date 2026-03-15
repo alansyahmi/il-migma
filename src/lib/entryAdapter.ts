@@ -57,6 +57,11 @@ export const INITIAL_FORM_STATE = {
     cv_pattern: '',
     _inheritedPattern: '',
     morph_pattern: '',
+    lemma_pattern: '',
+    form_fem_pattern: '',
+    form_masc_pattern: '',
+    form_plural_pattern: '',
+    dual_pattern: '',
     _sound_suffix: '',
     _adj_sound_suffix: '',
     synonyms: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
@@ -98,7 +103,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
     const inflections_pl_raw = parseArray(full.inflections_pl || full.noun_morphology?.plural_forms || full.adjective_morphology?.plural);
     const inflections_pl = Array.isArray(inflections_pl_raw) ? inflections_pl_raw.join(', ') : (inflections_pl_raw || '');
     const sound_suffix = full.sound_suffix || full.noun_morphology?.sound_plural || '';
-    const morph_pattern = full.morph_pattern || full.plural_pattern || full.adj_pattern || '';
+    const morph_pattern = full.morph_pattern || '';
     
     const hasBroken = inflections_pl?.length > 0;
     const hasSound = sound_suffix?.length > 0;
@@ -140,6 +145,11 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         inflections_pl,
         sound_suffix,
         morph_pattern,
+        lemma_pattern: full.lemma_pattern || '',
+        form_fem_pattern: full.form_fem_pattern || '',
+        form_masc_pattern: full.form_masc_pattern || '',
+        form_plural_pattern: full.form_plural_pattern || '',
+        dual_pattern: full.dual_pattern || '',
         dual_form,
         _hasDual: !!dual_form,
         _pluralType,

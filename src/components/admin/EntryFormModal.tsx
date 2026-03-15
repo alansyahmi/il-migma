@@ -252,9 +252,47 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options }: Morp
                     ))}
                 </div>
             </div>
+
+            <NonVerbalPatternPlacementFields form={form} set={set} t={t} styles={styles} />
         </div>
     );
 };
+
+
+interface NonVerbalPatternProps {
+    form: any;
+    set: (field: string, value: any) => void;
+    t: (en: string, mt: string) => string;
+    styles: { label: string; inp: string; grid: string; };
+}
+
+const NonVerbalPatternPlacementFields = ({ form, set, t, styles }: NonVerbalPatternProps) => (
+    <div className="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-100">
+        <label className={styles.label}>{t('Form Pattern Placements', 'Postijiet tal-Mudelli')}</label>
+        <div className={styles.grid}>
+            <div>
+                <label className={styles.label}>{t('Lemma Pattern', 'Mudell tal-Lemma')}</label>
+                <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} placeholder="e.g. CvCvC" />
+            </div>
+            <div>
+                <label className={styles.label}>{t('Feminine Pattern', 'Mudell Femminili')}</label>
+                <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} placeholder="e.g. CvCvCa" />
+            </div>
+            <div>
+                <label className={styles.label}>{t('Masculine Pattern', 'Mudell Maskili')}</label>
+                <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} placeholder="e.g. CvCvC" />
+            </div>
+            <div>
+                <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
+                <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} placeholder="e.g. CCvC" />
+            </div>
+            <div>
+                <label className={styles.label}>{t('Dual Pattern', 'Mudell Doppju')}</label>
+                <input className={styles.inp} value={form.dual_pattern || ''} onChange={e => set('dual_pattern', e.target.value)} placeholder="e.g. CvCvCejn" />
+            </div>
+        </div>
+    </div>
+);
 
 const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus }: MorphologyProps) => (
     <div className="space-y-4">
@@ -342,6 +380,8 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus }:
                 ))}
             </div>
         </div>
+
+        <NonVerbalPatternPlacementFields form={form} set={set} t={t} styles={styles} />
     </div>
 );
 
@@ -499,6 +539,8 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus }
                 { key: 'vowel_set_pl', label: 'Vowel Set (Plural)', placeholder: 'e.g. i-ie' }
             ]}
         />
+
+        <NonVerbalPatternPlacementFields form={form} set={set} t={t} styles={styles} />
     </div>
 );
 
@@ -543,6 +585,8 @@ const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => (
                 <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
             </div>
         </div>
+
+        <NonVerbalPatternPlacementFields form={form} set={set} t={t} styles={styles} />
     </div>
 );
 
@@ -628,6 +672,8 @@ const NumeralFields = ({ form, set, t, styles, options, onApplyDerivedTerms }: M
                 <input className={styles.inp} value={form.form_attributive_long || ''} onChange={e => set('form_attributive_long', e.target.value)} />
             </div>
         </div>
+
+        <NonVerbalPatternPlacementFields form={form} set={set} t={t} styles={styles} />
     </div>
 );
 // Returns the canonical CV notation for a verb's lemma (perfect 3sg.m) based

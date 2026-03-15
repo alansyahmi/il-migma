@@ -83,16 +83,15 @@ function normalizeNounGender(value) {
 }
 
 function validateAndNormalizeEntryGender(body) {
-    const candidate = body.noun_gender ?? body.gender;
+    const candidate = body.gender;
     if (candidate === undefined) return;
 
     const normalized = normalizeNounGender(candidate);
     if (normalized === null && String(candidate).trim() !== '') {
-        throw new Error("Invalid noun_gender. Allowed values: masculine, feminine, neutral.");
+        throw new Error("Invalid gender. Allowed values: masculine, feminine, neutral.");
     }
 
-    if ('noun_gender' in body) body.noun_gender = normalized;
-    if ('gender' in body) body.gender = normalized;
+    body.gender = normalized;
 }
 
 // ── GET — list entries ────────────────────────────────────────────────────────
