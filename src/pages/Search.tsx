@@ -263,7 +263,7 @@ export function Search() {
         ...getOptions('verb_class', mode, language)
     ], [getOptions, mode, language, term]);
 
-    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type') || searchParams.has('source');
+    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type') || searchParams.has('source') || searchParams.has('gender');
     const submitted = searchParams.get('q') ?? '';
 
     // Effect to fetch from API
@@ -273,6 +273,7 @@ export function Search() {
         const pos = searchParams.get('pos') || undefined;
         const type = searchParams.get('type') || undefined;
         const source = searchParams.get('source') || undefined;
+        const gender = searchParams.get('gender') || undefined;
         const v = searchParams.get('v') || undefined;
         const form = searchParams.get('form') || undefined;
         const pending = searchParams.get('pending') === 'true' || searchParams.get('pending') === null; // default to true if not present to match DEFAULT_FILTERS
@@ -280,7 +281,7 @@ export function Search() {
         const limit = Number(searchParams.get('limit') ?? DEFAULT_FILTERS.maxResults);
         const random = searchParams.get('random') || undefined;
 
-        apiSearch(q, { pos, type, source, limit, random, v, form, includePending: pending, includeSuggested: suggested })
+        apiSearch(q, { pos, type, source, gender, limit, random, v, form, includePending: pending, includeSuggested: suggested })
             .then(res => {
                 setTotal(res.total);
                 // Map API results to the local SearchResult interface

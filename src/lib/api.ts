@@ -57,6 +57,7 @@ export async function apiSearch(
         wizen?: string;
         verb_type?: string;
         source?: string;
+        gender?: string;
         radicals?: string[];
         random?: string;
         regex?: boolean;
@@ -80,6 +81,7 @@ export async function apiSearch(
     if (opts.wizen) params.set('wizen', opts.wizen);
     if (opts.verb_type) params.set('verb_type', opts.verb_type);
     if (opts.source) params.set('source', opts.source);
+    if (opts.gender) params.set('gender', opts.gender);
     if (opts.random) params.set('random', opts.random);
     if (opts.regex) params.set('regex', 'true');
     if (opts.searchLemma) params.set('lemma', 'true');
