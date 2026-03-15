@@ -347,7 +347,7 @@ function EntryManager() {
 
                                                 <div className="mt-3 flex flex-wrap gap-1.5">
                                                     <span className="text-[10px] font-bold text-black/30 uppercase tracking-tighter">{term(e.pos || 'pos')}</span>
-                                                    {e.noun_gender && <Badge variant="pos" className="bg-sky-50 text-sky-700">{term(e.noun_gender)}</Badge>}
+                                                    {e.gender && <Badge variant="pos" className="bg-sky-50 text-sky-700">{term(e.gender)}</Badge>}
                                                     {e.verb_class && <Badge variant="pos" className="bg-purple-50 text-purple-700">{term(e.verb_class)}</Badge>}
                                                     {e.verb_transitivity && (
                                                         <Badge variant="pos" className="bg-indigo-50 text-indigo-700">
@@ -423,7 +423,7 @@ function EntryManager() {
                                                     <td className="p-4">
                                                         <div className="text-xs font-bold text-black/80">{term(e.pos || 'pos')}</div>
                                                         <div className="flex flex-wrap gap-1 max-w-[200px]">
-                                                            {e.noun_gender && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term(e.noun_gender)}</span>}
+                                                            {e.gender && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term(e.gender)}</span>}
                                                             {e.verb_class && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term(e.verb_class)}</span>}
                                                             {e.verb_transitivity && <span className="text-[10px] bg-sky-50 px-1.5 py-0.5 rounded text-sky-700">
                                                                 {term(e.verb_transitivity)}

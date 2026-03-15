@@ -22,9 +22,10 @@ export function normalizeGender(value) {
 
 /**
  * Canonical gender fallback order used across API + UI:
- * 1) Explicit DB value on the entry row (`noun_gender`/`gender`)
- * 2) Noun morphology gender value
- * 3) null (no implicit masculine default)
+ * 1) Explicit canonical row value (`gender`)
+ * 2) Legacy row value (`noun_gender`) as temporary read-compat
+ * 3) Noun morphology gender value
+ * 4) null (no implicit masculine default)
  * @param {any} entry
  * @returns {NormalizedGender}
  */
@@ -32,8 +33,8 @@ export function resolveEntryGender(entry) {
     if (!entry) return null;
 
     return (
-        normalizeGender(entry.noun_gender) ||
         normalizeGender(entry.gender) ||
+        normalizeGender(entry.noun_gender) ||
         normalizeGender(entry.noun_morphology?.gender) ||
         null
     );
