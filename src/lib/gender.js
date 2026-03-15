@@ -1,5 +1,5 @@
 /**
- * @typedef {'masculine' | 'feminine' | null} NormalizedGender
+ * @typedef {'masculine' | 'feminine' | 'neutral' | null} NormalizedGender
  */
 
 /**
@@ -15,6 +15,7 @@ export function normalizeGender(value) {
 
     if (['masculine', 'masc', 'm'].includes(normalized)) return 'masculine';
     if (['feminine', 'fem', 'f'].includes(normalized)) return 'feminine';
+    if (['neutral', 'neut', 'n'].includes(normalized)) return 'neutral';
 
     return null;
 }

@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS entries (
   id                    TEXT PRIMARY KEY,
   headword              TEXT NOT NULL,
   pos                   TEXT NOT NULL,
-  gender                TEXT, -- Replaces noun_gender, adj_gender, ptcp_gender
+  gender                TEXT CHECK(gender IN ('masculine','feminine','neutral')), -- Replaces noun_gender, adj_gender, ptcp_gender
   lemma_base            TEXT, -- Replaces noun_singular, adj_masculine
   inflections_pl        TEXT, -- JSON array; Replaces noun_plural_forms, adj_plural
   form_fem              TEXT, -- Replaces noun_feminine, adj_feminine
