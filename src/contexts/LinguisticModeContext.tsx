@@ -15,7 +15,7 @@ const LinguisticModeContext = createContext<LinguisticModeContextValue | null>(n
 const STORAGE_KEY = 'il-migma:linguistic-mode';
 
 export function LinguisticModeProvider({ children }: { children: React.ReactNode }) {
-    const { config } = useAdminConfig();
+    const { byCategoryAndKey } = useAdminConfig();
     const { language } = useLanguage();
     const [mode, setModeState] = useState<LinguisticMode>(() => {
         const stored = localStorage.getItem(STORAGE_KEY);
@@ -32,8 +32,19 @@ export function LinguisticModeProvider({ children }: { children: React.ReactNode
         const lowerKey = key.toLowerCase();
         const isEn = language === 'en';
 
-        // 1. Check dynamic config first (case-insensitive key match)
-        const dynamicItem = config.find(c => c.key.toLowerCase() === lowerKey);
+        // 1. Check dynamic config via indexed maps
+        // Match order: ui_terminology -> global search (legacy)
+        let dynamicItem = byCategoryAndKey.get('ui_terminology')?.get(lowerKey);
+        
+        if (!dynamicItem) {
+            // Fallback: Global search across all categories (find first match)
+            for (const [cat, map] of byCategoryAndKey.entries()) {
+                if (cat === 'ui_terminology') continue;
+                dynamicItem = map.get(lowerKey);
+                if (dynamicItem) break;
+            }
+        }
+
         if (dynamicItem && typeof dynamicItem.value === 'object' && dynamicItem.value !== null) {
             const v = dynamicItem.value;
             if (isEn) {
@@ -49,7 +60,7 @@ export function LinguisticModeProvider({ children }: { children: React.ReactNode
 
         // 2. Fallback to hardcoded terminology
         return resolveHardcodedTerm(lowerKey, mode, isEn ? 'en' : 'mt');
-    }, [config, language, mode]);
+    }, [byCategoryAndKey, language, mode]);
 
     const contextValue = React.useMemo(() => ({ mode, setMode, term }), [mode, term]);
 

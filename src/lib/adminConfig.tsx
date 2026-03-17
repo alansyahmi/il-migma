@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { adminListConfig, adminCreateConfig, adminUpdateConfig, adminDeleteConfig } from './api';
-import { resolveTerm as resolveHardcodedTerm } from './terminology';
-import { normalizeGender } from './gender';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
+import { getCategoryById, getRegistryOptions } from './adminCategoryRegistry';
 
 export interface ConfigItem {
     id: string;
@@ -14,6 +13,8 @@ export interface ConfigItem {
 
 interface AdminConfigContextType {
     config: ConfigItem[];
+    byCategory: Map<string, ConfigItem[]>;
+    byCategoryAndKey: Map<string, Map<string, ConfigItem>>;
     loading: boolean;
     refresh: () => Promise<void>;
     getCategoryItems: (category: string) => ConfigItem[];
@@ -41,6 +42,24 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const [loading, setLoading] = useState(true);
     const { getToken } = useClerkAuth();
 
+    // Derived Indexes
+    const { byCategory, byCategoryAndKey } = React.useMemo(() => {
+        const catMap = new Map<string, ConfigItem[]>();
+        const catKeyMap = new Map<string, Map<string, ConfigItem>>();
+
+        config.forEach(item => {
+            // By Category
+            if (!catMap.has(item.category)) catMap.set(item.category, []);
+            catMap.get(item.category)!.push(item);
+
+            // By Category and Key
+            if (!catKeyMap.has(item.category)) catKeyMap.set(item.category, new Map());
+            catKeyMap.get(item.category)!.set(item.key.toLowerCase(), item);
+        });
+
+        return { byCategory: catMap, byCategoryAndKey: catKeyMap };
+    }, [config]);
+
     const refresh = useCallback(async () => {
         setLoading(true);
         try {
@@ -62,20 +81,27 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         refresh();
     }, [refresh]);
 
-    const getCategoryItems = (category: string) => {
-        return config.filter(item => item.category === category);
-    };
+    const getCategoryItems = useCallback((category: string) => {
+        const reg = getCategoryById(category);
+        const storageCats = reg ? reg.storageCategories : [category];
+        
+        if (storageCats.length === 1) {
+            return byCategory.get(storageCats[0]) || [];
+        }
 
-    const getValues = (category: string) => {
+        // Combine multiple storage categories (e.g. plural_pattern)
+        return storageCats.flatMap(cat => byCategory.get(cat) || []);
+    }, [byCategory]);
+
+    const getValues = useCallback((category: string) => {
         const items = getCategoryItems(category);
+        const reg = getCategoryById(category);
+
         if (items.length > 0) {
-            if (category === 'verb_preset') {
-                return items.map(i => ({ form: i.key, data: i.value }));
+            if (reg?.transformValue) {
+                return items.map(i => reg.transformValue!(i));
             }
-            if (category === 'cv_wizen_pattern' || category === 'broken_pattern' || category === 'adjective_pattern' || category === 'feminine_pattern') {
-                return items.map(i => i.value);
-            }
-            
+
             const first = items[0];
             const isComplex = typeof first.value === 'object' && first.value !== null && !('en' in first.value);
             if (isComplex) {
@@ -84,7 +110,7 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
             return items.map(i => i.key);
         }
         return FALLBACKS[category] || [];
-    };
+    }, [getCategoryItems]);
 
     const createItem = async (item: Partial<ConfigItem>) => {
         const token = await getToken();
@@ -107,48 +133,29 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         await refresh();
     };
 
-    const getOptions = (category: string, mode: 'standard' | 'arabised', lang: 'en' | 'mt' = 'mt'): { value: string, label: string }[] => {
+    const getOptions = useCallback((category: string, mode: 'standard' | 'arabised', lang: 'en' | 'mt' = 'mt'): { value: string, label: string }[] => {
         const items = getCategoryItems(category);
         if (items.length > 0) {
             return items
-                .map(item => {
-                    const v = item.value;
-
-                    // For gender, force canonical values so form state matches options even if
-                    // the admin-config keys were entered as "Masculine"/"Fem"/etc.
-                    const canonicalGender = category === 'gender' ? normalizeGender(item.key) : null;
-                    if (category === 'gender' && !canonicalGender) return null;
-
-                    let label = item.key;
-                    if (v && typeof v === 'object') {
-                        if (lang === 'en') {
-                            label = v.en || item.key;
-                        } else if (mode === 'arabised') {
-                            label = v.mt_arabised || v.wizen || v.en || item.key;
-                        } else {
-                            label = v.mt_standard || v.cv || v.en || item.key;
-                        }
-                    } else if (category === 'gender' && canonicalGender) {
-                        label = resolveHardcodedTerm(canonicalGender, mode, lang);
-                    }
-
-                    return { value: (canonicalGender || item.key), label };
-                })
+                .map(item => getRegistryOptions(category, item, mode, lang))
                 .filter(Boolean) as { value: string, label: string }[];
         }
 
         // Use fallbacks if no items in DB
         const fallbacks = FALLBACKS[category] || [];
-        return fallbacks.map(f => ({
-            value: f,
-            label: resolveHardcodedTerm(f, mode, lang)
-        }));
-    };
+        return fallbacks.map(f => {
+            const mockItem = { key: f, value: null };
+            const opt = getRegistryOptions(category, mockItem, mode, lang);
+            return opt || { value: f, label: f };
+        });
+    }, [getCategoryItems]);
 
     return (
         <AdminConfigContext.Provider
             value={{
                 config,
+                byCategory,
+                byCategoryAndKey,
                 loading,
                 refresh,
                 getCategoryItems,

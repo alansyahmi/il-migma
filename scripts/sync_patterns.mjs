@@ -109,13 +109,13 @@ async function run() {
         for (const key in unique) {
             const p = unique[key];
             await db.execute({
-                sql: `INSERT OR IGNORE INTO configs (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
+                sql: `INSERT OR IGNORE INTO admin_config (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
                 args: [uid(), p.category, p.cv, JSON.stringify({ cv: p.cv, wizen: p.wizen }), 100]
             });
             inserted++;
         }
 
-        console.log(`Synced ${inserted} patterns to configs table.`);
+        console.log(`Synced ${inserted} patterns to admin_config table.`);
     } catch (e) {
         console.error('Sync failed:', e);
     }

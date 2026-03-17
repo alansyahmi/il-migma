@@ -31,3 +31,4 @@ dist-ssr
 local.db*
 .wrangler/
 tmp/
+everything-claude-code

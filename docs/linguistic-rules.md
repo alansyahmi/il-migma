@@ -266,3 +266,6 @@ The `terminology.ts` module provides **bilingual term resolution**. Every lingui
 | **Arabised** | *Filgħi* (Arabised Maltese calque) | *Isem* |
 
 The user toggles between modes via a UI setting. All labels are resolved through `resolveTerm(key, mode)` — components never hardcode linguistic terminology.
+
+> [!NOTE]
+> For a detailed technical overview of how linguistic modes are implemented and their impact on the admin workflow, see [Linguistic Modes (Standard vs Arabised)](file:///c:/Projects/il-migma/docs/linguistic-mode.md).

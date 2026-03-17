@@ -4,33 +4,14 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Spinner';
 import { Modal } from '@/components/ui/Modal';
-import { Plus, Trash2, Edit2, RotateCcw, Save, Tag, Users, Globe, Zap, ClipboardList, Package, Library, Settings, Puzzle, Palette, PlusSquare, Languages, Braces, HelpCircle, Keyboard, GripVertical } from 'lucide-react';
+import { Plus, Trash2, Edit2, RotateCcw, Save, Settings, HelpCircle, Keyboard, GripVertical, Languages, Braces } from 'lucide-react';
 import { useUser } from '@clerk/clerk-react';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 
-const CATEGORIES = [
-    { id: 'pos', label: 'Parts of Speech', icon: Tag },
-    { id: 'gender', label: 'Genders', icon: Users },
-    { id: 'dialect', label: 'Dialects', icon: Globe },
-    { id: 'verb_class', label: 'Verb Classes', icon: Zap },
-    { id: 'verb_transitivity', label: 'Transitivity', icon: ClipboardList },
-    { id: 'register', label: 'Registers', icon: ClipboardList },
-    { id: 'noun_type', label: 'Noun Types', icon: Package },
-    { id: 'source_language', label: 'Sources', icon: Library },
-    { id: 'verb_preset', label: 'Verb Presets', icon: Settings },
-    { id: 'plural_pattern', label: 'Plural Patterns', icon: Puzzle },
-    { id: 'feminine_pattern', label: 'Feminine Patterns', icon: Users },
-    { id: 'cv_wizen_pattern', label: 'Patterns', icon: Palette },
-    { id: 'verb_form', label: 'Verb Forms', icon: Settings },
-    { id: 'participle_nuance', label: 'Ptcp. Nuances', icon: Tag },
-    { id: 'root_relationship', label: 'Root Relationships', icon: Globe },
-    { id: 'root_strength', label: 'Root Strengths', icon: Zap },
-    { id: 'weak_class', label: 'Weak Classes', icon: HelpCircle },
-    { id: 'ui_terminology', label: 'UI Terminology', icon: Languages },
-];
+import { CATEGORIES, getCategoryById } from '@/lib/adminCategoryRegistry';
 
 export function AdminSettings() {
     const { config, loading, getCategoryItems, deleteItem, createItem, updateItem } = useAdminConfig();
@@ -111,9 +92,7 @@ export function AdminSettings() {
         (e.target as HTMLElement).style.opacity = '1';
     };
 
-    const currentItems = activeTab === 'plural_pattern'
-        ? [...getCategoryItems('broken_pattern'), ...getCategoryItems('sound_suffix')]
-        : getCategoryItems(activeTab);
+    const currentItems = getCategoryItems(activeTab);
 
     if (loading && config.length === 0) {
         return <div className="flex justify-center py-20"><Spinner /></div>;
@@ -152,15 +131,13 @@ export function AdminSettings() {
                             )}
                             onClick={() => setActiveTab(cat.id)}
                         >
-                            <GripVertical size={14} className="opacity-0 group-hover:opacity-40 hover:!opacity-100 transition-opacity cursor-grab active:cursor-grabbing text-black" />
+                            <GripVertical size={14} className="opacity-0 group-hover:opacity-40 hover:opacity-100! transition-opacity cursor-grab active:cursor-grabbing text-black" />
                             <span className="flex items-center gap-2 flex-1">
                                 <cat.icon size={16} className={cn("transition-colors", activeTab === cat.id ? "text-[#1034A6]" : "text-black/20 group-hover:text-black/40")} />
                                 {t(cat.label, term(cat.label))}
                             </span>
                             <span className="text-[10px] bg-black/5 px-1.5 rounded opacity-50 group-hover:opacity-100 mr-2">
-                                {cat.id === 'plural_pattern'
-                                    ? getCategoryItems('broken_pattern').length + getCategoryItems('sound_suffix').length
-                                    : getCategoryItems(cat.id).length}
+                                {getCategoryItems(cat.id).length}
                             </span>
                         </div>
                     ))}
@@ -232,7 +209,7 @@ export function AdminSettings() {
                         {CATEGORIES.find(c => c.id === activeTab)?.label}
                     </h2>
                     <div className="flex items-center gap-3">
-                        {['cv_wizen_pattern', 'plural_pattern', 'feminine_pattern'].includes(activeTab) && (
+                        {getCategoryById(activeTab)?.hasPosFilter && (
                             <select
                                 className="bg-white border border-black/10 rounded-lg px-3 py-1.5 text-xs font-semibold focus:outline-none"
                                 value={posFilter}
@@ -251,7 +228,7 @@ export function AdminSettings() {
                 <div className="grid gap-3">
                     {(() => {
                         let items = currentItems;
-                        if (posFilter !== 'all' && ['cv_wizen_pattern', 'plural_pattern', 'feminine_pattern'].includes(activeTab)) {
+                        if (posFilter !== 'all' && getCategoryById(activeTab)?.hasPosFilter) {
                             items = items.filter(item => {
                                 const val = item.value as any;
                                 return val.pos_types?.includes(posFilter);
@@ -267,7 +244,7 @@ export function AdminSettings() {
                         }
 
                         return items.map(item => (
-                            <Card key={item.id} className="p-4 border-[#ede9e1] hover:border-[#1034A6]/30 transition-colors group">
+                            <Card key={item.id} className="p-4 border-border-light hover:border-[#1034A6]/30 transition-colors group">
                                 <div className="flex items-center justify-between">
                                     <div className="space-y-1">
                                         <h3 className="font-bold text-lg text-black uppercase tracking-tight">
@@ -335,9 +312,6 @@ export function AdminSettings() {
                                 await updateItem({ ...editItem, ...val });
                             } else {
                                 let saveCategory = activeTab;
-                                if (activeTab === 'plural_pattern') {
-                                    saveCategory = val.key.startsWith('-') ? 'sound_suffix' : 'broken_pattern';
-                                }
                                 await createItem({ category: saveCategory, ...val });
                             }
                             setShowAdd(false);
@@ -359,19 +333,8 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
     const [key, setKey] = useState(item?.key ?? '');
     const [value, setValue] = useState<any>(() => {
         if (item) return item.value;
-        if (category === 'verb_preset') {
-            return {
-                en: '', mt_standard: '', mt_arabised: '',
-                perfect: { cv: '', wizen: '' },
-                passive: { cv: '', wizen: '' },
-                active: { cv: '', wizen: '' },
-                verbal: { cv: '', wizen: '' }
-            };
-        }
-        if (['broken_pattern', 'plural_pattern', 'feminine_pattern', 'cv_wizen_pattern', 'sound_suffix'].includes(category)) {
-            return { cv: '', wizen: '', stress: 2, pos_types: [] };
-        }
-        return { en: '', mt_standard: '', mt_arabised: '' };
+        const reg = getCategoryById(category);
+        return reg ? reg.defaultValueFactory() : { en: '', mt_standard: '', mt_arabised: '' };
     });
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -413,7 +376,8 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
         }
     };
 
-    const isComplex = ['verb_preset', 'broken_pattern', 'plural_pattern', 'feminine_pattern', 'cv_wizen_pattern', 'sound_suffix'].includes(category);
+    const activeReg = getCategoryById(category);
+    const isComplex = activeReg?.editorType !== 'simple_label';
     const { getValues } = useAdminConfig();
     const POS_OPTIONS = getValues('pos').filter(p => p !== 'verb');
 
@@ -445,7 +409,7 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
                             }} placeholder={category === 'verb_preset' ? "e.g. Form I" : "English display name..."} />
                         </div>
                         {/* Only show these for non-pattern items to avoid redundancy */}
-                        {!['broken_pattern', 'plural_pattern', 'feminine_pattern', 'cv_wizen_pattern', 'sound_suffix'].includes(category) && (
+                        {activeReg?.editorType !== 'pattern' && (
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className={labelStyle}>Maltese (CV / Standard) {category === 'verb_preset' ? '(Form Name)' : ''}</label>
@@ -468,7 +432,7 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
                     {isComplex && (
                         <div className="pt-4 border-t border-black/5 space-y-4">
                             <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-tighter">Specific Configuration</h4>
-                            {category === 'verb_preset' ? (
+                            {activeReg?.editorType === 'verb_preset' ? (
                                 <div className="grid grid-cols-2 gap-x-6 gap-y-4">
                                     {['perfect', 'passive', 'active', 'verbal'].map(form => (
                                         <div key={form} className="space-y-2 border-l-2 border-slate-100 pl-3">
@@ -522,7 +486,7 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
                                         </div>
                                     </div>
 
-                                    {['cv_wizen_pattern', 'broken_pattern', 'plural_pattern', 'feminine_pattern', 'sound_suffix'].includes(category) && (
+                                    {activeReg?.hasPosFilter && (
                                         <div>
                                             <label className={labelStyle}>Apply to POS (exclude verb)</label>
                                             <div className="flex flex-wrap gap-1.5 mt-2">

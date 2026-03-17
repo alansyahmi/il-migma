@@ -118,9 +118,9 @@ const VERB_PRESETS = {
 
 async function run() {
     try {
-        console.log('Creating configs table...');
+        console.log('Creating admin_config table...');
         await db.execute(`
-            CREATE TABLE IF NOT EXISTS configs (
+            CREATE TABLE IF NOT EXISTS admin_config (
                 id TEXT PRIMARY KEY,
                 category TEXT NOT NULL,
                 key TEXT NOT NULL,
@@ -138,7 +138,7 @@ async function run() {
         const addSimple = (category, list) => {
             list.forEach((item, i) => {
                 queries.push({
-                    sql: `INSERT OR IGNORE INTO configs (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
+                    sql: `INSERT OR IGNORE INTO admin_config (id, category, key, value, sort_order) VALUES (?, ?, ?, ?, ?)`,
                     args: [Math.random().toString(36).slice(2, 11), category, item, JSON.stringify(item), i]
                 });
             });

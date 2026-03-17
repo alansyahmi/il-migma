@@ -7,7 +7,7 @@ conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
 def get_config_all():
-    cursor.execute("SELECT category, value FROM configs")
+    cursor.execute("SELECT category, value FROM admin_config")
     rows = cursor.fetchall()
     config = {}
     for cat, val_str in rows:
@@ -48,7 +48,7 @@ for cat in ['cv_wizen_pattern', 'broken_pattern', 'adjective_pattern']:
     all_presets.update(config.get(cat, set()))
 
 print(f"Total entries in 'patterns' table: {len(db_patterns)}")
-print(f"Total presets in 'configs' table (pattern categories): {len(all_presets)}")
+print(f"Total presets in 'admin_config' table (pattern categories): {len(all_presets)}")
 print(f"Total patterns actually used in 'entries' (extra columns): {len(usage_patterns)}")
 
 missing_from_presets = db_patterns - all_presets

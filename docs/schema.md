@@ -110,6 +110,21 @@ A computed 0–100 score based on which `lexical_sources` attest the entry. Each
 
 Can be attached to either an `entry_id` or a `subentry_id`. The `dialect` field defaults to `'Standard'` but can be any Maltese dialect region (e.g. `"Żejtun"`, `"Nadur"`).
 
+### `admin_config` — Dynamic Settings
+
+Stores UI terminology, pattern presets, and other dynamic admin settings.
+
+| Column | Type | Meaning |
+|---|---|---|
+| `id` | TEXT PK | Unique identifier |
+| `category` | TEXT | Grouping key (e.g., `'ui_terminology'`, `'broken_pattern'`) |
+| `key` | TEXT | Lookup key within category. Must be unique per category. |
+| `value` | TEXT (JSON) | Configuration payload. Localized objects for terminology, or pattern metadata for presets. |
+| `sort_order` | INTEGER | Display order in Admin UI |
+
+> [!IMPORTANT]
+> **Unique Constraint**: The table enforces `UNIQUE(category, key)` to ensure lookup consistency.
+
 ### `users` — Tiered Access
 
 Three tiers: `basic` (free), `pro` (subscription), `enterprise` (API access). Two standalone purchases: `ads_disabled` (€2.99 lifetime) and `audio_unlocked` (€1.99 lifetime).
