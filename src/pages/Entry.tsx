@@ -13,7 +13,7 @@ import { Edit2, ArrowLeft, Search, Plus, Trash2 } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { apiGetEntry, adminDeleteEntry } from '@/lib/api';
 import { useRootData } from '@/hooks/useRootData';
-import { cn } from '@/lib/utils';
+import { cn, getGloss } from '@/lib/utils';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { generateTheoreticalDual, generateElative, generateNumeralForms, type NumeralAutoForms } from '@/lib/maltesePhonology';
 
@@ -125,9 +125,37 @@ function VowelSetGrid({ morphology }: { morphology: any }) {
         <PropRow label={t('Vowel Set', 'Sett ta\' Vokali')}>
             <div className="grid grid-cols-1 gap-x-2 gap-y-1 mt-0.5">
                 {active.map(f => (
-                    <div key={f.key} className="flex items-center text-sm">
-                        <span className="opacity-55 text-[0.7rem] uppercase tracking-tighter pr-1 shrink-0">{f.label}:</span>
+                    <div key={f.key} className="flex items-center text-[13px]">
+                        <span className="text-[10px] font-bold text-black/40 uppercase tracking-tighter pr-1 shrink-0">{f.label}:</span>
                         <span className="font-mono font-regular" style={{ color: 'black' }}>{morphology[f.key]}</span>
+                    </div>
+                ))}
+            </div>
+        </PropRow>
+    );
+}
+
+function MorphologyGrid({ title, rows }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string }[] }) {
+    const activeRows = rows.filter(r => r.show !== false && r.value && r.value !== '-');
+    if (activeRows.length === 0) return null;
+
+    return (
+        <PropRow label={title}>
+            <div className="grid grid-cols-1 gap-x-2 gap-y-1 mt-0.5">
+                {activeRows.map((row, idx) => (
+                    <div key={idx} className="flex items-center text-[13px]">
+                        <span className="text-[10px] font-bold text-black/40 uppercase tracking-tighter pr-1 shrink-0">{row.label}:</span>
+                        <div className="flex items-baseline font-serif text-black">
+                            {typeof row.value === 'string' || (row.value && typeof row.value === 'object' && !React.isValidElement(row.value)) ? (
+                                <MarkedValue val={row.value as any} theoretical={row.theoretical} />
+                            ) : (
+                                row.value
+                            )}
+                            {row.extra}
+                            {row.pattern && (
+                                <span className="ml-1 text-[10px] font-sans text-black/40">({row.pattern})</span>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>
@@ -437,7 +465,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             </div>
                         )}
                     </div>
-                    <SubParts entry={entry} />
+                    <SubParts entry={entry} showGender />
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
@@ -490,7 +518,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                                    "{getGloss(rel, language, mode)}"
                                                 </span>
                                             </Link>
                                             {isActualAdmin && (
@@ -564,7 +592,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                 <VowelSetGrid morphology={{ ...entry, ...nm }} />
 
-                                <MorphologyTable
+                                <MorphologyGrid
                                     title={term('morphology')}
                                     rows={[
                                         {
@@ -687,7 +715,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                     <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif hover:underline" style={{ color: BLUE }}>
                                                         {rel.headword}{' '}
                                                         <span className="opacity-55 font-sans text-xs text-black">
-                                                            "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                                            "{getGloss(rel, language, mode)}"
                                                         </span>
                                                     </Link>
                                                 ))}
@@ -728,9 +756,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                     {s.headword}
                                                                 </Link>
-                                                                <span className="opacity-55 font-sans text-xs text-black truncate max-w-[120px]">
-                                                                    "{mode === 'standard' ? (s.gloss_en ?? '') : (s.gloss_mt ?? s.gloss_en ?? '')}"
-                                                                </span>
+                                                                    "{getGloss(s, language, mode)}"
                                                                 {isActualAdmin && (
                                                                     <AdminActionButtons
                                                                         onEdit={() => handleEditEntry(s)}
@@ -749,9 +775,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                     {a.headword}
                                                                 </Link>
-                                                                <span className="opacity-55 font-sans text-xs text-black truncate max-w-[120px]">
-                                                                    "{mode === 'standard' ? (a.gloss_en ?? '') : (a.gloss_mt ?? a.gloss_en ?? '')}"
-                                                                </span>
+                                                                    "{getGloss(a, language, mode)}"
                                                                 {isActualAdmin && (
                                                                     <AdminActionButtons
                                                                         onEdit={() => handleEditEntry(a)}
@@ -791,7 +815,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                                    "{getGloss(rel, language, mode)}"
                                                 </span>
                                             </Link>
                                         ))}
@@ -1008,7 +1032,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             </button>
                         )}
                     </div>
-                    <SubParts entry={entry} />
+                    <SubParts entry={entry} showGender />
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
@@ -1056,7 +1080,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                                    "{getGloss(rel, language, mode)}"
                                                 </span>
                                             </Link>
                                             {isActualAdmin && (
@@ -1479,7 +1503,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                         {s.headword}
                                                                     </Link>
                                                                     <span className="opacity-55 font-sans text-xs text-black truncate max-w-[120px]">
-                                                                        "{mode === 'standard' ? (s.gloss_en ?? '') : (s.gloss_mt ?? s.gloss_en ?? '')}"
+                                                                        "{getGloss(s, language, mode)}"
                                                                     </span>
                                                                     {isActualAdmin && (
                                                                         <AdminActionButtons
@@ -1500,7 +1524,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                         {a.headword}
                                                                     </Link>
                                                                     <span className="opacity-55 font-sans text-xs text-black truncate max-w-[120px]">
-                                                                        "{mode === 'standard' ? (a.gloss_en ?? '') : (a.gloss_mt ?? a.gloss_en ?? '')}"
+                                                                        "{getGloss(a, language, mode)}"
                                                                     </span>
                                                                     {isActualAdmin && (
                                                                         <AdminActionButtons
@@ -1542,7 +1566,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                                    "{getGloss(rel, language, mode)}"
                                                 </span>
                                             </Link>
                                         ))}
@@ -1753,7 +1777,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                             )}
                         </div>
                     </div>
-                    <SubParts entry={entry} />
+                    <SubParts entry={entry} showGender />
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
@@ -1794,7 +1818,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                                    "{getGloss(rel, language, mode)}"
                                                 </span>
                                             </Link>
                                             {isActualAdmin && (
@@ -1843,64 +1867,61 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                 {patternValue && (
                                     <PropRow label={patternLabel}>
                                         <Link to={`/pattern/${pattern?.id}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
-                                            {patternValue}
-                                        </Link>
-                                    </PropRow>
-                                )}
+                                    {patternValue}
+                                </Link>
+                            </PropRow>
+                        )}
 
-                                <div className="mt-4 border-t border-black/5" />
-                            </div>
+                        <VowelSetGrid morphology={{ ...entry, ...nm }} />
 
-                            {/* Morphology Table */}
-                            <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
-                                <MorphologyTable
-                                    title={term('morphology')}
-                                    rows={[
-                                        {
-                                            label: term('type') || 'Type',
-                                            value: <span className="capitalize">{entry.numeral_type || nm?.numeral_type || '-'}</span>,
-                                            show: !!(entry.numeral_type || nm?.numeral_type)
-                                        },
-                                        {
-                                            label: term('masculine'),
-                                            value: nm?.lemma_masc || entry.form_masc || entry.headword,
-                                            pattern: nm?.gender?.toLowerCase() === 'masculine' ? (nm.lemma_pattern || entry.lemma_pattern) : (nm?.form_masc_pattern || entry.form_masc_pattern)
-                                        },
-                                        {
-                                            label: term('feminine'),
-                                            value: nm?.lemma_fem || entry.form_fem,
-                                            pattern: (nm?.gender?.toLowerCase() === 'feminine' && !nm.form_fem_pattern && !entry.form_fem_pattern)
-                                                ? (nm.lemma_pattern || entry.lemma_pattern)
-                                                : (nm?.form_fem_pattern || entry.form_fem_pattern)
-                                        },
-                                        {
-                                            label: term('short-attributive') || 'Short',
-                                            value: nm?.form_attributive_short || entry.form_attributive_short,
-                                            theoretical: !nm?.form_attributive_short && !entry.form_attributive_short
-                                        },
-                                        {
-                                            label: term('long-attributive') || 'Long',
-                                            value: nm?.form_attributive_long || entry.form_attributive_long,
-                                            theoretical: !nm?.form_attributive_long && !entry.form_attributive_long
-                                        },
-                                        {
-                                            label: term('plural'),
-                                            value: nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || (entry.headword === 'wieħed' ? 'uħud' : null),
-                                            show: !!(nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || entry.headword === 'wieħed'),
-                                            pattern: entry.morph_pattern || nm?.morph_pattern || entry.form_plural_pattern || nm?.form_plural_pattern
-                                        },
-                                        {
-                                            label: term('ordinal') || 'Ordinal',
-                                            value: renderNumeralLink(markedAutoForms.ordinal, 'ordinal'),
-                                        },
-                                        {
-                                            label: term('adverbial') || 'Adverbial',
-                                            value: renderNumeralLink(markedAutoForms.adverbial, 'adverbial'),
-                                        },
-                                        {
-                                            label: term('fractional') || 'Fractional (Sem.)',
-                                            value: renderNumeralLink(markedAutoForms.fractional_semitic, 'fractional'),
-                                        },
+                        <MorphologyGrid
+                            title={term('morphology')}
+                            rows={[
+                                {
+                                    label: term('type') || 'Type',
+                                    value: <span className="capitalize">{entry.numeral_type || nm?.numeral_type || '-'}</span>,
+                                    show: !!(entry.numeral_type || nm?.numeral_type)
+                                },
+                                {
+                                    label: term('masculine'),
+                                    value: nm?.lemma_masc || entry.form_masc || entry.headword,
+                                    pattern: nm?.gender?.toLowerCase() === 'masculine' ? (nm.lemma_pattern || entry.lemma_pattern) : (nm?.form_masc_pattern || entry.form_masc_pattern)
+                                },
+                                {
+                                    label: term('feminine'),
+                                    value: nm?.lemma_fem || entry.form_fem,
+                                    pattern: (nm?.gender?.toLowerCase() === 'feminine' && !nm.form_fem_pattern && !entry.form_fem_pattern)
+                                        ? (nm.lemma_pattern || entry.lemma_pattern)
+                                        : (nm?.form_fem_pattern || entry.form_fem_pattern)
+                                },
+                                {
+                                    label: term('short-attributive') || 'Short',
+                                    value: nm?.form_attributive_short || entry.form_attributive_short,
+                                    theoretical: !nm?.form_attributive_short && !entry.form_attributive_short
+                                },
+                                {
+                                    label: term('long-attributive') || 'Long',
+                                    value: nm?.form_attributive_long || entry.form_attributive_long,
+                                    theoretical: !nm?.form_attributive_long && !entry.form_attributive_long
+                                },
+                                {
+                                    label: term('plural'),
+                                    value: nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || (entry.headword === 'wieħed' ? 'uħud' : null),
+                                    show: !!(nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || entry.headword === 'wieħed'),
+                                    pattern: entry.morph_pattern || nm?.morph_pattern || entry.form_plural_pattern || nm?.form_plural_pattern
+                                },
+                                {
+                                    label: term('ordinal') || 'Ordinal',
+                                    value: renderNumeralLink(markedAutoForms.ordinal, 'ordinal'),
+                                },
+                                {
+                                    label: term('adverbial') || 'Adverbial',
+                                    value: renderNumeralLink(markedAutoForms.adverbial, 'adverbial'),
+                                },
+                                {
+                                    label: term('fractional') || 'Fractional (Sem.)',
+                                    value: renderNumeralLink(markedAutoForms.fractional_semitic, 'fractional'),
+                                },
                                         {
                                             label: term('multiplier') || 'Multiplier',
                                             value: (
@@ -2045,7 +2066,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                             )}
                         </div>
                     </div>
-                    <SubParts entry={entry} />
+                    <SubParts entry={entry} showGender />
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
@@ -2086,7 +2107,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                                    "{getGloss(rel, language, mode)}"
                                                 </span>
                                             </Link>
                                             {isActualAdmin && (
@@ -2174,6 +2195,12 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                             pattern: entry.morph_pattern || am?.morph_pattern || entry.form_plural_pattern || am?.form_plural_pattern
                                         },
                                         {
+                                            label: term('diminutive'),
+                                            show: !!entry.diminutive_form,
+                                            value: entry.diminutive_form,
+                                            pattern: entry.diminutive_pattern || am.diminutive_pattern
+                                        },
+                                        {
                                             label: term('elative-masculine') || 'Elative (Masc)',
                                             value: elative?.masculine,
                                             theoretical: !am.elative,
@@ -2221,9 +2248,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                                             <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                 {s.headword}
                                                             </Link>
-                                                            <span className="opacity-55 font-sans text-xs text-black truncate max-w-[120px]">
-                                                                "{mode === 'standard' ? (s.gloss_en ?? '') : (s.gloss_mt ?? s.gloss_en ?? '')}"
-                                                            </span>
+                                                                "{getGloss(s, language, mode)}"
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(s)}
@@ -2242,9 +2267,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                                             <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                 {a.headword}
                                                             </Link>
-                                                            <span className="opacity-55 font-sans text-xs text-black truncate max-w-[120px]">
-                                                                "{mode === 'standard' ? (a.gloss_en ?? '') : (a.gloss_mt ?? a.gloss_en ?? '')}"
-                                                            </span>
+                                                                "{getGloss(a, language, mode)}"
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(a)}
@@ -2350,7 +2373,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                             )}
                         </div>
                     </div>
-                    <SubParts entry={entry} />
+                    <SubParts entry={entry} showGender />
                     <div className="mt-2 text-xs font-sans uppercase tracking-[0.2em] text-[#1034A6] font-bold">
                         {entry.participle_type ? term(entry.participle_type) : term('participle')}
                     </div>
@@ -2393,7 +2416,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{mode === 'standard' ? (rel.gloss_en ?? '') : (rel.gloss_mt ?? rel.gloss_en ?? '')}"
+                                                    "{getGloss(rel, language, mode)}"
                                                 </span>
                                             </Link>
                                             {isActualAdmin && (
@@ -2487,9 +2510,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                                             <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                 {s.headword}
                                                             </Link>
-                                                            <span className="opacity-55 font-sans text-xs text-black truncate max-w-[120px]">
-                                                                "{mode === 'standard' ? (s.gloss_en ?? '') : (s.gloss_mt ?? s.gloss_en ?? '')}"
-                                                            </span>
+                                                                "{getGloss(s, language, mode)}"
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(s)}
@@ -2508,9 +2529,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                                             <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                 {a.headword}
                                                             </Link>
-                                                            <span className="opacity-55 font-sans text-xs text-black truncate max-w-[120px]">
-                                                                "{mode === 'standard' ? (a.gloss_en ?? '') : (a.gloss_mt ?? a.gloss_en ?? '')}"
-                                                            </span>
+                                                                "{getGloss(a, language, mode)}"
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(a)}
@@ -2549,7 +2568,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
 
 // ── Entry Shell ────────────────────────────────────────────────────────────
 
-export function Entry() {
+export function EntryPage() {
     const { term } = useLinguisticMode();
     const { id } = useParams<{ id: string }>();
     const [entry, setEntry] = useState<Entry | null>(null);

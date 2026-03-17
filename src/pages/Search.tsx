@@ -341,11 +341,31 @@ export function Search() {
                             ...generated.verbalNoun,
                             marker: generated.verbalNoun.entryId ? undefined : 'theoretical'
                         });
-                    } else if (r.noun_morphology || r.noun_plural_forms?.length) {
-                        const nm = r.noun_morphology;
-                        const pluralForms = r.noun_plural_forms || nm?.plural_forms;
+                    } else {
+                        const gender = resolveEntryGender(r);
+
+                        // 1. Add opposite gender if applicable
+                        if (gender === 'masculine' && (r.form_fem || r.adjective_morphology?.feminine)) {
+                            inflections.push({ label: term('feminine'), form: r.form_fem || r.adjective_morphology?.feminine, hasPage: false });
+                        } else if (gender === 'feminine' && (r.form_masc || r.adjective_morphology?.masculine)) {
+                            inflections.push({ label: term('masculine'), form: r.form_masc || r.adjective_morphology?.masculine, hasPage: false });
+                        } else if (r.form_opposite || r.numeral_morphology?.form_opposite) {
+                            const label = gender === 'masculine' ? term('feminine') : (gender === 'feminine' ? term('masculine') : term('opposite'));
+                            inflections.push({ label, form: r.form_opposite || r.numeral_morphology?.form_opposite, hasPage: false });
+                        }
+
+                        // 2. Add plural
+                        const pluralForms = r.noun_plural_forms || r.noun_morphology?.plural_forms || (r.adjective_morphology?.plural ? [r.adjective_morphology.plural] : []) || r.inflections_pl;
                         if (pluralForms?.length) {
                             inflections.push({ label: term('plural'), form: pluralForms[0], hasPage: false });
+                        }
+
+                        // 3. Add diminutive (for adjectives)
+                        if (r.pos === 'adjective' || r.adjective_morphology) {
+                            const dim = r.diminutive_form || r.adjective_morphology?.diminutive;
+                            if (dim) {
+                                inflections.push({ label: term('diminutive'), form: dim, hasPage: false });
+                            }
                         }
                     }
 

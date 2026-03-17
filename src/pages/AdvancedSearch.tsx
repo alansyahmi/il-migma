@@ -7,8 +7,7 @@ import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig } from '@/lib/adminConfig';
-import { apiSearch } from '@/lib/api';
-import { derivePattern } from '@/lib/maltesePhonology';
+import { apiSearch, apiGetDistinctValues } from '@/lib/api';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { resolveEntryGender } from '@/lib/gender';
 
@@ -209,6 +208,86 @@ function FilterHybrid({
     );
 }
 
+function CollapsibleSection({
+    title, children, defaultOpen = true,
+}: {
+    title: string; children: React.ReactNode; defaultOpen?: boolean;
+}) {
+    const [open, setOpen] = useState(defaultOpen);
+    return (
+        <div className="border-b border-black/5 last:border-0 pb-3 mb-1">
+            <button
+                type="button"
+                onClick={() => setOpen(!open)}
+                className="w-full flex items-center justify-between py-2.5 text-left group"
+            >
+                <span className="text-[11px] font-bold uppercase tracking-wider text-black/40 group-hover:text-black/60 transition-colors">
+                    {title}
+                </span>
+                <ChevronDown
+                    size={14}
+                    className={cn("text-black/20 transition-transform duration-200", open && "rotate-180")}
+                />
+            </button>
+            {open && <div className="space-y-4 pt-1 animate-in fade-in slide-in-from-top-1 duration-200">{children}</div>}
+        </div>
+    );
+}
+
+function FilterUnifiedSelector({
+    label,
+    selectedType,
+    onTypeChange,
+    types,
+    value,
+    onValueChange,
+    placeholder,
+    options = [],
+}: {
+    label: string;
+    selectedType: string;
+    onTypeChange: (v: string) => void;
+    types: { value: string; label: string }[];
+    value: string;
+    onValueChange: (v: string) => void;
+    placeholder?: string;
+    options?: string[];
+}) {
+    return (
+        <div className="space-y-1.5">
+            <p className="text-xs font-medium text-black">{label}</p>
+            <div className="flex gap-1.5">
+                <div className="w-24 shrink-0">
+                    <FilterSelect
+                        label=""
+                        value={selectedType}
+                        onChange={onTypeChange}
+                        options={types}
+                    />
+                </div>
+                <div className="flex-1 min-w-0">
+                    {options.length > 0 ? (
+                        <FilterHybrid
+                            label=""
+                            value={value}
+                            onChange={onValueChange}
+                            options={options}
+                            placeholder={placeholder}
+                        />
+                    ) : (
+                        <FilterText
+                            label=""
+                            value={value}
+                            onChange={onValueChange}
+                            placeholder={placeholder}
+                        />
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function InflectionCell({ row }: { row: InflectionRow }) {
     const markerEl = row.marker === 'theoretical' ? (
         <span className="text-black/55 mr-0.5">*</span>
@@ -338,20 +417,32 @@ interface AdvancedFilters {
     rootRadicals: string[];
     wizenPattern: string;
     vowelSet: string;
-    dualPattern: string;
-    pluralPattern: string;
-    lemmaPattern: string;
-    femininePattern: string;
-    masculinePattern: string;
-    vowelSetSg: string;
-    vowelSetOpp: string;
-    vowelSetPl: string;
+    
+    // Consolidated patterns
+    patternType: string;
+    patternValue: string;
+    vowelSetContextType: string;
+    vowelSetContextValue: string;
+
     searchLemma: boolean;
     searchWordForms: boolean;
     searchEnglishGloss: boolean;
     includeSuggested: boolean;
     includePending: boolean;
     isRegex: boolean;
+    tag: string;
+
+    // Legacy fields for initial state mapping from URL
+    dualPattern?: string;
+    pluralPattern?: string;
+    lemmaPattern?: string;
+    femininePattern?: string;
+    masculinePattern?: string;
+    vowelSetSg?: string;
+    vowelSetOpp?: string;
+    vowelSetPl?: string;
+    elativePattern?: string;
+    diminutivePattern?: string;
 }
 
 const DEFAULT_FILTERS: AdvancedFilters = {
@@ -362,20 +453,19 @@ const DEFAULT_FILTERS: AdvancedFilters = {
     rootRadicals: ['', '', '', ''],
     wizenPattern: '',
     vowelSet: '',
-    dualPattern: '',
-    pluralPattern: '',
-    lemmaPattern: '',
-    femininePattern: '',
-    masculinePattern: '',
-    vowelSetSg: '',
-    vowelSetOpp: '',
-    vowelSetPl: '',
+    
+    patternType: 'plural',
+    patternValue: '',
+    vowelSetContextType: 'singular',
+    vowelSetContextValue: '',
+
     searchLemma: false,
     searchWordForms: false,
     searchEnglishGloss: false,
     includeSuggested: false,
     includePending: true,
     isRegex: false,
+    tag: '',
 };
 
 export function AdvancedSearch() {
@@ -395,6 +485,22 @@ export function AdvancedSearch() {
         ...getOptions('verb_class', mode, language)
     ], [getOptions, mode, language, term]);
 
+    const PATTERN_TYPE_OPTIONS = useMemo(() => [
+        { value: 'lemma', label: term('singular') },
+        { value: 'plural', label: term('plural') },
+        { value: 'feminine', label: term('feminine') },
+        { value: 'masculine', label: term('masculine') },
+        { value: 'dual', label: term('dual') },
+        { value: 'elative', label: term('elative') },
+        { value: 'diminutive', label: term('diminutive') },
+    ], [term]);
+
+    const VOWEL_SET_CONTEXT_OPTIONS = useMemo(() => [
+        { value: 'singular', label: term('singular') },
+        { value: 'plural', label: term('plural') },
+        { value: 'opposing', label: term('feminine') + '/' + term('masculine') },
+    ], [term]);
+
     // Local state for UI controls
     const [query, setQuery] = useState(searchParams.get('q') ?? '');
     const [filters, setFilters] = useState<AdvancedFilters>(() => {
@@ -403,14 +509,20 @@ export function AdvancedSearch() {
         if (searchParams.has('type')) f.rootType = searchParams.get('type')!;
         if (searchParams.has('v')) f.vowelSet = searchParams.get('v')!;
         if (searchParams.has('wizen')) f.wizenPattern = searchParams.get('wizen')!;
-        if (searchParams.has('lp')) f.lemmaPattern = searchParams.get('lp')!;
-        if (searchParams.has('fp')) f.femininePattern = searchParams.get('fp')!;
-        if (searchParams.has('mp')) f.masculinePattern = searchParams.get('mp')!;
-        if (searchParams.has('pp')) f.pluralPattern = searchParams.get('pp')!;
-        if (searchParams.has('dp')) f.dualPattern = searchParams.get('dp')!;
-        if (searchParams.has('vs_sg')) f.vowelSetSg = searchParams.get('vs_sg')!;
-        if (searchParams.has('vs_opp')) f.vowelSetOpp = searchParams.get('vs_opp')!;
-        if (searchParams.has('vs_pl')) f.vowelSetPl = searchParams.get('vs_pl')!;
+        
+        // Map legacy URL params to consolidated state
+        if (searchParams.has('lp')) { f.patternType = 'lemma'; f.patternValue = searchParams.get('lp')!; }
+        else if (searchParams.has('pp')) { f.patternType = 'plural'; f.patternValue = searchParams.get('pp')!; }
+        else if (searchParams.has('fp')) { f.patternType = 'feminine'; f.patternValue = searchParams.get('fp')!; }
+        else if (searchParams.has('mp')) { f.patternType = 'masculine'; f.patternValue = searchParams.get('mp')!; }
+        else if (searchParams.has('dp')) { f.patternType = 'dual'; f.patternValue = searchParams.get('dp')!; }
+        else if (searchParams.has('ep')) { f.patternType = 'elative'; f.patternValue = searchParams.get('ep')!; }
+        else if (searchParams.has('dmp')) { f.patternType = 'diminutive'; f.patternValue = searchParams.get('dmp')!; }
+
+        if (searchParams.has('vs_sg')) { f.vowelSetContextType = 'singular'; f.vowelSetContextValue = searchParams.get('vs_sg')!; }
+        else if (searchParams.has('vs_opp')) { f.vowelSetContextType = 'opposing'; f.vowelSetContextValue = searchParams.get('vs_opp')!; }
+        else if (searchParams.has('vs_pl')) { f.vowelSetContextType = 'plural'; f.vowelSetContextValue = searchParams.get('vs_pl')!; }
+
         if (searchParams.has('source')) f.source = searchParams.get('source')!;
         if (searchParams.has('r1')) f.rootRadicals[0] = searchParams.get('r1')!;
         if (searchParams.has('r2')) f.rootRadicals[1] = searchParams.get('r2')!;
@@ -422,8 +534,25 @@ export function AdvancedSearch() {
         if (searchParams.has('gloss')) f.searchEnglishGloss = searchParams.get('gloss') === 'true';
         if (searchParams.has('suggested')) f.includeSuggested = searchParams.get('suggested') === 'true';
         if (searchParams.has('pending')) f.includePending = searchParams.get('pending') !== 'false';
+        if (searchParams.has('tag')) f.tag = searchParams.get('tag')!;
         return f;
     });
+
+    // Dynamic options
+    const [availableTags, setAvailableTags] = useState<string[]>([]);
+    const [availableVowelSets, setAvailableVowelSets] = useState<string[]>([]);
+    const [availableSources, setAvailableSources] = useState<{ value: string; label: string }[]>([]);
+
+    useEffect(() => {
+        apiGetDistinctValues('tags').then(setAvailableTags).catch(e => console.error("Tags fetch error:", e));
+        apiGetDistinctValues('vowel_sets').then(setAvailableVowelSets).catch(e => console.error("Vowel sets fetch error:", e));
+        apiGetDistinctValues('sources').then(srcs => {
+            setAvailableSources([
+                { value: '', label: term('all') },
+                ...srcs.map(s => ({ value: s, label: s }))
+            ]);
+        }).catch(e => console.error("Sources fetch error:", e));
+    }, [term]);
 
     // Effective results state
     const [results, setResults] = useState<SearchResult[]>([]);
@@ -446,6 +575,9 @@ export function AdvancedSearch() {
         searchParams.has('vs_pl') ||
         searchParams.has('source') ||
         searchParams.has('gender') ||
+        searchParams.has('ep') ||
+        searchParams.has('dmp') ||
+        searchParams.has('tag') ||
         searchParams.has('r1');
 
     useEffect(() => {
@@ -467,9 +599,12 @@ export function AdvancedSearch() {
         const masculinePatternFilter = searchParams.get('mp') || '';
         const pluralPatternFilter = searchParams.get('pp') || '';
         const dualPatternFilter = searchParams.get('dp') || '';
+        const elativePatternFilter = searchParams.get('ep') || '';
+        const diminutivePatternFilter = searchParams.get('dmp') || '';
         const vowelSetSgFilter = searchParams.get('vs_sg') || '';
         const vowelSetOppFilter = searchParams.get('vs_opp') || '';
         const vowelSetPlFilter = searchParams.get('vs_pl') || '';
+        const tagFilter = searchParams.get('tag') || '';
         const radicals = [
             searchParams.get('r1') || '',
             searchParams.get('r2') || '',
@@ -498,6 +633,12 @@ export function AdvancedSearch() {
             mp: masculinePatternFilter || undefined,
             pp: pluralPatternFilter || undefined,
             dp: dualPatternFilter || undefined,
+            ep: elativePatternFilter || undefined,
+            dmp: diminutivePatternFilter || undefined,
+            tag: tagFilter || undefined,
+            vs_sg: vowelSetSgFilter || undefined,
+            vs_opp: vowelSetOppFilter || undefined,
+            vs_pl: vowelSetPlFilter || undefined,
         })
             .then(res => {
                 setTotal(res.total);
@@ -556,11 +697,31 @@ export function AdvancedSearch() {
                             ...generated.verbalNoun,
                             marker: generated.verbalNoun.entryId ? undefined : 'theoretical'
                         });
-                    } else if (r.noun_morphology || r.noun_plural_forms?.length) {
-                        const nm = r.noun_morphology;
-                        const pluralForms = r.noun_plural_forms || nm?.plural_forms;
+                    } else {
+                        const gender = resolveEntryGender(r);
+
+                        // 1. Add opposite gender if applicable
+                        if (gender === 'masculine' && (r.form_fem || r.adjective_morphology?.feminine)) {
+                            inflections.push({ label: term('feminine'), form: r.form_fem || r.adjective_morphology?.feminine, hasPage: false });
+                        } else if (gender === 'feminine' && (r.form_masc || r.adjective_morphology?.masculine)) {
+                            inflections.push({ label: term('masculine'), form: r.form_masc || r.adjective_morphology?.masculine, hasPage: false });
+                        } else if (r.form_opposite || r.numeral_morphology?.form_opposite) {
+                            const label = gender === 'masculine' ? term('feminine') : (gender === 'feminine' ? term('masculine') : term('opposite'));
+                            inflections.push({ label, form: r.form_opposite || r.numeral_morphology?.form_opposite, hasPage: false });
+                        }
+
+                        // 2. Add plural
+                        const pluralForms = r.noun_plural_forms || r.noun_morphology?.plural_forms || (r.adjective_morphology?.plural ? [r.adjective_morphology.plural] : []) || r.inflections_pl;
                         if (pluralForms?.length) {
                             inflections.push({ label: term('plural'), form: pluralForms[0], hasPage: false });
+                        }
+
+                        // 3. Add diminutive (for adjectives)
+                        if (r.pos === 'adjective' || r.adjective_morphology) {
+                            const dim = r.diminutive_form || r.adjective_morphology?.diminutive;
+                            if (dim) {
+                                inflections.push({ label: term('diminutive'), form: dim, hasPage: false });
+                            }
                         }
                     }
 
@@ -577,58 +738,8 @@ export function AdvancedSearch() {
                     };
                 });
 
-                const norm = (s: unknown) => String(s || '').trim().toLowerCase();
-                const includesPattern = (candidate: unknown, expected: string) => {
-                    if (!expected) return true;
-                    return norm(candidate).includes(norm(expected));
-                };
-
-                const filtered = mapped.filter((result) => {
-                    const entry = result.entry || {};
-                    const isNonVerb = entry.pos !== 'verb';
-
-                    const hasNonVerbFormFilters = Boolean(
-                        lemmaPatternFilter || femininePatternFilter || masculinePatternFilter ||
-                        vowelSetSgFilter || vowelSetOppFilter || vowelSetPlFilter
-                    );
-
-                    if (hasNonVerbFormFilters && !isNonVerb) return false;
-                    if (!isNonVerb) return true;
-
-                    const root = entry.root_pattern_form?.root?.consonants || entry.root_consonants || '';
-                    const inferPattern = (surface: string, fallback = '') => {
-                        if (!surface || !root) return fallback;
-                        const inferred = derivePattern(surface, root);
-                        return inferred || fallback;
-                    };
-
-                    const lemmaPattern = entry.cv_pattern || inferPattern(entry.lemma_base || entry.headword);
-                    const femininePattern = entry.form_fem_pattern || inferPattern(entry.form_fem);
-                    const masculinePattern = entry.form_masc_pattern || inferPattern(entry.form_masc);
-
-                    const pluralForms = Array.isArray(entry.noun_plural_forms)
-                        ? entry.noun_plural_forms
-                        : (Array.isArray(entry.inflections_pl) ? entry.inflections_pl : []);
-                    const pluralPatterns = [
-                        entry.morph_pattern,
-                        ...pluralForms.map((pf: string) => inferPattern(pf)).filter(Boolean),
-                    ].filter(Boolean);
-
-                    const matchesPluralPattern = !filters.pluralPattern || pluralPatterns.some((p) => includesPattern(p, filters.pluralPattern));
-
-                    return (
-                        includesPattern(lemmaPattern, lemmaPatternFilter) &&
-                        includesPattern(femininePattern, femininePatternFilter) &&
-                        includesPattern(masculinePattern, masculinePatternFilter) &&
-                        matchesPluralPattern &&
-                        includesPattern(entry.vowel_set_sg, vowelSetSgFilter) &&
-                        includesPattern(entry.vowel_set_opp, vowelSetOppFilter) &&
-                        includesPattern(entry.vowel_set_pl, vowelSetPlFilter)
-                    );
-                });
-
-                setResults(filtered);
-                setTotal(filtered.length);
+                setResults(mapped);
+                setTotal(res.total);
             })
             .catch(err => {
                 console.error("Advanced Search fetch error:", err);
@@ -650,14 +761,25 @@ export function AdvancedSearch() {
         if (filters.rootType) params.type = filters.rootType;
         if (filters.vowelSet) params.v = filters.vowelSet;
         if (filters.wizenPattern) params.wizen = filters.wizenPattern;
-        if (filters.lemmaPattern) params.lp = filters.lemmaPattern;
-        if (filters.femininePattern) params.fp = filters.femininePattern;
-        if (filters.masculinePattern) params.mp = filters.masculinePattern;
-        if (filters.pluralPattern) params.pp = filters.pluralPattern;
-        if (filters.dualPattern) params.dp = filters.dualPattern;
-        if (filters.vowelSetSg) params.vs_sg = filters.vowelSetSg;
-        if (filters.vowelSetOpp) params.vs_opp = filters.vowelSetOpp;
-        if (filters.vowelSetPl) params.vs_pl = filters.vowelSetPl;
+        
+        // Map consolidated patterns to API params
+        if (filters.patternValue) {
+            const map: Record<string, string> = {
+                lemma: 'lp', plural: 'pp', feminine: 'fp', masculine: 'mp',
+                dual: 'dp', elative: 'ep', diminutive: 'dmp'
+            };
+            const param = map[filters.patternType];
+            if (param) params[param] = filters.patternValue;
+        }
+
+        if (filters.vowelSetContextValue) {
+            const map: Record<string, string> = {
+                singular: 'vs_sg', opposing: 'vs_opp', plural: 'vs_pl'
+            };
+            const param = map[filters.vowelSetContextType];
+            if (param) params[param] = filters.vowelSetContextValue;
+        }
+
         if (filters.source) params.source = filters.source;
         filters.rootRadicals.forEach((r, i) => {
             if (r) params[`r${i + 1}`] = r;
@@ -668,8 +790,15 @@ export function AdvancedSearch() {
         if (filters.searchEnglishGloss) params.gloss = 'true';
         if (filters.includeSuggested) params.suggested = 'true';
         if (!filters.includePending) params.pending = 'false';
+        if (filters.tag) params.tag = filters.tag;
         setSearchParams(params);
         setShowFiltersMobile(false);
+    };
+
+    const handleClearFilters = () => {
+        setFilters(DEFAULT_FILTERS);
+        setQuery('');
+        setSearchParams({});
     };
 
     const insertChar = (char: string) => {
@@ -833,157 +962,175 @@ export function AdvancedSearch() {
                         </div>
 
                         {/* ── Filter sidebar ── */}
+                        {/* ── Filter sidebar ── */}
                         <aside className={cn(
-                            "w-full bg-white border border-black/10 md:border-black/8 shadow-sm p-5 space-y-4 transition-all duration-300 overflow-hidden",
+                            "w-full bg-white border border-black/10 md:border-black/8 shadow-sm p-4 space-y-1 transition-all duration-300 overflow-hidden",
                             "md:rounded-xl md:block",
                             showFiltersMobile ? "rounded-b-xl block" : "hidden"
                         )}>
-                            <h2 className="hidden md:block font-sans font-semibold text-sm text-black">
-                                {term('filters')}
-                            </h2>
+                            <div className="flex items-center justify-between mb-2 px-1">
+                                <h2 className="hidden md:block font-sans font-semibold text-sm text-black">
+                                    {term('filters')}
+                                </h2>
+                                <button
+                                    type="button"
+                                    onClick={handleClearFilters}
+                                    className="text-[10px] uppercase font-bold text-[#1034A6] hover:underline"
+                                >
+                                    {term('clear')}
+                                </button>
+                            </div>
 
-                            <FilterSelect
-                                label={term("max-results")}
-                                value={filters.maxResults}
-                                onChange={v => setFilter('maxResults', v)}
-                                options={[
-                                    { value: '10', label: '10' },
-                                    { value: '25', label: '25' },
-                                    { value: '50', label: '50' },
-                                    { value: '100', label: '100' },
-                                ]}
-                            />
-
-                            <FilterSelect
-                                label={term("part-of-speech")}
-                                value={filters.pos}
-                                onChange={v => setFilter('pos', v)}
-                                options={POS_FILTER_OPTIONS}
-                            />
-
-                            <FilterSelect
-                                label={term("root") + " (" + term("form") + ")"}
-                                value={filters.rootType}
-                                onChange={v => setFilter('rootType', v)}
-                                options={ROOT_TYPE_FILTER_OPTIONS}
-                            />
-
-                            <FilterSelect
-                                label={term("source")}
-                                value={filters.source}
-                                onChange={v => setFilter('source', v)}
-                                options={[
-                                    { value: '', label: term('all') },
-                                    { value: 'spagnol2011', label: 'Spagnol (2011)' },
-                                    { value: 'mayer2013', label: 'Mayer (2013)' },
-                                    { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
-                                    { value: 'maltese-academy', label: term('maltese-academy') },
-                                ]}
-                            />
-
-                            <RootRadicalsInput
-                                label={term('root-radicals')}
-                                values={filters.rootRadicals}
-                                onChange={setRadical}
-                            />
-
-                            <FilterText
-                                label={cvPatternLabel}
-                                value={filters.wizenPattern}
-                                onChange={v => setFilter('wizenPattern', v)}
-                                placeholder="e.g. CVCC"
-                            />
-
-                            <FilterHybrid
-                                label={term('vowel-set')}
-                                value={filters.vowelSet}
-                                onChange={v => setFilter('vowelSet', v)}
-                                placeholder="e.g. i–e"
-                                options={['--a', '--e', '--i', '--o', '--u', 'i–e', 'a–a', 'a-e', 'i-a', 'ie-e', 'a–i', 'e-a', 'e-e', 'e-i', 'o–o', 'i-i', 'i-u', 'u-u']}
-                            />
-
-                            <FilterHybrid
-                                label={term('dual-pattern')}
-                                value={filters.dualPattern}
-                                onChange={v => setFilter('dualPattern', v)}
-                                options={['-ejn', '-ajn', '-tejn', '-tajn']}
-                            />
-
-                            <FilterHybrid
-                                label={term('plural-pattern')}
-                                value={filters.pluralPattern}
-                                onChange={v => setFilter('pluralPattern', v)}
-                                options={['-i', '-iet', '-at', '-ijiet', 'Break Plural']}
-                            />
-
-                            <FilterText
-                                label={term('cv-pattern') + ' (' + term('singular') + ')'}
-                                value={filters.lemmaPattern}
-                                onChange={v => setFilter('lemmaPattern', v)}
-                                placeholder="e.g. CVCVC"
-                            />
-
-                            <FilterText
-                                label={term('cv-pattern') + ' (' + term('feminine') + ')'}
-                                value={filters.femininePattern}
-                                onChange={v => setFilter('femininePattern', v)}
-                                placeholder="e.g. CVCVC"
-                            />
-
-                            <FilterText
-                                label={term('cv-pattern') + ' (' + term('masculine') + ')'}
-                                value={filters.masculinePattern}
-                                onChange={v => setFilter('masculinePattern', v)}
-                                placeholder="e.g. CVCVC"
-                            />
-
-                            <FilterText
-                                label={term('vowel-set') + ' (' + term('singular') + ')'}
-                                value={filters.vowelSetSg}
-                                onChange={v => setFilter('vowelSetSg', v)}
-                                placeholder="e.g. i-a"
-                            />
-
-                            <FilterText
-                                label={term('vowel-set') + ' (' + term('feminine') + '/' + term('masculine') + ')'}
-                                value={filters.vowelSetOpp}
-                                onChange={v => setFilter('vowelSetOpp', v)}
-                                placeholder="e.g. i-e"
-                            />
-
-                            <FilterText
-                                label={term('vowel-set') + ' (' + term('plural') + ')'}
-                                value={filters.vowelSetPl}
-                                onChange={v => setFilter('vowelSetPl', v)}
-                                placeholder="e.g. u-a"
-                            />
-
-                            <div className="border-t border-black/8 pt-4 space-y-2.5">
-                                <FilterCheckbox
-                                    label={term('search-lemma')}
-                                    checked={filters.searchLemma}
-                                    onChange={v => setFilter('searchLemma', v)}
+                            <CollapsibleSection title={term('general') || 'General'}>
+                                <FilterSelect
+                                    label={term("max-results")}
+                                    value={filters.maxResults}
+                                    onChange={v => setFilter('maxResults', v)}
+                                    options={[
+                                        { value: '10', label: '10' },
+                                        { value: '25', label: '25' },
+                                        { value: '50', label: '50' },
+                                        { value: '100', label: '100' },
+                                    ]}
                                 />
-                                <FilterCheckbox
-                                    label={term('search-word-forms')}
-                                    checked={filters.searchWordForms}
-                                    onChange={v => setFilter('searchWordForms', v)}
+
+                                <FilterSelect
+                                    label={term("part-of-speech")}
+                                    value={filters.pos}
+                                    onChange={v => setFilter('pos', v)}
+                                    options={POS_FILTER_OPTIONS}
                                 />
-                                <FilterCheckbox
-                                    label={term('search-english-gloss')}
-                                    checked={filters.searchEnglishGloss}
-                                    onChange={v => setFilter('searchEnglishGloss', v)}
+
+                                <FilterSelect
+                                    label={term("source")}
+                                    value={filters.source}
+                                    onChange={v => setFilter('source', v)}
+                                    options={availableSources.length > 1 ? availableSources : [
+                                        { value: '', label: term('all') },
+                                        { value: 'spagnol2011', label: 'Spagnol (2011)' },
+                                        { value: 'mayer2013', label: 'Mayer (2013)' },
+                                        { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
+                                        { value: 'maltese-academy', label: term('maltese-academy') },
+                                    ]}
                                 />
-                                <FilterCheckbox
-                                    label={term('include-suggested')}
-                                    checked={filters.includeSuggested}
-                                    onChange={v => setFilter('includeSuggested', v)}
+                            </CollapsibleSection>
+
+                            {/* Root / Semitic - Mostly for Verbs but also Nouns/Adjectives with roots */}
+                            {(!filters.pos || ['verb', 'noun', 'adjective', 'numeral'].includes(filters.pos)) && (
+                                <CollapsibleSection title={term('root') || 'Root'}>
+                                    <RootRadicalsInput
+                                        label={term('root-radicals')}
+                                        values={filters.rootRadicals}
+                                        onChange={setRadical}
+                                    />
+
+                                    <FilterSelect
+                                        label={term("verb-class") || term("type")}
+                                        value={filters.rootType}
+                                        onChange={v => setFilter('rootType', v)}
+                                        options={ROOT_TYPE_FILTER_OPTIONS}
+                                    />
+
+                                    <FilterText
+                                        label={cvPatternLabel}
+                                        value={filters.wizenPattern}
+                                        onChange={v => setFilter('wizenPattern', v)}
+                                        placeholder="e.g. CVCC"
+                                    />
+
+                                    <FilterHybrid
+                                        label={term('vowel-set')}
+                                        value={filters.vowelSet}
+                                        onChange={v => setFilter('vowelSet', v)}
+                                        placeholder="e.g. i–e"
+                                        options={availableVowelSets.length > 0 ? availableVowelSets : ['--a', '--e', '--i', '--o', '--u', 'i–e', 'a–a', 'a-e', 'i-a', 'ie-e', 'a–i', 'e-a', 'e-e', 'e-i', 'o–o', 'i-i', 'i-u', 'u-u']}
+                                    />
+                                </CollapsibleSection>
+                            )}
+
+                            {/* Patterns - For Nouns, Adjectives, etc. */}
+                            {(!filters.pos || ['noun', 'adjective', 'numeral', 'pronoun'].includes(filters.pos)) && (
+                                <CollapsibleSection title={term('morphology') || 'Morphology'}>
+                                    <FilterUnifiedSelector
+                                        label={term('pattern') || 'Pattern'}
+                                        selectedType={filters.patternType}
+                                        onTypeChange={v => setFilter('patternType', v)}
+                                        types={PATTERN_TYPE_OPTIONS}
+                                        value={filters.patternValue}
+                                        onValueChange={v => setFilter('patternValue', v)}
+                                        placeholder="e.g. CVCVC"
+                                        options={filters.patternType === 'dual' ? ['-ejn', '-ajn', '-tejn', '-tajn'] : filters.patternType === 'plural' ? ['-i', '-iet', '-at', '-ijiet', 'Break Plural'] : []}
+                                    />
+
+                                    <FilterUnifiedSelector
+                                        label={term('vowel-set') || 'Vowel Set'}
+                                        selectedType={filters.vowelSetContextType}
+                                        onTypeChange={v => setFilter('vowelSetContextType', v)}
+                                        types={VOWEL_SET_CONTEXT_OPTIONS}
+                                        value={filters.vowelSetContextValue}
+                                        onValueChange={v => setFilter('vowelSetContextValue', v)}
+                                        placeholder="e.g. i-e"
+                                        options={availableVowelSets.length > 0 ? availableVowelSets : ['--a', '--e', '--i', '--o', '--u', 'i–e', 'a–a', 'a-e', 'i-a', 'ie-e', 'a–i', 'e-a', 'e-e', 'e-i', 'o–o', 'i-i', 'i-u', 'u-u']}
+                                    />
+                                </CollapsibleSection>
+                            )}
+
+                            <CollapsibleSection title={term('other') || 'Other'}>
+                                <FilterHybrid
+                                    label={term('tag') || 'Tag'}
+                                    value={filters.tag}
+                                    onChange={v => setFilter('tag', v)}
+                                    options={availableTags}
+                                    placeholder="e.g. archaic"
                                 />
-                                <FilterCheckbox
-                                    label={term('include-pending')}
-                                    checked={filters.includePending}
-                                    onChange={v => setFilter('includePending', v)}
-                                />
+
+                                <div className="pt-2">
+                                    <p className="text-xs font-medium text-black mb-2">{term('search-locations') || 'Search Locations'}</p>
+                                    <div className="space-y-2">
+                                        <FilterCheckbox
+                                            label={term('lemma') || 'Lemma'}
+                                            checked={filters.searchLemma}
+                                            onChange={v => setFilter('searchLemma', v)}
+                                        />
+                                        <FilterCheckbox
+                                            label={term('word-forms') || 'Word Forms'}
+                                            checked={filters.searchWordForms}
+                                            onChange={v => setFilter('searchWordForms', v)}
+                                        />
+                                        <FilterCheckbox
+                                            label={term('gloss') || 'English Gloss'}
+                                            checked={filters.searchEnglishGloss}
+                                            onChange={v => setFilter('searchEnglishGloss', v)}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="pt-2">
+                                    <p className="text-xs font-medium text-black mb-2">{term('suggestions') || 'Suggestions'}</p>
+                                    <div className="space-y-2">
+                                        <FilterCheckbox
+                                            label={term('include-suggested') || 'Include Suggested'}
+                                            checked={filters.includeSuggested}
+                                            onChange={v => setFilter('includeSuggested', v)}
+                                        />
+                                        <FilterCheckbox
+                                            label={term('include-pending') || 'Include Pending'}
+                                            checked={filters.includePending}
+                                            onChange={v => setFilter('includePending', v)}
+                                        />
+                                    </div>
+                                </div>
+                            </CollapsibleSection>
+
+                            <div className="pt-2 border-t border-black/5">
+                                <button
+                                    type="button"
+                                    onClick={() => handleSearch()}
+                                    className="w-full bg-[#1034A6] hover:bg-[#00238c] text-white font-sans font-semibold py-2.5 rounded-lg shadow-sm transition-all flex items-center justify-center gap-2"
+                                >
+                                    <SearchIcon size={16} />
+                                    <span>{term('search')}</span>
+                                </button>
                             </div>
                         </aside>
                     </div>
