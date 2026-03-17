@@ -72,7 +72,14 @@ export async function apiSearch(
         mp?: string;
         pp?: string;
         dp?: string;
+        ep?: string;
+        dmp?: string;
+        tag?: string;
+        vs_sg?: string;
+        vs_opp?: string;
+        vs_pl?: string;
     } = {}
+
 ): Promise<SearchResponse> {
     const params = new URLSearchParams();
     if (q) params.set('q', q);
@@ -100,7 +107,14 @@ export async function apiSearch(
     if (opts.mp) params.set('mp', opts.mp);
     if (opts.pp) params.set('pp', opts.pp);
     if (opts.dp) params.set('dp', opts.dp);
+    if (opts.ep) params.set('ep', opts.ep);
+    if (opts.dmp) params.set('dmp', opts.dmp);
+    if (opts.tag) params.set('tag', opts.tag);
+    if (opts.vs_sg) params.set('vs_sg', opts.vs_sg);
+    if (opts.vs_opp) params.set('vs_opp', opts.vs_opp);
+    if (opts.vs_pl) params.set('vs_pl', opts.vs_pl);
     if (opts.radicals) {
+
         opts.radicals.forEach((r, i) => {
             if (r) params.set(`r${i + 1}`, r);
         });
@@ -123,6 +137,17 @@ export async function apiLookupRootByConsonants(consonants: string): Promise<any
     const res = await apiSearchRoots(radicals);
     // Find exact match just in case
     return res.roots.find(r => r.consonants.toLowerCase() === consonants.toLowerCase()) || res.roots[0] || null;
+}
+
+// ── Generic Dynamic Options ──────────────────────────────────────────────────
+
+export async function apiGetDistinctValues(type: 'tags' | 'vowel_sets' | 'sources'): Promise<string[]> {
+    return apiFetch(`/api/distinct?type=${type}`);
+}
+
+/** Legacy wrapper or convenience */
+export async function apiGetTags(): Promise<string[]> {
+    return apiGetDistinctValues('tags');
 }
 
 // ── Single Entry ─────────────────────────────────────────────────────────────

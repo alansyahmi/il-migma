@@ -108,7 +108,7 @@ export function generateNounStems(
         // Note: For broken plurals ending in -a, they are usually treated as feminine-t.
         // We only trigger glide if gender is strictly masculine and NOT a broken plural pattern (like CvCCa).
         if (gender === 'masculine' && !pattern?.includes('CCa')) {
-            return { stemA: rootRaw + 'j', stemB: rootRaw + 'j' };
+            return { stemA: base + 'j', stemB: base + 'j' };
         }
 
         // Weak Root C3 Drop: zija -> zit-
@@ -157,6 +157,13 @@ export function applyPossessiveSuffix(
             if (idx === 2) return base + 'h';
             return base + glide + finalSuffix;
         }
+    }
+    
+    // ── Masculine -a Glide Handling (e.g. wara -> warajja) ────────────────────
+    if (base.endsWith('a') && gender === 'masculine' && stem.endsWith('j')) {
+        if (idx === 0) return stem + 'ja'; // warajja
+        if (idx === 1) return stem + 'k';  // warajk
+        if (idx === 2) return stem + 'h';  // warajh
     }
 
     // ── Buffer Logic for Consonant Suffixes ──────────────────────────────────

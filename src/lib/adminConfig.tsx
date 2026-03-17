@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { adminListConfig, adminCreateConfig, adminUpdateConfig, adminDeleteConfig } from './api';
 import { resolveTerm as resolveHardcodedTerm } from './terminology';
+import { normalizeGender } from './gender';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 
 export interface ConfigItem {
@@ -71,7 +72,7 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
             if (category === 'verb_preset') {
                 return items.map(i => ({ form: i.key, data: i.value }));
             }
-            if (category === 'cv_wizen_pattern' || category === 'broken_pattern' || category === 'adjective_pattern') {
+            if (category === 'cv_wizen_pattern' || category === 'broken_pattern' || category === 'adjective_pattern' || category === 'feminine_pattern') {
                 return items.map(i => i.value);
             }
             
@@ -109,20 +110,31 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const getOptions = (category: string, mode: 'standard' | 'arabised', lang: 'en' | 'mt' = 'mt'): { value: string, label: string }[] => {
         const items = getCategoryItems(category);
         if (items.length > 0) {
-            return items.map(item => {
-                const v = item.value;
-                let label = item.key;
-                if (v && typeof v === 'object') {
-                    if (lang === 'en') {
-                        label = v.en || item.key;
-                    } else if (mode === 'arabised') {
-                        label = v.mt_arabised || v.wizen || v.en || item.key;
-                    } else {
-                        label = v.mt_standard || v.cv || v.en || item.key;
+            return items
+                .map(item => {
+                    const v = item.value;
+
+                    // For gender, force canonical values so form state matches options even if
+                    // the admin-config keys were entered as "Masculine"/"Fem"/etc.
+                    const canonicalGender = category === 'gender' ? normalizeGender(item.key) : null;
+                    if (category === 'gender' && !canonicalGender) return null;
+
+                    let label = item.key;
+                    if (v && typeof v === 'object') {
+                        if (lang === 'en') {
+                            label = v.en || item.key;
+                        } else if (mode === 'arabised') {
+                            label = v.mt_arabised || v.wizen || v.en || item.key;
+                        } else {
+                            label = v.mt_standard || v.cv || v.en || item.key;
+                        }
+                    } else if (category === 'gender' && canonicalGender) {
+                        label = resolveHardcodedTerm(canonicalGender, mode, lang);
                     }
-                }
-                return { value: item.key, label };
-            });
+
+                    return { value: (canonicalGender || item.key), label };
+                })
+                .filter(Boolean) as { value: string, label: string }[];
         }
 
         // Use fallbacks if no items in DB

@@ -60,9 +60,10 @@ export const ENTRY_HANDLED_FIELDS = [
     'source_language', 'source_citation', 'definitions', 'etymology_chain',
     'phonetics', 'tags', 'cv_pattern', 'morph_pattern', 'sound_suffix',
     'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
+    'elative_pattern', 'diminutive_pattern',
     'synonyms', 'antonyms', 'related_entries', 'created_at', 'updated_at',
     'root_consonants', 'verb_form', 'root_pattern_form_id', 'verb_weak_class', 'verb_type',
-    'is_inflectable', 'usage_example', 'usage_example_en'
+    'is_inflectable', 'usage_example', 'usage_example_en', 'old_id'
 ] as const;
 
 export const ENTRY_PRIVATE_FIELDS = [
@@ -86,6 +87,7 @@ export const POS_FEATURES: Record<string, string[]> = {
         'inflections_pl', 'dual_form', 'diminutive_form', 'is_collective',
         'is_singulative', 'morph_pattern', 'sound_suffix',
         'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
+        'diminutive_pattern',
         'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'
     ],
     'verb': [
@@ -98,21 +100,23 @@ export const POS_FEATURES: Record<string, string[]> = {
         ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc', 'inflections_pl',
         'dual_form', 'diminutive_form', 'elative_form', 'morph_pattern', 'sound_suffix',
         'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
+        'elative_pattern', 'diminutive_pattern',
         'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'
     ],
     'participle': [
         ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc', 'inflections_pl',
-        'dual_form', 'diminutive_form', 'elative_form', 'participle_type', 'morph_pattern',
+        'dual_form', 'diminutive_form', 'elative_form', 'participle_type', 'morph_pattern', 'sound_suffix',
         'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
+        'elative_pattern', 'diminutive_pattern',
         'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'
     ],
     'pronoun': [
-        ...COMMON_FIELDS, 'gender', 'lemma_base', 'inflections_pl',
+        ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc', 'inflections_pl',
         'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
     ],
     'numeral': [
         ...COMMON_FIELDS, 'gender', 'lemma_base', 'inflections_pl', 'morph_pattern',
-        'form_fem', 'form_masc', 'vowel_set_sg', 'vowel_set_pl',
+        'form_fem', 'form_masc', 'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual',
         'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
         'numeral_type', 'form_attributive_short', 'form_attributive_long'
     ],
@@ -138,9 +142,15 @@ export function buildEntryPayload(form: any): Record<string, any> {
     payload.root_consonants = form._rootConsonants;
     payload.verb_weak_class = form._weakClass || null;
 
+    // Consolidate Split Logic for Plural Patterns
+    const plurals = (form.morph_pattern || '').split(',').map((s: string) => s.trim()).filter(Boolean);
+    payload.sound_suffix = plurals.filter((p: string) => p.startsWith('-')).join(', ');
+    payload.morph_pattern = plurals.filter((p: string) => !p.startsWith('-')).join(', ');
+
+
     // Filter to only allowed fields
     Object.keys(payload).forEach(key => {
-        if (!allowedFields.includes(key)) {
+        if (!allowedFields.includes(key) && key !== 'old_id') {
             delete payload[key];
         }
     });
@@ -156,6 +166,13 @@ export function buildEntryPayload(form: any): Record<string, any> {
             payload[key] = extraFields[key];
         }
     });
+
+    // Map plural forms from UI (plural_forms array) to DB (inflections_pl)
+    if (form.plural_forms && Array.isArray(form.plural_forms)) {
+        payload.inflections_pl = form.plural_forms.filter(Boolean);
+    } else if (typeof form.inflections_pl === 'string') {
+        payload.inflections_pl = form.inflections_pl.split(',').map((s: string) => s.trim()).filter(Boolean);
+    }
 
     // Serialization & Normalization
     payload.is_collective = form.is_collective ? 1 : 0;

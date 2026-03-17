@@ -47,6 +47,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'synonym-abbr': { en: 'syn.', standard: 'sin.', arabised: 'mibb.' },
     'antonym-abbr': { en: 'ant.', standard: 'ant.', arabised: 'mtf.' },
     'gender': { en: 'Gender', standard: 'Ġeneru', arabised: 'Ġens' },
+    'feature': { en: 'Feature', standard: 'Karatteristika', arabised: 'Fsurija' },
 
     // Parts of Speech
     'verb': { en: 'Verb', standard: 'Verb', arabised: 'Fagħal' },
@@ -156,7 +157,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     "phonetics-ipa": { en: 'Phonetics IPA', standard: 'Fonetika AFI', arabised: 'Ħossija AFI' },
     "(past)": { en: '(Past)', standard: '(Passat)', arabised: '(Mgħoddi)' },
     "(present)": { en: '(Present)', standard: '(Preżent)', arabised: '(Maħdur)' },
-    "dual": { en: 'Dual', standard: 'Imtenni', arabised: 'Mewweġ' },
+    "dual": { en: 'Dual', standard: 'Imtenni', arabised: 'Imtenni' },
     "entries-shown": { en: "{count} of {total} entries shown", standard: "{count} minn {total} entrati murija", arabised: "{count} minn {total} madħliet murija" },
     "search-results": { en: "Search results", standard: "Riżultati tat-tiftix", arabised: "Riżultati tat-tiftix" },
     "search-desc": { en: "Find entries and inflections in the dictionary.", standard: "Sib entrati u inflezzjonijiet fid-dizzjunarju.", arabised: "Sib madħliet u tisrifiet fil-miklem." },

@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { generateRootForms, markGeneratedForms, getAttestedEntries, type MarkedVerbForm } from '@/lib/conjugationEngine';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
@@ -12,6 +13,7 @@ import { RelationshipEditor } from '@/components/admin/RelationshipEditor';
 import { adminUpdateRoot, adminDeleteEntry } from '@/lib/api';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
+import { getGloss } from '@/lib/utils';
 import { useRootData } from '@/hooks/useRootData';
 import { type VerbStrength } from '@/types';
 
@@ -99,6 +101,7 @@ function MarkedCell({
 export function Root() {
     const { id } = useParams<{ id: string }>();
     const { mode, term } = useLinguisticMode();
+    const { language } = useLanguage();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
 
@@ -216,9 +219,10 @@ export function Root() {
                     class: term(e.pos || 'derived'),
                     cv: getPattern(e),
                     id: e.id,
-                    gloss: mode === 'standard'
-                        ? (e.definitions?.[0]?.text_en || (e as any).gloss_en || (e as any).text_en || '')
-                        : (e.definitions?.[0]?.text_mt || (e as any).gloss_mt || e.definitions?.[0]?.text_en || (e as any).gloss_en || '')
+                    gloss: getGloss({
+                        gloss_en: e.definitions?.[0]?.text_en || (e as any).gloss_en || (e as any).text_en,
+                        gloss_mt: e.definitions?.[0]?.text_mt || (e as any).gloss_mt
+                    }, language, mode)
                 });
             }
 
@@ -232,9 +236,10 @@ export function Root() {
                             class: term(sub.pos || 'derived'),
                             cv: getPattern(sub),
                             id: sub.id,
-                            gloss: mode === 'standard'
-                                ? (sub.definitions?.[0]?.text_en || (sub as any).gloss_en || (sub as any).text_en || '')
-                                : (sub.definitions?.[0]?.text_mt || (sub as any).gloss_mt || sub.definitions?.[0]?.text_en || (sub as any).gloss_en || '')
+                            gloss: getGloss({
+                                gloss_en: sub.definitions?.[0]?.text_en || (sub as any).gloss_en || (sub as any).text_en,
+                                gloss_mt: sub.definitions?.[0]?.text_mt || (sub as any).gloss_mt
+                            }, language, mode)
                         });
                     } else if (shownIds.has(sub.id)) {
                         seenIds.add(sub.id);
@@ -253,7 +258,7 @@ export function Root() {
                         class: term(re.pos || 'related'),
                         cv: mode === 'standard' ? (re.cv_pattern || re.wizen_pattern || '-') : (re.wizen_pattern || re.cv_pattern || '-'),
                         id: re.id,
-                        gloss: mode === 'standard' ? (re.gloss_en || '') : (re.gloss_mt || re.gloss_en || '')
+                        gloss: getGloss(re, language, mode)
                     });
                 }
             });
@@ -715,7 +720,7 @@ export function Root() {
                                                         -{s.headword}-
                                                     </Link>
                                                     <span className="text-black/40 italic ml-2">
-                                                        "{mode === 'standard' ? s.gloss_en : (s.gloss_mt || s.gloss_en)}"
+                                                    "{getGloss(s, language, mode)}"
                                                     </span>
                                                     {isActualAdmin && !vm?.synonyms?.some((v: any) => v.id === s.id) && (
                                                         <button
@@ -743,7 +748,7 @@ export function Root() {
                                                         {a.headword}
                                                     </Link>
                                                     <span className="text-black/40 italic ml-2">
-                                                        "{mode === 'standard' ? a.gloss_en : (a.gloss_mt || a.gloss_en)}"
+                                                        "{getGloss(a, language, mode)}"
                                                     </span>
                                                     {isActualAdmin && !vm?.antonyms?.some((v: any) => v.id === a.id) && (
                                                         <button

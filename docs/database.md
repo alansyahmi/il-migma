@@ -1,97 +1,197 @@
-# Database Management & Manual Manipulation
+# Database — Access & Management
 
-> This guide explains how the *Il-Miġma'* data layer is hosted, how to access it, and how to safely perform manual data operations.
+> How the *Il-Miġma'* data layer is hosted, how to access it locally, and how to safely perform manual data operations.
 
 ---
 
 ## 1. Hosting & Infrastructure
 
-- **Engine**: [Turso](https://turso.tech) (libSQL), an edge-hosted SQLite fork.
-- **Backend API**: Cloudflare Pages Functions (`functions/api/`).
-- **Connection**: Managed via `@libsql/client/web` in the API and `@libsql/client` in scripts.
-
-### Environment Variables
-To connect to the database, you need the following (usually in a `.env` file or Cloudflare dashboard):
-- `VITE_TURSO_URL`: The `libsql://...` connection string.
-- `VITE_TURSO_AUTH_TOKEN`: The JWT access token.
+| Layer | Technology |
+|---|---|
+| Engine | [Turso](https://turso.tech) (libSQL — edge SQLite fork) |
+| Backend API | Cloudflare Pages Functions (`functions/api/`) |
+| Client library | `@libsql/client/web` (API functions) · `@libsql/client` (scripts) |
 
 ---
 
-## 2. Manual Access
+## 2. Local Development Access
 
-### Remote (Production/Staging)
-The primary way to interact with the remote database is via the **Turso CLI**:
+### 2.1 Local DB files
 
-```bash
-# Enter interactive shell
-turso db shell il-migma-db
+The project keeps several SQLite files in the repo root. **`local.db` is the primary local database** used by the Wrangler dev server.
 
-# Run a SQL script
-turso db shell il-migma-db < db/schema.sql
+| File | Purpose |
+|---|---|
+| `local.db` | Primary local database (used by `npm run dev:api`) |
+| `database.sqlite` / `db.sqlite` | Legacy / scratch copies — treat as read-only unless you know their purpose |
+| `data.db` | Raw import staging file |
+
+### 2.2 Environment variables (`.dev.vars`)
+
+Wrangler reads **`.dev.vars`** (not `.env`) for local secrets. It must contain:
+
+```ini
+TURSO_URL=libsql://il-migma-alansyahmi.aws-ap-northeast-1.turso.io
+TURSO_AUTH_TOKEN=<jwt>
+CLERK_SECRET_KEY=dummy   # "dummy" skips Clerk auth locally
 ```
 
-### Local Development
-For local development, the app often uses a local SQLite file (e.g., `local.db` in the root). You can use any standard SQLite client:
+> [!NOTE]
+> When `CLERK_SECRET_KEY` equals `"dummy"` **or** the request comes from `localhost`, the API auth guard passes without verifying the JWT. All admin endpoints are therefore open in local dev.
+
+For the Vite frontend (`.env`), the equivalent keys are prefixed with `VITE_`:
+
+```ini
+VITE_TURSO_URL=libsql://...
+VITE_TURSO_AUTH_TOKEN=<jwt>
+```
+
+### 2.3 Starting the local API server
+
+The API runs on a separate port via Wrangler:
 
 ```bash
+npm run dev:api   # → http://localhost:8788
+npm run dev       # → Vite frontend at http://localhost:5173
+```
+
+Both must be running together for the admin UI to work.
+
+### 2.4 Direct SQLite access (CLI)
+
+You can query `local.db` directly with any SQLite client:
+
+```bash
+# Standard CLI
 sqlite3 local.db
+
+# Useful one-liners
+sqlite3 local.db ".tables"
+sqlite3 local.db "SELECT headword, pos FROM entries LIMIT 20;"
+sqlite3 local.db ".schema entries"
+```
+
+> [!TIP]
+> Use a GUI tool such as [DB Browser for SQLite](https://sqlitebrowser.org/) or the VS Code **SQLite Viewer** extension for a table-based view of `local.db`.
+
+---
+
+## 3. In-Browser Admin DB Tools
+
+When both dev servers are running, the **Admin DB Tools** panel is available in the app at `/admin` → *DB Tools* tab.
+
+It provides the following actions, all backed by `functions/api/admin/db-tools.js`:
+
+| Action | Description |
+|---|---|
+| **SQL Console** | Run arbitrary `SELECT` statements. Enable *Write Mode* to allow `INSERT` / `UPDATE` / `DELETE`. |
+| **Table Info** | Lists all tables with column definitions and row counts. |
+| **Data Export** | Dumps up to 50,000 rows from a chosen table as JSON. |
+| **Integrity Check** | Scans for orphaned rows, unlinked root consonants, malformed JSON fields, and duplicate roots. |
+| **Bulk Update** | Sets a single field to a value across a list of IDs in one operation. |
+| **Merge Roots** | Reassigns all entries and forms from a source root to a target root, then deletes the source. Supports a dry-run preview. |
+| **Check ID** | Tests whether a given ID already exists in a table (useful before inserting). |
+
+> [!IMPORTANT]
+> Write operations in the SQL Console are blocked by default. You must explicitly tick **"Enable write mode"** before running `INSERT`, `UPDATE`, `DELETE`, etc.
+
+#### Calling the API directly (curl / scripts)
+
+```bash
+# Table info
+curl -X POST http://localhost:8788/api/admin/db-tools \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer dummy" \
+  -d '{"action":"table-info"}'
+
+# Custom SELECT
+curl -X POST http://localhost:8788/api/admin/db-tools \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer dummy" \
+  -d '{"action":"query","sql":"SELECT id, headword, pos FROM entries LIMIT 5"}'
+
+# Integrity check
+curl -X POST http://localhost:8788/api/admin/db-tools \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer dummy" \
+  -d '{"action":"integrity-check"}'
 ```
 
 ---
 
-## 3. Data Ingestion (Import Scripts)
+## 4. Remote (Production) Access
 
-The project includes custom scripts to import data from Excel (`.xlsx`) files. These are defined in `package.json`.
+Use the **Turso CLI**:
+
+```bash
+# Interactive shell
+turso db shell il-migma-alansyahmi
+
+# Run a SQL file
+turso db shell il-migma-alansyahmi < db/schema.sql
+```
+
+The production DB URL is `libsql://il-migma-alansyahmi.aws-ap-northeast-1.turso.io`.
+
+---
+
+## 5. Data Ingestion (Import Scripts)
 
 | Script | Purpose |
 |---|---|
-| `npm run import:dry` | Validate the spreadsheet data without writing to the DB. |
-| `npm run import:all` | Import everything (roots, entries, nouns, verbs). |
-| `npm run import:roots` | Import only the `roots` sheet. |
-| `npm run import:nouns` | Import only the `nouns` sheet. |
+| `npm run import:dry` | Validate the spreadsheet without writing to DB |
+| `npm run import:all` | Import everything (roots, entries, nouns, verbs) |
+| `npm run import:roots` | Import only the `roots` sheet |
+| `npm run import:nouns` | Import only the `nouns` sheet |
 
-**Source File**: These scripts typically look for a file named `data.xlsx` or similar in a `data/` or `scripts/` folder. Check `scripts/import-xls.mjs` for the exact path.
-
----
-
-## 4. Manual Manipulation Rules
-
-If you are writing `INSERT` or `UPDATE` statements manually, you **must** follow these three golden rules:
-
-### Rule 1: NFC Normalisation
-Maltese characters like `ċ`, `ġ`, `ħ`, `ż` must be in **NFC (Normalisation Form Composed)**.
-- **Visual Check**: If you paste text from some sources, it might be in NFD (decomposed), which breaks search.
-- **SQL Tip**: Most SQLite tools don't auto-normalise. Use the Admin Dashboard whenever possible as it normalises everything on save.
-
-### Rule 2: JSON Fields
-Many columns in `roots` and `entries` are actually JSON strings stored in `TEXT` columns.
-- **Don't**: `UPDATE roots SET gloss = 'writing' WHERE id = 'k-t-b';`
-- **Do**: `UPDATE roots SET gloss = '[{"en":"writing","mt":"isawwar kliem fuq superfiċje"}]' WHERE id = 'k-t-b';`
-
-### Rule 3: ID Suffixing
-The `id` is the primary key and must be unique. If you add a homographic root, you must suffix the ID:
-1. `b-għ-d` (distance)
-2. `b-għ-d-2` (hating)
+Source file is `roots.xls` / similarly named in the repo root. See `scripts/import-xls.mjs` for exact path handling.
 
 ---
 
-## 5. Migrating the Schema
+## 6. Manual Manipulation Rules
 
-Since Turso is SQLite-based, it does not have a formal migration system like Prisma or Knex. Migrations are performed manually:
+### NFC Normalisation
+Maltese characters (`ċ`, `ġ`, `ħ`, `ż`) must be in **NFC**. Use the Admin Dashboard when possible — it normalises text on save. Raw SQL inserts may produce NFD text from some editors, breaking search.
 
-1. **Backup**: `turso db backup il-migma-db`
-2. **Plan**: Write a SQL script (e.g., `db/migrations/001_add_stems.sql`).
-3. **Execute**: Run via `turso db shell`.
+### JSON Fields
+Several `TEXT` columns store JSON arrays/objects (e.g., `gloss`, `noun_plural_forms`, `tags`):
+
+```sql
+-- ❌ Wrong
+UPDATE roots SET gloss = 'writing' WHERE id = 'k-t-b';
+
+-- ✅ Correct
+UPDATE roots SET gloss = '[{"en":"writing","mt":"kitba"}]' WHERE id = 'k-t-b';
+```
+
+### ID Uniqueness
+Primary keys must be unique. For homographic roots, suffix with `-2`, `-3`, etc.:
+- `b-għ-d` (distance)
+- `b-għ-d-2` (hating)
+
+---
+
+## 7. Schema Migration
+
+Migrations are manual (no Prisma/Knex). Workflow:
+
+1. **Backup** — `turso db backup il-migma-alansyahmi`
+2. **Write** — Add a script to `db/migrations/` or `scripts/` (e.g. `scripts/add-missing-columns.mjs`)
+3. **Apply** — Run migration for both local and remote:
+   - `node scripts/add-missing-columns.mjs local`
+   - `node scripts/add-missing-columns.mjs remote`
+
+### Database Synchronization (New Strategy)
+When local and remote schemas drift (missing columns):
+- Use the `/sync-db-schema` workflow (stored in `.agents/workflows/sync-db-schema.md`).
+- This workflow helps identify missing columns and applies them to both environments using the automated script.
+
 
 > [!IMPORTANT]
-> Because SQLite does not support `DROP COLUMN` in older versions or easy `ALTER TABLE` for complex changes (like removing UNIQUE constraints), you often have to follow the "Create-Copy-Swap" pattern:
-> 1. Create `new_table` with the desired schema.
-> 2. `INSERT INTO new_table SELECT * FROM old_table;`
-> 3. `DROP TABLE old_table;`
-> 4. `ALTER TABLE new_table RENAME TO old_table;`
-
----
-
-## 6. Planned: Stem-Pattern Logic
-
-As of current development, we are introducing **Stems** (e.g., `-skriv-`). These will likely reside in a planned `stems` and `stem_pattern_forms` table, mirroring the `roots` logic but for non-Semitic words that behave morphologically like roots.
+> For destructive `ALTER TABLE` changes (e.g., dropping a column, changing a constraint), use the **Create-Copy-Swap** pattern:
+> ```sql
+> CREATE TABLE entries_new (...);
+> INSERT INTO entries_new SELECT ... FROM entries;
+> DROP TABLE entries;
+> ALTER TABLE entries_new RENAME TO entries;
+> ```

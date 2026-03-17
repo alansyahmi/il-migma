@@ -3,6 +3,7 @@ import { Trash2, Plus, Loader2, Search, CheckCircle2, AlertCircle, Link2 } from 
 import { apiGetEntry, apiGetRoot } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { getGloss } from '@/lib/utils';
 
 interface RelationshipItem {
     id: string;
@@ -28,7 +29,7 @@ type LookupState = 'idle' | 'loading' | 'success' | 'error';
 export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
     title, items, onChange, type, extraActions, lookupType = 'entry'
 }) => {
-    const { t } = useLanguage();
+    const { language, t } = useLanguage();
     const { mode } = useLinguisticMode();
 
     // Track lookup state per row
@@ -244,7 +245,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                                             w-full border rounded-md px-2.5 py-1.5 text-[12px] font-mono
                                             focus:outline-none focus:ring-2 focus:ring-[#1034A6]/30 focus:border-[#1034A6]
                                             bg-white text-black placeholder:text-black/20
-                                            ${rowStates[i]?.state === 'error' ? 'border-red-300 bg-red-50/30' : 'border-[#d8cfc0]'}
+                                            ${rowStates[i]?.state === 'error' ? 'border-red-300 bg-red-50/30' : 'border-border'}
                                         `}
                                         value={item.id}
                                         placeholder={lookupType === 'root' ? "f-għ-l" : "entry-id"}
@@ -280,7 +281,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                                             )}
                                             {type === 'thesaurus' && (item.gloss_en || item.gloss_mt) && (
                                                 <span className="text-[12px] text-black/35 italic truncate">
-                                                    "{mode === 'standard' ? (item.gloss_en || item.gloss_mt) : (item.gloss_mt || item.gloss_en)}"
+                                                    "{getGloss(item, language, mode)}"
                                                 </span>
                                             )}
                                         </>
@@ -317,7 +318,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                         <button
                             type="button"
                             onClick={addItem}
-                            className="w-full py-8 border-2 border-dashed border-[#ede9e1] rounded-xl text-black/25 hover:border-[#1034A6]/30 hover:text-[#1034A6]/50 hover:bg-[#1034A6]/[0.02] transition-all cursor-pointer group"
+                            className="w-full py-8 border-2 border-dashed border-border-light rounded-xl text-black/25 hover:border-[#1034A6]/30 hover:text-[#1034A6]/50 hover:bg-[#1034A6]/2 transition-all cursor-pointer group"
                         >
                             <div className="flex flex-col items-center gap-2">
                                 <Plus size={20} className="group-hover:scale-110 transition-transform" strokeWidth={1.5} />

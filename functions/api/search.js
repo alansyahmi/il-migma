@@ -30,6 +30,9 @@ export async function onRequestGet({ request, env }) {
     const r3 = url.searchParams.get('r3') ?? '';
     const r4 = url.searchParams.get('r4') ?? '';
 
+    const tag = url.searchParams.get('tag')?.trim() ?? '';
+
+
     const limit = Math.min(Number(url.searchParams.get('limit') ?? 20), 100);
     const offset = Number(url.searchParams.get('offset') ?? 0);
 
@@ -42,6 +45,18 @@ export async function onRequestGet({ request, env }) {
     const includeSuggested = url.searchParams.get('suggested') === 'true';
     const includePending = url.searchParams.get('pending') === 'true';
     const isRecent = url.searchParams.get('recent') === 'true';
+
+    // Pattern filters
+    const lp = url.searchParams.get('lp') ?? '';
+    const fp = url.searchParams.get('fp') ?? '';
+    const mp = url.searchParams.get('mp') ?? '';
+    const pp = url.searchParams.get('pp') ?? '';
+    const dp = url.searchParams.get('dp') ?? '';
+    const ep = url.searchParams.get('ep') ?? '';
+    const dmp = url.searchParams.get('dmp') ?? '';
+    const vs_sg = url.searchParams.get('vs_sg') ?? '';
+    const vs_opp = url.searchParams.get('vs_opp') ?? '';
+    const vs_pl = url.searchParams.get('vs_pl') ?? '';
 
     try {
         const tursoUrl = env.TURSO_URL || env.VITE_TURSO_URL;
@@ -183,6 +198,30 @@ export async function onRequestGet({ request, env }) {
         if (r2) { sql += " AND (json_extract(r.consonant_array, '$[1]') = ? OR e.root_consonants LIKE ?)"; args.push(r2.toLowerCase(), '%-' + r2.toLowerCase() + '-%'); }
         if (r3) { sql += " AND (json_extract(r.consonant_array, '$[2]') = ? OR e.root_consonants LIKE ?)"; args.push(r3.toLowerCase(), '%-' + r3.toLowerCase() + (r4 ? '-%' : '')); }
         if (r4) { sql += " AND (json_extract(r.consonant_array, '$[3]') = ? OR e.root_consonants LIKE ?)"; args.push(r4.toLowerCase(), '%-' + r4.toLowerCase()); }
+        if (tag) {
+            // Support searching for base tag name while matching tags with prefixes (!, $, $!)
+            sql += ` AND EXISTS (SELECT 1 FROM json_each(e.tags) WHERE REPLACE(REPLACE(LOWER(value), '!', ''), '$', '') = ?)`;
+            args.push(tag.toLowerCase());
+        }
+
+        // Pattern filters
+        if (lp) { sql += ' AND LOWER(e.lemma_pattern) LIKE ?'; args.push(`%${lp.toLowerCase()}%`); }
+        if (fp) { sql += ' AND LOWER(e.form_fem_pattern) LIKE ?'; args.push(`%${fp.toLowerCase()}%`); }
+        if (mp) { sql += ' AND LOWER(e.form_masc_pattern) LIKE ?'; args.push(`%${mp.toLowerCase()}%`); }
+        if (pp) { 
+            sql += ' AND (LOWER(e.form_plural_pattern) LIKE ? OR LOWER(e.morph_pattern) LIKE ?)'; 
+            const lp_pp = `%${pp.toLowerCase()}%`;
+            args.push(lp_pp, lp_pp); 
+        }
+        if (dp) { sql += ' AND LOWER(e.dual_pattern) LIKE ?'; args.push(`%${dp.toLowerCase()}%`); }
+        // Elative and diminutive patterns aren't separate columns yet, they might be in morph_pattern
+        if (ep) { sql += ' AND LOWER(e.morph_pattern) LIKE ?'; args.push(`%${ep.toLowerCase()}%`); }
+        if (dmp) { sql += ' AND LOWER(e.morph_pattern) LIKE ?'; args.push(`%${dmp.toLowerCase()}%`); }
+        
+        if (vs_sg) { sql += ' AND LOWER(e.vowel_set_sg) LIKE ?'; args.push(`%${vs_sg.toLowerCase()}%`); }
+        if (vs_opp) { sql += ' AND LOWER(e.vowel_set_opp) LIKE ?'; args.push(`%${vs_opp.toLowerCase()}%`); }
+        if (vs_pl) { sql += ' AND LOWER(e.vowel_set_pl) LIKE ?'; args.push(`%${vs_pl.toLowerCase()}%`); }
+
 
         const totalRes = await db.execute({ sql: `SELECT COUNT(*) as total ${sql}`, args });
         const total = Number(totalRes.rows[0]?.total ?? 0);
@@ -233,7 +272,16 @@ export async function onRequestGet({ request, env }) {
         const result = await db.execute({ sql: finalSql, args });
 
         const rows = result.rows.map(r => {
-            const inflections_pl = r.inflections_pl ? JSON.parse(r.inflections_pl) : [];
+            let inflections_pl = [];
+            if (r.inflections_pl) {
+                try {
+                    inflections_pl = JSON.parse(r.inflections_pl);
+                    if (!Array.isArray(inflections_pl)) inflections_pl = [];
+                } catch (e) {
+                    console.error(`Malformed inflections_pl for ID ${r.id}:`, r.inflections_pl);
+                    inflections_pl = [];
+                }
+            }
             return {
                 ...r,
                 tags: r.tags ? (() => { try { return JSON.parse(r.tags); } catch { return []; } })() : [],
@@ -295,7 +343,12 @@ export async function onRequestGet({ request, env }) {
         return json({ results: rows, total, query: q });
     } catch (e) {
         console.error("API SEARCH ERROR:", e);
-        return json({ error: e.message, stack: e.stack, query: q }, 500);
+        return json({ 
+            error: e.message, 
+            stack: e.stack, 
+            query: q,
+            detail: "!!! SEARCH_API_ERROR !!!: Error occurred during search execution or result mapping"
+        }, 500);
     }
 }
 

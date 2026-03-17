@@ -4,6 +4,45 @@ import type { Entry } from '@/types';
 
 export const MOCK_ENTRIES: Entry[] = [
     {
+        id: 'entry-wara',
+        headword: 'wara',
+        pos: 'adverb',
+        root_pattern_form: {
+            id: 'rpf-wrj-cvcv',
+            root_id: 'wrj',
+            pattern_id: 'pat-cvcv',
+            derived_form: 'wara',
+            root: {
+                id: 'wrj',
+                consonants: 'w-r-j',
+                consonant_array: ['w', 'r', 'j'],
+                strength: 'weak',
+                is_imala_blocked: false,
+                gloss: 'behind',
+                etymology: 'Arabic',
+                created_at: '2024-01-01T00:00:00Z',
+                updated_at: '2024-01-01T00:00:00Z',
+            },
+            pattern: {
+                id: 'pat-cvca',
+                cv_notation: 'CvCa',
+                wizen_notation: 'fagħla',
+                created_at: '2024-01-01T00:00:00Z',
+            },
+        },
+        definitions: [
+            {
+                id: 'def-wara-1',
+                sense_number: 1,
+                text_en: 'behind, after',
+                text_mt: 'wara; wara x-xiħ',
+            },
+        ],
+        is_loanword: false,
+        created_at: '2024-01-01T00:00:00Z',
+        updated_at: '2024-01-01T00:00:00Z',
+    },
+    {
         id: 'entry-kiteb',
         headword: 'kiteb',
         pos: 'verb',

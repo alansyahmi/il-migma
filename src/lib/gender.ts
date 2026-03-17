@@ -28,10 +28,23 @@ export function normalizeGender(value: unknown): NormalizedGender {
 export function resolveEntryGender(entry: any): NormalizedGender {
     if (!entry) return null;
 
-    return (
-        normalizeGender(entry.gender) ||
+    // 1) Canonical column
+    const canonical = normalizeGender(entry.gender);
+    if (canonical) return canonical;
+
+    // 2) Legacy flat columns (read-compat while DB is migrating)
+    const legacy =
         normalizeGender(entry.noun_gender) ||
+        normalizeGender(entry.adj_gender) ||
+        normalizeGender(entry.participle_gender);
+    if (legacy) return legacy;
+
+    // 3) Nested morphology objects (some API payloads embed these)
+    const nested =
         normalizeGender(entry.noun_morphology?.gender) ||
-        null
-    );
+        normalizeGender(entry.adjective_morphology?.gender) ||
+        normalizeGender(entry.participle_morphology?.gender);
+    if (nested) return nested;
+
+    return null;
 }

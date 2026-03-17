@@ -5,7 +5,7 @@ import {
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants } from '@/lib/api';
+import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants, apiGetDistinctValues } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { generateRootForms } from '@/lib/conjugationEngine';
@@ -15,10 +15,10 @@ import { RelationshipEditor } from './RelationshipEditor';
 import { entryToForm, formToPayload, INITIAL_FORM_STATE } from '@/lib/entryAdapter';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
-import { 
-    generateIPA, deriveFeminineFromPattern, deriveMasculineFromFeminine, 
-    detectPluralType, derivePattern, extractLongVowelFromPattern, 
-    generateNumeralForms 
+import {
+    generateIPA, deriveFeminineFromPattern, deriveMasculineFromFeminine,
+    detectPluralType, derivePattern, extractLongVowelFromPattern,
+    generateNumeralForms
 } from '@/lib/maltesePhonology';
 import { resolveEntryGender } from '@/lib/gender';
 import { ENTRY_HANDLED_FIELDS } from '@/lib/adminSchema';
@@ -59,7 +59,7 @@ export interface EntryFormModalProps {
 
 interface MorphologyProps {
     form: any;
-    set: (field: string, value: any) => void;
+    set: (k: string, v: any) => void;
     t: (en: string, mt: string) => string;
     styles: {
         label: string;
@@ -84,6 +84,8 @@ interface MorphologyProps {
         cv_wizen_patterns?: any[];
         sound_suffixes?: string[];
         patterns?: { label: string; value: string; sub?: string }[];
+        feminine_patterns?: { label: string; value: string; sub?: string }[];
+        diminutive_patterns?: { label: string; value: string; sub?: string }[];
         suggestions?: {
             broken_pattern?: string;
             feminine?: string;
@@ -93,11 +95,12 @@ interface MorphologyProps {
         verb_presets?: Record<string, any>;
     };
     onApplyDerivedTerms?: () => void;
+    suggestions?: string[];
 }
 
 const CharRow = ({ onInsert }: { onInsert: (c: string) => void }) => (
     <div className="flex gap-1 mt-1">
-        {['à', 'â', 'ċ', 'ġ', 'ħ', 'ż'].map(c => (
+        {['à', 'â', 'ċ', 'ġ', 'ħ', 'ż', '–'].map(c => (
             <button
                 key={c}
                 type="button"
@@ -110,7 +113,154 @@ const CharRow = ({ onInsert }: { onInsert: (c: string) => void }) => (
     </div>
 );
 
-const VowelSetRow = ({ form, set, t, styles, onFocus, insertChar, fields }: MorphologyProps & { fields: { key: string; label: string; placeholder?: string }[] }) => (
+const SuggestionRow = ({ options, onSelect, label }: { options: string[], onSelect: (v: string) => void, label?: string }) => {
+    if (!options.length) return null;
+    return (
+        <div className="mt-1">
+            {label && <p className="text-[9px] uppercase font-bold text-black/30 mb-1">{label}</p>}
+            <div className="flex flex-wrap gap-1">
+                {options.map(opt => (
+                    <button
+                        key={opt}
+                        type="button"
+                        onClick={() => onSelect(opt)}
+                        className="px-1.5 py-0.5 text-[9px] bg-blue-50 border border-blue-100 rounded text-blue-600 hover:bg-blue-100 transition-colors"
+                    >
+                        {opt}
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const PatternPresetChips = ({
+    label,
+    patterns,
+    value,
+    onSelect,
+    multi
+}: {
+    label: string;
+    patterns?: { label: string; value: string; sub?: string }[];
+    value?: string | null;
+    onSelect: (v: string) => void;
+    multi?: boolean;
+}) => {
+    if (!patterns || patterns.length === 0) return null;
+    const values = multi ? (value?.split(',').map(s => s.trim()).filter(Boolean) || []) : [value];
+
+    return (
+        <div>
+            <span className="text-[10px] font-bold text-black/40 uppercase tracking-wider mb-2 block">
+                {label}
+            </span>
+            <div className="flex flex-wrap gap-2">
+                {patterns.map(opt => {
+                    const isSelected = multi ? values.includes(opt.value) : value === opt.value;
+                    return (
+                        <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => {
+                                if (multi) {
+                                    const next = isSelected
+                                        ? values.filter(v => v !== opt.value)
+                                        : [...values, opt.value];
+                                    onSelect(next.join(', '));
+                                } else {
+                                    onSelect(opt.value);
+                                }
+                            }}
+                            className={cn(
+                                "px-2 py-1 text-[10px] rounded border transition-all",
+                                isSelected
+                                    ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                                    : "bg-white text-slate-600 border-slate-200 hover:border-blue-400"
+                            )}
+                        >
+                            {opt.label} {opt.sub && <span className="opacity-50 ml-1 font-normal">({opt.sub})</span>}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
+
+const PatternTagField = ({
+    value,
+    onChange,
+    label,
+    placeholder,
+    presets,
+    suggestion,
+    onSuggest,
+    styles,
+    t
+}: {
+    value: string;
+    onChange: (v: string) => void;
+    label: string;
+    placeholder?: string;
+    presets?: { label: string; value: string; sub?: string }[];
+    suggestion?: string;
+    onSuggest?: () => void;
+    styles: any;
+    t: (en: string, mt: string) => string;
+}) => {
+    const values = value.split(',').map(s => s.trim()).filter(Boolean);
+
+    return (
+        <div className="space-y-2">
+            <label className={styles.label}>{label}</label>
+            <div className="flex flex-wrap gap-2 p-3 bg-white border border-black/10 rounded-lg min-h-[42px]">
+                {values.map(val => (
+                    <Badge key={val} variant="tag" className="bg-slate-100 border-slate-200 text-slate-700 pr-1">
+                        {val}
+                        <button
+                            type="button"
+                            onClick={() => onChange(values.filter(v => v !== val).join(', '))}
+                            className="ml-1 hover:text-red-500"
+                        >
+                            &times;
+                        </button>
+                    </Badge>
+                ))}
+                <input
+                    className="bg-transparent text-sm focus:outline-none min-w-[100px] flex-1 text-black"
+                    placeholder={values.length === 0 ? placeholder : ''}
+                    onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ',') {
+                            e.preventDefault();
+                            const val = e.currentTarget.value.trim();
+                            if (val && !values.includes(val)) {
+                                onChange([...values, val].join(', '));
+                                e.currentTarget.value = '';
+                            }
+                        }
+                    }}
+                />
+            </div>
+            {suggestion && value !== suggestion && (
+                <button type="button" onClick={onSuggest} className="mt-1 text-[10px] text-blue-600 hover:underline block">
+                    {t('Suggest', 'Sugġeriment')}: {suggestion}
+                </button>
+            )}
+            {presets && presets.length > 0 && (
+                <PatternPresetChips
+                    label={t('Pattern Presets', 'Mudelli Presets')}
+                    patterns={presets}
+                    value={value}
+                    onSelect={onChange}
+                    multi
+                />
+            )}
+        </div>
+    );
+};
+
+const VowelSetRow = ({ form, set, t, styles, onFocus, insertChar, fields, suggestions }: MorphologyProps & { fields: { key: string; label: string; placeholder?: string }[], suggestions?: string[] }) => (
     <div className={cn(styles.grid, "bg-slate-50 p-3 rounded-lg border border-slate-100")}>
         {fields.map(f => (
             <div key={f.key}>
@@ -122,17 +272,53 @@ const VowelSetRow = ({ form, set, t, styles, onFocus, insertChar, fields }: Morp
                     onFocus={() => onFocus(f.key)}
                     placeholder={f.placeholder || "e.g. i-a"}
                 />
-                <CharRow onInsert={insertChar} />
+                <div className="flex flex-col gap-1 mt-1">
+                    <CharRow onInsert={insertChar} />
+                    {suggestions && suggestions.length > 0 && (
+                        <SuggestionRow options={suggestions.slice(0, 10)} onSelect={v => set(f.key, v)} />
+                    )}
+                </div>
             </div>
         ))}
     </div>
 );
 
-const NounFields = ({ form, set, t, styles, insertChar, onFocus, options }: MorphologyProps) => {
-    const isCollectiveOrSingulative = form.is_collective || form.is_singulative;
-
+const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, suggestions }: MorphologyProps) => {
     return (
         <div className="space-y-4">
+            <div className="flex gap-4 p-3 bg-surface-soft rounded-lg border border-border">
+                <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                        type="checkbox"
+                        className={styles.check}
+                        checked={!!form.is_collective}
+                        onChange={e => {
+                            set('is_collective', e.target.checked);
+                            if (e.target.checked) {
+                                set('is_singulative', false);
+                                set('gender', 'masculine');
+                            }
+                        }}
+                    />
+                    <span className="text-sm font-medium">{t('Collective', 'Kollettiv')}</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                        type="checkbox"
+                        className={styles.check}
+                        checked={!!form.is_singulative}
+                        onChange={e => {
+                            set('is_singulative', e.target.checked);
+                            if (e.target.checked) {
+                                set('is_collective', false);
+                                set('gender', 'feminine');
+                            }
+                        }}
+                    />
+                    <span className="text-sm font-medium">{t('Singulative', 'Singolattiv')}</span>
+                </label>
+            </div>
+
             <div className={styles.grid}>
                 <div>
                     <label className={styles.label}>{t('Gender', 'Ġens')}</label>
@@ -141,7 +327,52 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options }: Morp
                         {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
                     </select>
                 </div>
-                {(!form.gender || form.gender === '') && (
+            </div>
+
+            <div className={styles.grid}>
+                {form.gender?.toLowerCase() === 'masculine' && (
+                    <div className="space-y-4">
+                        <div>
+                            <label className={styles.label}>
+                                {form.is_collective ? t('Singulative Form', 'Forma Singulattiva') : t('Feminine Form', 'Femminil')}
+                            </label>
+                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} placeholder={form.is_collective ? "e.g. tuffieħa" : "e.g. kelliema"} />
+                        </div>
+                        <div>
+                            <PatternTagField
+                                label={form.is_collective ? t('Singulative Pattern', 'Mudell Sing.') : t('Fem. Pattern', 'Mudell Fem.')}
+                                value={form.form_fem_pattern || ''}
+                                onChange={v => set('form_fem_pattern', v)}
+                                placeholder="e.g. CaCCaCa"
+                                presets={options?.feminine_patterns}
+                                styles={styles}
+                                t={t}
+                            />
+                        </div>
+                    </div>
+                )}
+                {form.gender?.toLowerCase() === 'feminine' && (
+                    <div className="space-y-4">
+                        <div>
+                            <label className={styles.label}>
+                                {form.is_singulative ? t('Collective Form', 'Forma Kollettiva') : t('Masculine Form', 'Maskil')}
+                            </label>
+                            <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} placeholder={form.is_singulative ? "e.g. tuffieħ" : "e.g. kelliem"} />
+                        </div>
+                        <div>
+                            <PatternTagField
+                                label={form.is_singulative ? t('Collective Pattern', 'Mudell Kollettiv') : t('Masc. Pattern', 'Mudell Mask.')}
+                                value={form.form_masc_pattern || ''}
+                                onChange={v => set('form_masc_pattern', v)}
+                                placeholder="e.g. CaCCaC"
+                                presets={options?.patterns}
+                                styles={styles}
+                                t={t}
+                            />
+                        </div>
+                    </div>
+                )}
+                {!form.gender && (
                     <>
                         <div className="space-y-4">
                             <div>
@@ -149,8 +380,15 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options }: Morp
                                 <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} placeholder="e.g. kelliem" />
                             </div>
                             <div>
-                                <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
-                                <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} placeholder="e.g. CaCCaC" />
+                                <PatternTagField
+                                    label={t('Masc. Pattern', 'Mudell Mask.')}
+                                    value={form.form_masc_pattern || ''}
+                                    onChange={v => set('form_masc_pattern', v)}
+                                    placeholder="e.g. CaCCaC"
+                                    presets={options?.patterns}
+                                    styles={styles}
+                                    t={t}
+                                />
                             </div>
                         </div>
                         <div className="space-y-4">
@@ -159,184 +397,105 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options }: Morp
                                 <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} placeholder="e.g. kelliema" />
                             </div>
                             <div>
-                                <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
-                                <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} placeholder="e.g. CaCCaCa" />
+                                <PatternTagField
+                                    label={t('Fem. Pattern', 'Mudell Fem.')}
+                                    value={form.form_fem_pattern || ''}
+                                    onChange={v => set('form_fem_pattern', v)}
+                                    placeholder="e.g. CaCCaCa"
+                                    presets={options?.feminine_patterns}
+                                    styles={styles}
+                                    t={t}
+                                />
                             </div>
                         </div>
                     </>
                 )}
-                {form.gender?.toLowerCase() === 'masculine' && (
-                    <>
-                        <div>
-                            <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
-                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} placeholder="e.g. kelliema" />
-                        </div>
-                        <div>
-                            <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
-                            <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} placeholder="e.g. CaCCaCa" />
-                        </div>
-                    </>
-                )}
-                {form.gender?.toLowerCase() === 'feminine' && (
-                    <>
-                        <div>
-                            <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
-                            <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} placeholder="e.g. kelliem" />
-                        </div>
-                        <div>
-                            <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
-                            <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} placeholder="e.g. CaCCaC" />
-                        </div>
-                    </>
-                )}
             </div>
 
-            <div className="flex gap-4 p-3 bg-surface-soft rounded-lg border border-border">
-                <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className={styles.check} checked={!!form.is_collective} onChange={e => set('is_collective', e.target.checked)} />
-                    <span className="text-sm font-medium">{t('Collective', 'Kollettiv')}</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className={styles.check} checked={!!form.is_singulative} onChange={e => set('is_singulative', e.target.checked)} />
-                    <span className="text-sm font-medium">{t('Singulative', 'Singolattiv')}</span>
-                </label>
-            </div>
 
-            <div className={styles.grid}>
-                <div className="space-y-4">
-                    <div>
-                        <label className={styles.label}>
-                            {form.is_collective ? t('Collective Form', 'Forma Kollettiva') :
-                                form.is_singulative ? t('Singulative Form', 'Forma Singulattiva') :
-                                    t('Singular', 'Singular')}
-                        </label>
-                        <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
-                    </div>
-                    <div>
-                        <label className={styles.label}>{t('Lemma Pattern', 'Mudell tal-Lemma')}</label>
-                        <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} placeholder="e.g. CaCC" />
-                    </div>
-                </div>
-                <div className="space-y-4">
-                    <div>
-                        <label className={styles.label}>
-                            {isCollectiveOrSingulative ? t('Singulative Form', 'Forma Singulattiva') : t('Plural (Broken)', 'Plural (Miksur)')}
-                        </label>
-                        <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} placeholder="e.g. klieb, djar" />
-                    </div>
-                    <div>
-                        <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
-                        <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} placeholder="e.g. CCieC" />
-                    </div>
-                </div>
-            </div>
 
-            <div className={styles.grid}>
-                <div className="space-y-4">
-                    <div>
-                        <label className={styles.label}>{t('Dual Form', 'Forma Doppja')}</label>
-                        <input className={styles.inp} value={form.dual_form || ''} onChange={e => set('dual_form', e.target.value)} placeholder="e.g. xahrejn" />
-                    </div>
-                    <div>
-                        <label className={styles.label}>{t('Dual Pattern', 'Mudell tad-Doppja')}</label>
-                        <input className={styles.inp} value={form.dual_pattern || ''} onChange={e => set('dual_pattern', e.target.value)} placeholder="e.g. CaCCejn" />
-                    </div>
-                </div>
-                <div>
-                    <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
-                    <input className={styles.inp} value={form.diminutive_form || ''} onChange={e => set('diminutive_form', e.target.value)} placeholder="e.g. kittejeb" />
-                </div>
-            </div>
+            
 
             <VowelSetRow
                 form={form} set={set} t={t} styles={styles} onFocus={onFocus} insertChar={insertChar}
+                suggestions={suggestions}
                 fields={[
                     { key: 'vowel_set_sg', label: 'Vowel Set (Singular)', placeholder: 'e.g. i-a' },
                     { key: 'vowel_set_opp', label: 'Vowel Set (Opp. Gender)', placeholder: 'e.g. i-a' },
                     { key: 'vowel_set_dual', label: 'Vowel Set (Dual)', placeholder: 'e.g. i-e' },
-                    { key: 'vowel_set_pl', label: 'Vowel Set (Plural)', placeholder: 'e.g. i-ie' }
+                    { key: 'vowel_set_pl', 'label': 'Vowel Set (Plural)', placeholder: 'e.g. i-ie' }
                 ]}
             />
 
-            <div className={styles.grid}>
+            <div className="space-y-4">
                 <div>
-                    <label className={styles.label}>{t('Sound Plural', 'Plural Sħiħ')}</label>
-                    <input className={styles.inp} value={form.sound_suffix || ''} onChange={e => set('sound_suffix', e.target.value)} placeholder="e.g. skieken" />
+                    <label className={styles.label}>{t('Dual Form', 'Forma Doppja')}</label>
+                    <input className={styles.inp} value={form.dual_form || ''} onChange={e => set('dual_form', e.target.value)} placeholder="e.g. xahrejn" />
                 </div>
-                <div>
-                    <label className={styles.label}>{t('Broken Pattern', 'Mudell miksur')}</label>
-                    <input className={styles.inp} value={form.morph_pattern || ''} onChange={e => set('morph_pattern', e.target.value)} />
-                    {options?.suggestions?.broken_pattern && form.morph_pattern !== options.suggestions.broken_pattern && (
-                        <button type="button" onClick={() => set('morph_pattern', options.suggestions!.broken_pattern)} className="mt-1 text-[10px] text-blue-600 hover:underline">
-                            {t('Suggest', 'Sugġeriment')}: {options.suggestions.broken_pattern}
-                        </button>
+                {form.dual_form && (
+                    <div>
+                        <PatternTagField
+                            label={t('Dual Pattern', 'Mudell Doppju')}
+                            value={form.dual_pattern || ''}
+                            onChange={v => set('dual_pattern', v)}
+                            placeholder="e.g. CvCCejn"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
+                    </div>
+                )}
+            </div>
+
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+                <div className={styles.grid}>
+                    <div>
+                        <label className={styles.label}>{t('Plural Form', 'Forma tal-Plural')}</label>
+                        <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} placeholder="e.g. klieb, djar" />
+                    </div>
+                    <div>
+                        <PatternTagField
+                            label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
+                            value={form.morph_pattern || ''}
+                            onChange={v => set('morph_pattern', v)}
+                            placeholder="e.g. CaCCaC, -ijet"
+                            presets={options?.patterns}
+                            suggestion={options?.suggestions?.broken_pattern}
+                            onSuggest={() => options?.suggestions?.broken_pattern && set('morph_pattern', options.suggestions.broken_pattern)}
+                            styles={styles}
+                            t={t}
+                        />
+                    </div>
+                </div>
+
+                <div className="space-y-4">
+                    <div>
+                        <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
+                        <input className={styles.inp} value={form.diminutive_form || ''} onChange={e => set('diminutive_form', e.target.value)} placeholder="e.g. kittejeb" />
+                    </div>
+                    {form.diminutive_form && (
+                        <div>
+                            <PatternTagField
+                                label={t('Diminutive Pattern', 'Mudell Diminuttiv')}
+                                value={form.diminutive_pattern || ''}
+                                onChange={v => set('diminutive_pattern', v)}
+                                placeholder="e.g. CCejjeC"
+                                presets={options?.diminutive_patterns}
+                                styles={styles}
+                                t={t}
+                            />
+                        </div>
                     )}
                 </div>
             </div>
-
-            <div>
-                <label className={styles.label}>{t('Patterns', 'Mudelli')}</label>
-                <div className="flex flex-wrap gap-2">
-                    {options?.patterns?.map((opt: any) => (
-                        <button
-                            key={opt.value}
-                            type="button"
-                            onClick={() => set('morph_pattern', opt.value)}
-                            className={cn(
-                                "px-2 py-1 text-[10px] rounded border transition-all",
-                                form.morph_pattern === opt.value
-                                    ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                                    : "bg-white text-slate-600 border-slate-200 hover:border-blue-400"
-                            )}
-                        >
-                            {opt.label} {opt.sub && <span className="opacity-50 ml-1 font-normal">({opt.sub})</span>}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <NonVerbalPatternPlacementFields form={form} set={set} t={t} styles={styles} />
         </div>
     );
 };
 
 
-interface NonVerbalPatternProps {
-    form: any;
-    set: (field: string, value: any) => void;
-    t: (en: string, mt: string) => string;
-    styles: { label: string; inp: string; grid: string; };
-}
 
-const NonVerbalPatternPlacementFields = ({ form, set, t, styles }: NonVerbalPatternProps) => (
-    <div className="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-100">
-        <label className={styles.label}>{t('Form Pattern Placements', 'Postijiet tal-Mudelli')}</label>
-        <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Lemma Pattern', 'Mudell tal-Lemma')}</label>
-                <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} placeholder="e.g. CvCvC" />
-            </div>
-            <div>
-                <label className={styles.label}>{t('Feminine Pattern', 'Mudell Femminili')}</label>
-                <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} placeholder="e.g. CvCvCa" />
-            </div>
-            <div>
-                <label className={styles.label}>{t('Masculine Pattern', 'Mudell Maskili')}</label>
-                <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} placeholder="e.g. CvCvC" />
-            </div>
-            <div>
-                <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
-                <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} placeholder="e.g. CCvC" />
-            </div>
-            <div>
-                <label className={styles.label}>{t('Dual Pattern', 'Mudell Doppju')}</label>
-                <input className={styles.inp} value={form.dual_pattern || ''} onChange={e => set('dual_pattern', e.target.value)} placeholder="e.g. CvCvCejn" />
-            </div>
-        </div>
-    </div>
-);
 
-const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus }: MorphologyProps) => (
+const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, suggestions }: MorphologyProps) => (
     <div className="space-y-4">
         <div className={styles.grid}>
             <div>
@@ -346,70 +505,44 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus }:
                     {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
                 </select>
             </div>
-            {(!form.gender || form.gender === '') && (
-                <>
-                    <div className="space-y-4">
-                        <div>
-                            <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
-                            <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
-                        </div>
-                        <div>
-                            <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
-                            <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
-                        </div>
-                    </div>
-                    <div className="space-y-4">
-                        <div>
-                            <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
-                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
-                        </div>
-                        <div>
-                            <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
-                            <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
-                        </div>
-                    </div>
-                </>
-            )}
             {form.gender?.toLowerCase() === 'masculine' && (
-                <>
+                <div className="space-y-4">
                     <div>
-                        <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
+                        <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
                         <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
-                        <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                        <PatternTagField
+                            label={t('Feminine Pattern', 'Mudell Fem.')}
+                            value={form.form_fem_pattern || ''}
+                            onChange={v => set('form_fem_pattern', v)}
+                            placeholder="e.g. CVCVCa"
+                            presets={options?.feminine_patterns}
+                            styles={styles}
+                            t={t}
+                        />
                     </div>
-                </>
+                </div>
             )}
             {form.gender?.toLowerCase() === 'feminine' && (
-                <>
+                <div className="space-y-4">
                     <div>
-                        <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
+                        <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
                         <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
-                        <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
+                        <PatternTagField
+                            label={t('Masculine Pattern', 'Mudell Mask.')}
+                            value={form.lemma_pattern || ''}
+                            onChange={v => set('lemma_pattern', v)}
+                            placeholder="e.g. CVCVC"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
                     </div>
-                </>
+                </div>
             )}
-        </div>
-        <div className={styles.grid}>
-            <div className="space-y-4">
-                <div>
-                    <label className={styles.label}>{t('Plural', 'Plural')}</label>
-                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
-                </div>
-                <div>
-                    <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
-                    <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} />
-                </div>
-            </div>
-            <div>
-                <label className={styles.label}>{t('Elative (Comparative)', 'Elattiv (Komparattiv)')}</label>
-                <input className={styles.inp} value={form.elative_form || ''} onChange={e => set('elative_form', e.target.value)} />
-            </div>
         </div>
 
         <div className={styles.grid}>
@@ -418,19 +551,44 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus }:
                     <label className={styles.label}>{t('Dual Form', 'Forma Doppja')}</label>
                     <input className={styles.inp} value={form.dual_form || ''} onChange={e => set('dual_form', e.target.value)} />
                 </div>
-                <div>
-                    <label className={styles.label}>{t('Dual Pattern', 'Mudell tad-Doppja')}</label>
-                    <input className={styles.inp} value={form.dual_pattern || ''} onChange={e => set('dual_pattern', e.target.value)} />
-                </div>
+                {form.dual_form && (
+                    <div>
+                        <PatternTagField
+                            label={t('Dual Pattern', 'Mudell Doppju')}
+                            value={form.dual_pattern || ''}
+                            onChange={v => set('dual_pattern', v)}
+                            placeholder="e.g. CvCCejn"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
+                    </div>
+                )}
             </div>
-            <div>
-                <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
-                <input className={styles.inp} value={form.diminutive_form || ''} onChange={e => set('diminutive_form', e.target.value)} />
+            <div className="space-y-4">
+                <div>
+                    <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
+                    <input className={styles.inp} value={form.diminutive_form || ''} onChange={e => set('diminutive_form', e.target.value)} />
+                </div>
+                {form.diminutive_form && (
+                    <div>
+                        <PatternTagField
+                            label={t('Diminutive Pattern', 'Mudell Diminuttiv')}
+                            value={form.diminutive_pattern || ''}
+                            onChange={v => set('diminutive_pattern', v)}
+                            placeholder="e.g. CCejjeC"
+                            presets={options?.diminutive_patterns}
+                            styles={styles}
+                            t={t}
+                        />
+                    </div>
+                )}
             </div>
         </div>
 
         <VowelSetRow
             form={form} set={set} t={t} styles={styles} onFocus={onFocus} insertChar={insertChar}
+            suggestions={suggestions}
             fields={[
                 { key: 'vowel_set_sg', label: 'Vowel Set (Singular)', placeholder: 'e.g. i-a' },
                 { key: 'vowel_set_opp', label: 'Vowel Set (Opp. Gender)', placeholder: 'e.g. i-a' },
@@ -438,32 +596,52 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus }:
                 { key: 'vowel_set_pl', label: 'Vowel Set (Plural)', placeholder: 'e.g. i-ie' }
             ]}
         />
-        <div>
-            <label className={styles.label}>{t('Patterns', 'Mudelli')}</label>
-            <div className="flex flex-wrap gap-2">
-                {options?.patterns?.map((opt: any) => (
-                    <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => set('morph_pattern', opt.value)}
-                        className={cn(
-                            "px-2 py-1 text-[10px] rounded border transition-all",
-                            form.morph_pattern === opt.value
-                                ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                                : "bg-white text-slate-600 border-slate-200 hover:border-blue-400"
-                        )}
-                    >
-                        {opt.label} {opt.sub && <span className="opacity-50 ml-1 font-normal">({opt.sub})</span>}
-                    </button>
-                ))}
+
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+            <div className={styles.grid}>
+                <div>
+                    <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
+                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
+                </div>
+                <div>
+                    <PatternTagField
+                        label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
+                        value={form.morph_pattern || ''}
+                        onChange={v => set('morph_pattern', v)}
+                        placeholder="e.g. CaCCaC, -ijet"
+                        presets={options?.patterns}
+                        styles={styles}
+                        t={t}
+                    />
+                </div>
             </div>
         </div>
 
-        <NonVerbalPatternPlacementFields form={form} set={set} t={t} styles={styles} />
+        <div className={styles.grid}>
+            <div className="space-y-4">
+                <div>
+                    <label className={styles.label}>{t('Elative (Comparative)', 'Elattiv (Komparattiv)')}</label>
+                    <input className={styles.inp} value={form.elative_form || ''} onChange={e => set('elative_form', e.target.value)} />
+                </div>
+                {form.elative_form && (
+                    <div>
+                        <PatternTagField
+                            label={t('Elative Pattern', 'Mudell Elattiv')}
+                            value={form.elative_pattern || ''}
+                            onChange={v => set('elative_pattern', v)}
+                            placeholder="e.g. aCCaC"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
+                    </div>
+                )}
+            </div>
+        </div>
     </div>
 );
 
-const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerms }: MorphologyProps) => {
+const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerms, suggestions }: MorphologyProps) => {
     return (
         <div className="space-y-4">
             <div className="flex justify-end">
@@ -476,23 +654,7 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
                     {t('Suggest Morphology from Pattern', 'Iġġenera Morfoloġija')}
                 </button>
             </div>
-            <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>{t('Class', 'Klassi')}</label>
-                    <select className={styles.sel} value={form.verb_class} onChange={e => set('verb_class', e.target.value)}>
-                        <option value="">{t('Select...', 'Agħżel...')}</option>
-                        {options?.verb_class?.map((c: any) => <option key={c.value} value={c.value}>{c.label}</option>)}
-                    </select>
-                </div>
-                <div>
-                    <label className={styles.label}>{t('Type', 'Tip')}</label>
-                    <select className={styles.sel} value={form.verb_type} onChange={e => set('verb_type', e.target.value)}>
-                        <option value="">{t('Select...', 'Agħżel...')}</option>
-                        {options?.verb_type?.map((cat: any) => <option key={cat.value} value={cat.value}>{cat.label}</option>)}
-                    </select>
-                </div>
-            </div>
-
+            
             <div className={styles.grid}>
                 <div>
                     <label className={styles.label}>{t('Perfect (3sg.m)', 'Perfett (3sg.m)')}</label>
@@ -508,10 +670,12 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
                 <div>
                     <label className={styles.label}>{t('Vowel Set (Perf)', 'Sett ta\' vokali (Perf)')}</label>
                     <input className={styles.inp} value={form.verb_vowel_perf} onChange={e => set('verb_vowel_perf', e.target.value)} />
+                    <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_perf', v)} />
                 </div>
                 <div>
                     <label className={styles.label}>{t('Vowel Set (Impf)', 'Sett ta\' vokali (Impf)')}</label>
                     <input className={styles.inp} value={form.verb_vowel_impf} onChange={e => set('verb_vowel_impf', e.target.value)} />
+                    <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_impf', v)} />
                 </div>
             </div>
 
@@ -543,7 +707,8 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
     );
 };
 
-const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus }: MorphologyProps) => (
+
+const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, suggestions }: MorphologyProps) => (
     <div className="space-y-4">
         <div className={styles.grid}>
             <div>
@@ -568,8 +733,15 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus }
                             <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
                         </div>
                         <div>
-                            <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
-                            <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
+                            <PatternTagField
+                                label={t('Masculine Pattern', 'Mudell Mask.')}
+                                value={form.lemma_pattern || ''}
+                                onChange={v => set('lemma_pattern', v)}
+                                placeholder="e.g. CVCVC"
+                                presets={options?.patterns}
+                                styles={styles}
+                                t={t}
+                            />
                         </div>
                     </div>
                     <div className="space-y-4">
@@ -578,44 +750,61 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus }
                             <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
                         </div>
                         <div>
-                            <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
-                            <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                            <PatternTagField
+                                label={t('Fem. Pattern', 'Mudell Fem.')}
+                                value={form.form_fem_pattern || ''}
+                                onChange={v => set('form_fem_pattern', v)}
+                                placeholder="e.g. CVCVCa"
+                                presets={options?.feminine_patterns}
+                                styles={styles}
+                                t={t}
+                            />
                         </div>
                     </div>
                 </>
             )}
             {form.gender?.toLowerCase() === 'masculine' && (
-                <>
+                <div className="space-y-4">
                     <div>
                         <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
                         <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
-                        <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                        <PatternTagField
+                            label={t('Feminine Pattern', 'Mudell Fem.')}
+                            value={form.form_fem_pattern || ''}
+                            onChange={v => set('form_fem_pattern', v)}
+                            placeholder="e.g. CVCVCa"
+                            presets={options?.feminine_patterns}
+                            styles={styles}
+                            t={t}
+                        />
                     </div>
-                </>
+                </div>
             )}
             {form.gender?.toLowerCase() === 'feminine' && (
-                <>
+                <div className="space-y-4">
                     <div>
                         <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
                         <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
-                        <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
+                        <PatternTagField
+                            label={t('Masculine Pattern', 'Mudell Mask.')}
+                            value={form.lemma_pattern || ''}
+                            onChange={v => set('lemma_pattern', v)}
+                            placeholder="e.g. CVCVC"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
                     </div>
-                </>
+                </div>
             )}
             <div className="space-y-4">
                 <div>
                     <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
                     <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
-                </div>
-                <div>
-                    <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
-                    <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} />
                 </div>
             </div>
         </div>
@@ -626,26 +815,44 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus }
                     <label className={styles.label}>{t('Dual Form', 'Forma Doppja')}</label>
                     <input className={styles.inp} value={form.dual_form || ''} onChange={e => set('dual_form', e.target.value)} />
                 </div>
+                {form.dual_form && (
+                    <div>
+                        <PatternTagField
+                            label={t('Dual Pattern', 'Mudell Doppju')}
+                            value={form.dual_pattern || ''}
+                            onChange={v => set('dual_pattern', v)}
+                            placeholder="e.g. CvCCejn"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
+                    </div>
+                )}
+            </div>
+            <div className="space-y-4">
                 <div>
-                    <label className={styles.label}>{t('Dual Pattern', 'Mudell tad-Doppja')}</label>
-                    <input className={styles.inp} value={form.dual_pattern || ''} onChange={e => set('dual_pattern', e.target.value)} />
+                    <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
+                    <input className={styles.inp} value={form.diminutive_form || ''} onChange={e => set('diminutive_form', e.target.value)} />
                 </div>
-            </div>
-            <div>
-                <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
-                <input className={styles.inp} value={form.diminutive_form || ''} onChange={e => set('diminutive_form', e.target.value)} />
-            </div>
-        </div>
-        
-        <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Elative (Comparative)', 'Elattiv (Komparattiv)')}</label>
-                <input className={styles.inp} value={form.elative_form || ''} onChange={e => set('elative_form', e.target.value)} />
+                {form.diminutive_form && (
+                    <div>
+                        <PatternTagField
+                            label={t('Diminutive Pattern', 'Mudell Diminuttiv')}
+                            value={form.diminutive_pattern || ''}
+                            onChange={v => set('diminutive_pattern', v)}
+                            placeholder="e.g. CCejjeC"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
+                    </div>
+                )}
             </div>
         </div>
 
         <VowelSetRow
             form={form} set={set} t={t} styles={styles} onFocus={onFocus} insertChar={insertChar}
+            suggestions={suggestions}
             fields={[
                 { key: 'vowel_set_sg', label: 'Vowel Set (Singular)', placeholder: 'e.g. i-a' },
                 { key: 'vowel_set_opp', label: 'Vowel Set (Opp. Gender)', placeholder: 'e.g. i-a' },
@@ -654,7 +861,43 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus }
             ]}
         />
 
-        <NonVerbalPatternPlacementFields form={form} set={set} t={t} styles={styles} />
+        <div className={styles.grid}>
+            <div className="space-y-4">
+                <div>
+                    <label className={styles.label}>{t('Elative (Comparative)', 'Elattiv (Komparattiv)')}</label>
+                    <input className={styles.inp} value={form.elative_form || ''} onChange={e => set('elative_form', e.target.value)} />
+                </div>
+                {form.elative_form && (
+                    <div>
+                        <PatternTagField
+                            label={t('Elative Pattern', 'Mudell Elattiv')}
+                            value={form.elative_pattern || ''}
+                            onChange={v => set('elative_pattern', v)}
+                            placeholder="e.g. aCCaC"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
+                    </div>
+                )}
+            </div>
+        </div>
+
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+            <div className={styles.grid}>
+                <div>
+                    <PatternTagField
+                        label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
+                        value={form.morph_pattern || ''}
+                        onChange={v => set('morph_pattern', v)}
+                        placeholder="e.g. CaCCaC, -ijet"
+                        presets={options?.patterns}
+                        styles={styles}
+                        t={t}
+                    />
+                </div>
+            </div>
+        </div>
     </div>
 );
 
@@ -662,83 +905,62 @@ const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => (
     <div className="space-y-4">
         <div className={styles.grid}>
             <div>
-                <label className={styles.label}>{t('Gender', 'Ġeneru')}</label>
+                <label className={styles.label}>{t('Gender', 'Ġens')}</label>
                 <select className={styles.sel} value={form.gender} onChange={e => set('gender', e.target.value)}>
                     <option value="">{t('Select...', 'Agħżel...')}</option>
                     {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
                 </select>
             </div>
-            {(!form.gender || form.gender === '') && (
-                <>
-                    <div className="space-y-4">
-                        <div>
-                            <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
-                            <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
-                        </div>
-                        <div>
-                            <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
-                            <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} />
-                        </div>
-                    </div>
-                    <div className="space-y-4">
-                        <div>
-                            <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
-                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
-                        </div>
-                        <div>
-                            <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
-                            <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
-                        </div>
-                    </div>
-                </>
-            )}
             {form.gender?.toLowerCase() === 'masculine' && (
-                <>
+                <div className="space-y-4">
                     <div>
                         <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
                         <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
-                        <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                        <PatternTagField
+                            label={t('Feminine Pattern', 'Mudell Fem.')}
+                            value={form.form_fem_pattern || ''}
+                            onChange={v => set('form_fem_pattern', v)}
+                            placeholder="e.g. CVCVCa"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
                     </div>
-                </>
+                </div>
             )}
             {form.gender?.toLowerCase() === 'feminine' && (
-                <>
+                <div className="space-y-4">
                     <div>
                         <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
-                        <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
+                        <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
-                        <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} />
+                        <PatternTagField
+                            label={t('Masculine Pattern', 'Mudell Mask.')}
+                            value={form.lemma_pattern || ''}
+                            onChange={v => set('lemma_pattern', v)}
+                            placeholder="e.g. CVCVC"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
                     </div>
-                </>
+                </div>
             )}
         </div>
         <div className={styles.grid}>
-            <div className="space-y-4">
-                <div>
-                    <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
-                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
-                </div>
-                <div>
-                    <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
-                    <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} />
-                </div>
-            </div>
             <div>
-                <label className={styles.label}>{t('Lemma Pattern', 'Mudell tal-Lemma')}</label>
-                <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
+                <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
+                <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
             </div>
         </div>
-
-        <NonVerbalPatternPlacementFields form={form} set={set} t={t} styles={styles} />
     </div>
 );
 
-const NumeralFields = ({ form, set, t, styles, options, onApplyDerivedTerms }: MorphologyProps) => (
+
+const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onApplyDerivedTerms, suggestions }: MorphologyProps) => (
     <div className="space-y-4">
         <div className="flex justify-end">
             <button
@@ -758,75 +980,73 @@ const NumeralFields = ({ form, set, t, styles, options, onApplyDerivedTerms }: M
                     {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
                 </select>
             </div>
-            {(!form.gender || form.gender === '') && (
-                <>
-                    <div className="space-y-4">
-                        <div>
-                            <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
-                            <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
-                        </div>
-                        <div>
-                            <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
-                            <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} />
-                        </div>
-                    </div>
-                    <div className="space-y-4">
-                        <div>
-                            <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
-                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
-                        </div>
-                        <div>
-                            <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
-                            <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
-                        </div>
-                    </div>
-                </>
-            )}
             {form.gender?.toLowerCase() === 'masculine' && (
-                <>
+                <div className="space-y-4">
                     <div>
-                        <label className={styles.label}>{t('Feminine', 'Femminil')}</label>
+                        <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
                         <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Fem. Pattern', 'Mudell Fem.')}</label>
-                        <input className={styles.inp} value={form.form_fem_pattern || ''} onChange={e => set('form_fem_pattern', e.target.value)} />
+                        <PatternTagField
+                            label={t('Feminine Pattern', 'Mudell Fem.')}
+                            value={form.form_fem_pattern || ''}
+                            onChange={v => set('form_fem_pattern', v)}
+                            placeholder="e.g. CVCVCa"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
                     </div>
-                </>
+                </div>
             )}
             {form.gender?.toLowerCase() === 'feminine' && (
-                <>
+                <div className="space-y-4">
                     <div>
-                        <label className={styles.label}>{t('Masculine', 'Maskil')}</label>
-                        <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
+                        <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
+                        <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
                     </div>
                     <div>
-                        <label className={styles.label}>{t('Masc. Pattern', 'Mudell Mask.')}</label>
-                        <input className={styles.inp} value={form.form_masc_pattern || ''} onChange={e => set('form_masc_pattern', e.target.value)} />
+                        <PatternTagField
+                            label={t('Masculine Pattern', 'Mudell Mask.')}
+                            value={form.lemma_pattern || ''}
+                            onChange={v => set('lemma_pattern', v)}
+                            placeholder="e.g. CVCVC"
+                            presets={options?.patterns}
+                            styles={styles}
+                            t={t}
+                        />
                     </div>
-                </>
+                </div>
             )}
         </div>
 
-        <div className={styles.grid}>
-            <div className="space-y-4">
-                <div>
-                    <label className={styles.label}>{t('Singular', 'Singular')}</label>
-                    <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
-                </div>
-                <div>
-                    <label className={styles.label}>{t('Lemma Pattern', 'Mudell tal-Lemma')}</label>
-                    <input className={styles.inp} value={form.lemma_pattern || ''} onChange={e => set('lemma_pattern', e.target.value)} />
-                </div>
-            </div>
-            <div className="space-y-4">
+        <VowelSetRow
+            form={form} set={set} t={t} styles={styles} onFocus={onFocus} insertChar={insertChar}
+            suggestions={suggestions}
+            fields={[
+                { key: 'vowel_set_sg', label: 'Vowel Set (Singular)', placeholder: 'e.g. i-a' },
+                { key: 'vowel_set_opp', label: 'Vowel Set (Opp. Gender)', placeholder: 'e.g. i-a' },
+                { key: 'vowel_set_dual', label: 'Vowel Set (Dual)', placeholder: 'e.g. i-e' },
+                { key: 'vowel_set_pl', label: 'Vowel Set (Plural)', placeholder: 'e.g. i-ie' }
+            ]}
+        />
+
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+            <div className={styles.grid}>
                 <div>
                     <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
                     <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
                 </div>
                 <div>
-                    <label className={styles.label}>{t('Plural Pattern', 'Mudell tal-Plural')}</label>
-                    <input className={styles.inp} value={form.form_plural_pattern || ''} onChange={e => set('form_plural_pattern', e.target.value)} />
+                    <PatternTagField
+                        label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
+                        value={form.morph_pattern || ''}
+                        onChange={v => set('morph_pattern', v)}
+                        placeholder="e.g. CaCCaC, -ijet"
+                        presets={options?.patterns}
+                        styles={styles}
+                        t={t}
+                    />
                 </div>
             </div>
         </div>
@@ -844,22 +1064,20 @@ const NumeralFields = ({ form, set, t, styles, options, onApplyDerivedTerms }: M
                     <option value="distributive">{t('Distributive', 'Distributtiv')}</option>
                 </select>
             </div>
-            <div>
-                <label className={styles.label}>{t('Short Attributive', 'Attributtiv Qasir')}</label>
-                <input className={styles.inp} value={form.form_attributive_short || ''} onChange={e => set('form_attributive_short', e.target.value)} />
+            <div className="space-y-4">
+                <div>
+                    <label className={styles.label}>{t('Short Attributive', 'Attributtiv Qasir')}</label>
+                    <input className={styles.inp} value={form.form_attributive_short || ''} onChange={e => set('form_attributive_short', e.target.value)} />
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Long Attributive', 'Attributtiv Twil')}</label>
+                    <input className={styles.inp} value={form.form_attributive_long || ''} onChange={e => set('form_attributive_long', e.target.value)} />
+                </div>
             </div>
         </div>
-
-        <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Long Attributive', 'Attributtiv Twil')}</label>
-                <input className={styles.inp} value={form.form_attributive_long || ''} onChange={e => set('form_attributive_long', e.target.value)} />
-            </div>
-        </div>
-
-        <NonVerbalPatternPlacementFields form={form} set={set} t={t} styles={styles} />
     </div>
 );
+
 // Returns the canonical CV notation for a verb's lemma (perfect 3sg.m) based
 // on its derivation form and morphological class.
 function getVerbCvSuggestion(form: string, verbClass: string): { cv: string; wizen: string } | null {
@@ -974,6 +1192,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const VERB_FORM_OPTIONS = getValues('verb_form');
     const CV_WIZEN_PATTERNS = getValues('cv_wizen_pattern');
     const BROKEN_PATTERNS = getValues('broken_pattern');
+    const FEMININE_PATTERNS_RAW = getValues('feminine_pattern');
     const PARTICIPLE_NUANCES = useMemo(() => getOptions('participle_nuance', mode, language), [getOptions, mode, language]);
     const VERB_TRANSITIVITY_OPTIONS = useMemo(() => getOptions('verb_transitivity', mode, language), [getOptions, mode, language]);
     const PARTICIPLE_TYPES = useMemo(() => getOptions('participle_type', mode, language), [getOptions, mode, language]);
@@ -1000,6 +1219,22 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         }));
     }, [BROKEN_PATTERNS, mode]);
 
+    const femininePatterns = useMemo(() => {
+        return FEMININE_PATTERNS_RAW.map((p: any) => ({
+            label: mode === 'standard' ? p.cv : p.wizen,
+            value: p.cv,
+            sub: mode === 'standard' ? p.wizen : p.cv
+        }));
+    }, [FEMININE_PATTERNS_RAW, mode]);
+
+    const diminutivePatterns = useMemo(() => {
+        return [{
+            label: mode === 'standard' ? 'CCvjjvC' : 'fgħajjel',
+            value: 'CCvjjvC',
+            sub: mode === 'standard' ? 'fgħajjel' : 'CCvjjvC'
+        }];
+    }, [mode]);
+
     // Convert verb presets list to the Record format used by the component
     const VERB_PRESETS = useMemo(() => {
         const map: Record<string, any> = {};
@@ -1017,6 +1252,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const [idExists, setIdExists] = useState<boolean | null>(null);
     const [suggestedId, setSuggestedId] = useState('');
     const [autoFilledFields, setAutoFilledFields] = useState<Set<string>>(new Set());
+    const [isNotable, setIsNotable] = useState(false);
 
     const [kbOpen, setKbOpen] = useState(false);
     const [activeInput, setActiveInput] = useState<string | null>(null);
@@ -1078,19 +1314,19 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 const headword = full.headword || prev.headword;
                                 const pos = full.pos || prev.pos;
 
-                                const lemma_base = full.lemma_base || full.noun_morphology?.singular || full.adjective_morphology?.masculine || prev.lemma_base;
-                                const gender = resolveEntryGender(full) || resolveEntryGender(prev) || undefined;
-                                const inflections_pl_raw = parseArray(full.inflections_pl || full.noun_morphology?.plural_forms || full.adjective_morphology?.plural || prev.inflections_pl);
+                                const lemma_base = full.lemma_base || prev.lemma_base;
+                                const gender = resolveEntryGender(full) || resolveEntryGender(prev) || prev.gender || '';
+                                const inflections_pl_raw = parseArray(full.inflections_pl || prev.inflections_pl);
                                 const inflections_pl = Array.isArray(inflections_pl_raw) ? inflections_pl_raw.join(', ') : (inflections_pl_raw || '');
-                                const sound_suffix = full.sound_suffix || full.noun_morphology?.sound_plural || prev.sound_suffix;
-                                const morph_pattern = full.morph_pattern || full.plural_pattern || full.adj_pattern || prev.morph_pattern;
-                                const form_fem = full.form_fem || full.noun_morphology?.feminine || full.adjective_morphology?.feminine || prev.form_fem;
-                                const form_masc = full.form_masc || full.noun_morphology?.masculine || prev.form_masc;
-                                const elative_form = full.elative_form || full.adjective_morphology?.elative || prev.elative_form;
-                                const dual_form = full.dual_form || full.noun_morphology?.dual || prev.dual_form;
-                                const diminutive_form = full.diminutive_form || full.noun_morphology?.diminutive || prev.diminutive_form;
-                                const vowel_set_sg = full.vowel_set_sg || full.noun_morphology?.vowel_set_sg || prev.vowel_set_sg;
-                                const vowel_set_pl = full.vowel_set_pl || full.noun_morphology?.vowel_set_pl || prev.vowel_set_pl;
+                                const sound_suffix = full.sound_suffix || prev.sound_suffix;
+                                const morph_pattern = full.morph_pattern || prev.morph_pattern;
+                                const form_fem = full.form_fem || prev.form_fem;
+                                const form_masc = full.form_masc || prev.form_masc;
+                                const elative_form = full.elative_form || prev.elative_form;
+                                const dual_form = full.dual_form || prev.dual_form;
+                                const diminutive_form = full.diminutive_form || prev.diminutive_form;
+                                const vowel_set_sg = full.vowel_set_sg || prev.vowel_set_sg;
+                                const vowel_set_pl = full.vowel_set_pl || prev.vowel_set_pl;
                                 const vowel_set_opp = full.vowel_set_opp || prev.vowel_set_opp;
                                 const vowel_set_dual = full.vowel_set_dual || prev.vowel_set_dual;
 
@@ -1345,19 +1581,29 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
     // ── AUTOMATION: Smart Defaults ──────────────────────────────────────────
     useEffect(() => {
-        if (form.headword && (form.pos === 'noun' || form.pos === 'adjective' || form.pos === 'participle')) {
+        const isMorphPos = ['noun', 'adjective', 'participle', 'numeral', 'pronoun'].includes(form.pos);
+        if (form.headword && isMorphPos) {
             setForm(prev => {
                 const next = { ...prev };
-                // For all relevant POS: if lemma_base is empty, seed it with the headword
+                const gender = prev.gender?.toLowerCase();
+
+                // 1. Fundamental seeding
                 if (!next.lemma_base) next.lemma_base = prev.headword;
-                // For feminine gender, seed form_fem with headword if empty
-                if (prev.gender?.toLowerCase() === 'feminine' && !next.form_fem) {
-                    next.form_fem = prev.headword;
+                if (!next.lemma_pattern && prev.cv_pattern) next.lemma_pattern = prev.cv_pattern;
+
+                // 2. Gender-specific proactive sync
+                if (gender === 'masculine') {
+                    if (prev.pos !== 'verb' && !next.form_masc) next.form_masc = prev.headword;
+                    if (!next.form_masc_pattern && prev.cv_pattern) next.form_masc_pattern = prev.cv_pattern;
+                } else if (gender === 'feminine') {
+                    if (!next.form_fem) next.form_fem = prev.headword;
+                    if (!next.form_fem_pattern && prev.cv_pattern) next.form_fem_pattern = prev.cv_pattern;
                 }
+
                 return next;
             });
         }
-    }, [form.headword, form.pos, form.gender]);
+    }, [form.headword, form.pos, form.gender, form.cv_pattern]);
 
     // ── AUTOMATION: Pattern Auto-Suggest (from headword + root) ─────────────
     const suggestedPattern = useMemo(() => {
@@ -1456,7 +1702,49 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         form.sound_suffix
     ]);
 
-    const set = (k: string, v: unknown) => setForm((f: any) => ({ ...f, [k]: v }));
+    const set = (k: string, v: any) => {
+        setForm((f: any) => {
+            const next = { ...f, [k]: v };
+
+            // Sync headword to lemma_base/form_fem/form_masc
+            if (k === 'headword' && ['noun', 'adjective', 'participle', 'numeral'].includes(next.pos)) {
+                if (next.gender?.toLowerCase() === 'feminine') {
+                    next.form_fem = v;
+                } else if (next.gender?.toLowerCase() === 'masculine') {
+                    if (next.pos === 'noun') {
+                        next.lemma_base = v;
+                    } else {
+                        next.lemma_base = v;
+                    }
+                } else {
+                    next.lemma_base = v;
+                }
+            }
+
+            // Sync CV pattern to gender-specific pattern for relevant POS
+            if (k === 'cv_pattern' && ['noun', 'adjective', 'participle', 'numeral'].includes(next.pos)) {
+                if (next.gender?.toLowerCase() === 'feminine') {
+                    next.form_fem_pattern = v;
+                } else {
+                    next.lemma_pattern = v;
+                }
+            }
+
+            // Sync back when gender changes
+            if (k === 'gender' && ['noun', 'adjective', 'participle', 'numeral'].includes(next.pos)) {
+                // When switching gender, also ensure the headword is synced to the new base
+                if (v?.toLowerCase() === 'feminine') {
+                    next.form_fem = next.headword;
+                    if (next.form_fem_pattern) next.cv_pattern = next.form_fem_pattern;
+                } else {
+                    next.lemma_base = next.headword;
+                    if (next.lemma_pattern) next.cv_pattern = next.lemma_pattern;
+                }
+            }
+
+            return next;
+        });
+    };
 
     const normalizedPos = useMemo(() => form.pos?.toLowerCase() || '', [form.pos]);
 
@@ -1527,6 +1815,16 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             setSaving(false);
         }
     };
+
+    const [availableTags, setAvailableTags] = useState<string[]>([]);
+    const [availableVowelSets, setAvailableVowelSets] = useState<string[]>([]);
+    const [availableSources, setAvailableSources] = useState<string[]>([]);
+
+    useEffect(() => {
+        apiGetDistinctValues('tags').then(setAvailableTags).catch(e => console.error("Tags fetch error:", e));
+        apiGetDistinctValues('vowel_sets').then(setAvailableVowelSets).catch(e => console.error("Vowel sets fetch error:", e));
+        apiGetDistinctValues('sources').then(setAvailableSources).catch(e => console.error("Sources fetch error:", e));
+    }, []);
 
     const conjugationPreview = useMemo(() => {
         if (normalizedPos !== 'verb' || !form._rootConsonants || !form.verb_vowel_perf || !form.verb_vowel_impf) return null;
@@ -1729,9 +2027,95 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     {/* Tags, Strength */}
                     <div className="space-y-4">
 
-                        <div>
-                            <label className={label}>{t('Tags (comma separated)', 'Tikketti (separati bil-virgola)')}</label>
-                            <input className={inp} value={form.tags || ''} onChange={e => setForm({ ...form, tags: e.target.value })} placeholder="e.g. archaic, dialectal" />
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-4 mb-2.5 px-1">
+                                <label className="flex items-center gap-2 cursor-pointer group">
+                                    <input
+                                        type="checkbox"
+                                        checked={isNotable}
+                                        onChange={e => setIsNotable(e.target.checked)}
+                                        className="w-3.5 h-3.5 text-[#1034A6] border-black/20 rounded focus:ring-0 focus:ring-offset-0"
+                                    />
+                                    <span className="text-[11px] font-bold uppercase tracking-wider text-black/60 group-hover:text-black transition-colors">{t('Notable (!)', 'Notabbli (!)')}</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer group">
+                                    <input
+                                        type="checkbox"
+                                        checked={(typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || [])).map((t: string) => t.trim()).includes('$invariable')}
+                                        onChange={e => {
+                                            const tags = (typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || [])).map((t: string) => t.trim()).filter(Boolean);
+                                            let next;
+                                            if (e.target.checked) {
+                                                next = [...tags, '$invariable'];
+                                            } else {
+                                                next = tags.filter(t => t !== '$invariable');
+                                            }
+                                            setForm({ ...form, tags: Array.from(new Set(next)).join(', ') });
+                                        }}
+                                        className="w-3.5 h-3.5 text-[#1034A6] border-black/20 rounded focus:ring-0 focus:ring-offset-0"
+                                    />
+                                    <span className="text-[11px] font-bold uppercase tracking-wider text-black/60 group-hover:text-black transition-colors">{t('No Elative', 'L-ebda Elattiv')}</span>
+                                </label>
+                            </div>
+
+                            <div className="flex flex-wrap gap-2 p-3 bg-slate-50 border border-black/10 rounded-lg">
+                                {form.tags && (typeof form.tags === 'string' ? form.tags.split(',') : form.tags).map((tag: string) => {
+                                    const clean = tag.trim();
+                                    if (!clean) return null;
+                                    return (
+                                        <Badge key={clean} variant="tag" className="bg-white border-black/10 text-black pr-1">
+                                            {clean}
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const tags = typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || []);
+                                                    setForm({ ...form, tags: tags.map((t: string) => t.trim()).filter((t: string) => t !== clean).join(', ') });
+                                                }}
+                                                className="ml-1 hover:text-red-500"
+                                            >
+                                                &times;
+                                            </button>
+                                        </Badge>
+                                    );
+                                })}
+                                <input
+                                    className="bg-transparent text-sm focus:outline-none min-w-[100px] flex-1 text-black"
+                                    placeholder={t('Add tag...', 'Żid tikketta...')}
+                                    onKeyDown={e => {
+                                        if (e.key === 'Enter' || e.key === ',') {
+                                            e.preventDefault();
+                                            let val = e.currentTarget.value.trim();
+                                            if (val) {
+                                                if (isNotable && !val.startsWith('!')) {
+                                                    val = '!' + val;
+                                                }
+                                                const tags = typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || []);
+                                                const next = [...tags.map((t: string) => t.trim()).filter(Boolean), val];
+                                                setForm({ ...form, tags: Array.from(new Set(next)).join(', ') });
+                                                e.currentTarget.value = '';
+                                                if (isNotable) setIsNotable(false); // Reset high-intensity prefix after use
+                                            }
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <SuggestionRow
+                                label={t('Existing Tags', 'Tikketti Eżistenti')}
+                                options={availableTags.filter(t => {
+                                    const current = typeof form.tags === 'string' ? form.tags.split(',').map((s: string) => s.trim()) : (form.tags || []);
+                                    return !current.includes(t);
+                                }).slice(0, 15)}
+                                onSelect={tag => {
+                                    let finalTag = tag;
+                                    if (isNotable && !finalTag.startsWith('!')) {
+                                        finalTag = '!' + finalTag;
+                                    }
+                                    const tags = typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || []);
+                                    const next = [...tags.map((t: string) => t.trim()).filter(Boolean), finalTag];
+                                    setForm({ ...form, tags: Array.from(new Set(next)).join(', ') });
+                                    if (isNotable) setIsNotable(false);
+                                }}
+                            />
                         </div>
                     </div>
 
@@ -1819,6 +2203,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     gender: GENDER_OPTIONS,
                                     noun_type: NOUN_TYPE_OPTIONS,
                                     patterns: nounPatterns,
+                                    feminine_patterns: femininePatterns,
+                                    diminutive_patterns: diminutivePatterns,
                                     suggestions: {
                                         broken_pattern: suggestedBrokenPattern || undefined,
                                         feminine: suggestedFeminine || undefined,
@@ -1827,6 +2213,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     }
                                 }}
                                 onApplyDerivedTerms={handleApplyDerivedTerms}
+                                suggestions={availableVowelSets}
                             />
                         )}
 
@@ -1855,6 +2242,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 options={{
                                     gender: GENDER_OPTIONS
                                 }}
+                                onApplyDerivedTerms={handleApplyDerivedTerms}
+                                suggestions={availableVowelSets}
                             />
                         )}
 
@@ -1890,8 +2279,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 onFocus={setActiveInput}
                                 options={{
                                     gender: GENDER_OPTIONS,
-                                    patterns: adjPatterns
+                                    patterns: adjPatterns,
+                                    feminine_patterns: femininePatterns,
+                                    diminutive_patterns: diminutivePatterns
                                 }}
+                                suggestions={availableVowelSets}
                             />
                         )}
 
@@ -1905,8 +2297,12 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 onFocus={setActiveInput}
                                 options={{
                                     participle_type: PARTICIPLE_TYPES,
-                                    participle_gender: GENDER_OPTIONS
+                                    participle_gender: GENDER_OPTIONS,
+                                    patterns: adjPatterns,
+                                    feminine_patterns: femininePatterns,
+                                    diminutive_patterns: diminutivePatterns
                                 }}
+                                suggestions={availableVowelSets}
                             />
                         )}
                     </div>
@@ -2102,6 +2498,10 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     }
                                 }}
                                 placeholder={t('e.g. Aquilina1987', 'eż. Aquilina1987')} />
+                            <SuggestionRow
+                                options={availableSources.slice(0, 10)}
+                                onSelect={src => set('source_citation', src)}
+                            />
                             {autoFilledFields.has('source_citation') && (
                                 <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse">
                                     <span>✦</span>

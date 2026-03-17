@@ -21,9 +21,9 @@ const CATEGORIES = [
     { id: 'noun_type', label: 'Noun Types', icon: Package },
     { id: 'source_language', label: 'Sources', icon: Library },
     { id: 'verb_preset', label: 'Verb Presets', icon: Settings },
-    { id: 'broken_pattern', label: 'Broken Patterns', icon: Puzzle },
+    { id: 'plural_pattern', label: 'Plural Patterns', icon: Puzzle },
+    { id: 'feminine_pattern', label: 'Feminine Patterns', icon: Users },
     { id: 'cv_wizen_pattern', label: 'Patterns', icon: Palette },
-    { id: 'sound_suffix', label: 'S. Plural Suffixes', icon: PlusSquare },
     { id: 'verb_form', label: 'Verb Forms', icon: Settings },
     { id: 'participle_nuance', label: 'Ptcp. Nuances', icon: Tag },
     { id: 'root_relationship', label: 'Root Relationships', icon: Globe },
@@ -111,7 +111,9 @@ export function AdminSettings() {
         (e.target as HTMLElement).style.opacity = '1';
     };
 
-    const currentItems = getCategoryItems(activeTab);
+    const currentItems = activeTab === 'plural_pattern'
+        ? [...getCategoryItems('broken_pattern'), ...getCategoryItems('sound_suffix')]
+        : getCategoryItems(activeTab);
 
     if (loading && config.length === 0) {
         return <div className="flex justify-center py-20"><Spinner /></div>;
@@ -156,7 +158,9 @@ export function AdminSettings() {
                                 {t(cat.label, term(cat.label))}
                             </span>
                             <span className="text-[10px] bg-black/5 px-1.5 rounded opacity-50 group-hover:opacity-100 mr-2">
-                                {getCategoryItems(cat.id).length}
+                                {cat.id === 'plural_pattern'
+                                    ? getCategoryItems('broken_pattern').length + getCategoryItems('sound_suffix').length
+                                    : getCategoryItems(cat.id).length}
                             </span>
                         </div>
                     ))}
@@ -228,7 +232,7 @@ export function AdminSettings() {
                         {CATEGORIES.find(c => c.id === activeTab)?.label}
                     </h2>
                     <div className="flex items-center gap-3">
-                        {(activeTab === 'cv_wizen_pattern' || activeTab === 'broken_pattern') && (
+                        {['cv_wizen_pattern', 'plural_pattern', 'feminine_pattern'].includes(activeTab) && (
                             <select
                                 className="bg-white border border-black/10 rounded-lg px-3 py-1.5 text-xs font-semibold focus:outline-none"
                                 value={posFilter}
@@ -247,7 +251,7 @@ export function AdminSettings() {
                 <div className="grid gap-3">
                     {(() => {
                         let items = currentItems;
-                        if (posFilter !== 'all' && (activeTab === 'cv_wizen_pattern' || activeTab === 'broken_pattern')) {
+                        if (posFilter !== 'all' && ['cv_wizen_pattern', 'plural_pattern', 'feminine_pattern'].includes(activeTab)) {
                             items = items.filter(item => {
                                 const val = item.value as any;
                                 return val.pos_types?.includes(posFilter);
@@ -327,8 +331,15 @@ export function AdminSettings() {
                         category={activeTab}
                         onClose={() => { setShowAdd(false); setEditItem(null); }}
                         onSave={async (val) => {
-                            if (editItem) await updateItem({ ...editItem, ...val });
-                            else await createItem({ category: activeTab, ...val });
+                            if (editItem) {
+                                await updateItem({ ...editItem, ...val });
+                            } else {
+                                let saveCategory = activeTab;
+                                if (activeTab === 'plural_pattern') {
+                                    saveCategory = val.key.startsWith('-') ? 'sound_suffix' : 'broken_pattern';
+                                }
+                                await createItem({ category: saveCategory, ...val });
+                            }
                             setShowAdd(false);
                             setEditItem(null);
                         }}
@@ -357,7 +368,7 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
                 verbal: { cv: '', wizen: '' }
             };
         }
-        if (category === 'broken_pattern' || category === 'cv_wizen_pattern') {
+        if (['broken_pattern', 'plural_pattern', 'feminine_pattern', 'cv_wizen_pattern', 'sound_suffix'].includes(category)) {
             return { cv: '', wizen: '', stress: 2, pos_types: [] };
         }
         return { en: '', mt_standard: '', mt_arabised: '' };
@@ -402,7 +413,7 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
         }
     };
 
-    const isComplex = category === 'verb_preset' || category === 'broken_pattern' || category === 'cv_wizen_pattern';
+    const isComplex = ['verb_preset', 'broken_pattern', 'plural_pattern', 'feminine_pattern', 'cv_wizen_pattern', 'sound_suffix'].includes(category);
     const { getValues } = useAdminConfig();
     const POS_OPTIONS = getValues('pos').filter(p => p !== 'verb');
 
@@ -434,7 +445,7 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
                             }} placeholder={category === 'verb_preset' ? "e.g. Form I" : "English display name..."} />
                         </div>
                         {/* Only show these for non-pattern items to avoid redundancy */}
-                        {category !== 'broken_pattern' && category !== 'cv_wizen_pattern' && (
+                        {!['broken_pattern', 'plural_pattern', 'feminine_pattern', 'cv_wizen_pattern', 'sound_suffix'].includes(category) && (
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className={labelStyle}>Maltese (CV / Standard) {category === 'verb_preset' ? '(Form Name)' : ''}</label>
@@ -511,7 +522,7 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
                                         </div>
                                     </div>
 
-                                    {category === 'cv_wizen_pattern' && (
+                                    {['cv_wizen_pattern', 'broken_pattern', 'plural_pattern', 'feminine_pattern', 'sound_suffix'].includes(category) && (
                                         <div>
                                             <label className={labelStyle}>Apply to POS (exclude verb)</label>
                                             <div className="flex flex-wrap gap-1.5 mt-2">

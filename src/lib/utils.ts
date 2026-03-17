@@ -58,3 +58,23 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
         timeout = setTimeout(() => fn(...args), delay);
     };
 }
+
+/** 
+ * Selects the appropriate gloss based on interface language and linguistic mode.
+ * Falls back to the alternative language if the preferred one is missing.
+ */
+export function getGloss(
+    item: { gloss_en?: string; gloss_mt?: string } | null | undefined,
+    language: 'en' | 'mt',
+    _mode: 'standard' | 'arabised' = 'standard'
+): string {
+    if (!item) return '';
+
+    if (language === 'en') {
+        return item.gloss_en || item.gloss_mt || '';
+    }
+
+    // For Maltese, we currently use gloss_mt for both Standard and Arabised modes.
+    // This helper allows for future expansion if separate Maltese glosses are added.
+    return item.gloss_mt || item.gloss_en || '';
+}

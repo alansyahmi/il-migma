@@ -11,7 +11,7 @@ import { Footer } from '@/components/layout/Footer';
 import ScrollToTop from '@/components/utils/ScrollToTop';
 import { Home } from '@/pages/Home';
 import { Search } from '@/pages/Search';
-import { Entry } from '@/pages/Entry';
+import { EntryPage } from '@/pages/Entry';
 import { Chatbot } from '@/pages/Chatbot';
 import { Dashboard } from '@/pages/Dashboard';
 import { Conjugator } from '@/pages/Conjugator';
@@ -63,7 +63,7 @@ export default function App() {
                                         <Route element={<AppShell />}>
                                             <Route index element={<Home />} />
                                             <Route path="search" element={<Search />} />
-                                            <Route path="entry/:id" element={<Entry />} />
+                                            <Route path="entry/:id" element={<EntryPage />} />
                                             <Route path="root/:id" element={<Root />} />
                                             <Route path="chatbot" element={<Chatbot />} />
                                             <Route path="dashboard" element={<Dashboard />} />

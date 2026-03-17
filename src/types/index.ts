@@ -219,6 +219,8 @@ export interface AdjectiveMorphology {
     form_fem_pattern?: string;
     form_masc_pattern?: string;
     form_plural_pattern?: string;
+    elative_pattern?: string;
+    diminutive_pattern?: string;
     dual_pattern?: string;
     source_citation?: string;
 }
@@ -378,6 +380,8 @@ export interface Entry {
     form_fem_pattern?: string;
     form_masc_pattern?: string;
     form_plural_pattern?: string;
+    diminutive_pattern?: string;
+    elative_pattern?: string;
     dual_pattern?: string;
     plural_pattern?: string;
     sound_suffix?: string;
