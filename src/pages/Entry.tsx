@@ -13,6 +13,7 @@ import { Edit2, ArrowLeft, Search, Plus, Trash2 } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { apiGetEntry, adminDeleteEntry } from '@/lib/api';
 import { useRootData } from '@/hooks/useRootData';
+import { useAdminConfig } from '@/lib/adminConfig';
 import { cn, getGloss } from '@/lib/utils';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { generateTheoreticalDual, generateElative, generateNumeralForms, type NumeralAutoForms } from '@/lib/maltesePhonology';
@@ -62,7 +63,7 @@ function PropRow({ label, children, className }: { label: string; children: Reac
     );
 }
 
-function MorphologyTable({ title, rows }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string }[] }) {
+function MorphologyTable({ title, rows, displayPattern }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string }[]; displayPattern?: (p?: string) => string }) {
     const { term } = useLinguisticMode();
     const activeRows = rows.filter(r => r.show !== false && r.value && r.value !== '-');
     if (activeRows.length === 0) return null;
@@ -96,7 +97,7 @@ function MorphologyTable({ title, rows }: { title: string; rows: { label: string
                                     </div>
                                 </td>
                                 <td className="py-2.5 text-black/40 text-[10px] font-sans tracking-tight">
-                                    {row.pattern || '-'}
+                                    {row.pattern ? (displayPattern ? displayPattern(row.pattern) : row.pattern) : '-'}
                                 </td>
                             </tr>
                         ))}
@@ -135,7 +136,7 @@ function VowelSetGrid({ morphology }: { morphology: any }) {
     );
 }
 
-function MorphologyGrid({ title, rows }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string }[] }) {
+function MorphologyGrid({ title, rows, displayPattern }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string }[]; displayPattern?: (p?: string) => string }) {
     const activeRows = rows.filter(r => r.show !== false && r.value && r.value !== '-');
     if (activeRows.length === 0) return null;
 
@@ -153,7 +154,9 @@ function MorphologyGrid({ title, rows }: { title: string; rows: { label: string;
                             )}
                             {row.extra}
                             {row.pattern && (
-                                <span className="ml-1 text-[10px] font-sans text-black/40">({row.pattern})</span>
+                                <span className="ml-1 text-[10px] font-sans text-black/40">
+                                    ({displayPattern ? displayPattern(row.pattern) : row.pattern})
+                                </span>
                             )}
                         </div>
                     </div>
@@ -171,10 +174,10 @@ function TagChips({ entry }: { entry: Entry }) {
         .filter(t => !t.includes('THEORETICAL'))
         .map(tag => {
             const isTitle = tag.startsWith('\\');
-            const clean = tag.replace('\\', '').replace('$', '').trim();
+            const clean = tag.replace(/^[\\!$]/, '').trim();
             return { raw: tag, label: clean, isTitle };
         })
-        .filter(c => c.label && c.label !== '$');
+        .filter(c => c.label && c.label !== '$' && c.label.toLowerCase() !== 'invariable');
 
     if (!chips.length) return null;
 
@@ -356,6 +359,29 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
 
+    const { getValues } = useAdminConfig();
+    const cvWizenMap = useMemo(() => {
+        const map = new Map<string, string>();
+        const categories = ['cv_wizen_pattern', 'plural_pattern', 'feminine_pattern', 'diminutive_pattern', 'adjective_pattern'];
+        categories.forEach(cat => {
+            const values = getValues(cat);
+            if (Array.isArray(values)) {
+                values.forEach(item => {
+                    const cv = item?.cv || item?.cv_notation;
+                    const wizen = item?.wizen || item?.wizen_notation;
+                    if (cv && wizen) map.set(cv.toLowerCase().trim(), wizen.trim());
+                });
+            }
+        });
+        return map;
+    }, [getValues]);
+
+    const displayPattern = (pattern?: string) => {
+        if (!pattern) return '';
+        if (mode !== 'arabised') return pattern;
+        return cvWizenMap.get(pattern.toLowerCase().trim()) || pattern;
+    };
+
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
     const [initialFormData, setInitialFormData] = useState<any>(null);
@@ -386,8 +412,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const pattern = entry.root_pattern_form?.pattern;
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
-    const patternValue = (mode === 'arabised' ? (entry as any).wizen_notation : (entry as any).cv_pattern)
-        || (mode === 'arabised' ? (pattern?.wizen_notation || pattern?.cv_notation) : pattern?.cv_notation);
+    const patternValue = displayPattern(pattern?.cv_notation);
 
     const POSSESSIVE_SUFFIX_KEYS = ['1s', '2s', '3ms', '3fs', '1p', '2p', '3p'];
 
@@ -594,6 +619,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                 <MorphologyGrid
                                     title={term('morphology')}
+                                    displayPattern={displayPattern}
                                     rows={[
                                         {
                                             show: nm.gender?.toLowerCase() === 'masculine' && !!nm.feminine,
@@ -756,7 +782,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                     {s.headword}
                                                                 </Link>
-                                                                    "{getGloss(s, language, mode)}"
+                                                                "{getGloss(s, language, mode)}"
                                                                 {isActualAdmin && (
                                                                     <AdminActionButtons
                                                                         onEdit={() => handleEditEntry(s)}
@@ -775,7 +801,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                     {a.headword}
                                                                 </Link>
-                                                                    "{getGloss(a, language, mode)}"
+                                                                "{getGloss(a, language, mode)}"
                                                                 {isActualAdmin && (
                                                                     <AdminActionButtons
                                                                         onEdit={() => handleEditEntry(a)}
@@ -833,7 +859,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                 </div>
             </div>
 
-                        {showForm && (
+            {showForm && (
                 <EntryFormModal
                     entry={editEntry}
                     onClose={() => { setShowForm(false); setEditEntry(null); setInitialFormData(null); }}
@@ -858,6 +884,29 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const { term, mode } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
+
+    const { getValues } = useAdminConfig();
+    const cvWizenMap = useMemo(() => {
+        const map = new Map<string, string>();
+        const categories = ['cv_wizen_pattern', 'plural_pattern', 'feminine_pattern', 'diminutive_pattern', 'adjective_pattern'];
+        categories.forEach(cat => {
+            const values = getValues(cat);
+            if (Array.isArray(values)) {
+                values.forEach(item => {
+                    const cv = item?.cv || item?.cv_notation;
+                    const wizen = item?.wizen || item?.wizen_notation;
+                    if (cv && wizen) map.set(cv.toLowerCase().trim(), wizen.trim());
+                });
+            }
+        });
+        return map;
+    }, [getValues]);
+
+    const displayPattern = (pattern?: string) => {
+        if (!pattern) return '';
+        if (mode !== 'arabised') return pattern;
+        return cvWizenMap.get(pattern.toLowerCase().trim()) || pattern;
+    };
 
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
@@ -994,8 +1043,8 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
 
 
-    const patternLabel = term('cv-pattern');
-    const patternValue = mode === 'arabised' ? (pattern?.wizen_notation || pattern?.cv_notation) : pattern?.cv_notation;
+    const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
+    const patternValue = displayPattern(pattern?.cv_notation);
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -1584,7 +1633,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                 </div>
             </div>
 
-                        {showForm && (
+            {showForm && (
                 <EntryFormModal
                     entry={editEntry}
                     onClose={() => { setShowForm(false); setEditEntry(null); setInitialFormData(null); }}
@@ -1609,6 +1658,29 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const { term, mode } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
+
+    const { getValues } = useAdminConfig();
+    const cvWizenMap = useMemo(() => {
+        const map = new Map<string, string>();
+        const categories = ['cv_wizen_pattern', 'plural_pattern', 'feminine_pattern', 'diminutive_pattern', 'adjective_pattern'];
+        categories.forEach(cat => {
+            const values = getValues(cat);
+            if (Array.isArray(values)) {
+                values.forEach(item => {
+                    const cv = item?.cv || item?.cv_notation;
+                    const wizen = item?.wizen || item?.wizen_notation;
+                    if (cv && wizen) map.set(cv.toLowerCase().trim(), wizen.trim());
+                });
+            }
+        });
+        return map;
+    }, [getValues]);
+
+    const displayPattern = (pattern?: string) => {
+        if (!pattern) return '';
+        if (mode !== 'arabised') return pattern;
+        return cvWizenMap.get(pattern.toLowerCase().trim()) || pattern;
+    };
 
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
@@ -1640,8 +1712,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const pattern = entry.root_pattern_form?.pattern;
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
-    const patternValue = (mode === 'arabised' ? (entry as any).wizen_notation : (entry as any).cv_pattern)
-        || (mode === 'arabised' ? (pattern?.wizen_notation || pattern?.cv_notation) : pattern?.cv_notation);
+    const patternValue = displayPattern((entry as any).cv_pattern || pattern?.cv_notation);
 
     const { entries: rootEntries } = useRootData(entry.root_pattern_form?.root?.id);
 
@@ -1659,7 +1730,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
     const markedAutoForms = useMemo(() => {
         if (!autoForms || !rootEntries) return autoForms;
-        
+
         const mark = (val: string | undefined) => {
             if (!val || val === '-') return { value: '-', marker: 'plain' };
             const cleanVal = val.startsWith('*') ? val.substring(1) : val;
@@ -1705,7 +1776,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const renderNumeralLink = (data: any, type: string) => {
         const isM = typeof data === 'object' && data !== null && 'value' in data;
         if (!isM) return <MarkedValue val={data} theoretical={true} />;
-        
+
         const { value, marker, entryId } = data as { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string };
         if (value === '-') return <span className="opacity-40">-</span>;
 
@@ -1867,61 +1938,62 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                 {patternValue && (
                                     <PropRow label={patternLabel}>
                                         <Link to={`/pattern/${pattern?.id}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
-                                    {patternValue}
-                                </Link>
-                            </PropRow>
-                        )}
+                                            {patternValue}
+                                        </Link>
+                                    </PropRow>
+                                )}
 
-                        <VowelSetGrid morphology={{ ...entry, ...nm }} />
+                                <VowelSetGrid morphology={{ ...entry, ...nm }} />
 
-                        <MorphologyGrid
-                            title={term('morphology')}
-                            rows={[
-                                {
-                                    label: term('type') || 'Type',
-                                    value: <span className="capitalize">{entry.numeral_type || nm?.numeral_type || '-'}</span>,
-                                    show: !!(entry.numeral_type || nm?.numeral_type)
-                                },
-                                {
-                                    label: term('masculine'),
-                                    value: nm?.lemma_masc || entry.form_masc || entry.headword,
-                                    pattern: nm?.gender?.toLowerCase() === 'masculine' ? (nm.lemma_pattern || entry.lemma_pattern) : (nm?.form_masc_pattern || entry.form_masc_pattern)
-                                },
-                                {
-                                    label: term('feminine'),
-                                    value: nm?.lemma_fem || entry.form_fem,
-                                    pattern: (nm?.gender?.toLowerCase() === 'feminine' && !nm.form_fem_pattern && !entry.form_fem_pattern)
-                                        ? (nm.lemma_pattern || entry.lemma_pattern)
-                                        : (nm?.form_fem_pattern || entry.form_fem_pattern)
-                                },
-                                {
-                                    label: term('short-attributive') || 'Short',
-                                    value: nm?.form_attributive_short || entry.form_attributive_short,
-                                    theoretical: !nm?.form_attributive_short && !entry.form_attributive_short
-                                },
-                                {
-                                    label: term('long-attributive') || 'Long',
-                                    value: nm?.form_attributive_long || entry.form_attributive_long,
-                                    theoretical: !nm?.form_attributive_long && !entry.form_attributive_long
-                                },
-                                {
-                                    label: term('plural'),
-                                    value: nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || (entry.headword === 'wieħed' ? 'uħud' : null),
-                                    show: !!(nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || entry.headword === 'wieħed'),
-                                    pattern: entry.morph_pattern || nm?.morph_pattern || entry.form_plural_pattern || nm?.form_plural_pattern
-                                },
-                                {
-                                    label: term('ordinal') || 'Ordinal',
-                                    value: renderNumeralLink(markedAutoForms.ordinal, 'ordinal'),
-                                },
-                                {
-                                    label: term('adverbial') || 'Adverbial',
-                                    value: renderNumeralLink(markedAutoForms.adverbial, 'adverbial'),
-                                },
-                                {
-                                    label: term('fractional') || 'Fractional (Sem.)',
-                                    value: renderNumeralLink(markedAutoForms.fractional_semitic, 'fractional'),
-                                },
+                                <MorphologyGrid
+                                    title={term('morphology')}
+                                    displayPattern={displayPattern}
+                                    rows={[
+                                        {
+                                            label: term('type') || 'Type',
+                                            value: <span className="capitalize">{entry.numeral_type || nm?.numeral_type || '-'}</span>,
+                                            show: !!(entry.numeral_type || nm?.numeral_type)
+                                        },
+                                        {
+                                            label: term('masculine'),
+                                            value: nm?.lemma_masc || entry.form_masc || entry.headword,
+                                            pattern: nm?.gender?.toLowerCase() === 'masculine' ? (nm.lemma_pattern || entry.lemma_pattern) : (nm?.form_masc_pattern || entry.form_masc_pattern)
+                                        },
+                                        {
+                                            label: term('feminine'),
+                                            value: nm?.lemma_fem || entry.form_fem,
+                                            pattern: (nm?.gender?.toLowerCase() === 'feminine' && !nm.form_fem_pattern && !entry.form_fem_pattern)
+                                                ? (nm.lemma_pattern || entry.lemma_pattern)
+                                                : (nm?.form_fem_pattern || entry.form_fem_pattern)
+                                        },
+                                        {
+                                            label: term('short-attributive') || 'Short',
+                                            value: nm?.form_attributive_short || entry.form_attributive_short,
+                                            theoretical: !nm?.form_attributive_short && !entry.form_attributive_short
+                                        },
+                                        {
+                                            label: term('long-attributive') || 'Long',
+                                            value: nm?.form_attributive_long || entry.form_attributive_long,
+                                            theoretical: !nm?.form_attributive_long && !entry.form_attributive_long
+                                        },
+                                        {
+                                            label: term('plural'),
+                                            value: nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || (entry.headword === 'wieħed' ? 'uħud' : null),
+                                            show: !!(nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || entry.headword === 'wieħed'),
+                                            pattern: entry.morph_pattern || nm?.morph_pattern || entry.form_plural_pattern || nm?.form_plural_pattern
+                                        },
+                                        {
+                                            label: term('ordinal') || 'Ordinal',
+                                            value: renderNumeralLink(markedAutoForms.ordinal, 'ordinal'),
+                                        },
+                                        {
+                                            label: term('adverbial') || 'Adverbial',
+                                            value: renderNumeralLink(markedAutoForms.adverbial, 'adverbial'),
+                                        },
+                                        {
+                                            label: term('fractional') || 'Fractional (Sem.)',
+                                            value: renderNumeralLink(markedAutoForms.fractional_semitic, 'fractional'),
+                                        },
                                         {
                                             label: term('multiplier') || 'Multiplier',
                                             value: (
@@ -1966,7 +2038,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                 </div>
             </div>
 
-                        {showForm && (
+            {showForm && (
                 <EntryFormModal
                     entry={editEntry}
                     onClose={() => { setShowForm(false); setEditEntry(null); setInitialFormData(null); }}
@@ -1991,6 +2063,29 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
     const { term, mode } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
+
+    const { getValues } = useAdminConfig();
+    const cvWizenMap = useMemo(() => {
+        const map = new Map<string, string>();
+        const categories = ['cv_wizen_pattern', 'plural_pattern', 'feminine_pattern', 'diminutive_pattern', 'adjective_pattern'];
+        categories.forEach(cat => {
+            const values = getValues(cat);
+            if (Array.isArray(values)) {
+                values.forEach(item => {
+                    const cv = item?.cv || item?.cv_notation;
+                    const wizen = item?.wizen || item?.wizen_notation;
+                    if (cv && wizen) map.set(cv.toLowerCase().trim(), wizen.trim());
+                });
+            }
+        });
+        return map;
+    }, [getValues]);
+
+    const displayPattern = (pattern?: string) => {
+        if (!pattern) return '';
+        if (mode !== 'arabised') return pattern;
+        return cvWizenMap.get(pattern.toLowerCase().trim()) || pattern;
+    };
 
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
@@ -2020,8 +2115,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
     const pattern = entry.root_pattern_form?.pattern;
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
-    const patternValue = (mode === 'arabised' ? (entry as any).wizen_notation : (entry as any).cv_pattern)
-        || (mode === 'arabised' ? (pattern?.wizen_notation || pattern?.cv_notation) : pattern?.cv_notation);
+    const patternValue = displayPattern((entry as any).cv_pattern || pattern?.cv_notation);
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -2029,8 +2123,8 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
     };
 
     const elative = useMemo(() => {
-        // Disable generation if any tag contains $
-        const isElativeDisabled = entry.tags?.some(tag => tag.includes('$'));
+        // Disable generation if any tag contains $ or is 'invariable'
+        const isElativeDisabled = entry.tags?.some(tag => tag.includes('$') || tag.toLowerCase() === 'invariable');
         if (isElativeDisabled) return null;
 
         if (am.elative) return { masculine: am.elative, feminine: null };
@@ -2174,6 +2268,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                             <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
                                 <MorphologyTable
                                     title={term('morphology')}
+                                    displayPattern={displayPattern}
                                     rows={[
                                         {
                                             label: term('masculine'),
@@ -2248,7 +2343,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                                             <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                 {s.headword}
                                                             </Link>
-                                                                "{getGloss(s, language, mode)}"
+                                                            "{getGloss(s, language, mode)}"
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(s)}
@@ -2267,7 +2362,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                                             <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                 {a.headword}
                                                             </Link>
-                                                                "{getGloss(a, language, mode)}"
+                                                            "{getGloss(a, language, mode)}"
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(a)}
@@ -2287,7 +2382,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                 </div>
             </div>
 
-                        {showForm && (
+            {showForm && (
                 <EntryFormModal
                     entry={editEntry}
                     onClose={() => { setShowForm(false); setEditEntry(null); setInitialFormData(null); }}
@@ -2312,12 +2407,36 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
 
+    const { getValues } = useAdminConfig();
+    const cvWizenMap = useMemo(() => {
+        const map = new Map<string, string>();
+        const categories = ['cv_wizen_pattern', 'plural_pattern', 'feminine_pattern', 'diminutive_pattern', 'adjective_pattern'];
+        categories.forEach(cat => {
+            const values = getValues(cat);
+            if (Array.isArray(values)) {
+                values.forEach(item => {
+                    const cv = item?.cv || item?.cv_notation;
+                    const wizen = item?.wizen || item?.wizen_notation;
+                    if (cv && wizen) map.set(cv.toLowerCase().trim(), wizen.trim());
+                });
+            }
+        });
+        return map;
+    }, [getValues]);
+
+    const displayPattern = (pattern?: string) => {
+        if (!pattern) return '';
+        if (mode !== 'arabised') return pattern;
+        return cvWizenMap.get(pattern.toLowerCase().trim()) || pattern;
+    };
+
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
     const [initialFormData, setInitialFormData] = useState<any>(null);
 
     const isActualAdmin = isAdmin && adminViewEnabled;
     const ety = entry.etymologies?.[0];
+    //const pm = entry.adjective_morphology!;
 
     const handleDeleteEntry = async (id: string) => {
         if (!confirm(term('confirm-delete-entry') || 'Are you sure you want to delete this entry permanently?')) return;
@@ -2339,8 +2458,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     const pattern = entry.root_pattern_form?.pattern;
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
-    const patternValue = (mode === 'arabised' ? (entry as any).wizen_notation : (entry as any).cv_pattern)
-        || (mode === 'arabised' ? (pattern?.wizen_notation || pattern?.cv_notation) : pattern?.cv_notation);
+    const patternValue = displayPattern((entry as any).cv_pattern || pattern?.cv_notation);
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -2457,6 +2575,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                             <div className="flex-1 min-w-0 w-full space-y-12">
                                 <MorphologyTable
                                     title={term('morphology')}
+                                    displayPattern={displayPattern}
                                     rows={[
                                         {
                                             label: term('gender'),
@@ -2480,12 +2599,12 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                         {
                                             label: term('plural'),
                                             value: (entry as any).adj_plural,
-                                            pattern: entry.morph_pattern || entry.form_plural_pattern
+                                            pattern: entry.form_plural_pattern || entry.morph_pattern
                                         },
                                         {
                                             label: term('elative') || 'Elative',
                                             value: (entry as any).adj_elative || entry.adjective_morphology?.elative,
-                                            show: !!((entry as any).adj_elative || entry.adjective_morphology?.elative) && !entry.tags?.some(t => t.includes('$'))
+                                            show: !!((entry as any).adj_elative || entry.adjective_morphology?.elative) && !entry.tags?.some(t => t.includes('$') || t.toLowerCase() === 'invariable')
                                         }
                                     ]}
                                 />
@@ -2510,7 +2629,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                                             <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                 {s.headword}
                                                             </Link>
-                                                                "{getGloss(s, language, mode)}"
+                                                            "{getGloss(s, language, mode)}"
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(s)}
@@ -2529,7 +2648,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                                             <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
                                                                 {a.headword}
                                                             </Link>
-                                                                "{getGloss(a, language, mode)}"
+                                                            "{getGloss(a, language, mode)}"
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(a)}
@@ -2548,7 +2667,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                     </div>
                 </div>
             </div>
-                        {showForm && (
+            {showForm && (
                 <EntryFormModal
                     entry={editEntry}
                     onClose={() => { setShowForm(false); setEditEntry(null); setInitialFormData(null); }}

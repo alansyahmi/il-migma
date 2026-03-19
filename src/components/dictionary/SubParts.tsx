@@ -97,6 +97,9 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
                 {term((entry as any).noun_type).toUpperCase()}
             </Link>
         ) : null,
+        tagsArr.some(t => t.toLowerCase() === 'invariable') ? (
+            <span key="invariable" className="text-black/60">({term('invariable').toUpperCase()})</span>
+        ) : null,
         ...titleTags
     ].filter(Boolean) as ReactNode[];
 
