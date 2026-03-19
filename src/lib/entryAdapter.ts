@@ -67,6 +67,7 @@ export const INITIAL_FORM_STATE = {
     synonyms: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
     antonyms: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
     related_entries: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
+    alternative_forms: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
     is_inflectable: true,
     usage_example: '',
     usage_example_en: '',
@@ -125,6 +126,12 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
             extraFields[key] = full[key];
         }
     });
+
+    const relatedAll = parseArray(full.related_entries);
+    const related_entries = relatedAll.filter((item: any) => !isAlternativeRelation(item));
+    const directAlternatives = parseArray(full.alternative_forms);
+    const fallbackAlternatives = relatedAll.filter((item: any) => isAlternativeRelation(item));
+    const alternative_forms = directAlternatives.length > 0 ? directAlternatives : fallbackAlternatives;
 
     const form: AdminForm = {
         ...INITIAL_FORM_STATE,
@@ -196,7 +203,8 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         _inheritedPattern: !full.cv_pattern && (full.cv_notation || full.resolved_cv),
         synonyms: parseArray(full.synonyms),
         antonyms: parseArray(full.antonyms),
-        related_entries: parseArray(full.related_entries),
+        related_entries,
+        alternative_forms,
         numeral_type: full.numeral_type || '',
         form_attributive_short: full.form_attributive_short || '',
         form_attributive_long: full.form_attributive_long || '',
@@ -215,5 +223,21 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
  * Delegates to buildEntryPayload for DB persistense logic.
  */
 export function formToPayload(form: AdminForm): Record<string, any> {
-    return buildEntryPayload(form);
+    return buildEntryPayload({
+        ...form,
+        related_entries: Array.isArray(form.related_entries) ? form.related_entries : [],
+        alternative_forms: Array.isArray((form as any).alternative_forms)
+            ? (form as any).alternative_forms.map((item: any) => ({ ...item, relation_kind: 'alternative_form' }))
+            : [],
+    });
+}
+
+function isAlternativeRelation(item: any): boolean {
+    const kind = String(
+        item?.relation_kind
+        || item?.relationship_type
+        || item?._rel
+        || '',
+    ).toLowerCase().trim();
+    return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
 }

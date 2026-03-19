@@ -62,6 +62,99 @@ function now() {
     return new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
 }
 
+async function ensureAlternativeFormsColumn(client) {
+    const tableInfo = await client.execute("PRAGMA table_info(entries)");
+    const hasAlternativeForms = tableInfo.rows.some((row) => row.name === 'alternative_forms');
+    if (hasAlternativeForms) return;
+
+    await client.execute("ALTER TABLE entries ADD COLUMN alternative_forms TEXT");
+
+    // Backfill: move relationship-tagged alternatives out of related_entries.
+    const rows = await client.execute({
+        sql: "SELECT id, related_entries, alternative_forms FROM entries WHERE related_entries IS NOT NULL AND TRIM(related_entries) != ''",
+        args: [],
+    });
+
+    for (const row of rows.rows) {
+        let related = [];
+        let existingAlt = [];
+        try {
+            related = row.related_entries
+                ? (typeof row.related_entries === 'string' ? JSON.parse(row.related_entries) : row.related_entries)
+                : [];
+        } catch {
+            related = [];
+        }
+
+        try {
+            existingAlt = row.alternative_forms
+                ? (typeof row.alternative_forms === 'string' ? JSON.parse(row.alternative_forms) : row.alternative_forms)
+                : [];
+        } catch {
+            existingAlt = [];
+        }
+
+        if (!Array.isArray(related)) continue;
+        if (!Array.isArray(existingAlt)) existingAlt = [];
+
+        const extracted = [];
+        const remaining = [];
+        for (const item of related) {
+            const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+            if (kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form') {
+                extracted.push({ ...item, relation_kind: 'alternative_form' });
+            } else {
+                remaining.push(item);
+            }
+        }
+
+        if (extracted.length === 0) continue;
+
+        const merged = [...existingAlt];
+        for (const item of extracted) {
+            const exists = merged.some((x) => x.id === item.id || x.headword === item.headword);
+            if (!exists) merged.push(item);
+        }
+
+        await client.execute({
+            sql: "UPDATE entries SET related_entries = ?, alternative_forms = ?, updated_at = ? WHERE id = ?",
+            args: [JSON.stringify(remaining), JSON.stringify(merged), now(), row.id],
+        });
+    }
+}
+
+const POS_ALIAS_GROUPS = {
+    noun: ['noun', 'n'],
+    verb: ['verb', 'v'],
+    adjective: ['adjective', 'adj'],
+    adverb: ['adverb', 'adv'],
+    preposition: ['preposition', 'prep'],
+    conjunction: ['conjunction', 'conj'],
+    particle: ['particle', 'part'],
+    article: ['article', 'art', 'det'],
+    pronoun: ['pronoun', 'pron'],
+    interrogative: ['interrogative', 'int', 'intg'],
+    numeral: ['numeral', 'num'],
+    interjection: ['interjection', 'intj'],
+    participle: ['participle', 'ptcp'],
+    verbal_noun: ['verbal_noun', 'verbal noun', 'vn'],
+};
+
+const POS_ALIAS_TO_CANONICAL = Object.entries(POS_ALIAS_GROUPS).reduce((acc, [canonical, aliases]) => {
+    aliases.forEach((alias) => {
+        const key = alias.toLowerCase().replace(/[-\s]+/g, '_').trim();
+        acc[key] = canonical;
+    });
+    return acc;
+}, {});
+
+function resolvePosAliases(rawPos) {
+    const cleaned = String(rawPos || '').toLowerCase().replace(/[-\s]+/g, '_').trim();
+    if (!cleaned) return [];
+    const canonical = POS_ALIAS_TO_CANONICAL[cleaned] || cleaned;
+    return POS_ALIAS_GROUPS[canonical] || [canonical];
+}
+
 function normalizeNounGender(value) {
     if (value === undefined || value === null) return null;
     const normalized = String(value).trim().toLowerCase();
@@ -96,9 +189,11 @@ export async function onRequestGet({ request, env }) {
         const pos = url.searchParams.get('pos')?.trim() ?? '';
 
         const client = getDbClient(env);
+        await ensureAlternativeFormsColumn(client);
+
         let sql = `SELECT e.id, e.headword, e.pos, e.gender, e.verb_class, e.verb_weak_class,
                          e.is_loanword, e.source_language, e.created_at, e.verb_form,
-                         e.verb_vowel_perf, e.verb_vowel_impf, e.tags, e.inflections_pl,
+                         e.verb_vowel_perf, e.verb_vowel_impf, e.tags, e.inflections_pl, e.alternative_forms,
                          COALESCE(e.root_consonants, r.consonants) AS root_consonants,
                          d.text_en
                   FROM entries e
@@ -113,8 +208,12 @@ export async function onRequestGet({ request, env }) {
             args.push(`%${q}%`, q, q);
         }
         if (pos) {
-            whereClauses.push('e.pos = ?');
-            args.push(pos);
+            const aliases = resolvePosAliases(pos);
+            if (aliases.length > 0) {
+                const placeholders = aliases.map(() => '?').join(', ');
+                whereClauses.push(`LOWER(TRIM(e.pos)) IN (${placeholders})`);
+                args.push(...aliases);
+            }
         }
 
         if (whereClauses.length) {
@@ -153,6 +252,7 @@ export async function onRequestPost({ request, env }) {
         const body = await request.json();
         validateAndNormalizeEntryGender(body);
         const client = getDbClient(env);
+        await ensureAlternativeFormsColumn(client);
 
         let id = body.id;
 
@@ -284,11 +384,11 @@ export async function onRequestPost({ request, env }) {
         const syns = body.synonyms || [];
         const ants = body.antonyms || [];
         const related = body.related_entries || [];
+        const alternatives = body.alternative_forms || [];
         if (syns.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'synonyms', syns);
         if (ants.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'antonyms', ants);
         if (related.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'related_entries', related);
-
-        if (related.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'related_entries', related);
+        if (alternatives.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'alternative_forms', alternatives);
 
         // Auto-register patterns
         await ensurePatternsRegistered(client, body);
@@ -310,6 +410,7 @@ export async function onRequestPut({ request, env }) {
         if (!id) return json({ error: 'id required' }, 400);
 
         const client = getDbClient(env);
+        await ensureAlternativeFormsColumn(client);
         const sourceId = old_id || id;
 
         const sourceRes = await client.execute({
@@ -464,11 +565,11 @@ export async function onRequestPut({ request, env }) {
         const syns = body.synonyms || [];
         const ants = body.antonyms || [];
         const related = body.related_entries || [];
+        const alternatives = body.alternative_forms || [];
         if (syns.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'synonyms', syns);
         if (ants.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'antonyms', ants);
         if (related.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'related_entries', related);
-
-        if (related.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'related_entries', related);
+        if (alternatives.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'alternative_forms', alternatives);
 
         // Auto-register patterns
         await ensurePatternsRegistered(client, body);
@@ -634,7 +735,7 @@ async function syncReciprocalRelationships(client, currentId, currentHeadword, c
         if (!targetId || targetId === currentId) continue;
 
         const targetRes = await client.execute({
-            sql: `SELECT synonyms, antonyms, related_entries FROM entries WHERE id = ? OR headword = ?`,
+            sql: `SELECT id, headword, synonyms, antonyms, related_entries, alternative_forms FROM entries WHERE id = ? OR headword = ?`,
             args: [targetId, targetId]
         });
         if (targetRes.rows.length === 0) continue;
@@ -655,13 +756,18 @@ async function syncReciprocalRelationships(client, currentId, currentHeadword, c
 
         const exists = targetList.some(item => item.id === currentId || item.headword === currentHeadword);
         if (!exists) {
-            targetList.push({
+            const relationKind = target?.relation_kind || target?.relationship_type || target?._rel || null;
+            const reciprocalItem = {
                 id: currentId,
                 headword: currentHeadword,
                 pos: currentPos,
                 gloss_en: currentGlossEn,
                 gloss_mt: currentGlossMt
-            });
+            };
+            if (relationKind) {
+                reciprocalItem.relation_kind = relationKind;
+            }
+            targetList.push(reciprocalItem);
             await client.execute({
                 sql: `UPDATE entries SET ${relType} = ?, updated_at = ? WHERE id = ?`,
                 args: [JSON.stringify(targetList), now(), actualTargetId]

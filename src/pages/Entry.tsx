@@ -447,7 +447,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
     return (
         <div style={bgStyle} className="w-full overflow-hidden">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-10 w-full mt-2 sm:mt-10">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
                         <div className="relative inline-flex items-center justify-center">
@@ -1053,7 +1053,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
     return (
         <div style={bgStyle} className="w-full overflow-hidden">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-10 w-full mt-2 sm:mt-10">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
                 {/*<div className="flex items-center gap-2 mb-4">
                     <Link to="/search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-search')}
@@ -1824,7 +1824,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
     return (
         <div style={bgStyle} className="w-full overflow-hidden">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-10 w-full mt-2 sm:mt-10">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
                         <div className="relative inline-flex items-center justify-center">
@@ -2136,7 +2136,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
 
     return (
         <div style={bgStyle} className="w-full overflow-hidden">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-10 w-full mt-2 sm:mt-10">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
                         <div className="relative inline-flex items-center justify-center">
@@ -2467,7 +2467,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
 
     return (
         <div style={bgStyle} className="w-full overflow-hidden">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 pb-10 w-full mt-2 sm:mt-10">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
                         <div className="relative inline-flex items-center justify-center">
@@ -2685,6 +2685,457 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     );
 }
 
+function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
+    const { language } = useLanguage();
+    const { term, mode } = useLinguisticMode();
+    const { isAdmin, adminViewEnabled } = useAuth();
+    const { getToken } = useClerkAuth();
+    const isActualAdmin = isAdmin && adminViewEnabled;
+
+    const [showForm, setShowForm] = useState(false);
+    const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
+    const [initialFormData, setInitialFormData] = useState<any>(null);
+
+    const pos = (entry.pos || '').toLowerCase();
+    const isInterjection = pos === 'interjection';
+    const isPronoun = pos === 'pronoun';
+    const isArticle = pos === 'article';
+    const isInflectablePos = ['pronoun', 'particle', 'adverb', 'preposition', 'article'].includes(pos);
+    const hasInflection = isInflectablePos && !(entry.is_inflectable === false || (entry.is_inflectable as any) === 0);
+
+    const parseMaybeArray = <T,>(val: any): T[] => {
+        if (Array.isArray(val)) return val as T[];
+        if (typeof val === 'string') {
+            const trimmed = val.trim();
+            if (!trimmed) return [];
+            if (trimmed.startsWith('[')) {
+                try {
+                    const parsed = JSON.parse(trimmed);
+                    return Array.isArray(parsed) ? parsed : [];
+                } catch {
+                    return [];
+                }
+            }
+            return trimmed.split(',').map(s => s.trim()).filter(Boolean) as any;
+        }
+        return [];
+    };
+
+    const allRelatedEntries = parseMaybeArray<any>((entry as any).related_entries);
+    const directAlternativeForms = parseMaybeArray<any>((entry as any).alternative_forms);
+    const markedAlternativeForms = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
+    });
+    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
+    const relatedEntries = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
+    });
+    const synonyms = parseMaybeArray<any>((entry as any).synonyms);
+    const antonyms = parseMaybeArray<any>((entry as any).antonyms);
+    const inflectionPlurals = parseMaybeArray<string>((entry as any).inflections_pl);
+
+    const ety = entry.etymologies?.[0];
+    const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-')
+        || entry.root_pattern_form?.root?.consonants
+        || (entry as any).root_consonants;
+    const pattern = entry.root_pattern_form?.pattern;
+    const patternValue = (entry as any).cv_pattern || pattern?.cv_notation;
+
+    const isIlArticle = (isArticle || pos === 'particle') && /^il-?/i.test((entry.headword || '').trim());
+
+    const sunTransformations = [
+        { letter: 'ċ', rule: 'il- → iċ-', example: 'ċertu', result: 'iċ-ċertu' },
+        { letter: 'd', rule: 'il- → id-', example: 'dar', result: 'id-dar' },
+        { letter: 'n', rule: 'il- → in-', example: 'nar', result: 'in-nar' },
+        { letter: 'r', rule: 'il- → ir-', example: 'raġel', result: 'ir-raġel' },
+        { letter: 's', rule: 'il- → is-', example: 'sema', result: 'is-sema' },
+        { letter: 't', rule: 'il- → it-', example: 'tarġa', result: 'it-tarġa' },
+        { letter: 'x', rule: 'il- → ix-', example: 'xemx', result: 'ix-xemx' },
+        { letter: 'ż', rule: 'il- → iż-', example: 'żarbun', result: 'iż-żarbun' },
+        { letter: 'z', rule: 'il- → iz-', example: 'zokkor', result: 'iz-zokkor' },
+    ];
+
+    const moonTransformations = [
+        { letter: 'b', rule: 'il- → il-', example: 'bieb', result: 'il-bieb' },
+        { letter: 'f', rule: 'il- → il-', example: 'fenek', result: 'il-fenek' },
+        { letter: 'g', rule: 'il- → il-', example: 'gżira', result: 'il-gżira' },
+        { letter: 'ġ', rule: 'il- → il-', example: 'ġurnata', result: 'il-ġurnata' },
+        { letter: 'għ', rule: 'il- → l-', example: 'għasfur', result: 'l-għasfur' },
+        { letter: 'h', rule: 'il- → l-', example: 'hena', result: 'l-hena' },
+        { letter: 'ħ', rule: 'il- → il-', example: 'ħobż', result: 'il-ħobż' },
+        { letter: 'j', rule: 'il- → il-', example: 'jum', result: 'il-jum' },
+        { letter: 'k', rule: 'il- → il-', example: 'klieb', result: 'il-klieb' },
+        { letter: 'l', rule: 'il- → il-', example: 'lejl', result: 'il-lejl' },
+        { letter: 'm', rule: 'il- → il-', example: 'mejda', result: 'il-mejda' },
+        { letter: 'p', rule: 'il- → il-', example: 'pjanu', result: 'il-pjanu' },
+        { letter: 'q', rule: 'il- → il-', example: 'qamar', result: 'il-qamar' },
+        { letter: 'v', rule: 'il- → il-', example: 'vapur', result: 'il-vapur' },
+        { letter: 'w', rule: 'il- → il-', example: 'werqa', result: 'il-werqa' },
+    ];
+
+    const handleDeleteEntry = async (id: string) => {
+        if (!confirm(term('confirm-delete-entry') || 'Are you sure you want to delete this entry permanently?')) return;
+        try {
+            const token = await getToken();
+            await adminDeleteEntry(token!, id);
+            onRefetch?.();
+        } catch (err: any) {
+            alert((term('failed-delete-entry') || 'Failed to delete entry: ') + (err.message || String(err)));
+        }
+    };
+
+    const handleEditEntry = (target: { id: string }) => {
+        setEditEntry(target as any);
+        setShowForm(true);
+    };
+
+    const POSSESSIVE_SUFFIX_KEYS = ['1s', '2s', '3ms', '3fs', '1p', '2p', '3p'];
+    const applySuffix = (base: string, idx: number) => {
+        if (!base) return { value: '-', theoretical: false };
+        const result = applyPossessiveSuffix(base, idx as any, (entry.gender as any) || 'masculine', (entry as any).cv_pattern || pattern?.cv_notation);
+        if (result === '-') return { value: '-', theoretical: false };
+        const parts = result.split(' / ');
+        if (parts.length > 1) {
+            return {
+                value: (
+                    <div className="flex flex-col gap-0.5">
+                        {parts.map((p, i) => <span key={i} className={i > 0 ? 'text-black/40' : ''}>{p}</span>)}
+                    </div>
+                ),
+                theoretical: false
+            };
+        }
+        return { value: result, theoretical: false };
+    };
+
+    const pluralBase = isPronoun ? (inflectionPlurals[0] || '') : '';
+    const showPluralColumn = isPronoun && !!pluralBase;
+
+    const bgStyle = {
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        minHeight: '100vh',
+    };
+
+    return (
+        <div style={bgStyle} className="w-full overflow-hidden">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
+                <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
+                    <div className="relative inline-flex items-center justify-center flex-col gap-1">
+                        <div className="relative inline-flex items-center justify-center">
+                            <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
+                                {entry.headword}
+                            </h1>
+                            {isActualAdmin && (
+                                <button
+                                    onClick={() => {
+                                        setEditEntry({
+                                            ...entry,
+                                            _rootConsonants: entry.root_pattern_form?.root?.consonants || ''
+                                        } as any);
+                                        setShowForm(true);
+                                    }}
+                                    className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
+                                    title={term('edit-entry')}
+                                >
+                                    <Edit2 size={16} />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                    <SubParts entry={entry} showGender={isPronoun} />
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-6 items-start w-full">
+                    <div className="w-full md:w-64 shrink-0 space-y-4">
+                        <SideCard title={term('gloss')}>
+                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                {entry.definitions.map(def => (
+                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                ))}
+                            </ol>
+                            <TagChips entry={entry} />
+                        </SideCard>
+
+                        {ety && ety.chain.length > 0 && (
+                            <SideCard title={term('etymology')}>
+                                <p className="text-sm text-black leading-relaxed">
+                                    {term('from')}
+                                    {ety.chain.map((c, i) => (
+                                        <React.Fragment key={i}>
+                                            {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
+                                            <span style={{ color: BLUE }} className="font-medium mx-1">
+                                                {term(c.language)}
+                                            </span>
+                                            {c.form && <span className="font-serif font-medium">{c.form}</span>}
+                                            {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
+                                        </React.Fragment>
+                                    ))}.
+                                </p>
+                            </SideCard>
+                        )}
+                    </div>
+
+                    <div className="flex-1 min-w-0 space-y-8 w-full">
+                        <div className="flex flex-col md:flex-row gap-8 items-start w-full">
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:max-w-none mb-8 md:mb-0">
+                                {rootConsonants && (
+                                    <PropRow label={term('root')}>
+                                        <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
+                                            {rootConsonants}
+                                        </Link>
+                                    </PropRow>
+                                )}
+                                {entry.phonetics && entry.phonetics.length > 0 && (
+                                    <PropRow label={term('pronunciation')}>
+                                        <div className="space-y-0 mt-1">
+                                            {entry.phonetics.map((ph, idx) => (
+                                                <div key={idx} className="flex flex-col sm:flex-row sm:items-center sm:gap-1 mb-0 last:mb-0">
+                                                    {ph.dialect && (
+                                                        <span className="text-[10px] font-bold text-black/40 uppercase tracking-tighter">
+                                                            {ph.dialect.replace(' (Għawdex)', '').replace(' (Arkajku)', '')}:
+                                                        </span>
+                                                    )}
+                                                    {ph.ipa && <span className="text-[14px] tracking-tighter font-mono whitespace-nowrap">{ph.ipa}</span>}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </PropRow>
+                                )}
+                                {patternValue && (
+                                    <PropRow label={mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern')}>
+                                        <Link to={`/pattern/${pattern?.id}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
+                                            {patternValue}
+                                        </Link>
+                                    </PropRow>
+                                )}
+                                {isPronoun && entry.gender && (
+                                    <PropRow label={term('gender')}>
+                                        <span className="capitalize">{term(entry.gender)}</span>
+                                    </PropRow>
+                                )}
+                                {(entry.usage_example || entry.usage_example_en) && (
+                                    <PropRow label={term('usage-example')}>
+                                        <span className="text-[13px]">
+                                            {entry.usage_example && <span className="italic">"{entry.usage_example}"</span>}
+                                            {entry.usage_example && entry.usage_example_en && <span className="mx-2 opacity-40">—</span>}
+                                            {entry.usage_example_en && <span>"{entry.usage_example_en}"</span>}
+                                        </span>
+                                    </PropRow>
+                                )}
+                            </div>
+
+                            <div className="flex-1 min-w-0 w-full space-y-12">
+                                {!isInterjection && hasInflection && (
+                                    <div className="w-full overflow-x-auto">
+                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                                            {term('inflection-table')}
+                                        </h2>
+                                        <table className="w-full text-sm border-collapse md:min-w-[500px]">
+                                            <thead>
+                                                <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                    <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('person')}</th>
+                                                    <th className="text-left font-semibold text-black pb-2 pr-4">{term('singular')}</th>
+                                                    {showPluralColumn && (
+                                                        <th className="text-left font-semibold text-black pb-2">{term('plural')}</th>
+                                                    )}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {POSSESSIVE_SUFFIX_KEYS.map((key, idx) => (
+                                                    <tr key={key} className="border-b border-black/4 whitespace-nowrap">
+                                                        <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">{term(key)}</td>
+                                                        <td className="py-1.5 pr-4 font-serif font-normal text-black">
+                                                            <MarkedValue val={applySuffix(entry.headword, idx)} />
+                                                        </td>
+                                                        {showPluralColumn && (
+                                                            <td className="py-1.5 font-serif font-normal text-black">
+                                                                <MarkedValue val={applySuffix(pluralBase, idx)} />
+                                                            </td>
+                                                        )}
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+
+                                {isIlArticle && (
+                                    <div className="w-full">
+                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                                            {term('sun-moon-letters') || 'Sun & Moon Letters'}
+                                        </h2>
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-sm">
+                                            <div className="rounded-lg border border-black/10 p-4 bg-white shadow-sm overflow-hidden">
+                                                <p className="text-xs font-bold uppercase tracking-wider text-black/50 mb-3 border-b border-black/5 pb-2">
+                                                    {term('sun-letters') || 'Sun Letters'} (Assimilated)
+                                                </p>
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full">
+                                                        <thead>
+                                                            <tr className="text-[10px] text-black/30 uppercase tracking-widest text-left">
+                                                                <th className="pb-1">Letter</th>
+                                                                <th className="pb-1">Rule</th>
+                                                                <th className="pb-1">Example</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="divide-y divide-black/5">
+                                                            {sunTransformations.map((t, idx) => (
+                                                                <tr key={idx} className="group hover:bg-black/2">
+                                                                    <td className="py-2 pr-4 font-serif font-bold text-lg text-black">{t.letter}</td>
+                                                                    <td className="py-2 pr-4 font-mono text-black/40 text-[11px] whitespace-nowrap">{t.rule}</td>
+                                                                    <td className="py-2 pr-2 font-serif text-black leading-tight">
+                                                                        <span className="opacity-40">{t.example}</span>
+                                                                        <span className="mx-2 opacity-20">→</span>
+                                                                        <span className="font-bold underline decoration-black/10 underline-offset-4">{t.result}</span>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div className="rounded-lg border border-black/10 p-4 bg-white shadow-sm overflow-hidden">
+                                                <p className="text-xs font-bold uppercase tracking-wider text-black/50 mb-3 border-b border-black/5 pb-2">
+                                                    {term('moon-letters') || 'Moon Letters'} (Standard)
+                                                </p>
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full">
+                                                        <thead>
+                                                            <tr className="text-[10px] text-black/30 uppercase tracking-widest text-left">
+                                                                <th className="pb-1">Letter</th>
+                                                                <th className="pb-1">Rule</th>
+                                                                <th className="pb-1">Example</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody className="divide-y divide-black/5">
+                                                            {moonTransformations.map((t, idx) => (
+                                                                <tr key={idx} className="group hover:bg-black/2">
+                                                                    <td className="py-2 pr-4 font-serif font-bold text-lg text-black">{t.letter}</td>
+                                                                    <td className="py-2 pr-4 font-mono text-black/40 text-[11px] whitespace-nowrap">{t.rule}</td>
+                                                                    <td className="py-2 pr-2 font-serif text-black leading-tight">
+                                                                        <span className="opacity-40">{t.example}</span>
+                                                                        <span className="mx-2 opacity-20">→</span>
+                                                                        <span className="font-bold underline decoration-black/10 underline-offset-4">{t.result}</span>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {((synonyms?.length ?? 0) > 0 || (antonyms?.length ?? 0) > 0 || (relatedEntries?.length ?? 0) > 0 || (alternativeForms?.length ?? 0) > 0) && (
+                                    <div className="w-full">
+                                        <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
+                                        <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-start">
+                                            {(synonyms?.length ?? 0) > 0 && (
+                                                <div>
+                                                    <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
+                                                    {synonyms.map((s: any) => (
+                                                        <div key={s.id} className="flex items-center gap-2 group">
+                                                            <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
+                                                                {s.headword}
+                                                            </Link>
+                                                            "{getGloss(s, language, mode)}"
+                                                            {isActualAdmin && (
+                                                                <AdminActionButtons
+                                                                    onEdit={() => handleEditEntry(s)}
+                                                                    onDelete={() => handleDeleteEntry(s.id)}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {(antonyms?.length ?? 0) > 0 && (
+                                                <div>
+                                                    <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
+                                                    {antonyms.map((a: any) => (
+                                                        <div key={a.id} className="flex items-center gap-2 group">
+                                                            <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
+                                                                {a.headword}
+                                                            </Link>
+                                                            "{getGloss(a, language, mode)}"
+                                                            {isActualAdmin && (
+                                                                <AdminActionButtons
+                                                                    onEdit={() => handleEditEntry(a)}
+                                                                    onDelete={() => handleDeleteEntry(a.id)}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {(relatedEntries?.length ?? 0) > 0 && (
+                                                <div>
+                                                    <p className="font-semibold text-black mb-1">{term('related-entries')}</p>
+                                                    {relatedEntries.map((rel: any) => (
+                                                        <div key={rel.id} className="flex items-center gap-2 group">
+                                                            <Link to={`/entry/${rel.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
+                                                                {rel.headword}
+                                                            </Link>
+                                                            "{getGloss(rel, language, mode)}"
+                                                            {isActualAdmin && (
+                                                                <AdminActionButtons
+                                                                    onEdit={() => handleEditEntry(rel)}
+                                                                    onDelete={() => handleDeleteEntry(rel.id)}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {(alternativeForms?.length ?? 0) > 0 && (
+                                                <div>
+                                                    <p className="font-semibold text-black mb-1">{term('alternative-forms') || 'Alternative Forms'}</p>
+                                                    {alternativeForms.map((alt: any) => (
+                                                        <div key={alt.id} className="flex items-center gap-2 group">
+                                                            <Link to={`/entry/${alt.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
+                                                                {alt.headword}
+                                                            </Link>
+                                                            "{getGloss(alt, language, mode)}"
+                                                            {isActualAdmin && (
+                                                                <AdminActionButtons
+                                                                    onEdit={() => handleEditEntry(alt)}
+                                                                    onDelete={() => handleDeleteEntry(alt.id)}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {showForm && (
+                <EntryFormModal
+                    entry={editEntry}
+                    onClose={() => { setShowForm(false); setEditEntry(null); setInitialFormData(null); }}
+                    onSaved={() => {
+                        setShowForm(false);
+                        setEditEntry(null);
+                        setInitialFormData(null);
+                        onRefetch?.();
+                    }}
+                    getToken={getToken}
+                    initialForm={initialFormData}
+                />
+            )}
+        </div>
+    );
+}
+
 // ── Entry Shell ────────────────────────────────────────────────────────────
 
 export function EntryPage() {
@@ -2777,7 +3228,7 @@ export function EntryPage() {
         return <NumeralEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if ((entry.pos === 'noun' || entry.pos === 'pronoun') && entry.noun_morphology) {
+    if (entry.pos === 'noun' && entry.noun_morphology) {
         return <NounEntryView entry={entry} onRefetch={refetch} />;
     }
 
@@ -2789,8 +3240,12 @@ export function EntryPage() {
         return <ParticipleEntryView entry={entry} onRefetch={refetch} />;
     }
 
+    if (['pronoun', 'particle', 'adverb', 'preposition', 'interjection', 'article', 'conjunction', 'interrogative'].includes((entry.pos || '').toLowerCase())) {
+        return <FunctionWordEntryView entry={entry} onRefetch={refetch} />;
+    }
+
     return (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8">
             <p className="text-sm text-black/40 italic">
                 {term('full-entry-view-coming-soon').replace('{pos}', term(entry.pos))}
             </p>

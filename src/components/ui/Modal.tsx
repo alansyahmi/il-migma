@@ -17,7 +17,7 @@ const sizeClasses = {
     xl: 'max-w-4xl',
 };
 
-export function Modal({ open, onClose, title, children, size = 'md' }: ModalProps) {
+export function Modal({ open, onClose, title, children, size = 'md'}: ModalProps) {
     const panelRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {

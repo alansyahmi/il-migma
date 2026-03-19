@@ -5,7 +5,7 @@ import {
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants, apiGetDistinctValues } from '@/lib/api';
+import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants, apiGetDistinctValues, apiGetEntry, adminCheckIdExists } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { generateRootForms } from '@/lib/conjugationEngine';
@@ -39,6 +39,7 @@ export interface AdminEntry {
     root_consonants?: string;
     verb_form?: string;
     tags?: string | string[];
+    alternative_forms?: string | { id: string; headword?: string }[];
     // Noun/Adj additions
     vowel_set_sg?: string;
     vowel_set_pl?: string;
@@ -909,63 +910,44 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
     </div>
 );
 
-const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => (
-    <div className="space-y-4">
-        <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Gender', 'Ġens')}</label>
-                <select className={styles.sel} value={form.gender} onChange={e => set('gender', e.target.value)}>
-                    <option value="">{t('Select...', 'Agħżel...')}</option>
-                    {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
-                </select>
-            </div>
-            {form.gender?.toLowerCase() === 'masculine' && (
-                <div className="space-y-4">
+const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => {
+    const head = (form.headword || '').trim().toLowerCase();
+    const showGender = head === 'huwa' || head === 'hija';
+
+    return (
+        <div className="space-y-4">
+            {showGender && (
+                <div className={styles.grid}>
                     <div>
-                        <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
-                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                        <label className={styles.label}>{t('Gender', 'Ġens')}</label>
+                        <select className={styles.sel} value={form.gender} onChange={e => set('gender', e.target.value)}>
+                            <option value="">{t('Select...', 'Agħżel...')}</option>
+                            {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
+                        </select>
                     </div>
-                    <div>
-                        <PatternTagField
-                            label={t('Feminine Pattern', 'Mudell Fem.')}
-                            value={form.form_fem_pattern || ''}
-                            onChange={v => set('form_fem_pattern', v)}
-                            placeholder="e.g. CVCVCa"
-                            presets={options?.patterns}
-                            styles={styles}
-                            t={t}
-                        />
-                    </div>
+                    {form.gender?.toLowerCase() === 'masculine' && (
+                        <div>
+                            <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
+                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                        </div>
+                    )}
+                    {form.gender?.toLowerCase() === 'feminine' && (
+                        <div>
+                            <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
+                            <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
+                        </div>
+                    )}
                 </div>
             )}
-            {form.gender?.toLowerCase() === 'feminine' && (
-                <div className="space-y-4">
-                    <div>
-                        <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
-                        <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
-                    </div>
-                    <div>
-                        <PatternTagField
-                            label={t('Masculine Pattern', 'Mudell Mask.')}
-                            value={form.form_masc_pattern || ''}
-                            onChange={v => set('form_masc_pattern', v)}
-                            placeholder="e.g. CVCVC"
-                            presets={options?.patterns}
-                            styles={styles}
-                            t={t}
-                        />
-                    </div>
+            <div className={styles.grid}>
+                <div>
+                    <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
+                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
                 </div>
-            )}
-        </div>
-        <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
-                <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 
 const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onApplyDerivedTerms, suggestions }: MorphologyProps) => (
@@ -1314,8 +1296,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     useEffect(() => {
         if (isEdit && entry?.id) {
             setIsLoadingFull(true);
-            import('@/lib/api').then(({ apiGetEntry }) => {
-                apiGetEntry(entry.id)
+            apiGetEntry(entry.id)
                     .then(res => {
                         if (res?.entry) {
                             setIsMissingEntry(false);
@@ -1448,7 +1429,6 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         ));
                     })
                     .finally(() => setIsLoadingFull(false));
-            });
         }
     }, [isEdit, entry?.id]);
 
@@ -1462,15 +1442,17 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         const POS_MAP: Record<string, string> = {
             verb: 'v', noun: 'n', adjective: 'adj', adverb: 'adv',
             preposition: 'prep', conjunction: 'conj', particle: 'part',
-            article: 'art', pronoun: 'pron', numeral: 'num'
+            article: 'art', pronoun: 'pron', numeral: 'num', participle: 'ptcp',
+            interrogative: 'int', interjection: 'intj'
         };
 
-        const suffix = POS_MAP[form.pos] || 'entry';
+        const currentPos = form.pos.toLowerCase();
+        const suffix = POS_MAP[currentPos] || 'entry';
         const safeHeadword = form.headword.toLowerCase()
             .replace(/\s+/g, '-')
             .replace(/[^a-z0-9àċġħżie-]/gi, '');
 
-        const formSuffix = (form.pos === 'verb' && form._formLabel) ? `-${form._formLabel.toLowerCase()}` : '';
+        const formSuffix = (currentPos === 'verb' && form._formLabel) ? `-${form._formLabel.toLowerCase()}` : '';
         const newId = `${suffix}-${safeHeadword}${formSuffix}`;
         setSuggestedId(newId);
     }, [form.pos, form.headword, form._formLabel, isEdit]);
@@ -1484,7 +1466,6 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         const timer = setTimeout(async () => {
             try {
                 const token = await getToken();
-                const { adminCheckIdExists } = await import('@/lib/api');
                 const res = await adminCheckIdExists(token!, 'entries', form.id);
                 setIdExists(res.exists);
             } catch { }
@@ -1784,6 +1765,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     };
 
     const normalizedPos = useMemo(() => form.pos?.toLowerCase() || '', [form.pos]);
+    const showInflectionToggle = ['pronoun', 'adverb', 'preposition', 'particle', 'article'].includes(normalizedPos);
+    const isInflectedFunctionPos = ['pronoun', 'adverb', 'preposition', 'particle', 'article'].includes(normalizedPos);
 
     // Context-aware CV pattern suggestion for verbs
     const verbCvSuggestion = useMemo(() => {
@@ -2295,10 +2278,32 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     </fieldset>
 
                     {/* Morphology Section */}
+                    {normalizedPos !== 'interjection' && (
                     <div className="mt-6">
                         <h3 className="text-sm font-bold text-black border-b border-border pb-2 mb-4">
                             {t('Morphology', 'Morfoloġija')}
                         </h3>
+
+                        {showInflectionToggle && (
+                            <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]"
+                                        checked={!!form.is_inflectable}
+                                        onChange={e => {
+                                            const checked = e.target.checked;
+                                            set('is_inflectable', checked);
+                                            if (!checked && normalizedPos !== 'pronoun') {
+                                                set('gender', '');
+                                                set('inflections_pl', '');
+                                            }
+                                        }}
+                                    />
+                                    <span className="text-sm font-medium">{t('Has Inflection', 'Għandu Inflessjoni')}</span>
+                                </label>
+                            </div>
+                        )}
 
                         {normalizedPos === 'noun' && (
                             <NounFields
@@ -2326,7 +2331,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             />
                         )}
 
-                        {normalizedPos === 'pronoun' && (
+                        {normalizedPos === 'pronoun' && !!form.is_inflectable && (
                             <PronounFields
                                 form={form}
                                 set={set}
@@ -2414,7 +2419,14 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 suggestions={availableVowelSets}
                             />
                         )}
+
+                        {isInflectedFunctionPos && !form.is_inflectable && normalizedPos !== 'interjection' && (
+                            <p className="text-xs text-black/50 italic">
+                                {t('No morphology fields when inflection is disabled.', 'L-ebda oqsma ta\' morfoloġija meta l-inflessjoni hija mitfija.')}
+                            </p>
+                        )}
                     </div>
+                    )}
 
                     {/* Definitions */}
                     <fieldset className="border border-border-light rounded-lg p-4 space-y-4">
@@ -2496,9 +2508,24 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     <div className="space-y-6">
                         <RelationshipEditor
                             type="derived"
+                            title={t('Alternative Forms', 'Forom Alternattivi')}
+                            items={(form as any).alternative_forms || []}
+                            onChange={(items) => set('alternative_forms', items)}
+                            enableSuggestions
+                            suggestionScope="entries"
+                            currentEntryId={form.id}
+                            extraActions={[
+                                { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
+                            ]}
+                        />
+                        <RelationshipEditor
+                            type="derived"
                             title={t('Derived Terms', 'Termini Derivati')}
                             items={form.related_entries || []}
                             onChange={(items) => set('related_entries', items)}
+                            enableSuggestions
+                            suggestionScope="entries"
+                            currentEntryId={form.id}
                             extraActions={[
                                 { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') },
                                 { label: t('New Root', 'Għerq Ġdid'), icon: <Plus size={12} />, onClick: () => window.open('/admin?tab=roots&new=root', '_blank') }
@@ -2509,6 +2536,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             title={t('Synonyms', 'Sinonimi')}
                             items={form.synonyms || []}
                             onChange={(items) => set('synonyms', items)}
+                            enableSuggestions
+                            suggestionScope="entries"
+                            currentEntryId={form.id}
                             extraActions={[
                                 { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
                             ]}
@@ -2518,6 +2548,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             title={t('Antonyms', 'Antonimi')}
                             items={form.antonyms || []}
                             onChange={(items) => set('antonyms', items)}
+                            enableSuggestions
+                            suggestionScope="entries"
+                            currentEntryId={form.id}
                             extraActions={[
                                 { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
                             ]}

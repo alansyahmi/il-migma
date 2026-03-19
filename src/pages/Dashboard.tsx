@@ -20,7 +20,7 @@ const DASHBOARD_TABS = [
 
 export function Dashboard() {
     return (
-        <div className="max-w-4xl mx-auto px-7 sm:px-8 py-8">
+        <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8">
             <SignedOut>
                 <div className="flex flex-col items-center justify-center py-12 gap-4">
                     <h1 className="font-serif text-2xl font-bold text-[#1034A6]">Dashboard</h1>

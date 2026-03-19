@@ -52,6 +52,10 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'antonym-abbr': { en: 'ant.', standard: 'ant.', arabised: 'mtf.' },
     'gender': { en: 'Gender', standard: 'Ġeneru', arabised: 'Ġens' },
     'feature': { en: 'Feature', standard: 'Karatteristika', arabised: 'Fsurija' },
+    'has-inflection': { en: 'Has Inflection', standard: 'Għandu Inflessjoni', arabised: 'Għandu Tisrif' },
+    'sun-moon-letters': { en: 'Sun & Moon Letters', standard: 'Ittri tax-Xemx u tal-Qamar', arabised: 'Ittri tax-Xemx u tal-Qamar' },
+    'sun-letters': { en: 'Sun Letters', standard: 'Ittri tax-Xemx', arabised: 'Ittri tax-Xemx' },
+    'moon-letters': { en: 'Moon Letters', standard: 'Ittri tal-Qamar', arabised: 'Ittri tal-Qamar' },
 
     // Parts of Speech
     'verb': { en: 'Verb', standard: 'Verb', arabised: 'Fagħal' },

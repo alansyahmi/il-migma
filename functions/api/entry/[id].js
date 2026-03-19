@@ -131,6 +131,7 @@ export async function onRequestGet({ params, env }) {
             synonyms: entry.synonyms ? JSON.parse(entry.synonyms) : [],
             antonyms: entry.antonyms ? JSON.parse(entry.antonyms) : [],
             related_entries: entry.related_entries ? JSON.parse(entry.related_entries) : [],
+            alternative_forms: entry.alternative_forms ? JSON.parse(entry.alternative_forms) : [],
             definitions,
             phonetics: phonRes.rows.map(ph => ({
                 ...ph,
@@ -200,6 +201,7 @@ export async function onRequestGet({ params, env }) {
                 synonyms: payload.synonyms,
                 antonyms: payload.antonyms,
                 related_entries: related_entries.length ? related_entries : payload.related_entries,
+                alternative_forms: payload.alternative_forms,
                 source_citation: entry.source_citation || null,
                 is_inflectable: entry.is_inflectable,
                 usage_example: entry.usage_example,
@@ -228,6 +230,7 @@ export async function onRequestGet({ params, env }) {
                 synonyms: payload.synonyms,
                 antonyms: payload.antonyms,
                 related_entries: related_entries.length ? related_entries : payload.related_entries,
+                alternative_forms: payload.alternative_forms,
                 source_citation: entry.source_citation || null,
                 morph_pattern: entry.morph_pattern || null,
             };
@@ -246,6 +249,7 @@ export async function onRequestGet({ params, env }) {
                 synonyms: payload.synonyms,
                 antonyms: payload.antonyms,
                 related_entries: related_entries.length ? related_entries : payload.related_entries,
+                alternative_forms: payload.alternative_forms,
                 source_citation: entry.source_citation || null,
                 morph_pattern: entry.morph_pattern || null,
             };

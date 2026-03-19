@@ -61,7 +61,7 @@ export const ENTRY_HANDLED_FIELDS = [
     'phonetics', 'tags', 'cv_pattern', 'morph_pattern', 'sound_suffix',
     'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
     'elative_pattern', 'diminutive_pattern',
-    'synonyms', 'antonyms', 'related_entries', 'created_at', 'updated_at',
+    'synonyms', 'antonyms', 'related_entries', 'alternative_forms', 'created_at', 'updated_at',
     'root_consonants', 'verb_form', 'root_pattern_form_id', 'verb_weak_class', 'verb_type',
     'is_inflectable', 'usage_example', 'usage_example_en', 'old_id'
 ] as const;
@@ -74,7 +74,7 @@ export const ENTRY_PRIVATE_FIELDS = [
 export const COMMON_FIELDS = [
     'id', 'headword', 'pos', 'is_loanword', 'source_language',
     'source_citation', 'definitions', 'etymology_chain', 'phonetics', 'tags',
-    'synonyms', 'antonyms', 'related_entries', 'is_inflectable',
+    'synonyms', 'antonyms', 'related_entries', 'alternative_forms', 'is_inflectable',
     'usage_example', 'usage_example_en', 'root_consonants', 'cv_pattern'
 ];
 
@@ -119,6 +119,27 @@ export const POS_FEATURES: Record<string, string[]> = {
         'form_fem', 'form_masc', 'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual',
         'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
         'numeral_type', 'form_attributive_short', 'form_attributive_long'
+    ],
+    'adverb': [
+        ...COMMON_FIELDS
+    ],
+    'preposition': [
+        ...COMMON_FIELDS
+    ],
+    'particle': [
+        ...COMMON_FIELDS
+    ],
+    'article': [
+        ...COMMON_FIELDS
+    ],
+    'interjection': [
+        ...COMMON_FIELDS
+    ],
+    'conjunction': [
+        ...COMMON_FIELDS
+    ],
+    'interrogative': [
+        ...COMMON_FIELDS
     ],
 };
 
@@ -196,6 +217,7 @@ export function buildEntryPayload(form: any): Record<string, any> {
         'synonyms',
         'antonyms',
         'related_entries',
+        'alternative_forms',
         'tags',
         'inflections_pl',
     ]);
@@ -225,7 +247,7 @@ export function buildEntryPayload(form: any): Record<string, any> {
 
     // Final pass through payload to normalize primitives and collections
     Object.keys(payload).forEach(key => {
-        let val = payload[key];
+        const val = payload[key];
 
         if (arrayFields.has(key)) {
             result[key] = parseArrayField(key, val);

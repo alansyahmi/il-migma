@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Trash2, Plus, Loader2, Search, CheckCircle2, AlertCircle, Link2 } from 'lucide-react';
-import { apiGetEntry, apiGetRoot } from '@/lib/api';
+import { apiGetEntry, apiGetRoot, apiSearch } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { getGloss } from '@/lib/utils';
@@ -21,13 +21,23 @@ interface RelationshipEditorProps {
     onChange: (items: RelationshipItem[]) => void;
     type: 'thesaurus' | 'derived';
     lookupType?: 'entry' | 'root';
+    enableSuggestions?: boolean;
+    suggestionScope?: 'entries';
+    currentEntryId?: string;
     extraActions?: { label: string; onClick: () => void; icon?: React.ReactNode }[];
 }
 
 type LookupState = 'idle' | 'loading' | 'success' | 'error';
+type SuggestionState = {
+    query: string;
+    open: boolean;
+    loading: boolean;
+    results: RelationshipItem[];
+    activeIndex: number;
+};
 
 export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
-    title, items, onChange, type, extraActions, lookupType = 'entry'
+    title, items, onChange, type, extraActions, lookupType = 'entry', enableSuggestions = false, suggestionScope = 'entries', currentEntryId
 }) => {
     const { language, t } = useLanguage();
     const { mode } = useLinguisticMode();
@@ -37,6 +47,8 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
     // Track which rows are pending removal (for undo animation)
     const [pendingRemove, setPendingRemove] = useState<number | null>(null);
     const removeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const suggestionTimers = useRef<Record<number, ReturnType<typeof setTimeout> | null>>({});
+    const [suggestions, setSuggestions] = useState<Record<number, SuggestionState>>({});
     // Ref for auto-focusing new inputs
     const newInputRef = useRef<HTMLInputElement | null>(null);
     const [justAdded, setJustAdded] = useState(false);
@@ -53,6 +65,9 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
     useEffect(() => {
         return () => {
             if (removeTimer.current) clearTimeout(removeTimer.current);
+            Object.values(suggestionTimers.current).forEach(timer => {
+                if (timer) clearTimeout(timer);
+            });
         };
     }, []);
 
@@ -102,19 +117,44 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                     setRowState(index, 'error', t('Root not found', 'Għerq mhux misjub'));
                 }
             } else {
-                const res = await apiGetEntry(id);
-                if (res?.entry) {
-                    const entry = res.entry as any;
+                // First try strict ID lookup.
+                let resolvedEntry: any = null;
+                try {
+                    const byId = await apiGetEntry(id);
+                    resolvedEntry = byId?.entry || null;
+                } catch {
+                    resolvedEntry = null;
+                }
+
+                // If ID lookup fails, try headword search fallback.
+                if (!resolvedEntry) {
+                    const searchRes = await apiSearch(id, {
+                        limit: 8,
+                        searchLemma: true,
+                        searchEnglishGloss: true,
+                        includeSuggested: true,
+                        includePending: true,
+                    });
+                    const q = id.trim().toLowerCase();
+                    const exact = (searchRes.results || []).find((r: any) => {
+                        const head = String(r?.entry?.headword || '').trim().toLowerCase();
+                        const eid = String(r?.entry?.id || '').trim().toLowerCase();
+                        return head === q || eid === q;
+                    });
+                    resolvedEntry = exact?.entry || searchRes.results?.[0]?.entry || null;
+                }
+
+                if (resolvedEntry) {
                     const nextItems = [...items];
                     nextItems[index] = {
                         ...nextItems[index],
-                        id: entry.id,
-                        headword: entry.headword,
-                        gloss_en: entry.definitions?.[0]?.text_en || '',
-                        gloss_mt: entry.definitions?.[0]?.text_mt || '',
-                        pos: entry.pos,
-                        cv_pattern: entry.cv_pattern || entry.root_pattern_form?.pattern?.cv_notation || '',
-                        wizen_pattern: entry.root_pattern_form?.pattern?.wizen_notation || ''
+                        id: resolvedEntry.id,
+                        headword: resolvedEntry.headword,
+                        gloss_en: resolvedEntry.definitions?.[0]?.text_en || '',
+                        gloss_mt: resolvedEntry.definitions?.[0]?.text_mt || '',
+                        pos: resolvedEntry.pos,
+                        cv_pattern: resolvedEntry.cv_pattern || resolvedEntry.root_pattern_form?.pattern?.cv_notation || '',
+                        wizen_pattern: resolvedEntry.root_pattern_form?.pattern?.wizen_notation || ''
                     };
                     onChange(nextItems);
                     setRowState(index, 'success');
@@ -127,6 +167,96 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
         }
     }, [items, lookupType, onChange, setRowState, t]);
 
+    const setSuggestionState = useCallback((index: number, patch: Partial<SuggestionState>) => {
+        setSuggestions(prev => ({
+            ...prev,
+            [index]: {
+                query: prev[index]?.query || '',
+                open: prev[index]?.open || false,
+                loading: prev[index]?.loading || false,
+                results: prev[index]?.results || [],
+                activeIndex: prev[index]?.activeIndex || 0,
+                ...patch,
+            }
+        }));
+    }, []);
+
+    const closeSuggestions = useCallback((index: number) => {
+        setSuggestionState(index, { open: false, loading: false, results: [], activeIndex: 0 });
+    }, [setSuggestionState]);
+
+    const mapEntryToItem = (entry: any): RelationshipItem => ({
+        id: entry.id,
+        headword: entry.headword,
+        gloss_en: entry.definitions?.[0]?.text_en || '',
+        gloss_mt: entry.definitions?.[0]?.text_mt || '',
+        pos: entry.pos,
+        cv_pattern: entry.cv_pattern || entry.root_pattern_form?.pattern?.cv_notation || '',
+        wizen_pattern: entry.root_pattern_form?.pattern?.wizen_notation || ''
+    });
+
+    const fetchSuggestions = useCallback(async (query: string, index: number) => {
+        const canSuggest = enableSuggestions && suggestionScope === 'entries' && lookupType === 'entry';
+        if (!canSuggest) return;
+
+        const normalized = query.trim();
+        if (normalized.length < 2) {
+            closeSuggestions(index);
+            return;
+        }
+
+        setSuggestionState(index, { loading: true, query: normalized, open: true });
+        try {
+            const res = await apiSearch(normalized, {
+                limit: 8,
+                searchLemma: true,
+                searchEnglishGloss: true,
+                includeSuggested: true,
+                includePending: true,
+            });
+
+            const usedIds = new Set(
+                items
+                    .map((it, i) => (i === index ? '' : it?.id))
+                    .filter(Boolean)
+            );
+
+            const mapped = (res.results || [])
+                .map(r => mapEntryToItem(r.entry))
+                .filter(it => !!it.id && !usedIds.has(it.id) && it.id !== currentEntryId);
+
+            setSuggestionState(index, {
+                loading: false,
+                open: mapped.length > 0,
+                results: mapped,
+                activeIndex: 0,
+                query: normalized,
+            });
+        } catch {
+            setSuggestionState(index, { loading: false, open: false, results: [], activeIndex: 0 });
+        }
+    }, [closeSuggestions, currentEntryId, enableSuggestions, items, lookupType, setSuggestionState, suggestionScope, type]);
+
+    const queueSuggestionFetch = useCallback((query: string, index: number) => {
+        if (suggestionTimers.current[index]) {
+            clearTimeout(suggestionTimers.current[index]!);
+        }
+        suggestionTimers.current[index] = setTimeout(() => {
+            fetchSuggestions(query, index);
+        }, 250);
+    }, [fetchSuggestions]);
+
+    const selectSuggestion = useCallback((index: number, suggestion: RelationshipItem) => {
+        const nextItems = [...items];
+        nextItems[index] = {
+            ...nextItems[index],
+            ...suggestion,
+        };
+        onChange(nextItems);
+        setRowState(index, 'success');
+        closeSuggestions(index);
+    }, [closeSuggestions, items, onChange, setRowState]);
+
     const addItem = () => {
         onChange([...items, { id: '', headword: '' }]);
         setJustAdded(true);
@@ -138,6 +268,17 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
         removeTimer.current = setTimeout(() => {
             onChange(items.filter((_, i) => i !== index));
             setPendingRemove(null);
+            if (suggestionTimers.current[index]) clearTimeout(suggestionTimers.current[index]!);
+            delete suggestionTimers.current[index];
+            setSuggestions(prev => {
+                const next: Record<number, SuggestionState> = {};
+                Object.entries(prev).forEach(([k, v]) => {
+                    const ki = parseInt(k, 10);
+                    if (ki < index) next[ki] = v;
+                    else if (ki > index) next[ki - 1] = v;
+                });
+                return next;
+            });
             // Shift row states
             setRowStates(prev => {
                 const next: typeof prev = {};
@@ -161,6 +302,9 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
         nextItems[index] = { ...nextItems[index], id, headword: '' }; // Clear resolved data on ID change
         onChange(nextItems);
         setRowState(index, 'idle');
+        if (enableSuggestions && suggestionScope === 'entries' && lookupType === 'entry') {
+            queueSuggestionFetch(id, index);
+        }
     };
 
     const patternLabel = (item: RelationshipItem) => {
@@ -178,6 +322,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
     };
 
     const stateIcon = (index: number) => {
+        if (suggestions[index]?.loading) return <Loader2 size={14} className="animate-spin text-[#1034A6]" />;
         const s = rowStates[index]?.state;
         if (s === 'loading') return <Loader2 size={14} className="animate-spin text-[#1034A6]" />;
         if (s === 'success') return <CheckCircle2 size={14} className="text-emerald-500" />;
@@ -210,12 +355,15 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                 {items.map((item, i) => {
                     const isPendingRemoval = pendingRemove === i;
                     const isResolved = !!item.headword;
+                    const rowSuggestions = suggestions[i];
+                    const hasSuggestions = !!rowSuggestions?.open && (rowSuggestions.results?.length ?? 0) > 0;
 
                     return (
                         <div
                             key={i}
                             className={`
-                                relative rounded-lg border transition-all duration-300 overflow-hidden
+                                relative rounded-lg border transition-all duration-300
+                                ${hasSuggestions ? 'overflow-visible' : 'overflow-hidden'}
                                 ${isPendingRemoval ? 'opacity-40 scale-[0.97] bg-red-50/50 border-red-200' : borderColor(i)}
                                 ${isResolved ? 'bg-white shadow-sm' : 'bg-[#faf9f7]'}
                             `}
@@ -248,13 +396,36 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                                             ${rowStates[i]?.state === 'error' ? 'border-red-300 bg-red-50/30' : 'border-border'}
                                         `}
                                         value={item.id}
-                                        placeholder={lookupType === 'root' ? "f-għ-l" : "entry-id"}
+                                        placeholder={lookupType === 'root' ? "f-għ-l" : "entry-id or headword"}
                                         onChange={e => updateId(i, e.target.value)}
-                                        onBlur={() => lookupItem(item.id, i)}
+                                        onBlur={() => {
+                                            setTimeout(() => {
+                                                closeSuggestions(i);
+                                            }, 120);
+                                        }}
                                         onKeyDown={e => {
+                                            if (hasSuggestions && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+                                                e.preventDefault();
+                                                const delta = e.key === 'ArrowDown' ? 1 : -1;
+                                                const len = rowSuggestions.results.length;
+                                                const next = (rowSuggestions.activeIndex + delta + len) % len;
+                                                setSuggestionState(i, { activeIndex: next });
+                                                return;
+                                            }
                                             if (e.key === 'Enter') {
                                                 e.preventDefault();
+                                                if (hasSuggestions) {
+                                                    const chosen = rowSuggestions.results[rowSuggestions.activeIndex] || rowSuggestions.results[0];
+                                                    if (chosen) {
+                                                        selectSuggestion(i, chosen);
+                                                        return;
+                                                    }
+                                                }
                                                 lookupItem(item.id, i);
+                                            }
+                                            if (e.key === 'Escape') {
+                                                e.preventDefault();
+                                                closeSuggestions(i);
                                             }
                                         }}
                                         disabled={isPendingRemoval}
@@ -262,6 +433,34 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                                     <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
                                         {stateIcon(i)}
                                     </div>
+                                    {hasSuggestions && (
+                                        <div className="absolute z-30 mt-1 left-0 right-0 bg-white border border-black/10 rounded-md shadow-lg max-h-56 overflow-auto">
+                                            {rowSuggestions.results.map((s, idx) => {
+                                                const isActive = idx === rowSuggestions.activeIndex;
+                                                return (
+                                                    <button
+                                                        key={`${s.id}-${idx}`}
+                                                        type="button"
+                                                        onMouseDown={(e) => {
+                                                            e.preventDefault();
+                                                            selectSuggestion(i, s);
+                                                        }}
+                                                        className={`w-full text-left px-2.5 py-2 border-b border-black/5 last:border-b-0 ${isActive ? 'bg-[#1034A6]/8' : 'hover:bg-black/3'}`}
+                                                    >
+                                                        <div className="flex items-center justify-between gap-2">
+                                                            <span className="font-serif text-[13px] text-black truncate">{s.headword}</span>
+                                                            <span className="text-[10px] text-black/30 font-mono truncate">{s.id}</span>
+                                                        </div>
+                                                        {!!(s.gloss_en || s.gloss_mt) && (
+                                                            <div className="text-[11px] text-black/45 truncate">
+                                                                "{getGloss(s, language, mode)}"
+                                                            </div>
+                                                        )}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Resolved Preview */}
@@ -291,7 +490,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                                                 ? <span className="text-red-400 not-italic text-[10px]">{rowStates[i]?.message}</span>
                                                 : (lookupType === 'root'
                                                     ? t('Type consonants and press Enter', 'Ikteb il-konsonanti u agħfas Enter')
-                                                    : t('Type an ID and press Enter', 'Ikteb ID u agħfas Enter'))
+                                                    : t('Type ID or headword, then select suggestion', 'Ikteb ID jew kelma, imbagħad agħżel suġġeriment'))
                                             }
                                         </span>
                                     )}

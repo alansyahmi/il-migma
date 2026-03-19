@@ -325,12 +325,29 @@ export function Root() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                        <Link
-                            to={`/suggest?type=root&q=${id}`}
-                            className="w-full sm:w-auto bg-link text-white text-sm font-sans font-medium px-6 py-2.5 rounded-lg hover:bg-link-hover transition-colors shadow-lg shadow-link/20"
-                        >
-                            {term('suggest-adding-root')}
-                        </Link>
+                        {isActualAdmin ? (
+                            <>
+                                <Link
+                                    to={`/admin?tab=roots&create=1&consonants=${encodeURIComponent(id)}`}
+                                    className="w-full sm:w-auto bg-link text-white text-sm font-sans font-medium px-6 py-2.5 rounded-lg hover:bg-link-hover transition-colors shadow-lg shadow-link/20"
+                                >
+                                    {term('new-root')}
+                                </Link>
+                                <Link
+                                    to={`/admin?tab=entries&create=1&headword=${encodeURIComponent(id)}&root=${encodeURIComponent(id)}`}
+                                    className="w-full sm:w-auto bg-white text-black text-sm font-sans font-medium px-6 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
+                                >
+                                    {term('new-entry')}
+                                </Link>
+                            </>
+                        ) : (
+                            <Link
+                                to={`/suggest?type=root&q=${id}`}
+                                className="w-full sm:w-auto bg-link text-white text-sm font-sans font-medium px-6 py-2.5 rounded-lg hover:bg-link-hover transition-colors shadow-lg shadow-link/20"
+                            >
+                                {term('suggest-adding-root')}
+                            </Link>
+                        )}
                         <Link
                             to="/root-search"
                             className="w-full sm:w-auto bg-white text-black text-sm font-sans font-medium px-6 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
@@ -361,7 +378,7 @@ export function Root() {
 
     return (
         <div style={bgStyle} className="w-full overflow-hidden">
-            <div className="max-w-5xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full">
                 <div className="flex items-center gap-2 mb-8">
                     <Link to="/root-search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-root-search')}

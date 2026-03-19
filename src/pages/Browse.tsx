@@ -143,7 +143,7 @@ export function Browse() {
 
     return (
         <div style={bgStyle}>
-            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-12">
+            <div className="max-w-[1440px] mx-auto px-7 sm:px-8 py-12">
 
                 {/* ── Page header ── */}
                 <div className="mb-6">

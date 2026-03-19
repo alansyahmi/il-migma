@@ -1,46 +1,46 @@
-CREATE TABLE entries (
-  id                    TEXT PRIMARY KEY,
-  headword              TEXT NOT NULL,
-  pos                   TEXT NOT NULL CHECK(pos IN (
-    'noun','verb','adjective','adverb','preposition',
-    'conjunction','particle','article','pronoun','interrogative',
-    'numeral','interjection'
-  )),
-  root_pattern_form_id  TEXT REFERENCES root_pattern_forms(id),
-  is_loanword           INTEGER NOT NULL DEFAULT 0,
-  source_language       TEXT,
-  tags                  TEXT,  -- JSON array
-
-  -- Noun morphology
-  noun_gender           TEXT CHECK(noun_gender IN ('masculine','feminine','common')),
-  noun_singular         TEXT,
-  noun_plural_forms     TEXT,  -- JSON array (multiple broken plurals)
-  noun_sound_plural     TEXT,
-  noun_dual             TEXT,
-  noun_diminutive       TEXT,
-  noun_collective       TEXT,
-  noun_singulative      TEXT,
-
-  -- Verb morphology
-  verb_class            TEXT CHECK(verb_class IN ('strong','weak','doubled','quadrilateral','loan')),
-  verb_transitivity     TEXT CHECK(verb_transitivity IN ('transitive','intransitive','both')),
-  verb_perfective_3sgm  TEXT,
-  verb_imperfective_3sgm TEXT,
-  verb_verbal_noun      TEXT,
-  verb_passive_ptcp     TEXT,
-
-  -- Admin workflow state
-  verb_vowel_perf       TEXT,
-  verb_vowel_impf       TEXT,
-
-  -- Adjective morphology
-  adj_masculine         TEXT,
-  adj_feminine          TEXT,
-  adj_plural            TEXT,
-  adj_elative           TEXT,
-
-  created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
-  updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
-, participle_type TEXT, noun_type TEXT, cv_pattern TEXT, root_consonants TEXT, verb_form TEXT, plural_pattern TEXT, sound_suffix TEXT, adj_pattern TEXT, noun_feminine TEXT, noun_masculine TEXT, verb_weak_class TEXT, adj_gender TEXT, participle_gender TEXT, verb_active_ptcp TEXT, verb_vowel_impv TEXT, verb_type TEXT, synonyms TEXT, antonyms TEXT, related_entries TEXT, is_inflectable INTEGER DEFAULT 1, usage_example TEXT, usage_example_en TEXT);
+CREATE TABLE entries (
+  id                    TEXT PRIMARY KEY,
+  headword              TEXT NOT NULL,
+  pos                   TEXT NOT NULL CHECK(pos IN (
+    'noun','verb','adjective','adverb','preposition',
+    'conjunction','particle','article','pronoun','interrogative',
+    'numeral','interjection','participle'
+  )),
+  root_pattern_form_id  TEXT REFERENCES root_pattern_forms(id),
+  is_loanword           INTEGER NOT NULL DEFAULT 0,
+  source_language       TEXT,
+  tags                  TEXT,  -- JSON array
+
+  -- Noun morphology
+  noun_gender           TEXT CHECK(noun_gender IN ('masculine','feminine','common')),
+  noun_singular         TEXT,
+  noun_plural_forms     TEXT,  -- JSON array (multiple broken plurals)
+  noun_sound_plural     TEXT,
+  noun_dual             TEXT,
+  noun_diminutive       TEXT,
+  noun_collective       TEXT,
+  noun_singulative      TEXT,
+
+  -- Verb morphology
+  verb_class            TEXT CHECK(verb_class IN ('strong','weak','doubled','quadrilateral','loan')),
+  verb_transitivity     TEXT CHECK(verb_transitivity IN ('transitive','intransitive','both')),
+  verb_perfective_3sgm  TEXT,
+  verb_imperfective_3sgm TEXT,
+  verb_verbal_noun      TEXT,
+  verb_passive_ptcp     TEXT,
+
+  -- Admin workflow state
+  verb_vowel_perf       TEXT,
+  verb_vowel_impf       TEXT,
+
+  -- Adjective morphology
+  adj_masculine         TEXT,
+  adj_feminine          TEXT,
+  adj_plural            TEXT,
+  adj_elative           TEXT,
+
+  created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+, participle_type TEXT, noun_type TEXT, cv_pattern TEXT, root_consonants TEXT, verb_form TEXT, plural_pattern TEXT, sound_suffix TEXT, adj_pattern TEXT, noun_feminine TEXT, noun_masculine TEXT, verb_weak_class TEXT, adj_gender TEXT, participle_gender TEXT, verb_active_ptcp TEXT, verb_vowel_impv TEXT, verb_type TEXT, synonyms TEXT, antonyms TEXT, related_entries TEXT, alternative_forms TEXT, is_inflectable INTEGER DEFAULT 1, usage_example TEXT, usage_example_en TEXT);
 CREATE INDEX idx_entries_headword ON entries(headword);
 CREATE INDEX idx_entries_pos ON entries(pos);
