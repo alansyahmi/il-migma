@@ -1,0 +1,6 @@
+TURSO_URL=libsql://<your-db>.turso.io
+TURSO_AUTH_TOKEN=<your-token>
+CLERK_SECRET_KEY=dummy
+
+# Wrangler Pages Functions run in a Worker-like runtime.
+# Do not use file:// URLs here (for example file:///C:/.../local.db).
