@@ -256,6 +256,30 @@ This three-way marking drives the UI: attested forms are shown normally, irregul
 
 ---
 
+## Pattern Metadata & Smarter Filtering
+
+To improve the accuracy of morphological suggestions, patterns now carry explicit **linguistic roles** and **gender** metadata.
+
+### Role-Based Filtering
+
+In the Admin Entry Form, preset suggestions are automatically filtered based on the field's requirements:
+
+- **Feminine Pattern field**: Filters presets to only show those with `linguistic_role = 'feminine_singular'`.
+- **Plural Pattern field**: Filters presets to only show those with `linguistic_role = 'broken_plural'` or `'sound_plural'`.
+- **Diminutive Pattern field**: Filters presets to only show those with `linguistic_role = 'diminutive'`.
+
+This prevents assigning a plural pattern to a feminine singular slot, reducing entry errors.
+
+### Pattern Descriptions
+
+Each pattern can include a **description** providing historical or phonological context (e.g., "Used for quadriliteral roots with a long penultimate vowel"). These descriptions are displayed as subtitles in the preset selection list and on the Pattern Detail page.
+
+### Browse by Pattern
+
+The public **Browse** page now includes a "By Pattern" index, allowing users to explore the dictionary through morphological templates. Each template links to a dedicated **Pattern Detail** page listing all entries associated with that specific wiżen.
+
+---
+
 ## Terminology System
 
 The `terminology.ts` module provides **bilingual term resolution**. Every linguistic label in the UI has two variants:

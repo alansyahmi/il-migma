@@ -34,7 +34,8 @@ export function LinguisticModeProvider({ children }: { children: React.ReactNode
 
         // 1. Check dynamic config via indexed maps
         // Match order: ui_terminology -> global search (legacy)
-        let dynamicItem = byCategoryAndKey.get('ui_terminology')?.get(lowerKey);
+        const safeKey = lowerKey.replace(/[\s_]+/g, '-');
+        let dynamicItem = byCategoryAndKey.get('ui_terminology')?.get(safeKey) || byCategoryAndKey.get('ui_terminology')?.get(lowerKey);
         
         if (!dynamicItem) {
             // Fallback: Global search across all categories (find first match)

@@ -20,7 +20,8 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
         let errorMessage = `API Error ${res.status}: ${res.statusText}`;
         try {
             const json = JSON.parse(text);
-            errorMessage = json.error || errorMessage;
+            const baseMessage = json.error || errorMessage;
+            errorMessage = json.code ? `${baseMessage} [${json.code}]` : baseMessage;
         } catch {
             errorMessage = `${errorMessage} (Response: ${text.slice(0, 100)}...)`;
         }
@@ -160,6 +161,14 @@ export async function apiGetRoot(id: string): Promise<{ root: any }> {
     return apiFetch(`/api/root/${encodeURIComponent(id)}`);
 }
 
+export async function apiGetPattern(id: string): Promise<{ pattern: any; roles: any[]; entries: any[] }> {
+    return apiFetch(`/api/pattern/${encodeURIComponent(id)}`);
+}
+
+export async function apiListPatterns(): Promise<{ patterns: any[] }> {
+    return apiFetch('/api/patterns');
+}
+
 // ── Chat ─────────────────────────────────────────────────────────────────────
 
 export async function apiChat(
@@ -274,9 +283,10 @@ export async function adminBulkDeleteRoots(token: string, ids: string[]) {
 
 // ── Config Admin ─────────────────────────────────────────────────────────────
 
-export async function adminListConfig(token: string, category?: string) {
+export async function adminListConfig(token: string, category?: string, cb?: number) {
     const params = new URLSearchParams();
     if (category) params.set('category', category);
+    if (cb) params.set('_cb', String(cb));
     return apiFetch<{ config: any[] }>(`/api/admin/config?${params}`, {
         headers: { Authorization: `Bearer ${token}` },
     });

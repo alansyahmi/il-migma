@@ -1,5 +1,14 @@
-import { createClient } from '@libsql/client/web';
-import { validateAndNormalize } from './configSchema';
+import { validateAndNormalize } from './configSchema.js';
+import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
+
+const roleMap = {
+    cv_wizen_pattern: '',
+    feminine_pattern: 'feminine_singular',
+    broken_pattern: 'broken_plural',
+    sound_suffix: 'sound_plural',
+    diminutive_pattern: 'diminutive',
+    adjective_pattern: 'elative',
+};
 
 // ── Migration Endpoint ────────────────────────────────────────────────────────
 export async function onRequestPost({ request, env }) {
@@ -8,16 +17,153 @@ export async function onRequestPost({ request, env }) {
         const body = await request.json();
         const { action } = body;
 
-        const client = db(env);
+        const client = getDbClient(env);
 
         if (action === 'migrate') {
             return handleMigration(client, body.commit === true);
         }
 
-        return new Response('Action required', { status: 400 });
+        if (action === 'sync-from-entries') {
+            return handleSyncFromEntries(client, body.commit === true);
+        }
+
+        return json({ error: 'Action required' }, 400);
     } catch (e) {
-        return new Response(e.message, { status: 500 });
+        const { status, body } = toApiErrorPayload(e);
+        return json(body, status);
     }
+}
+
+async function handleSyncFromEntries(client, commit) {
+    const logs = [];
+    logs.push(`Pattern Sync from Entries starting (commit=${commit})`);
+    const patternInsertInfo = commit ? await getPatternInsertInfo(client) : null;
+
+    const query = `
+        SELECT DISTINCT cv_pattern as p, 'cv_wizen_pattern' as cat FROM entries WHERE cv_pattern IS NOT NULL AND cv_pattern != ''
+        UNION
+        SELECT DISTINCT feminine_pattern as p, 'feminine_pattern' as cat FROM entries WHERE feminine_pattern IS NOT NULL AND feminine_pattern != ''
+        UNION
+        SELECT DISTINCT plural_pattern as p, 'broken_pattern' as cat FROM entries WHERE plural_pattern IS NOT NULL AND plural_pattern != ''
+        UNION
+        SELECT DISTINCT diminutive_pattern as p, 'diminutive_pattern' as cat FROM entries WHERE diminutive_pattern IS NOT NULL AND diminutive_pattern != ''
+        UNION
+        SELECT DISTINCT elative_pattern as p, 'adjective_pattern' as cat FROM entries WHERE elative_pattern IS NOT NULL AND elative_pattern != ''
+    `;
+
+    const res = await client.execute(query);
+    logs.push(`Found ${res.rows.length} unique pattern/category pairs in entries.`);
+
+    let addedCount = 0;
+    let skippedCount = 0;
+    const errors = [];
+    for (const row of res.rows) {
+        const rawPattern = String(row.p || '').trim();
+        if (!rawPattern) continue;
+
+        // Entries patterns often just have the CV part. 
+        // We'll normalize it to a pattern object.
+        const cv = rawPattern;
+        const wizen = ''; // We don't know the Wiżen from the entry alone
+        const patternId = btoa(encodeURIComponent(`${cv}|${wizen}`)).replace(/=/g, '');
+
+        if (commit) {
+            try {
+                // 1. Resolve canonical parent by cv_notation (schema has cv_notation UNIQUE)
+                const resolvedPatternId = await resolveOrCreatePatternIdByCv(
+                    client,
+                    patternInsertInfo,
+                    patternId,
+                    cv,
+                    wizen,
+                    logs
+                );
+                if (!resolvedPatternId) {
+                    skippedCount++;
+                    const msg = `Skipped ${row.cat}: parent pattern row missing after upsert (${cv})`;
+                    logs.push(msg);
+                    errors.push(msg);
+                    continue;
+                }
+
+                // 2. Link it to the correct category if not already linked
+                const appId = `${resolvedPatternId}_${row.cat}_all`;
+                await client.execute({
+                    sql: `INSERT OR IGNORE INTO pattern_applicability (id, pattern_id, category, pos, stress, linguistic_role)
+                          VALUES (?, ?, ?, ?, ?, ?)`,
+                    args: [appId, resolvedPatternId, row.cat, 'all', 2, row.cat.replace('_pattern', '') + '_role']
+                });
+                const role = roleMap[row.cat] || '';
+                if (role) {
+                    await client.execute({
+                        sql: `UPDATE pattern_applicability SET linguistic_role = ? WHERE id = ? AND (linguistic_role IS NULL OR linguistic_role = '')`,
+                        args: [role, appId]
+                    });
+                }
+                addedCount++;
+            } catch (e) {
+                skippedCount++;
+                const msg = `FAILED ${row.cat}: ${cv} -> ${e.message}`;
+                logs.push(msg);
+                errors.push(msg);
+            }
+        }
+        logs.push(`Synced ${row.cat}: ${cv}`);
+    }
+
+    return json({ logs, committed: commit, added: addedCount, skipped: skippedCount, errors });
+}
+
+async function getPatternInsertInfo(client) {
+    const infoRes = await client.execute(`PRAGMA table_info(patterns)`);
+    const columns = new Set((infoRes.rows || []).map(r => String(r.name)));
+    return {
+        hasDescription: columns.has('description'),
+        hasExampleWord: columns.has('example_word'),
+    };
+}
+
+async function upsertPattern(client, insertInfo, patternId, cv, wizen) {
+    const columns = ['id', 'cv_notation', 'wizen_notation'];
+    const args = [patternId, cv, wizen];
+    if (insertInfo?.hasDescription) {
+        columns.push('description');
+        args.push('');
+    }
+    if (insertInfo?.hasExampleWord) {
+        columns.push('example_word');
+        args.push(wizen || cv || '');
+    }
+    const placeholders = columns.map(() => '?').join(', ');
+    await client.execute({
+        sql: `INSERT OR IGNORE INTO patterns (${columns.join(', ')}) VALUES (${placeholders})`,
+        args,
+    });
+}
+
+async function resolveOrCreatePatternIdByCv(client, insertInfo, candidatePatternId, cv, wizen, logs) {
+    const existingByCv = await client.execute({
+        sql: `SELECT id, wizen_notation FROM patterns WHERE cv_notation = ? LIMIT 1`,
+        args: [cv]
+    });
+    if (existingByCv.rows.length) {
+        const existingId = String(existingByCv.rows[0].id);
+        if (existingId !== candidatePatternId) {
+            logs.push(`Reused existing pattern by cv_notation: ${cv} -> ${existingId}`);
+        }
+        return existingId;
+    }
+
+    await upsertPattern(client, insertInfo, candidatePatternId, cv, wizen);
+
+    const resolved = await client.execute({
+        sql: `SELECT id FROM patterns WHERE cv_notation = ? LIMIT 1`,
+        args: [cv]
+    });
+    if (resolved.rows.length) {
+        return String(resolved.rows[0].id);
+    }
+    return '';
 }
 
 async function verifyAdmin(request, env) {
@@ -38,14 +184,18 @@ async function verifyAdmin(request, env) {
     } catch { return false; }
 }
 
-function unauthorized() {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+function json(data, status = 200) {
+    return new Response(JSON.stringify(data), {
+        status,
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+        },
+    });
 }
 
-function db(env) {
-    const url = env.TURSO_URL || env.VITE_TURSO_URL;
-    const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
-    return createClient({ url, authToken: token });
+function unauthorized() {
+    return json({ error: 'Unauthorized' }, 401);
 }
 
 async function handleMigration(client, commit) {
@@ -100,7 +250,7 @@ async function handleMigration(client, commit) {
             
             const cv = normalized.cv;
             const wizen = normalized.wizen;
-            const patternId = btoa(`${cv}|${wizen}`).replace(/=/g, '');
+            const patternId = btoa(encodeURIComponent(`${cv}|${wizen}`)).replace(/=/g, '');
 
             if (commit) {
                 // Insert pattern if not exists
@@ -126,7 +276,5 @@ async function handleMigration(client, commit) {
         }
     }
 
-    return new Response(JSON.stringify({ logs, committed: commit }), {
-        headers: { 'Content-Type': 'application/json' }
-    });
+    return json({ logs, committed: commit });
 }

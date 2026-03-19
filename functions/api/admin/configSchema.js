@@ -28,7 +28,10 @@ export function validateAndNormalize(category, value) {
             cv: nfc(obj.cv || ''),
             wizen: nfc(obj.wizen || ''),
             stress: parseInt(obj.stress) || 2,
-            pos_types: Array.isArray(obj.pos_types) ? [...new Set(obj.pos_types.map(p => nfc(p)))] : []
+            pos_types: Array.isArray(obj.pos_types) ? [...new Set(obj.pos_types.map(p => nfc(p)))] : [],
+            linguistic_role: nfc(obj.linguistic_role || ''),
+            gender: nfc(obj.gender || ''),
+            description: nfc(obj.description || '')
         };
 
         if (!normalized.cv && !normalized.wizen) {

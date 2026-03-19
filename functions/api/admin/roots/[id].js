@@ -1,4 +1,4 @@
-import { createClient } from '@libsql/client/web';
+import { getDbClient, toApiErrorPayload } from '../../../lib/dbClient.js';
 
 async function verifyAdmin(request, env) {
     const auth = request.headers.get('Authorization') ?? '';
@@ -25,12 +25,6 @@ async function verifyAdmin(request, env) {
     }
 }
 
-function db(env) {
-    const url = env.TURSO_URL || env.VITE_TURSO_URL;
-    const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
-    return createClient({ url, authToken: token });
-}
-
 function json(data, status = 200) {
     return new Response(JSON.stringify(data), {
         status,
@@ -42,6 +36,11 @@ function unauthorized() {
     return json({ error: 'Unauthorized — admin role required' }, 401);
 }
 
+function internalError(err) {
+    const { status, body } = toApiErrorPayload(err);
+    return json(body, status);
+}
+
 export async function onRequestGet({ request, env, params }) {
     try {
         if (!(await verifyAdmin(request, env))) return unauthorized();
@@ -51,7 +50,7 @@ export async function onRequestGet({ request, env, params }) {
 
         const decodedId = decodeURIComponent(id).normalize('NFC');
 
-        const client = db(env);
+        const client = getDbClient(env);
         const rootRes = await client.execute({
             sql: `SELECT * FROM roots WHERE id = ? OR LOWER(consonants) = LOWER(?)`,
             args: [decodedId, decodedId],
@@ -72,7 +71,7 @@ export async function onRequestGet({ request, env, params }) {
 
         return json({ root });
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -84,7 +83,7 @@ export async function onRequestPut({ request, env, params }) {
         const decodedId = decodeURIComponent(id).normalize('NFC');
         const body = await request.json();
 
-        const client = db(env);
+        const client = getDbClient(env);
 
         // Dynamic column discovery
         const tableInfo = await client.execute("PRAGMA table_info(roots)");
@@ -221,7 +220,7 @@ export async function onRequestPut({ request, env, params }) {
 
         return json({ success: true });
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 

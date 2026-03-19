@@ -345,6 +345,8 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
                                 onChange={v => set('form_fem_pattern', v)}
                                 placeholder="e.g. CaCCaCa"
                                 presets={options?.feminine_patterns}
+                                suggestion={options?.suggestions?.feminine}
+                                onSuggest={() => options?.suggestions?.feminine && set('form_fem_pattern', options.suggestions.feminine)}
                                 styles={styles}
                                 t={t}
                             />
@@ -366,6 +368,8 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
                                 onChange={v => set('form_masc_pattern', v)}
                                 placeholder="e.g. CaCCaC"
                                 presets={options?.patterns}
+                                suggestion={options?.suggestions?.masculine}
+                                onSuggest={() => options?.suggestions?.masculine && set('form_masc_pattern', options.suggestions.masculine)}
                                 styles={styles}
                                 t={t}
                             />
@@ -386,6 +390,8 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
                                     onChange={v => set('form_masc_pattern', v)}
                                     placeholder="e.g. CaCCaC"
                                     presets={options?.patterns}
+                                    suggestion={options?.suggestions?.masculine}
+                                    onSuggest={() => options?.suggestions?.masculine && set('form_masc_pattern', options.suggestions.masculine)}
                                     styles={styles}
                                     t={t}
                                 />
@@ -403,6 +409,8 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
                                     onChange={v => set('form_fem_pattern', v)}
                                     placeholder="e.g. CaCCaCa"
                                     presets={options?.feminine_patterns}
+                                    suggestion={options?.suggestions?.feminine}
+                                    onSuggest={() => options?.suggestions?.feminine && set('form_fem_pattern', options.suggestions.feminine)}
                                     styles={styles}
                                     t={t}
                                 />
@@ -456,12 +464,12 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
                     <div>
                         <PatternTagField
                             label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                            value={form.morph_pattern || ''}
-                            onChange={v => set('morph_pattern', v)}
+                            value={form.form_plural_pattern || ''}
+                            onChange={v => set('form_plural_pattern', v)}
                             placeholder="e.g. CaCCaC, -ijet"
                             presets={options?.patterns}
                             suggestion={options?.suggestions?.broken_pattern}
-                            onSuggest={() => options?.suggestions?.broken_pattern && set('morph_pattern', options.suggestions.broken_pattern)}
+                            onSuggest={() => options?.suggestions?.broken_pattern && set('form_plural_pattern', options.suggestions.broken_pattern)}
                             styles={styles}
                             t={t}
                         />
@@ -533,8 +541,8 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
                     <div>
                         <PatternTagField
                             label={t('Masculine Pattern', 'Mudell Mask.')}
-                            value={form.lemma_pattern || ''}
-                            onChange={v => set('lemma_pattern', v)}
+                            value={form.form_masc_pattern || ''}
+                            onChange={v => set('form_masc_pattern', v)}
                             placeholder="e.g. CVCVC"
                             presets={options?.patterns}
                             styles={styles}
@@ -606,8 +614,8 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
                 <div>
                     <PatternTagField
                         label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                        value={form.morph_pattern || ''}
-                        onChange={v => set('morph_pattern', v)}
+                        value={form.form_plural_pattern || ''}
+                        onChange={v => set('form_plural_pattern', v)}
                         placeholder="e.g. CaCCaC, -ijet"
                         presets={options?.patterns}
                         styles={styles}
@@ -735,8 +743,8 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
                         <div>
                             <PatternTagField
                                 label={t('Masculine Pattern', 'Mudell Mask.')}
-                                value={form.lemma_pattern || ''}
-                                onChange={v => set('lemma_pattern', v)}
+                                value={form.form_masc_pattern || ''}
+                                onChange={v => set('form_masc_pattern', v)}
                                 placeholder="e.g. CVCVC"
                                 presets={options?.patterns}
                                 styles={styles}
@@ -791,8 +799,8 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
                     <div>
                         <PatternTagField
                             label={t('Masculine Pattern', 'Mudell Mask.')}
-                            value={form.lemma_pattern || ''}
-                            onChange={v => set('lemma_pattern', v)}
+                            value={form.form_masc_pattern || ''}
+                            onChange={v => set('form_masc_pattern', v)}
                             placeholder="e.g. CVCVC"
                             presets={options?.patterns}
                             styles={styles}
@@ -888,8 +896,8 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
                 <div>
                     <PatternTagField
                         label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                        value={form.morph_pattern || ''}
-                        onChange={v => set('morph_pattern', v)}
+                        value={form.form_plural_pattern || ''}
+                        onChange={v => set('form_plural_pattern', v)}
                         placeholder="e.g. CaCCaC, -ijet"
                         presets={options?.patterns}
                         styles={styles}
@@ -939,8 +947,8 @@ const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => (
                     <div>
                         <PatternTagField
                             label={t('Masculine Pattern', 'Mudell Mask.')}
-                            value={form.lemma_pattern || ''}
-                            onChange={v => set('lemma_pattern', v)}
+                            value={form.form_masc_pattern || ''}
+                            onChange={v => set('form_masc_pattern', v)}
                             placeholder="e.g. CVCVC"
                             presets={options?.patterns}
                             styles={styles}
@@ -1008,8 +1016,8 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
                     <div>
                         <PatternTagField
                             label={t('Masculine Pattern', 'Mudell Mask.')}
-                            value={form.lemma_pattern || ''}
-                            onChange={v => set('lemma_pattern', v)}
+                            value={form.form_masc_pattern || ''}
+                            onChange={v => set('form_masc_pattern', v)}
                             placeholder="e.g. CVCVC"
                             presets={options?.patterns}
                             styles={styles}
@@ -1040,8 +1048,8 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
                 <div>
                     <PatternTagField
                         label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                        value={form.morph_pattern || ''}
-                        onChange={v => set('morph_pattern', v)}
+                        value={form.form_plural_pattern || ''}
+                        onChange={v => set('form_plural_pattern', v)}
                         placeholder="e.g. CaCCaC, -ijet"
                         presets={options?.patterns}
                         styles={styles}
@@ -1176,7 +1184,7 @@ function MorphologyPresetSelector({
 }
 
 export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm }: EntryFormModalProps) {
-    const { getValues, getOptions } = useAdminConfig();
+    const { getValues, getOptions, createItem, updateItem, refresh, byCategoryAndKey } = useAdminConfig();
     const { mode, term } = useLinguisticMode();
     const { language, t } = useLanguage();
 
@@ -1193,6 +1201,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const CV_WIZEN_PATTERNS = getValues('cv_wizen_pattern');
     const BROKEN_PATTERNS = getValues('broken_pattern');
     const FEMININE_PATTERNS_RAW = getValues('feminine_pattern');
+    const DIMINUTIVE_PATTERNS_RAW = getValues('diminutive_pattern');
     const PARTICIPLE_NUANCES = useMemo(() => getOptions('participle_nuance', mode, language), [getOptions, mode, language]);
     const VERB_TRANSITIVITY_OPTIONS = useMemo(() => getOptions('verb_transitivity', mode, language), [getOptions, mode, language]);
     const PARTICIPLE_TYPES = useMemo(() => getOptions('participle_type', mode, language), [getOptions, mode, language]);
@@ -1200,9 +1209,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
 
     const nounPatterns = useMemo(() => {
-        return BROKEN_PATTERNS.filter((p: any) =>
-            !p.pos_types || p.pos_types.length === 0 || p.pos_types.includes('noun')
-        ).map((p: any) => ({
+        return BROKEN_PATTERNS.filter((p: any) => {
+            const matchesPos = !p.pos_types || p.pos_types.length === 0 || p.pos_types.includes('noun');
+            const matchesRole = !p.linguistic_role || p.linguistic_role === 'broken_plural';
+            return matchesPos && matchesRole;
+        }).map((p: any) => ({
             label: mode === 'standard' ? p.cv : p.wizen,
             value: p.cv,
             sub: mode === 'standard' ? p.wizen : p.cv
@@ -1210,9 +1221,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     }, [BROKEN_PATTERNS, mode]);
 
     const adjPatterns = useMemo(() => {
-        return BROKEN_PATTERNS.filter((p: any) =>
-            !p.pos_types || p.pos_types.length === 0 || p.pos_types.includes('adjective')
-        ).map((p: any) => ({
+        return BROKEN_PATTERNS.filter((p: any) => {
+            const matchesPos = !p.pos_types || p.pos_types.length === 0 || p.pos_types.includes('adjective');
+            const matchesRole = !p.linguistic_role || p.linguistic_role === 'broken_plural';
+            return matchesPos && matchesRole;
+        }).map((p: any) => ({
             label: mode === 'standard' ? p.cv : p.wizen,
             value: p.cv,
             sub: mode === 'standard' ? p.wizen : p.cv
@@ -1220,7 +1233,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     }, [BROKEN_PATTERNS, mode]);
 
     const femininePatterns = useMemo(() => {
-        return FEMININE_PATTERNS_RAW.map((p: any) => ({
+        return FEMININE_PATTERNS_RAW.filter((p: any) => {
+            return !p.linguistic_role || p.linguistic_role === 'feminine_singular';
+        }).map((p: any) => ({
             label: mode === 'standard' ? p.cv : p.wizen,
             value: p.cv,
             sub: mode === 'standard' ? p.wizen : p.cv
@@ -1228,12 +1243,12 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     }, [FEMININE_PATTERNS_RAW, mode]);
 
     const diminutivePatterns = useMemo(() => {
-        return [{
-            label: mode === 'standard' ? 'CCvjjvC' : 'fgħajjel',
-            value: 'CCvjjvC',
-            sub: mode === 'standard' ? 'fgħajjel' : 'CCvjjvC'
-        }];
-    }, [mode]);
+        return DIMINUTIVE_PATTERNS_RAW.map((p: any) => ({
+            label: mode === 'standard' ? p.cv : p.wizen,
+            value: p.cv,
+            sub: mode === 'standard' ? p.wizen : p.cv
+        }));
+    }, [DIMINUTIVE_PATTERNS_RAW, mode]);
 
     // Convert verb presets list to the Record format used by the component
     const VERB_PRESETS = useMemo(() => {
@@ -1247,6 +1262,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const isEdit = Boolean(entry);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
+    const [isMissingEntry, setIsMissingEntry] = useState(false);
     const [isLoadingFull, setIsLoadingFull] = useState(isEdit);
     const [originalForm, setOriginalForm] = useState<any>(null);
     const [idExists, setIdExists] = useState<boolean | null>(null);
@@ -1302,6 +1318,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 apiGetEntry(entry.id)
                     .then(res => {
                         if (res?.entry) {
+                            setIsMissingEntry(false);
                             const full = res.entry as any;
                             const parseArray = (val: any) => {
                                 if (typeof val === 'string' && val.trim().startsWith('[')) {
@@ -1313,53 +1330,57 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             setForm(prev => {
                                 const headword = full.headword || prev.headword;
                                 const pos = full.pos || prev.pos;
-
-                                const lemma_base = full.lemma_base || prev.lemma_base;
                                 const gender = resolveEntryGender(full) || resolveEntryGender(prev) || prev.gender || '';
+                                
                                 const inflections_pl_raw = parseArray(full.inflections_pl || prev.inflections_pl);
                                 const inflections_pl = Array.isArray(inflections_pl_raw) ? inflections_pl_raw.join(', ') : (inflections_pl_raw || '');
-                                const sound_suffix = full.sound_suffix || prev.sound_suffix;
-                                const morph_pattern = full.morph_pattern || prev.morph_pattern;
-                                const form_fem = full.form_fem || prev.form_fem;
-                                const form_masc = full.form_masc || prev.form_masc;
-                                const elative_form = full.elative_form || prev.elative_form;
-                                const dual_form = full.dual_form || prev.dual_form;
-                                const diminutive_form = full.diminutive_form || prev.diminutive_form;
-                                const vowel_set_sg = full.vowel_set_sg || prev.vowel_set_sg;
-                                const vowel_set_pl = full.vowel_set_pl || prev.vowel_set_pl;
-                                const vowel_set_opp = full.vowel_set_opp || prev.vowel_set_opp;
-                                const vowel_set_dual = full.vowel_set_dual || prev.vowel_set_dual;
-
+                                
+                                const raw_sound = full.sound_suffix || '';
+                                const raw_morph = full.form_plural_pattern || '';
                                 const hasBroken = inflections_pl?.length > 0;
-                                const hasSound = sound_suffix?.length > 0;
+                                const hasSound = raw_sound?.length > 0;
 
                                 const _pluralType = (hasBroken && hasSound) ? 'both'
                                     : hasBroken ? 'broken'
                                         : hasSound ? 'sound'
                                             : 'none';
 
-                                const _adjPluralType = (pos === 'adjective' && hasBroken) ? (morph_pattern ? 'broken' : 'sound') : 'none';
+                                const _adjPluralType = (pos === 'adjective' && hasBroken) ? (raw_morph ? 'broken' : 'sound') : 'none';
+
+                                const form_masc_pattern = full.form_masc_pattern || prev.form_masc_pattern;
+                                const form_fem_pattern = full.form_fem_pattern || prev.form_fem_pattern;
+                                const form_plural_pattern = full.form_plural_pattern || [raw_morph, raw_sound].filter(Boolean).join(', ') || prev.form_plural_pattern;
+                                const dual_pattern = full.dual_pattern || prev.dual_pattern;
+                                const elative_pattern = full.elative_pattern || prev.elative_pattern;
+                                const diminutive_pattern = full.diminutive_pattern || prev.diminutive_pattern;
+                                const cv_pattern = full.cv_pattern || prev.cv_pattern;
 
                                 return {
                                     ...prev,
                                     id: full.id || prev.id,
                                     headword,
                                     pos,
-                                    lemma_base,
+                                    lemma_base: full.lemma_base || prev.lemma_base,
                                     gender,
                                     inflections_pl,
-                                    sound_suffix,
-                                    morph_pattern,
-                                    form_fem,
-                                    form_masc,
-                                    elative_form,
-                                    dual_form,
-                                    diminutive_form,
-                                    vowel_set_sg,
-                                    vowel_set_pl,
-                                    vowel_set_opp,
-                                    vowel_set_dual,
-                                    _hasDual: !!dual_form,
+                                    sound_suffix: raw_sound,
+                                    form_fem: full.form_fem || prev.form_fem,
+                                    form_masc: full.form_masc || prev.form_masc,
+                                    elative_form: full.elative_form || prev.elative_form,
+                                    dual_form: full.dual_form || prev.dual_form,
+                                    diminutive_form: full.diminutive_form || prev.diminutive_form,
+                                    vowel_set_sg: full.vowel_set_sg || prev.vowel_set_sg,
+                                    vowel_set_pl: full.vowel_set_pl || prev.vowel_set_pl,
+                                    vowel_set_opp: full.vowel_set_opp || prev.vowel_set_opp,
+                                    vowel_set_dual: full.vowel_set_dual || prev.vowel_set_dual,
+                                    form_masc_pattern,
+                                    form_fem_pattern,
+                                    form_plural_pattern,
+                                    dual_pattern,
+                                    elative_pattern,
+                                    diminutive_pattern,
+                                    cv_pattern,
+                                    _hasDual: !!(full.dual_form || prev.dual_form),
                                     participle_type: full.participle_type || prev.participle_type,
                                     definitions: parseArray(full.definitions).length ? parseArray(full.definitions) : prev.definitions,
                                     tags: Array.isArray(full.tags) ? full.tags.join(', ')
@@ -1387,8 +1408,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     phonetics: parseArray(full.phonetics).length ? parseArray(full.phonetics) : prev.phonetics,
                                     etymology_chain: parseArray(full.etymology_chain).length ? parseArray(full.etymology_chain)
                                         : (full.etymologies?.[0]?.chain?.length ? full.etymologies[0].chain : prev.etymology_chain),
-                                    noun_type: full.noun_type || prev.noun_type,
-                                    cv_pattern: full.cv_pattern || full.cv_notation || prev.cv_pattern,
+                                    is_collective: Boolean(full.is_collective ?? prev.is_collective),
+                                    is_singulative: Boolean(full.is_singulative ?? prev.is_singulative),
                                     _inheritedPattern: !full.cv_pattern && (full.cv_notation || full.resolved_cv),
                                     synonyms: parseArray(full.synonyms || full.verb_morphology?.synonyms || full.noun_morphology?.synonyms),
                                     antonyms: parseArray(full.antonyms || full.verb_morphology?.antonyms || full.noun_morphology?.antonyms),
@@ -1411,9 +1432,21 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 };
                             });
                             setOriginalForm(full);
+                        } else {
+                            setIsMissingEntry(true);
+                            setError(t(
+                                'This entry no longer exists in the database. Use "Duplicate as New" to save your changes as a new entry.',
+                                'Din l-entrata m’għadhiex teżisti fid-database. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
+                            ));
                         }
                     })
-                    .catch(() => { })
+                    .catch(() => {
+                        setIsMissingEntry(true);
+                        setError(t(
+                            'This entry no longer exists in the database. Use "Duplicate as New" to save your changes as a new entry.',
+                            'Din l-entrata m’għadhiex teżisti fid-database. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
+                        ));
+                    })
                     .finally(() => setIsLoadingFull(false));
             });
         }
@@ -1589,7 +1622,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
                 // 1. Fundamental seeding
                 if (!next.lemma_base) next.lemma_base = prev.headword;
-                if (!next.lemma_pattern && prev.cv_pattern) next.lemma_pattern = prev.cv_pattern;
+                if (!next.form_masc_pattern && prev.cv_pattern) next.form_masc_pattern = prev.cv_pattern;
 
                 // 2. Gender-specific proactive sync
                 if (gender === 'masculine') {
@@ -1683,8 +1716,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
         if (isInvariable) {
             const tags = form.tags.split(',').map((s: string) => s.trim()).filter(Boolean);
-            if (!tags.includes('Invariable')) {
-                set('tags', [...tags, 'Invariable'].join(', '));
+            if (!tags.includes('$invariable')) {
+                set('tags', [...tags, '$invariable'].join(', '));
             }
         }
 
@@ -1726,7 +1759,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 if (next.gender?.toLowerCase() === 'feminine') {
                     next.form_fem_pattern = v;
                 } else {
-                    next.lemma_pattern = v;
+                    next.form_masc_pattern = v;
                 }
             }
 
@@ -1735,10 +1768,14 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 // When switching gender, also ensure the headword is synced to the new base
                 if (v?.toLowerCase() === 'feminine') {
                     next.form_fem = next.headword;
-                    if (next.form_fem_pattern) next.cv_pattern = next.form_fem_pattern;
+                    if (next.form_fem_pattern) {
+                        next.cv_pattern = next.form_fem_pattern;
+                    }
                 } else {
                     next.lemma_base = next.headword;
-                    if (next.lemma_pattern) next.cv_pattern = next.lemma_pattern;
+                    if (next.form_masc_pattern) {
+                        next.cv_pattern = next.form_masc_pattern;
+                    }
                 }
             }
 
@@ -1771,6 +1808,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             setError(t('Headword is required', 'Mamma meħtieġa'));
             return;
         }
+        if (isEdit && isMissingEntry) {
+            setError(t(
+                'This entry no longer exists in the database. Use "Duplicate as New" to save your changes as a new entry.',
+                'Din l-entrata m’għadhiex teżisti fid-database. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
+            ));
+            return;
+        }
 
         // Normalise POS to lowercase for DB compatibility
         const currentPos = normalizedPos;
@@ -1801,9 +1845,61 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 }
             }
 
+            const patternsToSync = [
+                { category: 'cv_wizen_pattern', key: form.cv_pattern },
+                { category: 'feminine_pattern', key: form.form_fem_pattern },
+                ...((form.form_plural_pattern || '').split(',')
+                    .map((s: string) => s.trim())
+                    .filter((s: string) => s && !s.startsWith('-'))
+                    .map((s: string) => ({ category: 'broken_pattern', key: s })))
+            ];
+
+            for (const item of patternsToSync) {
+                if (!item.key?.trim()) continue;
+                
+                const catMap = byCategoryAndKey.get(item.category);
+                const existing = catMap?.get(item.key.toLowerCase());
+                const currentPos = normalizedPos;
+
+                if (!existing) {
+                    try {
+                        await createItem({
+                            category: item.category,
+                            key: item.key,
+                            value: item.category === 'cv_wizen_pattern' 
+                                ? { cv: item.key, wizen: '', stress: 2, pos_types: [currentPos] }
+                                : { cv: item.key, wizen: '', pos_types: [currentPos] }
+                        });
+                    } catch (e) {
+                        console.error(`Failed to register ${item.category}:`, e);
+                    }
+                } else if (existing.id) {
+                    try {
+                        const val = typeof existing.value === 'string' ? JSON.parse(existing.value) : (existing.value || {});
+                        const pos_types = val.pos_types || [];
+                        if (!pos_types.includes(currentPos)) {
+                            await updateItem({
+                                ...existing,
+                                value: { ...val, pos_types: [...pos_types, currentPos] }
+                            });
+                        }
+                    } catch (e) {
+                        console.error(`Failed to update ${item.category}:`, e);
+                    }
+                }
+            }
+            refresh();
+
             onSaved();
         } catch (err: any) {
             let msg = err.message;
+            if (msg.includes('ENTRY_NOT_FOUND')) {
+                setIsMissingEntry(true);
+                msg = t(
+                    'This entry no longer exists in the database. Use "Duplicate as New" to save your changes as a new entry.',
+                    'Din l-entrata m’għadhiex teżisti fid-database. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
+                );
+            }
             if (msg.includes('FOREIGN KEY constraint failed')) {
                 msg = t(
                     'Database error: A referenced item (e.g. the Entry itself) was not found. If this is a mock entry, please use "Duplicate as New" instead of "Save Changes".',
@@ -1860,14 +1956,19 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         }
 
         if (!conjugationPreview) return;
-        const ptcpPass = conjugationPreview.passiveParticiple || '';
-        const ptcpAct = conjugationPreview.activeParticiple || '';
-        const vn = conjugationPreview.verbalNoun || '';
+        const ptcpPass = (conjugationPreview as any).passiveParticiple || '';
+        const ptcpAct = (conjugationPreview as any).activeParticiple || '';
+        const vn = (conjugationPreview as any).verbalNoun || '';
+        const perf3sgm = (conjugationPreview as any).perfective_3sg_m || (conjugationPreview as any).perfect || '';
+        const impf3sgm = (conjugationPreview as any).imperfective_3sg_m || (conjugationPreview as any).imperfect || '';
+
         setForm((f: any) => ({
             ...f,
             verb_verbal_noun: f.verb_verbal_noun || (vn !== '-' ? vn : ''),
             verb_passive_ptcp: f.verb_passive_ptcp || (ptcpPass !== '-' ? ptcpPass : ''),
-            verb_active_ptcp: f.verb_active_ptcp || (ptcpAct !== '-' ? ptcpAct : '')
+            verb_active_ptcp: f.verb_active_ptcp || (ptcpAct !== '-' ? ptcpAct : ''),
+            verb_perfective_3sgm: f.verb_perfective_3sgm || perf3sgm,
+            verb_imperfective_3sgm: f.verb_imperfective_3sgm || impf3sgm
         }));
     };
 
@@ -1886,11 +1987,19 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             title={isEdit ? t('Edit Entry', 'Editja l-Entrata') : t('New Entry', 'Entrata Ġdida')}
             size="xl"
         >
-            <div className="flex flex-col h-full overflow-hidden">
-                <div className="flex-1 overflow-y-auto pr-2 space-y-8 p-1">
+            <div className="flex flex-col h-full min-h-0 overflow-hidden">
+                <div className="flex-1 min-h-0 overflow-y-auto pr-2 space-y-8 p-1">
                     {isLoadingFull && (
                         <div className="absolute inset-0 z-50 bg-white/50 backdrop-blur-[1px] flex items-center justify-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1034A6]"></div>
+                        </div>
+                    )}
+                    {isEdit && isMissingEntry && (
+                        <div className="bg-amber-50 text-amber-900 border border-amber-200 rounded px-3 py-2 text-sm">
+                            {t(
+                                'This entry no longer exists in the database. Use "Duplicate as New" to save your changes as a new entry.',
+                                'Din l-entrata m’għadhiex teżisti fid-database. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
+                            )}
                         </div>
                     )}
                     {error && (
@@ -2549,47 +2658,85 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         )}
                 </div>
 
-                <div className="flex justify-between items-center pt-4 mt-4 border-t border-black/10 shrink-0">
+                <div className="flex justify-between items-center pt-4 mt-4 border-t border-black/10 bg-white px-1 shrink-0">
                     <div className="flex items-center gap-3">
-                        {isEdit && (
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                size="sm"
-                                className="text-xs"
-                                loading={saving}
-                                onClick={async () => {
-                                    setSaving(true);
-                                    try {
-                                        const token = await getToken();
-                                        if (!token) throw new Error("Not authenticated");
-                                        const payload = formToPayload(form);
-                                        await adminCreateEntry(token, payload);
-                                        onSaved();
-                                    } catch (err: any) {
-                                        setError(err.message);
-                                    } finally {
-                                        setSaving(false);
-                                    }
-                                }}
-                            >
-                                <Plus size={14} className="mr-1" /> {t('Duplicate as New', 'Ikkopja bħala Ġdid')}
-                            </Button>
-                        )}
-                        {isDirty && (
-                            <Badge className="bg-amber-100 text-amber-700 animate-pulse border-amber-200">
-                                <AlertTriangle size={10} className="mr-1" /> {t('Unsaved Changes', 'Tibdil mhux merfugħ')}
-                            </Badge>
-                        )}
+                                    {isEdit && (
+                                        <Button
+                                            type="button"
+                                            variant="secondary"
+                                            size="sm"
+                                            className="text-xs"
+                                            loading={saving}
+                                            onClick={async () => {
+                                                setSaving(true);
+                                                setError('');
+                                                try {
+                                                    const token = await getToken();
+                                                    if (!token) throw new Error("Not authenticated");
+                                                    const currentPos = normalizedPos;
+                                                    const payload = formToPayload({
+                                                        ...form,
+                                                        pos: currentPos
+                                                    });
+                                                    if (entry && payload.id === entry.id) {
+                                                        delete payload.id;
+                                                    }
+                                                    await adminCreateEntry(token, payload);
+                                                    
+                                                    const syncList = [
+                                                        { category: 'cv_wizen_pattern', key: form.cv_pattern },
+                                                        { category: 'feminine_pattern', key: form.form_fem_pattern },
+                                                        ...((form.form_plural_pattern || '').split(',')
+                                                            .map((s: string) => s.trim())
+                                                            .filter((s: string) => s && !s.startsWith('-'))
+                                                            .map((s: string) => ({ category: 'broken_pattern', key: s })))
+                                                    ];
+
+                                                    for (const syncItem of syncList) {
+                                                        if (!syncItem.key?.trim()) continue;
+                                                        const catMap = byCategoryAndKey.get(syncItem.category);
+                                                        const existing = catMap?.get(syncItem.key.toLowerCase());
+                                                        if (!existing) {
+                                                            try {
+                                                                await createItem({
+                                                                    category: syncItem.category,
+                                                                    key: syncItem.key,
+                                                                    value: syncItem.category === 'cv_wizen_pattern'
+                                                                        ? { cv: syncItem.key, wizen: '', stress: 2, pos_types: [currentPos] }
+                                                                        : { cv: syncItem.key, wizen: '', pos_types: [currentPos] }
+                                                                });
+                                                            } catch (e) {
+                                                                console.error(`Failed to register ${syncItem.category} during duplication:`, e);
+                                                            }
+                                                        }
+                                                    }
+                                                    refresh();
+
+                                                    onSaved();
+                                                } catch (err: any) {
+                                                    setError(err.message);
+                                                } finally {
+                                                    setSaving(false);
+                                                }
+                                            }}
+                                        >
+                                            <Plus size={14} className="mr-1" /> {t('Duplicate as New', 'Ikkopja bħala Ġdid')}
+                                        </Button>
+                                    )}
+                                    {isDirty && (
+                                        <Badge className="bg-amber-100 text-amber-700 animate-pulse border-amber-200">
+                                            <AlertTriangle size={10} className="mr-1" /> {t('Unsaved Changes', 'Tibdil mhux merfugħ')}
+                                        </Badge>
+                                    )}
                     </div>
                     <div className="flex gap-3">
                         <Button type="button" variant="ghost" onClick={handleClose}>{t('Cancel', 'Ikkanċella')}</Button>
-                        <Button type="button" onClick={handleSave} loading={saving}>
+                        <Button type="button" onClick={handleSave} loading={saving} disabled={isEdit && isMissingEntry}>
                             {isEdit ? t('Save Changes', 'Issejva l-Bidliet') : t('Create Entry', 'Oħloq Entrata')}
                         </Button>
                     </div>
                 </div>
-            </div >
-        </Modal >
+            </div>
+        </Modal>
     );
 }

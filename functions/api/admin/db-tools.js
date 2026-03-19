@@ -4,7 +4,7 @@
  * Provides: SQL Console, Data Export, Integrity Check, Bulk Update, Merge Roots, Table Info
  */
 
-import { createClient } from '@libsql/client/web';
+import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
 
 // ── Auth guard (same pattern as entries.js) ───────────────────────────────────
 async function verifyAdmin(request, env) {
@@ -30,13 +30,6 @@ async function verifyAdmin(request, env) {
     } catch { return false; }
 }
 
-function db(env) {
-    const url = env.TURSO_URL || env.VITE_TURSO_URL;
-    const authToken = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
-    if (!url) throw new Error('TURSO_URL missing');
-    return createClient({ url, authToken });
-}
-
 // ── Dangerous SQL patterns ────────────────────────────────────────────────────
 const WRITE_PATTERNS = /^\s*(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|REPLACE|ATTACH|DETACH|REINDEX|VACUUM|PRAGMA\s+\w+\s*=)/i;
 
@@ -48,7 +41,7 @@ export async function onRequestPost({ request, env }) {
         const body = await request.json();
         const { action } = body;
 
-        const client = db(env);
+        const client = getDbClient(env);
 
         switch (action) {
             case 'query':
@@ -69,7 +62,8 @@ export async function onRequestPost({ request, env }) {
                 return json({ error: `Unknown action: ${action}` }, 400);
         }
     } catch (e) {
-        return json({ error: e.message }, 500);
+        const { status, body } = toApiErrorPayload(e);
+        return json(body, status);
     }
 }
 

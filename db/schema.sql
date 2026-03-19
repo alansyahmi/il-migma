@@ -34,12 +34,37 @@ CREATE INDEX IF NOT EXISTS idx_roots_consonants ON roots(consonants);
 -- ─── Patterns ─────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS patterns (
   id              TEXT PRIMARY KEY,
-  cv_notation     TEXT NOT NULL UNIQUE,  -- e.g. "CaCaC"
+  cv_notation     TEXT NOT NULL,         -- e.g. "CaCaC"
   wizen_notation  TEXT NOT NULL,         -- e.g. "Fagħal" (Arabised)
+  description     TEXT,                  -- linguistic notes
   example_word    TEXT,
   tags            TEXT,                  -- JSON array
   created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_patterns_cv_wizen_unique
+  ON patterns(cv_notation, wizen_notation);
+CREATE INDEX IF NOT EXISTS idx_patterns_cv
+  ON patterns(cv_notation);
+
+-- ─── Pattern Applicability ────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS pattern_applicability (
+  id              TEXT PRIMARY KEY,
+  pattern_id      TEXT NOT NULL REFERENCES patterns(id) ON DELETE CASCADE,
+  category        TEXT NOT NULL,         -- e.g. "broken_plural", "sound_plural"
+  pos             TEXT NOT NULL,         -- e.g. "noun", "adjective", "verb" or "all"
+  stress          INTEGER,               -- syllable from end
+  is_active       INTEGER DEFAULT 1,
+  sort_order      INTEGER DEFAULT 0,
+  linguistic_role TEXT,                  -- explicit role e.g. "feminine_singular"
+  gender          TEXT,                  -- target gender e.g. "feminine"
+  created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_pa_pattern ON pattern_applicability(pattern_id);
+CREATE INDEX IF NOT EXISTS idx_pa_category ON pattern_applicability(category);
+CREATE INDEX IF NOT EXISTS idx_pa_pos_role ON pattern_applicability(pos, linguistic_role);
 
 -- ─── Root-Pattern Junction ─────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS root_pattern_forms (

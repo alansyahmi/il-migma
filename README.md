@@ -94,6 +94,16 @@ VITE_CLERK_PUBLISHABLE_KEY=<clerk_publishable_key>
 GEMINI_API_KEY=<gemini_key_if_using_chat>
 ```
 
+For `wrangler pages dev` (`npm run dev:api`), copy `.dev.vars.example` to `.dev.vars` and set Worker runtime vars:
+
+```bash
+TURSO_URL=libsql://<your-db>.turso.io
+TURSO_AUTH_TOKEN=<token>
+CLERK_SECRET_KEY=dummy
+```
+
+`file://` database URLs are not supported by the Worker runtime. Use remote `libsql://` or `https://` when running the API locally with Wrangler.
+
 ### 3) Run the frontend
 
 ```bash

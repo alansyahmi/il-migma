@@ -3,8 +3,8 @@
  * Protected by Clerk JWT verification.
  */
 
-import { createClient } from '@libsql/client/web';
-import { validateAndNormalize } from './configSchema';
+import { validateAndNormalize } from './configSchema.js';
+import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
 async function verifyAdmin(request, env) {
@@ -38,12 +38,6 @@ async function verifyAdmin(request, env) {
     }
 }
 
-function db(env) {
-    const url = env.TURSO_URL || env.VITE_TURSO_URL;
-    const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
-    return createClient({ url, authToken: token });
-}
-
 function json(data, status = 200) {
     return new Response(JSON.stringify(data), {
         status,
@@ -58,13 +52,44 @@ function unauthorized() {
     return json({ error: 'Unauthorized — admin role required' }, 401);
 }
 
+function internalError(err) {
+    const { status, body } = toApiErrorPayload(err);
+    return json(body, status);
+}
+
+function normalizePosTypes(rawPosTypes) {
+    let parsed = rawPosTypes;
+    if (typeof parsed === 'string') {
+        try {
+            parsed = JSON.parse(parsed);
+        } catch {
+            parsed = [];
+        }
+    }
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(p => typeof p === 'string' && p !== 'all');
+}
+
+function parsePatternCompositeId(id) {
+    if (!id || typeof id !== 'string') return null;
+    const firstSep = id.indexOf('_');
+    const lastSep = id.lastIndexOf('_');
+    if (firstSep <= 0 || lastSep <= firstSep) return null;
+
+    return {
+        patternId: id.slice(0, firstSep),
+        category: id.slice(firstSep + 1, lastSep),
+        suffix: id.slice(lastSep + 1), // stress number, pos token, or "all"
+    };
+}
+
 // ── GET — list config ────────────────────────────────────────────────────────
 export async function onRequestGet({ request, env }) {
     try {
         const url = new URL(request.url);
         const category = url.searchParams.get('category');
 
-        const client = db(env);
+        const client = getDbClient(env);
 
         // Normalized Query for Patterns
         const patternSql = `
@@ -77,6 +102,9 @@ export async function onRequestGet({ request, env }) {
                     'cv', p.cv_notation,
                     'wizen', p.wizen_notation,
                     'stress', pa.stress,
+                    'description', p.description,
+                    'linguistic_role', pa.linguistic_role,
+                    'gender', pa.gender,
                     'pos_types', (
                         SELECT json_group_array(pos) 
                         FROM pattern_applicability 
@@ -93,21 +121,30 @@ export async function onRequestGet({ request, env }) {
 
         let patterns = [];
         if (!category || normalizedCategories.includes(category)) {
-            const filterSql = category ? `${patternSql} AND pa.category = ?` : patternSql;
-            const res = await client.execute({ 
-                sql: `${filterSql} GROUP BY pa.pattern_id, pa.category, pa.stress`, 
-                args: category ? [category] : [] 
-            });
-            patterns = res.rows.map(row => ({
-                id: `${row.patternId}_${row.category}_${row.stress}`,
-                category: row.category,
-                key: row.key,
-                value: JSON.stringify({
-                    ...JSON.parse(row.value),
-                    pos_types: JSON.parse(JSON.parse(row.value).pos_types).filter(p => p !== 'all' && p !== null)
-                }),
-                sort_order: row.sort_order
-            }));
+            try {
+                const filterSql = category ? `${patternSql} AND pa.category = ?` : patternSql;
+                const res = await client.execute({ 
+                    sql: `${filterSql} GROUP BY pa.pattern_id, pa.category, pa.stress`, 
+                    args: category ? [category] : [] 
+                });
+                patterns = res.rows.map(row => ({
+                    // Standardized ID: patternId_category_stress
+                    id: `${row.patternId}_${row.category}_${row.stress}`,
+                    category: row.category,
+                    key: row.key,
+                    value: JSON.stringify((() => {
+                        const parsed = typeof row.value === 'string' ? JSON.parse(row.value) : (row.value || {});
+                        return {
+                            ...parsed,
+                            pos_types: normalizePosTypes(parsed.pos_types),
+                        };
+                    })()),
+                    sort_order: row.sort_order
+                }));
+            } catch (pErr) {
+                console.error('Pattern query failed (missing tables?):', pErr.message);
+                // Fallback: stay empty, legacyRes will catch any patterns still in admin_config
+            }
         }
 
         // Legacy Query for everything else
@@ -129,7 +166,7 @@ export async function onRequestGet({ request, env }) {
 
         return json({ config });
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -149,29 +186,36 @@ export async function onRequestPost({ request, env }) {
             return json({ error: `Validation failed: ${err.message}` }, 400);
         }
 
-        const client = db(env);
+        const client = getDbClient(env);
         const id = Math.random().toString(36).slice(2, 11);
 
         const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'adjective_pattern'];
         if (normalizedCategories.includes(category)) {
             const cv = value.cv;
             const wizen = value.wizen;
-            const patternId = btoa(`${cv}|${wizen}`).replace(/=/g, '');
+            const patternId = btoa(encodeURIComponent(`${cv}|${wizen}`)).replace(/=/g, '');
 
-            // Insert pattern
+            // Upsert pattern without delete/reinsert semantics to preserve FK chains.
             await client.execute({
-                sql: `INSERT OR IGNORE INTO patterns (id, cv_notation, wizen_notation) VALUES (?, ?, ?)`,
-                args: [patternId, cv, wizen]
+                sql: `INSERT INTO patterns (id, cv_notation, wizen_notation, description)
+                      VALUES (?, ?, ?, ?)
+                      ON CONFLICT(id) DO UPDATE SET
+                        cv_notation = excluded.cv_notation,
+                        wizen_notation = excluded.wizen_notation,
+                        description = excluded.description`,
+                args: [patternId, cv, wizen, value.description]
             });
 
             // Insert applicability (one for each POS, or 'all')
             const posTypes = value.pos_types?.length > 0 ? value.pos_types : ['all'];
+            const stress = Number.isFinite(Number(value.stress)) ? Number(value.stress) : null;
             for (const pos of posTypes) {
-                const appId = `${patternId}_${category}_${pos}`;
+                const stressToken = stress === null ? 'null' : String(stress);
+                const appId = `${patternId}_${category}_${stressToken}_${pos}`;
                 await client.execute({
-                    sql: `INSERT OR REPLACE INTO pattern_applicability (id, pattern_id, category, pos, stress, sort_order)
-                          VALUES (?, ?, ?, ?, ?, ?)`,
-                    args: [appId, patternId, category, pos, value.stress, sort_order]
+                    sql: `INSERT OR REPLACE INTO pattern_applicability (id, pattern_id, category, pos, stress, sort_order, linguistic_role, gender)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                    args: [appId, patternId, category, pos, stress, sort_order, value.linguistic_role, value.gender]
                 });
             }
             return json({ id: patternId, created: true }, 201);
@@ -185,7 +229,7 @@ export async function onRequestPost({ request, env }) {
 
         return json({ id, created: true }, 201);
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -198,7 +242,7 @@ export async function onRequestPut({ request, env }) {
         let { id, category, key, value, sort_order } = body;
         if (!id) return json({ error: 'id required' }, 400);
 
-        const client = db(env);
+        const client = getDbClient(env);
 
         const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'adjective_pattern'];
         if (category && normalizedCategories.includes(category)) {
@@ -211,35 +255,56 @@ export async function onRequestPut({ request, env }) {
 
             const cv = value.cv;
             const wizen = value.wizen;
-            const patternId = btoa(`${cv}|${wizen}`).replace(/=/g, '');
+            const patternId = btoa(encodeURIComponent(`${cv}|${wizen}`)).replace(/=/g, '');
 
-            // 1. Ensure pattern exists
+            // 1. Ensure pattern exists (safe upsert, no cascading delete side-effects).
             await client.execute({
-                sql: `INSERT OR IGNORE INTO patterns (id, cv_notation, wizen_notation) VALUES (?, ?, ?)`,
-                args: [patternId, cv, wizen]
+                sql: `INSERT INTO patterns (id, cv_notation, wizen_notation, description)
+                      VALUES (?, ?, ?, ?)
+                      ON CONFLICT(id) DO UPDATE SET
+                        cv_notation = excluded.cv_notation,
+                        wizen_notation = excluded.wizen_notation,
+                        description = excluded.description`,
+                args: [patternId, cv, wizen, value.description]
             });
 
-            // 2. Delete old applicability group
-            // Old ID format was patternId_category_stress
-            const [oldPatternId, oldCat, oldStress] = id.split('_');
-            if (oldPatternId && oldCat && oldStress) {
-                await client.execute({ 
-                    sql: `DELETE FROM pattern_applicability WHERE pattern_id = ? AND category = ? AND stress = ?`, 
-                    args: [oldPatternId, oldCat, parseInt(oldStress)] 
-                });
-            } else {
-                // Fallback for direct ID delete if format doesn't match
-                await client.execute({ sql: `DELETE FROM pattern_applicability WHERE id = ?`, args: [id] });
+            // 2. Delete old applicability group (supports both grouped IDs and row IDs)
+            const parsed = parsePatternCompositeId(id);
+            if (parsed) {
+                if (parsed.suffix === 'all') {
+                    await client.execute({
+                        sql: `DELETE FROM pattern_applicability WHERE pattern_id = ? AND category = ?`,
+                        args: [parsed.patternId, parsed.category]
+                    });
+                } else {
+                    const parsedStress = Number(parsed.suffix);
+                    if (Number.isFinite(parsedStress)) {
+                        await client.execute({
+                            sql: `DELETE FROM pattern_applicability WHERE pattern_id = ? AND category = ? AND stress = ?`,
+                            args: [parsed.patternId, parsed.category, parsedStress]
+                        });
+                    } else {
+                        await client.execute({
+                            sql: `DELETE FROM pattern_applicability WHERE pattern_id = ? AND category = ? AND pos = ?`,
+                            args: [parsed.patternId, parsed.category, parsed.suffix]
+                        });
+                    }
+                }
             }
+            
+            // Always try deleting the specific exact ID as fallback
+            await client.execute({ sql: `DELETE FROM pattern_applicability WHERE id = ?`, args: [id] });
 
             // 3. Insert new applicability (one for each POS)
             const posTypes = value.pos_types?.length > 0 ? value.pos_types : ['all'];
+            const stress = Number.isFinite(Number(value.stress)) ? Number(value.stress) : null;
             for (const pos of posTypes) {
-                const appId = `${patternId}_${category}_${pos}`; // Internal DB unique ID
+                const stressToken = stress === null ? 'null' : String(stress);
+                const appId = `${patternId}_${category}_${stressToken}_${pos}`; // Internal DB unique ID
                 await client.execute({
-                    sql: `INSERT OR REPLACE INTO pattern_applicability (id, pattern_id, category, pos, stress, sort_order)
-                          VALUES (?, ?, ?, ?, ?, ?)`,
-                    args: [appId, patternId, category, pos, value.stress, sort_order]
+                    sql: `INSERT OR REPLACE INTO pattern_applicability (id, pattern_id, category, pos, stress, sort_order, linguistic_role, gender)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                    args: [appId, patternId, category, pos, stress, sort_order, value.linguistic_role, value.gender]
                 });
             }
             return json({ id: `${patternId}_${category}_${value.stress}`, updated: true });
@@ -266,7 +331,7 @@ export async function onRequestPut({ request, env }) {
 
         return json({ id, updated: true });
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -279,18 +344,37 @@ export async function onRequestDelete({ request, env }) {
         const id = url.searchParams.get('id');
         if (!id) return json({ error: 'id required' }, 400);
 
-        const client = db(env);
+        const client = getDbClient(env);
         
-        // Try deleting from normalized tables first
-        // If it's a composite ID patternId_category_stress
-        const [patternId, cat, stress] = id.split('_');
-        if (patternId && cat && stress) {
-            const appRes = await client.execute({ 
-                sql: `DELETE FROM pattern_applicability WHERE pattern_id = ? AND category = ? AND stress = ?`, 
-                args: [patternId, cat, parseInt(stress)] 
-            });
-            if (appRes.rowsAffected > 0) {
-                return json({ id, deleted: true });
+        const parsed = parsePatternCompositeId(id);
+        if (parsed) {
+            if (parsed.suffix === 'all') {
+                const appRes = await client.execute({
+                    sql: `DELETE FROM pattern_applicability WHERE pattern_id = ? AND category = ?`,
+                    args: [parsed.patternId, parsed.category]
+                });
+                if (appRes.rowsAffected > 0) {
+                    return json({ id, deleted: true });
+                }
+            } else {
+                const parsedStress = Number(parsed.suffix);
+                if (Number.isFinite(parsedStress)) {
+                    const appRes = await client.execute({
+                        sql: `DELETE FROM pattern_applicability WHERE pattern_id = ? AND category = ? AND stress = ?`,
+                        args: [parsed.patternId, parsed.category, parsedStress]
+                    });
+                    if (appRes.rowsAffected > 0) {
+                        return json({ id, deleted: true });
+                    }
+                } else {
+                    const appRes = await client.execute({
+                        sql: `DELETE FROM pattern_applicability WHERE pattern_id = ? AND category = ? AND pos = ?`,
+                        args: [parsed.patternId, parsed.category, parsed.suffix]
+                    });
+                    if (appRes.rowsAffected > 0) {
+                        return json({ id, deleted: true });
+                    }
+                }
             }
         }
 
@@ -303,7 +387,7 @@ export async function onRequestDelete({ request, env }) {
 
         return json({ id, deleted: true });
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 

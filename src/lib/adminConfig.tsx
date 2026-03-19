@@ -64,7 +64,7 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         setLoading(true);
         try {
             const token = await getToken().catch(() => null);
-            const res = await adminListConfig(token || '');
+            const res = await adminListConfig(token || '', undefined, Date.now());
             const parsed = res.config.map(item => ({
                 ...item,
                 value: typeof item.value === 'string' ? JSON.parse(item.value) : item.value

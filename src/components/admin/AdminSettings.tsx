@@ -4,24 +4,59 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Spinner';
 import { Modal } from '@/components/ui/Modal';
-import { Plus, Trash2, Edit2, RotateCcw, Save, Settings, HelpCircle, Keyboard, GripVertical, Languages, Braces } from 'lucide-react';
+import { Plus, Trash2, Edit2, RotateCcw, Save, Settings, HelpCircle, Keyboard, GripVertical, Languages, Braces, Search, Filter, Info, Tag } from 'lucide-react';
 import { useUser } from '@clerk/clerk-react';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 
+import { TERMINOLOGY } from '@/lib/terminology';
 import { CATEGORIES, getCategoryById } from '@/lib/adminCategoryRegistry';
+import { Download, Upload, CheckCircle2, XCircle } from 'lucide-react';
 
 export function AdminSettings() {
-    const { config, loading, getCategoryItems, deleteItem, createItem, updateItem } = useAdminConfig();
+    const { config, loading, getCategoryItems, deleteItem, createItem, updateItem, refresh } = useAdminConfig();
     const [activeTab, setActiveTab] = useState('pos');
     const [editItem, setEditItem] = useState<ConfigItem | null>(null);
     const [showAdd, setShowAdd] = useState(false);
     const [posFilter, setPosFilter] = useState<string>('all');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [roleFilter, setRoleFilter] = useState<string>('all');
     const { language, setLanguage, t } = useLanguage();
     const { mode, setMode, term } = useLinguisticMode();
     const { user } = useUser();
+    const [syncLoading, setSyncLoading] = useState(false);
+    const [syncResult, setSyncResult] = useState<{ success?: number, errors?: string[] } | null>(null);
+
+    const summarizeRawError = (raw: string): string => {
+        const trimmed = raw?.trim() || '';
+        if (!trimmed) return '';
+        const lower = trimmed.toLowerCase();
+        if (!lower.startsWith('<!doctype html') && !lower.startsWith('<html')) {
+            return trimmed;
+        }
+        try {
+            const doc = new DOMParser().parseFromString(trimmed, 'text/html');
+            const msgNode = doc.querySelector('#error-message span:last-child');
+            const titleNode = doc.querySelector('#error-title');
+            const text = msgNode?.textContent?.trim() || titleNode?.textContent?.trim() || '';
+            return text ? `Server HTML error: ${text}` : 'Server returned an HTML error page (see dev API logs).';
+        } catch {
+            return 'Server returned an HTML error page (see dev API logs).';
+        }
+    };
+
+    const buildErrorLines = (data: any, raw: string, fallback: string): string[] => {
+        const lines: string[] = [];
+        if (data?.error) lines.push(String(data.error));
+        else if (raw?.trim()) lines.push(summarizeRawError(raw));
+        else lines.push(fallback);
+        if (data?.code) lines.push(`Code: ${data.code}`);
+        if (data?.upstream_status) lines.push(`Upstream status: ${data.upstream_status}`);
+        if (data?.hint) lines.push(`Hint: ${data.hint}`);
+        return lines;
+    };
 
     // Reordering state
     const [categoryOrder, setCategoryOrder] = useState<string[]>([]);
@@ -104,6 +139,156 @@ export function AdminSettings() {
             await deleteItem(id);
         } catch (e: any) {
             alert(e.message);
+        }
+    };
+
+    const handleExportTerminology = async () => {
+        setSyncLoading(true);
+        try {
+            const token = await (window as any).Clerk?.session?.getToken();
+            const res = await fetch('/api/admin/sync-terminology', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const raw = await res.text();
+            let data: any = null;
+            try {
+                data = JSON.parse(raw);
+            } catch {
+                data = null;
+            }
+
+            if (!res.ok || data?.error) {
+                const lines = buildErrorLines(data, raw, 'Export failed');
+                throw new Error(lines.join('\n'));
+            }
+
+            if (!data?.terminology || typeof data.terminology !== 'object') {
+                throw new Error('Export response did not include a valid terminology object');
+            }
+
+            // Create TS snippet
+            const tsSnippet = `export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabised: string }> = ${JSON.stringify(data.terminology, null, 4)};`;
+            
+            const blob = new Blob([tsSnippet], { type: 'text/typescript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'terminology_export.ts';
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch (e: any) {
+            alert('Export failed: ' + e.message);
+        } finally {
+            setSyncLoading(false);
+        }
+    };
+
+    const handleImportTerminology = async () => {
+        if (!confirm('This will upsert labels from the in-code TERMINOLOGY into the database. Existing database labels for these keys will be overwritten. Proceed?')) return;
+        
+        setSyncLoading(true);
+        setSyncResult(null);
+        try {
+            const token = await (window as any).Clerk?.session?.getToken();
+            const res = await fetch('/api/admin/sync-terminology', {
+                method: 'POST',
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ terminology: TERMINOLOGY })
+            });
+            const raw = await res.text();
+            let data: any = null;
+            try {
+                data = JSON.parse(raw);
+            } catch {
+                data = null;
+            }
+
+            if (!res.ok) {
+                throw new Error(buildErrorLines(data, raw, 'Import failed').join('\n'));
+            }
+
+            if (!data) {
+                throw new Error('Import response was not JSON');
+            }
+
+            if (data.error) {
+                throw new Error(buildErrorLines(data, raw, 'Import failed').join('\n'));
+            }
+
+            const upserted = data.upserted || 0;
+            const errors = Array.isArray(data.errors) ? data.errors : [];
+            if (upserted === 0 && errors.length === 0) {
+                throw new Error('Import returned 0 upserted rows. Check API connectivity and terminology payload.');
+            }
+
+            setSyncResult({ success: upserted, errors });
+            
+            if (data.upserted > 0) {
+                await refresh();
+            }
+        } catch (e: any) {
+            const msg = String(e?.message || 'Import failed');
+            setSyncResult({ errors: msg.split('\n').map(s => s.trim()).filter(Boolean) });
+        } finally {
+            setSyncLoading(false);
+        }
+    };
+
+    const handleSyncPatterns = async () => {
+        if (!confirm('This will scan all dictionary entries and add any new patterns to the registry. Proceed?')) return;
+        
+        setSyncLoading(true);
+        setSyncResult(null);
+        try {
+            const token = await (window as any).Clerk?.session?.getToken();
+            const res = await fetch('/api/admin/migrate-patterns', {
+                method: 'POST',
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'sync-from-entries', commit: true })
+            });
+            const raw = await res.text();
+            let data: any = null;
+            try {
+                data = JSON.parse(raw);
+            } catch {
+                data = null;
+            }
+
+            if (!res.ok) {
+                throw new Error(buildErrorLines(data, raw, 'Sync failed').join('\n'));
+            }
+
+            if (!data) {
+                throw new Error('Sync response was not JSON');
+            }
+
+            if (data.error) {
+                throw new Error(buildErrorLines(data, raw, 'Sync failed').join('\n'));
+            }
+
+            const added = Number(data.added || 0);
+            const errors = Array.isArray(data.errors) ? data.errors.map((e: unknown) => String(e)) : [];
+            const skipped = Number(data.skipped || 0);
+
+            if (errors.length > 0 && added === 0) {
+                throw new Error(errors.join('\n'));
+            }
+
+            setSyncResult({ success: added, errors });
+            if (added > 0 || skipped > 0) {
+                refresh();
+            }
+        } catch (e: any) {
+            const msg = String(e?.message || 'Sync failed');
+            setSyncResult({ errors: msg.split('\n').map(s => s.trim()).filter(Boolean) });
+        } finally {
+            setSyncLoading(false);
         }
     };
 
@@ -208,7 +393,54 @@ export function AdminSettings() {
                     <h2 className="text-xl font-bold text-black flex items-center gap-2">
                         {CATEGORIES.find(c => c.id === activeTab)?.label}
                     </h2>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                        {activeTab === 'ui_terminology' && (
+                            <div className="flex gap-2 mr-4">
+                                <Button 
+                                    variant="secondary" 
+                                    size="sm" 
+                                    onClick={handleExportTerminology}
+                                    disabled={syncLoading}
+                                    leftIcon={syncLoading ? <RotateCcw className="animate-spin" size={14} /> : <Download size={14} />}
+                                >
+                                    Export to TS
+                                </Button>
+                                <Button 
+                                    variant="secondary" 
+                                    size="sm" 
+                                    onClick={handleImportTerminology}
+                                    disabled={syncLoading}
+                                    leftIcon={syncLoading ? <RotateCcw className="animate-spin" size={14} /> : <Upload size={14} />}
+                                >
+                                    Import from Source
+                                </Button>
+                            </div>
+                        )}
+                        <div className="flex items-center gap-2 bg-white border border-black/10 rounded-lg px-2 py-1 shadow-sm">
+                            <Search size={14} className="text-black/30" />
+                            <input 
+                                type="text"
+                                placeholder="Search items..."
+                                className="bg-transparent border-none text-xs focus:outline-none w-32 focus:w-48 transition-all"
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                        {getCategoryById(activeTab)?.editorType === 'pattern' && (
+                            <select
+                                className="bg-white border border-black/10 rounded-lg px-3 py-1.5 text-xs font-semibold focus:outline-none"
+                                value={roleFilter}
+                                onChange={e => setRoleFilter(e.target.value)}
+                            >
+                                <option value="all">Any Role</option>
+                                <option value="broken_plural">Broken Plural</option>
+                                <option value="sound_plural">Sound Plural</option>
+                                <option value="feminine_singular">Feminine Singular</option>
+                                <option value="diminutive">Diminutive</option>
+                                <option value="elative">Elative</option>
+                                <option value="verbal_noun">Verbal Noun</option>
+                            </select>
+                        )}
                         {getCategoryById(activeTab)?.hasPosFilter && (
                             <select
                                 className="bg-white border border-black/10 rounded-lg px-3 py-1.5 text-xs font-semibold focus:outline-none"
@@ -221,13 +453,74 @@ export function AdminSettings() {
                                 ))}
                             </select>
                         )}
+                        {getCategoryById(activeTab)?.editorType === 'pattern' && (
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={handleSyncPatterns}
+                                disabled={syncLoading}
+                                leftIcon={<RotateCcw className={cn(syncLoading && "animate-spin")} size={14} />}
+                                className="mr-2"
+                            >
+                                Sync from Entries
+                            </Button>
+                        )}
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={refresh}
+                            disabled={loading || syncLoading}
+                            leftIcon={<RotateCcw className={cn((loading || syncLoading) && "animate-spin")} size={14} />}
+                        >
+                            Refresh
+                        </Button>
                         <Button size="sm" onClick={() => setShowAdd(true)} leftIcon={<Plus size={14} />}>Add New</Button>
                     </div>
                 </div>
 
+                {syncResult && (
+                    <div className={cn(
+                        "p-4 rounded-xl border flex items-start gap-3 mb-4",
+                        syncResult.errors?.length ? "bg-amber-50 border-amber-200" : "bg-green-50 border-green-200"
+                    )}>
+                        {syncResult.errors?.length ? <XCircle className="text-amber-600 shrink-0" /> : <CheckCircle2 className="text-green-600 shrink-0" />}
+                        <div className="text-xs">
+                            <p className={syncResult.errors?.length ? "text-amber-800 font-bold" : "text-green-800 font-bold"}>
+                                {syncResult.errors?.length ? "Synchronization failed." : `${syncResult.success || 0} items synchronized successfully.`}
+                            </p>
+                            {syncResult.errors?.map((err, i) => (
+                                <p key={i} className="text-amber-700 mt-1">• {err}</p>
+                            ))}
+                        </div>
+                        <button onClick={() => setSyncResult(null)} className="ml-auto text-black/20 hover:text-black/40">✕</button>
+                    </div>
+                )}
+
                 <div className="grid gap-3">
                     {(() => {
                         let items = currentItems;
+                        
+                        // 1. Search filter
+                        if (searchTerm.trim()) {
+                            const s = searchTerm.toLowerCase();
+                            items = items.filter(item => {
+                                const val = item.value as any;
+                                return item.key.toLowerCase().includes(s) || 
+                                       val.description?.toLowerCase().includes(s) ||
+                                       val.cv?.toLowerCase().includes(s) ||
+                                       val.wizen?.toLowerCase().includes(s);
+                            });
+                        }
+
+                        // 2. Role filter (for patterns)
+                        if (roleFilter !== 'all' && getCategoryById(activeTab)?.editorType === 'pattern') {
+                            items = items.filter(item => {
+                                const val = item.value as any;
+                                return val.linguistic_role === roleFilter;
+                            });
+                        }
+
+                        // 3. POS filter
                         if (posFilter !== 'all' && getCategoryById(activeTab)?.hasPosFilter) {
                             items = items.filter(item => {
                                 const val = item.value as any;
@@ -238,64 +531,141 @@ export function AdminSettings() {
                         if (items.length === 0) {
                             return (
                                 <div className="text-center py-12 bg-white/50 rounded-2xl border-2 border-dashed border-black/5">
-                                    <p className="text-black/20 italic">No items found.</p>
+                                    <div className="flex flex-col items-center gap-2 opacity-20">
+                                        <Search size={48} />
+                                        <p className="font-bold uppercase tracking-widest text-[10px]">No matches found</p>
+                                    </div>
                                 </div>
                             );
                         }
 
-                        return items.map(item => (
-                            <Card key={item.id} className="p-4 border-border-light hover:border-[#1034A6]/30 transition-colors group">
-                                <div className="flex items-center justify-between">
-                                    <div className="space-y-1">
-                                        <h3 className="font-bold text-lg text-black uppercase tracking-tight">
-                                            {item.key}
-                                        </h3>
-                                        <div className="flex items-center gap-2 text-xs font-medium text-black/50 italic mb-1">
-                                            {(() => {
-                                                if (typeof item.value === 'object' && item.value !== null) {
-                                                    if ('mt_standard' in item.value || 'mt_arabised' in item.value) {
-                                                        return (
-                                                            <>
-                                                                <span>{item.value.mt_standard || '-'}</span>
-                                                                <span className="opacity-30">/</span>
-                                                                <span>{item.value.mt_arabised || '-'}</span>
-                                                            </>
-                                                        );
-                                                    }
-                                                    if ('cv' in item.value || 'wizen' in item.value) {
-                                                        return (
-                                                            <>
-                                                                <span className="font-mono">{item.value.cv || '-'}</span>
-                                                                <span className="opacity-30">/</span>
-                                                                <span>{item.value.wizen || '-'}</span>
-                                                            </>
-                                                        );
-                                                    }
-                                                }
-                                                return null;
-                                            })()}
-                                        </div>
-                                        <div className="text-xs font-mono text-black/40 bg-black/5 inline-block px-1.5 py-0.5 rounded">
-                                            {typeof item.value === 'object' && item.value !== null ? (
-                                                <div className="flex gap-2">
-                                                    {Object.entries(item.value).map(([vk, vv]) => (
-                                                        <span key={vk} className="first:border-l-0 border-l border-black/10 pl-2">{vk}: {Array.isArray(vv) ? vv.join(', ') : String(vv)}</span>
+                        return items.map(item => {
+                            const isPattern = getCategoryById(activeTab)?.editorType === 'pattern';
+                            const val = item.value as any;
+
+                            if (isPattern) {
+                                return (
+                                    <Card key={item.id} className="p-4 border-border-light hover:border-[#1034A6]/30 transition-all group hover:shadow-xl hover:shadow-[#1034A6]/5">
+                                        <div className="flex items-start justify-between">
+                                            <div className="space-y-2 flex-1">
+                                                <div className="flex items-center gap-3">
+                                                    <h3 className="font-bold text-xl text-black uppercase tracking-tight">
+                                                        {item.key}
+                                                    </h3>
+                                                    {val.linguistic_role && (
+                                                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#1034A6]/10 text-[#1034A6] flex items-center gap-1">
+                                                            <Filter size={10} /> {val.linguistic_role.replace('_', ' ')}
+                                                        </span>
+                                                    )}
+                                                    {val.gender && (
+                                                        <span className={cn(
+                                                            "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1",
+                                                            val.gender === 'feminine' ? "bg-pink-100 text-pink-700" : 
+                                                            val.gender === 'masculine' ? "bg-blue-100 text-blue-700" : "bg-slate-100 text-slate-700"
+                                                        )}>
+                                                            <Tag size={10} /> {val.gender}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div className="flex items-center gap-3 text-xs font-semibold">
+                                                    <div className="flex items-center gap-1.5 px-2 py-1 bg-black/5 rounded-lg border border-black/5">
+                                                        <span className="text-black/30 text-[10px] font-bold uppercase">CV</span>
+                                                        <span className="font-mono text-[#1034A6]">{val.cv || '-'}</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-1.5 px-2 py-1 bg-black/5 rounded-lg border border-black/5">
+                                                        <span className="text-black/30 text-[10px] font-bold uppercase">Wiżen</span>
+                                                        <span className="text-black">{val.wizen || '-'}</span>
+                                                    </div>
+                                                    {val.stress && (
+                                                        <div className="flex items-center gap-1.5 px-2 py-1 bg-black/5 rounded-lg border border-black/5">
+                                                            <span className="text-black/30 text-[10px] font-bold uppercase">Stress</span>
+                                                            <span className="text-black">{val.stress}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {val.description && (
+                                                    <p className="text-xs text-black/60 leading-relaxed flex items-start gap-2 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                                        <Info size={14} className="text-[#1034A6] shrink-0 mt-0.5" />
+                                                        {val.description}
+                                                    </p>
+                                                )}
+
+                                                <div className="flex flex-wrap gap-2 pt-1">
+                                                    {val.pos_types?.map((p: string) => (
+                                                        <span key={p} className="text-[9px] font-black uppercase text-black/30 border border-black/10 px-1.5 rounded bg-white">
+                                                            {p}
+                                                        </span>
                                                     ))}
                                                 </div>
-                                            ) : (
-                                                <div className="flex gap-2">
-                                                    <span className="border-l border-black/10 pl-2">Value: {String(item.value)}</span>
-                                                </div>
-                                            )}
+                                            </div>
+
+                                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-4">
+                                                <button onClick={() => setEditItem(item)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Edit2 size={16} /></button>
+                                                <button onClick={() => handleDelete(item.id, item.key)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                );
+                            }
+
+                            // Default card for other categories
+                            return (
+                                <Card key={item.id} className="p-4 border-border-light hover:border-[#1034A6]/30 transition-colors group">
+                                    <div className="flex items-center justify-between">
+                                        <div className="space-y-1">
+                                            <h3 className="font-bold text-lg text-black uppercase tracking-tight">
+                                                {item.key}
+                                            </h3>
+                                            <div className="flex items-center gap-2 text-xs font-medium text-black/50 italic mb-1">
+                                                {(() => {
+                                                    if (typeof item.value === 'object' && item.value !== null) {
+                                                        const v = item.value as any;
+                                                        if ('mt_standard' in v || 'mt_arabised' in v) {
+                                                            return (
+                                                                <>
+                                                                    <span>{v.mt_standard || '-'}</span>
+                                                                    <span className="opacity-30">/</span>
+                                                                    <span>{v.mt_arabised || '-'}</span>
+                                                                </>
+                                                            );
+                                                        }
+                                                        if ('cv' in v || 'wizen' in v) {
+                                                            return (
+                                                                <>
+                                                                    <span className="font-mono">{v.cv || '-'}</span>
+                                                                    <span className="opacity-30">/</span>
+                                                                    <span>{v.wizen || '-'}</span>
+                                                                </>
+                                                            );
+                                                        }
+                                                    }
+                                                    return null;
+                                                })()}
+                                            </div>
+                                            <div className="text-xs font-mono text-black/40 bg-black/5 inline-block px-1.5 py-0.5 rounded">
+                                                {typeof item.value === 'object' && item.value !== null ? (
+                                                    <div className="flex gap-2">
+                                                        {Object.entries(item.value).map(([vk, vv]) => (
+                                                            <span key={vk} className="first:border-l-0 border-l border-black/10 pl-2">{vk}: {Array.isArray(vv) ? vv.join(', ') : String(vv)}</span>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex gap-2">
+                                                        <span className="border-l border-black/10 pl-2">Value: {String(item.value)}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button onClick={() => setEditItem(item)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Edit2 size={16} /></button>
+                                            <button onClick={() => handleDelete(item.id, item.key)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
                                         </div>
                                     </div>
-                                    <div className="flex gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <button onClick={() => setEditItem(item)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Edit2 size={16} /></button>
-                                        <button onClick={() => handleDelete(item.id, item.key)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={16} /></button>
-                                    </div>
-                                </div>
-                            </Card>
-                        ));
+                                </Card>
+                            );
+                        });
                     })()}
                 </div >
             </div >
@@ -379,17 +749,17 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
     const activeReg = getCategoryById(category);
     const isComplex = activeReg?.editorType !== 'simple_label';
     const { getValues } = useAdminConfig();
-    const POS_OPTIONS = getValues('pos').filter(p => p !== 'verb');
+    const POS_OPTIONS = getValues('pos');
 
     const inp = "w-full border border-[#d8cfc0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1034A6] bg-white text-black";
     const labelStyle = "block text-xs font-bold text-black/40 uppercase tracking-widest mb-1.5";
 
     return (
         <Modal open onClose={onClose} title={item ? `Edit Item` : `Add New ${category}`} size={isComplex ? 'lg' : 'md'}>
-            <form onSubmit={handleSubmit} className="flex flex-col h-full max-h-[85vh]">
+            <form onSubmit={handleSubmit} className="flex flex-col h-full min-h-0 max-h-[85vh] overflow-hidden">
                 {error && <div className="px-6 py-3"><div className="bg-red-50 text-red-800 p-3 rounded-xl text-sm border border-red-100">{error}</div></div>}
 
-                <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-200">
+                <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-200">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="col-span-1">
                             <label className={labelStyle}>In-code ID / Key</label>
@@ -469,6 +839,55 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
                                         </div>
                                     </div>
 
+                                    <div className="grid grid-cols-1 gap-4 pt-4 border-t border-black/5">
+                                        <div>
+                                            <label htmlFor="pattern-description" className={labelStyle}>Linguistic Description / Role Notes</label>
+                                            <textarea 
+                                                id="pattern-description"
+                                                className={cn(inp, "resize-none h-20")} 
+                                                value={value.description || ''} 
+                                                onChange={e => setValue({ ...value, description: e.target.value })} 
+                                                placeholder="e.g. Used for Quadriliteral broken plurals with long penult..." 
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label htmlFor="pattern-role" className={labelStyle}>Explicit Linguistic Role</label>
+                                            <select 
+                                                id="pattern-role"
+                                                className={inp} 
+                                                value={value.linguistic_role || ''} 
+                                                onChange={e => setValue({ ...value, linguistic_role: e.target.value })}
+                                            >
+                                                <option value="">-- None / General --</option>
+                                                <option value="masculine_singular">Masculine Singular</option>
+                                                <option value="feminine_singular">Feminine Singular</option>
+                                                <option value="broken_plural">Broken Plural</option>
+                                                <option value="sound_plural">Sound Plural</option>
+                                                <option value="dual">Dual</option>
+                                                <option value="diminutive">Diminutive</option>
+                                                <option value="elative_masc">Elative (Masc)</option>
+                                                <option value="elative_fem">Elative (Fem)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="pattern-gender" className={labelStyle}>Target Gender</label>
+                                            <select 
+                                                id="pattern-gender"
+                                                className={inp} 
+                                                value={value.gender || ''} 
+                                                onChange={e => setValue({ ...value, gender: e.target.value })}
+                                            >
+                                                <option value="">-- Any --</option>
+                                                <option value="masculine">Masculine</option>
+                                                <option value="feminine">Feminine</option>
+                                                <option value="neutral">Neutral</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <div className="flex justify-start">
                                         <button
                                             ref={kbTriggerRef}
@@ -488,7 +907,7 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
 
                                     {activeReg?.hasPosFilter && (
                                         <div>
-                                            <label className={labelStyle}>Apply to POS (exclude verb)</label>
+                                            <label className={labelStyle}>Apply to POS</label>
                                             <div className="flex flex-wrap gap-1.5 mt-2">
                                                 {POS_OPTIONS.map(p => {
                                                     const isSelected = (value.pos_types || []).includes(p);
@@ -519,7 +938,7 @@ function ConfigFormModal({ item, category, onClose, onSave }: {
                     )}
                 </div>
 
-                <div className="flex justify-end gap-3 px-6 py-4 border-t border-black/5 bg-slate-50/50 rounded-b-2xl">
+                <div className="sticky bottom-0 z-20 shrink-0 flex justify-end gap-3 px-6 py-4 border-t border-black/5 bg-slate-50/95 rounded-b-2xl backdrop-blur-sm">
                     <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
                     <Button type="submit" disabled={saving} leftIcon={saving ? <RotateCcw className="animate-spin" size={14} /> : <Save size={14} />}>
                         {saving ? 'Saving...' : 'Save Config'}

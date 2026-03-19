@@ -1,4 +1,4 @@
-import { Tag, Users, Globe, Zap, ClipboardList, Package, Library, Settings, Puzzle, Palette, HelpCircle, Languages, type LucideIcon } from 'lucide-react';
+import { Tag, Users, Globe, Zap, ClipboardList, Package, Library, Settings, Puzzle, Palette, HelpCircle, Languages, Sparkles, type LucideIcon } from 'lucide-react';
 import { normalizeGender } from './gender';
 import { resolveTerm as resolveHardcodedTerm } from './terminology';
 
@@ -19,7 +19,7 @@ export interface AdminCategory {
 }
 
 const DEFAULT_LABELS = { en: '', mt_standard: '', mt_arabised: '' };
-const DEFAULT_PATTERN = { cv: '', wizen: '', stress: 2, pos_types: [] };
+const DEFAULT_PATTERN = { cv: '', wizen: '', stress: 2, pos_types: [], description: '', linguistic_role: '', gender: '' };
 
 const defaultTransformOption = (item: any, mode: 'standard' | 'arabised', lang: 'en' | 'mt') => {
     const v = item.value;
@@ -166,6 +166,28 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         label: 'Patterns',
         icon: Palette,
         storageCategories: ['cv_wizen_pattern'],
+        editorType: 'pattern',
+        defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
+        listStrategy: 'pattern',
+        hasPosFilter: true,
+        transformValue: (i) => i.value,
+    },
+    diminutive_pattern: {
+        id: 'diminutive_pattern',
+        label: 'Diminutive Patterns',
+        icon: Sparkles,
+        storageCategories: ['diminutive_pattern'],
+        editorType: 'pattern',
+        defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
+        listStrategy: 'pattern',
+        hasPosFilter: true,
+        transformValue: (i) => i.value,
+    },
+    adjective_pattern: {
+        id: 'adjective_pattern',
+        label: 'Adjective Patterns',
+        icon: Palette,
+        storageCategories: ['adjective_pattern'],
         editorType: 'pattern',
         defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
         listStrategy: 'pattern',

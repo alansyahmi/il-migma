@@ -56,8 +56,6 @@ export const INITIAL_FORM_STATE = {
     _adjPluralType: 'none',
     cv_pattern: '',
     _inheritedPattern: '',
-    morph_pattern: '',
-    lemma_pattern: '',
     form_fem_pattern: '',
     form_masc_pattern: '',
     form_plural_pattern: '',
@@ -106,8 +104,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
     const inflections_pl = Array.isArray(inflections_pl_raw) ? inflections_pl_raw.join(', ') : (inflections_pl_raw || '');
     const raw_sound = full.sound_suffix || '';
     const raw_morph = full.morph_pattern || '';
-    // Consolidate into one field for the UI
-    const morph_pattern = [raw_morph, raw_sound].filter(Boolean).join(', ');
+    const plurals = [raw_morph, raw_sound].filter(Boolean).join(', ');
 
     const hasBroken = inflections_pl?.length > 0;
     const hasSound = raw_sound?.length > 0;
@@ -117,7 +114,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
             : hasSound ? 'sound'
                 : 'none';
 
-    const _adjPluralType = (pos === 'adjective' && hasBroken) ? (morph_pattern ? 'broken' : 'sound') : 'none';
+    const _adjPluralType = (pos === 'adjective' && hasBroken) ? (plurals ? 'broken' : 'sound') : 'none';
 
     const dual_form = full.dual_form || '';
 
@@ -148,12 +145,10 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         vowel_set_opp: full.vowel_set_opp || '',
         vowel_set_dual: full.vowel_set_dual || '',
         inflections_pl,
-        sound_suffix: raw_sound || '',
-        morph_pattern,
-        lemma_pattern: full.lemma_pattern || '',
+        sound_suffix: full.sound_suffix || '',
+        form_masc_pattern: full.form_masc_pattern || full.lemma_pattern || '',
         form_fem_pattern: full.form_fem_pattern || '',
-        form_masc_pattern: full.form_masc_pattern || '',
-        form_plural_pattern: full.form_plural_pattern || '',
+        form_plural_pattern: full.form_plural_pattern || plurals || '',
         dual_pattern: full.dual_pattern || '',
         elative_pattern: full.elative_pattern || '',
         diminutive_pattern: full.diminutive_pattern || '',

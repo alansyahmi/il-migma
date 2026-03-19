@@ -67,6 +67,19 @@ erDiagram
 |---|---|
 | `cv_notation` | Abstract consonant-vowel template, e.g. `"CaCaC"`, `"CvCvC"` |
 | `wizen_notation` | Arabised name using the template root ف-ع-ل (f-għ-l), e.g. `"Fagħal"` |
+| `description` | Linguistic notes or usage guidance |
+
+### `pattern_applicability` — Pattern Presets & Roles
+
+Determines which patterns appear as suggestions in the Admin Entry Form based on POS and linguistic requirements.
+
+| Column | Meaning |
+|---|---|
+| `category` | The administrative category (e.g. `'broken_plural'`, `'feminine_pattern'`) |
+| `pos` | Part of speech mask (`'noun'`, `'adjective'`, or `'all'`) |
+| `linguistic_role` | Explicit role (e.g. `'feminine_singular'`, `'broken_plural'`) used for targeted filtering |
+| `gender` | Target gender (if applicable) |
+| `stress` | Syllable count from the end for stress placement |
 
 ### `root_pattern_forms` — The Junction
 

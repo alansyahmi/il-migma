@@ -25,6 +25,7 @@ import { RootSearch } from '@/pages/RootSearch';
 import { Root } from '@/pages/Root';
 import { Suggest } from '@/pages/Suggest';
 import { Browse } from '@/pages/Browse';
+import { Pattern } from '@/pages/Pattern';
 
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string;
@@ -77,6 +78,7 @@ export default function App() {
                                             <Route path="root-search" element={<RootSearch />} />
                                             <Route path="suggest" element={<Suggest />} />
                                             <Route path="browse" element={<Browse />} />
+                                            <Route path="pattern/:id" element={<Pattern />} />
                                             <Route path="*" element={<NotFound />} />
                                         </Route>
                                     </Routes>

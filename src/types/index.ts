@@ -18,6 +18,15 @@ export type POS =
     | 'interjection';
 
 export type Gender = 'masculine' | 'feminine' | 'neutral';
+export type LinguisticRole =
+    | 'masculine_singular'
+    | 'feminine_singular'
+    | 'broken_plural'
+    | 'sound_plural'
+    | 'dual'
+    | 'diminutive'
+    | 'elative_masc'
+    | 'elative_fem';
 export type Transitivity = 'transitive' | 'intransitive' | 'both';
 
 export type VerbStrength = 'strong' | 'strong-hybrid' | 'weak' | 'geminated';
@@ -62,8 +71,11 @@ export interface Pattern {
     id: string;
     cv_notation: string;   // e.g. "CvCvC"
     wizen_notation: string; // e.g. "Fagħal" — Arabised CV name
+    description?: string;
     example_word?: string;
     tags?: string[];
+    role?: LinguisticRole;
+    gender?: Gender;
     created_at: string;
 }
 
@@ -94,12 +106,13 @@ export interface NounMorphology {
     vowel_set_dual?: string;
     feminine?: string;
     masculine?: string;
-    morph_pattern?: string;
-    lemma_pattern?: string;
+    morph_pattern?: string; // @deprecated use form_masc_pattern, form_fem_pattern, or form_plural_pattern
+    lemma_pattern?: string; // @deprecated use form_masc_pattern or form_fem_pattern
     form_fem_pattern?: string;
     form_masc_pattern?: string;
     form_plural_pattern?: string;
     dual_pattern?: string;
+    diminutive_pattern?: string;
     plural_pattern?: string; // keeping for internal use during transition
     sound_suffix?: string;
     is_inflectable?: boolean;
@@ -190,8 +203,8 @@ export interface NumeralMorphology {
     synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
     antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
     related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
-    morph_pattern?: string;
-    lemma_pattern?: string;
+    morph_pattern?: string; // @deprecated
+    lemma_pattern?: string; // @deprecated
     form_fem_pattern?: string;
     form_masc_pattern?: string;
     form_plural_pattern?: string;
@@ -214,8 +227,8 @@ export interface AdjectiveMorphology {
     antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
     // Related entries
     related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
-    morph_pattern?: string;
-    lemma_pattern?: string;
+    morph_pattern?: string; // @deprecated
+    lemma_pattern?: string; // @deprecated
     form_fem_pattern?: string;
     form_masc_pattern?: string;
     form_plural_pattern?: string;
@@ -368,7 +381,7 @@ export interface Entry {
     inflections_pl?: string[];
     form_fem?: string;
     form_masc?: string;
-    morph_pattern?: string;
+    morph_pattern?: string; // @deprecated
     dual_form?: string;
     diminutive_form?: string;
     elative_form?: string;
@@ -376,14 +389,14 @@ export interface Entry {
     form_attributive_short?: string;
     form_attributive_long?: string;
     form_opposite?: string;
-    lemma_pattern?: string;
+    lemma_pattern?: string; // @deprecated
     form_fem_pattern?: string;
     form_masc_pattern?: string;
     form_plural_pattern?: string;
     diminutive_pattern?: string;
     elative_pattern?: string;
     dual_pattern?: string;
-    plural_pattern?: string;
+    plural_pattern?: string; // @deprecated
     sound_suffix?: string;
 
     // Verb specifics (maintained for display logic)

@@ -127,45 +127,44 @@ export const FORBIDDEN_FIELDS = [
 ] as const;
 
 export function buildEntryPayload(form: any): Record<string, any> {
-    const payload: Record<string, any> = { ...form };
+    const payload: Record<string, any> = {};
     const extraFields = form.extraFields || {};
-
-    // Strip private fields
-    ENTRY_PRIVATE_FIELDS.forEach(f => {
-        delete payload[f];
-    });
 
     const pos = form.pos?.toLowerCase() || '';
     const allowedFields = POS_FEATURES[pos] || COMMON_FIELDS;
+
     // UI-to-DB Logic Mapping
-    payload.verb_form = form._formLabel;
-    payload.root_consonants = form._rootConsonants;
-    payload.verb_weak_class = form._weakClass || null;
+    const verbForm = form._formLabel;
+    const rootConsonants = form._rootConsonants;
+    const verbWeakClass = form._weakClass || null;
 
     // Consolidate Split Logic for Plural Patterns
-    const plurals = (form.morph_pattern || '').split(',').map((s: string) => s.trim()).filter(Boolean);
-    payload.sound_suffix = plurals.filter((p: string) => p.startsWith('-')).join(', ');
-    payload.morph_pattern = plurals.filter((p: string) => !p.startsWith('-')).join(', ');
+    const plurals = (form.form_plural_pattern || '').split(',').map((s: string) => s.trim()).filter(Boolean);
+    const soundSuffix = plurals.filter((p: string) => p.startsWith('-')).join(', ');
+    const morphPattern = plurals.filter((p: string) => !p.startsWith('-')).join(', ');
 
-
-    // Filter to only allowed fields
-    Object.keys(payload).forEach(key => {
-        if (!allowedFields.includes(key) && key !== 'old_id') {
-            delete payload[key];
+    // Fill payload using the allowed fields and normalization
+    ENTRY_HANDLED_FIELDS.forEach(field => {
+        if (allowedFields.includes(field) || field === 'old_id') {
+            payload[field] = form[field];
         }
     });
 
-    // Merge extraFields (passthrough unknown keys unchanged)
-    // Guardrails: skip private fields, forbidden/system fields, and already handled schema fields
-    Object.keys(extraFields).forEach(key => {
-        const isPrivate = key.startsWith('_');
-        const isForbidden = FORBIDDEN_FIELDS.includes(key as any);
-        const isSchema = allowedFields.includes(key);
+    // POS-specific manual overrides
+    payload.verb_form = verbForm;
+    payload.root_consonants = rootConsonants;
+    payload.verb_weak_class = verbWeakClass;
+    payload.sound_suffix = soundSuffix;
+    payload.morph_pattern = morphPattern;
+    // form_plural_pattern is already in payload from handled fields
 
-        if (!isPrivate && !isForbidden && !isSchema) {
-            payload[key] = extraFields[key];
-        }
-    });
+    // ── ACTIVE MIRRORING ───────────────────────────────────────────────────
+    // The cv_pattern field always mirrors the current gender's primary slot
+    if (form.gender?.toLowerCase() === 'feminine') {
+        payload.cv_pattern = form.form_fem_pattern || '';
+    } else {
+        payload.cv_pattern = form.form_masc_pattern || '';
+    }
 
     // Map plural forms from UI (plural_forms array) to DB (inflections_pl)
     if (form.plural_forms && Array.isArray(form.plural_forms)) {
@@ -174,27 +173,70 @@ export function buildEntryPayload(form: any): Record<string, any> {
         payload.inflections_pl = form.inflections_pl.split(',').map((s: string) => s.trim()).filter(Boolean);
     }
 
-    // Serialization & Normalization
-    payload.is_collective = form.is_collective ? 1 : 0;
-    payload.is_singulative = form.is_singulative ? 1 : 0;
-    payload.is_loanword = form.is_loanword ? 1 : 0;
-    payload.is_inflectable = form.is_inflectable ? 1 : 0;
+    // Merge extraFields (passthrough unknown keys unchanged)
+    Object.keys(extraFields).forEach(key => {
+        const isPrivate = key.startsWith('_');
+        const isForbidden = FORBIDDEN_FIELDS.includes(key as any);
+        const isSchema = ENTRY_HANDLED_FIELDS.includes(key as any);
 
-    // Ensure array consistency
-    const toArray = (val: any) => typeof val === 'string'
-        ? val.split(',').map(s => s.trim()).filter(Boolean)
-        : (val || []);
-
-    payload.tags = toArray(form.tags);
-    payload.inflections_pl = toArray(payload.inflections_pl);
-
-    // JSON fields
-    const jsonFields = ['definitions', 'phonetics', 'etymology_chain', 'synonyms', 'antonyms', 'related_entries'];
-    jsonFields.forEach(field => {
-        payload[field] = form[field] || [];
+        if (!isPrivate && !isForbidden && !isSchema) {
+            payload[key] = extraFields[key];
+        }
     });
 
-    return payload;
+    // Normalization
+    // Array-backed fields must stay arrays so the admin API can persist them
+    // into the child tables / JSON columns it owns.
+    const result: Record<string, any> = {};
+
+    const arrayFields = new Set([
+        'definitions',
+        'phonetics',
+        'etymology_chain',
+        'synonyms',
+        'antonyms',
+        'related_entries',
+        'tags',
+        'inflections_pl',
+    ]);
+
+    const parseArrayField = (key: string, val: unknown) => {
+        if (Array.isArray(val)) return val;
+        if (typeof val !== 'string') return [];
+
+        const trimmed = val.trim();
+        if (!trimmed) return [];
+
+        if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+            try {
+                const parsed = JSON.parse(trimmed);
+                return Array.isArray(parsed) ? parsed : parsed ? [parsed] : [];
+            } catch {
+                return [];
+            }
+        }
+
+        if (key === 'tags' || key === 'inflections_pl') {
+            return trimmed.split(',').map(s => s.trim()).filter(Boolean);
+        }
+
+        return [];
+    };
+
+    // Final pass through payload to normalize primitives and collections
+    Object.keys(payload).forEach(key => {
+        let val = payload[key];
+
+        if (arrayFields.has(key)) {
+            result[key] = parseArrayField(key, val);
+        } else if (typeof val === 'boolean') {
+            result[key] = val ? 1 : 0;
+        } else {
+            result[key] = n(val);
+        }
+    });
+
+    return result;
 }
 
 export function n(val: unknown): unknown {

@@ -3,7 +3,7 @@
  * Protected by Clerk JWT verification.
  */
 
-import { createClient } from '@libsql/client/web';
+import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
 async function verifyAdmin(request, env) {
@@ -54,16 +54,6 @@ async function verifyAdmin(request, env) {
     }
 }
 
-function db(env) {
-    const url = env.TURSO_URL || env.VITE_TURSO_URL;
-    const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
-    if (!url) {
-        const keys = Object.keys(env).join(', ');
-        throw new Error(`TURSO_URL missing. Available env keys: ${keys}`);
-    }
-    return createClient({ url, authToken: token });
-}
-
 function uid() {
     return Math.random().toString(36).slice(2, 11) + Math.random().toString(36).slice(2, 6);
 }
@@ -105,7 +95,7 @@ export async function onRequestGet({ request, env }) {
         const q = url.searchParams.get('q')?.trim() ?? '';
         const pos = url.searchParams.get('pos')?.trim() ?? '';
 
-        const client = db(env);
+        const client = getDbClient(env);
         let sql = `SELECT e.id, e.headword, e.pos, e.gender, e.verb_class, e.verb_weak_class,
                          e.is_loanword, e.source_language, e.created_at, e.verb_form,
                          e.verb_vowel_perf, e.verb_vowel_impf, e.tags, e.inflections_pl,
@@ -151,7 +141,7 @@ export async function onRequestGet({ request, env }) {
             limit, offset,
         });
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -162,7 +152,7 @@ export async function onRequestPost({ request, env }) {
 
         const body = await request.json();
         validateAndNormalizeEntryGender(body);
-        const client = db(env);
+        const client = getDbClient(env);
 
         let id = body.id;
 
@@ -298,9 +288,14 @@ export async function onRequestPost({ request, env }) {
         if (ants.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'antonyms', ants);
         if (related.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'related_entries', related);
 
+        if (related.length > 0) await syncReciprocalRelationships(client, id, headword, pos, 'related_entries', related);
+
+        // Auto-register patterns
+        await ensurePatternsRegistered(client, body);
+
         return json({ id, created: true }, 201);
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -314,18 +309,53 @@ export async function onRequestPut({ request, env }) {
         const { id, old_id, ...fields } = body;
         if (!id) return json({ error: 'id required' }, 400);
 
-        const client = db(env);
+        const client = getDbClient(env);
+        const sourceId = old_id || id;
+
+        const sourceRes = await client.execute({
+            sql: 'SELECT id FROM entries WHERE id = ?',
+            args: [sourceId]
+        });
+        if (!sourceRes.rows?.length) {
+            return json({
+                error: 'Entry not found for update',
+                code: 'ENTRY_NOT_FOUND',
+                id,
+                old_id: old_id || null
+            }, 404);
+        }
 
         // Handle ID rename 
         if (old_id && old_id !== id) {
             try {
+                const targetRes = await client.execute({
+                    sql: 'SELECT id FROM entries WHERE id = ?',
+                    args: [id]
+                });
+                if (targetRes.rows?.length) {
+                    return json({
+                        error: 'Target ID already exists',
+                        code: 'ENTRY_ID_CONFLICT',
+                        id,
+                        old_id
+                    }, 409);
+                }
+
                 const columnsRes = await client.execute("PRAGMA table_info(entries)");
                 const colNames = columnsRes.rows.map(r => r.name).filter(n => n !== 'id');
 
-                await client.execute({
+                const copyRes = await client.execute({
                     sql: `INSERT INTO entries (id, ${colNames.join(', ')}) SELECT ?, ${colNames.join(', ')} FROM entries WHERE id = ?`,
                     args: [id, old_id]
                 });
+                if (!copyRes.rowsAffected) {
+                    return json({
+                        error: 'Entry not found for update',
+                        code: 'ENTRY_NOT_FOUND',
+                        id,
+                        old_id
+                    }, 404);
+                }
 
                 const childTables = ['definitions', 'etymologies', 'phonetics', 'subentries', 'attestation_reliability', 'dialect_variants', 'audio_files'];
                 for (const table of childTables) {
@@ -377,10 +407,18 @@ export async function onRequestPut({ request, env }) {
             args.push(now());
             args.push(id);
 
-            await client.execute({
+            const updateRes = await client.execute({
                 sql: `UPDATE entries SET ${setClauses.join(', ')} WHERE id = ?`,
                 args,
             });
+            if (!updateRes.rowsAffected) {
+                return json({
+                    error: 'Entry not found for update',
+                    code: 'ENTRY_NOT_FOUND',
+                    id,
+                    old_id: old_id || null
+                }, 404);
+            }
         }
 
         if ('definitions' in fields && Array.isArray(fields.definitions)) {
@@ -430,9 +468,14 @@ export async function onRequestPut({ request, env }) {
         if (ants.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'antonyms', ants);
         if (related.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'related_entries', related);
 
+        if (related.length > 0) await syncReciprocalRelationships(client, id, currentHeadword, currentPos, 'related_entries', related);
+
+        // Auto-register patterns
+        await ensurePatternsRegistered(client, body);
+
         return json({ id, updated: true });
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -447,7 +490,7 @@ export async function onRequestDelete({ request, env }) {
 
         if (!id && !ids) return json({ error: 'id or ids required' }, 400);
 
-        const client = db(env);
+        const client = getDbClient(env);
 
         if (ids) {
             const idList = ids.split(',').map(s => s.trim()).filter(Boolean);
@@ -464,7 +507,7 @@ export async function onRequestDelete({ request, env }) {
             return json({ id, deleted: true });
         }
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -490,6 +533,89 @@ function json(data, status = 200) {
 
 function unauthorized() {
     return json({ error: 'Unauthorized — admin role required' }, 401);
+}
+
+function internalError(err) {
+    const { status, body } = toApiErrorPayload(err);
+    return json(body, status);
+}
+
+async function ensurePatternsRegistered(client, body) {
+    const patternMap = {
+        'cv_pattern': 'cv_wizen_pattern',
+        'feminine_pattern': 'feminine_pattern',
+        'form_fem_pattern': 'feminine_pattern',
+        'form_masc_pattern': 'cv_wizen_pattern',
+        'plural_pattern': 'broken_pattern', // Will be refined for sound_suffix below
+        'form_plural_pattern': 'broken_pattern',
+        'diminutive_pattern': 'diminutive_pattern',
+        'elative_pattern': 'adjective_pattern',
+        'dual_pattern': 'cv_wizen_pattern'
+    };
+
+    const roleMap = {
+        'feminine_pattern': 'feminine_singular',
+        'form_fem_pattern': 'feminine_singular',
+        'plural_pattern': 'broken_plural',
+        'form_plural_pattern': 'broken_plural',
+        'diminutive_pattern': 'diminutive',
+        'elative_pattern': 'elative'
+    };
+
+    for (const [col, cat] of Object.entries(patternMap)) {
+        const raw = body[col];
+        if (!raw || typeof raw !== 'string') continue;
+
+        // Entries can have multiple patterns comma separated for plurals
+        const patterns = raw.split(',').map(p => p.trim()).filter(Boolean);
+
+        for (const cv of patterns) {
+            const wizen = '';
+            const candidatePatternId = btoa(encodeURIComponent(`${cv}|${wizen}`)).replace(/=/g, '');
+
+            // Refine category for plural patterns (broken vs sound suffix)
+            let actualCat = cat;
+            if (cat === 'broken_pattern' && cv.startsWith('-')) {
+                actualCat = 'sound_suffix';
+            }
+
+            // 1. Resolve a valid pattern_id for this CV in both legacy/new schemas.
+            // Legacy DBs may enforce UNIQUE(cv_notation), which can ignore inserts with a new id.
+            let patternId = candidatePatternId;
+            const existingRes = await client.execute({
+                sql: `SELECT id FROM patterns WHERE cv_notation = ? LIMIT 1`,
+                args: [cv]
+            });
+            if (existingRes.rows.length > 0) {
+                patternId = existingRes.rows[0].id;
+            } else {
+                try {
+                    await client.execute({
+                        sql: `INSERT OR IGNORE INTO patterns (id, cv_notation, wizen_notation) VALUES (?, ?, ?)`,
+                        args: [candidatePatternId, cv, wizen]
+                    });
+                } catch {
+                    // Retry lookup below to recover from uniqueness races/legacy constraints.
+                }
+                const afterInsertRes = await client.execute({
+                    sql: `SELECT id FROM patterns WHERE cv_notation = ? LIMIT 1`,
+                    args: [cv]
+                });
+                if (afterInsertRes.rows.length > 0) {
+                    patternId = afterInsertRes.rows[0].id;
+                }
+            }
+
+            // 2. Link it to the correct category
+            // Standardized ID: patternId_category_pos_stress (using stress=2 as default for auto-reg)
+            const appId = `${patternId}_${actualCat}_all_2`; 
+            await client.execute({
+                sql: `INSERT OR IGNORE INTO pattern_applicability (id, pattern_id, category, pos, stress, linguistic_role)
+                      VALUES (?, ?, ?, ?, ?, ?)`,
+                args: [appId, patternId, actualCat, 'all', 2, roleMap[col] || '']
+            });
+        }
+    }
 }
 
 async function syncReciprocalRelationships(client, currentId, currentHeadword, currentPos, relType, targetItems) {

@@ -3,7 +3,7 @@
  * Protected by Clerk JWT verification.
  */
 
-import { createClient } from '@libsql/client/web';
+import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
 
 const now = () => new Date().toISOString();
 
@@ -44,23 +44,13 @@ async function verifyAdmin(request, env) {
     }
 }
 
-function db(env) {
-    const url = env.TURSO_URL || env.VITE_TURSO_URL;
-    const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
-    if (!url) {
-        const keys = Object.keys(env).join(', ');
-        throw new Error(`TURSO_URL missing. Available env keys: ${keys}`);
-    }
-    return createClient({ url, authToken: token });
-}
-
 export async function onRequestGet({ request, env }) {
     try {
         if (!(await verifyAdmin(request, env))) return unauthorized();
 
         const url = new URL(request.url);
         const q = url.searchParams.get('q')?.trim() ?? '';
-        const client = db(env);
+        const client = getDbClient(env);
 
         let sql = `SELECT * FROM roots`;
         const args = [];
@@ -73,7 +63,7 @@ export async function onRequestGet({ request, env }) {
         const res = await client.execute({ sql, args });
         return json({ roots: res.rows });
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -85,7 +75,7 @@ export async function onRequestPost({ request, env }) {
         const consonants = body.consonants?.trim().toLowerCase().normalize('NFC');
         if (!consonants) return json({ error: 'consonants required' }, 400);
 
-        const client = db(env);
+        const client = getDbClient(env);
         const force = body.force === true;
 
         if (!force) {
@@ -213,7 +203,7 @@ export async function onRequestPost({ request, env }) {
 
         return json({ id, created: true }, 201);
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -227,7 +217,7 @@ export async function onRequestDelete({ request, env }) {
 
         if (!id && !ids) return json({ error: 'id or ids required' }, 400);
 
-        const client = db(env);
+        const client = getDbClient(env);
 
         if (ids) {
             const idList = ids.split(',').map(s => s.trim()).filter(Boolean);
@@ -245,7 +235,7 @@ export async function onRequestDelete({ request, env }) {
             return json({ id, deleted: true });
         }
     } catch (e) {
-        return json({ error: e.message }, 500);
+        return internalError(e);
     }
 }
 
@@ -261,6 +251,11 @@ function json(data, status = 200) {
 
 function unauthorized() {
     return json({ error: 'Unauthorized — admin role required' }, 401);
+}
+
+function internalError(err) {
+    const { status, body } = toApiErrorPayload(err);
+    return json(body, status);
 }
 
 /** Convert empty/undefined to null for DB consistency, and normalize strings */

@@ -5,6 +5,10 @@ import type { LinguisticMode } from '@/types';
 
 export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabised: string }> = {
     // Morphological patterns
+    'pattern': { en: 'Pattern', standard: 'Mudell', arabised: 'Wiżen' },
+    'wizen': { en: 'Wiżen', standard: 'Wiżen', arabised: 'Wiżen' },
+    'cv': { en: 'CV', standard: 'CV', arabised: 'CV' },
+    'invariable': { en: 'Invariable', standard: 'Invarjabbli', arabised: 'Ma jinbidilx' },
     'cv-pattern': { en: 'CV Pattern', standard: "Mudell ta' CV", arabised: "Mudell ta' CV" },
     'wizen-pattern': { en: 'Wiżen Pattern', standard: "Mudell ta' Wiżen", arabised: "Mudell ta' Wiżen" },
     'demonym': { en: 'Demonym', standard: 'Demonym', arabised: 'Nisba' },

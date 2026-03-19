@@ -83,6 +83,8 @@ export interface GeneratedVerbForm {
     form: GenerativeVerbFormType;
     perfect: string;
     imperfect: string;
+    perfective_3sg_m?: string;
+    imperfective_3sg_m?: string;
     imperative?: string;
     passiveParticiple: string;
     activeParticiple: string;

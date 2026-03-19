@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Search as SearchIcon } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { apiSearch } from '@/lib/api';
+import { apiSearch, apiListPatterns } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
 // -- Constants --
@@ -31,6 +31,8 @@ export function Browse() {
     const { term } = useLinguisticMode();
     const [selectedPOS, setSelectedPOS] = useState<POSKey>('verb');
     const [subcategories, setSubcategories] = useState<SubcategoryData[]>([]);
+    const [patterns, setPatterns] = useState<any[]>([]);
+    const [loadingPatterns, setLoadingPatterns] = useState(true);
 
     const ALPHABET = [
         'A', 'B', 'Ċ', 'D', 'E', 'F', 'Ġ', 'G', 'GĦ', 'H', 'Ħ', 'I', 'IE', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Ż', 'Z'
@@ -119,6 +121,19 @@ export function Browse() {
         });
 
     }, [selectedPOS, term]);
+
+    useEffect(() => {
+        setLoadingPatterns(true);
+        apiListPatterns()
+            .then(res => {
+                setPatterns(res.patterns);
+                setLoadingPatterns(false);
+            })
+            .catch(err => {
+                console.error("Failed to fetch patterns:", err);
+                setLoadingPatterns(false);
+            });
+    }, []);
 
     const bgStyle = {
         background: `linear-gradient(rgba(244,243,240,0.88), rgba(244,243,240,0.88)),
@@ -273,6 +288,34 @@ export function Browse() {
                             </Link>
                         ))}
                     </div>
+                </div>
+
+                {/* Patterns Index */}
+                <div className="bg-white/40 backdrop-blur-sm rounded-3xl p-10 border border-black/5 mt-12">
+                    <h2 className="font-serif text-2xl font-bold text-black mb-8 flex items-center justify-center sm:justify-start gap-3">
+                        {term('browse-by-pattern')}
+                    </h2>
+
+                    {loadingPatterns ? (
+                        <div className="flex justify-center py-10">
+                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-link"></div>
+                        </div>
+                    ) : (
+                        <div className="flex flex-wrap gap-2.5 justify-center">
+                            {patterns.map(p => (
+                                <Link
+                                    key={p.id}
+                                    to={`/pattern/${p.id}`}
+                                    className="px-4 py-2 flex items-center justify-center rounded-xl bg-white border border-black/5 text-sm font-serif font-bold text-black hover:bg-link hover:text-white hover:border-link transition-all duration-200 shadow-sm hover:shadow-link/20 group"
+                                >
+                                    {p.cv_notation}
+                                    <span className="ml-2 text-[10px] opacity-30 group-hover:opacity-100 italic font-normal">
+                                        {p.wizen_notation}
+                                    </span>
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Footer Link */}
