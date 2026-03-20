@@ -167,6 +167,116 @@ function MorphologyGrid({ title, rows, displayPattern }: { title: string; rows: 
     );
 }
 
+function UsageExampleBlock({ entry }: { entry: Entry }) {
+    const { term } = useLinguisticMode();
+
+    const primaryMaltese = (entry.usage_example || '').trim();
+    const primaryEnglish = (entry.usage_example_en || '').trim();
+    const fallbackExample = entry.definitions?.[0]?.example_sentences?.[0];
+    const fallbackMaltese = (fallbackExample?.maltese || '').trim();
+    const fallbackEnglish = (fallbackExample?.english || '').trim();
+
+    const malteseText = primaryMaltese || fallbackMaltese;
+    const englishText = primaryEnglish || fallbackEnglish;
+
+    if (!malteseText && !englishText) return null;
+
+    return (
+        <div className="w-full">
+            <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">
+                {term('usage-example')}
+            </h2>
+            {malteseText && (
+                <p className="font-serif flex flex-col sm:flex-row gap-8 sm:gap-16 text-m mt-3 items-center md:items-start text-center md:text-left">
+                    {malteseText}
+                </p>
+            )}
+            {englishText && (
+                <p className="font-serif italic text-black/55 text-m md:items-start leading-tight text-center md:text-left mt-1">
+                    {englishText}
+                </p>
+            )}
+        </div>
+    );
+}
+
+function RelatedGlossRow({
+    item,
+    language,
+    mode,
+    isAdmin,
+    onEdit,
+    onDelete,
+}: {
+    item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string };
+    language: 'en' | 'mt';
+    mode: 'standard' | 'arabised';
+    isAdmin?: boolean;
+    onEdit?: () => void;
+    onDelete?: () => void;
+}) {
+    const gloss = getGloss(item, language, mode).trim();
+
+    if (!item?.id || !item?.headword) return null;
+
+    return (
+        <div className="group flex items-center gap-2 flex-wrap justify-center md:justify-start">
+            <Link to={`/entry/${item.id}`} style={{ color: BLUE }} className="block text-sm font-serif hover:underline">
+                {item.headword}
+            </Link>
+            {gloss && (
+                <span className="opacity-55 font-sans text-xs text-black">
+                    &quot;{gloss}&quot;
+                </span>
+            )}
+            {isAdmin && (onEdit || onDelete) && (
+                <AdminActionButtons onEdit={onEdit} onDelete={onDelete} />
+            )}
+        </div>
+    );
+}
+
+function RelatedGlossGroup({
+    title,
+    items,
+    language,
+    mode,
+    isAdmin,
+    onEditItem,
+    onDeleteItem,
+    wrapperClassName = 'w-full',
+}: {
+    title: string;
+    items: { id: string; headword: string; gloss_en?: string; gloss_mt?: string }[];
+    language: 'en' | 'mt';
+    mode: 'standard' | 'arabised';
+    isAdmin?: boolean;
+    onEditItem?: (item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string }) => void;
+    onDeleteItem?: (item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string }) => void;
+    wrapperClassName?: string;
+}) {
+    if (!items || items.length === 0) return null;
+
+    return (
+        <div className={wrapperClassName}>
+            <p className="font-semibold text-black mb-1.5 font-sans">{title}</p>
+            <div className="space-y-1.5">
+                {items.map(item => (
+                    <RelatedGlossRow
+                        key={item.id}
+                        item={item}
+                        language={language}
+                        mode={mode}
+                        isAdmin={isAdmin}
+                        onEdit={onEditItem ? () => onEditItem(item) : undefined}
+                        onDelete={onDeleteItem ? () => onDeleteItem(item) : undefined}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+}
+
 function TagChips({ entry }: { entry: Entry }) {
     const { term } = useLinguisticMode();
     const rawTags = entry.tags || [];
@@ -275,12 +385,14 @@ function SuffixStrip({ labels, activeIdx, onToggle, disabledIndices = [] }: {
 function DerivedTermLink({
     label,
     data,
+    gloss,
     isAdmin,
     onEdit,
     onDelete
 }: {
     label: string;
     data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string };
+    gloss?: string;
     isAdmin?: boolean;
     onEdit?: () => void;
     onDelete?: () => void;
@@ -301,8 +413,13 @@ function DerivedTermLink({
     return (
         <div className="group relative">
             <p className="text-xs text-black/55 mb-1.5 font-sans">{label}</p>
-            <div className="flex items-center gap-2 justify-center md:justify-start">
+            <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
                 {content}
+                {gloss && (
+                    <span className="opacity-55 font-sans text-xs text-black">
+                        &quot;{gloss}&quot;
+                    </span>
+                )}
                 {isAdmin && onEdit && (
                     <div className="flex items-center gap-1">
                         <button
@@ -403,7 +520,7 @@ function removeRelationshipFromEntry(entry: Entry, targetId: string): Entry {
 // ── Noun View ──────────────────────────────────────────────────────────────
 
 function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
-    const { language, t } = useLanguage();
+    const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
@@ -692,14 +809,6 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     <span className="capitalize">{term(nm.gender)}</span>
                                 </PropRow>
 
-                                {(entry.usage_example || entry.usage_example_en) && (
-                                    <PropRow label={t('Usage', 'Użu')} className="col-span-2 text-black text-[0.8rem] leading-none mb-1 mt-1 font-normal">
-                                        {entry.usage_example && <span className="italic">"{entry.usage_example}"</span>}
-                                        {entry.usage_example && entry.usage_example_en && <span className="mx-2 opacity-40">—</span>}
-                                        {entry.usage_example_en && <span>"{entry.usage_example_en}"</span>}
-                                    </PropRow>
-                                )}
-
                                 <VowelSetGrid morphology={{ ...entry, ...nm }} />
 
                                 <MorphologyGrid
@@ -817,86 +926,42 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                 {/* Derived Terms, Usage, and Thesaurus regions */}
                                 <div className="mt-16 md:mt-12 space-y-16 md:space-y-12">
-                                    {/* Derived Terms */}
-                                    {nm.related_entries && nm.related_entries.length > 0 && (
-                                        <div className="w-full">
-                                            <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('related-entries')}</h2>
-                                            <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-10 text-sm mt-3 items-center md:items-start text-center md:text-left">
-                                                {nm.related_entries.map(rel => (
-                                                    <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif hover:underline" style={{ color: BLUE }}>
-                                                        {rel.headword}{' '}
-                                                        <span className="opacity-55 font-sans text-xs text-black">
-                                                            "{getGloss(rel, language, mode)}"
-                                                        </span>
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
+                                    <RelatedGlossGroup
+                                        title={term('related-entries')}
+                                        items={nm.related_entries || []}
+                                        language={language}
+                                        mode={mode}
+                                        isAdmin={isActualAdmin}
+                                        onEditItem={handleEditEntry}
+                                        onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                    />
 
-                                    {/* Usage Example */}
-                                    {entry.definitions[0]?.example_sentences && entry.definitions[0].example_sentences.length > 0 && (
-                                        <div className="w-full">
-                                            <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('usage-example')}</h2>
-                                            {entry.definitions[0].example_sentences.slice(0, 1).map(ex => (
-                                                <div key={ex.id}>
-                                                    <p className="text-sm text-black font-serif text-center md:text-left">{ex.maltese}</p>
-                                                    {ex.english && (
-                                                        <div className="flex mt-1 justify-center md:justify-start">
-                                                            <div className="hidden md:block w-2 h-2 border-l border-b border-black/20 mr-2 -translate-y-1"></div>
-                                                            <p className="text-[13px] text-black/60 italic font-sans flex-1 text-center md:text-left max-w-full sm:max-w-[280px] md:max-w-none">
-                                                                {ex.english}
-                                                            </p>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
+                                    <UsageExampleBlock entry={entry} />
 
-                                    {/* Thesaurus */}
                                     {((nm.synonyms?.length ?? 0) > 0 || (nm.antonyms?.length ?? 0) > 0) && (
                                         <div className="w-full">
-                                            <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
-                                            <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-center md:items-start text-center md:text-left">
-                                                {nm.synonyms && nm.synonyms.length > 0 && (
-                                                    <div>
-                                                        <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
-                                                        {nm.synonyms.map(s => (
-                                                            <div key={s.id} className="flex items-center gap-2 group">
-                                                                <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                    {s.headword}
-                                                                </Link>
-                                                                "{getGloss(s, language, mode)}"
-                                                                {isActualAdmin && (
-                                                                    <AdminActionButtons
-                                                                        onEdit={() => handleEditEntry(s)}
-                                                                        onDelete={() => handleRemoveRelationship(s.id)}
-                                                                    />
-                                                                )}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                                {nm.antonyms && nm.antonyms.length > 0 && (
-                                                    <div>
-                                                        <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
-                                                        {nm.antonyms.map(a => (
-                                                            <div key={a.id} className="flex items-center gap-2 group">
-                                                                <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                    {a.headword}
-                                                                </Link>
-                                                                "{getGloss(a, language, mode)}"
-                                                                {isActualAdmin && (
-                                                                    <AdminActionButtons
-                                                                        onEdit={() => handleEditEntry(a)}
-                                                                        onDelete={() => handleRemoveRelationship(a.id)}
-                                                                    />
-                                                                )}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
+                                            <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
+                                            <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-start text-center md:text-left">
+                                                <RelatedGlossGroup
+                                                    title={term('synonyms')}
+                                                    items={nm.synonyms || []}
+                                                    language={language}
+                                                    mode={mode}
+                                                    isAdmin={isActualAdmin}
+                                                    onEditItem={handleEditEntry}
+                                                    onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                    wrapperClassName="flex-1 min-w-[220px]"
+                                                />
+                                                <RelatedGlossGroup
+                                                    title={term('antonyms')}
+                                                    items={nm.antonyms || []}
+                                                    language={language}
+                                                    mode={mode}
+                                                    isAdmin={isActualAdmin}
+                                                    onEditItem={handleEditEntry}
+                                                    onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                    wrapperClassName="flex-1 min-w-[220px]"
+                                                />
                                             </div>
                                         </div>
                                     )}
@@ -980,7 +1045,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 // ── Verb View ──────────────────────────────────────────────────────────────
 
 function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
-    const { language, t } = useLanguage();
+    const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
@@ -1142,6 +1207,12 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
             });
         }
         setShowForm(true);
+    };
+
+    const getDerivedGloss = (data: { value: string; entryId?: string }) => {
+        if (!data.entryId || !rootEntries?.length) return '';
+        const linked = rootEntries.find(e => e.id === data.entryId || e.headword === data.value);
+        return linked ? getGloss(linked, language, mode).trim() : '';
     };
 
     // Derived suffix strip labels (vowel-set sensitive)
@@ -1329,16 +1400,6 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 <PropRow label={term('transitivity')}>
                                     <span className="capitalize">{term(vm.transitivity || 'both')}</span>
                                 </PropRow>
-
-                                {(entry.usage_example || entry.usage_example_en) && (
-                                    <PropRow label={t('Usage', 'Użu')} className="col-span-2 text-black text-[0.8rem] leading-none mb-1 mt-1 font-normal">
-                                        {entry.usage_example && <span className="italic">"{entry.usage_example}"</span>}
-                                        {entry.usage_example && entry.usage_example_en && <span className="mx-2 opacity-40">—</span>}
-                                        {entry.usage_example_en && <span>"{entry.usage_example_en}"</span>}
-                                    </PropRow>
-
-                                )}
-
 
                                 <PropRow label={term("vowel-set")} className="col-span-2 sm:col-span-1 md:col-span-1">
                                     <div className="space-y-0 text-sm">
@@ -1621,12 +1682,13 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                         {/* Derived Terms */}
                                         {autoDerived && (autoDerived.imperfect.value !== '-' || autoDerived.imperative.value !== '-' || autoDerived.verbalNoun.value !== '-' || autoDerived.passiveParticiple.value !== '-' || autoDerived.activeParticiple.value !== '-') && (
                                             <div className="w-full">
-                                                <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('derived-terms')}</h2>
-                                                <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-10 text-sm mt-3 items-center md:items-start text-center md:text-left">
+                                                <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('derived-terms')}</h2>
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm mt-3 items-start text-center md:text-left">
                                                     {autoDerived.passiveParticiple.value !== '-' && (
                                                         <DerivedTermLink
                                                             label={term('passive')}
                                                             data={autoDerived.passiveParticiple}
+                                                            gloss={getDerivedGloss(autoDerived.passiveParticiple)}
                                                             isAdmin={isActualAdmin}
                                                             onDelete={() => autoDerived!.passiveParticiple.entryId && handleRemoveRelationship(autoDerived!.passiveParticiple.entryId)}
                                                             onEdit={() => handleEditDerived(autoDerived!.passiveParticiple, 'passive')}
@@ -1636,6 +1698,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                         <DerivedTermLink
                                                             label={term('active')}
                                                             data={autoDerived.activeParticiple}
+                                                            gloss={getDerivedGloss(autoDerived.activeParticiple)}
                                                             isAdmin={isActualAdmin}
                                                             onDelete={() => autoDerived!.activeParticiple.entryId && handleRemoveRelationship(autoDerived!.activeParticiple.entryId)}
                                                             onEdit={() => handleEditDerived(autoDerived!.activeParticiple, 'active')}
@@ -1645,6 +1708,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                         <DerivedTermLink
                                                             label={term('verbal-noun')}
                                                             data={autoDerived.verbalNoun}
+                                                            gloss={getDerivedGloss(autoDerived.verbalNoun)}
                                                             isAdmin={isActualAdmin}
                                                             onDelete={() => autoDerived!.verbalNoun.entryId && handleRemoveRelationship(autoDerived!.verbalNoun.entryId)}
                                                             onEdit={() => handleEditDerived(autoDerived!.verbalNoun, 'noun')}
@@ -1654,73 +1718,33 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             </div>
                                         )}
 
-                                        {/* Usage Example */}
-                                        {entry.definitions[0]?.example_sentences && entry.definitions[0].example_sentences.length > 0 && (
-                                            <div className="w-full">
-                                                <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('usage-example')}</h2>
-                                                {entry.definitions[0].example_sentences.slice(0, 1).map(ex => (
-                                                    <div key={ex.id}>
-                                                        <p className="text-sm text-black font-serif text-center md:text-left">{ex.maltese}</p>
-                                                        {ex.english && (
-                                                            <div className="flex mt-1 justify-center md:justify-start">
-                                                                <div className="hidden md:block w-2 h-2 border-l border-b border-black/20 mr-2 -translate-y-1"></div>
-                                                                <p className="text-[13px] text-black/60 italic font-sans flex-1 text-center md:text-left max-w-full sm:max-w-[280px] md:max-w-none">
-                                                                    {ex.english}
-                                                                </p>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
+                                        <UsageExampleBlock entry={entry} />
 
                                         {/* Thesaurus */}
                                         {((vm.synonyms?.length ?? 0) > 0 || (vm.antonyms?.length ?? 0) > 0) && (
                                             <div className="w-full">
-                                                <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
-                                                <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-center md:items-start text-center md:text-left">
-                                                    {vm.synonyms && vm.synonyms.length > 0 && (
-                                                        <div>
-                                                            <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
-                                                            {vm.synonyms.map(s => (
-                                                                <div key={s.id} className="flex items-center gap-2 group">
-                                                                    <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                        {s.headword}
-                                                                    </Link>
-                                                                    <span className="opacity-55 font-sans text-xs text-black truncate max-w-[120px]">
-                                                                        "{getGloss(s, language, mode)}"
-                                                                    </span>
-                                                                    {isActualAdmin && (
-                                                                        <AdminActionButtons
-                                                                            onEdit={() => handleEditEntry(s)}
-                                                                            onDelete={() => handleRemoveRelationship(s.id)}
-                                                                        />
-                                                                    )}
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                    {vm.antonyms && vm.antonyms.length > 0 && (
-                                                        <div>
-                                                            <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
-                                                            {vm.antonyms.map(a => (
-                                                                <div key={a.id} className="flex items-center gap-2 group">
-                                                                    <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                        {a.headword}
-                                                                    </Link>
-                                                                    <span className="opacity-55 font-sans text-xs text-black truncate max-w-[120px]">
-                                                                        "{getGloss(a, language, mode)}"
-                                                                    </span>
-                                                                    {isActualAdmin && (
-                                                                        <AdminActionButtons
-                                                                            onEdit={() => handleEditEntry(a)}
-                                                                            onDelete={() => handleRemoveRelationship(a.id)}
-                                                                        />
-                                                                    )}
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
+                                                <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
+                                                <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-start text-center md:text-left">
+                                                    <RelatedGlossGroup
+                                                        title={term('synonyms')}
+                                                        items={vm.synonyms || []}
+                                                        language={language}
+                                                        mode={mode}
+                                                        isAdmin={isActualAdmin}
+                                                        onEditItem={handleEditEntry}
+                                                        onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                        wrapperClassName="flex-1 min-w-[220px]"
+                                                    />
+                                                    <RelatedGlossGroup
+                                                        title={term('antonyms')}
+                                                        items={vm.antonyms || []}
+                                                        language={language}
+                                                        mode={mode}
+                                                        isAdmin={isActualAdmin}
+                                                        onEditItem={handleEditEntry}
+                                                        onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                        wrapperClassName="flex-1 min-w-[220px]"
+                                                    />
                                                 </div>
                                             </div>
                                         )}
@@ -2217,25 +2241,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
                                 {/* Usage and Thesaurus */}
                                 <div className="mt-12 space-y-12">
-                                    {/* Usage Example */}
-                                    {entry.definitions?.[0]?.example_sentences && entry.definitions[0].example_sentences.length > 0 && (
-                                        <div className="w-full">
-                                            <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('usage-example')}</h2>
-                                            {entry.definitions[0].example_sentences.slice(0, 1).map(ex => (
-                                                <div key={ex.id}>
-                                                    <p className="text-sm text-black font-serif text-center md:text-left">{ex.maltese}</p>
-                                                    {ex.english && (
-                                                        <div className="flex mt-1 justify-center md:justify-start">
-                                                            <div className="hidden md:block w-2 h-2 border-l border-b border-black/20 mr-2 -translate-y-1"></div>
-                                                            <p className="text-[13px] text-black/60 italic font-sans flex-1 text-center md:text-left max-w-full sm:max-w-[280px] md:max-w-none">
-                                                                {ex.english}
-                                                            </p>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
+                                    <UsageExampleBlock entry={entry} />
                                 </div>
                             </div>
                         </div>
@@ -2615,69 +2621,33 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                     ]}
                                 />
 
-                                {/* Usage Example */}
-                                {entry.definitions[0]?.example_sentences && entry.definitions[0].example_sentences.length > 0 && (
-                                    <div className="w-full">
-                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('usage-example')}</h2>
-                                        {entry.definitions[0].example_sentences.slice(0, 1).map(ex => (
-                                            <div key={ex.id}>
-                                                <p className="text-sm text-black font-serif text-center md:text-left">{ex.maltese}</p>
-                                                {ex.english && (
-                                                    <div className="flex mt-1 justify-center md:justify-start">
-                                                        <div className="hidden md:block w-2 h-2 border-l border-b border-black/20 mr-2 -translate-y-1"></div>
-                                                        <p className="text-[13px] text-black/60 italic font-sans flex-1 text-center md:text-left max-w-full sm:max-w-[280px] md:max-w-none">
-                                                            {ex.english}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                                <UsageExampleBlock entry={entry} />
 
                                 {/* Thesaurus */}
                                 {((am.synonyms?.length ?? 0) > 0 || (am.antonyms?.length ?? 0) > 0) && (
                                     <div className="w-full">
-                                        <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
-                                        <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-center md:items-start text-center md:text-left">
-                                            {am.synonyms && am.synonyms.length > 0 && (
-                                                <div>
-                                                    <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
-                                                    {am.synonyms.map((s: any) => (
-                                                        <div key={s.id} className="flex items-center gap-2 group">
-                                                            <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                {s.headword}
-                                                            </Link>
-                                                            "{getGloss(s, language, mode)}"
-                                                            {isActualAdmin && (
-                                                                <AdminActionButtons
-                                                                    onEdit={() => handleEditEntry(s)}
-                                                                    onDelete={() => handleRemoveRelationship(s.id)}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {am.antonyms && am.antonyms.length > 0 && (
-                                                <div>
-                                                    <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
-                                                    {am.antonyms.map((a: any) => (
-                                                        <div key={a.id} className="flex items-center gap-2 group">
-                                                            <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                {a.headword}
-                                                            </Link>
-                                                            "{getGloss(a, language, mode)}"
-                                                            {isActualAdmin && (
-                                                                <AdminActionButtons
-                                                                    onEdit={() => handleEditEntry(a)}
-                                                                    onDelete={() => handleRemoveRelationship(a.id)}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
+                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
+                                        <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-start text-center md:text-left">
+                                            <RelatedGlossGroup
+                                                title={term('synonyms')}
+                                                items={am.synonyms || []}
+                                                language={language}
+                                                mode={mode}
+                                                isAdmin={isActualAdmin}
+                                                onEditItem={handleEditEntry}
+                                                onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                wrapperClassName="flex-1 min-w-[220px]"
+                                            />
+                                            <RelatedGlossGroup
+                                                title={term('antonyms')}
+                                                items={am.antonyms || []}
+                                                language={language}
+                                                mode={mode}
+                                                isAdmin={isActualAdmin}
+                                                onEditItem={handleEditEntry}
+                                                onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                wrapperClassName="flex-1 min-w-[220px]"
+                                            />
                                         </div>
                                     </div>
                                 )}
@@ -3020,56 +2990,32 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                     ]}
                                 />
 
-                                {entry.usage_example && (
-                                    <div className="w-full">
-                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3">{term('usage-example')}</h2>
-                                        <p className="text-sm text-black font-serif italic">"{entry.usage_example}"</p>
-                                        {entry.usage_example_en && <p className="text-xs text-black/60 mt-1">"{entry.usage_example_en}"</p>}
-                                    </div>
-                                )}
+                                <UsageExampleBlock entry={entry} />
 
                                 {((entry as any).synonyms?.length > 0 || (entry as any).antonyms?.length > 0) && (
                                     <div className="w-full">
-                                        <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3">{term('thesaurus')}</h2>
-                                        <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3">
-                                            {(entry as any).synonyms && (entry as any).synonyms.length > 0 && (
-                                                <div>
-                                                    <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
-                                                    {(entry as any).synonyms.map((s: any) => (
-                                                        <div key={s.id} className="flex items-center gap-2 group">
-                                                            <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                {s.headword}
-                                                            </Link>
-                                                            "{getGloss(s, language, mode)}"
-                                                            {isActualAdmin && (
-                                                                <AdminActionButtons
-                                                                    onEdit={() => handleEditEntry(s)}
-                                                                    onDelete={() => handleRemoveRelationship(s.id)}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {(entry as any).antonyms && (entry as any).antonyms.length > 0 && (
-                                                <div>
-                                                    <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
-                                                    {(entry as any).antonyms.map((a: any) => (
-                                                        <div key={a.id} className="flex items-center gap-2 group">
-                                                            <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                {a.headword}
-                                                            </Link>
-                                                            "{getGloss(a, language, mode)}"
-                                                            {isActualAdmin && (
-                                                                <AdminActionButtons
-                                                                    onEdit={() => handleEditEntry(a)}
-                                                                    onDelete={() => handleRemoveRelationship(a.id)}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
+                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3">{term('thesaurus')}</h2>
+                                        <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-start">
+                                            <RelatedGlossGroup
+                                                title={term('synonyms')}
+                                                items={(entry as any).synonyms || []}
+                                                language={language}
+                                                mode={mode}
+                                                isAdmin={isActualAdmin}
+                                                onEditItem={handleEditEntry}
+                                                onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                wrapperClassName="flex-1 min-w-[220px]"
+                                            />
+                                            <RelatedGlossGroup
+                                                title={term('antonyms')}
+                                                items={(entry as any).antonyms || []}
+                                                language={language}
+                                                mode={mode}
+                                                isAdmin={isActualAdmin}
+                                                onEditItem={handleEditEntry}
+                                                onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                wrapperClassName="flex-1 min-w-[220px]"
+                                            />
                                         </div>
                                     </div>
                                 )}
@@ -3424,15 +3370,6 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                                         <span className="capitalize">{term(entry.gender)}</span>
                                     </PropRow>
                                 )}
-                                {(entry.usage_example || entry.usage_example_en) && (
-                                    <PropRow label={term('usage-example')}>
-                                        <span className="text-[13px]">
-                                            {entry.usage_example && <span className="italic">"{entry.usage_example}"</span>}
-                                            {entry.usage_example && entry.usage_example_en && <span className="mx-2 opacity-40">—</span>}
-                                            {entry.usage_example_en && <span>"{entry.usage_example_en}"</span>}
-                                        </span>
-                                    </PropRow>
-                                )}
                             </div>
 
                             <div className="flex-1 min-w-0 w-full space-y-12">
@@ -3539,86 +3476,42 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                                     </div>
                                 )}
 
-                                {((synonyms?.length ?? 0) > 0 || (antonyms?.length ?? 0) > 0) && (
+                                <UsageExampleBlock entry={entry} />
+
+                                {((synonyms?.length ?? 0) > 0 || (antonyms?.length ?? 0) > 0 || (relatedEntries?.length ?? 0) > 0) && (
                                     <div className="w-full">
-                                        <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
+                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
                                         <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-start">
-                                            {(synonyms?.length ?? 0) > 0 && (
-                                                <div>
-                                                    <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
-                                                    {synonyms.map((s: any) => (
-                                                        <div key={s.id} className="flex items-center gap-2 group">
-                                                            <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                 {s.headword}
-                                                            </Link>
-                                                            "{getGloss(s, language, mode)}"
-                                                            {isActualAdmin && (
-                                                                <AdminActionButtons
-                                                                    onEdit={() => handleEditEntry(s)}
-                                                                    onDelete={() => handleRemoveRelationship(s.id)}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {(antonyms?.length ?? 0) > 0 && (
-                                                <div>
-                                                    <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
-                                                    {antonyms.map((a: any) => (
-                                                        <div key={a.id} className="flex items-center gap-2 group">
-                                                            <Link key={a.id} to={`/entry/${a.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                {a.headword}
-                                                            </Link>
-                                                            "{getGloss(a, language, mode)}"
-                                                            {isActualAdmin && (
-                                                                <AdminActionButtons
-                                                                    onEdit={() => handleEditEntry(a)}
-                                                                    onDelete={() => handleRemoveRelationship(a.id)}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {(relatedEntries?.length ?? 0) > 0 && (
-                                                <div>
-                                                    <p className="font-semibold text-black mb-1">{term('related-entries')}</p>
-                                                    {relatedEntries.map((rel: any) => (
-                                                        <div key={rel.id} className="flex items-center gap-2 group">
-                                                            <Link to={`/entry/${rel.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                {rel.headword}
-                                                            </Link>
-                                                            "{getGloss(rel, language, mode)}"
-                                                            {isActualAdmin && (
-                                                                <AdminActionButtons
-                                                                    onEdit={() => handleEditEntry(rel)}
-                                                                    onDelete={() => handleRemoveRelationship(rel.id)}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {(alternativeForms?.length ?? 0) > 0 && (
-                                                <div>
-                                                    <p className="font-semibold text-black mb-1">{term('alternative-forms') || 'Alternative Forms'}</p>
-                                                    {alternativeForms.map((alt: any) => (
-                                                        <div key={alt.id} className="flex items-center gap-2 group">
-                                                            <Link to={`/entry/${alt.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                {alt.headword}
-                                                            </Link>
-                                                            "{getGloss(alt, language, mode)}"
-                                                            {isActualAdmin && (
-                                                                <AdminActionButtons
-                                                                    onEdit={() => handleEditEntry(alt)}
-                                                                    onDelete={() => handleRemoveRelationship(alt.id)}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
+                                            <RelatedGlossGroup
+                                                title={term('synonyms')}
+                                                items={synonyms || []}
+                                                language={language}
+                                                mode={mode}
+                                                isAdmin={isActualAdmin}
+                                                onEditItem={handleEditEntry}
+                                                onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                wrapperClassName="flex-1 min-w-[220px]"
+                                            />
+                                            <RelatedGlossGroup
+                                                title={term('antonyms')}
+                                                items={antonyms || []}
+                                                language={language}
+                                                mode={mode}
+                                                isAdmin={isActualAdmin}
+                                                onEditItem={handleEditEntry}
+                                                onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                wrapperClassName="flex-1 min-w-[220px]"
+                                            />
+                                            <RelatedGlossGroup
+                                                title={term('related-entries')}
+                                                items={relatedEntries || []}
+                                                language={language}
+                                                mode={mode}
+                                                isAdmin={isActualAdmin}
+                                                onEditItem={handleEditEntry}
+                                                onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                                wrapperClassName="flex-1 min-w-[220px]"
+                                            />
                                         </div>
                                     </div>
                                 )}

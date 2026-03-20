@@ -62,7 +62,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'noun': { en: 'Noun', standard: 'Nom', arabised: 'Isem' },
     'adjective': { en: 'Adjective', standard: 'Aġġettiv', arabised: 'Isem Fissieri' },
     'adverb': { en: 'Adverb', standard: 'Avverbju', arabised: 'Għatu' },
-    'particle': { en: 'Partiklu', standard: 'Partiklu', arabised: 'Ntejfa' },
+    'particle': { en: 'Particle', standard: 'Partiklu', arabised: 'Ntejfa' },
     'preposition': { en: 'Preposition', standard: 'Prepożizzjoni', arabised: 'Ntejfa Ġarrari' },
     'conjunction': { en: 'Conjunction', standard: 'Konġunzjoni', arabised: 'Ntejfa Għaqqadi' },
     'article': { en: 'Article', standard: 'Artiklu', arabised: 'Għodda tat-Tagħrif' },
@@ -72,10 +72,10 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'numeral': { en: 'Numeral', standard: 'Numerali', arabised: 'Għaddi' },
     'interjection': { en: 'Interjection', standard: 'Interjezzjoni', arabised: 'Tagħġiba' },
     'prefix': { en: 'Prefix', standard: 'Prefiss', arabised: 'Qagħda Quddimija' },
-    'suffix': { en: 'Suffiss', standard: 'Suffiss', arabised: 'Qagħda Warranija' },
+    'suffix': { en: 'Suffix', standard: 'Suffiss', arabised: 'Qagħda Warranija' },
     'masculine': { en: 'Masculine', standard: 'Maskili', arabised: 'Mdakkar' },
     'feminine': { en: 'Feminine', standard: 'Femminil', arabised: 'Mmarri' },
-    'neutral': { en: 'Newtrali', standard: 'Newtrali', arabised: 'Newtrali' },
+    'neutral': { en: 'Neutral', standard: 'Newtrali', arabised: 'Newtrali' },
     'transitive': { en: 'Transitive', standard: 'Tranżittiv', arabised: 'Mitgħaddi' },
     'intransitive': { en: 'Intransitive', standard: 'Intranżittiv', arabised: 'Lieżem' },
     'ditransitive': { en: 'Ditransitive', standard: 'Ditranżittiv', arabised: 'Mitgħaddi lil Mifgħulejn' },
@@ -136,6 +136,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'entries': { en: 'Entries', standard: 'Entrati', arabised: 'Madħliet' },
     'form': { en: 'Form', standard: 'Forma', arabised: 'Sura' },
     'form-label': { en: 'FORM', standard: 'FORMA', arabised: 'SURA' },
+    'alternative-forms': { en: 'Alternative Forms', standard: 'Forma Alternattiva', arabised: 'Sura Newwibija' },
     'inflected': { en: 'Inflected', standard: 'Infletta', arabised: 'Imsarrfa' },
     'term': { en: 'Term', standard: 'Terminu', arabised: 'Magħlqa' },
     'class': { en: 'Class', standard: 'Klassi', arabised: 'Taqsima' },
@@ -415,9 +416,18 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'enterprise-label': { en: 'Enterprise', standard: 'Intrapriża', arabised: 'Intrapriża' },
 };
 
+const TERM_ALIASES: Record<string, string> = {
+    partiklu: 'particle',
+};
+
+function normalizeTermKey(key: string) {
+    const lower = key.toLowerCase();
+    return TERM_ALIASES[lower] || lower;
+}
+
 /** Resolve a term key against the current linguistic mode and interface language */
 export function resolveTerm(key: string, mode: LinguisticMode, lang: 'en' | 'mt' = 'mt'): string {
-    const entry = TERMINOLOGY[key.toLowerCase()];
+    const entry = TERMINOLOGY[normalizeTermKey(key)];
     if (!entry) return key;
     if (lang === 'en') return entry.en || key.charAt(0).toUpperCase() + key.slice(1);
     return mode === 'arabised' ? entry.arabised : entry.standard;

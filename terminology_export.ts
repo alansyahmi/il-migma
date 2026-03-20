@@ -950,7 +950,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
         "arabised": "Xerriek"
     },
     "particle": {
-        "en": "Partiklu",
+        "en": "Particle",
         "standard": "Partiklu",
         "arabised": "Ntejfa"
     },

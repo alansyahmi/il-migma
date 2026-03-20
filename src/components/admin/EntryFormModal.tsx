@@ -2505,6 +2505,31 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         ))}
                     </fieldset>
 
+                    {/* Usage Example */}
+                    <fieldset className="border border-border-light rounded-lg p-4 space-y-3">
+                        <legend className="text-xs font-semibold text-black uppercase tracking-tight px-1">
+                            {term('usage-example')}
+                        </legend>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label className={label}>{`${term('maltese')} ${term('sentence')}`}</label>
+                                <input
+                                    className={inp}
+                                    value={form.usage_example || ''}
+                                    onChange={e => set('usage_example', e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label className={label}>{`${term('english')} ${term('sentence')}`}</label>
+                                <input
+                                    className={inp}
+                                    value={form.usage_example_en || ''}
+                                    onChange={e => set('usage_example_en', e.target.value)}
+                                />
+                            </div>
+                        </div>
+                    </fieldset>
+
                     {/* Relationships (Thesaurus & Derived Terms) */}
                     <div className="space-y-6">
                         <RelationshipEditor

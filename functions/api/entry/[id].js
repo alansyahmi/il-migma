@@ -191,8 +191,10 @@ export async function onRequestGet({ params, env }) {
             }));
         }
 
-        payload.alternative_forms = await enrichRelationships(payload.alternative_forms);
+        payload.synonyms = await enrichRelationships(payload.synonyms);
+        payload.antonyms = await enrichRelationships(payload.antonyms);
         payload.related_entries = await enrichRelationships(payload.related_entries);
+        payload.alternative_forms = await enrichRelationships(payload.alternative_forms);
 
         // ── Shared Related Entries ──────────────────────────────────────────────
         let related_entries = [];
