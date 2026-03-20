@@ -64,17 +64,48 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
  * Falls back to the alternative language if the preferred one is missing.
  */
 export function getGloss(
-    item: { gloss_en?: string; gloss_mt?: string } | null | undefined,
+    item: any,
     language: 'en' | 'mt',
     _mode: 'standard' | 'arabised' = 'standard'
 ): string {
     if (!item) return '';
 
+    // 1. Handle flattened glosses (common in related_entries / search results)
+    const flatEn = item.gloss_en ?? item.translation_en ?? item.en;
+    const flatMt = item.gloss_mt ?? item.translation_mt ?? item.mt;
+
     if (language === 'en') {
-        return item.gloss_en || item.gloss_mt || '';
+        if (flatEn) return flatEn;
+        if (flatMt) return flatMt;
+    } else {
+        if (flatMt) return flatMt;
+        if (flatEn) return flatEn;
     }
 
-    // For Maltese, we currently use gloss_mt for both Standard and Arabised modes.
-    // This helper allows for future expansion if separate Maltese glosses are added.
-    return item.gloss_mt || item.gloss_en || '';
+    // 2. Handle full Entry/SubEntry objects with definitions array
+    if (item.definitions && Array.isArray(item.definitions) && item.definitions.length > 0) {
+        // Try all definitions until we find a non-empty one
+        for (const def of item.definitions) {
+            const defEn = def.text_en || def.gloss_en || def.translation || def.en;
+            const defMt = def.text_mt || def.gloss_mt || def.mt;
+
+            if (language === 'en') {
+                const val = defEn || defMt;
+                if (val) return val;
+            } else {
+                const val = defMt || defEn;
+                if (val) return val;
+            }
+        }
+    }
+
+    // 3. Handle single definition/gloss object passed directly (or Root objects)
+    const textEn = item.text_en || item.gloss_en || item.gloss || item.translation || item.en;
+    const textMt = item.text_mt || item.gloss_mt || item.mt;
+    const desc = item.description;
+
+    if (language === 'en') {
+        return textEn || textMt || desc || '';
+    }
+    return textMt || textEn || desc || '';
 }

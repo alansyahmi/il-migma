@@ -502,12 +502,11 @@ export interface Vote {
 }
 
 // ─── Search ────────────────────────────────────────────────────────────────
-export interface SearchResult {
-    entry: Entry;
+export type SearchResult = Entry & {
     score?: number;              // relevance score (semantic search)
-    match_type: 'exact' | 'prefix' | 'fulltext' | 'semantic';
+    match_type?: 'exact' | 'prefix' | 'fulltext' | 'semantic';
     highlight?: string;
-}
+};
 
 export interface SearchFilters {
     pos?: POS[];

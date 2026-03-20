@@ -137,11 +137,11 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                     });
                     const q = id.trim().toLowerCase();
                     const exact = (searchRes.results || []).find((r: any) => {
-                        const head = String(r?.entry?.headword || '').trim().toLowerCase();
-                        const eid = String(r?.entry?.id || '').trim().toLowerCase();
+                        const head = String(r?.headword || '').trim().toLowerCase();
+                        const eid = String(r?.id || '').trim().toLowerCase();
                         return head === q || eid === q;
                     });
-                    resolvedEntry = exact?.entry || searchRes.results?.[0]?.entry || null;
+                    resolvedEntry = exact || searchRes.results?.[0] || null;
                 }
 
                 if (resolvedEntry) {
@@ -222,7 +222,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
             );
 
             const mapped = (res.results || [])
-                .map(r => mapEntryToItem(r.entry))
+                .map(r => mapEntryToItem(r))
                 .filter(it => !!it.id && !usedIds.has(it.id) && it.id !== currentEntryId);
 
             setSuggestionState(index, {

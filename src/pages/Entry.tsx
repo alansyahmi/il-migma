@@ -11,7 +11,7 @@ import { generateConjugation, generateRootForms, markGeneratedForms, getAttested
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Edit2, ArrowLeft, Search, Plus, Trash2 } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
-import { apiGetEntry, adminDeleteEntry } from '@/lib/api';
+import { apiGetEntry, adminUpdateEntry } from '@/lib/api';
 import { useRootData } from '@/hooks/useRootData';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { cn, getGloss } from '@/lib/utils';
@@ -327,13 +327,14 @@ function DerivedTermLink({
 }
 
 function AdminActionButtons({ onEdit, onDelete, isAdd = false }: { onEdit?: () => void, onDelete?: () => void, isAdd?: boolean }) {
+    const { term } = useLinguisticMode();
     return (
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
             {onEdit && (
                 <button
                     onClick={(e) => { e.preventDefault(); onEdit(); }}
-                    className="p-1 rounded hover:bg-black/5 text-black/55 transition-all"
-                    title={isAdd ? 'Add Entry' : 'Edit Entry'}
+                    className="p-1 rounded hover:bg-black/5 text-black/55 transition-all outline-none"
+                    title={isAdd ? term('add-entry') : term('edit-entry')}
                 >
                     {isAdd ? <Plus size={12} /> : <Edit2 size={12} />}
                 </button>
@@ -341,14 +342,60 @@ function AdminActionButtons({ onEdit, onDelete, isAdd = false }: { onEdit?: () =
             {onDelete && (
                 <button
                     onClick={(e) => { e.preventDefault(); onDelete(); }}
-                    className="p-1 rounded hover:bg-black/5 text-red-400 hover:text-red-600 transition-all"
-                    title="Delete Entry"
+                    className="p-1 rounded hover:bg-black/5 text-red-400 hover:text-red-600 transition-all outline-none"
+                    title={term('remove-relationship') || 'Remove Relationship'}
                 >
                     <Trash2 size={12} />
                 </button>
             )}
         </div>
     );
+}
+
+function removeRelationshipFromEntry(entry: Entry, targetId: string): Entry {
+    const updated = JSON.parse(JSON.stringify(entry)) as Entry;
+
+    // POS-specific morphology arrays
+    if (updated.noun_morphology) {
+        const m = updated.noun_morphology;
+        if (m.related_entries) m.related_entries = m.related_entries.filter((r: any) => r.id !== targetId);
+        if (m.synonyms) m.synonyms = m.synonyms.filter((s: any) => s.id !== targetId);
+        if (m.antonyms) m.antonyms = m.antonyms.filter((a: any) => a.id !== targetId);
+    }
+    if (updated.verb_morphology) {
+        const m = updated.verb_morphology;
+        if (m.related_entries) m.related_entries = m.related_entries.filter((r: any) => r.id !== targetId);
+        if (m.synonyms) m.synonyms = m.synonyms.filter((s: any) => s.id !== targetId);
+        if (m.antonyms) m.antonyms = m.antonyms.filter((a: any) => a.id !== targetId);
+    }
+    if (updated.adjective_morphology) {
+        const m = updated.adjective_morphology;
+        if (m.related_entries) m.related_entries = m.related_entries.filter((r: any) => r.id !== targetId);
+        if (m.synonyms) m.synonyms = m.synonyms.filter((s: any) => s.id !== targetId);
+        if (m.antonyms) m.antonyms = m.antonyms.filter((a: any) => a.id !== targetId);
+    }
+    if (updated.numeral_morphology) {
+        const m = updated.numeral_morphology;
+        if (m.related_entries) m.related_entries = m.related_entries.filter((r: any) => r.id !== targetId);
+        if (m.synonyms) m.synonyms = m.synonyms.filter((s: any) => s.id !== targetId);
+        if (m.antonyms) m.antonyms = m.antonyms.filter((a: any) => a.id !== targetId);
+    }
+
+    // Top-level arrays (fallback or primary for Participle/FunctionWord)
+    if (Array.isArray((updated as any).alternative_forms)) {
+        (updated as any).alternative_forms = (updated as any).alternative_forms.filter((a: any) => a.id !== targetId);
+    }
+    if (Array.isArray((updated as any).related_entries)) {
+        (updated as any).related_entries = (updated as any).related_entries.filter((r: any) => r.id !== targetId);
+    }
+    if (Array.isArray((updated as any).synonyms)) {
+        (updated as any).synonyms = (updated as any).synonyms.filter((s: any) => s.id !== targetId);
+    }
+    if (Array.isArray((updated as any).antonyms)) {
+        (updated as any).antonyms = (updated as any).antonyms.filter((a: any) => a.id !== targetId);
+    }
+
+    return updated;
 }
 
 // ── Noun View ──────────────────────────────────────────────────────────────
@@ -390,14 +437,27 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const nm = entry.noun_morphology!;
     const ety = entry.etymologies?.[0];
 
-    const handleDeleteEntry = async (id: string) => {
-        if (!confirm(term('confirm-delete-entry') || 'Are you sure you want to delete this entry permanently?')) return;
+    const allRelatedEntries = nm.related_entries || [];
+    const directAlternativeForms = (entry as any).alternative_forms || [];
+    const markedAlternativeForms = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
+    });
+    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
+    const relatedEntries = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
+    });
+
+    const handleRemoveRelationship = async (targetId: string) => {
+        if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
         try {
             const token = await getToken();
-            await adminDeleteEntry(token!, id);
+            const updated = removeRelationshipFromEntry(entry, targetId);
+            await adminUpdateEntry(token!, updated as any);
             onRefetch?.();
         } catch (err: any) {
-            alert((term('failed-delete-entry') || 'Failed to delete entry: ') + (err.message || String(err)));
+            alert((term('failed-remove-relationship') || 'Failed to remove relationship: ') + (err.message || String(err)));
         }
     };
 
@@ -535,10 +595,33 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             </SideCard>
                         )}
 
-                        {nm.related_entries && nm.related_entries.length > 0 && (
+                        {alternativeForms.length > 0 && (
+                            <SideCard title={term('alternative-forms')}>
+                                <div className="space-y-1">
+                                    {alternativeForms.map((alt: any) => (
+                                        <div key={alt.id} className="flex items-center justify-between group">
+                                            <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {alt.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(alt, language, mode)}"
+                                                </span>
+                                            </Link>
+                                            {isActualAdmin && (
+                                                <AdminActionButtons
+                                                    onEdit={() => handleEditEntry(alt)}
+                                                    onDelete={() => handleRemoveRelationship(alt.id)}
+                                                />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </SideCard>
+                        )}
+
+                        {relatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {nm.related_entries.map(rel => (
+                                    {relatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
@@ -549,7 +632,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             {isActualAdmin && (
                                                 <AdminActionButtons
                                                     onEdit={() => handleEditEntry(rel)}
-                                                    onDelete={() => handleDeleteEntry(rel.id)}
+                                                    onDelete={() => handleRemoveRelationship(rel.id)}
                                                 />
                                             )}
                                         </div>
@@ -786,7 +869,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 {isActualAdmin && (
                                                                     <AdminActionButtons
                                                                         onEdit={() => handleEditEntry(s)}
-                                                                        onDelete={() => handleDeleteEntry(s.id)}
+                                                                        onDelete={() => handleRemoveRelationship(s.id)}
                                                                     />
                                                                 )}
                                                             </div>
@@ -805,7 +888,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 {isActualAdmin && (
                                                                     <AdminActionButtons
                                                                         onEdit={() => handleEditEntry(a)}
-                                                                        onDelete={() => handleDeleteEntry(a.id)}
+                                                                        onDelete={() => handleRemoveRelationship(a.id)}
                                                                     />
                                                                 )}
                                                             </div>
@@ -834,10 +917,25 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </SideCard>
                             )}
 
-                            {nm.related_entries && nm.related_entries.length > 0 && (
+                            {alternativeForms.length > 0 && (
+                                <SideCard title={term('alternative-forms')}>
+                                    <div className="space-y-1">
+                                        {alternativeForms.map((alt: any) => (
+                                            <Link key={alt.id} to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {alt.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(alt, language, mode)}"
+                                                </span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </SideCard>
+                            )}
+
+                            {relatedEntries.length > 0 && (
                                 <SideCard title={term('related-entries')}>
                                     <div className="space-y-1">
-                                        {nm.related_entries.map(rel => (
+                                        {relatedEntries.map((rel: any) => (
                                             <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
@@ -916,6 +1014,18 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
     const vm = entry.verb_morphology!;
     const ety = entry.etymologies?.[0];
+
+    const allRelatedEntries = vm.related_entries || [];
+    const directAlternativeForms = (entry as any).alternative_forms || [];
+    const markedAlternativeForms = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
+    });
+    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
+    const relatedEntries = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
+    });
 
     const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants;
     const pattern = entry.root_pattern_form?.pattern;
@@ -996,14 +1106,15 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         }
     }, [entry, rootEntries, vm.form]);
 
-    const handleDeleteEntry = async (id: string) => {
-        if (!confirm(term('confirm-delete-entry') || 'Are you sure you want to delete this entry permanently?')) return;
+    const handleRemoveRelationship = async (targetId: string) => {
+        if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
         try {
             const token = await getToken();
-            await adminDeleteEntry(token!, id);
+            const updated = removeRelationshipFromEntry(entry, targetId);
+            await adminUpdateEntry(token!, updated as any);
             onRefetch?.();
         } catch (err: any) {
-            alert((term('failed-delete-entry') || 'Failed to delete entry: ') + (err.message || String(err)));
+            alert((term('failed-remove-relationship') || 'Failed to remove relationship: ') + (err.message || String(err)));
         }
     };
 
@@ -1121,10 +1232,33 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             </SideCard>
                         )}
 
-                        {vm.related_entries && vm.related_entries.length > 0 && (
+                        {alternativeForms.length > 0 && (
+                            <SideCard title={term('alternative-forms')}>
+                                <div className="space-y-1">
+                                    {alternativeForms.map((alt: any) => (
+                                        <div key={alt.id} className="flex items-center justify-between group">
+                                            <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {alt.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(alt, language, mode)}"
+                                                </span>
+                                            </Link>
+                                            {isActualAdmin && (
+                                                <AdminActionButtons
+                                                    onEdit={() => handleEditEntry(alt)}
+                                                    onDelete={() => handleRemoveRelationship(alt.id)}
+                                                />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </SideCard>
+                        )}
+
+                        {relatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {vm.related_entries.map(rel => (
+                                    {relatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
@@ -1135,7 +1269,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             {isActualAdmin && (
                                                 <AdminActionButtons
                                                     onEdit={() => handleEditEntry(rel)}
-                                                    onDelete={() => handleDeleteEntry(rel.id)}
+                                                    onDelete={() => handleRemoveRelationship(rel.id)}
                                                 />
                                             )}
                                         </div>
@@ -1492,7 +1626,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                             label={term('passive')}
                                                             data={autoDerived.passiveParticiple}
                                                             isAdmin={isActualAdmin}
-                                                            onDelete={() => autoDerived!.passiveParticiple.entryId && handleDeleteEntry(autoDerived!.passiveParticiple.entryId)}
+                                                            onDelete={() => autoDerived!.passiveParticiple.entryId && handleRemoveRelationship(autoDerived!.passiveParticiple.entryId)}
                                                             onEdit={() => handleEditDerived(autoDerived!.passiveParticiple, 'passive')}
                                                         />
                                                     )}
@@ -1501,7 +1635,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                             label={term('active')}
                                                             data={autoDerived.activeParticiple}
                                                             isAdmin={isActualAdmin}
-                                                            onDelete={() => autoDerived!.activeParticiple.entryId && handleDeleteEntry(autoDerived!.activeParticiple.entryId)}
+                                                            onDelete={() => autoDerived!.activeParticiple.entryId && handleRemoveRelationship(autoDerived!.activeParticiple.entryId)}
                                                             onEdit={() => handleEditDerived(autoDerived!.activeParticiple, 'active')}
                                                         />
                                                     )}
@@ -1510,7 +1644,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                             label={term('verbal-noun')}
                                                             data={autoDerived.verbalNoun}
                                                             isAdmin={isActualAdmin}
-                                                            onDelete={() => autoDerived!.verbalNoun.entryId && handleDeleteEntry(autoDerived!.verbalNoun.entryId)}
+                                                            onDelete={() => autoDerived!.verbalNoun.entryId && handleRemoveRelationship(autoDerived!.verbalNoun.entryId)}
                                                             onEdit={() => handleEditDerived(autoDerived!.verbalNoun, 'noun')}
                                                         />
                                                     )}
@@ -1557,7 +1691,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                     {isActualAdmin && (
                                                                         <AdminActionButtons
                                                                             onEdit={() => handleEditEntry(s)}
-                                                                            onDelete={() => handleDeleteEntry(s.id)}
+                                                                            onDelete={() => handleRemoveRelationship(s.id)}
                                                                         />
                                                                     )}
                                                                 </div>
@@ -1578,7 +1712,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                     {isActualAdmin && (
                                                                         <AdminActionButtons
                                                                             onEdit={() => handleEditEntry(a)}
-                                                                            onDelete={() => handleDeleteEntry(a.id)}
+                                                                            onDelete={() => handleRemoveRelationship(a.id)}
                                                                         />
                                                                     )}
                                                                 </div>
@@ -1608,10 +1742,25 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </SideCard>
                             )}
 
-                            {vm.related_entries && vm.related_entries.length > 0 && (
+                            {alternativeForms.length > 0 && (
+                                <SideCard title={term('alternative-forms')}>
+                                    <div className="space-y-1">
+                                        {alternativeForms.map((alt: any) => (
+                                            <Link key={alt.id} to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {alt.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(alt, language, mode)}"
+                                                </span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </SideCard>
+                            )}
+
+                            {relatedEntries.length > 0 && (
                                 <SideCard title={term('related-entries')}>
                                     <div className="space-y-1">
-                                        {vm.related_entries.map(rel => (
+                                        {relatedEntries.map((rel: any) => (
                                             <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
@@ -1690,16 +1839,29 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const nm = entry.numeral_morphology || (entry as any).numeral_morphology;
     const ety = entry.etymologies?.[0];
 
+    const allRelatedEntries = (entry as any).related_entries || [];
+    const directAlternativeForms = (entry as any).alternative_forms || [];
+    const markedAlternativeForms = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
+    });
+    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
+    const relatedEntries = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
+    });
+
     if (!entry) return null;
 
-    const handleDeleteEntry = async (id: string) => {
-        if (!confirm(term('confirm-delete-entry') || 'Are you sure you want to delete this entry permanently?')) return;
+    const handleRemoveRelationship = async (targetId: string) => {
+        if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
         try {
             const token = await getToken();
-            await adminDeleteEntry(token!, id);
+            const updated = removeRelationshipFromEntry(entry, targetId);
+            await adminUpdateEntry(token!, updated as any);
             onRefetch?.();
         } catch (err: any) {
-            alert((term('failed-delete-entry') || 'Failed to delete entry: ') + (err.message || String(err)));
+            alert((term('failed-remove-relationship') || 'Failed to remove relationship: ') + (err.message || String(err)));
         }
     };
 
@@ -1805,9 +1967,9 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                     </button>
                     {marker === 'plain' && entryId && (
                         <button
-                            onClick={(e) => { e.preventDefault(); handleDeleteEntry(entryId); }}
+                            onClick={(e) => { e.preventDefault(); handleRemoveRelationship(entryId); }}
                             className="p-1 rounded hover:bg-black/5 text-red-400 hover:text-red-600 transition-all"
-                            title="Delete Entry"
+                            title={term('remove-relationship') || 'Remove Relationship'}
                         >
                             <Trash2 size={12} />
                         </button>
@@ -1852,8 +2014,20 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
-                    {/* Left Sidebar */}
-                    <div className="w-full md:w-64 shrink-0 space-y-4">
+                    {/* Top Mobile Gloss */}
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
+                        <SideCard title={term('gloss')}>
+                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                {entry.definitions?.map(def => (
+                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                )) || <li>-</li>}
+                            </ol>
+                            <TagChips entry={entry} />
+                        </SideCard>
+                    </div>
+
+                    {/* Left Sidebar (Desktop Only) */}
+                    <div className="hidden md:block w-full md:w-64 shrink-0 space-y-4">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
                                 {entry.definitions?.map(def => (
@@ -1881,10 +2055,33 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                             </SideCard>
                         )}
 
-                        {nm?.related_entries && nm.related_entries.length > 0 && (
+                        {alternativeForms.length > 0 && (
+                            <SideCard title={term('alternative-forms')}>
+                                <div className="space-y-1">
+                                    {alternativeForms.map((alt: any) => (
+                                        <div key={alt.id} className="flex items-center justify-between group">
+                                            <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {alt.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(alt, language, mode)}"
+                                                </span>
+                                            </Link>
+                                            {isActualAdmin && (
+                                                <AdminActionButtons
+                                                    onEdit={() => handleEditEntry(alt)}
+                                                    onDelete={() => handleRemoveRelationship(alt.id)}
+                                                />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </SideCard>
+                        )}
+
+                        {relatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {nm.related_entries.map((rel: any) => (
+                                    {relatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
@@ -1895,12 +2092,18 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                             {isActualAdmin && (
                                                 <AdminActionButtons
                                                     onEdit={() => handleEditEntry(rel)}
-                                                    onDelete={() => handleDeleteEntry(rel.id)}
+                                                    onDelete={() => handleRemoveRelationship(rel.id)}
                                                 />
                                             )}
                                         </div>
                                     ))}
                                 </div>
+                            </SideCard>
+                        )}
+
+                        {nm.source_citation && (
+                            <SideCard title={term('sources')}>
+                                <span className="text-sm font-medium" style={{ color: GOLD }}>{nm.source_citation}</span>
                             </SideCard>
                         )}
                     </div>
@@ -2034,6 +2237,58 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                 </div>
                             </div>
                         </div>
+
+                        {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
+                        <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
+                            {ety && ety.chain.length > 0 && (
+                                <SideCard title={term('etymology')}>
+                                    <p className="text-sm text-black leading-relaxed">
+                                        {term('from')}
+                                        <span style={{ color: BLUE }} className="font-medium mx-1">
+                                            {term(ety.chain[0].language)}
+                                        </span>
+                                        {ety.chain[0].script && <> <span className="font-arabic">{ety.chain[0].script}</span></>}
+                                        {ety.chain[1] && <> ({ety.chain[1].form})</>}.
+                                    </p>
+                                </SideCard>
+                            )}
+
+                            {alternativeForms.length > 0 && (
+                                <SideCard title={term('alternative-forms')}>
+                                    <div className="space-y-1">
+                                        {alternativeForms.map((alt: any) => (
+                                            <Link key={alt.id} to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {alt.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(alt, language, mode)}"
+                                                </span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </SideCard>
+                            )}
+
+                            {relatedEntries.length > 0 && (
+                                <SideCard title={term('related-entries')}>
+                                    <div className="space-y-1">
+                                        {relatedEntries.map((rel: any) => (
+                                            <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {rel.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(rel, language, mode)}"
+                                                </span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </SideCard>
+                            )}
+
+                            {nm.source_citation && (
+                                <SideCard title={term('sources')}>
+                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{nm.source_citation}</span>
+                                </SideCard>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2095,14 +2350,27 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
     const am = entry.adjective_morphology!;
     const ety = entry.etymologies?.[0];
 
-    const handleDeleteEntry = async (id: string) => {
-        if (!confirm(term('confirm-delete-entry') || 'Are you sure you want to delete this entry permanently?')) return;
+    const allRelatedEntries = am.related_entries || [];
+    const directAlternativeForms = (entry as any).alternative_forms || [];
+    const markedAlternativeForms = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
+    });
+    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
+    const relatedEntries = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
+    });
+
+    const handleRemoveRelationship = async (targetId: string) => {
+        if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
         try {
             const token = await getToken();
-            await adminDeleteEntry(token!, id);
+            const updated = removeRelationshipFromEntry(entry, targetId);
+            await adminUpdateEntry(token!, updated as any);
             onRefetch?.();
         } catch (err: any) {
-            alert((term('failed-delete-entry') || 'Failed to delete entry: ') + (err.message || String(err)));
+            alert((term('failed-remove-relationship') || 'Failed to remove relationship: ') + (err.message || String(err)));
         }
     };
 
@@ -2164,8 +2432,20 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
-                    {/* Left Sidebar */}
-                    <div className="w-full md:w-64 shrink-0 space-y-4">
+                    {/* Top Mobile Gloss */}
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
+                        <SideCard title={term('gloss')}>
+                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                {entry.definitions.map(def => (
+                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                ))}
+                            </ol>
+                            <TagChips entry={entry} />
+                        </SideCard>
+                    </div>
+
+                    {/* Left Sidebar (Desktop Only) */}
+                    <div className="hidden md:block w-full md:w-64 shrink-0 space-y-4">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
                                 {entry.definitions.map(def => (
@@ -2193,10 +2473,33 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                             </SideCard>
                         )}
 
-                        {am.related_entries && am.related_entries.length > 0 && (
+                        {alternativeForms.length > 0 && (
+                            <SideCard title={term('alternative-forms')}>
+                                <div className="space-y-1">
+                                    {alternativeForms.map((alt: any) => (
+                                        <div key={alt.id} className="flex items-center justify-between group">
+                                            <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {alt.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(alt, language, mode)}"
+                                                </span>
+                                            </Link>
+                                            {isActualAdmin && (
+                                                <AdminActionButtons
+                                                    onEdit={() => handleEditEntry(alt)}
+                                                    onDelete={() => handleRemoveRelationship(alt.id)}
+                                                />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </SideCard>
+                        )}
+
+                        {relatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {am.related_entries.map((rel: any) => (
+                                    {relatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
@@ -2207,7 +2510,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                             {isActualAdmin && (
                                                 <AdminActionButtons
                                                     onEdit={() => handleEditEntry(rel)}
-                                                    onDelete={() => handleDeleteEntry(rel.id)}
+                                                    onDelete={() => handleRemoveRelationship(rel.id)}
                                                 />
                                             )}
                                         </div>
@@ -2347,7 +2650,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(s)}
-                                                                    onDelete={() => handleDeleteEntry(s.id)}
+                                                                    onDelete={() => handleRemoveRelationship(s.id)}
                                                                 />
                                                             )}
                                                         </div>
@@ -2366,7 +2669,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(a)}
-                                                                    onDelete={() => handleDeleteEntry(a.id)}
+                                                                    onDelete={() => handleRemoveRelationship(a.id)}
                                                                 />
                                                             )}
                                                         </div>
@@ -2375,6 +2678,63 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                             )}
                                         </div>
                                     </div>
+                                )}
+                            </div>
+
+                            {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
+                            <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
+                                {ety && ety.chain.length > 0 && (
+                                    <SideCard title={term('etymology')}>
+                                        <p className="text-sm text-black leading-relaxed">
+                                            {term('from')}
+                                            {ety.chain.map((c, i) => (
+                                                <React.Fragment key={i}>
+                                                    {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
+                                                    <span style={{ color: BLUE }} className="font-medium mx-1">
+                                                        {term(c.language)}
+                                                    </span>
+                                                    {c.form && <span className="font-serif font-medium">{c.form}</span>}
+                                                    {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
+                                                </React.Fragment>
+                                            ))}.
+                                        </p>
+                                    </SideCard>
+                                )}
+
+                                {alternativeForms.length > 0 && (
+                                    <SideCard title={term('alternative-forms')}>
+                                        <div className="space-y-1">
+                                            {alternativeForms.map((alt: any) => (
+                                                <Link key={alt.id} to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                    {alt.headword}{' '}
+                                                    <span className="opacity-55 font-sans text-xs text-black">
+                                                        "{getGloss(alt, language, mode)}"
+                                                    </span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </SideCard>
+                                )}
+
+                                {relatedEntries.length > 0 && (
+                                    <SideCard title={term('related-entries')}>
+                                        <div className="space-y-1">
+                                            {relatedEntries.map((rel: any) => (
+                                                <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                    {rel.headword}{' '}
+                                                    <span className="opacity-55 font-sans text-xs text-black">
+                                                        "{getGloss(rel, language, mode)}"
+                                                    </span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </SideCard>
+                                )}
+
+                                {am.source_citation && (
+                                    <SideCard title={term('sources')}>
+                                        <span className="text-sm font-medium" style={{ color: GOLD }}>{am.source_citation}</span>
+                                    </SideCard>
                                 )}
                             </div>
                         </div>
@@ -2436,16 +2796,29 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
 
     const isActualAdmin = isAdmin && adminViewEnabled;
     const ety = entry.etymologies?.[0];
+
+    const allRelatedEntries = (entry as any).related_entries || [];
+    const directAlternativeForms = (entry as any).alternative_forms || [];
+    const markedAlternativeForms = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
+    });
+    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
+    const relatedEntries = allRelatedEntries.filter((item: any) => {
+        const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
+        return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
+    });
     //const pm = entry.adjective_morphology!;
 
-    const handleDeleteEntry = async (id: string) => {
-        if (!confirm(term('confirm-delete-entry') || 'Are you sure you want to delete this entry permanently?')) return;
+    const handleRemoveRelationship = async (targetId: string) => {
+        if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
         try {
             const token = await getToken();
-            await adminDeleteEntry(token!, id);
+            const updated = removeRelationshipFromEntry(entry, targetId);
+            await adminUpdateEntry(token!, updated as any);
             onRefetch?.();
         } catch (err: any) {
-            alert((term('failed-delete-entry') || 'Failed to delete entry: ') + (err.message || String(err)));
+            alert((term('failed-remove-relationship') || 'Failed to remove relationship: ') + (err.message || String(err)));
         }
     };
 
@@ -2498,7 +2871,20 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
-                    <div className="w-full md:w-64 shrink-0 space-y-4">
+                    {/* Top Mobile Gloss */}
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
+                        <SideCard title={term('gloss')}>
+                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                {entry.definitions.map(def => (
+                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                ))}
+                            </ol>
+                            <TagChips entry={entry} />
+                        </SideCard>
+                    </div>
+
+                    {/* Left Sidebar (Desktop Only) */}
+                    <div className="hidden md:block w-full md:w-64 shrink-0 space-y-4">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
                                 {entry.definitions.map(def => (
@@ -2526,10 +2912,33 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                             </SideCard>
                         )}
 
-                        {(entry as any).related_entries && (entry as any).related_entries.length > 0 && (
+                        {alternativeForms.length > 0 && (
+                            <SideCard title={term('alternative-forms')}>
+                                <div className="space-y-1">
+                                    {alternativeForms.map((alt: any) => (
+                                        <div key={alt.id} className="flex items-center justify-between group">
+                                            <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {alt.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(alt, language, mode)}"
+                                                </span>
+                                            </Link>
+                                            {isActualAdmin && (
+                                                <AdminActionButtons
+                                                    onEdit={() => handleEditEntry(alt)}
+                                                    onDelete={() => handleRemoveRelationship(alt.id)}
+                                                />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </SideCard>
+                        )}
+
+                        {relatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {(entry as any).related_entries.map((rel: any) => (
+                                    {relatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
@@ -2540,7 +2949,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                             {isActualAdmin && (
                                                 <AdminActionButtons
                                                     onEdit={() => handleEditEntry(rel)}
-                                                    onDelete={() => handleDeleteEntry(rel.id)}
+                                                    onDelete={() => handleRemoveRelationship(rel.id)}
                                                 />
                                             )}
                                         </div>
@@ -2633,7 +3042,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(s)}
-                                                                    onDelete={() => handleDeleteEntry(s.id)}
+                                                                    onDelete={() => handleRemoveRelationship(s.id)}
                                                                 />
                                                             )}
                                                         </div>
@@ -2652,7 +3061,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(a)}
-                                                                    onDelete={() => handleDeleteEntry(a.id)}
+                                                                    onDelete={() => handleRemoveRelationship(a.id)}
                                                                 />
                                                             )}
                                                         </div>
@@ -2661,6 +3070,57 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                             )}
                                         </div>
                                     </div>
+                                )}
+                            </div>
+
+                            {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
+                            <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
+                                {ety && ety.chain.length > 0 && (
+                                    <SideCard title={term('etymology')}>
+                                        <p className="text-sm text-black leading-relaxed">
+                                            {term('from')}
+                                            {ety.chain.map((c, i) => (
+                                                <React.Fragment key={i}>
+                                                    {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
+                                                    <span style={{ color: BLUE }} className="font-medium mx-1">
+                                                        {term(c.language)}
+                                                    </span>
+                                                    {c.form && <span className="font-serif font-medium">{c.form}</span>}
+                                                    {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
+                                                </React.Fragment>
+                                            ))}.
+                                        </p>
+                                    </SideCard>
+                                )}
+
+                                {alternativeForms.length > 0 && (
+                                    <SideCard title={term('alternative-forms')}>
+                                        <div className="space-y-1">
+                                            {alternativeForms.map((alt: any) => (
+                                                <Link key={alt.id} to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                    {alt.headword}{' '}
+                                                    <span className="opacity-55 font-sans text-xs text-black">
+                                                        "{getGloss(alt, language, mode)}"
+                                                    </span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </SideCard>
+                                )}
+
+                                {relatedEntries.length > 0 && (
+                                    <SideCard title={term('related-entries')}>
+                                        <div className="space-y-1">
+                                            {relatedEntries.map((rel: any) => (
+                                                <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                    {rel.headword}{' '}
+                                                    <span className="opacity-55 font-sans text-xs text-black">
+                                                        "{getGloss(rel, language, mode)}"
+                                                    </span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </SideCard>
                                 )}
                             </div>
                         </div>
@@ -2775,14 +3235,15 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
         { letter: 'w', rule: 'il- → il-', example: 'werqa', result: 'il-werqa' },
     ];
 
-    const handleDeleteEntry = async (id: string) => {
-        if (!confirm(term('confirm-delete-entry') || 'Are you sure you want to delete this entry permanently?')) return;
+    const handleRemoveRelationship = async (targetId: string) => {
+        if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
         try {
             const token = await getToken();
-            await adminDeleteEntry(token!, id);
+            const updated = removeRelationshipFromEntry(entry, targetId);
+            await adminUpdateEntry(token!, updated as any);
             onRefetch?.();
         } catch (err: any) {
-            alert((term('failed-delete-entry') || 'Failed to delete entry: ') + (err.message || String(err)));
+            alert((term('failed-remove-relationship') || 'Failed to remove relationship: ') + (err.message || String(err)));
         }
     };
 
@@ -2873,6 +3334,52 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                                         </React.Fragment>
                                     ))}.
                                 </p>
+                            </SideCard>
+                        )}
+
+                        {alternativeForms.length > 0 && (
+                            <SideCard title={term('alternative-forms')}>
+                                <div className="space-y-1">
+                                    {alternativeForms.map((alt: any) => (
+                                        <div key={alt.id} className="flex items-center justify-between group">
+                                            <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {alt.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(alt, language, mode)}"
+                                                </span>
+                                            </Link>
+                                            {isActualAdmin && (
+                                                <AdminActionButtons
+                                                    onEdit={() => handleEditEntry(alt)}
+                                                    onDelete={() => handleRemoveRelationship(alt.id)}
+                                                />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </SideCard>
+                        )}
+
+                        {relatedEntries.length > 0 && (
+                            <SideCard title={term('related-entries')}>
+                                <div className="space-y-1">
+                                    {relatedEntries.map((rel: any) => (
+                                        <div key={rel.id} className="flex items-center justify-between group">
+                                            <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {rel.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(rel, language, mode)}"
+                                                </span>
+                                            </Link>
+                                            {isActualAdmin && (
+                                                <AdminActionButtons
+                                                    onEdit={() => handleEditEntry(rel)}
+                                                    onDelete={() => handleRemoveRelationship(rel.id)}
+                                                />
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
                             </SideCard>
                         )}
                     </div>
@@ -3030,7 +3537,7 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                                     </div>
                                 )}
 
-                                {((synonyms?.length ?? 0) > 0 || (antonyms?.length ?? 0) > 0 || (relatedEntries?.length ?? 0) > 0 || (alternativeForms?.length ?? 0) > 0) && (
+                                {((synonyms?.length ?? 0) > 0 || (antonyms?.length ?? 0) > 0) && (
                                     <div className="w-full">
                                         <h2 className="font-serif font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
                                         <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-start">
@@ -3040,13 +3547,13 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                                                     {synonyms.map((s: any) => (
                                                         <div key={s.id} className="flex items-center gap-2 group">
                                                             <Link to={`/entry/${s.id}`} style={{ color: BLUE }} className="block hover:underline whitespace-nowrap">
-                                                                {s.headword}
+                                                                 {s.headword}
                                                             </Link>
                                                             "{getGloss(s, language, mode)}"
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(s)}
-                                                                    onDelete={() => handleDeleteEntry(s.id)}
+                                                                    onDelete={() => handleRemoveRelationship(s.id)}
                                                                 />
                                                             )}
                                                         </div>
@@ -3065,7 +3572,7 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(a)}
-                                                                    onDelete={() => handleDeleteEntry(a.id)}
+                                                                    onDelete={() => handleRemoveRelationship(a.id)}
                                                                 />
                                                             )}
                                                         </div>
@@ -3084,7 +3591,7 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(rel)}
-                                                                    onDelete={() => handleDeleteEntry(rel.id)}
+                                                                    onDelete={() => handleRemoveRelationship(rel.id)}
                                                                 />
                                                             )}
                                                         </div>
@@ -3103,7 +3610,7 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                                                             {isActualAdmin && (
                                                                 <AdminActionButtons
                                                                     onEdit={() => handleEditEntry(alt)}
-                                                                    onDelete={() => handleDeleteEntry(alt.id)}
+                                                                    onDelete={() => handleRemoveRelationship(alt.id)}
                                                                 />
                                                             )}
                                                         </div>
@@ -3112,6 +3619,57 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                                             )}
                                         </div>
                                     </div>
+                                )}
+                            </div>
+
+                            {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
+                            <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
+                                {ety && ety.chain.length > 0 && (
+                                    <SideCard title={term('etymology')}>
+                                        <p className="text-sm text-black leading-relaxed">
+                                            {term('from')}
+                                            {ety.chain.map((c, i) => (
+                                                <React.Fragment key={i}>
+                                                    {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
+                                                    <span style={{ color: BLUE }} className="font-medium mx-1">
+                                                        {term(c.language)}
+                                                    </span>
+                                                    {c.form && <span className="font-serif font-medium">{c.form}</span>}
+                                                    {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
+                                                </React.Fragment>
+                                            ))}.
+                                        </p>
+                                    </SideCard>
+                                )}
+
+                                {alternativeForms.length > 0 && (
+                                    <SideCard title={term('alternative-forms')}>
+                                        <div className="space-y-1">
+                                            {alternativeForms.map((alt: any) => (
+                                                <Link key={alt.id} to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                    {alt.headword}{' '}
+                                                    <span className="opacity-55 font-sans text-xs text-black">
+                                                        "{getGloss(alt, language, mode)}"
+                                                    </span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </SideCard>
+                                )}
+
+                                {relatedEntries.length > 0 && (
+                                    <SideCard title={term('related-entries')}>
+                                        <div className="space-y-1">
+                                            {relatedEntries.map((rel: any) => (
+                                                <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                    {rel.headword}{' '}
+                                                    <span className="opacity-55 font-sans text-xs text-black">
+                                                        "{getGloss(rel, language, mode)}"
+                                                    </span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </SideCard>
                                 )}
                             </div>
                         </div>

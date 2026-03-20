@@ -166,6 +166,34 @@ export async function onRequestGet({ params, env }) {
             weak_class: entry.verb_weak_class || entry.root_weak_class || null,
         };
 
+        // ── Enrich Relationship Helpers ──────────────────────────────────────────
+        async function enrichRelationships(relArray) {
+            if (!relArray || !relArray.length) return [];
+            const idsToEnrich = relArray
+                .filter(r => !r.gloss_en && !r.gloss_mt)
+                .map(r => r.id);
+            if (idsToEnrich.length === 0) return relArray;
+
+            const res = await db.execute({
+                sql: `SELECT entry_id, text_en, text_mt FROM definitions WHERE entry_id IN (${idsToEnrich.map(() => '?').join(',')}) AND sense_number = 1`,
+                args: idsToEnrich,
+            });
+
+            const defMap = {};
+            res.rows.forEach(r => {
+                defMap[r.entry_id] = { en: r.text_en, mt: r.text_mt };
+            });
+
+            return relArray.map(r => ({
+                ...r,
+                gloss_en: r.gloss_en || defMap[r.id]?.en || '',
+                gloss_mt: r.gloss_mt || defMap[r.id]?.mt || '',
+            }));
+        }
+
+        payload.alternative_forms = await enrichRelationships(payload.alternative_forms);
+        payload.related_entries = await enrichRelationships(payload.related_entries);
+
         // ── Shared Related Entries ──────────────────────────────────────────────
         let related_entries = [];
         const rc = entry.resolved_root_consonants;
