@@ -17,6 +17,7 @@ import { useAdminConfig } from '@/lib/adminConfig';
 import { cn, getGloss } from '@/lib/utils';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { generateTheoreticalDual, generateElative, generateNumeralForms, type NumeralAutoForms } from '@/lib/maltesePhonology';
+import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 
 const MarkedValue = ({ val, theoretical, showMarker = true }: { val: string | React.ReactNode | { value: React.ReactNode, theoretical: boolean }, theoretical?: boolean, showMarker?: boolean }) => {
     const isObj = typeof val === 'object' && val !== null && 'value' in val;
@@ -167,6 +168,7 @@ function MorphologyGrid({ title, rows, displayPattern }: { title: string; rows: 
 }
 
 function TagChips({ entry }: { entry: Entry }) {
+    const { term } = useLinguisticMode();
     const rawTags = entry.tags || [];
     if (!rawTags.length) return null;
 
@@ -174,10 +176,10 @@ function TagChips({ entry }: { entry: Entry }) {
         .filter(t => !t.includes('THEORETICAL'))
         .map(tag => {
             const isTitle = tag.startsWith('\\');
-            const clean = tag.replace(/^[\\!$]/, '').trim();
-            return { raw: tag, label: clean, isTitle };
+            const clean = stripTagPrefixes(tag);
+            return { raw: tag, rawLabel: clean, label: resolveTagLabel(tag, term), isTitle };
         })
-        .filter(c => c.label && c.label !== '$' && c.label.toLowerCase() !== 'invariable');
+        .filter(c => c.rawLabel && c.rawLabel !== '$' && c.rawLabel.toLowerCase() !== 'invariable');
 
     if (!chips.length) return null;
 
@@ -536,14 +538,14 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 {entry.tags
                                     .filter(t => t.startsWith('\\'))
                                     .map(t => {
-                                        const clean = t.slice(1).replace('$', '').trim();
-                                        if (!clean) return null;
+                                        const translated = resolveTagLabel(t, term);
+                                        if (!translated) return null;
                                         return (
                                             <span
                                                 key={t}
                                                 className="inline-flex items-center px-2.5 py-1 rounded-full bg-black/5 text-[11px] font-sans text-black/80 border border-black/10"
                                             >
-                                                {clean}
+                                                {translated}
                                             </span>
                                         );
                                     })}

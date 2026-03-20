@@ -12,6 +12,7 @@ import { AudioPlayer } from './AudioPlayer';
 import { SubEntryBlock } from './SubEntryBlock';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import type { Entry } from '@/types';
+import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 
 interface EntryCardProps {
     entry: Entry;
@@ -123,9 +124,9 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                             )}
                             <RootPatternBadge form={entry.root_pattern_form} />
                             {entry.tags?.filter(t => !t.startsWith('\\')).map(t => {
-                                const clean = t.replace('$', '').trim();
+                                const clean = stripTagPrefixes(t);
                                 if (!clean) return null;
-                                return <Badge key={t} variant="tag">{clean}</Badge>;
+                                return <Badge key={t} variant="tag">{resolveTagLabel(t, term)}</Badge>;
                             })}
                         </div>
                     </div>

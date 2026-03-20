@@ -17,6 +17,7 @@ import { WorkspaceEmptyState } from '@/components/admin/workspace/WorkspaceEmpty
 import { WorkspaceErrorBanner, WorkspaceFeedbackBanner } from '@/components/admin/workspace/WorkspaceFeedbackBanner';
 import { WorkspaceToolbar } from '@/components/admin/workspace/WorkspaceToolbar';
 import { cn } from '@/lib/utils';
+import { resolveTagLabel } from '@/lib/tagLabel';
 
 const PAGE_SIZE = 50;
 
@@ -286,7 +287,7 @@ export function EntryManager() {
                                                         </Badge>
                                                     )}
                                                     {parseTags(entry.tags).map((tag) => (
-                                                        <Badge key={tag} variant="pos" className="bg-slate-50 text-slate-400 border-slate-100">{term(tag)}</Badge>
+                                                        <Badge key={tag} variant="pos" className="bg-slate-50 text-slate-400 border-slate-100">{resolveTagLabel(tag, term)}</Badge>
                                                     ))}
                                                 </div>
                                             </div>
@@ -353,7 +354,7 @@ export function EntryManager() {
                                                                 </span>
                                                             )}
                                                             {parseTags(entry.tags).map((tag) => (
-                                                                <span key={tag} className="text-[10px] bg-slate-50 border border-slate-100 px-1.5 py-0.5 rounded text-slate-400">{tag}</span>
+                                                                <span key={tag} className="text-[10px] bg-slate-50 border border-slate-100 px-1.5 py-0.5 rounded text-slate-400">{resolveTagLabel(tag, term)}</span>
                                                             ))}
                                                         </div>
                                                     </td>

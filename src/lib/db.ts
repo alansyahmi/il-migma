@@ -62,7 +62,7 @@ export async function searchEntries(
 
     const rs = await db.execute({ sql, args });
     return allRows<Entry>(rs).map((entry) => ({
-        entry,
+        ...entry,
         match_type: 'fulltext',
     }));
 }

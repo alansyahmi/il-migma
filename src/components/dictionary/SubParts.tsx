@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { resolveEntryGender } from '@/lib/gender';
+import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 
 import { type Entry } from '@/types';
 
@@ -15,7 +17,9 @@ interface SubPartsProps {
 
 export function SubParts({ entry, showTransitivity = false, layout = 'dots', showGender = false }: SubPartsProps) {
     const { term } = useLinguisticMode();
+    const { isAdmin, adminViewEnabled } = useAuth();
     const location = useLocation();
+    const isActualAdmin = isAdmin && adminViewEnabled;
 
     const isAdvanced = location.pathname.includes('/advanced-search');
     const basePath = isAdvanced ? '/advanced-search' : '/search';
@@ -29,9 +33,7 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
     const titleTags = tagsArr
         .filter(t => t.startsWith('!'))
         .map(t => {
-            const isImportant = t.startsWith('!');
-
-            let clean = t.slice(1).replace(/!/g, '').trim();
+            const clean = stripTagPrefixes(t);
             if (!clean) return null;
 
             return (
@@ -39,11 +41,10 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
                     key={t}
                     to={`/advanced-search?tag=${encodeURIComponent(clean)}`}
                     className={cn(
-                        "uppercase hover:underline",
-                        isImportant
+                        "uppercase hover:underline"
                     )}
                 >
-                    {clean}
+                    {resolveTagLabel(t, term).toUpperCase()}
                 </Link>
             );
         })
@@ -69,7 +70,7 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
                 })
                 .map(tag => (
                     <Link key={tag} to={`${basePath}?tag=${encodeURIComponent(tag)}`} className="hover:underline">
-                        {term(tag).toUpperCase()}
+                        {resolveTagLabel(tag, term).toUpperCase()}
                     </Link>
                 )),
             ...titleTags
@@ -97,7 +98,7 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
                 {term((entry as any).noun_type).toUpperCase()}
             </Link>
         ) : null,
-        tagsArr.some(t => t.toLowerCase() === 'invariable') ? (
+        isActualAdmin && tagsArr.some(t => stripTagPrefixes(t).toLowerCase() === 'invariable') ? (
             <span key="invariable" className="text-black/60">({term('invariable').toUpperCase()})</span>
         ) : null,
         ...titleTags

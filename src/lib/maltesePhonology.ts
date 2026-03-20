@@ -395,31 +395,40 @@ export function detectPluralType(headword: string, _soundSuffixes: string[]): Pl
 
 /**
  * Generates a theoretical dual form for a noun.
- * Appends -ajn if the word ends with a guttural (għ, ħ, q, h), otherwise -ejn.
- * Drops final -a before appending the suffix.
+ * Uses a synced-up stem before appending the suffix:
+ * - drops final -a
+ * - shortens final `ie` to `i`
+ * - syncopates a final short vowel when the word has a multi-vowel stem
+ * This keeps forms like għomor -> għomrejn instead of għomorejn.
  */
 export function generateTheoreticalDual(word: string): string {
     if (!word) return '';
     const norm = word.toLowerCase().trim().normalize('NFC');
-    
-    // Drop final -a
+
+    const vowelRe = /[aeiouàèìòùâêîôû]/gi;
     let stem = norm;
-    if (norm.endsWith('a')) {
-        stem = norm.slice(0, -1);
+
+    if (stem.endsWith('a')) {
+        stem = stem.slice(0, -1);
     }
-    
-    // Check for guttural ending (għ, ħ, q, h)
+
+    // Syncopate the final vowel in multi-vowel stems.
+    // This is intentionally conservative: words like "dar" stay untouched,
+    // while words like "għomor" and "xahar" reduce to their dual stem.
+    const vowelCount = stem.match(vowelRe)?.length ?? 0;
+    if (vowelCount >= 2) {
+        const shortenedIe = stem.replace(/ie([^aeiouàèìòùâêîôû]*)$/i, 'i$1');
+        if (shortenedIe !== stem) {
+            stem = shortenedIe;
+        } else {
+            stem = stem.replace(/([aeiouàèìòùâêîôû])([^aeiouàèìòùâêîôû]+)$/i, '$2');
+        }
+    }
+
+    // Check for guttural ending (għ, ħ, q, h) after stem reduction.
     const isGuttural = stem.endsWith('għ') || stem.endsWith('ħ') || stem.endsWith('q') || stem.endsWith('h');
     const suffix = isGuttural ? 'ajn' : 'ejn';
 
-    // Shorten 'ie' to 'i' in stem before suffix if it follows a consonant
-    // e.g., lsien -> lsin-ejn, ktieb -> ktib-ejn
-    if (stem.endsWith('ie' + (isGuttural ? stem.slice(-2) : stem.slice(-1)))) {
-        // This is complex b/c of guttural digraphs. 
-        // Simpler approach: replace 'ie' with 'i' if it's in the last syllable
-        stem = stem.replace(/ie([^aeiouàèìòùâêîôû]*)$/i, 'i$1');
-    }
-    
     return stem + suffix;
 }
 

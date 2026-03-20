@@ -16,6 +16,7 @@ import { WorkspaceEmptyState } from '@/components/admin/workspace/WorkspaceEmpty
 import { WorkspaceFeedbackBanner } from '@/components/admin/workspace/WorkspaceFeedbackBanner';
 import { WorkspaceToolbar } from '@/components/admin/workspace/WorkspaceToolbar';
 import { cn } from '@/lib/utils';
+import { resolveTagLabel } from '@/lib/tagLabel';
 
 interface AdminRootItem {
     id: string;
@@ -218,7 +219,7 @@ export function RootManager() {
                                         <div className="flex flex-wrap gap-1 max-w-[140px]">
                                             {parseStringArray(root.tags).map((tag) => (
                                                 <span key={tag} className="px-1.5 py-0.5 bg-black/5 text-black/40 rounded text-[9px] font-bold uppercase tracking-widest border border-black/5">
-                                                    {tag}
+                                                    {resolveTagLabel(tag, term)}
                                                 </span>
                                             ))}
                                         </div>

@@ -390,6 +390,22 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'with-pronoun': { en: 'With Pronoun', standard: 'Bl-Anness', arabised: 'Bl-Anness' },
     'broken-plural': { en: 'Broken Plural', standard: 'Plural Miksur', arabised: 'Ġmigħ Miksur' },
 
+    // Tag labels (ui_terminology convention: tag-<normalized-tag-key>)
+    'tag-common': { en: 'Common', standard: 'Komuni', arabised: 'Imferrex' },
+    'tag-semitic-core': { en: 'Semitic Core', standard: 'Qalba Semitika', arabised: 'Qalba Siemi' },
+    'tag-romance-core': { en: 'Romance Core', standard: 'Qalba Rumanz', arabised: 'Qalba Rumanzi' },
+    'tag-colour': { en: 'Colour', standard: 'Kulur', arabised: 'Lewn' },
+    'tag-color': { en: 'Color', standard: 'Kulur', arabised: 'Lewn' },
+    'tag-theoretical': { en: 'Theoretical', standard: 'Teoretiku', arabised: 'Ħsibi' },
+    'tag-base': { en: 'Base', standard: 'Bażi', arabised: 'Sies' },
+    'tag-derived': { en: 'Derived', standard: 'Derivat', arabised: 'Imħarreġ' },
+    'tag-arabism': { en: 'Arabism', standard: 'Arabiżmu', arabised: 'Għerubija' },
+    'tag-archaic': { en: 'Archaic', standard: 'Arkajku', arabised: 'Qadim' },
+    'tag-obsolete': { en: 'Obsolete', standard: 'Skadut', arabised: 'Mherri' },
+    'tag-puristic': { en: 'Puristic', standard: 'Puristiku', arabised: 'Safi' },
+    'tag-rgħajn': { en: 'Rgħajn', standard: 'Rgħajn', arabised: 'Rgħajn' },
+    'tag-loan': { en: 'Loan', standard: 'Selfa', arabised: 'Selfa' },
+
     // TierGate
     'is-a-feature': { en: "{label} is a {tier} feature", standard: "{label} hija feature {tier}", arabised: "{label} hija ghalik fil-livell {tier}" },
     'upgrade-to': { en: "Upgrade to {tier}", standard: "Aġġorna għal {tier}", arabised: "Ittejjeb għal {tier}" },

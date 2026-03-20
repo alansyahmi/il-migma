@@ -9,6 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "test:tag-label": "node --experimental-strip-types scripts/tagLabel.test.mjs",
+    "test:dual-form": "node --experimental-strip-types scripts/dualForm.test.mjs",
     "import:dry": "node scripts/import-xls.mjs --dry-run",
     "import:all": "node scripts/import-xls.mjs --execute",
     "import:roots": "node scripts/import-xls.mjs --execute --roots-only",

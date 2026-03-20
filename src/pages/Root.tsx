@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { getGloss } from '@/lib/utils';
 import { useRootData } from '@/hooks/useRootData';
 import { type VerbStrength } from '@/types';
+import { resolveTagLabel } from '@/lib/tagLabel';
 
 const LANGUAGE_COLORS: Record<string, { bg: string; text: string }> = {
     Arabic: { bg: 'bg-emerald-50', text: 'text-emerald-800' },
@@ -369,7 +370,7 @@ export function Root() {
         (rootObj.strength !== 'geminated' ? strengthLabel : null),
         weakClassLabel,
         rootObj.strength === 'geminated' ? term('geminated').toUpperCase() : null,
-        ...tags.map((tag: string) => term(tag).toUpperCase()),
+        ...tags.map((tag: string) => resolveTagLabel(tag, term).toUpperCase()),
     ].filter(Boolean).join(' • ');
 
 
@@ -445,7 +446,7 @@ export function Root() {
                             <div className="flex flex-wrap gap-1 px-1">
                                 {tags.map((tag: string) => (
                                     <span key={tag} className="px-2 py-0.5 bg-black/5 text-black/40 rounded-full text-[10px] font-bold uppercase tracking-wider border border-black/5">
-                                        {tag}
+                                        {resolveTagLabel(tag, term)}
                                     </span>
                                 ))}
                             </div>
