@@ -31,7 +31,7 @@ const AdminConfigContext = createContext<AdminConfigContextType | undefined>(und
 const FALLBACKS: Record<string, string[]> = {
     pos: ['verb', 'noun', 'adjective', 'adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'interrogative', 'numeral', 'interjection', 'participle'],
     gender: ['masculine', 'feminine', 'neutral'],
-    verb_class: ['strong', 'weak', 'doubled', 'quadrilateral', 'loan'],
+    verb_class: ['strong', 'weak', 'doubled', 'quadriliteral', 'loan'],
     verb_transitivity: ['transitive', 'intransitive', 'both', 'ditransitive'],
     register: ['formal', 'informal', 'archaic', 'obsolete', 'technical', 'dialectal', 'colloquial'],
     dialect: ['Standard', 'Qormi', 'Birkirkara', 'Żejtun', 'Żurrieq', 'Sannat', 'Mosta', 'Nadur (Għawdex)', 'Żebbuġ', 'Marsaxlokk', 'Xewkija (Għawdex)', 'Għarb', 'Victoria (Għawdex)', 'Vassalli (Arkajku)'],
@@ -84,7 +84,7 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const getCategoryItems = useCallback((category: string) => {
         const reg = getCategoryById(category);
         const storageCats = reg ? reg.storageCategories : [category];
-        
+
         if (storageCats.length === 1) {
             return byCategory.get(storageCats[0]) || [];
         }

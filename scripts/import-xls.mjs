@@ -95,7 +95,7 @@ function guessVerbClass(consonants) {
     if (cs[0] === cs[1] || cs[1] === cs[2]) return 'doubled';
     const weak = ['għ', 'j', 'w', 'a', 'e', 'i', 'o', 'u'];
     if (weak.some(w => cs.includes(w))) return 'weak';
-    if (cs.length >= 4) return 'quadrilateral';
+    if (cs.length >= 4) return 'quadriliteral';
     return 'strong';
 }
 

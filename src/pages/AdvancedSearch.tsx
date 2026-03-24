@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { Search as SearchIcon, Keyboard, Filter, ChevronDown, ChevronUp, MessageSquare, Shuffle } from 'lucide-react';
 import { generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
 import { cn } from '@/lib/utils';
@@ -473,6 +473,7 @@ export function AdvancedSearch() {
     const { term, mode } = useLinguisticMode();
     const { getOptions } = useAdminConfig();
     const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     // Dynamic options
     const POS_FILTER_OPTIONS = useMemo(() => [
@@ -535,6 +536,7 @@ export function AdvancedSearch() {
         if (searchParams.has('suggested')) f.includeSuggested = searchParams.get('suggested') === 'true';
         if (searchParams.has('pending')) f.includePending = searchParams.get('pending') !== 'false';
         if (searchParams.has('tag')) f.tag = searchParams.get('tag')!;
+        if (searchParams.has('limit')) f.maxResults = searchParams.get('limit')!;
         return f;
     });
 
@@ -612,13 +614,17 @@ export function AdvancedSearch() {
             searchParams.get('r4') || '',
         ];
 
+        const limit = Number(searchParams.get('limit') ?? filters.maxResults);
+        const offset = Number(searchParams.get('offset') ?? 0);
+
         apiSearch(q, {
             pos,
             type: rootType,
             wizen: wizen || undefined,
             source: source || undefined,
             gender,
-            limit: parseInt(filters.maxResults),
+            limit,
+            offset,
             v: vowelSet,
             random: searchParams.get('random') || undefined,
             radicals: radicals.some(r => r) ? radicals : undefined,
@@ -738,7 +744,11 @@ export function AdvancedSearch() {
                     };
                 });
 
-                setResults(mapped);
+                if (offset === 0) {
+                    setResults(mapped);
+                } else {
+                    setResults(prev => [...prev, ...mapped]);
+                }
                 setTotal(res.total);
             })
             .catch(err => {
@@ -791,6 +801,7 @@ export function AdvancedSearch() {
         if (filters.includeSuggested) params.suggested = 'true';
         if (!filters.includePending) params.pending = 'false';
         if (filters.tag) params.tag = filters.tag;
+        if (filters.maxResults && filters.maxResults !== DEFAULT_FILTERS.maxResults) params.limit = filters.maxResults;
         setSearchParams(params);
         setShowFiltersMobile(false);
     };
@@ -799,6 +810,14 @@ export function AdvancedSearch() {
         setFilters(DEFAULT_FILTERS);
         setQuery('');
         setSearchParams({});
+    };
+
+    const handleLoadMore = () => {
+        const nextOffset = results.length;
+        const params = new URLSearchParams(searchParams);
+        params.set('offset', String(nextOffset));
+        if (!params.has('limit')) params.set('limit', filters.maxResults);
+        navigate(`?${params.toString()}`, { replace: true, preventScrollReset: true });
     };
 
     const insertChar = (char: string) => {
@@ -828,8 +847,18 @@ export function AdvancedSearch() {
         return () => window.removeEventListener('keydown', handler);
     }, [query, filters]);
 
-    const setFilter = <K extends keyof AdvancedFilters>(key: K, value: AdvancedFilters[K]) =>
-        setFilters(f => ({ ...f, [key]: value }));
+    const setFilter = <K extends keyof AdvancedFilters>(key: K, value: AdvancedFilters[K]) => {
+        setFilters(f => {
+            const next = { ...f, [key]: value };
+            if (key === 'maxResults') {
+                const params = Object.fromEntries(searchParams.entries());
+                params.limit = value as string;
+                delete params.offset;
+                setSearchParams(params);
+            }
+            return next;
+        });
+    };
 
     const setRadical = (i: number, v: string) =>
         setFilters(f => {
@@ -1135,18 +1164,35 @@ export function AdvancedSearch() {
                         </aside>
                     </div>
 
-                    {/* ── Results area ── */}
                     <div className="flex-1 space-y-3 min-w-0 w-full">
-                        {loading ? (
-                            <div className="space-y-3">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="bg-white rounded-xl border border-black/5 h-24 animate-pulse" />
+                        {results.length > 0 ? (
+                            <>
+                                {results.map((r, i) => (
+                                    <EntryCard key={r.id} result={r} index={i + 1} />
                                 ))}
+
+                                {loading && (
+                                    <div className="flex justify-center p-4">
+                                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#1034A6]"></div>
+                                    </div>
+                                )}
+
+                                {!loading && results.length < total && (
+                                    <div className="flex justify-center pt-4">
+                                        <button
+                                            onClick={handleLoadMore}
+                                            className="flex items-center gap-2 px-6 py-2.5 bg-white border border-black/10 rounded-full text-sm font-medium text-black hover:bg-black/5 transition-colors shadow-sm"
+                                        >
+                                            <span>{term('show-more')}</span>
+                                            <ChevronDown size={16} className="text-black/40" />
+                                        </button>
+                                    </div>
+                                )}
+                            </>
+                        ) : loading ? (
+                            <div className="flex justify-center p-10">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1034A6]"></div>
                             </div>
-                        ) : results.length > 0 ? (
-                            results.map((r, i) => (
-                                <EntryCard key={r.id} result={r} index={i + 1} />
-                            ))
                         ) : (
                             <div className="bg-white/50 rounded-xl border border-white/40 shadow-sm p-10 text-left">
                                 <p className="text-sm text-black mb-2">

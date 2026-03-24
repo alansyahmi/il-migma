@@ -490,7 +490,9 @@ export function Root() {
                                     <tbody>
                                         {generatedTable.map((row: MarkedVerbForm) => (
                                             <tr key={row.form} className="border-b border-black/4 last:border-0 hover:bg-black/2 transition-colors whitespace-nowrap">
-                                                <td className="py-2.5 pr-4 text-black/60 font-serif">{row.form}</td>
+                                                <td className="py-2.5 pr-4 font-serif">
+                                                    <Link to={`/search?form=${row.form}`} className="text-[#1034A6] hover:underline font-bold">{row.form}</Link>
+                                                </td>
                                                 <td className="py-2.5 pr-4 font-serif">
                                                     <MarkedCell
                                                         data={row.perfect}

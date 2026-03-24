@@ -22,7 +22,7 @@ CREATE TABLE entries (
   noun_singulative      TEXT,
 
   -- Verb morphology
-  verb_class            TEXT CHECK(verb_class IN ('strong','weak','doubled','quadrilateral','loan')),
+  verb_class            TEXT CHECK(verb_class IN ('strong','weak','doubled','quadriliteral','loan')),
   verb_transitivity     TEXT CHECK(verb_transitivity IN ('transitive','intransitive','both')),
   verb_perfective_3sgm  TEXT,
   verb_imperfective_3sgm TEXT,

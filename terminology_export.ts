@@ -832,7 +832,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     "masculine": {
         "en": "Masculine",
         "standard": "Maskili",
-        "arabised": "Mdakkar"
+        "arabised": "Imdakkar"
     },
     "masculine-fem": {
         "en": "Masculine / Feminine",

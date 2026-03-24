@@ -205,7 +205,13 @@ export function Browse() {
                                             <div className="p-8 flex flex-col h-full">
                                                 <div className="flex items-center justify-between mb-6">
                                                     <h3 className="font-serif text-2xl font-bold text-black group-hover:text-link transition-colors">
-                                                        {sub.label}
+                                                        {sub.filter.form ? (
+                                                            <Link to={`/search?${new URLSearchParams(sub.filter).toString()}`} className="hover:underline">
+                                                                {sub.label}
+                                                            </Link>
+                                                        ) : (
+                                                            sub.label
+                                                        )}
                                                     </h3>
                                                     <div className="text-right">
                                                         <p className="text-[10px] font-bold uppercase tracking-wider text-black/30">Total</p>

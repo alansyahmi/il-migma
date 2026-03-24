@@ -60,7 +60,11 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
 
         const parts = [
             <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">{term(entry.pos).toUpperCase()}</Link>,
-            vm.form ? `${term('form-label')} ${vm.form}`.toUpperCase() : null,
+            vm.form ? (
+                <Link key="form" to={`${basePath}?form=${vm.form}`} className="hover:underline">
+                    {`${term('form-label')} ${vm.form}`.toUpperCase()}
+                </Link>
+            ) : null,
             strengthLabel ? <Link key="strength" to={`${basePath}?type=${strengthRaw}`} className="hover:underline">{strengthLabel.toUpperCase()}</Link> : null,
             weakClassLabel ? <Link key="weak" to={`${basePath}?type=${weakClassRaw}`} className="hover:underline">{weakClassLabel.toUpperCase()}</Link> : null,
             ...(vm.root_tags ?? [])

@@ -103,7 +103,7 @@ The central table. Every word in the dictionary is an entry.
 | `noun_plural_forms` | JSON array — a noun can have **multiple broken plurals** (e.g. *ktieb* → *kotba, ktejjeb*) |
 | `noun_sound_plural` | Regular sound plural suffix form (e.g. *-iet*, *-jiet*) |
 | `noun_dual` | Dual form (archaic/limited use in Maltese) |
-| `verb_class` | `'strong'`, `'weak'`, `'doubled'`, `'quadrilateral'`, `'loan'` |
+| `verb_class` | `'strong'`, `'weak'`, `'doubled'`, `'quadriliteral'`, `'loan'` |
 | `verb_perfective_3sgm` | Citation form: 3rd person singular masculine perfect (e.g. *kiteb*) |
 | `verb_imperfective_3sgm` | The imperfect counterpart (e.g. *jikteb*) |
 | `verb_vowel_perf` / `verb_vowel_impf` | Entry-level vowel overrides (copied from root, but can diverge) |

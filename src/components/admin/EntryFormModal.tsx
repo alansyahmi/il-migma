@@ -1480,7 +1480,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         const rootClean = form._rootConsonants.replace(/-/g, '').trim();
         if (!rootClean) return;
 
-        const detected = rootClean.length >= 4 ? 'quadrilateral' : 'triliteral';
+        const detected = rootClean.length >= 4 ? 'quadriliteral' : 'triliteral';
         if (form.verb_type !== detected) {
             set('verb_type', detected);
         }

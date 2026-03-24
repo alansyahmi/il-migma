@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
 
@@ -10,7 +11,9 @@ interface MorphologyGridProps {
 
 export function MorphologyGrid({ entry }: MorphologyGridProps) {
     const { term } = useLinguisticMode();
-    const isTheoretical = entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || entry.verb_morphology?.root_tags?.includes('THEORETICAL');
+    const isTheoretical = entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
+        entry.verb_morphology?.root_tags?.includes('THEORETICAL') ||
+        entry.headword.startsWith('*');
     const isElativeDisabled = entry.tags?.some(tag => tag && tag.includes('$'));
 
     if (entry.pos === 'noun' && entry.noun_morphology) {
@@ -51,7 +54,7 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                 <div className="grid grid-cols-2 sm:grid-cols-3 divide-x divide-y divide-border-light">
                     <Cell label={term('perfect') + " (3sg.m)"} value={<strong className="font-headword">{isTheoretical && '*'}{m.perfective_3sg_m}</strong>} />
                     <Cell label={term('imperfect') + " (3sg.m)"} value={<strong className="font-headword">{isTheoretical && '*'}{m.imperfective_3sg_m}</strong>} />
-                    <Cell label={term('form-title')} value={m.form} />
+                    <Cell label={term('form-title')} value={<Link to={`/search?form=${m.form}`} className="text-[#1034A6] hover:underline font-bold">{m.form}</Link>} />
                     <Cell label={term('strength-title')} value={entry.root_pattern_form?.root?.strength === 'strong-hybrid' ? 'Strong' : entry.root_pattern_form?.root?.strength} />
                     <Cell label={term('transitivity')} value={term(m.transitivity) ?? m.transitivity} />
                     {m.verbal_noun && <Cell label={term('masdar-label')} value={(isTheoretical && !m.verbal_noun.startsWith('*') ? '*' : '') + m.verbal_noun} />}
@@ -134,10 +137,28 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
 }
 
 function Cell({ label, value }: { label: string; value: React.ReactNode }) {
+    // Helper to determine if the value represents a theoretical form (starts with *)
+    const isTheoretical = (() => {
+        if (typeof value === 'string') return value.trim().startsWith('*');
+        
+        // If it's a React element (like <strong>*word</strong>), check its children
+        if (React.isValidElement(value)) {
+            const element = value as React.ReactElement<any>;
+            const children = element.props.children;
+            if (typeof children === 'string') return children.trim().startsWith('*');
+            if (Array.isArray(children)) {
+                return children.some(child => typeof child === 'string' && (child as string).trim().startsWith('*'));
+            }
+        }
+        return false;
+    })();
+
     return (
         <div className="px-3 py-2 min-w-0">
             <div className="text-[10px] uppercase tracking-wider text-[#A07030] font-semibold mb-0.5">{label}</div>
-            <div className="text-sm text-black font-sans">{value}</div>
+            <div className={`text-sm font-sans ${isTheoretical ? 'text-black/55' : 'text-black'}`}>
+                {value}
+            </div>
         </div>
     );
 }

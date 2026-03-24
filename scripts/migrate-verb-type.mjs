@@ -30,20 +30,20 @@ async function run() {
 
         console.log('Updating verb_type for existing entries...');
 
-        // Quadrilateral: if class is explicitly quadrilateral OR root has 4+ consonants
+        // quadriliteral: if class is explicitly quadriliteral OR root has 4+ consonants
         const resQuad = await db.execute(`
             UPDATE entries 
-            SET verb_type = 'quadrilateral' 
+            SET verb_type = 'quadriliteral' 
             WHERE pos = 'verb' 
             AND (
-                verb_class = 'quadrilateral' 
+                verb_class = 'quadriliteral' 
                 OR (
                     root_consonants IS NOT NULL 
                     AND length(replace(root_consonants, '-', '')) >= 4
                 )
             )
         `);
-        console.log('✅ Updated quadrilateral verbs:', resQuad.rowsAffected);
+        console.log('✅ Updated quadriliteral verbs:', resQuad.rowsAffected);
 
         // Triliteral: everything else that is a verb
         const resTri = await db.execute(`

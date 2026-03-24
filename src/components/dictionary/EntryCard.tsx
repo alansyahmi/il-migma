@@ -11,6 +11,7 @@ import { EtymologyChain } from './EtymologyChain';
 import { AudioPlayer } from './AudioPlayer';
 import { SubEntryBlock } from './SubEntryBlock';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { cn } from '@/lib/utils';
 import type { Entry } from '@/types';
 import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 
@@ -30,7 +31,9 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
     const { term } = useLinguisticMode();
     const [activeTab, setActiveTab] = useState('definitions');
     const [saved, setSaved] = useState(false);
-    const isTheoretical = entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || entry.verb_morphology?.root_tags?.includes('THEORETICAL');
+    const isTheoretical = entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
+        entry.verb_morphology?.root_tags?.includes('THEORETICAL') ||
+        entry.headword.startsWith('*');
 
     const primaryIPA = entry.phonetics?.find(p => p.dialect === 'Standard')?.ipa
         ?? entry.phonetics?.[0]?.ipa;
@@ -47,12 +50,20 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                             {linkToFull ? (
                                 <Link
                                     to={`/entry/${entry.id}`}
-                                    className="font-serif text-xl font-bold text-[#1034A6] hover:underline leading-tight"
+                                    className={cn(
+                                        "font-serif text-xl font-bold hover:underline leading-tight",
+                                        isTheoretical ? "text-black/55" : "text-[#1034A6]"
+                                    )}
                                 >
-                                    {isTheoretical && '*'}{entry.headword}
+                                    {isTheoretical && !entry.headword.startsWith('*') && '*'}{entry.headword}
                                 </Link>
                             ) : (
-                                <span className="font-serif text-xl font-bold text-[#1034A6]">{isTheoretical && '*'}{entry.headword}</span>
+                                <span className={cn(
+                                    "font-serif text-xl font-bold leading-tight",
+                                    isTheoretical ? "text-black/55" : "text-[#1034A6]"
+                                )}>
+                                    {isTheoretical && !entry.headword.startsWith('*') && '*'}{entry.headword}
+                                </span>
                             )}
                             {primaryIPA && (
                                 <span className="ipa text-sm">[{primaryIPA}]</span>
@@ -94,8 +105,11 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
             <div className="bg-white rounded-xl border border-border shadow-sm p-5 sm:p-7">
                 <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                        <h1 className="font-serif text-4xl font-bold text-[#1034A6] leading-tight">
-                            {isTheoretical && '*'}{entry.headword}
+                        <h1 className={cn(
+                            "font-serif text-4xl font-bold leading-tight",
+                            isTheoretical ? "text-black/55" : "text-[#1034A6]"
+                        )}>
+                            {isTheoretical && !entry.headword.startsWith('*') && '*'}{entry.headword}
                         </h1>
 
                         {primaryIPA && (

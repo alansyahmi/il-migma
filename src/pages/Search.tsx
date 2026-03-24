@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Search as SearchIcon, Keyboard, MessageSquare, Filter, ChevronDown, ChevronUp, Shuffle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
@@ -151,7 +151,16 @@ function FilterCheckbox({
 }
 
 function InflectionCell({ row }: { row: InflectionRow }) {
-    const markerEl = row.marker === 'theoretical' ? (
+    let form = row.form;
+    let isTheoretical = row.marker === 'theoretical';
+
+    // Auto-detect theoretical form from string prefix
+    if (typeof form === 'string' && form.startsWith('*')) {
+        isTheoretical = true;
+        form = form.substring(1);
+    }
+
+    const markerEl = isTheoretical ? (
         <span className="text-black/55 mr-0.5">*</span>
     ) : row.marker === 'auto_generated' ? (
         <span className="text-black/55 mr-0.5">✦</span>
@@ -159,15 +168,21 @@ function InflectionCell({ row }: { row: InflectionRow }) {
 
     if (row.hasPage || row.entryId) {
         return (
-            <Link to={`/entry/${row.entryId || row.form}`} style={{ color: EGYPTIAN_BLUE }}
-                className="text-sm hover:underline">
-                {markerEl}{row.form}
+            <Link 
+                to={`/entry/${row.entryId || row.form}`} 
+                style={{ color: isTheoretical ? undefined : EGYPTIAN_BLUE }}
+                className={cn(
+                    "text-sm hover:underline",
+                    isTheoretical ? "text-black/55" : ""
+                )}
+            >
+                {markerEl}{form}
             </Link>
         );
     }
     return (
-        <span className={cn("text-sm", row.marker ? "text-black/55" : "text-black")}>
-            {markerEl}{row.form}
+        <span className={cn("text-sm", (isTheoretical || row.marker) ? "text-black/55" : "text-black")}>
+            {markerEl}{form}
         </span>
     );
 }
@@ -248,6 +263,7 @@ export function Search() {
     const { term, mode } = useLinguisticMode();
     const { getOptions } = useAdminConfig();
     const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
     const [results, setResults] = useState<SearchResult[]>([]);
     const [loading, setLoading] = useState(false);
     const [showFiltersMobile, setShowFiltersMobile] = useState(false);
@@ -278,10 +294,11 @@ export function Search() {
         const form = searchParams.get('form') || undefined;
         const pending = searchParams.get('pending') === 'true' || searchParams.get('pending') === null; // default to true if not present to match DEFAULT_FILTERS
         const suggested = searchParams.get('suggested') === 'true';
-        const limit = Number(searchParams.get('limit') ?? DEFAULT_FILTERS.maxResults);
+        const limit = Number(searchParams.get('limit') ?? filters.maxResults);
+        const offset = Number(searchParams.get('offset') ?? 0);
         const random = searchParams.get('random') || undefined;
 
-        apiSearch(q, { pos, type, source, gender, limit, random, v, form, includePending: pending, includeSuggested: suggested })
+        apiSearch(q, { pos, type, source, gender, limit, offset, random, v, form, includePending: pending, includeSuggested: suggested })
             .then(res => {
                 setTotal(res.total);
                 // Map API results to the local SearchResult interface
@@ -381,7 +398,11 @@ export function Search() {
                         entry: r,
                     };
                 });
-                setResults(mapped);
+                if (offset === 0) {
+                    setResults(mapped);
+                } else {
+                    setResults(prev => [...prev, ...mapped]);
+                }
             })
             .catch(err => {
                 console.error("Search fetch error:", err);
@@ -402,6 +423,7 @@ export function Search() {
         if (searchParams.has('pos')) f.pos = searchParams.get('pos')!;
         if (searchParams.has('type')) f.rootType = searchParams.get('type')!;
         if (searchParams.has('source')) f.source = searchParams.get('source')!;
+        if (searchParams.has('limit')) f.maxResults = searchParams.get('limit')!;
         return f;
     });
 
@@ -419,6 +441,7 @@ export function Search() {
         if (filters.pos) params.pos = filters.pos;
         if (filters.rootType) params.type = filters.rootType;
         if (filters.source) params.source = filters.source;
+        if (filters.maxResults && filters.maxResults !== DEFAULT_FILTERS.maxResults) params.limit = filters.maxResults;
         setSearchParams(params);
         setShowFiltersMobile(false);
     };
@@ -459,11 +482,30 @@ export function Search() {
         });
     };
 
-    const setFilter = <K extends keyof Filters>(key: K, value: Filters[K]) =>
-        setFilters(f => ({ ...f, [key]: value }));
+    const setFilter = <K extends keyof Filters>(key: K, value: Filters[K]) => {
+        setFilters(f => {
+            const next = { ...f, [key]: value };
+            if (key === 'maxResults') {
+                // Changing max results should trigger a fresh search
+                const params = Object.fromEntries(searchParams.entries());
+                params.limit = value as string;
+                delete params.offset; // Reset offset
+                setSearchParams(params);
+            }
+            return next;
+        });
+    }
 
     const handleRandom = () => {
         setSearchParams({ random: 'true' });
+    };
+
+    const handleLoadMore = () => {
+        const nextOffset = results.length;
+        const params = new URLSearchParams(searchParams);
+        params.set('offset', String(nextOffset));
+        if (!params.has('limit')) params.set('limit', filters.maxResults);
+        navigate(`?${params.toString()}`, { replace: true, preventScrollReset: true });
     };
 
     return (
@@ -649,14 +691,33 @@ export function Search() {
                                 </div>
                             </div>
                         )}
-                        {loading && (
+                        {results.map((r, i) => (
+                            <EntryCard key={r.id} result={r} index={i + 1} />
+                        ))}
+
+                        {loading && results.length === 0 && (
                             <div className="flex justify-center p-10">
                                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1034A6]"></div>
                             </div>
                         )}
-                        {!loading && results.map((r, i) => (
-                            <EntryCard key={r.id} result={r} index={i + 1} />
-                        ))}
+
+                        {loading && results.length > 0 && (
+                            <div className="flex justify-center p-4">
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#1034A6]"></div>
+                            </div>
+                        )}
+
+                        {!loading && results.length > 0 && results.length < total && (
+                            <div className="flex justify-center pt-4">
+                                <button
+                                    onClick={handleLoadMore}
+                                    className="flex items-center gap-2 px-6 py-2.5 bg-white border border-black/10 rounded-full text-sm font-medium text-black hover:bg-black/5 transition-colors shadow-sm"
+                                >
+                                    <span>{term('show-more')}</span>
+                                    <ChevronDown size={16} className="text-black/40" />
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                 </div>

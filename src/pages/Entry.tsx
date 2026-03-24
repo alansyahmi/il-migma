@@ -25,14 +25,14 @@ const MarkedValue = ({ val, theoretical, showMarker = true }: { val: string | Re
     let isT = isObj ? (val as any).theoretical : theoretical;
 
     // If the value is a string and starts with an asterisk, treat it as theoretical
-    if (typeof v === 'string' && v.startsWith('*')) {
+    if (typeof v === 'string' && v.trim().startsWith('*')) {
         isT = true;
-        v = v.substring(1);
+        v = v.trim().substring(1);
     }
 
     if (!v || v === '-') return <span className="opacity-40">-</span>;
     return (
-        <span className={cn("font-serif", isT && "opacity-45")}>
+        <span className={cn("font-serif", isT && "text-black/55")}>
             {isT && showMarker ? '*' : ''}{v}
         </span>
     );
@@ -593,7 +593,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
     const patternValue = displayPattern(pattern?.cv_notation);
 
-    const POSSESSIVE_SUFFIX_KEYS = ['1s', '2s', '3ms', '3fs', '1p', '2p', '3p'];
+    const POSSESSIVE_SUFFIX_KEYS = ['pos-1s', 'pos-2s', 'pos-3ms', 'pos-3fs', 'pos-1p', 'pos-2p', 'pos-3p'];
 
     const applySuffix = (base: string, idx: number, theoreticalOverride?: boolean, customPattern?: string) => {
         const isT = theoreticalOverride ?? isTheoretical;
@@ -760,7 +760,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             </SideCard>
                         )}
 
-                        {nm.source_citation && (
+                        {nm?.source_citation && (
                             <SideCard title={term('sources')}>
                                 <span className="text-sm font-medium" style={{ color: GOLD }}>{nm.source_citation}</span>
                             </SideCard>
@@ -1014,7 +1014,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </SideCard>
                             )}
 
-                            {nm.source_citation && (
+                            {nm?.source_citation && (
                                 <SideCard title={term('sources')}>
                                     <span className="text-sm font-medium" style={{ color: GOLD }}>{nm.source_citation}</span>
                                 </SideCard>
@@ -2127,7 +2127,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                             </SideCard>
                         )}
 
-                        {nm.source_citation && (
+                        {nm?.source_citation && (
                             <SideCard title={term('sources')}>
                                 <span className="text-sm font-medium" style={{ color: GOLD }}>{nm.source_citation}</span>
                             </SideCard>
@@ -2135,10 +2135,10 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                     </div>
 
                     {/* Right Column */}
-                    <div className="flex-1 min-w-0 space-y-8 w-full">
+                    <div className="flex-1 min-w-0 space-y-0 w-full">
                         <div className="flex flex-col md:flex-row gap-8 items-start w-full">
                             {/* Properties */}
-                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:max-w-none mb-12 md:mb-0">
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
                                 {rootConsonants && (
                                     <PropRow label={term('root')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
@@ -2173,8 +2173,11 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                 )}
 
                                 <VowelSetGrid morphology={{ ...entry, ...nm }} />
+                            </div>
 
-                                <MorphologyGrid
+                            {/* Morphology Table */}
+                            <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
+                                <MorphologyTable
                                     title={term('morphology')}
                                     displayPattern={displayPattern}
                                     rows={[
@@ -2239,7 +2242,6 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                     ]}
                                 />
 
-                                {/* Usage and Thesaurus */}
                                 <div className="mt-12 space-y-12">
                                     <UsageExampleBlock entry={entry} />
                                 </div>
@@ -2291,7 +2293,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                 </SideCard>
                             )}
 
-                            {nm.source_citation && (
+                            {nm?.source_citation && (
                                 <SideCard title={term('sources')}>
                                     <span className="text-sm font-medium" style={{ color: GOLD }}>{nm.source_citation}</span>
                                 </SideCard>
@@ -2535,10 +2537,10 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                     </div>
 
                     {/* Right Column */}
-                    <div className="flex-1 min-w-0 space-y-8 w-full">
+                    <div className="flex-1 min-w-0 space-y-0 w-full">
                         <div className="flex flex-col md:flex-row gap-8 items-start w-full">
                             {/* Properties */}
-                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:max-w-none mb-12 md:mb-0">
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
                                 {rootConsonants && (
                                     <PropRow label={term('root')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
@@ -3200,7 +3202,7 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
         setShowForm(true);
     };
 
-    const POSSESSIVE_SUFFIX_KEYS = ['1s', '2s', '3ms', '3fs', '1p', '2p', '3p'];
+    const POSSESSIVE_SUFFIX_KEYS = ['pos-1s', 'pos-2s', 'pos-3ms', 'pos-3fs', 'pos-1p', 'pos-2p', 'pos-3p'];
     const applySuffix = (base: string, idx: number) => {
         if (!base) return { value: '-', theoretical: false };
         const result = applyPossessiveSuffix(base, idx as any, (entry.gender as any) || 'masculine', (entry as any).cv_pattern || pattern?.cv_notation);
@@ -3673,27 +3675,32 @@ export function EntryPage() {
 
 
 
-    if (entry.pos === 'verb' && entry.verb_morphology) {
+    const pos = (entry.pos || '').toLowerCase();
+    const nm = entry.noun_morphology;
+    const vm = entry.verb_morphology;
+    const am = entry.adjective_morphology;
+
+    if (pos === 'verb' && vm) {
         return <VerbEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if (entry.pos.toLowerCase() === 'numeral') {
+    if (pos === 'numeral') {
         return <NumeralEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if (entry.pos === 'noun' && entry.noun_morphology) {
+    if (pos === 'noun' && nm) {
         return <NounEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if (entry.pos === 'adjective' && entry.adjective_morphology) {
+    if (pos === 'adjective' && am) {
         return <AdjectiveEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if (entry.pos === 'participle') {
+    if (pos === 'participle') {
         return <ParticipleEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if (['pronoun', 'particle', 'adverb', 'preposition', 'interjection', 'article', 'conjunction', 'interrogative'].includes((entry.pos || '').toLowerCase())) {
+    if (['pronoun', 'particle', 'adverb', 'preposition', 'interjection', 'article', 'conjunction', 'interrogative'].includes(pos)) {
         return <FunctionWordEntryView entry={entry} onRefetch={refetch} />;
     }
 

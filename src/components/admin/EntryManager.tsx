@@ -278,7 +278,13 @@ export function EntryManager() {
                                                     {entry.gender && <Badge variant="pos" className="bg-sky-50 text-sky-700">{term(entry.gender)}</Badge>}
                                                     {entry.verb_class && <Badge variant="pos" className="bg-purple-50 text-purple-700">{term(entry.verb_class)}</Badge>}
                                                     {entry.verb_transitivity && <Badge variant="pos" className="bg-indigo-50 text-indigo-700">{term(entry.verb_transitivity)}</Badge>}
-                                                    {entry.verb_form && <Badge variant="pos" className="bg-indigo-50 text-indigo-700">{term('form')} {entry.verb_form}</Badge>}
+                                                    {entry.verb_form && (
+                                                        <Link to={`/search?form=${entry.verb_form}`}>
+                                                            <Badge variant="pos" className="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors">
+                                                                {term('form')} {entry.verb_form}
+                                                            </Badge>
+                                                        </Link>
+                                                    )}
                                                     {entry.is_loanword && <Badge variant="pos" className="bg-amber-50 text-amber-700">{term('loanword')}</Badge>}
                                                     {entry.source_language && <Badge variant="pos" className="bg-emerald-50 text-emerald-700">{term(entry.source_language)}</Badge>}
                                                     {parseRelationshipItems(entry.alternative_forms).length > 0 && (
@@ -345,7 +351,11 @@ export function EntryManager() {
                                                             {entry.gender && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term(entry.gender)}</span>}
                                                             {entry.verb_class && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term(entry.verb_class)}</span>}
                                                             {entry.verb_transitivity && <span className="text-[10px] bg-sky-50 px-1.5 py-0.5 rounded text-sky-700">{term(entry.verb_transitivity)}</span>}
-                                                            {entry.verb_form && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term('form')} {entry.verb_form}</span>}
+                                                            {entry.verb_form && (
+                                                                <Link to={`/search?form=${entry.verb_form}`} className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 hover:bg-slate-200 transition-colors">
+                                                                    {term('form')} {entry.verb_form}
+                                                                </Link>
+                                                            )}
                                                             {entry.is_loanword && <span className="text-[10px] bg-amber-50 px-1.5 py-0.5 rounded text-amber-700">{term('loanword')}</span>}
                                                             {entry.source_language && <span className="text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded text-emerald-700">{term(entry.source_language)}</span>}
                                                             {parseRelationshipItems(entry.alternative_forms).length > 0 && (

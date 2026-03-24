@@ -18,7 +18,7 @@ const DIALECT_OPTIONS = [
     'Mosta', 'Nadur (Għawdex)', 'Żebbuġ', 'Marsaxlokk', 'Xewkija (Għawdex)', 'Għarb', 'Victoria (Għawdex)', 'Vassalli (Arkajku)'
 ];
 const GENDER_OPTIONS = ['masculine', 'feminine', 'neutral'];
-const VERB_CLASS_OPTIONS = ['strong', 'weak', 'doubled', 'quadrilateral', 'loan'];
+const VERB_CLASS_OPTIONS = ['strong', 'weak', 'doubled', 'quadriliteral', 'loan'];
 const REGISTER_OPTIONS = ['formal', 'informal', 'archaic', 'obsolete', 'technical', 'dialectal', 'colloquial'];
 const NOUN_TYPE_OPTIONS = ['common', 'proper', 'verbal', 'actor', 'tool', 'place', 'collective', 'unit', 'diminutive'];
 const SOUND_SUFFIXES = ['i', 'ijiet', 'iet', 'ien', 'in', 'u'];
