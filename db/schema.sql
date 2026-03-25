@@ -31,6 +31,27 @@ CREATE TABLE IF NOT EXISTS roots (
 
 CREATE INDEX IF NOT EXISTS idx_roots_consonants ON roots(consonants);
 
+-- ─── Stems (Canonical) ───────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS stems (
+  stem_string     TEXT PRIMARY KEY,
+  class_type      TEXT NOT NULL DEFAULT 'ar' CHECK(class_type IN ('ar', 'ir')),
+  is_hybrid       INTEGER NOT NULL DEFAULT 0,
+  root            TEXT,
+  agentive_suffix TEXT,
+  tags            TEXT, -- JSON array
+  source          TEXT,
+  glosses         TEXT, -- JSON array [{ en, mt }]
+  etymology       TEXT, -- JSON object
+  synonyms        TEXT, -- JSON array of stem refs
+  antonyms        TEXT, -- JSON array of stem refs
+  related_stems   TEXT, -- JSON array of stem refs
+  created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_stems_class_type ON stems(class_type);
+CREATE INDEX IF NOT EXISTS idx_stems_hybrid ON stems(is_hybrid);
+
 -- ─── Patterns ─────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS patterns (
   id              TEXT PRIMARY KEY,

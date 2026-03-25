@@ -19,6 +19,7 @@ import { SubParts } from '@/components/dictionary/SubParts';
 import { generateTheoreticalDual, generateElative, generateNumeralForms, type NumeralAutoForms } from '@/lib/maltesePhonology';
 import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 import { generateZokkForms } from '@/lib/zokkEngine';
+import { formatStemDisplay } from '@/lib/stemDefaults';
 
 const MarkedValue = ({ val, theoretical, showMarker = true }: { val: string | React.ReactNode | { value: React.ReactNode, theoretical: boolean }, theoretical?: boolean, showMarker?: boolean }) => {
     const isObj = typeof val === 'object' && val !== null && 'value' in val;
@@ -49,12 +50,56 @@ export const GOLD = '#A07030';
 
 // ── Components ─────────────────────────────────────────────────────────────
 
-export function SideCard({ title, children }: { title: string; children: React.ReactNode }) {
+export function SideCard({
+    title,
+    children,
+}: {
+    title: string;
+    children: React.ReactNode;
+}) {
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm p-5 space-y-2">
-            <h2 className="font-sans font-bold text-[0.95rem] text-black">{title}</h2>
+            <h2 className="font-sans font-bold text-[0.95rem] text-black">
+                {title}
+            </h2>
             <div>{children}</div>
         </div>
+    );
+}
+
+export type EtymologySentenceItem = {
+    language: string;
+    form?: string;
+    pronunciation?: string;
+    definition?: string;
+    meaning?: string;
+};
+
+export function EtymologySentence({
+    prefix,
+    items,
+}: {
+    prefix?: string;
+    items: EtymologySentenceItem[];
+}) {
+    if (!items?.length) return null;
+
+    return (
+        <p className="text-sm text-black leading-relaxed">
+            {prefix && <span>{prefix}</span>}
+            {items.map((item, i) => (
+                <React.Fragment key={`${item.language}-${i}`}>
+                    {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
+                    <span style={{ color: BLUE }} className="font-medium mx-1">
+                        {item.language}
+                    </span>
+                    {item.form && <span className="font-serif font-medium" dir="auto">{item.form}</span>}
+                    {item.pronunciation && <span className="opacity-70"> ({item.pronunciation})</span>}
+                    {(item.definition || item.meaning) && <span className="opacity-70"> &quot;{item.definition || item.meaning}&quot;</span>}
+                </React.Fragment>
+            ))}
+            .
+        </p>
     );
 }
 
@@ -682,19 +727,14 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                         {ety && ety.chain.length > 0 && (
                             <SideCard title={term('etymology')}>
-                                <p className="text-sm text-black leading-relaxed">
-                                    {term('from')}
-                                    {ety.chain.map((c, i) => (
-                                        <React.Fragment key={i}>
-                                            {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                                            <span style={{ color: BLUE }} className="font-medium mx-1">
-                                                {term(c.language)}
-                                            </span>
-                                            {c.form && <span className="font-serif font-medium">{c.form}</span>}
-                                            {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
-                                        </React.Fragment>
-                                    ))}.
-                                </p>
+                                <EtymologySentence
+                                    prefix={term('from')}
+                                    items={ety.chain.map(c => ({
+                                        language: term(c.language),
+                                        form: c.form,
+                                        definition: c.meaning,
+                                    }))}
+                                />
                             </SideCard>
                         )}
 
@@ -1824,6 +1864,23 @@ export function ZokkEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: 
      const isActualAdmin = isAdmin && adminViewEnabled;
      const zm = entry.zokk_morphology!;
      const ety = entry.etymologies?.[0];
+     const zokkEtymologyItems = useMemo(() => {
+         if (ety?.chain?.length) {
+             return ety.chain.map(node => ({
+                 language: term(node.language),
+                 form: node.form || undefined,
+                 definition: node.meaning || undefined,
+             }));
+         }
+
+         if (entry.source_language) {
+             return [{
+                 language: term(entry.source_language),
+             }];
+         }
+
+         return [];
+     }, [ety, entry.source_language, term]);
  
      const zokkForms = useMemo(() => generateZokkForms(zm), [zm]);
      const conj = zokkForms.conjugation;
@@ -1873,20 +1930,9 @@ export function ZokkEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: 
                              <TagChips entry={entry} />
                          </SideCard>
  
-                         {ety && ety.chain.length > 0 && (
+                        {zokkEtymologyItems.length > 0 && (
                              <SideCard title={term('etymology')}>
-                                 <p className="text-sm text-black leading-relaxed">
-                                     {term('from')}
-                                     {ety.chain.map((c, i) => (
-                                         <React.Fragment key={i}>
-                                             {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                                             <span style={{ color: BLUE }} className="font-medium mx-1">
-                                                 {term(c.language)}
-                                             </span>
-                                             {c.form && <span className="font-serif font-medium">{c.form}</span>}
-                                         </React.Fragment>
-                                     ))}.
-                                 </p>
+                                 <EtymologySentence prefix={term('from')} items={zokkEtymologyItems} />
                              </SideCard>
                          )}
  
@@ -1913,20 +1959,16 @@ export function ZokkEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: 
                                      </PropRow>
                                  )}
 
-                                 <PropRow label={term('class')}>
-                                     <span className="capitalize font-medium">-{zm.class_type}</span>
-                                 </PropRow>
-                                 <PropRow label={term('stem')}>
-                                     <span className="font-serif font-medium">{zm.stem_string}</span>
-                                 </PropRow>
-                                 {zm.root && (
-                                     <PropRow label={term('reanalysed-root')}>
-                                         <span className="font-sans font-medium">{zm.root}</span>
-                                     </PropRow>
+                                <PropRow label={term('stem')}>
+                                    <Link to={`/stem/${zm.stem_string}`} className="font-serif font-medium text-link hover:underline">
+                                        {formatStemDisplay(zm.stem_string)}
+                                    </Link>
+                                </PropRow>
+                                {zm.root && (
+                                    <PropRow label={term('reanalysed-root')}>
+                                        <span className="font-sans font-medium">{zm.root}</span>
+                                    </PropRow>
                                  )}
-                                 <PropRow label={term('is-hybrid')}>
-                                     <span>{zm.is_hybrid ? term('yes') : term('no')}</span>
-                                 </PropRow>
 
                                  {/* Admin metadata matching Entry.tsx */}
                                  {isAdmin && (

@@ -21,7 +21,7 @@ import {
     generateNumeralForms
 } from '@/lib/maltesePhonology';
 import { resolveEntryGender } from '@/lib/gender';
-import { ENTRY_HANDLED_FIELDS } from '@/lib/adminSchema';
+import { ENTRY_HANDLED_FIELDS, resolveEntryMorphologyMode } from '@/lib/adminSchema';
 import { resolveTagLabel } from '@/lib/tagLabel';
 
 export interface AdminEntry {
@@ -1166,6 +1166,73 @@ function MorphologyPresetSelector({
     );
 }
 
+function StemMorphologyFields({
+    form,
+    set,
+    t,
+    styles,
+    hasRootConsonants,
+    sourceLanguageOptions
+}: {
+    form: any;
+    set: (k: string, v: any) => void;
+    t: (en: string, mt: string) => string;
+    styles: {
+        label: string;
+        inp: string;
+        sel: string;
+    };
+    hasRootConsonants: boolean;
+    sourceLanguageOptions: string[];
+}) {
+    return (
+        <div className="space-y-4 pt-2 border-t border-slate-200 mt-4 bg-blue-50/30 p-3 rounded-lg">
+            <h4 className="text-xs font-bold uppercase text-blue-600 tracking-wider flex items-center gap-1.5">
+                <span className="text-lg">⚙</span>
+                {t('Stem Morphology', 'Morfoloġija taż-Żokk')}
+            </h4>
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className={styles.label}>{t('Class', 'Klassi')}</label>
+                    <select className={styles.sel} value={form.zokk_class} onChange={e => set('zokk_class', e.target.value)}>
+                        <option value="">{t('Select...', 'Agħżel...')}</option>
+                        <option value="ar">-ar</option>
+                        <option value="ir">-ir</option>
+                    </select>
+                </div>
+            </div>
+            <div className="flex items-center gap-2">
+                <input type="checkbox" id="zokk_hybrid" checked={form.zokk_is_hybrid}
+                    onChange={e => set('zokk_is_hybrid', e.target.checked)}
+                    className="w-4 h-4 text-[#1034A6] rounded" />
+                <label htmlFor="zokk_hybrid" className="text-sm font-medium text-black">
+                    {t('Is Hybrid', 'Huwa Ibridu')}?
+                </label>
+            </div>
+            {form.zokk_is_hybrid && hasRootConsonants && (
+                <div className="text-[11px] text-black/50 px-1 -mt-1">
+                    {t('Reanalysed root mirrors the main root consonants.', 'L-għerq reanalizzat jirrifletti l-konsonanti tal-għerq prinċipali.')}
+                </div>
+            )}
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className={styles.label}>{t('Agentive Suffix', 'Suffiss Aġentiv')}</label>
+                    <input className={styles.inp} value={form.zokk_agentive_suffix}
+                        onChange={e => set('zokk_agentive_suffix', e.target.value)} placeholder="e.g. ant" />
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Source Language(s)', 'Lingwa(i) Sors')}</label>
+                    <input className={styles.inp} value={form.source_language}
+                        onChange={e => set('source_language', e.target.value)} list="stem-source-language-options" placeholder={t('e.g. Italian, English', 'eż. Taljan, Ingliż')} />
+                    <datalist id="stem-source-language-options">
+                        {sourceLanguageOptions.map((l) => <option key={l} value={l} />)}
+                    </datalist>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm }: EntryFormModalProps) {
     const { getValues, getOptions, createItem, updateItem, refresh, byCategoryAndKey } = useAdminConfig();
     const { mode, term } = useLinguisticMode();
@@ -1185,6 +1252,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const BROKEN_PATTERNS = getValues('broken_pattern');
     const FEMININE_PATTERNS_RAW = getValues('feminine_pattern');
     const DIMINUTIVE_PATTERNS_RAW = getValues('diminutive_pattern');
+    const SOURCE_LANGUAGE_OPTIONS = getValues('source_language');
     const PARTICIPLE_NUANCES = useMemo(() => getOptions('participle_nuance', mode, language), [getOptions, mode, language]);
     const VERB_TRANSITIVITY_OPTIONS = useMemo(() => getOptions('verb_transitivity', mode, language), [getOptions, mode, language]);
     const PARTICIPLE_TYPES = useMemo(() => getOptions('participle_type', mode, language), [getOptions, mode, language]);
@@ -1281,11 +1349,25 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
     const [form, setForm] = useState(() => entryToForm(entry, initialForm));
 
+    const rootConsonants = (form._rootConsonants || '').trim();
+    const zokkStem = (form.zokk_stem || '').trim();
+    const hasRootConsonants = rootConsonants.length > 0;
+    const hasZokkStem = zokkStem.length > 0;
+    const hasDualMorphology = hasRootConsonants && hasZokkStem;
+    const isStemMorphology = resolveEntryMorphologyMode(form) === 'stem';
+
     const isDirty = useMemo(() => {
         if (!originalForm) return false;
         // Simple JSON comparison for dirty check
         return JSON.stringify(form) !== JSON.stringify(originalForm);
     }, [form, originalForm]);
+
+    useEffect(() => {
+        if (!hasRootConsonants && !hasZokkStem) return;
+        if (form.is_loanword !== isStemMorphology) {
+            set('is_loanword', isStemMorphology);
+        }
+    }, [hasRootConsonants, hasZokkStem, isStemMorphology]);
 
     // Initialize original form for dirty tracking
     useEffect(() => {
@@ -2034,6 +2116,26 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 <ResetButton onClick={() => set('_rootConsonants', (entry as any)?._rootConsonants ?? (entry as any)?.root_pattern_form?.root?.consonants ?? (entry as any)?.root_consonants ?? initialForm?._rootConsonants ?? '')} title={t('Reset to original', 'Irrisettja')} />
                             </div>
                             <input className={inp} value={form._rootConsonants || ''} onChange={e => set('_rootConsonants', e.target.value)} placeholder="e.g. k-t-b" />
+                            <div className="space-y-1.5 pt-2">
+                                <label className={label}>{t('Stem', 'Żokk')}</label>
+                                <div className="relative">
+                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 font-serif">-</span>
+                                    <input className={`${inp} pl-5 pr-5 font-serif`} value={form.zokk_stem}
+                                        onChange={e => set('zokk_stem', e.target.value)} placeholder="kanta" />
+                                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 font-serif">-</span>
+                                </div>
+                            </div>
+                            {hasDualMorphology && (
+                                <label className="flex items-center gap-2 text-sm font-medium text-black pt-1">
+                                    <input
+                                        type="checkbox"
+                                        checked={!!form.prefer_zokk}
+                                        onChange={e => set('prefer_zokk', e.target.checked)}
+                                        className="w-4 h-4 text-[#1034A6] rounded"
+                                    />
+                                    <span>{t('Prioritise stem (loanword)', 'Prioritizza ż-żokk (self)')}</span>
+                                </label>
+                            )}
                         </div>
                         <div className="space-y-1.5 md:col-span-2">
                             <label className={label}>{t('CV Pattern / Wiżen', 'Mudell (Wiżen)')}</label>
@@ -2279,152 +2381,167 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     </fieldset>
 
                     {/* Morphology Section */}
-                    {normalizedPos !== 'interjection' && (
+                    {(normalizedPos !== 'interjection' || isStemMorphology) && (
                         <div className="mt-6">
                             <h3 className="text-sm font-bold text-black border-b border-border pb-2 mb-4">
-                                {t('Morphology', 'Morfoloġija')}
+                                {isStemMorphology
+                                    ? t('Stem Morphology', 'Morfoloġija taż-Żokk')
+                                    : t('Morphology', 'Morfoloġija')}
                             </h3>
 
-                            {showInflectionToggle && (
-                                <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                                    <label className="flex items-center gap-2 cursor-pointer">
-                                        <input
-                                            type="checkbox"
-                                            className="w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]"
-                                            checked={!!form.is_inflectable}
-                                            onChange={e => {
-                                                const checked = e.target.checked;
-                                                set('is_inflectable', checked);
-                                                if (!checked && normalizedPos !== 'pronoun') {
-                                                    set('gender', '');
-                                                    set('inflections_pl', '');
+                            {isStemMorphology ? (
+                                <StemMorphologyFields
+                                    form={form}
+                                    set={set}
+                                    t={t}
+                                    styles={{ label, inp, sel }}
+                                    hasRootConsonants={hasRootConsonants}
+                                    sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
+                                />
+                            ) : (
+                                <>
+                                    {showInflectionToggle && (
+                                        <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                                            <label className="flex items-center gap-2 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    className="w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]"
+                                                    checked={!!form.is_inflectable}
+                                                    onChange={e => {
+                                                        const checked = e.target.checked;
+                                                        set('is_inflectable', checked);
+                                                        if (!checked && normalizedPos !== 'pronoun') {
+                                                            set('gender', '');
+                                                            set('inflections_pl', '');
+                                                        }
+                                                    }}
+                                                />
+                                                <span className="text-sm font-medium">{t('Has Inflection', 'Għandu Inflessjoni')}</span>
+                                            </label>
+                                        </div>
+                                    )}
+
+                                    {normalizedPos === 'noun' && (
+                                        <NounFields
+                                            form={form}
+                                            set={set}
+                                            t={t}
+                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                                            insertChar={insertChar}
+                                            onFocus={setActiveInput}
+                                            options={{
+                                                gender: GENDER_OPTIONS,
+                                                noun_type: NOUN_TYPE_OPTIONS,
+                                                patterns: nounPatterns,
+                                                feminine_patterns: femininePatterns,
+                                                diminutive_patterns: diminutivePatterns,
+                                                suggestions: {
+                                                    broken_pattern: suggestedBrokenPattern || undefined,
+                                                    feminine: suggestedFeminine || undefined,
+                                                    masculine: suggestedMasculine || undefined,
+                                                    plural: pluralSuggestion || undefined
                                                 }
                                             }}
+                                            onApplyDerivedTerms={handleApplyDerivedTerms}
+                                            suggestions={availableVowelSets}
                                         />
-                                        <span className="text-sm font-medium">{t('Has Inflection', 'Għandu Inflessjoni')}</span>
-                                    </label>
-                                </div>
-                            )}
+                                    )}
 
-                            {normalizedPos === 'noun' && (
-                                <NounFields
-                                    form={form}
-                                    set={set}
-                                    t={t}
-                                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                    insertChar={insertChar}
-                                    onFocus={setActiveInput}
-                                    options={{
-                                        gender: GENDER_OPTIONS,
-                                        noun_type: NOUN_TYPE_OPTIONS,
-                                        patterns: nounPatterns,
-                                        feminine_patterns: femininePatterns,
-                                        diminutive_patterns: diminutivePatterns,
-                                        suggestions: {
-                                            broken_pattern: suggestedBrokenPattern || undefined,
-                                            feminine: suggestedFeminine || undefined,
-                                            masculine: suggestedMasculine || undefined,
-                                            plural: pluralSuggestion || undefined
-                                        }
-                                    }}
-                                    onApplyDerivedTerms={handleApplyDerivedTerms}
-                                    suggestions={availableVowelSets}
-                                />
-                            )}
+                                    {normalizedPos === 'pronoun' && !!form.is_inflectable && (
+                                        <PronounFields
+                                            form={form}
+                                            set={set}
+                                            t={t}
+                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                                            insertChar={insertChar}
+                                            onFocus={setActiveInput}
+                                            options={{
+                                                gender: GENDER_OPTIONS
+                                            }}
+                                        />
+                                    )}
 
-                            {normalizedPos === 'pronoun' && !!form.is_inflectable && (
-                                <PronounFields
-                                    form={form}
-                                    set={set}
-                                    t={t}
-                                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                    insertChar={insertChar}
-                                    onFocus={setActiveInput}
-                                    options={{
-                                        gender: GENDER_OPTIONS
-                                    }}
-                                />
-                            )}
+                                    {normalizedPos === 'numeral' && (
+                                        <NumeralFields
+                                            form={form}
+                                            set={set}
+                                            t={t}
+                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                                            insertChar={insertChar}
+                                            onFocus={setActiveInput}
+                                            options={{
+                                                gender: GENDER_OPTIONS
+                                            }}
+                                            onApplyDerivedTerms={handleApplyDerivedTerms}
+                                            suggestions={availableVowelSets}
+                                        />
+                                    )}
 
-                            {normalizedPos === 'numeral' && (
-                                <NumeralFields
-                                    form={form}
-                                    set={set}
-                                    t={t}
-                                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                    insertChar={insertChar}
-                                    onFocus={setActiveInput}
-                                    options={{
-                                        gender: GENDER_OPTIONS
-                                    }}
-                                    onApplyDerivedTerms={handleApplyDerivedTerms}
-                                    suggestions={availableVowelSets}
-                                />
-                            )}
+                                    {normalizedPos === 'verb' && (
+                                        <VerbFields
+                                            form={form}
+                                            set={set}
+                                            t={t}
+                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                                            insertChar={insertChar}
+                                            onFocus={setActiveInput}
+                                            options={{
+                                                verb_class: VERB_CLASS_OPTIONS,
+                                                verb_type: [
+                                                    { label: t('Strong', 'Sħiħ'), value: 'strong' },
+                                                    { label: t('Weak', 'Dgħajjef'), value: 'weak' },
+                                                    { label: t('Doubled', 'Irmidlat'), value: 'doubled' }
+                                                ],
+                                                verb_transitivity: VERB_TRANSITIVITY_OPTIONS,
+                                                verb_form: VERB_FORM_OPTIONS
+                                            }}
+                                            onApplyDerivedTerms={handleApplyDerivedTerms}
+                                        />
+                                    )}
 
-                            {normalizedPos === 'verb' && (
-                                <VerbFields
-                                    form={form}
-                                    set={set}
-                                    t={t}
-                                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                    insertChar={insertChar}
-                                    onFocus={setActiveInput}
-                                    options={{
-                                        verb_class: VERB_CLASS_OPTIONS,
-                                        verb_type: [
-                                            { label: t('Strong', 'Sħiħ'), value: 'strong' },
-                                            { label: t('Weak', 'Dgħajjef'), value: 'weak' },
-                                            { label: t('Doubled', 'Irmidlat'), value: 'doubled' }
-                                        ],
-                                        verb_transitivity: VERB_TRANSITIVITY_OPTIONS,
-                                        verb_form: VERB_FORM_OPTIONS
-                                    }}
-                                    onApplyDerivedTerms={handleApplyDerivedTerms}
-                                />
-                            )}
+                                    {normalizedPos === 'adjective' && (
+                                        <AdjectiveFields
+                                            form={form}
+                                            set={set}
+                                            t={t}
+                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                                            insertChar={insertChar}
+                                            onFocus={setActiveInput}
+                                            options={{
+                                                gender: GENDER_OPTIONS,
+                                                patterns: adjPatterns,
+                                                feminine_patterns: femininePatterns,
+                                                diminutive_patterns: diminutivePatterns
+                                            }}
+                                            suggestions={availableVowelSets}
+                                        />
+                                    )}
 
-                            {normalizedPos === 'adjective' && (
-                                <AdjectiveFields
-                                    form={form}
-                                    set={set}
-                                    t={t}
-                                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                    insertChar={insertChar}
-                                    onFocus={setActiveInput}
-                                    options={{
-                                        gender: GENDER_OPTIONS,
-                                        patterns: adjPatterns,
-                                        feminine_patterns: femininePatterns,
-                                        diminutive_patterns: diminutivePatterns
-                                    }}
-                                    suggestions={availableVowelSets}
-                                />
-                            )}
+                                    {normalizedPos === 'participle' && (
+                                        <ParticipleFields
+                                            form={form}
+                                            set={set}
+                                            t={t}
+                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                                            insertChar={insertChar}
+                                            onFocus={setActiveInput}
+                                            options={{
+                                                participle_type: PARTICIPLE_TYPES,
+                                                participle_gender: GENDER_OPTIONS,
+                                                patterns: adjPatterns,
+                                                feminine_patterns: femininePatterns,
+                                                diminutive_patterns: diminutivePatterns
+                                            }}
+                                            suggestions={availableVowelSets}
+                                        />
+                                    )}
 
-                            {normalizedPos === 'participle' && (
-                                <ParticipleFields
-                                    form={form}
-                                    set={set}
-                                    t={t}
-                                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                    insertChar={insertChar}
-                                    onFocus={setActiveInput}
-                                    options={{
-                                        participle_type: PARTICIPLE_TYPES,
-                                        participle_gender: GENDER_OPTIONS,
-                                        patterns: adjPatterns,
-                                        feminine_patterns: femininePatterns,
-                                        diminutive_patterns: diminutivePatterns
-                                    }}
-                                    suggestions={availableVowelSets}
-                                />
-                            )}
-
-                            {isInflectedFunctionPos && !form.is_inflectable && normalizedPos !== 'interjection' && (
-                                <p className="text-xs text-black/50 italic">
-                                    {t('No morphology fields when inflection is disabled.', 'L-ebda oqsma ta\' morfoloġija meta l-inflessjoni hija mitfija.')}
-                                </p>
+                                    {isInflectedFunctionPos && !form.is_inflectable && normalizedPos !== 'interjection' && (
+                                        <p className="text-xs text-black/50 italic">
+                                            {t('No morphology fields when inflection is disabled.', 'L-ebda oqsma ta\' morfoloġija meta l-inflessjoni hija mitfija.')}
+                                        </p>
+                                    )}
+                                </>
                             )}
                         </div>
                     )}
@@ -2606,13 +2723,6 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             </div>
                         )}
 
-                        <div className="flex items-center gap-2 px-1 mb-2">
-                            <input type="checkbox" id="loanword" checked={form.is_loanword}
-                                onChange={e => set('is_loanword', e.target.checked)}
-                                className="w-4 h-4 text-[#1034A6] rounded" />
-                            <label htmlFor="loanword" className="text-sm font-medium text-black">{t('Mark as Loanword', 'Isinja bħala Self')}?</label>
-                        </div>
-
                         {form.etymology_chain.map((ety: any, i: number) => (
                             <div key={i} className="flex gap-2 items-end">
                                 <div className="flex-1">
@@ -2645,61 +2755,6 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 </button>
                             </div>
                         ))}
-
-                        {form.is_loanword && (
-                            <div className="space-y-4 pt-2 border-t border-slate-200 mt-4 bg-blue-50/30 p-3 rounded-lg">
-                                <h4 className="text-xs font-bold uppercase text-blue-600 tracking-wider flex items-center gap-1.5">
-                                    <span className="text-lg">⚙</span>
-                                    {t('Stem (Zokk) Morphology', 'Morfoloġija taż-Żokk')}
-                                </h4>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className={label}>{t('Stem', 'Żokk')}</label>
-                                        <div className="relative">
-                                            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 font-serif">-</span>
-                                            <input className={`${inp} pl-5 pr-5 font-serif`} value={form.zokk_stem} 
-                                                onChange={e => set('zokk_stem', e.target.value)} placeholder="kanta" />
-                                            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 font-serif">-</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className={label}>{t('Class', 'Klassi')}</label>
-                                        <select className={sel} value={form.zokk_class} onChange={e => set('zokk_class', e.target.value)}>
-                                            <option value="">{t('Select...', 'Agħżel...')}</option>
-                                            <option value="ar">-ar</option>
-                                            <option value="ir">-ir</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <input type="checkbox" id="zokk_hybrid" checked={form.zokk_is_hybrid}
-                                        onChange={e => set('zokk_is_hybrid', e.target.checked)}
-                                        className="w-4 h-4 text-[#1034A6] rounded" />
-                                    <label htmlFor="zokk_hybrid" className="text-sm font-medium text-black">
-                                        {t('Is Hybrid', 'Huwa Ibridu')}?
-                                    </label>
-                                </div>
-                                {form.zokk_is_hybrid && (
-                                    <div>
-                                        <label className={label}>{t('Reanalysed Root', 'Għerq Reanalizzat')}</label>
-                                        <input className={inp} value={form.zokk_root} 
-                                            onChange={e => set('zokk_root', e.target.value)} placeholder="e.g. k-n-t-j" />
-                                    </div>
-                                )}
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className={label}>{t('Agentive Suffix', 'Suffiss Aġentiv')}</label>
-                                        <input className={inp} value={form.zokk_agentive_suffix} 
-                                            onChange={e => set('zokk_agentive_suffix', e.target.value)} placeholder="e.g. ant" />
-                                    </div>
-                                    <div>
-                                        <label className={label}>{t('Source Language(s)', 'Lingwa(i) Sors')}</label>
-                                        <input className={inp} value={form.source_language}
-                                            onChange={e => set('source_language', e.target.value)} placeholder={t('e.g. Italian, English', 'eż. Taljan, Ingliż')} />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
 
                         <div className="pt-2">
                             <label className={label}>{t('Source Citation', 'Sors / Referenza')}</label>

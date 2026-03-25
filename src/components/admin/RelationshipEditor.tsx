@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Trash2, Plus, Loader2, Search, CheckCircle2, AlertCircle, Link2 } from 'lucide-react';
-import { apiGetEntry, apiGetRoot, apiSearch } from '@/lib/api';
+import { apiGetEntry, apiGetRoot, apiGetStem, apiSearch, apiSearchStems } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { getGloss } from '@/lib/utils';
+import { formatStemDisplay } from '@/lib/stemDefaults';
 
 interface RelationshipItem {
     id: string;
@@ -20,7 +21,7 @@ interface RelationshipEditorProps {
     items: RelationshipItem[];
     onChange: (items: RelationshipItem[]) => void;
     type: 'thesaurus' | 'derived';
-    lookupType?: 'entry' | 'root';
+    lookupType?: 'entry' | 'root' | 'stem';
     enableSuggestions?: boolean;
     suggestionScope?: 'entries';
     currentEntryId?: string;
@@ -52,6 +53,9 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
     // Ref for auto-focusing new inputs
     const newInputRef = useRef<HTMLInputElement | null>(null);
     const [justAdded, setJustAdded] = useState(false);
+    const normalizeStemLookupId = useCallback((value: string) => {
+        return value.trim().replace(/^-+/, '').replace(/-+$/, '');
+    }, []);
 
     // Auto-focus when a new item is added
     useEffect(() => {
@@ -116,6 +120,47 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                 } else {
                     setRowState(index, 'error', t('Root not found', 'Għerq mhux misjub'));
                 }
+            } else if (lookupType === 'stem') {
+                const lookupId = normalizeStemLookupId(id);
+                let res = await apiGetStem(lookupId);
+                if (res?.stem) {
+                    const stem = res.stem as any;
+                    const firstGloss = Array.isArray(stem.glosses) ? stem.glosses[0] : null;
+                    const nextItems = [...items];
+                    nextItems[index] = {
+                        ...nextItems[index],
+                        id: stem.stem_string,
+                        headword: stem.stem_string,
+                        gloss_en: firstGloss?.en || '',
+                        gloss_mt: firstGloss?.mt || '',
+                        pos: 'STEM',
+                    };
+                    onChange(nextItems);
+                    setRowState(index, 'success');
+                } else {
+                    const searchRes = await apiSearchStems(lookupId, 8);
+                    const exact = (searchRes.stems || []).find((stem: any) => {
+                        const stemId = String(stem?.stem_string || stem?.id || '').trim().toLowerCase();
+                        const head = String(stem?.headword || stem?.stem_string || '').trim().toLowerCase();
+                        const q = lookupId.toLowerCase();
+                        return stemId === q || head === q;
+                    });
+                    if (exact) {
+                        const nextItems = [...items];
+                        nextItems[index] = {
+                            ...nextItems[index],
+                            id: exact.stem_string || exact.id,
+                            headword: exact.stem_string || exact.headword || exact.id,
+                            gloss_en: exact.gloss_en || '',
+                            gloss_mt: exact.gloss_mt || '',
+                            pos: 'STEM',
+                        };
+                        onChange(nextItems);
+                        setRowState(index, 'success');
+                    } else {
+                        setRowState(index, 'error', t('Stem not found', 'Żokk mhux misjub'));
+                    }
+                }
             } else {
                 // First try strict ID lookup.
                 let resolvedEntry: any = null;
@@ -165,7 +210,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
         } catch {
             setRowState(index, 'error', t('Lookup failed — check ID', 'Tfittxija falliet — iċċekkja l-ID'));
         }
-    }, [items, lookupType, onChange, setRowState, t]);
+    }, [items, lookupType, normalizeStemLookupId, onChange, setRowState, t]);
 
     const setSuggestionState = useCallback((index: number, patch: Partial<SuggestionState>) => {
         setSuggestions(prev => ({
@@ -196,7 +241,10 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
     });
 
     const fetchSuggestions = useCallback(async (query: string, index: number) => {
-        const canSuggest = enableSuggestions && suggestionScope === 'entries' && lookupType === 'entry';
+        const canSuggest = enableSuggestions && (
+            (suggestionScope === 'entries' && lookupType === 'entry') ||
+            lookupType === 'stem'
+        );
         if (!canSuggest) return;
 
         const normalized = query.trim();
@@ -207,23 +255,32 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
 
         setSuggestionState(index, { loading: true, query: normalized, open: true });
         try {
-            const res = await apiSearch(normalized, {
-                limit: 8,
-                searchLemma: true,
-                searchEnglishGloss: true,
-                includeSuggested: true,
-                includePending: true,
-            });
+            const usedIds = new Set(items.map((it, i) => (i === index ? '' : it?.id)).filter(Boolean));
+            let mapped: RelationshipItem[] = [];
 
-            const usedIds = new Set(
-                items
-                    .map((it, i) => (i === index ? '' : it?.id))
-                    .filter(Boolean)
-            );
-
-            const mapped = (res.results || [])
-                .map(r => mapEntryToItem(r))
-                .filter(it => !!it.id && !usedIds.has(it.id) && it.id !== currentEntryId);
+            if (lookupType === 'stem') {
+                const res = await apiSearchStems(normalized, 8);
+                mapped = (res.stems || [])
+                    .map((s: any) => ({
+                        id: s.stem_string || s.id,
+                        headword: s.headword || s.stem_string || s.id,
+                        gloss_en: s.gloss_en || '',
+                        gloss_mt: s.gloss_mt || '',
+                        pos: 'STEM',
+                    }))
+                    .filter(it => !!it.id && !usedIds.has(it.id));
+            } else {
+                const res = await apiSearch(normalized, {
+                    limit: 8,
+                    searchLemma: true,
+                    searchEnglishGloss: true,
+                    includeSuggested: true,
+                    includePending: true,
+                });
+                mapped = (res.results || [])
+                    .map(r => mapEntryToItem(r))
+                    .filter(it => !!it.id && !usedIds.has(it.id) && it.id !== currentEntryId);
+            }
 
             setSuggestionState(index, {
                 loading: false,
@@ -235,7 +292,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
         } catch {
             setSuggestionState(index, { loading: false, open: false, results: [], activeIndex: 0 });
         }
-    }, [closeSuggestions, currentEntryId, enableSuggestions, items, lookupType, setSuggestionState, suggestionScope, type]);
+    }, [closeSuggestions, currentEntryId, enableSuggestions, items, lookupType, setSuggestionState, suggestionScope]);
 
     const queueSuggestionFetch = useCallback((query: string, index: number) => {
         if (suggestionTimers.current[index]) {
@@ -302,7 +359,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
         nextItems[index] = { ...nextItems[index], id, headword: '' }; // Clear resolved data on ID change
         onChange(nextItems);
         setRowState(index, 'idle');
-        if (enableSuggestions && suggestionScope === 'entries' && lookupType === 'entry') {
+        if (enableSuggestions && (lookupType === 'entry' || lookupType === 'stem')) {
             queueSuggestionFetch(id, index);
         }
     };
@@ -396,7 +453,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                                             ${rowStates[i]?.state === 'error' ? 'border-red-300 bg-red-50/30' : 'border-border'}
                                         `}
                                         value={item.id}
-                                        placeholder={lookupType === 'root' ? "f-għ-l" : "entry-id or headword"}
+                                        placeholder={lookupType === 'root' ? "f-għ-l" : (lookupType === 'stem' ? "stem string" : "entry-id or headword")}
                                         onChange={e => updateId(i, e.target.value)}
                                         onBlur={() => {
                                             setTimeout(() => {
@@ -448,7 +505,9 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                                                         className={`w-full text-left px-2.5 py-2 border-b border-black/5 last:border-b-0 ${isActive ? 'bg-[#1034A6]/8' : 'hover:bg-black/3'}`}
                                                     >
                                                         <div className="flex items-center justify-between gap-2">
-                                                            <span className="font-serif text-[13px] text-black truncate">{s.headword}</span>
+                                                            <span className="font-serif text-[13px] text-black truncate">
+                                                                {lookupType === 'stem' ? formatStemDisplay(s.headword || s.id) : s.headword}
+                                                            </span>
                                                             <span className="text-[10px] text-black/30 font-mono truncate">{s.id}</span>
                                                         </div>
                                                         {!!(s.gloss_en || s.gloss_mt) && (
@@ -467,7 +526,9 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                                 <div className="flex-1 min-w-0 flex items-center gap-2 overflow-hidden">
                                     {isResolved ? (
                                         <>
-                                            <span className="font-serif text-[15px] text-black truncate">{item.headword}</span>
+                                            <span className="font-serif text-[15px] text-black truncate">
+                                                {item.pos === 'STEM' ? formatStemDisplay(item.headword) : item.headword}
+                                            </span>
                                             {type === 'derived' && item.pos && (
                                                 <span className="shrink-0 bg-black/5 text-black/50 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded">
                                                     {item.pos}
@@ -490,7 +551,9 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                                                 ? <span className="text-red-400 not-italic text-[10px]">{rowStates[i]?.message}</span>
                                                 : (lookupType === 'root'
                                                     ? t('Type consonants and press Enter', 'Ikteb il-konsonanti u agħfas Enter')
-                                                    : t('Type ID or headword, then select suggestion', 'Ikteb ID jew kelma, imbagħad agħżel suġġeriment'))
+                                                    : lookupType === 'stem'
+                                                        ? t('Type stem and press Enter', 'Ikteb iż-żokk u agħfas Enter')
+                                                        : t('Type ID or headword, then select suggestion', 'Ikteb ID jew kelma, imbagħad agħżel suġġeriment'))
                                             }
                                         </span>
                                     )}

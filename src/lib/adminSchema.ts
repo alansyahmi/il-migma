@@ -3,7 +3,7 @@
  * Refactored for Normalized Semitic Morphology.
  */
 
-import type { RootFormData } from './adminUtils';
+import type { RootFormData, StemFormData } from './adminUtils';
 
 // ── ROOTS ───────────────────────────────────────────────────────────────────
 
@@ -39,6 +39,31 @@ export function buildRootPayload(form: RootFormData): Record<string, any> {
     };
 }
 
+// ── STEMS ───────────────────────────────────────────────────────────────────
+
+export const STEM_HANDLED_FIELDS = [
+    'stem_string', 'class_type', 'is_hybrid', 'root', 'agentive_suffix',
+    'tags', 'source', 'glosses', 'etymology', 'synonyms', 'antonyms', 'related_stems',
+    'created_at', 'updated_at'
+] as const;
+
+export function buildStemPayload(form: StemFormData): Record<string, any> {
+    return {
+        stem_string: form.stem_string.trim().normalize('NFC'),
+        class_type: form.class_type === 'ir' ? 'ir' : 'ar',
+        is_hybrid: !!form.is_hybrid,
+        root: form.root || null,
+        agentive_suffix: form.agentive_suffix || null,
+        tags: JSON.stringify(form.tags?.split(',').map(s => s.trim()).filter(Boolean) || []),
+        source: form.source || '',
+        glosses: JSON.stringify(form.glosses.filter(g => g.en || g.mt)),
+        etymology: JSON.stringify(form.etymology || {}),
+        synonyms: JSON.stringify(form.synonyms || []),
+        antonyms: JSON.stringify(form.antonyms || []),
+        related_stems: JSON.stringify(form.related_stems || []),
+    };
+}
+
 // ── ENTRIES (REFACTORED) ─────────────────────────────────────────────────────
 
 /** * Unified Fields: 
@@ -68,7 +93,7 @@ export const ENTRY_HANDLED_FIELDS = [
 
 export const ENTRY_PRIVATE_FIELDS = [
     '_rootConsonants', '_formLabel', '_hasDual', '_pluralType', '_adjPluralType', '_weakClass',
-    '_sound_suffix', '_adj_sound_suffix', '_inheritedPattern'
+    '_sound_suffix', '_adj_sound_suffix', '_inheritedPattern', 'prefer_zokk'
 ] as const;
 
 export const COMMON_FIELDS = [
@@ -77,6 +102,25 @@ export const COMMON_FIELDS = [
     'synonyms', 'antonyms', 'related_entries', 'alternative_forms', 'is_inflectable',
     'usage_example', 'usage_example_en', 'root_consonants', 'cv_pattern', 'zokk_morphology'
 ];
+
+export type EntryMorphologyMode = 'root' | 'stem';
+
+export function resolveEntryMorphologyMode(form: any): EntryMorphologyMode {
+    const rootConsonants = String(form?._rootConsonants || form?.root_consonants || '').trim();
+    const zokkStem = String(form?.zokk_stem || '').trim();
+
+    const hasRootConsonants = rootConsonants.length > 0;
+    const hasZokkStem = zokkStem.length > 0;
+
+    if (hasRootConsonants && hasZokkStem) {
+        return form?.prefer_zokk ? 'stem' : 'root';
+    }
+
+    if (hasZokkStem) return 'stem';
+    if (hasRootConsonants) return 'root';
+
+    return form?.is_loanword ? 'stem' : 'root';
+}
 
 /** * Mapping POS to the Unified Database Columns.
  * UI will interpret 'lemma_base' as 'Singular' for Nouns and 'Masc' for Adjectives.
@@ -156,8 +200,10 @@ export function buildEntryPayload(form: any): Record<string, any> {
 
     // UI-to-DB Logic Mapping
     const verbForm = form._formLabel;
-    const rootConsonants = form._rootConsonants;
+    const rootConsonants = String(form._rootConsonants || form.root_consonants || '').trim();
     const verbWeakClass = form._weakClass || null;
+    const zokkStem = String(form.zokk_stem || '').trim();
+    const inferredIsLoanword = resolveEntryMorphologyMode(form) === 'stem';
 
     // Consolidate Split Logic for Plural Patterns
     const plurals = (form.form_plural_pattern || '').split(',').map((s: string) => s.trim()).filter(Boolean);
@@ -177,15 +223,16 @@ export function buildEntryPayload(form: any): Record<string, any> {
     payload.verb_weak_class = verbWeakClass;
     payload.sound_suffix = soundSuffix;
     payload.morph_pattern = morphPattern;
+    payload.is_loanword = inferredIsLoanword;
     // form_plural_pattern is already in payload from handled fields
 
     // ── ZOKK MORPHOLOGY serialization ─────────────────────────────────────
-    if (form.is_loanword && form.zokk_stem) {
+    if (zokkStem) {
         payload.zokk_morphology = JSON.stringify({
-            stem_string: form.zokk_stem,
+            stem_string: zokkStem,
             class_type: form.zokk_class,
             is_hybrid: !!form.zokk_is_hybrid,
-            root: form.zokk_root || null,
+            root: rootConsonants || form.zokk_root || null,
             agentive_suffix: form.zokk_agentive_suffix || null
         });
     }

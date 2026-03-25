@@ -5,7 +5,7 @@
  */
 
 import { buildEntryPayload, ENTRY_HANDLED_FIELDS } from './adminSchema.ts';
-import { resolveEntryGender } from './gender';
+import { resolveEntryGender } from './gender.ts';
 
 export const INITIAL_FORM_STATE = {
     id: '',
@@ -74,14 +74,15 @@ export const INITIAL_FORM_STATE = {
     numeral_type: '',
     form_attributive_short: '',
     form_attributive_long: '',
-    form_opposite: '',
-    zokk_class: '' as 'ar' | 'ir' | '',
-    zokk_stem: '',
-    zokk_is_hybrid: false,
-    zokk_root: '',
-    zokk_agentive_suffix: '',
-    extraFields: {} as Record<string, any>,
-};
+      form_opposite: '',
+      zokk_class: '' as 'ar' | 'ir' | '',
+      zokk_stem: '',
+      zokk_is_hybrid: false,
+      zokk_root: '',
+      prefer_zokk: false,
+      zokk_agentive_suffix: '',
+      extraFields: {} as Record<string, any>,
+  };
 
 export type AdminForm = typeof INITIAL_FORM_STATE;
 
@@ -123,6 +124,19 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
     const _adjPluralType = (pos === 'adjective' && hasBroken) ? (plurals ? 'broken' : 'sound') : 'none';
 
     const dual_form = full.dual_form || '';
+    const parseBooleanLike = (value: any) => {
+        if (typeof value === 'boolean') return value;
+        if (typeof value === 'number') return value === 1;
+        if (typeof value === 'string') {
+            const normalized = value.trim().toLowerCase();
+            return normalized === '1' || normalized === 'true' || normalized === 'yes' || normalized === 'on';
+        }
+        return false;
+    };
+    const hasZokkMorphology = !!full.zokk_morphology;
+    const isLoanword = full.is_loanword === undefined || full.is_loanword === null || full.is_loanword === ''
+        ? hasZokkMorphology
+        : parseBooleanLike(full.is_loanword);
 
     // Extract Extra Fields (unknown backend keys)
     const extraFields: Record<string, any> = {};
@@ -183,7 +197,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         verb_passive_ptcp: full.verb_passive_ptcp || '',
         elative_form: full.elative_form || '',
         participle_type: full.participle_type || '',
-        is_loanword: typeof full.is_loanword === 'boolean' ? full.is_loanword : (full.is_loanword === 1),
+        is_loanword: isLoanword,
         source_language: full.source_language || '',
         source_citation: full.source_citation || '',
         tags: Array.isArray(full.tags) ? full.tags.join(', ')
@@ -213,19 +227,20 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         numeral_type: full.numeral_type || '',
         form_attributive_short: full.form_attributive_short || '',
         form_attributive_long: full.form_attributive_long || '',
-        form_opposite: full.form_opposite || '',
-        is_inflectable: typeof full.is_inflectable === 'boolean' ? full.is_inflectable : (typeof full.is_inflectable === 'number' ? full.is_inflectable === 1 : true),
-        usage_example: full.usage_example || '',
-        usage_example_en: full.usage_example_en || '',
+          form_opposite: full.form_opposite || '',
+          is_inflectable: typeof full.is_inflectable === 'boolean' ? full.is_inflectable : (typeof full.is_inflectable === 'number' ? full.is_inflectable === 1 : true),
+          usage_example: full.usage_example || '',
+          usage_example_en: full.usage_example_en || '',
         // Initial Zokk values
         zokk_class: '',
         zokk_stem: '',
         zokk_is_hybrid: false,
         zokk_root: '',
+        prefer_zokk: isLoanword,
         zokk_agentive_suffix: '',
         extraFields,
         ...initialFormOverrides
-    };
+      };
 
     // Parse zokk_morphology if present
     if (full.zokk_morphology) {
@@ -233,12 +248,13 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
             const zokk = typeof full.zokk_morphology === 'string' 
                 ? JSON.parse(full.zokk_morphology) 
                 : full.zokk_morphology;
-            
+
             form.zokk_class = zokk.class_type || '';
             form.zokk_stem = zokk.stem_string || '';
             form.zokk_is_hybrid = !!zokk.is_hybrid;
-            form.zokk_root = zokk.root || '';
+            form.zokk_root = zokk.root || full.root_consonants || full.resolved_root_consonants || '';
             form.zokk_agentive_suffix = zokk.agentive_suffix || '';
+            form.prefer_zokk = isLoanword;
         } catch (e) {
             console.error('Failed to parse zokk_morphology', e);
         }

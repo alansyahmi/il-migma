@@ -45,6 +45,26 @@ export interface SearchResponse {
     query: string;
 }
 
+export interface StemApiItem {
+    id: string;
+    stem_string: string;
+    class_type: 'ar' | 'ir';
+    is_hybrid: boolean;
+    root: string | null;
+    agentive_suffix: string | null;
+    tags?: string[];
+    source?: string | null;
+    glosses?: Array<{ en: string; mt: string }>;
+    etymology?: Record<string, unknown>;
+    synonyms?: any[];
+    antonyms?: any[];
+    related_stems?: any[];
+    entry_count?: number;
+    entry_ids?: string[];
+    created_at?: string;
+    updated_at?: string;
+}
+
 export async function apiSearch(
     q: string,
     opts: {
@@ -80,6 +100,7 @@ export async function apiSearch(
         vs_opp?: string;
         vs_pl?: string;
         zokk?: boolean;
+        stem_string?: string;
     } = {}
 
 ): Promise<SearchResponse> {
@@ -116,6 +137,7 @@ export async function apiSearch(
     if (opts.vs_opp) params.set('vs_opp', opts.vs_opp);
     if (opts.vs_pl) params.set('vs_pl', opts.vs_pl);
     if (opts.zokk) params.set('zokk', 'true');
+    if (opts.stem_string) params.set('stem_string', opts.stem_string);
     if (opts.radicals) {
 
         opts.radicals.forEach((r, i) => {
@@ -165,6 +187,17 @@ export async function apiGetRoot(id: string): Promise<{ root: any }> {
 
 export async function apiGetPattern(id: string): Promise<{ pattern: any; roles: any[]; entries: any[] }> {
     return apiFetch(`/api/pattern/${encodeURIComponent(id)}`);
+}
+
+export async function apiGetStem(id: string): Promise<{ stem: StemApiItem }> {
+    return apiFetch(`/api/stem/${encodeURIComponent(id)}`);
+}
+
+export async function apiSearchStems(q: string, limit = 10): Promise<{ stems: any[] }> {
+    const params = new URLSearchParams();
+    if (q) params.set('q', q);
+    if (limit) params.set('limit', String(limit));
+    return apiFetch(`/api/stems/search?${params}`);
 }
 
 export async function apiListPatterns(): Promise<{ patterns: any[] }> {
@@ -246,6 +279,50 @@ export async function adminListStems(token: string, q?: string, limit = 500, off
     if (offset) params.set('offset', String(offset));
     return apiFetch<{ stems: any[] }>(`/api/admin/stems?${params}`, {
         headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminGetStem(token: string, id: string) {
+    return apiFetch<{ stem: StemApiItem }>(`/api/admin/stems/${encodeURIComponent(id)}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminCreateStem(token: string, data: Record<string, unknown>) {
+    return apiFetch<{ stem_string: string; created: boolean }>('/api/admin/stems', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function adminUpdateStem(token: string, id: string, data: Record<string, unknown>) {
+    return apiFetch<{ success: boolean; stem_string: string }>(`/api/admin/stems/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function adminDeleteStem(token: string, id: string) {
+    return apiFetch<{ id: string; deleted: boolean }>(`/api/admin/stems?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminSyncStemEtymology(token: string, commit = false) {
+    return apiFetch<{
+        committed: boolean;
+        examined: number;
+        updated: number;
+        skipped: number;
+        logs: string[];
+        samples: Array<Record<string, unknown>>;
+    }>('/api/admin/sync-stems', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ commit }),
     });
 }
 

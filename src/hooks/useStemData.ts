@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { apiSearch } from '@/lib/api';
-import type { Entry, ZokkMorphology } from '@/types';
+import { apiGetStem, apiSearch } from '@/lib/api';
+import type { Entry } from '@/types';
 
 export interface StemDataState {
     stem_string: string | null;
@@ -10,6 +10,7 @@ export interface StemDataState {
     agentive_suffix: string | null;
     source_languages: string[];
     entries: Entry[];
+    stem: any | null;
     loading: boolean;
     error: string | null;
 }
@@ -23,6 +24,7 @@ export function useStemData(id: string | undefined) {
         agentive_suffix: null,
         source_languages: [],
         entries: [],
+        stem: null,
         loading: false,
         error: null,
     });
@@ -33,20 +35,23 @@ export function useStemData(id: string | undefined) {
         setState(prev => ({ ...prev, loading: true, error: null }));
 
         try {
-            // Search for entries matching this stem
-            const searchRes = await apiSearch('', { zokk: true, stem_string: id } as any);
+            const [stemRes, searchRes] = await Promise.all([
+                apiGetStem(id).catch(() => null),
+                apiSearch('', { zokk: true, stem_string: id } as any),
+            ]);
             const entries = (searchRes.results as any) as Entry[];
 
-            if (entries.length === 0) {
+            const canonicalStem = stemRes?.stem || null;
+
+            if (entries.length === 0 && !canonicalStem) {
                 if (!signal?.aborted) {
-                    setState(prev => ({ ...prev, loading: false, entries: [] }));
+                    setState(prev => ({ ...prev, loading: false, entries: [], stem: null }));
                 }
                 return;
             }
 
-            // Extract metadata from the first entry with Zokk morphology
             const primary = entries.find(e => e.zokk_morphology) || entries[0];
-            const zokk = primary.zokk_morphology;
+            const zokk = canonicalStem || primary?.zokk_morphology || null;
 
             if (!signal?.aborted) {
                 setState({
@@ -61,6 +66,7 @@ export function useStemData(id: string | undefined) {
                         .flatMap(s => s!.split(',').map(x => x.trim()))
                         .filter((v, i, a) => a.indexOf(v) === i),
                     entries,
+                    stem: canonicalStem,
                     loading: false,
                     error: null,
                 });

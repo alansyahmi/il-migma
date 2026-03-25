@@ -58,6 +58,7 @@ export async function onRequestGet({ request, env }) {
     const vs_opp = url.searchParams.get('vs_opp') ?? '';
     const vs_pl = url.searchParams.get('vs_pl') ?? '';
     const isZokk = url.searchParams.get('zokk') === 'true';
+    const stemString = url.searchParams.get('stem_string')?.trim().normalize('NFC') ?? '';
 
     try {
         const tursoUrl = env.TURSO_URL || env.VITE_TURSO_URL;
@@ -223,6 +224,10 @@ export async function onRequestGet({ request, env }) {
         if (vs_opp) { sql += ' AND LOWER(e.vowel_set_opp) LIKE ?'; args.push(`%${vs_opp.toLowerCase()}%`); }
         if (vs_pl) { sql += ' AND LOWER(e.vowel_set_pl) LIKE ?'; args.push(`%${vs_pl.toLowerCase()}%`); }
         if (isZokk) { sql += ' AND e.zokk_morphology IS NOT NULL'; }
+        if (stemString) {
+            sql += ` AND json_valid(e.zokk_morphology) = 1 AND json_extract(e.zokk_morphology, '$.stem_string') = ?`;
+            args.push(stemString);
+        }
 
 
         const totalRes = await db.execute({ sql: `SELECT COUNT(*) as total ${sql}`, args });

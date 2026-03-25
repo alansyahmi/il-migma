@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { resolveEntryGender } from '@/lib/gender';
 import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
+import { resolveStemDefaults } from '@/lib/stemDefaults';
 
 import { type Entry } from '@/types';
 
@@ -53,9 +54,14 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
 
     if (entry.pos === 'verb' && entry.verb_morphology) {
         const vm = entry.verb_morphology;
-        const strengthRaw = entry.verb_class || entry.root_pattern_form?.root?.strength || 'strong';
+        const stemDefaults = entry.zokk_morphology ? resolveStemDefaults(entry.zokk_morphology as any) : null;
+        const strengthRaw = entry.zokk_morphology
+            ? stemDefaults?.strength || 'weak'
+            : (entry.verb_class || entry.root_pattern_form?.root?.strength || 'strong');
         const strengthLabel = term(strengthRaw === 'strong-hybrid' ? 'strong-hybrid' : strengthRaw);
-        const weakClassRaw = entry.verb_weak_class || entry.root_pattern_form?.root?.weak_class || vm.weak_class;
+        const weakClassRaw = entry.zokk_morphology
+            ? stemDefaults?.weak_class || 'defective'
+            : (entry.verb_weak_class || entry.root_pattern_form?.root?.weak_class || vm.weak_class);
         const weakClassLabel = weakClassRaw ? term(weakClassRaw) : null;
 
         const parts = [

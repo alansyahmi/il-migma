@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, Fragment } from 'react';
+import { useState, useMemo, useEffect, Fragment } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -17,34 +17,11 @@ import { getGloss } from '@/lib/utils';
 import { useRootData } from '@/hooks/useRootData';
 import { type VerbStrength } from '@/types';
 import { resolveTagLabel } from '@/lib/tagLabel';
-
-const LANGUAGE_COLORS: Record<string, { bg: string; text: string }> = {
-    Arabic: { bg: 'bg-emerald-50', text: 'text-emerald-800' },
-    Sicilian: { bg: 'bg-orange-50', text: 'text-orange-800' },
-    Italian: { bg: 'bg-blue-50', text: 'text-blue-800' },
-    Latin: { bg: 'bg-purple-50', text: 'text-purple-800' },
-    French: { bg: 'bg-sky-50', text: 'text-sky-800' },
-    English: { bg: 'bg-gray-100', text: 'text-gray-700' },
-    Spanish: { bg: 'bg-yellow-50', text: 'text-yellow-800' },
-    Berber: { bg: 'bg-amber-50', text: 'text-amber-800' },
-    Greek: { bg: 'bg-indigo-50', text: 'text-indigo-800' },
-    Uncertain: { bg: 'bg-gray-100', text: 'text-gray-500' },
-};
+import { EtymologySentence, SideCard, CREAM_RGBA } from './Entry';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
-const CREAM_RGBA = 'rgba(244,243,240,0.88)';
 const BLUE = '#1034A6';
 const GOLD = '#A07030';
-
-// ── Components ─────────────────────────────────────────────────────────────
-function SideCard({ title, children }: { title: string; children: React.ReactNode }) {
-    return (
-        <div className="bg-white rounded-xl border border-black/8 shadow-sm p-5 space-y-2">
-            <h2 className="font-sans font-bold text-[0.95rem] text-black">{title}</h2>
-            <div>{children}</div>
-        </div>
-    );
-}
 
 function MarkedCell({
     data,
@@ -153,6 +130,17 @@ export function Root() {
     }, [normalized, primaryEntry, mode]);
 
     const parsedEtymology = normalized?.etymology || null;
+    const etymologyItems = useMemo(() => {
+        if (!parsedEtymology) return [];
+        if (!parsedEtymology.language && !parsedEtymology.term && !parsedEtymology.pronunciation && !parsedEtymology.definition) return [];
+
+        return [{
+            language: parsedEtymology.language || '',
+            form: parsedEtymology.term || undefined,
+            pronunciation: parsedEtymology.pronunciation || undefined,
+            definition: parsedEtymology.definition || undefined,
+        }];
+    }, [parsedEtymology]);
 
     const rootRelationships = useMemo(() => {
         return normalized?.relationships || { synonyms: [], antonyms: [], related_entries: [] };
@@ -425,19 +413,9 @@ export function Root() {
                             )}
                         </SideCard>
 
-                        {parsedEtymology && (parsedEtymology.term || parsedEtymology.definition) && (
+                        {etymologyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
-                                <p className="text-sm text-black leading-relaxed flex flex-wrap items-center gap-1.5">
-                                    {parsedEtymology.relationship && <span>{parsedEtymology.relationship}</span>}
-                                    {parsedEtymology.language && (
-                                        <span className={`font-semibold ${LANGUAGE_COLORS[parsedEtymology.language]?.text || 'text-gray-600'} ${LANGUAGE_COLORS[parsedEtymology.language]?.bg || 'bg-gray-100'} px-1.5 py-0.5 rounded text-[0.7rem] uppercase tracking-wider`}>
-                                            {parsedEtymology.language}
-                                        </span>
-                                    )}
-                                    {parsedEtymology.term && <span className="font-serif">{parsedEtymology.term}</span>}
-                                    {parsedEtymology.pronunciation && <span className="text-black/60 italic">({parsedEtymology.pronunciation})</span>}
-                                    {parsedEtymology.definition && <span>"{parsedEtymology.definition}"</span>}
-                                </p>
+                                <EtymologySentence prefix={term('from')} items={etymologyItems} />
                             </SideCard>
                         )}
 

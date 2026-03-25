@@ -6,6 +6,7 @@ import { apiSearch } from '@/lib/api';
 import { Spinner } from '@/components/ui/Spinner';
 import type { SearchResult } from '@/types';
 import { Search, ArrowLeft } from 'lucide-react';
+import { formatStemDisplay } from '@/lib/stemDefaults';
 
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
 
@@ -113,7 +114,11 @@ export function StemSearch() {
                                         "{language === 'mt' && res.definition_mt ? res.definition_mt : res.definition_en}"
                                     </p>
                                     {res.zokk_morphology && (
-                                        <div className="mt-4 pt-4 border-t border-black/5 flex gap-4 text-[11px] font-medium text-black/40 uppercase tracking-wider">
+                                        <div className="mt-4 pt-4 border-t border-black/5 flex flex-wrap gap-4 text-[11px] font-medium text-black/40 uppercase tracking-wider">
+                                            <div>
+                                                <span className="opacity-50 mr-1">{term('stem')}:</span>
+                                                <span className="text-black/60">{formatStemDisplay(res.zokk_morphology.stem_string)}</span>
+                                            </div>
                                             <div>
                                                 <span className="opacity-50 mr-1">{term('class')}:</span>
                                                 <span className="text-black/60">-{res.zokk_morphology.class_type}</span>
