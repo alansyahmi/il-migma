@@ -65,7 +65,7 @@ export function Pattern() {
 
     return (
         <div style={bgStyle} className="w-full">
-            <div className="max-w-5xl mx-auto px-7 sm:px-8 py-10 pb-20">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-10 pb-20">
                 
                 {/* Back Link */}
                 <div className="mb-10">

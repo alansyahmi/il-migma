@@ -4,6 +4,31 @@ import type { Entry } from '@/types';
 
 export const MOCK_ENTRIES: Entry[] = [
     {
+        id: 'entry-abbandun',
+        headword: 'abbandun',
+        pos: 'verb',
+        is_loanword: true,
+        zokk_morphology: {
+            stem_string: 'abbandun',
+            class_type: 'ar',
+            is_hybrid: true,
+            root: 'b-n-d-n-j',
+            agentive_suffix: 'atur'
+        },
+        definitions: [
+            {
+                id: 'def-abbandun-1',
+                sense_number: 1,
+                text_en: 'to abandon',
+                text_mt: 'telaq; ħalla warajh'
+            }
+        ],
+        source_language: 'Italian',
+        tags: ['romance', 'loanword'],
+        created_at: '2024-03-25T00:00:00Z',
+        updated_at: '2024-03-25T00:00:00Z'
+    },
+    {
         id: 'entry-wara',
         headword: 'wara',
         pos: 'adverb',

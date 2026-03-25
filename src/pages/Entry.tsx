@@ -18,6 +18,7 @@ import { cn, getGloss } from '@/lib/utils';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { generateTheoreticalDual, generateElative, generateNumeralForms, type NumeralAutoForms } from '@/lib/maltesePhonology';
 import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
+import { generateZokkForms } from '@/lib/zokkEngine';
 
 const MarkedValue = ({ val, theoretical, showMarker = true }: { val: string | React.ReactNode | { value: React.ReactNode, theoretical: boolean }, theoretical?: boolean, showMarker?: boolean }) => {
     const isObj = typeof val === 'object' && val !== null && 'value' in val;
@@ -27,7 +28,9 @@ const MarkedValue = ({ val, theoretical, showMarker = true }: { val: string | Re
     // If the value is a string and starts with an asterisk, treat it as theoretical
     if (typeof v === 'string' && v.trim().startsWith('*')) {
         isT = true;
-        v = v.trim().substring(1);
+        v = v.trim().substring(1).trim();
+    } else if (typeof v === 'string') {
+        v = v.trim();
     }
 
     if (!v || v === '-') return <span className="opacity-40">-</span>;
@@ -39,14 +42,14 @@ const MarkedValue = ({ val, theoretical, showMarker = true }: { val: string | Re
 };
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
-const CREAM_RGBA = 'rgba(244,243,240,0.88)';
-const BLUE = '#1034A6';
-const GOLD = '#A07030';
+export const CREAM_RGBA = 'rgba(244,243,240,0.88)';
+export const BLUE = '#1034A6';
+export const GOLD = '#A07030';
 
 
 // ── Components ─────────────────────────────────────────────────────────────
 
-function SideCard({ title, children }: { title: string; children: React.ReactNode }) {
+export function SideCard({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm p-5 space-y-2">
             <h2 className="font-sans font-bold text-[0.95rem] text-black">{title}</h2>
@@ -55,7 +58,7 @@ function SideCard({ title, children }: { title: string; children: React.ReactNod
     );
 }
 
-function PropRow({ label, children, className }: { label: string; children: React.ReactNode; className?: string }) {
+export function PropRow({ label, children, className }: { label: string; children: React.ReactNode; className?: string }) {
     return (
         <div className={cn("flex flex-col", className)}>
             <p className="text-xs font-semibold text-black/40 mb-0.5 uppercase tracking-wider">{label}</p>
@@ -277,7 +280,7 @@ function RelatedGlossGroup({
     );
 }
 
-function TagChips({ entry }: { entry: Entry }) {
+export function TagChips({ entry }: { entry: Entry }) {
     const { term } = useLinguisticMode();
     const rawTags = entry.tags || [];
     if (!rawTags.length) return null;
@@ -405,8 +408,7 @@ function DerivedTermLink({
         </Link>
     ) : (
         <span className={`font-serif ${data.marker !== 'plain' ? 'opacity-45' : ''} text-black`}>
-            {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}
-            {data.value}
+            {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}{(data.value || '').trim()}
         </span>
     );
 
@@ -627,6 +629,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     return (
         <div style={bgStyle} className="w-full overflow-hidden">
             <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
+                {/* Header */}
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
                         <div className="relative inline-flex items-center justify-center">
@@ -649,25 +652,6 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </button>
                             )}
                         </div>
-                        {/* Title-level tags (e.g. \puristic) */}
-                        {entry.tags && entry.tags.some(t => t.startsWith('\\')) && (
-                            <div className="flex flex-wrap gap-2 justify-center mt-1">
-                                {entry.tags
-                                    .filter(t => t.startsWith('\\'))
-                                    .map(t => {
-                                        const translated = resolveTagLabel(t, term);
-                                        if (!translated) return null;
-                                        return (
-                                            <span
-                                                key={t}
-                                                className="inline-flex items-center px-2.5 py-1 rounded-full bg-black/5 text-[11px] font-sans text-black/80 border border-black/10"
-                                            >
-                                                {translated}
-                                            </span>
-                                        );
-                                    })}
-                            </div>
-                        )}
                     </div>
                     <SubParts entry={entry} showGender />
                 </div>
@@ -1826,7 +1810,244 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     );
 }
 
-// ── Numeral View ──────────────────────────────────────────────────────────
+// ── Zokk View ───────────────────────────────────────────────────────────────
+
+export function ZokkEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
+     const { language } = useLanguage();
+     const { term } = useLinguisticMode();
+     const { isAdmin, adminViewEnabled } = useAuth();
+     const { getToken } = useClerkAuth();
+
+     const [showForm, setShowForm] = useState(false);
+     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
+ 
+     const isActualAdmin = isAdmin && adminViewEnabled;
+     const zm = entry.zokk_morphology!;
+     const ety = entry.etymologies?.[0];
+ 
+     const zokkForms = useMemo(() => generateZokkForms(zm), [zm]);
+     const conj = zokkForms.conjugation;
+ 
+ 
+ 
+     const bgStyle = {
+         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+         minHeight: '100vh',
+     };
+ 
+     return (
+         <div style={bgStyle} className="w-full overflow-hidden">
+             <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
+                 {/* Header */}
+                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
+                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
+                         <div className="relative inline-flex items-center justify-center">
+                             <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
+                                 {entry.headword}
+                             </h1>
+                             {isActualAdmin && (
+                                 <button
+                                     onClick={() => {
+                                         setEditEntry({ ...entry } as any);
+                                         setShowForm(true);
+                                     }}
+                                     className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
+                                     title={term('edit-entry')}
+                                 >
+                                     <Edit2 size={16} />
+                                 </button>
+                             )}
+                         </div>
+                     </div>
+                     <SubParts entry={entry} showGender />
+                 </div>
+ 
+                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
+                     <div className="w-full md:w-64 shrink-0 space-y-4">
+                         <SideCard title={term('gloss')}>
+                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                 {entry.definitions?.map(def => (
+                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                 )) || <li>-</li>}
+                             </ol>
+                             <TagChips entry={entry} />
+                         </SideCard>
+ 
+                         {ety && ety.chain.length > 0 && (
+                             <SideCard title={term('etymology')}>
+                                 <p className="text-sm text-black leading-relaxed">
+                                     {term('from')}
+                                     {ety.chain.map((c, i) => (
+                                         <React.Fragment key={i}>
+                                             {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
+                                             <span style={{ color: BLUE }} className="font-medium mx-1">
+                                                 {term(c.language)}
+                                             </span>
+                                             {c.form && <span className="font-serif font-medium">{c.form}</span>}
+                                         </React.Fragment>
+                                     ))}.
+                                 </p>
+                             </SideCard>
+                         )}
+ 
+                     </div>
+ 
+                     <div className="flex-1 min-w-0 space-y-0 w-full">
+                         <div className="flex flex-col md:flex-row gap-8 items-start w-full">
+                             {/* New Sidebar Property Column */}
+                             <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-6 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
+                                 {entry.phonetics && entry.phonetics.length > 0 && (
+                                     <PropRow label={term('pronunciation')}>
+                                         <div className="space-y-0 mt-1">
+                                             {entry.phonetics.map((ph, idx) => (
+                                                 <div key={idx} className="flex flex-col sm:flex-row sm:items-center sm:gap-1 mb-0 last:mb-0">
+                                                     {ph.dialect && (
+                                                         <span className="text-[10px] font-bold text-black/40 uppercase tracking-tighter sm:mb-0">
+                                                             {ph.dialect.replace(' (Għawdex)', '').replace(' (Arkajku)', '')}:
+                                                         </span>
+                                                     )}
+                                                     {ph.ipa && <span className="text-[14px] tracking-tighter font-mono whitespace-nowrap">{ph.ipa}</span>}
+                                                 </div>
+                                             ))}
+                                         </div>
+                                     </PropRow>
+                                 )}
+
+                                 <PropRow label={term('class')}>
+                                     <span className="capitalize font-medium">-{zm.class_type}</span>
+                                 </PropRow>
+                                 <PropRow label={term('stem')}>
+                                     <span className="font-serif font-medium">{zm.stem_string}</span>
+                                 </PropRow>
+                                 {zm.root && (
+                                     <PropRow label={term('reanalysed-root')}>
+                                         <span className="font-sans font-medium">{zm.root}</span>
+                                     </PropRow>
+                                 )}
+                                 <PropRow label={term('is-hybrid')}>
+                                     <span>{zm.is_hybrid ? term('yes') : term('no')}</span>
+                                 </PropRow>
+
+                                 {/* Admin metadata matching Entry.tsx */}
+                                 {isAdmin && (
+                                     <div className="pt-2 border-t border-black/5 col-span-full">
+                                         <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
+                                         <div className="text-[11px] font-mono space-y-1 text-black/50">
+                                             <p>ID: {entry.id}</p>
+                                             <p>Type: Zokk</p>
+                                         </div>
+                                     </div>
+                                 )}
+                             </div>
+
+                             {conj && (
+                                 <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
+                                     <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                                         {term('conjugation-table')}
+                                     </h2>
+
+                                     <div className="overflow-x-auto overflow-y-hidden pb-4">
+                                         <table className="w-full text-sm border-collapse md:min-w-[500px]">
+                                             <thead>
+                                                 <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                     <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('person')}</th>
+                                                     <th className="text-left font-semibold text-black pb-2 pr-4">
+                                                         {term('imperfect')} <span className="opacity-55 font-normal text-xs">{term('(present)')}</span>
+                                                     </th>
+                                                     <th className="text-left font-semibold text-black pb-2">
+                                                         {term('perfect')} <span className="opacity-55 font-normal text-xs">{term('(past)')}</span>
+                                                     </th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                                 {conj.rows.map(row => (
+                                                     <tr key={row.person_mt} className="border-b border-black/4 whitespace-nowrap">
+                                                         <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
+                                                             {term(row.person_mt)}
+                                                         </td>
+                                                         <td className="py-1.5 pr-4 font-serif font-normal text-black">
+                                                             <MarkedValue val={row.imperfect} />
+                                                         </td>
+                                                         <td className="py-1.5 font-serif font-normal text-black">
+                                                             <MarkedValue val={row.perfect} />
+                                                         </td>
+                                                     </tr>
+                                                 ))}
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                 </div>
+                             )}
+                         </div>
+ 
+                         <div className="mt-12 w-full">
+                             <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">
+                                 {term('derived-terms')}
+                             </h2>
+                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-sm mt-3 items-start text-center md:text-left">
+                                 {zokkForms.passive_participle && (
+                                     <PropRow label={term('passive-participle')}>
+                                         <div className="flex flex-col gap-1">
+                                             <MarkedValue val={zokkForms.passive_participle.masc} />
+                                             <MarkedValue val={zokkForms.passive_participle.fem} />
+                                             <MarkedValue val={zokkForms.passive_participle.plural} />
+                                             {zokkForms.passive_participle.semitic && (
+                                                 <div className="mt-1 pt-1 border-t border-black/5">
+                                                     <span className="text-[10px] text-black/40 uppercase block mb-0.5">{term('semitic-hybrid')}</span>
+                                                     <MarkedValue val={zokkForms.passive_participle.semitic} />
+                                                 </div>
+                                             )}
+                                         </div>
+                                     </PropRow>
+                                 )}
+                                 {zokkForms.agentive && (
+                                     <PropRow label={term('agentive')}>
+                                         <div className="flex flex-col gap-1">
+                                             <MarkedValue val={zokkForms.agentive.masc} />
+                                             <MarkedValue val={zokkForms.agentive.fem} />
+                                             <MarkedValue val={zokkForms.agentive.plural} />
+                                         </div>
+                                     </PropRow>
+                                 )}
+                                 {zokkForms.verbal_noun && (
+                                     <PropRow label={term('verbal-noun')}>
+                                         <MarkedValue val={zokkForms.verbal_noun} />
+                                     </PropRow>
+                                 )}
+                             </div>
+                             {zokkForms.hybrid_forms?.form_ii && (
+                                 <div className="mt-8 pt-8 border-t border-black/5">
+                                     <PropRow label={term('form-ii')}>
+                                         <MarkedValue val={zokkForms.hybrid_forms.form_ii} />
+                                     </PropRow>
+                                 </div>
+                             )}
+                         </div>
+ 
+                         <div className="mt-16">
+                             <UsageExampleBlock entry={entry} />
+                         </div>
+                     </div>
+                 </div>
+             </div>
+ 
+             {showForm && (
+                 <EntryFormModal
+                     entry={editEntry}
+                     onClose={() => { setShowForm(false); setEditEntry(null); }}
+                     onSaved={() => {
+                         setShowForm(false);
+                         setEditEntry(null);
+                         onRefetch?.();
+                     }}
+                     getToken={getToken}
+                 />
+             )}
+         </div>
+     );
+ }
+ 
+ // ── Numeral View ──────────────────────────────────────────────────────────
 
 function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
     const { language } = useLanguage();
@@ -3679,6 +3900,10 @@ export function EntryPage() {
     const nm = entry.noun_morphology;
     const vm = entry.verb_morphology;
     const am = entry.adjective_morphology;
+
+    if (entry.zokk_morphology) {
+        return <ZokkEntryView entry={entry} onRefetch={refetch} />;
+    }
 
     if (pos === 'verb' && vm) {
         return <VerbEntryView entry={entry} onRefetch={refetch} />;

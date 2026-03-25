@@ -63,7 +63,7 @@ export const ENTRY_HANDLED_FIELDS = [
     'elative_pattern', 'diminutive_pattern',
     'synonyms', 'antonyms', 'related_entries', 'alternative_forms', 'created_at', 'updated_at',
     'root_consonants', 'verb_form', 'root_pattern_form_id', 'verb_weak_class', 'verb_type',
-    'is_inflectable', 'usage_example', 'usage_example_en', 'old_id'
+    'is_inflectable', 'usage_example', 'usage_example_en', 'old_id', 'zokk_morphology'
 ] as const;
 
 export const ENTRY_PRIVATE_FIELDS = [
@@ -75,7 +75,7 @@ export const COMMON_FIELDS = [
     'id', 'headword', 'pos', 'is_loanword', 'source_language',
     'source_citation', 'definitions', 'etymology_chain', 'phonetics', 'tags',
     'synonyms', 'antonyms', 'related_entries', 'alternative_forms', 'is_inflectable',
-    'usage_example', 'usage_example_en', 'root_consonants', 'cv_pattern'
+    'usage_example', 'usage_example_en', 'root_consonants', 'cv_pattern', 'zokk_morphology'
 ];
 
 /** * Mapping POS to the Unified Database Columns.
@@ -178,6 +178,17 @@ export function buildEntryPayload(form: any): Record<string, any> {
     payload.sound_suffix = soundSuffix;
     payload.morph_pattern = morphPattern;
     // form_plural_pattern is already in payload from handled fields
+
+    // ── ZOKK MORPHOLOGY serialization ─────────────────────────────────────
+    if (form.is_loanword && form.zokk_stem) {
+        payload.zokk_morphology = JSON.stringify({
+            stem_string: form.zokk_stem,
+            class_type: form.zokk_class,
+            is_hybrid: !!form.zokk_is_hybrid,
+            root: form.zokk_root || null,
+            agentive_suffix: form.zokk_agentive_suffix || null
+        });
+    }
 
     // ── ACTIVE MIRRORING ───────────────────────────────────────────────────
     // The cv_pattern field always mirrors the current gender's primary slot

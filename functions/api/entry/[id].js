@@ -132,6 +132,7 @@ export async function onRequestGet({ params, env }) {
             antonyms: entry.antonyms ? JSON.parse(entry.antonyms) : [],
             related_entries: entry.related_entries ? JSON.parse(entry.related_entries) : [],
             alternative_forms: entry.alternative_forms ? JSON.parse(entry.alternative_forms) : [],
+            zokk_morphology: entry.zokk_morphology ? JSON.parse(entry.zokk_morphology) : undefined,
             definitions,
             phonetics: phonRes.rows.map(ph => ({
                 ...ph,

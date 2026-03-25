@@ -10,7 +10,7 @@ export function Blog() {
         document.title = `${term('blog')} | Il-Miġma'`;
     }, [term]);
     return (
-        <div className="max-w-3xl mx-auto px-7 sm:px-8 py-8 space-y-6">
+        <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8 space-y-6">
             <h1 className="font-serif text-3xl font-bold text-[#1034A6]">{term('blog')}</h1>
             <p className="text-text-muted">{term('blog-desc')}</p>
             <div className="space-y-4">
@@ -44,7 +44,7 @@ export function BlogPost() {
         document.title = `${term('blog-post')} | Il-Miġma'`;
     }, [term]);
     return (
-        <div className="max-w-2xl mx-auto px-7 sm:px-8 py-8">
+        <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8">
             <Link to="/blog" className="text-sm text-[#1034A6] hover:underline mb-6 block">← {term('back-to-blog')}</Link>
             <div className="bg-white border border-border rounded-xl p-6 sm:p-8">
                 <div className="flex gap-2 mb-3">

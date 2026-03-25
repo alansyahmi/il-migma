@@ -225,15 +225,17 @@ export function Home() {
         <div className="min-h-screen">
             <div style={bgStyle}>
                 {/* Hero */}
-                <section className="text-center px-4 pt-16 pb-14 sm:pt-20 sm:pb-16 max-w-2xl mx-auto">
-                    <h1 className="font-serif font-medium text-[2.6rem] sm:text-[3.2rem] leading-tight text-black mb-3">
-                        {term('dictionary-title')}
-                    </h1>
-                    <p className="text-text-muted text-sm leading-relaxed max-w-lg mx-auto mb-10">
-                        {counts.total > 0
-                            ? term('home-desc').replace('300,000', counts.total.toLocaleString())
-                            : term('home-desc')}
-                    </p>
+                <section className="text-center px-7 sm:px-8 pt-16 pb-14 sm:pt-24 sm:pb-20">
+                    <div className="max-w-2xl mx-auto">
+                        <h1 className="font-serif font-medium text-[2.6rem] sm:text-[3.2rem] leading-tight text-black mb-3">
+                            {term('dictionary-title')}
+                        </h1>
+                        <p className="text-text-muted text-sm leading-relaxed max-w-lg mx-auto mb-10">
+                            {counts.total > 0
+                                ? term('home-desc').replace('300,000', counts.total.toLocaleString())
+                                : term('home-desc')}
+                        </p>
+                    </div>
 
                     {/* Search bar */}
                     <form onSubmit={handleSearch} className="max-w-md mx-auto mb-5 relative">
@@ -273,7 +275,6 @@ export function Home() {
                         />
                     </form>
 
-                    {/* Buttons */}
                     <div className="flex items-center justify-center gap-3">
                         <Link
                             to="/browse"
@@ -291,8 +292,8 @@ export function Home() {
                 </section>
 
                 {/* Categories */}
-                <section className="px-7 sm:px-8 pb-20">
-                    <div className="max-w-6xl mx-auto">
+                <section className="pb-20">
+                    <div className="max-w-6xl mx-auto px-7 sm:px-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
 
                             {/* Semitic Entries */}

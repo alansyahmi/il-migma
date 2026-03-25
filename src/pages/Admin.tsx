@@ -3,20 +3,21 @@ import { useSearchParams } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { ShieldAlert, FileText, Layers, Settings, Database } from 'lucide-react';
+import { ShieldAlert, FileText, Layers, Settings, Database, GitBranch } from 'lucide-react';
 import { DbTools } from '@/components/admin/DbTools';
 import { AdminSettings } from '@/components/admin/AdminSettings';
 import { EntryManager } from '@/components/admin/EntryManager';
 import { RootManager } from '@/components/admin/RootManager';
+import { StemManager } from '@/components/admin/StemManager';
 import { cn } from '@/lib/utils';
 
 export function Admin() {
     const { tier, isTrueAdmin } = useAuth();
     const { getToken } = useClerkAuth();
     const [searchParams, setSearchParams] = useSearchParams();
-    const tab = (searchParams.get('tab') as 'entries' | 'roots' | 'settings' | 'db') || 'entries';
+    const tab = (searchParams.get('tab') as 'entries' | 'roots' | 'stems' | 'settings' | 'db') || 'entries';
 
-    const setTab = (nextTab: 'entries' | 'roots' | 'settings' | 'db') => {
+    const setTab = (nextTab: 'entries' | 'roots' | 'stems' | 'settings' | 'db') => {
         setSearchParams({ tab: nextTab });
     };
 
@@ -27,6 +28,7 @@ export function Admin() {
         const tabLabels: Record<string, string> = {
             entries: term('entries'),
             roots: term('roots'),
+            stems: 'Stems',
             settings: term('settings'),
             db: term('db-tools'),
         };
@@ -35,7 +37,7 @@ export function Admin() {
     }, [tab, term]);
 
     return (
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+        <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8 space-y-6">
             {!hasAdminRights && (
                 <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-3 text-amber-900 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
                     <ShieldAlert className="shrink-0" size={20} />
@@ -67,6 +69,15 @@ export function Admin() {
                         <Layers size={16} /> {term('roots')}
                     </button>
                     <button
+                        onClick={() => setTab('stems')}
+                        className={cn(
+                            'px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2',
+                            tab === 'stems' ? 'bg-white text-link shadow-sm' : 'text-black/40 hover:text-black/60',
+                        )}
+                    >
+                        <GitBranch size={16} /> Stems
+                    </button>
+                    <button
                         onClick={() => setTab('settings')}
                         className={cn(
                             'px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2',
@@ -89,6 +100,7 @@ export function Admin() {
 
             {tab === 'entries' && <EntryManager />}
             {tab === 'roots' && <RootManager />}
+            {tab === 'stems' && <StemManager />}
             {tab === 'settings' && <AdminSettings />}
             {tab === 'db' && <DbTools getToken={getToken} />}
         </div>

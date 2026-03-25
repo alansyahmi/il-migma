@@ -6,7 +6,7 @@
 
 import type { Entry, SearchResult } from '@/types';
 
-const BASE = import.meta.env.DEV ? '' : (import.meta.env.VITE_APP_URL ?? '');
+const BASE = '';
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
     const url = `${BASE}${path}`;
@@ -79,6 +79,7 @@ export async function apiSearch(
         vs_sg?: string;
         vs_opp?: string;
         vs_pl?: string;
+        zokk?: boolean;
     } = {}
 
 ): Promise<SearchResponse> {
@@ -114,6 +115,7 @@ export async function apiSearch(
     if (opts.vs_sg) params.set('vs_sg', opts.vs_sg);
     if (opts.vs_opp) params.set('vs_opp', opts.vs_opp);
     if (opts.vs_pl) params.set('vs_pl', opts.vs_pl);
+    if (opts.zokk) params.set('zokk', 'true');
     if (opts.radicals) {
 
         opts.radicals.forEach((r, i) => {
@@ -233,6 +235,16 @@ export async function adminListRoots(token: string, q?: string) {
     const params = new URLSearchParams();
     if (q) params.set('q', q);
     return apiFetch<{ roots: any[] }>(`/api/admin/roots?${params}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminListStems(token: string, q?: string, limit = 500, offset = 0) {
+    const params = new URLSearchParams();
+    if (q) params.set('q', q);
+    if (limit) params.set('limit', String(limit));
+    if (offset) params.set('offset', String(offset));
+    return apiFetch<{ stems: any[] }>(`/api/admin/stems?${params}`, {
         headers: { Authorization: `Bearer ${token}` },
     });
 }

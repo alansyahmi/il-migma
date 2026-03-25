@@ -57,6 +57,7 @@ export async function onRequestGet({ request, env }) {
     const vs_sg = url.searchParams.get('vs_sg') ?? '';
     const vs_opp = url.searchParams.get('vs_opp') ?? '';
     const vs_pl = url.searchParams.get('vs_pl') ?? '';
+    const isZokk = url.searchParams.get('zokk') === 'true';
 
     try {
         const tursoUrl = env.TURSO_URL || env.VITE_TURSO_URL;
@@ -221,6 +222,7 @@ export async function onRequestGet({ request, env }) {
         if (vs_sg) { sql += ' AND LOWER(e.vowel_set_sg) LIKE ?'; args.push(`%${vs_sg.toLowerCase()}%`); }
         if (vs_opp) { sql += ' AND LOWER(e.vowel_set_opp) LIKE ?'; args.push(`%${vs_opp.toLowerCase()}%`); }
         if (vs_pl) { sql += ' AND LOWER(e.vowel_set_pl) LIKE ?'; args.push(`%${vs_pl.toLowerCase()}%`); }
+        if (isZokk) { sql += ' AND e.zokk_morphology IS NOT NULL'; }
 
 
         const totalRes = await db.execute({ sql: `SELECT COUNT(*) as total ${sql}`, args });
@@ -241,7 +243,7 @@ export async function onRequestGet({ request, env }) {
                 r.gloss AS root_gloss,
                 r.id AS root_id,
                 d.text_en, d.text_mt, p.ipa, ar.reliability_index,
-                pat.cv_notation, pat.wizen_notation
+                pat.cv_notation, pat.wizen_notation, e.zokk_morphology
             ${sql}
                 `;
 
@@ -311,6 +313,7 @@ export async function onRequestGet({ request, env }) {
                 } : undefined,
                 definition_en: r.text_en,
                 definition_mt: r.text_mt,
+                zokk_morphology: r.zokk_morphology ? (() => { try { return JSON.parse(r.zokk_morphology); } catch { return undefined; } })() : undefined,
                 root_pattern_form: r.root_consonants ? {
                     id: '',
                     root_id: r.root_id || '',

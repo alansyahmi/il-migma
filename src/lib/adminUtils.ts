@@ -121,3 +121,41 @@ export function normalizeRootRelationships(rel: any): any[] {
         return [];
     }
 }
+
+export interface StemMorphology {
+    stem_string: string;
+    class_type: 'ar' | 'ir';
+    is_hybrid: boolean;
+    root: string | null;
+    agentive_suffix: string | null;
+}
+
+/**
+ * Normalizes stem morphology JSON into a typed object.
+ */
+export function normalizeStemMorphology(zokk: any, defaultStem = ''): StemMorphology {
+    const defaultVal: StemMorphology = {
+        stem_string: defaultStem,
+        class_type: 'ar',
+        is_hybrid: false,
+        root: null,
+        agentive_suffix: null
+    };
+
+    if (!zokk) return defaultVal;
+
+    try {
+        const parsed = typeof zokk === 'string' ? JSON.parse(zokk) : zokk;
+        if (typeof parsed !== 'object' || parsed === null) return defaultVal;
+
+        return {
+            stem_string: String(parsed.stem_string || defaultStem),
+            class_type: (parsed.class_type === 'ir' ? 'ir' : 'ar'),
+            is_hybrid: !!parsed.is_hybrid,
+            root: parsed.root ? String(parsed.root) : null,
+            agentive_suffix: parsed.agentive_suffix ? String(parsed.agentive_suffix) : null
+        };
+    } catch (e) {
+        return defaultVal;
+    }
+}

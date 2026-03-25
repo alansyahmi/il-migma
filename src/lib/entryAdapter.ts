@@ -75,6 +75,11 @@ export const INITIAL_FORM_STATE = {
     form_attributive_short: '',
     form_attributive_long: '',
     form_opposite: '',
+    zokk_class: '' as 'ar' | 'ir' | '',
+    zokk_stem: '',
+    zokk_is_hybrid: false,
+    zokk_root: '',
+    zokk_agentive_suffix: '',
     extraFields: {} as Record<string, any>,
 };
 
@@ -161,7 +166,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         diminutive_pattern: full.diminutive_pattern || '',
         dual_form,
         _hasDual: !!dual_form,
-        _pluralType,
+        _pluralType: _pluralType as any,
         _adjPluralType,
         verb_class: full.verb_class || '',
         verb_type: full.verb_type || '',
@@ -178,7 +183,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         verb_passive_ptcp: full.verb_passive_ptcp || '',
         elative_form: full.elative_form || '',
         participle_type: full.participle_type || '',
-        is_loanword: typeof full.is_loanword === 'boolean' ? full.is_loanword : false,
+        is_loanword: typeof full.is_loanword === 'boolean' ? full.is_loanword : (full.is_loanword === 1),
         source_language: full.source_language || '',
         source_citation: full.source_citation || '',
         tags: Array.isArray(full.tags) ? full.tags.join(', ')
@@ -212,9 +217,32 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         is_inflectable: typeof full.is_inflectable === 'boolean' ? full.is_inflectable : (typeof full.is_inflectable === 'number' ? full.is_inflectable === 1 : true),
         usage_example: full.usage_example || '',
         usage_example_en: full.usage_example_en || '',
+        // Initial Zokk values
+        zokk_class: '',
+        zokk_stem: '',
+        zokk_is_hybrid: false,
+        zokk_root: '',
+        zokk_agentive_suffix: '',
         extraFields,
         ...initialFormOverrides
     };
+
+    // Parse zokk_morphology if present
+    if (full.zokk_morphology) {
+        try {
+            const zokk = typeof full.zokk_morphology === 'string' 
+                ? JSON.parse(full.zokk_morphology) 
+                : full.zokk_morphology;
+            
+            form.zokk_class = zokk.class_type || '';
+            form.zokk_stem = zokk.stem_string || '';
+            form.zokk_is_hybrid = !!zokk.is_hybrid;
+            form.zokk_root = zokk.root || '';
+            form.zokk_agentive_suffix = zokk.agentive_suffix || '';
+        } catch (e) {
+            console.error('Failed to parse zokk_morphology', e);
+        }
+    }
 
     return form;
 }

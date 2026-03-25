@@ -2647,10 +2647,57 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         ))}
 
                         {form.is_loanword && (
-                            <div className="pt-2">
-                                <label className={label}>{t('Primary Source Language', 'Lingwa Sors Prinċipali')}</label>
-                                <input className={inp} value={form.source_language}
-                                    onChange={e => set('source_language', e.target.value)} placeholder={t('e.g. Italian', 'eż. Taljan')} />
+                            <div className="space-y-4 pt-2 border-t border-slate-200 mt-4 bg-blue-50/30 p-3 rounded-lg">
+                                <h4 className="text-xs font-bold uppercase text-blue-600 tracking-wider flex items-center gap-1.5">
+                                    <span className="text-lg">⚙</span>
+                                    {t('Stem (Zokk) Morphology', 'Morfoloġija taż-Żokk')}
+                                </h4>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className={label}>{t('Stem', 'Żokk')}</label>
+                                        <div className="relative">
+                                            <span className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 font-serif">-</span>
+                                            <input className={`${inp} pl-5 pr-5 font-serif`} value={form.zokk_stem} 
+                                                onChange={e => set('zokk_stem', e.target.value)} placeholder="kanta" />
+                                            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 font-serif">-</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className={label}>{t('Class', 'Klassi')}</label>
+                                        <select className={sel} value={form.zokk_class} onChange={e => set('zokk_class', e.target.value)}>
+                                            <option value="">{t('Select...', 'Agħżel...')}</option>
+                                            <option value="ar">-ar</option>
+                                            <option value="ir">-ir</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <input type="checkbox" id="zokk_hybrid" checked={form.zokk_is_hybrid}
+                                        onChange={e => set('zokk_is_hybrid', e.target.checked)}
+                                        className="w-4 h-4 text-[#1034A6] rounded" />
+                                    <label htmlFor="zokk_hybrid" className="text-sm font-medium text-black">
+                                        {t('Is Hybrid', 'Huwa Ibridu')}?
+                                    </label>
+                                </div>
+                                {form.zokk_is_hybrid && (
+                                    <div>
+                                        <label className={label}>{t('Reanalysed Root', 'Għerq Reanalizzat')}</label>
+                                        <input className={inp} value={form.zokk_root} 
+                                            onChange={e => set('zokk_root', e.target.value)} placeholder="e.g. k-n-t-j" />
+                                    </div>
+                                )}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className={label}>{t('Agentive Suffix', 'Suffiss Aġentiv')}</label>
+                                        <input className={inp} value={form.zokk_agentive_suffix} 
+                                            onChange={e => set('zokk_agentive_suffix', e.target.value)} placeholder="e.g. ant" />
+                                    </div>
+                                    <div>
+                                        <label className={label}>{t('Source Language(s)', 'Lingwa(i) Sors')}</label>
+                                        <input className={inp} value={form.source_language}
+                                            onChange={e => set('source_language', e.target.value)} placeholder={t('e.g. Italian, English', 'eż. Taljan, Ingliż')} />
+                                    </div>
+                                </div>
                             </div>
                         )}
 

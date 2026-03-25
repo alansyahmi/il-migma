@@ -47,7 +47,8 @@ const columnsToAdd = [
     'numeral_type',
     'form_attributive_short',
     'form_attributive_long',
-    'form_opposite'
+    'form_opposite',
+    'zokk_morphology'
 ];
 
 async function run() {

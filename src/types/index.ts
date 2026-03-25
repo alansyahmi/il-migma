@@ -238,6 +238,14 @@ export interface AdjectiveMorphology {
     source_citation?: string;
 }
 
+export interface ZokkMorphology {
+    stem_string: string;
+    class_type: 'ar' | 'ir';
+    is_hybrid: boolean;
+    agentive_suffix?: string; // override (ant/ur/ent/itur)
+    root?: string;            // the reanalysed root (e.g. k-n-t-j)
+}
+
 // ─── Phonetics ─────────────────────────────────────────────────────────────
 export interface Phonetic {
     id: string;
@@ -362,6 +370,7 @@ export interface Entry {
     verb_morphology?: VerbMorphology;
     adjective_morphology?: AdjectiveMorphology;
     numeral_morphology?: NumeralMorphology;
+    zokk_morphology?: ZokkMorphology;
 
     definitions: Definition[];
     subentries?: SubEntry[];
@@ -506,6 +515,8 @@ export type SearchResult = Entry & {
     score?: number;              // relevance score (semantic search)
     match_type?: 'exact' | 'prefix' | 'fulltext' | 'semantic';
     highlight?: string;
+    definition_en?: string;
+    definition_mt?: string;
 };
 
 export interface SearchFilters {

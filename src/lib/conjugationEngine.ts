@@ -2464,9 +2464,7 @@ function generateTriliteralGeminated(
     const a1 = hasIorE(pv1) ? "ie" : "a";
     const a2 = isGuttural(C3) ? "a" : "e";
     const f1_act = `${C1}${a1}${C2}${a2}${C3}`;
-    const f1_vn = isGuttural(C1)
-        ? `${C1}e${pv1}${C2}${C3}`
-        : `${C1}${pv1}${C2}${C3}`;
+    const f1_vn = isPharyngeal(C1) ? `${C1}a${C2}i${C3}` : `${C1}${C2}i${C3}`;
     const f1_impv = `${C1}${ipv1}${C2}${C3}`;
 
     forms.push({

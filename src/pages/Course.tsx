@@ -10,7 +10,7 @@ export function Course() {
         document.title = `${t('Course', 'Kors')} | Il-Miġma'`;
     }, [t]);
     return (
-        <div className="max-w-3xl mx-auto px-7 sm:px-8 py-12 text-center space-y-6">
+        <div className="max-w-6xl mx-auto px-7 sm:px-8 py-12 text-center space-y-6">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1B4D3E]/10">
                 <GraduationCap size={32} className="text-[#1B4D3E]" />
             </div>

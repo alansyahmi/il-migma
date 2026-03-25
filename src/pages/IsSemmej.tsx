@@ -17,7 +17,7 @@ export function IsSemmej() {
 
     if (!hasAccess('semmej')) {
         return (
-            <div className="max-w-2xl mx-auto px-4 py-16">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-16">
                 <TierGate feature="semmej" />
             </div>
         );
@@ -47,7 +47,7 @@ function SemmejInterface() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+        <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8 space-y-6">
             <div>
                 <div className="flex items-center gap-2 mb-1">
                     <Wand2 size={20} className="text-[#C9A84C]" />

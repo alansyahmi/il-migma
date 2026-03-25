@@ -1,11 +1,11 @@
-import { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, Fragment } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { generateRootForms, markGeneratedForms, getAttestedEntries, type MarkedVerbForm } from '@/lib/conjugationEngine';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
-import { Plus, Edit2, ArrowLeft, Trash2 } from 'lucide-react';
+import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { RootFormModal } from '@/components/admin/RootFormModal';
 import { type RootFormData } from '@/lib/adminUtils';
@@ -311,11 +311,6 @@ export function Root() {
     if (!rootObj) {
         return (
             <div style={bgStyle} className="flex flex-col items-center justify-center px-4 text-center min-h-[60vh]">
-                <div className="flex items-center gap-2 mb-8">
-                    <Link to="/root-search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
-                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-root-search')}
-                    </Link>
-                </div>
 
                 <div className="bg-white/50 backdrop-blur-sm rounded-2xl border border-white/40 shadow-sm p-10 max-w-lg w-full">
                     <h2 className="font-serif text-2xl font-bold text-black mb-3">
@@ -366,12 +361,22 @@ export function Root() {
     const weakClassLabel = rootObj.weak_class ? term(rootObj.weak_class).toUpperCase() : null;
 
     const rootTypeParts = [
-        term('triliteral').toUpperCase(),
-        (rootObj.strength !== 'geminated' ? strengthLabel : null),
-        weakClassLabel,
-        rootObj.strength === 'geminated' ? term('geminated').toUpperCase() : null,
-        ...tags.map((tag: string) => resolveTagLabel(tag, term).toUpperCase()),
-    ].filter(Boolean).join(' • ');
+        <Link key="triliteral" to="/search?type=triliteral" className="hover:underline">{term('triliteral').toUpperCase()}</Link>,
+        (rootObj.strength !== 'geminated' && strengthRaw ? (
+            <Link key="strength" to={`/search?type=${strengthRaw}`} className="hover:underline">{strengthLabel.toUpperCase()}</Link>
+        ) : null),
+        (rootObj.weak_class ? (
+            <Link key="weak" to={`/search?type=${rootObj.weak_class}`} className="hover:underline">{weakClassLabel?.toUpperCase()}</Link>
+        ) : null),
+        (rootObj.strength === 'geminated' ? (
+            <Link key="geminated" to="/search?type=geminated" className="hover:underline">{term('geminated').toUpperCase()}</Link>
+        ) : null),
+        ...tags.map((tag: string) => (
+            <Link key={tag} to={`/search?tag=${encodeURIComponent(tag)}`} className="hover:underline">
+                {resolveTagLabel(tag, term).toUpperCase()}
+            </Link>
+        )),
+    ].filter(Boolean);
 
 
 
@@ -379,12 +384,7 @@ export function Root() {
 
     return (
         <div style={bgStyle} className="w-full overflow-hidden">
-            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full">
-                <div className="flex items-center gap-2 mb-8">
-                    <Link to="/root-search" className="group text-sm text-black/40 hover:text-black flex items-center gap-1 transition-all">
-                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {term('back-to-root-search')}
-                    </Link>
-                </div>
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
                 {/* Header */}
                 <div className="text-center mb-12 relative group max-w-fit mx-auto">
                     <div className="relative inline-flex items-center justify-center">
@@ -400,8 +400,13 @@ export function Root() {
                         )}
                     </div>
                     <p className="text-sm font-serif text-black/55 mt-2 uppercase tracking-widest">"{glossList[0]}"</p>
-                    <p className="text-xs font-sans text-black/55 tracking-[0.18em] mt-2 uppercase">
-                        — {rootTypeParts} —
+                    <p className="text-xs font-sans text-black/40 tracking-[0.18em] mt-2 uppercase">
+                        — {rootTypeParts.map((part, i) => (
+                            <Fragment key={i}>
+                                {part}
+                                {i < rootTypeParts.length - 1 && ' • '}
+                            </Fragment>
+                        ))} —
                     </p>
                 </div>
 
@@ -740,7 +745,7 @@ export function Root() {
                                                         -{s.headword}-
                                                     </Link>
                                                     <span className="text-black/40 italic ml-2">
-                                                    "{getGloss(s, language, mode)}"
+                                                        "{getGloss(s, language, mode)}"
                                                     </span>
                                                     {isActualAdmin && !vm?.synonyms?.some((v: any) => v.id === s.id) && (
                                                         <button

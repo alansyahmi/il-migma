@@ -155,15 +155,17 @@ function InflectionCell({ row }: { row: InflectionRow }) {
     let isTheoretical = row.marker === 'theoretical';
 
     // Auto-detect theoretical form from string prefix
-    if (typeof form === 'string' && form.startsWith('*')) {
+    if (typeof form === 'string' && form.trim().startsWith('*')) {
         isTheoretical = true;
-        form = form.substring(1);
+        form = form.trim().substring(1).trim();
+    } else if (typeof form === 'string') {
+        form = form.trim();
     }
 
     const markerEl = isTheoretical ? (
-        <span className="text-black/55 mr-0.5">*</span>
+        <span className="text-black/45">*</span>
     ) : row.marker === 'auto_generated' ? (
-        <span className="text-black/55 mr-0.5">✦</span>
+        <span className="text-black/45">✦</span>
     ) : null;
 
     if (row.hasPage || row.entryId) {
@@ -181,7 +183,7 @@ function InflectionCell({ row }: { row: InflectionRow }) {
         );
     }
     return (
-        <span className={cn("text-sm", (isTheoretical || row.marker) ? "text-black/55" : "text-black")}>
+        <span className={cn("text-sm font-serif", (isTheoretical || row.marker) ? "text-black/55" : "text-black")}>
             {markerEl}{form}
         </span>
     );
@@ -203,7 +205,7 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                             {result.headword}
                         </Link>
                         <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
-                            <Link to={`/search?root=${result.rootSlug}`}
+                            <Link to={`/root/${result.rootSlug}`}
                                 style={{ color: EGYPTIAN_BLUE }}
                                 className="text-xs hover:underline font-sans">
                                 {result.root}
@@ -338,20 +340,8 @@ export function Search() {
                             });
                         };
 
-                        if (generated?.imperfect) {
-                            inflections.push({
-                                label: term('imperfect'),
-                                form: generated.imperfect.value,
-                                hasPage: false,
-                            });
-                        }
-                        if (generated?.imperative && generated.imperative.value !== '-') {
-                            inflections.push({
-                                label: term('imperative'),
-                                form: generated.imperative.value,
-                                hasPage: false,
-                            });
-                        }
+                        pushMarked(term('imperfect'), generated?.imperfect);
+                        pushMarked(term('imperative'), generated?.imperative);
                         pushMarked(term('passive'), generated?.passiveParticiple);
 
                         pushMarked(term('verbal-noun'), generated?.verbalNoun && {
@@ -360,29 +350,60 @@ export function Search() {
                         });
                     } else {
                         const gender = resolveEntryGender(r);
+                        const rootEntries = r.root_pattern_form?.root?.entries || [r];
+                        const attested = getAttestedEntries(rootEntries);
+
+                        const pushMarkedSimple = (label: string, form: string | undefined, type: string) => {
+                            if (!form || form === '-') return;
+                            const clean = form.startsWith('*') ? form.substring(1) : form;
+                            const existing = attested.find(a => a.word === clean && a.type === type);
+                            inflections.push({
+                                label,
+                                form: clean,
+                                hasPage: !!existing,
+                                entryId: existing?.id,
+                                marker: existing ? undefined : (form.startsWith('*') ? 'theoretical' : undefined)
+                            });
+                        };
 
                         // 1. Add opposite gender if applicable
-                        if (gender === 'masculine' && (r.form_fem || r.adjective_morphology?.feminine)) {
-                            inflections.push({ label: term('feminine'), form: r.form_fem || r.adjective_morphology?.feminine, hasPage: false });
-                        } else if (gender === 'feminine' && (r.form_masc || r.adjective_morphology?.masculine)) {
-                            inflections.push({ label: term('masculine'), form: r.form_masc || r.adjective_morphology?.masculine, hasPage: false });
-                        } else if (r.form_opposite || r.numeral_morphology?.form_opposite) {
-                            const label = gender === 'masculine' ? term('feminine') : (gender === 'feminine' ? term('masculine') : term('opposite'));
-                            inflections.push({ label, form: r.form_opposite || r.numeral_morphology?.form_opposite, hasPage: false });
+                        const fem = r.form_fem || r.adjective_morphology?.feminine;
+                        const masc = r.form_masc || r.adjective_morphology?.masculine;
+                        if (gender === 'masculine' && fem) {
+                            pushMarkedSimple(term('feminine'), fem, r.pos === 'adjective' ? 'adjective' : 'noun');
+                        } else if (gender === 'feminine' && masc) {
+                            pushMarkedSimple(term('masculine'), masc, r.pos === 'adjective' ? 'adjective' : 'noun');
                         }
 
                         // 2. Add plural
                         const pluralForms = r.noun_plural_forms || r.noun_morphology?.plural_forms || (r.adjective_morphology?.plural ? [r.adjective_morphology.plural] : []) || r.inflections_pl;
                         if (pluralForms?.length) {
-                            inflections.push({ label: term('plural'), form: pluralForms[0], hasPage: false });
+                            pushMarkedSimple(term('plural'), pluralForms[0], r.pos === 'adjective' ? 'adjective' : 'noun');
                         }
 
-                        // 3. Add diminutive (for adjectives)
+                        // 3. Adjective specific: Elative
                         if (r.pos === 'adjective' || r.adjective_morphology) {
-                            const dim = r.diminutive_form || r.adjective_morphology?.diminutive;
-                            if (dim) {
-                                inflections.push({ label: term('diminutive'), form: dim, hasPage: false });
-                            }
+                            const am = r.adjective_morphology;
+                            const elative = am?.elative;
+                            if (elative) pushMarkedSimple(term('elative') || 'Elative', elative, 'adjective');
+                            
+                            const dim = r.diminutive_form || am?.diminutive;
+                            if (dim) pushMarkedSimple(term('diminutive'), dim, 'adjective');
+                        }
+
+                        // 4. Numeral specific: Ordinal, Adverbial, Distributive
+                        if (r.pos === 'numeral' || r.numeral_morphology) {
+                            const nm = r.numeral_morphology;
+                            if (nm?.ordinal) pushMarkedSimple(term('ordinal') || 'Ordinal', nm.ordinal, 'adjective');
+                            if (nm?.adverbial) pushMarkedSimple(term('adverbial') || 'Adverbial', nm.adverbial, 'adverb');
+                            if (nm?.distributive) pushMarkedSimple(term('distributive') || 'Distributive', nm.distributive, 'numeral');
+                        }
+
+                        // 5. Collective/Singulative
+                        const nm = r.noun_morphology;
+                        if (nm) {
+                            if (nm.collective) pushMarkedSimple(r.is_singulative ? term('collective') : (term('unit-form') || 'Unit Form'), nm.collective, 'noun');
+                            if (nm.singulative) pushMarkedSimple(r.is_collective ? term('singulative') : (term('individual-form') || 'Individual Form'), nm.singulative, 'noun');
                         }
                     }
 

@@ -44,7 +44,7 @@ export function Conjugator() {
     };
 
     return (
-        <div className="max-w-3xl mx-auto px-7 sm:px-8 py-8 space-y-6">
+        <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8 space-y-6">
             <div>
                 <div className="flex items-center gap-2 mb-1">
                     <BookOpen size={20} className="text-[#1B4D3E]" />
