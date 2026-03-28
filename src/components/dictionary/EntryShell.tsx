@@ -1,0 +1,136 @@
+import React from 'react';
+import { cn } from '@/lib/utils';
+
+export const CREAM_RGBA = 'rgba(244,243,240,0.88)';
+export const BLUE = '#1034A6';
+export const GOLD = '#A07030';
+
+export function SideCard({
+    title,
+    children,
+}: {
+    title: string;
+    children: React.ReactNode;
+}) {
+    return (
+        <div className="bg-white rounded-xl border border-black/8 shadow-sm p-5 space-y-2">
+            <h2 className="font-sans font-bold text-[0.95rem] text-black">
+                {title}
+            </h2>
+            <div>{children}</div>
+        </div>
+    );
+}
+
+export type EtymologySentenceItem = {
+    language: string;
+    form?: string;
+    pronunciation?: string;
+    definition?: string;
+    meaning?: string;
+};
+
+export function EtymologySentence({
+    prefix,
+    items,
+}: {
+    prefix?: string;
+    items: EtymologySentenceItem[];
+}) {
+    if (!items?.length) return null;
+
+    return (
+        <p className="text-sm text-black leading-relaxed">
+            {prefix && <span>{prefix}</span>}
+            {items.map((item, i) => (
+                <React.Fragment key={`${item.language}-${i}`}>
+                    {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
+                    <span style={{ color: BLUE }} className="font-medium mx-1">
+                        {item.language}
+                    </span>
+                    {item.form && <span className="font-serif font-medium" dir="auto">{item.form}</span>}
+                    {item.pronunciation && <span className="opacity-70"> ({item.pronunciation})</span>}
+                    {(item.definition || item.meaning) && <span className="opacity-70"> &quot;{item.definition || item.meaning}&quot;</span>}
+                </React.Fragment>
+            ))}
+            .
+        </p>
+    );
+}
+
+export function PropRow({
+    label,
+    children,
+    className,
+}: {
+    label: string;
+    children: React.ReactNode;
+    className?: string;
+}) {
+    return (
+        <div className={cn('flex flex-col', className)}>
+            <p className="text-xs font-semibold text-black/40 mb-0.5 uppercase tracking-wider">{label}</p>
+            <div className="text-sm text-black">{children}</div>
+        </div>
+    );
+}
+
+export type EntryViewModel = {
+    title: React.ReactNode;
+    titleClassName?: string;
+    subtitle?: React.ReactNode;
+    meta?: React.ReactNode;
+    headerAccessory?: React.ReactNode;
+    sidebarSections?: React.ReactNode[];
+    contentSections?: React.ReactNode[];
+    bgStyle?: React.CSSProperties;
+    shellClassName?: string;
+    containerClassName?: string;
+    headerClassName?: string;
+    layoutClassName?: string;
+    sidebarClassName?: string;
+    contentClassName?: string;
+};
+
+const DEFAULT_BG_STYLE: React.CSSProperties = {
+    background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+    minHeight: '100vh',
+};
+
+export function EntryShell({
+    viewModel,
+    children,
+}: {
+    viewModel: EntryViewModel;
+    children?: React.ReactNode;
+}) {
+    return (
+        <div style={viewModel.bgStyle || DEFAULT_BG_STYLE} className={cn('w-full overflow-hidden', viewModel.shellClassName)}>
+            <div className={cn('max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10', viewModel.containerClassName)}>
+                <div className={cn('text-center mb-12 relative group max-w-fit mx-auto', viewModel.headerClassName)}>
+                    <div className="relative inline-flex items-center justify-center">
+                        <h1 className={cn('font-serif font-bold text-[3rem] leading-none text-black tracking-tight', viewModel.titleClassName)}>
+                            {viewModel.title}
+                        </h1>
+                        {viewModel.headerAccessory}
+                    </div>
+                    {viewModel.subtitle}
+                    {viewModel.meta}
+                </div>
+
+                {children ? (
+                    children
+                ) : (
+                    <div className={cn('flex flex-col md:flex-row gap-8 md:gap-10 items-start', viewModel.layoutClassName)}>
+                        <div className={cn('w-full md:w-64 shrink-0 space-y-4', viewModel.sidebarClassName)}>
+                            {React.Children.toArray(viewModel.sidebarSections)}
+                        </div>
+                        <div className={cn('flex-1 min-w-0 space-y-12 w-full max-w-full', viewModel.contentClassName)}>
+                            {React.Children.toArray(viewModel.contentSections)}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

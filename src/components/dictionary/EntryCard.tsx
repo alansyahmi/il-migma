@@ -10,6 +10,7 @@ import { AttestationReliability } from './AttestationReliability';
 import { EtymologyChain } from './EtymologyChain';
 import { AudioPlayer } from './AudioPlayer';
 import { SubEntryBlock } from './SubEntryBlock';
+import { LinkedEntryList } from './LinkedEntryList';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { cn } from '@/lib/utils';
 import type { Entry } from '@/types';
@@ -38,6 +39,13 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
     const primaryIPA = entry.phonetics?.find(p => p.dialect === 'Standard')?.ipa
         ?? entry.phonetics?.[0]?.ipa;
     const primaryAttestation = entry.etymologies?.[0]?.attestation;
+    const alternativeForms = entry.alternative_forms || [];
+    const relatedEntries = [
+        ...(entry.verb_morphology?.related_entries || []),
+        ...(entry.noun_morphology?.related_entries || []),
+        ...(entry.adjective_morphology?.related_entries || []),
+        ...(entry.numeral_morphology?.related_entries || []),
+    ];
 
     // ── COMPACT (search result) ──────────────────────────────────────────
     if (compact) {
@@ -143,6 +151,27 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                 return <Badge key={t} variant="tag">{resolveTagLabel(t, term)}</Badge>;
                             })}
                         </div>
+
+                        {(alternativeForms.length > 0 || relatedEntries.length > 0) && (
+                            <div className="mt-5 pt-4 border-t border-border-light grid gap-4 sm:grid-cols-2">
+                                {alternativeForms.length > 0 && (
+                                    <div className="space-y-2">
+                                        <h3 className="text-xs font-semibold text-[#1034A6] uppercase tracking-wider">
+                                            {term('alternative-forms')}
+                                        </h3>
+                                        <LinkedEntryList items={alternativeForms} />
+                                    </div>
+                                )}
+                                {relatedEntries.length > 0 && (
+                                    <div className="space-y-2">
+                                        <h3 className="text-xs font-semibold text-[#1034A6] uppercase tracking-wider">
+                                            {term('related-entries')}
+                                        </h3>
+                                        <LinkedEntryList items={relatedEntries} />
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Action buttons */}

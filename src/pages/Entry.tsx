@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
 import { applyPossessiveSuffix } from '@/lib/nounInflectionEngine';
 import { generateConjugation, generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
+import { applyInflectionTableSuffix } from '@/lib/inflectionTable';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Edit2, ArrowLeft, Search, Plus, Trash2 } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
@@ -18,8 +19,12 @@ import { cn, getGloss } from '@/lib/utils';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { generateTheoreticalDual, generateElative, generateNumeralForms, type NumeralAutoForms } from '@/lib/maltesePhonology';
 import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
-import { generateZokkForms } from '@/lib/zokkEngine';
-import { formatStemDisplay } from '@/lib/stemDefaults';
+import { resolveStemDefaults } from '@/lib/stemDefaults';
+import { MorphologyProvenanceRows } from '@/components/dictionary/EntryMorphology';
+import { BLUE, CREAM_RGBA, GOLD, EtymologySentence, PropRow, SideCard } from '@/components/dictionary/EntryShell';
+import { StackedSurface } from '@/components/dictionary/VerbFormsTable';
+
+export { BLUE, CREAM_RGBA, GOLD, EntryShell, EtymologySentence, PropRow, SideCard } from '@/components/dictionary/EntryShell';
 
 const MarkedValue = ({ val, theoretical, showMarker = true }: { val: string | React.ReactNode | { value: React.ReactNode, theoretical: boolean }, theoretical?: boolean, showMarker?: boolean }) => {
     const isObj = typeof val === 'object' && val !== null && 'value' in val;
@@ -41,76 +46,6 @@ const MarkedValue = ({ val, theoretical, showMarker = true }: { val: string | Re
         </span>
     );
 };
-
-// ── Colour tokens ──────────────────────────────────────────────────────────
-export const CREAM_RGBA = 'rgba(244,243,240,0.88)';
-export const BLUE = '#1034A6';
-export const GOLD = '#A07030';
-
-
-// ── Components ─────────────────────────────────────────────────────────────
-
-export function SideCard({
-    title,
-    children,
-}: {
-    title: string;
-    children: React.ReactNode;
-}) {
-    return (
-        <div className="bg-white rounded-xl border border-black/8 shadow-sm p-5 space-y-2">
-            <h2 className="font-sans font-bold text-[0.95rem] text-black">
-                {title}
-            </h2>
-            <div>{children}</div>
-        </div>
-    );
-}
-
-export type EtymologySentenceItem = {
-    language: string;
-    form?: string;
-    pronunciation?: string;
-    definition?: string;
-    meaning?: string;
-};
-
-export function EtymologySentence({
-    prefix,
-    items,
-}: {
-    prefix?: string;
-    items: EtymologySentenceItem[];
-}) {
-    if (!items?.length) return null;
-
-    return (
-        <p className="text-sm text-black leading-relaxed">
-            {prefix && <span>{prefix}</span>}
-            {items.map((item, i) => (
-                <React.Fragment key={`${item.language}-${i}`}>
-                    {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                    <span style={{ color: BLUE }} className="font-medium mx-1">
-                        {item.language}
-                    </span>
-                    {item.form && <span className="font-serif font-medium" dir="auto">{item.form}</span>}
-                    {item.pronunciation && <span className="opacity-70"> ({item.pronunciation})</span>}
-                    {(item.definition || item.meaning) && <span className="opacity-70"> &quot;{item.definition || item.meaning}&quot;</span>}
-                </React.Fragment>
-            ))}
-            .
-        </p>
-    );
-}
-
-export function PropRow({ label, children, className }: { label: string; children: React.ReactNode; className?: string }) {
-    return (
-        <div className={cn("flex flex-col", className)}>
-            <p className="text-xs font-semibold text-black/40 mb-0.5 uppercase tracking-wider">{label}</p>
-            <div className="text-sm text-black">{children}</div>
-        </div>
-    );
-}
 
 function MorphologyTable({ title, rows, displayPattern }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string }[]; displayPattern?: (p?: string) => string }) {
     const { term } = useLinguisticMode();
@@ -653,13 +588,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         const parts = result.split(' / ');
         if (parts.length > 1) {
             return {
-                value: (
-                    <div className="flex flex-col gap-0.5">
-                        {parts.map((p, i) => (
-                            <span key={i} className={i > 0 ? 'text-black/40' : ''}>{p}</span>
-                        ))}
-                    </div>
-                ),
+                value: <StackedSurface primary={parts[0]} alternates={parts.slice(1)} />,
                 theoretical: isT
             };
         }
@@ -793,10 +722,17 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                     {/* Right Column */}
                     <div className="flex-1 min-w-0 space-y-0 w-full">
-                        <div className="flex flex-col md:flex-row gap-8 items-start w-full">
+                        <div className={cn(
+                            "flex flex-col gap-8 items-start w-full",
+                            !entry.zokk_morphology && "md:flex-row",
+                            entry.zokk_morphology && "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,0.72fr)_minmax(0,1.38fr)] lg:gap-10 lg:items-start"
+                        )}>
                             {/* Properties */}
-                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
-                                {rootConsonants && (
+                            <div className={cn(
+                                "w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mb-12 md:mb-0",
+                                entry.zokk_morphology ? "mx-0" : "mx-auto"
+                            )}>
+                                {rootConsonants && !entry.zokk_morphology && (
                                     <PropRow label={term('root')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
                                             {rootConsonants}
@@ -1142,17 +1078,24 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const conj = useMemo(() => {
         if (vm.conjugation) return vm.conjugation;
         // Auto-generate
-        const rootStr = entry.root_pattern_form?.root?.consonants;
+        // Auto-generate using either root_pattern_form or zokk_morphology fallback
+        const rootStr = entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root;
+
         const rootObj = entry.root_pattern_form?.root;
-        if (!rootStr || !rootObj) return null;
+        if (!rootStr) return null;
+
+        // Resolve morphological defaults if missing (critical for stem-based verbs)
+        const stemDefaults = entry.zokk_morphology ? resolveStemDefaults(entry.zokk_morphology as any) : null;
+
 
         try {
             return generateConjugation({
                 root: rootStr,
                 form: vm.form,
-                strength: (entry.verb_class as 'strong' | 'weak' | 'geminated') || rootObj.strength,
-                weakClass: (entry.verb_weak_class as 'assimilative' | 'hollow' | 'defective') || rootObj.weak_class,
-                isImalaBlocked: rootObj.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rootStr),
+                strength: (entry.verb_class as any) || rootObj?.strength || stemDefaults?.strength || 'strong',
+
+                weakClass: (entry.verb_weak_class as any) || rootObj?.weak_class || stemDefaults?.weak_class,
+                isImalaBlocked: rootObj?.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rootStr),
                 vowelSetPerfect: vsetPerf,
                 vowelSetImperfect: vsetImpf,
                 vowelSetImperative: vsetImp,
@@ -1384,10 +1327,19 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                     {/* Right Column */}
                     <div className="flex-1 min-w-0 space-y-0 w-full">
-                        <div className="flex flex-col md:flex-row gap-8 items-start w-full">
+                        <div className={cn(
+                            "flex flex-col gap-8 items-start w-full",
+                            !entry.zokk_morphology && "md:flex-row"
+                        )}>
                             {/* Properties */}
                             <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
-                                {rootConsonants && (
+                                {entry.zokk_morphology ? (
+                                    <MorphologyProvenanceRows
+                                        source={entry.zokk_morphology}
+                                        rootDisplayValue={rootConsonants || entry.zokk_morphology?.root || null}
+                                        rootHref={rootConsonants ? `/root/${rootConsonants}` : undefined}
+                                    />
+                                ) : rootConsonants && (
                                     <PropRow label={term('root')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
                                             {rootConsonants}
@@ -1852,9 +1804,17 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
 // ── Zokk View ───────────────────────────────────────────────────────────────
 
-export function ZokkEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
+export function ZokkEntryView({
+    entry,
+    onRefetch,
+    headerAccessory,
+}: {
+    entry: Entry;
+    onRefetch?: () => void;
+    headerAccessory?: React.ReactNode;
+}) {
      const { language } = useLanguage();
-     const { term } = useLinguisticMode();
+     const { term, mode } = useLinguisticMode();
      const { isAdmin, adminViewEnabled } = useAuth();
      const { getToken } = useClerkAuth();
 
@@ -1862,7 +1822,6 @@ export function ZokkEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: 
      const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
  
      const isActualAdmin = isAdmin && adminViewEnabled;
-     const zm = entry.zokk_morphology!;
      const ety = entry.etymologies?.[0];
      const zokkEtymologyItems = useMemo(() => {
          if (ety?.chain?.length) {
@@ -1881,11 +1840,23 @@ export function ZokkEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: 
 
          return [];
      }, [ety, entry.source_language, term]);
- 
-     const zokkForms = useMemo(() => generateZokkForms(zm), [zm]);
-     const conj = zokkForms.conjugation;
- 
- 
+
+     const handleRemoveRelationship = async (targetId: string) => {
+         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
+         try {
+             const token = await getToken();
+             const updated = removeRelationshipFromEntry(entry, targetId);
+             await adminUpdateEntry(token!, updated as any);
+             onRefetch?.();
+         } catch (err: any) {
+             alert((term('failed-remove-relationship') || 'Failed to remove relationship: ') + (err.message || String(err)));
+         }
+     };
+
+     const handleEditEntry = (target: { id: string }) => {
+         setEditEntry(target as any);
+         setShowForm(true);
+     };
  
      const bgStyle = {
          background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -1902,17 +1873,22 @@ export function ZokkEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: 
                              <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
                                  {entry.headword}
                              </h1>
-                             {isActualAdmin && (
-                                 <button
-                                     onClick={() => {
-                                         setEditEntry({ ...entry } as any);
-                                         setShowForm(true);
-                                     }}
-                                     className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
-                                     title={term('edit-entry')}
-                                 >
-                                     <Edit2 size={16} />
-                                 </button>
+                             {(isActualAdmin || headerAccessory) && (
+                                 <div className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 flex items-center gap-1">
+                                     {isActualAdmin && (
+                                         <button
+                                             onClick={() => {
+                                                 setEditEntry({ ...entry } as any);
+                                                 setShowForm(true);
+                                             }}
+                                             className="p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
+                                             title={term('edit-entry')}
+                                         >
+                                             <Edit2 size={16} />
+                                         </button>
+                                     )}
+                                     {headerAccessory}
+                                 </div>
                              )}
                          </div>
                      </div>
@@ -1938,140 +1914,86 @@ export function ZokkEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: 
  
                      </div>
  
-                     <div className="flex-1 min-w-0 space-y-0 w-full">
-                         <div className="flex flex-col md:flex-row gap-8 items-start w-full">
-                             {/* New Sidebar Property Column */}
-                             <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-6 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
-                                 {entry.phonetics && entry.phonetics.length > 0 && (
-                                     <PropRow label={term('pronunciation')}>
-                                         <div className="space-y-0 mt-1">
-                                             {entry.phonetics.map((ph, idx) => (
-                                                 <div key={idx} className="flex flex-col sm:flex-row sm:items-center sm:gap-1 mb-0 last:mb-0">
-                                                     {ph.dialect && (
-                                                         <span className="text-[10px] font-bold text-black/40 uppercase tracking-tighter sm:mb-0">
-                                                             {ph.dialect.replace(' (Għawdex)', '').replace(' (Arkajku)', '')}:
-                                                         </span>
-                                                     )}
-                                                     {ph.ipa && <span className="text-[14px] tracking-tighter font-mono whitespace-nowrap">{ph.ipa}</span>}
-                                                 </div>
-                                             ))}
-                                         </div>
-                                     </PropRow>
-                                 )}
+                    <div className="flex-1 min-w-0 space-y-0 w-full">
+                        <div className={cn(
+                            "flex flex-col gap-8 items-start w-full",
+                            !entry.zokk_morphology && "md:flex-row"
+                        )}>
+                            <div className={cn(
+                                "w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mb-12 md:mb-0",
+                                "mx-0"
+                            )}>
+                                <MorphologyProvenanceRows
+                                    source={entry.zokk_morphology}
+                                    rootDisplayValue={entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root || null}
+                                    rootHref={entry.root_pattern_form?.root?.consonants ? `/root/${entry.root_pattern_form.root.consonants}` : undefined}
+                                />
 
-                                <PropRow label={term('stem')}>
-                                    <Link to={`/stem/${zm.stem_string}`} className="font-serif font-medium text-link hover:underline">
-                                        {formatStemDisplay(zm.stem_string)}
-                                    </Link>
-                                </PropRow>
-                                {zm.root && (
-                                    <PropRow label={term('reanalysed-root')}>
-                                        <span className="font-sans font-medium">{zm.root}</span>
+                                {entry.phonetics && entry.phonetics.length > 0 && (
+                                    <PropRow label={term('pronunciation')}>
+                                        <div className="space-y-0 mt-1">
+                                            {entry.phonetics.map((ph, idx) => (
+                                                <div key={idx} className="flex flex-col sm:flex-row sm:items-center sm:gap-1 mb-0 last:mb-0">
+                                                    {ph.dialect && (
+                                                        <span className="text-[10px] font-bold text-black/40 uppercase tracking-tighter">
+                                                            {ph.dialect.replace(' (Għawdex)', '').replace(' (Arkajku)', '')}:
+                                                        </span>
+                                                    )}
+                                                    {ph.ipa && <span className="text-[14px] tracking-tighter font-mono whitespace-nowrap">{ph.ipa}</span>}
+                                                </div>
+                                            ))}
+                                        </div>
                                     </PropRow>
-                                 )}
+                                )}
 
-                                 {/* Admin metadata matching Entry.tsx */}
-                                 {isAdmin && (
-                                     <div className="pt-2 border-t border-black/5 col-span-full">
-                                         <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
-                                         <div className="text-[11px] font-mono space-y-1 text-black/50">
-                                             <p>ID: {entry.id}</p>
-                                             <p>Type: Zokk</p>
-                                         </div>
-                                     </div>
-                                 )}
-                             </div>
+                                {isActualAdmin && (
+                                    <div className="pt-0 border-t border-black/5 col-span-full">
+                                        <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
+                                        <div className="text-[11px] font-mono space-y-1 text-black/50">
+                                            <p>ID: {entry.id}</p>
+                                            <p>Type: Zokk</p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
 
-                             {conj && (
-                                 <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
-                                     <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
-                                         {term('conjugation-table')}
-                                     </h2>
+                        </div>
 
-                                     <div className="overflow-x-auto overflow-y-hidden pb-4">
-                                         <table className="w-full text-sm border-collapse md:min-w-[500px]">
-                                             <thead>
-                                                 <tr className="border-b border-black/8 font-sans whitespace-nowrap">
-                                                     <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('person')}</th>
-                                                     <th className="text-left font-semibold text-black pb-2 pr-4">
-                                                         {term('imperfect')} <span className="opacity-55 font-normal text-xs">{term('(present)')}</span>
-                                                     </th>
-                                                     <th className="text-left font-semibold text-black pb-2">
-                                                         {term('perfect')} <span className="opacity-55 font-normal text-xs">{term('(past)')}</span>
-                                                     </th>
-                                                 </tr>
-                                             </thead>
-                                             <tbody>
-                                                 {conj.rows.map(row => (
-                                                     <tr key={row.person_mt} className="border-b border-black/4 whitespace-nowrap">
-                                                         <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
-                                                             {term(row.person_mt)}
-                                                         </td>
-                                                         <td className="py-1.5 pr-4 font-serif font-normal text-black">
-                                                             <MarkedValue val={row.imperfect} />
-                                                         </td>
-                                                         <td className="py-1.5 font-serif font-normal text-black">
-                                                             <MarkedValue val={row.perfect} />
-                                                         </td>
-                                                     </tr>
-                                                 ))}
-                                             </tbody>
-                                         </table>
-                                     </div>
-                                 </div>
-                             )}
-                         </div>
- 
-                         <div className="mt-12 w-full">
-                             <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">
-                                 {term('derived-terms')}
-                             </h2>
-                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-sm mt-3 items-start text-center md:text-left">
-                                 {zokkForms.passive_participle && (
-                                     <PropRow label={term('passive-participle')}>
-                                         <div className="flex flex-col gap-1">
-                                             <MarkedValue val={zokkForms.passive_participle.masc} />
-                                             <MarkedValue val={zokkForms.passive_participle.fem} />
-                                             <MarkedValue val={zokkForms.passive_participle.plural} />
-                                             {zokkForms.passive_participle.semitic && (
-                                                 <div className="mt-1 pt-1 border-t border-black/5">
-                                                     <span className="text-[10px] text-black/40 uppercase block mb-0.5">{term('semitic-hybrid')}</span>
-                                                     <MarkedValue val={zokkForms.passive_participle.semitic} />
-                                                 </div>
-                                             )}
-                                         </div>
-                                     </PropRow>
-                                 )}
-                                 {zokkForms.agentive && (
-                                     <PropRow label={term('agentive')}>
-                                         <div className="flex flex-col gap-1">
-                                             <MarkedValue val={zokkForms.agentive.masc} />
-                                             <MarkedValue val={zokkForms.agentive.fem} />
-                                             <MarkedValue val={zokkForms.agentive.plural} />
-                                         </div>
-                                     </PropRow>
-                                 )}
-                                 {zokkForms.verbal_noun && (
-                                     <PropRow label={term('verbal-noun')}>
-                                         <MarkedValue val={zokkForms.verbal_noun} />
-                                     </PropRow>
-                                 )}
-                             </div>
-                             {zokkForms.hybrid_forms?.form_ii && (
-                                 <div className="mt-8 pt-8 border-t border-black/5">
-                                     <PropRow label={term('form-ii')}>
-                                         <MarkedValue val={zokkForms.hybrid_forms.form_ii} />
-                                     </PropRow>
-                                 </div>
-                             )}
-                         </div>
- 
-                         <div className="mt-16">
-                             <UsageExampleBlock entry={entry} />
-                         </div>
-                     </div>
-                 </div>
-             </div>
+                        <div className="mt-16">
+                            <UsageExampleBlock entry={entry} />
+                        </div>
+
+                        {/* Thesaurus */}
+                        {((entry as any).synonyms?.length || (entry as any).antonyms?.length || (entry as any).related_entries?.length) && (
+                            <div className="w-full">
+                                <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
+                                <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-start text-center md:text-left">
+                                    <RelatedGlossGroup
+                                        title={term('synonyms')}
+                                        items={(entry as any).synonyms || []}
+                                        language={language}
+                                        mode={mode}
+                                        isAdmin={isActualAdmin}
+                                        onEditItem={handleEditEntry}
+                                        onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                        wrapperClassName="flex-1 min-w-[220px]"
+                                    />
+                                    <RelatedGlossGroup
+                                        title={term('antonyms')}
+                                        items={(entry as any).antonyms || []}
+                                        language={language}
+                                        mode={mode}
+                                        isAdmin={isActualAdmin}
+                                        onEditItem={handleEditEntry}
+                                        onDeleteItem={item => handleRemoveRelationship(item.id)}
+                                        wrapperClassName="flex-1 min-w-[220px]"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
  
              {showForm && (
                  <EntryFormModal
@@ -2277,28 +2199,28 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
         <div style={bgStyle} className="w-full overflow-hidden">
             <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
-                    <div className="relative inline-flex items-center justify-center flex-col gap-1">
-                        <div className="relative inline-flex items-center justify-center">
-                            <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
-                                {entry.headword}
-                            </h1>
-                            {isActualAdmin && (
-                                <button
-                                    onClick={() => {
-                                        setEditEntry({
-                                            ...entry,
-                                            _rootConsonants: entry.root_pattern_form?.root?.consonants || ''
-                                        } as any);
-                                        setShowForm(true);
-                                    }}
-                                    className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
-                                    title={term('edit-entry')}
-                                >
-                                    <Edit2 size={16} />
-                                </button>
-                            )}
-                        </div>
-                    </div>
+                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
+                         <div className="relative inline-flex items-center justify-center">
+                             <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
+                                 {entry.headword}
+                             </h1>
+                             {isActualAdmin && (
+                                 <button
+                                     onClick={() => {
+                                         setEditEntry({
+                                             ...entry,
+                                             _rootConsonants: entry.root_pattern_form?.root?.consonants || ''
+                                         } as any);
+                                         setShowForm(true);
+                                     }}
+                                     className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
+                                     title={term('edit-entry')}
+                                 >
+                                     <Edit2 size={16} />
+                                 </button>
+                             )}
+                         </div>
+                     </div>
                     <SubParts entry={entry} showGender />
                 </div>
 
@@ -3358,7 +3280,23 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     );
 }
 
-function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
+export function FunctionWordEntryView({
+    entry,
+    onRefetch,
+    stemDisplayValue,
+    rootDisplayValue,
+    rootHref,
+    classType,
+    isHybrid,
+}: {
+    entry: Entry;
+    onRefetch?: () => void;
+    stemDisplayValue?: string;
+    rootDisplayValue?: string;
+    rootHref?: string;
+    classType?: string;
+    isHybrid?: boolean;
+}) {
     const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { isAdmin, adminViewEnabled } = useAuth();
@@ -3416,6 +3354,19 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
     const pattern = entry.root_pattern_form?.pattern;
     const patternValue = (entry as any).cv_pattern || pattern?.cv_notation;
 
+    const displayStem = stemDisplayValue || '';
+    const displayRoot = rootDisplayValue || rootConsonants;
+    const thirdRadical = rootConsonants?.split('-')?.[2] || rootConsonants?.[2] || '';
+    const stemClassType: 'ar' | 'ir' = classType === 'ir' ? 'ir' : 'ar';
+    const stemMetadataSource = displayStem
+        ? {
+            stem_string: displayStem,
+            class_type: stemClassType,
+            is_hybrid: !!isHybrid,
+            root: displayRoot || null,
+        }
+        : null;
+
     const isIlArticle = (isArticle || pos === 'particle') && /^il-?/i.test((entry.headword || '').trim());
 
     const sunTransformations = [
@@ -3468,16 +3419,18 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
     const POSSESSIVE_SUFFIX_KEYS = ['pos-1s', 'pos-2s', 'pos-3ms', 'pos-3fs', 'pos-1p', 'pos-2p', 'pos-3p'];
     const applySuffix = (base: string, idx: number) => {
         if (!base) return { value: '-', theoretical: false };
-        const result = applyPossessiveSuffix(base, idx as any, (entry.gender as any) || 'masculine', (entry as any).cv_pattern || pattern?.cv_notation);
+        const result = applyInflectionTableSuffix(
+            base,
+            idx as any,
+            (entry.gender as any) || 'masculine',
+            (entry as any).cv_pattern || pattern?.cv_notation,
+            thirdRadical
+        );
         if (result === '-') return { value: '-', theoretical: false };
         const parts = result.split(' / ');
         if (parts.length > 1) {
             return {
-                value: (
-                    <div className="flex flex-col gap-0.5">
-                        {parts.map((p, i) => <span key={i} className={i > 0 ? 'text-black/40' : ''}>{p}</span>)}
-                    </div>
-                ),
+                value: <StackedSurface primary={parts[0]} alternates={parts.slice(1)} />,
                 theoretical: false
             };
         }
@@ -3525,9 +3478,13 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                     <div className="w-full md:w-64 shrink-0 space-y-4">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions.map(def => (
-                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
-                                ))}
+                                {entry.definitions && entry.definitions.length > 0 ? (
+                                    entry.definitions.map(def => (
+                                        <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                    ))
+                                ) : (
+                                    <li>{language === 'mt' && (entry as any).definition_mt ? (entry as any).definition_mt : (entry as any).definition_en || '-'}</li>
+                                )}
                             </ol>
                             <TagChips entry={entry} />
                         </SideCard>
@@ -3598,14 +3555,17 @@ function FunctionWordEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?:
                     </div>
 
                     <div className="flex-1 min-w-0 space-y-8 w-full">
-                        <div className="flex flex-col md:flex-row gap-8 items-start w-full">
+                        <div className={cn(
+                            "flex flex-col gap-8 items-start w-full",
+                            !entry.zokk_morphology && "md:flex-row"
+                        )}>
                             <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:max-w-none mb-8 md:mb-0">
-                                {rootConsonants && (
-                                    <PropRow label={term('root')}>
-                                        <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
-                                            {rootConsonants}
-                                        </Link>
-                                    </PropRow>
+                                {stemMetadataSource && (
+                                    <MorphologyProvenanceRows
+                                        source={stemMetadataSource}
+                                        rootDisplayValue={displayRoot || undefined}
+                                        rootHref={rootHref}
+                                    />
                                 )}
                                 {entry.phonetics && entry.phonetics.length > 0 && (
                                     <PropRow label={term('pronunciation')}>
@@ -3936,16 +3896,11 @@ export function EntryPage() {
         );
     }
 
-
-
     const pos = (entry.pos || '').toLowerCase();
     const nm = entry.noun_morphology;
     const vm = entry.verb_morphology;
     const am = entry.adjective_morphology;
 
-    if (entry.zokk_morphology) {
-        return <ZokkEntryView entry={entry} onRefetch={refetch} />;
-    }
 
     if (pos === 'verb' && vm) {
         return <VerbEntryView entry={entry} onRefetch={refetch} />;
@@ -3969,6 +3924,10 @@ export function EntryPage() {
 
     if (['pronoun', 'particle', 'adverb', 'preposition', 'interjection', 'article', 'conjunction', 'interrogative'].includes(pos)) {
         return <FunctionWordEntryView entry={entry} onRefetch={refetch} />;
+    }
+
+    if (entry.zokk_morphology) {
+        return <ZokkEntryView entry={entry} onRefetch={refetch} />;
     }
 
     return (

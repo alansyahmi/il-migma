@@ -19,6 +19,11 @@ export interface ZokkResult {
         fem: string;
         plural: string;
         semitic?: string;
+        alternates?: {
+            masc?: string[];
+            fem?: string[];
+            plural?: string[];
+        };
     };
     agentive?: {
         masc: string;
@@ -30,28 +35,65 @@ export interface ZokkResult {
         semitic_passive_participle?: string;
         semitic_verbal_noun?: string;
         form_ii?: string;
+        form_ii_imperfect?: string;
+        form_ii_imperative?: string;
+        form_ii_passive_participle?: string;
+        form_ii_active_participle?: string;
+        form_ii_verbal_noun?: string;
     };
 }
 
 /**
- * Detects if a stem ends in a vowel and applies J-epenthesis if needed.
+ * Normalizes a stem into the consonant-final base used by the Zokk table.
  */
 function applyStem(stem: string): string {
-    const vowels = ['a', 'e', 'i', 'o', 'u', 'y']; // include y for english
     const cleanStem = stem.replace(/-$/, '');
-    const lastChar = cleanStem.charAt(cleanStem.length - 1).toLowerCase();
-    
-    // If the stem ends in a vowel, apply J-epenthesis
-    if (vowels.includes(lastChar)) {
-        return cleanStem + 'j';
-    }
-    return cleanStem;
+    // Stem tables already encode the vowel quality we need; do not inject
+    // an extra glide, just normalize away a trailing vowel marker.
+    return cleanStem.replace(/[aeiouy]$/i, '');
 }
 
 function extractConsonants(s: string): string[] {
     // We treat standard vowels as things to strip for root reanalysis
     const res = s.split('').filter(c => !['a','e','i','o','u','â','ê','î','ô','û'].includes(c.toLowerCase()));
     return res;
+}
+
+function buildCitationPerfectStem(base: string): string {
+    const initial = base.charAt(0);
+    return initial ? `${initial}${base}a` : `${base}a`;
+}
+
+function buildHybridCitationPerfectStem(base: string): string {
+    return `${base}a`;
+}
+
+function buildHybridFormII(base: string, classType: 'ar' | 'ir') {
+    if (classType === 'ir') {
+        const lemma = `s${base}a`;
+        const imperfectStem = lemma.replace(/a$/, 'i');
+
+        return {
+            form_ii: lemma,
+            form_ii_imperfect: `ji${imperfectStem}`,
+            form_ii_imperative: lemma,
+            form_ii_passive_participle: `mi${imperfectStem}`,
+            form_ii_active_participle: '-',
+            form_ii_verbal_noun: `s${base}ija`,
+        };
+    }
+
+    return {
+        form_ii: `t${base}a`,
+    };
+}
+
+function buildCitationImperfectStem(classType: 'ar' | 'ir', perfectStem: string): string {
+    if (classType === 'ir') {
+        return `ji${perfectStem.replace(/a$/, 'i')}`;
+    }
+
+    return `ji${perfectStem}`;
 }
 
 /**
@@ -76,6 +118,9 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
     ];
 
     const prefixes = ["n", "t", "j", "t", "n", "t", "j"];
+    const citationPerfectStem = is_hybrid
+        ? buildHybridCitationPerfectStem(base)
+        : buildCitationPerfectStem(base);
 
     for (let i = 0; i < 7; i++) {
         const p = persons[i];
@@ -86,7 +131,7 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
         if (i === 0 || i === 1) { // 1s, 2s
             perfect = base + (isAr ? 'ajt' : 'ejt');
         } else if (i === 2) { // 3ms
-            perfect = base + 'a';
+            perfect = citationPerfectStem;
         } else if (i === 3) { // 3fs
             perfect = base + (isAr ? 'at' : 'iet');
         } else if (i === 4) { // 1p
@@ -100,7 +145,13 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
         // Imperfect (Present)
         const pfx = prefixes[i];
         if (i < 4) { // Sg
-            imperfect = pfx + base + (isAr ? 'a' : 'i');
+            if (i === 2) {
+                imperfect = is_hybrid
+                    ? `j${base}a`
+                    : buildCitationImperfectStem(class_type, citationPerfectStem);
+            } else {
+                imperfect = pfx + base + (isAr ? 'a' : 'i');
+            }
         } else { // Pl
             imperfect = pfx + base + (isAr ? 'aw' : 'u');
         }
@@ -135,7 +186,7 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
     let ag_fem = '';
     let ag_pl = '';
 
-    const ag_sfx = agentive_suffix || (isAr ? 'ant' : 'ent');
+    const ag_sfx = agentive_suffix || (isAr ? 'atur' : 'itur');
     if (ag_sfx.startsWith('ant') || ag_sfx.startsWith('ent')) {
         ag_masc = base + ag_sfx;
         ag_fem = base + ag_sfx + 'a';
@@ -157,7 +208,10 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
         passive_participle: {
             masc: pp_masc,
             fem: pp_fem,
-            plural: pp_pl
+            plural: pp_pl,
+            alternates: !isAr ? {
+                masc: [`${base}ut`],
+            } : undefined,
         },
         agentive: {
             masc: ag_masc,
@@ -175,7 +229,7 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
             const pp_sem = `m${base}`;
             result.hybrid_forms = {
                 semitic_passive_participle: pp_sem,
-                form_ii: `t${base}a`
+                ...buildHybridFormII(base, class_type),
             };
             
             if (result.passive_participle) {

@@ -378,6 +378,7 @@ export interface Entry {
     audio?: AudioFile[];
     etymologies?: Etymology[];
     dialect_variants?: DialectVariant[];
+    alternative_forms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
 
     // Flags
     is_loanword: boolean;

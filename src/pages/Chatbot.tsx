@@ -97,7 +97,7 @@ function ChatInterface() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 h-[calc(100vh-4rem)] flex flex-col gap-4">
+        <div className="w-full max-w-6xl mx-auto px-7 sm:px-8 py-6 h-[calc(100vh-4rem)] flex flex-col gap-4">
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { apiGetStem, apiSearch } from '@/lib/api';
 import type { Entry } from '@/types';
+import { normalizeStemMorphology, type StemMorphologySource } from '@/lib/stemMorphology';
 
 export interface StemDataState {
     stem_string: string | null;
@@ -8,6 +9,7 @@ export interface StemDataState {
     is_hybrid: boolean;
     root: string | null;
     agentive_suffix: string | null;
+    stemMorphology: StemMorphologySource | null;
     source_languages: string[];
     entries: Entry[];
     stem: any | null;
@@ -22,6 +24,7 @@ export function useStemData(id: string | undefined) {
         is_hybrid: false,
         root: null,
         agentive_suffix: null,
+        stemMorphology: null,
         source_languages: [],
         entries: [],
         stem: null,
@@ -53,17 +56,26 @@ export function useStemData(id: string | undefined) {
             const primary = entries.find(e => e.zokk_morphology) || entries[0];
             const zokk = canonicalStem || primary?.zokk_morphology || null;
 
-            if (!signal?.aborted) {
-                setState({
-                    stem_string: zokk?.stem_string || id,
-                    class_type: zokk?.class_type || null,
-                    is_hybrid: !!zokk?.is_hybrid,
-                    root: zokk?.root || null,
-                    agentive_suffix: zokk?.agentive_suffix || null,
-                    source_languages: entries
-                        .map(e => e.source_language)
-                        .filter(Boolean)
-                        .flatMap(s => s!.split(',').map(x => x.trim()))
+                if (!signal?.aborted) {
+                    const stemMorphology = normalizeStemMorphology({
+                        stem_string: zokk?.stem_string || id || '',
+                        class_type: zokk?.class_type || undefined,
+                        is_hybrid: !!zokk?.is_hybrid,
+                        root: zokk?.root || null,
+                        agentive_suffix: zokk?.agentive_suffix || null,
+                    });
+
+                    setState({
+                        stem_string: zokk?.stem_string || id,
+                        class_type: zokk?.class_type || null,
+                        is_hybrid: !!zokk?.is_hybrid,
+                        root: zokk?.root || null,
+                        agentive_suffix: zokk?.agentive_suffix || null,
+                        stemMorphology,
+                        source_languages: entries
+                            .map(e => e.source_language)
+                            .filter(Boolean)
+                            .flatMap(s => s!.split(',').map(x => x.trim()))
                         .filter((v, i, a) => a.indexOf(v) === i),
                     entries,
                     stem: canonicalStem,

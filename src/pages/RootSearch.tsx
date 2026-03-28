@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { generateRootForms, markGeneratedForms, type FormMarker, type MarkedVerbForm, type AttestedEntry } from '@/lib/conjugationEngine';
-import { apiSearchRoots } from '@/lib/api';
+import { apiSearch, apiSearchRoots } from '@/lib/api';
 import { Spinner } from '@/components/ui/Spinner';
+import type { SearchResult } from '@/types';
+import { Search } from 'lucide-react';
+import { formatStemDisplay } from '@/lib/stemDefaults';
 
 const MAX_RADICALS = 4;
 
@@ -165,7 +169,58 @@ function RootRadicalsInput({
 
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
 
-export function RootSearch() {
+type SearchMode = 'root' | 'stem';
+
+function SearchModeTabs({ mode }: { mode: SearchMode }) {
+    const { term } = useLinguisticMode();
+    const navigate = useNavigate();
+    const isStem = mode === 'stem';
+
+    return (
+        <div className="flex justify-center mb-6">
+            <div className="relative grid w-full max-w-[340px] grid-cols-2 rounded-full border border-black/10 bg-white/80 p-1 shadow-sm overflow-hidden">
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-y-1 left-1 w-[calc(50%-0.125rem)] rounded-full bg-[#1034A6] shadow-sm transition-transform duration-300 ease-out"
+                    style={{ transform: isStem ? 'translateX(100%)' : 'translateX(0)' }}
+                />
+                <button
+                    type="button"
+                    onClick={() => navigate('/root-search')}
+                    aria-pressed={mode === 'root'}
+                    className="relative z-10 px-4 py-2 text-sm font-medium rounded-full text-center transition-colors duration-300"
+                    style={{ color: mode === 'root' ? 'white' : 'rgba(0,0,0,0.65)' }}
+                >
+                    {term('root-search')}
+                </button>
+                <button
+                    type="button"
+                    onClick={() => navigate('/root-search?mode=stem')}
+                    aria-pressed={mode === 'stem'}
+                    className="relative z-10 px-4 py-2 text-sm font-medium rounded-full text-center transition-colors duration-300"
+                    style={{ color: mode === 'stem' ? 'white' : 'rgba(0,0,0,0.65)' }}
+                >
+                    {term('stem-search')}
+                </button>
+            </div>
+        </div>
+    );
+}
+
+function SearchPageShell({ children }: { children: React.ReactNode }) {
+    return (
+        <div style={{
+            background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+            minHeight: 'calc(100vh - 56px)',
+        }}>
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8 animate-fade-in">
+                {children}
+            </div>
+        </div>
+    );
+}
+
+function RootSearchPanelContent() {
     const { term } = useLinguisticMode();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -203,6 +258,8 @@ export function RootSearch() {
                 .catch(() => setExtraRoots([]))
                 .finally(() => setLoading(false));
         } else {
+            setHasSearched(false);
+            setExtraRoots([]);
             document.title = `${term('root-search')} | Il-Miġma'`;
         }
     }, [searchParams, term]);
@@ -217,7 +274,8 @@ export function RootSearch() {
         });
 
         // Use Navigate instead of direct history manipulation so router knows
-        navigate(`/root-search?${params.toString()}`);
+        const query = params.toString();
+        navigate(query ? `/root-search?${query}` : '/root-search');
         setSearchedRadicals([...rootRadicals]);
         setHasSearched(true);
     };
@@ -248,62 +306,200 @@ export function RootSearch() {
         setRootRadicals(newRads);
     };
 
-    const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}),
-                 url("/bg-pattern.png") center/cover no-repeat`,
-        minHeight: 'calc(100vh - 56px)', // Adjust for navbar height (h-14 = 56px)
+    return (
+        <>
+            <h1 className="text-3xl font-serif font-bold text-black mb-2 text-center">
+                {term('root-search')}
+            </h1>
+            <p className="text-sm text-black/60 mb-8 max-w-2xl mx-auto text-center leading-relaxed">
+                {term('root-search-desc')}
+            </p>
+
+            {/* Horizontal Filter Bar */}
+            <div className="bg-[#F4F3F0] border border-border rounded-xl p-6 shadow-sm max-w-2xl mx-auto mb-8">
+                <form onSubmit={handleSearch} className="root-radical-input-group flex flex-col items-center gap-6">
+                    <RootRadicalsInput
+                        label={term('root-radicals')}
+                        values={rootRadicals}
+                        onChange={handleRootRadicalChange}
+                    />
+
+                    <div className="flex gap-3">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setRootRadicals(Array(MAX_RADICALS).fill(''));
+                                navigate('/root-search');
+                                setHasSearched(false);
+                                setExtraRoots([]);
+                            }}
+                            className="px-4 py-2 text-sm font-medium text-black/60 bg-white border border-border rounded-md hover:bg-black/5 transition-colors"
+                        >
+                            {term('clear')}
+                        </button>
+                        <button
+                            type="submit"
+                            className="bg-[#1034A6] text-white px-8 py-2 rounded-md font-medium text-sm hover:bg-[#1034A6]/90 transition-colors shadow-sm"
+                        >
+                            {term('search-roots')}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            {/* Results Area (Full Width) */}
+            {loading ? (
+                <div className="flex justify-center py-12">
+                    <Spinner />
+                </div>
+            ) : hasSearched && (
+                <RootResultView rootRadicals={searchedRadicals} extraRoots={extraRoots} />
+            )}
+        </>
+    );
+}
+
+function StemSearchPanelContent() {
+    const { term } = useLinguisticMode();
+    const { language } = useLanguage();
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const [q, setQ] = useState(searchParams.get('q') || '');
+    const [results, setResults] = useState<SearchResult[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [hasSearched, setHasSearched] = useState(false);
+
+    useEffect(() => {
+        const query = searchParams.get('q') || '';
+        let cancelled = false;
+
+        setQ(query);
+        setLoading(true);
+
+        (async () => {
+            try {
+                const res = await apiSearch(query, { zokk: true, limit: 50 });
+                if (cancelled) return;
+                setResults(res.results);
+                setHasSearched(true);
+            } catch (err) {
+                if (cancelled) return;
+                console.error('Stem search failed:', err);
+                setResults([]);
+                setHasSearched(true);
+            } finally {
+                if (!cancelled) {
+                    setLoading(false);
+                }
+            }
+        })();
+
+        document.title = query ? `${term('stem-search')}: ${query} | Il-Miġma'` : `${term('stem-search')} | Il-Miġma'`;
+
+        return () => {
+            cancelled = true;
+        };
+    }, [searchParams, term]);
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        const params = new URLSearchParams();
+        params.set('mode', 'stem');
+        if (q.trim()) params.set('q', q.trim());
+        navigate(`/root-search?${params.toString()}`);
     };
 
     return (
-        <div style={bgStyle}>
-            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8 animate-fade-in">
-                <h1 className="text-3xl font-serif font-bold text-black mb-2 text-center">
-                    {term('root-search')}
-                </h1>
-                <p className="text-sm text-black/60 mb-8 max-w-2xl mx-auto text-center leading-relaxed">
-                    {term('root-search-desc')}
-                </p>
+        <>
+            <h1 className="text-3xl font-serif font-bold text-black mb-2 text-center">
+                {term('stem-search')}
+            </h1>
+            <p className="text-sm text-black/60 mb-8 max-w-2xl mx-auto text-center leading-relaxed">
+                {term('stem-search-desc')}
+            </p>
 
-                {/* Horizontal Filter Bar */}
-                <div className="bg-[#F4F3F0] border border-border rounded-xl p-6 shadow-sm max-w-2xl mx-auto mb-8">
-                    <form onSubmit={handleSearch} className="root-radical-input-group flex flex-col items-center gap-6">
-                        <RootRadicalsInput
-                            label={term('root-radicals')}
-                            values={rootRadicals}
-                            onChange={handleRootRadicalChange}
-                        />
-
-                        <div className="flex gap-3">
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setRootRadicals(Array(MAX_RADICALS).fill(''));
-                                    navigate('/root-search');
-                                    setHasSearched(false);
-                                }}
-                                className="px-4 py-2 text-sm font-medium text-black/60 bg-white border border-border rounded-md hover:bg-black/5 transition-colors"
-                            >
-                                {term('clear')}
-                            </button>
-                            <button
-                                type="submit"
-                                className="bg-[#1034A6] text-white px-8 py-2 rounded-md font-medium text-sm hover:bg-[#1034A6]/90 transition-colors shadow-sm"
-                            >
-                                {term('search-roots')}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                {/* Results Area (Full Width) */}
-                {loading ? (
-                    <div className="flex justify-center py-12">
-                        <Spinner />
-                    </div>
-                ) : hasSearched && (
-                    <RootResultView rootRadicals={searchedRadicals} extraRoots={extraRoots} />
-                )}
+            <div className="max-w-2xl mx-auto mb-12">
+                <form onSubmit={handleSearch} className="relative group">
+                    <input
+                        type="text"
+                        value={q}
+                        onChange={(e) => setQ(e.target.value)}
+                        placeholder={term('search-stems-placeholder')}
+                        className="w-full bg-white border border-black/10 rounded-2xl px-6 py-4 pl-14 text-lg font-serif shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1034A6]/20 focus:border-[#1034A6] transition-all"
+                    />
+                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-black/20 group-focus-within:text-[#1034A6] transition-colors" size={24} />
+                    <button
+                        type="submit"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-[#1034A6] text-white px-6 py-2 rounded-xl font-medium text-sm hover:bg-[#1034A6]/90 transition-colors shadow-sm"
+                    >
+                        {term('search')}
+                    </button>
+                </form>
             </div>
-        </div>
+
+            {loading ? (
+                <div className="flex justify-center py-12">
+                    <Spinner />
+                </div>
+            ) : hasSearched && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {results.length > 0 ? (
+                        results.map((res) => (
+                            <Link
+                                key={res.id}
+                                to={res.zokk_morphology ? `/stem/${res.zokk_morphology.stem_string}` : `/entry/${res.id}`}
+                                className="bg-white rounded-2xl border border-black/5 p-6 shadow-sm hover:shadow-md hover:border-[#1034A6]/20 transition-all group"
+                            >
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="text-xl font-serif font-bold text-black group-hover:text-[#1034A6] transition-colors line-break-anywhere">
+                                        {res.headword}
+                                    </h3>
+                                    <span className="text-[10px] font-bold uppercase tracking-tighter text-black/30 bg-black/5 px-2 py-0.5 rounded">
+                                        {term(res.pos)}
+                                    </span>
+                                </div>
+                                <p className="text-sm text-black/60 line-clamp-2 italic font-serif">
+                                    "{language === 'mt' && res.definition_mt ? res.definition_mt : res.definition_en}"
+                                </p>
+                                {res.zokk_morphology && (
+                                    <div className="mt-4 pt-4 border-t border-black/5 flex flex-wrap gap-4 text-[11px] font-medium text-black/40 uppercase tracking-wider">
+                                        <div>
+                                            <span className="opacity-50 mr-1">{term('stem')}:</span>
+                                            <span className="text-black/60">{formatStemDisplay(res.zokk_morphology.stem_string)}</span>
+                                        </div>
+                                        <div>
+                                            <span className="opacity-50 mr-1">{term('class')}:</span>
+                                            <span className="text-black/60">-{res.zokk_morphology.class_type}</span>
+                                        </div>
+                                        {res.zokk_morphology.is_hybrid && (
+                                            <div className="text-[#1034A6]/60 font-bold">
+                                                ✦ {term('hybrid')}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </Link>
+                        ))
+                    ) : (
+                        <div className="col-span-full py-12 text-center bg-white/50 backdrop-blur-sm rounded-3xl border border-white/40 shadow-sm">
+                            <p className="text-black/40 italic">{term('no-stems-found')}</p>
+                        </div>
+                    )}
+                </div>
+            )}
+        </>
+    );
+}
+
+export function RootSearch() {
+    const [searchParams] = useSearchParams();
+    const mode = searchParams.get('mode') === 'stem' ? 'stem' : 'root';
+    
+    return (
+        <SearchPageShell>
+            <SearchModeTabs mode={mode} />
+            {mode === 'stem' ? <StemSearchPanelContent /> : <RootSearchPanelContent />}
+        </SearchPageShell>
     );
 }

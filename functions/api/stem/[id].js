@@ -31,10 +31,31 @@ export async function onRequestGet({ env, params }) {
 
         const client = getDbClient(env);
         const res = await client.execute({ sql: 'SELECT * FROM stems WHERE stem_string = ?', args: [id] });
-        if (res.rows.length === 0) return json({ error: 'Stem not found' }, 404);
-
-        const row = res.rows[0];
+        
+        let row = res.rows[0];
         const stats = await getStemEntryStats(client, id);
+
+        if (!row) {
+            // Virtual stem fallback: if no stem record but entries exist
+            if (stats.entry_count > 0) {
+                row = {
+                    stem_string: id,
+                    class_type: null,
+                    is_hybrid: false,
+                    root: null,
+                    agentive_suffix: null,
+                    tags: '[]',
+                    glosses: '[]',
+                    etymology: '{}',
+                    synonyms: '[]',
+                    antonyms: '[]',
+                    related_stems: '[]'
+                };
+            } else {
+                return json({ error: 'Stem not found' }, 404);
+            }
+        }
+
         return json({
             stem: {
                 ...row,

@@ -1980,6 +1980,45 @@ export function generateConjugation(
     const form = input.form;
     const strength = (input.strength || "strong").toLowerCase();
     const weakClass = input.weakClass?.toLowerCase();
+    const isQuadriliteral = consonants.length === 4;
+
+    if (isQuadriliteral) {
+        if (form === "I") {
+            if (strength === "weak" && weakClass === "defective") {
+                const [C1, C2, C3] = consonants;
+                const { v1: pv1 } = parseVset(input.vowelSetPerfect);
+                return buildWeakQuadriliteralDefectiveConjugation(
+                    `${C1}${pv1}${C2}${C3}`,
+                    input.isImalaBlocked,
+                    "I",
+                );
+            }
+            return generateQuadriliteralFormI(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.isImalaBlocked,
+            );
+        }
+        if (form === "II") {
+            if (strength === "weak" && weakClass === "defective") {
+                const [C1, C2, C3] = consonants;
+                const { v1: pv1 } = parseVset(input.vowelSetPerfect);
+                return buildWeakQuadriliteralDefectiveConjugation(
+                    `${C1}${pv1}${C2}${C3}`,
+                    input.isImalaBlocked,
+                    "II",
+                );
+            }
+            const formI = generateQuadriliteralFormI(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.isImalaBlocked,
+            );
+            return deriveQuadriliteralFormII(formI);
+        }
+    }
 
     if (form === "I") {
         if (strength === "geminated") {
@@ -3039,6 +3078,417 @@ function generateTriliteralDefective(
     return forms;
 }
 
+const QUADRILITERAL_PERSONS = [
+    { id: "1s", mt: "jiena", en: "I", prefix: "n" },
+    { id: "2s", mt: "inti", en: "you (sg.)", prefix: "t" },
+    { id: "3ms", mt: "huwa", en: "he", prefix: "j" },
+    { id: "3fs", mt: "hija", en: "she", prefix: "t" },
+    { id: "1p", mt: "aħna", en: "we", prefix: "n" },
+    { id: "2p", mt: "intom", en: "you (pl.)", prefix: "t" },
+    { id: "3p", mt: "huma", en: "they", prefix: "j" },
+] as const;
+
+function deriveAssimilatedTPrefixedWord(word: string): string {
+    return combinePrefix("t", word);
+}
+
+function deriveQuadriliteralAttachedStem(surface: string): string {
+    if (surface.endsWith("as")) {
+        return surface.replace(/as$/, "is");
+    }
+    if (surface.endsWith("et")) {
+        return surface.replace(/et$/, "it");
+    }
+    return surface;
+}
+
+function deriveQuadriliteralSyncopatedStem(surface: string): string {
+    if (surface.endsWith("as")) {
+        return surface.slice(0, -2) + "s";
+    }
+    if (surface.endsWith("sa")) {
+        return surface.slice(0, -1);
+    }
+    if (surface.endsWith("si")) {
+        return surface.slice(0, -1);
+    }
+    return surface;
+}
+
+function deriveQuadriliteralCliticStems(surface: string): { impfType1: string; impfType2: string } {
+    return {
+        impfType1: deriveQuadriliteralAttachedStem(surface),
+        impfType2: deriveQuadriliteralSyncopatedStem(surface),
+    };
+}
+
+function buildWeakQuadriliteralDefectiveConjugation(
+    rootStem: string,
+    isImalaBlocked: boolean,
+    form: "I" | "II",
+): VerbConjugationTable {
+    const formIPerfect = [
+        `${rootStem}ejt`,
+        `${rootStem}ejt`,
+        `${rootStem}a`,
+        `${rootStem}iet`,
+        `${rootStem}ejna`,
+        `${rootStem}ejtu`,
+        `${rootStem}ew`,
+    ];
+    const formIImperfect = [
+        `n${rootStem}i`,
+        combinePrefix("t", `${rootStem}i`),
+        `j${rootStem}i`,
+        combinePrefix("t", `${rootStem}i`),
+        `n${rootStem}u`,
+        combinePrefix("t", `${rootStem}u`),
+        `j${rootStem}u`,
+    ];
+    const formIImperative = `${rootStem}i`;
+    const formIImperativePl = `${rootStem}u`;
+
+    const makeRows = (
+        perfectRows: string[],
+        imperfectRows: string[],
+        useCliticStems: boolean,
+    ): ConjugationRow[] =>
+        QUADRILITERAL_PERSONS.map((person, idx) => ({
+            person_mt: person.id,
+            person_en: person.en,
+            perfect: perfectRows[idx],
+            imperfect: imperfectRows[idx],
+            perfect_neg: perfectRows[idx],
+              stems: useCliticStems
+                  ? {
+                      impfType1: deriveQuadriliteralCliticStems(imperfectRows[idx]).impfType1,
+                      impfType2: deriveQuadriliteralCliticStems(imperfectRows[idx]).impfType2,
+                      ...deriveWeakQuadriliteralPerfectCliticStems(rootStem, idx, perfectRows[idx]),
+                  }
+                  : {
+                      impfType1: imperfectRows[idx],
+                      impfType2: imperfectRows[idx],
+                    perfType1: perfectRows[idx],
+                    perfType2: perfectRows[idx],
+                },
+        }));
+
+    const baseTable: VerbConjugationTable = {
+        rows: makeRows(formIPerfect, formIImperfect, form === "I"),
+        imperative_sg: formIImperative,
+        imperative_pl: formIImperativePl,
+        imperative_sg_stems: {
+            impfType1: form === "I"
+                ? deriveQuadriliteralCliticStems(formIImperative).impfType1
+                : formIImperative,
+            impfType2: form === "I"
+                ? deriveQuadriliteralCliticStems(formIImperative).impfType2
+                : formIImperative,
+        },
+        imperative_pl_stems: {
+            impfType1: form === "I"
+                ? deriveQuadriliteralCliticStems(formIImperativePl).impfType1
+                : formIImperativePl,
+            impfType2: form === "I"
+                ? deriveQuadriliteralCliticStems(formIImperativePl).impfType2
+                : formIImperativePl,
+        },
+        blocksImala: isImalaBlocked,
+    };
+
+    if (form === "I") {
+        return baseTable;
+    }
+
+    return deriveQuadriliteralFormII(baseTable);
+}
+
+function deriveQuadriliteralAssimilatedStem(stem: string): string {
+    const stripped = stem.startsWith("j") || stem.startsWith("t") || stem.startsWith("n")
+        ? stem.slice(1)
+        : stem;
+    const normalized = stripped.startsWith("ss")
+        ? stripped.slice(1)
+        : stripped;
+    return deriveAssimilatedTPrefixedWord(normalized);
+}
+
+function deriveQuadriliteralImperfectStem(stem: string): string {
+    return `ji${deriveQuadriliteralAssimilatedStem(stem)}`;
+}
+
+function deriveWeakQuadriliteralPerfectCliticStems(
+    rootStem: string,
+    rowIndex: number,
+    perfectRow: string,
+): { perfType1: string; perfType2: string } {
+    if (rowIndex === 2) {
+        return {
+            perfType1: `${rootStem}i`,
+            perfType2: `${rootStem}i`,
+        };
+    }
+
+    if (rowIndex === 3) {
+        return {
+            perfType1: `${rootStem}it`,
+            perfType2: `${rootStem}it`,
+        };
+    }
+
+    return {
+        perfType1: deriveQuadriliteralCliticStems(perfectRow).impfType1,
+        perfType2: deriveQuadriliteralCliticStems(perfectRow).impfType2,
+    };
+}
+
+function generateQuadriliteralFormI(
+    consonants: string[],
+    vsetPerf: string,
+    _vsetImpf: string,
+    isImalaBlocked: boolean,
+): VerbConjugationTable {
+    const [C1, C2, C3, C4] = consonants;
+    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
+    const rootStem = `${C1}${pv1}${C2}${C3}${pv2}${C4}`;
+    const rootClusterStem = `${C1}${pv1}${C2}${C3}${C4}`;
+    const pluralStem = `${C1}${pv1}${C2}${C3}${C4}`;
+    const perfect3fs = `${rootClusterStem}et`;
+
+    const rows: ConjugationRow[] = [
+        {
+            person_mt: "1s",
+            person_en: "I",
+            perfect: `${rootStem}t`,
+            imperfect: `n${rootStem}`,
+            perfect_neg: `${rootStem}t`,
+            stems: {
+                impfType1: deriveQuadriliteralCliticStems(`n${rootStem}`).impfType1,
+                impfType2: deriveQuadriliteralCliticStems(`n${rootStem}`).impfType2,
+                perfType1: deriveQuadriliteralCliticStems(`${rootStem}t`).impfType1,
+                perfType2: deriveQuadriliteralCliticStems(`${rootStem}t`).impfType2,
+            },
+        },
+        {
+            person_mt: "2s",
+            person_en: "you (sg.)",
+            perfect: `${rootStem}t`,
+            imperfect: `t${rootStem}`,
+            perfect_neg: `${rootStem}t`,
+            stems: {
+                impfType1: deriveQuadriliteralCliticStems(`t${rootStem}`).impfType1,
+                impfType2: deriveQuadriliteralCliticStems(`t${rootStem}`).impfType2,
+                perfType1: deriveQuadriliteralCliticStems(`${rootStem}t`).impfType1,
+                perfType2: deriveQuadriliteralCliticStems(`${rootStem}t`).impfType2,
+            },
+        },
+        {
+            person_mt: "3ms",
+            person_en: "he",
+            perfect: rootStem,
+            imperfect: `j${rootStem}`,
+            perfect_neg: rootStem,
+            stems: {
+                impfType1: deriveQuadriliteralCliticStems(`j${rootStem}`).impfType1,
+                impfType2: deriveQuadriliteralCliticStems(`j${rootStem}`).impfType2,
+                perfType1: deriveQuadriliteralCliticStems(rootStem).impfType1,
+                perfType2: deriveQuadriliteralCliticStems(rootStem).impfType2,
+            },
+        },
+        {
+            person_mt: "3fs",
+            person_en: "she",
+            perfect: perfect3fs,
+            imperfect: `t${rootStem}`,
+            perfect_neg: `${rootClusterStem}it`,
+            stems: {
+                impfType1: deriveQuadriliteralCliticStems(`t${rootStem}`).impfType1,
+                impfType2: deriveQuadriliteralCliticStems(`t${rootStem}`).impfType2,
+                // Derive the clitic stem from the surface form so qartset -> qartsit
+                // and għargħret -> għargħrit.
+                perfType1: perfect3fs.replace(/et$/, "it"),
+                perfType2: perfect3fs.replace(/et$/, "it"),
+            },
+        },
+        {
+            person_mt: "1p",
+            person_en: "we",
+            perfect: `${rootStem}na`,
+            imperfect: `n${pluralStem}u`,
+            perfect_neg: `${rootStem}na`,
+            stems: {
+                impfType1: deriveQuadriliteralCliticStems(`n${pluralStem}u`).impfType1,
+                impfType2: deriveQuadriliteralCliticStems(`n${pluralStem}u`).impfType2,
+                perfType1: deriveQuadriliteralCliticStems(`${rootStem}na`).impfType1,
+                perfType2: deriveQuadriliteralCliticStems(`${rootStem}na`).impfType2,
+            },
+        },
+        {
+            person_mt: "2p",
+            person_en: "you (pl.)",
+            perfect: `${rootStem}tu`,
+            imperfect: `t${pluralStem}u`,
+            perfect_neg: `${rootStem}tu`,
+            stems: {
+                impfType1: deriveQuadriliteralCliticStems(`t${pluralStem}u`).impfType1,
+                impfType2: deriveQuadriliteralCliticStems(`t${pluralStem}u`).impfType2,
+                perfType1: deriveQuadriliteralCliticStems(`${rootStem}tu`).impfType1,
+                perfType2: deriveQuadriliteralCliticStems(`${rootStem}tu`).impfType2,
+            },
+        },
+        {
+            person_mt: "3p",
+            person_en: "they",
+            perfect: `${pluralStem}u`,
+            imperfect: `j${pluralStem}u`,
+            perfect_neg: `${pluralStem}u`,
+            stems: {
+                impfType1: deriveQuadriliteralCliticStems(`j${pluralStem}u`).impfType1,
+                impfType2: deriveQuadriliteralCliticStems(`j${pluralStem}u`).impfType2,
+                perfType1: deriveQuadriliteralCliticStems(`${pluralStem}u`).impfType1,
+                perfType2: deriveQuadriliteralCliticStems(`${pluralStem}u`).impfType2,
+            },
+        },
+    ];
+
+    return {
+        rows,
+        imperative_sg: rootStem,
+        imperative_pl: `${rootClusterStem}u`,
+        imperative_sg_stems: {
+            impfType1: deriveQuadriliteralCliticStems(rootStem).impfType1,
+            impfType2: deriveQuadriliteralCliticStems(rootStem).impfType2,
+        },
+        imperative_pl_stems: {
+            impfType1: deriveQuadriliteralCliticStems(`${rootClusterStem}u`).impfType1,
+            impfType2: deriveQuadriliteralCliticStems(`${rootClusterStem}u`).impfType2,
+        },
+        blocksImala: isImalaBlocked,
+    };
+}
+
+function generateQuadriliteralFormIDefective(
+    consonants: string[],
+    vsetPerf: string,
+    _vsetImpf: string,
+    _isImalaBlocked: boolean,
+): GeneratedVerbForm[] {
+    const [C1, C2, C3] = consonants;
+    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
+
+    const rootStem = `${C1}${pv1}${C2}${C3}`;
+    const perfect = `${rootStem}${pv2}`;
+    const imperfect = `j${rootStem}i`;
+
+    const formI: GeneratedVerbForm = {
+        form: "I",
+        perfect,
+        imperfect,
+        imperative: `${rootStem}i`,
+        passiveParticiple: `m${rootStem}i`,
+        activeParticiple: `${rootStem}ej`,
+        verbalNoun: `${rootStem}i`,
+    };
+    return [formI, buildQuadriliteralFormII(formI, "weak-defective")];
+}
+
+function deriveQuadriliteralFormII(base: VerbConjugationTable): VerbConjugationTable {
+    const rows = base.rows.map((row) => {
+        const perfect = deriveQuadriliteralAssimilatedStem(row.perfect);
+        const imperfectStem = row.imperfect.startsWith("j")
+            ? row.imperfect.slice(1)
+            : row.imperfect;
+        const imperfect = `ji${deriveQuadriliteralAssimilatedStem(imperfectStem)}`;
+
+        return {
+            ...row,
+            form: "II" as const,
+            perfect,
+            imperfect,
+            perfect_neg: row.perfect_neg ? deriveQuadriliteralAssimilatedStem(row.perfect_neg) : undefined,
+            stems: row.stems
+                ? {
+                    impfType1: deriveQuadriliteralImperfectStem(row.stems.impfType1),
+                    impfType2: deriveQuadriliteralImperfectStem(row.stems.impfType2),
+                    perfType1: deriveQuadriliteralAssimilatedStem(row.stems.perfType1),
+                    perfType2: deriveQuadriliteralAssimilatedStem(row.stems.perfType2),
+                }
+                : undefined,
+        };
+    });
+
+    return {
+        ...base,
+        rows,
+        imperative_sg: deriveQuadriliteralAssimilatedStem(base.imperative_sg),
+        imperative_pl: deriveQuadriliteralAssimilatedStem(base.imperative_pl),
+        imperative_sg_stems: base.imperative_sg_stems
+            ? {
+                impfType1: deriveQuadriliteralImperfectStem(base.imperative_sg_stems.impfType1),
+                impfType2: deriveQuadriliteralImperfectStem(base.imperative_sg_stems.impfType2),
+            }
+            : undefined,
+        imperative_pl_stems: base.imperative_pl_stems
+            ? {
+                impfType1: deriveQuadriliteralImperfectStem(base.imperative_pl_stems.impfType1),
+                impfType2: deriveQuadriliteralImperfectStem(base.imperative_pl_stems.impfType2),
+            }
+            : undefined,
+    };
+}
+
+type QuadriliteralFormIIMode = "strong" | "weak-defective";
+
+function buildQuadriliteralFormII(
+    formI: GeneratedVerbForm,
+    mode: QuadriliteralFormIIMode,
+): GeneratedVerbForm {
+    const imperfectStem = formI.imperfect.startsWith("j")
+        ? formI.imperfect.slice(1)
+        : formI.imperfect;
+    const perfectStem = formI.perfect ?? "";
+    const assimilatedPerfectStem = deriveQuadriliteralAssimilatedStem(perfectStem);
+    const assimilatedImperfectStem = deriveQuadriliteralAssimilatedStem(imperfectStem);
+    const verbalNounStem = mode === "weak-defective"
+        ? `${imperfectStem}ja`
+        : ((formI.verbalNoun || perfectStem).replace(/is$/, "ir"));
+
+    return {
+        form: "II",
+        perfect: assimilatedPerfectStem,
+        imperfect: `ji${assimilatedImperfectStem}`,
+        imperative: assimilatedPerfectStem,
+        passiveParticiple: `mi${assimilatedImperfectStem}`,
+        activeParticiple: "-",
+        verbalNoun: deriveAssimilatedTPrefixedWord(verbalNounStem),
+    };
+}
+
+function generateQuadriliteralStrong(
+    C1: string,
+    C2: string,
+    C3: string,
+    C4: string,
+    pv1: string,
+    pv2: string,
+    _ipv1: string,
+    ipv2: string,
+): GeneratedVerbForm[] {
+    const perfectStem = `${C1}${pv1}${C2}${C3}${pv2}${C4}`;
+    const imperfectStem = `${C1}${pv1}${C2}${C3}${ipv2}${C4}`;
+    const formI: GeneratedVerbForm = {
+        form: "I",
+        perfect: perfectStem,
+        imperfect: `j${imperfectStem}`,
+        imperative: perfectStem,
+        passiveParticiple: `m${perfectStem}`,
+        activeParticiple: `${C1}${pv1}${C2}${C3}ie${C4}`,
+        verbalNoun: `${C1}${pv1}${C2}${C3}i${C4}`,
+    };
+
+    return [formI, buildQuadriliteralFormII(formI, "strong")];
+}
+
 export function generateRootForms(
     consonants: string,
     pvSet: string,
@@ -3054,11 +3504,24 @@ export function generateRootForms(
     const C1 = arr[0] || "";
     const C2 = arr[1] || "";
     const C3 = arr[2] || "";
+    const C4 = arr[3] || "";
     const [pv1 = "a", pv2 = "a"] = pvSet.split("-");
     const [ipv1 = "i", ipv2 = "a"] = ipvSet.split("-");
 
     const strength = strengthStr.toLowerCase();
     const weakClass = weakClassStr?.toLowerCase();
+
+    if (arr.length === 4) {
+        if (strength === "weak" && weakClass === "defective") {
+            return generateQuadriliteralFormIDefective(
+                [C1, C2, C3, C4],
+                pv1 + "-" + pv2,
+                ipv1 + "-" + ipv2,
+                isImalaBlocked,
+            );
+        }
+        return generateQuadriliteralStrong(C1, C2, C3, C4, pv1, pv2, ipv1, ipv2);
+    }
 
     if (strength === "weak" && weakClass === "defective") {
         return generateTriliteralDefective(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
@@ -3091,7 +3554,99 @@ export interface AttestedEntry {
     word: string;
     id?: string;
     form: string;
+    pos?: string;
+    root?: string;
+    stem?: string;
     type: "lemma" | "passive" | "active" | "noun" | "imperfect" | "imperative";
+    participleType?: "passive" | "active";
+}
+
+export interface AttestedEntryMatchCriteria {
+    surface: string;
+    form?: string;
+    pos?: string;
+    root?: string;
+    stem?: string;
+    type?: "lemma" | "passive" | "active" | "noun" | "imperfect" | "imperative";
+    participleType?: "passive" | "active";
+}
+
+function normalizeMatchKey(value?: string | null): string {
+    return (value || "").trim().toLowerCase();
+}
+
+function getEntryRootKey(entry: any): string {
+    return entry?.root_pattern_form?.root?.consonant_array?.join("-")
+        || entry?.root_pattern_form?.root?.consonants
+        || entry?.zokk_morphology?.root
+        || entry?.root_consonants
+        || "";
+}
+
+function getEntryStemKey(entry: any): string {
+    return entry?.zokk_morphology?.stem_string
+        || entry?.stem_string
+        || entry?.root_pattern_form?.derived_form
+        || "";
+}
+
+function matchesAttestedCriteria(
+    entry: AttestedEntry,
+    criteria: AttestedEntryMatchCriteria,
+    includeSurface: boolean,
+): boolean {
+    if (includeSurface && normalizeMatchKey(entry.word) !== normalizeMatchKey(criteria.surface)) {
+        return false;
+    }
+
+    if (criteria.form && normalizeMatchKey(entry.form) !== normalizeMatchKey(criteria.form)) {
+        return false;
+    }
+
+    if (criteria.pos && normalizeMatchKey(entry.pos) !== normalizeMatchKey(criteria.pos)) {
+        return false;
+    }
+
+    if (criteria.type && entry.type !== criteria.type) {
+        return false;
+    }
+
+    if (criteria.participleType && normalizeMatchKey(entry.participleType) !== normalizeMatchKey(criteria.participleType)) {
+        return false;
+    }
+
+    const rootKey = normalizeMatchKey(criteria.root);
+    const stemKey = normalizeMatchKey(criteria.stem);
+    if (rootKey || stemKey) {
+        const entryRoot = normalizeMatchKey(entry.root);
+        const entryStem = normalizeMatchKey(entry.stem);
+        const rootMatches = rootKey ? entryRoot === rootKey : false;
+        const stemMatches = stemKey ? entryStem === stemKey : false;
+
+        if (rootKey && stemKey) return rootMatches || stemMatches;
+        if (rootKey) return rootMatches;
+        if (stemKey) return stemMatches;
+    }
+
+    return true;
+}
+
+export function resolveAttestedEntry(
+    attested: AttestedEntry[],
+    criteria: AttestedEntryMatchCriteria,
+): AttestedEntry | null {
+    const exact = attested.find((entry) => matchesAttestedCriteria(entry, criteria, true));
+    if (exact) return exact;
+
+    const fallback = attested.find((entry) => matchesAttestedCriteria(entry, criteria, false));
+    return fallback || null;
+}
+
+export function resolveAttestedEntryFromEntries(
+    entries: any[],
+    criteria: AttestedEntryMatchCriteria,
+): AttestedEntry | null {
+    return resolveAttestedEntry(getAttestedEntries(entries), criteria);
 }
 
 export function markGeneratedForms(
@@ -3099,27 +3654,45 @@ export function markGeneratedForms(
     attested: AttestedEntry[],
 ): MarkedVerbForm[] {
     const attestedRows = new Set<GenerativeVerbFormType>();
+    const sharedRoot = attested.find((entry) => entry.root)?.root;
+    const sharedStem = attested.find((entry) => entry.stem)?.stem;
 
     // First pass to find what is attested
     const attestedG = generated.map((g) => {
-        const isLemmaAttested = attested.some(
-            (a) => a.word === g.perfect && a.form === g.form && a.type === "lemma",
-        );
-        const isPassiveAttested = attested.some(
-            (a) =>
-                a.word === g.passiveParticiple &&
-                a.form === g.form &&
-                a.type === "passive",
-        );
-        const isActiveAttested = attested.some(
-            (a) =>
-                a.word === g.activeParticiple &&
-                a.form === g.form &&
-                a.type === "active",
-        );
-        const isVNAttested = attested.some(
-            (a) => a.word === g.verbalNoun && a.form === g.form && a.type === "noun",
-        );
+        const isLemmaAttested = !!resolveAttestedEntry(attested, {
+            surface: g.perfect,
+            form: g.form,
+            type: "lemma",
+            pos: "verb",
+            root: sharedRoot,
+            stem: sharedStem,
+        });
+        const isPassiveAttested = !!resolveAttestedEntry(attested, {
+            surface: g.passiveParticiple,
+            form: g.form,
+            type: "passive",
+            pos: "participle",
+            participleType: "passive",
+            root: sharedRoot,
+            stem: sharedStem,
+        });
+        const isActiveAttested = !!resolveAttestedEntry(attested, {
+            surface: g.activeParticiple,
+            form: g.form,
+            type: "active",
+            pos: "participle",
+            participleType: "active",
+            root: sharedRoot,
+            stem: sharedStem,
+        });
+        const isVNAttested = !!resolveAttestedEntry(attested, {
+            surface: g.verbalNoun,
+            form: g.form,
+            type: "noun",
+            pos: "noun",
+            root: sharedRoot,
+            stem: sharedStem,
+        });
 
         const anyAttested =
             isLemmaAttested || isPassiveAttested || isActiveAttested || isVNAttested;
@@ -3160,28 +3733,57 @@ export function markGeneratedForms(
         if (!ag.anyAttested && reconstructableForms.has(g.form))
             rowTheoretical = true;
 
-        const applyMarker = (
-            generatedVal: string,
-            formType: "lemma" | "passive" | "active" | "noun" | "imperfect" | "imperative",
-            isImperfect: boolean = false,
-        ): { value: string; marker: FormMarker; entryId?: string } => {
-            if (generatedVal === "-") return { value: generatedVal, marker: "plain" };
+            const applyMarker = (
+                generatedVal: string,
+                formType: "lemma" | "passive" | "active" | "noun" | "imperfect" | "imperative",
+                isImperfect: boolean = false,
+            ): { value: string; marker: FormMarker; entryId?: string } => {
+                if (generatedVal === "-") return { value: generatedVal, marker: "plain" };
 
-            // The imperfect will always exist if the lemma exists.
-            // We use the generated value for the imperfect column, but still want to link it to the lemma entry if it exists.
-            if (isImperfect && ag.isLemmaAttested) {
-                const lemmaAtt = attested.find(
-                    (a) => a.form === g.form && a.type === "lemma",
-                );
-                return { value: generatedVal, marker: "plain", entryId: lemmaAtt?.id };
-            }
+                if (isImperfect) return { value: generatedVal, marker: "plain" };
 
-            // Find the actual attested entry for this form and type
-            const att = attested.find(
-                (a) => a.form === g.form && a.type === formType,
-            );
+                const att =
+                    formType === "lemma"
+                        ? resolveAttestedEntry(attested, {
+                        surface: g.perfect,
+                        form: g.form,
+                        type: "lemma",
+                        pos: "verb",
+                        root: sharedRoot,
+                        stem: sharedStem,
+                    })
+                    : formType === "passive"
+                        ? resolveAttestedEntry(attested, {
+                            surface: g.passiveParticiple,
+                            form: g.form,
+                            type: "passive",
+                            pos: "participle",
+                            participleType: "passive",
+                            root: sharedRoot,
+                            stem: sharedStem,
+                        })
+                        : formType === "active"
+                            ? resolveAttestedEntry(attested, {
+                                surface: g.activeParticiple,
+                                form: g.form,
+                                type: "active",
+                                pos: "participle",
+                                participleType: "active",
+                                root: sharedRoot,
+                                stem: sharedStem,
+                            })
+                            : formType === "noun"
+                                ? resolveAttestedEntry(attested, {
+                                    surface: g.verbalNoun,
+                                    form: g.form,
+                                    type: "noun",
+                                    pos: "noun",
+                                    root: sharedRoot,
+                                    stem: sharedStem,
+                                })
+                                : null;
 
-            // If we have an exact match OR a form match, mark as plain and use the attested word/ID
+            // If we have an exact match OR a metadata match, mark as plain and use the attested word/ID
             if (att) {
                 return { value: att.word, marker: "plain", entryId: att.id };
             }
@@ -3190,10 +3792,16 @@ export function markGeneratedForms(
             return { value: generatedVal, marker: "auto_generated" };
         };
 
+        const perfect = applyMarker(g.perfect, "lemma");
+        const imperfect =
+            g.imperfect === "-"
+                ? { value: g.imperfect, marker: "plain" as FormMarker }
+                : { value: g.imperfect, marker: perfect.marker };
+
         return {
             form: g.form,
-            perfect: applyMarker(g.perfect, "lemma"),
-            imperfect: applyMarker(g.imperfect, "imperfect", true),
+            perfect,
+            imperfect,
             imperative: applyMarker(g.imperative || "-", "imperative", true),
             passiveParticiple: applyMarker(g.passiveParticiple, "passive"),
             activeParticiple: applyMarker(g.activeParticiple, "active"),
@@ -3211,10 +3819,12 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
     entries.forEach((e: any) => {
         const form = e.verb_morphology?.form || e._formLabel || "";
         if (!form) return;
+        const root = getEntryRootKey(e);
+        const stem = getEntryStemKey(e);
 
         // 1. Link the entry itself based on its POS
         if (e.pos === "verb") {
-            attested.push({ word: e.headword, id: e.id, form, type: "lemma" });
+            attested.push({ word: e.headword, id: e.id, form, pos: e.pos, root, stem, type: "lemma" });
         } else if (e.pos === "participle") {
             const pt =
                 e.verb_morphology?.participle_type || e.participle_type || "active";
@@ -3222,10 +3832,14 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
                 word: e.headword,
                 id: e.id,
                 form,
+                pos: e.pos,
+                root,
+                stem,
                 type: pt === "passive" ? "passive" : "active",
+                participleType: pt === "passive" ? "passive" : "active",
             });
         } else if (e.pos === "noun") {
-            attested.push({ word: e.headword, id: e.id, form, type: "noun" });
+            attested.push({ word: e.headword, id: e.id, form, pos: e.pos, root, stem, type: "noun" });
         }
 
         // 2. Also check internal fields within the entry (e.g. for legacy verbs)
@@ -3234,7 +3848,11 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
                 word: e.verb_morphology.passive_participle,
                 id: e.id,
                 form,
+                pos: "participle",
+                root,
+                stem,
                 type: "passive",
+                participleType: "passive",
             });
         }
         if (e.verb_morphology?.active_participle) {
@@ -3242,7 +3860,11 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
                 word: e.verb_morphology.active_participle,
                 id: e.id,
                 form,
+                pos: "participle",
+                root,
+                stem,
                 type: "active",
+                participleType: "active",
             });
         }
         if (e.verb_morphology?.verbal_noun) {
@@ -3250,6 +3872,9 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
                 word: e.verb_morphology.verbal_noun,
                 id: e.id,
                 form,
+                pos: "noun",
+                root,
+                stem,
                 type: "noun",
             });
         }
@@ -3258,6 +3883,9 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
                 word: e.verb_morphology.imperfective_3sg_m,
                 id: e.id,
                 form,
+                pos: "verb",
+                root,
+                stem,
                 type: "imperfect",
             });
         }
@@ -3266,6 +3894,9 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
                 word: e.verb_morphology.imperative_sg,
                 id: e.id,
                 form,
+                pos: "verb",
+                root,
+                stem,
                 type: "imperative",
             });
         }
@@ -3275,7 +3906,7 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
             e.subentries.forEach((sub: any) => {
                 const subForm = sub.verb_morphology?.form || sub._formLabel || form;
                 if (sub.pos === "noun") {
-                    attested.push({ word: sub.headword, id: sub.id, form: subForm, type: "noun" });
+                    attested.push({ word: sub.headword, id: sub.id, form: subForm, pos: sub.pos, root: getEntryRootKey(sub) || root, stem: getEntryStemKey(sub) || stem, type: "noun" });
                 } else if (sub.pos === "participle") {
                     const pt =
                         sub.verb_morphology?.participle_type ||
@@ -3285,7 +3916,21 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
                         word: sub.headword,
                         id: sub.id,
                         form: subForm,
+                        pos: sub.pos,
+                        root: getEntryRootKey(sub) || root,
+                        stem: getEntryStemKey(sub) || stem,
                         type: pt === "passive" ? "passive" : "active",
+                        participleType: pt === "passive" ? "passive" : "active",
+                    });
+                } else if (sub.pos === "verb") {
+                    attested.push({
+                        word: sub.headword,
+                        id: sub.id,
+                        form: subForm,
+                        pos: sub.pos,
+                        root: getEntryRootKey(sub) || root,
+                        stem: getEntryStemKey(sub) || stem,
+                        type: sub.verb_morphology?.participle_type ? (sub.verb_morphology.participle_type === "passive" ? "passive" : "active") : "lemma",
                     });
                 }
             });

@@ -10,6 +10,8 @@ import { useAdminConfig } from '@/lib/adminConfig';
 import { apiSearch, apiGetDistinctValues } from '@/lib/api';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { resolveEntryGender } from '@/lib/gender';
+import { getSearchCardLocation } from '@/lib/searchCard';
+import { getGloss, parseMaybeArray } from '@/lib/utils';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const CREAM_RGBA = 'rgba(244,243,240,0.88)';
@@ -29,6 +31,7 @@ interface SearchResult {
     headword: string;
     root: string;
     rootSlug: string;
+    rootHref: string;
     gender?: string;    // shown as Egyptian Blue below root
     pos: string;
     definitions: string[];
@@ -312,7 +315,9 @@ function InflectionCell({ row }: { row: InflectionRow }) {
 
 
 function EntryCard({ result, index }: { result: SearchResult; index: number }) {
-    const { term } = useLinguisticMode();
+    const { language } = useLanguage();
+    const { term, mode } = useLinguisticMode();
+    const alternativeForms = parseMaybeArray<any>(result.entry.alternative_forms);
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3 w-full">
             <div className="flex flex-col md:grid md:grid-cols-[12rem_8rem_1fr_16rem] min-h-20">
@@ -326,7 +331,7 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                             {result.headword}
                         </Link>
                         <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
-                            <Link to={`/root/${result.rootSlug}`}
+                            <Link to={result.rootHref}
                                 style={{ color: EGYPTIAN_BLUE }}
                                 className="text-xs hover:underline font-sans">
                                 {result.root}
@@ -359,6 +364,26 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                                 </li>
                             ))}
                         </ol>
+                    )}
+
+                    {alternativeForms.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-black/5 space-y-1">
+                            <div className="text-[10px] font-bold text-black/30 uppercase tracking-wider">
+                                {term('alternative-forms')}
+                            </div>
+                            <div className="space-y-1">
+                                {alternativeForms.map((alt: any) => (
+                                    <div key={alt.id || alt.headword} className="flex items-baseline gap-2">
+                                        <Link to={`/entry/${alt.id || alt.headword}`} className="font-serif text-sm font-semibold text-[#1034A6] hover:underline">
+                                            {alt.headword}
+                                        </Link>
+                                        <span className="text-xs text-black/50 italic">
+                                            "{getGloss(alt, language, mode)}"
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     )}
                 </div>
 
@@ -753,8 +778,7 @@ export function AdvancedSearch() {
                     return {
                         id: r.id,
                         headword: r.headword,
-                        root: r.root_pattern_form?.root?.consonants || '',
-                        rootSlug: r.root_pattern_form?.root?.consonants || '',
+                        ...getSearchCardLocation(r, r.root_pattern_form?.root?.consonants || ''),
                         gender: resolveEntryGender(r) || undefined,
                         pos: r.pos,
                         definitions: r.definition_en ? [r.definition_en] : (r.definitions?.length ? r.definitions.map((d: any) => d.text_en) : []),
@@ -896,7 +920,7 @@ export function AdvancedSearch() {
 
     return (
         <div style={bgStyle}>
-            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8">
+            <div className="w-full max-w-6xl mx-auto px-7 sm:px-8 py-8">
 
                 {/* ── Page header ── */}
                 <div className="mb-6">

@@ -37,7 +37,7 @@ export function Admin() {
     }, [tab, term]);
 
     return (
-        <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8 space-y-6">
+        <div className="w-full max-w-6xl mx-auto px-7 sm:px-8 py-8 space-y-6">
             {!hasAdminRights && (
                 <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-3 text-amber-900 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
                     <ShieldAlert className="shrink-0" size={20} />

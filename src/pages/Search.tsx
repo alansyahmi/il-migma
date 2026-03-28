@@ -8,8 +8,11 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { apiSearch } from '@/lib/api';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
+import { getSearchCardLocation } from '@/lib/searchCard';
+import { buildStemSearchPreview, type StemSearchPreviewKind } from '@/lib/stemSearchPreview';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { resolveEntryGender } from '@/lib/gender';
+import { getGloss, parseMaybeArray } from '@/lib/utils';
 
 // ── Colours ────────────────────────────────────────────────────────────────
 const EGYPTIAN_BLUE = '#1034A6';
@@ -21,6 +24,12 @@ interface InflectionRow {
     hasPage: boolean;
     entryId?: string;
     marker?: 'plain' | 'theoretical' | 'auto_generated'; // these + labels appear at black/55
+    secondary?: {
+        form: string;
+        hasPage: boolean;
+        entryId?: string;
+        marker?: 'plain' | 'theoretical' | 'auto_generated';
+    };
 }
 
 interface SearchResult {
@@ -28,6 +37,7 @@ interface SearchResult {
     headword: string;
     root: string;
     rootSlug: string;
+    rootHref: string;
     gender?: string;    // shown as Egyptian Blue below root
     pos: string;
     definitions: string[];
@@ -151,47 +161,90 @@ function FilterCheckbox({
 }
 
 function InflectionCell({ row }: { row: InflectionRow }) {
-    let form = row.form;
-    let isTheoretical = row.marker === 'theoretical';
+    const renderSurface = (
+        surface: Pick<InflectionRow, 'form' | 'hasPage' | 'entryId' | 'marker'>,
+        compact = false,
+    ) => {
+        let form = surface.form;
+        let isTheoretical = surface.marker === 'theoretical';
 
-    // Auto-detect theoretical form from string prefix
-    if (typeof form === 'string' && form.trim().startsWith('*')) {
-        isTheoretical = true;
-        form = form.trim().substring(1).trim();
-    } else if (typeof form === 'string') {
-        form = form.trim();
-    }
+        // Auto-detect theoretical form from string prefix
+        if (typeof form === 'string' && form.trim().startsWith('*')) {
+            isTheoretical = true;
+            form = form.trim().substring(1).trim();
+        } else if (typeof form === 'string') {
+            form = form.trim();
+        }
 
-    const markerEl = isTheoretical ? (
-        <span className="text-black/45">*</span>
-    ) : row.marker === 'auto_generated' ? (
-        <span className="text-black/45">✦</span>
-    ) : null;
+        const markerEl = isTheoretical ? (
+            <span className="text-black/45">*</span>
+        ) : surface.marker === 'auto_generated' ? (
+            <span className="text-black/45">✦</span>
+        ) : null;
 
-    if (row.hasPage || row.entryId) {
-        return (
-            <Link 
-                to={`/entry/${row.entryId || row.form}`} 
-                style={{ color: isTheoretical ? undefined : EGYPTIAN_BLUE }}
-                className={cn(
-                    "text-sm hover:underline",
-                    isTheoretical ? "text-black/55" : ""
-                )}
-            >
-                {markerEl}{form}
-            </Link>
+        const textClass = cn(
+            compact ? 'text-[11px] leading-tight' : 'text-sm',
+            'font-serif',
+            (isTheoretical || surface.marker) ? 'text-black/55' : 'text-black',
         );
-    }
+
+        const content = (
+            <span className={textClass}>
+                {markerEl}{form}
+            </span>
+        );
+
+        if (surface.hasPage || surface.entryId) {
+            return (
+                <Link
+                    to={`/entry/${surface.entryId || surface.form}`}
+                    style={{ color: isTheoretical ? undefined : EGYPTIAN_BLUE }}
+                    className={cn(
+                        compact ? 'text-[11px] leading-tight' : 'text-sm',
+                        'hover:underline',
+                        isTheoretical ? 'text-black/55' : '',
+                    )}
+                >
+                    {markerEl}{form}
+                </Link>
+            );
+        }
+
+        return content;
+    };
+
     return (
-        <span className={cn("text-sm font-serif", (isTheoretical || row.marker) ? "text-black/55" : "text-black")}>
-            {markerEl}{form}
-        </span>
+        <div className="flex flex-col gap-0.5">
+            {renderSurface(row)}
+            {row.secondary && (
+                <div className="pl-0.5">
+                    {renderSurface(row.secondary, true)}
+                </div>
+            )}
+        </div>
     );
+}
+
+function getStemPreviewLabel(kind: StemSearchPreviewKind, term: (key: string) => string) {
+    switch (kind) {
+        case 'imperfect':
+            return term('imperfect');
+        case 'imperative':
+            return term('imperative');
+        case 'passive':
+            return term('passive');
+        case 'verbal-noun':
+            return term('verbal-noun');
+        default:
+            return kind;
+    }
 }
 
 
 function EntryCard({ result, index }: { result: SearchResult; index: number }) {
-    const { term } = useLinguisticMode();
+    const { language } = useLanguage();
+    const { term, mode } = useLinguisticMode();
+    const alternativeForms = parseMaybeArray<any>(result.entry.alternative_forms);
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3 w-full">
             <div className="flex flex-col md:grid md:grid-cols-[12rem_8rem_1fr_16rem] min-h-20">
@@ -205,7 +258,7 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                             {result.headword}
                         </Link>
                         <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
-                            <Link to={`/root/${result.rootSlug}`}
+                            <Link to={result.rootHref}
                                 style={{ color: EGYPTIAN_BLUE }}
                                 className="text-xs hover:underline font-sans">
                                 {result.root}
@@ -238,6 +291,26 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                                 </li>
                             ))}
                         </ol>
+                    )}
+
+                    {alternativeForms.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-black/5 space-y-1">
+                            <div className="text-[10px] font-bold text-black/30 uppercase tracking-wider">
+                                {term('alternative-forms')}
+                            </div>
+                            <div className="space-y-1">
+                                {alternativeForms.map((alt: any) => (
+                                    <div key={alt.id || alt.headword} className="flex items-baseline gap-2">
+                                        <Link to={`/entry/${alt.id || alt.headword}`} className="font-serif text-sm font-semibold text-[#1034A6] hover:underline">
+                                            {alt.headword}
+                                        </Link>
+                                        <span className="text-xs text-black/50 italic">
+                                            "{getGloss(alt, language, mode)}"
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     )}
                 </div>
 
@@ -286,30 +359,95 @@ export function Search() {
 
     // Effect to fetch from API
     useEffect(() => {
-        setLoading(true);
-        const q = searchParams.get('q') ?? '';
-        const pos = searchParams.get('pos') || undefined;
-        const type = searchParams.get('type') || undefined;
-        const source = searchParams.get('source') || undefined;
-        const gender = searchParams.get('gender') || undefined;
-        const v = searchParams.get('v') || undefined;
-        const form = searchParams.get('form') || undefined;
-        const pending = searchParams.get('pending') === 'true' || searchParams.get('pending') === null; // default to true if not present to match DEFAULT_FILTERS
-        const suggested = searchParams.get('suggested') === 'true';
-        const limit = Number(searchParams.get('limit') ?? filters.maxResults);
-        const offset = Number(searchParams.get('offset') ?? 0);
-        const random = searchParams.get('random') || undefined;
+        let cancelled = false;
 
-        apiSearch(q, { pos, type, source, gender, limit, offset, random, v, form, includePending: pending, includeSuggested: suggested })
-            .then(res => {
+        const load = async () => {
+            setLoading(true);
+
+            const q = searchParams.get('q') ?? '';
+            const pos = searchParams.get('pos') || undefined;
+            const type = searchParams.get('type') || undefined;
+            const source = searchParams.get('source') || undefined;
+            const gender = searchParams.get('gender') || undefined;
+            const v = searchParams.get('v') || undefined;
+            const form = searchParams.get('form') || undefined;
+            const pending = searchParams.get('pending') === 'true' || searchParams.get('pending') === null; // default to true if not present to match DEFAULT_FILTERS
+            const suggested = searchParams.get('suggested') === 'true';
+            const limit = Number(searchParams.get('limit') ?? DEFAULT_FILTERS.maxResults);
+            const offset = Number(searchParams.get('offset') ?? 0);
+            const random = searchParams.get('random') || undefined;
+
+            try {
+                const res = await apiSearch(q, {
+                    pos,
+                    type,
+                    source,
+                    gender,
+                    limit,
+                    offset,
+                    random,
+                    v,
+                    form,
+                    includePending: pending,
+                    includeSuggested: suggested,
+                });
+
+                if (cancelled) return;
+
                 setTotal(res.total);
-                // Map API results to the local SearchResult interface
+
+                const stemStrings = Array.from(new Set(
+                    res.results
+                        .map((r: any) => r?.zokk_morphology?.stem_string?.trim())
+                        .filter((stem: string | undefined): stem is string => !!stem),
+                ));
+
+                const stemEntriesMap = new Map<string, any[]>();
+                await Promise.all(stemStrings.map(async (stemString) => {
+                    try {
+                        const stemRes = await apiSearch('', {
+                            zokk: true,
+                            stem_string: stemString,
+                            limit: 50,
+                            includePending: pending,
+                            includeSuggested: suggested,
+                        } as any);
+                        stemEntriesMap.set(stemString, stemRes.results);
+                    } catch (error) {
+                        console.warn('Stem preview fetch failed:', error);
+                        stemEntriesMap.set(stemString, []);
+                    }
+                }));
+
+                if (cancelled) return;
+
                 const mapped: SearchResult[] = res.results.map((r: any) => {
                     const inflections: InflectionRow[] = [];
                     const vm = r.verb_morphology;
                     let generated: any = null;
 
-                    if (vm) {
+                    if (r.zokk_morphology?.stem_string) {
+                        const previewRows = buildStemSearchPreview(
+                            r,
+                            stemEntriesMap.get(r.zokk_morphology.stem_string) || [r],
+                        );
+
+                        previewRows.forEach((previewRow) => {
+                            inflections.push({
+                                label: getStemPreviewLabel(previewRow.kind, term),
+                                form: previewRow.value,
+                                hasPage: previewRow.hasPage,
+                                entryId: previewRow.entryId,
+                                marker: previewRow.marker,
+                                secondary: previewRow.secondary ? {
+                                    form: previewRow.secondary.value,
+                                    hasPage: previewRow.secondary.hasPage,
+                                    entryId: previewRow.secondary.entryId,
+                                    marker: previewRow.secondary.marker,
+                                } : undefined,
+                            });
+                        });
+                    } else if (vm) {
                         const rc = r.root_pattern_form?.root?.consonants;
                         if (rc) {
                             try {
@@ -325,7 +463,7 @@ export function Search() {
                                 const marked = markGeneratedForms(forms, attestedEntries);
                                 generated = marked.find((f: any) => f.form === vm.form);
                             } catch (e) {
-                                console.warn("Search conjugation error:", e);
+                                console.warn('Search conjugation error:', e);
                             }
                         }
 
@@ -349,7 +487,7 @@ export function Search() {
                             marker: generated.verbalNoun.entryId ? undefined : 'theoretical'
                         });
                     } else {
-                        const gender = resolveEntryGender(r);
+                        const genderValue = resolveEntryGender(r);
                         const rootEntries = r.root_pattern_form?.root?.entries || [r];
                         const attested = getAttestedEntries(rootEntries);
 
@@ -369,9 +507,9 @@ export function Search() {
                         // 1. Add opposite gender if applicable
                         const fem = r.form_fem || r.adjective_morphology?.feminine;
                         const masc = r.form_masc || r.adjective_morphology?.masculine;
-                        if (gender === 'masculine' && fem) {
+                        if (genderValue === 'masculine' && fem) {
                             pushMarkedSimple(term('feminine'), fem, r.pos === 'adjective' ? 'adjective' : 'noun');
-                        } else if (gender === 'feminine' && masc) {
+                        } else if (genderValue === 'feminine' && masc) {
                             pushMarkedSimple(term('masculine'), masc, r.pos === 'adjective' ? 'adjective' : 'noun');
                         }
 
@@ -386,7 +524,7 @@ export function Search() {
                             const am = r.adjective_morphology;
                             const elative = am?.elative;
                             if (elative) pushMarkedSimple(term('elative') || 'Elative', elative, 'adjective');
-                            
+
                             const dim = r.diminutive_form || am?.diminutive;
                             if (dim) pushMarkedSimple(term('diminutive'), dim, 'adjective');
                         }
@@ -410,8 +548,7 @@ export function Search() {
                     return {
                         id: r.id,
                         headword: r.headword,
-                        root: r.root_pattern_form?.root?.consonants || '',
-                        rootSlug: r.root_pattern_form?.root?.consonants || '',
+                        ...getSearchCardLocation(r, r.root_pattern_form?.root?.consonants || ''),
                         gender: resolveEntryGender(r) || undefined,
                         pos: r.pos,
                         definitions: r.definition_en ? [r.definition_en] : (r.definitions?.length ? r.definitions.map((d: any) => d.text_en) : []),
@@ -419,17 +556,28 @@ export function Search() {
                         entry: r,
                     };
                 });
+
+                if (cancelled) return;
+
                 if (offset === 0) {
                     setResults(mapped);
                 } else {
                     setResults(prev => [...prev, ...mapped]);
                 }
-            })
-            .catch(err => {
-                console.error("Search fetch error:", err);
+            } catch (err) {
+                if (cancelled) return;
+                console.error('Search fetch error:', err);
                 setResults([]);
-            })
-            .finally(() => setLoading(false));
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        };
+
+        load();
+
+        return () => {
+            cancelled = true;
+        };
     }, [searchParams.toString(), isSearchPerformed, term]);
 
     // Filter and map results (Now handled by API effect, this useMemo is mostly for query state tracking)

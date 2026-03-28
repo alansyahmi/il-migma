@@ -109,3 +109,26 @@ export function getGloss(
     }
     return textMt || textEn || desc || '';
 }
+
+/**
+ * Normalize fields that may arrive as JSON strings, arrays, or empty values.
+ * This keeps older DB payloads from crashing result cards when they expect a list.
+ */
+export function parseMaybeArray<T>(value: unknown): T[] {
+    if (Array.isArray(value)) return value as T[];
+
+    if (typeof value === 'string') {
+        const trimmed = value.trim();
+        if (!trimmed) return [];
+        if (trimmed.startsWith('[')) {
+            try {
+                const parsed = JSON.parse(trimmed);
+                return Array.isArray(parsed) ? (parsed as T[]) : [];
+            } catch {
+                return [];
+            }
+        }
+    }
+
+    return [];
+}

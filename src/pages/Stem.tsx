@@ -4,15 +4,19 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
-import { generateZokkForms } from '@/lib/zokkEngine';
+import { type Entry } from '@/types';
 import { useStemData } from '@/hooks/useStemData';
-import { SideCard, CREAM_RGBA, EtymologySentence } from './Entry';
+import { EntryShell, type EntryViewModel, EtymologySentence, SideCard } from '@/components/dictionary/EntryShell';
+import { FunctionWordEntryView } from './Entry';
 import { getGloss } from '@/lib/utils';
 import { Edit2, Plus, Trash2 } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { StemFormModal } from '@/components/admin/StemFormModal';
-import { formatStemDisplay } from '@/lib/stemDefaults';
 import { adminDeleteEntry } from '@/lib/api';
+import { buildStemMorphologyViewModel } from '@/lib/stemMorphology';
+import { MorphologyProvenanceRows } from '@/components/dictionary/EntryMorphology';
+import { VerbFormsTable, StackedSurface } from '@/components/dictionary/VerbFormsTable';
+import { resolveAttestedEntryFromEntries } from '@/lib/conjugationEngine';
 
 const BLUE = '#1034A6';
 
@@ -89,6 +93,7 @@ export function Stem() {
         is_hybrid,
         root,
         agentive_suffix,
+        stemMorphology: stemMorphologySource,
         source_languages,
         entries,
         stem,
@@ -96,16 +101,34 @@ export function Stem() {
         refetch
     } = useStemData(id);
 
-    const zokkForms = useMemo(() => {
-        if (!stem_string || !class_type) return null;
-        return generateZokkForms({
-            stem_string,
-            class_type,
-            is_hybrid,
-            root: root || undefined,
-            agentive_suffix: agentive_suffix || undefined
-        });
-    }, [stem_string, class_type, is_hybrid, root, agentive_suffix]);
+    const stemMorphology = useMemo(() => buildStemMorphologyViewModel(stemMorphologySource), [
+        stemMorphologySource?.stem_string,
+        stemMorphologySource?.class_type,
+        stemMorphologySource?.is_hybrid,
+        stemMorphologySource?.root,
+        stemMorphologySource?.agentive_suffix,
+    ]);
+
+    const stemAdverbEntry = useMemo(() => {
+        if (!entries) return null;
+        const adverbEntries = entries.filter(e => (e.pos || '').toLowerCase() === 'adverb') as Entry[];
+        if (adverbEntries.length === 0) return null;
+
+        return (
+            adverbEntries.find(e => (e as any)?.zokk_morphology?.stem_string === stem_string) ||
+            adverbEntries.find(e => (e as any)?.zokk_morphology) ||
+            adverbEntries[0] ||
+            null
+        );
+    }, [entries, stem_string]);
+
+    const stemAdverbDisplayEntry = useMemo(() => {
+        if (!stemAdverbEntry) return null;
+        return {
+            ...stemAdverbEntry,
+            is_inflectable: stemAdverbEntry.is_inflectable === false ? true : stemAdverbEntry.is_inflectable,
+        } as Entry;
+    }, [stemAdverbEntry]);
 
     const stemEntryDefaults = useMemo(() => ({
         is_loanword: true,
@@ -118,7 +141,7 @@ export function Stem() {
     }), [agentive_suffix, class_type, id, is_hybrid, root, stem_string]);
 
     const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        background: 'linear-gradient(rgba(244,243,240,0.88), rgba(244,243,240,0.88)), url("/bg-pattern.png") center/cover no-repeat',
         minHeight: '100vh',
     };
 
@@ -130,6 +153,7 @@ export function Stem() {
                 .filter(Boolean);
         }
 
+        if (!entries) return [];
         const entryWithDef = entries.find(e => e.definitions && e.definitions.length > 0);
         if (entryWithDef) {
             return entryWithDef.definitions.map(d => (language === 'en' ? d.text_en : d.text_mt)).filter(Boolean);
@@ -145,6 +169,7 @@ export function Stem() {
                 : [];
 
         if (canonicalTags.length > 0) return canonicalTags;
+        if (!entries) return [];
         return entries.flatMap(e => (e as any).tags || []).filter((v, i, a) => a.indexOf(v) === i);
     }, [entries, stem]);
 
@@ -165,6 +190,140 @@ export function Stem() {
         return source_languages.map(language => ({ language }));
     }, [source_languages, stem]);
 
+    const zokkForms = stemMorphology?.forms;
+    const displayStem = stemMorphology?.displayStem || stem_string || '';
+    const hybridForms = zokkForms?.hybrid_forms;
+    const passiveAlternates = zokkForms?.passive_participle?.alternates?.masc || [];
+    const passiveAlternateEntries = useMemo(() => {
+        return passiveAlternates
+            .map((alt: string) => resolveAttestedEntryFromEntries(entries, {
+                surface: alt,
+                form: 'I',
+                pos: 'participle',
+                type: 'passive',
+                participleType: 'passive',
+                root: root || undefined,
+                stem: stem_string || undefined,
+            }) || entries.find(e => e.headword === alt) || { headword: alt })
+            .filter(Boolean) as Array<{ id?: string; headword: string; gloss_en?: string; gloss_mt?: string }>;
+    }, [entries, passiveAlternates, root, stem_string]);
+    const resolveStemCellEntry = (
+        value: string,
+        opts?: {
+            type?: 'lemma' | 'passive' | 'active' | 'noun' | 'imperfect' | 'imperative';
+            form?: 'I' | 'II';
+            pos?: string;
+            participleType?: 'passive' | 'active';
+        }
+    ) => resolveAttestedEntryFromEntries(entries, {
+        surface: value,
+        form: opts?.form,
+        pos: opts?.pos,
+        type: opts?.type,
+        participleType: opts?.participleType,
+        root: root || undefined,
+        stem: stem_string || undefined,
+    });
+      const makeCellData = (
+          value: string,
+          opts?: {
+              theoretical?: boolean;
+              type?: 'lemma' | 'passive' | 'active' | 'noun' | 'imperfect' | 'imperative';
+              form?: 'I' | 'II';
+              pos?: string;
+              participleType?: 'passive' | 'active';
+              parentMarker?: 'plain' | 'theoretical' | 'auto_generated';
+          }
+      ) => {
+          if (opts?.type === 'imperfect') {
+              return {
+                  value,
+                  marker: opts?.parentMarker ?? ('auto_generated' as const),
+              };
+          }
+          const entry = resolveStemCellEntry(value, opts);
+        if (entry) {
+            return { value: entry.word, marker: 'plain' as const, entryId: entry.id };
+        }
+        return {
+            value,
+              marker: opts?.theoretical ? 'theoretical' as const : 'auto_generated' as const
+          };
+      };
+
+      const getParentVerbMarker = (surface: string, form: 'I' | 'II') =>
+          makeCellData(surface, { type: 'lemma', form, pos: 'verb' }).marker;
+
+    const renderPassiveCell = (surface: string) => {
+        const primary = (
+            <MarkedCell
+                data={makeCellData(surface, { type: 'passive', form: 'I', pos: 'participle', participleType: 'passive' })}
+                isAdmin={isActualAdmin}
+                onDelete={() => {
+                    const existing = resolveStemCellEntry(surface, { form: 'I', pos: 'participle', participleType: 'passive' });
+                    if (existing?.id) handleDeleteEntry(existing.id);
+                }}
+                onEdit={() => openEntryEditor(surface, { type: 'passive', pos: 'participle', participle_type: 'passive', form: 'I' })}
+            />
+        );
+
+        if (passiveAlternateEntries.length === 0) {
+            return primary;
+        }
+
+        return (
+            <StackedSurface
+                primary={primary}
+                alternates={passiveAlternateEntries.map((item) => {
+                    const existing = item.id ? entries.find(e => e.id === item.id) : entries.find(e => e.headword === item.headword);
+
+                    return (
+                        <MarkedCell
+                            key={item.id || item.headword}
+                            data={
+                                existing
+                                    ? { value: existing.headword, marker: 'plain' as const, entryId: existing.id }
+                                    : makeCellData(item.headword, { type: 'passive', form: 'I', pos: 'participle', participleType: 'passive' })
+                            }
+                            isAdmin={isActualAdmin}
+                            onDelete={existing ? () => handleDeleteEntry(existing.id) : undefined}
+                            onEdit={() => openEntryEditor(item.headword, { type: 'passive', pos: 'participle', participle_type: 'passive', form: 'I' })}
+                        />
+                    );
+                })}
+            />
+        );
+    };
+
+    const viewModel: EntryViewModel = {
+        title: displayStem,
+        headerAccessory: isActualAdmin ? (
+            <button
+                onClick={() => setShowStemModal(true)}
+                className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
+                title={term('edit-root-metadata')}
+            >
+                <Edit2 size={16} />
+            </button>
+        ) : undefined,
+        subtitle: glossList[0] ? (
+            <p className="text-sm font-serif text-black/55 mt-2 uppercase tracking-widest text-center">"{glossList[0]}"</p>
+        ) : undefined,
+        meta: (
+            <p className="text-xs font-sans text-black/40 tracking-[0.18em] mt-2 uppercase text-center">
+                — {class_type && (
+                    <span className="hover:underline cursor-default">{term('class').toUpperCase()} -{class_type.toUpperCase()}</span>
+                )}
+                {is_hybrid && (
+                    <>
+                        {' • '}
+                        <span className="hover:underline cursor-default">{term('hybrid').toUpperCase()}</span>
+                    </>
+                )} —
+            </p>
+        ),
+    };
+
     const handleDeleteEntry = async (entryId: string) => {
         if (!confirm(term('confirm-delete-entry'))) return;
         try {
@@ -180,12 +339,20 @@ export function Stem() {
     const openEntryEditor = (
         value: string,
         config: {
+            type?: 'lemma' | 'passive' | 'active' | 'noun' | 'imperfect' | 'imperative';
             pos: string;
+            form?: 'I' | 'II';
             participle_type?: string;
             noLink?: boolean;
         }
     ) => {
-        const existing = entries.find(e => e.headword === value);
+        const existingMatch = resolveStemCellEntry(value, {
+            type: config.type,
+            form: config.form,
+            pos: config.pos,
+            participleType: config.participle_type as 'passive' | 'active' | undefined,
+        });
+        const existing = existingMatch?.id ? entries.find(e => e.id === existingMatch.id) : null;
         if (existing) {
             setEditEntry(existing as AdminEntry);
             setInitialFormData(null);
@@ -223,7 +390,7 @@ export function Stem() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                        {isActualAdmin ? (
+                        {isActualAdmin && (
                             <>
                                 <Link
                                     to={`/admin?tab=stems&create=1&stem_string=${encodeURIComponent(id)}`}
@@ -238,16 +405,9 @@ export function Stem() {
                                     {term('new-entry')}
                                 </Link>
                             </>
-                        ) : (
-                            <Link
-                                to="/stem-search"
-                                className="w-full sm:w-auto bg-link text-white text-sm font-sans font-medium px-6 py-2.5 rounded-lg hover:bg-link-hover transition-colors shadow-lg shadow-link/20"
-                            >
-                                {term('back-to-search')}
-                            </Link>
                         )}
                         <Link
-                            to="/stem-search"
+                            to="/root-search?mode=stem"
                             className="w-full sm:w-auto bg-white text-black text-sm font-sans font-medium px-6 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
                         >
                             {term('search-another-stem') || term('back-to-search')}
@@ -258,53 +418,41 @@ export function Stem() {
         );
     }
 
-    const displayStem = formatStemDisplay(stem_string);
-    const hybridForms = zokkForms?.hybrid_forms;
-    const makeCellData = (value: string, opts?: { theoretical?: boolean }) => {
-        const entry = entries.find(e => e.headword === value);
-        if (entry) {
-            return { value, marker: 'plain' as const, entryId: entry.id };
-        }
-        return {
-            value,
-            marker: opts?.theoretical ? 'theoretical' as const : 'auto_generated' as const
-        };
-    };
+    if (stemAdverbDisplayEntry) {
+        return (
+            <>
+                <FunctionWordEntryView
+                    entry={stemAdverbDisplayEntry}
+                    onRefetch={refetch}
+                    stemDisplayValue={stem_string || stemAdverbDisplayEntry.headword}
+                    rootDisplayValue={root || undefined}
+                    rootHref={root ? `/root/${root}` : undefined}
+                    classType={class_type || undefined}
+                    isHybrid={!!is_hybrid}
+                />
+                {showStemModal && (
+                    <StemFormModal
+                        data={stem || {
+                            stem_string: id || '',
+                            class_type: class_type || 'ar',
+                            is_hybrid: !!is_hybrid,
+                            root: root || null,
+                            agentive_suffix: agentive_suffix || null,
+                        }}
+                        onClose={() => setShowStemModal(false)}
+                        onSaved={() => {
+                            setShowStemModal(false);
+                            refetch();
+                        }}
+                        getToken={getToken}
+                    />
+                )}
+            </>
+        );
+    }
 
     return (
-        <div style={bgStyle} className="w-full overflow-hidden">
-            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
-
-                {/* Header */}
-                <div className="text-center mb-12 relative group max-w-fit mx-auto">
-                    <div className="relative inline-flex items-center justify-center">
-                        <h1 className="font-serif font-bold text-[3rem] leading-none text-black tracking-tight">{displayStem}</h1>
-                        {isActualAdmin && (
-                            <button
-                                onClick={() => setShowStemModal(true)}
-                                className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
-                                title={term('edit-root-metadata')}
-                            >
-                                <Edit2 size={16} />
-                            </button>
-                        )}
-                    </div>
-                    {glossList.length > 0 && (
-                        <p className="text-sm font-serif text-black/55 mt-2 uppercase tracking-widest text-center">"{glossList[0]}"</p>
-                    )}
-                    <p className="text-xs font-sans text-black/40 tracking-[0.18em] mt-2 uppercase text-center">
-                        — {class_type && (
-                            <span className="hover:underline cursor-default">{term('class').toUpperCase()} -{class_type.toUpperCase()}</span>
-                        )}
-                        {is_hybrid && (
-                            <>
-                                {' • '}
-                                <span className="hover:underline cursor-default">{term('hybrid').toUpperCase()}</span>
-                            </>
-                        )} —
-                    </p>
-                </div>
-
+        <EntryShell viewModel={viewModel}>
                 <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
                     {/* Left Sidebar */}
                     <div className="w-full md:w-64 shrink-0 space-y-4">
@@ -321,14 +469,12 @@ export function Stem() {
                             </div>
                         )}
 
-                        {is_hybrid && (
-                            <div className="pt-2 px-1">
-                                <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-black/30 mb-0.5">{term('root').toUpperCase()}</p>
-                                <p className="font-serif text-[1.4rem] font-medium text-blue-800 tracking-tight">
-                                    {root || `${stem_string.replace(/[aeiou]/g, '')}-j`}
-                                </p>
-                            </div>
-                        )}
+                        <div className="space-y-4 px-1">
+                            <MorphologyProvenanceRows
+                                source={stemMorphology?.source}
+                                rootDisplayValue={root || undefined}
+                            />
+                        </div>
 
                         {linguisticTags.length > 0 && (
                             <div className="flex flex-wrap gap-1 px-1">
@@ -344,126 +490,100 @@ export function Stem() {
                     {/* Right Content */}
                     <div className="flex-1 min-w-0 space-y-12 w-full max-w-full">
 
-                        {/* 1. Verbal Forms Table (matching Root.tsx) */}
-                        <div className="mb-12 w-full max-w-full">
-                            <h2 className="font-sans font-semibold text-[1.1rem] text-black mb-3">{term('verbal-forms')}</h2>
-                            <div className="overflow-x-auto whitespace-nowrap pb-4 w-full">
-                                <table className="w-full text-sm border-collapse text-left min-w-[600px]">
-                                    <thead>
-                                        <tr className="border-b border-black/8 font-sans text-black/80">
-                                            <th className="font-semibold pb-2 pr-4 w-12">{term('form')}</th>
-                                            <th className="font-semibold pb-2 pr-4">{term('lemma')}</th>
-                                            <th className="font-semibold pb-2 pr-4">{term('imperfect')}</th>
-                                            <th className="font-semibold pb-2 pr-4">{term('imperative')}</th>
-                                            <th className="font-semibold pb-2 pr-4">{term('passive')}</th>
-                                            <th className="font-semibold pb-2 pr-4">{term('active')}</th>
-                                            <th className="font-semibold pb-2">{term('verbal-noun')}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {/* Form I - Main Zokk Verb */}
-                                        <tr className="border-b border-black/4 hover:bg-black/2 transition-colors">
-                                            <td className="py-2.5 pr-4 font-serif font-bold text-[#1034A6]">I</td>
-                                            <td className="py-2.5 pr-4 font-serif text-black">
-                                                <MarkedCell
-                                                    data={makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '')}
-                                                    isAdmin={isActualAdmin}
-                                                    onDelete={() => {
-                                                        const existing = entries.find(e => e.headword === (zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || ''));
-                                                        if (existing) handleDeleteEntry(existing.id);
-                                                    }}
-                                                    onEdit={() => openEntryEditor(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { pos: 'verb' })}
-                                                />
-                                            </td>
-                                            <td className="py-2.5 pr-4 font-serif text-black">
-                                                <MarkedCell data={makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.imperfect || '')} />
-                                            </td>
-                                            <td className="py-2.5 pr-4 font-serif text-black">
-                                                <MarkedCell data={makeCellData(zokkForms?.conjugation?.imperative_sg || '')} />
-                                            </td>
-                                            <td className="py-2.5 pr-4 font-serif text-black">
-                                                <MarkedCell
-                                                    data={makeCellData(zokkForms?.passive_participle?.masc || '')}
-                                                    isAdmin={isActualAdmin}
-                                                    onDelete={() => {
-                                                        const existing = entries.find(e => e.headword === (zokkForms?.passive_participle?.masc || ''));
-                                                        if (existing) handleDeleteEntry(existing.id);
-                                                    }}
-                                                    onEdit={() => openEntryEditor(zokkForms?.passive_participle?.masc || '', { pos: 'participle', participle_type: 'passive' })}
-                                                />
-                                            </td>
-                                            <td className="py-2.5 pr-4 font-serif text-black">
-                                                <MarkedCell
-                                                    data={makeCellData(zokkForms?.agentive?.masc || '')}
-                                                    isAdmin={isActualAdmin}
-                                                    onDelete={() => {
-                                                        const existing = entries.find(e => e.headword === (zokkForms?.agentive?.masc || ''));
-                                                        if (existing) handleDeleteEntry(existing.id);
-                                                    }}
-                                                    onEdit={() => openEntryEditor(zokkForms?.agentive?.masc || '', { pos: 'participle', participle_type: 'active' })}
-                                                />
-                                            </td>
-                                            <td className="py-2.5 font-serif text-black">
-                                                <MarkedCell
-                                                    data={makeCellData(zokkForms?.verbal_noun || '')}
-                                                    isAdmin={isActualAdmin}
-                                                    onDelete={() => {
-                                                        const existing = entries.find(e => e.headword === (zokkForms?.verbal_noun || ''));
-                                                        if (existing) handleDeleteEntry(existing.id);
-                                                    }}
-                                                    onEdit={() => openEntryEditor(zokkForms?.verbal_noun || '', { pos: 'noun' })}
-                                                />
-                                            </td>
-                                        </tr>
-                                        {/* Form II - Hybrid Reanalysis */}
-                                        {is_hybrid && zokkForms?.hybrid_forms && (
-                                            <tr className="border-b border-black/4 last:border-0 hover:bg-black/2 transition-colors bg-black/5 italic">
-                                                <td className="py-2.5 pr-4 font-serif font-bold text-[#1034A6]">II</td>
-                                                <td className="py-2.5 pr-4 font-serif text-black/60">
-                                                    <MarkedCell data={makeCellData(hybridForms?.form_ii || '')} />
-                                                </td>
-                                                <td className="py-2.5 pr-4 font-serif text-black/30">-</td>
-                                                <td className="py-2.5 pr-4 font-serif text-black/30">-</td>
-                                                <td className="py-2.5 pr-4 font-serif text-black/60">
-                                                    <MarkedCell
-                                                        data={makeCellData(hybridForms?.semitic_passive_participle || '', { theoretical: true })}
-                                                        isAdmin={isActualAdmin}
-                                                        noLink
-                                                        onEdit={() => openEntryEditor(hybridForms?.semitic_passive_participle || '', { pos: 'participle', participle_type: 'passive' })}
-                                                    />
-                                                </td>
-                                                <td className="py-2.5 pr-4 font-serif text-black/30">-</td>
-                                                <td className="py-2.5 font-serif text-black/30">-</td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        {/* 2. Hybrid Semitic Forms Card (if hybrid) */}
-                        {is_hybrid && zokkForms?.hybrid_forms && (
-                            <div className="w-full bg-orange-50/30 p-6 rounded-xl border border-orange-100/50 shadow-sm shadow-orange-900/5">
-                                <h2 className="font-sans font-semibold text-[1.1rem] text-orange-900 mb-4 flex items-center gap-2">
-                                    <span className="text-lg">⚛</span>
-                                    {term('semitic-reanalysis')}
-                                </h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    <div className="bg-white/40 p-3 rounded-lg border border-white/50 backdrop-blur-[2px]">
-                                        <p className="text-[10px] uppercase tracking-widest text-orange-900/40 mb-1 font-bold">{term('passive-participle')}</p>
-                                        <p className="font-serif text-xl text-orange-900">*{hybridForms?.semitic_passive_participle}</p>
-                                    </div>
-                                    <div className="bg-white/40 p-3 rounded-lg border border-white/50 backdrop-blur-[2px]">
-                                        <p className="text-[10px] uppercase tracking-widest text-orange-900/40 mb-1 font-bold">{term('form-ii')}</p>
-                                        <p className="font-serif text-xl text-orange-900">{hybridForms?.form_ii}</p>
-                                    </div>
-                                    <div className="col-span-full lg:col-span-1 bg-white/40 p-3 rounded-lg border border-white/50 backdrop-blur-[2px]">
-                                        <p className="text-[10px] uppercase tracking-widest text-orange-900/40 mb-1 font-bold">{term('reanalysed-root')}</p>
-                                        <p className="font-sans text-sm font-medium text-orange-800">{root || `${stem_string.replace(/[aeiou]/g, '')}-j`}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        <VerbFormsTable
+                            title={term('verbal-forms')}
+                            columnLabels={{
+                                form: term('form'),
+                                lemma: term('lemma'),
+                                imperfect: term('imperfect'),
+                                imperative: term('imperative'),
+                                passive: term('passive'),
+                                active: term('active'),
+                                verbalNoun: term('verbal-noun'),
+                            }}
+                            rows={[
+                                {
+                                    key: 'I',
+                                    form: <span className="font-serif font-bold text-[#1034A6]">I</span>,
+                                    lemma: (
+                                        <MarkedCell
+                                            data={makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' })}
+                                            isAdmin={isActualAdmin}
+                                            onDelete={() => {
+                                                const existing = resolveStemCellEntry(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' });
+                                                if (existing?.id) handleDeleteEntry(existing.id);
+                                            }}
+                                            onEdit={() => openEntryEditor(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', pos: 'verb', form: 'I' })}
+                                        />
+                                    ),
+                                    imperfect: <MarkedCell data={makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.imperfect || '', { type: 'imperfect', form: 'I', pos: 'verb', parentMarker: getParentVerbMarker(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', 'I') })} noLink />,
+                                    imperative: <MarkedCell data={makeCellData(zokkForms?.conjugation?.imperative_sg || '', { type: 'imperative', form: 'I', pos: 'verb' })} />,
+                                    passive: renderPassiveCell(zokkForms?.passive_participle?.masc || ''),
+                                    active: (
+                                        <MarkedCell
+                                            data={makeCellData(zokkForms?.agentive?.masc || '', { type: 'active', form: 'I', pos: 'participle', participleType: 'active' })}
+                                            isAdmin={isActualAdmin}
+                                            onDelete={() => {
+                                                const existing = resolveStemCellEntry(zokkForms?.agentive?.masc || '', { form: 'I', pos: 'participle', participleType: 'active' });
+                                                if (existing?.id) handleDeleteEntry(existing.id);
+                                            }}
+                                            onEdit={() => openEntryEditor(zokkForms?.agentive?.masc || '', { type: 'active', pos: 'participle', participle_type: 'active', form: 'I' })}
+                                        />
+                                    ),
+                                    verbalNoun: (
+                                        <MarkedCell
+                                            data={makeCellData(zokkForms?.verbal_noun || '', { type: 'noun', form: 'I', pos: 'noun' })}
+                                            isAdmin={isActualAdmin}
+                                            onDelete={() => {
+                                                const existing = resolveStemCellEntry(zokkForms?.verbal_noun || '', { form: 'I', pos: 'noun' });
+                                                if (existing?.id) handleDeleteEntry(existing.id);
+                                            }}
+                                            onEdit={() => openEntryEditor(zokkForms?.verbal_noun || '', { type: 'noun', pos: 'noun', form: 'I' })}
+                                        />
+                                    ),
+                                },
+                                ...(is_hybrid && zokkForms?.hybrid_forms ? [{
+                                    key: 'II',
+                                    form: <span className="font-serif font-bold text-[#1034A6]">II</span>,
+                                    lemma: <MarkedCell data={makeCellData(hybridForms?.form_ii || '', { type: 'lemma', form: 'II', pos: 'verb' })} />,
+                                    imperfect: hybridForms?.form_ii_imperfect ? (
+                                        <MarkedCell data={makeCellData(hybridForms.form_ii_imperfect, { type: 'imperfect', form: 'II', pos: 'verb', parentMarker: getParentVerbMarker(hybridForms?.form_ii || '', 'II') })} noLink />
+                                    ) : (
+                                        <span className="text-black/30">-</span>
+                                    ),
+                                    imperative: hybridForms?.form_ii_imperative ? (
+                                        <MarkedCell data={makeCellData(hybridForms.form_ii_imperative, { type: 'imperative', form: 'II', pos: 'verb' })} />
+                                    ) : (
+                                        <span className="text-black/30">-</span>
+                                    ),
+                                    passive: hybridForms?.form_ii_passive_participle ? (
+                                        <MarkedCell
+                                            data={makeCellData(hybridForms.form_ii_passive_participle, { type: 'passive', form: 'II', pos: 'participle', participleType: 'passive' })}
+                                            isAdmin={isActualAdmin}
+                                            noLink
+                                            onEdit={() => openEntryEditor(hybridForms.form_ii_passive_participle || '', { type: 'passive', pos: 'participle', participle_type: 'passive', form: 'II' })}
+                                        />
+                                    ) : (
+                                        <MarkedCell
+                                            data={makeCellData(hybridForms?.semitic_passive_participle || '', { type: 'passive', form: 'II', pos: 'participle', participleType: 'passive' })}
+                                            isAdmin={isActualAdmin}
+                                            noLink
+                                            onEdit={() => openEntryEditor(hybridForms?.semitic_passive_participle || '', { type: 'passive', pos: 'participle', participle_type: 'passive', form: 'II' })}
+                                        />
+                                    ),
+                                    active: hybridForms?.form_ii_active_participle ? (
+                                        <MarkedCell data={makeCellData(hybridForms.form_ii_active_participle, { type: 'active', form: 'II', pos: 'participle', participleType: 'active' })} />
+                                    ) : (
+                                        <span className="text-black/30">-</span>
+                                    ),
+                                    verbalNoun: hybridForms?.form_ii_verbal_noun ? (
+                                        <MarkedCell data={makeCellData(hybridForms.form_ii_verbal_noun, { type: 'noun', form: 'II', pos: 'noun' })} />
+                                    ) : (
+                                        <span className="text-black/30">-</span>
+                                    ),
+                                }] : []),
+                            ]}
+                        />
 
                         {/* 3. Derived Terms Table (Full List) */}
                         <div className="w-full">
@@ -484,13 +604,13 @@ export function Stem() {
                                         <tr className="border-b border-black/4 hover:bg-black/2 transition-colors">
                                             <td className="py-2.5 pr-4 font-serif font-bold text-blue-900">
                                                 <MarkedCell
-                                                    data={makeCellData(zokkForms?.verbal_noun || '')}
+                                                    data={makeCellData(zokkForms?.verbal_noun || '', { type: 'noun', form: 'I', pos: 'noun' })}
                                                     isAdmin={isActualAdmin}
                                                     onDelete={() => {
-                                                        const existing = entries.find(e => e.headword === (zokkForms?.verbal_noun || ''));
-                                                        if (existing) handleDeleteEntry(existing.id);
+                                                        const existing = resolveStemCellEntry(zokkForms?.verbal_noun || '', { form: 'I', pos: 'noun' });
+                                                        if (existing?.id) handleDeleteEntry(existing.id);
                                                     }}
-                                                    onEdit={() => openEntryEditor(zokkForms?.verbal_noun || '', { pos: 'noun' })}
+                                                    onEdit={() => openEntryEditor(zokkForms?.verbal_noun || '', { type: 'noun', pos: 'noun', form: 'I' })}
                                                 />
                                             </td>
                                             <td className="py-2.5 pr-4 font-sans text-[10px] uppercase font-bold text-black/30 tracking-tight">{term('verbal-noun')}</td>
@@ -498,15 +618,7 @@ export function Stem() {
                                         </tr>
                                         <tr className="border-b border-black/4 hover:bg-black/2 transition-colors">
                                             <td className="py-2.5 pr-4 font-serif font-bold text-blue-900">
-                                                <MarkedCell
-                                                    data={makeCellData(zokkForms?.passive_participle?.masc || '')}
-                                                    isAdmin={isActualAdmin}
-                                                    onDelete={() => {
-                                                        const existing = entries.find(e => e.headword === (zokkForms?.passive_participle?.masc || ''));
-                                                        if (existing) handleDeleteEntry(existing.id);
-                                                    }}
-                                                    onEdit={() => openEntryEditor(zokkForms?.passive_participle?.masc || '', { pos: 'participle', participle_type: 'passive' })}
-                                                />
+                                                {renderPassiveCell(zokkForms?.passive_participle?.masc || '')}
                                             </td>
                                             <td className="py-2.5 pr-4 font-sans text-[10px] uppercase font-bold text-black/30 tracking-tight">{term('passive-participle')}</td>
                                             <td className="py-2.5 font-sans text-blue-800">-{class_type === 'ar' ? 'at' : 'it'}</td>
@@ -514,17 +626,17 @@ export function Stem() {
                                         <tr className="border-b border-black/4 hover:bg-black/2 transition-colors">
                                             <td className="py-2.5 pr-4 font-serif font-bold text-blue-900">
                                                 <MarkedCell
-                                                    data={makeCellData(zokkForms?.agentive?.masc || '')}
+                                                    data={makeCellData(zokkForms?.agentive?.masc || '', { type: 'active', form: 'I', pos: 'participle', participleType: 'active' })}
                                                     isAdmin={isActualAdmin}
                                                     onDelete={() => {
-                                                        const existing = entries.find(e => e.headword === (zokkForms?.agentive?.masc || ''));
-                                                        if (existing) handleDeleteEntry(existing.id);
+                                                        const existing = resolveStemCellEntry(zokkForms?.agentive?.masc || '', { form: 'I', pos: 'participle', participleType: 'active' });
+                                                        if (existing?.id) handleDeleteEntry(existing.id);
                                                     }}
-                                                    onEdit={() => openEntryEditor(zokkForms?.agentive?.masc || '', { pos: 'participle', participle_type: 'active' })}
+                                                    onEdit={() => openEntryEditor(zokkForms?.agentive?.masc || '', { type: 'active', pos: 'participle', participle_type: 'active', form: 'I' })}
                                                 />
                                             </td>
                                             <td className="py-2.5 pr-4 font-sans text-[10px] uppercase font-bold text-black/30 tracking-tight">{term('agentive')}</td>
-                                            <td className="py-2.5 font-sans text-blue-800">-{agentive_suffix || (class_type === 'ar' ? 'ant' : 'ent')}</td>
+                                            <td className="py-2.5 font-sans text-blue-800">-{agentive_suffix || (class_type === 'ar' ? 'atur' : 'itur')}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -578,8 +690,7 @@ export function Stem() {
 
                     </div>
                 </div>
-            </div>
-            {showStemModal && (
+        {showStemModal && (
                 <StemFormModal
                     data={stem || {
                         stem_string: id || '',
@@ -614,6 +725,6 @@ export function Stem() {
                     getToken={getToken}
                 />
             )}
-        </div>
+        </EntryShell>
     );
 }

@@ -6,7 +6,7 @@
  */
 
 import { createClient } from '@libsql/client/web';
-import { resolveEntryGender } from '../../../src/lib/gender.js';
+import { resolveEntryGender } from '../../../src/lib/gender.ts';
 
 export async function onRequestGet({ params, env }) {
     let { id } = params;
