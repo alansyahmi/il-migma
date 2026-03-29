@@ -123,6 +123,16 @@ npm run import:dry
 npm run import:all
 ```
 
+## Deploy to Cloudflare Pages
+
+This repo is set up as a Cloudflare Pages app with Pages Functions, so the deployment path should stay in Pages mode.
+
+- Build command: `npm run build`
+- Output directory: `dist`
+- Manual CLI deploy: `npm run deploy` or `npm run deploy:pages`
+
+If a Cloudflare project is using `wrangler deploy`, switch it to Pages deploy instead. `wrangler deploy` targets Workers, which is why it can fail when the project only has a static `dist/` site plus `functions/api/*`.
+
 ## Docs index
 
 - [`docs/README.md`](./docs/README.md) — full docs index
