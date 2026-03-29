@@ -1,12 +1,10 @@
 /**
  * scripts/validate_api.mjs
  * Simple validation script to exercise Admin API endpoints.
- * Requires the dev server to be running.
+ * Requires the Pages dev API to be running.
  */
 
-import fetch from 'node-fetch';
-
-const BASE_URL = 'http://localhost:5173/api/admin';
+const BASE_URL = process.env.API_BASE_URL || 'http://localhost:8788/api/admin';
 const TOKEN = 'dummy-token-bypass'; // Localhost bypasses Clerk verification
 
 async function testRootAPI() {
@@ -14,9 +12,9 @@ async function testRootAPI() {
     const rootData = {
         consonants: 't-s-t',
         strength: 'strong',
-        glosses: [{ en: 'testing', mt: 'jittestja' }],
+        gloss: JSON.stringify([{ en: 'testing', mt: 'jittestja' }]),
         etymology: [],
-        tags: 'test, validation',
+        tags: ['test', 'validation'],
         synonyms: [{ id: 'k-t-b', headword: 'k-t-b', pos: 'ROOT', gloss_en: 'writing' }]
     };
 
@@ -59,10 +57,9 @@ async function testEntryAPI() {
     const entryData = {
         headword: 'testword',
         pos: 'noun',
-        noun_singular: 'testword',
-        noun_plural_forms: 'testwords, testies',
+        gender: 'masculine',
         definitions: [{ text_en: 'a test word', text_mt: 'kelma ta prova' }],
-        tags: 'test'
+        tags: ['test']
     };
 
     // 1. Create

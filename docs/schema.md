@@ -111,6 +111,35 @@ The central table. Every word in the dictionary is an entry.
 > [!NOTE]
 > **`entries.verb_class` vs `roots.strength`**: These overlap but aren't identical. `verb_class` is the traditional grammatical taxonomy (strong/weak/doubled), while `roots.strength` is the engine-internal classification that drives conjugation generation (`strong`, `weak`, `geminated`, `strong-hybrid`). The `weak_class` sub-field further splits weak verbs into `hollow`, `assimilative`, `defective`.
 
+### `stems` — Canonical Stem Inventory
+
+Stem rows power the stem-search surface and its metadata view.
+
+| Column | Meaning |
+|---|---|
+| `stem_string` | Primary stem identifier, e.g. `"kant"` |
+| `class_type` | `ar` or `ir` |
+| `is_hybrid` | `0`/`1` flag for hybrid stems |
+| `root` | Reanalysed root string, if any |
+| `agentive_suffix` | Optional suffix override |
+| `tags` | JSON array of stem tags |
+| `source` | Source language or provenance label |
+| `glosses` | JSON array of `{en, mt}` gloss objects |
+| `etymology` | JSON object with stem-origin metadata |
+| `synonyms`, `antonyms`, `related_stems` | JSON arrays of stem references |
+
+### `entries.zokk_morphology` — Entry-Level Stem Metadata
+
+Loanword and stem-aware entries can store a compact stem payload in `entries.zokk_morphology`.
+
+| Field | Meaning |
+|---|---|
+| `stem_string` | Stem identifier used by the stem search filter |
+| `class_type` | `ar` or `ir` |
+| `is_hybrid` | Boolean flag copied into search results |
+| `root` | Optional reanalysed root string |
+| `agentive_suffix` | Optional suffix override |
+
 ### `definitions` — Bilingual Glosses
 
 Each entry can have multiple senses. `sense_number` determines order. Both `text_mt` (Maltese) and `text_en` (English) are required.
@@ -156,6 +185,7 @@ SQLite has no native JSON column type. All JSON data is stored as `TEXT` and par
 | `roots` | `hidden_forms`, `tags` | `string[]` |
 | `roots` | `consonant_array` | `string[]` |
 | `entries` | `noun_plural_forms`, `tags` | `string[]` |
+| `entries` | `zokk_morphology` | `{stem_string, class_type, is_hybrid, root?, agentive_suffix?}` |
 | `etymologies` | `chain` | `EtymologyNode[]` |
 | `flashcard_lists` | `entry_ids` | `string[]` |
 

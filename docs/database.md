@@ -16,15 +16,17 @@
 
 ## 2. Local Development Access
 
-### 2.1 Local DB files
+### 2.1 Dev database target
 
-The project keeps several SQLite files in the repo root. **`local.db` is the primary local database** used by the Wrangler dev server.
+`npm run dev:api` uses a remote Turso/libSQL database through Pages Functions. It does not use a repo-local SQLite file.
 
-| File | Purpose |
+For safe testing, point `.dev.vars` at a **clone of production** rather than the live production database. That keeps real data shape available while isolating local inserts, deletes, and migrations.
+
+| Target | Purpose |
 |---|---|
-| `local.db` | Primary local database (used by `npm run dev:api`) |
-| `database.sqlite` / `db.sqlite` | Legacy / scratch copies — treat as read-only unless you know their purpose |
-| `data.db` | Raw import staging file |
+| Production clone | Recommended target for `npm run dev:api` and UI testing |
+| Live production DB | Use only when you explicitly want to exercise the real dataset |
+| Repo-local SQLite files | Legacy/scratch artifacts; not used by Wrangler Pages dev |
 
 ### 2.2 Environment variables (`.dev.vars`)
 
@@ -38,6 +40,16 @@ CLERK_SECRET_KEY=dummy   # "dummy" skips Clerk auth locally
 
 > [!NOTE]
 > When `CLERK_SECRET_KEY` equals `"dummy"` **or** the request comes from `localhost`, the API auth guard passes without verifying the JWT. All admin endpoints are therefore open in local dev.
+
+> [!TIP]
+> To create a fresh clone of the live dataset, use Turso CLI first and then copy the clone URL and token into `.dev.vars`.
+>
+> ```bash
+> turso db create il-migma-pages-dev --from-db il-migma-alansyahmi
+> turso db tokens create il-migma-pages-dev
+> ```
+>
+> Keep the production URL/token out of `.dev.vars` when you want a disposable testing workspace.
 
 For the Vite frontend (`.env`), the equivalent keys are prefixed with `VITE_`:
 
@@ -57,22 +69,21 @@ npm run dev       # → Vite frontend at http://localhost:5173
 
 Both must be running together for the admin UI to work.
 
-### 2.4 Direct SQLite access (CLI)
+### 2.4 Direct database access
 
-You can query `local.db` directly with any SQLite client:
+For the clone or production database, use the Turso CLI:
 
 ```bash
-# Standard CLI
-sqlite3 local.db
-
-# Useful one-liners
-sqlite3 local.db ".tables"
-sqlite3 local.db "SELECT headword, pos FROM entries LIMIT 20;"
-sqlite3 local.db ".schema entries"
+turso db shell il-migma-alansyahmi
 ```
 
-> [!TIP]
-> Use a GUI tool such as [DB Browser for SQLite](https://sqlitebrowser.org/) or the VS Code **SQLite Viewer** extension for a table-based view of `local.db`.
+If you are inspecting a clone, replace the database name with the clone's name. You can also run a SQL file against a specific database:
+
+```bash
+turso db shell <clone-name> < db/schema.sql
+```
+
+For local scratch work, any SQLite client can still open exported `.sqlite` files, but those files are not the runtime database used by `npm run dev:api`.
 
 ---
 
@@ -119,7 +130,7 @@ curl -X POST http://localhost:8788/api/admin/db-tools \
 
 ---
 
-## 4. Remote (Production) Access
+## 4. Remote Database Access
 
 Use the **Turso CLI**:
 
@@ -132,6 +143,7 @@ turso db shell il-migma-alansyahmi < db/schema.sql
 ```
 
 The production DB URL is `libsql://il-migma-alansyahmi.aws-ap-northeast-1.turso.io`.
+For Pages dev, prefer a clone of that database instead of the live URL.
 
 ---
 
@@ -143,8 +155,11 @@ The production DB URL is `libsql://il-migma-alansyahmi.aws-ap-northeast-1.turso.
 | `npm run import:all` | Import everything (roots, entries, nouns, verbs) |
 | `npm run import:roots` | Import only the `roots` sheet |
 | `npm run import:nouns` | Import only the `nouns` sheet |
+| `npm run validate:api` | Smoke-test the Pages dev API and create/delete sample test rows on the clone |
 
 Source file is `roots.xls` / similarly named in the repo root. See `scripts/import-xls.mjs` for exact path handling.
+
+For a full test-entry seed pack with one example for every POS, see [`docs/test-entry-seeding.md`](./test-entry-seeding.md).
 
 ---
 

@@ -54,6 +54,32 @@ Important fields:
 - noun, verb, adjective morphology fields
 - `is_loanword`, `source_language`
 
+## `stems`
+
+Canonical stem inventory used by the Zokk / stem search surfaces.
+
+Important fields:
+- `stem_string`
+- `class_type` (`ar` or `ir`)
+- `is_hybrid`
+- `root`
+- `agentive_suffix`
+- `tags`, `source`, `glosses`, `etymology`
+- `synonyms`, `antonyms`, `related_stems`
+
+## `entries.zokk_morphology`
+
+Entry-level JSON blob that links a loanword or stem-aware entry back to a canonical stem.
+
+Important fields:
+- `stem_string`
+- `class_type`
+- `is_hybrid`
+- `root`
+- `agentive_suffix`
+
+This is the field the search layer reads when you filter by `stem_string`.
+
 ## 3) Supporting lexical entities
 
 - `definitions`: bilingual sense rows (`text_mt`, `text_en`).

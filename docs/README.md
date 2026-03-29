@@ -11,6 +11,7 @@
 | [import-pipeline.md](./import-pipeline.md) | Spreadsheet import workflow and operational checks |
 | [search-api.md](./search-api.md) | Query parameters, filters, and examples for `/api/search` |
 | [database.md](./database.md) | Database Management — hosting, CLI usage, and manual manipulation |
+| [test-entry-seeding.md](./test-entry-seeding.md) | Test entry payloads, POS coverage, and seed workflow |
 | [conventions.md](./conventions.md) | Naming Conventions — files, functions, DB columns, IDs |
 | [edge-cases.md](./edge-cases.md) | Edge Case Encyclopedia — bugs we fixed, and how to never repeat them |
 | [linguistic-rules.md](./linguistic-rules.md) | Linguistic & Logic Rules — the phonology baked into the conjugation engine |

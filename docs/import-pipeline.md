@@ -33,6 +33,7 @@ Underlying flags:
 1. **Environment and DB client boot**
    - Loads `.env` via `dotenv`
    - Connects to Turso using `VITE_TURSO_URL` + `VITE_TURSO_AUTH_TOKEN`
+   - For test runs, point those values at the same Turso clone used by `npm run dev:api`
 2. **Schema bootstrap (`ensureSchema`)**
    - Reads `db/schema.sql`
    - Executes statements idempotently (best-effort)

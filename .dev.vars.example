@@ -1,4 +1,5 @@
-TURSO_URL=libsql://<your-db>.turso.io
+# Point this at a Turso clone of production for Pages dev.
+TURSO_URL=libsql://<your-clone>.turso.io
 TURSO_AUTH_TOKEN=<your-token>
 CLERK_SECRET_KEY=dummy
 

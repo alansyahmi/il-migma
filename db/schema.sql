@@ -123,6 +123,7 @@ CREATE TABLE IF NOT EXISTS entries (
   is_loanword           INTEGER NOT NULL DEFAULT 0,
   is_inflectable        INTEGER NOT NULL DEFAULT 1,
   source_language       TEXT,
+  zokk_morphology       TEXT, -- JSON object for stem-linked / loanword morphology
   tags                  TEXT,  -- JSON array
   sound_suffix          TEXT,
   vowel_set_sg          TEXT,

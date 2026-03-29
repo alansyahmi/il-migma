@@ -94,15 +94,18 @@ VITE_CLERK_PUBLISHABLE_KEY=<clerk_publishable_key>
 GEMINI_API_KEY=<gemini_key_if_using_chat>
 ```
 
-For `wrangler pages dev` (`npm run dev:api`), copy `.dev.vars.example` to `.dev.vars` and set Worker runtime vars:
+For `wrangler pages dev` (`npm run dev:api`), copy `.dev.vars.example` to `.dev.vars` and point it at a Turso clone of production:
 
 ```bash
-TURSO_URL=libsql://<your-db>.turso.io
+TURSO_URL=libsql://<your-clone>.turso.io
 TURSO_AUTH_TOKEN=<token>
 CLERK_SECRET_KEY=dummy
 ```
 
 `file://` database URLs are not supported by the Worker runtime. Use remote `libsql://` or `https://` when running the API locally with Wrangler.
+
+If you want production-like data for testing, clone the live database into a separate Turso branch first and use that branch in `.dev.vars`. Keep the live production DB out of local Pages dev so inserts, deletes, and migrations stay isolated.
+If you are also running the Vite frontend locally, set the matching `VITE_TURSO_URL` and `VITE_TURSO_AUTH_TOKEN` in `.env` to the same clone so the UI and Pages Functions read the same dataset.
 
 ### 3) Run the frontend
 
@@ -139,3 +142,4 @@ If a Cloudflare project is using `wrangler deploy`, switch it to Pages deploy in
 - [`docs/data-model.md`](./docs/data-model.md) — contributor-oriented schema and relationships
 - [`docs/import-pipeline.md`](./docs/import-pipeline.md) — spreadsheet → DB pipeline
 - [`docs/search-api.md`](./docs/search-api.md) — `/api/search` parameters and examples
+- [`docs/test-entry-seeding.md`](./docs/test-entry-seeding.md) — test entry payloads and POS coverage

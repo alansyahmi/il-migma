@@ -16,6 +16,8 @@
     "import:all": "node scripts/import-xls.mjs --execute",
     "import:roots": "node scripts/import-xls.mjs --execute --roots-only",
     "import:nouns": "node scripts/import-xls.mjs --execute --nouns-only",
+    "validate:api": "node scripts/validate_api.mjs",
+    "seed:test-pack": "node scripts/seed-test-pack.mjs",
     "dev:api": "wrangler pages dev --port 8788 --no-show-interactive-dev-session",
     "deploy": "npm run build && wrangler pages deploy dist",
     "deploy:pages": "npm run build && wrangler pages deploy dist"
