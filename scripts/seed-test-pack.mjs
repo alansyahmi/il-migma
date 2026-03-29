@@ -77,6 +77,8 @@ const CLOSED_CLASS_HEADWORDS = {
     interjection: ['ħej', 'uffa', 'ah', 'iva', 'le'],
 };
 
+const SEMITIC_SOURCE_LANGUAGE = 'Arabic';
+
 const PRIMARY_GLOSSES = {
     noun: ['book', 'word', 'deed', 'opening', 'reading'],
     verb: ['to write', 'to speak', 'to do', 'to open', 'to exit'],
@@ -256,7 +258,7 @@ function rootEntry(pos, index, root) {
                 root_consonants: root.consonants,
                 cv_pattern: ['CCVVC', 'CVCVC', 'CVCVC', 'CCVC', 'CVCV'][index - 1],
                 morph_pattern: ['broken_plural', 'sound_plural', 'broken_plural', 'sound_plural', 'broken_plural'][index - 1],
-                source_language: ['Uncertain', 'Arabic', 'Arabic', 'Arabic', 'Arabic'][index - 1],
+                source_language: SEMITIC_SOURCE_LANGUAGE,
                 is_loanword: 0,
                 vowel_set_sg: ['i-e', 'e-e', 'a-a', 'u-u', 'a-i'][index - 1],
                 vowel_set_pl: ['o-a', 'i-e', 'e-e', 'u-a', 'a-i'][index - 1],
@@ -281,7 +283,7 @@ function rootEntry(pos, index, root) {
                 verb_vowel_impv: root.vowel_set_imp,
                 verb_type: 'root',
                 is_loanword: 0,
-                source_language: 'Uncertain',
+                source_language: SEMITIC_SOURCE_LANGUAGE,
             };
         case 'adjective':
             return {
@@ -301,7 +303,7 @@ function rootEntry(pos, index, root) {
                 root_consonants: root.consonants,
                 cv_pattern: ['CVCVC', 'CVCVC', 'CVCVC', 'CVCC', 'CVCC'][index - 1],
                 morph_pattern: ['comparative', 'comparative', 'comparative', 'comparative', 'comparative'][index - 1],
-                source_language: ['Uncertain', 'Arabic', 'Arabic', 'Arabic', 'Arabic'][index - 1],
+                source_language: SEMITIC_SOURCE_LANGUAGE,
                 is_loanword: 0,
                 vowel_set_sg: ['i-a', 'i-a', 'i-a', 'i-a', 'i-a'][index - 1],
                 vowel_set_pl: ['a-a', 'i-e', 'o-a', 'a-a', 'o-a'][index - 1],
@@ -318,7 +320,7 @@ function rootEntry(pos, index, root) {
                 verb_class: ['strong', 'strong', 'strong', 'strong', 'weak'][index - 1],
                 verb_active_ptcp: ['qari', 'kelliem', 'għamil', 'fetaħ', 'qari'][index - 1],
                 verb_passive_ptcp: headword,
-                source_language: 'Uncertain',
+                source_language: SEMITIC_SOURCE_LANGUAGE,
                 is_loanword: 0,
             };
         case 'verbal_noun':
@@ -328,7 +330,7 @@ function rootEntry(pos, index, root) {
                 verb_form: ['I', 'II', 'I', 'I', 'I'][index - 1],
                 verb_class: ['strong', 'strong', 'strong', 'strong', 'weak'][index - 1],
                 verb_verbal_noun: headword,
-                source_language: 'Uncertain',
+                source_language: SEMITIC_SOURCE_LANGUAGE,
                 is_loanword: 0,
                 tags: asJson(['seed', pos, 'root', `variant-${index}`, 'verbal-noun']),
             };
@@ -444,8 +446,50 @@ function buildSeedPack() {
         etymologies: [],
     };
 
+    const closedClassPos = ['adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'interrogative', 'numeral', 'interjection'];
     const rootLinkedPos = ['noun', 'adjective', 'participle', 'verbal_noun'];
     const stemLinkedPos = ['adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'interrogative', 'numeral', 'interjection'];
+
+    // Put closed-class items first so the homepage recent feed still has room for Semitic and Romance rows.
+    for (const pos of closedClassPos) {
+        for (let i = 1; i <= 5; i += 1) {
+            const entry = closedClassEntry(pos, i);
+            entries.push(entry);
+            childRows.definitions.push(...entry.definitions.map((definition, senseIndex) => ({
+                id: `zz-def-${pos}-${pad(i)}-${senseIndex + 1}`,
+                entry_id: entry.id,
+                subentry_id: null,
+                sense_number: senseIndex + 1,
+                text_mt: definition.text_mt,
+                text_en: definition.text_en,
+                register: pos === 'article' && i === 1 ? 'formal' : null,
+                nuance: null,
+                field: pos,
+                sort_order: senseIndex,
+            })));
+            for (const ph of entry.phonetics) {
+                childRows.phonetics.push({
+                    id: `zz-phon-${pos}-${pad(i)}`,
+                    entry_id: entry.id,
+                    subentry_id: null,
+                    ipa: ph.ipa,
+                    dialect: ph.dialect,
+                    notes: ph.notes,
+                });
+            }
+            if (entry.etymology_chain.length > 0) {
+                childRows.etymologies.push({
+                    id: `zz-etym-${pos}-${pad(i)}`,
+                    entry_id: entry.id,
+                    chain: asJson(entry.etymology_chain),
+                    notes: `Seed etymology chain for ${entry.headword}`,
+                });
+            }
+            delete entry.definitions;
+            delete entry.phonetics;
+            delete entry.etymology_chain;
+        }
+    }
 
     for (const pos of rootLinkedPos) {
         for (let i = 1; i <= 5; i += 1) {
@@ -568,46 +612,6 @@ function buildSeedPack() {
         delete entry.definitions;
         delete entry.phonetics;
         delete entry.etymology_chain;
-    }
-
-    for (const pos of stemLinkedPos) {
-        for (let i = 1; i <= 5; i += 1) {
-            const entry = closedClassEntry(pos, i);
-            entries.push(entry);
-            childRows.definitions.push(...entry.definitions.map((definition, senseIndex) => ({
-                id: `zz-def-${pos}-${pad(i)}-${senseIndex + 1}`,
-                entry_id: entry.id,
-                subentry_id: null,
-                sense_number: senseIndex + 1,
-                text_mt: definition.text_mt,
-                text_en: definition.text_en,
-                register: pos === 'article' && i === 1 ? 'formal' : null,
-                nuance: null,
-                field: pos,
-                sort_order: senseIndex,
-            })));
-            for (const ph of entry.phonetics) {
-                childRows.phonetics.push({
-                    id: `zz-phon-${pos}-${pad(i)}`,
-                    entry_id: entry.id,
-                    subentry_id: null,
-                    ipa: ph.ipa,
-                    dialect: ph.dialect,
-                    notes: ph.notes,
-                });
-            }
-            if (entry.etymology_chain.length > 0) {
-                childRows.etymologies.push({
-                    id: `zz-etym-${pos}-${pad(i)}`,
-                    entry_id: entry.id,
-                    chain: asJson(entry.etymology_chain),
-                    notes: `Seed etymology chain for ${entry.headword}`,
-                });
-            }
-            delete entry.definitions;
-            delete entry.phonetics;
-            delete entry.etymology_chain;
-        }
     }
 
     return { roots, stems, entries, childRows };

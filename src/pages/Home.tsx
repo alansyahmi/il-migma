@@ -28,19 +28,25 @@ export function Home() {
     const { isAdmin } = useAuth();
     const { user } = useUser();
     const [query, setQuery] = useState('');
-    const [recentEntries, setRecentEntries] = useState<Entry[]>([]);
-    const [loadingRecent, setLoadingRecent] = useState(true);
+    const [semiticEntries, setSemiticEntries] = useState<Entry[]>([]);
+    const [romanceEntries, setRomanceEntries] = useState<Entry[]>([]);
+    const [loadingSemitic, setLoadingSemitic] = useState(true);
+    const [loadingRomance, setLoadingRomance] = useState(true);
     const [counts, setCounts] = useState<{ semitic: number; romance: number; total: number }>({ semitic: 0, romance: 0, total: 0 });
     const navigate = useNavigate();
 
     useEffect(() => {
         document.title = "Il-Miġma' | " + term('dictionary-title');
 
-        // Fetch more recent entries for categorization
-        apiSearch('', { recent: true, limit: 50 })
-            .then(res => setRecentEntries(res.results as any))
-            .catch(err => console.error("Failed to fetch recent entries:", err))
-            .finally(() => setLoadingRecent(false));
+        // Fetch the category-specific entries directly so the cards stay populated
+        apiSearch('', { type: 'semitic', limit: 3 })
+            .then(res => setSemiticEntries(res.results as any))
+            .catch(err => console.error("Failed to fetch semitic entries:", err))
+            .finally(() => setLoadingSemitic(false));
+        apiSearch('', { type: 'romance', limit: 3 })
+            .then(res => setRomanceEntries(res.results as any))
+            .catch(err => console.error("Failed to fetch romance entries:", err))
+            .finally(() => setLoadingRomance(false));
 
         // Fetch counts
         apiSearch('', { type: 'semitic', limit: 0 })
@@ -53,15 +59,6 @@ export function Home() {
             .then(res => setCounts(prev => ({ ...prev, total: res.total })))
             .catch(err => console.error("Failed to fetch total count:", err));
     }, [term]);
-
-    const SEMITIC_LANGS = ['Arabic', 'Berber'];
-    const ROMANCE_LANGS = ['Sicilian', 'Italian', 'Latin', 'French', 'Spanish'];
-
-    const categorizedRecent = {
-        semitic: recentEntries.filter(e => !e.source_language || SEMITIC_LANGS.includes(e.source_language as string)),
-        romance: recentEntries.filter(e => e.source_language && ROMANCE_LANGS.includes(e.source_language as string)),
-    };
-
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -313,13 +310,13 @@ export function Home() {
 
                                     <div className="flex-1">
                                         <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/30 mb-4">{term('recently-added')}</h3>
-                                        {loadingRecent ? (
+                                        {loadingSemitic ? (
                                             <div className="space-y-3">
                                                 {[...Array(3)].map((_, i) => <div key={i} className="h-6 bg-black/5 rounded animate-pulse" />)}
                                             </div>
                                         ) : (
                                             <div className="space-y-4">
-                                                {categorizedRecent.semitic.slice(0, 3).map((entry: any) => (
+                                                {semiticEntries.slice(0, 3).map((entry: any) => (
                                                     <div key={entry.id} className="space-y-1">
                                                         <Link
                                                             to={`/entry/${entry.id}`}
@@ -340,7 +337,7 @@ export function Home() {
                                                         )}
                                                     </div>
                                                 ))}
-                                                {categorizedRecent.semitic.length > 0 && (
+                                                {semiticEntries.length > 0 && (
                                                     <Link to="/search?type=semitic" className="text-[11px] font-bold text-link hover:underline mt-2 inline-block">
                                                         {term('view-all')}
                                                     </Link>
@@ -368,13 +365,13 @@ export function Home() {
 
                                     <div className="flex-1">
                                         <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/30 mb-4">{term('recently-added')}</h3>
-                                        {loadingRecent ? (
+                                        {loadingRomance ? (
                                             <div className="space-y-3">
                                                 {[...Array(3)].map((_, i) => <div key={i} className="h-6 bg-black/5 rounded animate-pulse" />)}
                                             </div>
                                         ) : (
                                             <div className="space-y-4">
-                                                {categorizedRecent.romance.slice(0, 3).map((entry: any) => (
+                                                {romanceEntries.slice(0, 3).map((entry: any) => (
                                                     <div key={entry.id} className="space-y-1">
                                                         <Link
                                                             to={`/entry/${entry.id}`}
@@ -395,7 +392,7 @@ export function Home() {
                                                         )}
                                                     </div>
                                                 ))}
-                                                {categorizedRecent.romance.length > 0 && (
+                                                {romanceEntries.length > 0 && (
                                                     <Link to="/search?type=romance" className="text-[11px] font-bold text-link hover:underline mt-2 inline-block">
                                                         {term('view-all')}
                                                     </Link>
