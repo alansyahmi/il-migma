@@ -175,7 +175,9 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         label: 'Plural Patterns',
         icon: Puzzle,
         groupId: 'patterns',
-        storageCategories: ['broken_pattern', 'sound_suffix'],
+        // Keep the historical `plural_pattern` bucket as a fallback so older rows
+        // remain editable, while newer saves still land in the normalized tables.
+        storageCategories: ['broken_pattern', 'sound_suffix', 'plural_pattern'],
         editorType: 'pattern',
         defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
         listStrategy: 'pattern',

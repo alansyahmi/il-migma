@@ -6,6 +6,14 @@
 
 import { buildEntryPayload, ENTRY_HANDLED_FIELDS } from './adminSchema.ts';
 import { resolveEntryGender } from './gender.ts';
+import { normalizeEntryDefinitions, normalizeEntryEtymologyChain, type EntryEtymology } from './adminUtils.ts';
+import {
+    compactPluralRows,
+    normalizePluralFormRows,
+    pluralRowsToLegacyForms,
+    pluralRowsToLegacyPatternString,
+    type PluralFormRow,
+} from './pluralForms.ts';
 
 export const INITIAL_FORM_STATE = {
     id: '',
@@ -45,7 +53,7 @@ export const INITIAL_FORM_STATE = {
     definitions: [
         { text_en: '', text_mt: '', register: '', nuance: '' }
     ],
-    etymology_chain: [] as { language: string; form: string; meaning: string }[],
+    etymology_chain: [] as EntryEtymology[],
     phonetics: [] as { dialect: string; spelling: string; ipa: string }[],
     tags: '',
     _formLabel: '',
@@ -59,6 +67,7 @@ export const INITIAL_FORM_STATE = {
     form_fem_pattern: '',
     form_masc_pattern: '',
     form_plural_pattern: '',
+    plural_forms: [] as PluralFormRow[],
     dual_pattern: '',
     elative_pattern: '',
     diminutive_pattern: '',
@@ -107,13 +116,16 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
     const pos = full.pos || INITIAL_FORM_STATE.pos;
 
     // Resolve Plural Types
-    const inflections_pl_raw = parseArray(full.inflections_pl);
-    const inflections_pl = Array.isArray(inflections_pl_raw) ? inflections_pl_raw.join(', ') : (inflections_pl_raw || '');
+    const pluralRows = compactPluralRows(normalizePluralFormRows(
+        full.inflections_pl,
+        full.form_plural_pattern || full.plural_pattern || full.noun_morphology?.form_plural_pattern,
+    ));
+    const inflections_pl = pluralRowsToLegacyForms(pluralRows).join(', ');
     const raw_sound = full.sound_suffix || '';
     const raw_morph = full.morph_pattern || '';
-    const plurals = [raw_morph, raw_sound].filter(Boolean).join(', ');
+    const plurals = pluralRowsToLegacyPatternString(pluralRows) || [raw_morph, raw_sound].filter(Boolean).join(', ');
 
-    const hasBroken = inflections_pl?.length > 0;
+    const hasBroken = pluralRows.some(row => row.form);
     const hasSound = raw_sound?.length > 0;
 
     const _pluralType = (hasBroken && hasSound) ? 'both'
@@ -175,6 +187,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         form_masc_pattern: full.form_masc_pattern || full.lemma_pattern || '',
         form_fem_pattern: full.form_fem_pattern || '',
         form_plural_pattern: full.form_plural_pattern || plurals || '',
+        plural_forms: pluralRows,
         dual_pattern: full.dual_pattern || '',
         elative_pattern: full.elative_pattern || '',
         diminutive_pattern: full.diminutive_pattern || '',
@@ -203,21 +216,23 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         tags: Array.isArray(full.tags) ? full.tags.join(', ')
             : (typeof full.tags === 'string' && full.tags.startsWith('[') ? parseArray(full.tags).join(', ') : (full.tags || '')),
         _rootConsonants: full.resolved_root_consonants || full.root_consonants || '',
-        definitions: parseArray(full.definitions).length
-            ? parseArray(full.definitions).map((d: any) => ({
-                text_en: d.text_en || '',
-                text_mt: d.text_mt || '',
-                register: d.register || d.sense_register || '',
-                nuance: d.nuance || ''
-            }))
-            : [{ text_en: '', text_mt: '', register: '', nuance: '' }],
+        definitions: normalizeEntryDefinitions(
+            parseArray(full.definitions).length
+                ? full.definitions
+                : (full.definition_en || full.definition_mt
+                    ? [{ text_en: full.definition_en || '', text_mt: full.definition_mt || '' }]
+                    : [])
+        ),
         phonetics: parseArray(full.phonetics).map((p: any) => ({
             dialect: p.dialect || 'Standard',
             spelling: p.spelling || '',
             ipa: p.ipa || ''
         })),
-        etymology_chain: parseArray(full.etymology_chain).length ? parseArray(full.etymology_chain)
-            : (full.etymologies?.[0]?.chain?.length ? full.etymologies[0].chain : []),
+        etymology_chain: parseArray(full.etymology_chain).length
+            ? normalizeEntryEtymologyChain(parseArray(full.etymology_chain))
+            : (full.etymologies?.[0]?.chain?.length
+                ? normalizeEntryEtymologyChain(full.etymologies[0].chain)
+                : []),
         cv_pattern: full.cv_pattern || full.cv_notation || '',
         _inheritedPattern: !full.cv_pattern && (full.cv_notation || full.resolved_cv),
         synonyms: parseArray(full.synonyms),
@@ -270,6 +285,7 @@ export function formToPayload(form: AdminForm): Record<string, any> {
     return buildEntryPayload({
         ...form,
         related_entries: Array.isArray(form.related_entries) ? form.related_entries : [],
+        plural_forms: Array.isArray((form as any).plural_forms) ? (form as any).plural_forms : [],
         alternative_forms: Array.isArray((form as any).alternative_forms)
             ? (form as any).alternative_forms.map((item: any) => ({ ...item, relation_kind: 'alternative_form' }))
             : [],

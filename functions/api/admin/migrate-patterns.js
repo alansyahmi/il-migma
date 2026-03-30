@@ -241,7 +241,7 @@ async function handleMigration(client, commit) {
     }
 
     // 2. Fetch all patterns from admin_config
-    const patternCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'adjective_pattern'];
+    const patternCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
     const placeholders = patternCategories.map(() => '?').join(',');
     const res = await client.execute({
         sql: `SELECT * FROM admin_config WHERE category IN (${placeholders})`,

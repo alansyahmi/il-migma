@@ -4,6 +4,7 @@
  */
 
 import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
+import { normalizeRootEtymologyValue } from './etymology.js';
 
 const now = () => new Date().toISOString();
 
@@ -142,6 +143,9 @@ export async function onRequestPost({ request, env }) {
             if (col in body) {
                 insertColumns.push(col);
                 let val = body[col];
+                if (col === 'etymology') {
+                    val = JSON.stringify(normalizeRootEtymologyValue(val));
+                }
                 if (Array.isArray(val) || (val && typeof val === 'object' && col !== 'notes' && col !== 'source')) {
                     val = JSON.stringify(val);
                 }

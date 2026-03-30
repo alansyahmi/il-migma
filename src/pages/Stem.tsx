@@ -14,6 +14,8 @@ import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormMod
 import { StemFormModal } from '@/components/admin/StemFormModal';
 import { adminDeleteEntry } from '@/lib/api';
 import { buildStemMorphologyViewModel } from '@/lib/stemMorphology';
+import { normalizeStemEtymologyChain } from '@/lib/adminUtils';
+import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymology';
 import { MorphologyProvenanceRows } from '@/components/dictionary/EntryMorphology';
 import { VerbFormsTable, StackedSurface } from '@/components/dictionary/VerbFormsTable';
 import { resolveAttestedEntryFromEntries } from '@/lib/conjugationEngine';
@@ -174,21 +176,15 @@ export function Stem() {
     }, [entries, stem]);
 
     const etymologyItems = useMemo(() => {
-        const parsedEtymology = stem?.etymology || null;
-        if (
-            parsedEtymology &&
-            (parsedEtymology.language || parsedEtymology.term || parsedEtymology.pronunciation || parsedEtymology.definition)
-        ) {
-            return [{
-                language: parsedEtymology.language || '',
-                form: parsedEtymology.term || undefined,
-                pronunciation: parsedEtymology.pronunciation || undefined,
-                definition: parsedEtymology.definition || undefined,
-            }];
+        const chain = normalizeStemEtymologyChain(stem?.etymology);
+        const layered = chain.filter((step) => step && (step.language || step.term || step.definition));
+
+        if (layered.length > 0) {
+            return normalizeDictionaryEtymologyChain(layered, (language) => term(language));
         }
 
         return source_languages.map(language => ({ language }));
-    }, [source_languages, stem]);
+    }, [source_languages, stem?.etymology, term]);
 
     const zokkForms = stemMorphology?.forms;
     const displayStem = stemMorphology?.displayStem || stem_string || '';

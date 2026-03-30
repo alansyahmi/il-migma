@@ -3,7 +3,20 @@
  * Refactored for Normalized Semitic Morphology.
  */
 
-import type { RootFormData, StemFormData } from './adminUtils';
+import {
+    normalizeEntryDefinitions,
+    normalizeEntryEtymologyChain,
+    normalizeRootEtymologyChain,
+    normalizeStemEtymologyChain,
+    type RootFormData,
+    type StemFormData
+} from './adminUtils.ts';
+import {
+    compactPluralRows,
+    normalizePluralFormRows,
+    pluralRowsToLegacyForms,
+    pluralRowsToLegacyPatternString,
+} from './pluralForms.ts';
 
 // ── ROOTS ───────────────────────────────────────────────────────────────────
 
@@ -15,13 +28,14 @@ export const ROOT_HANDLED_FIELDS = [
 ] as const;
 
 export function buildRootPayload(form: RootFormData): Record<string, any> {
+    const etymology = normalizeRootEtymologyChain(form.etymology);
     return {
         id: form.id,
         consonants: form.consonants.trim().toLowerCase(),
         strength: form.strength,
         weak_class: form.weak_class || '',
         gloss: JSON.stringify(form.glosses.filter(g => g.en || g.mt)),
-        etymology: JSON.stringify(form.etymology),
+        etymology: JSON.stringify(etymology),
         source: form.source,
         vowel_set_perf: form.vowel_set_perf,
         vowel_set_impf: form.vowel_set_impf,
@@ -48,6 +62,7 @@ export const STEM_HANDLED_FIELDS = [
 ] as const;
 
 export function buildStemPayload(form: StemFormData): Record<string, any> {
+    const etymology = normalizeStemEtymologyChain(form.etymology);
     return {
         stem_string: form.stem_string.trim().normalize('NFC'),
         class_type: form.class_type === 'ir' ? 'ir' : 'ar',
@@ -57,7 +72,7 @@ export function buildStemPayload(form: StemFormData): Record<string, any> {
         tags: JSON.stringify(form.tags?.split(',').map(s => s.trim()).filter(Boolean) || []),
         source: form.source || '',
         glosses: JSON.stringify(form.glosses.filter(g => g.en || g.mt)),
-        etymology: JSON.stringify(form.etymology || {}),
+        etymology: JSON.stringify(etymology),
         synonyms: JSON.stringify(form.synonyms || []),
         antonyms: JSON.stringify(form.antonyms || []),
         related_stems: JSON.stringify(form.related_stems || []),
@@ -187,6 +202,17 @@ export const POS_FEATURES: Record<string, string[]> = {
     ],
 };
 
+const POS_WITH_NATIVE_VOWEL_SET_UI = new Set([
+    'noun',
+    'adjective',
+    'participle',
+    'numeral',
+]);
+
+export function entryPosHasNativeVowelSets(pos: string): boolean {
+    return POS_WITH_NATIVE_VOWEL_SET_UI.has(String(pos || '').toLowerCase());
+}
+
 export const FORBIDDEN_FIELDS = [
     'id', 'created_at', 'updated_at', 'root_id', 'root_pattern_form_id'
 ] as const;
@@ -196,7 +222,7 @@ export function buildEntryPayload(form: any): Record<string, any> {
     const extraFields = form.extraFields || {};
 
     const pos = form.pos?.toLowerCase() || '';
-    const allowedFields = POS_FEATURES[pos] || COMMON_FIELDS;
+    const allowedFields = new Set<string>(POS_FEATURES[pos] || COMMON_FIELDS);
 
     // UI-to-DB Logic Mapping
     const verbForm = form._formLabel;
@@ -205,14 +231,23 @@ export function buildEntryPayload(form: any): Record<string, any> {
     const zokkStem = String(form.zokk_stem || '').trim();
     const inferredIsLoanword = resolveEntryMorphologyMode(form) === 'stem';
 
-    // Consolidate Split Logic for Plural Patterns
-    const plurals = (form.form_plural_pattern || '').split(',').map((s: string) => s.trim()).filter(Boolean);
-    const soundSuffix = plurals.filter((p: string) => p.startsWith('-')).join(', ');
-    const morphPattern = plurals.filter((p: string) => !p.startsWith('-')).join(', ');
+    if (inferredIsLoanword && !entryPosHasNativeVowelSets(pos)) {
+        ['vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'].forEach(field => {
+            allowedFields.add(field);
+        });
+    }
+
+    const pluralRows = compactPluralRows(normalizePluralFormRows(
+        form.plural_forms || form.inflections_pl,
+        form.form_plural_pattern,
+    )).filter(row => row.form);
+    const pluralPatterns = pluralRows.map(row => row.pattern).filter(Boolean);
+    const soundSuffix = pluralPatterns.filter((p: string) => p.startsWith('-')).join(', ');
+    const morphPattern = pluralPatterns.filter((p: string) => !p.startsWith('-')).join(', ');
 
     // Fill payload using the allowed fields and normalization
     ENTRY_HANDLED_FIELDS.forEach(field => {
-        if (allowedFields.includes(field) || field === 'old_id') {
+        if (allowedFields.has(field) || field === 'old_id') {
             payload[field] = form[field];
         }
     });
@@ -245,12 +280,8 @@ export function buildEntryPayload(form: any): Record<string, any> {
         payload.cv_pattern = form.form_masc_pattern || '';
     }
 
-    // Map plural forms from UI (plural_forms array) to DB (inflections_pl)
-    if (form.plural_forms && Array.isArray(form.plural_forms)) {
-        payload.inflections_pl = form.plural_forms.filter(Boolean);
-    } else if (typeof form.inflections_pl === 'string') {
-        payload.inflections_pl = form.inflections_pl.split(',').map((s: string) => s.trim()).filter(Boolean);
-    }
+    payload.inflections_pl = pluralRowsToLegacyForms(pluralRows);
+    payload.form_plural_pattern = pluralRowsToLegacyPatternString(pluralRows);
 
     // Merge extraFields (passthrough unknown keys unchanged)
     Object.keys(extraFields).forEach(key => {
@@ -308,7 +339,22 @@ export function buildEntryPayload(form: any): Record<string, any> {
         const val = payload[key];
 
         if (arrayFields.has(key)) {
-            result[key] = parseArrayField(key, val);
+            if (key === 'etymology_chain') {
+                result[key] = normalizeEntryEtymologyChain(parseArrayField(key, val));
+            } else if (key === 'definitions') {
+                const normalizedDefinitions = normalizeEntryDefinitions(val).map(def => ({
+                    text_en: String(def.text_en || '').trim(),
+                    text_mt: String(def.text_mt || '').trim(),
+                    register: String(def.register || '').trim(),
+                    nuance: String(def.nuance || '').trim(),
+                })).filter(def => def.text_en || def.text_mt || def.register || def.nuance);
+
+                result[key] = normalizedDefinitions.length > 0
+                    ? normalizedDefinitions
+                    : [{ text_en: '', text_mt: '', register: '', nuance: '' }];
+            } else {
+                result[key] = parseArrayField(key, val);
+            }
         } else if (typeof val === 'boolean') {
             result[key] = val ? 1 : 0;
         } else {

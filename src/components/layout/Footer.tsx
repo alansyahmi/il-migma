@@ -16,7 +16,7 @@ const getContributeCol1 = (term: (key: string) => string) => [
     { label: term('suggest-dialect-entry'), href: '/suggest-dialect' },
 ];
 const getContributeCol2 = (term: (key: string) => string) => [
-    { label: term('report-error'), href: '/report' },
+    { label: term('report-error'), href: '/feedback?type=bug' },
     { label: term('submit-feedback'), href: '/feedback' },
 ];
 

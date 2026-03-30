@@ -22,7 +22,9 @@ import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 import { resolveStemDefaults } from '@/lib/stemDefaults';
 import { MorphologyProvenanceRows } from '@/components/dictionary/EntryMorphology';
 import { BLUE, CREAM_RGBA, GOLD, EtymologySentence, PropRow, SideCard } from '@/components/dictionary/EntryShell';
+import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymology';
 import { StackedSurface } from '@/components/dictionary/VerbFormsTable';
+import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
 
 export { BLUE, CREAM_RGBA, GOLD, EntryShell, EtymologySentence, PropRow, SideCard } from '@/components/dictionary/EntryShell';
 
@@ -46,6 +48,10 @@ const MarkedValue = ({ val, theoretical, showMarker = true }: { val: string | Re
         </span>
     );
 };
+
+function buildDisplayEtymologyItems(chain: any, translateLanguage: (language: string) => string) {
+    return normalizeDictionaryEtymologyChain(chain, translateLanguage);
+}
 
 function MorphologyTable({ title, rows, displayPattern }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string }[]; displayPattern?: (p?: string) => string }) {
     const { term } = useLinguisticMode();
@@ -80,7 +86,7 @@ function MorphologyTable({ title, rows, displayPattern }: { title: string; rows:
                                         {row.extra}
                                     </div>
                                 </td>
-                                <td className="py-2.5 text-black/40 text-[10px] font-sans tracking-tight">
+                                <td className="py-2.5 text-black/40 text-sm font-sans tracking-tight leading-normal">
                                     {row.pattern ? (displayPattern ? displayPattern(row.pattern) : row.pattern) : '-'}
                                 </td>
                             </tr>
@@ -88,6 +94,288 @@ function MorphologyTable({ title, rows, displayPattern }: { title: string; rows:
                     </tbody>
                 </table>
             </div>
+        </div>
+    );
+}
+
+type NounGenderVariant = 'masculine' | 'feminine';
+
+type NounParadigmCell = {
+    value?: string | null;
+    pattern?: string | null;
+    theoretical?: boolean;
+    stacked?: Array<{ value: string; pattern?: string | null; theoretical?: boolean }>;
+};
+
+type NounParadigmRow = {
+    label: string;
+    singular: NounParadigmCell;
+    dual: NounParadigmCell;
+    plural: NounParadigmCell;
+};
+
+function prepareDiminutiveStemForAttachment(word: string) {
+    const simplified = word.replace(/jj/g, 'j').replace(/ww/g, 'w');
+    const vowelRe = /[aeiouàèìòùâêîôû]/gi;
+    let stem = simplified;
+
+    const vowelCount = stem.match(vowelRe)?.length ?? 0;
+    if (vowelCount >= 2) {
+        const shortenedIe = stem.replace(/ie([^aeiouàèìòùâêîôû]*)$/i, 'i$1');
+        if (shortenedIe !== stem) {
+            stem = shortenedIe;
+        } else {
+            stem = stem.replace(/([aeiouàèìòùâêîôû])([^aeiouàèìòùâêîôû]+)$/i, '$2');
+        }
+    }
+
+    return stem;
+}
+
+function buildDiminutivePlural(word: string) {
+    if (!word) return '';
+    return `${prepareDiminutiveStemForAttachment(word)}in`;
+}
+
+function getNormalizedPluralRows(entry: Entry, morphology: NonNullable<Entry['noun_morphology']>) {
+    return compactPluralRows(normalizePluralFormRows(
+        morphology.plural_forms,
+        morphology.form_plural_pattern || entry.form_plural_pattern || morphology.plural_pattern || entry.plural_pattern || morphology.morph_pattern || entry.morph_pattern || null,
+    )).filter(row => row.form || row.pattern);
+}
+
+function NounParadigmCellView({
+    cell,
+    displayPattern,
+}: {
+    cell: NounParadigmCell;
+    displayPattern: (pattern?: string) => string;
+}) {
+    if (cell.stacked && cell.stacked.length > 0) {
+        return (
+            <div className="leading-tight space-y-2">
+                {cell.stacked.map((item, index) => {
+                    const hasValue = !!(item.value && item.value !== '-');
+                    return (
+                        <div key={`${item.value}-${index}`} className="leading-tight">
+                            {hasValue ? (
+                                <>
+                                    <div className="font-serif font-medium text-black">
+                                        <MarkedValue val={item.value || '-'} theoretical={item.theoretical} />
+                                    </div>
+                                    {item.pattern && (
+                                        <div className="mt-0.5 text-[11px] font-sans tracking-tight text-black/40">
+                                            {displayPattern(item.pattern)}
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <span className="text-black/30">-</span>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
+    const hasValue = !!(cell.value && cell.value !== '-');
+
+    return (
+        <div className="leading-tight">
+            {hasValue ? (
+                <>
+                    <div className="font-serif font-medium text-black">
+                        <MarkedValue val={cell.value || '-'} theoretical={cell.theoretical} />
+                    </div>
+                    {cell.pattern && (
+                        <div className="mt-0.5 text-[11px] font-sans tracking-tight text-black/40">
+                            {displayPattern(cell.pattern)}
+                        </div>
+                    )}
+                </>
+            ) : (
+                <span className="text-black/30">-</span>
+            )}
+        </div>
+    );
+}
+
+function NounParadigmTable({
+    title,
+    rows,
+    displayPattern,
+}: {
+    title: string;
+    rows: NounParadigmRow[];
+    displayPattern: (pattern?: string) => string;
+}) {
+    const showPluralColumn = rows.some(row => !!row.plural.value || (row.plural.stacked?.length ?? 0) > 0);
+    const hasRows = rows.some(row => (
+        row.singular.value || row.dual.value || row.plural.value || (row.plural.stacked?.length ?? 0) > 0
+    ));
+
+    if (!hasRows) return null;
+
+    return (
+        <div className="w-full">
+            <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                {title}
+            </h2>
+            <div className="pb-4">
+                <table className="w-full table-fixed text-sm border-collapse">
+                    <thead>
+                        <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                            <th className="text-left font-semibold text-black pb-2 pr-2 w-24" />
+                            <th className="text-left font-semibold text-black pb-2 pr-2">Singular</th>
+                            <th className="text-left font-semibold text-black pb-2 pr-2">Dual*</th>
+                            {showPluralColumn && <th className="text-left font-semibold text-black pb-2">Plural</th>}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows.map(row => (
+                            <tr key={row.label} className="border-b border-black/4">
+                                <td className="py-1.5 pr-2 align-top text-black/40 text-xs font-sans w-24">
+                                    {row.label}
+                                </td>
+                                <td className="py-1.5 pr-2 align-top font-serif font-normal text-black">
+                                    <NounParadigmCellView cell={row.singular} displayPattern={displayPattern} />
+                                </td>
+                                <td className="py-1.5 pr-2 align-top font-serif font-normal text-black">
+                                    <NounParadigmCellView cell={row.dual} displayPattern={displayPattern} />
+                                </td>
+                                {showPluralColumn && (
+                                    <td className="py-1.5 align-top font-serif font-normal text-black">
+                                        <NounParadigmCellView cell={row.plural} displayPattern={displayPattern} />
+                                    </td>
+                                )}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
+function NounMorphologySection({
+    entry,
+    morphology,
+    displayPattern,
+}: {
+    entry: Entry;
+    morphology: NonNullable<Entry['noun_morphology']>;
+    displayPattern: (pattern?: string) => string;
+}) {
+    const { term } = useLinguisticMode();
+
+    const singular = (value?: string | null) => (value && value.trim()) || null;
+    const primaryVariant: NounGenderVariant = morphology.gender === 'feminine' ? 'feminine' : 'masculine';
+    const oppositeVariant: NounGenderVariant = primaryVariant === 'masculine' ? 'feminine' : 'masculine';
+
+    const pluralRows = getNormalizedPluralRows(entry, morphology);
+    const pluralForms = pluralRows.map(row => row.form);
+    const soundPlural = singular(morphology.sound_plural || null);
+    const diminutive = singular(morphology.diminutive || entry.diminutive_form || null);
+    const hasDiminutive = !!diminutive;
+    const dual = singular(morphology.dual || entry.dual_form || null);
+
+    const explicitVariantForms: Record<NounGenderVariant, string | null> = {
+        masculine: singular(morphology.masculine || entry.form_masc || null),
+        feminine: singular(morphology.feminine || entry.form_fem || null),
+    };
+
+    const displayVariantForms: Record<NounGenderVariant, string | null> = {
+        masculine: primaryVariant === 'masculine'
+            ? singular(entry.headword)
+            : explicitVariantForms.masculine,
+        feminine: primaryVariant === 'feminine'
+            ? singular(entry.headword)
+            : explicitVariantForms.feminine,
+    };
+
+    const variantPatterns: Record<NounGenderVariant, string | null> = {
+        masculine: singular(morphology.form_masc_pattern || entry.form_masc_pattern || morphology.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null),
+        feminine: singular(morphology.form_fem_pattern || entry.form_fem_pattern || morphology.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null),
+    };
+
+    const hasOppositeGender = !!(
+        explicitVariantForms.masculine &&
+        explicitVariantForms.feminine &&
+        explicitVariantForms.masculine !== explicitVariantForms.feminine
+    );
+    const variantOrder: NounGenderVariant[] = hasOppositeGender
+        ? [primaryVariant, oppositeVariant]
+        : [primaryVariant];
+
+    const buildRows = (variant: NounGenderVariant): NounParadigmRow[] => {
+        const baseForm = displayVariantForms[variant] || displayVariantForms[primaryVariant] || singular(entry.headword);
+        const basePattern = variantPatterns[variant] || morphology.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null;
+        const pluralRows = getNormalizedPluralRows(entry, morphology);
+        const pluralPattern = singular(morphology.form_plural_pattern || entry.form_plural_pattern || morphology.plural_pattern || entry.plural_pattern || morphology.morph_pattern || entry.morph_pattern || null);
+        const soundPluralPattern = singular(morphology.sound_suffix || entry.sound_suffix || null);
+        const dualPattern = singular(morphology.dual_pattern || entry.dual_pattern || null);
+        const basePlural = pluralForms[0] || soundPlural || null;
+        const diminutivePlural = pluralForms[1] || (hasDiminutive ? buildDiminutivePlural(diminutive) : null);
+        const stackedPluralForms = pluralRows.length > 0
+            ? pluralRows.map(row => ({
+                value: row.form,
+                pattern: row.pattern || pluralPattern,
+                theoretical: false,
+            }))
+            : (basePlural ? [{
+                value: basePlural,
+                pattern: pluralPattern || soundPluralPattern,
+                theoretical: false,
+            }] : []);
+
+        return [
+            {
+                label: term('base') || 'Base',
+                singular: {
+                    value: baseForm,
+                    pattern: basePattern,
+                },
+                dual: {
+                    value: baseForm ? (variant === primaryVariant && dual ? dual : generateTheoreticalDual(baseForm)) : null,
+                    pattern: dualPattern,
+                    theoretical: !(variant === primaryVariant && !!dual),
+                },
+                plural: {
+                    value: basePlural,
+                    pattern: pluralForms[0] ? pluralPattern : soundPluralPattern,
+                    stacked: stackedPluralForms,
+                },
+            },
+            ...(hasDiminutive ? [{
+                label: term('diminutive') || 'Diminutive',
+                singular: {
+                    value: diminutive,
+                    pattern: singular(morphology.diminutive_pattern || entry.diminutive_pattern || null),
+                },
+                dual: {
+                    value: diminutive ? generateTheoreticalDual(prepareDiminutiveStemForAttachment(diminutive)) : null,
+                    pattern: dualPattern,
+                    theoretical: !!diminutive,
+                },
+                plural: {
+                    value: diminutivePlural,
+                    pattern: pluralForms[1] ? pluralPattern : 'CCvjCin',
+                },
+            }] : []),
+        ];
+    };
+
+    return (
+        <div className="flex flex-col space-y-12">
+            {variantOrder.map(variant => (
+                <NounParadigmTable
+                    key={variant}
+                    title={term(variant) || (variant === 'masculine' ? 'Masculine' : 'Feminine')}
+                    rows={buildRows(variant)}
+                    displayPattern={displayPattern}
+                />
+            ))}
         </div>
     );
 }
@@ -113,36 +401,6 @@ function VowelSetGrid({ morphology }: { morphology: any }) {
                     <div key={f.key} className="flex items-center text-[13px]">
                         <span className="text-[10px] font-bold text-black/40 uppercase tracking-tighter pr-1 shrink-0">{f.label}:</span>
                         <span className="font-mono font-regular" style={{ color: 'black' }}>{morphology[f.key]}</span>
-                    </div>
-                ))}
-            </div>
-        </PropRow>
-    );
-}
-
-function MorphologyGrid({ title, rows, displayPattern }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string }[]; displayPattern?: (p?: string) => string }) {
-    const activeRows = rows.filter(r => r.show !== false && r.value && r.value !== '-');
-    if (activeRows.length === 0) return null;
-
-    return (
-        <PropRow label={title}>
-            <div className="grid grid-cols-1 gap-x-2 gap-y-1 mt-0.5">
-                {activeRows.map((row, idx) => (
-                    <div key={idx} className="flex items-center text-[13px]">
-                        <span className="text-[10px] font-bold text-black/40 uppercase tracking-tighter pr-1 shrink-0">{row.label}:</span>
-                        <div className="flex items-baseline font-serif text-black">
-                            {typeof row.value === 'string' || (row.value && typeof row.value === 'object' && !React.isValidElement(row.value)) ? (
-                                <MarkedValue val={row.value as any} theoretical={row.theoretical} />
-                            ) : (
-                                row.value
-                            )}
-                            {row.extra}
-                            {row.pattern && (
-                                <span className="ml-1 text-[10px] font-sans text-black/40">
-                                    ({displayPattern ? displayPattern(row.pattern) : row.pattern})
-                                </span>
-                            )}
-                        </div>
                     </div>
                 ))}
             </div>
@@ -568,6 +826,19 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     };
 
     const isTheoretical = nm.is_inflectable === false || (nm.is_inflectable as any) === 0 || entry.is_inflectable === false || (entry.is_inflectable as any) === 0;
+    const pluralRows = getNormalizedPluralRows(entry, nm);
+    const trimOrNull = (value?: string | null) => (value && value.trim()) || null;
+    const pluralPattern = trimOrNull(nm.form_plural_pattern || entry.form_plural_pattern || nm.plural_pattern || entry.plural_pattern || nm.morph_pattern || entry.morph_pattern || null);
+    const soundPluralPattern = trimOrNull(nm.sound_suffix || entry.sound_suffix || null);
+    const pluralInflectionRows = pluralRows.filter(row => !!row.form);
+    const pluralInflectionRowsWithFallback = pluralInflectionRows.length > 0
+        ? pluralInflectionRows
+        : ((nm.plural_forms?.[0] || nm.sound_plural)
+            ? [{
+                form: trimOrNull(nm.plural_forms?.[0] || nm.sound_plural || null) || '',
+                pattern: pluralPattern || soundPluralPattern || '',
+            }]
+            : []);
 
     const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants;
     const pattern = entry.root_pattern_form?.pattern;
@@ -593,6 +864,28 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
             };
         }
         return { value: result, theoretical: isT };
+    };
+
+    const renderPluralInflection = (idx: number) => {
+        if (pluralInflectionRowsWithFallback.length === 0) return '-';
+
+        const resolvedPluralForms = pluralInflectionRowsWithFallback.map(row => applySuffix(
+            row.form,
+            idx,
+            false,
+            row.pattern || pluralPattern || soundPluralPattern || undefined,
+        ));
+
+        if (resolvedPluralForms.length === 1) return <MarkedValue val={resolvedPluralForms[0]} />;
+
+        return (
+            <StackedSurface
+                primary={<MarkedValue val={resolvedPluralForms[0]} />}
+                alternates={resolvedPluralForms.slice(1).map((value, altIdx) => (
+                    <MarkedValue key={`plural-${idx}-${altIdx}`} val={value} />
+                ))}
+            />
+        );
     };
 
     const bgStyle = {
@@ -658,11 +951,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             <SideCard title={term('etymology')}>
                                 <EtymologySentence
                                     prefix={term('from')}
-                                    items={ety.chain.map(c => ({
-                                        language: term(c.language),
-                                        form: c.form,
-                                        definition: c.meaning,
-                                    }))}
+                                    items={buildDisplayEtymologyItems(ety.chain, term)}
                                 />
                             </SideCard>
                         )}
@@ -770,52 +1059,17 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </PropRow>
 
                                 <VowelSetGrid morphology={{ ...entry, ...nm }} />
-
-                                <MorphologyGrid
-                                    title={term('morphology')}
-                                    displayPattern={displayPattern}
-                                    rows={[
-                                        {
-                                            show: nm.gender?.toLowerCase() === 'masculine' && !!nm.feminine,
-                                            label: term('feminine'),
-                                            value: <MarkedValue val={nm.feminine} />,
-                                            pattern: nm.form_fem_pattern || entry.form_fem_pattern
-                                        },
-                                        {
-                                            show: nm.gender?.toLowerCase() === 'feminine' && !!nm.masculine,
-                                            label: term('masculine'),
-                                            value: <MarkedValue val={nm.masculine} />,
-                                            pattern: nm.form_masc_pattern || entry.form_masc_pattern
-                                        },
-                                        {
-                                            label: term('dual'),
-                                            value: nm.dual ? (
-                                                <MarkedValue val={nm.dual} />
-                                            ) : (
-                                                <MarkedValue val={generateTheoreticalDual(entry.headword)} theoretical={true} />
-                                            ),
-                                            pattern: nm.dual_pattern || entry.dual_pattern
-                                        },
-                                        ...nm.plural_forms.map((f, i) => ({
-                                            label: term('broken-plural'),
-                                            value: <MarkedValue val={f} />,
-                                            pattern: i === 0 ? (entry.morph_pattern || nm?.morph_pattern || entry.form_plural_pattern || nm?.form_plural_pattern) : undefined
-                                        })),
-                                        {
-                                            show: !!nm.sound_plural,
-                                            label: term('sound-plural'),
-                                            value: <MarkedValue val={nm.sound_plural} />,
-                                            pattern: entry.sound_suffix || nm.sound_suffix
-                                        },
-                                        { show: !!nm.collective, label: (entry as any).is_singulative ? term('collective') : term('unit-form') || 'Unit Form', value: <MarkedValue val={nm.collective} /> },
-                                        { show: !!nm.singulative, label: (entry as any).is_collective ? term('singulative') : term('individual-form') || 'Individual Form', value: <MarkedValue val={nm.singulative} /> },
-                                        { show: !!nm.diminutive, label: term('diminutive'), value: <MarkedValue val={nm.diminutive} /> }
-                                    ]}
-                                />
                             </div>
 
-                            {/* Inflection Table */}
-                            <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
+                            {/* Morphology + Inflection Tables */}
+                            <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none space-y-12">
+                                <NounMorphologySection
+                                    entry={entry}
+                                    morphology={nm}
+                                    displayPattern={displayPattern}
+                                />
+
+                                {/* Inflection Table */}
                                 <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
                                     {term('inflection-table')}
                                 </h2>
@@ -845,7 +1099,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                             <MarkedValue val={applySuffix(entry.headword, idx)} />
                                                         </td>
                                                         <td className="py-1.5 font-serif font-normal text-black">
-                                                            <MarkedValue val={nm.plural_forms[0] ? applySuffix(nm.plural_forms[0], idx, false, nm.morph_pattern || entry.morph_pattern) : '-'} />
+                                                            {renderPluralInflection(idx)}
                                                         </td>
                                                     </tr>
                                                 );
@@ -874,7 +1128,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 <MarkedValue val={applySuffix(entry.headword, idx)} />
                                                             </td>
                                                             <td className="py-2 text-right">
-                                                                <MarkedValue val={nm.plural_forms[0] ? applySuffix(nm.plural_forms[0], idx, false, nm.morph_pattern || entry.morph_pattern) : '-'} />
+                                                                {renderPluralInflection(idx)}
                                                             </td>
                                                         </tr>
                                                     );
@@ -886,16 +1140,6 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                 {/* Derived Terms, Usage, and Thesaurus regions */}
                                 <div className="mt-16 md:mt-12 space-y-16 md:space-y-12">
-                                    <RelatedGlossGroup
-                                        title={term('related-entries')}
-                                        items={nm.related_entries || []}
-                                        language={language}
-                                        mode={mode}
-                                        isAdmin={isActualAdmin}
-                                        onEditItem={handleEditEntry}
-                                        onDeleteItem={item => handleRemoveRelationship(item.id)}
-                                    />
-
                                     <UsageExampleBlock entry={entry} />
 
                                     {((nm.synonyms?.length ?? 0) > 0 || (nm.antonyms?.length ?? 0) > 0) && (
@@ -933,14 +1177,10 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
                             {ety && ety.chain.length > 0 && (
                                 <SideCard title={term('etymology')}>
-                                    <p className="text-sm text-black leading-relaxed">
-                                        {term('from')}
-                                        <span style={{ color: BLUE }} className="font-medium mx-1">
-                                            {term(ety.chain[0].language)}
-                                        </span>
-                                        {ety.chain[0].script && <> <span className="font-arabic">{ety.chain[0].script}</span></>}
-                                        {ety.chain[1] && <> ({ety.chain[1].form})</>}.
-                                    </p>
+                                    <EtymologySentence
+                                        prefix={term('from')}
+                                        items={buildDisplayEtymologyItems(ety.chain, term)}
+                                    />
                                 </SideCard>
                             )}
 
@@ -952,21 +1192,6 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                 {alt.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
                                                     "{getGloss(alt, language, mode)}"
-                                                </span>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </SideCard>
-                            )}
-
-                            {relatedEntries.length > 0 && (
-                                <SideCard title={term('related-entries')}>
-                                    <div className="space-y-1">
-                                        {relatedEntries.map((rel: any) => (
-                                            <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
-                                                {rel.headword}{' '}
-                                                <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{getGloss(rel, language, mode)}"
                                                 </span>
                                             </Link>
                                         ))}
@@ -1042,7 +1267,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const vm = entry.verb_morphology!;
     const ety = entry.etymologies?.[0];
 
-    const allRelatedEntries = vm.related_entries || [];
+    const allRelatedEntries = vm.related_entries || (entry as any).related_entries || [];
     const directAlternativeForms = (entry as any).alternative_forms || [];
     const markedAlternativeForms = allRelatedEntries.filter((item: any) => {
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
@@ -1054,7 +1279,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
     });
 
-    const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants;
+    const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root;
     const pattern = entry.root_pattern_form?.pattern;
 
     // State
@@ -1073,6 +1298,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const vsetImpf = entry.verb_vowel_impf || vm.vowel_set_imperfect;
     const vsetPerf = entry.verb_vowel_perf || vm.vowel_set_perfect;
     const vsetImp = vm.vowel_set_imperative || 'o-o';
+    const stemDefaults = entry.zokk_morphology ? resolveStemDefaults(entry.zokk_morphology as any) : null;
 
     // Derive or use stored conjugation
     const conj = useMemo(() => {
@@ -1108,37 +1334,41 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
     // Fetch siblings for accurate theoretical/plain markers
     const { entries: rootEntries } = useRootData(entry.root_pattern_form?.root?.id);
+    const derivedRootEntries = useMemo(
+        () => (rootEntries.length > 0 ? rootEntries : [entry]),
+        [rootEntries, entry]
+    );
 
     // Auto-derive root forms (verbal noun, participles) using the SAME logic as Root.tsx
     const autoDerived = useMemo(() => {
-        const rootStr = entry.root_pattern_form?.root?.consonants;
+        const rootStr = entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root;
         const rootObj = entry.root_pattern_form?.root;
-        if (!rootStr || !rootObj || !vm.form) return null;
+        if (!rootStr || !vm.form) return null;
 
         // Use root-level primary vowels for auto-derivation matching Root.tsx
-        const f1 = rootEntries?.find(e => e.pos === 'verb' && e.verb_morphology?.form === 'I');
+        const f1 = derivedRootEntries?.find(e => e.pos === 'verb' && e.verb_morphology?.form === 'I');
         const f1vm = f1?.verb_morphology;
-        const pvSet = rootObj.vowel_set_perf || f1vm?.vowel_set_perfect || 'a-a';
-        const ipvSet = rootObj.vowel_set_impf || f1vm?.vowel_set_imperfect || 'i-a';
+        const pvSet = rootObj?.vowel_set_perf || entry.verb_vowel_perf || f1vm?.vowel_set_perfect || 'a-a';
+        const ipvSet = rootObj?.vowel_set_impf || entry.verb_vowel_impf || f1vm?.vowel_set_imperfect || 'i-a';
 
         try {
             const rawGen = generateRootForms(
                 rootStr,
                 pvSet,
                 ipvSet,
-                (rootObj.strength || f1vm?.verb_class || 'strong') as any,
-                (rootObj.weak_class || f1vm?.weak_class) as any,
-                rootObj.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rootStr)
+                (rootObj?.strength || f1vm?.verb_class || stemDefaults?.strength || 'strong') as any,
+                (rootObj?.weak_class || f1vm?.weak_class || stemDefaults?.weak_class) as any,
+                rootObj?.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rootStr)
             );
             // Use siblings if available, otherwise just itself
-            const attested = getAttestedEntries(rootEntries?.length ? rootEntries : [entry]);
+            const attested = getAttestedEntries(derivedRootEntries);
             const markedTable = markGeneratedForms(rawGen, attested);
             return markedTable.find(f => f.form === vm.form);
         } catch (e) {
             console.error("Auto-derivation error:", e);
             return null;
         }
-    }, [entry, rootEntries, vm.form]);
+    }, [entry, derivedRootEntries, stemDefaults, vm.form]);
 
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -1154,7 +1384,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
     const handleEditDerived = (data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string }, type: 'active' | 'passive' | 'noun') => {
         const rootObj = entry.root_pattern_form?.root;
-        const existing = rootEntries?.find(e => e.headword === data.value && (e.verb_morphology?.form === vm.form || e.pos !== 'verb'));
+        const existing = derivedRootEntries?.find(e => e.headword === data.value && (e.verb_morphology?.form === vm.form || e.pos !== 'verb'));
 
         if (existing) {
             setEditEntry({
@@ -1177,8 +1407,8 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     };
 
     const getDerivedGloss = (data: { value: string; entryId?: string }) => {
-        if (!data.entryId || !rootEntries?.length) return '';
-        const linked = rootEntries.find(e => e.id === data.entryId || e.headword === data.value);
+        if (!data.entryId || !derivedRootEntries?.length) return '';
+        const linked = derivedRootEntries.find(e => e.id === data.entryId || e.headword === data.value);
         return linked ? getGloss(linked, language, mode).trim() : '';
     };
 
@@ -1261,14 +1491,10 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                         {ety && ety.chain.length > 0 && (
                             <SideCard title={term('etymology')}>
-                                <p className="text-sm text-black leading-relaxed">
-                                    {term('from')}
-                                    <span style={{ color: BLUE }} className="font-medium mx-1">
-                                        {term(ety.chain[0].language)}
-                                    </span>
-                                    {ety.chain[0].script && <> <span className="font-arabic">{ety.chain[0].script}</span></>}
-                                    {ety.chain[1] && <> ({ety.chain[1].form})</>}.
-                                </p>
+                                <EtymologySentence
+                                    prefix={term('from')}
+                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                />
                             </SideCard>
                         )}
 
@@ -1329,7 +1555,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                     <div className="flex-1 min-w-0 space-y-0 w-full">
                         <div className={cn(
                             "flex flex-col gap-8 items-start w-full",
-                            !entry.zokk_morphology && "md:flex-row"
+                            "md:flex-row md:items-start"
                         )}>
                             {/* Properties */}
                             <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
@@ -1697,13 +1923,13 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                         <UsageExampleBlock entry={entry} />
 
                                         {/* Thesaurus */}
-                                        {((vm.synonyms?.length ?? 0) > 0 || (vm.antonyms?.length ?? 0) > 0) && (
+                                        {((vm.synonyms?.length ?? 0) > 0 || (vm.antonyms?.length ?? 0) > 0 || ((entry as any).synonyms?.length ?? 0) > 0 || ((entry as any).antonyms?.length ?? 0) > 0) && (
                                             <div className="w-full">
                                                 <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('thesaurus')}</h2>
                                                 <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm mt-3 items-start text-center md:text-left">
                                                     <RelatedGlossGroup
                                                         title={term('synonyms')}
-                                                        items={vm.synonyms || []}
+                                                        items={vm.synonyms || (entry as any).synonyms || []}
                                                         language={language}
                                                         mode={mode}
                                                         isAdmin={isActualAdmin}
@@ -1713,7 +1939,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                     />
                                                     <RelatedGlossGroup
                                                         title={term('antonyms')}
-                                                        items={vm.antonyms || []}
+                                                        items={vm.antonyms || (entry as any).antonyms || []}
                                                         language={language}
                                                         mode={mode}
                                                         isAdmin={isActualAdmin}
@@ -1733,14 +1959,10 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
                             {ety && ety.chain.length > 0 && (
                                 <SideCard title={term('etymology')}>
-                                    <p className="text-sm text-black leading-relaxed">
-                                        {term('from')}
-                                        <span style={{ color: BLUE }} className="font-medium mx-1">
-                                            {term(ety.chain[0].language)}
-                                        </span>
-                                        {ety.chain[0].script && <> <span className="font-arabic">{ety.chain[0].script}</span></>}
-                                        {ety.chain[1] && <> ({ety.chain[1].form})</>}.
-                                    </p>
+                                    <EtymologySentence
+                                        prefix={term('from')}
+                                        items={buildDisplayEtymologyItems(ety.chain, term)}
+                                    />
                                 </SideCard>
                             )}
 
@@ -1752,21 +1974,6 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                 {alt.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
                                                     "{getGloss(alt, language, mode)}"
-                                                </span>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </SideCard>
-                            )}
-
-                            {relatedEntries.length > 0 && (
-                                <SideCard title={term('related-entries')}>
-                                    <div className="space-y-1">
-                                        {relatedEntries.map((rel: any) => (
-                                            <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
-                                                {rel.headword}{' '}
-                                                <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{getGloss(rel, language, mode)}"
                                                 </span>
                                             </Link>
                                         ))}
@@ -1821,15 +2028,11 @@ export function ZokkEntryView({
      const [showForm, setShowForm] = useState(false);
      const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
  
-     const isActualAdmin = isAdmin && adminViewEnabled;
+    const isActualAdmin = isAdmin && adminViewEnabled;
      const ety = entry.etymologies?.[0];
      const zokkEtymologyItems = useMemo(() => {
          if (ety?.chain?.length) {
-             return ety.chain.map(node => ({
-                 language: term(node.language),
-                 form: node.form || undefined,
-                 definition: node.meaning || undefined,
-             }));
+             return buildDisplayEtymologyItems(ety.chain, term);
          }
 
          if (entry.source_language) {
@@ -2250,19 +2453,10 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
                         {ety && ety.chain.length > 0 && (
                             <SideCard title={term('etymology')}>
-                                <p className="text-sm text-black leading-relaxed">
-                                    {term('from')}
-                                    {ety.chain.map((c, i) => (
-                                        <React.Fragment key={i}>
-                                            {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                                            <span style={{ color: BLUE }} className="font-medium mx-1">
-                                                {term(c.language)}
-                                            </span>
-                                            {c.form && <span className="font-serif font-medium">{c.form}</span>}
-                                            {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
-                                        </React.Fragment>
-                                    ))}.
-                                </p>
+                                <EtymologySentence
+                                    prefix={term('from')}
+                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                />
                             </SideCard>
                         )}
 
@@ -2437,14 +2631,10 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                         <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
                             {ety && ety.chain.length > 0 && (
                                 <SideCard title={term('etymology')}>
-                                    <p className="text-sm text-black leading-relaxed">
-                                        {term('from')}
-                                        <span style={{ color: BLUE }} className="font-medium mx-1">
-                                            {term(ety.chain[0].language)}
-                                        </span>
-                                        {ety.chain[0].script && <> <span className="font-arabic">{ety.chain[0].script}</span></>}
-                                        {ety.chain[1] && <> ({ety.chain[1].form})</>}.
-                                    </p>
+                                    <EtymologySentence
+                                        prefix={term('from')}
+                                        items={buildDisplayEtymologyItems(ety.chain, term)}
+                                    />
                                 </SideCard>
                             )}
 
@@ -2456,21 +2646,6 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                                 {alt.headword}{' '}
                                                 <span className="opacity-55 font-sans text-xs text-black">
                                                     "{getGloss(alt, language, mode)}"
-                                                </span>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </SideCard>
-                            )}
-
-                            {relatedEntries.length > 0 && (
-                                <SideCard title={term('related-entries')}>
-                                    <div className="space-y-1">
-                                        {relatedEntries.map((rel: any) => (
-                                            <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
-                                                {rel.headword}{' '}
-                                                <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{getGloss(rel, language, mode)}"
                                                 </span>
                                             </Link>
                                         ))}
@@ -2590,11 +2765,14 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
         const isElativeDisabled = entry.tags?.some(tag => tag.includes('$') || tag.toLowerCase() === 'invariable');
         if (isElativeDisabled) return null;
 
-        if (am.elative) return { masculine: am.elative, feminine: null };
-        if (rootConsonants) {
-            return generateElative(rootConsonants, entry.headword);
+        const generated = rootConsonants ? generateElative(rootConsonants, entry.headword) : null;
+        if (!generated) {
+            return am.elative ? { masculine: am.elative, feminine: null } : null;
         }
-        return null;
+        return {
+            masculine: am.elative || generated.masculine,
+            feminine: generated.feminine,
+        };
     }, [am.elative, rootConsonants, entry.headword, entry.tags]);
 
     return (
@@ -2652,19 +2830,10 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
 
                         {ety && ety.chain.length > 0 && (
                             <SideCard title={term('etymology')}>
-                                <p className="text-sm text-black leading-relaxed">
-                                    {term('from')}
-                                    {ety.chain.map((c, i) => (
-                                        <React.Fragment key={i}>
-                                            {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                                            <span style={{ color: BLUE }} className="font-medium mx-1">
-                                                {term(c.language)}
-                                            </span>
-                                            {c.form && <span className="font-serif font-medium">{c.form}</span>}
-                                            {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
-                                        </React.Fragment>
-                                    ))}.
-                                </p>
+                                <EtymologySentence
+                                    prefix={term('from')}
+                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                />
                             </SideCard>
                         )}
 
@@ -2797,7 +2966,8 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                             label: term('elative-masculine') || 'Elative (Masc)',
                                             value: elative?.masculine,
                                             theoretical: !am.elative,
-                                            show: !!elative
+                                            show: !!elative,
+                                            pattern: am.elative_pattern || entry.elative_pattern || am.lemma_pattern || entry.lemma_pattern
                                         },
                                         {
                                             label: term('elative-feminine') || 'Elative (Fem)',
@@ -2840,62 +3010,38 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                 )}
                             </div>
 
-                            {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
-                            <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                                {ety && ety.chain.length > 0 && (
-                                    <SideCard title={term('etymology')}>
-                                        <p className="text-sm text-black leading-relaxed">
-                                            {term('from')}
-                                            {ety.chain.map((c, i) => (
-                                                <React.Fragment key={i}>
-                                                    {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                                                    <span style={{ color: BLUE }} className="font-medium mx-1">
-                                                        {term(c.language)}
-                                                    </span>
-                                                    {c.form && <span className="font-serif font-medium">{c.form}</span>}
-                                                    {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
-                                                </React.Fragment>
-                                            ))}.
-                                        </p>
-                                    </SideCard>
-                                )}
+                        {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
+                        <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
+                            {ety && ety.chain.length > 0 && (
+                                <SideCard title={term('etymology')}>
+                                    <EtymologySentence
+                                        prefix={term('from')}
+                                        items={buildDisplayEtymologyItems(ety.chain, term)}
+                                    />
+                                </SideCard>
+                            )}
 
-                                {alternativeForms.length > 0 && (
-                                    <SideCard title={term('alternative-forms')}>
-                                        <div className="space-y-1">
-                                            {alternativeForms.map((alt: any) => (
-                                                <Link key={alt.id} to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
-                                                    {alt.headword}{' '}
-                                                    <span className="opacity-55 font-sans text-xs text-black">
-                                                        "{getGloss(alt, language, mode)}"
-                                                    </span>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </SideCard>
-                                )}
+                            {alternativeForms.length > 0 && (
+                                <SideCard title={term('alternative-forms')}>
+                                    <div className="space-y-1">
+                                        {alternativeForms.map((alt: any) => (
+                                            <Link key={alt.id} to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                {alt.headword}{' '}
+                                                <span className="opacity-55 font-sans text-xs text-black">
+                                                    "{getGloss(alt, language, mode)}"
+                                                </span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </SideCard>
+                            )}
 
-                                {relatedEntries.length > 0 && (
-                                    <SideCard title={term('related-entries')}>
-                                        <div className="space-y-1">
-                                            {relatedEntries.map((rel: any) => (
-                                                <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
-                                                    {rel.headword}{' '}
-                                                    <span className="opacity-55 font-sans text-xs text-black">
-                                                        "{getGloss(rel, language, mode)}"
-                                                    </span>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </SideCard>
-                                )}
-
-                                {am.source_citation && (
-                                    <SideCard title={term('sources')}>
-                                        <span className="text-sm font-medium" style={{ color: GOLD }}>{am.source_citation}</span>
-                                    </SideCard>
-                                )}
-                            </div>
+                            {am.source_citation && (
+                                <SideCard title={term('sources')}>
+                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{am.source_citation}</span>
+                                </SideCard>
+                            )}
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -3055,19 +3201,10 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
 
                         {ety && ety.chain.length > 0 && (
                             <SideCard title={term('etymology')}>
-                                <p className="text-sm text-black leading-relaxed">
-                                    {term('from')}
-                                    {ety.chain.map((c, i) => (
-                                        <React.Fragment key={i}>
-                                            {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                                            <span style={{ color: BLUE }} className="font-medium mx-1">
-                                                {term(c.language)}
-                                            </span>
-                                            {c.form && <span className="font-serif font-medium">{c.form}</span>}
-                                            {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
-                                        </React.Fragment>
-                                    ))}.
-                                </p>
+                                <EtymologySentence
+                                    prefix={term('from')}
+                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                />
                             </SideCard>
                         )}
 
@@ -3212,19 +3349,10 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                             <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
                                 {ety && ety.chain.length > 0 && (
                                     <SideCard title={term('etymology')}>
-                                        <p className="text-sm text-black leading-relaxed">
-                                            {term('from')}
-                                            {ety.chain.map((c, i) => (
-                                                <React.Fragment key={i}>
-                                                    {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                                                    <span style={{ color: BLUE }} className="font-medium mx-1">
-                                                        {term(c.language)}
-                                                    </span>
-                                                    {c.form && <span className="font-serif font-medium">{c.form}</span>}
-                                                    {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
-                                                </React.Fragment>
-                                            ))}.
-                                        </p>
+                                        <EtymologySentence
+                                            prefix={term('from')}
+                                            items={buildDisplayEtymologyItems(ety.chain, term)}
+                                        />
                                     </SideCard>
                                 )}
 
@@ -3236,21 +3364,6 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                                     {alt.headword}{' '}
                                                     <span className="opacity-55 font-sans text-xs text-black">
                                                         "{getGloss(alt, language, mode)}"
-                                                    </span>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </SideCard>
-                                )}
-
-                                {relatedEntries.length > 0 && (
-                                    <SideCard title={term('related-entries')}>
-                                        <div className="space-y-1">
-                                            {relatedEntries.map((rel: any) => (
-                                                <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
-                                                    {rel.headword}{' '}
-                                                    <span className="opacity-55 font-sans text-xs text-black">
-                                                        "{getGloss(rel, language, mode)}"
                                                     </span>
                                                 </Link>
                                             ))}
@@ -3491,19 +3604,10 @@ export function FunctionWordEntryView({
 
                         {ety && ety.chain.length > 0 && (
                             <SideCard title={term('etymology')}>
-                                <p className="text-sm text-black leading-relaxed">
-                                    {term('from')}
-                                    {ety.chain.map((c, i) => (
-                                        <React.Fragment key={i}>
-                                            {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                                            <span style={{ color: BLUE }} className="font-medium mx-1">
-                                                {term(c.language)}
-                                            </span>
-                                            {c.form && <span className="font-serif font-medium">{c.form}</span>}
-                                            {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
-                                        </React.Fragment>
-                                    ))}.
-                                </p>
+                                <EtymologySentence
+                                    prefix={term('from')}
+                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                />
                             </SideCard>
                         )}
 
@@ -3746,19 +3850,10 @@ export function FunctionWordEntryView({
                             <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
                                 {ety && ety.chain.length > 0 && (
                                     <SideCard title={term('etymology')}>
-                                        <p className="text-sm text-black leading-relaxed">
-                                            {term('from')}
-                                            {ety.chain.map((c, i) => (
-                                                <React.Fragment key={i}>
-                                                    {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                                                    <span style={{ color: BLUE }} className="font-medium mx-1">
-                                                        {term(c.language)}
-                                                    </span>
-                                                    {c.form && <span className="font-serif font-medium">{c.form}</span>}
-                                                    {c.meaning && <span className="opacity-70"> "{c.meaning}"</span>}
-                                                </React.Fragment>
-                                            ))}.
-                                        </p>
+                                        <EtymologySentence
+                                            prefix={term('from')}
+                                            items={buildDisplayEtymologyItems(ety.chain, term)}
+                                        />
                                     </SideCard>
                                 )}
 
@@ -3770,21 +3865,6 @@ export function FunctionWordEntryView({
                                                     {alt.headword}{' '}
                                                     <span className="opacity-55 font-sans text-xs text-black">
                                                         "{getGloss(alt, language, mode)}"
-                                                    </span>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </SideCard>
-                                )}
-
-                                {relatedEntries.length > 0 && (
-                                    <SideCard title={term('related-entries')}>
-                                        <div className="space-y-1">
-                                            {relatedEntries.map((rel: any) => (
-                                                <Link key={rel.id} to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
-                                                    {rel.headword}{' '}
-                                                    <span className="opacity-55 font-sans text-xs text-black">
-                                                        "{getGloss(rel, language, mode)}"
                                                     </span>
                                                 </Link>
                                             ))}

@@ -181,6 +181,8 @@ const run = () => {
     ], getAttestedEntries(mismatchAttested));
     assertEq(markedMismatch[0].passiveParticiple.value, 'mservi', 'metadata-marked passive cell should use attested surface');
     assertEq(markedMismatch[0].passiveParticiple.marker, 'plain', 'metadata-marked passive cell should be plain');
+    assertEq(markedMismatch[0].imperative.value, 'sserva', 'imperative should keep the generated surface');
+    assertEq(markedMismatch[0].imperative.marker, 'theoretical', 'imperative should mirror imperfect-style marker state');
 
     const imperfectParentAttested = [{
         id: 'imperfect-parent-1',

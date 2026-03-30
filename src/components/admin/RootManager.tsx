@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { CheckSquare, Edit2, Plus, RefreshCw, Square, Trash2 } from 'lucide-react';
-import { adminBulkDeleteRoots, adminDeleteRoot, adminListRoots } from '@/lib/api';
+import { adminBulkDeleteRoots, adminDeleteRoot, adminListRoots, adminSyncRootEtymology } from '@/lib/api';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -48,6 +48,7 @@ export function RootManager() {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
+    const [syncing, setSyncing] = useState(false);
     const createRootRequested = searchParams.get('create') === '1';
     const prefillConsonants = searchParams.get('consonants') || searchParams.get('q') || '';
 
@@ -136,6 +137,23 @@ export function RootManager() {
         }
     };
 
+    const syncEtymology = useCallback(async () => {
+        if (!window.confirm('Normalize all root etymology records to the new four-field shape?')) return;
+
+        setSyncing(true);
+        try {
+            const token = await getToken();
+            if (!token) throw new Error('Not authenticated');
+            const res = await adminSyncRootEtymology(token, true);
+            showToast(`Root etymology synced: ${res.updated} updated, ${res.skipped} skipped.`);
+            await load();
+        } catch (e: unknown) {
+            showToast(e instanceof Error ? e.message : String(e), false);
+        } finally {
+            setSyncing(false);
+        }
+    }, [getToken, load, showToast]);
+
     const noResults = !loading && roots.length === 0;
 
     const toolbarCount = useMemo(() => `${roots.length} ${term('found')}`, [roots.length, term]);
@@ -147,13 +165,16 @@ export function RootManager() {
                 countText={toolbarCount}
                 controls={(
                     <>
-                        <WorkspaceViewToggle viewMode={viewMode} onChange={setViewMode} />
-                        <Button variant="ghost" size="sm" onClick={load} leftIcon={<RefreshCw size={14} className={cn(loading && 'animate-spin')} />}>
-                            {term('refresh')}
-                        </Button>
-                        <Button size="sm" onClick={() => setShowAdd(true)} leftIcon={<Plus size={14} />}>
-                            {term('new-root')}
-                        </Button>
+                    <WorkspaceViewToggle viewMode={viewMode} onChange={setViewMode} />
+                    <Button variant="ghost" size="sm" onClick={load} leftIcon={<RefreshCw size={14} className={cn(loading && 'animate-spin')} />}>
+                        {term('refresh')}
+                    </Button>
+                    <Button variant="secondary" size="sm" onClick={syncEtymology} loading={syncing}>
+                        Sync Etymology
+                    </Button>
+                    <Button size="sm" onClick={() => setShowAdd(true)} leftIcon={<Plus size={14} />}>
+                        {term('new-root')}
+                    </Button>
                     </>
                 )}
                 filters={<SearchInput value={query} onChange={setQuery} onSubmit={load} placeholder={`${term('search-root')}...`} />}

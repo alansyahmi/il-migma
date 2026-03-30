@@ -177,19 +177,14 @@ export function applyPossessiveSuffix(
         }
     }
 
-    // ── Handle Variants (e.g. kotbi / kotbiti) ────────────────────────────────
+    // ── Handle CvCCa broken plurals with t-marbuta construct forms ────────────
     if (base === 'kotba' || (pattern === 'CvCCa' && base.length <= 5)) {
-        const kotobBase = 'kotob';
-        const v1 = kotobBase + (finalSuffix === 'ek' ? (isRound(kotobBase) ? 'ok' : 'ek') : finalSuffix);
-        
-        // v2 uses the construct stem (kotbt-) with a buffer for consonant suffixes
-        let stemV2 = stemB;
-        if (!isVowelSuffix && stemV2.endsWith('t')) {
-             stemV2 = stemV2.slice(0, -1) + 'it';
-        }
-        const v2 = stemV2 + finalSuffix;
-        
-        return Array.from(new Set([v1, v2])).join(' / ');
+        const kotobConstruct = 'kotobt';
+        const suffixToUse = finalSuffix === 'ek'
+            ? (isRound(kotobConstruct) ? 'ok' : 'ek')
+            : finalSuffix;
+
+        return kotobConstruct + suffixToUse;
     }
 
     return stem + finalSuffix;

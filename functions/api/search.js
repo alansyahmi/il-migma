@@ -10,6 +10,23 @@ import { createClient } from '@libsql/client/web';
 
 const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
 
+function firstSenseText(value) {
+    if (value === undefined || value === null) return '';
+    const text = String(value).trim();
+    if (!text) return '';
+    return text.split(/\s*;\s*/)[0]?.trim() || '';
+}
+
+function getQueryValues(params, key) {
+    return [...new Set(
+        params
+            .getAll(key)
+            .flatMap((value) => String(value).split(','))
+            .map((value) => value.trim())
+            .filter(Boolean)
+    )];
+}
+
 export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const q = url.searchParams.get('q')?.trim() ?? '';
@@ -17,7 +34,7 @@ export async function onRequestGet({ request, env }) {
     const rootType = url.searchParams.get('type') ?? '';
     const vowelSet = url.searchParams.get('v') ?? '';
     const wizen = url.searchParams.get('wizen') ?? '';
-    const form = url.searchParams.get('form') ?? '';
+    const forms = getQueryValues(url.searchParams, 'form');
     const verbType = url.searchParams.get('verb_type') ?? '';
     const source = url.searchParams.get('source') ?? '';
     const requestedGender = url.searchParams.get('gender')?.trim().toLowerCase() ?? '';
@@ -74,8 +91,11 @@ export async function onRequestGet({ request, env }) {
 
         let sql = `
             FROM entries e
-            LEFT JOIN roots r ON (e.root_consonants = r.consonants)
+            -- Prefer the explicit root link; otherwise join the canonical root id
+            -- stored on the entry. This avoids fanning out across homographic
+            -- roots that share the same consonants.
             LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id OR e.root_pattern_form_id = rpf.id)
+            LEFT JOIN roots r ON r.id = COALESCE(rpf.root_id, e.root_consonants)
             LEFT JOIN patterns pat ON (rpf.pattern_id = pat.id)
             LEFT JOIN definitions d ON d.entry_id = e.id AND d.sense_number = 1
             LEFT JOIN phonetics p   ON p.entry_id = e.id AND p.dialect = 'Standard'
@@ -177,9 +197,10 @@ export async function onRequestGet({ request, env }) {
             sql += ' AND (pat.wizen_notation = ? OR pat.cv_notation = ? OR e.cv_pattern = ?)';
             args.push(wizen, wizen, wizen);
         }
-        if (form) {
-            sql += ' AND e.verb_form = ?';
-            args.push(form);
+        if (forms.length > 0) {
+            const placeholders = forms.map(() => '?').join(', ');
+            sql += ` AND e.verb_form IN (${placeholders})`;
+            args.push(...forms);
         }
         if (verbType) {
             sql += ' AND e.verb_type = ?';
@@ -316,8 +337,8 @@ export async function onRequestGet({ request, env }) {
                     masculine: r.lemma_base || r.headword,
                     plural: inflections_pl.join(', ')
                 } : undefined,
-                definition_en: r.text_en,
-                definition_mt: r.text_mt,
+                definition_en: firstSenseText(r.text_en),
+                definition_mt: firstSenseText(r.text_mt),
                 zokk_morphology: r.zokk_morphology ? (() => { try { return JSON.parse(r.zokk_morphology); } catch { return undefined; } })() : undefined,
                 root_pattern_form: r.root_consonants ? {
                     id: '',

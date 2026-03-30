@@ -125,6 +125,11 @@ export interface NounMorphology {
     source_citation?: string;
 }
 
+export interface PluralFormRow {
+    form: string;
+    pattern: string;
+}
+
 export interface ConjugationRow {
     person_mt: string;   // e.g. "jiena"
     person_en: string;   // e.g. "I"
@@ -300,7 +305,11 @@ export interface AttestationReliability {
 // ─── Etymology ─────────────────────────────────────────────────────────────
 export interface EtymologyNode {
     language: SourceLanguage;
-    form: string;               // word form in source language
+    relationship?: string;
+    term?: string;              // word form in source language
+    pronunciation?: string;
+    definition?: string;
+    form?: string;
     meaning?: string;
     script?: string;            // e.g. Arabic script version
     time_period?: string;

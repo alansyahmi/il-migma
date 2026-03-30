@@ -24,6 +24,7 @@ import { AdvancedSearch } from '@/pages/AdvancedSearch';
 import { RootSearch } from '@/pages/RootSearch';
 import { Root } from '@/pages/Root';
 import { Suggest } from '@/pages/Suggest';
+import { Feedback } from '@/pages/Feedback';
 import { Browse } from '@/pages/Browse';
 import { Pattern } from '@/pages/Pattern';
 import { StemSearch } from '@/pages/StemSearch';
@@ -39,7 +40,7 @@ if (!PUBLISHABLE_KEY) {
 /** The layout shell: Navbar + <Outlet> + Footer */
 function AppShell() {
     const { pathname } = useLocation();
-    const hideFooter = pathname === '/suggest';
+    const hideFooter = pathname === '/suggest' || pathname === '/feedback';
 
     return (
         <div className="min-h-screen flex flex-col bg-[#F4F3F0] overflow-x-hidden">
@@ -79,6 +80,7 @@ export default function App() {
                                             <Route path="advanced-search" element={<AdvancedSearch />} />
                                             <Route path="root-search" element={<RootSearch />} />
                                             <Route path="suggest" element={<Suggest />} />
+                                            <Route path="feedback" element={<Feedback />} />
                                             <Route path="browse" element={<Browse />} />
                                             <Route path="pattern/:id" element={<Pattern />} />
                                             <Route path="stem-search" element={<StemSearch />} />

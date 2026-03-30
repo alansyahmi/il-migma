@@ -1,7 +1,8 @@
-import { Edit2, Filter, Info, Search, Tag, Trash2 } from 'lucide-react';
+import { Edit2, Search, Trash2 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import type { ConfigItem } from '@/lib/adminConfig';
 import type { AdminCategory } from '@/lib/adminCategoryRegistry';
+import { getPatternMetadataSummary } from '@/lib/patternBuckets';
 import { cn } from '@/lib/utils';
 
 interface AdminSettingsItemListProps {
@@ -40,60 +41,51 @@ export function AdminSettingsItemList({ items, activeCategory, onEdit, onDelete 
 
 function PatternCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (item: ConfigItem) => void; onDelete: (id: string, key: string) => void }) {
     const value = item.value as Record<string, unknown>;
+    const summary = getPatternMetadataSummary(value);
 
     return (
-        <Card className="p-4 border-border-light hover:border-[#1034A6]/30 transition-all group hover:shadow-xl hover:shadow-[#1034A6]/5">
-            <div className="flex items-start justify-between gap-3">
-                <div className="space-y-2 flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-bold text-xl text-black uppercase tracking-tight">{item.key}</h3>
-                        {!!value.linguistic_role && (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#1034A6]/10 text-[#1034A6] flex items-center gap-1">
-                                <Filter size={10} /> {String(value.linguistic_role).replace('_', ' ')}
-                            </span>
-                        )}
-                        {!!value.gender && (
+        <Card className="group relative overflow-hidden p-3.5 border-border-light transition-all hover:border-[#1034A6]/30 hover:shadow-xl hover:shadow-[#1034A6]/5">
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#1034A6]/75 via-[#1034A6]/20 to-transparent" />
+            <div className="flex items-start justify-between gap-2.5">
+                <div className="space-y-2.5 flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="inline-flex items-center rounded-full border border-[#1034A6]/10 bg-[#1034A6]/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#1034A6]">
+                            Pattern
+                        </span>
+                        <MetaChip label="Bucket" value={summary.bucketLabel} tone="accent" compact />
+                        {!!summary.role && <MetaChip label="Role" value={summary.role.replace(/_/g, ' ')} tone="neutral" />}
+                        {!!summary.gender && (
                             <span className={cn(
-                                'px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1',
-                                value.gender === 'feminine' ? 'bg-pink-100 text-pink-700' :
-                                    value.gender === 'masculine' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-700',
+                                'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold',
+                                summary.gender === 'feminine' ? 'bg-pink-50 border-pink-100 text-pink-700' :
+                                    summary.gender === 'masculine' ? 'bg-blue-50 border-blue-100 text-blue-700' : 'bg-slate-50 border-slate-100 text-slate-700',
                             )}>
-                                <Tag size={10} /> {String(value.gender)}
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-black/30">Gender</span>
+                                <span>{summary.gender}</span>
                             </span>
                         )}
                     </div>
 
-                    <div className="flex items-center gap-3 text-xs font-semibold flex-wrap">
-                        <div className="flex items-center gap-1.5 px-2 py-1 bg-black/5 rounded-lg border border-black/5">
-                            <span className="text-black/30 text-[10px] font-bold uppercase">CV</span>
-                            <span className="font-mono text-[#1034A6]">{String(value.cv || '-')}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 px-2 py-1 bg-black/5 rounded-lg border border-black/5">
-                            <span className="text-black/30 text-[10px] font-bold uppercase">Wizen</span>
-                            <span className="text-black">{String(value.wizen || '-')}</span>
-                        </div>
-                        {!!value.stress && (
-                            <div className="flex items-center gap-1.5 px-2 py-1 bg-black/5 rounded-lg border border-black/5">
-                                <span className="text-black/30 text-[10px] font-bold uppercase">Stress</span>
-                                <span className="text-black">{String(value.stress)}</span>
-                            </div>
-                        )}
+                    <h3 className="font-bold text-[17px] text-black uppercase tracking-tight">{item.key}</h3>
+
+                    <div className="flex flex-wrap gap-1.5">
+                        <MetaChip label="CV" value={String(value.cv || '-')} tone="accent" mono compact />
+                        <MetaChip label="Wizen" value={String(value.wizen || '-')} tone="neutral" compact />
+                        {value.stress ? <MetaChip label="Stress" value={String(value.stress)} tone="neutral" /> : null}
+                        {summary.posTypes.length > 0 ? (
+                            <MetaChip
+                                label="POS"
+                                value={summary.posTypes.slice(0, 3).map(pos => pos.toUpperCase()).join(' • ')}
+                                tone="neutral"
+                            />
+                        ) : null}
                     </div>
 
                     {!!value.description && (
-                        <p className="text-xs text-black/60 leading-relaxed flex items-start gap-2 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                            <Info size={14} className="text-[#1034A6] shrink-0 mt-0.5" />
+                        <p className="pt-1.5 border-t border-black/5 text-xs text-black/55 leading-relaxed line-clamp-2">
                             {String(value.description)}
                         </p>
                     )}
-
-                    <div className="flex flex-wrap gap-2 pt-1">
-                        {Array.isArray(value.pos_types) && value.pos_types.map((pos: string) => (
-                            <span key={pos} className="text-[9px] font-black uppercase text-black/30 border border-black/10 px-1.5 rounded bg-white">
-                                {pos}
-                            </span>
-                        ))}
-                    </div>
                 </div>
 
                 <ActionButtons item={item} onEdit={onEdit} onDelete={onDelete} />
@@ -174,6 +166,31 @@ function renderMeta(value: unknown) {
     return (
         <div className="flex gap-2">
             <span className="border-l border-black/10 pl-2">Value: {String(value)}</span>
+        </div>
+    );
+}
+
+function MetaChip({
+    label,
+    value,
+    tone,
+    mono = false,
+    compact = false,
+}: {
+    label: string;
+    value: string;
+    tone: 'accent' | 'neutral';
+    mono?: boolean;
+    compact?: boolean;
+}) {
+    return (
+        <div className={cn(
+            'inline-flex items-center gap-1.5 rounded-lg border text-xs font-semibold',
+            compact ? 'px-2 py-0.5' : 'px-2.5 py-1',
+            tone === 'accent' ? 'bg-[#1034A6]/5 border-[#1034A6]/10 text-[#1034A6]' : 'bg-black/5 border-black/5 text-black/80',
+        )}>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-black/30">{label}</span>
+            <span className={cn(mono && 'font-mono')}>{value}</span>
         </div>
     );
 }

@@ -38,6 +38,13 @@ export function truncate(text: string, maxLength: number): string {
     return text.slice(0, maxLength).trimEnd() + '…';
 }
 
+function firstSenseText(value: unknown): string {
+    if (value === undefined || value === null) return '';
+    const text = String(value).trim();
+    if (!text) return '';
+    return text.split(/\s*;\s*/)[0]?.trim() || '';
+}
+
 /** Format a date string for display */
 export function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('mt', {
@@ -71,8 +78,8 @@ export function getGloss(
     if (!item) return '';
 
     // 1. Handle flattened glosses (common in related_entries / search results)
-    const flatEn = item.gloss_en ?? item.translation_en ?? item.en;
-    const flatMt = item.gloss_mt ?? item.translation_mt ?? item.mt;
+    const flatEn = firstSenseText(item.gloss_en ?? item.translation_en ?? item.en);
+    const flatMt = firstSenseText(item.gloss_mt ?? item.translation_mt ?? item.mt);
 
     if (language === 'en') {
         if (flatEn) return flatEn;
@@ -86,8 +93,8 @@ export function getGloss(
     if (item.definitions && Array.isArray(item.definitions) && item.definitions.length > 0) {
         // Try all definitions until we find a non-empty one
         for (const def of item.definitions) {
-            const defEn = def.text_en || def.gloss_en || def.translation || def.en;
-            const defMt = def.text_mt || def.gloss_mt || def.mt;
+            const defEn = firstSenseText(def.text_en || def.gloss_en || def.translation || def.en);
+            const defMt = firstSenseText(def.text_mt || def.gloss_mt || def.mt);
 
             if (language === 'en') {
                 const val = defEn || defMt;
@@ -100,8 +107,8 @@ export function getGloss(
     }
 
     // 3. Handle single definition/gloss object passed directly (or Root objects)
-    const textEn = item.text_en || item.gloss_en || item.gloss || item.translation || item.en;
-    const textMt = item.text_mt || item.gloss_mt || item.mt;
+    const textEn = firstSenseText(item.text_en || item.gloss_en || item.gloss || item.translation || item.en);
+    const textMt = firstSenseText(item.text_mt || item.gloss_mt || item.mt);
     const desc = item.description;
 
     if (language === 'en') {

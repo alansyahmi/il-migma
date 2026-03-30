@@ -379,7 +379,19 @@ export function detectPluralType(headword: string, _soundSuffixes: string[]): Pl
     // 1. Endings that strongly suggest sound plural
     const soundEndings = ['a', 'i', 'u', 'à', 'è', 'ì', 'ò', 'ù'];
     if (soundEndings.some(e => headword.endsWith(e))) {
-        return { type: 'sound', suffix: 'iet' };
+        const normalizedSuffixes = (_soundSuffixes || [])
+            .map((suffix) => {
+                if (typeof suffix === 'string') return suffix;
+                if (suffix && typeof suffix === 'object') {
+                    const record = suffix as Record<string, unknown>;
+                    return String(record.cv || record.wizen || record.key || '').trim();
+                }
+                return '';
+            })
+            .map((suffix) => suffix.split('/')[0].trim().replace(/^-+/, ''))
+            .filter(Boolean);
+
+        return { type: 'sound', suffix: normalizedSuffixes[0] || 'iet' };
     }
 
     // 2. Short Semitic roots (≤4 characters without digraphs) -> broken plural

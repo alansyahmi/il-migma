@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
+import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
 
 import type { Entry } from '@/types';
 
@@ -18,6 +19,10 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
 
     if (entry.pos === 'noun' && entry.noun_morphology) {
         const m = entry.noun_morphology;
+        const pluralRows = compactPluralRows(normalizePluralFormRows(
+            m.plural_forms,
+            m.form_plural_pattern || entry.form_plural_pattern || entry.plural_pattern,
+        )).filter(row => row.form || row.pattern);
         return (
             <div className="rounded-lg border border-border-light bg-surface-soft overflow-hidden">
                 <div className="px-3 py-1.5 bg-[#1034A6]/5 border-b border-border-light">
@@ -27,7 +32,23 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 divide-x divide-y divide-border-light">
                     <Cell label={term('singular')} value={m.singular} />
-                    <Cell label={term('plural')} value={m.plural_forms.join(' / ')} />
+                    <Cell
+                        label={term('plural')}
+                        value={pluralRows.length > 0 ? (
+                            <div className="space-y-2">
+                                {pluralRows.map((row, index) => (
+                                    <div key={`${row.form}-${index}`} className="leading-tight">
+                                        <div>{row.form}</div>
+                                        {row.pattern && (
+                                            <div className="text-[11px] text-black/40 font-sans">
+                                                {row.pattern}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : m.plural_forms.join(' / ')}
+                    />
                     {m.sound_plural && <Cell label={term('regular-plural')} value={m.sound_plural} />}
                     {m.dual && <Cell label={term('dual')} value={m.dual} />}
                     {m.diminutive && <Cell label={term('diminutive')} value={m.diminutive} />}

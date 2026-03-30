@@ -123,7 +123,7 @@ export function StemManager() {
     }, [getToken, showToast]);
 
     const syncEtymology = useCallback(async () => {
-        if (!window.confirm('Normalize all stem etymology records to the new structured shape?')) return;
+        if (!window.confirm('Normalize all stem etymology records to the new four-field shape?')) return;
 
         setSyncing(true);
         try {

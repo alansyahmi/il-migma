@@ -8,19 +8,35 @@ export interface RootGloss {
     mt: string;
 }
 
-export interface RootEtymology {
+export interface EtymologyBaseStep {
     relationship: string;
     language: string;
     term: string;
-    pronunciation: string;
     definition: string;
+}
+
+export interface RootEtymology extends EtymologyBaseStep {}
+
+export interface StemEtymology extends EtymologyBaseStep {}
+
+export interface EntryEtymology extends EtymologyBaseStep {
+    pronunciation: string;
+}
+
+export type EtymologyStep = RootEtymology | EntryEtymology;
+
+export interface EntryDefinition {
+    text_en: string;
+    text_mt: string;
+    register: string;
+    nuance: string;
 }
 
 export interface RootFormData {
     id?: string;
     consonants: string;
     glosses: RootGloss[];
-    etymology: RootEtymology;
+    etymology: RootEtymology[];
     source: string;
     strength: string;
     weak_class?: string;
@@ -78,7 +94,11 @@ export function normalizeRootGloss(gloss: any): RootGloss[] {
  * Normalizes an etymology field into a RootEtymology object.
  */
 export function normalizeRootEtymology(ety: any): RootEtymology {
-    return normalizeEtymologyShape(ety, 'From');
+    return normalizeEtymologyChain(ety, 'From', false)[0] as RootEtymology;
+}
+
+export function normalizeRootEtymologyChain(ety: any): RootEtymology[] {
+    return normalizeEtymologyChain(ety, 'From', false) as RootEtymology[];
 }
 
 /**
@@ -108,19 +128,11 @@ export interface StemGloss {
     mt: string;
 }
 
-export interface StemEtymology {
-    relationship: string;
-    language: string;
-    term: string;
-    pronunciation: string;
-    definition: string;
-}
-
 export interface StemFormData extends StemMorphology {
     tags?: string; // comma separated
     source?: string;
     glosses: StemGloss[];
-    etymology: StemEtymology;
+    etymology: StemEtymology[];
     synonyms: any[];
     antonyms: any[];
     related_stems: any[];
@@ -177,7 +189,79 @@ export function normalizeStemGloss(gloss: any): StemGloss[] {
 }
 
 export function normalizeStemEtymology(ety: any): StemEtymology {
-    return normalizeEtymologyShape(ety, 'From');
+    return normalizeEtymologyChain(ety, 'From', false)[0] as StemEtymology;
+}
+
+export function normalizeStemEtymologyChain(ety: any): StemEtymology[] {
+    return normalizeEtymologyChain(ety, 'From', false) as StemEtymology[];
+}
+
+export function normalizeEntryEtymology(ety: any): EntryEtymology {
+    return normalizeEtymologyChain(ety, 'From', true)[0] as EntryEtymology;
+}
+
+export function normalizeEntryEtymologyChain(ety: any): EntryEtymology[] {
+    return normalizeEtymologyChain(ety, 'From', true) as EntryEtymology[];
+}
+
+function splitDefinitionText(value: any): string[] {
+    if (value === undefined || value === null) return [''];
+
+    const normalized = String(value);
+    if (!normalized.trim()) return [''];
+
+    const parts = normalized
+        .split(/\s*;\s*/)
+        .filter(Boolean);
+
+    return parts.length > 0 ? parts : [''];
+}
+
+function normalizeEntryDefinition(def: any): EntryDefinition[] {
+    const textEnParts = splitDefinitionText(def?.text_en ?? def?.definition_en ?? def?.gloss_en ?? def?.text ?? def?.en);
+    const textMtParts = splitDefinitionText(def?.text_mt ?? def?.definition_mt ?? def?.gloss_mt ?? def?.mt);
+    const register = String(def?.register ?? def?.sense_register ?? '').trim();
+    const nuance = String(def?.nuance ?? '').trim();
+    const count = Math.max(textEnParts.length, textMtParts.length);
+
+    if (count <= 1) {
+        return [{
+            text_en: textEnParts[0] || '',
+            text_mt: textMtParts[0] || '',
+            register,
+            nuance,
+        }];
+    }
+
+    return Array.from({ length: count }, (_, index) => ({
+        text_en: textEnParts[index] || '',
+        text_mt: textMtParts[index] || '',
+        register,
+        nuance,
+    }));
+}
+
+export function normalizeEntryDefinitions(definitions: any): EntryDefinition[] {
+    if (!definitions) {
+        return [{ text_en: '', text_mt: '', register: '', nuance: '' }];
+    }
+
+    try {
+        const parsed = typeof definitions === 'string' ? JSON.parse(definitions) : definitions;
+        const items = Array.isArray(parsed) ? parsed : [parsed];
+        const normalized = items.flatMap(item => normalizeEntryDefinition(item)).filter(item =>
+            item.text_en.trim() || item.text_mt.trim() || item.register || item.nuance
+        );
+
+        return normalized.length > 0
+            ? normalized
+            : [{ text_en: '', text_mt: '', register: '', nuance: '' }];
+    } catch {
+        const normalized = normalizeEntryDefinition({ text_en: definitions });
+        return normalized.length > 0
+            ? normalized
+            : [{ text_en: '', text_mt: '', register: '', nuance: '' }];
+    }
 }
 
 export function normalizeStemTags(tags: any): string[] {
@@ -207,12 +291,11 @@ export function normalizeStemRelationships(rel: any): any[] {
     }
 }
 
-function normalizeEtymologyShape(ety: any, defaultRelationship: string): RootEtymology {
-    const fallback: RootEtymology = {
+function normalizeEtymologyStep(ety: any, defaultRelationship: string, includePronunciation: boolean): EtymologyStep {
+    const fallback: EtymologyBaseStep = {
         relationship: defaultRelationship,
         language: '',
         term: '',
-        pronunciation: '',
         definition: '',
     };
 
@@ -232,17 +315,44 @@ function normalizeEtymologyShape(ety: any, defaultRelationship: string): RootEty
         const parsed = typeof ety === 'string' ? JSON.parse(ety) : ety;
 
         if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-            return {
+            const normalized: EtymologyBaseStep = {
                 relationship: pick(parsed, ['relationship', 'relation', 'type']) || defaultRelationship,
                 language: pick(parsed, ['language', 'source_language', 'sourceLanguage', 'origin_language', 'originLanguage']),
                 term: pick(parsed, ['term', 'form', 'word', 'source_term', 'sourceTerm', 'source_form', 'sourceForm']),
-                pronunciation: pick(parsed, ['pronunciation', 'ipa', 'transcription', 'phonetic', 'reading']),
                 definition: pick(parsed, ['definition', 'meaning', 'gloss', 'translation', 'text']),
             };
+
+            if (includePronunciation) {
+                return {
+                    ...normalized,
+                    pronunciation: pick(parsed, ['pronunciation', 'ipa', 'transcription', 'phonetic', 'reading']),
+                } as EntryEtymology;
+            }
+
+            return normalized;
         }
 
         return { ...fallback, definition: String(parsed) };
     } catch {
         return { ...fallback, definition: String(ety) };
+    }
+}
+
+export function normalizeEtymologyChain(ety: any, defaultRelationship: string, includePronunciation = false): EtymologyBaseStep[] | EntryEtymology[] {
+    if (!ety) {
+        return [normalizeEtymologyStep(null, defaultRelationship, includePronunciation)];
+    }
+
+    try {
+        const parsed = typeof ety === 'string' ? JSON.parse(ety) : ety;
+
+        if (Array.isArray(parsed)) {
+            const normalized = parsed.map(step => normalizeEtymologyStep(step, defaultRelationship, includePronunciation));
+            return normalized.length > 0 ? normalized : [normalizeEtymologyStep(null, defaultRelationship, includePronunciation)];
+        }
+
+        return [normalizeEtymologyStep(parsed, defaultRelationship, includePronunciation)];
+    } catch {
+        return [normalizeEtymologyStep(ety, defaultRelationship, includePronunciation)];
     }
 }

@@ -8,7 +8,7 @@ interface Tab {
 }
 
 interface TabsProps {
-    tabs: Tab[];
+    tabs: readonly Tab[];
     activeTab: string;
     onChange: (id: string) => void;
     className?: string;

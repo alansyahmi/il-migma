@@ -3,22 +3,25 @@ import { useSearchParams } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { ShieldAlert, FileText, Layers, Settings, Database, GitBranch } from 'lucide-react';
+import { ShieldAlert, FileText, Layers, Settings, Database, GitBranch, Inbox } from 'lucide-react';
 import { DbTools } from '@/components/admin/DbTools';
 import { AdminSettings } from '@/components/admin/AdminSettings';
 import { EntryManager } from '@/components/admin/EntryManager';
 import { RootManager } from '@/components/admin/RootManager';
 import { StemManager } from '@/components/admin/StemManager';
+import { SubmissionInbox } from '@/components/admin/SubmissionInbox';
 import { cn } from '@/lib/utils';
 
 export function Admin() {
     const { tier, isTrueAdmin } = useAuth();
     const { getToken } = useClerkAuth();
     const [searchParams, setSearchParams] = useSearchParams();
-    const tab = (searchParams.get('tab') as 'entries' | 'roots' | 'stems' | 'settings' | 'db') || 'entries';
+    const tab = (searchParams.get('tab') as 'entries' | 'roots' | 'stems' | 'inbox' | 'settings' | 'db') || 'entries';
 
-    const setTab = (nextTab: 'entries' | 'roots' | 'stems' | 'settings' | 'db') => {
-        setSearchParams({ tab: nextTab });
+    const setTab = (nextTab: 'entries' | 'roots' | 'stems' | 'inbox' | 'settings' | 'db') => {
+        const nextParams = new URLSearchParams(searchParams);
+        nextParams.set('tab', nextTab);
+        setSearchParams(nextParams);
     };
 
     const hasAdminRights = isTrueAdmin || tier === 'enterprise';
@@ -29,6 +32,7 @@ export function Admin() {
             entries: term('entries'),
             roots: term('roots'),
             stems: 'Stems',
+            inbox: 'Feedback Inbox',
             settings: term('settings'),
             db: term('db-tools'),
         };
@@ -78,6 +82,15 @@ export function Admin() {
                         <GitBranch size={16} /> Stems
                     </button>
                     <button
+                        onClick={() => setTab('inbox')}
+                        className={cn(
+                            'px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2',
+                            tab === 'inbox' ? 'bg-white text-link shadow-sm' : 'text-black/40 hover:text-black/60',
+                        )}
+                    >
+                        <Inbox size={16} /> Inbox
+                    </button>
+                    <button
                         onClick={() => setTab('settings')}
                         className={cn(
                             'px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2',
@@ -101,6 +114,7 @@ export function Admin() {
             {tab === 'entries' && <EntryManager />}
             {tab === 'roots' && <RootManager />}
             {tab === 'stems' && <StemManager />}
+            {tab === 'inbox' && <SubmissionInbox />}
             {tab === 'settings' && <AdminSettings />}
             {tab === 'db' && <DbTools getToken={getToken} />}
         </div>

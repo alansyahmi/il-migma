@@ -106,6 +106,21 @@ export function AdminSettings() {
         });
     }, [categoryOrder]);
 
+    const resolveCreateCategory = (category: AdminCategory | null, value: unknown) => {
+        const fallback = category?.storageCategories?.[0] ?? activeTab;
+        if (category?.id !== 'plural_pattern') return fallback;
+
+        const patternValue = value as Record<string, unknown> | null;
+        const linguisticRole = String(patternValue?.linguistic_role || '').toLowerCase();
+        const cv = String(patternValue?.cv || '').trim();
+
+        if (linguisticRole === 'sound_plural' || cv.startsWith('-')) {
+            return 'sound_suffix';
+        }
+
+        return 'broken_pattern';
+    };
+
     const groupedCategories = useMemo(() => {
         const groups = new Map<AdminCategoryGroupId, AdminCategory[]>();
 
@@ -429,7 +444,10 @@ export function AdminSettings() {
                         if (editItem) {
                             await updateItem({ ...editItem, ...val });
                         } else {
-                            await createItem({ category: activeTab, ...val });
+                            // Composite tabs (like plural patterns) display items from multiple
+                            // storage categories, so new rows need to be written to a real
+                            // underlying category instead of the logical tab id.
+                            await createItem({ category: resolveCreateCategory(activeCategory, val.value), ...val });
                         }
                         setShowAdd(false);
                         setEditItem(null);

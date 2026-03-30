@@ -83,6 +83,32 @@ function parsePatternCompositeId(id) {
     };
 }
 
+async function upsertPatternByCv(client, cv, wizen, description) {
+    const existingByCv = await client.execute({
+        sql: `SELECT id FROM patterns WHERE cv_notation = ? LIMIT 1`,
+        args: [cv]
+    });
+
+    if (existingByCv.rows.length) {
+        const existingId = String(existingByCv.rows[0].id);
+        await client.execute({
+            sql: `UPDATE patterns
+                  SET wizen_notation = ?, description = COALESCE(?, description)
+                  WHERE id = ?`,
+            args: [wizen, description ?? null, existingId]
+        });
+        return existingId;
+    }
+
+    const patternId = btoa(encodeURIComponent(`${cv}|${wizen}`)).replace(/=/g, '');
+    await client.execute({
+        sql: `INSERT INTO patterns (id, cv_notation, wizen_notation, description)
+              VALUES (?, ?, ?, ?)`,
+        args: [patternId, cv, wizen, description ?? null]
+    });
+    return patternId;
+}
+
 // ── GET — list config ────────────────────────────────────────────────────────
 export async function onRequestGet({ request, env }) {
     try {
@@ -117,7 +143,7 @@ export async function onRequestGet({ request, env }) {
             WHERE pa.is_active = 1
         `;
 
-        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'adjective_pattern'];
+        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
 
         let patterns = [];
         if (!category || normalizedCategories.includes(category)) {
@@ -189,22 +215,11 @@ export async function onRequestPost({ request, env }) {
         const client = getDbClient(env);
         const id = Math.random().toString(36).slice(2, 11);
 
-        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'adjective_pattern'];
+        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
         if (normalizedCategories.includes(category)) {
             const cv = value.cv;
             const wizen = value.wizen;
-            const patternId = btoa(encodeURIComponent(`${cv}|${wizen}`)).replace(/=/g, '');
-
-            // Upsert pattern without delete/reinsert semantics to preserve FK chains.
-            await client.execute({
-                sql: `INSERT INTO patterns (id, cv_notation, wizen_notation, description)
-                      VALUES (?, ?, ?, ?)
-                      ON CONFLICT(id) DO UPDATE SET
-                        cv_notation = excluded.cv_notation,
-                        wizen_notation = excluded.wizen_notation,
-                        description = excluded.description`,
-                args: [patternId, cv, wizen, value.description]
-            });
+            const patternId = await upsertPatternByCv(client, cv, wizen, value.description);
 
             // Insert applicability (one for each POS, or 'all')
             const posTypes = value.pos_types?.length > 0 ? value.pos_types : ['all'];
@@ -244,7 +259,7 @@ export async function onRequestPut({ request, env }) {
 
         const client = getDbClient(env);
 
-        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'adjective_pattern'];
+        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
         if (category && normalizedCategories.includes(category)) {
             // value is a whole object {cv, wizen, stress, pos_types}
             try {
@@ -255,18 +270,7 @@ export async function onRequestPut({ request, env }) {
 
             const cv = value.cv;
             const wizen = value.wizen;
-            const patternId = btoa(encodeURIComponent(`${cv}|${wizen}`)).replace(/=/g, '');
-
-            // 1. Ensure pattern exists (safe upsert, no cascading delete side-effects).
-            await client.execute({
-                sql: `INSERT INTO patterns (id, cv_notation, wizen_notation, description)
-                      VALUES (?, ?, ?, ?)
-                      ON CONFLICT(id) DO UPDATE SET
-                        cv_notation = excluded.cv_notation,
-                        wizen_notation = excluded.wizen_notation,
-                        description = excluded.description`,
-                args: [patternId, cv, wizen, value.description]
-            });
+            const patternId = await upsertPatternByCv(client, cv, wizen, value.description);
 
             // 2. Delete old applicability group (supports both grouped IDs and row IDs)
             const parsed = parsePatternCompositeId(id);

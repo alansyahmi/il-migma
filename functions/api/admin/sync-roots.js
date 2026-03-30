@@ -1,10 +1,10 @@
 /**
- * Admin stem sync — /api/admin/sync-stems
- * Normalizes legacy stem etymology records into the structured four-field shape.
+ * Admin root etymology sync — /api/admin/sync-roots
+ * Normalizes legacy root etymology records into the structured four-field shape.
  */
 
 import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
-import { normalizeStemEtymologyValue } from './stems.js';
+import { normalizeRootEtymologyValue } from './etymology.js';
 
 async function verifyAdmin(request, env) {
     const auth = request.headers.get('Authorization') ?? '';
@@ -60,12 +60,13 @@ function parseJsonValue(value) {
     return null;
 }
 
-function isNormalizedStemEtymology(raw, normalized) {
+function isNormalizedRootEtymology(raw, normalized) {
     const canonicalKeys = ['relationship', 'language', 'term', 'definition'];
     const legacyKeys = [
         'relation', 'type',
         'source_language', 'sourceLanguage', 'origin_language', 'originLanguage',
         'source_term', 'sourceTerm', 'source_form', 'sourceForm', 'form', 'word',
+        'pronunciation', 'ipa', 'transcription', 'phonetic', 'reading',
         'meaning', 'gloss', 'translation', 'text',
     ];
 
@@ -92,7 +93,7 @@ export async function onRequestPost({ request, env }) {
         const commit = body.commit === true;
         const client = getDbClient(env);
         const res = await client.execute({
-            sql: 'SELECT stem_string, etymology FROM stems ORDER BY stem_string ASC',
+            sql: 'SELECT id, consonants, etymology FROM roots ORDER BY consonants ASC',
             args: [],
         });
 
@@ -106,12 +107,13 @@ export async function onRequestPost({ request, env }) {
             examined += 1;
 
             const raw = parseJsonValue(row.etymology);
-            const normalized = normalizeStemEtymologyValue(row.etymology);
-            const needsUpdate = !isNormalizedStemEtymology(raw, normalized);
+            const normalized = normalizeRootEtymologyValue(row.etymology);
+            const needsUpdate = !isNormalizedRootEtymology(raw, normalized);
 
             if (samples.length < 10) {
                 samples.push({
-                    stem_string: String(row.stem_string || ''),
+                    id: String(row.id || ''),
+                    consonants: String(row.consonants || ''),
                     before: raw,
                     after: normalized,
                     needs_update: needsUpdate,
@@ -129,16 +131,16 @@ export async function onRequestPost({ request, env }) {
             }
 
             await client.execute({
-                sql: 'UPDATE stems SET etymology = ?, updated_at = ? WHERE stem_string = ?',
-                args: [JSON.stringify(normalized), now(), row.stem_string],
+                sql: 'UPDATE roots SET etymology = ?, updated_at = ? WHERE id = ? OR LOWER(consonants) = LOWER(?)',
+                args: [JSON.stringify(normalized), now(), row.id, row.consonants],
             });
             updated += 1;
             if (updated <= 20) {
-                logs.push(`Normalized ${row.stem_string}`);
+                logs.push(`Normalized ${row.consonants}`);
             }
         }
 
-        logs.unshift(`Stem etymology sync complete (commit=${commit})`);
+        logs.unshift(`Root etymology sync complete (commit=${commit})`);
         logs.push(`Examined ${examined} rows.`);
 
         return json({

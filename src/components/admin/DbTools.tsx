@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
     Database, Table, CheckCircle2, AlertCircle, Info, Download,
     Play, Trash2, GitMerge, RefreshCw, Lock, Unlock, Search,
@@ -20,9 +21,21 @@ interface DbToolsProps {
     getToken: () => Promise<string | null>;
 }
 
+type DbToolsTab = 'console' | 'export' | 'integrity' | 'bulk';
+
+const DEFAULT_DB_TOOLS_TAB: DbToolsTab = 'console';
+
+function isDbToolsTab(value: string | null): value is DbToolsTab {
+    return value === 'console' || value === 'export' || value === 'integrity' || value === 'bulk';
+}
+
 export function DbTools({ getToken }: DbToolsProps) {
     const { t } = useLanguage();
-    const [activeTab, setActiveTab] = useState<'console' | 'export' | 'integrity' | 'bulk'>('console');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const rawTab = searchParams.get('dbtab');
+    const activeTab = isDbToolsTab(rawTab)
+        ? rawTab
+        : DEFAULT_DB_TOOLS_TAB;
     const [tables, setTables] = useState<any[]>([]);
 
     const loadTableInfo = useCallback(async () => {
@@ -47,13 +60,19 @@ export function DbTools({ getToken }: DbToolsProps) {
         { id: 'bulk', label: t('Bulk Ops', 'Operazzjonijiet'), icon: GitMerge },
     ];
 
+    const setActiveTab = (nextTab: DbToolsTab) => {
+        const nextParams = new URLSearchParams(searchParams);
+        nextParams.set('dbtab', nextTab);
+        setSearchParams(nextParams);
+    };
+
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex flex-wrap gap-2 p-1 bg-black/5 rounded-2xl w-fit">
                 {tabs.map(tab => (
                     <button
                         key={tab.id}
-                        onClick={() => setActiveTab(tab.id as any)}
+                        onClick={() => setActiveTab(tab.id as DbToolsTab)}
                         className={cn(
                             "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all",
                             activeTab === tab.id

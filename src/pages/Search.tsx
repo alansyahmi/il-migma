@@ -70,6 +70,16 @@ const DEFAULT_FILTERS: Filters = {
     includePending: true,
 };
 
+function readMultiValueParams(searchParams: URLSearchParams, key: string): string[] {
+    return [...new Set(
+        searchParams
+            .getAll(key)
+            .flatMap((value) => String(value).split(','))
+            .map((value) => value.trim())
+            .filter(Boolean),
+    )];
+}
+
 // ── Sub-components ─────────────────────────────────────────────────────────
 function FilterSelect({
     label, value, onChange, options,
@@ -354,7 +364,7 @@ export function Search() {
         ...getOptions('verb_class', mode, language)
     ], [getOptions, mode, language, term]);
 
-    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type') || searchParams.has('source') || searchParams.has('gender');
+    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type') || searchParams.has('source') || searchParams.has('gender') || searchParams.has('form');
     const submitted = searchParams.get('q') ?? '';
 
     // Effect to fetch from API
@@ -370,7 +380,7 @@ export function Search() {
             const source = searchParams.get('source') || undefined;
             const gender = searchParams.get('gender') || undefined;
             const v = searchParams.get('v') || undefined;
-            const form = searchParams.get('form') || undefined;
+            const forms = readMultiValueParams(searchParams, 'form');
             const pending = searchParams.get('pending') === 'true' || searchParams.get('pending') === null; // default to true if not present to match DEFAULT_FILTERS
             const suggested = searchParams.get('suggested') === 'true';
             const limit = Number(searchParams.get('limit') ?? DEFAULT_FILTERS.maxResults);
@@ -382,15 +392,15 @@ export function Search() {
                     pos,
                     type,
                     source,
-                    gender,
-                    limit,
-                    offset,
-                    random,
-                    v,
-                    form,
-                    includePending: pending,
-                    includeSuggested: suggested,
-                });
+                gender,
+                limit,
+                offset,
+                random,
+                v,
+                forms: forms.length > 0 ? forms : undefined,
+                includePending: pending,
+                includeSuggested: suggested,
+            });
 
                 if (cancelled) return;
 

@@ -3,6 +3,7 @@ import { apiGetRoot, apiSearch } from '@/lib/api';
 import {
     normalizeRootGloss,
     normalizeRootEtymology,
+    normalizeRootEtymologyChain,
     normalizeRootRelationships,
     type RootGloss,
     type RootEtymology
@@ -38,6 +39,7 @@ export interface RootDataState {
     normalized: {
         glosses: RootGloss[];
         etymology: RootEtymology;
+        etymologyChain: RootEtymology[];
         tags: string[];
         relationships: {
             synonyms: any[];
@@ -74,12 +76,13 @@ export function useRootData(id: string | undefined) {
             const entries = (searchRes.results as any) as Entry[];
 
             // Normalize fields using shared utilities
-            const normalized = {
-                glosses: normalizeRootGloss(root.gloss),
-                etymology: normalizeRootEtymology(root.etymology),
-                tags: typeof root.tags === 'string'
-                    ? JSON.parse(root.tags || '[]')
-                    : (Array.isArray(root.tags) ? root.tags : []),
+        const normalized = {
+            glosses: normalizeRootGloss(root.gloss),
+            etymology: normalizeRootEtymology(root.etymology),
+            etymologyChain: normalizeRootEtymologyChain(root.etymology),
+            tags: typeof root.tags === 'string'
+                ? JSON.parse(root.tags || '[]')
+                : (Array.isArray(root.tags) ? root.tags : []),
                 relationships: {
                     synonyms: normalizeRootRelationships(root.synonyms),
                     antonyms: normalizeRootRelationships(root.antonyms),

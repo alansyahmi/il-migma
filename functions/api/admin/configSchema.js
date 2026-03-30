@@ -11,7 +11,7 @@ export function validateAndNormalize(category, value) {
     const nfc = (s) => (typeof s === 'string' ? s.normalize('NFC').trim() : s);
 
     // 1. Pattern Categories
-    const patternCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'adjective_pattern'];
+    const patternCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
     if (patternCategories.includes(category)) {
         let obj = value;
 

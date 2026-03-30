@@ -12,6 +12,7 @@ import { generateRootForms } from '@/lib/conjugationEngine';
 import type { WeakClass } from '@/types';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { RelationshipEditor } from './RelationshipEditor';
+import { EtymologyChainEditor } from './EtymologyChainEditor';
 import { entryToForm, formToPayload, INITIAL_FORM_STATE } from '@/lib/entryAdapter';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
@@ -21,8 +22,17 @@ import {
     generateNumeralForms
 } from '@/lib/maltesePhonology';
 import { resolveEntryGender } from '@/lib/gender';
+import { normalizeEntryDefinitions, normalizeRootEtymologyChain } from '@/lib/adminUtils';
 import { ENTRY_HANDLED_FIELDS, resolveEntryMorphologyMode } from '@/lib/adminSchema';
 import { resolveTagLabel } from '@/lib/tagLabel';
+import {
+    compactPluralRows,
+    normalizePluralFormRows,
+    pluralRowsToLegacyForms,
+    pluralRowsToLegacyPatternString,
+    type PluralFormRow,
+} from '@/lib/pluralForms';
+import { buildPatternOptions, getPatternNotation, type PatternOption, type PatternSourceItem } from '@/lib/patternBuckets';
 
 export interface AdminEntry {
     id: string;
@@ -67,7 +77,7 @@ interface MorphologyProps {
         label: string;
         inp: string;
         sel: string;
-        check: string;
+        check?: string;
         grid: string;
     };
     insertChar: (char: string) => void;
@@ -85,9 +95,11 @@ interface MorphologyProps {
         broken_patterns?: any[];
         cv_wizen_patterns?: any[];
         sound_suffixes?: string[];
-        patterns?: { label: string; value: string; sub?: string }[];
-        feminine_patterns?: { label: string; value: string; sub?: string }[];
-        diminutive_patterns?: { label: string; value: string; sub?: string }[];
+        patterns?: PatternOption[];
+        plural_patterns?: PatternOption[];
+        elative_patterns?: PatternOption[];
+        feminine_patterns?: PatternOption[];
+        diminutive_patterns?: PatternOption[];
         suggestions?: {
             broken_pattern?: string;
             feminine?: string;
@@ -242,6 +254,13 @@ const PatternTagField = ({
                             }
                         }
                     }}
+                    onBlur={e => {
+                        const val = e.currentTarget.value.trim();
+                        if (val && !values.includes(val)) {
+                            onChange([...values, val].join(', '));
+                        }
+                        e.currentTarget.value = '';
+                    }}
                 />
             </div>
             {suggestion && value !== suggestion && (
@@ -285,7 +304,140 @@ const VowelSetRow = ({ form, set, t, styles, onFocus, insertChar, fields, sugges
     </div>
 );
 
+const PluralFormsEditor = ({
+    rows,
+    onChange,
+    t,
+    styles,
+    pluralPatterns,
+}: {
+    rows: PluralFormRow[];
+    onChange: (rows: PluralFormRow[]) => void;
+    t: (en: string, mt: string) => string;
+    styles: MorphologyProps['styles'];
+    pluralPatterns?: { label: string; value: string; sub?: string }[];
+}) => {
+    const activeRows = rows.length > 0 ? rows : [{ form: '', pattern: '' }];
+
+    const syncRows = (nextRows: PluralFormRow[]) => {
+        const compacted = compactPluralRows(nextRows);
+        onChange(compacted);
+    };
+
+    const updateRow = (index: number, key: keyof PluralFormRow, value: string) => {
+        const next = [...activeRows];
+        next[index] = { ...next[index], [key]: value };
+        syncRows(next);
+    };
+
+    const moveRow = (index: number, direction: 'up' | 'down') => {
+        const next = [...activeRows];
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= next.length) return;
+        [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+        syncRows(next);
+    };
+
+    return (
+        <fieldset className="border border-border-light rounded-lg p-4 space-y-4">
+            <div className="flex justify-between items-center px-1">
+                <legend className="text-xs font-semibold text-black uppercase tracking-tight">
+                    {t('Plural Forms', 'Forom tal-Plural')}
+                </legend>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 text-xs"
+                    onClick={() => syncRows([...activeRows, { form: '', pattern: '' }])}
+                >
+                    + {t('Add Plural', 'Żid Plural')}
+                </Button>
+            </div>
+            <p className="px-1 -mt-2 text-[10px] text-black/40">
+                {t('Add each plural form on its own row so every plural can keep its own pattern.', 'Żid kull forma tal-plural f\'riga separata sabiex kull plural ikollu mudell tiegħu.' )}
+            </p>
+
+            <div className="space-y-3">
+                {activeRows.map((row, index) => (
+                    <div key={index} className="bg-slate-50 p-3 rounded-md border border-slate-100 space-y-3 relative group">
+                        <div className="absolute top-2 right-2 flex items-center gap-1 group-hover:opacity-100 transition-opacity">
+                            <button
+                                type="button"
+                                onClick={() => moveRow(index, 'up')}
+                                disabled={index === 0}
+                                className="p-1 text-slate-400 hover:text-[#1034A6] disabled:opacity-0"
+                            >
+                                <ArrowUp size={14} />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => moveRow(index, 'down')}
+                                disabled={index === activeRows.length - 1}
+                                className="p-1 text-slate-400 hover:text-[#1034A6] disabled:opacity-0"
+                            >
+                                <ArrowDown size={14} />
+                            </button>
+                            {activeRows.length > 1 && (
+                                <button
+                                    type="button"
+                                    onClick={() => syncRows(activeRows.filter((_, idx) => idx !== index))}
+                                    className="p-1 text-slate-400 hover:text-red-500"
+                                >
+                                    <span className="sr-only">Delete</span>
+                                    &times;
+                                </button>
+                            )}
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label className={styles.label}>
+                                    {t('Plural Form', 'Forma tal-Plural')} {index + 1}
+                                </label>
+                                <input
+                                    className={styles.inp}
+                                    value={row.form}
+                                    onChange={e => updateRow(index, 'form', e.target.value)}
+                                    placeholder="e.g. klieb"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <div>
+                                    <label className={styles.label}>
+                                        {t('Plural Pattern', 'Mudell tal-Plural')} {index + 1}
+                                    </label>
+                                    <input
+                                        className={styles.inp}
+                                        value={row.pattern}
+                                        onChange={e => updateRow(index, 'pattern', e.target.value)}
+                                        placeholder="e.g. CaCCa"
+                                    />
+                                </div>
+                                {pluralPatterns && pluralPatterns.length > 0 && (
+                                    <PatternPresetChips
+                                        label={t('Pattern Presets', 'Mudelli Presets')}
+                                        patterns={pluralPatterns}
+                                        value={row.pattern}
+                                        onSelect={value => updateRow(index, 'pattern', value)}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </fieldset>
+    );
+};
+
 const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, suggestions }: MorphologyProps) => {
+    const pluralRows = compactPluralRows(normalizePluralFormRows(form.plural_forms, form.form_plural_pattern));
+    const updatePluralRows = (rows: PluralFormRow[]) => {
+        const compacted = compactPluralRows(rows);
+        set('plural_forms', compacted);
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex gap-4 p-3 bg-surface-soft rounded-lg border border-border">
@@ -457,27 +609,15 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
                 )}
             </div>
 
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
-                <div className={styles.grid}>
-                    <div>
-                        <label className={styles.label}>{t('Plural Form', 'Forma tal-Plural')}</label>
-                        <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} placeholder="e.g. klieb, djar" />
-                    </div>
-                    <div>
-                        <PatternTagField
-                            label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                            value={form.form_plural_pattern || ''}
-                            onChange={v => set('form_plural_pattern', v)}
-                            placeholder="e.g. CaCCaC, -ijet"
-                            presets={options?.patterns}
-                            suggestion={options?.suggestions?.broken_pattern}
-                            onSuggest={() => options?.suggestions?.broken_pattern && set('form_plural_pattern', options.suggestions.broken_pattern)}
-                            styles={styles}
-                            t={t}
-                        />
-                    </div>
-                </div>
+            <PluralFormsEditor
+                rows={pluralRows}
+                onChange={updatePluralRows}
+                t={t}
+                styles={styles}
+                pluralPatterns={options?.plural_patterns}
+            />
 
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
                 <div className="space-y-4">
                     <div>
                         <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
@@ -614,15 +754,15 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
                     <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
                 </div>
                 <div>
-                    <PatternTagField
-                        label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                        value={form.form_plural_pattern || ''}
-                        onChange={v => set('form_plural_pattern', v)}
-                        placeholder="e.g. CaCCaC, -ijet"
-                        presets={options?.patterns}
-                        styles={styles}
-                        t={t}
-                    />
+                        <PatternTagField
+                            label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
+                            value={form.form_plural_pattern || ''}
+                            onChange={v => set('form_plural_pattern', v)}
+                            placeholder="e.g. CaCCaC, -ijet"
+                            presets={options?.plural_patterns}
+                            styles={styles}
+                            t={t}
+                        />
                 </div>
             </div>
         </div>
@@ -640,7 +780,7 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
                             value={form.elative_pattern || ''}
                             onChange={v => set('elative_pattern', v)}
                             placeholder="e.g. aCCaC"
-                            presets={options?.patterns}
+                            presets={options?.elative_patterns}
                             styles={styles}
                             t={t}
                         />
@@ -679,13 +819,21 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
             <div className={styles.grid}>
                 <div>
                     <label className={styles.label}>{t('Vowel Set (Perf)', 'Sett ta\' vokali (Perf)')}</label>
-                    <input className={styles.inp} value={form.verb_vowel_perf} onChange={e => set('verb_vowel_perf', e.target.value)} />
+                    <input className={styles.inp} value={form.verb_vowel_perf} onChange={e => set('verb_vowel_perf', e.target.value)} onFocus={() => onFocus('verb_vowel_perf')} />
                     <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_perf', v)} />
                 </div>
                 <div>
                     <label className={styles.label}>{t('Vowel Set (Impf)', 'Sett ta\' vokali (Impf)')}</label>
-                    <input className={styles.inp} value={form.verb_vowel_impf} onChange={e => set('verb_vowel_impf', e.target.value)} />
+                    <input className={styles.inp} value={form.verb_vowel_impf} onChange={e => set('verb_vowel_impf', e.target.value)} onFocus={() => onFocus('verb_vowel_impf')} />
                     <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_impf', v)} />
+                </div>
+            </div>
+
+            <div className={styles.grid}>
+                <div>
+                    <label className={styles.label}>{t('Vowel Set (Impv)', 'Sett ta\' vokali (Impv)')}</label>
+                    <input className={styles.inp} value={form.verb_vowel_impv} onChange={e => set('verb_vowel_impv', e.target.value)} onFocus={() => onFocus('verb_vowel_impv')} />
+                    <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_impv', v)} />
                 </div>
             </div>
 
@@ -884,7 +1032,7 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
                             value={form.elative_pattern || ''}
                             onChange={v => set('elative_pattern', v)}
                             placeholder="e.g. aCCaC"
-                            presets={options?.patterns}
+                            presets={options?.elative_patterns}
                             styles={styles}
                             t={t}
                         />
@@ -896,15 +1044,15 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
         <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
             <div className={styles.grid}>
                 <div>
-                    <PatternTagField
-                        label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                        value={form.form_plural_pattern || ''}
-                        onChange={v => set('form_plural_pattern', v)}
-                        placeholder="e.g. CaCCaC, -ijet"
-                        presets={options?.patterns}
-                        styles={styles}
-                        t={t}
-                    />
+                        <PatternTagField
+                            label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
+                            value={form.form_plural_pattern || ''}
+                            onChange={v => set('form_plural_pattern', v)}
+                            placeholder="e.g. CaCCaC, -ijet"
+                            presets={options?.plural_patterns}
+                            styles={styles}
+                            t={t}
+                        />
                 </div>
             </div>
         </div>
@@ -1029,15 +1177,15 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
                     <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
                 </div>
                 <div>
-                    <PatternTagField
-                        label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                        value={form.form_plural_pattern || ''}
-                        onChange={v => set('form_plural_pattern', v)}
-                        placeholder="e.g. CaCCaC, -ijet"
-                        presets={options?.patterns}
-                        styles={styles}
-                        t={t}
-                    />
+                        <PatternTagField
+                            label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
+                            value={form.form_plural_pattern || ''}
+                            onChange={v => set('form_plural_pattern', v)}
+                            placeholder="e.g. CaCCaC, -ijet"
+                            presets={options?.plural_patterns}
+                            styles={styles}
+                            t={t}
+                        />
                 </div>
             </div>
         </div>
@@ -1172,7 +1320,7 @@ function StemMorphologyFields({
     t,
     styles,
     hasRootConsonants,
-    sourceLanguageOptions
+    sourceLanguageOptions,
 }: {
     form: any;
     set: (k: string, v: any) => void;
@@ -1181,6 +1329,7 @@ function StemMorphologyFields({
         label: string;
         inp: string;
         sel: string;
+        grid: string;
     };
     hasRootConsonants: boolean;
     sourceLanguageOptions: string[];
@@ -1248,10 +1397,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const SOUND_SUFFIXES = getValues('sound_suffix');
     const VERB_PRESETS_LIST = getValues('verb_preset');
     const VERB_FORM_OPTIONS = getValues('verb_form');
-    const CV_WIZEN_PATTERNS = getValues('cv_wizen_pattern');
-    const BROKEN_PATTERNS = getValues('broken_pattern');
-    const FEMININE_PATTERNS_RAW = getValues('feminine_pattern');
-    const DIMINUTIVE_PATTERNS_RAW = getValues('diminutive_pattern');
+    const CV_WIZEN_PATTERNS = getValues('cv_wizen_pattern') as PatternSourceItem[];
+    const BROKEN_PATTERNS = getValues('broken_pattern') as PatternSourceItem[];
+    const PLURAL_PATTERNS = getValues('plural_pattern') as PatternSourceItem[];
+    const ELATIVE_PATTERNS_RAW = getValues('adjective_pattern') as PatternSourceItem[];
+    const RELATIONSHIP_OPTIONS = getValues('root_relationship');
+    const FEMININE_PATTERNS_RAW = getValues('feminine_pattern') as PatternSourceItem[];
+    const DIMINUTIVE_PATTERNS_RAW = getValues('diminutive_pattern') as PatternSourceItem[];
     const SOURCE_LANGUAGE_OPTIONS = getValues('source_language');
     const PARTICIPLE_NUANCES = useMemo(() => getOptions('participle_nuance', mode, language), [getOptions, mode, language]);
     const VERB_TRANSITIVITY_OPTIONS = useMemo(() => getOptions('verb_transitivity', mode, language), [getOptions, mode, language]);
@@ -1259,47 +1411,34 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
 
 
-    const nounPatterns = useMemo(() => {
-        return BROKEN_PATTERNS.filter((p: any) => {
-            const matchesPos = !p.pos_types || p.pos_types.length === 0 || p.pos_types.includes('noun');
-            const matchesRole = !p.linguistic_role || p.linguistic_role === 'broken_plural';
-            return matchesPos && matchesRole;
-        }).map((p: any) => ({
-            label: mode === 'standard' ? p.cv : p.wizen,
-            value: p.cv,
-            sub: mode === 'standard' ? p.wizen : p.cv
-        }));
-    }, [BROKEN_PATTERNS, mode]);
+    const nounPatterns = useMemo(() => (
+        buildPatternOptions(BROKEN_PATTERNS, mode, {
+            pos: 'noun',
+            roles: ['broken_plural'],
+        })
+    ), [BROKEN_PATTERNS, mode]);
 
-    const adjPatterns = useMemo(() => {
-        return BROKEN_PATTERNS.filter((p: any) => {
-            const matchesPos = !p.pos_types || p.pos_types.length === 0 || p.pos_types.includes('adjective');
-            const matchesRole = !p.linguistic_role || p.linguistic_role === 'broken_plural';
-            return matchesPos && matchesRole;
-        }).map((p: any) => ({
-            label: mode === 'standard' ? p.cv : p.wizen,
-            value: p.cv,
-            sub: mode === 'standard' ? p.wizen : p.cv
-        }));
-    }, [BROKEN_PATTERNS, mode]);
+    const adjPatterns = useMemo(() => (
+        buildPatternOptions(BROKEN_PATTERNS, mode, {
+            pos: 'adjective',
+            roles: ['broken_plural'],
+        })
+    ), [BROKEN_PATTERNS, mode]);
 
-    const femininePatterns = useMemo(() => {
-        return FEMININE_PATTERNS_RAW.filter((p: any) => {
-            return !p.linguistic_role || p.linguistic_role === 'feminine_singular';
-        }).map((p: any) => ({
-            label: mode === 'standard' ? p.cv : p.wizen,
-            value: p.cv,
-            sub: mode === 'standard' ? p.wizen : p.cv
-        }));
-    }, [FEMININE_PATTERNS_RAW, mode]);
+    const femininePatterns = useMemo(() => (
+        buildPatternOptions(FEMININE_PATTERNS_RAW, mode, {
+            pos: ['noun', 'adjective'],
+            roles: ['feminine_singular'],
+            gender: 'feminine',
+        })
+    ), [FEMININE_PATTERNS_RAW, mode]);
 
-    const diminutivePatterns = useMemo(() => {
-        return DIMINUTIVE_PATTERNS_RAW.map((p: any) => ({
-            label: mode === 'standard' ? p.cv : p.wizen,
-            value: p.cv,
-            sub: mode === 'standard' ? p.wizen : p.cv
-        }));
-    }, [DIMINUTIVE_PATTERNS_RAW, mode]);
+    const diminutivePatterns = useMemo(() => (
+        buildPatternOptions(DIMINUTIVE_PATTERNS_RAW, mode, {
+            pos: ['noun', 'adjective'],
+            rolePrefix: 'diminutive',
+        })
+    ), [DIMINUTIVE_PATTERNS_RAW, mode]);
 
     // Convert verb presets list to the Record format used by the component
     const VERB_PRESETS = useMemo(() => {
@@ -1348,6 +1487,20 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     };
 
     const [form, setForm] = useState(() => entryToForm(entry, initialForm));
+
+    const pluralPatterns = useMemo(() => (
+        buildPatternOptions(PLURAL_PATTERNS, mode, {
+            pos: form.pos,
+        })
+    ), [PLURAL_PATTERNS, form.pos, mode]);
+
+    const elativePatterns = useMemo(() => (
+        buildPatternOptions(ELATIVE_PATTERNS_RAW, mode, {
+            pos: 'adjective',
+            rolePrefix: 'elative',
+            gender: 'masculine',
+        })
+    ), [ELATIVE_PATTERNS_RAW, mode]);
 
     const rootConsonants = (form._rootConsonants || '').trim();
     const zokkStem = (form.zokk_stem || '').trim();
@@ -1607,38 +1760,18 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         }
 
                         if (root.etymology && (!prev.etymology_chain || prev.etymology_chain.length === 0)) {
-                            try {
-                                // Try parsing as JSON first
-                                const parsed = JSON.parse(root.etymology);
-                                if (Array.isArray(parsed)) {
-                                    next.etymology_chain = parsed.map(p => ({
-                                        language: p.language || '',
-                                        form: p.form || '',
-                                        meaning: p.meaning || ''
-                                    }));
-                                    newFilled.add('etymology_chain');
-                                    hasChanges = true;
-                                } else if (typeof parsed === 'object') {
-                                    next.etymology_chain = [{
-                                        language: parsed.language || '',
-                                        form: parsed.form || '',
-                                        meaning: parsed.meaning || ''
-                                    }];
-                                    newFilled.add('etymology_chain');
-                                    hasChanges = true;
-                                }
-                            } catch (e) {
-                                // Fallback to regex for plain strings
-                                const match = root.etymology.match(/^([A-Za-z]+)\s+(.+)$/);
-                                if (match) {
-                                    next.etymology_chain = [{ language: match[1], form: match[2], meaning: '' }];
-                                    newFilled.add('etymology_chain');
-                                    hasChanges = true;
-                                } else if (root.etymology.length > 0) {
-                                    next.etymology_chain = [{ language: 'Root', form: root.etymology, meaning: '' }];
-                                    newFilled.add('etymology_chain');
-                                    hasChanges = true;
-                                }
+                            const normalized = normalizeRootEtymologyChain(root.etymology).map((step) => ({
+                                relationship: step.relationship || 'From',
+                                language: step.language || '',
+                                term: step.term || '',
+                                pronunciation: '',
+                                definition: step.definition || '',
+                            }));
+
+                            if (normalized.length > 0) {
+                                next.etymology_chain = normalized;
+                                newFilled.add('etymology_chain');
+                                hasChanges = true;
                             }
                         }
 
@@ -1718,6 +1851,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         return derivePattern(firstPlural, form._rootConsonants);
     }, [form.inflections_pl, form._rootConsonants]);
 
+    const soundSuffixValues = useMemo(() => {
+        return SOUND_SUFFIXES
+            .map(getPatternNotation)
+            .map((value) => value.split('/')[0].trim().replace(/^-+/, ''))
+            .filter(Boolean);
+    }, [SOUND_SUFFIXES]);
+
     // ── AUTOMATION: Feminine Suggestion ─────────────────────────────────────
     const suggestedFeminine = useMemo(() => {
         const isMasc = form.pos === 'noun'
@@ -1752,28 +1892,32 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     // ── AUTOMATION: Plural Type Suggestion ──────────────────────────────────
     const pluralSuggestion = useMemo(() => {
         if (!form.headword || form._pluralType !== 'none') return null;
-        const result = detectPluralType(form.headword, SOUND_SUFFIXES);
+        const result = detectPluralType(form.headword, soundSuffixValues);
         if (!result) return null;
         // Return a string representation: e.g. "sound: -iet" or just "broken"
         if (result.type === 'sound' && result.suffix) return `${result.type}: -${result.suffix}`;
         return result.type;
-    }, [form.headword, form._pluralType, SOUND_SUFFIXES]);
+    }, [form.headword, form._pluralType, soundSuffixValues]);
 
     // ── AUTOMATION: Invariable Tagging ──────────────────────────────────────
     useEffect(() => {
         if (!form.headword) return;
 
+        const pluralForms = compactPluralRows(normalizePluralFormRows(form.plural_forms, form.form_plural_pattern))
+            .map(row => row.form.trim())
+            .filter(Boolean);
+
         let isInvariable = false;
         if (form.pos === 'adjective') {
             const hasFem = form.form_fem && form.form_fem !== '';
-            const hasPlur = form.inflections_pl && form.inflections_pl !== '';
+            const hasPlur = pluralForms.length > 0;
             const masc = form.lemma_base || '';
-            if (hasFem && hasPlur && masc === form.headword && form.form_fem === form.headword && form.inflections_pl === form.headword) {
+            if (hasFem && hasPlur && masc === form.headword && form.form_fem === form.headword && pluralForms.every(pl => pl === form.headword)) {
                 isInvariable = true;
             }
         } else if (form.pos === 'noun') {
-            const hasPlur = (form.inflections_pl || form.sound_suffix) ? true : false;
-            if (hasPlur && form.lemma_base === form.headword && (form.inflections_pl === form.headword || form.sound_suffix === form.headword)) {
+            const hasPlur = pluralForms.length > 0 || !!form.sound_suffix;
+            if (hasPlur && form.lemma_base === form.headword && (pluralForms.includes(form.headword) || form.sound_suffix === form.headword)) {
                 isInvariable = true;
             }
         }
@@ -1795,7 +1939,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         }
     }, [
         form.headword, form.pos, form.cv_pattern,
-        form.lemma_base, form.form_fem, form.inflections_pl,
+        form.lemma_base, form.form_fem, form.plural_forms, form.form_plural_pattern,
         form.sound_suffix
     ]);
 
@@ -1843,6 +1987,23 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 }
             }
 
+            if (k === 'plural_forms' || k === 'form_plural_pattern' || k === 'inflections_pl') {
+                const rawInflections = k === 'inflections_pl' ? String(v ?? '').trim() : String(next.inflections_pl || '').trim();
+                if (k === 'inflections_pl' && !rawInflections) {
+                    next.plural_forms = [];
+                    next.inflections_pl = '';
+                    next.form_plural_pattern = '';
+                } else {
+                    const pluralRows = compactPluralRows(normalizePluralFormRows(
+                        k === 'plural_forms' ? v : (k === 'inflections_pl' ? v : next.plural_forms),
+                        k === 'form_plural_pattern' ? v : next.form_plural_pattern,
+                    ));
+                    next.plural_forms = pluralRows;
+                    next.inflections_pl = pluralRowsToLegacyForms(pluralRows).join(', ');
+                    next.form_plural_pattern = pluralRowsToLegacyPatternString(pluralRows);
+                }
+            }
+
             return next;
         });
     };
@@ -1866,6 +2027,63 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         if (targetIndex < 0 || targetIndex >= next.length) return;
         [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
         set('definitions', next);
+    };
+
+    const updateDefinitionField = (index: number, field: 'text_en' | 'text_mt' | 'register' | 'nuance', value: string) => {
+        const next = [...form.definitions];
+        next[index] = { ...next[index], [field]: value };
+        set('definitions', normalizeEntryDefinitions(next));
+    };
+
+    const syncPatternRegistrations = async (
+        entries: Array<{ category: string; key: string }>,
+        currentPos: string,
+    ) => {
+        const seen = new Set<string>();
+
+        for (const entry of entries) {
+            const key = entry.key.trim();
+            if (!key) continue;
+
+            const dedupeKey = `${entry.category}:${key.toLowerCase()}`;
+            if (seen.has(dedupeKey)) continue;
+            seen.add(dedupeKey);
+
+            const catMap = byCategoryAndKey.get(entry.category);
+            const existing = catMap?.get(key.toLowerCase());
+
+            if (!existing) {
+                try {
+                    await createItem({
+                        category: entry.category,
+                        key,
+                        value: entry.category === 'cv_wizen_pattern'
+                            ? { cv: key, wizen: '', stress: 2, pos_types: [currentPos] }
+                            : entry.category === 'sound_suffix'
+                                ? { cv: key, wizen: key.replace(/^-+/, ''), pos_types: [currentPos] }
+                                : { cv: key, wizen: '', pos_types: [currentPos] }
+                    });
+                } catch (err) {
+                    console.error(`Failed to register ${entry.category}:`, err);
+                }
+                continue;
+            }
+
+            if (!existing.id) continue;
+
+            try {
+                const val = typeof existing.value === 'string' ? JSON.parse(existing.value) : (existing.value || {});
+                const posTypes = Array.isArray(val.pos_types) ? val.pos_types : [];
+                if (!posTypes.includes(currentPos)) {
+                    await updateItem({
+                        ...existing,
+                        value: { ...val, pos_types: [...posTypes, currentPos] }
+                    });
+                }
+            } catch (err) {
+                console.error(`Failed to update ${entry.category}:`, err);
+            }
+        }
     };
 
     const handleSave = async (e: React.FormEvent) => {
@@ -1916,44 +2134,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 { category: 'feminine_pattern', key: form.form_fem_pattern },
                 ...((form.form_plural_pattern || '').split(',')
                     .map((s: string) => s.trim())
-                    .filter((s: string) => s && !s.startsWith('-'))
-                    .map((s: string) => ({ category: 'broken_pattern', key: s })))
+                    .filter((s: string) => s)
+                    .map((s: string) => ({
+                        category: s.startsWith('-') ? 'sound_suffix' : 'broken_pattern',
+                        key: s,
+                    })))
             ];
-
-            for (const item of patternsToSync) {
-                if (!item.key?.trim()) continue;
-
-                const catMap = byCategoryAndKey.get(item.category);
-                const existing = catMap?.get(item.key.toLowerCase());
-                const currentPos = normalizedPos;
-
-                if (!existing) {
-                    try {
-                        await createItem({
-                            category: item.category,
-                            key: item.key,
-                            value: item.category === 'cv_wizen_pattern'
-                                ? { cv: item.key, wizen: '', stress: 2, pos_types: [currentPos] }
-                                : { cv: item.key, wizen: '', pos_types: [currentPos] }
-                        });
-                    } catch (e) {
-                        console.error(`Failed to register ${item.category}:`, e);
-                    }
-                } else if (existing.id) {
-                    try {
-                        const val = typeof existing.value === 'string' ? JSON.parse(existing.value) : (existing.value || {});
-                        const pos_types = val.pos_types || [];
-                        if (!pos_types.includes(currentPos)) {
-                            await updateItem({
-                                ...existing,
-                                value: { ...val, pos_types: [...pos_types, currentPos] }
-                            });
-                        }
-                    } catch (e) {
-                        console.error(`Failed to update ${item.category}:`, e);
-                    }
-                }
-            }
+            await syncPatternRegistrations(patternsToSync, normalizedPos);
             refresh();
 
             onSaved();
@@ -2037,6 +2224,157 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             verb_imperfective_3sgm: f.verb_imperfective_3sgm || impf3sgm
         }));
     };
+
+    const renderPosMorphologyFields = () => (
+        <>
+            {showInflectionToggle && (
+                <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            className="w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]"
+                            checked={!!form.is_inflectable}
+                            onChange={e => {
+                                const checked = e.target.checked;
+                                set('is_inflectable', checked);
+                                if (!checked && normalizedPos !== 'pronoun') {
+                                    set('gender', '');
+                                    set('inflections_pl', '');
+                                }
+                            }}
+                        />
+                        <span className="text-sm font-medium">{t('Has Inflection', 'Għandu Inflessjoni')}</span>
+                    </label>
+                </div>
+            )}
+
+            {normalizedPos === 'noun' && (
+                <NounFields
+                    form={form}
+                    set={set}
+                    t={t}
+                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                    insertChar={insertChar}
+                    onFocus={setActiveInput}
+                    options={{
+                        gender: GENDER_OPTIONS,
+                        noun_type: NOUN_TYPE_OPTIONS,
+                        patterns: nounPatterns,
+                        plural_patterns: pluralPatterns,
+                        feminine_patterns: femininePatterns,
+                        diminutive_patterns: diminutivePatterns,
+                        suggestions: {
+                            broken_pattern: suggestedBrokenPattern || undefined,
+                            feminine: suggestedFeminine || undefined,
+                            masculine: suggestedMasculine || undefined,
+                            plural: pluralSuggestion || undefined
+                        }
+                    }}
+                    onApplyDerivedTerms={handleApplyDerivedTerms}
+                    suggestions={availableVowelSets}
+                />
+            )}
+
+            {normalizedPos === 'pronoun' && !!form.is_inflectable && (
+                <PronounFields
+                    form={form}
+                    set={set}
+                    t={t}
+                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                    insertChar={insertChar}
+                    onFocus={setActiveInput}
+                    options={{
+                        gender: GENDER_OPTIONS
+                    }}
+                />
+            )}
+
+            {normalizedPos === 'numeral' && (
+                <NumeralFields
+                    form={form}
+                    set={set}
+                    t={t}
+                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                    insertChar={insertChar}
+                    onFocus={setActiveInput}
+                    options={{
+                        gender: GENDER_OPTIONS
+                    }}
+                    onApplyDerivedTerms={handleApplyDerivedTerms}
+                    suggestions={availableVowelSets}
+                />
+            )}
+
+            {normalizedPos === 'verb' && (
+                <VerbFields
+                    form={form}
+                    set={set}
+                    t={t}
+                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                    insertChar={insertChar}
+                    onFocus={setActiveInput}
+                    options={{
+                        verb_class: VERB_CLASS_OPTIONS,
+                        verb_type: [
+                            { label: t('Strong', 'Sħiħ'), value: 'strong' },
+                            { label: t('Weak', 'Dgħajjef'), value: 'weak' },
+                            { label: t('Doubled', 'Irmidlat'), value: 'doubled' }
+                        ],
+                        verb_transitivity: VERB_TRANSITIVITY_OPTIONS,
+                        verb_form: VERB_FORM_OPTIONS
+                    }}
+                    onApplyDerivedTerms={handleApplyDerivedTerms}
+                />
+            )}
+
+            {normalizedPos === 'adjective' && (
+                <AdjectiveFields
+                    form={form}
+                    set={set}
+                    t={t}
+                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                    insertChar={insertChar}
+                    onFocus={setActiveInput}
+                    options={{
+                        gender: GENDER_OPTIONS,
+                        patterns: adjPatterns,
+                        elative_patterns: elativePatterns,
+                        plural_patterns: pluralPatterns,
+                        feminine_patterns: femininePatterns,
+                        diminutive_patterns: diminutivePatterns
+                    }}
+                    suggestions={availableVowelSets}
+                />
+            )}
+
+            {normalizedPos === 'participle' && (
+                <ParticipleFields
+                    form={form}
+                    set={set}
+                    t={t}
+                    styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                    insertChar={insertChar}
+                    onFocus={setActiveInput}
+                    options={{
+                        participle_type: PARTICIPLE_TYPES,
+                        participle_gender: GENDER_OPTIONS,
+                        patterns: adjPatterns,
+                        elative_patterns: elativePatterns,
+                        plural_patterns: pluralPatterns,
+                        feminine_patterns: femininePatterns,
+                        diminutive_patterns: diminutivePatterns
+                    }}
+                    suggestions={availableVowelSets}
+                />
+            )}
+
+            {isInflectedFunctionPos && !form.is_inflectable && normalizedPos !== 'interjection' && (
+                <p className="text-xs text-black/50 italic">
+                    {t('No morphology fields when inflection is disabled.', 'L-ebda oqsma ta\' morfoloġija meta l-inflessjoni hija mitfija.')}
+                </p>
+            )}
+        </>
+    );
 
     const inp = "w-full border border-[#d8cfc0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1034A6] bg-white text-black";
     const sel = inp + " cursor-pointer";
@@ -2292,6 +2630,19 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                             }
                                         }
                                     }}
+                                    onBlur={e => {
+                                        let val = e.currentTarget.value.trim();
+                                        if (val) {
+                                            if (isNotable && !val.startsWith('!')) {
+                                                val = '!' + val;
+                                            }
+                                            const tags = typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || []);
+                                            const next = [...tags.map((t: string) => t.trim()).filter(Boolean), val];
+                                            setForm({ ...form, tags: Array.from(new Set(next)).join(', ') });
+                                            if (isNotable) setIsNotable(false);
+                                        }
+                                        e.currentTarget.value = '';
+                                    }}
                                 />
                             </div>
                             <SuggestionRow
@@ -2381,7 +2732,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     </fieldset>
 
                     {/* Morphology Section */}
-                    {(normalizedPos !== 'interjection' || isStemMorphology) && (
+                    {normalizedPos !== 'interjection' && (
                         <div className="mt-6">
                             <h3 className="text-sm font-bold text-black border-b border-border pb-2 mb-4">
                                 {isStemMorphology
@@ -2390,158 +2741,24 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             </h3>
 
                             {isStemMorphology ? (
-                                <StemMorphologyFields
-                                    form={form}
-                                    set={set}
-                                    t={t}
-                                    styles={{ label, inp, sel }}
-                                    hasRootConsonants={hasRootConsonants}
-                                    sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
-                                />
+                                <div className="space-y-5">
+                                    <StemMorphologyFields
+                                        form={form}
+                                        set={set}
+                                        t={t}
+                                        styles={{ label, inp, sel, grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
+                                        hasRootConsonants={hasRootConsonants}
+                                        sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
+                                    />
+                                    <div className="pt-4 border-t border-slate-200">
+                                        <h4 className="text-[10px] font-bold uppercase tracking-wider text-black/40 mb-3">
+                                            {t('Entry Morphology', 'Morfoloġija tal-Entrata')}
+                                        </h4>
+                                        {renderPosMorphologyFields()}
+                                    </div>
+                                </div>
                             ) : (
-                                <>
-                                    {showInflectionToggle && (
-                                        <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                                            <label className="flex items-center gap-2 cursor-pointer">
-                                                <input
-                                                    type="checkbox"
-                                                    className="w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]"
-                                                    checked={!!form.is_inflectable}
-                                                    onChange={e => {
-                                                        const checked = e.target.checked;
-                                                        set('is_inflectable', checked);
-                                                        if (!checked && normalizedPos !== 'pronoun') {
-                                                            set('gender', '');
-                                                            set('inflections_pl', '');
-                                                        }
-                                                    }}
-                                                />
-                                                <span className="text-sm font-medium">{t('Has Inflection', 'Għandu Inflessjoni')}</span>
-                                            </label>
-                                        </div>
-                                    )}
-
-                                    {normalizedPos === 'noun' && (
-                                        <NounFields
-                                            form={form}
-                                            set={set}
-                                            t={t}
-                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                            insertChar={insertChar}
-                                            onFocus={setActiveInput}
-                                            options={{
-                                                gender: GENDER_OPTIONS,
-                                                noun_type: NOUN_TYPE_OPTIONS,
-                                                patterns: nounPatterns,
-                                                feminine_patterns: femininePatterns,
-                                                diminutive_patterns: diminutivePatterns,
-                                                suggestions: {
-                                                    broken_pattern: suggestedBrokenPattern || undefined,
-                                                    feminine: suggestedFeminine || undefined,
-                                                    masculine: suggestedMasculine || undefined,
-                                                    plural: pluralSuggestion || undefined
-                                                }
-                                            }}
-                                            onApplyDerivedTerms={handleApplyDerivedTerms}
-                                            suggestions={availableVowelSets}
-                                        />
-                                    )}
-
-                                    {normalizedPos === 'pronoun' && !!form.is_inflectable && (
-                                        <PronounFields
-                                            form={form}
-                                            set={set}
-                                            t={t}
-                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                            insertChar={insertChar}
-                                            onFocus={setActiveInput}
-                                            options={{
-                                                gender: GENDER_OPTIONS
-                                            }}
-                                        />
-                                    )}
-
-                                    {normalizedPos === 'numeral' && (
-                                        <NumeralFields
-                                            form={form}
-                                            set={set}
-                                            t={t}
-                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                            insertChar={insertChar}
-                                            onFocus={setActiveInput}
-                                            options={{
-                                                gender: GENDER_OPTIONS
-                                            }}
-                                            onApplyDerivedTerms={handleApplyDerivedTerms}
-                                            suggestions={availableVowelSets}
-                                        />
-                                    )}
-
-                                    {normalizedPos === 'verb' && (
-                                        <VerbFields
-                                            form={form}
-                                            set={set}
-                                            t={t}
-                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                            insertChar={insertChar}
-                                            onFocus={setActiveInput}
-                                            options={{
-                                                verb_class: VERB_CLASS_OPTIONS,
-                                                verb_type: [
-                                                    { label: t('Strong', 'Sħiħ'), value: 'strong' },
-                                                    { label: t('Weak', 'Dgħajjef'), value: 'weak' },
-                                                    { label: t('Doubled', 'Irmidlat'), value: 'doubled' }
-                                                ],
-                                                verb_transitivity: VERB_TRANSITIVITY_OPTIONS,
-                                                verb_form: VERB_FORM_OPTIONS
-                                            }}
-                                            onApplyDerivedTerms={handleApplyDerivedTerms}
-                                        />
-                                    )}
-
-                                    {normalizedPos === 'adjective' && (
-                                        <AdjectiveFields
-                                            form={form}
-                                            set={set}
-                                            t={t}
-                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                            insertChar={insertChar}
-                                            onFocus={setActiveInput}
-                                            options={{
-                                                gender: GENDER_OPTIONS,
-                                                patterns: adjPatterns,
-                                                feminine_patterns: femininePatterns,
-                                                diminutive_patterns: diminutivePatterns
-                                            }}
-                                            suggestions={availableVowelSets}
-                                        />
-                                    )}
-
-                                    {normalizedPos === 'participle' && (
-                                        <ParticipleFields
-                                            form={form}
-                                            set={set}
-                                            t={t}
-                                            styles={{ label, inp, sel, check: "w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]", grid: "grid grid-cols-1 sm:grid-cols-2 gap-4" }}
-                                            insertChar={insertChar}
-                                            onFocus={setActiveInput}
-                                            options={{
-                                                participle_type: PARTICIPLE_TYPES,
-                                                participle_gender: GENDER_OPTIONS,
-                                                patterns: adjPatterns,
-                                                feminine_patterns: femininePatterns,
-                                                diminutive_patterns: diminutivePatterns
-                                            }}
-                                            suggestions={availableVowelSets}
-                                        />
-                                    )}
-
-                                    {isInflectedFunctionPos && !form.is_inflectable && normalizedPos !== 'interjection' && (
-                                        <p className="text-xs text-black/50 italic">
-                                            {t('No morphology fields when inflection is disabled.', 'L-ebda oqsma ta\' morfoloġija meta l-inflessjoni hija mitfija.')}
-                                        </p>
-                                    )}
-                                </>
+                                renderPosMorphologyFields()
                             )}
                         </div>
                     )}
@@ -2552,10 +2769,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             <legend className="text-xs font-semibold text-black uppercase tracking-tight">{t('Definitions', 'Definizzjonijiet')}</legend>
                             <Button type="button" variant="ghost" size="sm" className="h-7 text-xs"
                                 disabled={form.definitions.length >= 10}
-                                onClick={() => set('definitions', [...form.definitions, { text_en: '', text_mt: '', register: '' }])}>
+                                onClick={() => set('definitions', [...form.definitions, { text_en: '', text_mt: '', register: '', nuance: '' }])}>
                                 + {t('Add Sense', 'Żid Sens')}
                             </Button>
                         </div>
+                        <p className="px-1 -mt-2 text-[10px] text-black/40">
+                            {t('Use semicolons to split one sense into separate entries.', 'Uża s-semikolon biex tifred sens wieħed f\'entrati separati.')}
+                        </p>
 
                         {form.definitions.map((def: any, i: number) => (
                             <div key={i} className="bg-slate-50 p-3 rounded-md border border-slate-100 space-y-3 relative group">
@@ -2579,27 +2799,15 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div className="col-span-2">
                                         <label className={label}>{t('Sense', 'Sens')} {i + 1}: {t('English', 'Ingliż')} *</label>
-                                        <input className={inp} value={def.text_en} onChange={e => {
-                                            const next = [...form.definitions];
-                                            next[i].text_en = e.target.value;
-                                            set('definitions', next);
-                                        }} required />
+                                        <input className={inp} value={def.text_en} onChange={e => updateDefinitionField(i, 'text_en', e.target.value)} required />
                                     </div>
                                     <div>
                                         <label className={label}>{t('Maltese', 'Malti')}</label>
-                                        <input className={inp} value={def.text_mt} onChange={e => {
-                                            const next = [...form.definitions];
-                                            next[i].text_mt = e.target.value;
-                                            set('definitions', next);
-                                        }} />
+                                        <input className={inp} value={def.text_mt} onChange={e => updateDefinitionField(i, 'text_mt', e.target.value)} />
                                     </div>
                                     <div>
                                         <label className={label}>{term('register')}</label>
-                                        <select className={sel} value={def.register} onChange={e => {
-                                            const next = [...form.definitions];
-                                            next[i].register = e.target.value;
-                                            set('definitions', next);
-                                        }}>
+                                        <select className={sel} value={def.register} onChange={e => updateDefinitionField(i, 'register', e.target.value)}>
                                             <option value="">—</option>
                                             {REGISTER_OPTIONS.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
                                         </select>
@@ -2607,11 +2815,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     {normalizedPos === 'participle' && (
                                         <div>
                                             <label className={label}>{t('Nuance', 'Sfumatura')}</label>
-                                            <select className={sel} value={def.nuance || ''} onChange={e => {
-                                                const next = [...form.definitions];
-                                                next[i].nuance = e.target.value;
-                                                set('definitions', next);
-                                            }}>
+                                            <select className={sel} value={def.nuance || ''} onChange={e => updateDefinitionField(i, 'nuance', e.target.value)}>
                                                 <option value="">—</option>
                                                 {PARTICIPLE_NUANCES.map(n => <option key={n.value} value={n.value}>{n.label}</option>)}
                                             </select>
@@ -2701,64 +2905,51 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     </div>
 
                     {/* Etymology Builder */}
-                    <fieldset className="border border-border-light rounded-lg p-4 space-y-4">
-                        <div className="flex justify-between items-center px-1">
-                            <legend className="text-xs font-semibold text-black uppercase tracking-tight">{t('Etymology Builder', 'Oriġini tal-Kelma')}</legend>
-                            <Button type="button" variant="ghost" size="sm" className="h-7 text-xs"
-                                onClick={() => set('etymology_chain', [...form.etymology_chain, { language: '', form: '', meaning: '' }])}>
-                                + {t('Add Step', 'Żid Pass')}
-                            </Button>
-                        </div>
-
+                    <div className="space-y-4">
                         {autoFilledFields.has('etymology_chain') && (
                             <div className="flex items-center gap-1 px-1 mb-2 text-[10px] text-blue-500 animate-pulse">
                                 <span>✦</span>
                                 <span>{t('Inherited from root', 'Miret mill-għerq')}</span>
-                                <button type="button" className="ml-1 hover:text-blue-700 underline" onClick={() => {
-                                    set('etymology_chain', []);
-                                    const next = new Set(autoFilledFields);
-                                    next.delete('etymology_chain');
-                                    setAutoFilledFields(next);
-                                }}>{t('reset', 'irrisettja')}</button>
+                                <button
+                                    type="button"
+                                    className="ml-1 hover:text-blue-700 underline"
+                                    onClick={() => {
+                                        set('etymology_chain', []);
+                                        const next = new Set(autoFilledFields);
+                                        next.delete('etymology_chain');
+                                        setAutoFilledFields(next);
+                                    }}
+                                >
+                                    {t('reset', 'irrisettja')}
+                                </button>
                             </div>
                         )}
 
-                        {form.etymology_chain.map((ety: any, i: number) => (
-                            <div key={i} className="flex gap-2 items-end">
-                                <div className="flex-1">
-                                    {i === 0 && <label className={label}>{t('Language', 'Lingwa')}</label>}
-                                    <input className={inp} value={ety.language} placeholder="e.g. Arabic" onChange={e => {
-                                        const next = [...form.etymology_chain];
-                                        next[i].language = e.target.value;
-                                        set('etymology_chain', next);
-                                    }} />
-                                </div>
-                                <div className="flex-1">
-                                    {i === 0 && <label className={label}>{t('Term', 'Kelma')}</label>}
-                                    <input className={inp} value={ety.form} placeholder="e.g. kataba" onChange={e => {
-                                        const next = [...form.etymology_chain];
-                                        next[i].form = e.target.value;
-                                        set('etymology_chain', next);
-                                    }} />
-                                </div>
-                                <div className="flex-1">
-                                    {i === 0 && <label className={label}>{t('Meaning', 'Tifsira')}</label>}
-                                    <input className={inp} value={ety.meaning} placeholder="e.g. to write" onChange={e => {
-                                        const next = [...form.etymology_chain];
-                                        next[i].meaning = e.target.value;
-                                        set('etymology_chain', next);
-                                    }} />
-                                </div>
-                                <button type="button" onClick={() => set('etymology_chain', form.etymology_chain.filter((_: any, idx: number) => idx !== i))}
-                                    className="mb-2 text-slate-400 hover:text-red-500 px-1">
-                                    &times;
-                                </button>
-                            </div>
-                        ))}
+                        <EtymologyChainEditor
+                            title={t('Etymology Builder', 'Oriġini tal-Kelma')}
+                            items={form.etymology_chain}
+                            onChange={(items) => set('etymology_chain', items)}
+                            showPronunciation
+                            relationshipOptions={RELATIONSHIP_OPTIONS}
+                            sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
+                            defaultRelationship="From"
+                            addLabel={t('Add Step', 'Żid Pass')}
+                            relationshipLabel={t('Relationship', 'Relazzjoni')}
+                            languageLabel={t('Language', 'Lingwa')}
+                            termLabel={t('Term', 'Kelma')}
+                            pronunciationLabel={t('Pronunciation', 'Pronunzja')}
+                            pronunciationPlaceholder={t('e.g. kan-ta-re', 'eż. kan-ta-re')}
+                            definitionLabel={t('Definition', 'Tifsira')}
+                            labelClassName={label}
+                            inputClassName={inp}
+                            selectClassName={sel}
+                        />
 
                         <div className="pt-2">
                             <label className={label}>{t('Source Citation', 'Sors / Referenza')}</label>
-                            <input className={inp} value={form.source_citation}
+                            <input
+                                className={inp}
+                                value={form.source_citation}
                                 onChange={e => {
                                     set('source_citation', e.target.value);
                                     if (autoFilledFields.has('source_citation')) {
@@ -2767,7 +2958,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         setAutoFilledFields(next);
                                     }
                                 }}
-                                placeholder={t('e.g. Aquilina1987', 'eż. Aquilina1987')} />
+                                placeholder={t('e.g. Aquilina1987', 'eż. Aquilina1987')}
+                            />
                             <SuggestionRow
                                 options={availableSources.slice(0, 10)}
                                 onSelect={src => set('source_citation', src)}
@@ -2791,7 +2983,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 </div>
                             )}
                         </div>
-                    </fieldset>
+                    </div>
 
                     {/* Dynamic Fields (for new DB columns) */}
                     {Object.keys(form.extraFields || {}).length > 0 && (
@@ -2849,28 +3041,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                             { category: 'feminine_pattern', key: form.form_fem_pattern },
                                             ...((form.form_plural_pattern || '').split(',')
                                                 .map((s: string) => s.trim())
-                                                .filter((s: string) => s && !s.startsWith('-'))
-                                                .map((s: string) => ({ category: 'broken_pattern', key: s })))
+                                                .filter((s: string) => s)
+                                                .map((s: string) => ({
+                                                    category: s.startsWith('-') ? 'sound_suffix' : 'broken_pattern',
+                                                    key: s,
+                                                })))
                                         ];
-
-                                        for (const syncItem of syncList) {
-                                            if (!syncItem.key?.trim()) continue;
-                                            const catMap = byCategoryAndKey.get(syncItem.category);
-                                            const existing = catMap?.get(syncItem.key.toLowerCase());
-                                            if (!existing) {
-                                                try {
-                                                    await createItem({
-                                                        category: syncItem.category,
-                                                        key: syncItem.key,
-                                                        value: syncItem.category === 'cv_wizen_pattern'
-                                                            ? { cv: syncItem.key, wizen: '', stress: 2, pos_types: [currentPos] }
-                                                            : { cv: syncItem.key, wizen: '', pos_types: [currentPos] }
-                                                    });
-                                                } catch (e) {
-                                                    console.error(`Failed to register ${syncItem.category} during duplication:`, e);
-                                                }
-                                            }
-                                        }
+                                        await syncPatternRegistrations(syncList, currentPos);
                                         refresh();
 
                                         onSaved();

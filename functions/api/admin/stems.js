@@ -70,12 +70,11 @@ function pickString(source, keys) {
     return '';
 }
 
-export function normalizeStemEtymologyValue(ety) {
+function normalizeStemEtymologyStepValue(ety) {
     const fallback = {
         relationship: 'From',
         language: '',
         term: '',
-        pronunciation: '',
         definition: '',
     };
 
@@ -89,7 +88,6 @@ export function normalizeStemEtymologyValue(ety) {
                 relationship: pickString(parsed, ['relationship', 'relation', 'type']) || 'From',
                 language: pickString(parsed, ['language', 'source_language', 'sourceLanguage', 'origin_language', 'originLanguage']),
                 term: pickString(parsed, ['term', 'form', 'word', 'source_term', 'sourceTerm', 'source_form', 'sourceForm']),
-                pronunciation: pickString(parsed, ['pronunciation', 'ipa', 'transcription', 'phonetic', 'reading']),
                 definition: pickString(parsed, ['definition', 'meaning', 'gloss', 'translation', 'text']),
             };
         }
@@ -97,6 +95,18 @@ export function normalizeStemEtymologyValue(ety) {
         return { ...fallback, definition: String(parsed) };
     } catch {
         return { ...fallback, definition: String(ety) };
+    }
+}
+
+export function normalizeStemEtymologyValue(ety) {
+    try {
+        const parsed = typeof ety === 'string' ? JSON.parse(ety) : ety;
+        if (Array.isArray(parsed)) {
+            return parsed.map((step) => normalizeStemEtymologyStepValue(step));
+        }
+        return [normalizeStemEtymologyStepValue(parsed)];
+    } catch {
+        return [normalizeStemEtymologyStepValue(ety)];
     }
 }
 

@@ -5,9 +5,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { Plus, Trash2, ArrowUp, ArrowDown, AlertCircle } from 'lucide-react';
 import { RelationshipEditor } from './RelationshipEditor';
+import { EtymologyChainEditor } from './EtymologyChainEditor';
 import { adminCreateStem, adminUpdateStem } from '@/lib/api';
 import {
-    normalizeStemEtymology,
+    normalizeStemEtymologyChain,
     normalizeStemGloss,
     normalizeStemMorphology,
     normalizeStemRelationships,
@@ -37,7 +38,7 @@ export function StemFormModal({ data, onClose, onSaved, isNew = false, getToken 
             tags: normalizeStemTags(data.tags).join(', '),
             source: data.source || '',
             glosses: normalizeStemGloss(data.glosses),
-            etymology: normalizeStemEtymology(data.etymology),
+            etymology: normalizeStemEtymologyChain(data.etymology),
             synonyms: normalizeStemRelationships(data.synonyms),
             antonyms: normalizeStemRelationships(data.antonyms),
             related_stems: normalizeStemRelationships(data.related_stems),
@@ -100,10 +101,6 @@ export function StemFormModal({ data, onClose, onSaved, isNew = false, getToken 
         if (target < 0 || target >= next.length) return;
         [next[index], next[target]] = [next[target], next[index]];
         setForm({ ...form, glosses: next });
-    };
-
-    const setEtymology = (key: string, value: string) => {
-        setForm((prev) => ({ ...prev, etymology: { ...prev.etymology, [key]: value } }));
     };
 
     const setRelationship = (key: 'synonyms' | 'antonyms' | 'related_stems', value: any[]) => {
@@ -246,38 +243,24 @@ export function StemFormModal({ data, onClose, onSaved, isNew = false, getToken 
                         </div>
                     </div>
 
-                    <fieldset className="border border-border-light rounded-xl p-4 pt-3">
-                        <legend className="text-[0.65rem] font-bold text-black px-2 uppercase tracking-widest">{t('Etymology', 'Etimoloġija')}</legend>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mt-1">
-                            <div>
-                                <label className={label}>Relationship</label>
-                                <select className={sel} value={form.etymology.relationship || 'From'} onChange={e => setEtymology('relationship', e.target.value)}>
-                                    {(RELATIONSHIP_OPTIONS.length > 0 ? RELATIONSHIP_OPTIONS : ['From', 'Borrowed from', 'Calqued from', 'Metathesis of', 'Related to', 'Variant of']).map((opt: string) => (
-                                        <option key={opt} value={opt}>{opt}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <label className={label}>{t('Language', 'Lingwa')}</label>
-                                <input className={inp} value={form.etymology.language || ''} onChange={e => setEtymology('language', e.target.value)} list="stem-source-language-options" placeholder="e.g. Italian" />
-                                <datalist id="stem-source-language-options">
-                                    {SOURCE_LANGUAGE_OPTIONS.map((l: string) => <option key={l} value={l} />)}
-                                </datalist>
-                            </div>
-                            <div>
-                                <label className={label}>{t('Term', 'Kelma')}</label>
-                                <input className={inp} value={form.etymology.term || ''} onChange={e => setEtymology('term', e.target.value)} placeholder="e.g. cantare" />
-                            </div>
-                            <div>
-                                <label className={label}>Pronunciation</label>
-                                <input className={inp} value={form.etymology.pronunciation || ''} onChange={e => setEtymology('pronunciation', e.target.value)} placeholder="e.g. kan-ta-re" />
-                            </div>
-                            <div>
-                                <label className={label}>{t('Definition', 'Tifsira')}</label>
-                                <input className={inp} value={form.etymology.definition || ''} onChange={e => setEtymology('definition', e.target.value)} placeholder="e.g. to sing" />
-                            </div>
-                        </div>
-                    </fieldset>
+                    <EtymologyChainEditor
+                        title={t('Etymology', 'Etimoloġija')}
+                        items={form.etymology}
+                        onChange={(items) => setForm(prev => ({ ...prev, etymology: items }))}
+                        showPronunciation={false}
+                        relationshipOptions={RELATIONSHIP_OPTIONS}
+                        sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
+                        defaultRelationship="From"
+                        addLabel={t('Add Step', 'Żid Pass')}
+                        relationshipLabel={t('Relationship', 'Relazzjoni')}
+                        languageLabel={t('Language', 'Lingwa')}
+                        termLabel={t('Term', 'Kelma')}
+                        pronunciationLabel={t('Pronunciation', 'Pronunzja')}
+                        definitionLabel={t('Definition', 'Tifsira')}
+                        labelClassName={label}
+                        inputClassName={inp}
+                        selectClassName={sel}
+                    />
 
                     <div className="space-y-6">
                         <RelationshipEditor

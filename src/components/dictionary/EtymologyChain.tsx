@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowRight, Info } from 'lucide-react';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import type { Etymology } from '@/types';
+import { normalizeDictionaryEtymologyChain } from './etymology';
 
 interface EtymologyChainProps {
     etymologies: Etymology[];
@@ -30,24 +31,32 @@ export function EtymologyChain({ etymologies }: EtymologyChainProps) {
                 <div key={ety.id} className="space-y-2">
                     {/* Chain nodes */}
                     <div className="flex flex-wrap items-center gap-2">
-                        {ety.chain.map((node, i) => {
+                        {normalizeDictionaryEtymologyChain(ety.chain).map((node, i) => {
                             const colors = LANGUAGE_COLORS[node.language] ?? LANGUAGE_COLORS.Uncertain;
                             return (
                                 <React.Fragment key={i}>
-                                    <div className={`rounded-lg border px-3 py-2 min-w-[80px] ${colors.bg} border-current/10`}>
+                                    <div className={`rounded-lg border px-3 py-2 min-w-[96px] ${colors.bg} border-current/10`}>
+                                        {node.relationship && (
+                                            <div className="text-[10px] uppercase tracking-wider font-semibold mb-0.5 text-[#A07030]/75">
+                                                {node.relationship}
+                                            </div>
+                                        )}
                                         <div className={`text-[10px] uppercase tracking-wider font-semibold mb-0.5 ${colors.text} opacity-70`}>
                                             {node.language}
                                         </div>
+                                        <div className={`font-serif text-sm font-semibold ${colors.text}`}>
+                                            <em>{node.term || node.form}</em>
+                                        </div>
+                                        {node.pronunciation && (
+                                            <div className="text-[11px] text-gray-500 mt-0.5">({node.pronunciation})</div>
+                                        )}
+                                        {(node.definition || node.meaning) && (
+                                            <div className="text-[11px] text-gray-500 mt-0.5">"{node.definition || node.meaning}"</div>
+                                        )}
                                         {node.script && (
-                                            <div className="font-arabic text-base leading-tight text-right mb-0.5">
+                                            <div className="font-arabic text-base leading-tight text-right mt-0.5">
                                                 {node.script}
                                             </div>
-                                        )}
-                                        <div className={`font-serif text-sm font-semibold ${colors.text}`}>
-                                            <em>{node.form}</em>
-                                        </div>
-                                        {node.meaning && (
-                                            <div className="text-[11px] text-gray-500 mt-0.5">"{node.meaning}"</div>
                                         )}
                                         {node.time_period && (
                                             <div className="text-[10px] text-gray-400 mt-0.5">{node.time_period}</div>

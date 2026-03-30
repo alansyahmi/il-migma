@@ -18,6 +18,7 @@ import { useRootData } from '@/hooks/useRootData';
 import { type VerbStrength } from '@/types';
 import { resolveTagLabel } from '@/lib/tagLabel';
 import { EntryShell, type EntryViewModel, EtymologySentence, SideCard } from '@/components/dictionary/EntryShell';
+import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymology';
 import { VerbFormsTable } from '@/components/dictionary/VerbFormsTable';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
@@ -130,18 +131,13 @@ export function Root() {
         return primaryEntry?.definitions?.map(d => d.text_en) || [];
     }, [normalized, primaryEntry, language]);
 
-    const parsedEtymology = normalized?.etymology || null;
     const etymologyItems = useMemo(() => {
-        if (!parsedEtymology) return [];
-        if (!parsedEtymology.language && !parsedEtymology.term && !parsedEtymology.pronunciation && !parsedEtymology.definition) return [];
+        const chain = normalized?.etymologyChain?.length
+            ? normalized.etymologyChain
+            : (normalized?.etymology ? [normalized.etymology] : []);
 
-        return [{
-            language: parsedEtymology.language || '',
-            form: parsedEtymology.term || undefined,
-            pronunciation: parsedEtymology.pronunciation || undefined,
-            definition: parsedEtymology.definition || undefined,
-        }];
-    }, [parsedEtymology]);
+        return normalizeDictionaryEtymologyChain(chain, (language) => term(language));
+    }, [normalized, term]);
 
     const rootRelationships = useMemo(() => {
         return normalized?.relationships || { synonyms: [], antonyms: [], related_entries: [] };

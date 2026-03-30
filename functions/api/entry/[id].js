@@ -8,6 +8,13 @@
 import { createClient } from '@libsql/client/web';
 import { resolveEntryGender } from '../../../src/lib/gender.ts';
 
+function firstSenseText(value) {
+    if (value === undefined || value === null) return '';
+    const text = String(value).trim();
+    if (!text) return '';
+    return text.split(/\s*;\s*/)[0]?.trim() || '';
+}
+
 export async function onRequestGet({ params, env }) {
     let { id } = params;
     if (!id) return json({ error: 'Missing id' }, 400);
@@ -119,10 +126,22 @@ export async function onRequestGet({ params, env }) {
                 })),
         } : null;
 
-        const definitions = defsRes.rows.map(d => ({
-            ...d,
-            example_sentences: examples.filter(e => e.definition_id === d.id),
-        }));
+        const definitions = defsRes.rows.flatMap(d => {
+            const textEnParts = firstSenseText(d.text_en) ? String(d.text_en).trim().split(/\s*;\s*/).map(part => part.trim()).filter(Boolean) : [''];
+            const textMtParts = firstSenseText(d.text_mt) ? String(d.text_mt).trim().split(/\s*;\s*/).map(part => part.trim()).filter(Boolean) : [''];
+            const count = Math.max(textEnParts.length, textMtParts.length);
+            const items = count > 1 ? Array.from({ length: count }, (_, index) => ({
+                ...d,
+                sense_number: d.sense_number + index,
+                text_en: textEnParts[index] || '',
+                text_mt: textMtParts[index] || '',
+                example_sentences: index === 0 ? examples.filter(e => e.definition_id === d.id) : [],
+            })) : [{
+                ...d,
+                example_sentences: examples.filter(e => e.definition_id === d.id),
+            }];
+            return items;
+        });
 
         const payload = {
             ...Object.fromEntries(Object.entries(entry).filter(([, v]) => v !== null)),
@@ -182,7 +201,7 @@ export async function onRequestGet({ params, env }) {
 
             const defMap = {};
             res.rows.forEach(r => {
-                defMap[r.entry_id] = { en: r.text_en, mt: r.text_mt };
+                defMap[r.entry_id] = { en: firstSenseText(r.text_en), mt: firstSenseText(r.text_mt) };
             });
 
             return relArray.map(r => ({
@@ -210,7 +229,11 @@ export async function onRequestGet({ params, env }) {
                       WHERE (e.root_consonants = ? OR r.consonants = ?) AND e.id != ? LIMIT 10`,
                 args: [rc, rc, entry.id],
             });
-            related_entries = relRes.rows;
+            related_entries = relRes.rows.map(row => ({
+                ...row,
+                gloss_en: firstSenseText(row.gloss_en),
+                gloss_mt: firstSenseText(row.gloss_mt),
+            }));
         }
 
         // Attach Verb Morphology struct from flat DB rows as expected by Frontend

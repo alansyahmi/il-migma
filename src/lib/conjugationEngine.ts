@@ -3797,12 +3797,16 @@ export function markGeneratedForms(
             g.imperfect === "-"
                 ? { value: g.imperfect, marker: "plain" as FormMarker }
                 : { value: g.imperfect, marker: perfect.marker };
+        const imperative =
+            (g.imperative ?? "-") === "-"
+                ? { value: g.imperative ?? "-", marker: "plain" as FormMarker }
+                : { value: g.imperative ?? "-", marker: perfect.marker };
 
         return {
             form: g.form,
             perfect,
             imperfect,
-            imperative: applyMarker(g.imperative || "-", "imperative", true),
+            imperative,
             passiveParticiple: applyMarker(g.passiveParticiple, "passive"),
             activeParticiple: applyMarker(g.activeParticiple, "active"),
             verbalNoun: applyMarker(g.verbalNoun, "noun"),

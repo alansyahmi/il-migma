@@ -12,6 +12,7 @@
     "test:tag-label": "node --experimental-strip-types scripts/tagLabel.test.mjs",
     "test:dual-form": "node --experimental-strip-types scripts/dualForm.test.mjs",
     "test:stem-forms": "node --experimental-strip-types scripts/stemForms.test.mjs",
+    "test:etymology-contract": "node --experimental-strip-types scripts/etymologyContract.test.mjs",
     "import:dry": "node scripts/import-xls.mjs --dry-run",
     "import:all": "node scripts/import-xls.mjs --execute",
     "import:roots": "node scripts/import-xls.mjs --execute --roots-only",

@@ -23,12 +23,23 @@ export function SideCard({
 }
 
 export type EtymologySentenceItem = {
+    relationship?: string;
     language: string;
+    term?: string;
     form?: string;
     pronunciation?: string;
     definition?: string;
     meaning?: string;
+    script?: string;
+    time_period?: string;
 };
+
+function splitGlossText(value?: string) {
+    return String(value || '')
+        .split(/\s*;\s*/)
+        .map(part => part.trim())
+        .filter(Boolean);
+}
 
 export function EtymologySentence({
     prefix,
@@ -41,16 +52,29 @@ export function EtymologySentence({
 
     return (
         <p className="text-sm text-black leading-relaxed">
-            {prefix && <span>{prefix}</span>}
+            {prefix && <span>{prefix} </span>}
             {items.map((item, i) => (
                 <React.Fragment key={`${item.language}-${i}`}>
                     {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
-                    <span style={{ color: BLUE }} className="font-medium mx-1">
+                    <span style={{ color: BLUE }} className="font-medium">
                         {item.language}
                     </span>
-                    {item.form && <span className="font-serif font-medium" dir="auto">{item.form}</span>}
+                    {item.term && <span className="ml-1 font-serif font-medium" dir="auto">{item.term}</span>}
+                    {!item.term && item.form && <span className="ml-1 font-serif font-medium" dir="auto">{item.form}</span>}
                     {item.pronunciation && <span className="opacity-70"> ({item.pronunciation})</span>}
-                    {(item.definition || item.meaning) && <span className="opacity-70"> &quot;{item.definition || item.meaning}&quot;</span>}
+                    {(item.definition || item.meaning) && (
+                        <span className="opacity-70">
+                            {" "}
+                            {splitGlossText(item.definition || item.meaning).map((part, index) => (
+                                <React.Fragment key={`${item.language}-${i}-gloss-${index}`}>
+                                    {index > 0 && <span className="text-black">, </span>}
+                                    &quot;{part}&quot;
+                                </React.Fragment>
+                            ))}
+                        </span>
+                    )}
+                    {item.script && <span className="opacity-70"> [{item.script}]</span>}
+                    {item.time_period && <span className="opacity-70"> {item.time_period}</span>}
                 </React.Fragment>
             ))}
             .

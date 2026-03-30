@@ -1,4 +1,5 @@
 import { getDbClient, toApiErrorPayload } from '../../../lib/dbClient.js';
+import { normalizeRootEtymologyValue } from '../etymology.js';
 
 async function verifyAdmin(request, env) {
     const auth = request.headers.get('Authorization') ?? '';
@@ -122,6 +123,10 @@ export async function onRequestPut({ request, env, params }) {
             }
 
             if (col === 'consonant_array') continue; // Handled by consonants
+
+            if (col === 'etymology') {
+                val = JSON.stringify(normalizeRootEtymologyValue(val));
+            }
 
             setClauses.push(`${col} = ?`);
             args.push(n(val));

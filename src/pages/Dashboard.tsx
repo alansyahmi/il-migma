@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { SignIn, SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -16,7 +17,15 @@ const DASHBOARD_TABS = [
     { id: 'subscription', label: 'Abbonament' },
     { id: 'api', label: 'API Keys' },
     { id: 'lists', label: 'Listi' },
-];
+] as const;
+
+type DashboardTab = typeof DASHBOARD_TABS[number]['id'];
+
+const DEFAULT_DASHBOARD_TAB: DashboardTab = 'account';
+
+function isDashboardTab(value: string | null): value is DashboardTab {
+    return Boolean(value && DASHBOARD_TABS.some((tab) => tab.id === value));
+}
 
 export function Dashboard() {
     return (
@@ -40,7 +49,11 @@ function DashboardContent() {
     const { t } = useLanguage();
     const { user } = useUser();
     const { tier, hasAccess } = useAuth();
-    const [activeTab, setActiveTab] = useState('account');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const rawTab = searchParams.get('tab');
+    const activeTab = isDashboardTab(rawTab)
+        ? rawTab
+        : DEFAULT_DASHBOARD_TAB;
     const [mockKeys, setMockKeys] = useState([
         { id: 'k1', name: 'Production', key_prefix: 'im_prod_1', usage_count: 4821, is_active: true, created_at: '2025-01-01' },
     ]);
@@ -56,6 +69,13 @@ function DashboardContent() {
         const activeLabel = labels[activeTab] || t('Dashboard', 'Dashboard');
         document.title = `${activeLabel} | Il-Miġma'`;
     }, [activeTab, t]);
+
+    const setActiveTab = (nextTab: string) => {
+        if (!isDashboardTab(nextTab)) return;
+        const nextParams = new URLSearchParams(searchParams);
+        nextParams.set('tab', nextTab);
+        setSearchParams(nextParams);
+    };
 
     const copyKey = (id: string) => {
         navigator.clipboard.writeText('im_prod_••••••••••••[masked]');
@@ -84,9 +104,9 @@ function DashboardContent() {
                 </div>
             </div>
 
-            {/* Tabs */}
-            <Card>
-                <Tabs tabs={DASHBOARD_TABS} activeTab={activeTab} onChange={setActiveTab} className="px-4" />
+                {/* Tabs */}
+                <Card>
+                    <Tabs tabs={DASHBOARD_TABS} activeTab={activeTab} onChange={setActiveTab} className="px-4" />
 
                 {/* Account */}
                 <TabContent tabId="account" activeTab={activeTab}>

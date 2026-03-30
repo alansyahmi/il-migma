@@ -5,6 +5,14 @@
  */
 
 import type { Entry, SearchResult } from '@/types';
+import type {
+    SubmissionBulkRequest,
+    SubmissionBulkResponse,
+    SubmissionListFilters,
+    SubmissionListResponse,
+    SubmissionPayload,
+    SubmissionStatus,
+} from '@/lib/submissions';
 
 const BASE = '';
 
@@ -101,6 +109,7 @@ export async function apiSearch(
         vs_pl?: string;
         zokk?: boolean;
         stem_string?: string;
+        forms?: string[];
     } = {}
 
 ): Promise<SearchResponse> {
@@ -112,7 +121,11 @@ export async function apiSearch(
     if (opts.offset) params.set('offset', String(opts.offset));
     if (opts.root_id) params.set('root_id', opts.root_id);
     if (opts.v) params.set('v', opts.v);
-    if (opts.form) params.set('form', opts.form);
+    if (opts.forms?.length) {
+        opts.forms.forEach((form) => {
+            if (form) params.append('form', form);
+        });
+    } else if (opts.form) params.set('form', opts.form);
     if (opts.wizen) params.set('wizen', opts.wizen);
     if (opts.verb_type) params.set('verb_type', opts.verb_type);
     if (opts.source) params.set('source', opts.source);
@@ -213,6 +226,61 @@ export async function apiChat(
     return apiFetch('/api/chat', {
         method: 'POST',
         body: JSON.stringify({ messages, dialect }),
+    });
+}
+
+// ── Community Submissions ───────────────────────────────────────────────────
+
+export async function apiSubmitSubmission(payload: SubmissionPayload): Promise<void> {
+    await apiFetch('/api/feedback', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+    });
+}
+
+export async function adminListSubmissions(
+    token: string,
+    opts: SubmissionListFilters = {}
+): Promise<SubmissionListResponse> {
+    const params = new URLSearchParams();
+    if (opts.q) params.set('q', opts.q);
+    if (opts.kind && opts.kind !== 'all') params.set('kind', opts.kind);
+    if (opts.status && opts.status !== 'all') params.set('status', opts.status);
+    if (opts.limit) params.set('limit', String(opts.limit));
+    if (opts.offset) params.set('offset', String(opts.offset));
+
+    return apiFetch(`/api/admin/submissions?${params}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminUpdateSubmission(
+    token: string,
+    id: string,
+    data: { status: SubmissionStatus }
+): Promise<{ ok: boolean; id: string; status: SubmissionStatus }> {
+    return apiFetch(`/api/admin/submissions/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function adminDeleteSubmission(token: string, id: string): Promise<{ ok: boolean; id: string }> {
+    return apiFetch(`/api/admin/submissions/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminBulkSubmissions(
+    token: string,
+    payload: SubmissionBulkRequest
+): Promise<SubmissionBulkResponse> {
+    return apiFetch('/api/admin/submissions/bulk', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(payload),
     });
 }
 
@@ -320,6 +388,21 @@ export async function adminSyncStemEtymology(token: string, commit = false) {
         logs: string[];
         samples: Array<Record<string, unknown>>;
     }>('/api/admin/sync-stems', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ commit }),
+    });
+}
+
+export async function adminSyncRootEtymology(token: string, commit = false) {
+    return apiFetch<{
+        committed: boolean;
+        examined: number;
+        updated: number;
+        skipped: number;
+        logs: string[];
+        samples: Array<Record<string, unknown>>;
+    }>('/api/admin/sync-roots', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify({ commit }),
