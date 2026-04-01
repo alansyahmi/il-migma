@@ -19,6 +19,7 @@ import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymo
 import { MorphologyProvenanceRows } from '@/components/dictionary/EntryMorphology';
 import { VerbFormsTable, StackedSurface } from '@/components/dictionary/VerbFormsTable';
 import { resolveAttestedEntryFromEntries } from '@/lib/conjugationEngine';
+import { isHiddenTag } from '@/lib/tagLabel';
 
 const BLUE = '#1034A6';
 
@@ -170,9 +171,9 @@ export function Stem() {
                 ? stem.tags.split(',').map((s: string) => s.trim()).filter(Boolean)
                 : [];
 
-        if (canonicalTags.length > 0) return canonicalTags;
+        if (canonicalTags.length > 0) return canonicalTags.filter((tag: string) => !isHiddenTag(tag));
         if (!entries) return [];
-        return entries.flatMap(e => (e as any).tags || []).filter((v, i, a) => a.indexOf(v) === i);
+        return entries.flatMap(e => (e as any).tags || []).filter((v, i, a) => a.indexOf(v) === i && !isHiddenTag(v));
     }, [entries, stem]);
 
     const etymologyItems = useMemo(() => {

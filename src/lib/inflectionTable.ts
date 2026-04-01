@@ -1,6 +1,7 @@
 import { applyPossessiveSuffix, type PossessiveSuffixIdx } from './nounInflectionEngine.ts';
 
 const A_ENDING_SUFFIXES = ['ja', 'k', 'h', 'ha', 'na', 'kom', 'hom'] as const;
+const CONSTRUCT_SUFFIXES = ['i', 'ek', 'u', 'ha', 'na', 'kom', 'hom'] as const;
 const FINAL_SYLLABLE_COLLAPSE_RE = /^(.*?)([aeiouàèìòùâêîôû])([^aeiouàèìòùâêîôû]+)$/i;
 
 function normalizeRadical(radical?: string) {
@@ -17,6 +18,49 @@ function collapseFinalSyllableVowel(base: string) {
     const collapsed = base.match(FINAL_SYLLABLE_COLLAPSE_RE);
     if (!collapsed) return base;
     return `${collapsed[1]}${collapsed[3]}`;
+}
+
+function normalizePattern(pattern?: string) {
+    return (pattern || '')
+        .trim()
+        .replace(/û/gi, 'u')
+        .replace(/ù/gi, 'u')
+        .replace(/î/gi, 'i')
+        .replace(/ì/gi, 'i')
+        .replace(/â/gi, 'a')
+        .replace(/à/gi, 'a')
+        .replace(/ê/gi, 'e')
+        .replace(/è/gi, 'e')
+        .replace(/ô/gi, 'o')
+        .replace(/ò/gi, 'o');
+}
+
+function derivePluralConstructStem(base: string, pattern?: string) {
+    const normalizedPattern = normalizePattern(pattern);
+
+    if (normalizedPattern === 'CvCCa') {
+        if (base.length >= 4) {
+            return `${base.slice(0, 3)}o${base[3]}t`;
+        }
+        return `${base.slice(0, -1)}t`;
+    }
+
+    if (normalizedPattern === 'CCuCa' || (!normalizedPattern && base.length === 5 && !/[aeiouàèìòùâêîôû]/i.test(base[1] || '') && /[aeiouàèìòùâêîôû]/i.test(base[2] || ''))) {
+        return `${base.slice(0, -1)}t`;
+    }
+
+    if (normalizedPattern === 'iCCCa' || (!normalizedPattern && base.length === 5 && /^[aeiouàèìòùâêîôû]/i.test(base))) {
+        if (base.length < 4) return `${base.slice(0, -1)}t`;
+        return `${base.slice(0, 3)}i${base[3]}t`;
+    }
+
+    return null;
+}
+
+function applyConstructSuffix(stem: string, idx: PossessiveSuffixIdx) {
+    const finalVowel = (stem.match(/([aeiouàèìòùâêîôû])(?!.*[aeiouàèìòùâêîôû])/i)?.[1] || '').toLowerCase();
+    const suffix = idx === 1 && finalVowel === 'o' ? 'ok' : CONSTRUCT_SUFFIXES[idx];
+    return `${stem}${suffix}`;
 }
 
 export function applyInflectionTableSuffix(
@@ -52,6 +96,11 @@ export function applyInflectionTableSuffix(
 
     // Handle words ending in 'a'
     if (base.endsWith('a')) {
+        const pluralConstructStem = derivePluralConstructStem(base, pattern);
+        if (pluralConstructStem) {
+            return applyConstructSuffix(pluralConstructStem, idx);
+        }
+
         // Glide insertion (e.g., wara -> warajja)
         if (GLIDE_A_WORDS.includes(lowerBase) || (!!radical && ['j', 'w'].includes(radical))) {
             const stem = `${base}j`;

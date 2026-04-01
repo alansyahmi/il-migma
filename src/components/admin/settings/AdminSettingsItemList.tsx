@@ -95,17 +95,44 @@ function PatternCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (it
 }
 
 function DefaultCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (item: ConfigItem) => void; onDelete: (id: string, key: string) => void }) {
+    const labels = getDisplayLabelPair(item.value);
+    const title = labels?.en || labels?.mt || item.key;
+
     return (
         <Card className="p-4 border-border-light hover:border-[#1034A6]/30 transition-colors group">
             <div className="flex items-center justify-between gap-3">
                 <div className="space-y-1 min-w-0">
-                    <h3 className="font-bold text-lg text-black uppercase tracking-tight">{item.key}</h3>
-                    <div className="flex items-center gap-2 text-xs font-medium text-black/50 italic mb-1">
-                        {renderPreview(item.value)}
-                    </div>
-                    <div className="text-xs font-mono text-black/40 bg-black/5 inline-block px-1.5 py-0.5 rounded max-w-full overflow-x-auto">
-                        {renderMeta(item.value)}
-                    </div>
+                    <h3 className={cn(
+                        'font-bold text-lg text-black tracking-tight',
+                        labels ? '' : 'uppercase',
+                    )}>
+                        {title}
+                    </h3>
+                    {labels ? (
+                        <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-black/50 italic mb-1">
+                            {labels.en && (
+                                <span className="inline-flex items-center gap-1 rounded-full border border-black/5 bg-black/5 px-2 py-0.5 not-italic">
+                                    <span className="text-[9px] font-bold uppercase tracking-widest text-black/30">EN</span>
+                                    <span>{labels.en}</span>
+                                </span>
+                            )}
+                            {labels.mt && (
+                                <span className="inline-flex items-center gap-1 rounded-full border border-black/5 bg-black/5 px-2 py-0.5 not-italic">
+                                    <span className="text-[9px] font-bold uppercase tracking-widest text-black/30">MT</span>
+                                    <span>{labels.mt}</span>
+                                </span>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-2 text-xs font-medium text-black/50 italic mb-1">
+                            {renderPreview(item.value)}
+                        </div>
+                    )}
+                    {!labels && (
+                        <div className="text-xs font-mono text-black/40 bg-black/5 inline-block px-1.5 py-0.5 rounded max-w-full overflow-x-auto">
+                            {renderMeta(item.value)}
+                        </div>
+                    )}
                 </div>
 
                 <ActionButtons item={item} onEdit={onEdit} onDelete={onDelete} />
@@ -168,6 +195,17 @@ function renderMeta(value: unknown) {
             <span className="border-l border-black/10 pl-2">Value: {String(value)}</span>
         </div>
     );
+}
+
+function getDisplayLabelPair(value: unknown): { en: string; mt: string } | null {
+    if (!value || typeof value !== 'object') return null;
+    const v = value as Record<string, unknown>;
+    const en = typeof v.en === 'string' ? v.en.trim() : '';
+    const mtStandard = typeof v.mt_standard === 'string' ? v.mt_standard.trim() : '';
+    const mtArabised = typeof v.mt_arabised === 'string' ? v.mt_arabised.trim() : '';
+    const mt = mtStandard || mtArabised;
+    if (!en && !mt) return null;
+    return { en, mt };
 }
 
 function MetaChip({

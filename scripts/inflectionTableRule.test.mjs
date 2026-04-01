@@ -13,6 +13,36 @@ const run = () => {
         'Base inference should switch kontr-a to kontri-'
     );
     assertEq(
+        applyInflectionTableSuffix('kotba', 0, 'masculine', 'CvCCa', 't'),
+        'kotobti',
+        'CvCCa-style plurals should use the construct stem when attached'
+    );
+    assertEq(
+        applyInflectionTableSuffix('kotba', 1, 'masculine', 'CvCCa', 't'),
+        'kotobtok',
+        'Final-vowel harmony should use -ok when the last vowel is o'
+    );
+    assertEq(
+        applyInflectionTableSuffix('qmura', 0, 'masculine', 'CCûCa', 'r'),
+        'qmurti',
+        'CCuCa-style plurals should add t before the suffix'
+    );
+    assertEq(
+        applyInflectionTableSuffix('qmura', 4, 'masculine', 'CCûCa', 'r'),
+        'qmurtna',
+        'CCuCa-style plurals should keep the t-marbuta construct stem'
+    );
+    assertEq(
+        applyInflectionTableSuffix('oqmra', 0, 'masculine', 'iCCCa', 'r'),
+        'oqmirti',
+        'iCCCa-style plurals should preserve the internal i in construct forms'
+    );
+    assertEq(
+        applyInflectionTableSuffix('oqmra', 4, 'masculine', 'iCCCa', 'r'),
+        'oqmirtna',
+        'iCCCa-style plurals should attach suffixes to the construct stem'
+    );
+    assertEq(
         applyInflectionTableSuffix('kiesaħ', 0, 'masculine', undefined, 'ħ'),
         'kiesħi',
         'Final-syllable vowels should collapse before -i'

@@ -17,7 +17,7 @@ import { useAdminConfig } from '@/lib/adminConfig';
 import { cn, getGloss } from '@/lib/utils';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { generateTheoreticalDual, generateFeminineDualFromMasculine, generateElative, generateNumeralForms, type NumeralAutoForms } from '@/lib/maltesePhonology';
-import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
+import { isHiddenTag, resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 import { resolveStemDefaults } from '@/lib/stemDefaults';
 import { MorphologyProvenanceRows } from '@/components/dictionary/EntryMorphology';
 import { BLUE, CREAM_RGBA, GOLD, EtymologySentence, PropRow, SideCard } from '@/components/dictionary/EntryShell';
@@ -52,10 +52,21 @@ function buildDisplayEtymologyItems(chain: any, translateLanguage: (language: st
     return normalizeDictionaryEtymologyChain(chain, translateLanguage);
 }
 
-function MorphologyTable({ title, rows, displayPattern }: { title: string; rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string }[]; displayPattern?: (p?: string) => string }) {
+function MorphologyTable({
+    title,
+    rows,
+    displayPattern,
+    labelHeader,
+}: {
+    title: string;
+    rows: { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string | null }[];
+    displayPattern?: (p?: string) => string;
+    labelHeader?: string;
+}) {
     const { term } = useLinguisticMode();
     const activeRows = rows.filter(r => r.show !== false && r.value && r.value !== '-');
     if (activeRows.length === 0) return null;
+    const headerLabel = labelHeader || term('feature') || 'Feature';
 
     return (
         <div className="w-full">
@@ -66,8 +77,8 @@ function MorphologyTable({ title, rows, displayPattern }: { title: string; rows:
                 <table className="w-full text-sm border-collapse">
                     <thead>
                         <tr className="border-b border-black/8 font-sans">
-                            <th className="text-left font-semibold text-black pb-2 pr-4 w-32 sm:w-40">{term('feature') || 'Feature'}</th>
-                            <th className="text-left font-semibold text-black pb-2">{term('form') || 'Form'}</th>
+                            <th className="text-left font-semibold text-black pb-2 pr-4 w-32 sm:w-40">{headerLabel}</th>
+                            <th className="text-left font-semibold text-black pb-2">{term('surface-form') || 'Surface Form'}</th>
                             <th className="text-left font-semibold text-black pb-2 w-24 sm:w-32">{term('pattern') || 'Pattern'}</th>
                         </tr>
                     </thead>
@@ -209,11 +220,13 @@ function NounParadigmTable({
     rows: NounParadigmRow[];
     displayPattern: (pattern?: string) => string;
 }) {
+    const { term } = useLinguisticMode();
     const showPluralColumn = rows.some(row => !!row.plural.value || (row.plural.stacked?.length ?? 0) > 0);
-    const showRowLabelColumn = rows.some(row => !!row.label.trim());
     const hasRows = rows.some(row => (
         row.singular.value || row.dual.value || row.plural.value || (row.plural.stacked?.length ?? 0) > 0
     ));
+    const formHeader = term('form') || 'Form';
+    const baseLabel = term('tag-base') || 'Base';
 
     if (!hasRows) return null;
 
@@ -226,20 +239,18 @@ function NounParadigmTable({
                 <table className="w-full table-fixed text-sm border-collapse">
                     <thead>
                         <tr className="border-b border-black/8 font-sans whitespace-nowrap">
-                            {showRowLabelColumn && <th className="text-left font-semibold text-black pb-2 pr-2 w-24" />}
+                            <th className="text-left font-semibold text-black pb-2 pr-2 w-24">{formHeader}</th>
                             <th className="text-left font-semibold text-black pb-2 pr-2">Singular</th>
                             <th className="text-left font-semibold text-black pb-2 pr-2">Dual</th>
                             {showPluralColumn && <th className="text-left font-semibold text-black pb-2">Plural</th>}
                         </tr>
                     </thead>
                     <tbody>
-                        {rows.map(row => (
-                            <tr key={row.label} className="border-b border-black/4">
-                                {showRowLabelColumn && (
-                                    <td className="py-1.5 pr-2 align-top text-black/40 text-xs font-sans w-24">
-                                        {row.label}
-                                    </td>
-                                )}
+                        {rows.map((row, idx) => (
+                            <tr key={row.label || idx} className="border-b border-black/4">
+                                <td className="py-1.5 pr-2 align-top text-black/40 text-xs font-sans w-24">
+                                    {row.label.trim() || (idx === 0 ? baseLabel : '')}
+                                </td>
                                 <td className="py-1.5 pr-2 align-top font-serif font-normal text-black">
                                     <NounParadigmCellView cell={row.singular} displayPattern={displayPattern} />
                                 </td>
@@ -397,6 +408,102 @@ function NounMorphologySection({
     );
 }
 
+function AdjectiveMorphologySection({
+    entry,
+    morphology,
+    elative,
+    displayPattern,
+}: {
+    entry: Entry;
+    morphology: NonNullable<Entry['adjective_morphology']>;
+    elative: { masculine: string | null; feminine: string | null } | null;
+    displayPattern: (pattern?: string) => string;
+}) {
+    const { term } = useLinguisticMode();
+
+    const singular = (value?: string | null) => (value && value.trim()) || null;
+    const primaryVariant: NounGenderVariant = morphology.gender === 'feminine' ? 'feminine' : 'masculine';
+    const oppositeVariant: NounGenderVariant = primaryVariant === 'masculine' ? 'feminine' : 'masculine';
+
+    const explicitVariantForms: Record<NounGenderVariant, string | null> = {
+        masculine: singular(morphology.masculine || (morphology.gender !== 'feminine' ? entry.headword : null)),
+        feminine: singular(morphology.feminine || (morphology.gender === 'feminine' ? entry.headword : null)),
+    };
+
+    const hasOppositeGender = !!(
+        explicitVariantForms.masculine &&
+        explicitVariantForms.feminine &&
+        explicitVariantForms.masculine !== explicitVariantForms.feminine
+    );
+
+    const variantOrder: NounGenderVariant[] = hasOppositeGender
+        ? [primaryVariant, oppositeVariant]
+        : [primaryVariant];
+
+    const morphologyTitle = term('morphology') || 'Morphology';
+    const getVariantTitle = (variant: NounGenderVariant) => {
+        if (variantOrder.length === 1) return morphologyTitle;
+        return `${term(variant) || (variant === 'masculine' ? 'Masculine' : 'Feminine')} ${morphologyTitle}`;
+    };
+
+    const pluralPattern = singular(morphology.form_plural_pattern || entry.form_plural_pattern || morphology.morph_pattern || entry.morph_pattern || null);
+    const attestedElativePattern = singular(morphology.elative_pattern || entry.elative_pattern || morphology.lemma_pattern || entry.lemma_pattern || null);
+    const theoreticalElativePatterns: Record<NounGenderVariant, string> = {
+        masculine: 'vCCvC',
+        feminine: 'CoCCa',
+    };
+    const basePattern = (variant: NounGenderVariant) => singular(
+        variant === 'masculine'
+            ? (morphology.form_masc_pattern || entry.form_masc_pattern || morphology.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null)
+            : (morphology.form_fem_pattern || entry.form_fem_pattern || morphology.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null)
+    );
+    const isTheoreticalElative = !morphology.elative;
+    const getElativePattern = (variant: NounGenderVariant) => (
+        isTheoreticalElative
+            ? theoreticalElativePatterns[variant]
+            : attestedElativePattern
+    );
+
+    const buildRows = (variant: NounGenderVariant): { label: string; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string | null }[] => {
+        const baseForm = explicitVariantForms[variant] || explicitVariantForms[primaryVariant] || singular(entry.headword);
+        const elativeForm = variant === 'masculine' ? elative?.masculine : elative?.feminine;
+
+        return [
+            {
+                label: term('tag-base') || 'Base',
+                value: baseForm,
+                pattern: basePattern(variant),
+            },
+            {
+                label: term('plural') || 'Plural',
+                value: singular(morphology.plural),
+                pattern: pluralPattern,
+            },
+            {
+                label: term('elative') || 'Elative',
+                value: elativeForm,
+                show: !!elativeForm,
+                theoretical: isTheoreticalElative,
+                pattern: getElativePattern(variant),
+            },
+        ];
+    };
+
+    return (
+        <div className="flex flex-col space-y-12">
+            {variantOrder.map(variant => (
+                <MorphologyTable
+                    key={variant}
+                    title={getVariantTitle(variant)}
+                    labelHeader={term('form') || 'Form'}
+                    displayPattern={displayPattern}
+                    rows={buildRows(variant)}
+                />
+            ))}
+        </div>
+    );
+}
+
 function VowelSetGrid({ morphology }: { morphology: any }) {
     const { t } = useLanguage();
     if (!morphology) return null;
@@ -537,17 +644,20 @@ function RelatedGlossGroup({
 
 export function TagChips({ entry }: { entry: Entry }) {
     const { term } = useLinguisticMode();
+    const { isAdmin, adminViewEnabled } = useAuth();
+    const isActualAdmin = isAdmin && adminViewEnabled;
     const rawTags = entry.tags || [];
     if (!rawTags.length) return null;
 
     const chips = rawTags
         .filter(t => !t.includes('THEORETICAL'))
+        .filter(t => isActualAdmin || !isHiddenTag(t))
         .map(tag => {
             const isTitle = tag.startsWith('\\');
             const clean = stripTagPrefixes(tag);
             return { raw: tag, rawLabel: clean, label: resolveTagLabel(tag, term), isTitle };
         })
-        .filter(c => c.rawLabel && c.rawLabel !== '$' && c.rawLabel.toLowerCase() !== 'invariable');
+        .filter(c => c.rawLabel && c.rawLabel !== '$');
 
     if (!chips.length) return null;
 
@@ -2582,8 +2692,14 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                             <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
                                 <MorphologyTable
                                     title={term('morphology')}
+                                    labelHeader={term('form') || 'Form'}
                                     displayPattern={displayPattern}
                                     rows={[
+                                        {
+                                            label: term('tag-base') || 'Base',
+                                            value: entry.headword,
+                                            pattern: entry.lemma_pattern || entry.form_masc_pattern || entry.cv_pattern,
+                                        },
                                         {
                                             label: term('type') || 'Type',
                                             value: <span className="capitalize">{entry.numeral_type || nm?.numeral_type || '-'}</span>,
@@ -2785,8 +2901,8 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
     };
 
     const elative = useMemo(() => {
-        // Disable generation if any tag contains $ or is 'invariable'
-        const isElativeDisabled = entry.tags?.some(tag => tag.includes('$') || tag.toLowerCase() === 'invariable');
+        // Disable generation if any internal elative-blocking tag is present
+        const isElativeDisabled = entry.tags?.some(tag => tag.includes('$') || isHiddenTag(tag));
         if (isElativeDisabled) return null;
 
         const generated = rootConsonants ? generateElative(rootConsonants, entry.headword) : null;
@@ -2953,53 +3069,15 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                 )}
 
                                 <VowelSetGrid morphology={{ ...entry, ...am }} />
-                            </div>
+                                </div>
 
                             {/* Morphology Table */}
                             <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
-                                <MorphologyTable
-                                    title={term('morphology')}
+                                <AdjectiveMorphologySection
+                                    entry={entry}
+                                    morphology={am}
+                                    elative={elative}
                                     displayPattern={displayPattern}
-                                    rows={[
-                                        {
-                                            label: term('masculine'),
-                                            value: am.masculine || (am.gender !== 'feminine' ? entry.headword : null),
-                                            show: am.gender !== 'feminine' || !!am.masculine,
-                                            pattern: am.gender?.toLowerCase() === 'masculine' ? (am.lemma_pattern || entry.lemma_pattern) : (am.form_masc_pattern || entry.form_masc_pattern)
-                                        },
-                                        {
-                                            label: term('feminine'),
-                                            value: am.feminine || (am.gender === 'feminine' ? entry.headword : null),
-                                            show: am.gender === 'feminine' || !!am.feminine,
-                                            pattern: (am.gender?.toLowerCase() === 'feminine' && !am.form_fem_pattern && !entry.form_fem_pattern)
-                                                ? (am.lemma_pattern || entry.lemma_pattern)
-                                                : (am.form_fem_pattern || entry.form_fem_pattern)
-                                        },
-                                        {
-                                            label: term('plural') || 'Plural',
-                                            value: am.plural,
-                                            pattern: entry.morph_pattern || am?.morph_pattern || entry.form_plural_pattern || am?.form_plural_pattern
-                                        },
-                                        {
-                                            label: term('diminutive'),
-                                            show: !!entry.diminutive_form,
-                                            value: entry.diminutive_form,
-                                            pattern: entry.diminutive_pattern || am.diminutive_pattern
-                                        },
-                                        {
-                                            label: term('elative-masculine') || 'Elative (Masc)',
-                                            value: elative?.masculine,
-                                            theoretical: !am.elative,
-                                            show: !!elative,
-                                            pattern: am.elative_pattern || entry.elative_pattern || am.lemma_pattern || entry.lemma_pattern
-                                        },
-                                        {
-                                            label: term('elative-feminine') || 'Elative (Fem)',
-                                            value: elative?.feminine,
-                                            theoretical: true,
-                                            show: !!elative
-                                        }
-                                    ]}
                                 />
 
                                 <UsageExampleBlock entry={entry} />
@@ -3333,7 +3411,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                         {
                                             label: term('elative') || 'Elative',
                                             value: (entry as any).adj_elative || entry.adjective_morphology?.elative,
-                                            show: !!((entry as any).adj_elative || entry.adjective_morphology?.elative) && !entry.tags?.some(t => t.includes('$') || t.toLowerCase() === 'invariable')
+                                            show: !!((entry as any).adj_elative || entry.adjective_morphology?.elative) && !entry.tags?.some(t => t.includes('$') || isHiddenTag(t))
                                         }
                                     ]}
                                 />

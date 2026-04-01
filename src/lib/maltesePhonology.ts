@@ -485,7 +485,8 @@ export function generateElative(rootConsonants: string, headword: string): { mas
     } else if (isGeminated) {
         masc = `a${c1}a${c2}${c3}`;
     } else {
-        const v2 = (isGuttural(c1) || isGuttural(c2)) ? 'a' : 'e';
+        // If any radical is guttural, the adjacent masculine elative vowel shifts to "a".
+        const v2 = (isGuttural(c1) || isGuttural(c2) || isGuttural(c3)) ? 'a' : 'e';
         // Check if we should use iCCvC or iCvCC (usually triliteral roots use iCCvC)
         // Most elatives are iCCvC (e.g. iħla, iqsar, itwal)
         // But for doubled roots we handle separately.

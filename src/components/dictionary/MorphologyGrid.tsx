@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
 import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
+import { isHiddenTag } from '@/lib/tagLabel';
 
 import type { Entry } from '@/types';
 
@@ -15,7 +16,7 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
     const isTheoretical = entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
         entry.verb_morphology?.root_tags?.includes('THEORETICAL') ||
         entry.headword.startsWith('*');
-    const isElativeDisabled = entry.tags?.some(tag => tag && tag.includes('$'));
+    const isElativeDisabled = entry.tags?.some(tag => tag && (tag.includes('$') || isHiddenTag(tag)));
 
     if (entry.pos === 'noun' && entry.noun_morphology) {
         const m = entry.noun_morphology;

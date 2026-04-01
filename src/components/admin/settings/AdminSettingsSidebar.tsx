@@ -79,11 +79,15 @@ export function AdminSettingsSidebar({
                                                     draggedCatId && draggedCatId !== cat.id ? 'border-t-2 border-t-transparent hover:border-t-[#1034A6]/20' : '',
                                                 )}
                                                 onClick={() => onSelectCategory(cat.id)}
-                                            >
+                                                >
                                                 <GripVertical size={14} className="opacity-0 group-hover:opacity-50 transition-opacity cursor-grab active:cursor-grabbing text-black" />
                                                 <span className="flex items-center gap-2 flex-1 min-w-0">
                                                     <cat.icon size={16} className={cn('shrink-0 transition-colors', activeTab === cat.id ? 'text-[#1034A6]' : 'text-black/25 group-hover:text-black/40')} />
-                                                    <span className="truncate">{t(cat.label, term(cat.label))}</span>
+                                                    <span className="truncate">
+                                                        {cat.id === 'root_relationship'
+                                                            ? t(cat.label, term('etymological-relationships'))
+                                                            : t(cat.label, term(cat.label))}
+                                                    </span>
                                                 </span>
                                                 <span className="text-[10px] bg-black/5 px-1.5 rounded opacity-60 group-hover:opacity-100">
                                                     {getItemCount(cat.id)}

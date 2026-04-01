@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { resolveEntryGender } from '@/lib/gender';
-import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
+import { isHiddenTag, resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 import { resolveStemDefaults } from '@/lib/stemDefaults';
 
 import { type Entry } from '@/types';
@@ -18,9 +17,7 @@ interface SubPartsProps {
 
 export function SubParts({ entry, showTransitivity = false, layout = 'dots', showGender = false }: SubPartsProps) {
     const { term } = useLinguisticMode();
-    const { isAdmin, adminViewEnabled } = useAuth();
     const location = useLocation();
-    const isActualAdmin = isAdmin && adminViewEnabled;
 
     const isAdvanced = location.pathname.includes('/advanced-search');
     const basePath = isAdvanced ? '/advanced-search' : '/search';
@@ -33,6 +30,7 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
 
     const titleTags = tagsArr
         .filter(t => t.startsWith('!'))
+        .filter(t => !isHiddenTag(t))
         .map(t => {
             const clean = stripTagPrefixes(t);
             if (!clean) return null;
@@ -107,9 +105,6 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
             <Link key="type" to={`${basePath}?type=${(entry as any).noun_type}`} className="hover:underline">
                 {term((entry as any).noun_type).toUpperCase()}
             </Link>
-        ) : null,
-        isActualAdmin && tagsArr.some(t => stripTagPrefixes(t).toLowerCase() === 'invariable') ? (
-            <span key="invariable" className="text-black/60">({term('invariable').toUpperCase()})</span>
         ) : null,
         ...titleTags
     ].filter(Boolean) as ReactNode[];

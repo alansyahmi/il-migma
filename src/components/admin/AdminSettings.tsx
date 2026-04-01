@@ -139,6 +139,11 @@ export function AdminSettings() {
     }, [sortedCategories]);
 
     const activeCategory = getCategoryById(activeTab);
+    const activeCategoryLabel = activeCategory
+        ? (activeCategory.id === 'root_relationship'
+            ? t(activeCategory.label, term('etymological-relationships'))
+            : t(activeCategory.label, term(activeCategory.label)))
+        : activeTab;
     const currentItems = getCategoryItems(activeTab);
 
     const filteredItems = useMemo(() => {
@@ -295,7 +300,7 @@ export function AdminSettings() {
             }
 
             setSyncResult({ success: added, errors });
-            if (added > 0 || skipped > 0) refresh();
+            if (added > 0 || skipped > 0) await refresh();
         } catch (e: unknown) {
             const message = toErrorMessage(e) || 'Sync failed';
             setSyncResult({ errors: message.split('\n').map((line) => line.trim()).filter(Boolean) });
@@ -391,7 +396,7 @@ export function AdminSettings() {
 
                 <AdminSettingsToolbar
                     activeCategory={activeCategory}
-                    categoryLabel={activeCategory?.label || activeTab}
+                    categoryLabel={activeCategoryLabel}
                     searchTerm={searchTerm}
                     onSearchTermChange={setSearchTerm}
                     posFilter={posFilter}

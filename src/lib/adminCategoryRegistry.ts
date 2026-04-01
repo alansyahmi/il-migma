@@ -256,7 +256,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     root_relationship: {
         id: 'root_relationship',
-        label: 'Root Relationships',
+        label: 'Etymological Relationships',
         icon: Globe,
         groupId: 'advanced',
         storageCategories: ['root_relationship'],

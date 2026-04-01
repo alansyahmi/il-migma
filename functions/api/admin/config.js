@@ -93,7 +93,8 @@ async function upsertPatternByCv(client, cv, wizen, description) {
         const existingId = String(existingByCv.rows[0].id);
         await client.execute({
             sql: `UPDATE patterns
-                  SET wizen_notation = ?, description = COALESCE(?, description)
+                  SET wizen_notation = COALESCE(NULLIF(?, ''), wizen_notation),
+                      description = COALESCE(NULLIF(?, ''), description)
                   WHERE id = ?`,
             args: [wizen, description ?? null, existingId]
         });

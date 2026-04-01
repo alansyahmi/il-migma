@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { getGloss } from '@/lib/utils';
 import { useRootData } from '@/hooks/useRootData';
 import { type VerbStrength } from '@/types';
-import { resolveTagLabel } from '@/lib/tagLabel';
+import { isHiddenTag, resolveTagLabel } from '@/lib/tagLabel';
 import { EntryShell, type EntryViewModel, EtymologySentence, SideCard } from '@/components/dictionary/EntryShell';
 import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymology';
 import { VerbFormsTable } from '@/components/dictionary/VerbFormsTable';
@@ -363,7 +363,7 @@ export function Root() {
         (rootObj.strength === 'geminated' ? (
             <Link key="geminated" to="/search?type=geminated" className="hover:underline">{term('geminated').toUpperCase()}</Link>
         ) : null),
-        ...tags.map((tag: string) => (
+        ...tags.filter((tag: string) => !isHiddenTag(tag)).map((tag: string) => (
             <Link key={tag} to={`/search?tag=${encodeURIComponent(tag)}`} className="hover:underline">
                 {resolveTagLabel(tag, term).toUpperCase()}
             </Link>
@@ -427,7 +427,7 @@ export function Root() {
 
                         {tags.length > 0 && (
                             <div className="flex flex-wrap gap-1 px-1">
-                                {tags.map((tag: string) => (
+                                {tags.filter((tag: string) => !isHiddenTag(tag)).map((tag: string) => (
                                     <span key={tag} className="px-2 py-0.5 bg-black/5 text-black/40 rounded-full text-[10px] font-bold uppercase tracking-wider border border-black/5">
                                         {resolveTagLabel(tag, term)}
                                     </span>

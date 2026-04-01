@@ -14,7 +14,7 @@ import { LinkedEntryList } from './LinkedEntryList';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { cn } from '@/lib/utils';
 import type { Entry } from '@/types';
-import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
+import { isHiddenTag, resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 
 interface EntryCardProps {
     entry: Entry;
@@ -145,7 +145,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                 <Badge variant="source">← {entry.source_language}</Badge>
                             )}
                             <RootPatternBadge form={entry.root_pattern_form} />
-                            {entry.tags?.filter(t => !t.startsWith('\\')).map(t => {
+                            {entry.tags?.filter(t => !t.startsWith('\\') && !isHiddenTag(t)).map(t => {
                                 const clean = stripTagPrefixes(t);
                                 if (!clean) return null;
                                 return <Badge key={t} variant="tag">{resolveTagLabel(t, term)}</Badge>;

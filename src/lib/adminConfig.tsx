@@ -19,9 +19,9 @@ interface AdminConfigContextType {
     refresh: () => Promise<void>;
     getCategoryItems: (category: string) => ConfigItem[];
     getValues: (category: string) => any[];
-    createItem: (item: Partial<ConfigItem>) => Promise<void>;
-    updateItem: (item: ConfigItem) => Promise<void>;
-    deleteItem: (id: string) => Promise<void>;
+    createItem: (item: Partial<ConfigItem>, options?: { refresh?: boolean }) => Promise<void>;
+    updateItem: (item: ConfigItem, options?: { refresh?: boolean }) => Promise<void>;
+    deleteItem: (id: string, options?: { refresh?: boolean }) => Promise<void>;
     getOptions: (category: string, mode: 'standard' | 'arabised', lang?: 'en' | 'mt') => { value: string, label: string }[];
 }
 
@@ -112,25 +112,31 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         return FALLBACKS[category] || [];
     }, [getCategoryItems]);
 
-    const createItem = async (item: Partial<ConfigItem>) => {
+    const createItem = async (item: Partial<ConfigItem>, options?: { refresh?: boolean }) => {
         const token = await getToken();
         if (!token) throw new Error('Not authenticated');
         await adminCreateConfig(token, item);
-        await refresh();
+        if (options?.refresh !== false) {
+            await refresh();
+        }
     };
 
-    const updateItem = async (item: ConfigItem) => {
+    const updateItem = async (item: ConfigItem, options?: { refresh?: boolean }) => {
         const token = await getToken();
         if (!token) throw new Error('Not authenticated');
         await adminUpdateConfig(token, item);
-        await refresh();
+        if (options?.refresh !== false) {
+            await refresh();
+        }
     };
 
-    const deleteItem = async (id: string) => {
+    const deleteItem = async (id: string, options?: { refresh?: boolean }) => {
         const token = await getToken();
         if (!token) throw new Error('Not authenticated');
         await adminDeleteConfig(token, id);
-        await refresh();
+        if (options?.refresh !== false) {
+            await refresh();
+        }
     };
 
     const getOptions = useCallback((category: string, mode: 'standard' | 'arabised', lang: 'en' | 'mt' = 'mt'): { value: string, label: string }[] => {

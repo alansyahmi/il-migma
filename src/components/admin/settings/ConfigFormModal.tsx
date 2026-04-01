@@ -44,6 +44,7 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
     const isPatternEditor = activeRegistry?.editorType === 'pattern';
     const isVerbPresetEditor = activeRegistry?.editorType === 'verb_preset';
     const hasSpecialLayout = isPatternEditor || isVerbPresetEditor;
+    const categoryLabel = activeRegistry?.label || category;
     const derivedPatternKey = isPatternEditor ? buildPatternKey(value) : '';
     const patternSummary = isPatternEditor ? getPatternMetadataSummary(value) : null;
     const patternKeyPreview = derivedPatternKey || 'Set CV and Wizen to generate the key';
@@ -87,8 +88,8 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
     };
 
     const modalTitle = item
-        ? (isPatternEditor ? 'Edit Pattern' : 'Edit Item')
-        : (isPatternEditor ? 'Add Pattern' : `Add New ${category}`);
+        ? (isPatternEditor ? 'Edit Pattern' : `Edit ${categoryLabel}`)
+        : (isPatternEditor ? 'Add Pattern' : `Add New ${categoryLabel}`);
 
     return (
         <Modal open onClose={onClose} title={modalTitle} size={hasSpecialLayout ? 'lg' : 'md'}>

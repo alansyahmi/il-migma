@@ -316,12 +316,11 @@ const PluralFormsEditor = ({
     t: (en: string, mt: string) => string;
     styles: MorphologyProps['styles'];
     pluralPatterns?: { label: string; value: string; sub?: string }[];
-}) => {
+    }) => {
     const activeRows = rows.length > 0 ? rows : [{ form: '', pattern: '' }];
 
     const syncRows = (nextRows: PluralFormRow[]) => {
-        const compacted = compactPluralRows(nextRows);
-        onChange(compacted);
+        onChange(nextRows);
     };
 
     const updateRow = (index: number, key: keyof PluralFormRow, value: string) => {
@@ -432,10 +431,11 @@ const PluralFormsEditor = ({
 };
 
 const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, suggestions }: MorphologyProps) => {
-    const pluralRows = compactPluralRows(normalizePluralFormRows(form.plural_forms, form.form_plural_pattern));
+    const pluralRows = Array.isArray(form.plural_forms) && form.plural_forms.length > 0
+        ? form.plural_forms
+        : compactPluralRows(normalizePluralFormRows(form.plural_forms, form.form_plural_pattern));
     const updatePluralRows = (rows: PluralFormRow[]) => {
-        const compacted = compactPluralRows(rows);
-        set('plural_forms', compacted);
+        set('plural_forms', rows);
     };
 
     return (
@@ -646,6 +646,15 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
 
 
 const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, suggestions }: MorphologyProps) => (
+    (() => {
+        const pluralRows = Array.isArray(form.plural_forms) && form.plural_forms.length > 0
+            ? form.plural_forms
+            : compactPluralRows(normalizePluralFormRows(form.plural_forms, form.form_plural_pattern));
+        const updatePluralRows = (rows: PluralFormRow[]) => {
+            set('plural_forms', rows);
+        };
+
+        return (
     <div className="space-y-4">
         <div className={styles.grid}>
             <div>
@@ -747,25 +756,13 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
             ]}
         />
 
-        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
-            <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
-                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
-                </div>
-                <div>
-                        <PatternTagField
-                            label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                            value={form.form_plural_pattern || ''}
-                            onChange={v => set('form_plural_pattern', v)}
-                            placeholder="e.g. CaCCaC, -ijet"
-                            presets={options?.plural_patterns}
-                            styles={styles}
-                            t={t}
-                        />
-                </div>
-            </div>
-        </div>
+        <PluralFormsEditor
+            rows={pluralRows}
+            onChange={updatePluralRows}
+            t={t}
+            styles={styles}
+            pluralPatterns={options?.plural_patterns}
+        />
 
         <div className={styles.grid}>
             <div className="space-y-4">
@@ -789,6 +786,8 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
             </div>
         </div>
     </div>
+        );
+    })()
 );
 
 const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerms, suggestions }: MorphologyProps) => {
@@ -867,6 +866,15 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
 
 
 const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, suggestions }: MorphologyProps) => (
+    (() => {
+        const pluralRows = Array.isArray(form.plural_forms) && form.plural_forms.length > 0
+            ? form.plural_forms
+            : compactPluralRows(normalizePluralFormRows(form.plural_forms, form.form_plural_pattern));
+        const updatePluralRows = (rows: PluralFormRow[]) => {
+            set('plural_forms', rows);
+        };
+
+        return (
     <div className="space-y-4">
         <div className={styles.grid}>
             <div>
@@ -959,12 +967,13 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
                     </div>
                 </div>
             )}
-            <div className="space-y-4">
-                <div>
-                    <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
-                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
-                </div>
-            </div>
+            <PluralFormsEditor
+                rows={pluralRows}
+                onChange={updatePluralRows}
+                t={t}
+                styles={styles}
+                pluralPatterns={options?.plural_patterns}
+            />
         </div>
 
         <div className={styles.grid}>
@@ -1041,27 +1050,20 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
             </div>
         </div>
 
-        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
-            <div className={styles.grid}>
-                <div>
-                        <PatternTagField
-                            label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                            value={form.form_plural_pattern || ''}
-                            onChange={v => set('form_plural_pattern', v)}
-                            placeholder="e.g. CaCCaC, -ijet"
-                            presets={options?.plural_patterns}
-                            styles={styles}
-                            t={t}
-                        />
-                </div>
-            </div>
-        </div>
     </div>
+        );
+    })()
 );
 
 const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => {
     const head = (form.headword || '').trim().toLowerCase();
     const showGender = head === 'huwa' || head === 'hija';
+    const pluralRows = Array.isArray(form.plural_forms) && form.plural_forms.length > 0
+        ? form.plural_forms
+        : compactPluralRows(normalizePluralFormRows(form.plural_forms, form.form_plural_pattern));
+    const updatePluralRows = (rows: PluralFormRow[]) => {
+        set('plural_forms', rows);
+    };
 
     return (
         <div className="space-y-4">
@@ -1088,18 +1090,28 @@ const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => {
                     )}
                 </div>
             )}
-            <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
-                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
-                </div>
-            </div>
+            <PluralFormsEditor
+                rows={pluralRows}
+                onChange={updatePluralRows}
+                t={t}
+                styles={styles}
+                pluralPatterns={options?.plural_patterns}
+            />
         </div>
     );
 };
 
 
 const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onApplyDerivedTerms, suggestions }: MorphologyProps) => (
+    (() => {
+        const pluralRows = Array.isArray(form.plural_forms) && form.plural_forms.length > 0
+            ? form.plural_forms
+            : compactPluralRows(normalizePluralFormRows(form.plural_forms, form.form_plural_pattern));
+        const updatePluralRows = (rows: PluralFormRow[]) => {
+            set('plural_forms', rows);
+        };
+
+        return (
     <div className="space-y-4">
         <div className="flex justify-end">
             <button
@@ -1170,25 +1182,13 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
             ]}
         />
 
-        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
-            <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>{t('Plural Form', 'Plural')}</label>
-                    <input className={styles.inp} value={form.inflections_pl || ''} onChange={e => set('inflections_pl', e.target.value)} />
-                </div>
-                <div>
-                        <PatternTagField
-                            label={t('Plural Pattern(s)', 'Mudelli tal-Plural')}
-                            value={form.form_plural_pattern || ''}
-                            onChange={v => set('form_plural_pattern', v)}
-                            placeholder="e.g. CaCCaC, -ijet"
-                            presets={options?.plural_patterns}
-                            styles={styles}
-                            t={t}
-                        />
-                </div>
-            </div>
-        </div>
+        <PluralFormsEditor
+            rows={pluralRows}
+            onChange={updatePluralRows}
+            t={t}
+            styles={styles}
+            pluralPatterns={options?.plural_patterns}
+        />
 
         <div className={styles.grid}>
             <div>
@@ -1215,6 +1215,8 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
             </div>
         </div>
     </div>
+        );
+    })()
 );
 
 // Returns the canonical CV notation for a verb's lemma (perfect 3sg.m) based
@@ -1899,7 +1901,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         return result.type;
     }, [form.headword, form._pluralType, soundSuffixValues]);
 
-    // ── AUTOMATION: Invariable Tagging ──────────────────────────────────────
+    // ── AUTOMATION: No Elative Tagging ─────────────────────────────────────
     useEffect(() => {
         if (!form.headword) return;
 
@@ -1907,25 +1909,26 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             .map(row => row.form.trim())
             .filter(Boolean);
 
-        let isInvariable = false;
+        let isNoElative = false;
         if (form.pos === 'adjective') {
             const hasFem = form.form_fem && form.form_fem !== '';
             const hasPlur = pluralForms.length > 0;
             const masc = form.lemma_base || '';
             if (hasFem && hasPlur && masc === form.headword && form.form_fem === form.headword && pluralForms.every(pl => pl === form.headword)) {
-                isInvariable = true;
+                isNoElative = true;
             }
         } else if (form.pos === 'noun') {
             const hasPlur = pluralForms.length > 0 || !!form.sound_suffix;
             if (hasPlur && form.lemma_base === form.headword && (pluralForms.includes(form.headword) || form.sound_suffix === form.headword)) {
-                isInvariable = true;
+                isNoElative = true;
             }
         }
 
-        if (isInvariable) {
+        if (isNoElative) {
             const tags = form.tags.split(',').map((s: string) => s.trim()).filter(Boolean);
-            if (!tags.includes('$invariable')) {
-                set('tags', [...tags, '$invariable'].join(', '));
+            const normalized = tags.filter(t => t !== '$invariable' && t !== '$no-elative');
+            if (!normalized.includes('$no-elative')) {
+                set('tags', [...normalized, '$no-elative'].join(', '));
             }
         }
 
@@ -1988,19 +1991,29 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             }
 
             if (k === 'plural_forms' || k === 'form_plural_pattern' || k === 'inflections_pl') {
-                const rawInflections = k === 'inflections_pl' ? String(v ?? '').trim() : String(next.inflections_pl || '').trim();
-                if (k === 'inflections_pl' && !rawInflections) {
-                    next.plural_forms = [];
-                    next.inflections_pl = '';
-                    next.form_plural_pattern = '';
-                } else {
-                    const pluralRows = compactPluralRows(normalizePluralFormRows(
-                        k === 'plural_forms' ? v : (k === 'inflections_pl' ? v : next.plural_forms),
-                        k === 'form_plural_pattern' ? v : next.form_plural_pattern,
-                    ));
+                if (k === 'plural_forms') {
+                    const pluralRows = Array.isArray(v)
+                        ? v
+                        : normalizePluralFormRows(v, next.form_plural_pattern);
                     next.plural_forms = pluralRows;
-                    next.inflections_pl = pluralRowsToLegacyForms(pluralRows).join(', ');
-                    next.form_plural_pattern = pluralRowsToLegacyPatternString(pluralRows);
+                    const compacted = compactPluralRows(pluralRows);
+                    next.inflections_pl = pluralRowsToLegacyForms(compacted).join(', ');
+                    next.form_plural_pattern = pluralRowsToLegacyPatternString(compacted);
+                } else {
+                    const rawInflections = k === 'inflections_pl' ? String(v ?? '').trim() : String(next.inflections_pl || '').trim();
+                    if (k === 'inflections_pl' && !rawInflections) {
+                        next.plural_forms = [];
+                        next.inflections_pl = '';
+                        next.form_plural_pattern = '';
+                    } else {
+                        const pluralRows = compactPluralRows(normalizePluralFormRows(
+                            k === 'inflections_pl' ? v : next.plural_forms,
+                            k === 'form_plural_pattern' ? v : next.form_plural_pattern,
+                        ));
+                        next.plural_forms = pluralRows;
+                        next.inflections_pl = pluralRowsToLegacyForms(pluralRows).join(', ');
+                        next.form_plural_pattern = pluralRowsToLegacyPatternString(pluralRows);
+                    }
                 }
             }
 
@@ -2062,7 +2075,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             : entry.category === 'sound_suffix'
                                 ? { cv: key, wizen: key.replace(/^-+/, ''), pos_types: [currentPos] }
                                 : { cv: key, wizen: '', pos_types: [currentPos] }
-                    });
+                    }, { refresh: false });
                 } catch (err) {
                     console.error(`Failed to register ${entry.category}:`, err);
                 }
@@ -2078,7 +2091,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     await updateItem({
                         ...existing,
                         value: { ...val, pos_types: [...posTypes, currentPos] }
-                    });
+                    }, { refresh: false });
                 }
             } catch (err) {
                 console.error(`Failed to update ${entry.category}:`, err);
@@ -2141,7 +2154,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     })))
             ];
             await syncPatternRegistrations(patternsToSync, normalizedPos);
-            refresh();
+            await refresh();
 
             onSaved();
         } catch (err: any) {
@@ -2574,14 +2587,14 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 <label className="flex items-center gap-2 cursor-pointer group">
                                     <input
                                         type="checkbox"
-                                        checked={(typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || [])).map((t: string) => t.trim()).includes('$invariable')}
+                                        checked={(typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || [])).map((t: string) => t.trim()).some((t: string) => t === '$invariable' || t === '$no-elative')}
                                         onChange={e => {
                                             const tags = (typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || [])).map((t: string) => t.trim()).filter(Boolean);
                                             let next;
                                             if (e.target.checked) {
-                                                next = [...tags, '$invariable'];
+                                                next = [...tags.filter(t => t !== '$invariable' && t !== '$no-elative'), '$no-elative'];
                                             } else {
-                                                next = tags.filter(t => t !== '$invariable');
+                                                next = tags.filter(t => t !== '$invariable' && t !== '$no-elative');
                                             }
                                             setForm({ ...form, tags: Array.from(new Set(next)).join(', ') });
                                         }}
@@ -3048,7 +3061,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                                 })))
                                         ];
                                         await syncPatternRegistrations(syncList, currentPos);
-                                        refresh();
+                                        await refresh();
 
                                         onSaved();
                                     } catch (err: any) {
