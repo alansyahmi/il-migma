@@ -1,4 +1,4 @@
-import { generateTheoreticalDual } from '../src/lib/maltesePhonology.ts';
+import { generateFeminineDualFromMasculine, generateTheoreticalDual } from '../src/lib/maltesePhonology.ts';
 
 const assertEq = (actual, expected, message) => {
     if (actual !== expected) {
@@ -11,6 +11,7 @@ const run = () => {
     assertEq(generateTheoreticalDual('xahar'), 'xahrejn', 'Dual helper should syncopate xahar');
     assertEq(generateTheoreticalDual('ktieb'), 'ktibejn', 'Dual helper should shorten ie to i');
     assertEq(generateTheoreticalDual('dar'), 'darejn', 'Simple monosyllabic nouns should keep the citation stem');
+    assertEq(generateFeminineDualFromMasculine('kiesaħ'), 'kesaħtejn', 'Feminine dual should collapse ie before -tejn');
 };
 
 run();

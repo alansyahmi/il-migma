@@ -6,7 +6,6 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { type Entry } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
-import { applyPossessiveSuffix } from '@/lib/nounInflectionEngine';
 import { generateConjugation, generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
 import { applyInflectionTableSuffix } from '@/lib/inflectionTable';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
@@ -17,7 +16,7 @@ import { useRootData } from '@/hooks/useRootData';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { cn, getGloss } from '@/lib/utils';
 import { SubParts } from '@/components/dictionary/SubParts';
-import { generateTheoreticalDual, generateElative, generateNumeralForms, type NumeralAutoForms } from '@/lib/maltesePhonology';
+import { generateTheoreticalDual, generateFeminineDualFromMasculine, generateElative, generateNumeralForms, type NumeralAutoForms } from '@/lib/maltesePhonology';
 import { resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 import { resolveStemDefaults } from '@/lib/stemDefaults';
 import { MorphologyProvenanceRows } from '@/components/dictionary/EntryMorphology';
@@ -211,6 +210,7 @@ function NounParadigmTable({
     displayPattern: (pattern?: string) => string;
 }) {
     const showPluralColumn = rows.some(row => !!row.plural.value || (row.plural.stacked?.length ?? 0) > 0);
+    const showRowLabelColumn = rows.some(row => !!row.label.trim());
     const hasRows = rows.some(row => (
         row.singular.value || row.dual.value || row.plural.value || (row.plural.stacked?.length ?? 0) > 0
     ));
@@ -226,18 +226,20 @@ function NounParadigmTable({
                 <table className="w-full table-fixed text-sm border-collapse">
                     <thead>
                         <tr className="border-b border-black/8 font-sans whitespace-nowrap">
-                            <th className="text-left font-semibold text-black pb-2 pr-2 w-24" />
+                            {showRowLabelColumn && <th className="text-left font-semibold text-black pb-2 pr-2 w-24" />}
                             <th className="text-left font-semibold text-black pb-2 pr-2">Singular</th>
-                            <th className="text-left font-semibold text-black pb-2 pr-2">Dual*</th>
+                            <th className="text-left font-semibold text-black pb-2 pr-2">Dual</th>
                             {showPluralColumn && <th className="text-left font-semibold text-black pb-2">Plural</th>}
                         </tr>
                     </thead>
                     <tbody>
                         {rows.map(row => (
                             <tr key={row.label} className="border-b border-black/4">
-                                <td className="py-1.5 pr-2 align-top text-black/40 text-xs font-sans w-24">
-                                    {row.label}
-                                </td>
+                                {showRowLabelColumn && (
+                                    <td className="py-1.5 pr-2 align-top text-black/40 text-xs font-sans w-24">
+                                        {row.label}
+                                    </td>
+                                )}
                                 <td className="py-1.5 pr-2 align-top font-serif font-normal text-black">
                                     <NounParadigmCellView cell={row.singular} displayPattern={displayPattern} />
                                 </td>
@@ -307,6 +309,11 @@ function NounMorphologySection({
     const variantOrder: NounGenderVariant[] = hasOppositeGender
         ? [primaryVariant, oppositeVariant]
         : [primaryVariant];
+    const morphologyTitle = term('morphology') || 'Morphology';
+    const getVariantTitle = (variant: NounGenderVariant) => {
+        if (variantOrder.length === 1) return morphologyTitle;
+        return `${term(variant) || (variant === 'masculine' ? 'Masculine' : 'Feminine')} ${morphologyTitle}`;
+    };
 
     const buildRows = (variant: NounGenderVariant): NounParadigmRow[] => {
         const baseForm = displayVariantForms[variant] || displayVariantForms[primaryVariant] || singular(entry.headword);
@@ -317,6 +324,7 @@ function NounMorphologySection({
         const dualPattern = singular(morphology.dual_pattern || entry.dual_pattern || null);
         const basePlural = pluralForms[0] || soundPlural || null;
         const diminutivePlural = pluralForms[1] || (hasDiminutive ? buildDiminutivePlural(diminutive) : null);
+        const masculineSource = displayVariantForms.masculine || explicitVariantForms.masculine || singular(entry.headword) || '';
         const stackedPluralForms = pluralRows.length > 0
             ? pluralRows.map(row => ({
                 value: row.form,
@@ -331,15 +339,24 @@ function NounMorphologySection({
 
         return [
             {
-                label: term('base') || 'Base',
+                label: '',
                 singular: {
                     value: baseForm,
                     pattern: basePattern,
                 },
                 dual: {
-                    value: baseForm ? (variant === primaryVariant && dual ? dual : generateTheoreticalDual(baseForm)) : null,
+                    value: (() => {
+                        if (!baseForm) return null;
+                        if (variant === 'feminine' && hasOppositeGender && masculineSource) {
+                            return generateFeminineDualFromMasculine(masculineSource);
+                        }
+                        if (variant === primaryVariant && dual) {
+                            return dual;
+                        }
+                        return generateTheoreticalDual(baseForm);
+                    })(),
                     pattern: dualPattern,
-                    theoretical: !(variant === primaryVariant && !!dual),
+                    theoretical: !(variant === primaryVariant && !!dual) || (variant === 'feminine' && hasOppositeGender && !!masculineSource),
                 },
                 plural: {
                     value: basePlural,
@@ -371,7 +388,7 @@ function NounMorphologySection({
             {variantOrder.map(variant => (
                 <NounParadigmTable
                     key={variant}
-                    title={term(variant) || (variant === 'masculine' ? 'Masculine' : 'Feminine')}
+                    title={getVariantTitle(variant)}
                     rows={buildRows(variant)}
                     displayPattern={displayPattern}
                 />
@@ -842,6 +859,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
     const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants;
     const pattern = entry.root_pattern_form?.pattern;
+    const thirdRadical = rootConsonants?.split('-')?.[2] || rootConsonants?.[2] || '';
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
     const patternValue = displayPattern(pattern?.cv_notation);
@@ -852,7 +870,13 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         const isT = theoreticalOverride ?? isTheoretical;
         // Use the passed customPattern (for plurals) or the entry's cv_pattern
         const activePattern = customPattern || (entry as any).cv_pattern || (entry.root_pattern_form?.pattern?.cv_notation);
-        const result = applyPossessiveSuffix(base, idx as any, nm.gender, activePattern);
+        const result = applyInflectionTableSuffix(
+            base,
+            idx as any,
+            nm.gender === 'feminine' ? 'feminine' : 'masculine',
+            activePattern,
+            thirdRadical,
+        );
 
         if (result === '-') return { value: '-', theoretical: false };
 

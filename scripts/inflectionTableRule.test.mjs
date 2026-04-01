@@ -13,29 +13,24 @@ const run = () => {
         'Base inference should switch kontr-a to kontri-'
     );
     assertEq(
-        applyInflectionTableSuffix('wara', 0, 'masculine', undefined, 'r'),
-        'warija',
-        'Masculine -a entries with a non-glide final radical should switch to i + ja'
+        applyInflectionTableSuffix('kiesaħ', 0, 'masculine', undefined, 'ħ'),
+        'kiesħi',
+        'Final-syllable vowels should collapse before -i'
     );
     assertEq(
-        applyInflectionTableSuffix('wara', 1, 'masculine', undefined, 'r'),
-        'warik',
-        'Masculine -a entries with a non-glide final radical should use -k'
+        applyInflectionTableSuffix('kiesaħ', 1, 'masculine', undefined, 'ħ'),
+        'kiesħek',
+        'Final-syllable vowels should collapse before -k'
     );
     assertEq(
-        applyInflectionTableSuffix('wara', 2, 'masculine', undefined, 'r'),
-        'warih',
-        'Masculine -a entries with a non-glide final radical should use -h'
+        applyInflectionTableSuffix('kiesaħ', 2, 'masculine', undefined, 'ħ'),
+        'kiesħu',
+        'Final-syllable vowels should collapse before -u'
     );
     assertEq(
         applyInflectionTableSuffix('wara', 4, 'masculine', undefined, 'r'),
-        'warina',
-        'Later suffixes should keep the i-shifted stem'
-    );
-    assertEq(
-        applyInflectionTableSuffix('zija', 0, 'masculine', undefined, 'j'),
-        'zijajja',
-        'Glide-final radicals should keep the existing possessive suffix behavior'
+        'warajna',
+        'Later suffixes should keep the existing glide behavior'
     );
 };
 

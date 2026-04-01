@@ -1,6 +1,7 @@
 import { applyPossessiveSuffix, type PossessiveSuffixIdx } from './nounInflectionEngine.ts';
 
 const A_ENDING_SUFFIXES = ['ja', 'k', 'h', 'ha', 'na', 'kom', 'hom'] as const;
+const FINAL_SYLLABLE_COLLAPSE_RE = /^(.*?)([aeiouàèìòùâêîôû])([^aeiouàèìòùâêîôû]+)$/i;
 
 function normalizeRadical(radical?: string) {
     return (radical || '').trim().toLowerCase();
@@ -10,6 +11,12 @@ function inferFinalRadicalFromBase(base: string) {
     const stripped = base.replace(/a$/i, '');
     const match = stripped.match(/([^\Waeiouàèìòùâêîôû])$/i);
     return match?.[1] || '';
+}
+
+function collapseFinalSyllableVowel(base: string) {
+    const collapsed = base.match(FINAL_SYLLABLE_COLLAPSE_RE);
+    if (!collapsed) return base;
+    return `${collapsed[1]}${collapsed[3]}`;
 }
 
 export function applyInflectionTableSuffix(
@@ -26,6 +33,14 @@ export function applyInflectionTableSuffix(
     const lowerBase = base.toLowerCase();
 
     const radical = normalizeRadical(thirdRadical) || normalizeRadical(inferFinalRadicalFromBase(base));
+
+    // The first three attached forms collapse the final syllable vowel before suffixation.
+    if (idx <= 2) {
+        const collapsedBase = collapseFinalSyllableVowel(base);
+        if (collapsedBase !== base) {
+            return applyPossessiveSuffix(collapsedBase, idx, gender, pattern);
+        }
+    }
     
     // Vocalic endings: u/i
     if (base.endsWith('u') || base.endsWith('i')) {

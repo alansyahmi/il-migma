@@ -444,6 +444,16 @@ export function generateTheoreticalDual(word: string): string {
     return stem + suffix;
 }
 
+/**
+ * Feminine duals are derived from the masculine form plus -tejn,
+ * with attachment-driven vowel collapse for sequences like ie -> e.
+ */
+export function generateFeminineDualFromMasculine(word: string): string {
+    if (!word) return '';
+    const normalized = word.toLowerCase().trim().normalize('NFC');
+    return `${normalized.replace(/ie/g, 'e')}tejn`;
+}
+
 // ── CONSONANT SET ──────────────────────────────────────────────────────────
 
 
