@@ -409,11 +409,11 @@ export function detectPluralType(headword: string, _soundSuffixes: string[]): Pl
  * Generates a theoretical dual form for a noun.
  * Uses a synced-up stem before appending the suffix:
  * - drops final -a
- * - shortens final `ie` to `i`
+ * - collapses final `ie` to `e` or `i` based on the plural hint
  * - syncopates a final short vowel when the word has a multi-vowel stem
  * This keeps forms like għomor -> għomrejn instead of għomorejn.
  */
-export function generateTheoreticalDual(word: string): string {
+export function generateTheoreticalDual(word: string, pluralHint?: string | null): string {
     if (!word) return '';
     const norm = word.toLowerCase().trim().normalize('NFC');
 
@@ -424,15 +424,15 @@ export function generateTheoreticalDual(word: string): string {
         stem = stem.slice(0, -1);
     }
 
-    // Syncopate the final vowel in multi-vowel stems.
-    // This is intentionally conservative: words like "dar" stay untouched,
-    // while words like "għomor" and "xahar" reduce to their dual stem.
-    const vowelCount = stem.match(vowelRe)?.length ?? 0;
-    if (vowelCount >= 2) {
-        const shortenedIe = stem.replace(/ie([^aeiouàèìòùâêîôû]*)$/i, 'i$1');
-        if (shortenedIe !== stem) {
-            stem = shortenedIe;
-        } else {
+    const ieCollapsedStem = collapseIeForFeminineDual(stem, pluralHint);
+    if (ieCollapsedStem !== stem) {
+        stem = ieCollapsedStem;
+    } else {
+        // Syncopate the final vowel in multi-vowel stems.
+        // This is intentionally conservative: words like "dar" stay untouched,
+        // while words like "għomor" and "xahar" reduce to their dual stem.
+        const vowelCount = stem.match(vowelRe)?.length ?? 0;
+        if (vowelCount >= 2) {
             stem = stem.replace(/([aeiouàèìòùâêîôû])([^aeiouàèìòùâêîôû]+)$/i, '$2');
         }
     }
@@ -452,6 +452,186 @@ export function generateFeminineDualFromMasculine(word: string): string {
     if (!word) return '';
     const normalized = word.toLowerCase().trim().normalize('NFC');
     return `${normalized.replace(/ie/g, 'e')}tejn`;
+}
+
+function inferIeCollapseVowel(pluralHint?: string | null): 'e' | 'i' {
+    const normalized = String(pluralHint || '').toLowerCase().trim().normalize('NFC');
+    const firstVowel = normalized.match(/[aeiouàèìòùâêîôû]/)?.[0];
+
+    if (firstVowel === 'i') return 'i';
+    if (firstVowel === 'e') return 'e';
+    if (normalized.includes('ie')) return 'e';
+    return 'e';
+}
+
+function collapseIeForFeminineDual(word: string, pluralHint?: string | null): string {
+    const collapse = inferIeCollapseVowel(pluralHint);
+    return word.replace(/ie/g, collapse);
+}
+
+export function generateFeminineDualFromMasculineWithHint(word: string, pluralHint?: string | null): string {
+    if (!word) return '';
+    const normalized = word.toLowerCase().trim().normalize('NFC');
+    return `${collapseIeForFeminineDual(normalized, pluralHint)}tejn`;
+}
+
+export function prepareSuffixAttachmentStem(word: string): string {
+    const simplified = String(word || '').replace(/jj/g, 'j').replace(/ww/g, 'w');
+    const vowelRe = /[aeiouàèìòùâêîôû]/gi;
+    let stem = simplified;
+
+    const vowelCount = stem.match(vowelRe)?.length ?? 0;
+    if (vowelCount >= 2) {
+        const shortenedIe = stem.replace(/ie([^aeiouàèìòùâêîôû]*)$/i, 'i$1');
+        if (shortenedIe !== stem) {
+            stem = shortenedIe;
+        } else {
+            stem = stem.replace(/([aeiouàèìòùâêîôû])([^aeiouàèìòùâêîôû]+)$/i, '$2');
+        }
+    }
+
+    return stem;
+}
+
+function parseRootConsonants(rootConsonants?: string | null): string[] {
+    return String(rootConsonants || '')
+        .toLowerCase()
+        .replace(/[-.,\s]+/g, '-')
+        .split('-')
+        .map((item) => item.trim())
+        .filter(Boolean);
+}
+
+function expandPatternWithRoots(pattern: string, roots: string[]): string | null {
+    if (!pattern) return null;
+
+    let usedRoot = false;
+    let rootIndex = 0;
+    const expanded = pattern.replace(/C/g, () => {
+        const root = roots[rootIndex] || roots[roots.length - 1] || '';
+        if (rootIndex < roots.length) rootIndex++;
+        if (root) usedRoot = true;
+        return root || 'C';
+    });
+
+    return usedRoot || !pattern.includes('C') ? expanded : null;
+}
+
+function isCacvcDiminutiveClass(basePattern?: string | null, headword?: string | null): boolean {
+    const pattern = String(basePattern || '').toLowerCase().trim();
+    const word = String(headword || '').toLowerCase().trim();
+
+    if (!pattern && !word) return false;
+
+    if (pattern.includes('â') && /c.*v.*c/.test(pattern)) return true;
+    if (/fâgħel|fagħel/.test(word)) return true;
+
+    return false;
+}
+
+function buildCacvcDiminutiveForms(roots: string[]) {
+    if (roots.length < 3) return null;
+
+    const [c1, c2, c3] = roots;
+    const v = ['għ', 'ħ', 'q', 'h'].includes(c2) || ['għ', 'ħ', 'q', 'h'].includes(c3) ? 'a' : 'e';
+
+    return {
+        masculine: {
+            form: `${c1}wej${c2}${v}${c3}`,
+            pattern: 'CwejCvC',
+        },
+        feminine: {
+            form: `${c1}wej${c2}${c3}a`,
+            pattern: 'CwejCCa',
+        },
+    };
+}
+
+function hasGuttural(word: string): boolean {
+    return /għ|ħ|q|h/i.test(word);
+}
+
+export function generateDiminutiveSoundPlural(word: string): string {
+    if (!word) return '';
+    return `${prepareSuffixAttachmentStem(word)}in`;
+}
+
+export function generateFeminineDiminutiveSoundPlural(word: string): string {
+    if (!word) return '';
+    const attachmentStem = prepareSuffixAttachmentStem(word);
+    const stem = attachmentStem.replace(/a$/i, '');
+    const suffix = hasGuttural(stem) ? 'at' : 'iet';
+    return `${stem}${suffix}`;
+}
+
+export type DiminutiveAutoForm = {
+    form: string;
+    pattern: string | null;
+    theoretical: boolean;
+};
+
+export type DiminutiveVariant = 'masculine' | 'feminine';
+
+export type DiminutiveAutoFormOptions = {
+    basePattern?: string | null;
+    gender?: DiminutiveVariant;
+    pluralHint?: string | null;
+};
+
+/**
+ * Generates a best-effort diminutive form for nouns/adjectives.
+ * Prefers an attested pattern when available, otherwise falls back to a
+ * conservative Maltese-style template derived from the root consonants.
+ */
+export function generateDiminutiveForm(
+    headword: string,
+    rootConsonants?: string,
+    diminutivePattern?: string | null,
+    options: DiminutiveAutoFormOptions = {},
+): DiminutiveAutoForm | null {
+    const word = String(headword || '').toLowerCase().trim().normalize('NFC');
+    const roots = parseRootConsonants(rootConsonants);
+    const pattern = String(diminutivePattern || '').trim();
+    const basePattern = String(options.basePattern || '').trim();
+
+    if (isCacvcDiminutiveClass(basePattern, word)) {
+        const forms = buildCacvcDiminutiveForms(roots);
+        const selected = forms?.[options.gender || 'masculine'] || forms?.masculine || null;
+        if (selected) {
+            return { form: selected.form, pattern: selected.pattern, theoretical: true };
+        }
+    }
+
+    if (pattern) {
+        const expanded = expandPatternWithRoots(pattern, roots);
+        if (expanded) {
+            return { form: expanded, pattern, theoretical: true };
+        }
+    }
+
+    if (roots.length >= 3) {
+        const [c1, c2, c3] = roots;
+        const ghv = ['għ'].includes(c1) ? 'e' : '';
+        const v = ['għ', 'ħ', 'q', 'h'].includes(c2) || ['għ', 'ħ', 'q', 'h'].includes(c3) ? 'a' : 'e';
+        return {
+            form: `${c1}${ghv}${c2}${v}jj${v}${c3}`,
+            pattern: 'CCvjjvC',
+            theoretical: true,
+        };
+    }
+
+    if (word) {
+        const withIeShift = word.replace(/ie([^aeiouàèìòùâêîôû]*)$/i, 'ejje$1');
+        if (withIeShift !== word) {
+            return {
+                form: withIeShift,
+                pattern: null,
+                theoretical: true,
+            };
+        }
+    }
+
+    return null;
 }
 
 // ── CONSONANT SET ──────────────────────────────────────────────────────────

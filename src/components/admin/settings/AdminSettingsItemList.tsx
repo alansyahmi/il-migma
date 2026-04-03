@@ -2,7 +2,7 @@ import { Edit2, Search, Trash2 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import type { ConfigItem } from '@/lib/adminConfig';
 import type { AdminCategory } from '@/lib/adminCategoryRegistry';
-import { getPatternMetadataSummary } from '@/lib/patternBuckets';
+import { getPatternMetadataSummary } from '@/lib/patternMetadata';
 import { cn } from '@/lib/utils';
 
 interface AdminSettingsItemListProps {
@@ -41,7 +41,7 @@ export function AdminSettingsItemList({ items, activeCategory, onEdit, onDelete 
 
 function PatternCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (item: ConfigItem) => void; onDelete: (id: string, key: string) => void }) {
     const value = item.value as Record<string, unknown>;
-    const summary = getPatternMetadataSummary(value);
+    const summary = getPatternMetadataSummary(value, item.category);
 
     return (
         <Card className="group relative overflow-hidden p-3.5 border-border-light transition-all hover:border-[#1034A6]/30 hover:shadow-xl hover:shadow-[#1034A6]/5">
@@ -53,7 +53,6 @@ function PatternCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (it
                             Pattern
                         </span>
                         <MetaChip label="Bucket" value={summary.bucketLabel} tone="accent" compact />
-                        {!!summary.role && <MetaChip label="Role" value={summary.role.replace(/_/g, ' ')} tone="neutral" />}
                         {!!summary.gender && (
                             <span className={cn(
                                 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold',
@@ -64,6 +63,7 @@ function PatternCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (it
                                 <span>{summary.gender}</span>
                             </span>
                         )}
+                        {!!summary.weakClass && <MetaChip label="Weak" value={summary.weakClass} tone="neutral" />}
                     </div>
 
                     <h3 className="font-bold text-[17px] text-black uppercase tracking-tight">{item.key}</h3>
@@ -80,6 +80,19 @@ function PatternCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (it
                             />
                         ) : null}
                     </div>
+
+                    {summary.applicabilities.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                            {summary.applicabilities.map((app) => (
+                                <span
+                                    key={`${item.id}-${app.pos}`}
+                                    className="inline-flex items-center gap-1 rounded-lg border border-black/5 bg-black/5 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-black/55"
+                                >
+                                    <span className="text-[#1034A6]">{app.label}</span>
+                                </span>
+                            ))}
+                        </div>
+                    )}
 
                     {!!value.description && (
                         <p className="pt-1.5 border-t border-black/5 text-xs text-black/55 leading-relaxed line-clamp-2">

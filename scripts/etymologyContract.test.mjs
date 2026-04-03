@@ -12,7 +12,12 @@ import {
     entryPosHasNativeVowelSets,
 } from '../src/lib/adminSchema.ts';
 import { entryToForm } from '../src/lib/entryAdapter.ts';
-import { normalizeDictionaryEtymologyChain as normalizeDisplayEtymologyChain } from '../src/components/dictionary/etymology.ts';
+import {
+    formatEtymologyConnector,
+    formatEtymologySentenceLeadIn,
+    isConjunctiveEtymologyRelationship,
+    normalizeDictionaryEtymologyChain as normalizeDisplayEtymologyChain,
+} from '../src/components/dictionary/etymology.ts';
 
 const assertEq = (actual, expected, message) => {
     assert.deepStrictEqual(actual, expected, message);
@@ -287,6 +292,14 @@ const run = () => {
         script: 'كتب',
         time_period: 'Classical',
     }, 'display helper should still normalize legacy entry etymology data');
+
+    assertEq(isConjunctiveEtymologyRelationship('or'), true, 'conjunctive relationships should be detected');
+    assertEq(formatEtymologyConnector('or'), 'or', 'conjunctive relationships should render as lowercase joiners');
+    assertEq(
+        formatEtymologySentenceLeadIn('from', 'or'),
+        'from',
+        'a conjunctive first relationship should not replace the lead-in'
+    );
 };
 
 run();

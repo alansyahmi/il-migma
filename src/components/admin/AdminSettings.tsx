@@ -6,14 +6,15 @@ import { Spinner } from '@/components/ui/Spinner';
 import { useAdminConfig, type ConfigItem } from '@/lib/adminConfig';
 import {
     ADMIN_CATEGORY_GROUPS,
-    CATEGORIES,
     getCategoryById,
+    SIDEBAR_CATEGORIES,
     type AdminCategory,
     type AdminCategoryGroupId,
 } from '@/lib/adminCategoryRegistry';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { TERMINOLOGY } from '@/lib/terminology';
+import { normalizePatternFormValue, PATTERN_BUCKET_LABELS } from '@/lib/patternMetadata';
 import { cn } from '@/lib/utils';
 import { AdminSettingsSidebar } from './settings/AdminSettingsSidebar';
 import { AdminSettingsToolbar } from './settings/AdminSettingsToolbar';
@@ -87,7 +88,7 @@ export function AdminSettings() {
         if (savedCategoryOrder) {
             setCategoryOrder(savedCategoryOrder);
         } else {
-            setCategoryOrder(CATEGORIES.map((cat) => cat.id));
+            setCategoryOrder(SIDEBAR_CATEGORIES.map((cat) => cat.id));
         }
     }, [savedCategoryOrder, user?.id]);
 
@@ -98,23 +99,65 @@ export function AdminSettings() {
     }, [expandedGroups]);
 
     const sortedCategories = useMemo(() => {
+        const visibleCategories = SIDEBAR_CATEGORIES;
         const orderMap = new Map(categoryOrder.map((id, index) => [id, index]));
-        return [...CATEGORIES].sort((a, b) => {
+        return [...visibleCategories].sort((a, b) => {
             const indexA = orderMap.get(a.id) ?? Number.MAX_SAFE_INTEGER;
             const indexB = orderMap.get(b.id) ?? Number.MAX_SAFE_INTEGER;
             return indexA - indexB;
         });
     }, [categoryOrder]);
 
+    const canonicalPatternShortcuts = useMemo(() => {
+        const canonicalItems = getCategoryItems('cv_wizen_pattern');
+        const posOrder = new Map(getCategoryItems('pos').map((item, index) => [item.key, index]));
+        const counts = new Map<string, number>();
+
+        canonicalItems.forEach((item) => {
+            const normalized = normalizePatternFormValue(item.value);
+            const posTypes = (normalized.pos_types?.length ? normalized.pos_types : normalized.applicabilities?.map((app) => app.pos) || [])
+                .filter((pos): pos is string => typeof pos === 'string' && pos.trim().length > 0);
+            Array.from(new Set(posTypes)).forEach((pos) => {
+                counts.set(pos, (counts.get(pos) || 0) + 1);
+            });
+        });
+
+        return Array.from(counts.entries())
+            .sort((a, b) => (posOrder.get(a[0]) ?? Number.MAX_SAFE_INTEGER) - (posOrder.get(b[0]) ?? Number.MAX_SAFE_INTEGER))
+            .map(([pos, count]) => ({ pos, count }));
+    }, [getCategoryItems]);
+
+    const canonicalRoleShortcuts = useMemo(() => {
+        const canonicalItems = getCategoryItems('cv_wizen_pattern');
+        const preferredOrder = ['broken_pattern', 'sound_suffix', 'feminine_pattern', 'diminutive_pattern', 'adjective_pattern', 'cv_wizen_pattern'];
+        const counts = new Map<string, number>();
+
+        canonicalItems.forEach((item) => {
+            const category = String(item.category || '').trim();
+            if (!category) return;
+            counts.set(category, (counts.get(category) || 0) + 1);
+        });
+
+        return Array.from(counts.entries())
+            .sort((a, b) => {
+                const indexA = preferredOrder.indexOf(a[0]);
+                const indexB = preferredOrder.indexOf(b[0]);
+                if (indexA !== -1 || indexB !== -1) {
+                    return (indexA === -1 ? Number.MAX_SAFE_INTEGER : indexA) - (indexB === -1 ? Number.MAX_SAFE_INTEGER : indexB);
+                }
+                return a[0].localeCompare(b[0]);
+            })
+            .map(([role, count]) => ({ role, label: PATTERN_BUCKET_LABELS[role] || role, count }));
+    }, [getCategoryItems]);
+
     const resolveCreateCategory = (category: AdminCategory | null, value: unknown) => {
         const fallback = category?.storageCategories?.[0] ?? activeTab;
         if (category?.id !== 'plural_pattern') return fallback;
 
         const patternValue = value as Record<string, unknown> | null;
-        const linguisticRole = String(patternValue?.linguistic_role || '').toLowerCase();
         const cv = String(patternValue?.cv || '').trim();
 
-        if (linguisticRole === 'sound_plural' || cv.startsWith('-')) {
+        if (cv.startsWith('-')) {
             return 'sound_suffix';
         }
 
@@ -372,13 +415,22 @@ export function AdminSettings() {
                 expandedGroups={expandedGroups}
                 onToggleGroup={toggleGroup}
                 activeTab={activeTab}
+                activePosFilter={posFilter}
+                activeRoleFilter={roleFilter}
                 draggedCatId={draggedCatId}
                 onSelectCategory={setActiveTab}
+                onSelectCanonicalPattern={(filters) => {
+                    setActiveTab('cv_wizen_pattern');
+                    setPosFilter(filters?.pos ?? 'all');
+                    setRoleFilter(filters?.role ?? 'all');
+                }}
                 onDragStart={handleDragStart}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
                 onDragEnd={handleDragEnd}
                 getItemCount={(categoryId) => getCategoryItems(categoryId).length}
+                canonicalPatternShortcuts={canonicalPatternShortcuts}
+                canonicalRoleShortcuts={canonicalRoleShortcuts}
                 language={language}
                 setLanguage={setLanguage}
                 mode={mode}

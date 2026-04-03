@@ -629,7 +629,7 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
                                 label={t('Diminutive Pattern', 'Mudell Diminuttiv')}
                                 value={form.diminutive_pattern || ''}
                                 onChange={v => set('diminutive_pattern', v)}
-                                placeholder="e.g. CCejjeC"
+                                placeholder="e.g. CCvjjvC"
                                 presets={options?.diminutive_patterns}
                                 styles={styles}
                                 t={t}
@@ -735,7 +735,7 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
                             label={t('Diminutive Pattern', 'Mudell Diminuttiv')}
                             value={form.diminutive_pattern || ''}
                             onChange={v => set('diminutive_pattern', v)}
-                            placeholder="e.g. CCejjeC"
+                            placeholder="e.g. CCvjjvC"
                             presets={options?.diminutive_patterns}
                             styles={styles}
                             t={t}
@@ -1007,7 +1007,7 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
                             label={t('Diminutive Pattern', 'Mudell Diminuttiv')}
                             value={form.diminutive_pattern || ''}
                             onChange={v => set('diminutive_pattern', v)}
-                            placeholder="e.g. CCejjeC"
+                            placeholder="e.g. CCvjjvC"
                             presets={options?.patterns}
                             styles={styles}
                             t={t}

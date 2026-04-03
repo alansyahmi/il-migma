@@ -1,5 +1,10 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import {
+    formatEtymologyConnector,
+    formatEtymologySentenceLeadIn,
+    isConjunctiveEtymologyRelationship,
+} from './etymology';
 
 export const CREAM_RGBA = 'rgba(244,243,240,0.88)';
 export const BLUE = '#1034A6';
@@ -41,33 +46,6 @@ function splitGlossText(value?: string) {
         .filter(Boolean);
 }
 
-function sentenceCase(value: string) {
-    const trimmed = value.trim();
-    if (!trimmed) return trimmed;
-    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
-}
-
-function formatEtymologyPrefix(prefix: string | undefined, relationship: string | undefined) {
-    const cleanPrefix = prefix?.trim() || '';
-    const cleanRelationship = relationship?.trim() || '';
-
-    if (!cleanRelationship) return cleanPrefix || undefined;
-    if (!cleanPrefix) return cleanRelationship;
-
-    const lowerPrefix = cleanPrefix.toLowerCase();
-    const lowerRelationship = cleanRelationship.toLowerCase();
-
-    if (lowerRelationship === lowerPrefix || lowerRelationship.endsWith(` ${lowerPrefix}`)) {
-        return sentenceCase(cleanRelationship);
-    }
-
-    if (lowerRelationship === 'from') {
-        return cleanPrefix;
-    }
-
-    return `${sentenceCase(cleanRelationship)} ${lowerPrefix}`;
-}
-
 export function EtymologySentence({
     prefix,
     items,
@@ -76,14 +54,22 @@ export function EtymologySentence({
     items: EtymologySentenceItem[];
 }) {
     if (!items?.length) return null;
-    const displayPrefix = formatEtymologyPrefix(prefix, items[0]?.relationship);
+    const displayPrefix = formatEtymologySentenceLeadIn(prefix, items[0]?.relationship);
 
     return (
         <p className="text-sm text-black leading-relaxed">
             {displayPrefix && <span>{displayPrefix} </span>}
             {items.map((item, i) => (
                 <React.Fragment key={`${item.language}-${i}`}>
-                    {i > 0 && <span className="mx-1 opacity-50 font-sans">{' < '}</span>}
+                    {i > 0 && (
+                        isConjunctiveEtymologyRelationship(item.relationship) ? (
+                            <span className="mx-1 font-sans text-black/70">
+                                {formatEtymologyConnector(item.relationship)}
+                            </span>
+                        ) : (
+                            <span className="mx-1 opacity-50 font-sans">{' < '}</span>
+                        )
+                    )}
                     <span style={{ color: BLUE }} className="font-medium">
                         {item.language}
                     </span>

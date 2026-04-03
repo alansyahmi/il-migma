@@ -89,9 +89,9 @@ async function handleSyncFromEntries(client, commit) {
                 // 2. Link it to the correct category if not already linked
                 const appId = `${resolvedPatternId}_${row.cat}_all`;
                 await client.execute({
-                    sql: `INSERT OR IGNORE INTO pattern_applicability (id, pattern_id, category, pos, stress, linguistic_role)
-                          VALUES (?, ?, ?, ?, ?, ?)`,
-                    args: [appId, resolvedPatternId, row.cat, 'all', 2, row.cat.replace('_pattern', '') + '_role']
+                    sql: `INSERT OR IGNORE INTO pattern_applicability (id, pattern_id, category, pos, stress, linguistic_role, metadata)
+                          VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    args: [appId, resolvedPatternId, row.cat, 'all', 2, row.cat.replace('_pattern', '') + '_role', '{}']
                 });
                 const role = roleMap[row.cat] || '';
                 if (role) {
@@ -217,6 +217,9 @@ async function handleMigration(client, commit) {
             category TEXT,
             pos TEXT,
             stress INTEGER,
+            linguistic_role TEXT,
+            gender TEXT,
+            metadata TEXT,
             is_active INTEGER DEFAULT 1,
             sort_order INTEGER DEFAULT 0,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -261,12 +264,29 @@ async function handleMigration(client, commit) {
 
                 // Insert applicability for each POS
                 const posTypes = normalized.pos_types.length > 0 ? normalized.pos_types : ['all'];
-                for (const pos of posTypes) {
+                const normalizedApplicabilities = normalized.applicabilities?.length > 0 ? normalized.applicabilities : posTypes.map((pos) => ({
+                    pos,
+                    linguistic_role: normalized.linguistic_role || '',
+                    gender: normalized.gender || '',
+                    metadata: {},
+                }));
+                for (const applicability of normalizedApplicabilities) {
+                    const pos = applicability.pos || 'all';
                     const appId = `${patternId}_${row.category}_${pos}`;
                     await client.execute({
-                        sql: `INSERT OR REPLACE INTO pattern_applicability (id, pattern_id, category, pos, stress, sort_order)
-                              VALUES (?, ?, ?, ?, ?, ?)`,
-                        args: [appId, patternId, row.category, pos, normalized.stress, row.sort_order]
+                        sql: `INSERT OR REPLACE INTO pattern_applicability (id, pattern_id, category, pos, stress, sort_order, linguistic_role, gender, metadata)
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                        args: [
+                            appId,
+                            patternId,
+                            row.category,
+                            pos,
+                            normalized.stress,
+                            row.sort_order,
+                            applicability.linguistic_role || '',
+                            applicability.gender || '',
+                            JSON.stringify(applicability.metadata || {}),
+                        ]
                     });
                 }
             }

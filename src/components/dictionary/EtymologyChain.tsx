@@ -2,7 +2,11 @@ import React from 'react';
 import { ArrowRight, Info } from 'lucide-react';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import type { Etymology } from '@/types';
-import { normalizeDictionaryEtymologyChain } from './etymology';
+import {
+    formatEtymologyConnector,
+    isConjunctiveEtymologyRelationship,
+    normalizeDictionaryEtymologyChain,
+} from './etymology';
 
 interface EtymologyChainProps {
     etymologies: Etymology[];
@@ -31,12 +35,14 @@ export function EtymologyChain({ etymologies }: EtymologyChainProps) {
                 <div key={ety.id} className="space-y-2">
                     {/* Chain nodes */}
                     <div className="flex flex-wrap items-center gap-2">
-                        {normalizeDictionaryEtymologyChain(ety.chain).map((node, i) => {
+                        {normalizeDictionaryEtymologyChain(ety.chain).map((node, i, nodes) => {
                             const colors = LANGUAGE_COLORS[node.language] ?? LANGUAGE_COLORS.Uncertain;
+                            const nextNode = nodes[i + 1];
+                            const nextIsConjunctive = isConjunctiveEtymologyRelationship(nextNode?.relationship);
                             return (
                                 <React.Fragment key={i}>
                                     <div className={`rounded-lg border px-3 py-2 min-w-[96px] ${colors.bg} border-current/10`}>
-                                        {node.relationship && (
+                                        {node.relationship && !isConjunctiveEtymologyRelationship(node.relationship) && (
                                             <div className="text-[10px] uppercase tracking-wider font-semibold mb-0.5 text-[#A07030]/75">
                                                 {node.relationship}
                                             </div>
@@ -62,8 +68,14 @@ export function EtymologyChain({ etymologies }: EtymologyChainProps) {
                                             <div className="text-[10px] text-gray-400 mt-0.5">{node.time_period}</div>
                                         )}
                                     </div>
-                                    {i < ety.chain.length - 1 && (
-                                        <ArrowRight size={14} className="text-[#A07030] shrink-0" />
+                                    {i < nodes.length - 1 && (
+                                        nextIsConjunctive ? (
+                                            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#A07030] shrink-0 px-1">
+                                                {formatEtymologyConnector(nextNode?.relationship)}
+                                            </span>
+                                        ) : (
+                                            <ArrowRight size={14} className="text-[#A07030] shrink-0" />
+                                        )
                                     )}
                                 </React.Fragment>
                             );

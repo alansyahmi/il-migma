@@ -9,11 +9,61 @@ export type PatternSourceItem = {
 
 export type PatternOption = { label: string; value: string; sub?: string };
 
+export const PATTERN_POS_OPTIONS = ['verb', 'noun', 'adjective', 'participle', 'numeral'] as const;
+export type PatternPos = typeof PATTERN_POS_OPTIONS[number];
+
+export const PATTERN_BUCKET_LABELS: Record<string, string> = {
+    cv_wizen_pattern: 'Pattern',
+    broken_pattern: 'Broken plural',
+    feminine_pattern: 'Feminine singular',
+    sound_suffix: 'Sound plural',
+    diminutive_pattern: 'Diminutive',
+    adjective_pattern: 'Elative',
+};
+
 export type PatternMetadataSummary = {
     posTypes: string[];
-    role: string;
     gender: string;
+    weakClass: string;
     bucketLabel: string;
+    applicabilities: PatternApplicabilitySummary[];
+};
+
+export type PatternApplicabilityMetadata = Record<string, unknown>;
+
+export type PatternApplicability = {
+    pos: string;
+    strength?: string;
+    gender?: string;
+    weakClass?: string;
+    participleType?: string;
+    numeralType?: string;
+    metadata?: PatternApplicabilityMetadata;
+};
+
+export type PatternFormValue = {
+    cv?: string;
+    wizen?: string;
+    stress?: number;
+    description?: string;
+    pos_types?: string[];
+    applicabilities?: PatternApplicability[];
+    strength?: string;
+    gender?: string;
+    weak_class?: string;
+    participle_type?: string;
+    numeral_type?: string;
+    metadata?: PatternApplicabilityMetadata;
+};
+
+export type PatternApplicabilitySummary = {
+    pos: string;
+    strength: string;
+    gender: string;
+    weakClass: string;
+    participleType: string;
+    numeralType: string;
+    label: string;
 };
 
 export function getPatternNotation(value: unknown) {
@@ -27,6 +77,10 @@ export function getPatternNotation(value: unknown) {
 
 function normalizeToken(value: unknown) {
     return String(value || '').trim().toLowerCase();
+}
+
+function normalizeText(value: unknown) {
+    return String(value || '').trim();
 }
 
 function normalizeStringList(value: unknown) {
@@ -52,36 +106,198 @@ function titleCase(value: string) {
         .join(' ');
 }
 
-export function getPatternMetadataSummary(value: unknown): PatternMetadataSummary {
-    const record = value && typeof value === 'object' ? value as Record<string, unknown> : {};
-    const posTypes = normalizeStringList(record.pos_types).map((pos) => pos.toLowerCase());
-    const role = normalizeToken(record.linguistic_role);
-    const gender = normalizeToken(record.gender);
+function normalizeApplicabilityMetadata(record: Record<string, unknown>) {
+    const metadata = record.metadata && typeof record.metadata === 'object' && !Array.isArray(record.metadata)
+        ? { ...record.metadata as Record<string, unknown> }
+        : {};
 
-    let bucketLabel = '';
-    if (role.startsWith('elative')) {
-        bucketLabel = gender === 'masculine'
-            ? 'Elative (Masc.)'
-            : gender === 'feminine'
-                ? 'Elative (Fem.)'
-                : 'Elative';
-    } else if (role === 'broken_plural') {
-        bucketLabel = 'Broken plural';
-    } else if (role === 'sound_plural') {
-        bucketLabel = 'Sound plural';
-    } else if (role === 'feminine_singular') {
-        bucketLabel = 'Feminine singular';
-    } else if (role === 'masculine_singular') {
-        bucketLabel = 'Masculine singular';
-    } else if (role === 'diminutive') {
-        bucketLabel = 'Diminutive';
-    } else if (posTypes.length > 0) {
-        bucketLabel = `${titleCase(posTypes[0])} pattern`;
-    } else {
-        bucketLabel = 'General pattern';
+    Object.entries(record).forEach(([key, value]) => {
+        if (['pos', 'metadata'].includes(key)) return;
+        if (value !== undefined && value !== null && String(value).trim() !== '') {
+            metadata[key] = value;
+        }
+    });
+
+    if (metadata.class !== undefined && metadata.strength === undefined) {
+        metadata.strength = metadata.class;
     }
 
-    return { posTypes, role, gender, bucketLabel };
+    return metadata;
+}
+
+function normalizePatternPos(value: unknown) {
+    const pos = normalizeToken(value);
+    return PATTERN_POS_OPTIONS.includes(pos as PatternPos) ? pos : '';
+}
+
+function normalizeApplicability(record: Record<string, unknown>) {
+    const pos = normalizePatternPos(record.pos);
+    if (!pos) return null;
+
+    const metadata = normalizeApplicabilityMetadata(record);
+    const strength = normalizeText(record.strength || metadata.strength);
+    const gender = normalizeText(record.gender || metadata.gender);
+    const weakClass = normalizeText(record.weakClass || metadata.weak_class);
+    const participleType = normalizeText(record.participleType || metadata.participle_type);
+    const numeralType = normalizeText(record.numeralType || metadata.numeral_type);
+
+    if (strength) metadata.strength = strength;
+    if (gender) metadata.gender = gender;
+    if (weakClass) metadata.weak_class = weakClass;
+    if (participleType) metadata.participle_type = participleType;
+    if (numeralType) metadata.numeral_type = numeralType;
+    delete metadata.class;
+    delete metadata.linguistic_role;
+
+    return {
+        pos,
+        strength,
+        gender,
+        weakClass,
+        participleType,
+        numeralType,
+        metadata,
+    } as PatternApplicability;
+}
+
+export function normalizePatternFormValue(value: unknown): PatternFormValue {
+    const record = value && typeof value === 'object' ? value as Record<string, unknown> : {};
+    const posTypes = normalizeStringList(record.pos_types)
+        .map((pos) => normalizePatternPos(pos))
+        .filter(Boolean);
+    const rawApplicabilities = Array.isArray(record.applicabilities) ? record.applicabilities as Record<string, unknown>[] : [];
+
+    const applicabilities = rawApplicabilities.length > 0
+        ? rawApplicabilities
+            .map((app) => normalizeApplicability(app))
+            .filter(Boolean) as PatternApplicability[]
+        : [];
+    const firstApplicability = applicabilities[0] || null;
+    const derivedStrength = normalizeText(
+        record.strength ||
+        firstApplicability?.strength ||
+        firstApplicability?.metadata?.strength
+    );
+    const derivedGender = normalizeText(
+        record.gender ||
+        firstApplicability?.gender ||
+        firstApplicability?.metadata?.gender
+    );
+    const derivedWeakClass = normalizeText(
+        record.weak_class ||
+        firstApplicability?.weakClass ||
+        firstApplicability?.metadata?.weak_class
+    );
+    const derivedParticipleType = normalizeText(
+        record.participle_type ||
+        firstApplicability?.participleType ||
+        firstApplicability?.metadata?.participle_type
+    );
+    const derivedNumeralType = normalizeText(
+        record.numeral_type ||
+        firstApplicability?.numeralType ||
+        firstApplicability?.metadata?.numeral_type
+    );
+
+    if (applicabilities.length > 0) {
+        return {
+            cv: normalizeText(record.cv),
+            wizen: normalizeText(record.wizen),
+            stress: Number.isFinite(Number(record.stress)) ? Number(record.stress) : 2,
+            description: normalizeText(record.description),
+            pos_types: posTypes.length > 0 ? posTypes : applicabilities.map((app) => app.pos),
+            applicabilities,
+            strength: derivedStrength,
+            gender: derivedGender,
+            weak_class: derivedWeakClass,
+            participle_type: derivedParticipleType,
+            numeral_type: derivedNumeralType,
+            metadata: record.metadata && typeof record.metadata === 'object' && !Array.isArray(record.metadata)
+                ? record.metadata as PatternApplicabilityMetadata
+                : {},
+        };
+    }
+
+    const legacyMetadata = normalizeApplicabilityMetadata(record);
+    const legacyStrength = normalizeText(derivedStrength || legacyMetadata.strength);
+    const legacyGender = normalizeText(derivedGender || legacyMetadata.gender);
+    const legacyWeakClass = normalizeText(derivedWeakClass || legacyMetadata.weak_class);
+    const legacyParticipleType = normalizeText(derivedParticipleType || legacyMetadata.participle_type);
+    const legacyNumeralType = normalizeText(derivedNumeralType || legacyMetadata.numeral_type);
+    const legacyPosTypes = posTypes.length > 0 ? posTypes : ['all'];
+
+    return {
+        cv: normalizeText(record.cv),
+        wizen: normalizeText(record.wizen),
+        stress: Number.isFinite(Number(record.stress)) ? Number(record.stress) : 2,
+        description: normalizeText(record.description),
+        pos_types: legacyPosTypes,
+        applicabilities: legacyPosTypes.map((pos) => ({
+            pos,
+            strength: legacyStrength,
+            gender: legacyGender,
+            weakClass: legacyWeakClass,
+            participleType: legacyParticipleType,
+            numeralType: legacyNumeralType,
+            metadata: {
+                ...legacyMetadata,
+                strength: legacyStrength,
+                weak_class: legacyWeakClass,
+                participle_type: legacyParticipleType,
+                numeral_type: legacyNumeralType,
+                gender: legacyGender,
+            },
+        })),
+        strength: legacyStrength,
+        gender: legacyGender,
+        weak_class: legacyWeakClass,
+        participle_type: legacyParticipleType,
+        numeral_type: legacyNumeralType,
+        metadata: legacyMetadata,
+    };
+}
+
+export function getPatternApplicabilitySummary(value: unknown): PatternApplicabilitySummary[] {
+    const normalized = normalizePatternFormValue(value);
+    const applicabilities = normalized.applicabilities || [];
+
+    return applicabilities.map((app) => {
+        const metadata = (app.metadata || {}) as Record<string, unknown>;
+        const strength = normalizeText(app.strength || metadata.strength);
+        const weakClass = normalizeText(app.weakClass || metadata.weak_class);
+        const gender = normalizeText(app.gender || metadata.gender);
+        const participleType = normalizeText(app.participleType || metadata.participle_type);
+        const numeralType = normalizeText(app.numeralType || metadata.numeral_type);
+        const labelParts = [titleCase(app.pos)];
+
+        if (strength) labelParts.push(strength.replace(/_/g, ' '));
+        if (gender) labelParts.push(gender);
+        if (weakClass) labelParts.push(weakClass);
+        if (participleType) labelParts.push(participleType);
+        if (numeralType) labelParts.push(numeralType);
+
+        return {
+            pos: app.pos,
+            strength,
+            gender,
+            weakClass,
+            participleType,
+            numeralType,
+            label: labelParts.filter(Boolean).join(' · '),
+        };
+    });
+}
+
+export function getPatternMetadataSummary(value: unknown, category?: string): PatternMetadataSummary {
+    const normalized = normalizePatternFormValue(value);
+    const posTypes = normalized.pos_types || [];
+    const gender = normalizeToken(normalized.gender);
+    const weakClass = normalizeToken(normalized.weak_class);
+    const applicabilities = getPatternApplicabilitySummary(normalized);
+
+    const bucketLabel = (category && PATTERN_BUCKET_LABELS[category]) || (posTypes.length > 0 ? `${titleCase(posTypes[0])} pattern` : 'General pattern');
+
+    return { posTypes, gender, weakClass, bucketLabel, applicabilities };
 }
 
 export function buildPatternOptions(

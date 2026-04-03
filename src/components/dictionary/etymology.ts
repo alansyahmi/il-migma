@@ -10,6 +10,8 @@ export type DictionaryEtymologyStep = {
     time_period?: string;
 };
 
+const CONJUNCTIVE_RELATIONSHIPS = new Set(['and', 'or', 'nor']);
+
 function pickString(source: Record<string, any> | undefined, keys: string[]) {
     if (!source) return '';
 
@@ -21,6 +23,50 @@ function pickString(source: Record<string, any> | undefined, keys: string[]) {
     }
 
     return '';
+}
+
+function sentenceCase(value: string) {
+    const trimmed = value.trim();
+    if (!trimmed) return trimmed;
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+}
+
+function normalizeRelationshipValue(relationship?: string) {
+    return String(relationship || '').trim();
+}
+
+export function isConjunctiveEtymologyRelationship(relationship?: string) {
+    return CONJUNCTIVE_RELATIONSHIPS.has(normalizeRelationshipValue(relationship).toLowerCase());
+}
+
+export function formatEtymologySentenceLeadIn(prefix?: string, relationship?: string) {
+    const cleanPrefix = normalizeRelationshipValue(prefix);
+    const cleanRelationship = normalizeRelationshipValue(relationship);
+
+    if (!cleanRelationship) return cleanPrefix || undefined;
+    if (!cleanPrefix) return cleanRelationship;
+    if (isConjunctiveEtymologyRelationship(cleanRelationship)) return cleanPrefix;
+
+    const lowerPrefix = cleanPrefix.toLowerCase();
+    const lowerRelationship = cleanRelationship.toLowerCase();
+
+    if (lowerRelationship === lowerPrefix || lowerRelationship.endsWith(` ${lowerPrefix}`)) {
+        return sentenceCase(cleanRelationship);
+    }
+
+    if (lowerRelationship === 'from') {
+        return cleanPrefix;
+    }
+
+    return `${sentenceCase(cleanRelationship)} ${lowerPrefix}`;
+}
+
+export function formatEtymologyConnector(relationship?: string) {
+    const cleanRelationship = normalizeRelationshipValue(relationship);
+    if (!cleanRelationship) return '';
+    return isConjunctiveEtymologyRelationship(cleanRelationship)
+        ? cleanRelationship.toLowerCase()
+        : cleanRelationship;
 }
 
 export function normalizeDictionaryEtymologyChain(

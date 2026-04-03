@@ -14,6 +14,7 @@ import {
     pluralRowsToLegacyPatternString,
     type PluralFormRow,
 } from './pluralForms.ts';
+import type { EntryDiminutive } from '@/types';
 
 export const INITIAL_FORM_STATE = {
     id: '',
@@ -71,6 +72,7 @@ export const INITIAL_FORM_STATE = {
     dual_pattern: '',
     elative_pattern: '',
     diminutive_pattern: '',
+    diminutives: [] as EntryDiminutive[],
     _sound_suffix: '',
     _adj_sound_suffix: '',
     synonyms: [] as { id: string; headword: string; gloss_en: string; gloss_mt: string }[],
@@ -149,6 +151,8 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
     const isLoanword = full.is_loanword === undefined || full.is_loanword === null || full.is_loanword === ''
         ? hasZokkMorphology
         : parseBooleanLike(full.is_loanword);
+    const diminutives = parseArray(full.diminutives);
+    const primaryDiminutive = diminutives.find((item: any) => item && (item.form || item.diminutive_form)) || null;
 
     // Extract Extra Fields (unknown backend keys)
     const extraFields: Record<string, any> = {};
@@ -173,7 +177,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         // Preserve default for new forms, but read legacy/canonical when editing
         gender: resolveEntryGender(full) || INITIAL_FORM_STATE.gender,
         noun_type: full.noun_type || '',
-        diminutive_form: full.diminutive_form || '',
+        diminutive_form: primaryDiminutive?.form || primaryDiminutive?.diminutive_form || full.diminutive_form || '',
         form_fem: full.form_fem || '',
         form_masc: full.form_masc || '',
         is_collective: Boolean(full.is_collective ?? false),
@@ -190,7 +194,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         plural_forms: pluralRows,
         dual_pattern: full.dual_pattern || '',
         elative_pattern: full.elative_pattern || '',
-        diminutive_pattern: full.diminutive_pattern || '',
+        diminutive_pattern: primaryDiminutive?.pattern || primaryDiminutive?.diminutive_pattern || full.diminutive_pattern || '',
         dual_form,
         _hasDual: !!dual_form,
         _pluralType: _pluralType as any,
@@ -239,6 +243,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         antonyms: parseArray(full.antonyms),
         related_entries,
         alternative_forms,
+        diminutives,
         numeral_type: full.numeral_type || '',
         form_attributive_short: full.form_attributive_short || '',
         form_attributive_long: full.form_attributive_long || '',

@@ -18,19 +18,21 @@ export const filterSettingsItems = (
         const term = filters.searchTerm.trim().toLowerCase();
         next = next.filter((item) => {
             const value = item.value as Record<string, unknown>;
+            const applicabilities = Array.isArray(value?.applicabilities) ? value.applicabilities as Record<string, unknown>[] : [];
+            const metadataText = applicabilities.map((app) => JSON.stringify(app)).join(' ').toLowerCase();
             return (
                 item.key.toLowerCase().includes(term) ||
                 String(value?.description ?? '').toLowerCase().includes(term) ||
                 String(value?.cv ?? '').toLowerCase().includes(term) ||
-                String(value?.wizen ?? '').toLowerCase().includes(term)
+                String(value?.wizen ?? '').toLowerCase().includes(term) ||
+                metadataText.includes(term)
             );
         });
     }
 
     if (filters.roleFilter !== 'all' && activeCategory?.editorType === 'pattern') {
         next = next.filter((item) => {
-            const value = item.value as Record<string, unknown>;
-            return value?.linguistic_role === filters.roleFilter;
+            return item.category === filters.roleFilter;
         });
     }
 
@@ -38,7 +40,8 @@ export const filterSettingsItems = (
         next = next.filter((item) => {
             const value = item.value as Record<string, unknown>;
             const pos = Array.isArray(value?.pos_types) ? (value.pos_types as string[]) : [];
-            return pos.includes(filters.posFilter);
+            const applicabilities = Array.isArray(value?.applicabilities) ? value.applicabilities as Record<string, unknown>[] : [];
+            return pos.includes(filters.posFilter) || applicabilities.some((app) => String(app?.pos ?? '').trim() === filters.posFilter);
         });
     }
 

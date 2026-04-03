@@ -123,6 +123,20 @@ export interface NounMorphology {
     antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
     related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
     source_citation?: string;
+    diminutives?: EntryDiminutive[];
+}
+
+export interface EntryDiminutive {
+    id: string;
+    entry_id: string;
+    pos: 'noun' | 'adjective' | 'participle';
+    form: string;
+    pattern?: string;
+    gender?: Gender;
+    sort_order?: number;
+    is_preferred?: boolean;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export interface PluralFormRow {
@@ -241,6 +255,7 @@ export interface AdjectiveMorphology {
     diminutive_pattern?: string;
     dual_pattern?: string;
     source_citation?: string;
+    diminutives?: EntryDiminutive[];
 }
 
 export interface ZokkMorphology {
@@ -380,6 +395,7 @@ export interface Entry {
     adjective_morphology?: AdjectiveMorphology;
     numeral_morphology?: NumeralMorphology;
     zokk_morphology?: ZokkMorphology;
+    diminutives?: EntryDiminutive[];
 
     definitions: Definition[];
     subentries?: SubEntry[];

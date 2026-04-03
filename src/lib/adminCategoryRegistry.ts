@@ -29,12 +29,13 @@ export interface AdminCategory {
     defaultValueFactory: () => unknown;
     listStrategy: ListStrategy;
     hasPosFilter?: boolean;
+    visibleInSidebar?: boolean;
     transformValue?: (item: any) => unknown;
     transformOption?: (item: any, mode: 'standard' | 'arabised', lang: 'en' | 'mt') => { value: string, label: string } | null;
 }
 
 const DEFAULT_LABELS = { en: '', mt_standard: '', mt_arabised: '' };
-const DEFAULT_PATTERN = { cv: '', wizen: '', stress: 2, pos_types: [], description: '', linguistic_role: '', gender: '' };
+const DEFAULT_PATTERN = { cv: '', wizen: '', stress: 2, pos_types: [], description: '', applicabilities: [] };
 
 const defaultTransformOption = (item: unknown, mode: 'standard' | 'arabised', lang: 'en' | 'mt') => {
     const source = item as { key: string; value: unknown };
@@ -109,17 +110,6 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         listStrategy: 'label_only',
         transformValue: (i) => i.key,
     },
-    verb_transitivity: {
-        id: 'verb_transitivity',
-        label: 'Transitivity',
-        icon: ClipboardList,
-        groupId: 'core_grammar',
-        storageCategories: ['verb_transitivity'],
-        editorType: 'simple_label',
-        defaultValueFactory: () => ({ ...DEFAULT_LABELS }),
-        listStrategy: 'label_only',
-        transformValue: (i) => i.key,
-    },
     register: {
         id: 'register',
         label: 'Registers',
@@ -160,6 +150,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         groupId: 'patterns',
         storageCategories: ['verb_preset'],
         editorType: 'verb_preset',
+        visibleInSidebar: true,
         defaultValueFactory: () => ({
             en: '', mt_standard: '', mt_arabised: '',
             perfect: { cv: '', wizen: '' },
@@ -170,15 +161,17 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         listStrategy: 'complex_object',
         transformValue: (i) => ({ form: i.key, data: i.value }),
     },
+    // Legacy storage buckets kept for backward compatibility with older rows.
     plural_pattern: {
         id: 'plural_pattern',
-        label: 'Plural Patterns',
+        label: 'Legacy Plural Bucket',
         icon: Puzzle,
         groupId: 'patterns',
         // Keep the historical `plural_pattern` bucket as a fallback so older rows
         // remain editable, while newer saves still land in the normalized tables.
         storageCategories: ['broken_pattern', 'sound_suffix', 'plural_pattern'],
         editorType: 'pattern',
+        visibleInSidebar: false,
         defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
         listStrategy: 'pattern',
         hasPosFilter: true,
@@ -186,11 +179,12 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     feminine_pattern: {
         id: 'feminine_pattern',
-        label: 'Feminine Patterns',
+        label: 'Legacy Feminine Bucket',
         icon: Users,
         groupId: 'patterns',
         storageCategories: ['feminine_pattern'],
         editorType: 'pattern',
+        visibleInSidebar: false,
         defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
         listStrategy: 'pattern',
         hasPosFilter: true,
@@ -198,11 +192,12 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     cv_wizen_pattern: {
         id: 'cv_wizen_pattern',
-        label: 'Patterns',
+        label: 'Canonical Patterns',
         icon: Palette,
         groupId: 'patterns',
-        storageCategories: ['cv_wizen_pattern'],
+        storageCategories: ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern', 'plural_pattern'],
         editorType: 'pattern',
+        visibleInSidebar: true,
         defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
         listStrategy: 'pattern',
         hasPosFilter: true,
@@ -210,11 +205,12 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     diminutive_pattern: {
         id: 'diminutive_pattern',
-        label: 'Diminutive Patterns',
+        label: 'Legacy Diminutive Bucket',
         icon: Sparkles,
         groupId: 'patterns',
         storageCategories: ['diminutive_pattern'],
         editorType: 'pattern',
+        visibleInSidebar: false,
         defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
         listStrategy: 'pattern',
         hasPosFilter: true,
@@ -222,11 +218,12 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     adjective_pattern: {
         id: 'adjective_pattern',
-        label: 'Adjective Patterns',
+        label: 'Legacy Adjective Bucket',
         icon: Palette,
         groupId: 'patterns',
         storageCategories: ['adjective_pattern'],
         editorType: 'pattern',
+        visibleInSidebar: false,
         defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
         listStrategy: 'pattern',
         hasPosFilter: true,
@@ -309,3 +306,4 @@ export const getRegistryOptions = (category: string, item: unknown, mode: 'stand
 };
 
 export const CATEGORIES = Object.values(ADMIN_REGISTRY);
+export const SIDEBAR_CATEGORIES = CATEGORIES.filter((category) => category.visibleInSidebar !== false);

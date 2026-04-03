@@ -123,6 +123,91 @@ async function ensureAlternativeFormsColumn(client) {
     }
 }
 
+async function ensureDiminutiveTable(client) {
+    const tableInfo = await client.execute("PRAGMA table_info(entry_diminutives)");
+    if (tableInfo.rows.length > 0) return;
+
+    await client.execute(`
+        CREATE TABLE IF NOT EXISTS entry_diminutives (
+            id TEXT PRIMARY KEY,
+            entry_id TEXT NOT NULL,
+            pos TEXT NOT NULL CHECK(pos IN ('noun', 'adjective', 'participle')),
+            gender TEXT,
+            form TEXT NOT NULL,
+            pattern TEXT,
+            sort_order INTEGER NOT NULL DEFAULT 0,
+            is_preferred INTEGER NOT NULL DEFAULT 1,
+            created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+            updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+        )
+    `);
+
+    try {
+        await client.execute("CREATE INDEX IF NOT EXISTS idx_entry_diminutives_entry_id ON entry_diminutives(entry_id)");
+    } catch {
+        // Index creation is best-effort for legacy SQLite setups.
+    }
+}
+
+function normalizeDiminutivePos(pos, fallbackPos = 'noun') {
+    const normalized = String(pos || fallbackPos || '').trim().toLowerCase();
+    if (normalized === 'adjective' || normalized === 'participle') return normalized;
+    return 'noun';
+}
+
+function normalizeDiminutiveRows(body, fallbackPos = 'noun') {
+    if (Array.isArray(body?.diminutives) && body.diminutives.length > 0) {
+        return body.diminutives;
+    }
+
+    const legacyForm = body?.diminutive_form || body?.diminutive?.form || '';
+    if (!legacyForm) return [];
+
+    return [{
+        id: body?.diminutive_id || '',
+        entry_id: body?.id || '',
+        pos: body?.pos || fallbackPos || 'noun',
+        gender: body?.gender || null,
+        form: legacyForm,
+        pattern: body?.diminutive_pattern || body?.diminutive?.pattern || '',
+        sort_order: 0,
+        is_preferred: true,
+    }];
+}
+
+async function syncEntryDiminutives(client, entryId, body, fallbackPos = 'noun') {
+    await ensureDiminutiveTable(client);
+
+    await client.execute({
+        sql: 'DELETE FROM entry_diminutives WHERE entry_id = ?',
+        args: [entryId],
+    });
+
+    const rows = normalizeDiminutiveRows(body, fallbackPos);
+    for (const [index, row] of rows.entries()) {
+        const form = n(row?.form || row?.diminutive_form);
+        if (!form) continue;
+
+        await client.execute({
+            sql: `INSERT INTO entry_diminutives
+                (id, entry_id, pos, gender, form, pattern, sort_order, is_preferred, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            args: [
+                row.id || uid(),
+                entryId,
+                normalizeDiminutivePos(row.pos, fallbackPos),
+                n(row.gender || body?.gender),
+                form,
+                n(row.pattern || row.diminutive_pattern || ''),
+                Number.isFinite(Number(row.sort_order)) ? Number(row.sort_order) : index,
+                row.is_preferred === false ? 0 : 1,
+                now(),
+                now(),
+            ],
+        });
+    }
+}
+
 const POS_ALIAS_GROUPS = {
     noun: ['noun', 'n'],
     verb: ['verb', 'v'],
@@ -253,6 +338,7 @@ export async function onRequestPost({ request, env }) {
         validateAndNormalizeEntryGender(body);
         const client = getDbClient(env);
         await ensureAlternativeFormsColumn(client);
+        await ensureDiminutiveTable(client);
 
         let id = body.id;
 
@@ -392,6 +478,7 @@ export async function onRequestPost({ request, env }) {
 
         // Auto-register patterns
         await ensurePatternsRegistered(client, body);
+        await syncEntryDiminutives(client, id, body, body.pos);
 
         return json({ id, created: true }, 201);
     } catch (e) {
@@ -411,6 +498,7 @@ export async function onRequestPut({ request, env }) {
 
         const client = getDbClient(env);
         await ensureAlternativeFormsColumn(client);
+        await ensureDiminutiveTable(client);
         const sourceId = old_id || id;
 
         const sourceRes = await client.execute({
@@ -458,7 +546,7 @@ export async function onRequestPut({ request, env }) {
                     }, 404);
                 }
 
-                const childTables = ['definitions', 'etymologies', 'phonetics', 'subentries', 'attestation_reliability', 'dialect_variants', 'audio_files'];
+                const childTables = ['definitions', 'etymologies', 'phonetics', 'subentries', 'attestation_reliability', 'dialect_variants', 'audio_files', 'entry_diminutives'];
                 for (const table of childTables) {
                     await client.execute({ sql: `UPDATE ${table} SET entry_id = ? WHERE entry_id = ?`, args: [id, old_id] });
                 }
@@ -499,7 +587,7 @@ export async function onRequestPut({ request, env }) {
             args.push(n(val));
         }
 
-        if (!setClauses.length && !('definitions' in fields) && !('etymology_chain' in fields) && !('phonetics' in fields)) {
+        if (!setClauses.length && !('definitions' in fields) && !('etymology_chain' in fields) && !('phonetics' in fields) && !('diminutives' in fields) && !('diminutive_form' in fields)) {
             return json({ error: 'No fields to update' }, 400);
         }
 
@@ -573,6 +661,7 @@ export async function onRequestPut({ request, env }) {
 
         // Auto-register patterns
         await ensurePatternsRegistered(client, body);
+        await syncEntryDiminutives(client, id, body, currentPos);
 
         return json({ id, updated: true });
     } catch (e) {
@@ -599,11 +688,16 @@ export async function onRequestDelete({ request, env }) {
 
             const placeholders = idList.map(() => '?').join(',');
             await client.execute({
+                sql: `DELETE FROM entry_diminutives WHERE entry_id IN (${placeholders})`,
+                args: idList
+            });
+            await client.execute({
                 sql: `DELETE FROM entries WHERE id IN (${placeholders})`,
                 args: idList
             });
             return json({ ids: idList, deleted: true });
         } else {
+            await client.execute({ sql: 'DELETE FROM entry_diminutives WHERE entry_id = ?', args: [id] });
             await client.execute({ sql: 'DELETE FROM entries WHERE id = ?', args: [id] });
             return json({ id, deleted: true });
         }
@@ -711,9 +805,9 @@ async function ensurePatternsRegistered(client, body) {
             // Standardized ID: patternId_category_pos_stress (using stress=2 as default for auto-reg)
             const appId = `${patternId}_${actualCat}_all_2`; 
             await client.execute({
-                sql: `INSERT OR IGNORE INTO pattern_applicability (id, pattern_id, category, pos, stress, linguistic_role)
-                      VALUES (?, ?, ?, ?, ?, ?)`,
-                args: [appId, patternId, actualCat, 'all', 2, roleMap[col] || '']
+                sql: `INSERT OR IGNORE INTO pattern_applicability (id, pattern_id, category, pos, stress, linguistic_role, metadata)
+                      VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                args: [appId, patternId, actualCat, 'all', 2, roleMap[col] || '', '{}']
             });
         }
     }

@@ -15,6 +15,29 @@ function firstSenseText(value) {
     return text.split(/\s*;\s*/)[0]?.trim() || '';
 }
 
+async function ensureDiminutivesTableExists(db) {
+    const tableCheck = await db.execute({
+        sql: `SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'entry_diminutives'`,
+        args: [],
+    });
+    if (tableCheck.rows.length > 0) return;
+
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS entry_diminutives (
+            id TEXT PRIMARY KEY,
+            entry_id TEXT NOT NULL,
+            pos TEXT NOT NULL CHECK(pos IN ('noun', 'adjective', 'participle')),
+            gender TEXT,
+            form TEXT NOT NULL,
+            pattern TEXT,
+            sort_order INTEGER NOT NULL DEFAULT 0,
+            is_preferred INTEGER NOT NULL DEFAULT 1,
+            created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+            updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+        )
+    `);
+}
+
 export async function onRequestGet({ params, env }) {
     let { id } = params;
     if (!id) return json({ error: 'Missing id' }, 400);
@@ -53,6 +76,19 @@ export async function onRequestGet({ params, env }) {
 
         if (!entryRes.rows.length) return json({ error: 'Not found' }, 404);
         const entry = entryRes.rows[0];
+        await ensureDiminutivesTableExists(db);
+
+        const diminutiveRes = await db.execute({
+            sql: `SELECT * FROM entry_diminutives
+                  WHERE entry_id = ?
+                  ORDER BY COALESCE(is_preferred, 0) DESC, sort_order ASC, created_at ASC`,
+            args: [id],
+        });
+        const diminutives = diminutiveRes.rows.map((row) => ({
+            ...row,
+            is_preferred: Boolean(row.is_preferred),
+        }));
+        const primaryDiminutive = diminutives[0] || null;
 
         // ── Definitions ─────────────────────────────────────────────────────────
         const defsRes = await db.execute({
@@ -152,6 +188,9 @@ export async function onRequestGet({ params, env }) {
             related_entries: entry.related_entries ? JSON.parse(entry.related_entries) : [],
             alternative_forms: entry.alternative_forms ? JSON.parse(entry.alternative_forms) : [],
             zokk_morphology: entry.zokk_morphology ? JSON.parse(entry.zokk_morphology) : undefined,
+            diminutives,
+            diminutive_form: primaryDiminutive?.form || entry.diminutive_form || null,
+            diminutive_pattern: primaryDiminutive?.pattern || entry.diminutive_pattern || null,
             definitions,
             phonetics: phonRes.rows.map(ph => ({
                 ...ph,
@@ -273,7 +312,8 @@ export async function onRequestGet({ params, env }) {
                 plural_forms: payload.inflections_pl,
                 sound_plural: entry.sound_suffix || null,
                 dual: entry.dual_form || null,
-                diminutive: entry.diminutive_form || null,
+                diminutive: primaryDiminutive?.form || entry.diminutive_form || null,
+                diminutives,
                 collective: isSing ? entry.form_fem : null,
                 singulative: isColl ? entry.form_fem : null,
                 feminine: (!isColl && !isSing && entry.gender === 'masculine') ? entry.form_fem : null,
@@ -287,6 +327,7 @@ export async function onRequestGet({ params, env }) {
                 alternative_forms: payload.alternative_forms,
                 source_citation: entry.source_citation || null,
                 morph_pattern: entry.morph_pattern || null,
+                diminutive_pattern: primaryDiminutive?.pattern || entry.diminutive_pattern || null,
             };
         }
 
@@ -297,6 +338,8 @@ export async function onRequestGet({ params, env }) {
                 feminine: entry.form_fem || null,
                 plural: payload.inflections_pl?.join(', ') || null, 
                 elative: entry.elative_form || null,
+                diminutive: primaryDiminutive?.form || entry.diminutive_form || null,
+                diminutives,
                 // Optional vowel sets
                 vowel_set_sg: entry.vowel_set_sg || null,
                 vowel_set_pl: entry.vowel_set_pl || null,
@@ -306,6 +349,7 @@ export async function onRequestGet({ params, env }) {
                 alternative_forms: payload.alternative_forms,
                 source_citation: entry.source_citation || null,
                 morph_pattern: entry.morph_pattern || null,
+                diminutive_pattern: primaryDiminutive?.pattern || entry.diminutive_pattern || null,
             };
             // Participles use adjective morphology but have a type
             if (entry.pos === 'participle') {

@@ -46,9 +46,21 @@ export function EtymologyChainEditor({
     selectClassName,
 }: EtymologyChainEditorProps) {
     const datalistId = useId();
-    const relationshipChoices = relationshipOptions.length > 0
-        ? relationshipOptions
-        : [defaultRelationship, 'Borrowed from', 'Calqued from', 'Metathesis of', 'Related to', 'Variant of'];
+    const mergeRelationshipChoices = (choices: string[]) => {
+        const seen = new Set<string>();
+        return choices.filter((choice) => {
+            const normalized = choice.trim().toLowerCase();
+            if (!normalized || seen.has(normalized)) return false;
+            seen.add(normalized);
+            return true;
+        });
+    };
+
+    const relationshipChoices = mergeRelationshipChoices(
+        relationshipOptions.length > 0
+            ? [...relationshipOptions, 'or', 'and']
+            : [defaultRelationship, 'Borrowed from', 'Calqued from', 'Metathesis of', 'Related to', 'Variant of', 'or', 'and']
+    );
 
     const updateStep = (index: number, key: EtymologyFieldKey, value: string) => {
         const next = [...items];

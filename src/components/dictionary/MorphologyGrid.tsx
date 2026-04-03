@@ -4,6 +4,7 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
 import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
 import { isHiddenTag } from '@/lib/tagLabel';
+import { generateDiminutiveForm } from '@/lib/maltesePhonology';
 
 import type { Entry } from '@/types';
 
@@ -20,6 +21,18 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
 
     if (entry.pos === 'noun' && entry.noun_morphology) {
         const m = entry.noun_morphology;
+        const diminutiveRows = m.diminutives?.length ? m.diminutives : entry.diminutives || [];
+        const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants || null;
+        const diminutivePatternHint = m.diminutive_pattern || entry.diminutive_pattern || null;
+        const diminutiveBasePatternHint = m.form_masc_pattern || m.form_fem_pattern || m.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null;
+        const generatedDiminutiveRows = diminutiveRows.length > 0
+            ? []
+            : [
+                generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: 'masculine' }),
+                generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: 'feminine' }),
+            ].filter(Boolean) as Array<NonNullable<ReturnType<typeof generateDiminutiveForm>>>;
+        const diminutive = diminutiveRows[0]?.form || m.diminutive || entry.diminutive_form || generatedDiminutiveRows[0]?.form || null;
+        const diminutivePattern = diminutiveRows[0]?.pattern || m.diminutive_pattern || entry.diminutive_pattern || generatedDiminutiveRows[0]?.pattern || null;
         const pluralRows = compactPluralRows(normalizePluralFormRows(
             m.plural_forms,
             m.form_plural_pattern || entry.form_plural_pattern || entry.plural_pattern,
@@ -52,13 +65,46 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     />
                     {m.sound_plural && <Cell label={term('regular-plural')} value={m.sound_plural} />}
                     {m.dual && <Cell label={term('dual')} value={m.dual} />}
-                    {m.diminutive && <Cell label={term('diminutive')} value={m.diminutive} />}
                     {m.collective && <Cell label={term('collective')} value={m.collective} />}
                     {m.singulative && <Cell label={term('singulative')} value={m.singulative} />}
                     <Cell
                         label={term('masculine-fem')}
                         value={<Badge variant="pos">{term(m.gender)}</Badge>}
                     />
+                </div>
+                <div className="border-t border-border-light px-3 py-2">
+                    <div className="text-[10px] uppercase tracking-wider text-[#A07030] font-semibold mb-0.5">
+                        {term('diminutive')}
+                    </div>
+                    {diminutiveRows.length > 0 || generatedDiminutiveRows.length > 0 ? (
+                        <div className="space-y-1">
+                            {(diminutiveRows.length > 0 ? diminutiveRows : generatedDiminutiveRows).map((row, index) => (
+                                <div key={`${row.form}-${index}`} className="leading-tight">
+                                    <div className="font-serif text-sm text-black">
+                                        {row.form}
+                                    </div>
+                                    {(row.pattern || diminutivePattern) && (
+                                        <div className="text-[11px] text-black/40 font-sans">
+                                            {row.pattern || diminutivePattern}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    ) : diminutive ? (
+                        <div className="leading-tight">
+                        <div className={`font-serif text-sm ${generatedDiminutiveRows.length > 0 ? 'text-black/55' : 'text-black'}`}>
+                                {generatedDiminutiveRows[0]?.theoretical ? '*' : ''}{diminutive}
+                            </div>
+                            {diminutivePattern && (
+                                <div className="text-[11px] text-black/40 font-sans">
+                                    {diminutivePattern}
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <span className="opacity-40">-</span>
+                    )}
                 </div>
             </div>
         );
@@ -89,6 +135,18 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
 
     if (entry.pos === 'adjective' && entry.adjective_morphology) {
         const m = entry.adjective_morphology;
+        const diminutiveRows = m.diminutives?.length ? m.diminutives : entry.diminutives || [];
+        const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants || null;
+        const diminutivePatternHint = m.diminutive_pattern || entry.diminutive_pattern || null;
+        const diminutiveBasePatternHint = m.form_masc_pattern || m.form_fem_pattern || m.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null;
+        const generatedDiminutiveRows = diminutiveRows.length > 0
+            ? []
+            : [
+                generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: 'masculine' }),
+                generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: 'feminine' }),
+            ].filter(Boolean) as Array<NonNullable<ReturnType<typeof generateDiminutiveForm>>>;
+        const diminutive = diminutiveRows[0]?.form || entry.diminutive_form || generatedDiminutiveRows[0]?.form || null;
+        const diminutivePattern = diminutiveRows[0]?.pattern || m.diminutive_pattern || entry.diminutive_pattern || generatedDiminutiveRows[0]?.pattern || null;
         return (
             <div className="rounded-lg border border-border-light bg-surface-soft overflow-hidden">
                 <div className="px-3 py-1.5 bg-[#1034A6]/5 border-b border-border-light">
@@ -114,6 +172,40 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                             <div></div> /* Empty cell to maintain grid */
                         }
                     </div>
+                </div>
+                <div className="border-t border-border-light px-3 py-2">
+                    <div className="text-[10px] uppercase tracking-wider text-[#A07030] font-semibold mb-0.5">
+                        {term('diminutive')}
+                    </div>
+                    {diminutiveRows.length > 0 || generatedDiminutiveRows.length > 0 ? (
+                        <div className="space-y-1">
+                            {(diminutiveRows.length > 0 ? diminutiveRows : generatedDiminutiveRows).map((row, index) => (
+                                <div key={`${row.form}-${index}`} className="leading-tight">
+                                    <div className="font-serif text-sm text-black">
+                                        {row.form}
+                                    </div>
+                                    {(row.pattern || diminutivePattern) && (
+                                        <div className="text-[11px] text-black/40 font-sans">
+                                            {row.pattern || diminutivePattern}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    ) : diminutive ? (
+                        <div className="leading-tight">
+                        <div className={`font-serif text-sm ${generatedDiminutiveRows.length > 0 ? 'text-black/55' : 'text-black'}`}>
+                                {generatedDiminutiveRows[0]?.theoretical ? '*' : ''}{diminutive}
+                            </div>
+                            {diminutivePattern && (
+                                <div className="text-[11px] text-black/40 font-sans">
+                                    {diminutivePattern}
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <span className="opacity-40">-</span>
+                    )}
                 </div>
             </div>
         );
