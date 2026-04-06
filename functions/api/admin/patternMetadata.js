@@ -1,4 +1,18 @@
-export const PATTERN_POS_OPTIONS = ['verb', 'noun', 'adjective', 'participle', 'numeral'];
+export const PATTERN_POS_OPTIONS = [
+    'verb',
+    'noun',
+    'adjective',
+    'participle',
+    'numeral',
+    'adverb',
+    'preposition',
+    'particle',
+    'article',
+    'interjection',
+    'conjunction',
+    'interrogative',
+    'pronoun',
+];
 
 export const PATTERN_BUCKET_LABELS = {
     cv_wizen_pattern: 'Pattern',
@@ -63,7 +77,43 @@ export const PATTERN_POS_SCHEMA = {
             { key: 'notes', label: 'Notes', kind: 'textarea', placeholder: 'Optional numeral-specific notes...', rows: 3 },
         ],
     },
+    adverb: {
+        label: 'Adverb',
+        fields: [],
+    },
+    preposition: {
+        label: 'Preposition',
+        fields: [],
+    },
+    particle: {
+        label: 'Particle',
+        fields: [],
+    },
+    article: {
+        label: 'Article',
+        fields: [],
+    },
+    interjection: {
+        label: 'Interjection',
+        fields: [],
+    },
+    conjunction: {
+        label: 'Conjunction',
+        fields: [],
+    },
+    interrogative: {
+        label: 'Interrogative',
+        fields: [],
+    },
+    pronoun: {
+        label: 'Pronoun',
+        fields: [],
+    },
 };
+
+const PATTERN_POS_WITH_METADATA = new Set(['noun', 'verb', 'adjective', 'participle', 'numeral']);
+
+const hasPatternMetadata = (pos) => PATTERN_POS_WITH_METADATA.has(pos);
 
 export function getPatternPosSchema(pos) {
     const normalizedPos = normalizePatternPos(pos);
@@ -185,6 +235,10 @@ const inferLegacyPatternPosTypes = (record, category) => {
 };
 
 const buildLegacyApplicabilitySource = (record, pos) => {
+    if (!hasPatternMetadata(pos)) {
+        return { pos };
+    }
+
     const metadata = collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender']));
 
     switch (pos) {
@@ -245,6 +299,13 @@ const createBlankApplicability = (pos) => ({
 const normalizeApplicability = (record) => {
     const pos = normalizePatternPos(record.pos);
     if (!pos) return null;
+
+    if (!hasPatternMetadata(pos)) {
+        return {
+            pos,
+            metadata: {},
+        };
+    }
 
     const metadata = normalizeApplicabilityMetadata(record);
     const linguisticRole = normalizeText(

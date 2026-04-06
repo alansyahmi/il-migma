@@ -1,6 +1,8 @@
 import type { Gender } from '../types';
 import {
     deriveNounAttachmentStems,
+    deriveAjPluralStem,
+    isAjPluralPattern,
     isRoundVowelStem,
 } from './nounAttachment.ts';
 
@@ -92,14 +94,14 @@ export function applyPossessiveSuffix(
         }
     }
 
-    // ── Handle CvCCa broken plurals with t-marbuta construct forms ────────────
-    if (gender === 'masculine' && (base === 'kotba' || (pattern === 'CvCCa' && base.length <= 5))) {
-        const kotobConstruct = 'kotobt';
+    // ── Handle CoCCa broken plurals with -aj- forms ─────────────────────────
+    if (gender === 'masculine' && (base === 'kotba' || isAjPluralPattern(pattern))) {
+        const pluralStem = deriveAjPluralStem(base);
         const suffixToUse = finalSuffix === 'ek'
-            ? (isRoundVowelStem(kotobConstruct) ? 'ok' : 'ek')
+            ? (isRoundVowelStem(pluralStem) ? 'ok' : 'ek')
             : finalSuffix;
 
-        return kotobConstruct + suffixToUse;
+        return pluralStem + suffixToUse;
     }
 
     // ── Feminine t-marbuta buffering ──────────────────────────────────────────

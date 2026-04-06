@@ -1,11 +1,9 @@
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { Plus, Trash2, ArrowUp, ArrowDown, AlertCircle } from 'lucide-react';
-import { RelationshipEditor } from './RelationshipEditor';
-import { EtymologyChainEditor } from './EtymologyChainEditor';
 import { adminCreateStem, adminUpdateStem } from '@/lib/api';
 import {
     normalizeStemEtymologyChain,
@@ -16,6 +14,14 @@ import {
     type StemFormData
 } from '@/lib/adminUtils';
 import { buildStemPayload, STEM_HANDLED_FIELDS } from '@/lib/adminSchema';
+
+const LazyRelationshipEditor = lazy(() =>
+    import('./RelationshipEditor').then(module => ({ default: module.RelationshipEditor }))
+);
+
+const LazyEtymologyChainEditor = lazy(() =>
+    import('./EtymologyChainEditor').then(module => ({ default: module.EtymologyChainEditor }))
+);
 
 interface StemFormModalProps {
     data: any;
@@ -243,51 +249,59 @@ export function StemFormModal({ data, onClose, onSaved, isNew = false, getToken 
                         </div>
                     </div>
 
-                    <EtymologyChainEditor
-                        title={t('Etymology', 'Etimoloġija')}
-                        items={form.etymology}
-                        onChange={(items) => setForm(prev => ({ ...prev, etymology: items }))}
-                        showPronunciation={false}
-                        relationshipOptions={RELATIONSHIP_OPTIONS}
-                        sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
-                        defaultRelationship="From"
-                        addLabel={t('Add Step', 'Żid Pass')}
-                        relationshipLabel={t('Relationship', 'Relazzjoni')}
-                        languageLabel={t('Language', 'Lingwa')}
-                        termLabel={t('Term', 'Kelma')}
-                        pronunciationLabel={t('Pronunciation', 'Pronunzja')}
-                        definitionLabel={t('Definition', 'Tifsira')}
-                        labelClassName={label}
-                        inputClassName={inp}
-                        selectClassName={sel}
-                    />
+                    <Suspense
+                        fallback={(
+                            <div className="rounded-xl border border-border-light bg-slate-50 p-4 text-xs text-black/40">
+                                {t('Loading editors…', 'Qed jitgħabbu l-editors…')}
+                            </div>
+                        )}
+                    >
+                        <LazyEtymologyChainEditor
+                            title={t('Etymology', 'Etimoloġija')}
+                            items={form.etymology}
+                            onChange={(items) => setForm(prev => ({ ...prev, etymology: items }))}
+                            showPronunciation={false}
+                            relationshipOptions={RELATIONSHIP_OPTIONS}
+                            sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
+                            defaultRelationship="From"
+                            addLabel={t('Add Step', 'Żid Pass')}
+                            relationshipLabel={t('Relationship', 'Relazzjoni')}
+                            languageLabel={t('Language', 'Lingwa')}
+                            termLabel={t('Term', 'Kelma')}
+                            pronunciationLabel={t('Pronunciation', 'Pronunzja')}
+                            definitionLabel={t('Definition', 'Tifsira')}
+                            labelClassName={label}
+                            inputClassName={inp}
+                            selectClassName={sel}
+                        />
 
-                    <div className="space-y-6">
-                        <RelationshipEditor
-                            type="thesaurus"
-                            lookupType="stem"
-                            title={t('Synonyms', 'Sinonimi')}
-                            items={form.synonyms || []}
-                            onChange={(items) => setRelationship('synonyms', items)}
-                            enableSuggestions
-                        />
-                        <RelationshipEditor
-                            type="thesaurus"
-                            lookupType="stem"
-                            title={t('Antonyms', 'Antonimi')}
-                            items={form.antonyms || []}
-                            onChange={(items) => setRelationship('antonyms', items)}
-                            enableSuggestions
-                        />
-                        <RelationshipEditor
-                            type="derived"
-                            lookupType="stem"
-                            title={t('Related Stems', 'Żkuk Relatati')}
-                            items={form.related_stems || []}
-                            onChange={(items) => setRelationship('related_stems', items)}
-                            enableSuggestions
-                        />
-                    </div>
+                        <div className="space-y-6">
+                            <LazyRelationshipEditor
+                                type="thesaurus"
+                                lookupType="stem"
+                                title={t('Synonyms', 'Sinonimi')}
+                                items={form.synonyms || []}
+                                onChange={(items) => setRelationship('synonyms', items)}
+                                enableSuggestions
+                            />
+                            <LazyRelationshipEditor
+                                type="thesaurus"
+                                lookupType="stem"
+                                title={t('Antonyms', 'Antonimi')}
+                                items={form.antonyms || []}
+                                onChange={(items) => setRelationship('antonyms', items)}
+                                enableSuggestions
+                            />
+                            <LazyRelationshipEditor
+                                type="derived"
+                                lookupType="stem"
+                                title={t('Related Stems', 'Żkuk Relatati')}
+                                items={form.related_stems || []}
+                                onChange={(items) => setRelationship('related_stems', items)}
+                                enableSuggestions
+                            />
+                        </div>
+                    </Suspense>
 
                     {Object.keys(data || {}).filter((key) => !STEM_HANDLED_FIELDS.includes(key as any)).length > 0 && (
                         <fieldset className="border border-amber-100 bg-amber-50/20 rounded-xl p-4 space-y-3">

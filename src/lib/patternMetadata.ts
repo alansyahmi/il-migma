@@ -14,7 +14,21 @@ export type PatternSourceItem = {
 
 export type PatternOption = { label: string; value: string; sub?: string };
 
-export const PATTERN_POS_OPTIONS = ['verb', 'noun', 'adjective', 'participle', 'numeral'] as const;
+export const PATTERN_POS_OPTIONS = [
+    'verb',
+    'noun',
+    'adjective',
+    'participle',
+    'numeral',
+    'adverb',
+    'preposition',
+    'particle',
+    'article',
+    'interjection',
+    'conjunction',
+    'interrogative',
+    'pronoun',
+] as const;
 export type PatternPos = typeof PATTERN_POS_OPTIONS[number];
 
 export const PATTERN_BUCKET_LABELS: Record<string, string> = {
@@ -141,7 +155,45 @@ export const PATTERN_POS_SCHEMA: Record<PatternPos, PatternPosSchema> = {
             { key: 'notes', label: 'Notes', kind: 'textarea', placeholder: 'Optional numeral-specific notes...', rows: 3 },
         ],
     },
+    adverb: {
+        label: 'Adverb',
+        fields: [],
+    },
+    preposition: {
+        label: 'Preposition',
+        fields: [],
+    },
+    particle: {
+        label: 'Particle',
+        fields: [],
+    },
+    article: {
+        label: 'Article',
+        fields: [],
+    },
+    interjection: {
+        label: 'Interjection',
+        fields: [],
+    },
+    conjunction: {
+        label: 'Conjunction',
+        fields: [],
+    },
+    interrogative: {
+        label: 'Interrogative',
+        fields: [],
+    },
+    pronoun: {
+        label: 'Pronoun',
+        fields: [],
+    },
 };
+
+const PATTERN_POS_WITH_METADATA = new Set<PatternPos>(['noun', 'verb', 'adjective', 'participle', 'numeral']);
+
+function hasPatternMetadata(pos: string) {
+    return PATTERN_POS_WITH_METADATA.has(pos as PatternPos);
+}
 
 export function getPatternPosSchema(pos: unknown) {
     const normalizedPos = normalizePatternPos(pos);
@@ -276,6 +328,10 @@ function inferLegacyPatternPosTypes(record: Record<string, unknown>, category?: 
 }
 
 function buildLegacyApplicabilitySource(record: Record<string, unknown>, pos: string) {
+    if (!hasPatternMetadata(pos)) {
+        return { pos };
+    }
+
     const metadata = collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender']));
 
     switch (pos) {
@@ -328,6 +384,13 @@ function buildLegacyApplicabilitySource(record: Record<string, unknown>, pos: st
 function normalizeApplicability(record: Record<string, unknown>) {
     const pos = normalizePatternPos(record.pos);
     if (!pos) return null;
+
+    if (!hasPatternMetadata(pos)) {
+        return {
+            pos,
+            metadata: {},
+        } as PatternApplicability;
+    }
 
     const metadata = normalizeApplicabilityMetadata(record);
     const metadataRecord = metadata as Record<string, unknown>;

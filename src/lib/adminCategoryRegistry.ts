@@ -1,5 +1,6 @@
 import { Tag, Users, Globe, Zap, ClipboardList, Package, Library, Settings, Puzzle, Palette, HelpCircle, Languages, Sparkles, type LucideIcon } from 'lucide-react';
 import { normalizeGender } from './gender';
+import { normalizeEntryPos } from './entryId';
 import { resolveTerm as resolveHardcodedTerm } from './terminology';
 
 export type EditorType = 'simple_label' | 'pattern' | 'verb_preset' | 'ui_terminology';
@@ -69,11 +70,12 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         editorType: 'simple_label',
         defaultValueFactory: () => ({ ...DEFAULT_LABELS }),
         listStrategy: 'label_only',
-        transformValue: (i) => i.key,
+        transformValue: (i) => normalizeEntryPos(i.key) || String(i.key || '').trim().toLowerCase(),
         transformOption: (item, mode, lang) => {
             const source = item as { key: string };
-            const label = resolveHardcodedTerm(source.key, mode, lang);
-            return { value: source.key, label };
+            const value = normalizeEntryPos(source.key) || String(source.key || '').trim().toLowerCase();
+            const label = resolveHardcodedTerm(value, mode, lang);
+            return { value, label };
         }
     },
     gender: {

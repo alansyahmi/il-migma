@@ -9,7 +9,21 @@ export type PatternSourceItem = {
 
 export type PatternOption = { label: string; value: string; sub?: string };
 
-export const PATTERN_POS_OPTIONS = ['verb', 'noun', 'adjective', 'participle', 'numeral'] as const;
+export const PATTERN_POS_OPTIONS = [
+    'verb',
+    'noun',
+    'adjective',
+    'participle',
+    'numeral',
+    'adverb',
+    'preposition',
+    'particle',
+    'article',
+    'interjection',
+    'conjunction',
+    'interrogative',
+    'pronoun',
+] as const;
 export type PatternPos = typeof PATTERN_POS_OPTIONS[number];
 
 export const PATTERN_BUCKET_LABELS: Record<string, string> = {
@@ -106,16 +120,27 @@ function titleCase(value: string) {
         .join(' ');
 }
 
+const PATTERN_POS_WITH_METADATA = new Set<PatternPos>(['verb', 'noun', 'adjective', 'participle', 'numeral']);
+
+function hasPatternMetadata(pos: string) {
+    return PATTERN_POS_WITH_METADATA.has(pos as PatternPos);
+}
+
 function createBlankApplicability(pos: string): PatternApplicability {
-    return {
-        pos,
-        strength: '',
-        gender: '',
-        weakClass: '',
-        participleType: '',
-        numeralType: '',
-        metadata: {},
-    };
+    return hasPatternMetadata(pos)
+        ? {
+            pos,
+            strength: '',
+            gender: '',
+            weakClass: '',
+            participleType: '',
+            numeralType: '',
+            metadata: {},
+        }
+        : {
+            pos,
+            metadata: {},
+        };
 }
 
 export function mergePatternBucketApplicabilities(value: unknown, incomingPosTypes: unknown = []) {
@@ -173,6 +198,13 @@ function normalizePatternPos(value: unknown) {
 function normalizeApplicability(record: Record<string, unknown>) {
     const pos = normalizePatternPos(record.pos);
     if (!pos) return null;
+
+    if (!hasPatternMetadata(pos)) {
+        return {
+            pos,
+            metadata: {},
+        } as PatternApplicability;
+    }
 
     const metadata = normalizeApplicabilityMetadata(record);
     const strength = normalizeText(record.strength || metadata.strength);
@@ -269,13 +301,33 @@ export function normalizePatternFormValue(value: unknown): PatternFormValue {
     const legacyNumeralType = normalizeText(derivedNumeralType || legacyMetadata.numeral_type);
     const legacyPosTypes = posTypes.length > 0 ? posTypes : ['all'];
 
-    return {
-        cv: normalizeText(record.cv),
-        wizen: normalizeText(record.wizen),
-        stress: Number.isFinite(Number(record.stress)) ? Number(record.stress) : 2,
-        description: normalizeText(record.description),
-        pos_types: legacyPosTypes,
-        applicabilities: legacyPosTypes.map((pos) => ({
+    const buildLegacyApplicability = (pos: string) => {
+        const normalizedPos = normalizePatternPos(pos);
+
+        if (!normalizedPos) {
+            return {
+                pos,
+                strength: legacyStrength,
+                gender: legacyGender,
+                weakClass: legacyWeakClass,
+                participleType: legacyParticipleType,
+                numeralType: legacyNumeralType,
+                metadata: {
+                    ...legacyMetadata,
+                    strength: legacyStrength,
+                    weak_class: legacyWeakClass,
+                    participle_type: legacyParticipleType,
+                    numeral_type: legacyNumeralType,
+                    gender: legacyGender,
+                },
+            };
+        }
+
+        if (!hasPatternMetadata(normalizedPos)) {
+            return createBlankApplicability(pos);
+        }
+
+        return {
             pos,
             strength: legacyStrength,
             gender: legacyGender,
@@ -290,7 +342,16 @@ export function normalizePatternFormValue(value: unknown): PatternFormValue {
                 numeral_type: legacyNumeralType,
                 gender: legacyGender,
             },
-        })),
+        };
+    };
+
+    return {
+        cv: normalizeText(record.cv),
+        wizen: normalizeText(record.wizen),
+        stress: Number.isFinite(Number(record.stress)) ? Number(record.stress) : 2,
+        description: normalizeText(record.description),
+        pos_types: legacyPosTypes,
+        applicabilities: legacyPosTypes.map((pos) => buildLegacyApplicability(pos)),
         strength: legacyStrength,
         gender: legacyGender,
         weak_class: legacyWeakClass,

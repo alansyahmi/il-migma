@@ -95,6 +95,16 @@ const run = () => {
     assertEq(feminineOptions.length, 1, 'Feminine singular filters should only keep matching singular patterns');
     assertEq(feminineOptions[0].value, 'fem-sing', 'Feminine singular filter should select the feminine singular pattern');
 
+    const remainingOptions = buildPatternOptions([
+        { cv: 'prep-pattern', wizen: 'prep-pattern', pos_types: ['preposition'] },
+        { cv: 'verb-pattern', wizen: 'verb-pattern', pos_types: ['verb'] },
+    ], 'standard', {
+        pos: 'preposition',
+    });
+
+    assertEq(remainingOptions.length, 1, 'Preposition should be eligible for pattern suggestions');
+    assertEq(remainingOptions[0].value, 'prep-pattern', 'Preposition pattern should be returned by the filter');
+
     const merged = mergePatternBucketApplicabilities(
         {
             cv: 'CvC',
@@ -129,6 +139,23 @@ const run = () => {
     assertEq(mergedNoun.strength, 'broken_plural', 'Existing applicability metadata should be preserved');
     assertEq(mergedNoun.metadata.extra, 'value', 'Existing applicability metadata payload should be preserved');
 
+    const mergedRemaining = mergePatternBucketApplicabilities(
+        {
+            cv: 'CvC',
+            wizen: 'faghal',
+            stress: 2,
+            pos_types: ['preposition'],
+        },
+        ['preposition'],
+    );
+
+    assertEq(mergedRemaining.pos_types.join(','), 'preposition', 'Remaining POS should be kept when merging pattern buckets');
+    assertEq(mergedRemaining.applicabilities.length, 1, 'Remaining POS should get a single blank applicability');
+    const mergedPreposition = mergedRemaining.applicabilities[0];
+    assertEq(mergedPreposition.pos, 'preposition', 'Remaining POS applicability should preserve the POS');
+    assertEq(mergedPreposition.strength || '', '', 'Remaining POS applicability should not invent metadata');
+    assertEq(Object.keys(mergedPreposition.metadata || {}).length, 0, 'Remaining POS applicability metadata should stay empty');
+
     const serverNormalized = normalizePatternFormValueServer(
         {
             cv: 'CvC',
@@ -157,6 +184,35 @@ const run = () => {
     assertEq(serverVerb.linguisticRole, '', 'Server backfill should not invent linguistic role metadata');
     assertEq(serverVerb.gender, '', 'Server backfill should not invent gender metadata');
     assertEq(serverVerb.notes, '', 'Server backfill should not invent notes metadata');
+
+    const serverNoMetadata = normalizePatternFormValueServer(
+        {
+            cv: 'CvC',
+            wizen: 'faghal',
+            stress: 2,
+            pos_types: ['preposition'],
+            applicabilities: [
+                {
+                    pos: 'preposition',
+                    linguistic_role: 'prep',
+                    gender: 'feminine',
+                    notes: 'ignore me',
+                    metadata: {
+                        extra: 'value',
+                    },
+                },
+            ],
+        },
+        'cv_wizen_pattern',
+    );
+
+    assertEq(serverNoMetadata.applicabilities.length, 1, 'Server normalization should keep the preposition applicability');
+    const serverPreposition = serverNoMetadata.applicabilities[0];
+    assertEq(serverPreposition.pos, 'preposition', 'Server normalization should preserve the remaining POS');
+    assertEq(serverPreposition.linguisticRole || '', '', 'Server normalization should strip metadata from remaining POS');
+    assertEq(serverPreposition.gender || '', '', 'Server normalization should strip gender from remaining POS');
+    assertEq(serverPreposition.notes || '', '', 'Server normalization should strip notes from remaining POS');
+    assertEq(Object.keys(serverPreposition.metadata || {}).length, 0, 'Server normalization should not retain metadata for remaining POS');
 };
 
 run();

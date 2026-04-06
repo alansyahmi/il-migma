@@ -1,4 +1,5 @@
 import { applyPossessiveSuffix, type PossessiveSuffixIdx } from './nounInflectionEngine.ts';
+import { deriveAjPluralStem, isAjPluralPattern } from './nounAttachment.ts';
 
 const A_ENDING_SUFFIXES = ['ja', 'k', 'h', 'ha', 'na', 'kom', 'hom'] as const;
 const CONSTRUCT_SUFFIXES = ['i', 'ek', 'u', 'ha', 'na', 'kom', 'hom'] as const;
@@ -42,12 +43,15 @@ function normalizePattern(pattern?: string) {
 
 function derivePluralConstructStem(base: string, pattern?: string) {
     const normalizedPattern = normalizePattern(pattern);
+    const normalizedBase = base.toLowerCase().trim().normalize('NFC');
 
-    if (normalizedPattern === 'CvCCa') {
-        if (base.length >= 4) {
-            return `${base.slice(0, 3)}o${base[3]}t`;
-        }
-        return `${base.slice(0, -1)}t`;
+    if (isAjPluralPattern(normalizedPattern)) {
+        // CoCCa plurals like kotba use the -aj- stem.
+        return deriveAjPluralStem(base);
+    }
+
+    if (!normalizedPattern && normalizedBase === 'kotba') {
+        return deriveAjPluralStem(base);
     }
 
     if (normalizedPattern === 'CCuCa' || (!normalizedPattern && base.length === 5 && !/[aeiouàèìòùâêîôû]/i.test(base[1] || '') && /[aeiouàèìòùâêîôû]/i.test(base[2] || ''))) {

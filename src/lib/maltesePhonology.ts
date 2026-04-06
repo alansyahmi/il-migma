@@ -411,15 +411,15 @@ export function detectPluralType(headword: string, _soundSuffixes: string[]): Pl
  * Generates a theoretical dual form for a noun.
  * Uses a synced-up stem before appending the suffix:
  * - drops final -a
- * - collapses final `ie` to `e` or `i` based on the plural hint
+ * - collapses any `ie` sequence to `e` or `i` based on the plural hint
  * - syncopates a final short vowel when the word has a multi-vowel stem
  * This keeps forms like għomor -> għomrejn instead of għomorejn.
  */
 export function generateTheoreticalDual(word: string, pluralHint?: string | null): string {
     if (!word) return '';
     const norm = word.toLowerCase().trim().normalize('NFC');
-    void pluralHint;
-    const stem = prepareSuffixAttachmentStem(norm);
+    const collapseIe = collapseIeForDual(norm, pluralHint);
+    const stem = prepareSuffixAttachmentStem(collapseIe);
 
     // Check for guttural ending (għ, ħ, q, h) after stem reduction.
     const isGuttural = stem.endsWith('għ') || stem.endsWith('ħ') || stem.endsWith('q') || stem.endsWith('h');
@@ -448,15 +448,18 @@ function inferIeCollapseVowel(pluralHint?: string | null): 'e' | 'i' {
     return 'e';
 }
 
-function collapseIeForFeminineDual(word: string, pluralHint?: string | null): string {
-    const collapse = inferIeCollapseVowel(pluralHint);
-    return word.replace(/ie/g, collapse);
+function collapseIeForDual(word: string, pluralHint?: string | null): string {
+    return word.replace(/ie/g, (match, offset, fullWord: string) => {
+        const suffix = fullWord.slice(offset + match.length);
+        const isFinalSyllable = !/[aeiouàèìòùâêîôû]/i.test(suffix);
+        return isFinalSyllable ? 'i' : inferIeCollapseVowel(pluralHint);
+    });
 }
 
 export function generateFeminineDualFromMasculineWithHint(word: string, pluralHint?: string | null): string {
     if (!word) return '';
     const normalized = word.toLowerCase().trim().normalize('NFC');
-    return `${collapseIeForFeminineDual(normalized, pluralHint)}tejn`;
+    return `${collapseIeForDual(normalized, pluralHint)}tejn`;
 }
 
 function parseRootConsonants(rootConsonants?: string | null): string[] {

@@ -18,14 +18,19 @@ const run = () => {
         'Base inference should switch kontr-a to kontri-'
     );
     assertEq(
-        applyInflectionTableSuffix('kotba', 0, 'masculine', 'CvCCa', 't'),
-        'kotobti',
-        'CvCCa-style plurals should use the construct stem when attached'
+        applyInflectionTableSuffix('kotba', 0, 'masculine', 'CoCCa', 't'),
+        'kotbaji',
+        'CoCCa-style plurals should use the -aj- stem when attached'
     );
     assertEq(
-        applyInflectionTableSuffix('kotba', 1, 'masculine', 'CvCCa', 't'),
-        'kotobtok',
-        'Final-vowel harmony should use -ok when the last vowel is o'
+        applyInflectionTableSuffix('kotba', 1, 'masculine', 'CoCCa', 't'),
+        'kotbajek',
+        'CoCCa-style plurals should keep the -aj- stem for -ek'
+    );
+    assertEq(
+        applyInflectionTableSuffix('kotba', 0, 'masculine'),
+        'kotbaji',
+        'kotba should use the -aj- stem even without an explicit pattern'
     );
     assertEq(
         applyInflectionTableSuffix('qmura', 0, 'masculine', 'CCûCa', 'r'),

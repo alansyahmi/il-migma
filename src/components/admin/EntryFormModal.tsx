@@ -1,18 +1,16 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { lazy, Suspense, useState, useMemo, useEffect, useRef, useDeferredValue, useCallback } from 'react';
 import {
     Plus, RefreshCw, RotateCcw, Keyboard, Sparkles, ArrowUp, ArrowDown, AlertTriangle
 } from 'lucide-react';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants, apiGetDistinctValues, apiGetEntry, adminCheckIdExists } from '@/lib/api';
+import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants, apiGetDistinctValues, apiGetEntry, adminCheckIdExists, invalidateDistinctValuesCache } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { generateRootForms } from '@/lib/conjugationEngine';
 import type { WeakClass } from '@/types';
 import { useAdminConfig } from '@/lib/adminConfig';
-import { RelationshipEditor } from './RelationshipEditor';
-import { EtymologyChainEditor } from './EtymologyChainEditor';
 import { buildLoadedEntryPatch, entryToForm, formToPayload, INITIAL_FORM_STATE } from '@/lib/entryAdapter';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
@@ -71,6 +69,18 @@ export interface EntryFormModalProps {
     onSaved: () => void;
     getToken: () => Promise<string | null>;
     initialForm?: Partial<typeof INITIAL_FORM_STATE>;
+}
+
+const LazyRelationshipEditor = lazy(() =>
+    import('./RelationshipEditor').then(module => ({ default: module.RelationshipEditor }))
+);
+
+const LazyEtymologyChainEditor = lazy(() =>
+    import('./EtymologyChainEditor').then(module => ({ default: module.EtymologyChainEditor }))
+);
+
+function buildFormSnapshot(form: any): string {
+    return JSON.stringify(formToPayload(form));
 }
 
 
@@ -1503,10 +1513,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const [error, setError] = useState('');
     const [isMissingEntry, setIsMissingEntry] = useState(false);
     const [isLoadingFull, setIsLoadingFull] = useState(isEdit);
-    const [originalForm, setOriginalForm] = useState<any>(null);
+    const [savedSnapshot, setSavedSnapshot] = useState('');
     const [idExists, setIdExists] = useState<boolean | null>(null);
     const [suggestedId, setSuggestedId] = useState('');
     const [autoFilledFields, setAutoFilledFields] = useState<Set<string>>(new Set());
+    const autoFilledFieldsRef = useRef<Set<string>>(new Set());
     const [isNotable, setIsNotable] = useState(false);
 
     const [kbOpen, setKbOpen] = useState(false);
@@ -1536,6 +1547,16 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     };
 
     const [form, setForm] = useState(() => entryToForm(entry, initialForm));
+    const deferredForm = useDeferredValue(form);
+    const loadRequestSeqRef = useRef(0);
+    const idCheckSeqRef = useRef(0);
+    const rootLookupSeqRef = useRef(0);
+    const rootLookupCacheRef = useRef(new Map<string, any | null>());
+    const currentSnapshot = useMemo(() => buildFormSnapshot(deferredForm), [deferredForm]);
+    const isDirty = useMemo(() => {
+        if (!savedSnapshot) return false;
+        return currentSnapshot !== savedSnapshot;
+    }, [currentSnapshot, savedSnapshot]);
 
     const currentEntryGender = useMemo(() => String(form.gender || '').trim().toLowerCase(), [form.gender]);
     const currentEntrySingularFilters = useMemo(() => {
@@ -1579,11 +1600,19 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const hasDualMorphology = hasRootConsonants && hasZokkStem;
     const isStemMorphology = resolveEntryMorphologyMode(form) === 'stem';
 
-    const isDirty = useMemo(() => {
-        if (!originalForm) return false;
-        // Simple JSON comparison for dirty check
-        return JSON.stringify(form) !== JSON.stringify(originalForm);
-    }, [form, originalForm]);
+    const replaceAutoFilledFields = useCallback((next: Set<string>) => {
+        autoFilledFieldsRef.current = next;
+        setAutoFilledFields(next);
+    }, []);
+
+    useEffect(() => {
+        autoFilledFieldsRef.current = autoFilledFields;
+    }, [autoFilledFields]);
+
+    useEffect(() => {
+        if (isEdit || isLoadingFull || savedSnapshot) return;
+        setSavedSnapshot(buildFormSnapshot(form));
+    }, [form, isEdit, isLoadingFull, savedSnapshot]);
 
     useEffect(() => {
         if (!hasRootConsonants && !hasZokkStem) return;
@@ -1592,43 +1621,58 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         }
     }, [hasRootConsonants, hasZokkStem, isStemMorphology]);
 
-    // Initialize original form for dirty tracking
     useEffect(() => {
-        if (!originalForm && !isLoadingFull) {
-            setOriginalForm(form);
-        }
-    }, [form, originalForm, isLoadingFull]);
+        if (!isEdit || !entry?.id) return;
 
-    useEffect(() => {
-        if (isEdit && entry?.id) {
-            setIsLoadingFull(true);
-            apiGetEntry(entry.id)
-                .then(res => {
-                    if (res?.entry) {
-                        setIsMissingEntry(false);
-                        const full = res.entry as any;
-                        setForm(prev => ({
+        const requestSeq = ++loadRequestSeqRef.current;
+        let active = true;
+        setIsLoadingFull(true);
+
+        apiGetEntry(entry.id)
+            .then(res => {
+                if (!active || requestSeq !== loadRequestSeqRef.current) return;
+
+                if (res?.entry) {
+                    setIsMissingEntry(false);
+                    const full = res.entry as any;
+                    let nextForm: any = null;
+
+                    setForm(prev => {
+                        nextForm = {
                             ...prev,
                             ...buildLoadedEntryPatch(full, prev),
-                        }));
-                        setOriginalForm(full);
-                    } else {
-                        setIsMissingEntry(true);
-                        setError(t(
-                            'This entry no longer exists in the database. Use "Duplicate as New" to save your changes as a new entry.',
-                            'Din l-entrata m’għadhiex teżisti fid-database. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
-                        ));
+                        };
+                        return nextForm;
+                    });
+
+                    if (nextForm) {
+                        setSavedSnapshot(buildFormSnapshot(nextForm));
                     }
-                })
-                .catch(() => {
+                } else {
                     setIsMissingEntry(true);
                     setError(t(
                         'This entry no longer exists in the database. Use "Duplicate as New" to save your changes as a new entry.',
                         'Din l-entrata m’għadhiex teżisti fid-database. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
                     ));
-                })
-                .finally(() => setIsLoadingFull(false));
-        }
+                }
+            })
+            .catch(() => {
+                if (!active || requestSeq !== loadRequestSeqRef.current) return;
+                setIsMissingEntry(true);
+                setError(t(
+                    'This entry no longer exists in the database. Use "Duplicate as New" to save your changes as a new entry.',
+                    'Din l-entrata m’għadhiex teżisti fid-database. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
+                ));
+            })
+            .finally(() => {
+                if (active && requestSeq === loadRequestSeqRef.current) {
+                    setIsLoadingFull(false);
+                }
+            });
+
+        return () => {
+            active = false;
+        };
     }, [isEdit, entry?.id]);
 
     // ── AUTOMATION: Auto-ID Suggestion ──────────────────────────────────────
@@ -1651,10 +1695,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             setIdExists(null);
             return;
         }
+        const requestSeq = ++idCheckSeqRef.current;
         const timer = setTimeout(async () => {
             try {
                 const token = await getToken();
-                const res = await adminCheckIdExists(token!, 'entries', form.id);
+                if (!token || requestSeq !== idCheckSeqRef.current) return;
+                const res = await adminCheckIdExists(token, 'entries', form.id);
+                if (requestSeq !== idCheckSeqRef.current) return;
                 setIdExists(res.exists);
             } catch { }
         }, 500);
@@ -1678,74 +1725,90 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         const rootStr = form._rootConsonants.trim();
         if (!rootStr) return;
 
+        const requestSeq = ++rootLookupSeqRef.current;
+        const lookupKey = rootStr.toLowerCase();
+        let active = true;
+
         const timer = setTimeout(async () => {
             try {
-                const root = await apiLookupRootByConsonants(rootStr);
-                if (root) {
-                    const rootStrength = root.strength?.toLowerCase();
-                    let suggestedClass = '';
-                    if (rootStrength === 'strong') suggestedClass = 'strong';
-                    else if (rootStrength === 'weak') suggestedClass = 'weak';
-                    else if (rootStrength === 'geminated') suggestedClass = 'doubled';
-
-                    setForm(prev => {
-                        const next = { ...prev };
-                        let hasChanges = false;
-                        const newFilled = new Set(autoFilledFields);
-
-                        if (suggestedClass && !prev.verb_class) {
-                            next.verb_class = suggestedClass;
-                            newFilled.add('verb_class');
-                            hasChanges = true;
-                        }
-
-                        if (root.weak_class && !prev._weakClass) {
-                            next._weakClass = root.weak_class;
-                            newFilled.add('_weakClass');
-                            hasChanges = true;
-                        }
-
-                        if (root.source && !prev.source_citation) {
-                            next.source_citation = root.source;
-                            newFilled.add('source_citation');
-                            hasChanges = true;
-                        }
-
-                        if (root.etymology && (!prev.etymology_chain || prev.etymology_chain.length === 0)) {
-                            const normalized = normalizeRootEtymologyChain(root.etymology).map((step) => ({
-                                relationship: step.relationship || 'From',
-                                language: step.language || '',
-                                term: step.term || '',
-                                pronunciation: '',
-                                definition: step.definition || '',
-                            }));
-
-                            if (normalized.length > 0) {
-                                next.etymology_chain = normalized;
-                                newFilled.add('etymology_chain');
-                                hasChanges = true;
-                            }
-                        }
-
-                        if (hasChanges) {
-                            setTimeout(() => setAutoFilledFields(newFilled), 0);
-                        }
-
-                        return next;
-                    });
+                let root = rootLookupCacheRef.current.get(lookupKey);
+                if (root === undefined) {
+                    root = await apiLookupRootByConsonants(rootStr);
+                    rootLookupCacheRef.current.set(lookupKey, root);
                 }
+
+                if (!active || requestSeq !== rootLookupSeqRef.current || !root) return;
+
+                const rootStrength = root.strength?.toLowerCase();
+                let suggestedClass = '';
+                if (rootStrength === 'strong') suggestedClass = 'strong';
+                else if (rootStrength === 'weak') suggestedClass = 'weak';
+                else if (rootStrength === 'geminated') suggestedClass = 'doubled';
+
+                setForm(prev => {
+                    let next: any = prev;
+                    let hasChanges = false;
+                    const newFilled = new Set(autoFilledFieldsRef.current);
+                    const assign = (key: string, value: any) => {
+                        if (!Object.is(next[key], value)) {
+                            if (next === prev) next = { ...prev };
+                            next[key] = value;
+                            hasChanges = true;
+                        }
+                    };
+
+                    if (suggestedClass && !prev.verb_class) {
+                        newFilled.add('verb_class');
+                        assign('verb_class', suggestedClass);
+                    }
+
+                    if (root.weak_class && !prev._weakClass) {
+                        newFilled.add('_weakClass');
+                        assign('_weakClass', root.weak_class);
+                    }
+
+                    if (root.source && !prev.source_citation) {
+                        newFilled.add('source_citation');
+                        assign('source_citation', root.source);
+                    }
+
+                    if (root.etymology && (!prev.etymology_chain || prev.etymology_chain.length === 0)) {
+                        const normalized = normalizeRootEtymologyChain(root.etymology).map((step) => ({
+                            relationship: step.relationship || 'From',
+                            language: step.language || '',
+                            term: step.term || '',
+                            pronunciation: '',
+                            definition: step.definition || '',
+                        }));
+
+                        if (normalized.length > 0) {
+                            newFilled.add('etymology_chain');
+                            assign('etymology_chain', normalized);
+                        }
+                    }
+
+                    if (hasChanges) {
+                        setTimeout(() => replaceAutoFilledFields(newFilled), 0);
+                        return next;
+                    }
+
+                    return prev;
+                });
             } catch (err) {
                 console.error('Failed to lookup root for auto-fill:', err);
             }
         }, 1000); // Debounce lookup
 
-        return () => clearTimeout(timer);
-    }, [form._rootConsonants, autoFilledFields]);
+        return () => {
+            active = false;
+            clearTimeout(timer);
+        };
+    }, [form._rootConsonants]);
 
     // Reset auto-filled status when POS changes
     useEffect(() => {
         if (autoFilledFields.size > 0) {
-            setAutoFilledFields(new Set());
+            replaceAutoFilledFields(new Set());
         }
     }, [form.pos]);
 
@@ -1765,23 +1828,31 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         const isMorphPos = ['noun', 'adjective', 'participle', 'numeral', 'pronoun'].includes(form.pos);
         if (form.headword && isMorphPos) {
             setForm(prev => {
-                const next = { ...prev };
+                let next: any = prev;
+                let hasChanges = false;
                 const gender = prev.gender?.toLowerCase();
+                const assign = (key: string, value: any) => {
+                    if (!Object.is(next[key], value)) {
+                        if (next === prev) next = { ...prev };
+                        next[key] = value;
+                        hasChanges = true;
+                    }
+                };
 
                 // 1. Fundamental seeding
-                if (!next.lemma_base) next.lemma_base = prev.headword;
-                if (!next.form_masc_pattern && prev.cv_pattern) next.form_masc_pattern = prev.cv_pattern;
+                if (!next.lemma_base) assign('lemma_base', prev.headword);
+                if (!next.form_masc_pattern && prev.cv_pattern) assign('form_masc_pattern', prev.cv_pattern);
 
                 // 2. Gender-specific proactive sync
                 if (gender === 'masculine') {
-                    if (prev.pos !== 'verb' && !next.form_masc) next.form_masc = prev.headword;
-                    if (!next.form_masc_pattern && prev.cv_pattern) next.form_masc_pattern = prev.cv_pattern;
+                    if (prev.pos !== 'verb' && !next.form_masc) assign('form_masc', prev.headword);
+                    if (!next.form_masc_pattern && prev.cv_pattern) assign('form_masc_pattern', prev.cv_pattern);
                 } else if (gender === 'feminine') {
-                    if (!next.form_fem) next.form_fem = prev.headword;
-                    if (!next.form_fem_pattern && prev.cv_pattern) next.form_fem_pattern = prev.cv_pattern;
+                    if (!next.form_fem) assign('form_fem', prev.headword);
+                    if (!next.form_fem_pattern && prev.cv_pattern) assign('form_fem_pattern', prev.cv_pattern);
                 }
 
-                return next;
+                return hasChanges ? next : prev;
             });
         }
     }, [form.headword, form.pos, form.gender, form.cv_pattern]);
@@ -1897,28 +1968,38 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
     const set = (k: string, v: any) => {
         setForm((f: any) => {
-            const next = { ...f, [k]: v };
+            let next: any = f;
+            let changed = false;
+            const assign = (key: string, value: any) => {
+                if (!Object.is(next[key], value)) {
+                    if (next === f) next = { ...f };
+                    next[key] = value;
+                    changed = true;
+                }
+            };
+
+            assign(k, v);
 
             // Sync headword to lemma_base/form_fem/form_masc
             if (k === 'headword' && ['noun', 'adjective', 'participle', 'numeral'].includes(next.pos)) {
                 if (next.gender?.toLowerCase() === 'feminine') {
-                    next.form_fem = v;
+                    assign('form_fem', v);
                 } else if (next.gender?.toLowerCase() === 'masculine') {
-                    next.lemma_base = v;
+                    assign('lemma_base', v);
                     if (next.pos === 'numeral' && !next.form_masc) {
-                        next.form_masc = v;
+                        assign('form_masc', v);
                     }
                 } else {
-                    next.lemma_base = v;
+                    assign('lemma_base', v);
                 }
             }
 
             // Sync CV pattern to gender-specific pattern for relevant POS
             if (k === 'cv_pattern' && ['noun', 'adjective', 'participle', 'numeral'].includes(next.pos)) {
                 if (next.gender?.toLowerCase() === 'feminine') {
-                    next.form_fem_pattern = v;
+                    assign('form_fem_pattern', v);
                 } else {
-                    next.form_masc_pattern = v;
+                    assign('form_masc_pattern', v);
                 }
             }
 
@@ -1926,17 +2007,17 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             if (k === 'gender' && ['noun', 'adjective', 'participle', 'numeral'].includes(next.pos)) {
                 // When switching gender, also ensure the headword is synced to the new base
                 if (v?.toLowerCase() === 'feminine') {
-                    next.form_fem = next.headword;
+                    assign('form_fem', next.headword);
                     if (next.form_fem_pattern) {
-                        next.cv_pattern = next.form_fem_pattern;
+                        assign('cv_pattern', next.form_fem_pattern);
                     }
                 } else {
-                    next.lemma_base = next.headword;
+                    assign('lemma_base', next.headword);
                     if (next.pos === 'numeral' && !next.form_masc) {
-                        next.form_masc = next.headword;
+                        assign('form_masc', next.headword);
                     }
                     if (next.form_masc_pattern) {
-                        next.cv_pattern = next.form_masc_pattern;
+                        assign('cv_pattern', next.form_masc_pattern);
                     }
                 }
             }
@@ -1946,29 +2027,29 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     const pluralRows = Array.isArray(v)
                         ? v
                         : normalizePluralFormRows(v, next.form_plural_pattern);
-                    next.plural_forms = pluralRows;
+                    assign('plural_forms', pluralRows);
                     const compacted = compactPluralRows(pluralRows);
-                    next.inflections_pl = pluralRowsToLegacyForms(compacted).join(', ');
-                    next.form_plural_pattern = pluralRowsToLegacyPatternString(compacted);
+                    assign('inflections_pl', pluralRowsToLegacyForms(compacted).join(', '));
+                    assign('form_plural_pattern', pluralRowsToLegacyPatternString(compacted));
                 } else {
                     const rawInflections = k === 'inflections_pl' ? String(v ?? '').trim() : String(next.inflections_pl || '').trim();
                     if (k === 'inflections_pl' && !rawInflections) {
-                        next.plural_forms = [];
-                        next.inflections_pl = '';
-                        next.form_plural_pattern = '';
+                        assign('plural_forms', []);
+                        assign('inflections_pl', '');
+                        assign('form_plural_pattern', '');
                     } else {
                         const pluralRows = compactPluralRows(normalizePluralFormRows(
                             k === 'inflections_pl' ? v : next.plural_forms,
                             k === 'form_plural_pattern' ? v : next.form_plural_pattern,
                         ));
-                        next.plural_forms = pluralRows;
-                        next.inflections_pl = pluralRowsToLegacyForms(pluralRows).join(', ');
-                        next.form_plural_pattern = pluralRowsToLegacyPatternString(pluralRows);
+                        assign('plural_forms', pluralRows);
+                        assign('inflections_pl', pluralRowsToLegacyForms(pluralRows).join(', '));
+                        assign('form_plural_pattern', pluralRowsToLegacyPatternString(pluralRows));
                     }
                 }
             }
 
-            return next;
+            return changed ? next : f;
         });
     };
 
@@ -1998,11 +2079,12 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         set('definitions', normalizeEntryDefinitions(next));
     };
 
-      const syncPatternRegistrations = async (
-          entries: Array<{ category: string; key: string }>,
-          currentPos: string,
-      ) => {
-          const seen = new Set<string>();
+    const syncPatternRegistrations = async (
+        entries: Array<{ category: string; key: string }>,
+        currentPos: string,
+    ) => {
+        const seen = new Set<string>();
+        const tasks: Promise<void>[] = [];
 
         for (const entry of entries) {
             const key = entry.key.trim();
@@ -2012,46 +2094,50 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             if (seen.has(dedupeKey)) continue;
             seen.add(dedupeKey);
 
-            const catMap = byCategoryAndKey.get(entry.category);
-              const existing = catMap?.get(key.toLowerCase());
-              const baseValue = entry.category === 'cv_wizen_pattern'
-                  ? { cv: key, wizen: '', stress: 2, pos_types: [currentPos] }
-                  : entry.category === 'sound_suffix'
-                      ? { cv: key, wizen: key.replace(/^-+/, ''), pos_types: [currentPos] }
-                      : { cv: key, wizen: '', pos_types: [currentPos] };
+            tasks.push((async () => {
+                const catMap = byCategoryAndKey.get(entry.category);
+                const existing = catMap?.get(key.toLowerCase());
+                const baseValue = entry.category === 'cv_wizen_pattern'
+                    ? { cv: key, wizen: '', stress: 2, pos_types: [currentPos] }
+                    : entry.category === 'sound_suffix'
+                        ? { cv: key, wizen: key.replace(/^-+/, ''), pos_types: [currentPos] }
+                        : { cv: key, wizen: '', pos_types: [currentPos] };
 
-              if (!existing) {
-                  try {
-                      const mergedValue = mergePatternBucketApplicabilities(baseValue, [currentPos]);
-                      await createItem({
-                          category: entry.category,
-                          key,
-                          value: mergedValue,
-                      }, { refresh: false });
-                  } catch (err) {
-                      console.error(`Failed to register ${entry.category}:`, err);
-                  }
-                  continue;
-            }
+                if (!existing) {
+                    try {
+                        const mergedValue = mergePatternBucketApplicabilities(baseValue, [currentPos]);
+                        await createItem({
+                            category: entry.category,
+                            key,
+                            value: mergedValue,
+                        }, { refresh: false });
+                    } catch (err) {
+                        console.error(`Failed to register ${entry.category}:`, err);
+                    }
+                    return;
+                }
 
-            if (!existing.id) continue;
+                if (!existing.id) return;
 
-              try {
-                  const val = typeof existing.value === 'string' ? JSON.parse(existing.value) : (existing.value || {});
-                  const posTypes = Array.isArray(val.pos_types) ? val.pos_types : [];
-                  const applicabilities = Array.isArray(val.applicabilities) ? val.applicabilities : [];
-                  const hasCurrentApplicability = applicabilities.some((item: Record<string, unknown>) => String(item.pos ?? '').trim() === currentPos);
-                  if (!posTypes.includes(currentPos) || !hasCurrentApplicability) {
-                      const mergedValue = mergePatternBucketApplicabilities(val, [currentPos]);
-                      await updateItem({
-                          ...existing,
-                          value: mergedValue,
-                      }, { refresh: false });
-                  }
-              } catch (err) {
-                  console.error(`Failed to update ${entry.category}:`, err);
-              }
+                try {
+                    const val = typeof existing.value === 'string' ? JSON.parse(existing.value) : (existing.value || {});
+                    const posTypes = Array.isArray(val.pos_types) ? val.pos_types : [];
+                    const applicabilities = Array.isArray(val.applicabilities) ? val.applicabilities : [];
+                    const hasCurrentApplicability = applicabilities.some((item: Record<string, unknown>) => String(item.pos ?? '').trim() === currentPos);
+                    if (!posTypes.includes(currentPos) || !hasCurrentApplicability) {
+                        const mergedValue = mergePatternBucketApplicabilities(val, [currentPos]);
+                        await updateItem({
+                            ...existing,
+                            value: mergedValue,
+                        }, { refresh: false });
+                    }
+                } catch (err) {
+                    console.error(`Failed to update ${entry.category}:`, err);
+                }
+            })());
         }
+
+        await Promise.all(tasks);
     };
 
     const handleSave = async (e: React.FormEvent) => {
@@ -2106,10 +2192,12 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     .map((s: string) => ({
                         category: s.startsWith('-') ? 'sound_suffix' : 'broken_pattern',
                         key: s,
-                    })))
+                })))
             ];
             await syncPatternRegistrations(patternsToSync, normalizedPos);
+            invalidateDistinctValuesCache();
             await refresh();
+            setSavedSnapshot(buildFormSnapshot({ ...form, pos: currentPos }));
 
             onSaved();
         } catch (err: any) {
@@ -2138,9 +2226,26 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const [availableSources, setAvailableSources] = useState<string[]>([]);
 
     useEffect(() => {
-        apiGetDistinctValues('tags').then(setAvailableTags).catch(e => console.error("Tags fetch error:", e));
-        apiGetDistinctValues('vowel_sets').then(setAvailableVowelSets).catch(e => console.error("Vowel sets fetch error:", e));
-        apiGetDistinctValues('sources').then(setAvailableSources).catch(e => console.error("Sources fetch error:", e));
+        let active = true;
+
+        Promise.all([
+            apiGetDistinctValues('tags'),
+            apiGetDistinctValues('vowel_sets'),
+            apiGetDistinctValues('sources'),
+        ])
+            .then(([tags, vowelSets, sources]) => {
+                if (!active) return;
+                setAvailableTags(tags);
+                setAvailableVowelSets(vowelSets);
+                setAvailableSources(sources);
+            })
+            .catch(e => {
+                if (active) console.error('Distinct values fetch error:', e);
+            });
+
+        return () => {
+            active = false;
+        };
     }, []);
 
     const conjugationPreview = useMemo(() => {
@@ -2364,7 +2469,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             </label>
                             <input
                                 value={form.id}
-                                onChange={e => setForm({ ...form, id: e.target.value })}
+                                onChange={e => set('id', e.target.value)}
                                 className={cn(
                                     "w-full p-2 bg-white border rounded-lg text-sm transition-all font-mono",
                                     idExists === true ? "border-red-500 ring-1 ring-red-500/20" : "border-black/10 focus:border-[#1034A6]"
@@ -2373,7 +2478,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             />
                             {suggestedId && form.id !== suggestedId && (
                                 <button
-                                    onClick={() => setForm({ ...form, id: suggestedId })}
+                                    onClick={() => set('id', suggestedId)}
                                     className="mt-1 text-[9px] font-bold text-[#1034A6] hover:underline flex items-center gap-1 uppercase tracking-tighter"
                                 >
                                     <Plus size={10} /> {t('Suggest:', 'Suġġeriment:')} {suggestedId}
@@ -2525,7 +2630,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                             } else {
                                                 next = tags.filter(t => t !== '$invariable' && t !== '$no-elative');
                                             }
-                                            setForm({ ...form, tags: Array.from(new Set(next)).join(', ') });
+                                            set('tags', Array.from(new Set(next)).join(', '));
                                         }}
                                         className="w-3.5 h-3.5 text-[#1034A6] border-black/20 rounded focus:ring-0 focus:ring-offset-0"
                                     />
@@ -2553,7 +2658,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                                 type="button"
                                                 onClick={() => {
                                                     const tags = typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || []);
-                                                    setForm({ ...form, tags: tags.map((t: string) => t.trim()).filter((t: string) => t !== clean).join(', ') });
+                                                    set('tags', tags.map((t: string) => t.trim()).filter((t: string) => t !== clean).join(', '));
                                                 }}
                                                 className="ml-1 hover:text-red-500"
                                             >
@@ -2575,7 +2680,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                                 }
                                                 const tags = typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || []);
                                                 const next = [...tags.map((t: string) => t.trim()).filter(Boolean), val];
-                                                setForm({ ...form, tags: Array.from(new Set(next)).join(', ') });
+                                                set('tags', Array.from(new Set(next)).join(', '));
                                                 e.currentTarget.value = '';
                                                 if (isNotable) setIsNotable(false); // Reset high-intensity prefix after use
                                             }
@@ -2589,7 +2694,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                             }
                                             const tags = typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || []);
                                             const next = [...tags.map((t: string) => t.trim()).filter(Boolean), val];
-                                            setForm({ ...form, tags: Array.from(new Set(next)).join(', ') });
+                                            set('tags', Array.from(new Set(next)).join(', '));
                                             if (isNotable) setIsNotable(false);
                                         }
                                         e.currentTarget.value = '';
@@ -2609,7 +2714,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     }
                                     const tags = typeof form.tags === 'string' ? form.tags.split(',') : (form.tags || []);
                                     const next = [...tags.map((t: string) => t.trim()).filter(Boolean), finalTag];
-                                    setForm({ ...form, tags: Array.from(new Set(next)).join(', ') });
+                                    set('tags', Array.from(new Set(next)).join(', '));
                                     if (isNotable) setIsNotable(false);
                                 }}
                             />
@@ -2803,138 +2908,142 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     </fieldset>
 
                     {/* Relationships (Thesaurus & Derived Terms) */}
-                    <div className="space-y-6">
-                        <RelationshipEditor
-                            type="derived"
-                            title={t('Alternative Forms', 'Forom Alternattivi')}
-                            items={(form as any).alternative_forms || []}
-                            onChange={(items) => set('alternative_forms', items)}
-                            enableSuggestions
-                            suggestionScope="entries"
-                            currentEntryId={form.id}
-                            extraActions={[
-                                { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
-                            ]}
-                        />
-                        <RelationshipEditor
-                            type="derived"
-                            title={t('Derived Terms', 'Termini Derivati')}
-                            items={form.related_entries || []}
-                            onChange={(items) => set('related_entries', items)}
-                            enableSuggestions
-                            suggestionScope="entries"
-                            currentEntryId={form.id}
-                            extraActions={[
-                                { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') },
-                                { label: t('New Root', 'Għerq Ġdid'), icon: <Plus size={12} />, onClick: () => window.open('/admin?tab=roots&new=root', '_blank') }
-                            ]}
-                        />
-                        <RelationshipEditor
-                            type="thesaurus"
-                            title={t('Synonyms', 'Sinonimi')}
-                            items={form.synonyms || []}
-                            onChange={(items) => set('synonyms', items)}
-                            enableSuggestions
-                            suggestionScope="entries"
-                            currentEntryId={form.id}
-                            extraActions={[
-                                { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
-                            ]}
-                        />
-                        <RelationshipEditor
-                            type="thesaurus"
-                            title={t('Antonyms', 'Antonimi')}
-                            items={form.antonyms || []}
-                            onChange={(items) => set('antonyms', items)}
-                            enableSuggestions
-                            suggestionScope="entries"
-                            currentEntryId={form.id}
-                            extraActions={[
-                                { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
-                            ]}
-                        />
-                    </div>
+                    <Suspense fallback={<div className="rounded-xl border border-border-light bg-slate-50 p-4 text-xs text-black/40">{t('Loading relationship editors…', 'Qed jitgħabbu l-editors tar-relazzjonijiet…')}</div>}>
+                        <div className="space-y-6">
+                            <LazyRelationshipEditor
+                                type="derived"
+                                title={t('Alternative Forms', 'Forom Alternattivi')}
+                                items={(form as any).alternative_forms || []}
+                                onChange={(items) => set('alternative_forms', items)}
+                                enableSuggestions
+                                suggestionScope="entries"
+                                currentEntryId={form.id}
+                                extraActions={[
+                                    { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
+                                ]}
+                            />
+                            <LazyRelationshipEditor
+                                type="derived"
+                                title={t('Derived Terms', 'Termini Derivati')}
+                                items={form.related_entries || []}
+                                onChange={(items) => set('related_entries', items)}
+                                enableSuggestions
+                                suggestionScope="entries"
+                                currentEntryId={form.id}
+                                extraActions={[
+                                    { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') },
+                                    { label: t('New Root', 'Għerq Ġdid'), icon: <Plus size={12} />, onClick: () => window.open('/admin?tab=roots&new=root', '_blank') }
+                                ]}
+                            />
+                            <LazyRelationshipEditor
+                                type="thesaurus"
+                                title={t('Synonyms', 'Sinonimi')}
+                                items={form.synonyms || []}
+                                onChange={(items) => set('synonyms', items)}
+                                enableSuggestions
+                                suggestionScope="entries"
+                                currentEntryId={form.id}
+                                extraActions={[
+                                    { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
+                                ]}
+                            />
+                            <LazyRelationshipEditor
+                                type="thesaurus"
+                                title={t('Antonyms', 'Antonimi')}
+                                items={form.antonyms || []}
+                                onChange={(items) => set('antonyms', items)}
+                                enableSuggestions
+                                suggestionScope="entries"
+                                currentEntryId={form.id}
+                                extraActions={[
+                                    { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
+                                ]}
+                            />
+                        </div>
+                    </Suspense>
 
                     {/* Etymology Builder */}
-                    <div className="space-y-4">
-                        {autoFilledFields.has('etymology_chain') && (
-                            <div className="flex items-center gap-1 px-1 mb-2 text-[10px] text-blue-500 animate-pulse">
-                                <span>✦</span>
-                                <span>{t('Inherited from root', 'Miret mill-għerq')}</span>
-                                <button
-                                    type="button"
-                                    className="ml-1 hover:text-blue-700 underline"
-                                    onClick={() => {
-                                        set('etymology_chain', []);
-                                        const next = new Set(autoFilledFields);
-                                        next.delete('etymology_chain');
-                                        setAutoFilledFields(next);
-                                    }}
-                                >
-                                    {t('reset', 'irrisettja')}
-                                </button>
-                            </div>
-                        )}
-
-                        <EtymologyChainEditor
-                            title={t('Etymology Builder', 'Oriġini tal-Kelma')}
-                            items={form.etymology_chain}
-                            onChange={(items) => set('etymology_chain', items)}
-                            showPronunciation
-                            relationshipOptions={RELATIONSHIP_OPTIONS}
-                            sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
-                            defaultRelationship="From"
-                            addLabel={t('Add Step', 'Żid Pass')}
-                            relationshipLabel={t('Relationship', 'Relazzjoni')}
-                            languageLabel={t('Language', 'Lingwa')}
-                            termLabel={t('Term', 'Kelma')}
-                            pronunciationLabel={t('Pronunciation', 'Pronunzja')}
-                            pronunciationPlaceholder={t('e.g. kan-ta-re', 'eż. kan-ta-re')}
-                            definitionLabel={t('Definition', 'Tifsira')}
-                            labelClassName={label}
-                            inputClassName={inp}
-                            selectClassName={sel}
-                        />
-
-                        <div className="pt-2">
-                            <label className={label}>{t('Source Citation', 'Sors / Referenza')}</label>
-                            <input
-                                className={inp}
-                                value={form.source_citation}
-                                onChange={e => {
-                                    set('source_citation', e.target.value);
-                                    if (autoFilledFields.has('source_citation')) {
-                                        const next = new Set(autoFilledFields);
-                                        next.delete('source_citation');
-                                        setAutoFilledFields(next);
-                                    }
-                                }}
-                                placeholder={t('e.g. Aquilina1987', 'eż. Aquilina1987')}
-                            />
-                            <SuggestionRow
-                                options={availableSources.slice(0, 10)}
-                                onSelect={src => set('source_citation', src)}
-                            />
-                            {autoFilledFields.has('source_citation') && (
-                                <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse">
+                    <Suspense fallback={<div className="rounded-xl border border-border-light bg-slate-50 p-4 text-xs text-black/40">{t('Loading etymology editor…', 'Qed jitgħabba l-editor tal-etimoloġija…')}</div>}>
+                        <div className="space-y-4">
+                            {autoFilledFields.has('etymology_chain') && (
+                                <div className="flex items-center gap-1 px-1 mb-2 text-[10px] text-blue-500 animate-pulse">
                                     <span>✦</span>
                                     <span>{t('Inherited from root', 'Miret mill-għerq')}</span>
                                     <button
                                         type="button"
                                         className="ml-1 hover:text-blue-700 underline"
                                         onClick={() => {
-                                            set('source_citation', '');
+                                            set('etymology_chain', []);
                                             const next = new Set(autoFilledFields);
-                                            next.delete('source_citation');
-                                            setAutoFilledFields(next);
+                                            next.delete('etymology_chain');
+                                            replaceAutoFilledFields(next);
                                         }}
                                     >
                                         {t('reset', 'irrisettja')}
                                     </button>
                                 </div>
                             )}
+
+                            <LazyEtymologyChainEditor
+                                title={t('Etymology Builder', 'Oriġini tal-Kelma')}
+                                items={form.etymology_chain}
+                                onChange={(items) => set('etymology_chain', items)}
+                                showPronunciation
+                                relationshipOptions={RELATIONSHIP_OPTIONS}
+                                sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
+                                defaultRelationship="From"
+                                addLabel={t('Add Step', 'Żid Pass')}
+                                relationshipLabel={t('Relationship', 'Relazzjoni')}
+                                languageLabel={t('Language', 'Lingwa')}
+                                termLabel={t('Term', 'Kelma')}
+                                pronunciationLabel={t('Pronunciation', 'Pronunzja')}
+                                pronunciationPlaceholder={t('e.g. kan-ta-re', 'eż. kan-ta-re')}
+                                definitionLabel={t('Definition', 'Tifsira')}
+                                labelClassName={label}
+                                inputClassName={inp}
+                                selectClassName={sel}
+                            />
+
+                            <div className="pt-2">
+                                <label className={label}>{t('Source Citation', 'Sors / Referenza')}</label>
+                                <input
+                                    className={inp}
+                                    value={form.source_citation}
+                                    onChange={e => {
+                                        set('source_citation', e.target.value);
+                                        if (autoFilledFields.has('source_citation')) {
+                                            const next = new Set(autoFilledFields);
+                                            next.delete('source_citation');
+                                            replaceAutoFilledFields(next);
+                                        }
+                                    }}
+                                    placeholder={t('e.g. Aquilina1987', 'eż. Aquilina1987')}
+                                />
+                                <SuggestionRow
+                                    options={availableSources.slice(0, 10)}
+                                    onSelect={src => set('source_citation', src)}
+                                />
+                                {autoFilledFields.has('source_citation') && (
+                                    <div className="flex items-center gap-1 mt-1 text-[10px] text-blue-500 animate-pulse">
+                                        <span>✦</span>
+                                        <span>{t('Inherited from root', 'Miret mill-għerq')}</span>
+                                        <button
+                                            type="button"
+                                            className="ml-1 hover:text-blue-700 underline"
+                                            onClick={() => {
+                                                set('source_citation', '');
+                                                const next = new Set(autoFilledFields);
+                                                next.delete('source_citation');
+                                                replaceAutoFilledFields(next);
+                                            }}
+                                        >
+                                            {t('reset', 'irrisettja')}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    </Suspense>
 
                     {/* Dynamic Fields (for new DB columns) */}
                     {Object.keys(form.extraFields || {}).length > 0 && (
@@ -2999,7 +3108,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                                 })))
                                         ];
                                         await syncPatternRegistrations(syncList, currentPos);
+                                        invalidateDistinctValuesCache();
                                         await refresh();
+                                        setSavedSnapshot(buildFormSnapshot({ ...form, pos: currentPos }));
 
                                         onSaved();
                                     } catch (err: any) {

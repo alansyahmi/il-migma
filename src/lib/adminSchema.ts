@@ -205,6 +205,13 @@ export const POS_FEATURES: Record<string, string[]> = {
     ],
 };
 
+const CV_PATTERN_MIRROR_POS = new Set([
+    'noun',
+    'adjective',
+    'participle',
+    'numeral',
+]);
+
 const POS_WITH_NATIVE_VOWEL_SET_UI = new Set([
     'noun',
     'adjective',
@@ -275,13 +282,16 @@ export function buildEntryPayload(form: any): Record<string, any> {
         });
     }
 
-    // ── ACTIVE MIRRORING ───────────────────────────────────────────────────
-    // The cv_pattern field always mirrors the current gender's primary slot
-    if (form.gender?.toLowerCase() === 'feminine') {
-        payload.cv_pattern = form.form_fem_pattern || '';
-    } else {
-        payload.cv_pattern = form.form_masc_pattern || '';
-    }
+    // ── CV PATTERN RESOLUTION ───────────────────────────────────────────────
+    // Keep the direct cv_pattern when the UI has one, and only fall back to
+    // legacy gendered pattern slots for entries that still mirror them.
+    const directCvPattern = String(form.cv_pattern || '').trim();
+    const mirroredCvPattern = CV_PATTERN_MIRROR_POS.has(pos)
+        ? (form.gender?.toLowerCase() === 'feminine'
+            ? String(form.form_fem_pattern || '').trim()
+            : String(form.form_masc_pattern || '').trim())
+        : '';
+    payload.cv_pattern = directCvPattern || mirroredCvPattern || '';
 
     payload.inflections_pl = pluralRowsToLegacyForms(pluralRows);
     payload.form_plural_pattern = pluralRowsToLegacyPatternString(pluralRows);

@@ -663,13 +663,17 @@ function ApplicabilitySection({
     const { getValues } = useAdminConfig();
     const app = getApplicabilityForPos(value, pos);
     const schema = PATTERN_POS_SCHEMA[pos];
+    const fields = schema?.fields || [];
+    const hasMetadataFields = fields.length > 0;
 
     return (
         <div className="rounded-2xl border border-black/5 bg-slate-50/70 p-3.5 space-y-3">
             <div className="flex items-center justify-between gap-2">
                 <div>
                     <h5 className="text-[10px] font-bold uppercase tracking-widest text-[#1034A6]">{schema?.label || pos}</h5>
-                    <p className="text-[11px] text-black/40">Metadata for this POS only</p>
+                    <p className="text-[11px] text-black/40">
+                        {hasMetadataFields ? 'Metadata for this POS only' : 'Pattern-only POS, no extra metadata'}
+                    </p>
                 </div>
                 <button
                     type="button"
@@ -679,54 +683,60 @@ function ApplicabilitySection({
                     Remove
                 </button>
             </div>
-            <div className="grid grid-cols-1 gap-3.5">
-                {(schema?.fields || []).map((field) => {
-                    if (field.showWhen && !field.showWhen(app)) {
-                        return null;
-                    }
+            {hasMetadataFields ? (
+                <div className="grid grid-cols-1 gap-3.5">
+                    {fields.map((field) => {
+                        if (field.showWhen && !field.showWhen(app)) {
+                            return null;
+                        }
 
-                    const fieldValue = getPatternFieldValue(app, field);
-                    const options = getFieldOptions(field, getValues);
+                        const fieldValue = getPatternFieldValue(app, field);
+                        const options = getFieldOptions(field, getValues);
 
-                    return (
-                        <div
-                            key={field.key}
-                            className={field.kind === 'textarea' ? 'space-y-1 md:col-span-3' : 'space-y-1'}
-                        >
-                            <label className={labelClass}>{field.label}</label>
-                            {field.kind === 'select' && (
-                                <select
-                                    className={inputClass}
-                                    value={fieldValue}
-                                    onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
-                                >
-                                    <option value="">{field.emptyLabel || '-- Select --'}</option>
-                                    {options.map((opt) => (
-                                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                    ))}
-                                </select>
-                            )}
-                            {field.kind === 'text' && (
-                                <input
-                                    className={inputClass}
-                                    value={fieldValue}
-                                    onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
-                                    placeholder={field.placeholder}
-                                />
-                            )}
-                            {field.kind === 'textarea' && (
-                                <textarea
-                                    className={cn(inputClass, 'min-h-[84px] resize-y')}
-                                    value={fieldValue}
-                                    onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
-                                    placeholder={field.placeholder}
-                                    rows={field.rows || 3}
-                                />
-                            )}
-                        </div>
-                    );
-                })}
-            </div>
+                        return (
+                            <div
+                                key={field.key}
+                                className={field.kind === 'textarea' ? 'space-y-1 md:col-span-3' : 'space-y-1'}
+                            >
+                                <label className={labelClass}>{field.label}</label>
+                                {field.kind === 'select' && (
+                                    <select
+                                        className={inputClass}
+                                        value={fieldValue}
+                                        onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
+                                    >
+                                        <option value="">{field.emptyLabel || '-- Select --'}</option>
+                                        {options.map((opt) => (
+                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                        ))}
+                                    </select>
+                                )}
+                                {field.kind === 'text' && (
+                                    <input
+                                        className={inputClass}
+                                        value={fieldValue}
+                                        onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
+                                        placeholder={field.placeholder}
+                                    />
+                                )}
+                                {field.kind === 'textarea' && (
+                                    <textarea
+                                        className={cn(inputClass, 'min-h-[84px] resize-y')}
+                                        value={fieldValue}
+                                        onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
+                                        placeholder={field.placeholder}
+                                        rows={field.rows || 3}
+                                    />
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            ) : (
+                <div className="rounded-xl border border-dashed border-black/10 bg-white/60 px-3 py-2 text-[11px] text-black/40">
+                    This POS can still be linked to patterns, but it does not use any extra applicability metadata.
+                </div>
+            )}
         </div>
     );
 }

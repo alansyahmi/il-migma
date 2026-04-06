@@ -89,12 +89,14 @@ function MorphologyTable({
     displayPattern,
     labelHeader,
     hideHeaderLabel = false,
+    patternBelowValue = false,
 }: {
     title: string;
     rows: Array<SectionRow | MorphologyDisplayRow>;
     displayPattern?: (p?: string) => string;
     labelHeader?: string;
     hideHeaderLabel?: boolean;
+    patternBelowValue?: boolean;
 }) {
     const { term } = useLinguisticMode();
     const sectionRows = rows.filter((row): row is SectionRow => 'kind' in row);
@@ -132,6 +134,22 @@ function MorphologyTable({
     };
 
     if (dataRows.length === 0) return null;
+    const columnCount = patternBelowValue ? 2 : 3;
+
+    const renderValueContent = (row: MorphologyDisplayRow) => {
+        const valueContent = typeof row.value === 'string' || (row.value && typeof row.value === 'object' && !React.isValidElement(row.value)) ? (
+            <MarkedValue val={row.value as any} theoretical={row.theoretical} />
+        ) : (
+            row.value
+        );
+
+        return (
+            <div className={`flex items-baseline ${row.theoretical ? 'text-black/55' : 'text-black'}`}>
+                {valueContent}
+                {row.extra}
+            </div>
+        );
+    };
 
     const renderedRows: React.ReactNode[] = [];
     const sectionStack: Array<{ id: string; depth: number; open: boolean }> = [];
@@ -149,7 +167,7 @@ function MorphologyTable({
 
             renderedRows.push(
                 <tr key={`section-${row.id}-${idx}`} className="border-b border-black/4 bg-black/[0.02]">
-                    <td colSpan={3} className={`py-2.5 ${depth > 0 ? 'pl-6' : 'pl-3'} pr-3`}>
+                    <td colSpan={columnCount} className={`py-2.5 ${depth > 0 ? 'pl-6' : 'pl-3'} pr-3`}>
                         <button
                             type="button"
                             onClick={() => toggleSection(row.id)}
@@ -177,26 +195,34 @@ function MorphologyTable({
                         <div className="font-serif font-medium text-black">
                             {row.label}
                         </div>
-                        {row.secondaryLabel && (
+                        {!patternBelowValue && row.secondaryLabel && (
                             <div className="mt-0.5 text-[11px] font-sans tracking-tight text-black/40">
                                 {row.secondaryLabel}
                             </div>
                         )}
                     </div>
                 </td>
-                <td className="py-2.5 font-serif text-black leading-normal">
-                    <div className="flex items-baseline">
-                        {typeof row.value === 'string' || (row.value && typeof row.value === 'object' && !React.isValidElement(row.value)) ? (
-                            <MarkedValue val={row.value as any} theoretical={row.theoretical} />
-                        ) : (
-                            row.value
-                        )}
-                        {row.extra}
-                    </div>
-                </td>
-                <td className="py-2.5 text-black/40 text-sm font-sans tracking-tight leading-normal">
-                    {renderPatternValue(row.pattern, displayPattern)}
-                </td>
+                {patternBelowValue ? (
+                    <td className="py-2.5 font-serif leading-normal">
+                        <div className="leading-tight">
+                            {renderValueContent(row)}
+                            {row.pattern && (
+                                <div className="mt-0.5 text-[11px] font-sans tracking-tight text-black/40">
+                                    {renderPatternValue(row.pattern, displayPattern)}
+                                </div>
+                            )}
+                        </div>
+                    </td>
+                ) : (
+                    <>
+                        <td className="py-2.5 font-serif text-black leading-normal">
+                            {renderValueContent(row)}
+                        </td>
+                        <td className="py-2.5 text-black/40 text-sm font-sans tracking-tight leading-normal">
+                            {renderPatternValue(row.pattern, displayPattern)}
+                        </td>
+                    </>
+                )}
             </tr>,
         );
     });
@@ -214,7 +240,9 @@ function MorphologyTable({
                                 {hideHeaderLabel ? null : headerLabel}
                             </th>
                             <th className="text-left font-semibold text-black pb-2">{term('surface-form') || 'Surface Form'}</th>
-                            <th className="text-left font-semibold text-black pb-2 w-24 sm:w-32">{term('pattern') || 'Pattern'}</th>
+                            {!patternBelowValue && (
+                                <th className="text-left font-semibold text-black pb-2 w-24 sm:w-32">{term('pattern') || 'Pattern'}</th>
+                            )}
                         </tr>
                     </thead>
                     <tbody>
@@ -266,6 +294,26 @@ function renderPatternValue(pattern?: string | (string | null)[] | null, display
     return <span>{displayPattern ? displayPattern(pattern) : pattern}</span>;
 }
 
+function resolveDisplayedPattern(
+    mode: 'standard' | 'arabised',
+    cvWizenMap: Map<string, string>,
+    cvPattern?: string | null,
+    wizenPattern?: string | null,
+) {
+    const directCv = String(cvPattern || '').trim();
+    const directWizen = String(wizenPattern || '').trim();
+
+    if (mode !== 'arabised') {
+        return directCv || directWizen;
+    }
+
+    if (directWizen) {
+        return directWizen;
+    }
+
+    return directCv ? (cvWizenMap.get(directCv.toLowerCase().trim()) || directCv) : '';
+}
+
 type NounParadigmCell = {
     value?: React.ReactNode;
     pattern?: string | null;
@@ -290,6 +338,16 @@ type DiminutiveDisplayRow = {
     theoretical: boolean;
     gender?: NounGenderVariant;
 };
+
+type AdjectiveParadigmDataRow = {
+    label: string;
+    singular: NounParadigmCell;
+    dual: NounParadigmCell;
+    plural: NounParadigmCell;
+    elative: NounParadigmCell;
+};
+
+type AdjectiveParadigmRow = AdjectiveParadigmDataRow | SectionRow;
 
 function prepareDiminutiveStemForAttachment(word: string) {
     return String(word || '').replace(/jj/g, 'j').replace(/ww/g, 'w');
@@ -607,6 +665,147 @@ function NounParadigmTable({
     );
 }
 
+function AdjectiveParadigmTable({
+    title,
+    rows,
+    displayPattern,
+    labelHeader,
+    hideHeaderLabel = false,
+}: {
+    title: string;
+    rows: Array<AdjectiveParadigmRow>;
+    displayPattern: (pattern?: string) => string;
+    labelHeader?: string;
+    hideHeaderLabel?: boolean;
+}) {
+    const { term } = useLinguisticMode();
+    const sectionRows = rows.filter((row): row is SectionRow => 'kind' in row);
+    const dataRows = rows.filter((row): row is AdjectiveParadigmDataRow => !('kind' in row));
+    const showElativeColumn = dataRows.some(row => !!row.elative.value || (row.elative.stacked?.length ?? 0) > 0);
+    const hasRows = dataRows.some(row => (
+        row.singular.value || row.dual.value || row.plural.value || row.elative.value ||
+        (row.singular.stacked?.length ?? 0) > 0 || (row.dual.stacked?.length ?? 0) > 0 ||
+        (row.plural.stacked?.length ?? 0) > 0 || (row.elative.stacked?.length ?? 0) > 0
+    ));
+    const headerLabel = labelHeader || term('feature') || 'Feature';
+    const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => {
+        const initial: Record<string, boolean> = {};
+        sectionRows.forEach((row) => {
+            initial[row.id] = row.defaultOpen ?? false;
+        });
+        return initial;
+    });
+
+    useEffect(() => {
+        setOpenSections((prev) => {
+            const next = { ...prev };
+            let changed = false;
+            sectionRows.forEach((row) => {
+                if (!(row.id in next)) {
+                    next[row.id] = row.defaultOpen ?? false;
+                    changed = true;
+                }
+            });
+            return changed ? next : prev;
+        });
+    }, [rows]);
+
+    const toggleSection = (id: string) => {
+        setOpenSections((prev) => ({ ...prev, [id]: !prev[id] }));
+    };
+
+    const renderedRows: React.ReactNode[] = [];
+    const sectionStack: Array<{ id: string; depth: number; open: boolean }> = [];
+
+    rows.forEach((row, idx) => {
+        if ('kind' in row) {
+            const depth = row.depth ?? 0;
+            while (sectionStack.length > 0 && sectionStack[sectionStack.length - 1].depth >= depth) {
+                sectionStack.pop();
+            }
+            const ancestorsOpen = sectionStack.every((section) => section.open);
+            const isOpen = openSections[row.id] ?? row.defaultOpen ?? false;
+            sectionStack.push({ id: row.id, depth, open: isOpen });
+            if (!ancestorsOpen) return;
+
+            renderedRows.push(
+                <tr key={`section-${row.id}-${idx}`} className="border-b border-black/4 bg-black/[0.02]">
+                    <td colSpan={4 + (showElativeColumn ? 1 : 0)} className={`py-2 ${depth > 0 ? 'pl-6' : 'pl-3'} pr-3`}>
+                        <button
+                            type="button"
+                            onClick={() => toggleSection(row.id)}
+                            className="flex w-full items-center justify-between gap-3 text-left font-sans uppercase tracking-[0.14em] text-black/60 text-[10px] hover:text-black/80 transition-colors"
+                            aria-expanded={isOpen}
+                        >
+                            <span>{row.label}</span>
+                            {isOpen ? <ChevronDown size={12} className="shrink-0" /> : <ChevronRight size={12} className="shrink-0" />}
+                        </button>
+                    </td>
+                </tr>,
+            );
+            return;
+        }
+
+        const ancestorsOpen = sectionStack.every((section) => section.open);
+        if (!ancestorsOpen) return;
+
+        const rowPath = sectionStack.map((section) => section.id).join('>');
+        renderedRows.push(
+            <tr key={`${rowPath}|${row.label}|${idx}`} className="border-b border-black/4">
+                <td className="py-2.5 pr-4 align-top w-24 sm:w-40">
+                    <div className="leading-tight">
+                        <div className="font-serif font-medium text-black">
+                            {row.label.trim() || (idx === 0 ? headerLabel : '')}
+                        </div>
+                    </div>
+                </td>
+                <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
+                    <NounParadigmCellView cell={row.singular} displayPattern={displayPattern} />
+                </td>
+                <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
+                    <NounParadigmCellView cell={row.dual} displayPattern={displayPattern} />
+                </td>
+                <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
+                    <NounParadigmCellView cell={row.plural} displayPattern={displayPattern} />
+                </td>
+                {showElativeColumn && (
+                    <td className="py-2.5 align-top font-serif font-normal text-black">
+                        <NounParadigmCellView cell={row.elative} displayPattern={displayPattern} />
+                    </td>
+                )}
+            </tr>,
+        );
+    });
+
+    if (!hasRows) return null;
+
+    return (
+        <div className="w-full">
+            <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                {title}
+            </h2>
+            <div className="pb-4">
+                <table className="w-full table-fixed text-sm border-collapse">
+                    <thead>
+                        <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                            <th className="text-left font-semibold text-black pb-2 pr-2 w-24 sm:w-40" aria-label={term('form') || 'Form'}>
+                                {hideHeaderLabel ? null : headerLabel}
+                            </th>
+                            <th className="text-left font-semibold text-black pb-2 pr-2">{term('singular') || 'Singular'}</th>
+                            <th className="text-left font-semibold text-black pb-2 pr-2">{term('dual') || 'Dual'}</th>
+                            <th className="text-left font-semibold text-black pb-2 pr-2">{term('plural') || 'Plural'}</th>
+                            {showElativeColumn && <th className="text-left font-semibold text-black pb-2">{term('elative') || 'Elative'}</th>}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {renderedRows}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
 function NounMorphologySection({
     entry,
     morphology,
@@ -872,6 +1071,39 @@ function AdjectiveMorphologySection({
     const { term } = useLinguisticMode();
 
     const singular = (value?: string | null) => (value && value.trim()) || null;
+    const splitMultiValue = (value?: string | null) => (
+        String(value || '')
+            .split(',')
+            .map((part) => part.trim())
+            .filter(Boolean)
+    );
+    const buildStackedCell = (
+        value?: string | null,
+        pattern?: string | null,
+        theoretical = false,
+    ): NounParadigmCell => {
+        const values = splitMultiValue(value);
+        const patterns = splitMultiValue(pattern);
+
+        if (values.length <= 1) {
+            return {
+                value: values[0] || null,
+                pattern: pattern || null,
+                theoretical,
+            };
+        }
+
+        return {
+            value: values[0],
+            pattern: patterns[0] || pattern || null,
+            theoretical,
+            stacked: values.map((item, index) => ({
+                value: item,
+                pattern: patterns[index] || patterns[0] || pattern || null,
+                theoretical,
+            })),
+        };
+    };
     const primaryVariant: NounGenderVariant = morphology.gender === 'feminine' ? 'feminine' : 'masculine';
     const oppositeVariant: NounGenderVariant = primaryVariant === 'masculine' ? 'feminine' : 'masculine';
 
@@ -895,7 +1127,7 @@ function AdjectiveMorphologySection({
     const renderVariantLabel = (variant: NounGenderVariant) => term(variant) || (variant === 'masculine' ? 'Masculine' : 'Feminine');
 
     const pluralPattern = singular(morphology.form_plural_pattern || entry.form_plural_pattern || morphology.morph_pattern || entry.morph_pattern || null);
-    const pluralHint = singular(morphology.plural || null);
+    const pluralHint = splitMultiValue(morphology.plural || null)[0] || null;
     const dualPattern = singular(morphology.dual_pattern || entry.dual_pattern || null);
     const attestedElativePattern = singular(morphology.elative_pattern || entry.elative_pattern || morphology.lemma_pattern || entry.lemma_pattern || null);
     const diminutiveBasePatternHint = singular(morphology.form_masc_pattern || morphology.form_fem_pattern || morphology.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null);
@@ -917,44 +1149,40 @@ function AdjectiveMorphologySection({
             : attestedElativePattern
     );
 
-    const buildRows = (variant: NounGenderVariant): Array<{ label: string; secondaryLabel?: React.ReactNode; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string | null }> => {
+    const buildRows = (variant: NounGenderVariant): AdjectiveParadigmDataRow[] => {
         const baseForm = explicitVariantForms[variant] || explicitVariantForms[primaryVariant] || singular(entry.headword);
         const elativeForm = variant === 'masculine' ? elative?.masculine : elative?.feminine;
 
         return [
             {
                 label: term('tag-term') || 'Term',
-                secondaryLabel: term('pattern') || 'Pattern',
-                value: baseForm,
-                pattern: basePattern(variant),
-            },
-            {
-                label: term('dual') || 'Dual',
-                value: (() => {
-                    return getDualSurfaceForVariant(
-                        baseForm,
-                        pluralHint,
-                        variant,
-                        primaryVariant,
-                        hasOppositeGender,
-                        explicitVariantForms.masculine,
-                        singular(entry.dual_form || null),
-                    );
-                })(),
-                theoretical: !(variant === primaryVariant && !!singular(entry.dual_form || null)),
-                pattern: getDualPatternForVariant(baseForm, pluralHint, variant, primaryVariant, dualPattern, singular(entry.dual_form || null)),
-            },
-            {
-                label: term('plural') || 'Plural',
-                value: singular(morphology.plural),
-                pattern: pluralPattern,
-            },
-            {
-                label: term('elative') || 'Elative',
-                value: elativeForm,
-                show: !!elativeForm,
-                theoretical: isTheoreticalElative,
-                pattern: getElativePattern(variant),
+                singular: {
+                    value: baseForm,
+                    pattern: basePattern(variant),
+                },
+                dual: {
+                    value: (() => {
+                        return getDualSurfaceForVariant(
+                            baseForm,
+                            pluralHint,
+                            variant,
+                            primaryVariant,
+                            hasOppositeGender,
+                            explicitVariantForms.masculine,
+                            singular(entry.dual_form || null),
+                        );
+                    })(),
+                    theoretical: !(variant === primaryVariant && !!singular(entry.dual_form || null)),
+                    pattern: getDualPatternForVariant(baseForm, pluralHint, variant, primaryVariant, dualPattern, singular(entry.dual_form || null)),
+                },
+                plural: {
+                    ...buildStackedCell(morphology.plural || null, pluralPattern),
+                },
+                elative: {
+                    value: elativeForm,
+                    theoretical: isTheoreticalElative,
+                    pattern: getElativePattern(variant),
+                },
             },
         ];
     };
@@ -963,7 +1191,7 @@ function AdjectiveMorphologySection({
         rowsForTable: DiminutiveDisplayRow[],
         variant: NounGenderVariant,
         allRows: DiminutiveDisplayRow[],
-    ): Array<{ label: string; secondaryLabel?: React.ReactNode; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string | null }> => {
+    ): AdjectiveParadigmDataRow[] => {
         if (rowsForTable.length === 0) return [];
         const primaryRow = rowsForTable[0];
         const feminineRow = allRows.find((row) => row.gender === 'feminine') || rowsForTable.find((row) => row.gender === 'feminine') || primaryRow;
@@ -979,30 +1207,40 @@ function AdjectiveMorphologySection({
         const primaryPattern = primaryRow.pattern || diminutiveBasePattern || null;
         return [{
             label: term('tag-term') || 'Term',
-            secondaryLabel: term('pattern') || 'Pattern',
-            value: singularValue,
-            pattern: primaryPattern,
-            theoretical: !!primaryRow.theoretical,
-        }, {
-            label: term('dual') || 'Dual',
-            value: variant === 'feminine'
-                ? generateFeminineDiminutiveDual(primaryRow.form)
-                : generateTheoreticalDual(prepareDiminutiveStemForAttachment(primaryRow.form), pluralHint),
-            pattern: singular(morphology.dual_pattern || entry.dual_pattern || null) || getTheoreticalDualPattern(primaryRow.form, pluralHint, variant === 'feminine'),
-            theoretical: true,
-        }, {
-            label: term('plural') || 'Plural',
-            value: variant === 'feminine'
-                ? buildFeminineDiminutivePlural(feminineRow.form)
-                : buildDiminutivePlural(primaryRow.form),
-            pattern: variant === 'feminine'
-                ? (buildFeminineDiminutivePlural(feminineRow.form).endsWith('at') ? '-at' : '-iet')
-                : '-in',
-            theoretical: true,
+            singular: {
+                value: singularValue,
+                pattern: primaryPattern,
+                theoretical: !!primaryRow.theoretical,
+                stacked: rowsForTable.length > 1 ? rowsForTable.map((row) => ({
+                    value: row.form,
+                    pattern: row.pattern || primaryPattern,
+                    theoretical: !!row.theoretical,
+                })) : undefined,
+            },
+            dual: {
+                value: variant === 'feminine'
+                    ? generateFeminineDiminutiveDual(primaryRow.form)
+                    : generateTheoreticalDual(prepareDiminutiveStemForAttachment(primaryRow.form), pluralHint),
+                pattern: singular(morphology.dual_pattern || entry.dual_pattern || null) || getTheoreticalDualPattern(primaryRow.form, pluralHint, variant === 'feminine'),
+                theoretical: true,
+            },
+            plural: {
+                value: variant === 'feminine'
+                    ? buildFeminineDiminutivePlural(feminineRow.form)
+                    : buildDiminutivePlural(primaryRow.form),
+                pattern: variant === 'feminine'
+                    ? (buildFeminineDiminutivePlural(feminineRow.form).endsWith('at') ? '-at' : '-iet')
+                    : '-in',
+                theoretical: true,
+            },
+            elative: {
+                value: null,
+                pattern: null,
+            },
         }];
     };
 
-    const combinedRows: Array<SectionRow | { label: string; secondaryLabel?: React.ReactNode; value: React.ReactNode; show?: boolean; theoretical?: boolean; extra?: React.ReactNode; pattern?: string | null }> = [];
+    const combinedRows: Array<SectionRow | AdjectiveParadigmDataRow> = [];
     variantOrder.forEach((variant) => {
         combinedRows.push(makeSectionRow(`adj-${variant}`, renderVariantLabel(variant), 0, true));
         combinedRows.push(...buildRows(variant));
@@ -1027,12 +1265,11 @@ function AdjectiveMorphologySection({
 
     return (
         <div className="flex flex-col space-y-12">
-            <MorphologyTable
+            <AdjectiveParadigmTable
                 title={morphologyTitle}
                 labelHeader={term('form') || 'Form'}
                 displayPattern={displayPattern}
                 rows={combinedRows}
-                hideHeaderLabel
             />
         </div>
     );
@@ -1443,17 +1680,16 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         return map;
     }, [getValues]);
 
-    const displayPattern = (pattern?: string) => {
-        if (!pattern) return '';
-        if (mode !== 'arabised') return pattern;
-        return cvWizenMap.get(pattern.toLowerCase().trim()) || pattern;
-    };
-
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
     const [initialFormData, setInitialFormData] = useState<any>(null);
 
     const isActualAdmin = isAdmin && adminViewEnabled;
+    const displayPattern = (pattern?: string) => {
+        if (!pattern) return '';
+        if (mode !== 'arabised') return pattern;
+        return cvWizenMap.get(pattern.toLowerCase().trim()) || pattern;
+    };
     const nm = entry.noun_morphology!;
     const ety = entry.etymologies?.[0];
 
@@ -1507,7 +1743,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const thirdRadical = rootConsonants?.split('-')?.[2] || rootConsonants?.[2] || '';
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
-    const patternValue = displayPattern(pattern?.cv_notation);
+    const patternValue = resolveDisplayedPattern(mode, cvWizenMap, pattern?.cv_notation, pattern?.wizen_notation);
 
     const POSSESSIVE_SUFFIX_KEYS = ['pos-1s', 'pos-2s', 'pos-3ms', 'pos-3fs', 'pos-1p', 'pos-2p', 'pos-3p'];
 
@@ -1541,7 +1777,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         const resolvedPluralForms = pluralInflectionRowsWithFallback.map(row => applySuffix(
             row.form,
             idx,
-            false,
+            isTheoretical,
             row.pattern || pluralPattern || soundPluralPattern || undefined,
         ));
 
@@ -1922,12 +2158,6 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         return map;
     }, [getValues]);
 
-    const displayPattern = (pattern?: string) => {
-        if (!pattern) return '';
-        if (mode !== 'arabised') return pattern;
-        return cvWizenMap.get(pattern.toLowerCase().trim()) || pattern;
-    };
-
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
     const [initialFormData, setInitialFormData] = useState<any>(null);
@@ -2095,7 +2325,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
-    const patternValue = displayPattern(pattern?.cv_notation);
+    const patternValue = resolveDisplayedPattern(mode, cvWizenMap, pattern?.cv_notation, pattern?.wizen_notation);
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -2959,7 +3189,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const pattern = entry.root_pattern_form?.pattern;
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
-    const patternValue = displayPattern((entry as any).cv_pattern || pattern?.cv_notation);
+    const patternValue = resolveDisplayedPattern(mode, cvWizenMap, (entry as any).cv_pattern || pattern?.cv_notation, pattern?.wizen_notation);
     const { entries: rootEntries } = useRootData(entry.root_pattern_form?.root?.id);
     const linkedNumeralEntries = useMemo(() => {
         const seen = new Set<string>();
@@ -3507,7 +3737,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
     const pattern = entry.root_pattern_form?.pattern;
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
-    const patternValue = displayPattern((entry as any).cv_pattern || pattern?.cv_notation);
+    const patternValue = resolveDisplayedPattern(mode, cvWizenMap, (entry as any).cv_pattern || pattern?.cv_notation, pattern?.wizen_notation);
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
         minHeight: '100vh',
@@ -3852,7 +4082,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     const pattern = entry.root_pattern_form?.pattern;
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
-    const patternValue = displayPattern((entry as any).cv_pattern || pattern?.cv_notation);
+    const patternValue = resolveDisplayedPattern(mode, cvWizenMap, (entry as any).cv_pattern || pattern?.cv_notation, pattern?.wizen_notation);
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -4133,6 +4363,23 @@ export function FunctionWordEntryView({
     const { getToken } = useClerkAuth();
     const isActualAdmin = isAdmin && adminViewEnabled;
 
+    const { getValues } = useAdminConfig();
+    const cvWizenMap = useMemo(() => {
+        const map = new Map<string, string>();
+        const categories = ['cv_wizen_pattern', 'plural_pattern', 'feminine_pattern', 'diminutive_pattern', 'adjective_pattern'];
+        categories.forEach(cat => {
+            const values = getValues(cat);
+            if (Array.isArray(values)) {
+                values.forEach(item => {
+                    const cv = item?.cv || item?.cv_notation;
+                    const wizen = item?.wizen || item?.wizen_notation;
+                    if (cv && wizen) map.set(cv.toLowerCase().trim(), wizen.trim());
+                });
+            }
+        });
+        return map;
+    }, [getValues]);
+
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
     const [initialFormData, setInitialFormData] = useState<any>(null);
@@ -4181,7 +4428,7 @@ export function FunctionWordEntryView({
         || entry.root_pattern_form?.root?.consonants
         || (entry as any).root_consonants;
     const pattern = entry.root_pattern_form?.pattern;
-    const patternValue = (entry as any).cv_pattern || pattern?.cv_notation;
+    const patternValue = resolveDisplayedPattern(mode, cvWizenMap, (entry as any).cv_pattern || pattern?.cv_notation, pattern?.wizen_notation);
 
     const displayStem = stemDisplayValue || '';
     const displayRoot = rootDisplayValue || rootConsonants;

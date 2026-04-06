@@ -179,8 +179,26 @@ export async function apiLookupRootByConsonants(consonants: string): Promise<any
 
 // ── Generic Dynamic Options ──────────────────────────────────────────────────
 
+const distinctValuesCache = new Map<'tags' | 'vowel_sets' | 'sources', Promise<string[]>>();
+
 export async function apiGetDistinctValues(type: 'tags' | 'vowel_sets' | 'sources'): Promise<string[]> {
-    return apiFetch(`/api/distinct?type=${type}`);
+    const cached = distinctValuesCache.get(type);
+    if (cached) return cached;
+
+    const request = apiFetch<string[]>(`/api/distinct?type=${type}`).catch((err) => {
+        distinctValuesCache.delete(type);
+        throw err;
+    });
+    distinctValuesCache.set(type, request);
+    return request;
+}
+
+export function invalidateDistinctValuesCache(type?: 'tags' | 'vowel_sets' | 'sources') {
+    if (type) {
+        distinctValuesCache.delete(type);
+        return;
+    }
+    distinctValuesCache.clear();
 }
 
 /** Legacy wrapper or convenience */

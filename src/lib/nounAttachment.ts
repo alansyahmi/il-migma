@@ -43,6 +43,41 @@ function deriveMasculineLongStem(base: string): string {
 }
 
 /**
+ * Returns true for the `-aj-` plural family used by `kotba`.
+ * This is the pattern class that yields forms like `kotbaji`.
+ */
+export function isAjPluralPattern(pattern?: string): boolean {
+    const normalized = String(pattern || '')
+        .trim()
+        .replace(/û/gi, 'u')
+        .replace(/ù/gi, 'u')
+        .replace(/î/gi, 'i')
+        .replace(/ì/gi, 'i')
+        .replace(/â/gi, 'a')
+        .replace(/à/gi, 'a')
+        .replace(/ê/gi, 'e')
+        .replace(/è/gi, 'e')
+        .replace(/ô/gi, 'o')
+        .replace(/ò/gi, 'o')
+        .toLowerCase();
+
+    return /^cocca$/.test(normalized);
+}
+
+/**
+ * Converts a `CoCCa`-style plural into the `-aj-` stem used for suffixes.
+ *
+ * This keeps broken plurals like `kotba` on the same attachment path as
+ * their regular plural attachment stem.
+ */
+export function deriveAjPluralStem(base: string): string {
+    const normalized = normalizeWord(base);
+    if (!normalized || normalized === '-') return normalized;
+
+    return `${normalized.slice(0, -1)}aj`;
+}
+
+/**
  * Returns a Type-1-style attachment stem for noun suffixes and duals.
  *
  * The result is intentionally conservative:

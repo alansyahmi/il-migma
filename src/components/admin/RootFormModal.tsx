@@ -1,14 +1,20 @@
-import { useState, useMemo } from 'react';
+import { lazy, Suspense, useState, useMemo } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Plus, Trash2, ArrowUp, ArrowDown, AlertCircle } from 'lucide-react';
 import { useAdminConfig } from '@/lib/adminConfig';
-import { RelationshipEditor } from './RelationshipEditor';
-import { EtymologyChainEditor } from './EtymologyChainEditor';
 import { adminCreateRoot, adminUpdateRoot } from '@/lib/api';
 import { normalizeRootEtymologyChain, normalizeRootGloss, normalizeRootRelationships, type RootFormData } from '@/lib/adminUtils';
 import { buildRootPayload, ROOT_HANDLED_FIELDS } from '@/lib/adminSchema';
+
+const LazyRelationshipEditor = lazy(() =>
+    import('./RelationshipEditor').then(module => ({ default: module.RelationshipEditor }))
+);
+
+const LazyEtymologyChainEditor = lazy(() =>
+    import('./EtymologyChainEditor').then(module => ({ default: module.EtymologyChainEditor }))
+);
 
 interface RootFormModalProps {
     data: any; // Raw data from DB (can be stringified JSONs) or RootFormData
@@ -320,63 +326,71 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                         </div>
                     </div>
 
-                    <EtymologyChainEditor
-                        title={t('Etymology', 'Etimoloġija')}
-                        items={form.etymology}
-                        onChange={(items) => setForm(prev => ({ ...prev, etymology: items }))}
-                        showPronunciation={false}
-                        relationshipOptions={RELATIONSHIP_OPTIONS}
-                        sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
-                        defaultRelationship="From"
-                        addLabel={t('Add Step', 'Żid Pass')}
-                        relationshipLabel={t('Relationship', 'Relazzjoni')}
-                        languageLabel={t('Language', 'Lingwa')}
-                        termLabel={t('Term', 'Kelma')}
-                        pronunciationLabel={t('Pronunciation', 'Pronunzja')}
-                        definitionLabel={t('Definition', 'Tifsira')}
-                        labelClassName={label}
-                        inputClassName={inp}
-                        selectClassName={sel}
-                    />
+                    <Suspense
+                        fallback={(
+                            <div className="rounded-xl border border-border-light bg-slate-50 p-4 text-xs text-black/40">
+                                {t('Loading editors…', 'Qed jitgħabbu l-editors…')}
+                            </div>
+                        )}
+                    >
+                        <LazyEtymologyChainEditor
+                            title={t('Etymology', 'Etimoloġija')}
+                            items={form.etymology}
+                            onChange={(items) => setForm(prev => ({ ...prev, etymology: items }))}
+                            showPronunciation={false}
+                            relationshipOptions={RELATIONSHIP_OPTIONS}
+                            sourceLanguageOptions={SOURCE_LANGUAGE_OPTIONS}
+                            defaultRelationship="From"
+                            addLabel={t('Add Step', 'Żid Pass')}
+                            relationshipLabel={t('Relationship', 'Relazzjoni')}
+                            languageLabel={t('Language', 'Lingwa')}
+                            termLabel={t('Term', 'Kelma')}
+                            pronunciationLabel={t('Pronunciation', 'Pronunzja')}
+                            definitionLabel={t('Definition', 'Tifsira')}
+                            labelClassName={label}
+                            inputClassName={inp}
+                            selectClassName={sel}
+                        />
 
-                    {/* Relationships (Thesaurus & Derived Terms) */}
-                    <div className="space-y-6">
-                        <RelationshipEditor
-                            type="derived"
-                            title={t('Derived Terms', 'Termini Derivati')}
-                            items={form.related_entries || []}
-                            onChange={(items: any[]) => setRelationship('related_entries', items)}
-                            extraActions={[
-                                {
-                                    label: t('New Entry', 'Entrata Ġdida'),
-                                    icon: <Plus size={12} />,
-                                    onClick: () => {
-                                        window.open('/admin?new=entry', '_blank');
+                        {/* Relationships (Thesaurus & Derived Terms) */}
+                        <div className="space-y-6">
+                            <LazyRelationshipEditor
+                                type="derived"
+                                title={t('Derived Terms', 'Termini Derivati')}
+                                items={form.related_entries || []}
+                                onChange={(items: any[]) => setRelationship('related_entries', items)}
+                                extraActions={[
+                                    {
+                                        label: t('New Entry', 'Entrata Ġdida'),
+                                        icon: <Plus size={12} />,
+                                        onClick: () => {
+                                            window.open('/admin?new=entry', '_blank');
+                                        }
                                     }
-                                }
-                            ]}
-                        />
-                        <RelationshipEditor
-                            type="thesaurus"
-                            lookupType="root"
-                            title={t('Synonyms', 'Sinonimi')}
-                            items={form.synonyms || []}
-                            onChange={(items: any[]) => setRelationship('synonyms', items)}
-                            extraActions={[
-                                { label: t('New Root', 'Għerq Ġdid'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=root', '_blank') }
-                            ]}
-                        />
-                        <RelationshipEditor
-                            type="thesaurus"
-                            lookupType="root"
-                            title={t('Antonyms', 'Antonimi')}
-                            items={form.antonyms || []}
-                            onChange={(items: any[]) => setRelationship('antonyms', items)}
-                            extraActions={[
-                                { label: t('New Root', 'Għerq Ġdid'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=root', '_blank') }
-                            ]}
-                        />
-                    </div>
+                                ]}
+                            />
+                            <LazyRelationshipEditor
+                                type="thesaurus"
+                                lookupType="root"
+                                title={t('Synonyms', 'Sinonimi')}
+                                items={form.synonyms || []}
+                                onChange={(items: any[]) => setRelationship('synonyms', items)}
+                                extraActions={[
+                                    { label: t('New Root', 'Għerq Ġdid'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=root', '_blank') }
+                                ]}
+                            />
+                            <LazyRelationshipEditor
+                                type="thesaurus"
+                                lookupType="root"
+                                title={t('Antonyms', 'Antonimi')}
+                                items={form.antonyms || []}
+                                onChange={(items: any[]) => setRelationship('antonyms', items)}
+                                extraActions={[
+                                    { label: t('New Root', 'Għerq Ġdid'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=root', '_blank') }
+                                ]}
+                            />
+                        </div>
+                    </Suspense>
 
                     {/* Source */}
                     <div className="space-y-4">

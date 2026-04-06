@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, Fragment } from 'react';
+import { lazy, Suspense, useState, useMemo, useEffect, Fragment } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -9,7 +9,6 @@ import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { RootFormModal } from '@/components/admin/RootFormModal';
 import { type RootFormData } from '@/lib/adminUtils';
-import { RelationshipEditor } from '@/components/admin/RelationshipEditor';
 import { adminUpdateRoot, adminDeleteEntry } from '@/lib/api';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
@@ -20,6 +19,10 @@ import { isHiddenTag, resolveTagLabel } from '@/lib/tagLabel';
 import { EntryShell, type EntryViewModel, EtymologySentence, SideCard } from '@/components/dictionary/EntryShell';
 import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymology';
 import { VerbFormsTable } from '@/components/dictionary/VerbFormsTable';
+
+const LazyRelationshipEditor = lazy(() =>
+    import('@/components/admin/RelationshipEditor').then(module => ({ default: module.RelationshipEditor }))
+);
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const BLUE = '#1034A6';
@@ -757,12 +760,19 @@ export function Root() {
                     </div>
                 </div>
 
-            {activeRelEdit && (
-                <Modal
-                    open
-                    onClose={() => setActiveRelEdit(null)}
-                    title={activeRelEdit === 'derived' ? term('manage-derived') : term('manage-thesaurus')}
-                    size="lg"
+        {activeRelEdit && (
+            <Modal
+                open
+                onClose={() => setActiveRelEdit(null)}
+                title={activeRelEdit === 'derived' ? term('manage-derived') : term('manage-thesaurus')}
+                size="lg"
+            >
+                <Suspense
+                    fallback={(
+                        <div className="space-y-5 overflow-y-auto flex-1 rounded-xl border border-border-light bg-slate-50 p-4 text-xs text-black/40">
+                            Loading relationship editor…
+                        </div>
+                    )}
                 >
                     <div className="space-y-5 overflow-y-auto flex-1">
                         <p className="text-xs text-black/40 leading-relaxed -mt-2">
@@ -773,7 +783,7 @@ export function Root() {
                         </p>
 
                         {activeRelEdit === 'derived' ? (
-                            <RelationshipEditor
+                            <LazyRelationshipEditor
                                 type="derived"
                                 title={term('derived-terms')}
                                 items={relForm.related_entries}
@@ -792,7 +802,7 @@ export function Root() {
                             />
                         ) : (
                             <div className="space-y-6">
-                                <RelationshipEditor
+                                <LazyRelationshipEditor
                                     type="thesaurus"
                                     lookupType="root"
                                     title={term('sinonimi')}
@@ -806,7 +816,7 @@ export function Root() {
                                         }
                                     ]}
                                 />
-                                <RelationshipEditor
+                                <LazyRelationshipEditor
                                     type="thesaurus"
                                     lookupType="root"
                                     title={term('antonimi')}
@@ -823,6 +833,7 @@ export function Root() {
                             </div>
                         )}
                     </div>
+                </Suspense>
 
                     <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-black/8 shrink-0">
                         <button
