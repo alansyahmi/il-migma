@@ -4,6 +4,8 @@
  * Linguistic engine for Standard Maltese phonology, orthography, and morphology.
  */
 
+import { prepareSuffixAttachmentStem } from './nounAttachment.ts';
+
 // ── CONSTANTS ──────────────────────────────────────────────────────────────
 
 const VOWELS = ['a', 'e', 'i', 'o', 'u', 'à', 'è', 'ì', 'ò', 'ù', 'â', 'ê', 'î', 'ô', 'û'];
@@ -308,7 +310,7 @@ export function deriveFeminineFromPattern(_cvPattern: string, headword: string):
 
     // 1. Handle jj/ww degemination + syncopation (tfajjel -> tfajla)
     if (word.includes('jj') || word.includes('ww')) {
-        let base = word.replace('jj', 'j').replace('ww', 'w');
+        const base = word.replace('jj', 'j').replace('ww', 'w');
         // If it ends in VC, drop the V (syncopation)
         if (v.includes(base[base.length - 2])) {
             return base.substring(0, base.length - 2) + base.substring(base.length - 1) + 'a';
@@ -416,26 +418,8 @@ export function detectPluralType(headword: string, _soundSuffixes: string[]): Pl
 export function generateTheoreticalDual(word: string, pluralHint?: string | null): string {
     if (!word) return '';
     const norm = word.toLowerCase().trim().normalize('NFC');
-
-    const vowelRe = /[aeiouàèìòùâêîôû]/gi;
-    let stem = norm;
-
-    if (stem.endsWith('a')) {
-        stem = stem.slice(0, -1);
-    }
-
-    const ieCollapsedStem = collapseIeForFeminineDual(stem, pluralHint);
-    if (ieCollapsedStem !== stem) {
-        stem = ieCollapsedStem;
-    } else {
-        // Syncopate the final vowel in multi-vowel stems.
-        // This is intentionally conservative: words like "dar" stay untouched,
-        // while words like "għomor" and "xahar" reduce to their dual stem.
-        const vowelCount = stem.match(vowelRe)?.length ?? 0;
-        if (vowelCount >= 2) {
-            stem = stem.replace(/([aeiouàèìòùâêîôû])([^aeiouàèìòùâêîôû]+)$/i, '$2');
-        }
-    }
+    void pluralHint;
+    const stem = prepareSuffixAttachmentStem(norm);
 
     // Check for guttural ending (għ, ħ, q, h) after stem reduction.
     const isGuttural = stem.endsWith('għ') || stem.endsWith('ħ') || stem.endsWith('q') || stem.endsWith('h');
@@ -473,24 +457,6 @@ export function generateFeminineDualFromMasculineWithHint(word: string, pluralHi
     if (!word) return '';
     const normalized = word.toLowerCase().trim().normalize('NFC');
     return `${collapseIeForFeminineDual(normalized, pluralHint)}tejn`;
-}
-
-export function prepareSuffixAttachmentStem(word: string): string {
-    const simplified = String(word || '').replace(/jj/g, 'j').replace(/ww/g, 'w');
-    const vowelRe = /[aeiouàèìòùâêîôû]/gi;
-    let stem = simplified;
-
-    const vowelCount = stem.match(vowelRe)?.length ?? 0;
-    if (vowelCount >= 2) {
-        const shortenedIe = stem.replace(/ie([^aeiouàèìòùâêîôû]*)$/i, 'i$1');
-        if (shortenedIe !== stem) {
-            stem = shortenedIe;
-        } else {
-            stem = stem.replace(/([aeiouàèìòùâêîôû])([^aeiouàèìòùâêîôû]+)$/i, '$2');
-        }
-    }
-
-    return stem;
 }
 
 function parseRootConsonants(rootConsonants?: string | null): string[] {
@@ -547,6 +513,30 @@ function buildCacvcDiminutiveForms(roots: string[]) {
     };
 }
 
+function buildGenericDiminutiveForm(roots: string[], gender: DiminutiveVariant): DiminutiveAutoForm | null {
+    if (roots.length < 3) return null;
+
+    const [c1, c2, c3] = roots;
+    const ghv = ['għ'].includes(c1) ? 'e' : '';
+    const v = ['għ', 'ħ', 'q', 'h'].includes(c2) || ['għ', 'ħ', 'q', 'h'].includes(c3) ? 'a' : 'e';
+    const masculineForm = `${c1}${ghv}${c2}${v}jj${v}${c3}`;
+
+    if (gender === 'feminine') {
+        const feminineForm = deriveFeminineFromPattern('', masculineForm) || masculineForm;
+        return {
+            form: feminineForm,
+            pattern: 'CCvjjva',
+            theoretical: true,
+        };
+    }
+
+    return {
+        form: masculineForm,
+        pattern: 'CCvjjvC',
+        theoretical: true,
+    };
+}
+
 function hasGuttural(word: string): boolean {
     return /għ|ħ|q|h/i.test(word);
 }
@@ -562,6 +552,16 @@ export function generateFeminineDiminutiveSoundPlural(word: string): string {
     const stem = attachmentStem.replace(/a$/i, '');
     const suffix = hasGuttural(stem) ? 'at' : 'iet';
     return `${stem}${suffix}`;
+}
+
+/**
+ * Feminine diminutive duals attach -tejn to the diminished feminine stem.
+ * This keeps forms like darba -> darbtejn and fgħajla -> fgħajltejn.
+ */
+export function generateFeminineDiminutiveDual(word: string): string {
+    if (!word) return '';
+    const attachmentStem = prepareSuffixAttachmentStem(word);
+    return `${attachmentStem.replace(/a$/i, '')}tejn`;
 }
 
 export type DiminutiveAutoForm = {
@@ -610,14 +610,7 @@ export function generateDiminutiveForm(
     }
 
     if (roots.length >= 3) {
-        const [c1, c2, c3] = roots;
-        const ghv = ['għ'].includes(c1) ? 'e' : '';
-        const v = ['għ', 'ħ', 'q', 'h'].includes(c2) || ['għ', 'ħ', 'q', 'h'].includes(c3) ? 'a' : 'e';
-        return {
-            form: `${c1}${ghv}${c2}${v}jj${v}${c3}`,
-            pattern: 'CCvjjvC',
-            theoretical: true,
-        };
+        return buildGenericDiminutiveForm(roots, options.gender || 'masculine');
     }
 
     if (word) {
@@ -691,11 +684,17 @@ export interface NumeralAutoForms {
     attributive_long?: string;
 }
 
+const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
+    // `wieħed` is suppletive: its ordinal is `ewwel`, not a regular root-derived form.
+    'wieħed': { ordinal: 'ewwel' },
+};
+
 /**
  * Generates theoretical numeral-derived forms based on Semitic patterns.
  */
 export function generateNumeralForms(masculine: string, root_consonants: string): NumeralAutoForms {
     if (!masculine || !root_consonants) return {};
+    const normalizedMasculine = masculine.toLowerCase().normalize('NFC');
     const roots = root_consonants.toLowerCase().replace(/[-.,\s]+/g, '-').split('-').filter(Boolean);
     if (roots.length < 3) return {};
 
@@ -711,6 +710,10 @@ export function generateNumeralForms(masculine: string, root_consonants: string)
     if (c3 === 'għ' || c3 === 'ħ' || c3 === 'q') {
         forms.ordinal = `${c1}â${c2}a${c3}`; // Guttural adjustment
     }
+    const suppletiveForms = SUPPLETIVE_NUMERAL_FORMS[normalizedMasculine];
+    if (suppletiveForms?.ordinal) {
+        forms.ordinal = suppletiveForms.ordinal;
+    }
 
     // 2. Adverbial: masc form + darbiet
     forms.adverbial = `${masculine} darbiet`;
@@ -721,9 +724,9 @@ export function generateNumeralForms(masculine: string, root_consonants: string)
         forms.fractional_semitic = `${c1}o${c2}u'`; // e.g. robu'
     }
 
-    // 4. Multiplier: CCieCi or passive ptcp of Form II (mCeCCet)
+    // 4. Multiplier: CCieCi or passive ptcp of Form II (mCeCCeC)
     forms.multiplier_form1 = `${c1}${c2}ie${c3}i`;
-    forms.multiplier_form2 = `m${c1}e${c2}${c3}${c3}et`; // simplified Form II passive ptcp logic
+    forms.multiplier_form2 = `m${c1}e${c2}${c2}e${c3}`; // simplified Form II passive ptcp logic
     if (c3 === 'għ') forms.multiplier_form2 = `m${c1}e${c2}${c2}a'`; // e.g. mrabba'
 
     // 5. Distributive: CCieC

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
 import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
+import { isInflectionDisabled } from '@/lib/inflectionState';
 import { isHiddenTag } from '@/lib/tagLabel';
 import { generateDiminutiveForm } from '@/lib/maltesePhonology';
 
@@ -14,7 +15,7 @@ interface MorphologyGridProps {
 
 export function MorphologyGrid({ entry }: MorphologyGridProps) {
     const { term } = useLinguisticMode();
-    const isTheoretical = entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
+    const isTheoretical = isInflectionDisabled(entry) || entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
         entry.verb_morphology?.root_tags?.includes('THEORETICAL') ||
         entry.headword.startsWith('*');
     const isElativeDisabled = entry.tags?.some(tag => tag && (tag.includes('$') || isHiddenTag(tag)));
@@ -25,12 +26,15 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
         const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants || null;
         const diminutivePatternHint = m.diminutive_pattern || entry.diminutive_pattern || null;
         const diminutiveBasePatternHint = m.form_masc_pattern || m.form_fem_pattern || m.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null;
-        const generatedDiminutiveRows = diminutiveRows.length > 0
-            ? []
-            : [
-                generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: 'masculine' }),
-                generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: 'feminine' }),
-            ].filter(Boolean) as Array<NonNullable<ReturnType<typeof generateDiminutiveForm>>>;
+        const diminutiveGender = entry.gender?.toLowerCase() === 'feminine' ? 'feminine' : 'masculine';
+        const paucal = m.paucal || (entry as any).paucal_form || null;
+        const paucalPattern = m.paucal_pattern || (entry as any).paucal_pattern || null;
+        const augmentative = m.augmentative || (entry as any).augmentative_form || null;
+        const augmentativePattern = m.augmentative_pattern || (entry as any).augmentative_pattern || null;
+        const generatedDiminutive = diminutiveRows.length > 0
+            ? null
+            : generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: diminutiveGender });
+        const generatedDiminutiveRows = generatedDiminutive ? [generatedDiminutive] : [];
         const diminutive = diminutiveRows[0]?.form || m.diminutive || entry.diminutive_form || generatedDiminutiveRows[0]?.form || null;
         const diminutivePattern = diminutiveRows[0]?.pattern || m.diminutive_pattern || entry.diminutive_pattern || generatedDiminutiveRows[0]?.pattern || null;
         const pluralRows = compactPluralRows(normalizePluralFormRows(
@@ -65,6 +69,8 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     />
                     {m.sound_plural && <Cell label={term('regular-plural')} value={m.sound_plural} />}
                     {m.dual && <Cell label={term('dual')} value={m.dual} />}
+                    {paucal && <Cell label={term('paucal')} value={<div className="leading-tight"><div>{paucal}</div>{paucalPattern && <div className="text-[11px] text-black/40 font-sans">{paucalPattern}</div>}</div>} />}
+                    {augmentative && <Cell label={term('augmentative')} value={<div className="leading-tight"><div>{augmentative}</div>{augmentativePattern && <div className="text-[11px] text-black/40 font-sans">{augmentativePattern}</div>}</div>} />}
                     {m.collective && <Cell label={term('collective')} value={m.collective} />}
                     {m.singulative && <Cell label={term('singulative')} value={m.singulative} />}
                     <Cell
@@ -139,12 +145,11 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
         const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants || null;
         const diminutivePatternHint = m.diminutive_pattern || entry.diminutive_pattern || null;
         const diminutiveBasePatternHint = m.form_masc_pattern || m.form_fem_pattern || m.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null;
-        const generatedDiminutiveRows = diminutiveRows.length > 0
-            ? []
-            : [
-                generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: 'masculine' }),
-                generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: 'feminine' }),
-            ].filter(Boolean) as Array<NonNullable<ReturnType<typeof generateDiminutiveForm>>>;
+        const diminutiveGender = entry.gender?.toLowerCase() === 'feminine' ? 'feminine' : 'masculine';
+        const generatedDiminutive = diminutiveRows.length > 0
+            ? null
+            : generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: diminutiveGender });
+        const generatedDiminutiveRows = generatedDiminutive ? [generatedDiminutive] : [];
         const diminutive = diminutiveRows[0]?.form || entry.diminutive_form || generatedDiminutiveRows[0]?.form || null;
         const diminutivePattern = diminutiveRows[0]?.pattern || m.diminutive_pattern || entry.diminutive_pattern || generatedDiminutiveRows[0]?.pattern || null;
         return (

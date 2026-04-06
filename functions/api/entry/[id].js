@@ -228,25 +228,64 @@ export async function onRequestGet({ params, env }) {
         // ── Enrich Relationship Helpers ──────────────────────────────────────────
         async function enrichRelationships(relArray) {
             if (!relArray || !relArray.length) return [];
-            const idsToEnrich = relArray
-                .filter(r => !r.gloss_en && !r.gloss_mt)
-                .map(r => r.id);
+            const idsToEnrich = [...new Set(
+                relArray
+                    .map(r => r.id)
+                    .filter(Boolean)
+            )];
             if (idsToEnrich.length === 0) return relArray;
 
             const res = await db.execute({
-                sql: `SELECT entry_id, text_en, text_mt FROM definitions WHERE entry_id IN (${idsToEnrich.map(() => '?').join(',')}) AND sense_number = 1`,
+                sql: `SELECT
+                        e.id,
+                        e.headword,
+                        e.pos,
+                        e.cv_pattern,
+                        e.lemma_pattern,
+                        e.form_masc_pattern,
+                        e.form_fem_pattern,
+                        e.form_plural_pattern,
+                        e.morph_pattern,
+                        e.root_consonants,
+                        entry_defs.text_en,
+                        entry_defs.text_mt
+                      FROM entries e
+                      LEFT JOIN definitions entry_defs
+                        ON entry_defs.entry_id = e.id AND entry_defs.sense_number = 1
+                      WHERE e.id IN (${idsToEnrich.map(() => '?').join(',')})`,
                 args: idsToEnrich,
             });
 
-            const defMap = {};
+            const entryMap = {};
             res.rows.forEach(r => {
-                defMap[r.entry_id] = { en: firstSenseText(r.text_en), mt: firstSenseText(r.text_mt) };
+                entryMap[r.id] = {
+                    en: firstSenseText(r.text_en),
+                    mt: firstSenseText(r.text_mt),
+                    cv_pattern: r.cv_pattern || null,
+                    lemma_pattern: r.lemma_pattern || null,
+                    form_masc_pattern: r.form_masc_pattern || null,
+                    form_fem_pattern: r.form_fem_pattern || null,
+                    form_plural_pattern: r.form_plural_pattern || null,
+                    morph_pattern: r.morph_pattern || null,
+                    root_consonants: r.root_consonants || null,
+                    headword: r.headword || null,
+                    pos: r.pos || null,
+                };
             });
 
             return relArray.map(r => ({
                 ...r,
-                gloss_en: r.gloss_en || defMap[r.id]?.en || '',
-                gloss_mt: r.gloss_mt || defMap[r.id]?.mt || '',
+                cv_pattern: r.cv_pattern || entryMap[r.id]?.cv_pattern || null,
+                lemma_pattern: r.lemma_pattern || entryMap[r.id]?.lemma_pattern || null,
+                form_masc_pattern: r.form_masc_pattern || entryMap[r.id]?.form_masc_pattern || null,
+                form_fem_pattern: r.form_fem_pattern || entryMap[r.id]?.form_fem_pattern || null,
+                form_plural_pattern: r.form_plural_pattern || entryMap[r.id]?.form_plural_pattern || null,
+                morph_pattern: r.morph_pattern || entryMap[r.id]?.morph_pattern || null,
+                root_consonants: r.root_consonants || entryMap[r.id]?.root_consonants || null,
+                headword: r.headword || entryMap[r.id]?.headword || '',
+                pos: r.pos || entryMap[r.id]?.pos || '',
+                gloss_en: r.gloss_en || entryMap[r.id]?.en || '',
+                gloss_mt: r.gloss_mt || entryMap[r.id]?.mt || '',
             }));
         }
 
@@ -313,6 +352,8 @@ export async function onRequestGet({ params, env }) {
                 sound_plural: entry.sound_suffix || null,
                 dual: entry.dual_form || null,
                 diminutive: primaryDiminutive?.form || entry.diminutive_form || null,
+                paucal: entry.paucal_form || null,
+                augmentative: entry.augmentative_form || null,
                 diminutives,
                 collective: isSing ? entry.form_fem : null,
                 singulative: isColl ? entry.form_fem : null,
@@ -327,6 +368,8 @@ export async function onRequestGet({ params, env }) {
                 alternative_forms: payload.alternative_forms,
                 source_citation: entry.source_citation || null,
                 morph_pattern: entry.morph_pattern || null,
+                paucal_pattern: entry.paucal_pattern || null,
+                augmentative_pattern: entry.augmentative_pattern || null,
                 diminutive_pattern: primaryDiminutive?.pattern || entry.diminutive_pattern || null,
             };
         }

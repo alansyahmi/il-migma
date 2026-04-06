@@ -13,17 +13,17 @@ import type { WeakClass } from '@/types';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { RelationshipEditor } from './RelationshipEditor';
 import { EtymologyChainEditor } from './EtymologyChainEditor';
-import { entryToForm, formToPayload, INITIAL_FORM_STATE } from '@/lib/entryAdapter';
+import { buildLoadedEntryPatch, entryToForm, formToPayload, INITIAL_FORM_STATE } from '@/lib/entryAdapter';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
 import {
     generateIPA, deriveFeminineFromPattern, deriveMasculineFromFeminine,
-    detectPluralType, derivePattern, extractLongVowelFromPattern,
-    generateNumeralForms
+    detectPluralType, derivePattern, extractLongVowelFromPattern
 } from '@/lib/maltesePhonology';
-import { resolveEntryGender } from '@/lib/gender';
+import { buildNumeralAutoForms, seedNumeralDerivedFields } from '@/lib/numeralMorphology';
 import { normalizeEntryDefinitions, normalizeRootEtymologyChain } from '@/lib/adminUtils';
-import { ENTRY_HANDLED_FIELDS, resolveEntryMorphologyMode } from '@/lib/adminSchema';
+import { resolveEntryMorphologyMode } from '@/lib/adminSchema';
+import { applyInflectableToggle } from '@/lib/inflectionState';
 import { resolveTagLabel } from '@/lib/tagLabel';
 import {
     compactPluralRows,
@@ -32,7 +32,14 @@ import {
     pluralRowsToLegacyPatternString,
     type PluralFormRow,
 } from '@/lib/pluralForms';
-import { buildPatternOptions, getPatternNotation, type PatternOption, type PatternSourceItem } from '@/lib/patternBuckets';
+import {
+    buildPatternOptions,
+    getPatternNotation,
+    mergePatternBucketApplicabilities,
+    type PatternOption,
+    type PatternSourceItem,
+} from '@/lib/patternBuckets';
+import { buildSuggestedEntryId } from '@/lib/entryId';
 
 export interface AdminEntry {
     id: string;
@@ -92,6 +99,7 @@ interface MorphologyProps {
         participle_type?: { label: string; value: string }[];
         participle_nuance?: { label: string; value: string }[];
         participle_gender?: { label: string; value: string }[];
+        numeral_type?: { label: string; value: string }[];
         broken_patterns?: any[];
         cv_wizen_patterns?: any[];
         sound_suffixes?: string[];
@@ -618,6 +626,41 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
             />
 
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+                <div className={styles.grid}>
+                    <div>
+                        <label className={styles.label}>{t('Paucal Form', 'Forma Pawkali')}</label>
+                        <input className={styles.inp} value={form.paucal_form || ''} onChange={e => set('paucal_form', e.target.value)} placeholder="e.g. ..." />
+                    </div>
+                    <div>
+                        <label className={styles.label}>{t('Augmentative Form', 'Forma Tkabbir')}</label>
+                        <input className={styles.inp} value={form.augmentative_form || ''} onChange={e => set('augmentative_form', e.target.value)} placeholder="e.g. ..." />
+                    </div>
+                </div>
+                <div className={styles.grid}>
+                    <div>
+                        <PatternTagField
+                            label={t('Paucal Pattern', 'Mudell Pawkali')}
+                            value={form.paucal_pattern || ''}
+                            onChange={v => set('paucal_pattern', v)}
+                            placeholder="e.g. CVCVC"
+                            styles={styles}
+                            t={t}
+                        />
+                    </div>
+                    <div>
+                        <PatternTagField
+                            label={t('Augmentative Pattern', 'Mudell Tkabbir')}
+                            value={form.augmentative_pattern || ''}
+                            onChange={v => set('augmentative_pattern', v)}
+                            placeholder="e.g. CVCVCa"
+                            styles={styles}
+                            t={t}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
                 <div className="space-y-4">
                     <div>
                         <label className={styles.label}>{t('Diminutive', 'Diminuttiv')}</label>
@@ -1112,109 +1155,112 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
         };
 
         return (
-    <div className="space-y-4">
-        <div className="flex justify-end">
-            <button
-                type="button"
-                onClick={onApplyDerivedTerms}
-                className="text-[10px] text-blue-600 font-medium hover:underline flex items-center gap-1"
-            >
-                <RefreshCw size={10} />
-                {t('Suggest Numeral Forms', 'Iġġenera Forom tan-Numri')}
-            </button>
-        </div>
-        <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Gender', 'Ġens')}</label>
-                <select className={styles.sel} value={form.gender} onChange={e => set('gender', e.target.value)}>
-                    <option value="">{t('Select...', 'Agħżel...')}</option>
-                    {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
-                </select>
+        <div className="space-y-4">
+            <div className="flex justify-end">
+                <button
+                    type="button"
+                    onClick={onApplyDerivedTerms}
+                    className="text-[10px] text-blue-600 font-medium hover:underline flex items-center gap-1"
+                >
+                    <RefreshCw size={10} />
+                    {t('Suggest Numeral Forms', 'Iġġenera Forom tan-Numri')}
+                </button>
             </div>
-            {form.gender?.toLowerCase() === 'masculine' && (
-                <div className="space-y-4">
-                    <div>
-                        <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
-                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
-                    </div>
-                    <div>
-                        <PatternTagField
-                            label={t('Feminine Pattern', 'Mudell Fem.')}
-                            value={form.form_fem_pattern || ''}
-                            onChange={v => set('form_fem_pattern', v)}
-                            placeholder="e.g. CVCVCa"
-                            presets={options?.patterns}
-                            styles={styles}
-                            t={t}
-                        />
-                    </div>
-                </div>
-            )}
-            {form.gender?.toLowerCase() === 'feminine' && (
-                <div className="space-y-4">
-                    <div>
-                        <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
-                        <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
-                    </div>
-                    <div>
-                        <PatternTagField
-                            label={t('Masculine Pattern', 'Mudell Mask.')}
-                            value={form.form_masc_pattern || ''}
-                            onChange={v => set('form_masc_pattern', v)}
-                            placeholder="e.g. CVCVC"
-                            presets={options?.patterns}
-                            styles={styles}
-                            t={t}
-                        />
-                    </div>
-                </div>
-            )}
-        </div>
 
-        <VowelSetRow
-            form={form} set={set} t={t} styles={styles} onFocus={onFocus} insertChar={insertChar}
-            suggestions={suggestions}
-            fields={[
-                { key: 'vowel_set_sg', label: 'Vowel Set (Singular)', placeholder: 'e.g. i-a' },
-                { key: 'vowel_set_opp', label: 'Vowel Set (Opp. Gender)', placeholder: 'e.g. i-a' },
-                { key: 'vowel_set_dual', label: 'Vowel Set (Dual)', placeholder: 'e.g. i-e' },
-                { key: 'vowel_set_pl', label: 'Vowel Set (Plural)', placeholder: 'e.g. i-ie' }
-            ]}
-        />
-
-        <PluralFormsEditor
-            rows={pluralRows}
-            onChange={updatePluralRows}
-            t={t}
-            styles={styles}
-            pluralPatterns={options?.plural_patterns}
-        />
-
-        <div className={styles.grid}>
-            <div>
-                <label className={styles.label}>{t('Numeral Type', 'Tip ta\' Numeral')}</label>
-                <select className={styles.sel} value={form.numeral_type} onChange={e => set('numeral_type', e.target.value)}>
-                    <option value="">{t('Select...', 'Agħżel...')}</option>
-                    <option value="cardinal">{t('Cardinal', 'Kardinal')}</option>
-                    <option value="ordinal">{t('Ordinal', 'Ordinal')}</option>
-                    <option value="adverbial">{t('Adverbial', 'Adverbjali')}</option>
-                    <option value="fractional">{t('Fractional', 'Frazzjonali')}</option>
-                    <option value="multiplier">{t('Multiplier', 'Moltiplikattiv')}</option>
-                    <option value="distributive">{t('Distributive', 'Distributtiv')}</option>
-                </select>
-            </div>
-            <div className="space-y-4">
+            <div className={styles.grid}>
                 <div>
-                    <label className={styles.label}>{t('Short Attributive', 'Attributtiv Qasir')}</label>
-                    <input className={styles.inp} value={form.form_attributive_short || ''} onChange={e => set('form_attributive_short', e.target.value)} />
+                    <label className={styles.label}>{t('Gender', 'Ġens')}</label>
+                    <select className={styles.sel} value={form.gender} onChange={e => set('gender', e.target.value)}>
+                        <option value="">{t('Select...', 'Agħżel...')}</option>
+                        {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
+                    </select>
                 </div>
                 <div>
-                    <label className={styles.label}>{t('Long Attributive', 'Attributtiv Twil')}</label>
-                    <input className={styles.inp} value={form.form_attributive_long || ''} onChange={e => set('form_attributive_long', e.target.value)} />
+                    <label className={styles.label}>{t('Numeral Type', 'Tip ta\' Numeral')}</label>
+                    <select className={styles.sel} value={form.numeral_type} onChange={e => set('numeral_type', e.target.value)}>
+                        <option value="">{t('Select...', 'Agħżel...')}</option>
+                        {options?.numeral_type?.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    </select>
                 </div>
             </div>
+
+            <div className={styles.grid}>
+                <div>
+                    <label className={styles.label}>{t('Lemma Base', 'Lemma Bażi')}</label>
+                    <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
+                    <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
+                </div>
+            </div>
+
+            <div className={styles.grid}>
+                <div>
+                    <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
+                    <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                </div>
+                <div className="space-y-4">
+                    <div>
+                        <label className={styles.label}>{t('Short Attributive', 'Attributtiv Qasir')}</label>
+                        <input className={styles.inp} value={form.form_attributive_short || ''} onChange={e => set('form_attributive_short', e.target.value)} />
+                    </div>
+                    <div>
+                        <label className={styles.label}>{t('Long Attributive', 'Attributtiv Twil')}</label>
+                        <input className={styles.inp} value={form.form_attributive_long || ''} onChange={e => set('form_attributive_long', e.target.value)} />
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.grid}>
+                <div>
+                    <PatternTagField
+                        label={t('Masculine Pattern', 'Mudell Mask.')}
+                        value={form.form_masc_pattern || ''}
+                        onChange={v => set('form_masc_pattern', v)}
+                        placeholder="e.g. CVCVC"
+                        presets={options?.patterns}
+                        styles={styles}
+                        t={t}
+                    />
+                </div>
+                <div>
+                    <PatternTagField
+                        label={t('Feminine Pattern', 'Mudell Fem.')}
+                        value={form.form_fem_pattern || ''}
+                        onChange={v => set('form_fem_pattern', v)}
+                        placeholder="e.g. CVCVCa"
+                        presets={options?.patterns}
+                        styles={styles}
+                        t={t}
+                    />
+                </div>
+            </div>
+
+            <VowelSetRow
+                form={form}
+                set={set}
+                t={t}
+                styles={styles}
+                onFocus={onFocus}
+                insertChar={insertChar}
+                suggestions={suggestions}
+                fields={[
+                    { key: 'vowel_set_sg', label: 'Vowel Set (Singular)', placeholder: 'e.g. i-a' },
+                    { key: 'vowel_set_opp', label: 'Vowel Set (Opp. Gender)', placeholder: 'e.g. i-a' },
+                    { key: 'vowel_set_dual', label: 'Vowel Set (Dual)', placeholder: 'e.g. i-e' },
+                    { key: 'vowel_set_pl', label: 'Vowel Set (Plural)', placeholder: 'e.g. i-ie' }
+                ]}
+            />
+
+            <PluralFormsEditor
+                rows={pluralRows}
+                onChange={updatePluralRows}
+                t={t}
+                styles={styles}
+                pluralPatterns={options?.plural_patterns}
+            />
         </div>
-    </div>
         );
     })()
 );
@@ -1399,6 +1445,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const SOUND_SUFFIXES = getValues('sound_suffix');
     const VERB_PRESETS_LIST = getValues('verb_preset');
     const VERB_FORM_OPTIONS = getValues('verb_form');
+    const NUMERAL_TYPE_OPTIONS = useMemo(() => getOptions('numeral_type', mode, language), [getOptions, mode, language]);
     const CV_WIZEN_PATTERNS = getValues('cv_wizen_pattern') as PatternSourceItem[];
     const BROKEN_PATTERNS = getValues('broken_pattern') as PatternSourceItem[];
     const PLURAL_PATTERNS = getValues('plural_pattern') as PatternSourceItem[];
@@ -1411,19 +1458,19 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const VERB_TRANSITIVITY_OPTIONS = useMemo(() => getOptions('verb_transitivity', mode, language), [getOptions, mode, language]);
     const PARTICIPLE_TYPES = useMemo(() => getOptions('participle_type', mode, language), [getOptions, mode, language]);
 
-
-
     const nounPatterns = useMemo(() => (
         buildPatternOptions(BROKEN_PATTERNS, mode, {
             pos: 'noun',
-            roles: ['broken_plural'],
+            roles: ['masculine_singular'],
+            gender: 'masculine',
         })
     ), [BROKEN_PATTERNS, mode]);
 
     const adjPatterns = useMemo(() => (
         buildPatternOptions(BROKEN_PATTERNS, mode, {
             pos: 'adjective',
-            roles: ['broken_plural'],
+            roles: ['masculine_singular'],
+            gender: 'masculine',
         })
     ), [BROKEN_PATTERNS, mode]);
 
@@ -1490,6 +1537,27 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
     const [form, setForm] = useState(() => entryToForm(entry, initialForm));
 
+    const currentEntryGender = useMemo(() => String(form.gender || '').trim().toLowerCase(), [form.gender]);
+    const currentEntrySingularFilters = useMemo(() => {
+        if (currentEntryGender === 'masculine') {
+            return {
+                roles: ['masculine_singular'],
+                gender: 'masculine',
+            };
+        }
+
+        if (currentEntryGender === 'feminine') {
+            return {
+                roles: ['feminine_singular'],
+                gender: 'feminine',
+            };
+        }
+
+        return {
+            roles: ['masculine_singular', 'feminine_singular'],
+        };
+    }, [currentEntryGender]);
+
     const pluralPatterns = useMemo(() => (
         buildPatternOptions(PLURAL_PATTERNS, mode, {
             pos: form.pos,
@@ -1539,117 +1607,10 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     if (res?.entry) {
                         setIsMissingEntry(false);
                         const full = res.entry as any;
-                        const parseArray = (val: any) => {
-                            if (typeof val === 'string' && val.trim().startsWith('[')) {
-                                try { return JSON.parse(val); } catch { return []; }
-                            }
-                            return Array.isArray(val) ? val : [];
-                        };
-
-                        setForm(prev => {
-                            const headword = full.headword || prev.headword;
-                            const pos = full.pos || prev.pos;
-                            const gender = resolveEntryGender(full) || resolveEntryGender(prev) || prev.gender || '';
-
-                            const inflections_pl_raw = parseArray(full.inflections_pl || prev.inflections_pl);
-                            const inflections_pl = Array.isArray(inflections_pl_raw) ? inflections_pl_raw.join(', ') : (inflections_pl_raw || '');
-
-                            const raw_sound = full.sound_suffix || '';
-                            const raw_morph = full.form_plural_pattern || '';
-                            const hasBroken = inflections_pl?.length > 0;
-                            const hasSound = raw_sound?.length > 0;
-
-                            const _pluralType = (hasBroken && hasSound) ? 'both'
-                                : hasBroken ? 'broken'
-                                    : hasSound ? 'sound'
-                                        : 'none';
-
-                            const _adjPluralType = (pos === 'adjective' && hasBroken) ? (raw_morph ? 'broken' : 'sound') : 'none';
-
-                            const form_masc_pattern = full.form_masc_pattern || prev.form_masc_pattern;
-                            const form_fem_pattern = full.form_fem_pattern || prev.form_fem_pattern;
-                            const form_plural_pattern = full.form_plural_pattern || [raw_morph, raw_sound].filter(Boolean).join(', ') || prev.form_plural_pattern;
-                            const dual_pattern = full.dual_pattern || prev.dual_pattern;
-                            const elative_pattern = full.elative_pattern || prev.elative_pattern;
-                            const diminutive_pattern = full.diminutive_pattern || prev.diminutive_pattern;
-                            const cv_pattern = full.cv_pattern || prev.cv_pattern;
-
-                            return {
-                                ...prev,
-                                id: full.id || prev.id,
-                                headword,
-                                pos,
-                                lemma_base: full.lemma_base || prev.lemma_base,
-                                gender,
-                                inflections_pl,
-                                sound_suffix: raw_sound,
-                                form_fem: full.form_fem || prev.form_fem,
-                                form_masc: full.form_masc || prev.form_masc,
-                                elative_form: full.elative_form || prev.elative_form,
-                                dual_form: full.dual_form || prev.dual_form,
-                                diminutive_form: full.diminutive_form || prev.diminutive_form,
-                                vowel_set_sg: full.vowel_set_sg || prev.vowel_set_sg,
-                                vowel_set_pl: full.vowel_set_pl || prev.vowel_set_pl,
-                                vowel_set_opp: full.vowel_set_opp || prev.vowel_set_opp,
-                                vowel_set_dual: full.vowel_set_dual || prev.vowel_set_dual,
-                                form_masc_pattern,
-                                form_fem_pattern,
-                                form_plural_pattern,
-                                dual_pattern,
-                                elative_pattern,
-                                diminutive_pattern,
-                                cv_pattern,
-                                _hasDual: !!(full.dual_form || prev.dual_form),
-                                participle_type: full.participle_type || prev.participle_type,
-                                definitions: parseArray(full.definitions).length ? parseArray(full.definitions) : prev.definitions,
-                                tags: Array.isArray(full.tags) ? full.tags.join(', ')
-                                    : (typeof full.tags === 'string' && full.tags.startsWith('[') ? parseArray(full.tags).join(', ') : (full.tags || prev.tags)),
-                                _rootConsonants: full.resolved_root_consonants || full.root_consonants || prev._rootConsonants,
-                                _formLabel: full.verb_form || full.verb_morphology?.form || prev._formLabel,
-                                verb_class: full.verb_class || full.verb_morphology?.verb_class || prev.verb_class,
-                                _weakClass: full.verb_weak_class || full.weak_class || full.verb_morphology?.weak_class || prev._weakClass,
-                                verb_type: full.verb_type || prev.verb_type,
-                                verb_vowel_perf: full.verb_vowel_perf || full.verb_morphology?.vowel_set_perf || prev.verb_vowel_perf,
-                                verb_vowel_impf: full.verb_vowel_impf || full.verb_morphology?.vowel_set_impf || prev.verb_vowel_impf,
-                                verb_vowel_impv: full.verb_vowel_impv || full.verb_morphology?.vowel_set_imperative || prev.verb_vowel_impv,
-                                verb_transitivity: full.verb_transitivity || full.verb_morphology?.transitivity || prev.verb_transitivity,
-                                verb_perfective_3sgm: full.verb_perfective_3sgm || full.verb_morphology?.perfective_3sg_m || prev.verb_perfective_3sgm,
-                                verb_imperfective_3sgm: full.verb_imperfective_3sgm || full.verb_morphology?.imperfective_3sg_m || prev.verb_perfective_3sgm,
-                                verb_verbal_noun: full.verb_verbal_noun || full.verb_morphology?.verbal_noun || prev.verb_verbal_noun,
-                                verb_active_ptcp: full.verb_active_ptcp || full.verb_morphology?.active_participle || prev.verb_active_ptcp,
-                                verb_passive_ptcp: full.verb_passive_ptcp || full.verb_morphology?.passive_participle || prev.verb_passive_ptcp,
-                                is_loanword: typeof full.is_loanword === 'boolean' ? full.is_loanword : prev.is_loanword,
-                                source_language: full.source_language || prev.source_language,
-                                is_inflectable: typeof full.is_inflectable === 'boolean' ? full.is_inflectable : (typeof full.is_inflectable === 'number' ? full.is_inflectable === 1 : prev.is_inflectable),
-                                usage_example: full.usage_example || prev.usage_example,
-                                usage_example_en: full.usage_example_en || prev.usage_example_en,
-                                source_citation: full.source_citation || full.verb_morphology?.source_citation || full.noun_morphology?.source_citation || prev.source_citation,
-                                phonetics: parseArray(full.phonetics).length ? parseArray(full.phonetics) : prev.phonetics,
-                                etymology_chain: parseArray(full.etymology_chain).length ? parseArray(full.etymology_chain)
-                                    : (full.etymologies?.[0]?.chain?.length ? full.etymologies[0].chain : prev.etymology_chain),
-                                is_collective: Boolean(full.is_collective ?? prev.is_collective),
-                                is_singulative: Boolean(full.is_singulative ?? prev.is_singulative),
-                                _inheritedPattern: !full.cv_pattern && (full.cv_notation || full.resolved_cv),
-                                synonyms: parseArray(full.synonyms || full.verb_morphology?.synonyms || full.noun_morphology?.synonyms),
-                                antonyms: parseArray(full.antonyms || full.verb_morphology?.antonyms || full.noun_morphology?.antonyms),
-                                related_entries: parseArray(full.related_entries || full.verb_morphology?.related_entries || full.noun_morphology?.related_entries),
-                                numeral_type: full.numeral_type || full.numeral_morphology?.numeral_type || prev.numeral_type,
-                                form_attributive_short: full.form_attributive_short || full.numeral_morphology?.form_attributive_short || prev.form_attributive_short,
-                                form_attributive_long: full.form_attributive_long || full.numeral_morphology?.form_attributive_long || prev.form_attributive_long,
-                                form_opposite: full.form_opposite || full.numeral_morphology?.form_opposite || prev.form_opposite,
-                                _pluralType,
-                                _adjPluralType,
-                                extraFields: (() => {
-                                    const extras: Record<string, any> = {};
-                                    Object.keys(full).forEach(key => {
-                                        if (!ENTRY_HANDLED_FIELDS.includes(key as any) && !key.startsWith('_')) {
-                                            extras[key] = full[key];
-                                        }
-                                    });
-                                    return extras;
-                                })(),
-                            };
-                        });
+                        setForm(prev => ({
+                            ...prev,
+                            ...buildLoadedEntryPatch(full, prev),
+                        }));
                         setOriginalForm(full);
                     } else {
                         setIsMissingEntry(true);
@@ -1676,24 +1637,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             setSuggestedId('');
             return;
         }
-
-        const POS_MAP: Record<string, string> = {
-            verb: 'v', noun: 'n', adjective: 'adj', adverb: 'adv',
-            preposition: 'prep', conjunction: 'conj', particle: 'part',
-            article: 'art', pronoun: 'pron', numeral: 'num', participle: 'ptcp',
-            interrogative: 'int', interjection: 'intj'
-        };
-
-        const currentPos = form.pos.toLowerCase();
-        const suffix = POS_MAP[currentPos] || 'entry';
-        const safeHeadword = form.headword.toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/[^a-z0-9àċġħżie-]/gi, '');
-
-        const formSuffix = (currentPos === 'verb' && form._formLabel) ? `-${form._formLabel.toLowerCase()}` : '';
-        const newId = `${suffix}-${safeHeadword}${formSuffix}`;
+        const newId = buildSuggestedEntryId({
+            headword: form.headword,
+            pos: form.pos,
+            participleType: form.participle_type,
+        });
         setSuggestedId(newId);
-    }, [form.pos, form.headword, form._formLabel, isEdit]);
+    }, [form.pos, form.headword, form.participle_type, isEdit]);
 
     // ── AUTOMATION: ID Existence Check ──────────────────────────────────────
     useEffect(() => {
@@ -1801,15 +1751,14 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
     // Filtered patterns based on LIVE POS
     const filteredPatterns = useMemo(() => {
-        return CV_WIZEN_PATTERNS.filter((p: any) =>
-            !p.pos_types || p.pos_types.length === 0 || p.pos_types.includes(form.pos)
-        ).map((p: any) => ({
-            label: mode === 'standard' ? p.cv : p.wizen,
-            value: p.cv,
-            sub: mode === 'standard' ? p.wizen : p.cv,
-            stress: p.stress as number | undefined,
-        }));
-    }, [CV_WIZEN_PATTERNS, form.pos, mode]);
+        const currentPos = String(form.pos || '').trim().toLowerCase();
+        const shouldUseSingularFilter = currentPos === 'noun' || currentPos === 'adjective';
+
+        return buildPatternOptions(CV_WIZEN_PATTERNS, mode, {
+            pos: currentPos,
+            ...(shouldUseSingularFilter ? currentEntrySingularFilters : {}),
+        });
+    }, [CV_WIZEN_PATTERNS, currentEntrySingularFilters, form.pos, mode]);
 
     // ── AUTOMATION: Smart Defaults ──────────────────────────────────────────
     useEffect(() => {
@@ -1955,10 +1904,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 if (next.gender?.toLowerCase() === 'feminine') {
                     next.form_fem = v;
                 } else if (next.gender?.toLowerCase() === 'masculine') {
-                    if (next.pos === 'noun') {
-                        next.lemma_base = v;
-                    } else {
-                        next.lemma_base = v;
+                    next.lemma_base = v;
+                    if (next.pos === 'numeral' && !next.form_masc) {
+                        next.form_masc = v;
                     }
                 } else {
                     next.lemma_base = v;
@@ -1984,6 +1932,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     }
                 } else {
                     next.lemma_base = next.headword;
+                    if (next.pos === 'numeral' && !next.form_masc) {
+                        next.form_masc = next.headword;
+                    }
                     if (next.form_masc_pattern) {
                         next.cv_pattern = next.form_masc_pattern;
                     }
@@ -2022,7 +1973,6 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     };
 
     const normalizedPos = useMemo(() => form.pos?.toLowerCase() || '', [form.pos]);
-    const showInflectionToggle = ['pronoun', 'adverb', 'preposition', 'particle', 'article'].includes(normalizedPos);
     const isInflectedFunctionPos = ['pronoun', 'adverb', 'preposition', 'particle', 'article'].includes(normalizedPos);
 
     // Context-aware CV pattern suggestion for verbs
@@ -2048,11 +1998,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         set('definitions', normalizeEntryDefinitions(next));
     };
 
-    const syncPatternRegistrations = async (
-        entries: Array<{ category: string; key: string }>,
-        currentPos: string,
-    ) => {
-        const seen = new Set<string>();
+      const syncPatternRegistrations = async (
+          entries: Array<{ category: string; key: string }>,
+          currentPos: string,
+      ) => {
+          const seen = new Set<string>();
 
         for (const entry of entries) {
             const key = entry.key.trim();
@@ -2063,39 +2013,44 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             seen.add(dedupeKey);
 
             const catMap = byCategoryAndKey.get(entry.category);
-            const existing = catMap?.get(key.toLowerCase());
+              const existing = catMap?.get(key.toLowerCase());
+              const baseValue = entry.category === 'cv_wizen_pattern'
+                  ? { cv: key, wizen: '', stress: 2, pos_types: [currentPos] }
+                  : entry.category === 'sound_suffix'
+                      ? { cv: key, wizen: key.replace(/^-+/, ''), pos_types: [currentPos] }
+                      : { cv: key, wizen: '', pos_types: [currentPos] };
 
-            if (!existing) {
-                try {
-                    await createItem({
-                        category: entry.category,
-                        key,
-                        value: entry.category === 'cv_wizen_pattern'
-                            ? { cv: key, wizen: '', stress: 2, pos_types: [currentPos] }
-                            : entry.category === 'sound_suffix'
-                                ? { cv: key, wizen: key.replace(/^-+/, ''), pos_types: [currentPos] }
-                                : { cv: key, wizen: '', pos_types: [currentPos] }
-                    }, { refresh: false });
-                } catch (err) {
-                    console.error(`Failed to register ${entry.category}:`, err);
-                }
-                continue;
+              if (!existing) {
+                  try {
+                      const mergedValue = mergePatternBucketApplicabilities(baseValue, [currentPos]);
+                      await createItem({
+                          category: entry.category,
+                          key,
+                          value: mergedValue,
+                      }, { refresh: false });
+                  } catch (err) {
+                      console.error(`Failed to register ${entry.category}:`, err);
+                  }
+                  continue;
             }
 
             if (!existing.id) continue;
 
-            try {
-                const val = typeof existing.value === 'string' ? JSON.parse(existing.value) : (existing.value || {});
-                const posTypes = Array.isArray(val.pos_types) ? val.pos_types : [];
-                if (!posTypes.includes(currentPos)) {
-                    await updateItem({
-                        ...existing,
-                        value: { ...val, pos_types: [...posTypes, currentPos] }
-                    }, { refresh: false });
-                }
-            } catch (err) {
-                console.error(`Failed to update ${entry.category}:`, err);
-            }
+              try {
+                  const val = typeof existing.value === 'string' ? JSON.parse(existing.value) : (existing.value || {});
+                  const posTypes = Array.isArray(val.pos_types) ? val.pos_types : [];
+                  const applicabilities = Array.isArray(val.applicabilities) ? val.applicabilities : [];
+                  const hasCurrentApplicability = applicabilities.some((item: Record<string, unknown>) => String(item.pos ?? '').trim() === currentPos);
+                  if (!posTypes.includes(currentPos) || !hasCurrentApplicability) {
+                      const mergedValue = mergePatternBucketApplicabilities(val, [currentPos]);
+                      await updateItem({
+                          ...existing,
+                          value: mergedValue,
+                      }, { refresh: false });
+                  }
+              } catch (err) {
+                  console.error(`Failed to update ${entry.category}:`, err);
+              }
         }
     };
 
@@ -2210,14 +2165,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
     const handleApplyDerivedTerms = () => {
         if (normalizedPos === 'numeral' && form._rootConsonants) {
-            const auto = generateNumeralForms(form.headword, form._rootConsonants);
-            setForm((f: any) => ({
-                ...f,
-                numeral_type: f.numeral_type || 'cardinal',
-                form_attributive_short: f.form_attributive_short || auto.attributive_short || '',
-                form_attributive_long: f.form_attributive_long || auto.attributive_long || '',
-                // form_opposite is manual usually
-            }));
+            const auto = buildNumeralAutoForms(form.headword, form._rootConsonants);
+            setForm((f: any) => seedNumeralDerivedFields(f, auto));
             return;
         }
 
@@ -2240,27 +2189,6 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
     const renderPosMorphologyFields = () => (
         <>
-            {showInflectionToggle && (
-                <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                            type="checkbox"
-                            className="w-4 h-4 text-[#1034A6] rounded border-black/20 focus:ring-[#1034A6]"
-                            checked={!!form.is_inflectable}
-                            onChange={e => {
-                                const checked = e.target.checked;
-                                set('is_inflectable', checked);
-                                if (!checked && normalizedPos !== 'pronoun') {
-                                    set('gender', '');
-                                    set('inflections_pl', '');
-                                }
-                            }}
-                        />
-                        <span className="text-sm font-medium">{t('Has Inflection', 'Għandu Inflessjoni')}</span>
-                    </label>
-                </div>
-            )}
-
             {normalizedPos === 'noun' && (
                 <NounFields
                     form={form}
@@ -2311,7 +2239,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     insertChar={insertChar}
                     onFocus={setActiveInput}
                     options={{
-                        gender: GENDER_OPTIONS
+                        gender: GENDER_OPTIONS,
+                        numeral_type: NUMERAL_TYPE_OPTIONS,
                     }}
                     onApplyDerivedTerms={handleApplyDerivedTerms}
                     suggestions={availableVowelSets}
@@ -2574,7 +2503,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     <div className="space-y-4">
 
                         <div className="space-y-2">
-                            <div className="flex items-center gap-4 mb-2.5 px-1">
+                            <div className="flex flex-wrap items-center gap-4 mb-2.5 px-1">
                                 <label className="flex items-center gap-2 cursor-pointer group">
                                     <input
                                         type="checkbox"
@@ -2601,6 +2530,15 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         className="w-3.5 h-3.5 text-[#1034A6] border-black/20 rounded focus:ring-0 focus:ring-offset-0"
                                     />
                                     <span className="text-[11px] font-bold uppercase tracking-wider text-black/60 group-hover:text-black transition-colors">{t('No Elative', 'L-ebda Elattiv')}</span>
+                                </label>
+                                <label className="flex items-center gap-2 cursor-pointer group">
+                                    <input
+                                        type="checkbox"
+                                        checked={!!form.is_inflectable}
+                                        onChange={e => setForm((current: any) => applyInflectableToggle(current, e.target.checked))}
+                                        className="w-3.5 h-3.5 text-[#1034A6] border-black/20 rounded focus:ring-0 focus:ring-offset-0"
+                                    />
+                                    <span className="text-[11px] font-bold uppercase tracking-wider text-black/60 group-hover:text-black transition-colors">{t('Has Inflection', 'Għandu Inflessjoni')}</span>
                                 </label>
                             </div>
 

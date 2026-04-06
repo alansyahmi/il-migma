@@ -7,6 +7,11 @@ const assertEq = (actual, expected, message) => {
 };
 
 const run = () => {
+    const assertRow = (base, gender, expected, pattern, thirdRadical) => {
+        const actual = [0, 1, 2, 3, 4, 5, 6].map((idx) => applyInflectionTableSuffix(base, idx, gender, pattern, thirdRadical));
+        assertEq(actual.join(' | '), expected.join(' | '), `Unexpected table forms for ${base}`);
+    };
+
     assertEq(
         applyInflectionTableSuffix('kontra', 0),
         'kontrija',
@@ -56,6 +61,48 @@ const run = () => {
         applyInflectionTableSuffix('kiesaħ', 2, 'masculine', undefined, 'ħ'),
         'kiesħu',
         'Final-syllable vowels should collapse before -u'
+    );
+    assertRow(
+        'dar',
+        'masculine',
+        ['dari', 'darek', 'daru', 'darha', 'darna', 'darkom', 'darhom'],
+    );
+    assertRow(
+        'qra',
+        'masculine',
+        ['qrai', 'qraek', 'qrau', 'qraha', 'qrana', 'qrakom', 'qrahom'],
+    );
+    assertRow(
+        'għomor',
+        'masculine',
+        ['għomri', 'għomrok', 'għomru', 'għomorha', 'għomorna', 'għomorkom', 'għomorhom'],
+    );
+    assertRow(
+        'ġisem',
+        'masculine',
+        ['ġismi', 'ġismek', 'ġismu', 'ġisimha', 'ġisimna', 'ġisimkom', 'ġisimhom'],
+    );
+    assertRow(
+        'ziju',
+        'masculine',
+        ['zijuwi', 'zijuk', 'zijuh', 'zijuha', 'zijuna', 'zijukom', 'zijuhom'],
+    );
+    assertRow(
+        'darba',
+        'feminine',
+        ['darbti', 'darbtek', 'darbtu', 'darbitha', 'darbitna', 'darbitkom', 'darbithom'],
+    );
+    assertRow(
+        'drabi',
+        'feminine',
+        ['drabija', 'drabik', 'drabih', 'drabiha', 'drabina', 'drabikom', 'drabihom'],
+    );
+    assertRow(
+        'ilma',
+        'masculine',
+        ['ilmaji', 'ilmajek', 'ilmaju', 'ilmajha', 'ilmajna', 'ilmajkom', 'ilmajhom'],
+        undefined,
+        'j',
     );
     assertEq(
         applyInflectionTableSuffix('wara', 4, 'masculine', undefined, 'r'),

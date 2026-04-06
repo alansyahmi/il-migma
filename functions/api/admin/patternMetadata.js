@@ -9,11 +9,6 @@ export const PATTERN_BUCKET_LABELS = {
     adjective_pattern: 'Elative',
 };
 
-export const NOUN_CLASS_OPTIONS = [
-    { label: 'Strong', value: 'strong' },
-    { label: 'Weak', value: 'weak' },
-];
-
 export const PARTICIPLE_TYPE_OPTIONS = [
     { label: 'Active', value: 'active' },
     { label: 'Passive', value: 'passive' },
@@ -30,24 +25,16 @@ export const PATTERN_POS_SCHEMA = {
     noun: {
         label: 'Noun',
         fields: [
-            { key: 'classValue', label: 'Noun Class', kind: 'select', options: NOUN_CLASS_OPTIONS, emptyLabel: '-- Select --' },
-            {
-                key: 'weakClass',
-                label: 'Weak Class',
-                kind: 'select',
-                optionSource: 'weak_class',
-                emptyLabel: '-- Select --',
-                showWhen: (app) => app.classValue === 'weak',
-            },
             { key: 'linguisticRole', label: 'Linguistic Role', kind: 'text', placeholder: 'e.g. plural, collective, singular' },
             { key: 'gender', label: 'Gender', kind: 'select', optionSource: 'gender', emptyLabel: '-- Any --' },
+            { key: 'notes', label: 'Notes', kind: 'textarea', placeholder: 'Optional noun-specific notes...', rows: 3 },
         ],
     },
     verb: {
         label: 'Verb',
         fields: [
-            { key: 'verbForm', label: 'Verb Form', kind: 'select', optionSource: 'verb_form', emptyLabel: '-- Select --' },
-            { key: 'classCompatibility', label: 'Class Compatibility', kind: 'select', optionSource: 'verb_class', emptyLabel: '-- Select --' },
+            { key: 'verbForm', label: 'Verb Form', kind: 'select', optionSource: 'verb_form', emptyLabel: '-- Select --', metadataKey: 'verb_form' },
+            { key: 'classCompatibility', label: 'Class Compatibility', kind: 'select', optionSource: 'verb_class', emptyLabel: '-- Select --', metadataKey: 'class_compatibility' },
             { key: 'notes', label: 'Notes', kind: 'textarea', placeholder: 'Optional verb-specific notes...', rows: 3 },
         ],
     },
@@ -56,21 +43,24 @@ export const PATTERN_POS_SCHEMA = {
         fields: [
             { key: 'linguisticRole', label: 'Linguistic Role', kind: 'text', placeholder: 'e.g. elative, qualitative' },
             { key: 'gender', label: 'Gender', kind: 'select', optionSource: 'gender', emptyLabel: '-- Any --' },
+            { key: 'notes', label: 'Notes', kind: 'textarea', placeholder: 'Optional adjective-specific notes...', rows: 3 },
         ],
     },
     participle: {
         label: 'Participle',
         fields: [
-            { key: 'participleType', label: 'Participle Type', kind: 'select', options: PARTICIPLE_TYPE_OPTIONS, emptyLabel: '-- Select --' },
-            { key: 'gender', label: 'Gender', kind: 'select', optionSource: 'gender', emptyLabel: '-- Any --' },
+            { key: 'participleType', label: 'Participle Type', kind: 'select', options: PARTICIPLE_TYPE_OPTIONS, emptyLabel: '-- Select --', metadataKey: 'participle_type' },
             { key: 'linguisticRole', label: 'Linguistic Role', kind: 'text', placeholder: 'e.g. active, passive, adjectival' },
+            { key: 'gender', label: 'Gender', kind: 'select', optionSource: 'gender', emptyLabel: '-- Any --' },
+            { key: 'notes', label: 'Notes', kind: 'textarea', placeholder: 'Optional participle-specific notes...', rows: 3 },
         ],
     },
     numeral: {
         label: 'Numeral',
         fields: [
-            { key: 'numeralType', label: 'Numeral Type', kind: 'select', options: NUMERAL_TYPE_OPTIONS, emptyLabel: '-- Select --' },
+            { key: 'numeralType', label: 'Numeral Type', kind: 'select', options: NUMERAL_TYPE_OPTIONS, emptyLabel: '-- Select --', metadataKey: 'numeral_type' },
             { key: 'gender', label: 'Gender', kind: 'select', optionSource: 'gender', emptyLabel: '-- Any --' },
+            { key: 'notes', label: 'Notes', kind: 'textarea', placeholder: 'Optional numeral-specific notes...', rows: 3 },
         ],
     },
 };
@@ -129,85 +119,55 @@ const normalizePosList = (value) => normalizeStringList(value)
     .map((pos) => normalizePatternPos(pos))
     .filter(Boolean);
 
-const collectMetadata = (record) => {
-    const metadata = record.metadata && typeof record.metadata === 'object' && !Array.isArray(record.metadata)
-        ? { ...record.metadata }
-        : {};
+const METADATA_KEY_ALIASES = {
+    linguisticRole: 'linguistic_role',
+    linguistic_role: 'linguistic_role',
+    verbForm: 'verb_form',
+    verb_form: 'verb_form',
+    classCompatibility: 'class_compatibility',
+    class_compatibility: 'class_compatibility',
+    participleType: 'participle_type',
+    participle_type: 'participle_type',
+    numeralType: 'numeral_type',
+    numeral_type: 'numeral_type',
+};
+
+const LEGACY_METADATA_KEYS = new Set(['class', 'classValue', 'strength', 'weakClass', 'weak_class']);
+
+const normalizeMetadataKey = (key) => METADATA_KEY_ALIASES[key] || key;
+const isMeaningfulValue = (value) => value !== undefined && value !== null && !(typeof value === 'string' && value.trim() === '');
+
+const addMetadataEntry = (target, key, value) => {
+    if (!isMeaningfulValue(value)) return;
+
+    if (key === 'metadata' && value && typeof value === 'object' && !Array.isArray(value)) {
+        Object.entries(value).forEach(([nestedKey, nestedValue]) => addMetadataEntry(target, nestedKey, nestedValue));
+        return;
+    }
+
+    const normalizedKey = normalizeMetadataKey(key);
+    if (LEGACY_METADATA_KEYS.has(normalizedKey)) return;
+    if (normalizedKey === 'linguistic_role' || normalizedKey === 'gender') return;
+
+    target[normalizedKey] = value;
+};
+
+const collectMetadata = (record, ignoreKeys) => {
+    const metadata = {};
+
+    if (record.metadata && typeof record.metadata === 'object' && !Array.isArray(record.metadata)) {
+        Object.entries(record.metadata).forEach(([key, value]) => addMetadataEntry(metadata, key, value));
+    }
 
     Object.entries(record).forEach(([key, value]) => {
-        if (['pos', 'metadata'].includes(key)) return;
-        if (value !== undefined && value !== null && String(value).trim() !== '') {
-            metadata[key] = value;
-        }
+        if (ignoreKeys.has(key)) return;
+        addMetadataEntry(metadata, key, value);
     });
 
     return metadata;
 };
 
-const normalizeApplicabilityMetadata = (record) => {
-    const metadata = collectMetadata(record);
-
-    const classValue = firstNonEmpty(record.class, record.strength, metadata.class, metadata.strength);
-    const weakClass = firstNonEmpty(record.weakClass, record.weak_class, metadata.weakClass, metadata.weak_class);
-    const verbForm = firstNonEmpty(record.verbForm, record.verb_form, metadata.verbForm, metadata.verb_form);
-    const classCompatibility = firstNonEmpty(
-        record.classCompatibility,
-        record.class_compatibility,
-        metadata.classCompatibility,
-        metadata.class_compatibility,
-    );
-    const linguisticRole = firstNonEmpty(
-        record.linguisticRole,
-        record.linguistic_role,
-        metadata.linguisticRole,
-        metadata.linguistic_role,
-    );
-    const gender = firstNonEmpty(record.gender, metadata.gender);
-    const participleType = firstNonEmpty(
-        record.participleType,
-        record.participle_type,
-        metadata.participleType,
-        metadata.participle_type,
-    );
-    const numeralType = firstNonEmpty(
-        record.numeralType,
-        record.numeral_type,
-        metadata.numeralType,
-        metadata.numeral_type,
-    );
-    const notes = firstNonEmpty(record.notes, metadata.notes);
-
-    if (classValue) metadata.class = classValue;
-    if (weakClass) metadata.weak_class = weakClass;
-    if (verbForm) metadata.verb_form = verbForm;
-    if (classCompatibility) metadata.class_compatibility = classCompatibility;
-    if (linguisticRole) metadata.linguistic_role = linguisticRole;
-    if (gender) metadata.gender = gender;
-    if (participleType) metadata.participle_type = participleType;
-    if (numeralType) metadata.numeral_type = numeralType;
-    if (notes) metadata.notes = notes;
-
-    delete metadata.strength;
-    delete metadata.weakClass;
-    delete metadata.verbForm;
-    delete metadata.classCompatibility;
-    delete metadata.linguisticRole;
-    delete metadata.participleType;
-    delete metadata.numeralType;
-
-    return {
-        classValue,
-        weakClass,
-        verbForm,
-        classCompatibility,
-        linguisticRole,
-        gender,
-        participleType,
-        numeralType,
-        notes,
-        metadata,
-    };
-};
+const normalizeApplicabilityMetadata = (record) => collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender']));
 
 const inferLegacyPatternPosTypes = (record, category) => {
     const hasVerbFields = Boolean(record.verbForm || record.verb_form || record.classCompatibility || record.class_compatibility || record.notes);
@@ -225,16 +185,15 @@ const inferLegacyPatternPosTypes = (record, category) => {
 };
 
 const buildLegacyApplicabilitySource = (record, pos) => {
-    const metadata = collectMetadata(record);
+    const metadata = collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender']));
 
     switch (pos) {
         case 'noun':
             return {
                 pos,
-                class: record.class || record.strength || metadata.class || metadata.strength || '',
-                weak_class: record.weak_class || metadata.weak_class || '',
                 linguistic_role: record.linguistic_role || metadata.linguistic_role || '',
                 gender: record.gender || metadata.gender || '',
+                notes: record.notes || metadata.notes || '',
                 metadata,
             };
         case 'verb':
@@ -250,6 +209,7 @@ const buildLegacyApplicabilitySource = (record, pos) => {
                 pos,
                 linguistic_role: record.linguistic_role || metadata.linguistic_role || '',
                 gender: record.gender || metadata.gender || '',
+                notes: record.notes || metadata.notes || '',
                 metadata,
             };
         case 'participle':
@@ -258,6 +218,7 @@ const buildLegacyApplicabilitySource = (record, pos) => {
                 participle_type: record.participle_type || metadata.participle_type || '',
                 linguistic_role: record.linguistic_role || metadata.linguistic_role || '',
                 gender: record.gender || metadata.gender || '',
+                notes: record.notes || metadata.notes || '',
                 metadata,
             };
         case 'numeral':
@@ -265,6 +226,7 @@ const buildLegacyApplicabilitySource = (record, pos) => {
                 pos,
                 numeral_type: record.numeral_type || metadata.numeral_type || '',
                 gender: record.gender || metadata.gender || '',
+                notes: record.notes || metadata.notes || '',
                 metadata,
             };
         default:
@@ -272,50 +234,34 @@ const buildLegacyApplicabilitySource = (record, pos) => {
     }
 };
 
+const createBlankApplicability = (pos) => ({
+    pos,
+    linguisticRole: '',
+    gender: '',
+    notes: '',
+    metadata: {},
+});
+
 const normalizeApplicability = (record) => {
     const pos = normalizePatternPos(record.pos);
     if (!pos) return null;
 
     const metadata = normalizeApplicabilityMetadata(record);
-    const classValue = normalizeText(record.class || record.strength || metadata.class || metadata.strength);
-    const weakClass = normalizeText(record.weakClass || record.weak_class || metadata.weakClass || metadata.weak_class);
-    const verbForm = normalizeText(record.verbForm || record.verb_form || metadata.verbForm || metadata.verb_form);
-    const classCompatibility = normalizeText(
-        record.classCompatibility || record.class_compatibility || metadata.classCompatibility || metadata.class_compatibility,
-    );
     const linguisticRole = normalizeText(
         record.linguisticRole || record.linguistic_role || metadata.linguisticRole || metadata.linguistic_role,
     );
     const gender = normalizeText(record.gender || metadata.gender);
-    const participleType = normalizeText(
-        record.participleType || record.participle_type || metadata.participleType || metadata.participle_type,
-    );
-    const numeralType = normalizeText(
-        record.numeralType || record.numeral_type || metadata.numeralType || metadata.numeral_type,
-    );
     const notes = normalizeText(record.notes || metadata.notes);
 
-    if (classValue) metadata.class = classValue;
-    if (weakClass) metadata.weak_class = weakClass;
-    if (verbForm) metadata.verb_form = verbForm;
-    if (classCompatibility) metadata.class_compatibility = classCompatibility;
-    if (linguisticRole) metadata.linguistic_role = linguisticRole;
-    if (gender) metadata.gender = gender;
-    if (participleType) metadata.participle_type = participleType;
-    if (numeralType) metadata.numeral_type = numeralType;
+    delete metadata.linguistic_role;
+    delete metadata.gender;
     if (notes) metadata.notes = notes;
+    else delete metadata.notes;
 
     return {
         pos,
-        classValue,
-        strength: classValue,
-        weakClass: classValue === 'weak' ? weakClass : '',
-        verbForm,
-        classCompatibility,
         linguisticRole,
         gender,
-        participleType,
-        numeralType,
         notes,
         metadata,
     };
@@ -323,14 +269,24 @@ const normalizeApplicability = (record) => {
 
 const normalizeApplicabilities = (value, category) => {
     const rawApplicabilities = Array.isArray(value.applicabilities) ? value.applicabilities : [];
+    const normalizedPosTypes = normalizePosList(value.pos_types);
 
     if (rawApplicabilities.length > 0) {
-        return rawApplicabilities
+        const normalizedApplicabilities = rawApplicabilities
             .map((item) => normalizeApplicability(item))
+            .filter(Boolean);
+        const posTypes = normalizedPosTypes.length > 0 ? normalizedPosTypes : normalizedApplicabilities.map((app) => app.pos);
+        const mergedPosTypes = Array.from(new Set([
+            ...posTypes,
+            ...normalizedApplicabilities.map((app) => app.pos),
+        ]));
+        const byPos = new Map(normalizedApplicabilities.map((app) => [app.pos, app]));
+
+        return mergedPosTypes
+            .map((pos) => byPos.get(pos) || createBlankApplicability(pos))
             .filter(Boolean);
     }
 
-    const normalizedPosTypes = normalizePosList(value.pos_types);
     const inferredPosTypes = normalizedPosTypes.length > 0 ? normalizedPosTypes : inferLegacyPatternPosTypes(value, category);
     return inferredPosTypes
         .map((pos) => normalizeApplicability(buildLegacyApplicabilitySource(value, pos)))
@@ -345,17 +301,24 @@ export function normalizePatternFormValue(value, category) {
     const description = normalizeText(record.description);
     const posTypes = normalizePosList(record.pos_types);
     const applicabilities = normalizeApplicabilities(record, category);
+    const notes = normalizeText(record.notes);
+    const metadata = collectMetadata(
+        record,
+        new Set(['cv', 'wizen', 'stress', 'description', 'pos_types', 'applicabilities', 'metadata', 'linguisticRole', 'linguistic_role', 'gender']),
+    );
 
     return {
         cv,
         wizen,
         stress,
         description,
-        pos_types: posTypes.length > 0 ? posTypes : Array.from(new Set(applicabilities.map((app) => app.pos))),
+        notes,
+        pos_types: Array.from(new Set([
+            ...(posTypes.length > 0 ? posTypes : applicabilities.map((app) => app.pos)),
+            ...applicabilities.map((app) => app.pos),
+        ])),
         applicabilities,
-        metadata: record.metadata && typeof record.metadata === 'object' && !Array.isArray(record.metadata)
-            ? record.metadata
-            : {},
+        metadata,
     };
 }
 
@@ -366,40 +329,14 @@ export function getPatternApplicabilitySummary(value, category) {
     return applicabilities.map((app) => {
         const labelParts = [titleCase(app.pos)];
 
-        if (app.pos === 'noun' && app.classValue) labelParts.push(`Noun Class ${app.classValue}`);
-        if (app.pos === 'noun' && app.weakClass) labelParts.push(`Weak Class ${app.weakClass}`);
-        if (app.pos === 'verb' && app.verbForm) labelParts.push(`Verb Form ${app.verbForm}`);
-        if (app.pos === 'verb' && app.classCompatibility) labelParts.push(`Class Compatibility ${app.classCompatibility.replace(/_/g, ' ')}`);
-        if (app.pos === 'adjective' && app.linguisticRole) labelParts.push(`Role ${app.linguisticRole}`);
-        if (app.pos === 'adjective' && app.gender) labelParts.push(`Gender ${app.gender}`);
-        if (app.pos === 'participle' && app.participleType) labelParts.push(`Participle Type ${app.participleType}`);
-        if (app.pos === 'participle' && app.gender) labelParts.push(`Gender ${app.gender}`);
-        if (app.pos === 'participle' && app.linguisticRole) labelParts.push(`Role ${app.linguisticRole}`);
-        if (app.pos === 'numeral' && app.numeralType) labelParts.push(`Numeral Type ${app.numeralType}`);
-        if (app.pos === 'numeral' && app.gender) labelParts.push(`Gender ${app.gender}`);
-        if (!['noun', 'verb', 'adjective', 'participle', 'numeral'].includes(app.pos)) {
-            if (app.classValue) labelParts.push(`Class ${app.classValue}`);
-            if (app.weakClass) labelParts.push(`Weak ${app.weakClass}`);
-            if (app.verbForm) labelParts.push(app.verbForm);
-            if (app.classCompatibility) labelParts.push(app.classCompatibility.replace(/_/g, ' '));
-            if (app.linguisticRole) labelParts.push(app.linguisticRole);
-            if (app.gender) labelParts.push(app.gender);
-            if (app.participleType) labelParts.push(app.participleType);
-            if (app.numeralType) labelParts.push(app.numeralType);
-        }
+        if (app.linguisticRole) labelParts.push(`Role ${app.linguisticRole}`);
+        if (app.gender) labelParts.push(`Gender ${app.gender}`);
         if (app.notes) labelParts.push(app.notes);
 
         return {
             pos: app.pos,
-            classValue: app.classValue || '',
-            strength: app.classValue || '',
-            weakClass: app.weakClass || '',
-            verbForm: app.verbForm || '',
-            classCompatibility: app.classCompatibility || '',
             linguisticRole: app.linguisticRole || '',
             gender: app.gender || '',
-            participleType: app.participleType || '',
-            numeralType: app.numeralType || '',
             notes: app.notes || '',
             label: labelParts.filter(Boolean).join(' · '),
         };
@@ -418,8 +355,9 @@ export function getPatternMetadataSummary(value, category) {
         posTypes,
         bucketLabel,
         applicabilities,
-        gender: firstApplicability?.gender,
-        weakClass: firstApplicability?.weakClass,
+        linguisticRole: firstApplicability?.linguisticRole || '',
+        gender: firstApplicability?.gender || '',
+        notes: firstApplicability?.notes || '',
     };
 }
 
@@ -444,9 +382,18 @@ export function buildPatternOptions(source, mode, filters = {}) {
 
         if (!cv) return;
         if (posFilters && posTypes.length > 0 && !posTypes.some((pos) => posFilters.includes(pos))) return;
-        if (roleFilters && role && !roleFilters.includes(role)) return;
-        if (genderFilters && gender && !genderFilters.includes(gender)) return;
-        if (rolePrefix && role && !role.startsWith(rolePrefix)) return;
+        if (roleFilters) {
+            if (!role) return;
+            if (!roleFilters.includes(role)) return;
+        }
+        if (genderFilters) {
+            if (!gender) return;
+            if (!genderFilters.includes(gender)) return;
+        }
+        if (rolePrefix) {
+            if (!role) return;
+            if (!role.startsWith(rolePrefix)) return;
+        }
 
         unique.set(cv, {
             label: mode === 'standard' ? cv : wizen,

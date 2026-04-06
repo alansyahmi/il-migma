@@ -31,11 +31,35 @@ const AdminConfigContext = createContext<AdminConfigContextType | undefined>(und
 const FALLBACKS: Record<string, string[]> = {
     pos: ['verb', 'noun', 'adjective', 'adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'interrogative', 'numeral', 'interjection', 'participle'],
     gender: ['masculine', 'feminine', 'neutral'],
+    numeral_type: ['cardinal', 'ordinal', 'adverbial', 'fractional', 'multiplier', 'distributive'],
     verb_class: ['strong', 'weak', 'doubled', 'quadriliteral', 'loan'],
     verb_transitivity: ['transitive', 'intransitive', 'both', 'ditransitive'],
     register: ['formal', 'informal', 'archaic', 'obsolete', 'technical', 'dialectal', 'colloquial'],
     dialect: ['Standard', 'Qormi', 'Birkirkara', 'Żejtun', 'Żurrieq', 'Sannat', 'Mosta', 'Nadur (Għawdex)', 'Żebbuġ', 'Marsaxlokk', 'Xewkija (Għawdex)', 'Għarb', 'Victoria (Għawdex)', 'Vassalli (Arkajku)'],
 };
+
+function optionKey(value: unknown) {
+    if (value === null) return 'null';
+    if (value === undefined) return 'undefined';
+    if (typeof value === 'string') return `string:${value}`;
+    if (typeof value === 'number') return `number:${value}`;
+    if (typeof value === 'boolean') return `boolean:${value}`;
+    try {
+        return `json:${JSON.stringify(value)}`;
+    } catch {
+        return `string:${String(value)}`;
+    }
+}
+
+function dedupeBy<T>(items: T[], getValue: (item: T) => unknown) {
+    const seen = new Set<string>();
+    return items.filter((item) => {
+        const key = optionKey(getValue(item));
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+}
 
 export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [config, setConfig] = useState<ConfigItem[]>([]);
@@ -99,15 +123,15 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
         if (items.length > 0) {
             if (reg?.transformValue) {
-                return items.map(i => reg.transformValue!(i));
+                return dedupeBy(items.map(i => reg.transformValue!(i)), (value) => value);
             }
 
             const first = items[0];
             const isComplex = typeof first.value === 'object' && first.value !== null && !('en' in first.value);
             if (isComplex) {
-                return items.map(i => i.value);
+                return dedupeBy(items.map(i => i.value), (value) => value);
             }
-            return items.map(i => i.key);
+            return dedupeBy(items.map(i => i.key), (value) => value);
         }
         return FALLBACKS[category] || [];
     }, [getCategoryItems]);
@@ -142,18 +166,18 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const getOptions = useCallback((category: string, mode: 'standard' | 'arabised', lang: 'en' | 'mt' = 'mt'): { value: string, label: string }[] => {
         const items = getCategoryItems(category);
         if (items.length > 0) {
-            return items
+            return dedupeBy(items
                 .map(item => getRegistryOptions(category, item, mode, lang))
-                .filter(Boolean) as { value: string, label: string }[];
+                .filter(Boolean) as { value: string, label: string }[], (option) => option.value);
         }
 
         // Use fallbacks if no items in DB
         const fallbacks = FALLBACKS[category] || [];
-        return fallbacks.map(f => {
+        return dedupeBy(fallbacks.map(f => {
             const mockItem = { key: f, value: null };
             const opt = getRegistryOptions(category, mockItem, mode, lang);
             return opt || { value: f, label: f };
-        });
+        }), (option) => option.value);
     }, [getCategoryItems]);
 
     return (

@@ -96,6 +96,8 @@ export interface NounMorphology {
     sound_plural?: string;
     dual?: string;
     diminutive?: string;
+    paucal?: string;
+    augmentative?: string;
     collective?: string;           // collective form
     singulative?: string;          // singulative form
     is_collective?: boolean;       // flag if the lemma itself is collective
@@ -113,6 +115,8 @@ export interface NounMorphology {
     form_plural_pattern?: string;
     dual_pattern?: string;
     diminutive_pattern?: string;
+    paucal_pattern?: string;
+    augmentative_pattern?: string;
     plural_pattern?: string; // keeping for internal use during transition
     sound_suffix?: string;
     is_inflectable?: boolean;
@@ -419,6 +423,8 @@ export interface Entry {
     morph_pattern?: string; // @deprecated
     dual_form?: string;
     diminutive_form?: string;
+    paucal_form?: string;
+    augmentative_form?: string;
     elative_form?: string;
     numeral_type?: string;
     form_attributive_short?: string;
@@ -429,6 +435,8 @@ export interface Entry {
     form_masc_pattern?: string;
     form_plural_pattern?: string;
     diminutive_pattern?: string;
+    paucal_pattern?: string;
+    augmentative_pattern?: string;
     elative_pattern?: string;
     dual_pattern?: string;
     plural_pattern?: string; // @deprecated

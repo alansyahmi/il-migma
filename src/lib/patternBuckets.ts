@@ -106,6 +106,46 @@ function titleCase(value: string) {
         .join(' ');
 }
 
+function createBlankApplicability(pos: string): PatternApplicability {
+    return {
+        pos,
+        strength: '',
+        gender: '',
+        weakClass: '',
+        participleType: '',
+        numeralType: '',
+        metadata: {},
+    };
+}
+
+export function mergePatternBucketApplicabilities(value: unknown, incomingPosTypes: unknown = []) {
+    const normalized = normalizePatternFormValue(value);
+    const existingApplicabilities = Array.isArray(normalized.applicabilities) ? normalized.applicabilities : [];
+    const normalizedPosTypes = Array.isArray(normalized.pos_types) ? normalized.pos_types : [];
+    const normalizedExistingPosTypes = (normalizedPosTypes.length > 0
+        ? normalizedPosTypes
+        : existingApplicabilities.map((app) => app.pos))
+        .map((pos) => normalizePatternPos(pos))
+        .filter(Boolean);
+    const normalizedIncomingPosTypes = normalizeStringList(incomingPosTypes)
+        .map((pos) => normalizePatternPos(pos))
+        .filter(Boolean);
+
+    const nextPosTypes = Array.from(new Set([
+        ...normalizedExistingPosTypes,
+        ...normalizedIncomingPosTypes,
+        ...existingApplicabilities.map((app) => app.pos),
+    ]));
+    const existingByPos = new Map(existingApplicabilities.map((app) => [app.pos, app]));
+    const nextApplicabilities = nextPosTypes.map((pos) => existingByPos.get(pos) || createBlankApplicability(pos));
+
+    return {
+        ...normalized,
+        pos_types: nextPosTypes,
+        applicabilities: nextApplicabilities,
+    };
+}
+
 function normalizeApplicabilityMetadata(record: Record<string, unknown>) {
     const metadata = record.metadata && typeof record.metadata === 'object' && !Array.isArray(record.metadata)
         ? { ...record.metadata as Record<string, unknown> }
@@ -205,7 +245,10 @@ export function normalizePatternFormValue(value: unknown): PatternFormValue {
             wizen: normalizeText(record.wizen),
             stress: Number.isFinite(Number(record.stress)) ? Number(record.stress) : 2,
             description: normalizeText(record.description),
-            pos_types: posTypes.length > 0 ? posTypes : applicabilities.map((app) => app.pos),
+            pos_types: Array.from(new Set([
+                ...(posTypes.length > 0 ? posTypes : applicabilities.map((app) => app.pos)),
+                ...applicabilities.map((app) => app.pos),
+            ])),
             applicabilities,
             strength: derivedStrength,
             gender: derivedGender,
@@ -330,9 +373,18 @@ export function buildPatternOptions(
 
         if (!cv) return;
         if (posFilters && posTypes.length > 0 && !posTypes.some((pos) => posFilters.includes(pos))) return;
-        if (roleFilters && role && !roleFilters.includes(role)) return;
-        if (genderFilters && gender && !genderFilters.includes(gender)) return;
-        if (rolePrefix && role && !role.startsWith(rolePrefix)) return;
+        if (roleFilters) {
+            if (!role) return;
+            if (!roleFilters.includes(role)) return;
+        }
+        if (genderFilters) {
+            if (!gender) return;
+            if (!genderFilters.includes(gender)) return;
+        }
+        if (rolePrefix) {
+            if (!role) return;
+            if (!role.startsWith(rolePrefix)) return;
+        }
 
         unique.set(cv, {
             label: mode === 'standard' ? cv : wizen,

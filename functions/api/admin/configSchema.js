@@ -6,13 +6,6 @@
 import { normalizePatternFormValue } from './patternMetadata.js';
 
 const PATTERN_CATEGORIES = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
-const POS_ALLOWED_FIELDS = {
-    verb: [],
-    noun: ['strength', 'weak_class', 'gender'],
-    adjective: ['gender'],
-    participle: ['participle_type', 'gender'],
-    numeral: ['numeral_type', 'gender'],
-};
 
 function nfc(value) {
     return typeof value === 'string' ? value.normalize('NFC').trim() : value;
@@ -35,116 +28,6 @@ function normalizeStringList(value) {
     }
 
     return [];
-}
-
-function pruneEmptyObject(value) {
-    if (!value || typeof value !== 'object') return {};
-    return Object.fromEntries(
-        Object.entries(value).filter(([, item]) => item !== undefined && item !== null && String(item).trim() !== '')
-    );
-}
-
-function normalizeApplicabilityMetadata(pos, input) {
-    const record = input && typeof input === 'object' ? input : {};
-    const metadata = {};
-    const allowedFields = POS_ALLOWED_FIELDS[normalizeToken(pos)] || [];
-
-    if (record.metadata && typeof record.metadata === 'object' && !Array.isArray(record.metadata)) {
-        Object.assign(metadata, record.metadata);
-    }
-
-    allowedFields.forEach((field) => {
-        if (record[field] !== undefined && record[field] !== null && String(record[field]).trim() !== '') {
-            metadata[field] = nfc(record[field]);
-        }
-    });
-
-    // Preserve any extra explicit metadata keys for forward compatibility.
-    if (record.metadata && typeof record.metadata === 'object' && !Array.isArray(record.metadata)) {
-        Object.entries(record.metadata).forEach(([key, value]) => {
-            if (value !== undefined && value !== null && String(value).trim() !== '') {
-                metadata[key] = nfc(value);
-            }
-        });
-    }
-
-    if (metadata.class !== undefined && metadata.strength === undefined) {
-        metadata.strength = metadata.class;
-    }
-
-    return pruneEmptyObject(metadata);
-}
-
-function normalizeApplicabilities(value) {
-    const normalizedPosTypes = normalizeStringList(value.pos_types);
-    const rawApplicabilities = Array.isArray(value.applicabilities) ? value.applicabilities : [];
-
-    if (rawApplicabilities.length > 0) {
-        return rawApplicabilities
-            .map((item) => {
-                const pos = normalizeToken(item?.pos);
-                if (!pos) return null;
-
-                const metadata = normalizeApplicabilityMetadata(pos, item);
-                const strength = nfc(item?.strength || metadata.strength || '');
-                const gender = nfc(item?.gender || metadata.gender || '');
-                const weakClass = nfc(item?.weakClass || metadata.weak_class || '');
-                const participleType = nfc(item?.participleType || metadata.participle_type || '');
-                const numeralType = nfc(item?.numeralType || metadata.numeral_type || '');
-
-                if (strength) metadata.strength = strength;
-                if (gender) metadata.gender = gender;
-                if (weakClass) metadata.weak_class = weakClass;
-                if (participleType) metadata.participle_type = participleType;
-                if (numeralType) metadata.numeral_type = numeralType;
-                delete metadata.class;
-                delete metadata.linguistic_role;
-
-                return {
-                    pos,
-                    strength,
-                    gender,
-                    weakClass,
-                    participleType,
-                    numeralType,
-                    metadata,
-                };
-            })
-            .filter(Boolean);
-    }
-
-    const legacyMetadata = normalizeApplicabilityMetadata(
-        normalizedPosTypes[0] || '',
-        {
-            strength: value.strength || value.class,
-            weak_class: value.weak_class,
-            gender: value.gender,
-            participle_type: value.participle_type,
-            numeral_type: value.numeral_type,
-            metadata: value.metadata,
-        }
-    );
-    const strength = nfc(value.strength || legacyMetadata.strength || '');
-    const gender = nfc(value.gender || legacyMetadata.gender || '');
-    const weakClass = nfc(value.weak_class || legacyMetadata.weak_class || '');
-    const participleType = nfc(value.participle_type || legacyMetadata.participle_type || '');
-    const numeralType = nfc(value.numeral_type || legacyMetadata.numeral_type || '');
-
-    if (strength) legacyMetadata.strength = strength;
-    if (gender) legacyMetadata.gender = gender;
-    if (weakClass) legacyMetadata.weak_class = weakClass;
-    if (participleType) legacyMetadata.participle_type = participleType;
-    if (numeralType) legacyMetadata.numeral_type = numeralType;
-
-    return (normalizedPosTypes.length > 0 ? normalizedPosTypes : ['all']).map((pos) => ({
-        pos,
-        strength,
-        gender,
-        weakClass,
-        participleType,
-        numeralType,
-        metadata: { ...legacyMetadata },
-    }));
 }
 
 export function validateAndNormalize(category, value) {

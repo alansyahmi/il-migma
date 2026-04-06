@@ -79,6 +79,7 @@ Determines which patterns appear as suggestions in the Admin Entry Form based on
 | `pos` | Part of speech mask (`'noun'`, `'adjective'`, or `'all'`) |
 | `linguistic_role` | Explicit role (e.g. `'feminine_singular'`, `'broken_plural'`) used for targeted filtering |
 | `gender` | Target gender (if applicable) |
+| `metadata` | JSON blob for forward-compatible extras and legacy notes |
 | `stress` | Syllable count from the end for stress placement |
 
 ### `root_pattern_forms` — The Junction

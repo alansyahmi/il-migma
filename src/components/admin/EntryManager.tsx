@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Book, CheckSquare, Edit2, HelpCircle, Plus, RefreshCw, Sparkles, Square, Trash2, Zap } from 'lucide-react';
@@ -39,6 +39,7 @@ export function EntryManager() {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
     const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+    const loadRequestId = useRef(0);
     const createEntryRequested = searchParams.get('create') === '1';
     const prefillHeadword = searchParams.get('headword') || searchParams.get('q') || '';
     const prefillRoot = searchParams.get('root') || searchParams.get('consonants') || '';
@@ -49,6 +50,7 @@ export function EntryManager() {
     }, []);
 
     const load = useCallback(async () => {
+        const requestId = ++loadRequestId.current;
         setLoading(true);
         setError('');
         try {
@@ -60,11 +62,14 @@ export function EntryManager() {
                 limit: PAGE_SIZE,
                 offset: 0,
             }) as { entries?: AdminEntry[]; total?: number };
+            if (loadRequestId.current !== requestId) return;
             setEntries(data.entries ?? []);
             setTotal(data.total ?? 0);
         } catch (e: unknown) {
+            if (loadRequestId.current !== requestId) return;
             setError(e instanceof Error ? e.message : String(e));
         } finally {
+            if (loadRequestId.current !== requestId) return;
             setLoading(false);
         }
     }, [getToken, query, selectedPos]);
@@ -140,18 +145,23 @@ export function EntryManager() {
         }
     };
 
+    const filteredEntries = useMemo(() => {
+        if (selectedPos === 'all') return entries;
+        return entries.filter((entry) => posMatchesFilter(entry.pos, selectedPos));
+    }, [entries, selectedPos]);
+
     const groupedEntries = useMemo(() => {
-        return entries.reduce((acc, entry) => {
+        return filteredEntries.reduce((acc, entry) => {
             const pos = entry.pos || 'unknown';
             if (!acc[pos]) acc[pos] = [];
             acc[pos].push(entry);
             return acc;
         }, {} as Record<string, AdminEntry[]>);
-    }, [entries]);
+    }, [filteredEntries]);
 
     const displayedGroups = useMemo(() => {
-        return Object.entries(selectedPos === 'all' ? groupedEntries : { [selectedPos]: entries });
-    }, [entries, groupedEntries, selectedPos]);
+        return Object.entries(selectedPos === 'all' ? groupedEntries : { [selectedPos]: filteredEntries });
+    }, [filteredEntries, groupedEntries, selectedPos]);
 
     const posOptions = useMemo(() => getValues('pos') as string[], [getValues]);
 
@@ -213,9 +223,9 @@ export function EntryManager() {
             {toast && <WorkspaceFeedbackBanner message={toast.msg} tone={toast.ok ? 'success' : 'error'} />}
             {error && <WorkspaceErrorBanner message={error} />}
 
-            {loading && entries.length === 0 ? (
+            {loading && filteredEntries.length === 0 ? (
                 <div className="flex justify-center py-20"><Spinner /></div>
-            ) : entries.length === 0 ? (
+            ) : filteredEntries.length === 0 ? (
                 <WorkspaceEmptyState
                     title={query ? term('no-results-found').replace('{q}', query) : term('no-results-found').replace(" for '{q}'", '').replace(" għal '{q}'", '')}
                     actionLabel={query ? term('clear-selection') : term('new-entry')}
@@ -445,4 +455,36 @@ function parseRelationshipItems(value: unknown): Array<{ id?: string; headword?:
     } catch {
         return [];
     }
+}
+
+const POS_ALIAS_GROUPS: Record<string, string[]> = {
+    noun: ['noun', 'n'],
+    verb: ['verb', 'v'],
+    adjective: ['adjective', 'adj'],
+    adverb: ['adverb', 'adv'],
+    preposition: ['preposition', 'prep'],
+    conjunction: ['conjunction', 'conj'],
+    particle: ['particle', 'part'],
+    article: ['article', 'art', 'det'],
+    pronoun: ['pronoun', 'pron'],
+    interrogative: ['interrogative', 'int', 'intg'],
+    numeral: ['numeral', 'num'],
+    interjection: ['interjection', 'intj'],
+    participle: ['participle', 'ptcp'],
+};
+
+function posMatchesFilter(entryPos: string | null | undefined, selectedPos: string) {
+    const normalizedEntryPos = normalizePos(entryPos);
+    const normalizedFilter = normalizePos(selectedPos);
+    if (!normalizedEntryPos || !normalizedFilter || normalizedFilter === 'all') return false;
+
+    if (normalizedEntryPos === normalizedFilter) return true;
+
+    const entryAliases = POS_ALIAS_GROUPS[normalizedEntryPos] || [normalizedEntryPos];
+    const filterAliases = POS_ALIAS_GROUPS[normalizedFilter] || [normalizedFilter];
+    return entryAliases.some((alias) => filterAliases.includes(alias));
+}
+
+function normalizePos(value: string | null | undefined) {
+    return String(value || '').trim().toLowerCase().replace(/[-\s]+/g, '_');
 }

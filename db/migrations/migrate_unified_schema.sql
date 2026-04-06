@@ -15,6 +15,8 @@ CREATE TABLE entries_new (
   form_masc             TEXT,
   dual_form             TEXT,
   diminutive_form       TEXT,
+  paucal_form           TEXT,
+  augmentative_form     TEXT,
   elative_form          TEXT,
   is_collective         INTEGER NOT NULL DEFAULT 0,
   is_singulative        INTEGER NOT NULL DEFAULT 0,
@@ -56,7 +58,7 @@ CREATE TABLE entries_new (
 -- 2. Migrate data
 INSERT INTO entries_new (
   id, headword, pos, gender, lemma_base, inflections_pl, form_fem, form_masc, 
-  dual_form, diminutive_form, elative_form, is_collective, is_singulative,
+  dual_form, diminutive_form, paucal_form, augmentative_form, elative_form, is_collective, is_singulative,
   participle_type, root_consonants, cv_pattern, morph_pattern, verb_form,
   root_pattern_form_id, is_loanword, is_inflectable, source_language, tags,
   sound_suffix, vowel_set_sg, vowel_set_pl, verb_class, verb_weak_class,
@@ -75,6 +77,8 @@ SELECT
   noun_masculine,
   noun_dual,
   noun_diminutive,
+  NULL,
+  NULL,
   adj_elative,
   0, -- is_collective
   0, -- is_singulative

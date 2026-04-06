@@ -53,17 +53,12 @@ function PatternCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (it
                             Pattern
                         </span>
                         <MetaChip label="Bucket" value={summary.bucketLabel} tone="accent" compact />
-                        {!!summary.gender && (
-                            <span className={cn(
-                                'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold',
-                                summary.gender === 'feminine' ? 'bg-pink-50 border-pink-100 text-pink-700' :
-                                    summary.gender === 'masculine' ? 'bg-blue-50 border-blue-100 text-blue-700' : 'bg-slate-50 border-slate-100 text-slate-700',
-                            )}>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-black/30">Gender</span>
-                                <span>{summary.gender}</span>
-                            </span>
+                        {!!summary.linguisticRole && (
+                            <MetaChip label="Role" value={summary.linguisticRole} tone="neutral" />
                         )}
-                        {!!summary.weakClass && <MetaChip label="Weak" value={summary.weakClass} tone="neutral" />}
+                        {!!summary.gender && (
+                            <MetaChip label="Gender" value={summary.gender} tone="neutral" />
+                        )}
                     </div>
 
                     <h3 className="font-bold text-[17px] text-black uppercase tracking-tight">{item.key}</h3>

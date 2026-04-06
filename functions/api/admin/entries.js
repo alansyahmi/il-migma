@@ -4,6 +4,7 @@
  */
 
 import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
+import { buildSuggestedEntryId } from '../../../src/lib/entryId.ts';
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
 async function verifyAdmin(request, env) {
@@ -120,6 +121,22 @@ async function ensureAlternativeFormsColumn(client) {
             sql: "UPDATE entries SET related_entries = ?, alternative_forms = ?, updated_at = ? WHERE id = ?",
             args: [JSON.stringify(remaining), JSON.stringify(merged), now(), row.id],
         });
+    }
+}
+
+async function ensureNounMorphologyColumns(client) {
+    const tableInfo = await client.execute("PRAGMA table_info(entries)");
+    const columnNames = new Set(tableInfo.rows.map((row) => row.name));
+    const additions = [
+        ['paucal_form', 'TEXT'],
+        ['augmentative_form', 'TEXT'],
+        ['paucal_pattern', 'TEXT'],
+        ['augmentative_pattern', 'TEXT'],
+    ];
+
+    for (const [name, type] of additions) {
+        if (columnNames.has(name)) continue;
+        await client.execute(`ALTER TABLE entries ADD COLUMN ${name} ${type}`);
     }
 }
 
@@ -338,35 +355,17 @@ export async function onRequestPost({ request, env }) {
         validateAndNormalizeEntryGender(body);
         const client = getDbClient(env);
         await ensureAlternativeFormsColumn(client);
+        await ensureNounMorphologyColumns(client);
         await ensureDiminutiveTable(client);
 
         let id = body.id;
 
         if (!id) {
-            const POS_PREFIXES = {
-                'noun': 'noun',
-                'verb': 'verb',
-                'adjective': 'adj',
-                'adverb': 'adv',
-                'preposition': 'prep',
-                'conjunction': 'conj',
-                'particle': 'part',
-                'article': 'art',
-                'pronoun': 'pron',
-                'interrogative': 'int',
-                'numeral': 'num',
-                'interjection': 'intj'
-            };
-
-            let prefix = POS_PREFIXES[body.pos] || body.pos || 'entry';
-            if (body.pos === 'participle') prefix = body.participle_type === 'active' ? 'ap' : 'pp';
-            else if (body.pos === 'verbal_noun') prefix = 'vn';
-
-            const safeHeadword = (body.headword || '').toLowerCase()
-                .replace(/\s+/g, '-')
-                .replace(/[^a-z0-9àċġħżie-]/gi, '');
-
-            let baseId = `${prefix}-${safeHeadword}`;
+            const baseId = buildSuggestedEntryId({
+                headword: body.headword,
+                pos: body.pos,
+                participleType: body.participle_type,
+            });
             id = baseId;
 
             // Handle collisions using numeral suffixes
@@ -498,6 +497,7 @@ export async function onRequestPut({ request, env }) {
 
         const client = getDbClient(env);
         await ensureAlternativeFormsColumn(client);
+        await ensureNounMorphologyColumns(client);
         await ensureDiminutiveTable(client);
         const sourceId = old_id || id;
 

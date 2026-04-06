@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS pattern_applicability (
   sort_order      INTEGER DEFAULT 0,
   linguistic_role TEXT,                  -- explicit role e.g. "feminine_singular"
   gender          TEXT,                  -- target gender e.g. "feminine"
+  metadata        TEXT,                  -- JSON blob for forward-compatible extras
   created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
   updated_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
@@ -111,6 +112,8 @@ CREATE TABLE IF NOT EXISTS entries (
   form_masc             TEXT, -- Replaces noun_masculine
   dual_form             TEXT, -- Replaces noun_dual
   diminutive_form       TEXT, -- Replaces noun_diminutive
+  paucal_form           TEXT, -- Replaces noun_paucal
+  augmentative_form     TEXT, -- Replaces noun_augmentative
   elative_form          TEXT, -- Replaces adj_elative
   is_collective         INTEGER NOT NULL DEFAULT 0,
   is_singulative        INTEGER NOT NULL DEFAULT 0,
@@ -135,6 +138,8 @@ CREATE TABLE IF NOT EXISTS entries (
   form_masc_pattern     TEXT,
   form_plural_pattern   TEXT,
   dual_pattern          TEXT,
+  paucal_pattern        TEXT,
+  augmentative_pattern  TEXT,
   numeral_type          TEXT,
   form_attributive_short TEXT,
   form_attributive_long TEXT,

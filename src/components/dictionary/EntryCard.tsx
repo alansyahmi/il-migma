@@ -13,6 +13,7 @@ import { SubEntryBlock } from './SubEntryBlock';
 import { LinkedEntryList } from './LinkedEntryList';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { cn } from '@/lib/utils';
+import { isInflectionDisabled } from '@/lib/inflectionState';
 import type { Entry } from '@/types';
 import { isHiddenTag, resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 
@@ -32,7 +33,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
     const { term } = useLinguisticMode();
     const [activeTab, setActiveTab] = useState('definitions');
     const [saved, setSaved] = useState(false);
-    const isTheoretical = entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
+    const isTheoretical = isInflectionDisabled(entry) || entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
         entry.verb_morphology?.root_tags?.includes('THEORETICAL') ||
         entry.headword.startsWith('*');
 

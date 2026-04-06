@@ -127,10 +127,7 @@ export function Stem() {
 
     const stemAdverbDisplayEntry = useMemo(() => {
         if (!stemAdverbEntry) return null;
-        return {
-            ...stemAdverbEntry,
-            is_inflectable: stemAdverbEntry.is_inflectable === false ? true : stemAdverbEntry.is_inflectable,
-        } as Entry;
+        return stemAdverbEntry as Entry;
     }, [stemAdverbEntry]);
 
     const stemEntryDefaults = useMemo(() => ({

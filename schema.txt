@@ -18,6 +18,10 @@ CREATE TABLE entries (
   noun_sound_plural     TEXT,
   noun_dual             TEXT,
   noun_diminutive       TEXT,
+  paucal_form           TEXT,
+  augmentative_form     TEXT,
+  paucal_pattern        TEXT,
+  augmentative_pattern  TEXT,
   noun_collective       TEXT,
   noun_singulative      TEXT,
 

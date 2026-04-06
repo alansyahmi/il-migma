@@ -1,0 +1,206 @@
+import { generateNumeralForms, type NumeralAutoForms } from './maltesePhonology.ts';
+
+export interface NumeralDerivedFieldState {
+    numeral_type?: string;
+    form_attributive_short?: string;
+    form_attributive_long?: string;
+}
+
+export type NumeralSurfaceMarker = 'plain' | 'theoretical' | 'auto_generated';
+
+export interface NumeralSurfaceValue {
+    value: string;
+    marker: NumeralSurfaceMarker;
+    entryId?: string;
+    pattern?: string | null;
+}
+
+export interface NumeralDisplayForms {
+    ordinal: NumeralSurfaceValue[];
+    adverbial: NumeralSurfaceValue[];
+    fractional: NumeralSurfaceValue[];
+    multiplier: NumeralSurfaceValue[];
+    distributive: NumeralSurfaceValue[];
+}
+
+type LinkedNumeralEntry = {
+    id?: string;
+    headword?: string | null;
+    cv_pattern?: string | null;
+    lemma_pattern?: string | null;
+    form_masc_pattern?: string | null;
+    form_fem_pattern?: string | null;
+    form_plural_pattern?: string | null;
+    morph_pattern?: string | null;
+    root_pattern_form?: {
+        pattern?: {
+            cv_notation?: string | null;
+        } | null;
+    } | null;
+};
+
+const NUMERAL_RELATED_HEADWORDS: Record<string, string[]> = {
+    wieħed: ['ewwel'],
+    ewwel: ['wieħed'],
+    tlieta: ['tielet'],
+    tielet: ['tlieta'],
+    erbgħa: ["raba'"],
+    "raba'": ['erbgħa'],
+};
+
+const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayForms, string[]>>> = {
+    wieħed: {
+        ordinal: ['ewwel'],
+        adverbial: ['darba'],
+        fractional: [],
+        multiplier: ['uniku', 'fard', '*mwaħħad'],
+        distributive: ['*uħied', 'uħud', 'frad', 'frud'],
+    },
+    tlieta: {
+        ordinal: ['tielet'],
+    },
+    erbgħa: {
+        ordinal: ["raba'"],
+    },
+};
+
+const SUPPLETIVE_NUMERAL_FAMILY_ALIASES: Record<string, string> = {
+    ewwel: 'wieħed',
+};
+
+const NUMERAL_MASC_SHORT_ATTRIBUTIVE_EXCEPTIONS = new Set(['wieħed', 'tnejn']);
+
+export function buildNumeralAutoForms(headword: string, rootConsonants: string): NumeralAutoForms {
+    return generateNumeralForms(headword, rootConsonants);
+}
+
+export function getNumeralShortAttributiveRowLabel(): string {
+    return 'Short-Attributive (Masculine)';
+}
+
+export function shouldCombineMasculineAndShortAttributive(headword: string): boolean {
+    const normalizedHeadword = normalizeNumeralLookupKey(headword);
+    return !!normalizedHeadword && !NUMERAL_MASC_SHORT_ATTRIBUTIVE_EXCEPTIONS.has(normalizedHeadword);
+}
+
+export function getNumeralRelatedHeadwords(headword: string): string[] {
+    const normalizedHeadword = normalizeNumeralLookupKey(headword);
+    if (!normalizedHeadword) return [];
+
+    return Array.from(new Set([
+        normalizedHeadword,
+        ...(NUMERAL_RELATED_HEADWORDS[normalizedHeadword] || []),
+    ].map(normalizeNumeralLookupKey).filter(Boolean)));
+}
+
+export function normalizeNumeralLookupKey(value: string): string {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFC')
+        .replace(/[’‘`´ˈ]/g, "'");
+}
+
+function normalizePatternValue(value: unknown): string | null {
+    if (typeof value !== 'string') return null;
+    const trimmed = value.trim();
+    return trimmed || null;
+}
+
+function extractLinkedEntryPattern(entry: LinkedNumeralEntry): string | null {
+    const rootPattern = entry.root_pattern_form?.pattern;
+    if (rootPattern && typeof rootPattern === 'object') {
+        const patternValue = normalizePatternValue(rootPattern.cv_notation);
+        if (patternValue) return patternValue;
+    }
+
+    return (
+        normalizePatternValue(entry.cv_pattern)
+        || normalizePatternValue(entry.lemma_pattern)
+        || normalizePatternValue(entry.form_masc_pattern)
+        || normalizePatternValue(entry.form_fem_pattern)
+        || normalizePatternValue(entry.form_plural_pattern)
+        || normalizePatternValue(entry.morph_pattern)
+    );
+}
+
+function toNumeralSurfaceValue(
+    rawValue: string | undefined,
+    linkedEntries: LinkedNumeralEntry[],
+    fallbackMarker: Exclude<NumeralSurfaceMarker, 'theoretical'> = 'auto_generated',
+): NumeralSurfaceValue | null {
+    if (!rawValue || rawValue === '-') return null;
+
+    const isTheoretical = rawValue.startsWith('*');
+    const value = isTheoretical ? rawValue.slice(1).trim() : rawValue.trim();
+    if (!value) return null;
+
+    const existing = linkedEntries.find((entry) => normalizeNumeralLookupKey(entry.headword || '') === normalizeNumeralLookupKey(value));
+    if (existing) {
+        return { value, marker: 'plain', entryId: existing.id, pattern: extractLinkedEntryPattern(existing) };
+    }
+
+    if (isTheoretical) {
+        return { value, marker: 'theoretical', pattern: null };
+    }
+
+    return { value, marker: fallbackMarker, pattern: null };
+}
+
+function toNumeralSurfaceList(
+    values: string[] | undefined,
+    linkedEntries: LinkedNumeralEntry[],
+    fallbackMarker: Exclude<NumeralSurfaceMarker, 'theoretical'> = 'auto_generated',
+): NumeralSurfaceValue[] {
+    return (values || [])
+        .map((value) => toNumeralSurfaceValue(value, linkedEntries, fallbackMarker))
+        .filter((value): value is NumeralSurfaceValue => Boolean(value));
+}
+
+export function buildNumeralDisplayForms(
+    headword: string,
+    rootConsonants: string,
+    linkedEntries: LinkedNumeralEntry[] = [],
+): NumeralDisplayForms {
+    const normalizedHeadword = normalizeNumeralLookupKey(headword);
+    const familyHeadword = SUPPLETIVE_NUMERAL_FAMILY_ALIASES[normalizedHeadword] || normalizedHeadword;
+    const displayForms = NUMERAL_DISPLAY_FORMS[familyHeadword];
+
+    const autoForms = generateNumeralForms(headword, rootConsonants);
+
+    const resolveDisplayValues = (key: keyof NumeralDisplayForms, fallback: string[] | string | null | undefined) => {
+        const override = displayForms?.[key];
+        if (override !== undefined) return override;
+        if (fallback === undefined || fallback === null) return [];
+        return Array.isArray(fallback) ? fallback : [fallback];
+    };
+
+    return {
+        ordinal: toNumeralSurfaceList(resolveDisplayValues('ordinal', autoForms.ordinal), linkedEntries, 'plain'),
+        adverbial: toNumeralSurfaceList(resolveDisplayValues('adverbial', autoForms.adverbial), linkedEntries, 'plain'),
+        fractional: toNumeralSurfaceList(resolveDisplayValues('fractional', autoForms.fractional_semitic), linkedEntries, 'plain'),
+        multiplier: toNumeralSurfaceList(
+            resolveDisplayValues(
+                'multiplier',
+                [autoForms.multiplier_form1, autoForms.multiplier_form2].filter((value): value is string => Boolean(value)),
+            ),
+            linkedEntries,
+            'plain',
+        ),
+        distributive: toNumeralSurfaceList(resolveDisplayValues('distributive', autoForms.distributive), linkedEntries, 'plain'),
+    };
+}
+
+export function seedNumeralDerivedFields<T extends NumeralDerivedFieldState>(
+    form: T,
+    autoForms: NumeralAutoForms,
+): T {
+    const next = { ...form };
+    const numeralType = String(next.numeral_type || '').trim();
+
+    next.numeral_type = numeralType || 'cardinal';
+    next.form_attributive_short = next.form_attributive_short || autoForms.attributive_short || '';
+    next.form_attributive_long = next.form_attributive_long || autoForms.attributive_long || '';
+
+    return next;
+}

@@ -24,7 +24,6 @@ interface ConfigFormModalProps {
     onSave: (val: { key: string; value: unknown }) => Promise<void>;
 }
 type FormValue = Record<string, any>;
-type ApplicabilityFieldKey = 'classValue' | 'weakClass' | 'verbForm' | 'classCompatibility' | 'linguisticRole' | 'gender' | 'participleType' | 'numeralType' | 'notes';
 
 function buildPatternKey(value: FormValue) {
     const cv = typeof value.cv === 'string' ? value.cv.trim() : '';
@@ -508,39 +507,31 @@ function PatternSection({
 function createBlankApplicability(pos: PatternPos): PatternApplicability {
     return {
         pos: pos as PatternApplicability['pos'],
-        classValue: '',
-        weakClass: '',
-        verbForm: '',
-        classCompatibility: '',
         linguisticRole: '',
         gender: '',
-        participleType: '',
-        numeralType: '',
         notes: '',
         metadata: {},
     };
 }
 
-function getPatternFieldValue(app: PatternApplicability, fieldKey: ApplicabilityFieldKey): string {
+function getPatternFieldValue(app: PatternApplicability, field: PatternFieldSpec): string {
     const metadata = (app.metadata || {}) as Record<string, any>;
+    const fieldKey = field.metadataKey || field.key;
 
     switch (fieldKey) {
-        case 'classValue':
-            return String(app.classValue || app.strength || metadata.class || metadata.strength || '').trim();
-        case 'weakClass':
-            return String(app.weakClass || metadata.weak_class || '').trim();
-        case 'verbForm':
-            return String(app.verbForm || metadata.verb_form || '').trim();
-        case 'classCompatibility':
-            return String(app.classCompatibility || metadata.class_compatibility || '').trim();
+        case 'verb_form':
+            return String(metadata.verb_form || '').trim();
+        case 'class_compatibility':
+            return String(metadata.class_compatibility || '').trim();
+        case 'participle_type':
+            return String(metadata.participle_type || '').trim();
+        case 'numeral_type':
+            return String(metadata.numeral_type || '').trim();
         case 'linguisticRole':
+        case 'linguistic_role':
             return String(app.linguisticRole || metadata.linguistic_role || '').trim();
         case 'gender':
             return String(app.gender || metadata.gender || '').trim();
-        case 'participleType':
-            return String(app.participleType || metadata.participle_type || '').trim();
-        case 'numeralType':
-            return String(app.numeralType || metadata.numeral_type || '').trim();
         case 'notes':
             return String(app.notes || metadata.notes || '').trim();
         default:
@@ -551,56 +542,37 @@ function getPatternFieldValue(app: PatternApplicability, fieldKey: Applicability
 function updatePatternField(
     setValue: Dispatch<SetStateAction<FormValue>>,
     pos: PatternPos,
-    fieldKey: ApplicabilityFieldKey,
+    field: PatternFieldSpec,
     rawValue: string,
 ) {
     updateApplicability(setValue, pos, (current) => {
         const nextValue = rawValue.trim();
         const nextMetadata = { ...(current.metadata || {}) };
         const next = { ...current };
+        const fieldKey = field.metadataKey || field.key;
 
         switch (fieldKey) {
-            case 'classValue':
-                next.classValue = nextValue;
-                next.strength = nextValue;
-                nextMetadata.class = nextValue;
-                nextMetadata.strength = nextValue;
-                if (nextValue !== 'weak') {
-                    delete next.weakClass;
-                    delete nextMetadata.weak_class;
-                }
-                break;
-            case 'weakClass':
-                next.weakClass = nextValue;
-                nextMetadata.weak_class = nextValue;
-                break;
-            case 'verbForm':
-                next.verbForm = nextValue;
-                nextMetadata.verb_form = nextValue;
-                break;
-            case 'classCompatibility':
-                next.classCompatibility = nextValue;
-                nextMetadata.class_compatibility = nextValue;
-                break;
             case 'linguisticRole':
+            case 'linguistic_role':
                 next.linguisticRole = nextValue;
-                nextMetadata.linguistic_role = nextValue;
+                delete nextMetadata.linguistic_role;
+                delete nextMetadata.linguisticRole;
                 break;
             case 'gender':
                 next.gender = nextValue;
-                nextMetadata.gender = nextValue;
-                break;
-            case 'participleType':
-                next.participleType = nextValue;
-                nextMetadata.participle_type = nextValue;
-                break;
-            case 'numeralType':
-                next.numeralType = nextValue;
-                nextMetadata.numeral_type = nextValue;
+                delete nextMetadata.gender;
                 break;
             case 'notes':
                 next.notes = nextValue;
-                nextMetadata.notes = nextValue;
+                if (nextValue) nextMetadata.notes = nextValue;
+                else delete nextMetadata.notes;
+                break;
+            case 'verb_form':
+            case 'class_compatibility':
+            case 'participle_type':
+            case 'numeral_type':
+                if (nextValue) nextMetadata[fieldKey] = nextValue;
+                else delete nextMetadata[fieldKey];
                 break;
         }
 
@@ -620,8 +592,8 @@ function getFieldOptions(field: PatternFieldSpec, getValues: (category: string) 
         .map((value) => ({ value, label: value }));
 
     if (mapped.length > 0) return mapped;
-    if (field.optionSource === 'weak_class') {
-        return ['defective', 'hollow', 'assimilative'].map((value) => ({ value, label: value }));
+    if (field.optionSource === 'gender') {
+        return ['masculine', 'feminine', 'neutral'].map((value) => ({ value, label: value }));
     }
 
     return mapped;
@@ -649,14 +621,8 @@ function updateApplicability(
         const nextApplicabilities = applicabilities.filter((item) => item.pos !== pos);
         nextApplicabilities.push({
             pos,
-            classValue: String(next.classValue || next.strength || '').trim(),
-            weakClass: String(next.weakClass || '').trim(),
-            verbForm: String(next.verbForm || '').trim(),
-            classCompatibility: String(next.classCompatibility || '').trim(),
             linguisticRole: String(next.linguisticRole || '').trim(),
             gender: String(next.gender || '').trim(),
-            participleType: String(next.participleType || '').trim(),
-            numeralType: String(next.numeralType || '').trim(),
             notes: String(next.notes || '').trim(),
             metadata: next.metadata || {},
         });
@@ -719,7 +685,7 @@ function ApplicabilitySection({
                         return null;
                     }
 
-                    const fieldValue = getPatternFieldValue(app, field.key as ApplicabilityFieldKey);
+                    const fieldValue = getPatternFieldValue(app, field);
                     const options = getFieldOptions(field, getValues);
 
                     return (
@@ -732,7 +698,7 @@ function ApplicabilitySection({
                                 <select
                                     className={inputClass}
                                     value={fieldValue}
-                                    onChange={(e) => updatePatternField(setValue, pos, field.key as ApplicabilityFieldKey, e.target.value)}
+                                    onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
                                 >
                                     <option value="">{field.emptyLabel || '-- Select --'}</option>
                                     {options.map((opt) => (
@@ -744,7 +710,7 @@ function ApplicabilitySection({
                                 <input
                                     className={inputClass}
                                     value={fieldValue}
-                                    onChange={(e) => updatePatternField(setValue, pos, field.key as ApplicabilityFieldKey, e.target.value)}
+                                    onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
                                     placeholder={field.placeholder}
                                 />
                             )}
@@ -752,7 +718,7 @@ function ApplicabilitySection({
                                 <textarea
                                     className={cn(inputClass, 'min-h-[84px] resize-y')}
                                     value={fieldValue}
-                                    onChange={(e) => updatePatternField(setValue, pos, field.key as ApplicabilityFieldKey, e.target.value)}
+                                    onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
                                     placeholder={field.placeholder}
                                     rows={field.rows || 3}
                                 />

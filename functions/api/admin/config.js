@@ -134,43 +134,66 @@ function parseJsonObject(raw) {
     }
 }
 
+const METADATA_KEY_ALIASES = {
+    linguisticRole: 'linguistic_role',
+    linguistic_role: 'linguistic_role',
+    verbForm: 'verb_form',
+    verb_form: 'verb_form',
+    classCompatibility: 'class_compatibility',
+    class_compatibility: 'class_compatibility',
+    participleType: 'participle_type',
+    participle_type: 'participle_type',
+    numeralType: 'numeral_type',
+    numeral_type: 'numeral_type',
+};
+
+const LEGACY_METADATA_KEYS = new Set(['class', 'classValue', 'strength', 'weakClass', 'weak_class']);
+
+function normalizeMetadataKey(key) {
+    return METADATA_KEY_ALIASES[key] || key;
+}
+
+function isMeaningfulValue(value) {
+    return value !== undefined && value !== null && !(typeof value === 'string' && value.trim() === '');
+}
+
+function addMetadataEntry(target, key, value) {
+    if (!isMeaningfulValue(value)) return;
+
+    if (key === 'metadata' && value && typeof value === 'object' && !Array.isArray(value)) {
+        Object.entries(value).forEach(([nestedKey, nestedValue]) => addMetadataEntry(target, nestedKey, nestedValue));
+        return;
+    }
+
+    const normalizedKey = normalizeMetadataKey(key);
+    if (LEGACY_METADATA_KEYS.has(normalizedKey)) return;
+    if (normalizedKey === 'linguistic_role' || normalizedKey === 'gender') return;
+
+    target[normalizedKey] = value;
+}
+
+function collectMetadataBlob(source) {
+    const metadata = {};
+    if (!source || typeof source !== 'object' || Array.isArray(source)) return metadata;
+    Object.entries(source).forEach(([key, value]) => addMetadataEntry(metadata, key, value));
+    return metadata;
+}
+
 function normalizePatternApplicabilityRow(row) {
-    const metadata = parseJsonObject(row.metadata);
-    const classValue = String(metadata.class || metadata.strength || '').trim();
-    const weakClass = String(metadata.weak_class || '').trim();
-    const verbForm = String(metadata.verb_form || '').trim();
-    const classCompatibility = String(metadata.class_compatibility || '').trim();
+    const metadata = collectMetadataBlob(parseJsonObject(row.metadata));
     const linguisticRole = String(row.linguistic_role || metadata.linguistic_role || '').trim();
     const gender = String(row.gender || metadata.gender || '').trim();
-    const participleType = String(metadata.participle_type || '').trim();
-    const numeralType = String(metadata.numeral_type || '').trim();
     const notes = String(metadata.notes || '').trim();
-    const mergedMetadata = {
-        ...metadata,
-    };
 
-    if (classValue) mergedMetadata.class = classValue;
-    if (gender) mergedMetadata.gender = gender;
-    if (weakClass) mergedMetadata.weak_class = weakClass;
-    if (verbForm) mergedMetadata.verb_form = verbForm;
-    if (classCompatibility) mergedMetadata.class_compatibility = classCompatibility;
-    if (linguisticRole) mergedMetadata.linguistic_role = linguisticRole;
-    if (participleType) mergedMetadata.participle_type = participleType;
-    if (numeralType) mergedMetadata.numeral_type = numeralType;
-    if (notes) mergedMetadata.notes = notes;
-    delete mergedMetadata.strength;
+    delete metadata.linguistic_role;
+    delete metadata.gender;
+    if (!notes) delete metadata.notes;
     return {
         pos: String(row.pos || '').trim().toLowerCase(),
-        classValue,
-        gender,
-        weakClass,
-        verbForm,
-        classCompatibility,
         linguisticRole,
-        participleType,
-        numeralType,
+        gender,
         notes,
-        metadata: mergedMetadata,
+        metadata,
     };
 }
 
@@ -193,7 +216,10 @@ function buildPatternPayloadRows(clientPatternId, category, value, sortOrder) {
         sort_order: sortOrder,
         linguistic_role: applicability.linguisticRole || '',
         gender: applicability.gender || '',
-        metadata: JSON.stringify(applicability.metadata || {}),
+        metadata: JSON.stringify({
+            ...(applicability.metadata || {}),
+            ...(applicability.notes ? { notes: applicability.notes } : {}),
+        }),
     }));
 }
 
@@ -223,15 +249,9 @@ function groupPatternRows(rows) {
 
     return Array.from(groups.values()).map((group) => {
         const posTypes = Array.from(new Set(group.applicabilities.map((item) => item.pos).filter(Boolean)));
-        const firstRole = group.applicabilities.find((item) => item.linguisticRole)?.linguisticRole || group.applicabilities.find((item) => item.metadata?.linguistic_role)?.metadata?.linguistic_role || '';
+        const firstRole = group.applicabilities.find((item) => item.linguisticRole)?.linguisticRole || '';
         const firstGender = group.applicabilities.find((item) => item.gender)?.gender || '';
-        const firstClassValue = group.applicabilities.find((item) => item.classValue)?.classValue || group.applicabilities.find((item) => item.metadata?.class)?.metadata?.class || group.applicabilities.find((item) => item.metadata?.strength)?.metadata?.strength || '';
-        const firstWeakClass = group.applicabilities.find((item) => item.weakClass)?.weakClass || group.applicabilities.find((item) => item.metadata?.weak_class)?.metadata?.weak_class || '';
-        const firstVerbForm = group.applicabilities.find((item) => item.verbForm)?.verbForm || group.applicabilities.find((item) => item.metadata?.verb_form)?.metadata?.verb_form || '';
-        const firstClassCompatibility = group.applicabilities.find((item) => item.classCompatibility)?.classCompatibility || group.applicabilities.find((item) => item.metadata?.class_compatibility)?.metadata?.class_compatibility || '';
-        const firstParticipleType = group.applicabilities.find((item) => item.participleType)?.participleType || group.applicabilities.find((item) => item.metadata?.participle_type)?.metadata?.participle_type || '';
-        const firstNumeralType = group.applicabilities.find((item) => item.numeralType)?.numeralType || group.applicabilities.find((item) => item.metadata?.numeral_type)?.metadata?.numeral_type || '';
-        const firstNotes = group.applicabilities.find((item) => item.notes)?.notes || group.applicabilities.find((item) => item.metadata?.notes)?.metadata?.notes || '';
+        const firstNotes = group.applicabilities.find((item) => item.notes)?.notes || '';
 
         return {
             id: `${group.patternId}_${group.category}_${group.stress === null || group.stress === undefined ? 'null' : group.stress}`,
@@ -246,12 +266,6 @@ function groupPatternRows(rows) {
                 applicabilities: group.applicabilities,
                 linguistic_role: firstRole,
                 gender: firstGender,
-                class: firstClassValue,
-                weak_class: firstWeakClass,
-                verb_form: firstVerbForm,
-                class_compatibility: firstClassCompatibility,
-                participle_type: firstParticipleType,
-                numeral_type: firstNumeralType,
                 notes: firstNotes,
             }),
             sort_order: group.sort_order,

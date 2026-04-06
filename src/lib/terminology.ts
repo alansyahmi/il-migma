@@ -21,6 +21,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'active': { en: 'Active', standard: 'Attiv', arabised: 'Fiegħel' },
     'noun-type': { en: 'Noun Type', standard: "Tip ta' Nom", arabised: "Għamla ta' Isem" },
     'dialect': { en: 'Dialect', standard: 'Djalett', arabised: 'Ilsejjen' },
+    'dialects': { en: 'Dialects', standard: 'Djaletti', arabised: 'Ilsejnin' },
     'conjugation-table': { en: 'Conjugation Table', standard: 'Tabella tal-Konjugazzjoni', arabised: 'Tabella tat-Tisrif' },
     'person': { en: 'Person', standard: 'Persuna', arabised: 'Nifs' },
     'imperfect': { en: 'Imperfect', standard: 'Imperfett', arabised: 'Għajr Tmim' },
@@ -28,6 +29,8 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'imperative': { en: 'Imperative', standard: 'Imperattiv', arabised: 'Amar' },
     'singular': { en: 'Singular', standard: 'Singular', arabised: 'Fard' },
     'plural': { en: 'Plural', standard: 'Plural', arabised: 'Ġmigħ' },
+    'paucal': { en: 'Paucal', standard: 'Pawkal', arabised: 'Pawkal' },
+    'augmentative': { en: 'Augmentative', standard: 'Tkabbir', arabised: 'Tkabbir' },
     '1s': { en: 'I', standard: 'Jiena', arabised: 'Jiena' },
     '2s': { en: 'You (singular)', standard: 'Inti', arabised: 'Inti' },
     '3ms': { en: 'He', standard: 'Huwa', arabised: 'Huwa' },
@@ -165,7 +168,6 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'digital': { en: 'Digital', standard: 'Diġitali', arabised: 'Għaddieni' },
     'online': { en: 'online', standard: 'onlajn', arabised: 'fuq linja' },
     'researchers': { en: 'researchers', standard: 'riċerkaturi', arabised: 'fittixin' },
-    'dialects': { en: 'dialects', standard: 'djaletti', arabised: 'lsejnin' },
 
     // Advanced Search
     'use-regular-expression': { en: 'Regex Mode', standard: 'Mod ta\' Regex', arabised: 'Mod ta\' Regex' },
@@ -437,6 +439,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'tag-color': { en: 'Color', standard: 'Kulur', arabised: 'Lewn' },
     'tag-theoretical': { en: 'Theoretical', standard: 'Teoretiku', arabised: 'Ħsibi' },
     'tag-base': { en: 'Base', standard: 'Bażi', arabised: 'Sies' },
+    'tag-term': { en: 'Term', standard: 'Terminu', arabised: 'Terminu' },
     'tag-derived': { en: 'Derived', standard: 'Derivat', arabised: 'Imħarreġ' },
     'tag-arabism': { en: 'Arabism', standard: 'Arabiżmu', arabised: 'Għerubija' },
     'tag-archaic': { en: 'Archaic', standard: 'Arkajku', arabised: 'Qadim' },

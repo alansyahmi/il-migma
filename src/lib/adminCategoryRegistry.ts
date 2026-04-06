@@ -31,11 +31,17 @@ export interface AdminCategory {
     hasPosFilter?: boolean;
     visibleInSidebar?: boolean;
     transformValue?: (item: any) => unknown;
-    transformOption?: (item: any, mode: 'standard' | 'arabised', lang: 'en' | 'mt') => { value: string, label: string } | null;
+    transformOption?: (item: unknown, mode: 'standard' | 'arabised', lang: 'en' | 'mt') => { value: string, label: string } | null;
 }
 
 const DEFAULT_LABELS = { en: '', mt_standard: '', mt_arabised: '' };
 const DEFAULT_PATTERN = { cv: '', wizen: '', stress: 2, pos_types: [], description: '', applicabilities: [] };
+
+const titleCase = (value: string) => value
+    .split(/[\s_-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(' ');
 
 const defaultTransformOption = (item: unknown, mode: 'standard' | 'arabised', lang: 'en' | 'mt') => {
     const source = item as { key: string; value: unknown };
@@ -79,7 +85,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         editorType: 'simple_label',
         defaultValueFactory: () => ({ ...DEFAULT_LABELS }),
         listStrategy: 'label_only',
-        transformValue: (i) => i.key,
+        transformValue: (i) => normalizeGender(i.key) || i.key,
         transformOption: (item, mode, lang) => {
             const source = item as { key: string };
             const canonicalGender = normalizeGender(source.key);
@@ -142,6 +148,22 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         defaultValueFactory: () => ({ ...DEFAULT_LABELS }),
         listStrategy: 'label_only',
         transformValue: (i) => i.key,
+    },
+    numeral_type: {
+        id: 'numeral_type',
+        label: 'Numeral Types',
+        icon: Tag,
+        groupId: 'core_grammar',
+        storageCategories: ['numeral_type'],
+        editorType: 'simple_label',
+        defaultValueFactory: () => ({ ...DEFAULT_LABELS }),
+        listStrategy: 'label_only',
+        transformValue: (i) => i.key,
+        transformOption: (item, mode, lang) => {
+            const source = item as { key: string };
+            const label = resolveHardcodedTerm(source.key, mode, lang);
+            return { value: source.key, label: label === source.key ? titleCase(source.key) : label };
+        },
     },
     verb_preset: {
         id: 'verb_preset',

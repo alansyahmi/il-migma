@@ -90,6 +90,7 @@ export function buildStemPayload(form: StemFormData): Record<string, any> {
 export const ENTRY_HANDLED_FIELDS = [
     'id', 'headword', 'pos', 'gender', 'lemma_base', 'inflections_pl',
     'form_fem', 'form_masc', 'dual_form', 'diminutive_form',
+    'paucal_form', 'augmentative_form',
     'is_collective', 'is_singulative', 'vowel_set_sg', 'vowel_set_pl',
     'vowel_set_opp', 'vowel_set_dual',
     'verb_class', 'verb_transitivity', 'verb_perfective_3sgm',
@@ -100,6 +101,7 @@ export const ENTRY_HANDLED_FIELDS = [
     'source_language', 'source_citation', 'definitions', 'etymology_chain',
     'phonetics', 'tags', 'cv_pattern', 'morph_pattern', 'sound_suffix',
     'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
+    'paucal_pattern', 'augmentative_pattern',
     'elative_pattern', 'diminutive_pattern',
     'synonyms', 'antonyms', 'related_entries', 'alternative_forms', 'created_at', 'updated_at',
     'root_consonants', 'verb_form', 'root_pattern_form_id', 'verb_weak_class', 'verb_type',
@@ -143,9 +145,10 @@ export function resolveEntryMorphologyMode(form: any): EntryMorphologyMode {
 export const POS_FEATURES: Record<string, string[]> = {
     'noun': [
         ...COMMON_FIELDS, 'gender', 'lemma_base', 'form_fem', 'form_masc',
-        'inflections_pl', 'dual_form', 'diminutive_form', 'is_collective',
+        'inflections_pl', 'dual_form', 'diminutive_form', 'paucal_form', 'augmentative_form', 'is_collective',
         'is_singulative', 'morph_pattern', 'sound_suffix',
         'lemma_pattern', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern', 'dual_pattern',
+        'paucal_pattern', 'augmentative_pattern',
         'diminutive_pattern',
         'vowel_set_sg', 'vowel_set_pl', 'vowel_set_opp', 'vowel_set_dual'
     ],
