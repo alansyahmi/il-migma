@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import { Menu, X, Sun, Moon, Search, Eye, EyeOff, Shield, Keyboard } from 'lucide-react';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useDarkMode } from '@/contexts/DarkModeContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,6 +14,7 @@ import { cn } from '@/lib/utils';
 
 export function Navbar() {
     const { mode, setMode, term } = useLinguisticMode();
+    const { hideTheoreticalForms, toggleHideTheoreticalForms } = useHideTheoreticalForms();
     const { language, setLanguage } = useLanguage();
     const { dark, toggle: toggleDark } = useDarkMode();
     const { isTrueAdmin, adminViewEnabled, setAdminViewEnabled, tier } = useAuth();
@@ -103,7 +105,7 @@ export function Navbar() {
 
                 {/* Desktop Search Bar — Dynamic Middle Section */}
                 {showSearch && (
-                    <div className="hidden md:block flex-1 max-w-md mx-6">
+                    <div className="hidden md:block flex-1 min-w-0 max-w-[20rem] lg:max-w-[24rem] mx-4">
                         <form onSubmit={handleSearch} className="relative group">
                             <div className="flex items-center bg-white/60 border border-border rounded-md overflow-hidden focus-within:bg-white focus-within:ring-1 focus-within:ring-[#1034A6] transition-all">
                                 <button
@@ -111,7 +113,7 @@ export function Navbar() {
                                     type="button"
                                     onClick={() => setKbOpen(o => !o)}
                                     className={cn(
-                                        "flex items-center gap-1 px-3 border-r border-black/10 shrink-0 py-2.5 transition-colors",
+                                        "flex items-center gap-1 px-2.5 border-r border-black/10 shrink-0 py-2 transition-colors",
                                         kbOpen ? "text-black bg-black/5" : "text-text-muted hover:text-black"
                                     )}
                                     aria-label={term('toggle-picker')}
@@ -125,11 +127,11 @@ export function Navbar() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder={term('search-placeholder')}
-                                    className="flex-1 bg-transparent px-3 py-2.5 text-sm focus:outline-none placeholder:text-text-muted text-black"
+                                    className="flex-1 min-w-0 bg-transparent px-2.5 py-2 text-sm focus:outline-none placeholder:text-text-muted text-black"
                                 />
                                 <button
                                     type="submit"
-                                    className="px-3 py-2.5 text-text-muted hover:text-black transition-colors shrink-0"
+                                    className="px-2.5 py-2 text-text-muted hover:text-black transition-colors shrink-0"
                                     aria-label={term('search')}
                                 >
                                     <Search size={16} />
@@ -146,7 +148,7 @@ export function Navbar() {
                 )}
 
                 {/* Right controls */}
-                <div className="flex items-center gap-0.5 sm:gap-1.5 shrink-0">
+                <div className="flex items-center gap-0.5 sm:gap-1 shrink-0 flex-nowrap">
 
 
 
@@ -167,7 +169,20 @@ export function Navbar() {
                         }
                     </button>
 
-                    {/* ② EN / MT — interface language */}
+                    {/* ② Hide / show theoretical forms */}
+                    <button
+                        id="hide-theoretical-toggle"
+                        onClick={toggleHideTheoreticalForms}
+                        title={hideTheoreticalForms ? term('show-theoretical-forms') : term('hide-theoretical-forms')}
+                        aria-pressed={hideTheoreticalForms}
+                        className={cn(
+                            'inline-flex items-center justify-center px-1 py-0.5 text-black/70 hover:text-black transition-colors',
+                        )}
+                    >
+                        <span className="text-[15px] leading-none">{hideTheoreticalForms ? '✧' : '✦'}</span>
+                    </button>
+
+                    {/* ③ EN / MT — interface language */}
                     <button
                         id="language-toggle"
                         onClick={() => setLanguage(language === 'en' ? 'mt' : 'en')}
@@ -177,7 +192,7 @@ export function Navbar() {
                         {language === 'en' ? 'EN' : 'MT'}
                     </button>
 
-                    {/* ③ Sun / Moon — light / dark mode */}
+                    {/* ④ Sun / Moon — light / dark mode */}
                     <button
                         id="dark-mode-toggle"
                         onClick={toggleDark}
@@ -187,7 +202,7 @@ export function Navbar() {
                         {dark ? <Moon size={15} /> : <Sun size={15} />}
                     </button>
 
-                    {/* ④ Admin View Toggle — Minimal version */}
+                    {/* ⑤ Admin View Toggle — Minimal version */}
                     {isTrueAdmin && (
                         <button
                             id="admin-view-toggle"
@@ -202,7 +217,7 @@ export function Navbar() {
                         </button>
                     )}
 
-                    {/* ⑤ User avatar — Clerk */}
+                    {/* ⑥ User avatar — Clerk */}
                     <SignedOut>
                         <SignInButton mode="modal">
                             <button
@@ -296,6 +311,17 @@ export function Navbar() {
                             className="text-sm font-medium text-black"
                         >
                             {isArabised ? <span className="font-arabic text-base">وزن</span> : <span className="font-sans font-medium text-sm">CV</span>}
+                        </button>
+                        <span className="text-border">·</span>
+                        <button
+                            onClick={toggleHideTheoreticalForms}
+                            aria-pressed={hideTheoreticalForms}
+                            title={hideTheoreticalForms ? term('show-theoretical-forms') : term('hide-theoretical-forms')}
+                            className={cn(
+                                'inline-flex items-center justify-center px-1 py-0.5 text-black/70 transition-colors',
+                            )}
+                        >
+                            <span className="text-[13px] leading-none">{hideTheoreticalForms ? '✧' : '✦'}</span>
                         </button>
                         <span className="text-border">·</span>
                         <button

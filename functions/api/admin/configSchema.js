@@ -5,7 +5,7 @@
 
 import { normalizePatternFormValue } from './patternMetadata.js';
 
-const PATTERN_CATEGORIES = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
+const PATTERN_CATEGORIES = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'derivational_suffix', 'dual_suffix', 'diminutive_pattern', 'adjective_pattern'];
 
 function nfc(value) {
     return typeof value === 'string' ? value.normalize('NFC').trim() : value;

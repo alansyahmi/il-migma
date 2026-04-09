@@ -551,6 +551,12 @@ export type SearchResult = Entry & {
     highlight?: string;
     definition_en?: string;
     definition_mt?: string;
+    suffix_match?: {
+        role: 'dual' | 'plural' | 'derivational';
+        displayValue: string;
+        sourceField: string;
+        matchedSuffix: string;
+    };
 };
 
 export interface SearchFilters {

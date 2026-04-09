@@ -17,6 +17,7 @@ import {
     pluralRowsToLegacyForms,
     pluralRowsToLegacyPatternString,
 } from './pluralForms.ts';
+import { isDashMarkedSuffix } from './suffixMatching.ts';
 
 // ── ROOTS ───────────────────────────────────────────────────────────────────
 
@@ -252,8 +253,8 @@ export function buildEntryPayload(form: any): Record<string, any> {
         form.form_plural_pattern,
     )).filter(row => row.form);
     const pluralPatterns = pluralRows.map(row => row.pattern).filter(Boolean);
-    const soundSuffix = pluralPatterns.filter((p: string) => p.startsWith('-')).join(', ');
-    const morphPattern = pluralPatterns.filter((p: string) => !p.startsWith('-')).join(', ');
+    const soundSuffix = pluralPatterns.filter((p: string) => isDashMarkedSuffix(p)).join(', ');
+    const morphPattern = pluralPatterns.filter((p: string) => !isDashMarkedSuffix(p)).join(', ');
 
     // Fill payload using the allowed fields and normalization
     ENTRY_HANDLED_FIELDS.forEach(field => {

@@ -35,7 +35,9 @@ export const PATTERN_BUCKET_LABELS: Record<string, string> = {
     cv_wizen_pattern: 'Pattern',
     broken_pattern: 'Broken plural',
     feminine_pattern: 'Feminine singular',
-    sound_suffix: 'Sound plural',
+    sound_suffix: 'Sound Plural Suffix',
+    derivational_suffix: 'Derivational Suffixes',
+    dual_suffix: 'Dual suffix',
     diminutive_pattern: 'Diminutive',
     adjective_pattern: 'Elative',
 };

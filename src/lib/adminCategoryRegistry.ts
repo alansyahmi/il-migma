@@ -5,7 +5,7 @@ import { resolveTerm as resolveHardcodedTerm } from './terminology';
 
 export type EditorType = 'simple_label' | 'pattern' | 'verb_preset' | 'ui_terminology';
 export type ListStrategy = 'label_only' | 'pattern' | 'complex_object';
-export type AdminCategoryGroupId = 'core_grammar' | 'patterns' | 'advanced' | 'ui_system';
+export type AdminCategoryGroupId = 'core_grammar' | 'patterns' | 'suffixes' | 'advanced' | 'ui_system';
 
 export interface AdminCategoryGroup {
     id: AdminCategoryGroupId;
@@ -16,8 +16,9 @@ export interface AdminCategoryGroup {
 export const ADMIN_CATEGORY_GROUPS: Record<AdminCategoryGroupId, AdminCategoryGroup> = {
     core_grammar: { id: 'core_grammar', label: 'Core Grammar', order: 1 },
     patterns: { id: 'patterns', label: 'Patterns', order: 2 },
-    advanced: { id: 'advanced', label: 'Advanced', order: 3 },
-    ui_system: { id: 'ui_system', label: 'UI & System', order: 4 },
+    suffixes: { id: 'suffixes', label: 'Suffixes', order: 3 },
+    advanced: { id: 'advanced', label: 'Advanced', order: 4 },
+    ui_system: { id: 'ui_system', label: 'UI & System', order: 5 },
 };
 
 export interface AdminCategory {
@@ -185,6 +186,45 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         listStrategy: 'complex_object',
         transformValue: (i) => ({ form: i.key, data: i.value }),
     },
+    sound_suffix: {
+        id: 'sound_suffix',
+        label: 'Sound Plural Suffix',
+        icon: Sparkles,
+        groupId: 'suffixes',
+        storageCategories: ['sound_suffix'],
+        editorType: 'pattern',
+        visibleInSidebar: true,
+        defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
+        listStrategy: 'pattern',
+        hasPosFilter: true,
+        transformValue: (i) => i.value,
+    },
+    derivational_suffix: {
+        id: 'derivational_suffix',
+        label: 'Derivational Suffixes',
+        icon: Puzzle,
+        groupId: 'suffixes',
+        storageCategories: ['derivational_suffix'],
+        editorType: 'pattern',
+        visibleInSidebar: true,
+        defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
+        listStrategy: 'pattern',
+        hasPosFilter: true,
+        transformValue: (i) => i.value,
+    },
+    dual_suffix: {
+        id: 'dual_suffix',
+        label: 'Dual Suffix',
+        icon: Puzzle,
+        groupId: 'suffixes',
+        storageCategories: ['dual_suffix'],
+        editorType: 'pattern',
+        visibleInSidebar: true,
+        defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
+        listStrategy: 'pattern',
+        hasPosFilter: true,
+        transformValue: (i) => i.value,
+    },
     // Legacy storage buckets kept for backward compatibility with older rows.
     plural_pattern: {
         id: 'plural_pattern',
@@ -193,7 +233,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         groupId: 'patterns',
         // Keep the historical `plural_pattern` bucket as a fallback so older rows
         // remain editable, while newer saves still land in the normalized tables.
-        storageCategories: ['broken_pattern', 'sound_suffix', 'plural_pattern'],
+        storageCategories: ['broken_pattern', 'plural_pattern'],
         editorType: 'pattern',
         visibleInSidebar: false,
         defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),
@@ -219,7 +259,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         label: 'Canonical Patterns',
         icon: Palette,
         groupId: 'patterns',
-        storageCategories: ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern', 'plural_pattern'],
+        storageCategories: ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'diminutive_pattern', 'adjective_pattern', 'plural_pattern'],
         editorType: 'pattern',
         visibleInSidebar: true,
         defaultValueFactory: () => ({ ...DEFAULT_PATTERN }),

@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, isValidElement, type ReactNode } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
@@ -20,6 +21,7 @@ import { MorphologyProvenanceRows } from '@/components/dictionary/EntryMorpholog
 import { VerbFormsTable, StackedSurface } from '@/components/dictionary/VerbFormsTable';
 import { resolveAttestedEntryFromEntries } from '@/lib/conjugationEngine';
 import { isHiddenTag } from '@/lib/tagLabel';
+import { shouldHideSurface } from '@/lib/theoreticalForms';
 
 const BLUE = '#1034A6';
 
@@ -28,24 +30,35 @@ function MarkedCell({
     isAdmin,
     onEdit,
     onDelete,
-    noLink
+    noLink,
+    hideWhenHidden,
 }: {
     data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string };
     isAdmin?: boolean;
     onEdit?: () => void;
     onDelete?: () => void;
     noLink?: boolean;
+    hideWhenHidden?: boolean;
 }) {
     const { term } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
+    const rawValue = String(data.value || '').trim();
+    const hasMarkerPrefix = rawValue.startsWith('*') || rawValue.startsWith('✦');
+    const hidden = hideTheoreticalForms && (data.marker !== 'plain' || rawValue.startsWith('*') || rawValue.startsWith('✦'));
     if (data.value === '-') return <span className="opacity-40">-</span>;
+    if (hidden) return hideWhenHidden ? null : <span className="opacity-40">-</span>;
+    const displayValue = hideTheoreticalForms ? rawValue.replace(/^[*✦]+\s*/, '').trim() : data.value;
+    const markerPrefix = data.marker === 'theoretical'
+        ? '*'
+        : (data.marker === 'auto_generated' ? '✦' : '');
 
     const content = (data.marker === 'plain' && !noLink) ? (
         <Link to={`/entry/${data.entryId || data.value}`} className="text-[#1034A6] hover:underline">
-            {data.value}
+            {displayValue}
         </Link>
     ) : (
         <span className={data.marker === 'plain' ? 'text-black' : 'opacity-45'}>
-            {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}{data.value}
+            {markerPrefix && !hasMarkerPrefix ? markerPrefix : ''}{displayValue}
         </span>
     );
 
@@ -80,6 +93,7 @@ export function Stem() {
     const { id } = useParams<{ id: string }>();
     const { mode, term } = useLinguisticMode();
     const { language } = useLanguage();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
     const [showStemModal, setShowStemModal] = useState(false);
@@ -249,10 +263,15 @@ export function Stem() {
           makeCellData(surface, { type: 'lemma', form, pos: 'verb' }).marker;
 
     const renderPassiveCell = (surface: string) => {
+        const primaryData = makeCellData(surface, { type: 'passive', form: 'I', pos: 'participle', participleType: 'passive' });
+        const visibleAlternateEntries = hideTheoreticalForms
+            ? passiveAlternateEntries.filter((item) => !shouldHideSurface(item, hideTheoreticalForms))
+            : passiveAlternateEntries;
         const primary = (
             <MarkedCell
-                data={makeCellData(surface, { type: 'passive', form: 'I', pos: 'participle', participleType: 'passive' })}
+                data={primaryData}
                 isAdmin={isActualAdmin}
+                hideWhenHidden
                 onDelete={() => {
                     const existing = resolveStemCellEntry(surface, { form: 'I', pos: 'participle', participleType: 'passive' });
                     if (existing?.id) handleDeleteEntry(existing.id);
@@ -261,14 +280,18 @@ export function Stem() {
             />
         );
 
-        if (passiveAlternateEntries.length === 0) {
+        if (hideTheoreticalForms && shouldHideSurface(primaryData, hideTheoreticalForms) && visibleAlternateEntries.length === 0) {
+            return null;
+        }
+
+        if (visibleAlternateEntries.length === 0) {
             return primary;
         }
 
         return (
             <StackedSurface
                 primary={primary}
-                alternates={passiveAlternateEntries.map((item) => {
+                alternates={visibleAlternateEntries.map((item) => {
                     const existing = item.id ? entries.find(e => e.id === item.id) : entries.find(e => e.headword === item.headword);
 
                     return (
@@ -287,6 +310,35 @@ export function Stem() {
                 })}
             />
         );
+    };
+
+    const toVerbCell = (
+        node: ReactNode | null | undefined,
+        marker?: 'plain' | 'theoretical' | 'auto_generated',
+        placeholder?: boolean,
+    ) => {
+        if (node === null || node === undefined) {
+            if (hideTheoreticalForms && (marker ?? 'plain') !== 'plain') {
+                return {
+                    value: '-',
+                    marker: marker || 'plain',
+                    hidden: true,
+                    placeholder: true,
+                };
+            }
+            return undefined;
+        }
+        const inferredPlaceholder =
+            placeholder ??
+            (isValidElement(node) &&
+                typeof (node.props as any)?.data?.value === 'string' &&
+                String((node.props as any).data.value).trim() === '-');
+        return {
+            value: node,
+            marker: marker || 'plain',
+            hidden: hideTheoreticalForms && (marker ?? 'plain') !== 'plain',
+            placeholder: !!inferredPlaceholder,
+        };
     };
 
     const viewModel: EntryViewModel = {
@@ -486,6 +538,7 @@ export function Stem() {
 
                         <VerbFormsTable
                             title={term('verbal-forms')}
+                            hideTheoreticalForms={hideTheoreticalForms}
                             columnLabels={{
                                 form: term('form'),
                                 lemma: term('lemma'),
@@ -499,81 +552,98 @@ export function Stem() {
                                 {
                                     key: 'I',
                                     form: <span className="font-serif font-bold text-[#1034A6]">I</span>,
-                                    lemma: (
+                                    lemma: toVerbCell(
                                         <MarkedCell
                                             data={makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' })}
                                             isAdmin={isActualAdmin}
+                                            hideWhenHidden
                                             onDelete={() => {
                                                 const existing = resolveStemCellEntry(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' });
                                                 if (existing?.id) handleDeleteEntry(existing.id);
                                             }}
                                             onEdit={() => openEntryEditor(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', pos: 'verb', form: 'I' })}
-                                        />
+                                        />,
+                                        makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' }).marker,
                                     ),
-                                    imperfect: <MarkedCell data={makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.imperfect || '', { type: 'imperfect', form: 'I', pos: 'verb', parentMarker: getParentVerbMarker(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', 'I') })} noLink />,
-                                    imperative: <MarkedCell data={makeCellData(zokkForms?.conjugation?.imperative_sg || '', { type: 'imperative', form: 'I', pos: 'verb' })} />,
-                                    passive: renderPassiveCell(zokkForms?.passive_participle?.masc || ''),
-                                    active: (
+                                    imperfect: toVerbCell(<MarkedCell data={makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.imperfect || '', { type: 'imperfect', form: 'I', pos: 'verb', parentMarker: getParentVerbMarker(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', 'I') })} hideWhenHidden noLink />, makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.imperfect || '', { type: 'imperfect', form: 'I', pos: 'verb', parentMarker: getParentVerbMarker(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', 'I') }).marker),
+                                    imperative: toVerbCell(<MarkedCell data={makeCellData(zokkForms?.conjugation?.imperative_sg || '', { type: 'imperative', form: 'I', pos: 'verb' })} hideWhenHidden />, makeCellData(zokkForms?.conjugation?.imperative_sg || '', { type: 'imperative', form: 'I', pos: 'verb' }).marker),
+                                    passive: toVerbCell(
+                                        renderPassiveCell(zokkForms?.passive_participle?.masc || ''),
+                                        makeCellData(zokkForms?.passive_participle?.masc || '', { type: 'passive', form: 'I', pos: 'participle', participleType: 'passive' }).marker,
+                                    ),
+                                    active: toVerbCell(
                                         <MarkedCell
                                             data={makeCellData(zokkForms?.agentive?.masc || '', { type: 'active', form: 'I', pos: 'participle', participleType: 'active' })}
                                             isAdmin={isActualAdmin}
+                                            hideWhenHidden
                                             onDelete={() => {
                                                 const existing = resolveStemCellEntry(zokkForms?.agentive?.masc || '', { form: 'I', pos: 'participle', participleType: 'active' });
                                                 if (existing?.id) handleDeleteEntry(existing.id);
                                             }}
                                             onEdit={() => openEntryEditor(zokkForms?.agentive?.masc || '', { type: 'active', pos: 'participle', participle_type: 'active', form: 'I' })}
-                                        />
+                                        />,
+                                        makeCellData(zokkForms?.agentive?.masc || '', { type: 'active', form: 'I', pos: 'participle', participleType: 'active' }).marker,
                                     ),
-                                    verbalNoun: (
+                                    verbalNoun: toVerbCell(
                                         <MarkedCell
                                             data={makeCellData(zokkForms?.verbal_noun || '', { type: 'noun', form: 'I', pos: 'noun' })}
                                             isAdmin={isActualAdmin}
+                                            hideWhenHidden
                                             onDelete={() => {
                                                 const existing = resolveStemCellEntry(zokkForms?.verbal_noun || '', { form: 'I', pos: 'noun' });
                                                 if (existing?.id) handleDeleteEntry(existing.id);
                                             }}
                                             onEdit={() => openEntryEditor(zokkForms?.verbal_noun || '', { type: 'noun', pos: 'noun', form: 'I' })}
-                                        />
+                                        />,
+                                        makeCellData(zokkForms?.verbal_noun || '', { type: 'noun', form: 'I', pos: 'noun' }).marker,
                                     ),
                                 },
                                 ...(is_hybrid && zokkForms?.hybrid_forms ? [{
                                     key: 'II',
                                     form: <span className="font-serif font-bold text-[#1034A6]">II</span>,
-                                    lemma: <MarkedCell data={makeCellData(hybridForms?.form_ii || '', { type: 'lemma', form: 'II', pos: 'verb' })} />,
+                                    lemma: toVerbCell(<MarkedCell data={makeCellData(hybridForms?.form_ii || '', { type: 'lemma', form: 'II', pos: 'verb' })} hideWhenHidden />, makeCellData(hybridForms?.form_ii || '', { type: 'lemma', form: 'II', pos: 'verb' }).marker),
                                     imperfect: hybridForms?.form_ii_imperfect ? (
-                                        <MarkedCell data={makeCellData(hybridForms.form_ii_imperfect, { type: 'imperfect', form: 'II', pos: 'verb', parentMarker: getParentVerbMarker(hybridForms?.form_ii || '', 'II') })} noLink />
+                                        toVerbCell(<MarkedCell data={makeCellData(hybridForms.form_ii_imperfect, { type: 'imperfect', form: 'II', pos: 'verb', parentMarker: getParentVerbMarker(hybridForms?.form_ii || '', 'II') })} hideWhenHidden noLink />, makeCellData(hybridForms.form_ii_imperfect, { type: 'imperfect', form: 'II', pos: 'verb', parentMarker: getParentVerbMarker(hybridForms?.form_ii || '', 'II') }).marker)
                                     ) : (
-                                        <span className="text-black/30">-</span>
+                                        undefined
                                     ),
                                     imperative: hybridForms?.form_ii_imperative ? (
-                                        <MarkedCell data={makeCellData(hybridForms.form_ii_imperative, { type: 'imperative', form: 'II', pos: 'verb' })} />
+                                        toVerbCell(<MarkedCell data={makeCellData(hybridForms.form_ii_imperative, { type: 'imperative', form: 'II', pos: 'verb' })} hideWhenHidden />, makeCellData(hybridForms.form_ii_imperative, { type: 'imperative', form: 'II', pos: 'verb' }).marker)
                                     ) : (
-                                        <span className="text-black/30">-</span>
+                                        undefined
                                     ),
                                     passive: hybridForms?.form_ii_passive_participle ? (
-                                        <MarkedCell
+                                        toVerbCell(
+                                            <MarkedCell
                                             data={makeCellData(hybridForms.form_ii_passive_participle, { type: 'passive', form: 'II', pos: 'participle', participleType: 'passive' })}
                                             isAdmin={isActualAdmin}
+                                            hideWhenHidden
                                             noLink
                                             onEdit={() => openEntryEditor(hybridForms.form_ii_passive_participle || '', { type: 'passive', pos: 'participle', participle_type: 'passive', form: 'II' })}
-                                        />
+                                        />,
+                                            makeCellData(hybridForms.form_ii_passive_participle, { type: 'passive', form: 'II', pos: 'participle', participleType: 'passive' }).marker,
+                                        )
                                     ) : (
-                                        <MarkedCell
+                                        toVerbCell(
+                                            <MarkedCell
                                             data={makeCellData(hybridForms?.semitic_passive_participle || '', { type: 'passive', form: 'II', pos: 'participle', participleType: 'passive' })}
                                             isAdmin={isActualAdmin}
+                                            hideWhenHidden
                                             noLink
                                             onEdit={() => openEntryEditor(hybridForms?.semitic_passive_participle || '', { type: 'passive', pos: 'participle', participle_type: 'passive', form: 'II' })}
-                                        />
+                                        />,
+                                            makeCellData(hybridForms?.semitic_passive_participle || '', { type: 'passive', form: 'II', pos: 'participle', participleType: 'passive' }).marker,
+                                        )
                                     ),
                                     active: hybridForms?.form_ii_active_participle ? (
-                                        <MarkedCell data={makeCellData(hybridForms.form_ii_active_participle, { type: 'active', form: 'II', pos: 'participle', participleType: 'active' })} />
+                                        toVerbCell(<MarkedCell data={makeCellData(hybridForms.form_ii_active_participle, { type: 'active', form: 'II', pos: 'participle', participleType: 'active' })} hideWhenHidden />, makeCellData(hybridForms.form_ii_active_participle, { type: 'active', form: 'II', pos: 'participle', participleType: 'active' }).marker)
                                     ) : (
-                                        <span className="text-black/30">-</span>
+                                        undefined
                                     ),
                                     verbalNoun: hybridForms?.form_ii_verbal_noun ? (
-                                        <MarkedCell data={makeCellData(hybridForms.form_ii_verbal_noun, { type: 'noun', form: 'II', pos: 'noun' })} />
+                                        toVerbCell(<MarkedCell data={makeCellData(hybridForms.form_ii_verbal_noun, { type: 'noun', form: 'II', pos: 'noun' })} hideWhenHidden />, makeCellData(hybridForms.form_ii_verbal_noun, { type: 'noun', form: 'II', pos: 'noun' }).marker)
                                     ) : (
-                                        <span className="text-black/30">-</span>
+                                        undefined
                                     ),
                                 }] : []),
                             ]}

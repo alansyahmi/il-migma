@@ -38,6 +38,7 @@ import {
     type PatternSourceItem,
 } from '@/lib/patternBuckets';
 import { buildSuggestedEntryId } from '@/lib/entryId';
+import { isDashMarkedSuffix, stripLeadingDash } from '@/lib/suffixMatching';
 
 export interface AdminEntry {
     id: string;
@@ -113,11 +114,13 @@ interface MorphologyProps {
         broken_patterns?: any[];
         cv_wizen_patterns?: any[];
         sound_suffixes?: string[];
+        dual_suffixes?: PatternOption[];
         patterns?: PatternOption[];
         plural_patterns?: PatternOption[];
         elative_patterns?: PatternOption[];
         feminine_patterns?: PatternOption[];
         diminutive_patterns?: PatternOption[];
+        derivational_suffixes?: PatternOption[];
         suggestions?: {
             broken_pattern?: string;
             feminine?: string;
@@ -615,11 +618,11 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
                 {form.dual_form && (
                     <div>
                         <PatternTagField
-                            label={t('Dual Pattern', 'Mudell Doppju')}
+                            label={t('Dual Suffix', 'Suffiss Doppju')}
                             value={form.dual_pattern || ''}
                             onChange={v => set('dual_pattern', v)}
                             placeholder="e.g. CvCCejn"
-                            presets={options?.patterns}
+                            presets={options?.dual_suffixes}
                             styles={styles}
                             t={t}
                         />
@@ -663,6 +666,7 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
                             value={form.augmentative_pattern || ''}
                             onChange={v => set('augmentative_pattern', v)}
                             placeholder="e.g. CVCVCa"
+                            presets={options?.derivational_suffixes}
                             styles={styles}
                             t={t}
                         />
@@ -766,11 +770,11 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
                 {form.dual_form && (
                     <div>
                         <PatternTagField
-                            label={t('Dual Pattern', 'Mudell Doppju')}
+                            label={t('Dual Suffix', 'Suffiss Doppju')}
                             value={form.dual_pattern || ''}
                             onChange={v => set('dual_pattern', v)}
                             placeholder="e.g. CvCCejn"
-                            presets={options?.patterns}
+                            presets={options?.dual_suffixes}
                             styles={styles}
                             t={t}
                         />
@@ -1038,11 +1042,11 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
                 {form.dual_form && (
                     <div>
                         <PatternTagField
-                            label={t('Dual Pattern', 'Mudell Doppju')}
+                            label={t('Dual Suffix', 'Suffiss Doppju')}
                             value={form.dual_pattern || ''}
                             onChange={v => set('dual_pattern', v)}
                             placeholder="e.g. CvCCejn"
-                            presets={options?.patterns}
+                            presets={options?.dual_suffixes}
                             styles={styles}
                             t={t}
                         />
@@ -1453,6 +1457,12 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const REGISTER_OPTIONS = useMemo(() => getOptions('register', mode, language), [getOptions, mode, language]);
     const NOUN_TYPE_OPTIONS = useMemo(() => getOptions('noun_type', mode, language), [getOptions, mode, language]);
     const SOUND_SUFFIXES = getValues('sound_suffix');
+    const DUAL_SUFFIX_OPTIONS = useMemo(() => (
+        getValues('dual_suffix')
+            .map(getPatternNotation)
+            .filter(Boolean)
+            .map((value) => ({ label: value, value }))
+    ), [getValues]);
     const VERB_PRESETS_LIST = getValues('verb_preset');
     const VERB_FORM_OPTIONS = getValues('verb_form');
     const NUMERAL_TYPE_OPTIONS = useMemo(() => getOptions('numeral_type', mode, language), [getOptions, mode, language]);
@@ -2100,7 +2110,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 const baseValue = entry.category === 'cv_wizen_pattern'
                     ? { cv: key, wizen: '', stress: 2, pos_types: [currentPos] }
                     : entry.category === 'sound_suffix'
-                        ? { cv: key, wizen: key.replace(/^-+/, ''), pos_types: [currentPos] }
+                        ? { cv: key, wizen: stripLeadingDash(key), pos_types: [currentPos] }
+                        : entry.category === 'derivational_suffix'
+                            ? { cv: key, wizen: stripLeadingDash(key), pos_types: [currentPos] }
                         : { cv: key, wizen: '', pos_types: [currentPos] };
 
                 if (!existing) {
@@ -2190,9 +2202,17 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     .map((s: string) => s.trim())
                     .filter((s: string) => s)
                     .map((s: string) => ({
-                        category: s.startsWith('-') ? 'sound_suffix' : 'broken_pattern',
+                        category: isDashMarkedSuffix(s) ? 'sound_suffix' : 'broken_pattern',
                         key: s,
-                })))
+                    }))),
+                ...((form.augmentative_pattern || '').split(',')
+                    .map((s: string) => s.trim())
+                    .filter((s: string) => s)
+                    .filter((s: string) => isDashMarkedSuffix(s))
+                    .map((s: string) => ({
+                        category: 'derivational_suffix',
+                        key: s,
+                    }))),
             ];
             await syncPatternRegistrations(patternsToSync, normalizedPos);
             invalidateDistinctValuesCache();
@@ -2306,6 +2326,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         gender: GENDER_OPTIONS,
                         noun_type: NOUN_TYPE_OPTIONS,
                         patterns: nounPatterns,
+                        dual_suffixes: DUAL_SUFFIX_OPTIONS,
+                        derivational_suffixes: getValues('derivational_suffix')
+                            .map(getPatternNotation)
+                            .filter(Boolean)
+                            .map((value) => ({ label: value, value })),
                         plural_patterns: pluralPatterns,
                         feminine_patterns: femininePatterns,
                         diminutive_patterns: diminutivePatterns,
@@ -2385,6 +2410,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     options={{
                         gender: GENDER_OPTIONS,
                         patterns: adjPatterns,
+                        dual_suffixes: DUAL_SUFFIX_OPTIONS,
                         elative_patterns: elativePatterns,
                         plural_patterns: pluralPatterns,
                         feminine_patterns: femininePatterns,
@@ -3103,9 +3129,17 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                                 .map((s: string) => s.trim())
                                                 .filter((s: string) => s)
                                                 .map((s: string) => ({
-                                                    category: s.startsWith('-') ? 'sound_suffix' : 'broken_pattern',
+                                                    category: isDashMarkedSuffix(s) ? 'sound_suffix' : 'broken_pattern',
                                                     key: s,
-                                                })))
+                                                }))),
+                                            ...((form.augmentative_pattern || '').split(',')
+                                                .map((s: string) => s.trim())
+                                                .filter((s: string) => s)
+                                                .filter((s: string) => isDashMarkedSuffix(s))
+                                                .map((s: string) => ({
+                                                    category: 'derivational_suffix',
+                                                    key: s,
+                                                }))),
                                         ];
                                         await syncPatternRegistrations(syncList, currentPos);
                                         invalidateDistinctValuesCache();

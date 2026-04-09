@@ -7,8 +7,26 @@
  */
 
 import { createClient } from '@libsql/client/web';
+import { resolveSuffixEntryMatch } from '../../src/lib/suffixMatching.ts';
 
 const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
+
+function normalizeSuffixToken(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFC')
+        .replace(/[–—−]/g, '-')
+        .replace(/[\s-]+/g, '');
+}
+
+function normalizedColumnSql(column) {
+    return `REPLACE(REPLACE(REPLACE(LOWER(COALESCE(${column}, '')), '-', ''), '–', ''), ' ', '')`;
+}
+
+function suffixTokenColumnSql(column) {
+    return `(',' || ${normalizedColumnSql(column)} || ',')`;
+}
 
 function firstSenseText(value) {
     if (value === undefined || value === null) return '';
@@ -37,6 +55,9 @@ export async function onRequestGet({ request, env }) {
     const forms = getQueryValues(url.searchParams, 'form');
     const verbType = url.searchParams.get('verb_type') ?? '';
     const source = url.searchParams.get('source') ?? '';
+    const sourceLanguage = url.searchParams.get('source_language')?.trim() ?? '';
+    const suffix = url.searchParams.get('suffix')?.trim() ?? '';
+    const suffixKind = url.searchParams.get('suffix_kind')?.trim().toLowerCase() ?? '';
     const requestedGender = url.searchParams.get('gender')?.trim().toLowerCase() ?? '';
     const gender = CANONICAL_GENDERS.has(requestedGender) ? requestedGender : '';
     const rootId = url.searchParams.get('root_id')?.trim().normalize('NFC') ?? '';
@@ -210,6 +231,58 @@ export async function onRequestGet({ request, env }) {
             sql += ' AND (r.source = ? OR e.source = ?)';
             args.push(source, source);
         }
+        if (sourceLanguage) {
+            sql += ' AND LOWER(COALESCE(e.source_language, \'\')) = ?';
+            args.push(sourceLanguage.toLowerCase());
+        }
+        if (suffix) {
+            const normalizedSuffix = normalizeSuffixToken(suffix);
+            const suffixTokenPattern = `%,${normalizedSuffix},%`;
+            const suffixMatchSql = [];
+            const suffixArgs = [];
+
+            if (suffixKind === 'nominal') {
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.dual_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.sound_suffix')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.form_plural_pattern')} LIKE ?`);
+                suffixArgs.push(
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                );
+            } else if (suffixKind === 'derivational') {
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.augmentative_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.augmentative_form')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.morph_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.lemma_pattern')} LIKE ?`);
+                suffixArgs.push(
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                );
+            } else {
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.dual_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.sound_suffix')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.augmentative_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.augmentative_form')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.form_plural_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.morph_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.lemma_pattern')} LIKE ?`);
+                suffixArgs.push(
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                    suffixTokenPattern,
+                );
+            }
+
+            sql += ` AND (${suffixMatchSql.join(' OR ')})`;
+            args.push(...suffixArgs);
+        }
         if (gender) {
             sql += ` AND (
                 LOWER(COALESCE(e.gender, '')) = ?
@@ -258,7 +331,7 @@ export async function onRequestGet({ request, env }) {
             return json({ results: [], total, query: q });
         }
 
-        const hasCriteria = q || rootId || pos || rootType || vowelSet || wizen || source || gender || r1 || r2 || r3 || r4;
+        const hasCriteria = q || rootId || pos || rootType || vowelSet || wizen || source || sourceLanguage || suffix || gender || r1 || r2 || r3 || r4;
         let isRandomSearch = (isRandom || !hasCriteria) && !q;
 
         let finalSql = `
@@ -310,12 +383,12 @@ export async function onRequestGet({ request, env }) {
                     inflections_pl = [];
                 }
             }
-            return {
+            const mapped = {
                 ...r,
                 tags: r.tags ? (() => { try { return JSON.parse(r.tags); } catch { return []; } })() : [],
                 is_loanword: Boolean(r.is_loanword),
                 // Map to legacy names for frontend compatibility if needed, or keep unified
-                noun_plural_forms: inflections_pl, 
+                noun_plural_forms: inflections_pl,
                 verb_morphology: (r.pos === 'verb' || r.verb_form) ? {
                     form: r.verb_form || '',
                     transitivity: r.verb_transitivity || 'both',
@@ -366,6 +439,11 @@ export async function onRequestGet({ request, env }) {
                         created_at: ''
                     } : undefined
                 } : undefined
+            };
+
+            return {
+                ...mapped,
+                suffix_match: suffix ? (resolveSuffixEntryMatch(mapped, suffix, suffixKind === 'derivational' ? 'derivational' : 'nominal') || undefined) : undefined
             };
         });
 

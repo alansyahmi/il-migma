@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Badge } from '@/components/ui/Badge';
 import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
 import { isInflectionDisabled } from '@/lib/inflectionState';
 import { isHiddenTag } from '@/lib/tagLabel';
 import { generateDiminutiveForm } from '@/lib/maltesePhonology';
+import { stripTheoreticalPrefix, shouldHideSurface } from '@/lib/theoreticalForms';
 
 import type { Entry } from '@/types';
 
@@ -15,10 +17,14 @@ interface MorphologyGridProps {
 
 export function MorphologyGrid({ entry }: MorphologyGridProps) {
     const { term } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const isTheoretical = isInflectionDisabled(entry) || entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
         entry.verb_morphology?.root_tags?.includes('THEORETICAL') ||
-        entry.headword.startsWith('*');
+        entry.headword.startsWith('*') ||
+        entry.headword.startsWith('✦');
     const isElativeDisabled = entry.tags?.some(tag => tag && (tag.includes('$') || isHiddenTag(tag)));
+    const visibleText = (value?: string | null) => (hideTheoreticalForms ? stripTheoreticalPrefix(value || '') : (value || ''));
+    const hideValue = (value?: string | null, theoretical = false) => hideTheoreticalForms && (theoretical || isTheoretical || shouldHideSurface(value || '', hideTheoreticalForms));
 
     if (entry.pos === 'noun' && entry.noun_morphology) {
         const m = entry.noun_morphology;
@@ -35,8 +41,12 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
             ? null
             : generateDiminutiveForm(entry.headword, rootConsonants, diminutivePatternHint, { basePattern: diminutiveBasePatternHint, gender: diminutiveGender });
         const generatedDiminutiveRows = generatedDiminutive ? [generatedDiminutive] : [];
+        const visibleDiminutiveRows = hideTheoreticalForms ? diminutiveRows.filter(row => !shouldHideSurface(row.form, hideTheoreticalForms)) : diminutiveRows;
+        const visibleGeneratedDiminutiveRows = hideTheoreticalForms ? [] : generatedDiminutiveRows;
+        const shownDiminutiveRows = visibleDiminutiveRows.length > 0 ? visibleDiminutiveRows : visibleGeneratedDiminutiveRows;
         const diminutive = diminutiveRows[0]?.form || m.diminutive || entry.diminutive_form || generatedDiminutiveRows[0]?.form || null;
         const diminutivePattern = diminutiveRows[0]?.pattern || m.diminutive_pattern || entry.diminutive_pattern || generatedDiminutiveRows[0]?.pattern || null;
+        const diminutiveHidden = hideValue(diminutive, !!generatedDiminutiveRows[0]?.theoretical);
         const pluralRows = compactPluralRows(normalizePluralFormRows(
             m.plural_forms,
             m.form_plural_pattern || entry.form_plural_pattern || entry.plural_pattern,
@@ -49,14 +59,14 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     </span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 divide-x divide-y divide-border-light">
-                    <Cell label={term('singular')} value={m.singular} />
+                    <Cell label={term('singular')} value={visibleText(m.singular)} />
                     <Cell
                         label={term('plural')}
                         value={pluralRows.length > 0 ? (
                             <div className="space-y-2">
                                 {pluralRows.map((row, index) => (
                                     <div key={`${row.form}-${index}`} className="leading-tight">
-                                        <div>{row.form}</div>
+                                        <div>{visibleText(row.form)}</div>
                                         {row.pattern && (
                                             <div className="text-[11px] text-black/40 font-sans">
                                                 {row.pattern}
@@ -65,14 +75,14 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                                     </div>
                                 ))}
                             </div>
-                        ) : m.plural_forms.join(' / ')}
+                        ) : visibleText(m.plural_forms.join(' / '))}
                     />
-                    {m.sound_plural && <Cell label={term('regular-plural')} value={m.sound_plural} />}
-                    {m.dual && <Cell label={term('dual')} value={m.dual} />}
-                    {paucal && <Cell label={term('paucal')} value={<div className="leading-tight"><div>{paucal}</div>{paucalPattern && <div className="text-[11px] text-black/40 font-sans">{paucalPattern}</div>}</div>} />}
-                    {augmentative && <Cell label={term('augmentative')} value={<div className="leading-tight"><div>{augmentative}</div>{augmentativePattern && <div className="text-[11px] text-black/40 font-sans">{augmentativePattern}</div>}</div>} />}
-                    {m.collective && <Cell label={term('collective')} value={m.collective} />}
-                    {m.singulative && <Cell label={term('singulative')} value={m.singulative} />}
+                    {m.sound_plural && <Cell label={term('regular-plural')} value={visibleText(m.sound_plural)} />}
+                    {m.dual && <Cell label={term('dual')} value={visibleText(m.dual)} />}
+                    {paucal && <Cell label={term('paucal')} value={<div className="leading-tight"><div>{visibleText(paucal)}</div>{paucalPattern && <div className="text-[11px] text-black/40 font-sans">{paucalPattern}</div>}</div>} />}
+                    {augmentative && <Cell label={term('augmentative')} value={<div className="leading-tight"><div>{visibleText(augmentative)}</div>{augmentativePattern && <div className="text-[11px] text-black/40 font-sans">{augmentativePattern}</div>}</div>} />}
+                    {m.collective && <Cell label={term('collective')} value={visibleText(m.collective)} />}
+                    {m.singulative && <Cell label={term('singulative')} value={visibleText(m.singulative)} />}
                     <Cell
                         label={term('masculine-fem')}
                         value={<Badge variant="pos">{term(m.gender)}</Badge>}
@@ -82,12 +92,12 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     <div className="text-[10px] uppercase tracking-wider text-[#A07030] font-semibold mb-0.5">
                         {term('diminutive')}
                     </div>
-                    {diminutiveRows.length > 0 || generatedDiminutiveRows.length > 0 ? (
+                    {shownDiminutiveRows.length > 0 ? (
                         <div className="space-y-1">
-                            {(diminutiveRows.length > 0 ? diminutiveRows : generatedDiminutiveRows).map((row, index) => (
+                            {shownDiminutiveRows.map((row, index) => (
                                 <div key={`${row.form}-${index}`} className="leading-tight">
                                     <div className="font-serif text-sm text-black">
-                                        {row.form}
+                                        {visibleText(row.form)}
                                     </div>
                                     {(row.pattern || diminutivePattern) && (
                                         <div className="text-[11px] text-black/40 font-sans">
@@ -100,7 +110,7 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     ) : diminutive ? (
                         <div className="leading-tight">
                         <div className={`font-serif text-sm ${generatedDiminutiveRows.length > 0 ? 'text-black/55' : 'text-black'}`}>
-                                {generatedDiminutiveRows[0]?.theoretical ? '*' : ''}{diminutive}
+                                {diminutiveHidden ? <span className="opacity-40">-</span> : visibleText(diminutive)}
                             </div>
                             {diminutivePattern && (
                                 <div className="text-[11px] text-black/40 font-sans">
@@ -126,14 +136,14 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     </span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 divide-x divide-y divide-border-light">
-                    <Cell label={term('perfect') + " (3sg.m)"} value={<strong className="font-headword">{isTheoretical && '*'}{m.perfective_3sg_m}</strong>} />
-                    <Cell label={term('imperfect') + " (3sg.m)"} value={<strong className="font-headword">{isTheoretical && '*'}{m.imperfective_3sg_m}</strong>} />
-                    <Cell label={term('form-title')} value={<Link to={`/search?form=${m.form}`} className="text-[#1034A6] hover:underline font-bold">{m.form}</Link>} />
+                    <Cell label={term('perfect') + " (3sg.m)"} value={hideValue(m.perfective_3sg_m, isTheoretical) ? '-' : <strong className="font-headword">{visibleText(m.perfective_3sg_m)}</strong>} />
+                    <Cell label={term('imperfect') + " (3sg.m)"} value={hideValue(m.imperfective_3sg_m, isTheoretical) ? '-' : <strong className="font-headword">{visibleText(m.imperfective_3sg_m)}</strong>} />
+                    <Cell label={term('form-title')} value={<Link to={`/search?form=${m.form}`} className="text-[#1034A6] hover:underline font-bold">{visibleText(m.form)}</Link>} />
                     <Cell label={term('strength-title')} value={entry.root_pattern_form?.root?.strength === 'strong-hybrid' ? 'Strong' : entry.root_pattern_form?.root?.strength} />
                     <Cell label={term('transitivity')} value={term(m.transitivity) ?? m.transitivity} />
-                    {m.verbal_noun && <Cell label={term('masdar-label')} value={(isTheoretical && !m.verbal_noun.startsWith('*') ? '*' : '') + m.verbal_noun} />}
-                    {m.active_participle && <Cell label={term('active-participle')} value={(isTheoretical && !m.active_participle.startsWith('*') ? '*' : '') + m.active_participle} />}
-                    {m.passive_participle && <Cell label={term('passive-participle')} value={(isTheoretical && !m.passive_participle.startsWith('*') ? '*' : '') + m.passive_participle} />}
+                    {m.verbal_noun && <Cell label={term('masdar-label')} value={hideValue(m.verbal_noun, isTheoretical) ? '-' : visibleText(m.verbal_noun)} />}
+                    {m.active_participle && <Cell label={term('active-participle')} value={hideValue(m.active_participle, isTheoretical) ? '-' : visibleText(m.active_participle)} />}
+                    {m.passive_participle && <Cell label={term('passive-participle')} value={hideValue(m.passive_participle, isTheoretical) ? '-' : visibleText(m.passive_participle)} />}
                 </div>
             </div>
         );
@@ -152,6 +162,10 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
         const generatedDiminutiveRows = generatedDiminutive ? [generatedDiminutive] : [];
         const diminutive = diminutiveRows[0]?.form || entry.diminutive_form || generatedDiminutiveRows[0]?.form || null;
         const diminutivePattern = diminutiveRows[0]?.pattern || m.diminutive_pattern || entry.diminutive_pattern || generatedDiminutiveRows[0]?.pattern || null;
+        const visibleAdjectiveDiminutiveRows = hideTheoreticalForms ? diminutiveRows.filter(row => !shouldHideSurface(row.form, hideTheoreticalForms)) : diminutiveRows;
+        const isTheoreticalElative = isTheoretical;
+        const shownAdjectiveDiminutiveRows = visibleAdjectiveDiminutiveRows.length > 0 ? visibleAdjectiveDiminutiveRows : (hideTheoreticalForms ? [] : generatedDiminutiveRows);
+        const diminutiveHidden = hideValue(diminutive, !!generatedDiminutiveRows[0]?.theoretical);
         return (
             <div className="rounded-lg border border-border-light bg-surface-soft overflow-hidden">
                 <div className="px-3 py-1.5 bg-[#1034A6]/5 border-b border-border-light">
@@ -161,19 +175,19 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                 </div>
                 {/* Mobile: vertical layout (3 columns) */}
                 <div className="grid grid-cols-3 md:hidden divide-x divide-y divide-border-light">
-                    <Cell label={term('masculine')} value={<strong className="font-headword">{m.masculine}</strong>} />
-                    <Cell label={term('feminine')} value={<strong className="font-headword">{m.feminine}</strong>} />
-                    <Cell label={term('plural')} value={<strong className="font-headword">{m.plural}</strong>} />
-                    {m.elative && !isElativeDisabled && <Cell label={term('elative')} value={m.elative} />}
+                    <Cell label={term('masculine')} value={<strong className="font-headword">{visibleText(m.masculine)}</strong>} />
+                    <Cell label={term('feminine')} value={<strong className="font-headword">{visibleText(m.feminine)}</strong>} />
+                    <Cell label={term('plural')} value={<strong className="font-headword">{visibleText(m.plural)}</strong>} />
+                    {m.elative && !isElativeDisabled && <Cell label={term('elative')} value={hideValue(m.elative, isTheoreticalElative) ? '-' : visibleText(m.elative)} />}
                 </div>
                 {/* Desktop: horizontal layout (row) */}
                 <div className="hidden md:grid grid-cols-1 divide-y divide-border-light">
                     <div className="grid grid-cols-4 divide-x divide-border-light">
-                        <Cell label={term('masculine')} value={<strong className="font-headword">{m.masculine}</strong>} />
-                        <Cell label={term('feminine')} value={<strong className="font-headword">{m.feminine}</strong>} />
-                        <Cell label={term('plural')} value={<strong className="font-headword">{m.plural}</strong>} />
+                        <Cell label={term('masculine')} value={<strong className="font-headword">{visibleText(m.masculine)}</strong>} />
+                        <Cell label={term('feminine')} value={<strong className="font-headword">{visibleText(m.feminine)}</strong>} />
+                        <Cell label={term('plural')} value={<strong className="font-headword">{visibleText(m.plural)}</strong>} />
                         {m.elative && !isElativeDisabled ? 
-                            <Cell label={term('elative')} value={m.elative} /> : 
+                            <Cell label={term('elative')} value={hideValue(m.elative, isTheoreticalElative) ? '-' : visibleText(m.elative)} /> : 
                             <div></div> /* Empty cell to maintain grid */
                         }
                     </div>
@@ -182,12 +196,12 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     <div className="text-[10px] uppercase tracking-wider text-[#A07030] font-semibold mb-0.5">
                         {term('diminutive')}
                     </div>
-                    {diminutiveRows.length > 0 || generatedDiminutiveRows.length > 0 ? (
+                    {shownAdjectiveDiminutiveRows.length > 0 ? (
                         <div className="space-y-1">
-                            {(diminutiveRows.length > 0 ? diminutiveRows : generatedDiminutiveRows).map((row, index) => (
+                            {shownAdjectiveDiminutiveRows.map((row, index) => (
                                 <div key={`${row.form}-${index}`} className="leading-tight">
                                     <div className="font-serif text-sm text-black">
-                                        {row.form}
+                                        {visibleText(row.form)}
                                     </div>
                                     {(row.pattern || diminutivePattern) && (
                                         <div className="text-[11px] text-black/40 font-sans">
@@ -200,7 +214,7 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     ) : diminutive ? (
                         <div className="leading-tight">
                         <div className={`font-serif text-sm ${generatedDiminutiveRows.length > 0 ? 'text-black/55' : 'text-black'}`}>
-                                {generatedDiminutiveRows[0]?.theoretical ? '*' : ''}{diminutive}
+                                {diminutiveHidden ? <span className="opacity-40">-</span> : visibleText(diminutive)}
                             </div>
                             {diminutivePattern && (
                                 <div className="text-[11px] text-black/40 font-sans">

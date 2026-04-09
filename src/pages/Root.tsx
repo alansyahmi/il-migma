@@ -1,6 +1,7 @@
-import { lazy, Suspense, useState, useMemo, useEffect, Fragment } from 'react';
+import { lazy, Suspense, useState, useMemo, useEffect, Fragment, isValidElement, type ReactNode } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { generateRootForms, markGeneratedForms, getAttestedEntries, type MarkedVerbForm } from '@/lib/conjugationEngine';
 import { useAuth } from '@/contexts/AuthContext';
@@ -19,6 +20,7 @@ import { isHiddenTag, resolveTagLabel } from '@/lib/tagLabel';
 import { EntryShell, type EntryViewModel, EtymologySentence, SideCard } from '@/components/dictionary/EntryShell';
 import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymology';
 import { VerbFormsTable } from '@/components/dictionary/VerbFormsTable';
+import { shouldHideSurface } from '@/lib/theoreticalForms';
 
 const LazyRelationshipEditor = lazy(() =>
     import('@/components/admin/RelationshipEditor').then(module => ({ default: module.RelationshipEditor }))
@@ -42,15 +44,19 @@ function MarkedCell({
     noLink?: boolean;
 }) {
     const { term } = useLinguisticMode();
-    if (data.value === '-') return <span className="opacity-40">-</span>;
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
+    const rawValue = String(data.value || '').trim();
+    const hidden = hideTheoreticalForms && (data.marker !== 'plain' || rawValue.startsWith('*') || rawValue.startsWith('✦'));
+    if (data.value === '-' || hidden) return <span className="opacity-40">-</span>;
+    const displayValue = hideTheoreticalForms ? rawValue.replace(/^[*✦]+\s*/, '').trim() : data.value;
 
     const content = (data.marker === 'plain' && !noLink) ? (
         <Link to={`/entry/${data.entryId || data.value}`} className="text-[#1034A6] hover:underline">
-            {data.value}
+            {displayValue}
         </Link>
     ) : (
         <span className={data.marker === 'plain' ? 'text-black' : 'opacity-45'}>
-            {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}{data.value}
+            {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}{displayValue}
         </span>
     );
 
@@ -85,6 +91,7 @@ export function Root() {
     const { id } = useParams<{ id: string }>();
     const { mode, term } = useLinguisticMode();
     const { language } = useLanguage();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
 
@@ -373,6 +380,40 @@ export function Root() {
         )),
     ].filter(Boolean);
 
+    const toVerbCell = (
+        node: ReactNode | null | undefined,
+        marker?: 'plain' | 'theoretical' | 'auto_generated',
+        placeholder?: boolean,
+    ) => {
+        if (node === null || node === undefined) {
+            if (hideTheoreticalForms && (marker ?? 'plain') !== 'plain') {
+                return {
+                    value: '-',
+                    marker: marker || 'plain',
+                    hidden: true,
+                    placeholder: true,
+                };
+            }
+            return undefined;
+        }
+        const inferredPlaceholder =
+            placeholder ??
+            (isValidElement(node) &&
+                typeof (node.props as any)?.data?.value === 'string' &&
+                String((node.props as any).data.value).trim() === '-');
+        return {
+            value: node,
+            marker: marker || 'plain',
+            hidden: hideTheoreticalForms && (marker ?? 'plain') !== 'plain',
+            placeholder: !!inferredPlaceholder,
+        };
+    };
+
+    const renderVerbCell = (
+        data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string },
+        node: ReactNode,
+    ) => (hideTheoreticalForms && shouldHideSurface(data, hideTheoreticalForms) ? null : node);
+
     const viewModel: EntryViewModel = {
         title: rootObj.consonants,
         headerAccessory: isActualAdmin ? (
@@ -459,6 +500,7 @@ export function Root() {
 
                         <VerbFormsTable
                             title={term('verbal-forms')}
+                            hideTheoreticalForms={hideTheoreticalForms}
                             columnLabels={{
                                 form: term('form'),
                                 lemma: term('lemma'),
@@ -471,120 +513,140 @@ export function Root() {
                             rows={generatedTable.map((row: MarkedVerbForm) => ({
                                 key: row.form,
                                 form: <Link to={`/search?form=${row.form}`} className="text-[#1034A6] hover:underline font-bold">{row.form}</Link>,
-                                lemma: (
-                                    <MarkedCell
-                                        data={row.perfect}
-                                        isAdmin={isActualAdmin}
-                                        onDelete={() => row.perfect.entryId && handleDeleteEntry(row.perfect.entryId)}
-                                        onEdit={() => {
-                                            const existing = rootEntries.find(e => e.headword === row.perfect.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                            if (existing) {
-                                                setEditEntry({
-                                                    ...existing,
-                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                    _formLabel: existing.verb_morphology?.form || row.form,
-                                                } as any);
-                                                setInitialFormData(null);
-                                            } else {
-                                                setEditEntry(null);
-                                                setInitialFormData({
-                                                    headword: row.perfect.value,
-                                                    pos: 'verb',
-                                                    verb_class: rootObj?.strength || '',
-                                                    _rootConsonants: rootObj?.consonants || '',
-                                                    _formLabel: row.form,
-                                                    verb_vowel_perf: rootObj?.vowel_set_perf || '',
-                                                    verb_vowel_impf: rootObj?.vowel_set_impf || '',
-                                                });
-                                            }
-                                            setShowForm(true);
-                                        }}
-                                    />
+                                lemma: toVerbCell(
+                                    renderVerbCell(
+                                        row.perfect,
+                                        <MarkedCell
+                                            data={row.perfect}
+                                            isAdmin={isActualAdmin}
+                                            onDelete={() => row.perfect.entryId && handleDeleteEntry(row.perfect.entryId)}
+                                            onEdit={() => {
+                                                const existing = rootEntries.find(e => e.headword === row.perfect.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                if (existing) {
+                                                    setEditEntry({
+                                                        ...existing,
+                                                        _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                        _formLabel: existing.verb_morphology?.form || row.form,
+                                                    } as any);
+                                                    setInitialFormData(null);
+                                                } else {
+                                                    setEditEntry(null);
+                                                    setInitialFormData({
+                                                        headword: row.perfect.value,
+                                                        pos: 'verb',
+                                                        verb_class: rootObj?.strength || '',
+                                                        _rootConsonants: rootObj?.consonants || '',
+                                                        _formLabel: row.form,
+                                                        verb_vowel_perf: rootObj?.vowel_set_perf || '',
+                                                        verb_vowel_impf: rootObj?.vowel_set_impf || '',
+                                                    });
+                                                }
+                                                setShowForm(true);
+                                            }}
+                                        />,
+                                    ),
+                                    row.perfect.marker,
+                                    row.perfect.value === '-',
                                 ),
-                                imperfect: <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} noLink />,
-                                imperative: <MarkedCell data={row.imperative} isAdmin={isActualAdmin} noLink />,
-                                passive: (
-                                    <MarkedCell
-                                        data={row.passiveParticiple}
-                                        isAdmin={isActualAdmin}
-                                        onDelete={() => row.passiveParticiple.entryId && handleDeleteEntry(row.passiveParticiple.entryId)}
-                                        onEdit={() => {
-                                            const existing = rootEntries.find(e => e.headword === row.passiveParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                            if (existing) {
-                                                setEditEntry({
-                                                    ...existing,
-                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                    _formLabel: existing.verb_morphology?.form || row.form,
-                                                } as any);
-                                                setInitialFormData(null);
-                                            } else {
-                                                setEditEntry(null);
-                                                setInitialFormData({
-                                                    headword: row.passiveParticiple.value,
-                                                    pos: 'participle',
-                                                    participle_type: 'passive',
-                                                    _formLabel: row.form,
-                                                    _rootConsonants: rootObj?.consonants || '',
-                                                });
-                                            }
-                                            setShowForm(true);
-                                        }}
-                                    />
+                                imperfect: toVerbCell(renderVerbCell(row.imperfect, <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} noLink />), row.imperfect.marker, row.imperfect.value === '-'),
+                                imperative: toVerbCell(renderVerbCell(row.imperative, <MarkedCell data={row.imperative} isAdmin={isActualAdmin} noLink />), row.imperative.marker, row.imperative.value === '-'),
+                                passive: toVerbCell(
+                                    renderVerbCell(
+                                        row.passiveParticiple,
+                                        <MarkedCell
+                                            data={row.passiveParticiple}
+                                            isAdmin={isActualAdmin}
+                                            onDelete={() => row.passiveParticiple.entryId && handleDeleteEntry(row.passiveParticiple.entryId)}
+                                            onEdit={() => {
+                                                const existing = rootEntries.find(e => e.headword === row.passiveParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                if (existing) {
+                                                    setEditEntry({
+                                                        ...existing,
+                                                        _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                        _formLabel: existing.verb_morphology?.form || row.form,
+                                                    } as any);
+                                                    setInitialFormData(null);
+                                                } else {
+                                                    setEditEntry(null);
+                                                    setInitialFormData({
+                                                        headword: row.passiveParticiple.value,
+                                                        pos: 'participle',
+                                                        participle_type: 'passive',
+                                                        _formLabel: row.form,
+                                                        _rootConsonants: rootObj?.consonants || '',
+                                                    });
+                                                }
+                                                setShowForm(true);
+                                            }}
+                                        />,
+                                    ),
+                                    row.passiveParticiple.marker,
+                                    row.passiveParticiple.value === '-',
                                 ),
-                                active: (
-                                    <MarkedCell
-                                        data={row.activeParticiple}
-                                        isAdmin={isActualAdmin}
-                                        onDelete={() => row.activeParticiple.entryId && handleDeleteEntry(row.activeParticiple.entryId)}
-                                        onEdit={() => {
-                                            const existing = rootEntries.find(e => e.headword === row.activeParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                            if (existing) {
-                                                setEditEntry({
-                                                    ...existing,
-                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                    _formLabel: existing.verb_morphology?.form || row.form,
-                                                } as any);
-                                                setInitialFormData(null);
-                                            } else {
-                                                setEditEntry(null);
-                                                setInitialFormData({
-                                                    headword: row.activeParticiple.value,
-                                                    pos: 'participle',
-                                                    participle_type: 'active',
-                                                    _formLabel: row.form,
-                                                    _rootConsonants: rootObj?.consonants || '',
-                                                });
-                                            }
-                                            setShowForm(true);
-                                        }}
-                                    />
+                                active: toVerbCell(
+                                    renderVerbCell(
+                                        row.activeParticiple,
+                                        <MarkedCell
+                                            data={row.activeParticiple}
+                                            isAdmin={isActualAdmin}
+                                            onDelete={() => row.activeParticiple.entryId && handleDeleteEntry(row.activeParticiple.entryId)}
+                                            onEdit={() => {
+                                                const existing = rootEntries.find(e => e.headword === row.activeParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                if (existing) {
+                                                    setEditEntry({
+                                                        ...existing,
+                                                        _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                        _formLabel: existing.verb_morphology?.form || row.form,
+                                                    } as any);
+                                                    setInitialFormData(null);
+                                                } else {
+                                                    setEditEntry(null);
+                                                    setInitialFormData({
+                                                        headword: row.activeParticiple.value,
+                                                        pos: 'participle',
+                                                        participle_type: 'active',
+                                                        _formLabel: row.form,
+                                                        _rootConsonants: rootObj?.consonants || '',
+                                                    });
+                                                }
+                                                setShowForm(true);
+                                            }}
+                                        />,
+                                    ),
+                                    row.activeParticiple.marker,
+                                    row.activeParticiple.value === '-',
                                 ),
-                                verbalNoun: (
-                                    <MarkedCell
-                                        data={row.verbalNoun}
-                                        isAdmin={isActualAdmin}
-                                        onDelete={() => row.verbalNoun.entryId && handleDeleteEntry(row.verbalNoun.entryId)}
-                                        onEdit={() => {
-                                            const existing = rootEntries.find(e => e.headword === row.verbalNoun.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                            if (existing) {
-                                                setEditEntry({
-                                                    ...existing,
-                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                    _formLabel: existing.verb_morphology?.form || row.form,
-                                                } as any);
-                                                setInitialFormData(null);
-                                            } else {
-                                                setEditEntry(null);
-                                                setInitialFormData({
-                                                    headword: row.verbalNoun.value,
-                                                    pos: 'noun',
-                                                    _formLabel: row.form,
-                                                    _rootConsonants: rootObj?.consonants || '',
-                                                });
-                                            }
-                                            setShowForm(true);
-                                        }}
-                                    />
+                                verbalNoun: toVerbCell(
+                                    renderVerbCell(
+                                        row.verbalNoun,
+                                        <MarkedCell
+                                            data={row.verbalNoun}
+                                            isAdmin={isActualAdmin}
+                                            onDelete={() => row.verbalNoun.entryId && handleDeleteEntry(row.verbalNoun.entryId)}
+                                            onEdit={() => {
+                                                const existing = rootEntries.find(e => e.headword === row.verbalNoun.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
+                                                if (existing) {
+                                                    setEditEntry({
+                                                        ...existing,
+                                                        _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                        _formLabel: existing.verb_morphology?.form || row.form,
+                                                    } as any);
+                                                    setInitialFormData(null);
+                                                } else {
+                                                    setEditEntry(null);
+                                                    setInitialFormData({
+                                                        headword: row.verbalNoun.value,
+                                                        pos: 'noun',
+                                                        _formLabel: row.form,
+                                                        _rootConsonants: rootObj?.consonants || '',
+                                                    });
+                                                }
+                                                setShowForm(true);
+                                            }}
+                                        />,
+                                    ),
+                                    row.verbalNoun.marker,
+                                    row.verbalNoun.value === '-',
                                 ),
                             }))}
                         />

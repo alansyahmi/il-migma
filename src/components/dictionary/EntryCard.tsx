@@ -11,11 +11,13 @@ import { EtymologyChain } from './EtymologyChain';
 import { AudioPlayer } from './AudioPlayer';
 import { SubEntryBlock } from './SubEntryBlock';
 import { LinkedEntryList } from './LinkedEntryList';
+import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { cn } from '@/lib/utils';
 import { isInflectionDisabled } from '@/lib/inflectionState';
 import type { Entry } from '@/types';
 import { isHiddenTag, resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
+import { shouldHideSurface, stripTheoreticalPrefix } from '@/lib/theoreticalForms';
 
 interface EntryCardProps {
     entry: Entry;
@@ -31,12 +33,13 @@ const getEntryTabs = (term: (key: string) => string) => [
 
 export function EntryCard({ entry, compact = false, linkToFull = false }: EntryCardProps) {
     const { term } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const [activeTab, setActiveTab] = useState('definitions');
     const [saved, setSaved] = useState(false);
     const isTheoretical = isInflectionDisabled(entry) || entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
         entry.verb_morphology?.root_tags?.includes('THEORETICAL') ||
-        entry.headword.startsWith('*');
-
+        entry.headword.startsWith('*') ||
+        entry.headword.startsWith('✦');
     const primaryIPA = entry.phonetics?.find(p => p.dialect === 'Standard')?.ipa
         ?? entry.phonetics?.[0]?.ipa;
     const primaryAttestation = entry.etymologies?.[0]?.attestation;
@@ -47,6 +50,24 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
         ...(entry.adjective_morphology?.related_entries || []),
         ...(entry.numeral_morphology?.related_entries || []),
     ];
+    const displayHeadword = hideTheoreticalForms ? stripTheoreticalPrefix(entry.headword) : entry.headword;
+    const displayAlternativeForms = hideTheoreticalForms
+        ? alternativeForms
+            .filter((form: any) => !shouldHideSurface(form, hideTheoreticalForms))
+            .map((form: any) => ({
+                ...form,
+                headword: stripTheoreticalPrefix(form.headword || ''),
+            }))
+        : alternativeForms;
+    const displayRelatedEntries = hideTheoreticalForms
+        ? relatedEntries
+            .filter((form: any) => !shouldHideSurface(form, hideTheoreticalForms))
+            .map((form: any) => ({
+                ...form,
+                headword: stripTheoreticalPrefix(form.headword || ''),
+            }))
+        : relatedEntries;
+    const isMutedTheoretical = isTheoretical && !hideTheoreticalForms;
 
     // ── COMPACT (search result) ──────────────────────────────────────────
     if (compact) {
@@ -61,17 +82,17 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                     to={`/entry/${entry.id}`}
                                     className={cn(
                                         "font-serif text-xl font-bold hover:underline leading-tight",
-                                        isTheoretical ? "text-black/55" : "text-[#1034A6]"
+                                        isMutedTheoretical ? "text-black/55" : "text-[#1034A6]"
                                     )}
                                 >
-                                    {isTheoretical && !entry.headword.startsWith('*') && '*'}{entry.headword}
+                                    {displayHeadword}
                                 </Link>
                             ) : (
                                 <span className={cn(
                                     "font-serif text-xl font-bold leading-tight",
-                                    isTheoretical ? "text-black/55" : "text-[#1034A6]"
+                                    isMutedTheoretical ? "text-black/55" : "text-[#1034A6]"
                                 )}>
-                                    {isTheoretical && !entry.headword.startsWith('*') && '*'}{entry.headword}
+                                    {displayHeadword}
                                 </span>
                             )}
                             {primaryIPA && (
@@ -153,22 +174,22 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                             })}
                         </div>
 
-                        {(alternativeForms.length > 0 || relatedEntries.length > 0) && (
+                        {(displayAlternativeForms.length > 0 || displayRelatedEntries.length > 0) && (
                             <div className="mt-5 pt-4 border-t border-border-light grid gap-4 sm:grid-cols-2">
-                                {alternativeForms.length > 0 && (
+                                {displayAlternativeForms.length > 0 && (
                                     <div className="space-y-2">
                                         <h3 className="text-xs font-semibold text-[#1034A6] uppercase tracking-wider">
                                             {term('alternative-forms')}
                                         </h3>
-                                        <LinkedEntryList items={alternativeForms} />
+                                        <LinkedEntryList items={displayAlternativeForms} />
                                     </div>
                                 )}
-                                {relatedEntries.length > 0 && (
+                                {displayRelatedEntries.length > 0 && (
                                     <div className="space-y-2">
                                         <h3 className="text-xs font-semibold text-[#1034A6] uppercase tracking-wider">
                                             {term('related-entries')}
                                         </h3>
-                                        <LinkedEntryList items={relatedEntries} />
+                                        <LinkedEntryList items={displayRelatedEntries} />
                                     </div>
                                 )}
                             </div>

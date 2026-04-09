@@ -1,11 +1,13 @@
 import { validateAndNormalize } from './configSchema.js';
 import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
+import { isDashMarkedSuffix } from '../../../src/lib/suffixMatching.ts';
 
 const roleMap = {
     cv_wizen_pattern: '',
     feminine_pattern: 'feminine_singular',
     broken_pattern: 'broken_plural',
     sound_suffix: 'sound_plural',
+    derivational_suffix: 'derivational',
     diminutive_pattern: 'diminutive',
     adjective_pattern: 'elative',
 };
@@ -46,6 +48,8 @@ async function handleSyncFromEntries(client, commit) {
         UNION
         SELECT DISTINCT form_plural_pattern as p, 'broken_pattern' as cat FROM entries WHERE form_plural_pattern IS NOT NULL AND form_plural_pattern != ''
         UNION
+        SELECT DISTINCT augmentative_pattern as p, 'derivational_suffix' as cat FROM entries WHERE augmentative_pattern IS NOT NULL AND augmentative_pattern != '' AND (augmentative_pattern LIKE '%-%' OR augmentative_pattern LIKE '%–%' OR augmentative_pattern LIKE '%—%' OR augmentative_pattern LIKE '%−%')
+        UNION
         SELECT DISTINCT diminutive_pattern as p, 'diminutive_pattern' as cat FROM entries WHERE diminutive_pattern IS NOT NULL AND diminutive_pattern != ''
         UNION
         SELECT DISTINCT elative_pattern as p, 'adjective_pattern' as cat FROM entries WHERE elative_pattern IS NOT NULL AND elative_pattern != ''
@@ -71,8 +75,11 @@ async function handleSyncFromEntries(client, commit) {
             try {
                 // Refine category for plural patterns
                 let actualCat = row.cat;
-                if (row.cat === 'broken_pattern' && cv.startsWith('-')) {
+                if (row.cat === 'broken_pattern' && isDashMarkedSuffix(cv)) {
                     actualCat = 'sound_suffix';
+                }
+                if (row.cat === 'derivational_suffix' && !isDashMarkedSuffix(cv)) {
+                    continue;
                 }
 
                 // 1. Resolve canonical parent by cv_notation (schema has cv_notation UNIQUE)
@@ -244,7 +251,7 @@ async function handleMigration(client, commit) {
     }
 
     // 2. Fetch all patterns from admin_config
-    const patternCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
+    const patternCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'derivational_suffix', 'dual_suffix', 'diminutive_pattern', 'adjective_pattern'];
     const placeholders = patternCategories.map(() => '?').join(',');
     const res = await client.execute({
         sql: `SELECT * FROM admin_config WHERE category IN (${placeholders})`,
@@ -261,6 +268,11 @@ async function handleMigration(client, commit) {
             const cv = normalized.cv;
             const wizen = normalized.wizen;
             const patternId = btoa(encodeURIComponent(`${cv}|${wizen}`)).replace(/=/g, '');
+
+            if (row.category === 'derivational_suffix' && !isDashMarkedSuffix(cv)) {
+                logs.push(`Skipped ${row.category}: dash-marked suffix expected (${row.key})`);
+                continue;
+            }
 
             if (commit) {
                 // Insert pattern if not exists

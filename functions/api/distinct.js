@@ -1,9 +1,10 @@
 /**
- * GET /api/distinct?type=[tags|vowel_sets|sources]
+ * GET /api/distinct?type=[tags|vowel_sets|sources|source_languages|suffixes]
  * Returns unique values found in the database for the requested type.
  */
 
 import { createClient } from '@libsql/client/web';
+import { buildSuffixCatalogItems } from '../../src/lib/suffixMatching.ts';
 
 export async function onRequestGet({ request, env }) {
     try {
@@ -48,6 +49,38 @@ export async function onRequestGet({ request, env }) {
                 WHERE val IS NOT NULL AND val != ''
                 ORDER BY val ASC
             `;
+        } else if (type === 'source_languages') {
+            sql = `
+                SELECT DISTINCT source_language as val
+                FROM entries
+                WHERE source_language IS NOT NULL AND source_language != ''
+                ORDER BY val ASC
+            `;
+        } else if (type === 'suffixes') {
+            const result = await db.execute(`
+                SELECT
+                    id,
+                    headword,
+                    pos,
+                    dual_pattern,
+                    form_plural_pattern,
+                    sound_suffix
+                FROM entries
+                WHERE
+                    (dual_pattern IS NOT NULL AND TRIM(dual_pattern) != '')
+                    OR (form_plural_pattern IS NOT NULL AND TRIM(form_plural_pattern) != '')
+                    OR (sound_suffix IS NOT NULL AND TRIM(sound_suffix) != '')
+            `);
+
+            const values = buildSuffixCatalogItems(result.rows);
+
+            return new Response(JSON.stringify(values), {
+                status: 200,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            });
         } else {
             return new Response(JSON.stringify({ error: "Invalid type" }), { status: 400 });
         }

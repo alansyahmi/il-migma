@@ -2,35 +2,41 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { generateRootForms, markGeneratedForms, type FormMarker, type MarkedVerbForm, type AttestedEntry } from '@/lib/conjugationEngine';
 import { apiSearch, apiSearchRoots } from '@/lib/api';
 import { Spinner } from '@/components/ui/Spinner';
 import type { SearchResult } from '@/types';
 import { Search } from 'lucide-react';
 import { formatStemDisplay } from '@/lib/stemDefaults';
+import { shouldHideSurface, stripTheoreticalPrefix } from '@/lib/theoreticalForms';
 
 const MAX_RADICALS = 4;
 
 function MarkedCell({ data }: { data: { value: string; marker: FormMarker } }) {
-    if (data.value === '-') return <span className="opacity-40">-</span>;
+    const { term } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
+    const hidden = shouldHideSurface(data, hideTheoreticalForms);
+    if (hidden || data.value === '-') return <span className="opacity-40">-</span>;
+    const value = hideTheoreticalForms ? stripTheoreticalPrefix(data.value) : data.value;
     if (data.marker === 'plain') {
         return (
-            <Link to={`/search?q=${data.value}`} key={data.value} className="text-[#1034A6] hover:underline">
-                {data.value}
+            <Link to={`/search?q=${value}`} key={value} className="text-[#1034A6] hover:underline">
+                {value}
             </Link>
         );
     }
     const mark = data.marker === 'theoretical' ? '*' : '✦';
-    const { term } = useLinguisticMode();
     return (
         <span className="opacity-55 text-black" title={data.marker === 'theoretical' ? term('theoretical') : term('auto-generated')}>
-            {mark}{data.value}
+            {hideTheoreticalForms ? value : `${mark}${data.value}`}
         </span>
     );
 }
 
 function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: string[], extraRoots?: any[] }) {
     const { term } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     // Unique matching roots by consonants string
     const matchingRootsMap = new Map<string, any>();
 
@@ -45,6 +51,47 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
     });
 
     const matchingRoots = Array.from(matchingRootsMap.values());
+    const formLabels = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'Xa', 'Xb'];
+    const rootRows = matchingRoots.map(({ rootObj, verbs }) => {
+        const primaryVerb = verbs.find((v: any) => v.verb_morphology?.form === 'I') || verbs[0];
+        const vm = primaryVerb?.verb_morphology || { vowel_set_perfect: 'a-a', vowel_set_imperfect: 'i-a' };
+
+        const rawGen = generateRootForms(
+            rootObj.consonants,
+            rootObj.vowel_set_perf || vm.vowel_set_perfect || 'a-a',
+            rootObj.vowel_set_impf || vm.vowel_set_imperfect || 'i-a',
+            rootObj.strength,
+            rootObj.weak_class
+        );
+
+        const attested: AttestedEntry[] = [];
+        verbs.forEach((v: any) => {
+            const form = v.verb_morphology?.form || '';
+            if (!form) return;
+            attested.push({ word: v.headword, id: v.id, form, type: 'lemma' });
+            if (v.verb_morphology?.passive_participle) {
+                attested.push({ word: v.verb_morphology.passive_participle, id: v.id, form, type: 'passive' });
+            }
+            if (v.verb_morphology?.active_participle) {
+                attested.push({ word: v.verb_morphology.active_participle, id: v.id, form, type: 'active' });
+            }
+            if (v.verb_morphology?.verbal_noun) {
+                attested.push({ word: v.verb_morphology.verbal_noun, id: v.id, form, type: 'noun' });
+            }
+        });
+
+        return {
+            rootObj,
+            verbs,
+            rowsData: markGeneratedForms(rawGen, attested),
+        };
+    });
+    const visibleFormLabels = hideTheoreticalForms
+        ? formLabels.filter(fl => rootRows.some(({ rowsData }) => {
+            const rData = rowsData.find((r: MarkedVerbForm) => r.form === fl);
+            return rData && !shouldHideSurface(rData.perfect, hideTheoreticalForms);
+        }))
+        : formLabels;
 
     if (matchingRoots.length === 0) {
         const joined = rootRadicals.filter(Boolean).join('-');
@@ -60,8 +107,6 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
         );
     }
 
-    const formLabels = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'Xa', 'Xb'];
-
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mt-8 max-w-7xl mx-auto">
             <div className="overflow-x-auto">
@@ -70,41 +115,13 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                         <tr className="bg-black/5 border-b border-black/10 text-black/40">
                             <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap min-w-[100px]">{term('root')}</th>
                             <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">{term('class')}</th>
-                            {formLabels.map(f => (
+                            {visibleFormLabels.map(f => (
                                 <th key={f} className="px-4 py-3 text-[10px] font-bold tracking-wider">{f}</th>
                             ))}
                         </tr>
                     </thead>
                     <tbody>
-                        {matchingRoots.map(({ rootObj, verbs }) => {
-                            const primaryVerb = verbs.find((v: any) => v.verb_morphology?.form === 'I') || verbs[0];
-                            const vm = primaryVerb?.verb_morphology || { vowel_set_perfect: 'a-a', vowel_set_imperfect: 'i-a' };
-
-                            const rawGen = generateRootForms(
-                                rootObj.consonants,
-                                rootObj.vowel_set_perf || vm.vowel_set_perfect || 'a-a',
-                                rootObj.vowel_set_impf || vm.vowel_set_imperfect || 'i-a',
-                                rootObj.strength,
-                                rootObj.weak_class
-                            );
-
-                            const attested: AttestedEntry[] = [];
-                            verbs.forEach((v: any) => {
-                                const form = v.verb_morphology?.form || '';
-                                if (!form) return;
-                                attested.push({ word: v.headword, id: v.id, form, type: 'lemma' });
-                                if (v.verb_morphology?.passive_participle) {
-                                    attested.push({ word: v.verb_morphology.passive_participle, id: v.id, form, type: 'passive' });
-                                }
-                                if (v.verb_morphology?.active_participle) {
-                                    attested.push({ word: v.verb_morphology.active_participle, id: v.id, form, type: 'active' });
-                                }
-                                if (v.verb_morphology?.verbal_noun) {
-                                    attested.push({ word: v.verb_morphology.verbal_noun, id: v.id, form, type: 'noun' });
-                                }
-                            });
-
-                            const rowsData = markGeneratedForms(rawGen, attested);
+                        {rootRows.map(({ rootObj, rowsData }) => {
                             const strengthLabel = rootObj.strength.toUpperCase();
 
                             return (
@@ -121,7 +138,7 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                                             {rootObj.strength === 'geminated' && <span>• {term('geminated').toUpperCase()}</span>}
                                         </span>
                                     </td>
-                                    {formLabels.map(fl => {
+                                    {visibleFormLabels.map(fl => {
                                         const rData = rowsData.find((r: MarkedVerbForm) => r.form === fl);
                                         return (
                                             <td key={fl} className="px-4 py-4 text-sm font-serif min-w-[60px]">
@@ -362,6 +379,7 @@ function RootSearchPanelContent() {
 function StemSearchPanelContent() {
     const { term } = useLinguisticMode();
     const { language } = useLanguage();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
@@ -444,8 +462,8 @@ function StemSearchPanelContent() {
                 </div>
             ) : hasSearched && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {results.length > 0 ? (
-                        results.map((res) => (
+                                {results.length > 0 ? (
+                            results.map((res) => (
                             <Link
                                 key={res.id}
                                 to={res.zokk_morphology ? `/stem/${res.zokk_morphology.stem_string}` : `/entry/${res.id}`}
@@ -453,7 +471,7 @@ function StemSearchPanelContent() {
                             >
                                 <div className="flex justify-between items-start mb-2">
                                     <h3 className="text-xl font-serif font-bold text-black group-hover:text-[#1034A6] transition-colors line-break-anywhere">
-                                        {res.headword}
+                                        {hideTheoreticalForms ? stripTheoreticalPrefix(res.headword) : res.headword}
                                     </h3>
                                     <span className="text-[10px] font-bold uppercase tracking-tighter text-black/30 bg-black/5 px-2 py-0.5 rounded">
                                         {term(res.pos)}
@@ -472,7 +490,7 @@ function StemSearchPanelContent() {
                                             <span className="opacity-50 mr-1">{term('class')}:</span>
                                             <span className="text-black/60">-{res.zokk_morphology.class_type}</span>
                                         </div>
-                                        {res.zokk_morphology.is_hybrid && (
+                                        {res.zokk_morphology.is_hybrid && !hideTheoreticalForms && (
                                             <div className="text-[#1034A6]/60 font-bold">
                                                 ✦ {term('hybrid')}
                                             </div>

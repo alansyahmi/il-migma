@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { MOCK_ENTRIES } from '@/data/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { type Entry } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
@@ -11,7 +12,7 @@ import { applyInflectionTableSuffix } from '@/lib/inflectionTable';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Edit2, ArrowLeft, Search, Plus, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
-import { apiGetEntry, adminUpdateEntry } from '@/lib/api';
+import { apiGetEntry, adminUpdateEntry, apiListPatterns, type PatternApiItem } from '@/lib/api';
 import { useRootData } from '@/hooks/useRootData';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { cn, getGloss } from '@/lib/utils';
@@ -24,6 +25,7 @@ import { BLUE, CREAM_RGBA, GOLD, EtymologySentence, PropRow, SideCard } from '@/
 import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymology';
 import { StackedSurface } from '@/components/dictionary/VerbFormsTable';
 import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
+import { isSuffixLikeValue } from '@/lib/suffixMatching';
 import { isInflectableEnabled, shouldHideInflectionTable } from '@/lib/inflectionState';
 import {
     buildNumeralDisplayForms,
@@ -31,32 +33,65 @@ import {
     shouldCombineMasculineAndShortAttributive,
     type NumeralSurfaceValue,
 } from '@/lib/numeralMorphology';
+import { stripTheoreticalPrefix, shouldHideSurface } from '@/lib/theoreticalForms';
 
 export { BLUE, CREAM_RGBA, GOLD, EntryShell, EtymologySentence, PropRow, SideCard } from '@/components/dictionary/EntryShell';
 
 const MarkedValue = ({ val, theoretical, showMarker = true }: { val: string | React.ReactNode | { value: React.ReactNode, theoretical: boolean }, theoretical?: boolean, showMarker?: boolean }) => {
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const isObj = typeof val === 'object' && val !== null && 'value' in val;
-    let v = isObj ? (val as any).value : val;
+    const rawValue = isObj ? (val as any).value : val;
     let isT = isObj ? (val as any).theoretical : theoretical;
 
-    // If the value is a string and starts with an asterisk, treat it as theoretical
-    if (typeof v === 'string' && v.trim().startsWith('*')) {
-        isT = true;
-        v = v.trim().substring(1).trim();
-    } else if (typeof v === 'string') {
-        v = v.trim();
+    const hasHiddenPrefix = (node: React.ReactNode): boolean => {
+        if (typeof node === 'string') {
+            return node.trim().startsWith('*') || node.trim().startsWith('✦');
+        }
+        if (React.isValidElement(node)) {
+            const element = node as React.ReactElement<any>;
+            return hasHiddenPrefix(element.props.children);
+        }
+        if (Array.isArray(node)) {
+            return node.some(hasHiddenPrefix);
+        }
+        return false;
+    };
+
+    if (hideTheoreticalForms && (isT || hasHiddenPrefix(rawValue))) {
+        return <span className="opacity-40">-</span>;
+    }
+
+    let v = rawValue;
+    if (typeof v === 'string') {
+        isT = isT || v.trim().startsWith('*') || v.trim().startsWith('✦');
+        v = hideTheoreticalForms ? stripTheoreticalPrefix(v) : v.trim();
     }
 
     if (!v || v === '-') return <span className="opacity-40">-</span>;
+    const markerPrefix = isT && showMarker && !hideTheoreticalForms && !hasHiddenPrefix(rawValue) ? '*' : '';
     return (
-        <span className={cn("font-serif", isT && "text-black/55")}>
-            {isT && showMarker ? '*' : ''}{v}
+        <span className={cn("font-serif", isT && !hideTheoreticalForms && "text-black/55")}>
+            {markerPrefix}{v}
         </span>
     );
 };
 
 function buildDisplayEtymologyItems(chain: any, translateLanguage: (language: string) => string) {
     return normalizeDictionaryEtymologyChain(chain, translateLanguage);
+}
+
+function getVisibleEntryLabel(value: string, hideTheoreticalForms: boolean) {
+    return hideTheoreticalForms ? stripTheoreticalPrefix(value) : value;
+}
+
+function getVisibleEntryForms<T extends { headword?: string }>(items: T[], hideTheoreticalForms: boolean): T[] {
+    if (!hideTheoreticalForms) return items;
+    return items
+        .filter((item) => !shouldHideSurface(item, hideTheoreticalForms))
+        .map((item) => ({
+            ...item,
+            headword: stripTheoreticalPrefix(item.headword || ''),
+        }));
 }
 
 function getNodeText(node: React.ReactNode): string {
@@ -83,6 +118,106 @@ function isDashLikePattern(pattern?: string | (string | null)[] | null): boolean
     return pattern.trim() === '-';
 }
 
+type PatternHrefResolver = (pattern?: string | null) => string | null;
+
+let patternLookupRequest: Promise<Map<string, string>> | null = null;
+
+function normalizePatternLookupKey(value: unknown): string {
+    return String(value ?? '').trim().normalize('NFC').toLowerCase();
+}
+
+function buildPatternLookup(patterns: PatternApiItem[]) {
+    const map = new Map<string, string>();
+
+    patterns.forEach((pattern) => {
+        [pattern.cv_notation, pattern.wizen_notation].forEach((notation) => {
+            const key = normalizePatternLookupKey(notation);
+            if (key && !map.has(key)) {
+                map.set(key, pattern.id);
+            }
+        });
+    });
+
+    return map;
+}
+
+function loadPatternLookup() {
+    if (!patternLookupRequest) {
+        patternLookupRequest = apiListPatterns()
+            .then(({ patterns }) => buildPatternLookup(patterns))
+            .catch((err) => {
+                patternLookupRequest = null;
+                throw err;
+            });
+    }
+
+    return patternLookupRequest;
+}
+
+function usePatternHrefResolver() {
+    const [patternLookup, setPatternLookup] = useState<Map<string, string>>(new Map());
+
+    useEffect(() => {
+        let cancelled = false;
+
+        loadPatternLookup()
+            .then((lookup) => {
+                if (!cancelled) setPatternLookup(lookup);
+            })
+            .catch(() => {
+                if (!cancelled) setPatternLookup(new Map());
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    return useMemo<PatternHrefResolver>(() => {
+        return (pattern?: string | null) => resolvePatternHref(pattern, patternLookup);
+    }, [patternLookup]);
+}
+
+function resolvePatternHref(pattern: string | null | undefined, patternLookup: Map<string, string>) {
+    const normalized = String(pattern ?? '').trim();
+    if (!normalized || normalized === '-') return null;
+
+    if (isSuffixLikeValue(normalized)) {
+        return `/suffix/nominal/${encodeURIComponent(normalized)}`;
+    }
+
+    const lookupKey = normalizePatternLookupKey(normalized);
+    const patternId = patternLookup.get(lookupKey);
+    return patternId ? `/pattern/${encodeURIComponent(patternId)}` : null;
+}
+
+function splitPatternValues(pattern: string) {
+    return pattern
+        .split(',')
+        .map((part) => part.trim())
+        .filter(Boolean);
+}
+
+function renderPatternToken(
+    pattern?: string | null,
+    displayPattern?: (p?: string) => string,
+    getPatternHref?: PatternHrefResolver,
+) {
+    if (!pattern) return <span className="opacity-40">-</span>;
+
+    const text = displayPattern ? displayPattern(pattern) : pattern;
+    if (!text) return <span className="opacity-40">-</span>;
+
+    const href = getPatternHref?.(pattern);
+    if (!href) return <span>{text}</span>;
+
+    return (
+        <Link to={href} className="inline-flex items-baseline text-[11px] leading-tight font-sans text-link hover:underline hover:text-link">
+            {text}
+        </Link>
+    );
+}
+
 function MorphologyTable({
     title,
     rows,
@@ -99,11 +234,14 @@ function MorphologyTable({
     patternBelowValue?: boolean;
 }) {
     const { term } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
+    const patternHrefForValue = usePatternHrefResolver();
     const sectionRows = rows.filter((row): row is SectionRow => 'kind' in row);
     const dataRows = rows.filter(
         (row): row is MorphologyDisplayRow =>
             !('kind' in row) &&
             row.show !== false &&
+            !(hideTheoreticalForms && row.theoretical) &&
             !(isDashLikeValue(row.value) && isDashLikePattern(row.pattern)),
     );
     const headerLabel = labelHeader || term('feature') || 'Feature';
@@ -208,7 +346,7 @@ function MorphologyTable({
                             {renderValueContent(row)}
                             {row.pattern && (
                                 <div className="mt-0.5 text-[11px] font-sans tracking-tight text-black/40">
-                                    {renderPatternValue(row.pattern, displayPattern)}
+                                    {renderPatternValue(row.pattern, displayPattern, patternHrefForValue)}
                                 </div>
                             )}
                         </div>
@@ -219,7 +357,7 @@ function MorphologyTable({
                             {renderValueContent(row)}
                         </td>
                         <td className="py-2.5 text-black/40 text-sm font-sans tracking-tight leading-normal">
-                            {renderPatternValue(row.pattern, displayPattern)}
+                            {renderPatternValue(row.pattern, displayPattern, patternHrefForValue)}
                         </td>
                     </>
                 )}
@@ -274,7 +412,11 @@ type MorphologyDisplayRow = {
     pattern?: string | (string | null)[] | null;
 };
 
-function renderPatternValue(pattern?: string | (string | null)[] | null, displayPattern?: (p?: string) => string) {
+function renderPatternValue(
+    pattern?: string | (string | null)[] | null,
+    displayPattern?: (p?: string) => string,
+    getPatternHref?: PatternHrefResolver,
+) {
     if (!pattern) return <span className="opacity-40">-</span>;
 
     if (Array.isArray(pattern)) {
@@ -284,14 +426,27 @@ function renderPatternValue(pattern?: string | (string | null)[] | null, display
             <div className="flex flex-col gap-1">
                 {pattern.map((item, index) => (
                     <div key={`${item || 'pattern'}-${index}`} className={item ? undefined : 'opacity-40'}>
-                        {item ? (displayPattern ? displayPattern(item) : item) : '-'}
+                        {renderPatternToken(item, displayPattern, getPatternHref)}
                     </div>
                 ))}
             </div>
         );
     }
 
-    return <span>{displayPattern ? displayPattern(pattern) : pattern}</span>;
+    const splitValues = splitPatternValues(pattern);
+    if (splitValues.length > 1) {
+        return (
+            <div className="flex flex-col gap-1">
+                {splitValues.map((item, index) => (
+                    <div key={`${item || 'pattern'}-${index}`} className={item ? undefined : 'opacity-40'}>
+                        {renderPatternToken(item, displayPattern, getPatternHref)}
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
+    return <span>{renderPatternToken(pattern, displayPattern, getPatternHref)}</span>;
 }
 
 function resolveDisplayedPattern(
@@ -474,26 +629,42 @@ function NounParadigmCellView({
     cell: NounParadigmCell;
     displayPattern: (pattern?: string) => string;
 }) {
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
+    const patternHrefForValue = usePatternHrefResolver();
+    const isHidden = hideTheoreticalForms && (
+        cell.theoretical ||
+        shouldHideSurface(cell.value, hideTheoreticalForms) ||
+        (cell.stacked?.length ? cell.stacked.every(item => item.theoretical || shouldHideSurface(item.value, hideTheoreticalForms)) : false)
+    );
+
+    if (isHidden) {
+        return <span className="text-black/30">-</span>;
+    }
+
     if (cell.stacked && cell.stacked.length > 0) {
+        const visibleStacked = cell.stacked.filter((item) => !(hideTheoreticalForms && (item.theoretical || shouldHideSurface(item.value, hideTheoreticalForms))));
+        if (visibleStacked.length === 0) {
+            return <span className="text-black/30">-</span>;
+        }
         return (
             <div className="leading-tight space-y-2">
-                {cell.stacked.map((item, index) => {
+                {visibleStacked.map((item, index) => {
                     const hasValue = !!(item.value && item.value !== '-');
                     return (
                         <div key={`${item.value}-${index}`} className="leading-tight">
-                            {hasValue ? (
-                                <>
-                                    <div className="font-serif font-medium text-black">
-                                        <MarkedValue val={item.value || '-'} theoretical={item.theoretical} />
-                                    </div>
-                                    {item.pattern && (
-                                        <div className="mt-0.5 text-[11px] font-sans tracking-tight text-black/40">
-                                            {displayPattern(item.pattern)}
-                                        </div>
-                                    )}
-                                </>
-                            ) : (
-                                <span className="text-black/30">-</span>
+                                    {hasValue ? (
+                                        <>
+                                            <div className="font-serif font-medium text-black">
+                                                <MarkedValue val={item.value || '-'} theoretical={item.theoretical} />
+                                            </div>
+                                            {item.pattern && (
+                                                <div className="mt-0.5 text-[11px] font-sans tracking-tight text-black/40">
+                                                    {renderPatternValue(item.pattern, displayPattern, patternHrefForValue)}
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <span className="text-black/30">-</span>
                             )}
                         </div>
                     );
@@ -513,7 +684,7 @@ function NounParadigmCellView({
                     </div>
                     {cell.pattern && (
                         <div className="mt-0.5 text-[11px] font-sans tracking-tight text-black/40">
-                            {displayPattern(cell.pattern)}
+                            {renderPatternValue(cell.pattern, displayPattern, patternHrefForValue)}
                         </div>
                     )}
                 </>
@@ -534,12 +705,27 @@ function NounParadigmTable({
     displayPattern: (pattern?: string) => string;
 }) {
     const { term } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
+    const cellIsVisible = (cell: NounParadigmCell) => !(
+        hideTheoreticalForms && (
+            cell.theoretical ||
+            shouldHideSurface(cell.value, hideTheoreticalForms) ||
+            (cell.stacked?.length ? cell.stacked.every(item => item.theoretical || shouldHideSurface(item.value, hideTheoreticalForms)) : false)
+        )
+    ) && !(isDashLikeValue(cell.value) && isDashLikePattern(cell.pattern));
     const sectionRows = rows.filter((row): row is SectionRow => 'kind' in row);
-    const dataRows = rows.filter((row): row is NounParadigmDataRow => !('kind' in row));
-    const showPluralColumn = dataRows.some(row => !!row.plural.value || (row.plural.stacked?.length ?? 0) > 0);
-    const showPaucalColumn = dataRows.some(row => !!row.paucal.value || (row.paucal.stacked?.length ?? 0) > 0);
+    const dataRows = rows.filter((row): row is NounParadigmDataRow => !('kind' in row) && (
+        cellIsVisible(row.singular) ||
+        cellIsVisible(row.dual) ||
+        cellIsVisible(row.plural) ||
+        cellIsVisible(row.paucal)
+    ));
+    const showSingularColumn = dataRows.some(row => cellIsVisible(row.singular));
+    const showDualColumn = dataRows.some(row => cellIsVisible(row.dual));
+    const showPluralColumn = dataRows.some(row => cellIsVisible(row.plural));
+    const showPaucalColumn = dataRows.some(row => cellIsVisible(row.paucal));
     const hasRows = dataRows.some(row => (
-        row.singular.value || row.dual.value || row.plural.value || (row.plural.stacked?.length ?? 0) > 0 || row.paucal.value || (row.paucal.stacked?.length ?? 0) > 0
+        cellIsVisible(row.singular) || cellIsVisible(row.dual) || cellIsVisible(row.plural) || cellIsVisible(row.paucal)
     ));
     const baseLabel = term('tag-term') || 'Term';
     const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => {
@@ -584,7 +770,7 @@ function NounParadigmTable({
 
             renderedRows.push(
                 <tr key={`section-${row.id}-${idx}`} className="border-b border-black/4 bg-black/[0.02]">
-                    <td colSpan={3 + (showPluralColumn ? 1 : 0) + (showPaucalColumn ? 1 : 0)} className={`py-2 ${depth > 0 ? 'pl-6' : 'pl-3'} pr-3`}>
+                    <td colSpan={1 + (showSingularColumn ? 1 : 0) + (showDualColumn ? 1 : 0) + (showPluralColumn ? 1 : 0) + (showPaucalColumn ? 1 : 0)} className={`py-2 ${depth > 0 ? 'pl-6' : 'pl-3'} pr-3`}>
                         <button
                             type="button"
                             onClick={() => toggleSection(row.id)}
@@ -618,12 +804,16 @@ function NounParadigmTable({
                         )}
                     </div>
                 </td>
-                <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
-                    <NounParadigmCellView cell={row.singular} displayPattern={displayPattern} />
-                </td>
-                <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
-                    <NounParadigmCellView cell={row.dual} displayPattern={displayPattern} />
-                </td>
+                {showSingularColumn && (
+                    <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
+                        <NounParadigmCellView cell={row.singular} displayPattern={displayPattern} />
+                    </td>
+                )}
+                {showDualColumn && (
+                    <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
+                        <NounParadigmCellView cell={row.dual} displayPattern={displayPattern} />
+                    </td>
+                )}
                 {showPluralColumn && (
                     <td className="py-2.5 align-top font-serif font-normal text-black">
                         <NounParadigmCellView cell={row.plural} displayPattern={displayPattern} />
@@ -650,8 +840,8 @@ function NounParadigmTable({
                     <thead>
                         <tr className="border-b border-black/8 font-sans whitespace-nowrap">
                             <th className="text-left font-semibold text-black pb-2 pr-2 w-24 sm:w-40" aria-label={term('form') || 'Form'} />
-                            <th className="text-left font-semibold text-black pb-2 pr-2">Singular</th>
-                            <th className="text-left font-semibold text-black pb-2 pr-2">Dual</th>
+                            {showSingularColumn && <th className="text-left font-semibold text-black pb-2 pr-2">Singular</th>}
+                            {showDualColumn && <th className="text-left font-semibold text-black pb-2 pr-2">Dual</th>}
                             {showPluralColumn && <th className="text-left font-semibold text-black pb-2">Plural</th>}
                             {showPaucalColumn && <th className="text-left font-semibold text-black pb-2">Paucal</th>}
                         </tr>
@@ -679,13 +869,27 @@ function AdjectiveParadigmTable({
     hideHeaderLabel?: boolean;
 }) {
     const { term } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
+    const cellIsVisible = (cell: NounParadigmCell) => !(
+        hideTheoreticalForms && (
+            cell.theoretical ||
+            shouldHideSurface(cell.value, hideTheoreticalForms) ||
+            (cell.stacked?.length ? cell.stacked.every(item => item.theoretical || shouldHideSurface(item.value, hideTheoreticalForms)) : false)
+        )
+    ) && !(isDashLikeValue(cell.value) && isDashLikePattern(cell.pattern));
     const sectionRows = rows.filter((row): row is SectionRow => 'kind' in row);
-    const dataRows = rows.filter((row): row is AdjectiveParadigmDataRow => !('kind' in row));
-    const showElativeColumn = dataRows.some(row => !!row.elative.value || (row.elative.stacked?.length ?? 0) > 0);
+    const dataRows = rows.filter((row): row is AdjectiveParadigmDataRow => !('kind' in row) && (
+        cellIsVisible(row.singular) ||
+        cellIsVisible(row.dual) ||
+        cellIsVisible(row.plural) ||
+        cellIsVisible(row.elative)
+    ));
+    const showSingularColumn = dataRows.some(row => cellIsVisible(row.singular));
+    const showDualColumn = dataRows.some(row => cellIsVisible(row.dual));
+    const showPluralColumn = dataRows.some(row => cellIsVisible(row.plural));
+    const showElativeColumn = dataRows.some(row => cellIsVisible(row.elative));
     const hasRows = dataRows.some(row => (
-        row.singular.value || row.dual.value || row.plural.value || row.elative.value ||
-        (row.singular.stacked?.length ?? 0) > 0 || (row.dual.stacked?.length ?? 0) > 0 ||
-        (row.plural.stacked?.length ?? 0) > 0 || (row.elative.stacked?.length ?? 0) > 0
+        cellIsVisible(row.singular) || cellIsVisible(row.dual) || cellIsVisible(row.plural) || cellIsVisible(row.elative)
     ));
     const headerLabel = labelHeader || term('feature') || 'Feature';
     const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => {
@@ -730,7 +934,7 @@ function AdjectiveParadigmTable({
 
             renderedRows.push(
                 <tr key={`section-${row.id}-${idx}`} className="border-b border-black/4 bg-black/[0.02]">
-                    <td colSpan={4 + (showElativeColumn ? 1 : 0)} className={`py-2 ${depth > 0 ? 'pl-6' : 'pl-3'} pr-3`}>
+                    <td colSpan={1 + (showSingularColumn ? 1 : 0) + (showDualColumn ? 1 : 0) + (showPluralColumn ? 1 : 0) + (showElativeColumn ? 1 : 0)} className={`py-2 ${depth > 0 ? 'pl-6' : 'pl-3'} pr-3`}>
                         <button
                             type="button"
                             onClick={() => toggleSection(row.id)}
@@ -759,15 +963,21 @@ function AdjectiveParadigmTable({
                         </div>
                     </div>
                 </td>
-                <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
-                    <NounParadigmCellView cell={row.singular} displayPattern={displayPattern} />
-                </td>
-                <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
-                    <NounParadigmCellView cell={row.dual} displayPattern={displayPattern} />
-                </td>
-                <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
-                    <NounParadigmCellView cell={row.plural} displayPattern={displayPattern} />
-                </td>
+                {showSingularColumn && (
+                    <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
+                        <NounParadigmCellView cell={row.singular} displayPattern={displayPattern} />
+                    </td>
+                )}
+                {showDualColumn && (
+                    <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
+                        <NounParadigmCellView cell={row.dual} displayPattern={displayPattern} />
+                    </td>
+                )}
+                {showPluralColumn && (
+                    <td className="py-2.5 pr-2 align-top font-serif font-normal text-black">
+                        <NounParadigmCellView cell={row.plural} displayPattern={displayPattern} />
+                    </td>
+                )}
                 {showElativeColumn && (
                     <td className="py-2.5 align-top font-serif font-normal text-black">
                         <NounParadigmCellView cell={row.elative} displayPattern={displayPattern} />
@@ -791,9 +1001,9 @@ function AdjectiveParadigmTable({
                             <th className="text-left font-semibold text-black pb-2 pr-2 w-24 sm:w-40" aria-label={term('form') || 'Form'}>
                                 {hideHeaderLabel ? null : headerLabel}
                             </th>
-                            <th className="text-left font-semibold text-black pb-2 pr-2">{term('singular') || 'Singular'}</th>
-                            <th className="text-left font-semibold text-black pb-2 pr-2">{term('dual') || 'Dual'}</th>
-                            <th className="text-left font-semibold text-black pb-2 pr-2">{term('plural') || 'Plural'}</th>
+                            {showSingularColumn && <th className="text-left font-semibold text-black pb-2 pr-2">{term('singular') || 'Singular'}</th>}
+                            {showDualColumn && <th className="text-left font-semibold text-black pb-2 pr-2">{term('dual') || 'Dual'}</th>}
+                            {showPluralColumn && <th className="text-left font-semibold text-black pb-2 pr-2">{term('plural') || 'Plural'}</th>}
                             {showElativeColumn && <th className="text-left font-semibold text-black pb-2">{term('elative') || 'Elative'}</th>}
                         </tr>
                     </thead>
@@ -1536,15 +1746,22 @@ function DerivedTermLink({
     onEdit?: () => void;
     onDelete?: () => void;
 }) {
-    if (data.value === '-') return null;
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
+    if (data.value === '-' || shouldHideSurface(data, hideTheoreticalForms)) return null;
+    const hasMarkerPrefix = data.value.trim().startsWith('*') || data.value.trim().startsWith('✦');
+
+    const displayValue = hideTheoreticalForms ? stripTheoreticalPrefix(data.value).trim() : data.value.trim();
+    const markerPrefix = data.marker === 'theoretical'
+        ? '*'
+        : (data.marker === 'auto_generated' ? '✦' : '');
 
     const content = (data.marker === 'plain' && data.entryId) ? (
         <Link to={`/entry/${data.entryId}`} style={{ color: BLUE }} className="font-serif hover:underline">
-            {data.value}
+            {displayValue}
         </Link>
     ) : (
         <span className={`font-serif ${data.marker !== 'plain' ? 'opacity-45' : ''} text-black`}>
-            {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}{(data.value || '').trim()}
+            {markerPrefix && !hasMarkerPrefix ? markerPrefix : ''}{displayValue}
         </span>
     );
 
@@ -1660,6 +1877,7 @@ function removeRelationshipFromEntry(entry: Entry, targetId: string): Entry {
 function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
     const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
 
@@ -1699,11 +1917,13 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
     });
-    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
-    const relatedEntries = allRelatedEntries.filter((item: any) => {
+    const alternativeForms = getVisibleEntryForms(directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms, hideTheoreticalForms);
+    const relatedEntries = getVisibleEntryForms(allRelatedEntries.filter((item: any) => {
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
-    });
+    }), hideTheoreticalForms);
+    const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
+    const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
 
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -1737,14 +1957,6 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
             }]
             : []);
     const singularBase = trimOrNull(nm.singular || entry.headword || null) || entry.headword;
-
-    const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants;
-    const pattern = entry.root_pattern_form?.pattern;
-    const thirdRadical = rootConsonants?.split('-')?.[2] || rootConsonants?.[2] || '';
-
-    const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
-    const patternValue = resolveDisplayedPattern(mode, cvWizenMap, pattern?.cv_notation, pattern?.wizen_notation);
-
     const POSSESSIVE_SUFFIX_KEYS = ['pos-1s', 'pos-2s', 'pos-3ms', 'pos-3fs', 'pos-1p', 'pos-2p', 'pos-3p'];
 
     const applySuffix = (base: string, idx: number, theoreticalOverride?: boolean, customPattern?: string) => {
@@ -1771,27 +1983,35 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         return { value: result, theoretical: isT };
     };
 
-    const renderPluralInflection = (idx: number) => {
-        if (pluralInflectionRowsWithFallback.length === 0) return '-';
+    const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants;
+    const pattern = entry.root_pattern_form?.pattern;
+    const thirdRadical = rootConsonants?.split('-')?.[2] || rootConsonants?.[2] || '';
 
-        const resolvedPluralForms = pluralInflectionRowsWithFallback.map(row => applySuffix(
+    const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
+    const patternValue = resolveDisplayedPattern(mode, cvWizenMap, pattern?.cv_notation, pattern?.wizen_notation);
+
+    const inflectionRows = POSSESSIVE_SUFFIX_KEYS.map((key, idx) => {
+        const singularCell = applySuffix(singularBase, idx);
+        const singularVisible = !(hideTheoreticalForms && (singularCell.theoretical || isDashLikeValue(singularCell.value)));
+
+        const pluralResolvedCells = pluralInflectionRowsWithFallback.map(row => applySuffix(
             row.form,
             idx,
             isTheoretical,
             row.pattern || pluralPattern || soundPluralPattern || undefined,
         ));
+        const pluralVisible = pluralResolvedCells.length > 0 && pluralResolvedCells.some(cell => !(hideTheoreticalForms && (cell.theoretical || isDashLikeValue(cell.value))));
 
-        if (resolvedPluralForms.length === 1) return <MarkedValue val={resolvedPluralForms[0]} />;
-
-        return (
-            <StackedSurface
-                primary={<MarkedValue val={resolvedPluralForms[0]} />}
-                alternates={resolvedPluralForms.slice(1).map((value, altIdx) => (
-                    <MarkedValue key={`plural-${idx}-${altIdx}`} val={value} />
-                ))}
-            />
-        );
-    };
+        return {
+            key,
+            singularCell,
+            singularVisible,
+            pluralResolvedCells,
+            pluralVisible,
+        };
+    }).filter(row => row.singularVisible || row.pluralVisible);
+    const showSingularInflectionColumn = hideTheoreticalForms ? inflectionRows.some(row => row.singularVisible) : true;
+    const showPluralInflectionColumn = hideTheoreticalForms ? inflectionRows.some(row => row.pluralVisible) : true;
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -1804,10 +2024,10 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                 {/* Header */}
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
-                        <div className="relative inline-flex items-center justify-center">
-                            <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
-                                {entry.headword}
-                            </h1>
+                            <div className="relative inline-flex items-center justify-center">
+                                <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
+                                {getVisibleEntryLabel(entry.headword, hideTheoreticalForms)}
+                                </h1>
                             {isActualAdmin && (
                                 <button
                                     onClick={() => {
@@ -1861,10 +2081,10 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             </SideCard>
                         )}
 
-                        {alternativeForms.length > 0 && (
+                        {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
                                 <div className="space-y-1">
-                                    {alternativeForms.map((alt: any) => (
+                                    {displayAlternativeForms.map((alt: any) => (
                                         <div key={alt.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {alt.headword}{' '}
@@ -1884,10 +2104,10 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             </SideCard>
                         )}
 
-                        {relatedEntries.length > 0 && (
+                        {displayRelatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {relatedEntries.map((rel: any) => (
+                                    {displayRelatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
@@ -1976,6 +2196,8 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 />
 
                                 {/* Inflection Table */}
+                                {inflectionRows.length > 0 && (
+                                    <>
                                 <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
                                     {term('inflection-table')}
                                 </h2>
@@ -1986,27 +2208,46 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                         <thead>
                                             <tr className="border-b border-black/8 font-sans whitespace-nowrap">
                                                 <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('person')}</th>
+                                                {showSingularInflectionColumn && (
                                                 <th className="text-left font-semibold text-black pb-2 pr-4">
                                                     {(entry as any).is_collective ? term('collective') : (entry as any).is_singulative ? term('singulative') : term('singular')}
                                                 </th>
+                                                )}
+                                                {showPluralInflectionColumn && (
                                                 <th className="text-left font-semibold text-black pb-2">
                                                     {(entry as any).is_collective || (entry as any).is_singulative ? (term('unit-form') || 'Unit Form / Pl.') : term('plural')}
                                                 </th>
+                                                )}
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {POSSESSIVE_SUFFIX_KEYS.map((key, idx) => {
+                                            {inflectionRows.map(({ key, singularCell, singularVisible, pluralResolvedCells, pluralVisible }, idx) => {
                                                 return (
                                                     <tr key={key} className="border-b border-black/4 whitespace-nowrap">
                                                         <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
                                                             {term(key)}
                                                         </td>
-                                                        <td className="py-1.5 pr-4 font-serif font-normal text-black">
-                                                            <MarkedValue val={applySuffix(singularBase, idx)} />
-                                                        </td>
-                                                        <td className="py-1.5 font-serif font-normal text-black">
-                                                            {renderPluralInflection(idx)}
-                                                        </td>
+                                                        {showSingularInflectionColumn && (
+                                                            <td className="py-1.5 pr-4 font-serif font-normal text-black">
+                                                                {singularVisible ? <MarkedValue val={singularCell} /> : null}
+                                                            </td>
+                                                        )}
+                                                        {showPluralInflectionColumn && (
+                                                            <td className="py-1.5 font-serif font-normal text-black">
+                                                                {pluralVisible ? (
+                                                                    pluralResolvedCells.length === 1 ? (
+                                                                        <MarkedValue val={pluralResolvedCells[0]} />
+                                                                    ) : (
+                                                                        <StackedSurface
+                                                                            primary={<MarkedValue val={pluralResolvedCells[0]} />}
+                                                                            alternates={pluralResolvedCells.slice(1).map((value, altIdx) => (
+                                                                                <MarkedValue key={`plural-${idx}-${altIdx}`} val={value} />
+                                                                            ))}
+                                                                        />
+                                                                    )
+                                                                ) : null}
+                                                            </td>
+                                                        )}
                                                     </tr>
                                                 );
                                             })}
@@ -2021,21 +2262,40 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             <thead>
                                                 <tr className="border-b border-black/8 font-semibold text-[10px] uppercase tracking-wider text-black/40">
                                                     <th className="text-left pb-1 w-24 sm:w-[130px]">{term('person')}</th>
-                                                    <th className="text-left pb-1">{(entry as any).is_collective ? term('collective') : (entry as any).is_singulative ? term('singulative') : term('singular')}</th>
-                                                    <th className="text-right pb-1">{(entry as any).is_collective || (entry as any).is_singulative ? (term('unit-form') || 'Unit Form') : term('plural')}</th>
+                                                    {showSingularInflectionColumn && (
+                                                        <th className="text-left pb-1">{(entry as any).is_collective ? term('collective') : (entry as any).is_singulative ? term('singulative') : term('singular')}</th>
+                                                    )}
+                                                    {showPluralInflectionColumn && (
+                                                        <th className="text-right pb-1">{(entry as any).is_collective || (entry as any).is_singulative ? (term('unit-form') || 'Unit Form') : term('plural')}</th>
+                                                    )}
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-black/2">
-                                                {POSSESSIVE_SUFFIX_KEYS.map((key, idx) => {
+                                                {inflectionRows.map(({ key, singularCell, singularVisible, pluralResolvedCells, pluralVisible }, idx) => {
                                                     return (
                                                         <tr key={`mobile-${key}`}>
                                                             <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term(key)}</td>
-                                                            <td className="py-2 text-left">
-                                                                <MarkedValue val={applySuffix(singularBase, idx)} />
-                                                            </td>
-                                                            <td className="py-2 text-right">
-                                                                {renderPluralInflection(idx)}
-                                                            </td>
+                                                            {showSingularInflectionColumn && (
+                                                                <td className="py-2 text-left">
+                                                                    {singularVisible ? <MarkedValue val={singularCell} /> : null}
+                                                                </td>
+                                                            )}
+                                                            {showPluralInflectionColumn && (
+                                                                <td className="py-2 text-right">
+                                                                    {pluralVisible ? (
+                                                                        pluralResolvedCells.length === 1 ? (
+                                                                            <MarkedValue val={pluralResolvedCells[0]} />
+                                                                        ) : (
+                                                                            <StackedSurface
+                                                                                primary={<MarkedValue val={pluralResolvedCells[0]} />}
+                                                                                alternates={pluralResolvedCells.slice(1).map((value, altIdx) => (
+                                                                                    <MarkedValue key={`mobile-plural-${idx}-${altIdx}`} val={value} />
+                                                                                ))}
+                                                                            />
+                                                                        )
+                                                                    ) : null}
+                                                                </td>
+                                                            )}
                                                         </tr>
                                                     );
                                                 })}
@@ -2043,6 +2303,8 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                         </table>
                                     </div>
                                 </div>
+                                    </>
+                                )}
 
                                 {/* Derived Terms, Usage, and Thesaurus regions */}
                                 <div className="mt-16 md:mt-12 space-y-16 md:space-y-12">
@@ -2138,6 +2400,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
     const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
 
@@ -2173,11 +2436,13 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
     });
-    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
-    const relatedEntries = allRelatedEntries.filter((item: any) => {
+    const alternativeForms: any[] = getVisibleEntryForms(directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms, hideTheoreticalForms);
+    const relatedEntries: any[] = getVisibleEntryForms(allRelatedEntries.filter((item: any) => {
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
-    });
+    }), hideTheoreticalForms);
+    const displayAlternativeForms: any[] = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
+    const displayRelatedEntries: any[] = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
 
     const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root;
     const pattern = entry.root_pattern_form?.pattern;
@@ -2269,6 +2534,8 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
             return null;
         }
     }, [entry, derivedRootEntries, stemDefaults, vm.form]);
+    const isVisibleDerivedTerm = (data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string }) =>
+        data.value !== '-' && !shouldHideSurface(data, hideTheoreticalForms);
 
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -2344,7 +2611,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
                     <div className="relative inline-flex items-center justify-center">
                         <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
-                            {isTheoretical && '*'}{entry.headword}
+                            {getVisibleEntryLabel(entry.headword, hideTheoreticalForms)}
                         </h1>
                         {isActualAdmin && (
                             <button
@@ -2398,10 +2665,10 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             </SideCard>
                         )}
 
-                        {alternativeForms.length > 0 && (
+                        {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
                                 <div className="space-y-1">
-                                    {alternativeForms.map((alt: any) => (
+                                    {displayAlternativeForms.map((alt: any) => (
                                         <div key={alt.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {alt.headword}{' '}
@@ -2421,10 +2688,10 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             </SideCard>
                         )}
 
-                        {relatedEntries.length > 0 && (
+                        {displayRelatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {relatedEntries.map((rel: any) => (
+                                    {displayRelatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
@@ -2646,7 +2913,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                             <tr key={`perf-${row.person_mt}`}>
                                                                 <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term(row.person_mt)}</td>
                                                                 <td className="py-2 font-serif text-black text-right break-all text-sm">
-                                                                    {isTheoretical && '*'}{buildPerfectForm(
+                                                                    <MarkedValue val={buildPerfectForm(
                                                                         row.perfect,
                                                                         row.perfect_neg ?? row.perfect,
                                                                         isNeg,
@@ -2656,7 +2923,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                         row.stems,
                                                                         conj?.blocksImala || false,
                                                                         vm.form
-                                                                    )}
+                                                                    )} theoretical={isTheoretical} />
                                                                 </td>
                                                             </tr>
                                                         ))}
@@ -2681,7 +2948,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                             <tr key={`impf-${row.person_mt}`}>
                                                                 <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term(row.person_mt)}</td>
                                                                 <td className="py-2 font-serif text-black text-right break-all text-sm">
-                                                                    {isTheoretical && '*'}{buildVerbForm(
+                                                                    <MarkedValue val={buildVerbForm(
                                                                         row.imperfect,
                                                                         isNeg,
                                                                         doIdx,
@@ -2690,7 +2957,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                         row.stems,
                                                                         conj?.blocksImala || false,
                                                                         vm.form
-                                                                    )}
+                                                                    )} theoretical={isTheoretical} />
                                                                 </td>
                                                             </tr>
                                                         ))}
@@ -2719,7 +2986,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                     const base = isNeg ? row.imperfect : conj.imperative_sg;
                                                                     const stems = isNeg ? row.stems : (conj.imperative_sg_stems || { impfType1: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1'), impfType2: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1') });
                                                                     const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
-                                                                    return (isTheoretical ? '*' : '') + (isNeg ? result.replace(/^ma /, '') : result);
+                                                                    return <MarkedValue val={isNeg ? result.replace(/^ma /, '') : result} theoretical={isTheoretical} />;
                                                                 })()}
                                                             </td>
                                                         </tr>
@@ -2731,7 +2998,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                     const base = isNeg ? row.imperfect : conj.imperative_pl;
                                                                     const stems = isNeg ? row.stems : (conj.imperative_pl_stems || { impfType1: conj.imperative_pl, impfType2: conj.imperative_pl });
                                                                     const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
-                                                                    return (isTheoretical ? '*' : '') + (isNeg ? result.replace(/^ma /, '') : result);
+                                                                    return <MarkedValue val={isNeg ? result.replace(/^ma /, '') : result} theoretical={isTheoretical} />;
                                                                 })()}
                                                             </td>
                                                         </tr>
@@ -2782,11 +3049,11 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     {/* Derived Terms, Usage, and Thesaurus regions moved here to align with the Conjugation Table pillar */}
                                     <div className="mt-16 md:mt-12 space-y-16 md:space-y-12">
                                         {/* Derived Terms */}
-                                        {autoDerived && (autoDerived.imperfect.value !== '-' || autoDerived.imperative.value !== '-' || autoDerived.verbalNoun.value !== '-' || autoDerived.passiveParticiple.value !== '-' || autoDerived.activeParticiple.value !== '-') && (
+                                        {autoDerived && (isVisibleDerivedTerm(autoDerived.imperfect) || isVisibleDerivedTerm(autoDerived.imperative) || isVisibleDerivedTerm(autoDerived.verbalNoun) || isVisibleDerivedTerm(autoDerived.passiveParticiple) || isVisibleDerivedTerm(autoDerived.activeParticiple)) && (
                                             <div className="w-full">
                                                 <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">{term('derived-terms')}</h2>
                                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm mt-3 items-start text-center md:text-left">
-                                                    {autoDerived.passiveParticiple.value !== '-' && (
+                                                    {isVisibleDerivedTerm(autoDerived.passiveParticiple) && (
                                                         <DerivedTermLink
                                                             label={term('passive')}
                                                             data={autoDerived.passiveParticiple}
@@ -2796,7 +3063,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                             onEdit={() => handleEditDerived(autoDerived!.passiveParticiple, 'passive')}
                                                         />
                                                     )}
-                                                    {autoDerived.activeParticiple.value !== '-' && (
+                                                    {isVisibleDerivedTerm(autoDerived.activeParticiple) && (
                                                         <DerivedTermLink
                                                             label={term('active')}
                                                             data={autoDerived.activeParticiple}
@@ -2806,7 +3073,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                             onEdit={() => handleEditDerived(autoDerived!.activeParticiple, 'active')}
                                                         />
                                                     )}
-                                                    {autoDerived.verbalNoun.value !== '-' && (
+                                                    {isVisibleDerivedTerm(autoDerived.verbalNoun) && (
                                                         <DerivedTermLink
                                                             label={term('verbal-noun')}
                                                             data={autoDerived.verbalNoun}
@@ -2920,13 +3187,14 @@ export function ZokkEntryView({
     onRefetch?: () => void;
     headerAccessory?: React.ReactNode;
 }) {
-     const { language } = useLanguage();
-     const { term, mode } = useLinguisticMode();
-     const { isAdmin, adminViewEnabled } = useAuth();
-     const { getToken } = useClerkAuth();
+    const { language } = useLanguage();
+    const { term, mode } = useLinguisticMode();
+    const { isAdmin, adminViewEnabled } = useAuth();
+    const { getToken } = useClerkAuth();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
 
-     const [showForm, setShowForm] = useState(false);
-     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
+    const [showForm, setShowForm] = useState(false);
+    const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
  
     const isActualAdmin = isAdmin && adminViewEnabled;
      const ety = entry.etymologies?.[0];
@@ -2974,7 +3242,7 @@ export function ZokkEntryView({
                      <div className="relative inline-flex items-center justify-center flex-col gap-1">
                          <div className="relative inline-flex items-center justify-center">
                              <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
-                                 {entry.headword}
+                                 {getVisibleEntryLabel(entry.headword, hideTheoreticalForms)}
                              </h1>
                              {(isActualAdmin || headerAccessory) && (
                                  <div className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 flex items-center gap-1">
@@ -3119,6 +3387,7 @@ export function ZokkEntryView({
 function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
     const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
 
@@ -3160,11 +3429,13 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
     });
-    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
-    const relatedEntries = allRelatedEntries.filter((item: any) => {
+    const alternativeForms = getVisibleEntryForms(directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms, hideTheoreticalForms);
+    const relatedEntries = getVisibleEntryForms(allRelatedEntries.filter((item: any) => {
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
-    });
+    }), hideTheoreticalForms);
+    const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
+    const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
 
     if (!entry) return null;
 
@@ -3191,7 +3462,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
     const patternValue = resolveDisplayedPattern(mode, cvWizenMap, (entry as any).cv_pattern || pattern?.cv_notation, pattern?.wizen_notation);
     const { entries: rootEntries } = useRootData(entry.root_pattern_form?.root?.id);
-    const linkedNumeralEntries = useMemo(() => {
+    const linkedNumeralEntries: any[] = useMemo(() => {
         const seen = new Set<string>();
         return [...rootEntries, ...relatedEntries, ...alternativeForms].filter((item: any) => {
             const key = String(item?.id || item?.headword || '').toLowerCase().trim();
@@ -3201,7 +3472,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
         });
     }, [rootEntries, relatedEntries, alternativeForms]);
 
-    const resolvedNumeralEntries = useMemo(() => {
+    const resolvedNumeralEntries: any[] = useMemo(() => {
         const seen = new Set<string>();
         return linkedNumeralEntries.filter((item: any) => {
             const key = String(item?.headword || item?.id || '').toLowerCase().trim();
@@ -3304,15 +3575,12 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
         const hasLinkedEntry = data.marker === 'plain' && !!data.entryId;
         const linkedEntryId = data.entryId;
+        const displayValue = <MarkedValue val={{ value: data.value, theoretical: data.marker !== 'plain' }} />;
         const content = hasLinkedEntry ? (
             <Link to={`/entry/${linkedEntryId}`} style={{ color: BLUE }} className="hover:underline">
-                {data.value}
+                {displayValue}
             </Link>
-        ) : (
-            <span className={cn(data.marker !== 'plain' && "opacity-45")}>
-                {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}{data.value}
-            </span>
-        );
+        ) : displayValue;
 
         if (!isActualAdmin) return content;
 
@@ -3343,7 +3611,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
     const renderNumeralLink = (data: NumeralSurfaceValue | NumeralSurfaceValue[], type: string) => {
         if (Array.isArray(data)) {
-            const visibleItems = data.filter((item) => item.value !== '-');
+            const visibleItems = data.filter((item) => item.value !== '-' && !shouldHideSurface(item, hideTheoreticalForms));
             if (visibleItems.length === 0) return <span className="opacity-40">-</span>;
             return (
                 <div className="flex flex-col gap-1">
@@ -3370,9 +3638,9 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
                      <div className="relative inline-flex items-center justify-center flex-col gap-1">
                          <div className="relative inline-flex items-center justify-center">
-                             <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
-                                 {entry.headword}
-                             </h1>
+                            <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
+                                {stripTheoreticalPrefix(entry.headword)}
+                            </h1>
                              {isActualAdmin && (
                                  <button
                                      onClick={() => {
@@ -3426,10 +3694,10 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                             </SideCard>
                         )}
 
-                        {alternativeForms.length > 0 && (
+                        {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
                                 <div className="space-y-1">
-                                    {alternativeForms.map((alt: any) => (
+                                    {displayAlternativeForms.map((alt: any) => (
                                         <div key={alt.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {alt.headword}{' '}
@@ -3449,10 +3717,10 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                             </SideCard>
                         )}
 
-                        {relatedEntries.length > 0 && (
+                        {displayRelatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {relatedEntries.map((rel: any) => (
+                                    {displayRelatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
@@ -3670,6 +3938,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
     const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
 
@@ -3710,11 +3979,13 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
     });
-    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
-    const relatedEntries = allRelatedEntries.filter((item: any) => {
+    const alternativeForms = getVisibleEntryForms(directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms, hideTheoreticalForms);
+    const relatedEntries = getVisibleEntryForms(allRelatedEntries.filter((item: any) => {
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
-    });
+    }), hideTheoreticalForms);
+    const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
+    const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
 
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -3765,7 +4036,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
                         <div className="relative inline-flex items-center justify-center">
                             <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
-                                {entry.headword}
+                                {getVisibleEntryLabel(entry.headword, hideTheoreticalForms)}
                             </h1>
                             {isActualAdmin && (
                                 <button
@@ -3820,10 +4091,10 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                             </SideCard>
                         )}
 
-                        {alternativeForms.length > 0 && (
+                        {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
                                 <div className="space-y-1">
-                                    {alternativeForms.map((alt: any) => (
+                                    {displayAlternativeForms.map((alt: any) => (
                                         <div key={alt.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {alt.headword}{' '}
@@ -3843,10 +4114,10 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                             </SideCard>
                         )}
 
-                        {relatedEntries.length > 0 && (
+                        {displayRelatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {relatedEntries.map((rel: any) => (
+                                    {displayRelatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
@@ -4015,6 +4286,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
 function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
     const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
 
@@ -4054,11 +4326,13 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
     });
-    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
-    const relatedEntries = allRelatedEntries.filter((item: any) => {
+    const alternativeForms = getVisibleEntryForms(directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms, hideTheoreticalForms);
+    const relatedEntries = getVisibleEntryForms(allRelatedEntries.filter((item: any) => {
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
-    });
+    }), hideTheoreticalForms);
+    const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
+    const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
     //const pm = entry.adjective_morphology!;
 
     const handleRemoveRelationship = async (targetId: string) => {
@@ -4096,7 +4370,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
                         <div className="relative inline-flex items-center justify-center">
                             <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
-                                {entry.headword}
+                                {getVisibleEntryLabel(entry.headword, hideTheoreticalForms)}
                             </h1>
                             {isActualAdmin && (
                                 <button
@@ -4154,10 +4428,10 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                             </SideCard>
                         )}
 
-                        {alternativeForms.length > 0 && (
+                        {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
                                 <div className="space-y-1">
-                                    {alternativeForms.map((alt: any) => (
+                                    {displayAlternativeForms.map((alt: any) => (
                                         <div key={alt.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {alt.headword}{' '}
@@ -4177,10 +4451,10 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                             </SideCard>
                         )}
 
-                        {relatedEntries.length > 0 && (
+                        {displayRelatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {relatedEntries.map((rel: any) => (
+                                    {displayRelatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}
@@ -4359,6 +4633,7 @@ export function FunctionWordEntryView({
 }) {
     const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
+    const { hideTheoreticalForms } = useHideTheoreticalForms();
     const { isAdmin, adminViewEnabled } = useAuth();
     const { getToken } = useClerkAuth();
     const isActualAdmin = isAdmin && adminViewEnabled;
@@ -4414,11 +4689,13 @@ export function FunctionWordEntryView({
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
     });
-    const alternativeForms = directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms;
-    const relatedEntries = allRelatedEntries.filter((item: any) => {
+    const alternativeForms = getVisibleEntryForms(directAlternativeForms.length > 0 ? directAlternativeForms : markedAlternativeForms, hideTheoreticalForms);
+    const relatedEntries = getVisibleEntryForms(allRelatedEntries.filter((item: any) => {
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
         return !(kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form');
-    });
+    }), hideTheoreticalForms);
+    const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
+    const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
     const synonyms = parseMaybeArray<any>((entry as any).synonyms);
     const antonyms = parseMaybeArray<any>((entry as any).antonyms);
     const inflectionPlurals = parseMaybeArray<string>((entry as any).inflections_pl);
@@ -4529,7 +4806,7 @@ export function FunctionWordEntryView({
                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
                         <div className="relative inline-flex items-center justify-center">
                             <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
-                                {entry.headword}
+                                {getVisibleEntryLabel(entry.headword, hideTheoreticalForms)}
                             </h1>
                             {isActualAdmin && (
                                 <button
@@ -4575,10 +4852,10 @@ export function FunctionWordEntryView({
                             </SideCard>
                         )}
 
-                        {alternativeForms.length > 0 && (
+                        {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
                                 <div className="space-y-1">
-                                    {alternativeForms.map((alt: any) => (
+                                    {displayAlternativeForms.map((alt: any) => (
                                         <div key={alt.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {alt.headword}{' '}
@@ -4598,10 +4875,10 @@ export function FunctionWordEntryView({
                             </SideCard>
                         )}
 
-                        {relatedEntries.length > 0 && (
+                        {displayRelatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {relatedEntries.map((rel: any) => (
+                                    {displayRelatedEntries.map((rel: any) => (
                                         <div key={rel.id} className="flex items-center justify-between group">
                                             <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
                                                 {rel.headword}{' '}

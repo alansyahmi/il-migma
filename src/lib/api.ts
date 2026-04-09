@@ -78,15 +78,18 @@ export async function apiSearch(
     opts: {
         pos?: string;
         type?: string;
-        limit?: number;
-        offset?: number;
-        root_id?: string;
-        v?: string;
-        form?: string;
-        wizen?: string;
-        verb_type?: string;
-        source?: string;
-        gender?: string;
+    limit?: number;
+    offset?: number;
+    root_id?: string;
+    v?: string;
+    form?: string;
+    wizen?: string;
+    verb_type?: string;
+    source?: string;
+    source_language?: string;
+    suffix?: string;
+    suffix_kind?: 'nominal' | 'derivational';
+    gender?: string;
         radicals?: string[];
         random?: string;
         regex?: boolean;
@@ -117,8 +120,8 @@ export async function apiSearch(
     if (q) params.set('q', q);
     if (opts.pos) params.set('pos', opts.pos);
     if (opts.type) params.set('type', opts.type);
-    if (opts.limit) params.set('limit', String(opts.limit));
-    if (opts.offset) params.set('offset', String(opts.offset));
+    if (opts.limit !== undefined) params.set('limit', String(opts.limit));
+    if (opts.offset !== undefined) params.set('offset', String(opts.offset));
     if (opts.root_id) params.set('root_id', opts.root_id);
     if (opts.v) params.set('v', opts.v);
     if (opts.forms?.length) {
@@ -129,6 +132,9 @@ export async function apiSearch(
     if (opts.wizen) params.set('wizen', opts.wizen);
     if (opts.verb_type) params.set('verb_type', opts.verb_type);
     if (opts.source) params.set('source', opts.source);
+    if (opts.source_language) params.set('source_language', opts.source_language);
+    if (opts.suffix) params.set('suffix', opts.suffix);
+    if (opts.suffix_kind) params.set('suffix_kind', opts.suffix_kind);
     if (opts.gender) params.set('gender', opts.gender);
     if (opts.random) params.set('random', opts.random);
     if (opts.regex) params.set('regex', 'true');
@@ -179,9 +185,9 @@ export async function apiLookupRootByConsonants(consonants: string): Promise<any
 
 // ── Generic Dynamic Options ──────────────────────────────────────────────────
 
-const distinctValuesCache = new Map<'tags' | 'vowel_sets' | 'sources', Promise<string[]>>();
+const distinctValuesCache = new Map<'tags' | 'vowel_sets' | 'sources' | 'source_languages', Promise<string[]>>();
 
-export async function apiGetDistinctValues(type: 'tags' | 'vowel_sets' | 'sources'): Promise<string[]> {
+export async function apiGetDistinctValues(type: 'tags' | 'vowel_sets' | 'sources' | 'source_languages'): Promise<string[]> {
     const cached = distinctValuesCache.get(type);
     if (cached) return cached;
 
@@ -193,12 +199,25 @@ export async function apiGetDistinctValues(type: 'tags' | 'vowel_sets' | 'source
     return request;
 }
 
-export function invalidateDistinctValuesCache(type?: 'tags' | 'vowel_sets' | 'sources') {
+export function invalidateDistinctValuesCache(type?: 'tags' | 'vowel_sets' | 'sources' | 'source_languages') {
     if (type) {
         distinctValuesCache.delete(type);
         return;
     }
     distinctValuesCache.clear();
+}
+
+export interface SuffixCatalogItem {
+    kind: 'nominal' | 'derivational';
+    label: string;
+    suffix: string;
+    count: number;
+    sample_headword?: string;
+    sample_pos?: string;
+}
+
+export async function apiGetSuffixCatalog(): Promise<SuffixCatalogItem[]> {
+    return apiFetch('/api/distinct?type=suffixes');
 }
 
 /** Legacy wrapper or convenience */
@@ -216,8 +235,61 @@ export async function apiGetRoot(id: string): Promise<{ root: any }> {
     return apiFetch(`/api/root/${encodeURIComponent(id)}`);
 }
 
-export async function apiGetPattern(id: string): Promise<{ pattern: any; roles: any[]; entries: any[] }> {
+export interface PatternDetailEntry {
+    id: string;
+    headword: string;
+    pos: string;
+    root_id?: string | null;
+    root_consonants?: string | null;
+    definition?: string | null;
+    inflections_pl?: string[] | string | null;
+    plural_display?: string | null;
+    match_role?: 'dual' | 'plural' | 'derivational' | 'other' | null;
+    match_display_value?: string | null;
+    match_source_field?: string | null;
+    pos_group_key?: string;
+    pos_group_label?: string;
+    morphology_group_key?: string;
+    morphology_group_label?: string;
+}
+
+export interface PatternDetailGroup {
+    key: string;
+    label: string;
+    count: number;
+    entries: PatternDetailEntry[];
+}
+
+export interface PatternDetailResponse {
+    pattern: PatternApiItem;
+    roles: PatternApiApplicability[];
+    entries: PatternDetailEntry[];
+    entry_groups: {
+        pos: PatternDetailGroup[];
+        morphology: PatternDetailGroup[];
+    };
+}
+
+export async function apiGetPattern(id: string): Promise<PatternDetailResponse> {
     return apiFetch(`/api/pattern/${encodeURIComponent(id)}`);
+}
+
+export interface PatternApiApplicability {
+    category?: string;
+    pos?: string;
+    role?: string;
+    gender?: string;
+    stress?: number;
+    sort_order?: number;
+}
+
+export interface PatternApiItem {
+    id: string;
+    cv_notation: string;
+    wizen_notation: string;
+    description?: string | null;
+    example_word?: string | null;
+    applicability?: PatternApiApplicability[];
 }
 
 export async function apiGetStem(id: string): Promise<{ stem: StemApiItem }> {
@@ -231,7 +303,7 @@ export async function apiSearchStems(q: string, limit = 10): Promise<{ stems: an
     return apiFetch(`/api/stems/search?${params}`);
 }
 
-export async function apiListPatterns(): Promise<{ patterns: any[] }> {
+export async function apiListPatterns(): Promise<{ patterns: PatternApiItem[] }> {
     return apiFetch('/api/patterns');
 }
 

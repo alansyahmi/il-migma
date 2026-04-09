@@ -171,7 +171,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
 
     // Advanced Search
     'use-regular-expression': { en: 'Regex Mode', standard: 'Mod ta\' Regex', arabised: 'Mod ta\' Regex' },
-    'dual-pattern': { en: 'Dual Pattern', standard: 'Mudell tal-Imtenni', arabised: 'Sura tal-Imtenni' },
+    'dual-suffix': { en: 'Dual Suffix', standard: 'Suffiss Doppju', arabised: 'Suffiss Doppju' },
     'plural-pattern': { en: 'Plural Pattern', standard: 'Mudell tal-Plural', arabised: 'Sura tal-Ġmigħ' },
     'root-consonants': { en: 'Root Consonants', standard: 'Konsonanti tal-Għerq', arabised: 'Ittri Wieqaf tal-Ġidra' },
     'vowel-set': { en: 'Vowel Set', standard: 'Sett ta\' Vokali', arabised: 'Ġmejgħa ta\' Ittri Miexi' },
@@ -207,6 +207,8 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     "eg-consonants": { en: "e.g. k-t-b", standard: "eż. k-t-b", arabised: "eż. k-t-b" },
     "theoretical": { en: "Theoretical", standard: "Teoretiku", arabised: "Ħsibi" },
     "auto-generated": { en: "Auto-generated", standard: "Iġġenerat Awtomatikament", arabised: "Imnissel Għoddi" },
+    "hide-theoretical-forms": { en: "Hide theoretical forms", standard: "Aħbi forom teoretiċi", arabised: "أخفِ الأشكال النظرية" },
+    "show-theoretical-forms": { en: "Show theoretical forms", standard: "Uri forom teoretiċi", arabised: "أظهر الأشكال النظرية" },
     "no-attested-data": { en: "No attested data for root {q}.", standard: "L-ebda data attestata għall-għerq {q}.", arabised: "M'hemm data attestata għall-ġidra {q} ebda." },
     "view-root-anyway": { en: "Attempt to view root page anyway →", standard: "Ipprova ara l-paġna tal-għerq xorta waħda →", arabised: "Ipprova ara l-paġna tal-ġidra xorta waħda →" },
     "root-search-desc": { en: "Explore the morphological derivation of verbs and nouns from their base triliteral and quadriliteral roots. Enter consonants below to find matching root families.", standard: "Esplora d-derivazzjoni morfoloġika ta' verbi u nomi mill-għeruq bażiċi trilitteri u kwadrilitteri. Daħħal il-konsonanti hawn taħt biex issib familji ta' għeruq kompatibbli.", arabised: "Esplora d-derivazzjoni morfoloġika ta' verbi u nomi mill-ġidriet bażiċi trilitteri u kwadrilitteri. Daħħal il-konsonanti hawn taħt biex issib familji ta' ġidriet kompatibbli." },
@@ -302,6 +304,23 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     "check": { en: "Check", standard: "Iċċekkja", arabised: "Iċċekkja" },
     "browse-entries": { en: "Browse Entries", standard: "Ibbrawżja l-Entrati", arabised: "Għarbel il-Madħliet" },
     "random-entry": { en: "Random Entry", standard: "Entrata Kazwali", arabised: "Madħla Kif Ġie Ġie" },
+    "browse-mode": { en: "Browse mode", standard: "Mod ta' bbrawżjar", arabised: "Mod ta' għarbiel" },
+    "browse-by-pos": { en: "Browse by POS", standard: "Ibbrawżja skont il-POS", arabised: "Għarbel skont il-POS" },
+    "browse-by-pattern": { en: "Browse by Pattern", standard: "Ibbrawżja skont il-Mudell", arabised: "Għarbel skont il-Mudell" },
+    "browse-by-source": { en: "Browse by Source", standard: "Ibbrawżja skont is-Sors", arabised: "Għarbel skont is-Sors" },
+    "browse-by-suffix": { en: "Browse by Suffix", standard: "Ibbrawżja skont is-Suffiss", arabised: "Għarbel skont is-Suffiss" },
+    "all": { en: "All", standard: "Kollox", arabised: "Kollox" },
+    "browse-facets-desc": { en: "Explore the dictionary through morphology and etymology source groupings.", standard: "Esplora d-dizzjunarju permezz tal-morfoloġija u l-gruppi tas-sors etimoloġiku.", arabised: "Esplora l-miklem permezz tal-morfoloġija u l-gruppi tas-sors etimoloġiku." },
+    "browse-pattern-summary": { en: "Showing {count} patterns across {groups} groups.", standard: "Qed jintwerew {count} mudelli f'{groups} gruppi.", arabised: "Qed jintwerew {count} wiżien f'{groups} ġabriet." },
+    "browse-pattern-empty": { en: "No patterns found for this POS.", standard: "L-ebda mudell ma nstab għal dan il-POS.", arabised: "L-ebda wiżen ma nstab għal dan il-POS." },
+    "browse-by-source-desc": { en: "Explore entries by language of origin and jump straight into the related search results.", standard: "Esplora l-entrati skont il-lingwa ta' oriġini u aqbeż direttament għar-riżultati relatati tat-tiftix.", arabised: "Esplora l-madħliet skont l-ilsien tal-oriġini u aqbeż direttament għar-riżultati relatati tat-tiftix." },
+    "browse-by-suffix-desc": { en: "Explore entries by inflectional and derivational endings.", standard: "Esplora l-entrati skont it-tmiem inflessjonali u dderivati.", arabised: "Esplora l-madħliet skont it-tmiem inflessjonali u dderivattiv." },
+    "browse-suffix-summary": { en: "Showing {count} entries for {suffix}.", standard: "Qed jintwerew {count} entrata għal {suffix}.", arabised: "Qed jintwerew {count} madħla għal {suffix}." },
+    "browse-suffix-empty": { en: "No entries found for this suffix.", standard: "L-ebda entrata ma nstabet għal dan is-suffiss.", arabised: "L-ebda madħla ma nstabet għal dan is-suffiss." },
+    "nominal-suffixes": { en: "Nominal Suffixes", standard: "Suffissi Nominali", arabised: "Suffissi Nominali" },
+    "derivational-suffixes": { en: "Derivational Suffixes", standard: "Suffissi Dderivati", arabised: "Suffissi Dderivati" },
+    "sound-plural": { en: "Sound Plural", standard: "Plural Sħiħ", arabised: "Ġmigħ Sħiħ" },
+    "abstract-nouns": { en: "Abstract Nouns", standard: "Nomi Astratti", arabised: "Ismijiet Astratti" },
     "browse-by-letter": { en: "Browse by Letter", standard: "Ibbrawżja skont l-Ittra", arabised: "Għarbel skont l-Ittra" },
     "all-pos": { en: "All {pos}", standard: "Il-{pos} Kollha", arabised: "Il-{pos} Kollha" },
     "verb-forms-title": { en: "Verb Forms", standard: "Forom tal-Verbi", arabised: "Użien il-Fagħal" },
@@ -459,6 +478,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
 
 const TERM_ALIASES: Record<string, string> = {
     partiklu: 'particle',
+    'dual-pattern': 'dual-suffix',
 };
 
 function normalizeTermKey(key: string) {

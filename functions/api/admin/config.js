@@ -283,7 +283,7 @@ export async function onRequestGet({ request, env }) {
 
         await ensurePatternApplicabilityMetadataColumn(client);
 
-        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
+        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'derivational_suffix', 'dual_suffix', 'diminutive_pattern', 'adjective_pattern'];
 
         let patterns = [];
         if (!category || normalizedCategories.includes(category)) {
@@ -361,7 +361,7 @@ export async function onRequestPost({ request, env }) {
         await ensurePatternApplicabilityMetadataColumn(client);
         const id = Math.random().toString(36).slice(2, 11);
 
-        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
+        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'derivational_suffix', 'dual_suffix', 'diminutive_pattern', 'adjective_pattern'];
         if (normalizedCategories.includes(category)) {
             const cv = value.cv;
             const wizen = value.wizen;
@@ -402,7 +402,7 @@ export async function onRequestPut({ request, env }) {
         const client = getDbClient(env);
         await ensurePatternApplicabilityMetadataColumn(client);
 
-        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'diminutive_pattern', 'adjective_pattern'];
+        const normalizedCategories = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'sound_suffix', 'derivational_suffix', 'dual_suffix', 'diminutive_pattern', 'adjective_pattern'];
         if (category && normalizedCategories.includes(category)) {
             // value is a whole object {cv, wizen, stress, pos_types}
             try {

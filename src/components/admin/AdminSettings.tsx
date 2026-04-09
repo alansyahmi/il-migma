@@ -15,6 +15,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { TERMINOLOGY } from '@/lib/terminology';
 import { normalizePatternFormValue, PATTERN_BUCKET_LABELS } from '@/lib/patternMetadata';
+import { isDashMarkedSuffix } from '@/lib/suffixMatching';
 import { cn } from '@/lib/utils';
 import { AdminSettingsSidebar } from './settings/AdminSettingsSidebar';
 import { AdminSettingsToolbar } from './settings/AdminSettingsToolbar';
@@ -157,7 +158,7 @@ export function AdminSettings() {
         const patternValue = value as Record<string, unknown> | null;
         const cv = String(patternValue?.cv || '').trim();
 
-        if (cv.startsWith('-')) {
+        if (isDashMarkedSuffix(cv)) {
             return 'sound_suffix';
         }
 

@@ -5,6 +5,7 @@
 
 import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
 import { buildSuggestedEntryId } from '../../../src/lib/entryId.ts';
+import { isDashMarkedSuffix } from '../../../src/lib/suffixMatching.ts';
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
 async function verifyAdmin(request, env) {
@@ -743,9 +744,10 @@ async function ensurePatternsRegistered(client, body) {
         'form_masc_pattern': 'cv_wizen_pattern',
         'plural_pattern': 'broken_pattern', // Will be refined for sound_suffix below
         'form_plural_pattern': 'broken_pattern',
+        'augmentative_pattern': 'derivational_suffix',
         'diminutive_pattern': 'diminutive_pattern',
         'elative_pattern': 'adjective_pattern',
-        'dual_pattern': 'cv_wizen_pattern'
+        'dual_pattern': 'dual_suffix'
     };
 
     const roleMap = {
@@ -753,6 +755,7 @@ async function ensurePatternsRegistered(client, body) {
         'form_fem_pattern': 'feminine_singular',
         'plural_pattern': 'broken_plural',
         'form_plural_pattern': 'broken_plural',
+        'augmentative_pattern': 'derivational',
         'diminutive_pattern': 'diminutive',
         'elative_pattern': 'elative'
     };
@@ -770,8 +773,10 @@ async function ensurePatternsRegistered(client, body) {
 
             // Refine category for plural patterns (broken vs sound suffix)
             let actualCat = cat;
-            if (cat === 'broken_pattern' && cv.startsWith('-')) {
+            if (cat === 'broken_pattern' && isDashMarkedSuffix(cv)) {
                 actualCat = 'sound_suffix';
+            } else if (cat === 'derivational_suffix' && !isDashMarkedSuffix(cv)) {
+                continue;
             }
 
             // 1. Resolve a valid pattern_id for this CV in both legacy/new schemas.
