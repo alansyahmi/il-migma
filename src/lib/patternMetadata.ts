@@ -14,6 +14,28 @@ export type PatternSourceItem = {
 
 export type PatternOption = { label: string; value: string; sub?: string };
 
+const PATTERN_LINGUISTIC_ROLE_ALIASES: Record<string, string> = {
+    masculine_singular: 'singular',
+    feminine_singular: 'singular',
+    elative_masc: 'elative',
+    elative_fem: 'elative',
+};
+
+export const PATTERN_LINGUISTIC_ROLE_OPTIONS: PatternOption[] = [
+    { value: 'broken_plural', label: 'Broken plural' },
+    { value: 'sound_plural', label: 'Sound plural' },
+    { value: 'singular', label: 'Singular' },
+    { value: 'dual', label: 'Dual' },
+    { value: 'diminutive', label: 'Diminutive' },
+    { value: 'collective', label: 'Collective' },
+    { value: 'singulative', label: 'Singulative' },
+    { value: 'elative', label: 'Elative' },
+    { value: 'qualitative', label: 'Qualitative' },
+    { value: 'adjectival', label: 'Adjectival' },
+    { value: 'active', label: 'Active' },
+    { value: 'passive', label: 'Passive' },
+];
+
 export const PATTERN_POS_OPTIONS = [
     'verb',
     'noun',
@@ -62,6 +84,7 @@ export type PatternApplicability = {
     gender?: string;
     notes?: string;
     metadata?: PatternApplicabilityMetadata;
+    clientId?: string;
 };
 
 export type PatternFormValue = {
@@ -119,7 +142,7 @@ export const PATTERN_POS_SCHEMA: Record<PatternPos, PatternPosSchema> = {
     noun: {
         label: 'Noun',
         fields: [
-            { key: 'linguisticRole', label: 'Linguistic Role', kind: 'text', placeholder: 'e.g. plural, collective, singular' },
+            { key: 'linguisticRole', label: 'Linguistic Role', kind: 'select', options: PATTERN_LINGUISTIC_ROLE_OPTIONS, emptyLabel: '-- Select --' },
             { key: 'gender', label: 'Gender', kind: 'select', optionSource: 'gender', emptyLabel: '-- Any --' },
             { key: 'notes', label: 'Notes', kind: 'textarea', placeholder: 'Optional noun-specific notes...', rows: 3 },
         ],
@@ -135,7 +158,7 @@ export const PATTERN_POS_SCHEMA: Record<PatternPos, PatternPosSchema> = {
     adjective: {
         label: 'Adjective',
         fields: [
-            { key: 'linguisticRole', label: 'Linguistic Role', kind: 'text', placeholder: 'e.g. elative, qualitative' },
+            { key: 'linguisticRole', label: 'Linguistic Role', kind: 'select', options: PATTERN_LINGUISTIC_ROLE_OPTIONS, emptyLabel: '-- Select --' },
             { key: 'gender', label: 'Gender', kind: 'select', optionSource: 'gender', emptyLabel: '-- Any --' },
             { key: 'notes', label: 'Notes', kind: 'textarea', placeholder: 'Optional adjective-specific notes...', rows: 3 },
         ],
@@ -144,7 +167,7 @@ export const PATTERN_POS_SCHEMA: Record<PatternPos, PatternPosSchema> = {
         label: 'Participle',
         fields: [
             { key: 'participleType', label: 'Participle Type', kind: 'select', options: PARTICIPLE_TYPE_OPTIONS, emptyLabel: '-- Select --', metadataKey: 'participle_type' },
-            { key: 'linguisticRole', label: 'Linguistic Role', kind: 'text', placeholder: 'e.g. active, passive, adjectival' },
+            { key: 'linguisticRole', label: 'Linguistic Role', kind: 'select', options: PATTERN_LINGUISTIC_ROLE_OPTIONS, emptyLabel: '-- Select --' },
             { key: 'gender', label: 'Gender', kind: 'select', optionSource: 'gender', emptyLabel: '-- Any --' },
             { key: 'notes', label: 'Notes', kind: 'textarea', placeholder: 'Optional participle-specific notes...', rows: 3 },
         ],
@@ -219,6 +242,11 @@ function normalizeText(value: unknown) {
     return String(value || '').trim();
 }
 
+export function normalizePatternLinguisticRoleValue(role: unknown) {
+    const normalizedRole = normalizeText(role).toLowerCase();
+    return PATTERN_LINGUISTIC_ROLE_ALIASES[normalizedRole] || normalizedRole;
+}
+
 function normalizeStringList(value: unknown) {
     if (Array.isArray(value)) {
         return value.map((item) => normalizeToken(item)).filter(Boolean);
@@ -240,6 +268,12 @@ function titleCase(value: string) {
         .filter(Boolean)
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
         .join(' ');
+}
+
+export function getPatternLinguisticRoleLabel(role: string) {
+    const normalizedRole = normalizePatternLinguisticRoleValue(role);
+    return PATTERN_LINGUISTIC_ROLE_OPTIONS.find((option) => option.value === normalizedRole)?.label
+        || titleCase(normalizedRole);
 }
 
 function normalizePatternPos(value: unknown) {
@@ -311,7 +345,7 @@ function collectMetadata(record: Record<string, unknown>, ignoreKeys: Set<string
 }
 
 function normalizeApplicabilityMetadata(record: Record<string, unknown>) {
-    return collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender']));
+    return collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender', 'clientId', 'id']));
 }
 
 function inferLegacyPatternPosTypes(record: Record<string, unknown>, category?: string) {
@@ -334,7 +368,7 @@ function buildLegacyApplicabilitySource(record: Record<string, unknown>, pos: st
         return { pos };
     }
 
-    const metadata = collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender']));
+    const metadata = collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender', 'clientId', 'id']));
 
     switch (pos) {
         case 'noun':
@@ -401,9 +435,12 @@ function normalizeApplicability(record: Record<string, unknown>) {
     );
     const gender = normalizeText(record.gender || metadataRecord.gender);
     const notes = normalizeText(record.notes || metadataRecord.notes);
+    const clientId = normalizeText(record.clientId || metadataRecord.clientId || record.id || metadataRecord.id);
 
     delete metadataRecord.linguistic_role;
     delete metadataRecord.gender;
+    delete metadataRecord.clientId;
+    delete metadataRecord.id;
     if (notes) metadataRecord.notes = notes;
     else delete metadataRecord.notes;
 
@@ -413,6 +450,7 @@ function normalizeApplicability(record: Record<string, unknown>) {
         gender,
         notes,
         metadata,
+        clientId,
     } as PatternApplicability;
 }
 
@@ -468,7 +506,7 @@ export function getPatternApplicabilitySummary(value: unknown, category?: string
     return applicabilities.map((app) => {
         const labelParts = [titleCase(app.pos)];
 
-        if (app.linguisticRole) labelParts.push(`Role ${app.linguisticRole}`);
+        if (app.linguisticRole) labelParts.push(`Role ${getPatternLinguisticRoleLabel(app.linguisticRole)}`);
         if (app.gender) labelParts.push(`Gender ${app.gender}`);
         if (app.notes) labelParts.push(app.notes);
 

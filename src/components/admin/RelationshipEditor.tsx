@@ -10,7 +10,7 @@ interface RelationshipItem {
     id: string;
     headword: string;
     gloss_en?: string;
-    gloss_mt?: string;
+    gloss_mt?: string | null;
     pos?: string;
     cv_pattern?: string;
     wizen_pattern?: string;

@@ -1,12 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight, Search as SearchIcon } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
-import { BrowsePageHeader } from '@/components/browse/BrowsePageHeader';
-import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { apiSearch } from '@/lib/api';
-import type { SearchResult } from '@/types';
-import { cn } from '@/lib/utils';
+export { BrowseSuffixCatalogPage, BrowseSuffixCatalogPage as BrowseSuffixPage } from './BrowseSuffixCatalogPage';
+/*
 
 interface SuffixOption {
     id: 'dual' | 'sound_plural_masc' | 'sound_plural_fem' | 'abstract_noun' | 'augmentative';
@@ -192,6 +185,7 @@ function SelectedSuffixCard({ option }: { option: SuffixOption }) {
 }
 
 export function BrowseSuffixPage() {
+    const { t } = useLanguage();
     const { term } = useLinguisticMode();
     const [searchParams, setSearchParams] = useSearchParams();
     const [selectedSuffixValue, setSelectedSuffixValue] = useState(() => {
@@ -208,8 +202,8 @@ export function BrowseSuffixPage() {
     );
 
     useEffect(() => {
-        document.title = `${term('browse-by-suffix')} | Il-Miġma'`;
-    }, [term]);
+        document.title = `${t('Browse by Suffix', 'Ibbrawżja skont is-Suffiss')} | Il-Miġma'`;
+    }, [t]);
 
     useEffect(() => {
         const nextSuffix = searchParams.get('suffix');
@@ -299,7 +293,7 @@ export function BrowseSuffixPage() {
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
                     <div>
                         <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-black/35">
-                            {term('suffix')}
+                            {t('Suffix', 'Suffiss')}
                         </p>
                         <p className="mt-1 text-sm text-text-muted">
                             {loading
@@ -351,3 +345,4 @@ export function BrowseSuffixPage() {
         </div>
     );
 }
+*/

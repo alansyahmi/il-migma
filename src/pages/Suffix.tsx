@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Info } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { apiGetSuffixCatalog, apiSearch, type SuffixCatalogItem } from '@/lib/api';
 import { normalizeSuffixDisplay, resolveSuffixEntryMatch } from '@/lib/suffixMatching';
@@ -43,7 +44,7 @@ function EntryCard({
                 {cardTitle && cardTitle !== entry.headword && (
                     <div className="flex items-center gap-2">
                         <p className="text-xs text-black/40 font-medium italic">
-                            Headword: <span className="text-black/60 group-hover:text-link/60 transition-colors">{entry.headword}</span>
+                            {term('headword')}: <span className="text-black/60 group-hover:text-link/60 transition-colors">{entry.headword}</span>
                         </p>
                         <span className="text-[9px] font-bold uppercase tracking-tighter text-link/60 bg-link/5 px-1.5 py-px border border-link/10 rounded">
                             {match.role === 'dual'
@@ -69,6 +70,7 @@ function EntryCard({
 }
 
 export function SuffixDetailPage() {
+    const { t } = useLanguage();
     const { term } = useLinguisticMode();
     const { kind, suffix } = useParams<{ kind: string; suffix: string }>();
     const [catalog, setCatalog] = useState<SuffixCatalogItem[]>([]);
@@ -85,8 +87,8 @@ export function SuffixDetailPage() {
     }, [catalog, normalizedKind, normalizedSuffix]);
 
     useEffect(() => {
-        document.title = `${normalizedSuffix || term('browse-by-suffix')} | Il-Miġma'`;
-    }, [normalizedSuffix, term]);
+        document.title = `${normalizedSuffix || t('Browse by Suffix', 'Ibbrawżja skont is-Suffiss')} | Il-Miġma'`;
+    }, [normalizedSuffix, t]);
 
     useEffect(() => {
         let cancelled = false;
@@ -158,8 +160,8 @@ export function SuffixDetailPage() {
     }, [selectedItem?.kind, selectedItem?.suffix]);
 
     const kindLabel = normalizedKind === 'nominal'
-        ? term('nominal-suffixes')
-        : term('derivational-suffixes');
+        ? t('Nominal Suffixes', 'Suffissi Nominali')
+        : t('Derivational Suffixes', 'Suffissi Dderivati');
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -178,7 +180,7 @@ export function SuffixDetailPage() {
         return (
             <div style={bgStyle} className="flex flex-col items-center justify-center h-screen px-4 text-center">
                 <h2 className="font-serif text-2xl font-bold text-black mb-2">{term('error')}</h2>
-                <p className="text-text-muted mb-6">Suffix not found</p>
+                <p className="text-text-muted mb-6">{t('Suffix not found', 'Suffiss ma nstabx')}</p>
                 <Link to="/browse/suffix" className="text-link hover:underline flex items-center gap-2">
                     <ArrowLeft size={16} /> {term('back-to-browse')}
                 </Link>

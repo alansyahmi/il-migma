@@ -1,12 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight, Search as SearchIcon } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
-import { BrowsePageHeader } from '@/components/browse/BrowsePageHeader';
-import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { apiGetSuffixCatalog, apiSearch, type SuffixCatalogItem } from '@/lib/api';
-import type { SearchResult } from '@/types';
-import { cn } from '@/lib/utils';
+export { BrowseSuffixCatalogPage, BrowseSuffixCatalogPage as BrowseSuffixPageV2 } from './BrowseSuffixCatalogPage';
+/*
 
 type SuffixGroup = 'all' | 'nominal' | 'derivational';
 
@@ -131,6 +124,7 @@ function SuffixCard({
 }
 
 export function BrowseSuffixPage() {
+    const { t } = useLanguage();
     const { term } = useLinguisticMode();
     const [searchParams, setSearchParams] = useSearchParams();
     const [catalog, setCatalog] = useState<SuffixCatalogItem[]>([]);
@@ -171,19 +165,19 @@ export function BrowseSuffixPage() {
         const nominalCount = catalog.filter((item) => item.kind === 'nominal').length;
         const derivationalCount = catalog.filter((item) => item.kind === 'derivational').length;
         return [
-            { id: 'all' as const, label: term('all'), count: catalog.length },
+            { id: 'all' as const, label: t('All', 'Kollox'), count: catalog.length },
             ...(nominalCount > 0
-                ? [{ id: 'nominal' as const, label: term('nominal-suffixes'), count: nominalCount }]
+                ? [{ id: 'nominal' as const, label: t('Nominal Suffixes', 'Suffissi Nominali'), count: nominalCount }]
                 : []),
             ...(derivationalCount > 0
-                ? [{ id: 'derivational' as const, label: term('derivational-suffixes'), count: derivationalCount }]
+                ? [{ id: 'derivational' as const, label: t('Derivational Suffixes', 'Suffissi Dderivati'), count: derivationalCount }]
                 : []),
         ];
-    }, [catalog, term]);
+    }, [catalog, t]);
 
     useEffect(() => {
-        document.title = `${term('browse-by-suffix')} | Il-Miġma'`;
-    }, [term]);
+        document.title = `${t('Browse by Suffix', 'Ibbrawżja skont is-Suffiss')} | Il-Miġma'`;
+    }, [t]);
 
     useEffect(() => {
         let cancelled = false;
@@ -327,10 +321,10 @@ export function BrowseSuffixPage() {
                         <div>
                             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-black/35">
                                 {activeGroup === 'all'
-                                    ? term('browse-by-suffix')
+                                    ? t('Browse by Suffix', 'Ibbrawżja skont is-Suffiss')
                                     : activeGroup === 'nominal'
-                                        ? term('nominal-suffixes')
-                                        : term('derivational-suffixes')}
+                                        ? t('Nominal Suffixes', 'Suffissi Nominali')
+                                        : t('Derivational Suffixes', 'Suffissi Dderivati')}
                             </p>
                             <p className="mt-1 text-sm text-text-muted">
                                 {selectedItem
@@ -358,14 +352,14 @@ export function BrowseSuffixPage() {
                                     <div className="flex items-center gap-4">
                                         <div className="border-l-4 border-link pl-5">
                                             <h2 className="font-serif text-3xl font-bold text-black">
-                                                {term('nominal-suffixes')}
+                                                {t('Nominal Suffixes', 'Suffissi Nominali')}
                                             </h2>
                                         </div>
                                         <div className="h-px flex-1 bg-black/8" />
                                     </div>
                                     {renderCards(
                                         catalog.filter((item) => item.kind === 'nominal'),
-                                        term('nominal-suffixes'),
+                                        t('Nominal Suffixes', 'Suffissi Nominali'),
                                     )}
                                 </section>
                             ) : null}
@@ -375,14 +369,14 @@ export function BrowseSuffixPage() {
                                     <div className="flex items-center gap-4">
                                         <div className="border-l-4 border-link pl-5">
                                             <h2 className="font-serif text-3xl font-bold text-black">
-                                                {term('derivational-suffixes')}
+                                                {t('Derivational Suffixes', 'Suffissi Dderivati')}
                                             </h2>
                                         </div>
                                         <div className="h-px flex-1 bg-black/8" />
                                     </div>
                                     {renderCards(
                                         catalog.filter((item) => item.kind === 'derivational'),
-                                        term('derivational-suffixes'),
+                                        t('Derivational Suffixes', 'Suffissi Dderivati'),
                                     )}
                                 </section>
                             ) : null}
@@ -393,15 +387,15 @@ export function BrowseSuffixPage() {
                                 <div className="border-l-4 border-link pl-5">
                                     <h2 className="font-serif text-3xl font-bold text-black">
                                         {activeGroup === 'nominal'
-                                            ? term('nominal-suffixes')
-                                            : term('derivational-suffixes')}
+                                            ? t('Nominal Suffixes', 'Suffissi Nominali')
+                                            : t('Derivational Suffixes', 'Suffissi Dderivati')}
                                     </h2>
                                 </div>
                                 <div className="h-px flex-1 bg-black/8" />
                             </div>
                             {renderCards(
                                 visibleCatalog,
-                                activeGroup === 'nominal' ? term('nominal-suffixes') : term('derivational-suffixes'),
+                                activeGroup === 'nominal' ? t('Nominal Suffixes', 'Suffissi Nominali') : t('Derivational Suffixes', 'Suffissi Dderivati'),
                             )}
                         </section>
                     )}
@@ -420,7 +414,7 @@ export function BrowseSuffixPage() {
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-6">
                     <div>
                         <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-black/35">
-                            {term('suffix')}
+                            {t('Suffix', 'Suffiss')}
                         </p>
                         <p className="mt-1 text-sm text-text-muted">{selectedSummary}</p>
                     </div>
@@ -455,3 +449,4 @@ export function BrowseSuffixPage() {
         </div>
     );
 }
+*/

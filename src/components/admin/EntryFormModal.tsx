@@ -404,7 +404,7 @@ const PluralFormsEditor = ({
                                     onClick={() => syncRows(activeRows.filter((_, idx) => idx !== index))}
                                     className="p-1 text-slate-400 hover:text-red-500"
                                 >
-                                    <span className="sr-only">Delete</span>
+                                    <span className="sr-only">{t('Delete', 'Delete')}</span>
                                     &times;
                                 </button>
                             )}
@@ -2516,7 +2516,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             <input className={inp} value={form.headword} onChange={e => set('headword', e.target.value)} required />
                         </div>
                         <div className="space-y-1.5 md:col-span-1">
-                            <label className={label}>POS *</label>
+                            <label className={label}>{t('POS', 'POS')} *</label>
                             <select className={sel} value={form.pos} onChange={e => set('pos', e.target.value)}>
                                 {POS_OPTIONS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
                             </select>
@@ -2563,7 +2563,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 />
                                 {form._inheritedPattern && !form.cv_pattern && (
                                     <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-black/25 font-mono text-sm">
-                                        {form._inheritedPattern} <span className="text-[10px] italic">(inherited)</span>
+                                        {form._inheritedPattern} <span className="text-[10px] italic">{t('Inherited', 'Inherited')}</span>
                                     </div>
                                 )}
                                 <button
@@ -2873,7 +2873,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     {form.definitions.length > 1 && (
                                         <button type="button" onClick={() => set('definitions', form.definitions.filter((_: any, idx: number) => idx !== i))}
                                             className="p-1 text-slate-400 hover:text-red-500">
-                                            <span className="sr-only">Delete</span>
+                                            <span className="sr-only">{t('Delete', 'Delete')}</span>
                                             &times;
                                         </button>
                                     )}
@@ -2885,7 +2885,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     </div>
                                     <div>
                                         <label className={label}>{t('Maltese', 'Malti')}</label>
-                                        <input className={inp} value={def.text_mt} onChange={e => updateDefinitionField(i, 'text_mt', e.target.value)} />
+                                        <input className={inp} value={def.text_mt ?? ''} onChange={e => updateDefinitionField(i, 'text_mt', e.target.value)} />
                                     </div>
                                     <div>
                                         <label className={label}>{term('register')}</label>

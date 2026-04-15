@@ -208,16 +208,55 @@ export function invalidateDistinctValuesCache(type?: 'tags' | 'vowel_sets' | 'so
 }
 
 export interface SuffixCatalogItem {
+    id?: string;
     kind: 'nominal' | 'derivational';
     label: string;
     suffix: string;
     count: number;
+    sort_order?: number;
     sample_headword?: string;
     sample_pos?: string;
 }
 
 export async function apiGetSuffixCatalog(): Promise<SuffixCatalogItem[]> {
-    return apiFetch('/api/distinct?type=suffixes');
+    const res = await apiFetch<{ suffixes: SuffixCatalogItem[] }>('/api/suffix-catalog');
+    return Array.isArray(res.suffixes) ? res.suffixes : [];
+}
+
+export async function adminListSuffixCatalog(token: string): Promise<{ suffixes: SuffixCatalogItem[] }> {
+    return apiFetch('/api/admin/suffix-catalog', {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminCreateSuffixCatalog(
+    token: string,
+    data: { kind: 'nominal' | 'derivational'; suffix: string; label: string; sort_order?: number },
+) {
+    return apiFetch('/api/admin/suffix-catalog', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function adminUpdateSuffixCatalog(
+    token: string,
+    id: string,
+    data: { kind: 'nominal' | 'derivational'; suffix: string; label: string; sort_order?: number },
+) {
+    return apiFetch('/api/admin/suffix-catalog', {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ id, ...data }),
+    });
+}
+
+export async function adminDeleteSuffixCatalog(token: string, id: string) {
+    return apiFetch(`/api/admin/suffix-catalog?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+    });
 }
 
 /** Legacy wrapper or convenience */

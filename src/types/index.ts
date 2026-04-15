@@ -123,9 +123,9 @@ export interface NounMorphology {
     usage_example?: string;
     usage_example_en?: string;
     // Common metadata
-    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
-    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
-    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
+    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
+    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
     source_citation?: string;
     diminutives?: EntryDiminutive[];
 }
@@ -206,10 +206,10 @@ export interface VerbMorphology {
     // Full conjugation paradigm (optional — engine auto-generates if absent)
     conjugation?: VerbConjugationTable;
     // Thesaurus
-    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
-    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
+    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
     // Related entries from same root
-    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
     // Source citation
     source_citation?: string;
 }
@@ -223,9 +223,9 @@ export interface NumeralMorphology {
     form_opposite?: string;
     inflections_pl?: string[];
     // Common metadata
-    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
-    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
-    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
+    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
+    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
     morph_pattern?: string; // @deprecated
     lemma_pattern?: string; // @deprecated
     form_fem_pattern?: string;
@@ -246,10 +246,10 @@ export interface AdjectiveMorphology {
     vowel_set_opp?: string;
     vowel_set_dual?: string;
     // Thesaurus
-    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
-    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
+    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
     // Related entries
-    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
     morph_pattern?: string; // @deprecated
     lemma_pattern?: string; // @deprecated
     form_fem_pattern?: string;
@@ -360,7 +360,7 @@ export interface SubEntry {
 export interface Definition {
     id: string;
     sense_number: number;
-    text_mt: string;             // Maltese definition
+    text_mt: string | null;      // Maltese definition
     text_en: string;             // English translation/gloss
     register?: 'formal' | 'informal' | 'archaic' | 'technical' | 'dialectal' | 'colloquial';
     field?: string;              // domain, e.g. "Law", "Medicine"
@@ -407,7 +407,7 @@ export interface Entry {
     audio?: AudioFile[];
     etymologies?: Etymology[];
     dialect_variants?: DialectVariant[];
-    alternative_forms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string }>;
+    alternative_forms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
 
     // Flags
     is_loanword: boolean;

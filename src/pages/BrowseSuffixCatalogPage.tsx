@@ -1,15 +1,27 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Edit2, Plus, Trash2 } from 'lucide-react';
+import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
 import { BrowsePageHeader } from '@/components/browse/BrowsePageHeader';
 import { BrowseViewSwitch, type BrowseViewMode } from '@/components/browse/BrowseViewSwitch';
+import { SuffixCatalogFormModal } from '@/components/admin/SuffixCatalogFormModal';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { apiGetSuffixCatalog, type SuffixCatalogItem } from '@/lib/api';
+import {
+    adminCreateSuffixCatalog,
+    adminDeleteSuffixCatalog,
+    adminUpdateSuffixCatalog,
+    apiGetSuffixCatalog,
+    type SuffixCatalogItem,
+} from '@/lib/api';
 import { cn } from '@/lib/utils';
 
 type SuffixGroup = 'all' | 'nominal' | 'derivational';
 type SuffixViewMode = BrowseViewMode;
+type SuffixEditorKind = 'nominal' | 'derivational';
 
 const TAB_CLASS =
     'relative -mb-px border-b-2 px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-link/25 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent';
@@ -51,12 +63,58 @@ function getSamplePosLabel(value: string) {
     return normalized ? titleCase(normalized) : 'Other';
 }
 
-function SuffixCard({ item }: { item: SuffixCatalogItem }) {
+function SuffixCard({
+    item,
+    canEdit = false,
+    onEdit,
+    onDelete,
+    deleting = false,
+}: {
+    item: SuffixCatalogItem;
+    canEdit?: boolean;
+    onEdit?: () => void;
+    onDelete?: () => void;
+    deleting?: boolean;
+}) {
     return (
-        <Card className="border border-black/5 bg-white/60 backdrop-blur-md rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-black/5">
+        <Card className="relative border border-black/5 bg-white/60 backdrop-blur-md rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-black/5">
+            {canEdit && (
+                <div className="absolute right-4 top-4 z-20 flex items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onEdit?.();
+                        }}
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white/90 text-black/55 shadow-sm transition-colors hover:border-link hover:text-link"
+                        aria-label={`Edit ${item.suffix}`}
+                        title="Edit suffix"
+                    >
+                        <Edit2 size={15} />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onDelete?.();
+                        }}
+                        disabled={deleting}
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white/90 text-black/45 shadow-sm transition-colors hover:border-red-300 hover:text-red-600 disabled:opacity-50"
+                        aria-label={`Delete ${item.suffix}`}
+                        title="Delete suffix"
+                    >
+                        <Trash2 size={14} />
+                    </button>
+                </div>
+            )}
             <Link
                 to={`/suffix/${item.kind}/${encodeURIComponent(item.suffix)}`}
-                className="block p-6 group hover:bg-white/70 transition-colors h-full"
+                className={cn(
+                    'block p-6 group hover:bg-white/70 transition-colors h-full',
+                    canEdit ? 'pr-24' : '',
+                )}
             >
                 <div className="flex items-start justify-between gap-4 mb-6">
                     <div>
@@ -101,10 +159,16 @@ function SuffixCard({ item }: { item: SuffixCatalogItem }) {
 }
 
 export function BrowseSuffixCatalogPage() {
+    const { t } = useLanguage();
     const { term } = useLinguisticMode();
+    const { isAdmin } = useAuth();
+    const { getToken } = useClerkAuth();
     const [searchParams, setSearchParams] = useSearchParams();
     const [catalog, setCatalog] = useState<SuffixCatalogItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [suffixEditor, setSuffixEditor] = useState<SuffixCatalogItem | null>(null);
+    const [suffixEditorKind, setSuffixEditorKind] = useState<SuffixEditorKind>('nominal');
+    const [deletingId, setDeletingId] = useState<string | null>(null);
     const modeParam = searchParams.get('mode');
     const [selectedMode, setSelectedMode] = useState<SuffixViewMode>(
         modeParam === 'pos' ? 'pos' : 'morphology',
@@ -124,8 +188,21 @@ export function BrowseSuffixCatalogPage() {
     }, [searchParams]);
 
     useEffect(() => {
-        document.title = `${term('browse-by-suffix')} | Il-Miġma'`;
-    }, [term]);
+        document.title = `${t('Browse by Suffix', 'Ibbrawżja skont is-Suffiss')} | Il-Miġma'`;
+    }, [t]);
+
+    const loadCatalog = useCallback(async () => {
+        setLoading(true);
+        try {
+            const items = await apiGetSuffixCatalog();
+            setCatalog(items);
+        } catch (err) {
+            console.error('Failed to fetch suffix catalog:', err);
+            setCatalog([]);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
     useEffect(() => {
         const nextMode = searchParams.get('mode') === 'pos' ? 'pos' : 'morphology';
@@ -135,42 +212,23 @@ export function BrowseSuffixCatalogPage() {
     }, [searchParams, selectedMode]);
 
     useEffect(() => {
-        let cancelled = false;
-
-        setLoading(true);
-        apiGetSuffixCatalog()
-            .then((items) => {
-                if (!cancelled) setCatalog(items);
-            })
-            .catch((err) => {
-                if (!cancelled) {
-                    console.error('Failed to fetch suffix catalog:', err);
-                    setCatalog([]);
-                }
-            })
-            .finally(() => {
-                if (!cancelled) setLoading(false);
-            });
-
-        return () => {
-            cancelled = true;
-        };
-    }, []);
+        loadCatalog();
+    }, [loadCatalog]);
 
     const tabs = useMemo(() => {
         const nominalCount = catalog.filter((item) => item.kind === 'nominal').length;
         const derivationalCount = catalog.filter((item) => item.kind === 'derivational').length;
 
         return [
-            { id: 'all' as const, label: term('all'), count: catalog.length },
+            { id: 'all' as const, label: t('All', 'Kollox'), count: catalog.length },
             ...(nominalCount > 0
-                ? [{ id: 'nominal' as const, label: term('nominal-suffixes'), count: nominalCount }]
+                ? [{ id: 'nominal' as const, label: t('Nominal Suffixes', 'Suffissi Nominali'), count: nominalCount }]
                 : []),
             ...(derivationalCount > 0
-                ? [{ id: 'derivational' as const, label: term('derivational-suffixes'), count: derivationalCount }]
+                ? [{ id: 'derivational' as const, label: t('Derivational Suffixes', 'Suffissi Dderivati'), count: derivationalCount }]
                 : []),
         ];
-    }, [catalog, term]);
+    }, [catalog, t]);
 
     const posTabs = useMemo(() => {
         const counts = new Map<string, number>();
@@ -257,6 +315,64 @@ export function BrowseSuffixCatalogPage() {
         setSearchParams(nextParams);
     };
 
+    const openSuffixEditor = (item?: SuffixCatalogItem) => {
+        setSuffixEditor(item ?? null);
+        setSuffixEditorKind(item?.kind ?? (activeGroup === 'derivational' ? 'derivational' : 'nominal'));
+    };
+
+    const closeSuffixEditor = () => {
+        setSuffixEditor(null);
+    };
+
+    const saveSuffixEditor = async (value: { kind: SuffixEditorKind; suffix: string; label: string }) => {
+        const token = await getToken();
+        if (!token) {
+            throw new Error('Not authenticated');
+        }
+
+        const nextSortOrder = suffixEditor?.sort_order ?? (catalog.reduce((max, item) => Math.max(max, Number(item.sort_order ?? 0)), -1) + 1);
+
+        if (suffixEditor?.id) {
+            await adminUpdateSuffixCatalog(token, suffixEditor.id, {
+                kind: value.kind,
+                suffix: value.suffix,
+                label: value.label,
+                sort_order: nextSortOrder,
+            });
+        } else {
+            await adminCreateSuffixCatalog(token, {
+                kind: value.kind,
+                suffix: value.suffix,
+                label: value.label,
+                sort_order: nextSortOrder,
+            });
+        }
+
+        await loadCatalog();
+        closeSuffixEditor();
+    };
+
+    const deleteSuffix = async (item: SuffixCatalogItem) => {
+        if (!item.id) return;
+        if (!confirm(`Delete "${item.label}" (${item.suffix})?`)) return;
+
+        try {
+            const token = await getToken();
+            if (!token) {
+                throw new Error('Not authenticated');
+            }
+
+            setDeletingId(item.id);
+            await adminDeleteSuffixCatalog(token, item.id);
+            await loadCatalog();
+        } catch (error) {
+            console.error('Failed to delete suffix:', error);
+            alert(error instanceof Error ? error.message : String(error));
+        } finally {
+            setDeletingId(null);
+        }
+    };
+
     return (
         <div className="space-y-10">
             <BrowsePageHeader active="suffix" description={term('browse-by-suffix-desc')} />
@@ -280,6 +396,7 @@ export function BrowseSuffixCatalogPage() {
                                     onClick={() => setPosGroup(tab.id)}
                                     className={cn(
                                         TAB_CLASS,
+                                        'inline-flex items-center gap-2',
                                         isActive
                                             ? 'border-link text-black'
                                             : 'border-transparent text-black/50 hover:border-black/20 hover:text-black',
@@ -302,6 +419,7 @@ export function BrowseSuffixCatalogPage() {
                                     onClick={() => setGroup(tab.id)}
                                     className={cn(
                                         TAB_CLASS,
+                                        'inline-flex items-center gap-2',
                                         isActive
                                             ? 'border-link text-black'
                                             : 'border-transparent text-black/50 hover:border-black/20 hover:text-black',
@@ -322,6 +440,18 @@ export function BrowseSuffixCatalogPage() {
                 />
             </div>
 
+            <div className="flex items-center justify-end">
+                {isAdmin && (
+                    <Button
+                        type="button"
+                        onClick={() => openSuffixEditor()}
+                        leftIcon={<Plus size={14} />}
+                    >
+                        Add suffix
+                    </Button>
+                )}
+            </div>
+
             {loading ? (
                 <div className="flex justify-center py-10">
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-link" />
@@ -331,13 +461,13 @@ export function BrowseSuffixCatalogPage() {
                     <div className="space-y-8">
                         <div className="flex items-center justify-between gap-4">
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-black/35">
-                                    {activeGroup === 'all'
-                                        ? term('browse-by-suffix')
+                            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-black/35">
+                                {activeGroup === 'all'
+                                        ? t('Browse by Suffix', 'Ibbrawżja skont is-Suffiss')
                                         : activeGroup === 'nominal'
-                                            ? term('nominal-suffixes')
-                                            : term('derivational-suffixes')}
-                                </p>
+                                            ? t('Nominal Suffixes', 'Suffissi Nominali')
+                                            : t('Derivational Suffixes', 'Suffissi Dderivati')}
+                            </p>
                                 <p className="mt-1 text-sm text-text-muted">
                                     {activeGroup === 'all'
                                         ? `${catalog.length.toLocaleString()} suffixes in the catalog.`
@@ -353,14 +483,21 @@ export function BrowseSuffixCatalogPage() {
                                         <div className="flex items-center gap-4">
                                             <div className="border-l-4 border-link pl-5">
                                                 <h2 className="font-serif text-3xl font-bold text-black">
-                                                    {term('nominal-suffixes')}
+                                                    {t('Nominal Suffixes', 'Suffissi Nominali')}
                                                 </h2>
                                             </div>
                                             <div className="h-px flex-1 bg-black/8" />
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                             {nominalItems.map((item) => (
-                                                <SuffixCard key={`${item.kind}:${item.suffix}:${item.label}`} item={item} />
+                                                <SuffixCard
+                                                    key={item.id ?? `${item.kind}:${item.suffix}:${item.label}`}
+                                                    item={item}
+                                                    canEdit={isAdmin}
+                                                    deleting={Boolean(item.id && deletingId === item.id)}
+                                                    onEdit={isAdmin ? () => openSuffixEditor(item) : undefined}
+                                                    onDelete={isAdmin ? () => deleteSuffix(item) : undefined}
+                                                />
                                             ))}
                                         </div>
                                     </section>
@@ -371,14 +508,21 @@ export function BrowseSuffixCatalogPage() {
                                         <div className="flex items-center gap-4">
                                             <div className="border-l-4 border-link pl-5">
                                                 <h2 className="font-serif text-3xl font-bold text-black">
-                                                    {term('derivational-suffixes')}
+                                                    {t('Derivational Suffixes', 'Suffissi Dderivati')}
                                                 </h2>
                                             </div>
                                             <div className="h-px flex-1 bg-black/8" />
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                             {derivationalItems.map((item) => (
-                                                <SuffixCard key={`${item.kind}:${item.suffix}:${item.label}`} item={item} />
+                                                <SuffixCard
+                                                    key={item.id ?? `${item.kind}:${item.suffix}:${item.label}`}
+                                                    item={item}
+                                                    canEdit={isAdmin}
+                                                    deleting={Boolean(item.id && deletingId === item.id)}
+                                                    onEdit={isAdmin ? () => openSuffixEditor(item) : undefined}
+                                                    onDelete={isAdmin ? () => deleteSuffix(item) : undefined}
+                                                />
                                             ))}
                                         </div>
                                     </section>
@@ -390,15 +534,22 @@ export function BrowseSuffixCatalogPage() {
                                     <div className="border-l-4 border-link pl-5">
                                         <h2 className="font-serif text-3xl font-bold text-black">
                                             {activeGroup === 'nominal'
-                                                ? term('nominal-suffixes')
-                                                : term('derivational-suffixes')}
+                                                ? t('Nominal Suffixes', 'Suffissi Nominali')
+                                                : t('Derivational Suffixes', 'Suffissi Dderivati')}
                                         </h2>
                                     </div>
                                     <div className="h-px flex-1 bg-black/8" />
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                     {visibleCatalog.map((item) => (
-                                        <SuffixCard key={`${item.kind}:${item.suffix}:${item.label}`} item={item} />
+                                        <SuffixCard
+                                            key={item.id ?? `${item.kind}:${item.suffix}:${item.label}`}
+                                            item={item}
+                                            canEdit={isAdmin}
+                                            deleting={Boolean(item.id && deletingId === item.id)}
+                                            onEdit={isAdmin ? () => openSuffixEditor(item) : undefined}
+                                            onDelete={isAdmin ? () => deleteSuffix(item) : undefined}
+                                        />
                                     ))}
                                 </div>
                             </section>
@@ -439,7 +590,14 @@ export function BrowseSuffixCatalogPage() {
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                 {section.items.map((item) => (
-                                    <SuffixCard key={`${item.kind}:${item.suffix}:${item.label}`} item={item} />
+                                    <SuffixCard
+                                        key={item.id ?? `${item.kind}:${item.suffix}:${item.label}`}
+                                        item={item}
+                                        canEdit={isAdmin}
+                                        deleting={Boolean(item.id && deletingId === item.id)}
+                                        onEdit={isAdmin ? () => openSuffixEditor(item) : undefined}
+                                        onDelete={isAdmin ? () => deleteSuffix(item) : undefined}
+                                    />
                                 ))}
                             </div>
                         </section>
@@ -452,6 +610,15 @@ export function BrowseSuffixCatalogPage() {
                         {term('browse-suffix-empty')}
                     </p>
                 </div>
+            )}
+
+            {suffixEditor !== null && (
+                <SuffixCatalogFormModal
+                    item={suffixEditor}
+                    initialKind={suffixEditorKind}
+                    onClose={closeSuffixEditor}
+                    onSave={saveSuffixEditor}
+                />
             )}
         </div>
     );

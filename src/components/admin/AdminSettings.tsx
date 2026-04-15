@@ -14,7 +14,7 @@ import {
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { TERMINOLOGY } from '@/lib/terminology';
-import { normalizePatternFormValue, PATTERN_BUCKET_LABELS } from '@/lib/patternMetadata';
+import { normalizePatternFormValue } from '@/lib/patternMetadata';
 import { isDashMarkedSuffix } from '@/lib/suffixMatching';
 import { cn } from '@/lib/utils';
 import { AdminSettingsSidebar } from './settings/AdminSettingsSidebar';
@@ -25,6 +25,18 @@ import { ConfigFormModal } from './settings/ConfigFormModal';
 import { filterSettingsItems } from './settings/selectors';
 
 const GROUP_STORAGE_KEY = 'admin-settings-expanded-groups-v1';
+
+const PATTERN_BUCKET_LABEL_KEYS: Record<string, string> = {
+    cv_wizen_pattern: 'canonical-patterns',
+    broken_pattern: 'broken-plural',
+    feminine_pattern: 'feminine-singular',
+    sound_suffix: 'sound-plural-suffix',
+    derivational_suffix: 'derivational-suffixes',
+    dual_suffix: 'dual-suffix',
+    diminutive_pattern: 'diminutive',
+    adjective_pattern: 'elative',
+    plural_pattern: 'legacy-plural-bucket',
+};
 
 type SyncResult = { success?: number; errors?: string[] } | null;
 type ApiData = Record<string, unknown> | null;
@@ -148,8 +160,8 @@ export function AdminSettings() {
                 }
                 return a[0].localeCompare(b[0]);
             })
-            .map(([role, count]) => ({ role, label: PATTERN_BUCKET_LABELS[role] || role, count }));
-    }, [getCategoryItems]);
+            .map(([role, count]) => ({ role, label: term(PATTERN_BUCKET_LABEL_KEYS[role] || role), count }));
+    }, [getCategoryItems, term]);
 
     const resolveCreateCategory = (category: AdminCategory | null, value: unknown) => {
         const fallback = category?.storageCategories?.[0] ?? activeTab;
@@ -443,7 +455,7 @@ export function AdminSettings() {
             <section className="md:col-span-3 space-y-4">
                 <div className="flex items-center gap-2">
                     <h2 className="text-2xl font-bold text-black flex items-center gap-2">
-                        <Settings className="text-[#1034A6]" size={24} /> Admin Settings
+                        <Settings className="text-[#1034A6]" size={24} /> {t('Admin Settings', 'Settings tal-Amministrazzjoni')}
                     </h2>
                 </div>
 

@@ -66,6 +66,39 @@ const run = () => {
     assertEq(normalized.metadata.root_nested, 'root-value', 'Root nested metadata should be flattened');
     assert(!('metadata' in normalized.metadata), 'Root metadata should not re-nest metadata');
 
+    const duplicateInput = {
+        cv: 'CvC',
+        wizen: 'faghal',
+        stress: 2,
+        applicabilities: [
+            {
+                pos: 'noun',
+                linguistic_role: 'broken_plural',
+                gender: 'feminine',
+                clientId: 'noun-1',
+                metadata: {
+                    extra: 'value-1',
+                },
+            },
+            {
+                pos: 'noun',
+                linguistic_role: 'sound_plural',
+                gender: 'masculine',
+                clientId: 'noun-2',
+                metadata: {
+                    extra: 'value-2',
+                },
+            },
+        ],
+    };
+
+    const duplicateNormalized = normalizePatternFormValue(duplicateInput, 'broken_pattern');
+    assertEq(duplicateNormalized.applicabilities?.length, 2, 'Duplicate POS roles should be preserved');
+    assertEq(duplicateNormalized.applicabilities?.[0].clientId, 'noun-1', 'Client IDs should survive client normalization');
+    assertEq(duplicateNormalized.applicabilities?.[1].clientId, 'noun-2', 'Client IDs should survive client normalization');
+    assertEq(duplicateNormalized.applicabilities?.[0].linguisticRole, 'broken_plural', 'First duplicate role should be preserved');
+    assertEq(duplicateNormalized.applicabilities?.[1].linguisticRole, 'sound_plural', 'Second duplicate role should be preserved');
+
     const summary = getPatternMetadataSummary(input, 'broken_pattern');
     assertEq(summary.linguisticRole, 'broken_plural', 'Summary should expose linguistic role');
     assertEq(summary.gender, 'feminine', 'Summary should expose gender');
@@ -116,8 +149,18 @@ const run = () => {
                     pos: 'noun',
                     strength: 'broken_plural',
                     gender: 'feminine',
+                    clientId: 'noun-1',
                     metadata: {
-                        extra: 'value',
+                        extra: 'value-1',
+                    },
+                },
+                {
+                    pos: 'noun',
+                    strength: 'sound_plural',
+                    gender: 'masculine',
+                    clientId: 'noun-2',
+                    metadata: {
+                        extra: 'value-2',
                     },
                 },
             ],
@@ -126,7 +169,7 @@ const run = () => {
     );
 
     assertEq(merged.pos_types.join(','), 'noun,verb', 'Merged pattern should dedupe and append new POS types');
-    assertEq(merged.applicabilities.length, 2, 'Merged pattern should backfill a blank applicability for missing POS');
+    assertEq(merged.applicabilities.length, 3, 'Merged pattern should preserve duplicate POS rows and backfill missing POS');
     const mergedVerb = merged.applicabilities.find((app) => app.pos === 'verb');
     assert(mergedVerb, 'Merged pattern should include a blank verb applicability');
     assertEq(mergedVerb.strength, '', 'Backfilled POS applicability should start blank');
@@ -134,10 +177,14 @@ const run = () => {
     assertEq(mergedVerb.weakClass, '', 'Backfilled POS applicability should start blank');
     assertEq(mergedVerb.participleType, '', 'Backfilled POS applicability should start blank');
     assertEq(mergedVerb.numeralType, '', 'Backfilled POS applicability should start blank');
-    const mergedNoun = merged.applicabilities.find((app) => app.pos === 'noun');
-    assert(mergedNoun, 'Merged pattern should preserve the existing noun applicability');
-    assertEq(mergedNoun.strength, 'broken_plural', 'Existing applicability metadata should be preserved');
-    assertEq(mergedNoun.metadata.extra, 'value', 'Existing applicability metadata payload should be preserved');
+    const mergedNouns = merged.applicabilities.filter((app) => app.pos === 'noun');
+    assertEq(mergedNouns.length, 2, 'Merged pattern should keep both noun applicabilities');
+    assertEq(mergedNouns[0].clientId, 'noun-1', 'First noun applicability should keep its client ID');
+    assertEq(mergedNouns[1].clientId, 'noun-2', 'Second noun applicability should keep its client ID');
+    assertEq(mergedNouns[0].strength, 'broken_plural', 'First noun applicability metadata should be preserved');
+    assertEq(mergedNouns[1].strength, 'sound_plural', 'Second noun applicability metadata should be preserved');
+    assertEq(mergedNouns[0].metadata.extra, 'value-1', 'First noun applicability metadata payload should be preserved');
+    assertEq(mergedNouns[1].metadata.extra, 'value-2', 'Second noun applicability metadata payload should be preserved');
 
     const mergedRemaining = mergePatternBucketApplicabilities(
         {
@@ -167,9 +214,20 @@ const run = () => {
                     pos: 'noun',
                     linguistic_role: 'broken_plural',
                     gender: 'feminine',
+                    clientId: 'noun-1',
                     notes: 'keep this',
                     metadata: {
                         extra: 'value',
+                    },
+                },
+                {
+                    pos: 'noun',
+                    linguistic_role: 'sound_plural',
+                    gender: 'masculine',
+                    clientId: 'noun-2',
+                    notes: 'keep this too',
+                    metadata: {
+                        extra: 'value-2',
                     },
                 },
             ],
@@ -178,12 +236,11 @@ const run = () => {
     );
 
     assertEq(serverNormalized.pos_types.join(','), 'noun,verb', 'Server normalization should keep the merged POS list');
-    assertEq(serverNormalized.applicabilities.length, 2, 'Server normalization should materialize the missing POS bucket');
-    const serverVerb = serverNormalized.applicabilities.find((app) => app.pos === 'verb');
-    assert(serverVerb, 'Server normalization should include a blank verb applicability');
-    assertEq(serverVerb.linguisticRole, '', 'Server backfill should not invent linguistic role metadata');
-    assertEq(serverVerb.gender, '', 'Server backfill should not invent gender metadata');
-    assertEq(serverVerb.notes, '', 'Server backfill should not invent notes metadata');
+    assertEq(serverNormalized.applicabilities.length, 2, 'Server normalization should preserve duplicate POS rows');
+    assertEq(serverNormalized.applicabilities?.[0].clientId, 'noun-1', 'Server normalization should preserve client IDs');
+    assertEq(serverNormalized.applicabilities?.[1].clientId, 'noun-2', 'Server normalization should preserve client IDs');
+    assertEq(serverNormalized.applicabilities?.[0].linguisticRole, 'broken_plural', 'Server normalization should preserve the first role');
+    assertEq(serverNormalized.applicabilities?.[1].linguisticRole, 'sound_plural', 'Server normalization should preserve the second role');
 
     const serverNoMetadata = normalizePatternFormValueServer(
         {

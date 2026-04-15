@@ -179,7 +179,7 @@ export function Home() {
                         <div className="max-w-xl relative z-10">
                             <h2 className="text-2xl font-serif mb-4">{term('quick-search-verification')}</h2>
                             <p className="text-white/70 text-sm mb-6">{term('quick-search-verification-desc')}</p>
-                            <form onSubmit={handleSearch} className="flex gap-2 relative">
+                            <form onSubmit={handleSearch} className="flex flex-wrap gap-2 relative">
                                 <div className="flex-1 flex items-center bg-white/10 border border-white/20 rounded-xl overflow-hidden focus-within:bg-white/20 transition-all">
                                     <button
                                         ref={kbRef2}
@@ -203,6 +203,12 @@ export function Home() {
                                 <button type="submit" className="bg-white text-[#1034A6] px-6 py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all shrink-0">
                                     {term('check')}
                                 </button>
+                                <Link
+                                    to="/browse"
+                                    className="bg-link text-white text-sm font-sans font-medium px-5 py-2.5 rounded-lg hover:bg-link-hover transition-colors shadow-lg shadow-link/20 shrink-0"
+                                >
+                                    {term('browse-entries')}
+                                </Link>
                                 <MalteseCharPicker
                                     open={kbOpen2}
                                     onOpenChange={setKbOpen2}

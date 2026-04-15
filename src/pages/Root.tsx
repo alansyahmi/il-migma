@@ -778,7 +778,7 @@ export function Root() {
                                                         <button
                                                             onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('synonyms', s.id); }}
                                                             className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                                                            title="Unlink Synonym"
+                                                            title={term('unlink-synonym')}
                                                         >
                                                             <Trash2 size={10} />
                                                         </button>
@@ -806,7 +806,7 @@ export function Root() {
                                                         <button
                                                             onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('antonyms', a.id); }}
                                                             className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                                                            title="Unlink Antonym"
+                                                            title={term('unlink-antonym')}
                                                         >
                                                             <Trash2 size={10} />
                                                         </button>
@@ -867,7 +867,7 @@ export function Root() {
                                 <LazyRelationshipEditor
                                     type="thesaurus"
                                     lookupType="root"
-                                    title={term('sinonimi')}
+                                    title={term('synonyms')}
                                     items={relForm.synonyms}
                                     onChange={(items) => setRelForm(f => ({ ...f, synonyms: items }))}
                                     extraActions={[
@@ -881,7 +881,7 @@ export function Root() {
                                 <LazyRelationshipEditor
                                     type="thesaurus"
                                     lookupType="root"
-                                    title={term('antonimi')}
+                                    title={term('antonyms')}
                                     items={relForm.antonyms}
                                     onChange={(items) => setRelForm(f => ({ ...f, antonyms: items }))}
                                     extraActions={[

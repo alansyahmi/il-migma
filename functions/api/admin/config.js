@@ -207,8 +207,8 @@ function buildPatternPayloadRows(clientPatternId, category, value, sortOrder) {
     const stressToken = stress === null ? 'null' : String(stress);
     const applicabilities = normalizePatternApplicabilities(value);
 
-    return applicabilities.map((applicability) => ({
-        id: `${clientPatternId}_${category}_${stressToken}_${applicability.pos}`,
+    return applicabilities.map((applicability, index) => ({
+        id: `${clientPatternId}_${category}_${stressToken}_${applicability.pos}_${index}`,
         pattern_id: clientPatternId,
         category,
         pos: applicability.pos,

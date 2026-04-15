@@ -55,6 +55,7 @@ export type PatternApplicability = {
     participleType?: string;
     numeralType?: string;
     metadata?: PatternApplicabilityMetadata;
+    clientId?: string;
 };
 
 export type PatternFormValue = {
@@ -163,8 +164,13 @@ export function mergePatternBucketApplicabilities(value: unknown, incomingPosTyp
         ...normalizedIncomingPosTypes,
         ...existingApplicabilities.map((app) => app.pos),
     ]));
-    const existingByPos = new Map(existingApplicabilities.map((app) => [app.pos, app]));
-    const nextApplicabilities = nextPosTypes.map((pos) => existingByPos.get(pos) || createBlankApplicability(pos));
+    const nextApplicabilities = [...existingApplicabilities];
+
+    nextPosTypes.forEach((pos) => {
+        if (!nextApplicabilities.some((app) => app.pos === pos)) {
+            nextApplicabilities.push(createBlankApplicability(pos));
+        }
+    });
 
     return {
         ...normalized,
@@ -179,7 +185,7 @@ function normalizeApplicabilityMetadata(record: Record<string, unknown>) {
         : {};
 
     Object.entries(record).forEach(([key, value]) => {
-        if (['pos', 'metadata'].includes(key)) return;
+        if (['pos', 'metadata', 'clientId', 'id'].includes(key)) return;
         if (value !== undefined && value !== null && String(value).trim() !== '') {
             metadata[key] = value;
         }
@@ -214,6 +220,7 @@ function normalizeApplicability(record: Record<string, unknown>) {
     const weakClass = normalizeText(record.weakClass || metadata.weak_class);
     const participleType = normalizeText(record.participleType || metadata.participle_type);
     const numeralType = normalizeText(record.numeralType || metadata.numeral_type);
+    const clientId = normalizeText(record.clientId || metadata.clientId || record.id || metadata.id);
 
     if (strength) metadata.strength = strength;
     if (gender) metadata.gender = gender;
@@ -222,6 +229,8 @@ function normalizeApplicability(record: Record<string, unknown>) {
     if (numeralType) metadata.numeral_type = numeralType;
     delete metadata.class;
     delete metadata.linguistic_role;
+    delete metadata.clientId;
+    delete metadata.id;
 
     return {
         pos,
@@ -231,6 +240,7 @@ function normalizeApplicability(record: Record<string, unknown>) {
         participleType,
         numeralType,
         metadata,
+        clientId,
     } as PatternApplicability;
 }
 

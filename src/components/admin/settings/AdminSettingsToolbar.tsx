@@ -1,5 +1,6 @@
 import { Download, HelpCircle, Plus, RefreshCw, RotateCcw, Search, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import type { AdminCategory } from '@/lib/adminCategoryRegistry';
 import { cn } from '@/lib/utils';
 
@@ -40,6 +41,7 @@ export function AdminSettingsToolbar({
     onImportTerminology,
     onSyncPatterns,
 }: AdminSettingsToolbarProps) {
+    const { term } = useLinguisticMode();
     const isPattern = activeCategory?.editorType === 'pattern';
     const hasPosFilter = Boolean(activeCategory?.hasPosFilter);
     const isUiTerminology = activeCategory?.id === 'ui_terminology';
@@ -59,7 +61,7 @@ export function AdminSettingsToolbar({
                                 disabled={syncLoading}
                                 leftIcon={syncLoading ? <RotateCcw className="animate-spin" size={14} /> : <Download size={14} />}
                             >
-                                Export to TS
+                                {term('export-to-ts')}
                             </Button>
                             <Button
                                 variant="secondary"
@@ -68,7 +70,7 @@ export function AdminSettingsToolbar({
                                 disabled={syncLoading}
                                 leftIcon={syncLoading ? <RotateCcw className="animate-spin" size={14} /> : <Upload size={14} />}
                             >
-                                Import from Source
+                                {term('import-from-source')}
                             </Button>
                         </div>
                     )}
@@ -78,10 +80,10 @@ export function AdminSettingsToolbar({
                             variant="secondary"
                             size="sm"
                             onClick={onSyncPatterns}
-                            disabled={syncLoading}
-                            leftIcon={<RotateCcw className={cn(syncLoading && 'animate-spin')} size={14} />}
-                        >
-                            Sync from Entries
+                        disabled={syncLoading}
+                        leftIcon={<RotateCcw className={cn(syncLoading && 'animate-spin')} size={14} />}
+                    >
+                            {term('sync-from-entries')}
                         </Button>
                     )}
 
@@ -92,9 +94,9 @@ export function AdminSettingsToolbar({
                         disabled={loading || syncLoading}
                         leftIcon={<RefreshCw className={cn((loading || syncLoading) && 'animate-spin')} size={14} />}
                     >
-                        Refresh
+                        {term('refresh')}
                     </Button>
-                    <Button size="sm" onClick={onAdd} leftIcon={<Plus size={14} />}>Add New</Button>
+                    <Button size="sm" onClick={onAdd} leftIcon={<Plus size={14} />}>{term('add-new')}</Button>
                 </div>
             </div>
 
@@ -103,7 +105,7 @@ export function AdminSettingsToolbar({
                     <Search size={14} className="text-black/30" />
                     <input
                         type="text"
-                        placeholder="Search items..."
+                        placeholder={term('search-items')}
                         className="bg-transparent border-none text-xs focus:outline-none w-36 focus:w-56 transition-all"
                         value={searchTerm}
                         onChange={(e) => onSearchTermChange(e.target.value)}
@@ -116,13 +118,13 @@ export function AdminSettingsToolbar({
                         value={roleFilter}
                         onChange={(e) => onRoleFilterChange(e.target.value)}
                     >
-                        <option value="all">Any Role</option>
-                        <option value="broken_plural">Broken Plural</option>
-                        <option value="sound_plural">Sound Plural</option>
-                        <option value="feminine_singular">Feminine Singular</option>
-                        <option value="diminutive">Diminutive</option>
-                        <option value="elative">Elative</option>
-                        <option value="verbal_noun">Verbal Noun</option>
+                        <option value="all">{term('any-role')}</option>
+                        <option value="broken_plural">{term('broken-plural')}</option>
+                        <option value="sound_plural">{term('sound-plural')}</option>
+                        <option value="feminine_singular">{term('feminine-singular')}</option>
+                        <option value="diminutive">{term('diminutive')}</option>
+                        <option value="elative">{term('elative')}</option>
+                        <option value="verbal_noun">{term('verbal-noun')}</option>
                     </select>
                 )}
 
@@ -132,7 +134,7 @@ export function AdminSettingsToolbar({
                         value={posFilter}
                         onChange={(e) => onPosFilterChange(e.target.value)}
                     >
-                        <option value="all">All POS</option>
+                        <option value="all">{term('all-pos-label')}</option>
                         {posOptions.map((option) => (
                             <option key={option} value={option}>{option.toUpperCase()}</option>
                         ))}
@@ -144,7 +146,7 @@ export function AdminSettingsToolbar({
                 <div className="bg-blue-50 border border-blue-100 p-3 rounded-lg flex items-start gap-3">
                     <HelpCircle className="text-blue-500 shrink-0 mt-0.5" size={18} />
                     <div className="text-xs text-blue-800 leading-relaxed">
-                        <p className="font-bold mb-1">Development Tip: Sync to Code</p>
+                        <p className="font-bold mb-1">{term('development-tip-sync-to-code')}</p>
                         <p>
                             To persist these changes in source code, update
                             {' '}

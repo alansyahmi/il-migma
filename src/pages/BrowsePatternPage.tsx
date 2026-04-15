@@ -1,12 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight, Search as SearchIcon } from 'lucide-react';
+import { ArrowRight, Edit2, Plus, Search as SearchIcon } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
 import { BrowsePageHeader } from '@/components/browse/BrowsePageHeader';
 import { BrowseViewSwitch, type BrowseViewMode } from '@/components/browse/BrowseViewSwitch';
+import { ConfigFormModal } from '@/components/admin/settings/ConfigFormModal';
+import { useAuth } from '@/contexts/AuthContext';
+import { useAdminConfig, type ConfigItem } from '@/lib/adminConfig';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { apiListPatterns, type PatternApiItem } from '@/lib/api';
-import { getPatternMetadataSummary, PATTERN_BUCKET_LABELS } from '@/lib/patternMetadata';
+import { getPatternMetadataSummary } from '@/lib/patternMetadata';
 import { cn } from '@/lib/utils';
 
 const POS_LIST = [
@@ -36,8 +40,20 @@ type PatternBucketId = typeof PATTERN_BUCKET_ORDER[number] | 'other';
 type PatternViewMode = BrowseViewMode;
 type MorphologyTabKey = 'all' | PatternBucketId;
 type MorphologySelectedBucket = MorphologyTabKey;
+type PatternEditorState = {
+    item: ConfigItem | null;
+} | null;
 
 const SUFFIX_PATTERN_CATEGORIES = new Set(['sound_suffix', 'derivational_suffix', 'dual_suffix']);
+const BUCKET_LABEL_KEYS: Record<PatternBucketId, string> = {
+    cv_wizen_pattern: 'canonical-patterns',
+    broken_pattern: 'broken-plural',
+    feminine_pattern: 'feminine-singular',
+    sound_suffix: 'sound-plural-suffix',
+    diminutive_pattern: 'diminutive',
+    adjective_pattern: 'elative',
+    other: 'other',
+};
 const TAB_CLASS =
     'relative -mb-px border-b-2 px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-link/25 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent';
 
@@ -60,14 +76,6 @@ function isPOSKey(value: string | null): value is POSKey {
 
 function normalizeToken(value: unknown) {
     return String(value || '').trim().toLowerCase();
-}
-
-function titleCase(value: string) {
-    return value
-        .split(/[\s_-]+/)
-        .filter(Boolean)
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
-        .join(' ');
 }
 
 function isHyphenatedNotation(pattern: PatternCardData) {
@@ -138,16 +146,63 @@ function getMorphologyBucketIds(pattern: PatternCardData): PatternBucketId[] {
     );
 }
 
-function getBucketLabel(bucketId: PatternBucketId) {
-    return PATTERN_BUCKET_LABELS[bucketId] || titleCase(bucketId);
+function getBucketLabel(bucketId: PatternBucketId, term: (key: string) => string) {
+    return term(BUCKET_LABEL_KEYS[bucketId] || bucketId);
+}
+
+function buildPatternFormValue(pattern: PatternCardData) {
+    const applicabilities = pattern.applicability.map((row) => ({
+        pos: row.pos || 'noun',
+        linguisticRole: row.role || '',
+        gender: row.gender || '',
+        notes: '',
+        metadata: {
+            category: row.category || '',
+            stress: row.stress,
+            sort_order: row.sort_order,
+        },
+    }));
+
+    return {
+        cv: pattern.cv_notation,
+        wizen: pattern.wizen_notation,
+        description: pattern.description || '',
+        pos_types: Array.from(new Set(applicabilities.map((app) => app.pos).filter(Boolean))),
+        applicabilities,
+    };
+}
+
+function toPatternConfigKey(pattern: PatternCardData) {
+    return `${pattern.cv_notation}/${pattern.wizen_notation}`;
+}
+
+function pickPatternConfigItem(pattern: PatternCardData, items: ConfigItem[]) {
+    const key = toPatternConfigKey(pattern);
+    const candidates = items.filter((item) => item.key === key);
+
+    if (candidates.length === 0) return null;
+
+    const priority: string[] = ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'diminutive_pattern', 'adjective_pattern', 'plural_pattern'];
+    return [...candidates].sort((a, b) => {
+        const indexA = priority.indexOf(a.category);
+        const indexB = priority.indexOf(b.category);
+        if (indexA !== indexB) {
+            return (indexA === -1 ? Number.MAX_SAFE_INTEGER : indexA) - (indexB === -1 ? Number.MAX_SAFE_INTEGER : indexB);
+        }
+        return (a.sort_order || 0) - (b.sort_order || 0);
+    })[0] || null;
 }
 
 function PatternCard({
     pattern,
     bucketId,
+    onEdit,
+    canEdit = false,
 }: {
     pattern: PatternCardData;
     bucketId: PatternBucketId;
+    onEdit?: () => void;
+    canEdit?: boolean;
 }) {
     const { term } = useLinguisticMode();
     const summary = getPatternMetadataSummary({
@@ -168,10 +223,28 @@ function PatternCard({
     }, bucketId === 'other' ? undefined : bucketId);
 
     return (
-        <Card className="border border-black/5 bg-white/60 backdrop-blur-md rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-black/5">
+        <Card className="relative border border-black/5 bg-white/60 backdrop-blur-md rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-black/5">
+            {canEdit && onEdit && (
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onEdit();
+                    }}
+                    className="absolute right-4 top-4 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white/90 text-black/55 shadow-sm transition-colors hover:border-link hover:text-link"
+                    aria-label={term('edit-pattern')}
+                    title={term('edit-pattern')}
+                >
+                    <Edit2 size={15} />
+                </button>
+            )}
             <Link
                 to={`/pattern/${pattern.id}`}
-                className="block p-6 group hover:bg-white/70 transition-colors h-full"
+                className={cn(
+                    'block p-6 group hover:bg-white/70 transition-colors h-full',
+                    canEdit ? 'pr-16' : '',
+                )}
             >
                 <div className="flex items-start justify-between gap-4 mb-6">
                     <div>
@@ -183,7 +256,7 @@ function PatternCard({
                         </p>
                     </div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-black/30 bg-black/5 px-2 py-1 rounded">
-                        {getBucketLabel(bucketId)}
+                        {getBucketLabel(bucketId, term)}
                     </span>
                 </div>
 
@@ -219,6 +292,8 @@ function PatternCard({
 
 export function BrowsePatternPage() {
     const { term } = useLinguisticMode();
+    const { isAdmin } = useAuth();
+    const { getCategoryItems, createItem, updateItem, refresh: refreshAdminConfig } = useAdminConfig();
     const [searchParams, setSearchParams] = useSearchParams();
     const modeParam = searchParams.get('mode');
     const [selectedMode, setSelectedMode] = useState<PatternViewMode>(
@@ -236,6 +311,7 @@ export function BrowsePatternPage() {
     });
     const [patterns, setPatterns] = useState<PatternCardData[]>([]);
     const [loadingPatterns, setLoadingPatterns] = useState(true);
+    const [patternEditor, setPatternEditor] = useState<PatternEditorState>(null);
 
     useEffect(() => {
         document.title = `${term('browse-by-pattern')} | Il-Miġma'`;
@@ -298,23 +374,56 @@ export function BrowsePatternPage() {
         setSearchParams(nextParams);
     };
 
-    useEffect(() => {
+    const loadPatterns = useCallback(async () => {
         setLoadingPatterns(true);
-        apiListPatterns()
-            .then((res) => {
-                setPatterns(
-                    res.patterns.map((pattern) => ({
-                        ...pattern,
-                        applicability: Array.isArray(pattern.applicability) ? pattern.applicability : [],
-                    })),
-                );
-                setLoadingPatterns(false);
-            })
-            .catch((err) => {
-                console.error('Failed to fetch patterns:', err);
-                setLoadingPatterns(false);
-            });
+        try {
+            const res = await apiListPatterns();
+            setPatterns(
+                res.patterns.map((pattern) => ({
+                    ...pattern,
+                    applicability: Array.isArray(pattern.applicability) ? pattern.applicability : [],
+                })),
+            );
+        } catch (err) {
+            console.error('Failed to fetch patterns:', err);
+        } finally {
+            setLoadingPatterns(false);
+        }
     }, []);
+
+    useEffect(() => {
+        loadPatterns();
+    }, [loadPatterns]);
+
+    const patternConfigItems = useMemo(() => getCategoryItems('cv_wizen_pattern'), [getCategoryItems]);
+
+    const openPatternEditor = (pattern?: PatternCardData) => {
+        const existingItem = pattern ? pickPatternConfigItem(pattern, patternConfigItems) : null;
+        setPatternEditor({
+            item: existingItem ?? (pattern ? {
+                id: '',
+                category: 'cv_wizen_pattern',
+                key: toPatternConfigKey(pattern),
+                value: buildPatternFormValue(pattern),
+                sort_order: 0,
+            } : null),
+        });
+    };
+
+    const closePatternEditor = () => setPatternEditor(null);
+
+    const savePatternEditor = async ({ key, value }: { key: string; value: unknown }) => {
+        const draft = patternEditor?.item;
+        if (draft?.id) {
+            await updateItem({ ...draft, key, value }, { refresh: false });
+        } else {
+            await createItem({ category: 'cv_wizen_pattern', key, value, sort_order: draft?.sort_order ?? 0 }, { refresh: false });
+        }
+
+        await refreshAdminConfig();
+        await loadPatterns();
+        closePatternEditor();
+    };
 
     const browsePatterns = useMemo(
         () => patterns.filter((pattern) => !isSuffixPattern(pattern)),
@@ -355,14 +464,14 @@ export function BrowsePatternPage() {
             ...PATTERN_BUCKET_ORDER
                 .map((bucketId) => ({
                     bucketId,
-                    label: getBucketLabel(bucketId),
+                    label: getBucketLabel(bucketId, term),
                     patterns: groups.get(bucketId) ?? [],
                 }))
                 .filter((group) => group.patterns.length > 0),
             ...(groups.has('other')
                 ? [{
                     bucketId: 'other' as PatternBucketId,
-                    label: titleCase('other'),
+                    label: term('other'),
                     patterns: groups.get('other') ?? [],
                 }]
                 : []),
@@ -385,20 +494,20 @@ export function BrowsePatternPage() {
     }, [browsePatterns]);
 
     const morphologyTabs = useMemo(() => {
-        const tabs: Array<{ key: MorphologyTabKey; label: string }> = [{ key: 'all', label: 'All' }];
+        const tabs: Array<{ key: MorphologyTabKey; label: string }> = [{ key: 'all', label: term('all') }];
 
         PATTERN_BUCKET_ORDER.forEach((bucketId) => {
             if ((morphologyBuckets.get(bucketId) ?? []).length > 0) {
-                tabs.push({ key: bucketId, label: getBucketLabel(bucketId) });
+                tabs.push({ key: bucketId, label: getBucketLabel(bucketId, term) });
             }
         });
 
         if ((morphologyBuckets.get('other') ?? []).length > 0) {
-            tabs.push({ key: 'other', label: titleCase('other') });
+            tabs.push({ key: 'other', label: term('other') });
         }
 
         return tabs;
-    }, [morphologyBuckets]);
+    }, [morphologyBuckets, term]);
 
     const morphologySections = useMemo(() => {
         if (selectedBucket !== 'all') {
@@ -406,7 +515,7 @@ export function BrowsePatternPage() {
             return items.length > 0
                 ? [{
                     bucketId: selectedBucket,
-                    label: getBucketLabel(selectedBucket),
+                    label: getBucketLabel(selectedBucket, term),
                     patterns: items,
                 }]
                 : [];
@@ -416,19 +525,19 @@ export function BrowsePatternPage() {
             ...PATTERN_BUCKET_ORDER
                 .map((bucketId) => ({
                     bucketId,
-                    label: getBucketLabel(bucketId),
+                    label: getBucketLabel(bucketId, term),
                     patterns: morphologyBuckets.get(bucketId) ?? [],
                 }))
                 .filter((group) => group.patterns.length > 0),
             ...((morphologyBuckets.get('other') ?? []).length > 0
                 ? [{
                     bucketId: 'other' as PatternBucketId,
-                    label: titleCase('other'),
+                    label: term('other'),
                     patterns: morphologyBuckets.get('other') ?? [],
                 }]
                 : []),
         ];
-    }, [morphologyBuckets, selectedBucket]);
+    }, [morphologyBuckets, selectedBucket, term]);
 
     const totalVisible = selectedMode === 'pos'
         ? visiblePatterns.length
@@ -440,7 +549,7 @@ export function BrowsePatternPage() {
         ? term('pattern')
         : selectedBucket === 'all'
             ? term('pattern')
-            : getBucketLabel(selectedBucket);
+            : getBucketLabel(selectedBucket, term);
 
     return (
         <>
@@ -449,7 +558,7 @@ export function BrowsePatternPage() {
             <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div
                     role="tablist"
-                    aria-label={selectedMode === 'pos' ? 'Browse by part of speech' : 'Browse by morphology'}
+                    aria-label={selectedMode === 'pos' ? term('browse-by-pos') : term('browse-by-morphology')}
                     className="flex flex-wrap items-end gap-1 border-b border-black/10"
                 >
                     {(selectedMode === 'pos' ? POS_LIST : morphologyTabs).map((tab) => {
@@ -480,7 +589,7 @@ export function BrowsePatternPage() {
                 <BrowseViewSwitch
                     mode={selectedMode}
                     onChange={handleModeChange}
-                    ariaLabel="Browse view mode"
+                    ariaLabel={term('browse-view-mode')}
                     className="lg:ml-auto"
                 />
             </div>
@@ -495,9 +604,20 @@ export function BrowsePatternPage() {
                             ? term('browse-pattern-summary')
                                 .replace('{count}', totalVisible.toLocaleString())
                                 .replace('{groups}', String(totalGroups))
-                            : term('browse-pattern-empty')}
+                        : term('browse-pattern-empty')}
                     </p>
                 </div>
+
+                {isAdmin && (
+                    <Button
+                        type="button"
+                        onClick={() => openPatternEditor()}
+                        leftIcon={<Plus size={14} />}
+                        className="sm:self-end"
+                    >
+                        {term('add-pattern')}
+                    </Button>
+                )}
             </div>
 
             {loadingPatterns ? (
@@ -525,6 +645,8 @@ export function BrowsePatternPage() {
                                         key={pattern.id}
                                         pattern={pattern}
                                         bucketId={group.bucketId}
+                                        canEdit={isAdmin}
+                                        onEdit={isAdmin ? () => openPatternEditor(pattern) : undefined}
                                     />
                                 ))}
                             </div>
@@ -534,9 +656,9 @@ export function BrowsePatternPage() {
                 ) : (
                     <div className="flex flex-col items-center justify-center py-20 text-center">
                         <SearchIcon size={40} className="text-black/20 mb-4" />
-                        <h2 className="font-serif text-2xl font-bold text-black">No patterns found</h2>
+                        <h2 className="font-serif text-2xl font-bold text-black">{term('no-patterns-found')}</h2>
                         <p className="mt-2 text-sm text-text-muted max-w-md">
-                            This POS does not have any patterns yet, or the patterns have not been categorized.
+                            {term('no-patterns-found-desc')}
                         </p>
                     </div>
                 )
@@ -560,6 +682,8 @@ export function BrowsePatternPage() {
                                         key={pattern.id}
                                         pattern={pattern}
                                         bucketId={group.bucketId}
+                                        canEdit={isAdmin}
+                                        onEdit={isAdmin ? () => openPatternEditor(pattern) : undefined}
                                     />
                                 ))}
                             </div>
@@ -569,11 +693,20 @@ export function BrowsePatternPage() {
             ) : (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
                     <SearchIcon size={40} className="text-black/20 mb-4" />
-                    <h2 className="font-serif text-2xl font-bold text-black">No patterns found</h2>
+                    <h2 className="font-serif text-2xl font-bold text-black">{term('no-patterns-found')}</h2>
                     <p className="mt-2 text-sm text-text-muted max-w-md">
-                        This morphology view does not have any patterns yet, or the patterns have not been categorized.
+                        {term('no-patterns-found-desc')}
                     </p>
                 </div>
+            )}
+
+            {patternEditor && (
+                <ConfigFormModal
+                    item={patternEditor.item}
+                    category="cv_wizen_pattern"
+                    onClose={closePatternEditor}
+                    onSave={savePatternEditor}
+                />
             )}
         </>
     );

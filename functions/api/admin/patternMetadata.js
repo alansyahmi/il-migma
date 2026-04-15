@@ -199,6 +199,7 @@ const addMetadataEntry = (target, key, value) => {
 
     const normalizedKey = normalizeMetadataKey(key);
     if (LEGACY_METADATA_KEYS.has(normalizedKey)) return;
+    if (normalizedKey === 'clientId' || normalizedKey === 'id') return;
     if (normalizedKey === 'linguistic_role' || normalizedKey === 'gender') return;
 
     target[normalizedKey] = value;
@@ -219,7 +220,7 @@ const collectMetadata = (record, ignoreKeys) => {
     return metadata;
 };
 
-const normalizeApplicabilityMetadata = (record) => collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender']));
+const normalizeApplicabilityMetadata = (record) => collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender', 'clientId', 'id']));
 
 const inferLegacyPatternPosTypes = (record, category) => {
     const hasVerbFields = Boolean(record.verbForm || record.verb_form || record.classCompatibility || record.class_compatibility || record.notes);
@@ -241,7 +242,7 @@ const buildLegacyApplicabilitySource = (record, pos) => {
         return { pos };
     }
 
-    const metadata = collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender']));
+    const metadata = collectMetadata(record, new Set(['pos', 'metadata', 'linguisticRole', 'linguistic_role', 'gender', 'clientId', 'id']));
 
     switch (pos) {
         case 'noun':
@@ -315,9 +316,12 @@ const normalizeApplicability = (record) => {
     );
     const gender = normalizeText(record.gender || metadata.gender);
     const notes = normalizeText(record.notes || metadata.notes);
+    const clientId = normalizeText(record.clientId || metadata.clientId || record.id || metadata.id);
 
     delete metadata.linguistic_role;
     delete metadata.gender;
+    delete metadata.clientId;
+    delete metadata.id;
     if (notes) metadata.notes = notes;
     else delete metadata.notes;
 
@@ -327,6 +331,7 @@ const normalizeApplicability = (record) => {
         gender,
         notes,
         metadata,
+        clientId,
     };
 };
 
@@ -338,22 +343,22 @@ const normalizeApplicabilities = (value, category) => {
         const normalizedApplicabilities = rawApplicabilities
             .map((item) => normalizeApplicability(item))
             .filter(Boolean);
-        const posTypes = normalizedPosTypes.length > 0 ? normalizedPosTypes : normalizedApplicabilities.map((app) => app.pos);
-        const mergedPosTypes = Array.from(new Set([
-            ...posTypes,
-            ...normalizedApplicabilities.map((app) => app.pos),
-        ]));
-        const byPos = new Map(normalizedApplicabilities.map((app) => [app.pos, app]));
-
-        return mergedPosTypes
-            .map((pos) => byPos.get(pos) || createBlankApplicability(pos))
-            .filter(Boolean);
+        return {
+            applicabilities: normalizedApplicabilities,
+            posTypes: Array.from(new Set([
+                ...(normalizedPosTypes.length > 0 ? normalizedPosTypes : normalizedApplicabilities.map((app) => app.pos)),
+                ...normalizedApplicabilities.map((app) => app.pos),
+            ])),
+        };
     }
 
     const inferredPosTypes = normalizedPosTypes.length > 0 ? normalizedPosTypes : inferLegacyPatternPosTypes(value, category);
-    return inferredPosTypes
-        .map((pos) => normalizeApplicability(buildLegacyApplicabilitySource(value, pos)))
-        .filter(Boolean);
+    return {
+        applicabilities: inferredPosTypes
+            .map((pos) => normalizeApplicability(buildLegacyApplicabilitySource(value, pos)))
+            .filter(Boolean),
+        posTypes: inferredPosTypes,
+    };
 };
 
 export function normalizePatternFormValue(value, category) {
@@ -362,8 +367,8 @@ export function normalizePatternFormValue(value, category) {
     const wizen = normalizeText(record.wizen);
     const stress = Number.isFinite(Number(record.stress)) ? Number(record.stress) : 2;
     const description = normalizeText(record.description);
-    const posTypes = normalizePosList(record.pos_types);
-    const applicabilities = normalizeApplicabilities(record, category);
+    const rawPosTypes = normalizePosList(record.pos_types);
+    const { applicabilities, posTypes } = normalizeApplicabilities(record, category);
     const notes = normalizeText(record.notes);
     const metadata = collectMetadata(
         record,
@@ -377,7 +382,7 @@ export function normalizePatternFormValue(value, category) {
         description,
         notes,
         pos_types: Array.from(new Set([
-            ...(posTypes.length > 0 ? posTypes : applicabilities.map((app) => app.pos)),
+            ...(rawPosTypes.length > 0 ? rawPosTypes : posTypes),
             ...applicabilities.map((app) => app.pos),
         ])),
         applicabilities,

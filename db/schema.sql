@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS definitions (
   entry_id      TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
   subentry_id   TEXT,  -- NULL if directly under entry
   sense_number  INTEGER NOT NULL DEFAULT 1,
-  text_mt       TEXT NOT NULL,
+  text_mt       TEXT,
   text_en       TEXT NOT NULL,
   register      TEXT,
   nuance        TEXT,

@@ -213,7 +213,7 @@ export function Stem() {
                 root: root || undefined,
                 stem: stem_string || undefined,
             }) || entries.find(e => e.headword === alt) || { headword: alt })
-            .filter(Boolean) as Array<{ id?: string; headword: string; gloss_en?: string; gloss_mt?: string }>;
+            .filter(Boolean) as Array<{ id?: string; headword: string; gloss_en?: string; gloss_mt?: string | null }>;
     }, [entries, passiveAlternates, root, stem_string]);
     const resolveStemCellEntry = (
         value: string,

@@ -141,6 +141,42 @@ async function ensureNounMorphologyColumns(client) {
     }
 }
 
+async function ensureNullableDefinitionGlossColumn(client) {
+    const tableInfo = await client.execute("PRAGMA table_info(definitions)");
+    const textMtColumn = tableInfo.rows.find((row) => row.name === 'text_mt');
+    if (textMtColumn && !textMtColumn.notnull) return;
+
+    await client.execute('PRAGMA foreign_keys = OFF');
+    try {
+        await client.execute('DROP TABLE IF EXISTS definitions_new');
+        await client.execute(`CREATE TABLE definitions_new (
+            id            TEXT PRIMARY KEY,
+            entry_id      TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+            subentry_id   TEXT,
+            sense_number  INTEGER NOT NULL DEFAULT 1,
+            text_mt       TEXT,
+            text_en       TEXT NOT NULL,
+            register      TEXT,
+            nuance        TEXT,
+            field         TEXT,
+            sort_order    INTEGER NOT NULL DEFAULT 0
+        )`);
+
+        await client.execute(`INSERT INTO definitions_new (
+            id, entry_id, subentry_id, sense_number, text_mt, text_en, register, nuance, field, sort_order
+        )
+        SELECT
+            id, entry_id, subentry_id, sense_number, text_mt, text_en, register, nuance, field, sort_order
+        FROM definitions`);
+
+        await client.execute('DROP TABLE definitions');
+        await client.execute('ALTER TABLE definitions_new RENAME TO definitions');
+        await client.execute('CREATE INDEX IF NOT EXISTS idx_defs_entry ON definitions(entry_id)');
+    } finally {
+        await client.execute('PRAGMA foreign_keys = ON');
+    }
+}
+
 async function ensureDiminutiveTable(client) {
     const tableInfo = await client.execute("PRAGMA table_info(entry_diminutives)");
     if (tableInfo.rows.length > 0) return;
@@ -357,6 +393,7 @@ export async function onRequestPost({ request, env }) {
         const client = getDbClient(env);
         await ensureAlternativeFormsColumn(client);
         await ensureNounMorphologyColumns(client);
+        await ensureNullableDefinitionGlossColumn(client);
         await ensureDiminutiveTable(client);
 
         let id = body.id;
@@ -441,7 +478,7 @@ export async function onRequestPost({ request, env }) {
                 await client.execute({
                     sql: `INSERT INTO definitions (id, entry_id, sense_number, text_mt, text_en, register, nuance, sort_order)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                    args: [uid(), id, i + 1, def.text_mt || def.text_en, def.text_en, n(def.register), n(def.nuance), i],
+                    args: [uid(), id, i + 1, n(def.text_mt), def.text_en, n(def.register), n(def.nuance), i],
                 });
             }
         }
@@ -499,6 +536,7 @@ export async function onRequestPut({ request, env }) {
         const client = getDbClient(env);
         await ensureAlternativeFormsColumn(client);
         await ensureNounMorphologyColumns(client);
+        await ensureNullableDefinitionGlossColumn(client);
         await ensureDiminutiveTable(client);
         const sourceId = old_id || id;
 
@@ -619,7 +657,7 @@ export async function onRequestPut({ request, env }) {
                 await client.execute({
                     sql: `INSERT INTO definitions (id, entry_id, sense_number, text_mt, text_en, register, nuance, sort_order)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                    args: [uid(), id, i + 1, def.text_mt || def.text_en, def.text_en, n(def.register), n(def.nuance), i],
+                    args: [uid(), id, i + 1, n(def.text_mt), def.text_en, n(def.register), n(def.nuance), i],
                 });
             }
         }
@@ -827,7 +865,7 @@ async function syncReciprocalRelationships(client, currentId, currentHeadword, c
         args: [currentId]
     });
     const currentGlossEn = currentDefRes.rows[0]?.text_en || '';
-    const currentGlossMt = currentDefRes.rows[0]?.text_mt || '';
+    const currentGlossMt = n(currentDefRes.rows[0]?.text_mt);
 
     for (const target of targetItems) {
         const targetId = target.id || target.headword; // Fallback to headword if ID is missing (though unlikely in UI)

@@ -358,14 +358,14 @@ export function buildEntryPayload(form: any): Record<string, any> {
             } else if (key === 'definitions') {
                 const normalizedDefinitions = normalizeEntryDefinitions(val).map(def => ({
                     text_en: String(def.text_en || '').trim(),
-                    text_mt: String(def.text_mt || '').trim(),
+                    text_mt: def.text_mt == null ? null : String(def.text_mt).trim() || null,
                     register: String(def.register || '').trim(),
                     nuance: String(def.nuance || '').trim(),
                 })).filter(def => def.text_en || def.text_mt || def.register || def.nuance);
 
                 result[key] = normalizedDefinitions.length > 0
                     ? normalizedDefinitions
-                    : [{ text_en: '', text_mt: '', register: '', nuance: '' }];
+                    : [{ text_en: '', text_mt: null, register: '', nuance: '' }];
             } else {
                 result[key] = parseArrayField(key, val);
             }

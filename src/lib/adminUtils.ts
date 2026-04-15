@@ -27,7 +27,7 @@ export type EtymologyStep = RootEtymology | EntryEtymology;
 
 export interface EntryDefinition {
     text_en: string;
-    text_mt: string;
+    text_mt: string | null;
     register: string;
     nuance: string;
 }
@@ -45,9 +45,9 @@ export interface RootFormData {
     vowel_set_imp?: string;
     is_imala_blocked?: boolean;
     tags?: string; // Comma-separated
-    synonyms?: { id: string; headword: string; gloss_en: string; gloss_mt?: string }[];
-    antonyms?: { id: string; headword: string; gloss_en: string; gloss_mt?: string }[];
-    related_entries?: { id: string; headword: string; gloss_en: string; gloss_mt?: string }[];
+    synonyms?: { id: string; headword: string; gloss_en: string; gloss_mt?: string | null }[];
+    antonyms?: { id: string; headword: string; gloss_en: string; gloss_mt?: string | null }[];
+    related_entries?: { id: string; headword: string; gloss_en: string; gloss_mt?: string | null }[];
 }
 
 /**
@@ -217,6 +217,12 @@ function splitDefinitionText(value: any): string[] {
     return parts.length > 0 ? parts : [''];
 }
 
+function normalizeNullableText(value: any): string | null {
+    if (value === undefined || value === null) return null;
+    const normalized = String(value).trim();
+    return normalized ? normalized : null;
+}
+
 function normalizeEntryDefinition(def: any): EntryDefinition[] {
     const textEnParts = splitDefinitionText(def?.text_en ?? def?.definition_en ?? def?.gloss_en ?? def?.text ?? def?.en);
     const textMtParts = splitDefinitionText(def?.text_mt ?? def?.definition_mt ?? def?.gloss_mt ?? def?.mt);
@@ -227,7 +233,7 @@ function normalizeEntryDefinition(def: any): EntryDefinition[] {
     if (count <= 1) {
         return [{
             text_en: textEnParts[0] || '',
-            text_mt: textMtParts[0] || '',
+            text_mt: normalizeNullableText(textMtParts[0]),
             register,
             nuance,
         }];
@@ -235,7 +241,7 @@ function normalizeEntryDefinition(def: any): EntryDefinition[] {
 
     return Array.from({ length: count }, (_, index) => ({
         text_en: textEnParts[index] || '',
-        text_mt: textMtParts[index] || '',
+        text_mt: normalizeNullableText(textMtParts[index]),
         register,
         nuance,
     }));
@@ -243,24 +249,24 @@ function normalizeEntryDefinition(def: any): EntryDefinition[] {
 
 export function normalizeEntryDefinitions(definitions: any): EntryDefinition[] {
     if (!definitions) {
-        return [{ text_en: '', text_mt: '', register: '', nuance: '' }];
+        return [{ text_en: '', text_mt: null, register: '', nuance: '' }];
     }
 
     try {
         const parsed = typeof definitions === 'string' ? JSON.parse(definitions) : definitions;
         const items = Array.isArray(parsed) ? parsed : [parsed];
         const normalized = items.flatMap(item => normalizeEntryDefinition(item)).filter(item =>
-            item.text_en.trim() || item.text_mt.trim() || item.register || item.nuance
+            item.text_en.trim() || (item.text_mt?.trim() ?? '') || item.register || item.nuance
         );
 
         return normalized.length > 0
             ? normalized
-            : [{ text_en: '', text_mt: '', register: '', nuance: '' }];
+            : [{ text_en: '', text_mt: null, register: '', nuance: '' }];
     } catch {
         const normalized = normalizeEntryDefinition({ text_en: definitions });
         return normalized.length > 0
             ? normalized
-            : [{ text_en: '', text_mt: '', register: '', nuance: '' }];
+            : [{ text_en: '', text_mt: null, register: '', nuance: '' }];
     }
 }
 

@@ -1554,7 +1554,7 @@ function RelatedGlossRow({
     onEdit,
     onDelete,
 }: {
-    item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string };
+    item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string | null };
     language: 'en' | 'mt';
     mode: 'standard' | 'arabised';
     isAdmin?: boolean;
@@ -1593,12 +1593,12 @@ function RelatedGlossGroup({
     wrapperClassName = 'w-full',
 }: {
     title: string;
-    items: { id: string; headword: string; gloss_en?: string; gloss_mt?: string }[];
+    items: { id: string; headword: string; gloss_en?: string; gloss_mt?: string | null }[];
     language: 'en' | 'mt';
     mode: 'standard' | 'arabised';
     isAdmin?: boolean;
-    onEditItem?: (item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string }) => void;
-    onDeleteItem?: (item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string }) => void;
+    onEditItem?: (item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string | null }) => void;
+    onDeleteItem?: (item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string | null }) => void;
     wrapperClassName?: string;
 }) {
     if (!items || items.length === 0) return null;

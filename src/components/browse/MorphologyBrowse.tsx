@@ -4,7 +4,7 @@ import { ArrowRight, Search as SearchIcon } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { apiListPatterns, type PatternApiItem } from '@/lib/api';
-import { getPatternMetadataSummary, PATTERN_BUCKET_LABELS } from '@/lib/patternMetadata';
+import { getPatternMetadataSummary } from '@/lib/patternMetadata';
 import { cn } from '@/lib/utils';
 
 const BUCKET_ORDER = [
@@ -35,20 +35,21 @@ type MorphologySection = {
     patterns: PatternCardData[];
 };
 
+const BUCKET_LABEL_KEYS: Record<Exclude<BucketKey, 'all' | 'other'>, string> = {
+    cv_wizen_pattern: 'canonical-patterns',
+    broken_pattern: 'broken-plural',
+    feminine_pattern: 'feminine-singular',
+    sound_suffix: 'sound-plural-suffix',
+    diminutive_pattern: 'diminutive',
+    adjective_pattern: 'elative',
+};
+
 const TAB_BASE = 'inline-flex items-center justify-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-link/25 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent';
 const TAB_ACTIVE = 'bg-link text-white border-link shadow-sm shadow-link/20';
 const TAB_INACTIVE = 'bg-white/75 text-black/55 border-black/5 hover:text-black hover:border-black/10';
 
 function normalizeToken(value: unknown) {
     return String(value || '').trim().toLowerCase();
-}
-
-function titleCase(value: string) {
-    return value
-        .split(/[\s_-]+/)
-        .filter(Boolean)
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
-        .join(' ');
 }
 
 function isBucketKey(value: string | null): value is BucketKey {
@@ -83,10 +84,10 @@ function getBucketKeys(pattern: PatternCardData): BucketKey[] {
     ))));
 }
 
-function getBucketLabel(bucketId: BucketKey) {
-    if (bucketId === 'all') return 'All';
-    if (bucketId === 'other') return 'Other';
-    return PATTERN_BUCKET_LABELS[bucketId] || titleCase(bucketId);
+function getBucketLabel(bucketId: BucketKey, term: (key: string) => string) {
+    if (bucketId === 'all') return term('all');
+    if (bucketId === 'other') return term('other');
+    return term(BUCKET_LABEL_KEYS[bucketId] || bucketId);
 }
 
 function PatternCard({
@@ -125,7 +126,7 @@ function PatternCard({
                         <p className="text-sm italic text-black/50 mt-1">{pattern.wizen_notation}</p>
                     </div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-black/30 bg-black/5 px-2 py-1 rounded">
-                        {getBucketLabel(bucketId)}
+                        {getBucketLabel(bucketId, term)}
                     </span>
                 </div>
 
@@ -160,6 +161,7 @@ function PatternCard({
 }
 
 export function MorphologyBrowse() {
+    const { term } = useLinguisticMode();
     const [searchParams, setSearchParams] = useSearchParams();
     const [patterns, setPatterns] = useState<PatternCardData[]>([]);
     const [loading, setLoading] = useState(true);
@@ -212,20 +214,20 @@ export function MorphologyBrowse() {
     }, [patterns]);
 
     const tabs = useMemo(() => {
-        const items: Array<{ key: BucketKey; label: string }> = [{ key: 'all', label: 'All' }];
+        const items: Array<{ key: BucketKey; label: string }> = [{ key: 'all', label: term('all') }];
 
         BUCKET_ORDER.forEach((bucketId) => {
             if ((bucketMap.get(bucketId) ?? []).length > 0) {
-                items.push({ key: bucketId, label: getBucketLabel(bucketId) });
+                items.push({ key: bucketId, label: getBucketLabel(bucketId, term) });
             }
         });
 
         if ((bucketMap.get('other') ?? []).length > 0) {
-            items.push({ key: 'other', label: 'Other' });
+            items.push({ key: 'other', label: term('other') });
         }
 
         return items;
-    }, [bucketMap]);
+    }, [bucketMap, term]);
 
     const activeBucket = selectedBucket === 'all' || tabs.some((tab) => tab.key === selectedBucket)
         ? selectedBucket
@@ -235,7 +237,7 @@ export function MorphologyBrowse() {
         if (activeBucket !== 'all') {
             const items = bucketMap.get(activeBucket) ?? [];
             return items.length > 0
-                ? [{ bucketId: activeBucket, label: getBucketLabel(activeBucket), patterns: items }]
+                ? [{ bucketId: activeBucket, label: getBucketLabel(activeBucket, term), patterns: items }]
                 : [];
         }
 
@@ -243,19 +245,19 @@ export function MorphologyBrowse() {
             ...BUCKET_ORDER
                 .map((bucketId) => ({
                     bucketId,
-                    label: getBucketLabel(bucketId),
+                    label: getBucketLabel(bucketId, term),
                     patterns: bucketMap.get(bucketId) ?? [],
                 }))
                 .filter((section) => section.patterns.length > 0),
             ...((bucketMap.get('other') ?? []).length > 0
                 ? [{
                     bucketId: 'other' as const,
-                    label: getBucketLabel('other'),
+                    label: term('other'),
                     patterns: bucketMap.get('other') ?? [],
                 }]
                 : []),
         ];
-    }, [activeBucket, bucketMap]);
+    }, [activeBucket, bucketMap, term]);
 
     const setBucket = (bucketId: BucketKey) => {
         const nextParams = new URLSearchParams(searchParams);
@@ -320,9 +322,9 @@ export function MorphologyBrowse() {
             ) : (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
                     <SearchIcon size={40} className="text-black/20 mb-4" />
-                    <h2 className="font-serif text-2xl font-bold text-black">No patterns found</h2>
+                    <h2 className="font-serif text-2xl font-bold text-black">{term('no-patterns-found')}</h2>
                     <p className="mt-2 text-sm text-text-muted max-w-md">
-                        This morphology bucket does not have any patterns yet, or the patterns have not been categorized.
+                        {term('no-patterns-found-desc')}
                     </p>
                 </div>
             )}

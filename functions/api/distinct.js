@@ -4,7 +4,7 @@
  */
 
 import { createClient } from '@libsql/client/web';
-import { buildSuffixCatalogItems } from '../../src/lib/suffixMatching.ts';
+import { listSuffixCatalog } from './_shared/suffixCatalog.js';
 
 export async function onRequestGet({ request, env }) {
     try {
@@ -57,22 +57,7 @@ export async function onRequestGet({ request, env }) {
                 ORDER BY val ASC
             `;
         } else if (type === 'suffixes') {
-            const result = await db.execute(`
-                SELECT
-                    id,
-                    headword,
-                    pos,
-                    dual_pattern,
-                    form_plural_pattern,
-                    sound_suffix
-                FROM entries
-                WHERE
-                    (dual_pattern IS NOT NULL AND TRIM(dual_pattern) != '')
-                    OR (form_plural_pattern IS NOT NULL AND TRIM(form_plural_pattern) != '')
-                    OR (sound_suffix IS NOT NULL AND TRIM(sound_suffix) != '')
-            `);
-
-            const values = buildSuffixCatalogItems(result.rows);
+            const values = await listSuffixCatalog(db);
 
             return new Response(JSON.stringify(values), {
                 status: 200,

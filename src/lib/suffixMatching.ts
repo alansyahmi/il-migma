@@ -131,6 +131,10 @@ export function normalizeSuffixValue(value: unknown): string {
     return normalizeSuffixDash(value);
 }
 
+export function normalizeSuffixText(value: unknown): string {
+    return normalizeSuffixValue(value);
+}
+
 export function normalizeSuffixDisplay(value: unknown): string {
     const normalized = normalizeSuffixValue(value);
     if (!normalized) return '';

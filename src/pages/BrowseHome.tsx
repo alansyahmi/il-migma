@@ -198,7 +198,7 @@ export function BrowseHome() {
             <div className="mb-10">
                 <div
                     role="tablist"
-                    aria-label="Browse by part of speech"
+                    aria-label={term('browse-by-pos')}
                     className="flex flex-wrap items-end gap-1 border-b border-black/10"
                 >
                     {POS_LIST.map((pos) => {
@@ -261,7 +261,7 @@ export function BrowseHome() {
                                                         </Link>
                                                     </h3>
                                                     <div className="text-right">
-                                                        <p className="text-[10px] font-bold uppercase tracking-wider text-black/30">Total</p>
+                                                        <p className="text-[10px] font-bold uppercase tracking-wider text-black/30">{term('total')}</p>
                                                         <p className="text-sm font-bold text-black">{sub.total.toLocaleString()}</p>
                                                     </div>
                                                 </div>
@@ -300,7 +300,7 @@ export function BrowseHome() {
                                                     ) : (
                                                         <div className="flex flex-col items-center justify-center h-full py-12 text-center opacity-30">
                                                             <SearchIcon size={32} className="mb-2" />
-                                                            <p className="text-xs font-medium uppercase tracking-wider">No entries yet</p>
+                                                            <p className="text-xs font-medium uppercase tracking-wider">{term('no-entries-yet')}</p>
                                                         </div>
                                                     )}
                                                 </div>

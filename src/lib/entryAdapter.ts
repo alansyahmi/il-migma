@@ -235,7 +235,10 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
                 : (full.definition_en || full.definition_mt
                     ? [{ text_en: full.definition_en || '', text_mt: full.definition_mt || '' }]
                     : [])
-        ),
+        ).map(def => ({
+            ...def,
+            text_mt: def.text_mt ?? '',
+        })),
         phonetics: parseArray(full.phonetics).map((p: any) => ({
             dialect: p.dialect || 'Standard',
             spelling: p.spelling || '',
@@ -384,7 +387,12 @@ export function buildLoadedEntryPatch(full: any, prev: AdminForm): Partial<Admin
         cv_pattern: full.cv_pattern || full.cv_notation || prev.cv_pattern,
         _hasDual: !!(full.dual_form || prev.dual_form),
         participle_type: full.participle_type || prev.participle_type,
-        definitions: parseArray(full.definitions).length ? parseArray(full.definitions) : prev.definitions,
+        definitions: parseArray(full.definitions).length
+            ? normalizeEntryDefinitions(parseArray(full.definitions)).map(def => ({
+                ...def,
+                text_mt: def.text_mt ?? '',
+            }))
+            : prev.definitions,
         tags: Array.isArray(full.tags) ? full.tags.join(', ')
             : (typeof full.tags === 'string' && full.tags.startsWith('[') ? parseArray(full.tags).join(', ') : (full.tags || prev.tags)),
         _rootConsonants: full.resolved_root_consonants || full.root_consonants || prev._rootConsonants,

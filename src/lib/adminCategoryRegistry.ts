@@ -14,11 +14,11 @@ export interface AdminCategoryGroup {
 }
 
 export const ADMIN_CATEGORY_GROUPS: Record<AdminCategoryGroupId, AdminCategoryGroup> = {
-    core_grammar: { id: 'core_grammar', label: 'Core Grammar', order: 1 },
-    patterns: { id: 'patterns', label: 'Patterns', order: 2 },
-    suffixes: { id: 'suffixes', label: 'Suffixes', order: 3 },
-    advanced: { id: 'advanced', label: 'Advanced', order: 4 },
-    ui_system: { id: 'ui_system', label: 'UI & System', order: 5 },
+    core_grammar: { id: 'core_grammar', label: 'core-grammar', order: 1 },
+    patterns: { id: 'patterns', label: 'patterns', order: 2 },
+    suffixes: { id: 'suffixes', label: 'suffixes', order: 3 },
+    advanced: { id: 'advanced', label: 'advanced', order: 4 },
+    ui_system: { id: 'ui_system', label: 'ui-system', order: 5 },
 };
 
 export interface AdminCategory {
@@ -64,7 +64,7 @@ const defaultTransformOption = (item: unknown, mode: 'standard' | 'arabised', la
 export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     pos: {
         id: 'pos',
-        label: 'Parts of Speech',
+        label: 'part-of-speech',
         icon: Tag,
         groupId: 'core_grammar',
         storageCategories: ['pos'],
@@ -81,7 +81,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     gender: {
         id: 'gender',
-        label: 'Genders',
+        label: 'genders',
         icon: Users,
         groupId: 'core_grammar',
         storageCategories: ['gender'],
@@ -99,7 +99,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     dialect: {
         id: 'dialect',
-        label: 'Dialects',
+        label: 'dialects',
         icon: Globe,
         groupId: 'core_grammar',
         storageCategories: ['dialect'],
@@ -110,7 +110,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     verb_class: {
         id: 'verb_class',
-        label: 'Verb Classes',
+        label: 'verb-classes',
         icon: Zap,
         groupId: 'core_grammar',
         storageCategories: ['verb_class'],
@@ -121,7 +121,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     register: {
         id: 'register',
-        label: 'Registers',
+        label: 'registers',
         icon: ClipboardList,
         groupId: 'core_grammar',
         storageCategories: ['register'],
@@ -132,7 +132,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     noun_type: {
         id: 'noun_type',
-        label: 'Noun Types',
+        label: 'noun-types',
         icon: Package,
         groupId: 'core_grammar',
         storageCategories: ['noun_type'],
@@ -143,7 +143,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     source_language: {
         id: 'source_language',
-        label: 'Sources',
+        label: 'sources',
         icon: Library,
         groupId: 'core_grammar',
         storageCategories: ['source_language'],
@@ -154,7 +154,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     numeral_type: {
         id: 'numeral_type',
-        label: 'Numeral Types',
+        label: 'numeral-types',
         icon: Tag,
         groupId: 'core_grammar',
         storageCategories: ['numeral_type'],
@@ -170,7 +170,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     verb_preset: {
         id: 'verb_preset',
-        label: 'Verb Presets',
+        label: 'verb-presets',
         icon: Settings,
         groupId: 'patterns',
         storageCategories: ['verb_preset'],
@@ -188,7 +188,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     sound_suffix: {
         id: 'sound_suffix',
-        label: 'Sound Plural Suffix',
+        label: 'sound-plural-suffix',
         icon: Sparkles,
         groupId: 'suffixes',
         storageCategories: ['sound_suffix'],
@@ -201,7 +201,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     derivational_suffix: {
         id: 'derivational_suffix',
-        label: 'Derivational Suffixes',
+        label: 'derivational-suffixes',
         icon: Puzzle,
         groupId: 'suffixes',
         storageCategories: ['derivational_suffix'],
@@ -214,7 +214,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     dual_suffix: {
         id: 'dual_suffix',
-        label: 'Dual Suffix',
+        label: 'dual-suffix',
         icon: Puzzle,
         groupId: 'suffixes',
         storageCategories: ['dual_suffix'],
@@ -228,7 +228,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     // Legacy storage buckets kept for backward compatibility with older rows.
     plural_pattern: {
         id: 'plural_pattern',
-        label: 'Legacy Plural Bucket',
+        label: 'legacy-plural-bucket',
         icon: Puzzle,
         groupId: 'patterns',
         // Keep the historical `plural_pattern` bucket as a fallback so older rows
@@ -243,7 +243,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     feminine_pattern: {
         id: 'feminine_pattern',
-        label: 'Legacy Feminine Bucket',
+        label: 'legacy-feminine-bucket',
         icon: Users,
         groupId: 'patterns',
         storageCategories: ['feminine_pattern'],
@@ -256,7 +256,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     cv_wizen_pattern: {
         id: 'cv_wizen_pattern',
-        label: 'Canonical Patterns',
+        label: 'canonical-patterns',
         icon: Palette,
         groupId: 'patterns',
         storageCategories: ['cv_wizen_pattern', 'broken_pattern', 'feminine_pattern', 'diminutive_pattern', 'adjective_pattern', 'plural_pattern'],
@@ -269,7 +269,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     diminutive_pattern: {
         id: 'diminutive_pattern',
-        label: 'Legacy Diminutive Bucket',
+        label: 'legacy-diminutive-bucket',
         icon: Sparkles,
         groupId: 'patterns',
         storageCategories: ['diminutive_pattern'],
@@ -282,7 +282,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     adjective_pattern: {
         id: 'adjective_pattern',
-        label: 'Legacy Adjective Bucket',
+        label: 'legacy-adjective-bucket',
         icon: Palette,
         groupId: 'patterns',
         storageCategories: ['adjective_pattern'],
@@ -295,7 +295,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     verb_form: {
         id: 'verb_form',
-        label: 'Verb Forms',
+        label: 'verb-forms',
         icon: Settings,
         groupId: 'core_grammar',
         storageCategories: ['verb_form'],
@@ -306,7 +306,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     participle_nuance: {
         id: 'participle_nuance',
-        label: 'Ptcp. Nuances',
+        label: 'ptcp-nuances',
         icon: Tag,
         groupId: 'advanced',
         storageCategories: ['participle_nuance'],
@@ -317,7 +317,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     root_relationship: {
         id: 'root_relationship',
-        label: 'Etymological Relationships',
+        label: 'etymological-relationships',
         icon: Globe,
         groupId: 'advanced',
         storageCategories: ['root_relationship'],
@@ -328,7 +328,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     root_strength: {
         id: 'root_strength',
-        label: 'Root Strengths',
+        label: 'root-strengths',
         icon: Zap,
         groupId: 'advanced',
         storageCategories: ['root_strength'],
@@ -339,7 +339,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     weak_class: {
         id: 'weak_class',
-        label: 'Weak Classes',
+        label: 'weak-classes',
         icon: HelpCircle,
         groupId: 'advanced',
         storageCategories: ['weak_class'],
@@ -350,7 +350,7 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
     },
     ui_terminology: {
         id: 'ui_terminology',
-        label: 'UI Terminology',
+        label: 'ui-terminology',
         icon: Languages,
         groupId: 'ui_system',
         storageCategories: ['ui_terminology'],

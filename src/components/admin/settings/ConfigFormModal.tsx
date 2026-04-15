@@ -1,21 +1,36 @@
-import { useRef, useState, type Dispatch, type FormEvent, type MutableRefObject, type SetStateAction } from 'react';
+import { useEffect, useRef, useState, type Dispatch, type FormEvent, type MutableRefObject, type SetStateAction } from 'react';
 import { Keyboard, RotateCcw, Save } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig, type ConfigItem } from '@/lib/adminConfig';
 import { getCategoryById } from '@/lib/adminCategoryRegistry';
 import {
     getPatternApplicabilitySummary,
     getPatternMetadataSummary,
+    PATTERN_LINGUISTIC_ROLE_OPTIONS,
     PATTERN_POS_OPTIONS,
     PATTERN_POS_SCHEMA,
+    normalizePatternLinguisticRoleValue,
     type PatternApplicability,
     type PatternFieldSpec,
     type PatternPos,
     normalizePatternFormValue,
 } from '@/lib/patternMetadata';
 import { cn } from '@/lib/utils';
+
+const PATTERN_BUCKET_LABEL_KEYS: Record<string, string> = {
+    cv_wizen_pattern: 'canonical-patterns',
+    broken_pattern: 'broken-plural',
+    feminine_pattern: 'feminine-singular',
+    sound_suffix: 'sound-plural-suffix',
+    derivational_suffix: 'derivational-suffixes',
+    dual_suffix: 'dual-suffix',
+    diminutive_pattern: 'diminutive',
+    adjective_pattern: 'elative',
+    plural_pattern: 'legacy-plural-bucket',
+};
 
 interface ConfigFormModalProps {
     item: ConfigItem | null;
@@ -33,11 +48,13 @@ function buildPatternKey(value: FormValue) {
 }
 
 export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormModalProps) {
+    const { term } = useLinguisticMode();
     const [key, setKey] = useState(item?.key ?? '');
     const [value, setValue] = useState<FormValue>(() => {
-        if (item) return item.value;
-        const registry = getCategoryById(category);
-        return (registry ? registry.defaultValueFactory() : { en: '', mt_standard: '', mt_arabised: '' }) as FormValue;
+        const baseValue = item
+            ? item.value
+            : (getCategoryById(category)?.defaultValueFactory() || { en: '', mt_standard: '', mt_arabised: '' });
+        return attachApplicabilityClientIds(baseValue as FormValue);
     });
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -58,8 +75,11 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
     );
     const derivedPatternKey = isPatternEditor ? buildPatternKey(value) : '';
     const patternSummary = isPatternEditor ? getPatternMetadataSummary(value, item?.category) : null;
+    const patternBucketLabel = patternSummary
+        ? term(PATTERN_BUCKET_LABEL_KEYS[item?.category || ''] || patternSummary.bucketLabel)
+        : null;
     const applicabilitySummaries = isPatternEditor ? getPatternApplicabilitySummary(value) : [];
-    const patternKeyPreview = derivedPatternKey || 'Set CV and Wizen to generate the key';
+    const patternKeyPreview = derivedPatternKey || term('set-cv-and-wizen-to-generate-the-key');
     const patternPosOptions = [...PATTERN_POS_OPTIONS];
 
     const inputClass = 'w-full border border-[#d8cfc0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1034A6] bg-white text-black';
@@ -86,7 +106,7 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
         e.preventDefault();
         const submissionKey = isPatternEditor ? derivedPatternKey : key.trim();
         if (!submissionKey.trim()) {
-            setError(isPatternEditor ? 'CV or Wizen is required' : 'Key is required');
+            setError(isPatternEditor ? term('cv-or-wizen-is-required') : term('key-is-required'));
             return;
         }
 
@@ -101,8 +121,8 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
     };
 
     const modalTitle = item
-        ? (isPatternEditor ? 'Edit Pattern' : `Edit ${categoryLabel}`)
-        : (isPatternEditor ? 'Add Pattern' : `Add New ${categoryLabel}`);
+        ? (isPatternEditor ? term('edit-pattern') : `Edit ${categoryLabel}`)
+        : (isPatternEditor ? term('add-pattern') : `Add New ${categoryLabel}`);
 
     return (
         <Modal open onClose={onClose} title={modalTitle} size={hasSpecialLayout ? 'lg' : 'md'}>
@@ -115,20 +135,20 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
                             <div className="rounded-2xl border border-[#1034A6]/10 bg-gradient-to-br from-[#1034A6]/5 via-white to-[#f7f3ec] px-3 py-3 shadow-sm">
                                 <div className="flex flex-wrap items-start justify-between gap-2.5">
                                     <div className="space-y-1">
-                                        <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">Pattern Identity</h4>
+                                        <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">{term('pattern-identity')}</h4>
                                         <p className="text-[11px] text-black/50 max-w-xl leading-snug">
-                                            The saved key is composed from the surface forms below, so the record stays aligned with the pattern it describes.
+                                            {term('pattern-identity-desc')}
                                         </p>
                                     </div>
                                     <div className="inline-flex items-center gap-2 rounded-full border border-[#1034A6]/10 bg-white/90 px-2.5 py-1 shadow-sm">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-black/30">Derived Key</span>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-black/30">{term('derived-key')}</span>
                                         <span className="font-mono text-[11px] font-semibold text-[#1034A6]">{patternKeyPreview}</span>
                                     </div>
                                 </div>
                                 {patternSummary && (
                                     <div className="flex flex-wrap gap-2">
                                         <span className="inline-flex items-center rounded-full border border-[#1034A6]/10 bg-[#1034A6]/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#1034A6]">
-                                            {patternSummary.bucketLabel}
+                                            {patternBucketLabel}
                                         </span>
                                         {patternSummary.posTypes.map((pos) => (
                                             <span key={pos} className="inline-flex items-center rounded-full border border-black/5 bg-black/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black/40">
@@ -139,8 +159,8 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
                                 )}
                                 {applicabilitySummaries.length > 0 && (
                                     <div className="flex flex-wrap gap-2">
-                                        {applicabilitySummaries.map((app) => (
-                                            <span key={app.pos} className="inline-flex items-center gap-1 rounded-full border border-[#1034A6]/10 bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black/45">
+                                        {applicabilitySummaries.map((app, index) => (
+                                            <span key={`${app.pos}-${index}`} className="inline-flex items-center gap-1 rounded-full border border-[#1034A6]/10 bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black/45">
                                                 <span className="text-[#1034A6]">{app.label}</span>
                                             </span>
                                         ))}
@@ -151,9 +171,9 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
                             <section className="rounded-2xl border border-black/5 bg-white/80 p-3.5 shadow-sm space-y-3">
                                 <div className="flex items-end justify-between gap-3 flex-wrap">
                                     <div>
-                                        <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">Shared Pattern Base</h4>
+                                        <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">{term('shared-pattern-base')}</h4>
                                         <p className="text-[11px] text-black/45 mt-1 leading-snug">
-                                            CV, Wizen, stress, and description stay shared while POS applicability is edited below.
+                                            {term('shared-pattern-base-desc')}
                                         </p>
                                     </div>
                                 </div>
@@ -177,16 +197,16 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
                                 <details className="group rounded-2xl border border-black/5 bg-white/75 shadow-sm" open>
                                     <summary className="cursor-pointer list-none flex items-center justify-between gap-3 px-3.5 py-2.5 text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">
                                         <div className="flex items-center gap-2">
-                                            <span>POS Applicability</span>
+                                            <span>{term('pos-applicability')}</span>
                                             <span className="rounded-full border border-black/5 bg-black/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black/35">
-                                                Per POS
+                                                {term('per-pos')}
                                             </span>
                                         </div>
-                                        <span className="text-black/30">Rendered from the selected POS schema</span>
+                                        <span className="text-black/30">{term('pos-applicability-desc')}</span>
                                     </summary>
                                     <div className="border-t border-black/5 px-3.5 py-3.5 space-y-3.5">
                                         {selectedPosTypes.length === 0 && (
-                                            <p className="text-xs text-black/45">Pick one or more POS above to edit their metadata.</p>
+                                            <p className="text-xs text-black/45">{term('pick-one-or-more-pos-above-to-edit-their-metadata')}</p>
                                         )}
                                         {selectedPosTypes.map((pos) => (
                                             <ApplicabilitySection
@@ -205,9 +225,9 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
                     ) : (
                         <>
                             <section className="space-y-3">
-                                <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">Identity</h4>
+                                <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">{term('identity')}</h4>
                                 <div className="max-w-md">
-                                    <label className={labelClass}>In-code ID / Key</label>
+                                    <label className={labelClass}>{term('in-code-id-key')}</label>
                                     <input
                                         className={inputClass}
                                         value={key}
@@ -234,16 +254,16 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
 
                     {isVerbPresetEditor && (
                         <section className="pt-4 border-t border-black/5 space-y-4">
-                            <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">Specific Configuration</h4>
+                            <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">{term('specific-configuration')}</h4>
                             <VerbPresetSection value={value} setValue={setValue} inputClass={inputClass} />
                         </section>
                     )}
                 </div>
 
                 <div className="sticky bottom-0 z-20 shrink-0 flex justify-end gap-3 px-6 py-4 border-t border-black/5 bg-slate-50/95 rounded-b-2xl backdrop-blur-sm">
-                    <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
+                    <Button type="button" variant="ghost" onClick={onClose}>{term('cancel')}</Button>
                     <Button type="submit" disabled={saving} leftIcon={saving ? <RotateCcw className="animate-spin" size={14} /> : <Save size={14} />}>
-                        {saving ? 'Saving...' : 'Save Config'}
+                        {saving ? term('saving') : term('save-config')}
                     </Button>
                 </div>
             </form>
@@ -266,47 +286,48 @@ function TranslationSection({
     inputClass: string;
     hideMaltese: boolean;
 }) {
+    const { term } = useLinguisticMode();
     const en = typeof value.en === 'string' ? value.en : '';
     const mtStandard = typeof value.mt_standard === 'string' ? value.mt_standard : '';
     const mtArabised = typeof value.mt_arabised === 'string' ? value.mt_arabised : '';
 
     return (
         <section className="space-y-4 pt-4 border-t border-black/5">
-            <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">Translations / Display Labels</h4>
+            <h4 className="text-[10px] font-bold text-[#1034A6] uppercase tracking-widest">{term('translations-display-labels')}</h4>
             <div>
-                <label className={labelClass}>English Label {category === 'verb_preset' ? '(Form Name)' : ''}</label>
+                <label className={labelClass}>{term('english-label')} {category === 'verb_preset' ? `(${term('form-name')})` : ''}</label>
                 <input
                     className={inputClass}
                     value={en}
                     onChange={(e) => {
                         setValue({ ...value, en: e.target.value });
                     }}
-                    placeholder={category === 'verb_preset' ? 'e.g. Form I' : 'English display name...'}
+                    placeholder={category === 'verb_preset' ? 'e.g. Form I' : term('english-display-name')}
                 />
             </div>
 
             {!hideMaltese && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className={labelClass}>Maltese (CV / Standard) {category === 'verb_preset' ? '(Form Name)' : ''}</label>
+                        <label className={labelClass}>{term('maltese-standard-label')} {category === 'verb_preset' ? `(${term('form-name')})` : ''}</label>
                         <input
                             className={inputClass}
                             value={mtStandard}
                             onChange={(e) => {
                                 setValue({ ...value, mt_standard: e.target.value });
                             }}
-                            placeholder={category === 'verb_preset' ? 'e.g. Forma I' : 'Standard Maltese label...'}
+                            placeholder={category === 'verb_preset' ? 'e.g. Forma I' : term('standard-maltese-label')}
                         />
                     </div>
                     <div>
-                        <label className={labelClass}>Maltese (Wizen / Arabised) {category === 'verb_preset' ? '(Form Name)' : ''}</label>
+                        <label className={labelClass}>{term('maltese-arabised-label')} {category === 'verb_preset' ? `(${term('form-name')})` : ''}</label>
                         <input
                             className={inputClass}
                             value={mtArabised}
                             onChange={(e) => {
                                 setValue({ ...value, mt_arabised: e.target.value });
                             }}
-                            placeholder={category === 'verb_preset' ? 'e.g. Forma I' : 'Arabised Maltese label...'}
+                            placeholder={category === 'verb_preset' ? 'e.g. Forma I' : term('arabised-maltese-label')}
                         />
                     </div>
                 </div>
@@ -324,6 +345,7 @@ function VerbPresetSection({
     setValue: Dispatch<SetStateAction<FormValue>>;
     inputClass: string;
 }) {
+    const { term } = useLinguisticMode();
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
             {['perfect', 'passive', 'active', 'verbal'].map((form) => (
@@ -331,12 +353,12 @@ function VerbPresetSection({
                     <h4 className="text-[10px] font-bold text-black/40 uppercase tracking-tighter">{form}</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
-                            <label className="text-[10px] text-black/50 block mb-1">Standard (CV)</label>
-                            <input className={inputClass} value={value[form]?.cv || ''} onChange={(e) => setValue({ ...value, [form]: { ...value[form], cv: e.target.value } })} placeholder="CV notation" />
+                            <label className="text-[10px] text-black/50 block mb-1">{term('standard-cv')}</label>
+                            <input className={inputClass} value={value[form]?.cv || ''} onChange={(e) => setValue({ ...value, [form]: { ...value[form], cv: e.target.value } })} placeholder={term('cv-notation')} />
                         </div>
                         <div>
-                            <label className="text-[10px] text-black/50 block mb-1">Arabised (Wizen)</label>
-                            <input className={inputClass} value={value[form]?.wizen || ''} onChange={(e) => setValue({ ...value, [form]: { ...value[form], wizen: e.target.value } })} placeholder="Wizen name" />
+                            <label className="text-[10px] text-black/50 block mb-1">{term('arabised-wizen')}</label>
+                            <input className={inputClass} value={value[form]?.wizen || ''} onChange={(e) => setValue({ ...value, [form]: { ...value[form], wizen: e.target.value } })} placeholder={term('wizen-name')} />
                         </div>
                     </div>
                 </div>
@@ -372,6 +394,7 @@ function PatternSection({
     posOptions: string[];
     showPosFilter: boolean;
 }) {
+    const { term } = useLinguisticMode();
     const selectedPosTypes = Array.isArray(value.pos_types)
         ? value.pos_types.filter((pos): pos is string => typeof pos === 'string' && posOptions.includes(pos))
         : [];
@@ -380,7 +403,7 @@ function PatternSection({
         <div className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-3.5">
                 <div className="space-y-1.5">
-                    <label className={labelClass}>Maltese (CV / Standard) <span className="text-black/30 normal-case font-normal">(v = short, V = long vowel)</span></label>
+                    <label className={labelClass}>{term('maltese-standard-label')} <span className="text-black/30 normal-case font-normal">{term('maltese-standard-label-hint')}</span></label>
                     <input
                         className={inputClass}
                         value={value.cv || ''}
@@ -389,11 +412,11 @@ function PatternSection({
                             setActiveInput('cv');
                             activeInputRef.current = e.target;
                         }}
-                        placeholder="e.g. CvCVC"
+                        placeholder={term('cv-notation')}
                     />
                 </div>
                 <div className="space-y-1.5">
-                    <label className={labelClass}>Maltese (Wizen / Arabised)</label>
+                    <label className={labelClass}>{term('maltese-arabised-label')}</label>
                     <input
                         className={inputClass}
                         value={value.wizen || ''}
@@ -402,14 +425,14 @@ function PatternSection({
                             setActiveInput('wizen');
                             activeInputRef.current = e.target;
                         }}
-                        placeholder="e.g. faghal"
+                        placeholder={term('wizen-name')}
                     />
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                 <div className="space-y-1">
-                    <label className={labelClass}>Stress (syllable from end)</label>
+                    <label className={labelClass}>{term('stress-label')}</label>
                     <input
                         className={inputClass}
                         type="number"
@@ -421,7 +444,7 @@ function PatternSection({
                 </div>
                 <div className="space-y-1.5">
                     <div className="flex items-end justify-between gap-3">
-                        <label className={labelClass}>Keyboard Helper</label>
+                        <label className={labelClass}>{term('keyboard-helper')}</label>
                     </div>
                     <div className="flex flex-wrap items-center gap-3">
                         <button
@@ -433,7 +456,7 @@ function PatternSection({
                                 kbOpen ? 'bg-[#1034A6] text-white border-[#1034A6]' : 'bg-white text-black/45 border-black/10 hover:border-black/20',
                             )}
                         >
-                            <Keyboard size={12} /> {kbOpen ? 'Close Keyboard' : 'Open Keyboard'}
+                            <Keyboard size={12} /> {kbOpen ? term('close-keyboard') : term('open-keyboard')}
                         </button>
                         <div className="relative">
                             <MalteseCharPicker open={kbOpen} onOpenChange={setKbOpen} onInsert={insertChar} triggerRef={kbTriggerRef} />
@@ -443,12 +466,12 @@ function PatternSection({
             </div>
 
             <div className="space-y-1.5">
-                <label className={labelClass}>Description</label>
+                <label className={labelClass}>{term('description')}</label>
                 <textarea
                     className={cn(inputClass, 'min-h-[84px] resize-y')}
                     value={value.description || ''}
                     onChange={(e) => setValue({ ...value, description: e.target.value })}
-                    placeholder="Optional pattern description..."
+                    placeholder={term('optional-pattern-description')}
                     rows={3}
                 />
             </div>
@@ -457,10 +480,10 @@ function PatternSection({
                 <div className="rounded-2xl border border-black/5 bg-slate-50/70 p-3 space-y-2.5">
                     <div className="flex items-end justify-between gap-3 flex-wrap">
                         <div>
-                            <label className={labelClass}>Apply to POS</label>
+                            <label className={labelClass}>{term('apply-to-pos')}</label>
                         </div>
                         <span className="rounded-full border border-black/5 bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-black/40">
-                            {selectedPosTypes.length} selected
+                            {term('selected-count').replace('{count}', String(selectedPosTypes.length))}
                         </span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
@@ -493,7 +516,7 @@ function PatternSection({
                                         isSelected ? 'bg-[#1034A6] text-white border-[#1034A6] shadow-sm' : 'bg-white text-black/40 border-black/10 hover:border-black/20',
                                     )}
                                 >
-                                    {String(pos).toUpperCase()}
+                                    {term(pos)}
                                 </button>
                             );
                         })}
@@ -504,13 +527,37 @@ function PatternSection({
     );
 }
 
+function createApplicabilityClientId() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+
+    return `app-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 function createBlankApplicability(pos: PatternPos): PatternApplicability {
     return {
         pos: pos as PatternApplicability['pos'],
+        clientId: createApplicabilityClientId(),
         linguisticRole: '',
         gender: '',
         notes: '',
         metadata: {},
+    };
+}
+
+function attachApplicabilityClientIds(value: FormValue) {
+    const normalized = normalizePatternFormValue(value, 'cv_wizen_pattern');
+    const applicabilities = Array.isArray(normalized.applicabilities)
+        ? normalized.applicabilities.map((app) => ({
+            ...app,
+            clientId: app.clientId || createApplicabilityClientId(),
+        }))
+        : [];
+
+    return {
+        ...normalized,
+        applicabilities,
     };
 }
 
@@ -539,13 +586,74 @@ function getPatternFieldValue(app: PatternApplicability, field: PatternFieldSpec
     }
 }
 
+function getFieldOptions(field: PatternFieldSpec, getValues: (category: string) => any[]) {
+    if (field.options) return field.options;
+    if (!field.optionSource) return [];
+
+    const rawOptions = getValues(field.optionSource) || [];
+    const mapped = rawOptions
+        .map((item) => (typeof item === 'string' ? item.trim() : ''))
+        .filter(Boolean)
+        .map((value) => ({ value, label: value }));
+
+    if (mapped.length > 0) return mapped;
+    if (field.optionSource === 'gender') {
+        return ['masculine', 'feminine', 'neutral'].map((value) => ({ value, label: value }));
+    }
+
+    return mapped;
+}
+
+function updateApplicability(
+    setValue: Dispatch<SetStateAction<FormValue>>,
+    clientId: string,
+    pos: PatternPos,
+    updater: (current: Record<string, any>) => Record<string, any>,
+) {
+    setValue((prev) => {
+        const normalized = normalizePatternFormValue(prev, 'cv_wizen_pattern');
+        const applicabilities = Array.isArray(normalized.applicabilities) ? [...normalized.applicabilities] : [];
+        const currentIndex = applicabilities.findIndex((item) => item.clientId === clientId);
+        const current = currentIndex >= 0
+            ? applicabilities[currentIndex]
+            : applicabilities.find((item) => item.pos === pos) || createBlankApplicability(pos);
+
+        const next = updater({
+            ...current,
+            metadata: { ...(current.metadata || {}) },
+            clientId: current.clientId || clientId,
+        });
+
+        const nextApplicability = {
+            ...current,
+            ...next,
+            pos,
+            clientId: current.clientId || clientId,
+            metadata: next.metadata || {},
+        };
+
+        if (currentIndex >= 0) {
+            applicabilities[currentIndex] = nextApplicability;
+        } else {
+            applicabilities.push(nextApplicability);
+        }
+
+        return {
+            ...prev,
+            pos_types: Array.from(new Set(applicabilities.map((item) => item.pos).filter(Boolean))),
+            applicabilities,
+        };
+    });
+}
+
 function updatePatternField(
     setValue: Dispatch<SetStateAction<FormValue>>,
+    clientId: string,
     pos: PatternPos,
     field: PatternFieldSpec,
     rawValue: string,
 ) {
-    updateApplicability(setValue, pos, (current) => {
+    updateApplicability(setValue, clientId, pos, (current) => {
         const nextValue = rawValue.trim();
         const nextMetadata = { ...(current.metadata || {}) };
         const next = { ...current };
@@ -581,70 +689,191 @@ function updatePatternField(
     });
 }
 
-function getFieldOptions(field: PatternFieldSpec, getValues: (category: string) => any[]) {
-    if (field.options) return field.options;
-    if (!field.optionSource) return [];
-
-    const rawOptions = getValues(field.optionSource) || [];
-    const mapped = rawOptions
-        .map((item) => (typeof item === 'string' ? item.trim() : ''))
-        .filter(Boolean)
-        .map((value) => ({ value, label: value }));
-
-    if (mapped.length > 0) return mapped;
-    if (field.optionSource === 'gender') {
-        return ['masculine', 'feminine', 'neutral'].map((value) => ({ value, label: value }));
-    }
-
-    return mapped;
-}
-
-function getApplicabilityForPos(value: FormValue, pos: PatternPos) {
+function getApplicabilitiesForPos(value: FormValue, pos: PatternPos) {
     const normalized = normalizePatternFormValue(value, 'cv_wizen_pattern');
-    return normalized.applicabilities?.find((app) => app.pos === pos) || createBlankApplicability(pos);
+    return (normalized.applicabilities || []).filter((app) => app.pos === pos);
 }
 
-function updateApplicability(
-    setValue: Dispatch<SetStateAction<FormValue>>,
-    pos: PatternPos,
-    updater: (current: Record<string, any>) => Record<string, any>,
-) {
+function addApplicability(setValue: Dispatch<SetStateAction<FormValue>>, pos: PatternPos) {
     setValue((prev) => {
         const normalized = normalizePatternFormValue(prev, 'cv_wizen_pattern');
-        const applicabilities = Array.isArray(normalized.applicabilities) ? normalized.applicabilities : [];
-        const current = getApplicabilityForPos(prev, pos);
-        const next = updater({
-            ...current,
-            metadata: { ...(current.metadata || {}) },
-        });
-
-        const nextApplicabilities = applicabilities.filter((item) => item.pos !== pos);
-        nextApplicabilities.push({
-            pos,
-            linguisticRole: String(next.linguisticRole || '').trim(),
-            gender: String(next.gender || '').trim(),
-            notes: String(next.notes || '').trim(),
-            metadata: next.metadata || {},
-        });
+        const nextApplicabilities = Array.isArray(normalized.applicabilities) ? [...normalized.applicabilities] : [];
+        nextApplicabilities.push(createBlankApplicability(pos));
 
         return {
             ...prev,
-            pos_types: Array.from(new Set([...(normalized.pos_types || []), pos].filter((item) => nextApplicabilities.some((app) => app.pos === item)))),
+            pos_types: Array.from(new Set([...(normalized.pos_types || []), pos])),
             applicabilities: nextApplicabilities,
         };
     });
 }
 
-function removeApplicability(setValue: Dispatch<SetStateAction<FormValue>>, pos: PatternPos) {
+function removeApplicability(setValue: Dispatch<SetStateAction<FormValue>>, clientId: string) {
     setValue((prev) => {
         const normalized = normalizePatternFormValue(prev, 'cv_wizen_pattern');
-        const nextApplicabilities = (normalized.applicabilities || []).filter((item) => item.pos !== pos);
+        const nextApplicabilities = (normalized.applicabilities || []).filter((item) => item.clientId !== clientId);
+
         return {
             ...prev,
-            pos_types: (normalized.pos_types || []).filter((item) => item !== pos),
+            pos_types: Array.from(new Set(nextApplicabilities.map((item) => item.pos).filter(Boolean))),
             applicabilities: nextApplicabilities,
         };
     });
+}
+
+function ApplicabilityCard({
+    pos,
+    app,
+    setValue,
+    labelClass,
+    inputClass,
+}: {
+    pos: PatternPos;
+    app: PatternApplicability;
+    setValue: Dispatch<SetStateAction<FormValue>>;
+    labelClass: string;
+    inputClass: string;
+}) {
+    const { term } = useLinguisticMode();
+    const { getValues } = useAdminConfig();
+    const schema = PATTERN_POS_SCHEMA[pos];
+    const fields = schema?.fields || [];
+    const hasMetadataFields = fields.length > 0;
+    const clientId = app.clientId || '';
+    const [customRoleMode, setCustomRoleMode] = useState(() => {
+        const initialRole = normalizePatternLinguisticRoleValue(app.linguisticRole);
+        return Boolean(initialRole) && !PATTERN_LINGUISTIC_ROLE_OPTIONS.some((option) => option.value === initialRole);
+    });
+
+    useEffect(() => {
+        const currentRole = normalizePatternLinguisticRoleValue(app.linguisticRole);
+        if (!currentRole) return;
+
+        if (PATTERN_LINGUISTIC_ROLE_OPTIONS.some((option) => option.value === currentRole)) {
+            setCustomRoleMode(false);
+        } else {
+            setCustomRoleMode(true);
+        }
+    }, [app.linguisticRole]);
+
+    return (
+        <div className="rounded-xl border border-black/5 bg-white/70 p-3 space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                <div>
+                    <h6 className="text-[10px] font-bold uppercase tracking-widest text-[#1034A6]">
+                        {schema?.label || pos}
+                    </h6>
+                    <p className="text-[11px] text-black/40">
+                        {hasMetadataFields ? term('metadata-for-this-role') : term('pattern-only-role')}
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => removeApplicability(setValue, clientId)}
+                    className="text-[10px] font-bold uppercase tracking-widest text-black/35 hover:text-red-600 transition-colors"
+                >
+                    {term('remove-role')}
+                </button>
+            </div>
+            {hasMetadataFields ? (
+                <div className="grid grid-cols-1 gap-3.5">
+                    {fields.map((field) => {
+                        if (field.showWhen && !field.showWhen(app)) {
+                            return null;
+                        }
+
+                        const fieldValue = getPatternFieldValue(app, field);
+                        const options = getFieldOptions(field, getValues);
+                        const isLinguisticRoleField = field.key === 'linguisticRole';
+                        const normalizedRoleValue = normalizePatternLinguisticRoleValue(fieldValue);
+                        const selectedRoleValue = options.some((opt) => opt.value === normalizedRoleValue) ? normalizedRoleValue : '';
+
+                        return (
+                            <div
+                                key={field.key}
+                                className={field.kind === 'textarea' ? 'space-y-1 md:col-span-3' : 'space-y-1'}
+                            >
+                                <label className={labelClass}>{field.label}</label>
+                                {field.kind === 'select' && !isLinguisticRoleField && (
+                                    <select
+                                        className={inputClass}
+                                        value={fieldValue}
+                                        onChange={(e) => updatePatternField(setValue, clientId, pos, field, e.target.value)}
+                                    >
+                                        <option value="">{field.emptyLabel || term('select-placeholder')}</option>
+                                        {options.map((opt) => (
+                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                        ))}
+                                    </select>
+                                )}
+                                {field.kind === 'select' && isLinguisticRoleField && (
+                                    <div className="space-y-2">
+                                        <select
+                                            className={inputClass}
+                                            value={customRoleMode ? '__custom__' : selectedRoleValue}
+                                            onChange={(e) => {
+                                                const nextValue = e.target.value;
+                                                if (!nextValue) {
+                                                    setCustomRoleMode(false);
+                                                    updatePatternField(setValue, clientId, pos, field, '');
+                                                    return;
+                                                }
+
+                                                if (nextValue === '__custom__') {
+                                                    setCustomRoleMode(true);
+                                                    updatePatternField(setValue, clientId, pos, field, '');
+                                                    return;
+                                                }
+
+                                                setCustomRoleMode(false);
+                                                updatePatternField(setValue, clientId, pos, field, nextValue);
+                                            }}
+                                        >
+                                    <option value="">{field.emptyLabel || term('select-placeholder')}</option>
+                                    {options.map((opt) => (
+                                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                    ))}
+                                            <option value="__custom__">{term('custom-role')}</option>
+                                        </select>
+
+                                        {customRoleMode && (
+                                            <input
+                                                className={inputClass}
+                                                value={fieldValue}
+                                                onChange={(e) => updatePatternField(setValue, clientId, pos, field, e.target.value)}
+                                                placeholder={term('type-a-new-linguistic-role')}
+                                            />
+                                        )}
+                                    </div>
+                                )}
+                                {field.kind === 'text' && (
+                                    <input
+                                        className={inputClass}
+                                        value={fieldValue}
+                                        onChange={(e) => updatePatternField(setValue, clientId, pos, field, e.target.value)}
+                                        placeholder={field.placeholder}
+                                    />
+                                )}
+                                {field.kind === 'textarea' && (
+                                    <textarea
+                                        className={cn(inputClass, 'min-h-[84px] resize-y')}
+                                        value={fieldValue}
+                                        onChange={(e) => updatePatternField(setValue, clientId, pos, field, e.target.value)}
+                                        placeholder={field.placeholder}
+                                        rows={field.rows || 3}
+                                    />
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            ) : (
+                <div className="rounded-xl border border-dashed border-black/10 bg-white/60 px-3 py-2 text-[11px] text-black/40">
+                    {term('pattern-role-no-extra-metadata')}
+                </div>
+            )}
+        </div>
+    );
 }
 
 function ApplicabilitySection({
@@ -660,81 +889,45 @@ function ApplicabilitySection({
     labelClass: string;
     inputClass: string;
 }) {
-    const { getValues } = useAdminConfig();
-    const app = getApplicabilityForPos(value, pos);
+    const { term } = useLinguisticMode();
     const schema = PATTERN_POS_SCHEMA[pos];
-    const fields = schema?.fields || [];
-    const hasMetadataFields = fields.length > 0;
+    const apps = getApplicabilitiesForPos(value, pos);
 
     return (
         <div className="rounded-2xl border border-black/5 bg-slate-50/70 p-3.5 space-y-3">
-            <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center justify-between gap-2">
                 <div>
                     <h5 className="text-[10px] font-bold uppercase tracking-widest text-[#1034A6]">{schema?.label || pos}</h5>
                     <p className="text-[11px] text-black/40">
-                        {hasMetadataFields ? 'Metadata for this POS only' : 'Pattern-only POS, no extra metadata'}
+                        {apps.length > 1
+                            ? term('roles-in-this-pos').replace('{count}', String(apps.length))
+                            : term('metadata-for-this-pos')}
                     </p>
                 </div>
                 <button
                     type="button"
-                    onClick={() => removeApplicability(setValue, pos)}
-                    className="text-[10px] font-bold uppercase tracking-widest text-black/35 hover:text-red-600 transition-colors"
+                    onClick={() => addApplicability(setValue, pos)}
+                    className="text-[10px] font-bold uppercase tracking-widest text-[#1034A6] hover:text-[#0b2f86] transition-colors"
                 >
-                    Remove
+                    {term('add-role')}
                 </button>
             </div>
-            {hasMetadataFields ? (
-                <div className="grid grid-cols-1 gap-3.5">
-                    {fields.map((field) => {
-                        if (field.showWhen && !field.showWhen(app)) {
-                            return null;
-                        }
-
-                        const fieldValue = getPatternFieldValue(app, field);
-                        const options = getFieldOptions(field, getValues);
-
-                        return (
-                            <div
-                                key={field.key}
-                                className={field.kind === 'textarea' ? 'space-y-1 md:col-span-3' : 'space-y-1'}
-                            >
-                                <label className={labelClass}>{field.label}</label>
-                                {field.kind === 'select' && (
-                                    <select
-                                        className={inputClass}
-                                        value={fieldValue}
-                                        onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
-                                    >
-                                        <option value="">{field.emptyLabel || '-- Select --'}</option>
-                                        {options.map((opt) => (
-                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                        ))}
-                                    </select>
-                                )}
-                                {field.kind === 'text' && (
-                                    <input
-                                        className={inputClass}
-                                        value={fieldValue}
-                                        onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
-                                        placeholder={field.placeholder}
-                                    />
-                                )}
-                                {field.kind === 'textarea' && (
-                                    <textarea
-                                        className={cn(inputClass, 'min-h-[84px] resize-y')}
-                                        value={fieldValue}
-                                        onChange={(e) => updatePatternField(setValue, pos, field, e.target.value)}
-                                        placeholder={field.placeholder}
-                                        rows={field.rows || 3}
-                                    />
-                                )}
-                            </div>
-                        );
-                    })}
+            {apps.length > 0 ? (
+                <div className="space-y-3.5">
+                    {apps.map((app) => (
+                        <ApplicabilityCard
+                            key={app.clientId || `${pos}-${app.linguisticRole || app.gender || 'role'}`}
+                            pos={pos}
+                            app={app}
+                            setValue={setValue}
+                            labelClass={labelClass}
+                            inputClass={inputClass}
+                        />
+                    ))}
                 </div>
             ) : (
                 <div className="rounded-xl border border-dashed border-black/10 bg-white/60 px-3 py-2 text-[11px] text-black/40">
-                    This POS can still be linked to patterns, but it does not use any extra applicability metadata.
+                    {term('no-roles-yet-for-this-pos')}
                 </div>
             )}
         </div>

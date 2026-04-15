@@ -1,11 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight, Search as SearchIcon } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
-import { BrowsePageHeader } from '@/components/browse/BrowsePageHeader';
-import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { apiSearch, apiListPatterns } from '@/lib/api';
-import { cn } from '@/lib/utils';
+export { BrowsePatternPage, BrowsePatternPage as BrowsePattern } from './BrowsePatternPage';
+/*
 
 const POS_LIST = [
     { key: 'verb', label: 'verb' },
@@ -361,3 +355,4 @@ export function BrowsePattern() {
         </>
     );
 }
+*/

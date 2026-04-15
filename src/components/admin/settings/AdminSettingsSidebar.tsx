@@ -63,7 +63,7 @@ export function AdminSettingsSidebar({
     return (
         <aside className="md:col-span-1 space-y-4">
             <div className="bg-white rounded-2xl border border-black/5 p-3 shadow-sm">
-                <h3 className="text-[10px] font-bold text-black/40 uppercase tracking-widest px-2 mb-3">Categories</h3>
+                <h3 className="text-[10px] font-bold text-black/40 uppercase tracking-widest px-2 mb-3">{term('categories')}</h3>
 
                 <div className="space-y-2">
                     {groupedCategories.map((group) => {
@@ -75,7 +75,7 @@ export function AdminSettingsSidebar({
                                     onClick={() => onToggleGroup(group.groupId)}
                                     className="w-full px-2.5 py-2 flex items-center justify-between text-[10px] font-black tracking-wider uppercase text-black/45"
                                 >
-                                    <span>{group.groupLabel}</span>
+                                    <span>{term(group.groupLabel)}</span>
                                     <ChevronDown size={12} className={cn('transition-transform', isOpen ? 'rotate-180' : '')} />
                                 </button>
 
@@ -108,23 +108,23 @@ export function AdminSettingsSidebar({
                                                         <span className="text-[10px] bg-black/5 px-1.5 rounded opacity-60 group-hover:opacity-100">
                                                             {getItemCount(cat.id)}
                                                         </span>
-                                                        <button
-                                                            type="button"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                setCanonicalOpen((prev) => !prev);
-                                                            }}
-                                                            className="ml-1 rounded-md p-1 text-black/35 hover:text-[#1034A6] hover:bg-[#1034A6]/5 transition-colors"
-                                                            aria-label="Toggle canonical pattern shortcuts"
-                                                        >
-                                                            <ChevronDown size={12} className={cn('transition-transform', canonicalOpen ? 'rotate-180' : '')} />
-                                                        </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setCanonicalOpen((prev) => !prev);
+                                                                }}
+                                                                className="ml-1 rounded-md p-1 text-black/35 hover:text-[#1034A6] hover:bg-[#1034A6]/5 transition-colors"
+                                                                aria-label={term('toggle-canonical-pattern-shortcuts')}
+                                                            >
+                                                                <ChevronDown size={12} className={cn('transition-transform', canonicalOpen ? 'rotate-180' : '')} />
+                                                            </button>
                                                     </div>
 
                                                     {canonicalOpen && (
                                                         <div className="pl-4 pr-1 pb-1.5 space-y-3">
                                                             <div className="space-y-1">
-                                                                <div className="px-1 text-[9px] font-bold uppercase tracking-[0.22em] text-black/25">POS</div>
+                                                                <div className="px-1 text-[9px] font-bold uppercase tracking-[0.22em] text-black/25">{term('part-of-speech')}</div>
                                                                 <button
                                                                     type="button"
                                                                     onClick={() => onSelectCanonicalPattern()}
@@ -135,7 +135,7 @@ export function AdminSettingsSidebar({
                                                                             : 'bg-white text-black/45 border-black/10 hover:border-[#1034A6]/20 hover:text-black/70',
                                                                     )}
                                                                 >
-                                                                    <span>All POS</span>
+                                                                    <span>{term('all-pos-label')}</span>
                                                                     <span className="opacity-70">{getItemCount(cat.id)}</span>
                                                                 </button>
 
@@ -153,7 +153,7 @@ export function AdminSettingsSidebar({
                                                                                     : 'bg-white text-black/45 border-black/10 hover:border-[#1034A6]/20 hover:text-black/70',
                                                                             )}
                                                                         >
-                                                                            <span>{shortcut.pos}</span>
+                                                                            <span>{term(shortcut.pos)}</span>
                                                                             <span className="opacity-70">{shortcut.count}</span>
                                                                         </button>
                                                                     );
@@ -161,7 +161,7 @@ export function AdminSettingsSidebar({
                                                             </div>
 
                                                             <div className="space-y-1">
-                                                                <div className="px-1 text-[9px] font-bold uppercase tracking-[0.22em] text-black/25">Roles</div>
+                                                                <div className="px-1 text-[9px] font-bold uppercase tracking-[0.22em] text-black/25">{term('roles')}</div>
                                                                 <button
                                                                     type="button"
                                                                     onClick={() => onSelectCanonicalPattern({ pos: 'all', role: 'all' })}
@@ -172,7 +172,7 @@ export function AdminSettingsSidebar({
                                                                             : 'bg-white text-black/45 border-black/10 hover:border-[#1034A6]/20 hover:text-black/70',
                                                                     )}
                                                                 >
-                                                                    <span>All Roles</span>
+                                                                    <span>{term('all-roles')}</span>
                                                                     <span className="opacity-70">{getItemCount(cat.id)}</span>
                                                                 </button>
 
@@ -241,11 +241,11 @@ export function AdminSettingsSidebar({
             </div>
 
             <div className="px-4 py-3 bg-white rounded-2xl border border-black/5 space-y-4 shadow-sm">
-                <h3 className="text-[10px] font-bold text-black/40 uppercase tracking-widest">Interface View</h3>
+                <h3 className="text-[10px] font-bold text-black/40 uppercase tracking-widest">{term('interface-view')}</h3>
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
                         <span className="text-xs font-medium text-black/60 flex items-center gap-2">
-                            <Languages size={14} /> Language
+                            <Languages size={14} /> {term('language')}
                         </span>
                         <div className="flex bg-black/5 p-0.5 rounded-lg">
                             <button
@@ -266,7 +266,7 @@ export function AdminSettingsSidebar({
                     </div>
                     <div className="flex items-center justify-between">
                         <span className="text-xs font-medium text-black/60 flex items-center gap-2">
-                            <Braces size={14} /> Mode
+                            <Braces size={14} /> {term('mode')}
                         </span>
                         <div className="flex bg-black/5 p-0.5 rounded-lg">
                             <button
@@ -274,14 +274,14 @@ export function AdminSettingsSidebar({
                                 onClick={() => setMode('standard')}
                                 className={cn('px-2 py-1 text-[10px] font-bold rounded-md transition-all', mode === 'standard' ? 'bg-white text-[#1034A6] shadow-sm' : 'text-black/40')}
                             >
-                                CV
+                            {term('mode')}
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setMode('arabised')}
                                 className={cn('px-2 py-1 text-[10px] font-bold rounded-md transition-all', mode === 'arabised' ? 'bg-white text-[#1034A6] shadow-sm' : 'text-black/40')}
                             >
-                                وزن
+                            {term('mode')}
                             </button>
                         </div>
                     </div>

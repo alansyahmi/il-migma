@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { resolveTermByEnglish } from '@/lib/terminology';
 
 type Language = 'en' | 'mt';
 
@@ -18,7 +19,10 @@ const LanguageContext = createContext<LanguageContextType>({
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const [language, setLanguage] = useState<Language>('en');
 
-    const t = (en: string, mt: string) => language === 'en' ? en : mt;
+    const t = (en: string, mt: string) => {
+        if (language === 'en') return en;
+        return resolveTermByEnglish(en) || mt;
+    };
 
     return (
         <LanguageContext.Provider value={{ language, setLanguage, t }}>

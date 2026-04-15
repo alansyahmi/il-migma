@@ -1,9 +1,22 @@
 import { Edit2, Search, Trash2 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import type { ConfigItem } from '@/lib/adminConfig';
 import type { AdminCategory } from '@/lib/adminCategoryRegistry';
 import { getPatternMetadataSummary } from '@/lib/patternMetadata';
 import { cn } from '@/lib/utils';
+
+const PATTERN_BUCKET_LABEL_KEYS: Record<string, string> = {
+    cv_wizen_pattern: 'canonical-patterns',
+    broken_pattern: 'broken-plural',
+    feminine_pattern: 'feminine-singular',
+    sound_suffix: 'sound-plural-suffix',
+    derivational_suffix: 'derivational-suffixes',
+    dual_suffix: 'dual-suffix',
+    diminutive_pattern: 'diminutive',
+    adjective_pattern: 'elative',
+    plural_pattern: 'legacy-plural-bucket',
+};
 
 interface AdminSettingsItemListProps {
     items: ConfigItem[];
@@ -13,12 +26,13 @@ interface AdminSettingsItemListProps {
 }
 
 export function AdminSettingsItemList({ items, activeCategory, onEdit, onDelete }: AdminSettingsItemListProps) {
+    const { term } = useLinguisticMode();
     if (items.length === 0) {
         return (
             <div className="text-center py-12 bg-white/60 rounded-2xl border-2 border-dashed border-black/5">
                 <div className="flex flex-col items-center gap-2 opacity-20">
                     <Search size={48} />
-                    <p className="font-bold uppercase tracking-widest text-[10px]">No matches found</p>
+                    <p className="font-bold uppercase tracking-widest text-[10px]">{term('no-matches-found')}</p>
                 </div>
             </div>
         );
@@ -40,8 +54,10 @@ export function AdminSettingsItemList({ items, activeCategory, onEdit, onDelete 
 }
 
 function PatternCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (item: ConfigItem) => void; onDelete: (id: string, key: string) => void }) {
+    const { term } = useLinguisticMode();
     const value = item.value as Record<string, unknown>;
     const summary = getPatternMetadataSummary(value, item.category);
+    const bucketLabel = term(PATTERN_BUCKET_LABEL_KEYS[item.category] || summary.bucketLabel);
 
     return (
         <Card className="group relative overflow-hidden p-3.5 border-border-light transition-all hover:border-[#1034A6]/30 hover:shadow-xl hover:shadow-[#1034A6]/5">
@@ -50,14 +66,14 @@ function PatternCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (it
                 <div className="space-y-2.5 flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="inline-flex items-center rounded-full border border-[#1034A6]/10 bg-[#1034A6]/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#1034A6]">
-                            Pattern
+                            {term('pattern')}
                         </span>
-                        <MetaChip label="Bucket" value={summary.bucketLabel} tone="accent" compact />
+                        <MetaChip label={term('bucket')} value={bucketLabel} tone="accent" compact />
                         {!!summary.linguisticRole && (
-                            <MetaChip label="Role" value={summary.linguisticRole} tone="neutral" />
+                            <MetaChip label={term('role')} value={summary.linguisticRole} tone="neutral" />
                         )}
                         {!!summary.gender && (
-                            <MetaChip label="Gender" value={summary.gender} tone="neutral" />
+                            <MetaChip label={term('gender')} value={summary.gender} tone="neutral" />
                         )}
                     </div>
 
@@ -69,7 +85,7 @@ function PatternCard({ item, onEdit, onDelete }: { item: ConfigItem; onEdit: (it
                         {value.stress ? <MetaChip label="Stress" value={String(value.stress)} tone="neutral" /> : null}
                         {summary.posTypes.length > 0 ? (
                             <MetaChip
-                                label="POS"
+                                label={term('part-of-speech')}
                                 value={summary.posTypes.slice(0, 3).map(pos => pos.toUpperCase()).join(' • ')}
                                 tone="neutral"
                             />

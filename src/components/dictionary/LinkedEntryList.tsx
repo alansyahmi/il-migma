@@ -8,8 +8,8 @@ export interface LinkedEntryItem {
     id?: string;
     headword: string;
     gloss_en?: string;
-    gloss_mt?: string;
-    definitions?: Array<{ text_en?: string; text_mt?: string }>;
+    gloss_mt?: string | null;
+    definitions?: Array<{ text_en?: string; text_mt?: string | null }>;
 }
 
 export function LinkedEntryList({
