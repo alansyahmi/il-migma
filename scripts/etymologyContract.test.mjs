@@ -108,6 +108,22 @@ const run = () => {
         definition: 'to write',
     }, 'legacy entry etymology should normalize to the five-field shape');
 
+    const legacyEntryWithScript = [{
+        language: 'Arabic',
+        form: 'كَتَبَ',
+        meaning: 'to write',
+        script: 'كَتَبَ',
+    }];
+    const normalizedLegacyEntryWithScript = normalizeEntryEtymologyChain(legacyEntryWithScript);
+    assertEq(normalizedLegacyEntryWithScript[0], {
+        relationship: 'From',
+        language: 'Arabic',
+        term: 'كَتَبَ',
+        pronunciation: '',
+        definition: 'to write',
+        script: 'كَتَبَ',
+    }, 'legacy entry etymology should preserve Arabic script when supplied');
+
     const entryPayload = buildEntryPayload({
         id: 'entry-1',
         headword: 'kataba',
@@ -144,6 +160,45 @@ const run = () => {
         pronunciation: 'ka-ta-ba',
         definition: 'to write',
     }], 'entry payload should preserve pronunciation');
+
+    const entryPayloadWithScript = buildEntryPayload({
+        id: 'entry-1b',
+        headword: 'kataba',
+        pos: 'noun',
+        etymology_chain: [{
+            relationship: 'From',
+            language: 'Arabic',
+            term: 'كَتَبَ',
+            pronunciation: 'ka-ta-ba',
+            definition: 'to write',
+            script: 'كَتَبَ',
+        }],
+        definitions: [],
+        phonetics: [],
+        tags: '',
+        source_language: '',
+        source_citation: '',
+        synonyms: [],
+        antonyms: [],
+        related_entries: [],
+        alternative_forms: [],
+        is_loanword: false,
+        cv_pattern: '',
+        form_masc_pattern: '',
+        form_fem_pattern: '',
+        form_plural_pattern: '',
+        lemma_base: '',
+        gender: 'masculine',
+        is_inflectable: true,
+    });
+    assertEq(entryPayloadWithScript.etymology_chain, [{
+        relationship: 'From',
+        language: 'Arabic',
+        term: 'كَتَبَ',
+        pronunciation: 'ka-ta-ba',
+        definition: 'to write',
+        script: 'كَتَبَ',
+    }], 'entry payload should preserve Arabic script when supplied');
 
     const semicolonDefinitions = normalizeEntryDefinitions([{
         text_en: 'alas; woe to me',

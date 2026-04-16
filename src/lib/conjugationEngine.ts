@@ -19,17 +19,17 @@
  *   defective-gem  ħeja  / jeħji   (C3 assimilates to V2)
  *   geminated       dell  / jdell   (C2 = C3)
  *
- * ── Stem Types Theory & Clitic Attachment Logic ────────────────────────────
+ * ── Attached vs Syncopated Stem Logic ─────────────────────────────────────
  *
  * To support object pronoun (clitic) attachment, the engine pre-calculates
  * differentiated stems based on phonological conditioning:
  *
- * 1. Type 1 (Full/Attached):
+ * 1. Attached form:
  *    - Used for consonant-initial suffixes (e.g., -ni, -ha, -hom).
  *    - Logic: Preserves the theme vowel but typically shifts the grade (e -> i)
  *      to buffer the consonant cluster (e.g., jikteb -> jiktib-ni).
  *
- * 2. Type 2 (Syncopated/Shifted):
+ * 2. Syncopated form:
  *    - Used for vowel-initial suffixes (e.g., -u, -ek).
  *    - Logic: Drops the theme vowel (syncopation) to avoid vowel clusters,
  *      or shifts it (metathesis) before C2 if C2 is a liquid/guttural
@@ -39,9 +39,39 @@
 import type {
     VerbConjugationTable,
     ConjugationRow,
+    StemVariantSet,
     VerbStrength,
     WeakClass,
 } from "@/types";
+
+type LegacyStemVariantInput = Partial<StemVariantSet> & {
+    impfType1?: string;
+    impfType2?: string;
+    perfType1?: string;
+    perfType2?: string;
+};
+
+type LegacyStemRecipeInput = {
+    perfFull: string;
+    perfSync: string;
+    perfReduced: string;
+    perf3f: string;
+    impfBase: (person: number) => string;
+    attachedImperfect?: (person: number) => string;
+    syncopatedImperfect?: (person: number) => string;
+    impfPlural: (person: number) => string;
+    negM?: string;
+    negF?: string;
+    attachedPerfectBuilder?: (perfRow: string, pIdx: number) => string;
+    impSg: string;
+    impPl: string;
+    impSgStems?: LegacyStemVariantInput;
+    impPlStems?: LegacyStemVariantInput;
+    blocksImala: boolean;
+    impfType1?: (person: number) => string;
+    impfType2?: (person: number) => string;
+    perfType1Builder?: (perfRow: string, pIdx: number) => string;
+};
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -100,8 +130,8 @@ export interface StemRecipe {
 
     // Imperfect stem builders
     impfBase: (person: number) => string; // Base form for 1-3rd person sg
-    impfType1: (person: number) => string; // Attached form (e -> i shift)
-    impfType2: (person: number) => string; // Syncopated form (before vowel suffixes)
+    attachedImperfect?: (person: number) => string; // Attached form (e -> i shift)
+    syncopatedImperfect?: (person: number) => string; // Syncopated form (before vowel suffixes)
     impfPlural: (person: number) => string; // Plural form (endsWith -u)
 
     // Negative overrides
@@ -109,13 +139,12 @@ export interface StemRecipe {
     negF?: string;
 
     // Stem type overrides
-    perfType1Builder?: (perfRow: string, pIdx: number) => string;
-
+    attachedPerfectBuilder?: (perfRow: string, pIdx: number) => string;
     // Imperative
     impSg: string;
     impPl: string;
-    impSgStems?: { impfType1: string; impfType2: string };
-    impPlStems?: { impfType1: string; impfType2: string };
+    impSgStems?: Partial<StemVariantSet>;
+    impPlStems?: Partial<StemVariantSet>;
 
     // Metadata
     blocksImala: boolean;
@@ -124,7 +153,7 @@ export interface StemRecipe {
 // ── Engine Core ────────────────────────────────────────────────────────────
 
 function buildConjugationTable(
-    recipe: StemRecipe,
+    recipe: LegacyStemRecipeInput,
     C3?: string,
     verbForm?: string,
 ): VerbConjugationTable {
@@ -152,29 +181,33 @@ function buildConjugationTable(
     const negF = recipe.negF ?? defaultNegF;
 
     const impfForms: string[] = [];
-    const stemsList: any[] = [];
+    const stemsList: StemVariantSet[] = [];
 
     for (let i = 0; i < 7; i++) {
         // Build Base Imperfect
         const base = i >= 4 ? recipe.impfPlural(i) : recipe.impfBase(i);
         impfForms.push(base);
 
-        // perfType1: Attached version (e -> i shift usually) unless overridden
-        let p1 = recipe.perfType1Builder
-            ? recipe.perfType1Builder(perfRows[i], i)
+        const attachedImperfect = recipe.attachedImperfect ?? recipe.impfType1;
+        const syncopatedImperfect = recipe.syncopatedImperfect ?? recipe.impfType2;
+        const attachedPerfectBuilder = recipe.attachedPerfectBuilder ?? recipe.perfType1Builder;
+
+        // Attached perfect version (e -> i shift usually) unless overridden
+        let attachedPerfect = attachedPerfectBuilder
+            ? attachedPerfectBuilder(perfRows[i], i)
             : perfRows[i].replace(/e([^aeiou])$/, "i$1");
 
-        // perfType2: Syncopated version
-        let p2 = i === 2 ? recipe.perfSync : perfRows[i];
-        if (recipe.perfType1Builder && i === 3) {
-            p2 = recipe.perfType1Builder(perfRows[i], i);
+        // Syncopated perfect version
+        let syncopatedPerfect = i === 2 ? recipe.perfSync : perfRows[i];
+        if (attachedPerfectBuilder && i === 3) {
+            syncopatedPerfect = attachedPerfectBuilder(perfRows[i], i);
         }
 
         stemsList.push({
-            impfType1: i >= 4 ? recipe.impfPlural(i) : recipe.impfType1(i),
-            impfType2: i >= 4 ? recipe.impfPlural(i) : recipe.impfType2(i),
-            perfType1: p1,
-            perfType2: p2,
+            attached: i >= 4 ? recipe.impfPlural(i) : attachedImperfect(i),
+            syncopated: i >= 4 ? recipe.impfPlural(i) : syncopatedImperfect(i),
+            perfectAttached: attachedPerfect,
+            perfectSyncopated: syncopatedPerfect,
         });
     }
 
@@ -202,14 +235,24 @@ function buildConjugationTable(
         rows,
         imperative_sg: recipe.impSg,
         imperative_pl: recipe.impPl,
-        imperative_sg_stems: recipe.impSgStems ?? {
-            impfType1: recipe.impSg,
-            impfType2: recipe.impSg,
-        },
-        imperative_pl_stems: recipe.impPlStems ?? {
-            impfType1: recipe.impPl.replace("ie", "e"),
-            impfType2: recipe.impPl,
-        },
+        imperative_sg_stems: recipe.impSgStems
+            ? {
+                attached: recipe.impSgStems.attached ?? recipe.impSgStems.impfType1 ?? recipe.impSg,
+                syncopated: recipe.impSgStems.syncopated ?? recipe.impSgStems.impfType2 ?? recipe.impSg,
+            }
+            : {
+                attached: recipe.impSg,
+                syncopated: recipe.impSg,
+            },
+        imperative_pl_stems: recipe.impPlStems
+            ? {
+                attached: recipe.impPlStems.attached ?? recipe.impPlStems.impfType1 ?? recipe.impPl.replace("ie", "e"),
+                syncopated: recipe.impPlStems.syncopated ?? recipe.impPlStems.impfType2 ?? recipe.impPl,
+            }
+            : {
+                attached: recipe.impPl.replace("ie", "e"),
+                syncopated: recipe.impPl,
+            },
         blocksImala: recipe.blocksImala,
     };
 }
@@ -251,10 +294,10 @@ function deriveTable(
             : undefined,
         stems: row.stems
             ? {
-                impfType1: impfTransform(row.stems.impfType1, pIdx),
-                impfType2: impfTransform(row.stems.impfType2, pIdx),
-                perfType1: perfPrefix + row.stems.perfType1,
-                perfType2: perfPrefix + row.stems.perfType2,
+                attached: impfTransform(row.stems.attached, pIdx),
+                syncopated: impfTransform(row.stems.syncopated, pIdx),
+                perfectAttached: perfPrefix + (row.stems.perfectAttached ?? row.perfect),
+                perfectSyncopated: perfPrefix + (row.stems.perfectSyncopated ?? row.perfect),
             }
             : undefined,
     });
@@ -272,14 +315,14 @@ function deriveTable(
             : undefined,
         imperative_sg_stems: base.imperative_sg_stems
             ? {
-                impfType1: perfPrefix + base.imperative_sg_stems.impfType1,
-                impfType2: perfPrefix + base.imperative_sg_stems.impfType2,
+                attached: perfPrefix + base.imperative_sg_stems.attached,
+                syncopated: perfPrefix + base.imperative_sg_stems.syncopated,
             }
             : undefined,
         imperative_pl_stems: base.imperative_pl_stems
             ? {
-                impfType1: perfPrefix + base.imperative_pl_stems.impfType1,
-                impfType2: perfPrefix + base.imperative_pl_stems.impfType2,
+                attached: perfPrefix + base.imperative_pl_stems.attached,
+                syncopated: perfPrefix + base.imperative_pl_stems.syncopated,
             }
             : undefined,
     };
@@ -700,7 +743,7 @@ function genDefectiveGħ(
             perfSync,
             perfReduced,
             perf3f: pv2 === "a" ? `${perfSync}t` : `${perfSync}et`,
-            perfType1Builder: (perfRow, pIdx) => {
+            attachedPerfectBuilder: (perfRow, pIdx) => {
                 if (pIdx === 2) return `${C1}${pv1}${C2}${pv2}${C3}`;
                 if (pIdx === 3) return `${perfSync}it`;
                 return perfRow.replace(/e([^aeiou])$/, "i$1");
@@ -767,12 +810,12 @@ function genDefective(
         return `${prefix}${C1}${C2}${suffix}`;
     };
 
-    const impfType1 = (person: number) => {
+    const attachedImperfect = (person: number) => {
         if (person >= 4) return impfPlural(person);
         return `${buildPrefix(person, vsetImpf)}${C1}${C2}${attV}`;
     };
 
-    const impfType2 = (person: number) => {
+    const syncopatedImperfect = (person: number) => {
         if (person >= 4) return impfPlural(person);
         return `${buildPrefix(person, vsetImpf)}${C1}${C2}${attVj}`;
     };
@@ -788,14 +831,14 @@ function genDefective(
             perfSync: `${perfReduced}`,
             perfReduced: `${perfReduced}j`,
             perf3f,
-            perfType1Builder: (perfRow, pIdx) => {
+            attachedPerfectBuilder: (perfRow, pIdx) => {
                 if (pIdx === 2 && pv2 === "a") return `${C1}${pv1}${C2}ie`;
                 else if (pIdx === 3) return `${perf3f.slice(0, -1)}t`;
                 return perfRow;
             },
             impfBase,
-            impfType1,
-            impfType2,
+            impfType1: attachedImperfect,
+            impfType2: syncopatedImperfect,
             impfPlural,
             impSg,
             impPl,
@@ -827,16 +870,18 @@ function genFormIIStrong(
     vsetImpf: string,
     vsetImp: string,
     verbForm: string,
+    isImalaBlocked: boolean = false,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
     const C2D = C2 + C2;
+    const shiftAttachedVowel = (vowel: string) => (isImalaBlocked ? vowel : applyAttachedShift(vowel, C3));
 
     const perfFull = `${C1}${pv1}${C2D}${cleanThemeVowel(pv2, C3)}${C3}`;
     const perfSync = `${C1}${pv1}${C2D}${C3}`;
 
-    const impfT1stem = `${C1}${iv1}${C2D}${applyAttachedShift(iv2, C3)}${C3}`;
+    const impfT1stem = `${C1}${iv1}${C2D}${shiftAttachedVowel(iv2)}${C3}`;
     const impfT2stem = `${C1}${iv1}${C2D}${C3}`;
 
     const impfBase = (i: number) => {
@@ -855,7 +900,7 @@ function genFormIIStrong(
         {
             perfFull,
             perfSync,
-            perfReduced: `${C1}${pv1}${C2D}${applyAttachedShift(pv2, C3)}${C3}`,
+            perfReduced: `${C1}${pv1}${C2D}${shiftAttachedVowel(pv2)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>
@@ -877,7 +922,7 @@ function genFormIIStrong(
             impSg,
             impPl,
             impSgStems: {
-                impfType1: `${C1}${impV1}${C2D}${applyAttachedShift(impV2, C3)}${C3}`,
+                impfType1: `${C1}${impV1}${C2D}${shiftAttachedVowel(impV2)}${C3}`,
                 impfType2: `${C1}${impV1}${C2D}${C3}`,
             },
             blocksImala:
@@ -896,16 +941,18 @@ function genFormIIHollow(
     vsetImpf: string,
     vsetImp: string,
     verbForm: string,
+    isImalaBlocked: boolean = false,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
     const C2D = C2 + C2;
+    const shiftAttachedVowel = (vowel: string) => (isImalaBlocked ? vowel : applyAttachedShift(vowel, C3));
 
     const perfFull = `${C1}${pv1}${C2D}${cleanThemeVowel(pv2, C3)}${C3}`;
     const perfSync = `${C1}${pv1}${C2}${C3}`;
 
-    const impfT1stem = `${C1}${iv1}${C2D}${applyAttachedShift(iv2, C3)}${C3}`;
+    const impfT1stem = `${C1}${iv1}${C2D}${shiftAttachedVowel(iv2)}${C3}`;
     const impfT2stem = `${C1}${iv1}${C2}${C3}`;
 
     const impfBase = (i: number) => {
@@ -924,7 +971,7 @@ function genFormIIHollow(
         {
             perfFull,
             perfSync,
-            perfReduced: `${C1}${pv1}${C2D}${applyAttachedShift(pv2, C3)}${C3}`,
+            perfReduced: `${C1}${pv1}${C2D}${shiftAttachedVowel(pv2)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>
@@ -946,11 +993,12 @@ function genFormIIHollow(
             impSg,
             impPl,
             impSgStems: {
-                impfType1: `${C1}${impV1}${C2D}${applyAttachedShift(impV2, C3)}${C3}`,
+                impfType1: `${C1}${impV1}${C2D}${shiftAttachedVowel(impV2)}${C3}`,
                 impfType2: `${C1}${impV1}${C2}${C3}`,
             },
             blocksImala:
-                C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
+                isImalaBlocked ||
+                (C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a"))),
         },
         C3,
         verbForm,
@@ -972,13 +1020,14 @@ function genFormIIDefective(
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: _iv1, v2: iv2 } = parseVset(vsetImpf);
     const C2D = C2 + C2;
+    const shiftAttachedVowel = (vowel: string) => (isImalaBlocked ? vowel : applyAttachedShift(vowel, C3, true));
 
     const perfFull = `${C1}${pv1}${C2D}${pv2}`; // nessa
     const perf3f = `${C1}${pv1}${C2D}iet`; // nessiet
     const perfReduced = `${C1}${pv1}${C2D}`; // -ness-
 
     const imalaBlocked = isImalaBlocked;
-    const attV = applyAttachedShift(iv2 || "a", C3, true);
+    const attV = shiftAttachedVowel(iv2 || "a");
     const attVj = attV === "ie" ? "iej" : imalaBlocked ? "aj" : "ej";
 
     const impfBase = (person: number) => {
@@ -991,12 +1040,12 @@ function genFormIIDefective(
         return `${prefix}${perfReduced}${suffix}`;
     };
 
-    const impfType1 = (person: number) => {
+    const attachedImperfect = (person: number) => {
         if (person >= 4) return impfPlural(person);
         return `${buildPrefix(person, "")}${perfReduced}${attV}`;
     };
 
-    const impfType2 = (person: number) => {
+    const syncopatedImperfect = (person: number) => {
         if (person >= 4) return impfPlural(person);
         return `${buildPrefix(person, "")}${perfReduced}${attVj}`;
     };
@@ -1012,15 +1061,15 @@ function genFormIIDefective(
             perfSync: `${perfReduced}`,
             perfReduced: `${perfReduced}ej`,
             perf3f,
-            perfType1Builder: (perfRow, pIdx) => {
+            attachedPerfectBuilder: (perfRow, pIdx) => {
                 if (pIdx === 2 && pv2 === "a") return `${C1}${pv1}${C2D}a`;
                 else if (pIdx === 3) return `${perf3f.slice(0, -1)}t`;
                 else if (pIdx === 7) return `${perfReduced}ew`;
                 return perfRow;
             },
             impfBase,
-            impfType1,
-            impfType2,
+            impfType1: attachedImperfect,
+            impfType2: syncopatedImperfect,
             impfPlural,
             impSg,
             impPl,
@@ -1082,7 +1131,7 @@ export function genFormIIIStrong(
             perfSync,
             perfReduced: perfImalaBlocked,
             perf3f: `${perfSync}et`,
-            perfType1Builder: (perfRow, pIdx) => {
+            attachedPerfectBuilder: (perfRow, pIdx) => {
                 if (pIdx === 2) return perfRow.replace(/e([^aeiou])$/, "i$1");
                 if (pIdx === 3) return `${perfSync}it`;
                 return perfRow;
@@ -1153,7 +1202,7 @@ export function genFormIIIDefective(
             perfSync: perfImalaBlocked,
             perfReduced: perfImalaBlocked + "ej",
             perf3f: `${perfImalaBlocked}iet`,
-            perfType1Builder: (perfRow, pIdx) => {
+            attachedPerfectBuilder: (perfRow, pIdx) => {
                 if (pIdx === 3) return `${perfImalaBlocked}it`;
                 return perfRow;
             },
@@ -1913,12 +1962,12 @@ function genFormXbDefective(
         return `${prefix}i${perfReduced}${suffix}`;
     };
 
-    const impfType1 = (person: number) => {
+    const attachedImperfect = (person: number) => {
         if (person >= 4) return impfPlural(person);
         return `${buildPrefix(person, "")}i${perfReduced}${attV}`;
     };
 
-    const impfType2 = (person: number) => {
+    const syncopatedImperfect = (person: number) => {
         if (person >= 4) return impfPlural(person);
         return `${buildPrefix(person, "")}${perfReduced}${attVj}`;
     };
@@ -1934,15 +1983,15 @@ function genFormXbDefective(
             perfSync: `${perfReduced}`,
             perfReduced: `${perfReduced}ej`,
             perf3f,
-            perfType1Builder: (perfRow, pIdx) => {
+            attachedPerfectBuilder: (perfRow, pIdx) => {
                 if (pIdx === 2 && pv2 === "a") return `st${C1}${pv1}${C2D}ie`;
                 else if (pIdx === 3) return `${perf3f.slice(0, -1)}t`;
                 else if (pIdx === 7) return `${perfReduced}ew`;
                 return perfRow;
             },
             impfBase,
-            impfType1,
-            impfType2,
+            impfType1: attachedImperfect,
+            impfType2: syncopatedImperfect,
             impfPlural,
             impSg,
             impPl,
@@ -2094,6 +2143,7 @@ export function generateConjugation(
                 input.vowelSetImperfect,
                 input.vowelSetImperative,
                 form,
+                input.isImalaBlocked,
             );
         }
         if (strength === "weak") {
@@ -2104,6 +2154,7 @@ export function generateConjugation(
                     input.vowelSetImperfect,
                     input.vowelSetImperative,
                     form,
+                    input.isImalaBlocked,
                 );
             }
             if (weakClass === "hollow") {
@@ -2113,6 +2164,7 @@ export function generateConjugation(
                     input.vowelSetImperfect,
                     input.vowelSetImperative,
                     form,
+                    input.isImalaBlocked,
                 );
             }
             if (weakClass === "defective") {
@@ -2133,6 +2185,7 @@ export function generateConjugation(
                 input.vowelSetImperfect,
                 input.vowelSetImperative,
                 form,
+                input.isImalaBlocked,
             );
         }
     }
@@ -3115,10 +3168,12 @@ function deriveQuadriliteralSyncopatedStem(surface: string): string {
     return surface;
 }
 
-function deriveQuadriliteralCliticStems(surface: string): { impfType1: string; impfType2: string } {
+function deriveQuadriliteralCliticStems(surface: string): StemVariantSet {
     return {
-        impfType1: deriveQuadriliteralAttachedStem(surface),
-        impfType2: deriveQuadriliteralSyncopatedStem(surface),
+        attached: deriveQuadriliteralAttachedStem(surface),
+        syncopated: deriveQuadriliteralSyncopatedStem(surface),
+        perfectAttached: deriveQuadriliteralAttachedStem(surface),
+        perfectSyncopated: deriveQuadriliteralSyncopatedStem(surface),
     };
 }
 
@@ -3160,16 +3215,18 @@ function buildWeakQuadriliteralDefectiveConjugation(
             imperfect: imperfectRows[idx],
             perfect_neg: perfectRows[idx],
               stems: useCliticStems
-                  ? {
-                      impfType1: deriveQuadriliteralCliticStems(imperfectRows[idx]).impfType1,
-                      impfType2: deriveQuadriliteralCliticStems(imperfectRows[idx]).impfType2,
+                ? {
+                      attached: deriveQuadriliteralCliticStems(imperfectRows[idx]).attached,
+                      syncopated: deriveQuadriliteralCliticStems(imperfectRows[idx]).syncopated,
+                      perfectAttached: deriveWeakQuadriliteralPerfectCliticStems(rootStem, idx, perfectRows[idx]).perfectAttached,
+                      perfectSyncopated: deriveWeakQuadriliteralPerfectCliticStems(rootStem, idx, perfectRows[idx]).perfectSyncopated,
                       ...deriveWeakQuadriliteralPerfectCliticStems(rootStem, idx, perfectRows[idx]),
                   }
                   : {
-                      impfType1: imperfectRows[idx],
-                      impfType2: imperfectRows[idx],
-                    perfType1: perfectRows[idx],
-                    perfType2: perfectRows[idx],
+                      attached: imperfectRows[idx],
+                      syncopated: imperfectRows[idx],
+                    perfectAttached: perfectRows[idx],
+                    perfectSyncopated: perfectRows[idx],
                 },
         }));
 
@@ -3178,19 +3235,19 @@ function buildWeakQuadriliteralDefectiveConjugation(
         imperative_sg: formIImperative,
         imperative_pl: formIImperativePl,
         imperative_sg_stems: {
-            impfType1: form === "I"
-                ? deriveQuadriliteralCliticStems(formIImperative).impfType1
+            attached: form === "I"
+                ? deriveQuadriliteralCliticStems(formIImperative).attached
                 : formIImperative,
-            impfType2: form === "I"
-                ? deriveQuadriliteralCliticStems(formIImperative).impfType2
+            syncopated: form === "I"
+                ? deriveQuadriliteralCliticStems(formIImperative).syncopated
                 : formIImperative,
         },
         imperative_pl_stems: {
-            impfType1: form === "I"
-                ? deriveQuadriliteralCliticStems(formIImperativePl).impfType1
+            attached: form === "I"
+                ? deriveQuadriliteralCliticStems(formIImperativePl).attached
                 : formIImperativePl,
-            impfType2: form === "I"
-                ? deriveQuadriliteralCliticStems(formIImperativePl).impfType2
+            syncopated: form === "I"
+                ? deriveQuadriliteralCliticStems(formIImperativePl).syncopated
                 : formIImperativePl,
         },
         blocksImala: isImalaBlocked,
@@ -3221,24 +3278,24 @@ function deriveWeakQuadriliteralPerfectCliticStems(
     rootStem: string,
     rowIndex: number,
     perfectRow: string,
-): { perfType1: string; perfType2: string } {
+): { perfectAttached: string; perfectSyncopated: string } {
     if (rowIndex === 2) {
         return {
-            perfType1: `${rootStem}i`,
-            perfType2: `${rootStem}i`,
+            perfectAttached: `${rootStem}i`,
+            perfectSyncopated: `${rootStem}i`,
         };
     }
 
     if (rowIndex === 3) {
         return {
-            perfType1: `${rootStem}it`,
-            perfType2: `${rootStem}it`,
+            perfectAttached: `${rootStem}it`,
+            perfectSyncopated: `${rootStem}it`,
         };
     }
 
     return {
-        perfType1: deriveQuadriliteralCliticStems(perfectRow).impfType1,
-        perfType2: deriveQuadriliteralCliticStems(perfectRow).impfType2,
+        perfectAttached: deriveQuadriliteralCliticStems(perfectRow).attached,
+        perfectSyncopated: deriveQuadriliteralCliticStems(perfectRow).syncopated,
     };
 }
 
@@ -3263,10 +3320,10 @@ function generateQuadriliteralFormI(
             imperfect: `n${rootStem}`,
             perfect_neg: `${rootStem}t`,
             stems: {
-                impfType1: deriveQuadriliteralCliticStems(`n${rootStem}`).impfType1,
-                impfType2: deriveQuadriliteralCliticStems(`n${rootStem}`).impfType2,
-                perfType1: deriveQuadriliteralCliticStems(`${rootStem}t`).impfType1,
-                perfType2: deriveQuadriliteralCliticStems(`${rootStem}t`).impfType2,
+                attached: deriveQuadriliteralCliticStems(`n${rootStem}`).attached,
+                syncopated: deriveQuadriliteralCliticStems(`n${rootStem}`).syncopated,
+                perfectAttached: deriveQuadriliteralCliticStems(`${rootStem}t`).attached,
+                perfectSyncopated: deriveQuadriliteralCliticStems(`${rootStem}t`).syncopated,
             },
         },
         {
@@ -3276,10 +3333,10 @@ function generateQuadriliteralFormI(
             imperfect: `t${rootStem}`,
             perfect_neg: `${rootStem}t`,
             stems: {
-                impfType1: deriveQuadriliteralCliticStems(`t${rootStem}`).impfType1,
-                impfType2: deriveQuadriliteralCliticStems(`t${rootStem}`).impfType2,
-                perfType1: deriveQuadriliteralCliticStems(`${rootStem}t`).impfType1,
-                perfType2: deriveQuadriliteralCliticStems(`${rootStem}t`).impfType2,
+                attached: deriveQuadriliteralCliticStems(`t${rootStem}`).attached,
+                syncopated: deriveQuadriliteralCliticStems(`t${rootStem}`).syncopated,
+                perfectAttached: deriveQuadriliteralCliticStems(`${rootStem}t`).attached,
+                perfectSyncopated: deriveQuadriliteralCliticStems(`${rootStem}t`).syncopated,
             },
         },
         {
@@ -3289,10 +3346,10 @@ function generateQuadriliteralFormI(
             imperfect: `j${rootStem}`,
             perfect_neg: rootStem,
             stems: {
-                impfType1: deriveQuadriliteralCliticStems(`j${rootStem}`).impfType1,
-                impfType2: deriveQuadriliteralCliticStems(`j${rootStem}`).impfType2,
-                perfType1: deriveQuadriliteralCliticStems(rootStem).impfType1,
-                perfType2: deriveQuadriliteralCliticStems(rootStem).impfType2,
+                attached: deriveQuadriliteralCliticStems(`j${rootStem}`).attached,
+                syncopated: deriveQuadriliteralCliticStems(`j${rootStem}`).syncopated,
+                perfectAttached: deriveQuadriliteralCliticStems(rootStem).attached,
+                perfectSyncopated: deriveQuadriliteralCliticStems(rootStem).syncopated,
             },
         },
         {
@@ -3302,12 +3359,12 @@ function generateQuadriliteralFormI(
             imperfect: `t${rootStem}`,
             perfect_neg: `${rootClusterStem}it`,
             stems: {
-                impfType1: deriveQuadriliteralCliticStems(`t${rootStem}`).impfType1,
-                impfType2: deriveQuadriliteralCliticStems(`t${rootStem}`).impfType2,
+                attached: deriveQuadriliteralCliticStems(`t${rootStem}`).attached,
+                syncopated: deriveQuadriliteralCliticStems(`t${rootStem}`).syncopated,
                 // Derive the clitic stem from the surface form so qartset -> qartsit
                 // and għargħret -> għargħrit.
-                perfType1: perfect3fs.replace(/et$/, "it"),
-                perfType2: perfect3fs.replace(/et$/, "it"),
+                perfectAttached: perfect3fs.replace(/et$/, "it"),
+                perfectSyncopated: perfect3fs.replace(/et$/, "it"),
             },
         },
         {
@@ -3317,10 +3374,10 @@ function generateQuadriliteralFormI(
             imperfect: `n${pluralStem}u`,
             perfect_neg: `${rootStem}na`,
             stems: {
-                impfType1: deriveQuadriliteralCliticStems(`n${pluralStem}u`).impfType1,
-                impfType2: deriveQuadriliteralCliticStems(`n${pluralStem}u`).impfType2,
-                perfType1: deriveQuadriliteralCliticStems(`${rootStem}na`).impfType1,
-                perfType2: deriveQuadriliteralCliticStems(`${rootStem}na`).impfType2,
+                attached: deriveQuadriliteralCliticStems(`n${pluralStem}u`).attached,
+                syncopated: deriveQuadriliteralCliticStems(`n${pluralStem}u`).syncopated,
+                perfectAttached: deriveQuadriliteralCliticStems(`${rootStem}na`).attached,
+                perfectSyncopated: deriveQuadriliteralCliticStems(`${rootStem}na`).syncopated,
             },
         },
         {
@@ -3330,10 +3387,10 @@ function generateQuadriliteralFormI(
             imperfect: `t${pluralStem}u`,
             perfect_neg: `${rootStem}tu`,
             stems: {
-                impfType1: deriveQuadriliteralCliticStems(`t${pluralStem}u`).impfType1,
-                impfType2: deriveQuadriliteralCliticStems(`t${pluralStem}u`).impfType2,
-                perfType1: deriveQuadriliteralCliticStems(`${rootStem}tu`).impfType1,
-                perfType2: deriveQuadriliteralCliticStems(`${rootStem}tu`).impfType2,
+                attached: deriveQuadriliteralCliticStems(`t${pluralStem}u`).attached,
+                syncopated: deriveQuadriliteralCliticStems(`t${pluralStem}u`).syncopated,
+                perfectAttached: deriveQuadriliteralCliticStems(`${rootStem}tu`).attached,
+                perfectSyncopated: deriveQuadriliteralCliticStems(`${rootStem}tu`).syncopated,
             },
         },
         {
@@ -3343,10 +3400,10 @@ function generateQuadriliteralFormI(
             imperfect: `j${pluralStem}u`,
             perfect_neg: `${pluralStem}u`,
             stems: {
-                impfType1: deriveQuadriliteralCliticStems(`j${pluralStem}u`).impfType1,
-                impfType2: deriveQuadriliteralCliticStems(`j${pluralStem}u`).impfType2,
-                perfType1: deriveQuadriliteralCliticStems(`${pluralStem}u`).impfType1,
-                perfType2: deriveQuadriliteralCliticStems(`${pluralStem}u`).impfType2,
+                attached: deriveQuadriliteralCliticStems(`j${pluralStem}u`).attached,
+                syncopated: deriveQuadriliteralCliticStems(`j${pluralStem}u`).syncopated,
+                perfectAttached: deriveQuadriliteralCliticStems(`${pluralStem}u`).attached,
+                perfectSyncopated: deriveQuadriliteralCliticStems(`${pluralStem}u`).syncopated,
             },
         },
     ];
@@ -3356,12 +3413,12 @@ function generateQuadriliteralFormI(
         imperative_sg: rootStem,
         imperative_pl: `${rootClusterStem}u`,
         imperative_sg_stems: {
-            impfType1: deriveQuadriliteralCliticStems(rootStem).impfType1,
-            impfType2: deriveQuadriliteralCliticStems(rootStem).impfType2,
+            attached: deriveQuadriliteralCliticStems(rootStem).attached,
+            syncopated: deriveQuadriliteralCliticStems(rootStem).syncopated,
         },
         imperative_pl_stems: {
-            impfType1: deriveQuadriliteralCliticStems(`${rootClusterStem}u`).impfType1,
-            impfType2: deriveQuadriliteralCliticStems(`${rootClusterStem}u`).impfType2,
+            attached: deriveQuadriliteralCliticStems(`${rootClusterStem}u`).attached,
+            syncopated: deriveQuadriliteralCliticStems(`${rootClusterStem}u`).syncopated,
         },
         blocksImala: isImalaBlocked,
     };
@@ -3408,10 +3465,10 @@ function deriveQuadriliteralFormII(base: VerbConjugationTable): VerbConjugationT
             perfect_neg: row.perfect_neg ? deriveQuadriliteralAssimilatedStem(row.perfect_neg) : undefined,
             stems: row.stems
                 ? {
-                    impfType1: deriveQuadriliteralImperfectStem(row.stems.impfType1),
-                    impfType2: deriveQuadriliteralImperfectStem(row.stems.impfType2),
-                    perfType1: deriveQuadriliteralAssimilatedStem(row.stems.perfType1),
-                    perfType2: deriveQuadriliteralAssimilatedStem(row.stems.perfType2),
+                    attached: deriveQuadriliteralImperfectStem(row.stems.attached),
+                    syncopated: deriveQuadriliteralImperfectStem(row.stems.syncopated),
+                    perfectAttached: deriveQuadriliteralAssimilatedStem(row.stems.perfectAttached ?? row.perfect),
+                    perfectSyncopated: deriveQuadriliteralAssimilatedStem(row.stems.perfectSyncopated ?? row.perfect),
                 }
                 : undefined,
         };
@@ -3424,14 +3481,14 @@ function deriveQuadriliteralFormII(base: VerbConjugationTable): VerbConjugationT
         imperative_pl: deriveQuadriliteralAssimilatedStem(base.imperative_pl),
         imperative_sg_stems: base.imperative_sg_stems
             ? {
-                impfType1: deriveQuadriliteralImperfectStem(base.imperative_sg_stems.impfType1),
-                impfType2: deriveQuadriliteralImperfectStem(base.imperative_sg_stems.impfType2),
+                attached: deriveQuadriliteralImperfectStem(base.imperative_sg_stems.attached),
+                syncopated: deriveQuadriliteralImperfectStem(base.imperative_sg_stems.syncopated),
             }
             : undefined,
         imperative_pl_stems: base.imperative_pl_stems
             ? {
-                impfType1: deriveQuadriliteralImperfectStem(base.imperative_pl_stems.impfType1),
-                impfType2: deriveQuadriliteralImperfectStem(base.imperative_pl_stems.impfType2),
+                attached: deriveQuadriliteralImperfectStem(base.imperative_pl_stems.attached),
+                syncopated: deriveQuadriliteralImperfectStem(base.imperative_pl_stems.syncopated),
             }
             : undefined,
     };

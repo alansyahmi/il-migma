@@ -75,7 +75,12 @@ export function EtymologySentence({
                     </span>
                     {item.term && <span className="ml-1 font-serif font-medium" dir="auto">{item.term}</span>}
                     {!item.term && item.form && <span className="ml-1 font-serif font-medium" dir="auto">{item.form}</span>}
-                    {item.pronunciation && <span className="opacity-70"> ({item.pronunciation})</span>}
+                    {item.pronunciation && (
+                        <span className="opacity-70">
+                            {' '}
+                            (<em>{item.pronunciation}</em>)
+                        </span>
+                    )}
                     {(item.definition || item.meaning) && (
                         <span className="opacity-70">
                             {" "}

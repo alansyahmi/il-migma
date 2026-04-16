@@ -18,6 +18,7 @@
     "test:entry-id": "node --experimental-strip-types scripts/entryId.test.mjs",
     "test:stem-forms": "node --experimental-strip-types scripts/stemForms.test.mjs",
     "test:etymology-contract": "node --experimental-strip-types scripts/etymologyContract.test.mjs",
+    "test:foreign-script-pronunciation": "node --experimental-strip-types scripts/foreignScriptPronunciation.test.mjs",
     "test:pattern-metadata": "node --experimental-strip-types scripts/patternMetadata.test.mjs",
     "test:inflection-state": "node --experimental-strip-types scripts/inflectionState.test.mjs",
     "import:dry": "node scripts/import-xls.mjs --dry-run",

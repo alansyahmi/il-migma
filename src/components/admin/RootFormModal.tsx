@@ -6,6 +6,7 @@ import { Plus, Trash2, ArrowUp, ArrowDown, AlertCircle } from 'lucide-react';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { adminCreateRoot, adminUpdateRoot } from '@/lib/api';
 import { normalizeRootEtymologyChain, normalizeRootGloss, normalizeRootRelationships, type RootFormData } from '@/lib/adminUtils';
+import { inferImalaBlocked } from '@/lib/imala';
 import { buildRootPayload, ROOT_HANDLED_FIELDS } from '@/lib/adminSchema';
 
 const LazyRelationshipEditor = lazy(() =>
@@ -46,13 +47,18 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
             vowel_set_perf: data.vowel_set_perf || 'a-a',
             vowel_set_impf: data.vowel_set_impf || 'i-a',
             vowel_set_imp: data.vowel_set_imp || 'i-a',
-            is_imala_blocked: !!data.is_imala_blocked,
+            is_imala_blocked: isNew ? false : inferImalaBlocked({
+                consonants: data.consonants || '',
+                vowel_set_perf: data.vowel_set_perf,
+                vowel_set_impf: data.vowel_set_impf,
+                vowel_set_imp: data.vowel_set_imp,
+            }),
             tags: Array.isArray(data.tags) ? data.tags.join(', ') : (typeof data.tags === 'string' && data.tags.startsWith('[') ? JSON.parse(data.tags).join(', ') : (data.tags || '')),
             synonyms: normalizeRootRelationships(data.synonyms),
             antonyms: normalizeRootRelationships(data.antonyms),
             related_entries: normalizeRootRelationships(data.related_entries),
         };
-    }, [data]);
+    }, [data, isNew]);
 
     const [form, setForm] = useState<RootFormData>(initialState);
     const [saving, setSaving] = useState(false);
@@ -259,7 +265,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                                 <input
                                     type="checkbox"
                                     className="w-4 h-4 rounded border-black/20 text-[#1034A6] focus:ring-[#1034A6]"
-                                    checked={!!form.is_imala_blocked}
+                                    checked={isNew ? !!form.is_imala_blocked : inferImalaBlocked(form)}
                                     onChange={(e) => setForm({ ...form, is_imala_blocked: e.target.checked })}
                                 />
                                 <span className="text-xs font-semibold text-black uppercase tracking-wider group-hover:text-[#1034A6] transition-colors">

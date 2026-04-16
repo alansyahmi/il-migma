@@ -156,16 +156,7 @@ export interface ConjugationRow {
     perfect: string;            // perfect positive
     perfect_neg?: string;       // perfect negative form (3sg may shift vowel grade)
     // Stems used for automated suffix attachment (clitics)
-    stems?: {
-        /** Vowel-shifted stem for consonant-initial suffixes (-ni, -ha, -hom). e.g., jiktib- */
-        impfType1: string;
-        /** Syncopated/Shifted stem for vowel-initial suffixes (-u, -ok). e.g., jiktb- */
-        impfType2: string;
-        /** Perfect vowel-shifted stem. e.g., kitbit- */
-        perfType1: string;
-        /** Perfect base/syncopated stem. e.g., kitb- */
-        perfType2: string;
-    };
+    stems?: StemVariantSet;
 }
 
 export interface VerbConjugationTable {
@@ -173,14 +164,25 @@ export interface VerbConjugationTable {
     imperative_sg: string;
     imperative_pl: string;
     /** Clitic attachment stems for imperative singular */
-    imperative_sg_stems?: { impfType1: string; impfType2: string };
+    imperative_sg_stems?: StemVariantSet;
     /** Clitic attachment stems for imperative plural */
-    imperative_pl_stems?: { impfType1: string; impfType2: string };
+    imperative_pl_stems?: StemVariantSet;
     // Negative forms (shown when polarity toggle = Negative)
     imperative_sg_neg?: string;
     imperative_pl_neg?: string;
     /** Whether this verb blocks the automatic a->ie vowel shift (Imala) b/c of a final guttural */
     blocksImala?: boolean;
+}
+
+export interface StemVariantSet {
+    /** Stem used when a clitic prefers the fuller, vowel-preserving form. */
+    attached: string;
+    /** Stem used when a clitic prefers the syncopated, vowel-dropping form. */
+    syncopated: string;
+    /** Perfect attached stem, where relevant. Falls back to `attached` when omitted. */
+    perfectAttached?: string;
+    /** Perfect syncopated stem, where relevant. Falls back to `syncopated` when omitted. */
+    perfectSyncopated?: string;
 }
 
 export interface VerbMorphology {

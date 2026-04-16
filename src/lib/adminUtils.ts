@@ -21,6 +21,7 @@ export interface StemEtymology extends EtymologyBaseStep {}
 
 export interface EntryEtymology extends EtymologyBaseStep {
     pronunciation: string;
+    script?: string;
 }
 
 export type EtymologyStep = RootEtymology | EntryEtymology;
@@ -329,9 +330,11 @@ function normalizeEtymologyStep(ety: any, defaultRelationship: string, includePr
             };
 
             if (includePronunciation) {
+                const script = pick(parsed, ['script', 'source_script', 'sourceScript']);
                 return {
                     ...normalized,
                     pronunciation: pick(parsed, ['pronunciation', 'ipa', 'transcription', 'phonetic', 'reading']),
+                    ...(script ? { script } : {}),
                 } as EntryEtymology;
             }
 

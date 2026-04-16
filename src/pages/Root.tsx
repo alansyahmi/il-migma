@@ -10,6 +10,7 @@ import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { RootFormModal } from '@/components/admin/RootFormModal';
 import { type RootFormData } from '@/lib/adminUtils';
+import { inferImalaBlocked } from '@/lib/imala';
 import { adminUpdateRoot, adminDeleteEntry } from '@/lib/api';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
@@ -164,12 +165,19 @@ export function Root() {
         if (!rootObj) return { generatedTable: [], shownIds: new Set<string>() };
         const pvSet = rootObj.vowel_set_perf || vm?.vowel_set_perfect || 'a-a';
         const ipvSet = rootObj.vowel_set_impf || vm?.vowel_set_imperfect || 'i-a';
+        const imalaBlocked = inferImalaBlocked({
+            consonants: rootObj.consonants,
+            vowel_set_perf: pvSet,
+            vowel_set_impf: ipvSet,
+            vowel_set_imp: rootObj.vowel_set_imp || vm?.vowel_set_imperative || 'o-o',
+        });
         const rawGen = generateRootForms(
             rootObj.consonants,
             pvSet,
             ipvSet,
             (rootObj.strength || 'strong') as VerbStrength,
-            rootObj.weak_class as any
+            rootObj.weak_class as any,
+            imalaBlocked
         );
 
         // Collect attested forms from all rootEntries

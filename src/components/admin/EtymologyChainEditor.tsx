@@ -2,9 +2,10 @@ import { useId } from 'react';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import type { EtymologyBaseStep } from '@/lib/adminUtils';
+import { generateForeignScriptPronunciation } from '@/lib/foreignScriptPronunciation';
 
 type EtymologyFieldKey = keyof EtymologyBaseStep | 'pronunciation';
-type EtymologyChainItem = EtymologyBaseStep & { pronunciation?: string };
+type EtymologyChainItem = EtymologyBaseStep & { pronunciation?: string; script?: string };
 
 type EtymologyChainEditorProps = {
     title: string;
@@ -64,10 +65,19 @@ export function EtymologyChainEditor({
 
     const updateStep = (index: number, key: EtymologyFieldKey, value: string) => {
         const next = [...items];
-        next[index] = {
+        const updated = {
             ...next[index],
             [key]: value,
         };
+
+        if (showPronunciation && key !== 'pronunciation' && (key === 'language' || key === 'term')) {
+            const generatedPronunciation = generateForeignScriptPronunciation(updated);
+            if (generatedPronunciation && !String(updated.pronunciation || '').trim()) {
+                updated.pronunciation = generatedPronunciation;
+            }
+        }
+
+        next[index] = updated;
         onChange(next);
     };
 
@@ -108,7 +118,7 @@ export function EtymologyChainEditor({
 
             <div className="space-y-4 mt-1">
                 {items.map((item, index) => (
-                    <div key={`${index}-${item.relationship}-${item.language}`} className="relative">
+                    <div key={index} className="relative">
                         <button
                             type="button"
                             onClick={() => removeStep(index)}
@@ -151,7 +161,18 @@ export function EtymologyChainEditor({
                             </div>
                             {showPronunciation && (
                                 <div>
-                                    <label className={labelClassName}>{pronunciationLabel}</label>
+                                    <div className="flex items-center justify-between gap-2">
+                                        <label className={labelClassName}>{pronunciationLabel}</label>
+                                        {generateForeignScriptPronunciation(item) && (
+                                            <button
+                                                type="button"
+                                                className="text-[10px] font-semibold uppercase tracking-wider text-[#1034A6] hover:underline"
+                                                onClick={() => updateStep(index, 'pronunciation', generateForeignScriptPronunciation(item))}
+                                            >
+                                                Auto
+                                            </button>
+                                        )}
+                                    </div>
                                     <input
                                         className={inputClassName}
                                         value={'pronunciation' in item ? item.pronunciation || '' : ''}

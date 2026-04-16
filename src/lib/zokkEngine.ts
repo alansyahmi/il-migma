@@ -162,10 +162,10 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
             perfect,
             imperfect,
             stems: {
-                impfType1: imperfect, 
-                impfType2: imperfect,
-                perfType1: perfect,
-                perfType2: perfect
+                attached: imperfect,
+                syncopated: imperfect,
+                perfectAttached: perfect,
+                perfectSyncopated: perfect,
             }
         });
     }

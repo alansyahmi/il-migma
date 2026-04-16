@@ -27,6 +27,7 @@ import { StackedSurface } from '@/components/dictionary/VerbFormsTable';
 import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
 import { isSuffixLikeValue } from '@/lib/suffixMatching';
 import { isInflectableEnabled, shouldHideInflectionTable } from '@/lib/inflectionState';
+import { inferImalaBlocked } from '@/lib/imala';
 import {
     buildNumeralDisplayForms,
     getNumeralShortAttributiveRowLabel,
@@ -2463,6 +2464,15 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const vsetImpf = entry.verb_vowel_impf || vm.vowel_set_imperfect;
     const vsetPerf = entry.verb_vowel_perf || vm.vowel_set_perfect;
     const vsetImp = vm.vowel_set_imperative || 'o-o';
+    const rootImalaBlocked = useMemo(
+        () => inferImalaBlocked({
+            consonants: entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root || '',
+            vowel_set_perf: entry.root_pattern_form?.root?.vowel_set_perf || vsetPerf,
+            vowel_set_impf: entry.root_pattern_form?.root?.vowel_set_impf || vsetImpf,
+            vowel_set_imp: entry.root_pattern_form?.root?.vowel_set_imp || vsetImp,
+        }),
+        [entry, vsetPerf, vsetImpf, vsetImp]
+    );
     const stemDefaults = entry.zokk_morphology ? resolveStemDefaults(entry.zokk_morphology as any) : null;
 
     // Derive or use stored conjugation
@@ -2486,7 +2496,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                 strength: (entry.verb_class as any) || rootObj?.strength || stemDefaults?.strength || 'strong',
 
                 weakClass: (entry.verb_weak_class as any) || rootObj?.weak_class || stemDefaults?.weak_class,
-                isImalaBlocked: rootObj?.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rootStr),
+                isImalaBlocked: rootImalaBlocked,
                 vowelSetPerfect: vsetPerf,
                 vowelSetImperfect: vsetImpf,
                 vowelSetImperative: vsetImp,
@@ -2523,7 +2533,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                 ipvSet,
                 (rootObj?.strength || f1vm?.verb_class || stemDefaults?.strength || 'strong') as any,
                 (rootObj?.weak_class || f1vm?.weak_class || stemDefaults?.weak_class) as any,
-                rootObj?.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rootStr)
+                rootImalaBlocked
             );
             // Use siblings if available, otherwise just itself
             const attested = getAttestedEntries(derivedRootEntries);
@@ -2533,7 +2543,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
             console.error("Auto-derivation error:", e);
             return null;
         }
-    }, [entry, derivedRootEntries, stemDefaults, vm.form]);
+    }, [entry, derivedRootEntries, stemDefaults, vm.form, rootImalaBlocked]);
     const isVisibleDerivedTerm = (data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string }) =>
         data.value !== '-' && !shouldHideSurface(data, hideTheoreticalForms);
 
@@ -2786,8 +2796,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             <p>{term('strength')}: {entry.verb_class || entry.root_pattern_form.root.strength}</p>
                                             {(entry.verb_weak_class || entry.root_pattern_form.root.weak_class) && <p>{term('weak-class')}: {entry.verb_weak_class || entry.root_pattern_form.root.weak_class}</p>}
                                             <p>{term('imala-blocked')}: {
-                                                (entry.root_pattern_form.root.is_imala_blocked ||
-                                                    /[\u0127q]|g\u0127|h/i.test(entry.root_pattern_form.root.consonants))
+                                                rootImalaBlocked
                                                     ? term('yes') : term('no')}
                                             </p>
                                         </div>
@@ -2863,8 +2872,8 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                                         // Prefer engine-provided stems, fallback to basic logic
                                                         const stems = isNeg ? row.stems : (conj.imperative_sg_stems || {
-                                                            impfType1: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1'),
-                                                            impfType2: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1')
+                                                            attached: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1'),
+                                                            syncopated: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1')
                                                         });
 
                                                         const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
@@ -2882,8 +2891,8 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                                         // Prefer engine-provided stems, fallback to basic logic
                                                         const stems = isNeg ? row.stems : (conj.imperative_pl_stems || {
-                                                            impfType1: conj.imperative_pl,
-                                                            impfType2: conj.imperative_pl
+                                                            attached: conj.imperative_pl,
+                                                            syncopated: conj.imperative_pl
                                                         });
 
                                                         const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
@@ -2984,7 +2993,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 {(() => {
                                                                     const row = conj.rows[1];
                                                                     const base = isNeg ? row.imperfect : conj.imperative_sg;
-                                                                    const stems = isNeg ? row.stems : (conj.imperative_sg_stems || { impfType1: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1'), impfType2: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1') });
+                                                                    const stems = isNeg ? row.stems : (conj.imperative_sg_stems || { attached: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1'), syncopated: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1') });
                                                                     const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
                                                                     return <MarkedValue val={isNeg ? result.replace(/^ma /, '') : result} theoretical={isTheoretical} />;
                                                                 })()}
@@ -2996,7 +3005,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 {(() => {
                                                                     const row = conj.rows[5];
                                                                     const base = isNeg ? row.imperfect : conj.imperative_pl;
-                                                                    const stems = isNeg ? row.stems : (conj.imperative_pl_stems || { impfType1: conj.imperative_pl, impfType2: conj.imperative_pl });
+                                                                    const stems = isNeg ? row.stems : (conj.imperative_pl_stems || { attached: conj.imperative_pl, syncopated: conj.imperative_pl });
                                                                     const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
                                                                     return <MarkedValue val={isNeg ? result.replace(/^ma /, '') : result} theoretical={isTheoretical} />;
                                                                 })()}

@@ -12,6 +12,15 @@
  *  • ma…x negative wrapping
  */
 
+import type { StemVariantSet } from '@/types';
+
+type LegacyStemVariantInput = Partial<StemVariantSet> & {
+    impfType1?: string;
+    impfType2?: string;
+    perfType1?: string;
+    perfType2?: string;
+};
+
 // ── Vowel set helpers ──────────────────────────────────────────────────────
 
 /**
@@ -344,20 +353,21 @@ export function buildVerbForm(
     doIdx: number | null,
     ioIdx: number | null,
     vset: string,
-    stems?: { impfType1: string; impfType2: string },
+    stems?: StemVariantSet,
     blocksImala: boolean = false,
     verbForm?: string
 ): string {
     // ── Handle Slashed Variants (e.g. mmur / nmur) ───────────────────────
+    const legacyStems = stems as LegacyStemVariantInput | undefined;
     if (baseForm.includes(' / ')) {
         const partsBase = baseForm.split(' / ');
-        const partsT1 = (stems?.impfType1 || baseForm).split(' / ');
-        const partsT2 = (stems?.impfType2 || baseForm).split(' / ');
+        const partsAttached = (stems?.attached || legacyStems?.impfType1 || baseForm).split(' / ');
+        const partsSyncopated = (stems?.syncopated || legacyStems?.impfType2 || baseForm).split(' / ');
 
         const results = partsBase.map((b, i) => {
             const s = {
-                impfType1: partsT1[i] ?? partsT1[0],
-                impfType2: partsT2[i] ?? partsT2[0],
+                attached: partsAttached[i] ?? partsAttached[0],
+                syncopated: partsSyncopated[i] ?? partsSyncopated[0],
             };
             return buildVerbForm(b, isNeg, doIdx, ioIdx, vset, s, blocksImala, verbForm);
         });
@@ -368,8 +378,8 @@ export function buildVerbForm(
     if (doIdx === null && ioIdx === null) {
         if (isNeg) {
             // PHARYNGEAL EXCEPTION: for singular jilqa' + x -> jilqax
-            // Instead of using it1 (jilqagħ) which gives ma jilqagħx
-            let stem = stems?.impfType1 || baseForm;
+            // Instead of using the attached stem (jilqagħ) which gives ma jilqagħx
+            let stem = stems?.attached || legacyStems?.impfType1 || baseForm;
             if (blocksImala && baseForm.endsWith("'")) {
                 stem = baseForm.replace(/'$/, '');
             }
@@ -378,26 +388,26 @@ export function buildVerbForm(
         return baseForm;
     }
 
-    // Stem selection logic based on three-stem framework
-    const t1 = stems?.impfType1 || baseForm;
-    const t2 = stems?.impfType2 || baseForm;
+    // Stem selection logic based on attached vs syncopated forms
+    const attachedStem = stems?.attached || legacyStems?.impfType1 || baseForm;
+    const syncopatedStem = stems?.syncopated || legacyStems?.impfType2 || baseForm;
 
     let result: string;
     if (doIdx !== null && ioIdx !== null) {
-        // Combined DO+IO: use Type 1 stem
-        const res = applyDoIo(t1, doIdx, ioIdx, vset, verbForm, blocksImala);
+        // Combined DO+IO: use the attached stem
+        const res = applyDoIo(attachedStem, doIdx, ioIdx, vset, verbForm, blocksImala);
         result = isNeg ? res.negative : res.positive;
     } else if (doIdx !== null) {
-        // DO idx 1 (-ek/-ok) and idx 2 (-u) are vowel-initial -> syncopated stem (Type 2)
+        // DO idx 1 (-ek/-ok) and idx 2 (-u) are vowel-initial -> syncopated stem
         // EXCEPTION: if the base stem ends in a vowel (Defective/Perfective), syncing produces illegal clusters
-        // or misses the -h/-k suffix variants. So we use t1.
-        const stem = (doIdx === 1 || doIdx === 2) ? (/[aeiouwàèìòùâêîôû]$/i.test(t1) ? t1 : t2) : t1;
+        // or misses the -h/-k suffix variants. So we use the attached form.
+        const stem = (doIdx === 1 || doIdx === 2) ? (/[aeiouwàèìòùâêîôû]$/i.test(attachedStem) ? attachedStem : syncopatedStem) : attachedStem;
         const res = applyDo(stem, doIdx, vset, verbForm, blocksImala);
         result = isNeg ? res.negative : res.positive;
     } else {
         // IO only:
-        // idx 3-6 (-lha/-lna/-lkom/-lhom) -> need Type 2 stem so -il- epenthesis fires
-        const stem = (ioIdx! >= 3) ? t2 : t1;
+        // idx 3-6 (-lha/-lna/-lkom/-lhom) -> need the syncopated stem so -il- epenthesis fires
+        const stem = (ioIdx! >= 3) ? syncopatedStem : attachedStem;
         const res = applyIo(stem, ioIdx!, vset, verbForm, blocksImala);
         result = isNeg ? res.negative : res.positive;
     }
@@ -412,11 +422,12 @@ export function buildPerfectForm(
     doIdx: number | null,
     ioIdx: number | null,
     vset: string,
-    stems?: { perfType1: string; perfType2: string },
+    stems?: StemVariantSet,
     blocksImala: boolean = false,
     verbForm?: string
 ): string {
     const base = isNeg ? perfectNeg : perfectPos;
+    const legacyStems = stems as LegacyStemVariantInput | undefined;
 
     if (doIdx === null && ioIdx === null) {
         if (isNeg) {
@@ -426,34 +437,34 @@ export function buildPerfectForm(
     }
 
     // Clitic attachment
-    let t1 = applyReverseImala(stems?.perfType1 || base, blocksImala);
-    const t2 = applyReverseImala(stems?.perfType2 || base, blocksImala);
+    const attachedStem = applyReverseImala(stems?.perfectAttached || stems?.attached || legacyStems?.perfType1 || base, blocksImala);
+    const syncopatedStem = applyReverseImala(stems?.perfectSyncopated || stems?.syncopated || legacyStems?.perfType2 || base, blocksImala);
 
     let finalResult: string;
 
     if (doIdx !== null && ioIdx !== null) {
-        const result = applyDoIo(t1, doIdx, ioIdx, vset, verbForm, blocksImala);
+        const result = applyDoIo(attachedStem, doIdx, ioIdx, vset, verbForm, blocksImala);
         finalResult = isNeg ? result.negative : result.positive;
     } else if (doIdx !== null) {
-        let perfBase = t1;
+        let perfBase = attachedStem;
         if (doIdx === 2) {
-            // Perfect + DO=-u: handles syncopation/shift internally or via t2
+            // Perfect + DO=-u: handles syncopation/shift internally or via the syncopated stem
             if (base.endsWith('et') && !base.endsWith('iet')) {
                 perfBase = base.slice(0, -2) + 'it';
             } else if (base.endsWith('it')) {
                 perfBase = base;
-            } else if (/[aeiouwàèìòùâêîôû]$/i.test(t1)) {
-                perfBase = t1;
+            } else if (/[aeiouwàèìòùâêîôû]$/i.test(attachedStem)) {
+                perfBase = attachedStem;
             } else if (!base.endsWith('na')) {
-                perfBase = t2;
+                perfBase = syncopatedStem;
             }
         } else if (doIdx === 1) {
-            perfBase = base.endsWith('na') ? t1 : t2;
+            perfBase = base.endsWith('na') ? attachedStem : syncopatedStem;
         }
         const result = applyDo(perfBase, doIdx, vset, verbForm, blocksImala);
         finalResult = isNeg ? result.negative : result.positive;
     } else {
-        const stem = (ioIdx! >= 3) ? (base.endsWith('na') ? t1 : t2) : t1;
+        const stem = (ioIdx! >= 3) ? (base.endsWith('na') ? attachedStem : syncopatedStem) : attachedStem;
         const result = applyIo(stem, ioIdx!, vset, verbForm, blocksImala);
         finalResult = isNeg ? result.negative : result.positive;
     }

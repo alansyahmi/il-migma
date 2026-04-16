@@ -395,6 +395,24 @@ assertEq(weakQuadFormII.rows[4].imperfect, 'jissaqsu', 'weak quadriliteral Form 
 assertEq(weakQuadFormII.rows[5].imperfect, 'jissaqsu', 'weak quadriliteral Form II 2p imperfect');
 assertEq(weakQuadFormII.rows[6].imperfect, 'jissaqsu', 'weak quadriliteral Form II 3p imperfect');
 
+const hollowBlocked = generateConjugation({
+    root: 'd-w-r',
+    form: 'II',
+    strength: 'weak',
+    weakClass: 'hollow',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'a-a',
+    vowelSetImperative: 'a-a',
+    isImalaBlocked: true,
+});
+
+assertEq(hollowBlocked.blocksImala, true, 'blocked hollow Form II should expose blocked metadata');
+assertEq(hollowBlocked.rows[0].perfect, 'dawwart', 'blocked hollow Form II 1s perfect');
+assertEq(hollowBlocked.rows[1].perfect, 'dawwart', 'blocked hollow Form II 2s perfect');
+assertEq(hollowBlocked.rows[2].perfect, 'dawwar', 'blocked hollow Form II 3ms perfect');
+assertEq(hollowBlocked.rows[4].perfect, 'dawwarna', 'blocked hollow Form II 1p perfect');
+assertEq(hollowBlocked.rows[5].perfect, 'dawwartu', 'blocked hollow Form II 2p perfect');
+
 const weakQuadRootFormsII = generateRootForms('s-q-s-w', 'a-a', 'i-a', 'weak', 'defective');
 assertEq(weakQuadRootFormsII[1].verbalNoun, 'ssaqsija', 'weak quadriliteral Form II verbal noun');
 
