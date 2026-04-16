@@ -188,8 +188,8 @@ function buildConjugationTable(
         const base = i >= 4 ? recipe.impfPlural(i) : recipe.impfBase(i);
         impfForms.push(base);
 
-        const attachedImperfect = recipe.attachedImperfect ?? recipe.impfType1;
-        const syncopatedImperfect = recipe.syncopatedImperfect ?? recipe.impfType2;
+        const attachedImperfect = recipe.attachedImperfect ?? recipe.impfType1 ?? recipe.impfBase;
+        const syncopatedImperfect = recipe.syncopatedImperfect ?? recipe.impfType2 ?? recipe.impfBase;
         const attachedPerfectBuilder = recipe.attachedPerfectBuilder ?? recipe.perfType1Builder;
 
         // Attached perfect version (e -> i shift usually) unless overridden
@@ -3218,8 +3218,6 @@ function buildWeakQuadriliteralDefectiveConjugation(
                 ? {
                       attached: deriveQuadriliteralCliticStems(imperfectRows[idx]).attached,
                       syncopated: deriveQuadriliteralCliticStems(imperfectRows[idx]).syncopated,
-                      perfectAttached: deriveWeakQuadriliteralPerfectCliticStems(rootStem, idx, perfectRows[idx]).perfectAttached,
-                      perfectSyncopated: deriveWeakQuadriliteralPerfectCliticStems(rootStem, idx, perfectRows[idx]).perfectSyncopated,
                       ...deriveWeakQuadriliteralPerfectCliticStems(rootStem, idx, perfectRows[idx]),
                   }
                   : {
