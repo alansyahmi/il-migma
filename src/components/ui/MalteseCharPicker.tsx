@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
+import React, { useRef, useState, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 
 const LOWER = ['ċ', 'ġ', 'għ', 'ħ', 'ż'];
@@ -13,7 +13,7 @@ interface Props {
     triggerRef?: React.RefObject<any>;
 }
 
-export function MalteseCharPicker({ open, onOpenChange, onInsert, triggerRef }: Props) {
+export function MalteseCharPicker({ open, onInsert, triggerRef }: Props) {
     const ref = useRef<HTMLDivElement>(null);
     const [coords, setCoords] = useState<{ top: number, left: number } | null>(null);
 
@@ -54,19 +54,6 @@ export function MalteseCharPicker({ open, onOpenChange, onInsert, triggerRef }: 
             window.removeEventListener('scroll', updatePos, true);
         };
     }, [open, triggerRef]);
-
-    // Close on outside click
-    useEffect(() => {
-        if (!open) return;
-        const handler = (e: MouseEvent) => {
-            if (ref.current && ref.current.contains(e.target as Node)) return;
-            if (triggerRef?.current && triggerRef.current.contains(e.target as Node)) return;
-
-            onOpenChange(false);
-        };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, [open, onOpenChange, triggerRef]);
 
     if (!open) return null;
 

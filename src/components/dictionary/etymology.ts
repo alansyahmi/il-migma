@@ -1,3 +1,5 @@
+import { generateForeignScriptPronunciation } from '../../lib/foreignScriptPronunciation';
+
 export type DictionaryEtymologyStep = {
     relationship?: string;
     language: string;
@@ -33,6 +35,16 @@ function sentenceCase(value: string) {
 
 function normalizeRelationshipValue(relationship?: string) {
     return String(relationship || '').trim();
+}
+
+function normalizePronunciationComparisonValue(value?: string) {
+    return String(value || '').trim().normalize('NFKC').toLowerCase();
+}
+
+function isRedundantPronunciation(pronunciation?: string, term?: string) {
+    const cleanPronunciation = normalizePronunciationComparisonValue(pronunciation);
+    const cleanTerm = normalizePronunciationComparisonValue(term);
+    return Boolean(cleanPronunciation && cleanTerm && cleanPronunciation === cleanTerm);
 }
 
 export function isConjunctiveEtymologyRelationship(relationship?: string) {
@@ -90,6 +102,46 @@ export function normalizeDictionaryEtymologyChain(
                 language: translateLanguage(rawLanguage || ''),
                 term: term || undefined,
                 pronunciation: pronunciation || undefined,
+                definition: definition || undefined,
+                form: term || undefined,
+                meaning: definition || undefined,
+                script: script || undefined,
+                time_period: timePeriod || undefined,
+            };
+        })
+        .filter((item) => Boolean(item.language || item.term || item.definition || item.form || item.meaning || item.script || item.time_period));
+}
+
+export function normalizeDictionaryEtymologyChainForDisplay(
+    chain: any,
+    translateLanguage: (language: string) => string = (language) => language,
+): DictionaryEtymologyStep[] {
+    const items = Array.isArray(chain) ? chain : [];
+
+    return items
+        .map((node) => {
+            const rawLanguage = pickString(node, ['language', 'source_language', 'sourceLanguage', 'origin_language', 'originLanguage']);
+            const term = pickString(node, ['term', 'form', 'word', 'source_term', 'sourceTerm', 'source_form', 'sourceForm']);
+            const pronunciation = pickString(node, ['pronunciation', 'ipa', 'transcription', 'phonetic', 'reading']);
+            const definition = pickString(node, ['definition', 'meaning', 'gloss', 'translation', 'text']);
+            const relationship = pickString(node, ['relationship', 'relation', 'type']);
+            const script = pickString(node, ['script']);
+            const timePeriod = pickString(node, ['time_period', 'timePeriod']);
+            const language = translateLanguage(rawLanguage || '');
+            const resolvedPronunciation = pronunciation || generateForeignScriptPronunciation({
+                language: rawLanguage || language,
+                term,
+                script,
+            });
+            const displayPronunciation = isRedundantPronunciation(resolvedPronunciation, term)
+                ? ''
+                : resolvedPronunciation;
+
+            return {
+                relationship: relationship || undefined,
+                language,
+                term: term || undefined,
+                pronunciation: displayPronunciation || undefined,
                 definition: definition || undefined,
                 form: term || undefined,
                 meaning: definition || undefined,

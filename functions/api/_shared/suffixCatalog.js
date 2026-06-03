@@ -1,4 +1,5 @@
 import { buildSuffixCatalogItems, resolveSuffixEntryMatch } from '../../../src/lib/suffixMatching.ts';
+import { ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../../src/lib/entryHydration.ts';
 
 const DASH_VARIANTS = /[–—−]/g;
 
@@ -49,17 +50,18 @@ async function ensureSuffixCatalogSeedStateTable(client) {
 async function seedSuffixCatalogFromEntries(client) {
     const rows = await client.execute(`
         SELECT
-            id,
-            headword,
-            pos,
-            dual_pattern,
-            form_plural_pattern,
-            sound_suffix
-        FROM entries
+            e.id,
+            e.headword,
+            e.pos,
+            nm.dual_pattern,
+            nm.form_plural_pattern,
+            nm.sound_plural AS sound_suffix
+        FROM entries e
+        LEFT JOIN noun_morphology nm ON nm.entry_id = e.id
         WHERE
-            (dual_pattern IS NOT NULL AND TRIM(dual_pattern) != '')
-            OR (form_plural_pattern IS NOT NULL AND TRIM(form_plural_pattern) != '')
-            OR (sound_suffix IS NOT NULL AND TRIM(sound_suffix) != '')
+            (nm.dual_pattern IS NOT NULL AND TRIM(nm.dual_pattern) != '')
+            OR (nm.form_plural_pattern IS NOT NULL AND TRIM(nm.form_plural_pattern) != '')
+            OR (nm.sound_plural IS NOT NULL AND TRIM(nm.sound_plural) != '')
     `);
 
     const items = buildSuffixCatalogItems(rows.rows);
@@ -96,16 +98,17 @@ export async function ensureSuffixCatalogSeeded(client) {
 async function loadEntriesForSuffixCounts(client) {
     const rows = await client.execute(`
         SELECT
-            id,
-            headword,
-            pos,
-            dual_pattern,
-            form_plural_pattern,
-            sound_suffix,
-            augmentative_pattern,
-            morph_pattern,
-            lemma_pattern
-        FROM entries
+            e.id,
+            e.headword,
+            e.pos,
+            nm.dual_pattern,
+            nm.form_plural_pattern,
+            nm.sound_plural AS sound_suffix,
+            nm.augmentative_pattern,
+            nm.morph_pattern,
+            nm.pattern
+        FROM entries e
+        LEFT JOIN noun_morphology nm ON nm.entry_id = e.id
     `);
 
     return rows.rows;

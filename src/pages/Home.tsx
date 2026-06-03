@@ -102,7 +102,7 @@ export function Home() {
                         <div>
                             <h2 className="text-[#1034A6] font-medium text-sm tracking-widest uppercase mb-1">{term('management-panel')}</h2>
                             <h1 className="font-serif text-4xl font-bold text-black leading-tight">
-                                {term('welcome-admin').replace('{name}', user?.firstName || '')}
+                                {term('welcome-admin', { name: user?.firstName || '' })}
                             </h1>
                         </div>
                         <div className="flex gap-3">
@@ -147,9 +147,9 @@ export function Home() {
                                 <PlusCircle className="text-[#1034A6]" size={20} /> {term('word-entries')}
                             </h3>
                             <p className="text-sm text-black/60 mb-6">
-                                {counts.total > 0
-                                    ? term('word-entries-desc').replace('300k+', (Math.floor(counts.total / 1000) + 'k+'))
-                                    : term('word-entries-desc')}
+                                {term('word-entries-desc', {
+                                    count: counts.total > 0 ? `${Math.floor(counts.total / 1000)}k+` : '—',
+                                })}
                             </p>
                             <Link to="/admin" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
                                 {term('manage-entries')} <ArrowRight size={14} />
@@ -234,9 +234,9 @@ export function Home() {
                             {term('dictionary-title')}
                         </h1>
                         <p className="text-text-muted text-sm leading-relaxed max-w-lg mx-auto mb-10">
-                            {counts.total > 0
-                                ? term('home-desc').replace('300,000', counts.total.toLocaleString())
-                                : term('home-desc')}
+                            {term('home-desc', {
+                                count: counts.total > 0 ? counts.total.toLocaleString() : '—',
+                            })}
                         </p>
                     </div>
 

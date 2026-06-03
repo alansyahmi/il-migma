@@ -55,12 +55,12 @@
 |---|---|
 | `snake_case` always | `vowel_set_perf`, `root_pattern_form_id`, `is_loanword` |
 | Boolean fields use `is_` or flag `INTEGER 0/1` | `is_loanword`, `is_ai_generated`, `is_active`, `is_lifetime` |
-| JSON array fields are named as plurals | `synonyms`, `antonyms`, `tags`, `noun_plural_forms` |
-| FK columns end in `_id` | `entry_id`, `root_id`, `pattern_id`, `user_id` |
-| Timestamps use `_at` suffix | `created_at`, `updated_at`, `generated_at`, `last_used_at` |
-| Verb-specific fields prefixed `verb_` | `verb_class`, `verb_form`, `verb_perfective_3sgm` |
-| Noun-specific fields prefixed `noun_` | `noun_gender`, `noun_singular`, `noun_plural_forms` |
-| Adjective-specific fields prefixed `adj_` | `adj_masculine`, `adj_feminine`, `adj_plural` |
+  | JSON array fields are named as plurals | `synonyms`, `antonyms`, `tags`, `noun_plural_forms` |
+  | FK columns end in `_id` | `entry_id`, `root_id`, `pattern_id`, `user_id` |
+  | Timestamps use `_at` suffix | `created_at`, `updated_at`, `generated_at`, `last_used_at` |
+  | Verb morphology stored in `verb_morphology` | `entry_id`, `form`, `class`, `weak_class` |
+  | Noun-specific fields prefixed `noun_` | `noun_gender`, `noun_singular`, `noun_plural_forms`, `noun_type` |
+  | Adjective-specific fields prefixed `adj_` | `adj_masculine`, `adj_feminine`, `adj_plural` |
 
 ---
 

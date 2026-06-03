@@ -99,7 +99,7 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
 
         return (
             <div className="bg-white rounded-xl border border-black/8 shadow-sm p-6 mt-8 text-center max-w-2xl mx-auto">
-                <p className="text-sm text-black/55">{term('no-attested-data').replace('{q}', joined)}</p>
+                <p className="text-sm text-black/55">{term('no-attested-data', { q: joined })}</p>
                 <Link to={`/root/${joined}`} className="text-xs font-semibold text-[#1034A6] mt-2 block hover:underline">
                     {term('view-root-anyway')}
                 </Link>
@@ -474,7 +474,7 @@ function StemSearchPanelContent() {
                                         {hideTheoreticalForms ? stripTheoreticalPrefix(res.headword) : res.headword}
                                     </h3>
                                     <span className="text-[10px] font-bold uppercase tracking-tighter text-black/30 bg-black/5 px-2 py-0.5 rounded">
-                                        {term(res.pos)}
+                                        {term(res.pos || 'unknown')}
                                     </span>
                                 </div>
                                 <p className="text-sm text-black/60 line-clamp-2 italic font-serif">

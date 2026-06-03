@@ -1,39 +1,36 @@
 import assert from 'node:assert/strict';
-import { normalizePluralFormRows, pluralRowsToLegacyForms, pluralRowsToLegacyPatternString } from '../src/lib/pluralForms.ts';
-import { entryToForm, formToPayload } from '../src/lib/entryAdapter.ts';
+import { normalizePluralContract } from '../src/lib/pluralForms.ts';
 
-const run = () => {
-    const rows = normalizePluralFormRows(['kotba', 'ktejjeb'], 'CaCCa, -iet');
-    assert.strictEqual(rows.length, 2, 'should keep one row per plural');
-    assert.deepStrictEqual(rows[0], { form: 'kotba', pattern: 'CaCCa' }, 'first plural row should keep its pattern');
-    assert.deepStrictEqual(rows[1], { form: 'ktejjeb', pattern: '-iet' }, 'second plural row should keep its pattern');
-    assert.strictEqual(pluralRowsToLegacyForms(rows).join(', '), 'kotba, ktejjeb', 'legacy plural string should stay ordered');
-    assert.strictEqual(pluralRowsToLegacyPatternString(rows), 'CaCCa, -iet', 'legacy pattern string should stay ordered');
+console.log('Testing pluralForms normalization...');
 
-    const form = entryToForm({
-        id: 'entry-1',
-        headword: 'ktieb',
-        pos: 'noun',
-        inflections_pl: JSON.stringify(['kotba', 'ktejjeb']),
-        form_plural_pattern: 'CaCCa, -iet',
-    });
+// Case 1: Manual plural form input (from UI array)
+const res1 = normalizePluralContract(
+    [{ form: 'ftut', pattern: '' }], // v
+    '', // next.form_plural_pattern
+    'test', // next.inflections_pl
+    '' // next.form_plural_pattern
+);
+assert.deepEqual(res1.rows, [{ form: 'ftut', pattern: '' }], 'Manual array input should win');
+assert.equal(res1.legacyForms[0], 'ftut', 'Legacy forms should update');
 
-    assert.strictEqual(form.plural_forms.length, 2, 'entryToForm should hydrate plural rows');
-    assert.deepStrictEqual(form.plural_forms[0], { form: 'kotba', pattern: 'CaCCa' }, 'first plural row should hydrate cleanly');
-    assert.deepStrictEqual(form.plural_forms[1], { form: 'ktejjeb', pattern: '-iet' }, 'second plural row should hydrate cleanly');
-    assert.strictEqual(form.inflections_pl, 'kotba, ktejjeb', 'entryToForm should keep the summary string in sync');
+// Case 2: Manual legacy pattern input
+const res2 = normalizePluralContract(
+    [{ form: 'ftut', pattern: '' }], // next.plural_forms
+    'CaCCa', // v (new pattern)
+    'ftut', // next.inflections_pl
+    'CaCCa' // v (new pattern)
+);
+assert.deepEqual(res2.rows, [{ form: 'ftut', pattern: 'CaCCa' }], 'New pattern should be merged into existing rows');
+assert.equal(res2.legacyPattern, 'CaCCa', 'Legacy pattern should update');
 
-    const payload = formToPayload({
-        ...form,
-        plural_forms: [
-            { form: 'kotba', pattern: 'CaCCa' },
-            { form: 'ktejjeb', pattern: '-iet' },
-        ],
-    });
+// Case 3: Empty array, but legacy data exists
+const res3 = normalizePluralContract(
+    [], // v
+    '', // next.form_plural_pattern
+    'test', // next.inflections_pl
+    'CaCCa' // next.form_plural_pattern
+);
+// In this case, normalizePluralContract will use the fallback (legacy) because the first arg is empty
+assert.deepEqual(res3.rows, [{ form: 'test', pattern: 'CaCCa' }], 'Fallback to legacy should happen when array is empty');
 
-    assert.deepStrictEqual(payload.inflections_pl, ['kotba', 'ktejjeb'], 'payload should persist plural forms as an ordered array');
-    assert.strictEqual(payload.form_plural_pattern, 'CaCCa, -iet', 'payload should persist plural patterns as an ordered string');
-};
-
-run();
-console.log('pluralForms tests passed');
+console.log('pluralForms.test.mjs passed');

@@ -1,4 +1,4 @@
-import { Download, HelpCircle, Plus, RefreshCw, RotateCcw, Search, Upload } from 'lucide-react';
+import { HelpCircle, Plus, RefreshCw, RotateCcw, Search } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import type { AdminCategory } from '@/lib/adminCategoryRegistry';
@@ -18,8 +18,6 @@ interface AdminSettingsToolbarProps {
     loading: boolean;
     onRefresh: () => void;
     onAdd: () => void;
-    onExportTerminology: () => void;
-    onImportTerminology: () => void;
     onSyncPatterns: () => void;
 }
 
@@ -37,14 +35,11 @@ export function AdminSettingsToolbar({
     loading,
     onRefresh,
     onAdd,
-    onExportTerminology,
-    onImportTerminology,
     onSyncPatterns,
 }: AdminSettingsToolbarProps) {
     const { term } = useLinguisticMode();
     const isPattern = activeCategory?.editorType === 'pattern';
     const hasPosFilter = Boolean(activeCategory?.hasPosFilter);
-    const isUiTerminology = activeCategory?.id === 'ui_terminology';
 
     return (
         <div className="sticky top-2 z-10 bg-[#f7f6f3]/90 backdrop-blur border border-black/5 rounded-2xl p-3 space-y-3 shadow-sm">
@@ -52,37 +47,14 @@ export function AdminSettingsToolbar({
                 <h2 className="text-lg font-bold text-black">{categoryLabel}</h2>
 
                 <div className="flex items-center gap-2">
-                    {isUiTerminology && (
-                        <div className="flex gap-2">
-                            <Button
-                                variant="secondary"
-                                size="sm"
-                                onClick={onExportTerminology}
-                                disabled={syncLoading}
-                                leftIcon={syncLoading ? <RotateCcw className="animate-spin" size={14} /> : <Download size={14} />}
-                            >
-                                {term('export-to-ts')}
-                            </Button>
-                            <Button
-                                variant="secondary"
-                                size="sm"
-                                onClick={onImportTerminology}
-                                disabled={syncLoading}
-                                leftIcon={syncLoading ? <RotateCcw className="animate-spin" size={14} /> : <Upload size={14} />}
-                            >
-                                {term('import-from-source')}
-                            </Button>
-                        </div>
-                    )}
-
                     {isPattern && (
                         <Button
                             variant="secondary"
                             size="sm"
                             onClick={onSyncPatterns}
-                        disabled={syncLoading}
-                        leftIcon={<RotateCcw className={cn(syncLoading && 'animate-spin')} size={14} />}
-                    >
+                            disabled={syncLoading}
+                            leftIcon={<RotateCcw className={cn(syncLoading && 'animate-spin')} size={14} />}
+                        >
                             {term('sync-from-entries')}
                         </Button>
                     )}

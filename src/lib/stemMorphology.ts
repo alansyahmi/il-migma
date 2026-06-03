@@ -1,5 +1,5 @@
-import { generateZokkForms, type ZokkResult } from '@/lib/zokkEngine';
-import { formatStemDisplay } from '@/lib/stemDefaults';
+import { generateZokkForms, type ZokkResult } from './zokkEngine.ts';
+import { formatStemDisplay } from './stemDefaults.ts';
 
 export type StemMorphologySource = {
     stem_string: string;
@@ -7,6 +7,10 @@ export type StemMorphologySource = {
     is_hybrid: boolean;
     root?: string | null;
     agentive_suffix?: string | null;
+};
+
+export type StemMorphologyInput = Omit<Partial<StemMorphologySource>, 'class_type'> & {
+    class_type?: 'ar' | 'ir' | '' | null;
 };
 
 export interface StemMorphologyViewModel {
@@ -21,7 +25,7 @@ function normalizeClassType(value: unknown): 'ar' | 'ir' | null {
     return value === 'ar' || value === 'ir' ? value : null;
 }
 
-export function normalizeStemMorphology(source?: Partial<StemMorphologySource> | null): StemMorphologySource | null {
+export function normalizeStemMorphology(source?: StemMorphologyInput | null): StemMorphologySource | null {
     if (!source) return null;
 
     const stem_string = String(source.stem_string || '').trim();
@@ -42,7 +46,7 @@ export function normalizeStemMorphology(source?: Partial<StemMorphologySource> |
     };
 }
 
-export function buildStemMorphologyViewModel(source?: Partial<StemMorphologySource> | null): StemMorphologyViewModel | null {
+export function buildStemMorphologyViewModel(source?: StemMorphologyInput | null): StemMorphologyViewModel | null {
     const normalized = normalizeStemMorphology(source);
     if (!normalized) return null;
 
@@ -67,4 +71,42 @@ export function buildStemMorphologyViewModel(source?: Partial<StemMorphologySour
             forms.hybrid_forms?.semitic_verbal_noun
         ),
     };
+}
+
+export async function ensureStemsTable(client: any) {
+    await client.execute(`
+        CREATE TABLE IF NOT EXISTS stems (
+            stem_string      TEXT PRIMARY KEY,
+            class_type       TEXT NOT NULL,
+            is_hybrid        INTEGER NOT NULL DEFAULT 0,
+            root             TEXT,
+            agentive_suffix  TEXT,
+            created_at       TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+            updated_at       TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+        )
+    `);
+}
+
+export async function syncStemMorphology(client: any, stem_string: string, payload: any) {
+    if (!stem_string) return;
+
+    // We can extract zokk_* fields from payload
+    const class_type = payload.zokk_class || payload.zokk_morphology?.zokk_class;
+    if (!class_type) return;
+
+    const is_hybrid = payload.zokk_is_hybrid || payload.zokk_morphology?.zokk_is_hybrid ? 1 : 0;
+    const root = payload.root_consonants || payload.zokk_morphology?.root_consonants;
+    const agentive_suffix = payload.zokk_agentive_suffix || payload.zokk_morphology?.zokk_agentive_suffix;
+
+    await client.execute({
+        sql: `INSERT INTO stems (stem_string, class_type, is_hybrid, root, agentive_suffix, updated_at)
+              VALUES (?, ?, ?, ?, ?, (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')))
+              ON CONFLICT(stem_string) DO UPDATE SET
+                class_type = excluded.class_type,
+                is_hybrid = excluded.is_hybrid,
+                root = excluded.root,
+                agentive_suffix = excluded.agentive_suffix,
+                updated_at = excluded.updated_at`,
+        args: [stem_string, class_type, is_hybrid, root || null, agentive_suffix || null]
+    });
 }

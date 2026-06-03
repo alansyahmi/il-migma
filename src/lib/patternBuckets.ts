@@ -418,7 +418,7 @@ export function getPatternMetadataSummary(value: unknown, category?: string): Pa
 
 export function buildPatternOptions(
     source: PatternSourceItem[],
-    mode: 'standard' | 'arabised',
+    mode: 'standard' | 'arabised' | 'latinised',
     filters: {
         pos?: string | string[];
         roles?: string[];
@@ -445,24 +445,16 @@ export function buildPatternOptions(
         const wizen = String(item.wizen || '').trim();
 
         if (!cv) return;
-        if (posFilters && posTypes.length > 0 && !posTypes.some((pos) => posFilters.includes(pos))) return;
-        if (roleFilters) {
-            if (!role) return;
-            if (!roleFilters.includes(role)) return;
-        }
-        if (genderFilters) {
-            if (!gender) return;
-            if (!genderFilters.includes(gender)) return;
-        }
-        if (rolePrefix) {
-            if (!role) return;
-            if (!role.startsWith(rolePrefix)) return;
-        }
+        if (posFilters && posTypes.length > 0 && !posTypes.some((pos) => posFilters.includes(pos) || pos === 'all')) return;
+        if (roleFilters && role && !roleFilters.includes(role)) return;
+        if (genderFilters && gender && !genderFilters.includes(gender)) return;
+        if (rolePrefix && role && !role.startsWith(rolePrefix)) return;
 
+        const useStandardLabels = mode === 'standard' || mode === 'latinised';
         unique.set(cv, {
-            label: mode === 'standard' ? cv : wizen,
+            label: useStandardLabels ? cv : wizen,
             value: cv,
-            sub: mode === 'standard' ? wizen : cv,
+            sub: useStandardLabels ? wizen : cv,
         });
     });
 

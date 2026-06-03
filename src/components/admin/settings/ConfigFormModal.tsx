@@ -483,7 +483,7 @@ function PatternSection({
                             <label className={labelClass}>{term('apply-to-pos')}</label>
                         </div>
                         <span className="rounded-full border border-black/5 bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-black/40">
-                            {term('selected-count').replace('{count}', String(selectedPosTypes.length))}
+                            {term('selected-count', { count: selectedPosTypes.length })}
                         </span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
@@ -900,7 +900,7 @@ function ApplicabilitySection({
                     <h5 className="text-[10px] font-bold uppercase tracking-widest text-[#1034A6]">{schema?.label || pos}</h5>
                     <p className="text-[11px] text-black/40">
                         {apps.length > 1
-                            ? term('roles-in-this-pos').replace('{count}', String(apps.length))
+                            ? term('roles-in-this-pos', { count: apps.length })
                             : term('metadata-for-this-pos')}
                     </p>
                 </div>

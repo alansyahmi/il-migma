@@ -55,15 +55,15 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
         const stemDefaults = entry.zokk_morphology ? resolveStemDefaults(entry.zokk_morphology as any) : null;
         const strengthRaw = entry.zokk_morphology
             ? stemDefaults?.strength || 'weak'
-            : (entry.verb_class || entry.root_pattern_form?.root?.strength || 'strong');
+            : ((entry.verb_morphology?.verb_class) || entry.root_pattern_form?.root?.strength || 'strong');
         const strengthLabel = term(strengthRaw === 'strong-hybrid' ? 'strong-hybrid' : strengthRaw);
         const weakClassRaw = entry.zokk_morphology
             ? stemDefaults?.weak_class || 'defective'
-            : (entry.verb_weak_class || entry.root_pattern_form?.root?.weak_class || vm.weak_class);
+            : ((entry.verb_morphology?.weak_class) || entry.root_pattern_form?.root?.weak_class || vm.weak_class);
         const weakClassLabel = weakClassRaw ? term(weakClassRaw) : null;
 
         const parts = [
-            <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">{term(entry.pos).toUpperCase()}</Link>,
+            <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">{term(entry.pos || 'noun').toUpperCase()}</Link>,
             vm.form ? (
                 <Link key="form" to={`${basePath}?form=${vm.form}`} className="hover:underline">
                     {`${term('form-label')} ${vm.form}`.toUpperCase()}
@@ -90,20 +90,57 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
         return <SubPartsRenderer parts={parts} layout={layout} />;
     }
 
+    if (entry.pos === 'participle') {
+        const participleType = (entry.participle_morphology?.participle_type) ? term((entry.participle_morphology?.participle_type)).toUpperCase() : '';
+        const participleLabel = term('participle').toUpperCase();
+        const participlePart = (
+            <span className="inline-flex flex-col items-start leading-snug">
+                {participleType && (
+                    <span className="text-[10px] md:text-xs font-sans uppercase tracking-wide text-black/60">
+                        {participleType}
+                    </span>
+                )}
+                <span className="text-[10px] md:text-xs font-sans uppercase tracking-wide leading-snug">
+                    {participleLabel}
+                </span>
+            </span>
+        );
+
+        const parts = [
+            <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">
+                {participlePart}
+            </Link>,
+            ...titleTags,
+        ].filter(Boolean) as ReactNode[];
+
+        return <SubPartsRenderer parts={parts} layout={layout} />;
+    }
+
     // Noun / Adjective / Other
 
     const gender = showGender ? resolveEntryGender(entry) : null;
+    const nounType = (entry as any).noun_type || (entry as any).noun_morphology?.noun_type || '';
+    const nounLabel = nounType
+        ? `${term(nounType).toUpperCase()} ${term(entry.pos || 'noun').toUpperCase()}`
+        : term(entry.pos || 'noun').toUpperCase();
 
     const parts = [
-        <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">{term(entry.pos).toUpperCase()}</Link>,
+        nounType ? (
+            <Link
+                key="pos"
+                to={`${basePath}?pos=${entry.pos}&noun_type=${encodeURIComponent(nounType)}`}
+                className="hover:underline"
+            >
+                {nounLabel}
+            </Link>
+        ) : (
+            <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">
+                {nounLabel}
+            </Link>
+        ),
         gender ? (
             <Link key="gender" to={`${basePath}?gender=${gender}`} className="hover:underline">
                 {term(gender).toUpperCase()}
-            </Link>
-        ) : null,
-        (entry as any).noun_type ? (
-            <Link key="type" to={`${basePath}?type=${(entry as any).noun_type}`} className="hover:underline">
-                {term((entry as any).noun_type).toUpperCase()}
             </Link>
         ) : null,
         ...titleTags

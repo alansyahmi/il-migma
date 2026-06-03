@@ -299,9 +299,10 @@ export function BrowseSuffixPage() {
                             {loading
                                 ? 'Loading entries...'
                                 : total > 0
-                                    ? term('browse-suffix-summary')
-                                        .replace('{count}', total.toLocaleString())
-                                        .replace('{suffix}', selectedOption.suffix)
+                                    ? term('browse-suffix-summary', {
+                                        count: total.toLocaleString(),
+                                        suffix: selectedOption.suffix,
+                                    })
                                     : term('browse-suffix-empty')}
                         </p>
                     </div>

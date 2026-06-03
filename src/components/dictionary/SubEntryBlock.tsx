@@ -39,7 +39,7 @@ export function SubEntryBlock({ subentry, defaultOpen = false }: SubEntryBlockPr
             {/* Expanded content */}
             {open && (
                 <div className="mt-2 space-y-2 animate-fade-in">
-                    {subentry.definitions.map((def) => (
+                    {subentry.definitions?.map((def: any) => (
                         <div key={def.id} className="flex gap-2">
                             <span className="text-[#A07030] font-semibold text-sm min-w-[16px]">
                                 {def.sense_number}.
@@ -52,7 +52,7 @@ export function SubEntryBlock({ subentry, defaultOpen = false }: SubEntryBlockPr
                                 {def.register && (
                                     <Badge variant="register" className="ml-2">{def.register}</Badge>
                                 )}
-                                {def.example_sentences?.map((ex) => (
+                                {def.example_sentences?.map((ex: any) => (
                                     <div key={ex.id} className="mt-1 ml-2 text-xs text-text-muted">
                                         <em>"{ex.maltese}"</em>
                                         {ex.english && <span className="ml-1 text-gray-400">({ex.english})</span>}

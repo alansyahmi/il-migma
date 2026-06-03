@@ -127,13 +127,13 @@ function getMatchingPluralDisplay(row, patternNotation) {
 }
 
 function resolveMorphologyMatch(row, patternNotation) {
-    const pluralField = ['form_plural_pattern', 'sound_suffix', 'morph_pattern'].find((field) =>
+    const pluralField = ['nm_plural_pattern', 'nm_sound_plural'].find((field) =>
         matchesPatternNotation(readPathValue(row, field), patternNotation),
     );
 
     if (pluralField) {
         const pluralDisplay = getMatchingPluralDisplay(row, patternNotation);
-        const key = pluralField === 'sound_suffix' ? 'sound_plural' : 'broken_plural';
+        const key = pluralField === 'nm_sound_plural' ? 'sound_plural' : 'broken_plural';
         return {
             key,
             label: MORPHOLOGY_ROLE_LABELS[key],
@@ -146,7 +146,7 @@ function resolveMorphologyMatch(row, patternNotation) {
         };
     }
 
-    const dualField = ['dual_pattern'].find((field) =>
+    const dualField = ['nm_dual_pattern'].find((field) =>
         matchesPatternNotation(readPathValue(row, field), patternNotation),
     );
 
@@ -163,12 +163,12 @@ function resolveMorphologyMatch(row, patternNotation) {
         };
     }
 
-    const derivationalField = ['augmentative_pattern', 'lemma_pattern'].find((field) =>
+    const derivationalField = ['nm_augmentative_pattern', 'nm_pattern'].find((field) =>
         matchesPatternNotation(readPathValue(row, field), patternNotation),
     );
 
     if (derivationalField) {
-        const key = derivationalField === 'augmentative_pattern' ? 'augmentative' : 'lemma';
+        const key = derivationalField === 'nm_augmentative_pattern' ? 'augmentative' : 'lemma';
         return {
             key,
             label: MORPHOLOGY_ROLE_LABELS[key],
@@ -181,7 +181,7 @@ function resolveMorphologyMatch(row, patternNotation) {
         };
     }
 
-    const lemmaField = row.root_pattern_form_id || matchesPatternNotation(readPathValue(row, 'cv_pattern'), patternNotation);
+    const lemmaField = matchesPatternNotation(readPathValue(row, 'am_pattern'), patternNotation);
 
     if (lemmaField) {
         return {
@@ -190,7 +190,7 @@ function resolveMorphologyMatch(row, patternNotation) {
             match: {
                 role: 'lemma',
                 displayValue: normalizeText(row.headword),
-                sourceField: row.root_pattern_form_id ? 'root_pattern_form' : 'cv_pattern',
+                sourceField: 'am_pattern',
                 matchedSuffix: normalizePatternField(patternNotation),
             },
         };
@@ -261,19 +261,25 @@ export async function onRequestGet({ params, env }) {
         const normalizedPatternNotation = normalizePatternField(patternNotation);
         const tokenLike = normalizedPatternNotation ? `%,${normalizedPatternNotation},%` : '';
         const entriesRes = await db.execute({
-            sql: `SELECT e.id, e.headword, e.pos, e.cv_pattern, e.inflections_pl, e.form_plural_pattern, e.sound_suffix, e.morph_pattern, e.dual_pattern, e.augmentative_pattern, e.lemma_pattern, rpf.id AS root_pattern_form_id, COALESCE(r.consonants, e.root_consonants) AS root_consonants, r.id AS root_id, d.text_en as definition
+            sql: `SELECT e.id, e.headword, e.pos,
+                         nm.plural_forms AS nm_plural_forms, nm.form_plural_pattern AS nm_plural_pattern,
+                         nm.sound_plural AS nm_sound_plural, nm.dual_pattern AS nm_dual_pattern,
+                         nm.augmentative_pattern AS nm_augmentative_pattern,
+                         nm.pattern AS nm_pattern,
+                         am.pattern AS am_pattern,
+                         COALESCE(r.consonants, e.root_consonants) AS root_consonants, r.id AS root_id,
+                         json_extract(e.definitions, '$[0].text_en') as definition
                   FROM entries e
-                  LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
+                  LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
                   LEFT JOIN roots r ON r.id = rpf.root_id OR r.consonants = e.root_consonants
-                  LEFT JOIN definitions d ON d.entry_id = e.id AND d.sense_number = 1
+                  LEFT JOIN noun_morphology nm ON nm.entry_id = e.id
+                  LEFT JOIN adj_morphology am ON am.entry_id = e.id
                   WHERE rpf.pattern_id = ?
-                     OR LOWER(COALESCE(e.cv_pattern, '')) = LOWER(?)
-                     OR (',' || LOWER(REPLACE(COALESCE(e.form_plural_pattern, ''), ' ', '')) || ',') LIKE ?
-                     OR (',' || LOWER(REPLACE(COALESCE(e.morph_pattern, ''), ' ', '')) || ',') LIKE ?
-                     OR (',' || LOWER(REPLACE(COALESCE(e.dual_pattern, ''), ' ', '')) || ',') LIKE ?
-                     OR (',' || LOWER(REPLACE(COALESCE(e.sound_suffix, ''), ' ', '')) || ',') LIKE ?
-                     OR (',' || LOWER(REPLACE(COALESCE(e.augmentative_pattern, ''), ' ', '')) || ',') LIKE ?
-                     OR (',' || LOWER(REPLACE(COALESCE(e.lemma_pattern, ''), ' ', '')) || ',') LIKE ?
+                     OR LOWER(COALESCE(am.pattern, '')) = LOWER(?)
+                     OR (',' || LOWER(REPLACE(COALESCE(nm.form_plural_pattern, ''), ' ', '')) || ',') LIKE ?
+                     OR (',' || LOWER(REPLACE(COALESCE(nm.dual_pattern, ''), ' ', '')) || ',') LIKE ?
+                     OR (',' || LOWER(REPLACE(COALESCE(nm.sound_plural, ''), ' ', '')) || ',') LIKE ?
+                     OR (',' || LOWER(REPLACE(COALESCE(nm.augmentative_pattern, ''), ' ', '')) || ',') LIKE ?
                   LIMIT 50`,
             args: [
                 id,

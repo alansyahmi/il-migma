@@ -70,13 +70,13 @@ export function VerbFormsTable({
     rows: VerbFormsTableRow[];
     hideTheoreticalForms?: boolean;
     columnLabels?: {
-        form: string;
-        lemma: string;
-        imperfect: string;
-        imperative: string;
-        passive: string;
-        active: string;
-        verbalNoun: string;
+        form: React.ReactNode;
+        lemma: React.ReactNode;
+        imperfect: React.ReactNode;
+        imperative: React.ReactNode;
+        passive: React.ReactNode;
+        active: React.ReactNode;
+        verbalNoun: React.ReactNode;
     };
     className?: string;
     tableClassName?: string;

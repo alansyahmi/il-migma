@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import { generateZokkForms } from '../src/lib/zokkEngine.ts';
 import {
+    generateConjugation,
     getAttestedEntries,
     markGeneratedForms,
     resolveAttestedEntryFromEntries,
 } from '../src/lib/conjugationEngine.ts';
 import { buildStemSearchPreview } from '../src/lib/stemSearchPreview.ts';
+import { resolveVerbClassification } from '../src/lib/stemDefaults.ts';
 
 const assertEq = (actual, expected, message) => {
     assert.strictEqual(actual, expected, message);
@@ -44,6 +46,25 @@ const run = () => {
     assertEq(prefer.agentive?.masc, 'preferitur', 'ir agentive masc');
     assertEq(prefer.verbal_noun, 'preferir', 'ir verbal noun');
 
+    const inheritedStrong = resolveVerbClassification({
+        root: { strength: 'strong', weak_class: null },
+    });
+    assertEq(inheritedStrong.strength, 'strong', 'verb classification should inherit strong root strength');
+    assertEq(inheritedStrong.weak_class, null, 'verb classification should not invent a weak class for strong roots');
+
+    const inheritedWeak = resolveVerbClassification({
+        root: { strength: 'weak', weak_class: 'defective' },
+    });
+    assertEq(inheritedWeak.strength, 'weak', 'verb classification should inherit weak root strength');
+    assertEq(inheritedWeak.weak_class, 'defective', 'verb classification should inherit weak root weak-class');
+
+    const hybridOverride = resolveVerbClassification({
+        root: { strength: 'strong', weak_class: null },
+        zokk_morphology: { is_hybrid: true },
+    });
+    assertEq(hybridOverride.strength, 'weak', 'hybrid stems should resolve to weak classification');
+    assertEq(hybridOverride.weak_class, 'defective', 'hybrid stems should resolve to defective weak class');
+
     const hybrid = generateZokkForms({
         stem_string: 'kanta',
         class_type: 'ar',
@@ -72,6 +93,59 @@ const run = () => {
     assertEq(hybridIr.hybrid_forms?.form_ii_passive_participle, 'misservi', 'ir hybrid form II passive');
     assertEq(hybridIr.hybrid_forms?.form_ii_active_participle, '-', 'ir hybrid form II active');
     assertEq(hybridIr.hybrid_forms?.form_ii_verbal_noun, 'sservija', 'ir hybrid form II verbal noun');
+
+    const accepta = generateZokkForms({
+        stem_string: 'aċċett',
+        class_type: 'ar',
+        is_hybrid: false,
+    });
+
+    const acceptaCitation = getCitationRow(accepta);
+    assertEq(acceptaCitation?.perfect, 'aċċetta', 'vowel-initial ar citation perfect should not duplicate the initial vowel');
+    assertEq(acceptaCitation?.imperfect, 'jaċċetta', 'vowel-initial ar citation imperfect should not insert an extra i');
+    assertEq(accepta.conjugation?.imperative_sg, 'aċċetta', 'vowel-initial ar imperative should preserve the citation stem');
+
+    const weakQuad = generateConjugation({
+        root: 's-q-s-j',
+        form: 'I',
+        strength: 'weak',
+        weakClass: 'defective',
+        vowelSetPerfect: 'a-a',
+        vowelSetImperfect: 'a-i',
+        vowelSetImperative: 'a-i',
+        isImalaBlocked: false,
+    });
+
+    assertEq(weakQuad.rows[0].perfect, 'saqsejt', 'weak quadriliteral Form I should follow the saqsa-style citation stem');
+    assertEq(weakQuad.rows[0].imperfect, 'nsaqsi', 'weak quadriliteral Form I imperfect should use the weak singular -i ending');
+    assertEq(weakQuad.rows[1].imperfect, 'ssaqsi', 'weak quadriliteral Form I 2s imperfect should use the weak singular -i ending');
+    assertEq(weakQuad.rows[2].perfect, 'saqsa', 'weak quadriliteral Form I 3ms perfect should keep the bare citation stem');
+    assertEq(weakQuad.rows[2].imperfect, 'jsaqsi', 'weak quadriliteral Form I 3ms imperfect should use the weak singular -i ending');
+    assertEq(weakQuad.rows[3].perfect, 'saqsiet', 'weak quadriliteral Form I 3fs perfect should use the weak -iet ending');
+    assertEq(weakQuad.rows[6].perfect, 'saqsew', 'weak quadriliteral Form I 3p perfect should use the weak -ew ending');
+    assertEq(weakQuad.rows[6].imperfect, 'jsaqsu', 'weak quadriliteral Form I 3p should keep the plural -u ending');
+    assertEq(weakQuad.imperative_sg, 'saqsi', 'weak quadriliteral imperative singular should use the weak -i ending');
+    assertEq(weakQuad.imperative_pl, 'saqsu', 'weak quadriliteral plural imperative should use the weak -u ending');
+
+    const weakQuadServa = generateConjugation({
+        root: 's-r-v-j',
+        form: 'I',
+        strength: 'weak',
+        weakClass: 'defective',
+        vowelSetPerfect: 'e-a',
+        vowelSetImperfect: 'e-i',
+        vowelSetImperative: 'e-i',
+        isImalaBlocked: false,
+    });
+
+    assertEq(weakQuadServa.rows[0].perfect, 'servejt', 'serva should follow the same weak quadriliteral citation pattern');
+    assertEq(weakQuadServa.rows[0].imperfect, 'nservi', 'serva should use the weak singular -i ending');
+    assertEq(weakQuadServa.rows[2].perfect, 'serva', 'serva 3ms perfect should keep the bare citation stem');
+    assertEq(weakQuadServa.rows[2].imperfect, 'jservi', 'serva 3ms imperfect should use the weak singular -i ending');
+    assertEq(weakQuadServa.rows[6].perfect, 'servew', 'serva 3p perfect should use the weak -ew ending');
+    assertEq(weakQuadServa.rows[6].imperfect, 'jservu', 'serva 3p imperfect should use the weak plural -u ending');
+    assertEq(weakQuadServa.imperative_sg, 'servi', 'serva imperative singular should use the weak -i ending');
+    assertEq(weakQuadServa.imperative_pl, 'servu', 'serva imperative plural should use the weak -u ending');
 
     const stemPreview = buildStemSearchPreview(
         {

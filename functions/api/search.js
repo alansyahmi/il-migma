@@ -8,6 +8,9 @@
 
 import { createClient } from '@libsql/client/web';
 import { resolveSuffixEntryMatch } from '../../src/lib/suffixMatching.ts';
+import { normalizeSourceMetadata } from '../../src/lib/sourceMetadata.ts';
+import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../src/lib/entryHydration.ts';
+import { ensureVerbMorphologyTable } from '../../src/lib/verbMorphology.ts';
 
 const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
 
@@ -50,6 +53,7 @@ export async function onRequestGet({ request, env }) {
     const q = url.searchParams.get('q')?.trim() ?? '';
     const pos = url.searchParams.get('pos') ?? '';
     const rootType = url.searchParams.get('type') ?? '';
+    const nounType = url.searchParams.get('noun_type')?.trim().toLowerCase() ?? '';
     const vowelSet = url.searchParams.get('v') ?? '';
     const wizen = url.searchParams.get('wizen') ?? '';
     const forms = getQueryValues(url.searchParams, 'form');
@@ -102,6 +106,7 @@ export async function onRequestGet({ request, env }) {
         const tursoUrl = env.TURSO_URL || env.VITE_TURSO_URL;
         const dbToken = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
         const db = createClient({ url: tursoUrl, authToken: dbToken });
+        await ensureVerbMorphologyTable(db, { backfill: true });
 
         // Normalize search string for better matches
         const normalizedQ = q.toLowerCase().trim().normalize('NFC');
@@ -115,12 +120,12 @@ export async function onRequestGet({ request, env }) {
             -- Prefer the explicit root link; otherwise join the canonical root id
             -- stored on the entry. This avoids fanning out across homographic
             -- roots that share the same consonants.
-            LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id OR e.root_pattern_form_id = rpf.id)
+            LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id)
             LEFT JOIN roots r ON r.id = COALESCE(rpf.root_id, e.root_consonants)
             LEFT JOIN patterns pat ON (rpf.pattern_id = pat.id)
-            LEFT JOIN definitions d ON d.entry_id = e.id AND d.sense_number = 1
             LEFT JOIN phonetics p   ON p.entry_id = e.id AND p.dialect = 'Standard'
             LEFT JOIN attestation_reliability ar ON ar.entry_id = e.id
+            ${ENTRY_MORPHOLOGY_JOINS}
             WHERE 1=1
         `;
         const args = [];
@@ -146,12 +151,12 @@ export async function onRequestGet({ request, env }) {
                     qArgs.push(globStr);
                 }
                 if (searchEnglishGloss) {
-                    conditions.push("LOWER(d.text_en) GLOB LOWER(?)");
+                    conditions.push(`LOWER(COALESCE(json_extract(e.definitions, '$[0].text_en'), '')) GLOB LOWER(?)`);
                     qArgs.push(globStr);
                 }
                 if (searchWordForms) {
-                    conditions.push("LOWER(e.inflections_pl) GLOB LOWER(?)");
-                    conditions.push("LOWER(e.verb_verbal_noun) GLOB LOWER(?)");
+                    conditions.push("LOWER(COALESCE(nm.plural_forms, am.plural_form, '')) GLOB LOWER(?)");
+                    conditions.push("LOWER(vm.verbal_noun) GLOB LOWER(?)");
                     qArgs.push(globStr, globStr);
                 }
                 if (!hasFieldFilter) {
@@ -168,12 +173,12 @@ export async function onRequestGet({ request, env }) {
                     qArgs.push(normalizedQ, ftsQuery);
                 }
                 if (searchEnglishGloss) {
-                    conditions.push("d.text_en LIKE ?");
+                    conditions.push(`COALESCE(json_extract(e.definitions, '$[0].text_en'), '') LIKE ?`);
                     qArgs.push(`%${q}%`);
                 }
                 if (searchWordForms) {
-                    conditions.push("e.inflections_pl LIKE ?");
-                    conditions.push("e.verb_verbal_noun LIKE ?");
+                    conditions.push("COALESCE(nm.plural_forms, am.plural_form, '') LIKE ?");
+                    conditions.push("vm.verbal_noun LIKE ?");
                     qArgs.push(`%${q}%`, `%${q}%`);
                 }
                 if (!hasFieldFilter) {
@@ -206,30 +211,34 @@ export async function onRequestGet({ request, env }) {
             } else if (rootType === 'romance') {
                 sql += " AND e.source_language IN ('Sicilian', 'Italian', 'Latin', 'French', 'Spanish')";
             } else {
-                sql += ' AND (r.strength = ? OR e.verb_class = ?)';
+                sql += ' AND (r.strength = ? OR vm.class = ?)';
                 args.push(rootType, rootType);
             }
         }
+        if (nounType) {
+            sql += ' AND LOWER(COALESCE(nm.noun_type, \'\')) = ?';
+            args.push(nounType);
+        }
         if (vowelSet) {
-            sql += ' AND (r.vowel_set_perf = ? OR e.verb_vowel_perf = ?)';
+            sql += ' AND (r.vowel_set_perf = ? OR vm.vowel_set_perf = ?)';
             args.push(vowelSet, vowelSet);
         }
         if (wizen) {
-            sql += ' AND (pat.wizen_notation = ? OR pat.cv_notation = ? OR e.cv_pattern = ?)';
+            sql += ' AND (pat.wizen_notation = ? OR pat.cv_notation = ? OR COALESCE(nm.morph_pattern, e.cv_pattern) = ?)';
             args.push(wizen, wizen, wizen);
         }
         if (forms.length > 0) {
             const placeholders = forms.map(() => '?').join(', ');
-            sql += ` AND e.verb_form IN (${placeholders})`;
+            sql += ` AND vm.form IN (${placeholders})`;
             args.push(...forms);
         }
         if (verbType) {
-            sql += ' AND e.verb_type = ?';
+            sql += ' AND vm.type = ?';
             args.push(verbType);
         }
         if (source) {
-            sql += ' AND (r.source = ? OR e.source = ?)';
-            args.push(source, source);
+            sql += ' AND r.source = ?';
+            args.push(source);
         }
         if (sourceLanguage) {
             sql += ' AND LOWER(COALESCE(e.source_language, \'\')) = ?';
@@ -242,19 +251,19 @@ export async function onRequestGet({ request, env }) {
             const suffixArgs = [];
 
             if (suffixKind === 'nominal') {
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.dual_pattern')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.sound_suffix')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.form_plural_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('nm.dual_form')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('nm.sound_plural')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('nm.plural_forms')} LIKE ?`);
                 suffixArgs.push(
                     suffixTokenPattern,
                     suffixTokenPattern,
                     suffixTokenPattern,
                 );
             } else if (suffixKind === 'derivational') {
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.augmentative_pattern')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.augmentative_form')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.morph_pattern')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.lemma_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('nm.augmentative_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('nm.augmentative_form')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.cv_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('am.elative_form')} LIKE ?`);
                 suffixArgs.push(
                     suffixTokenPattern,
                     suffixTokenPattern,
@@ -262,13 +271,13 @@ export async function onRequestGet({ request, env }) {
                     suffixTokenPattern,
                 );
             } else {
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.dual_pattern')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.sound_suffix')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.augmentative_pattern')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.augmentative_form')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.form_plural_pattern')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.morph_pattern')} LIKE ?`);
-                suffixMatchSql.push(`${suffixTokenColumnSql('e.lemma_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('nm.dual_form')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('nm.sound_plural')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('nm.augmentative_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('nm.augmentative_form')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('nm.plural_forms')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('e.cv_pattern')} LIKE ?`);
+                suffixMatchSql.push(`${suffixTokenColumnSql('am.elative_form')} LIKE ?`);
                 suffixArgs.push(
                     suffixTokenPattern,
                     suffixTokenPattern,
@@ -285,41 +294,40 @@ export async function onRequestGet({ request, env }) {
         }
         if (gender) {
             sql += ` AND (
-                LOWER(COALESCE(e.gender, '')) = ?
-                OR LOWER(COALESCE(json_extract(e.noun_morphology, '$.gender'), '')) = ?
+                LOWER(COALESCE(nm.gender, am.gender, pm.gender, '')) = ?
             )`;
-            args.push(gender, gender);
+            args.push(gender);
         }
         if (r1) { sql += " AND (json_extract(r.consonant_array, '$[0]') = ? OR e.root_consonants LIKE ?)"; args.push(r1.toLowerCase(), r1.toLowerCase() + '-%'); }
         if (r2) { sql += " AND (json_extract(r.consonant_array, '$[1]') = ? OR e.root_consonants LIKE ?)"; args.push(r2.toLowerCase(), '%-' + r2.toLowerCase() + '-%'); }
         if (r3) { sql += " AND (json_extract(r.consonant_array, '$[2]') = ? OR e.root_consonants LIKE ?)"; args.push(r3.toLowerCase(), '%-' + r3.toLowerCase() + (r4 ? '-%' : '')); }
         if (r4) { sql += " AND (json_extract(r.consonant_array, '$[3]') = ? OR e.root_consonants LIKE ?)"; args.push(r4.toLowerCase(), '%-' + r4.toLowerCase()); }
         if (tag) {
-            // Support searching for base tag name while matching tags with prefixes (!, $, $!)
-            sql += ` AND EXISTS (SELECT 1 FROM json_each(e.tags) WHERE REPLACE(REPLACE(LOWER(value), '!', ''), '$', '') = ?)`;
+            // Support searching for base tag name while matching tags in normalized entry_tags table
+            sql += ` AND EXISTS (SELECT 1 FROM entry_tags et JOIN tags t ON et.tag_id = t.id WHERE et.entry_id = e.id AND LOWER(t.name) = ?)`;
             args.push(tag.toLowerCase());
         }
-
-        // Pattern filters
-        if (lp) { sql += ' AND LOWER(e.lemma_pattern) LIKE ?'; args.push(`%${lp.toLowerCase()}%`); }
-        if (fp) { sql += ' AND LOWER(e.form_fem_pattern) LIKE ?'; args.push(`%${fp.toLowerCase()}%`); }
-        if (mp) { sql += ' AND LOWER(e.form_masc_pattern) LIKE ?'; args.push(`%${mp.toLowerCase()}%`); }
+   // Pattern filters
+        if (lp) { sql += ' AND LOWER(COALESCE(pat.cv_notation, \'\')) LIKE ?'; args.push(`%${lp.toLowerCase()}%`); }
+        if (fp) { sql += ' AND LOWER(COALESCE(nm.feminine_form, am.feminine_form, \'\')) LIKE ?'; args.push(`%${fp.toLowerCase()}%`); }
+        if (mp) { sql += ' AND LOWER(COALESCE(nm.masculine_form, am.masculine_form, \'\')) LIKE ?'; args.push(`%${mp.toLowerCase()}%`); }
         if (pp) { 
-            sql += ' AND (LOWER(e.form_plural_pattern) LIKE ? OR LOWER(e.morph_pattern) LIKE ?)'; 
+            sql += ' AND (LOWER(COALESCE(nm.plural_forms, am.plural_form, \'\')) LIKE ? OR LOWER(nm.sound_plural) LIKE ?)';
             const lp_pp = `%${pp.toLowerCase()}%`;
             args.push(lp_pp, lp_pp); 
         }
-        if (dp) { sql += ' AND LOWER(e.dual_pattern) LIKE ?'; args.push(`%${dp.toLowerCase()}%`); }
-        // Elative and diminutive patterns aren't separate columns yet, they might be in morph_pattern
-        if (ep) { sql += ' AND LOWER(e.morph_pattern) LIKE ?'; args.push(`%${ep.toLowerCase()}%`); }
-        if (dmp) { sql += ' AND LOWER(e.morph_pattern) LIKE ?'; args.push(`%${dmp.toLowerCase()}%`); }
+        if (dp) { sql += ' AND LOWER(COALESCE(nm.dual_form, \'\')) LIKE ?'; args.push(`%${dp.toLowerCase()}%`); }
+        if (ep) { sql += ' AND LOWER(COALESCE(am.elative_form, \'\')) LIKE ?'; args.push(`%${ep.toLowerCase()}%`); }
+        if (dmp) { sql += ' AND LOWER(COALESCE(nm.diminutive_form, \'\')) LIKE ?'; args.push(`%${dmp.toLowerCase()}%`); }
         
-        if (vs_sg) { sql += ' AND LOWER(e.vowel_set_sg) LIKE ?'; args.push(`%${vs_sg.toLowerCase()}%`); }
-        if (vs_opp) { sql += ' AND LOWER(e.vowel_set_opp) LIKE ?'; args.push(`%${vs_opp.toLowerCase()}%`); }
-        if (vs_pl) { sql += ' AND LOWER(e.vowel_set_pl) LIKE ?'; args.push(`%${vs_pl.toLowerCase()}%`); }
-        if (isZokk) { sql += ' AND e.zokk_morphology IS NOT NULL'; }
+        if (vs_sg) { sql += ' AND LOWER(COALESCE(vm.vowel_set_perf, \'\')) LIKE ?'; args.push(`%${vs_sg.toLowerCase()}%`); }
+        if (vs_opp) { sql += ' AND LOWER(COALESCE(vm.vowel_set_impf, \'\')) LIKE ?'; args.push(`%${vs_opp.toLowerCase()}%`); }
+        if (vs_pl) { sql += ' AND LOWER(COALESCE(vm.vowel_set_impv, \'\')) LIKE ?'; args.push(`%${vs_pl.toLowerCase()}%`); }
+        if (isZokk) {
+            sql += ' AND e.stem IS NOT NULL';
+        }
         if (stemString) {
-            sql += ` AND json_valid(e.zokk_morphology) = 1 AND json_extract(e.zokk_morphology, '$.stem_string') = ?`;
+            sql += ` AND e.stem = ?`;
             args.push(stemString);
         }
 
@@ -331,7 +339,7 @@ export async function onRequestGet({ request, env }) {
             return json({ results: [], total, query: q });
         }
 
-        const hasCriteria = q || rootId || pos || rootType || vowelSet || wizen || source || sourceLanguage || suffix || gender || r1 || r2 || r3 || r4;
+        const hasCriteria = q || rootId || pos || rootType || nounType || vowelSet || wizen || source || sourceLanguage || suffix || gender || r1 || r2 || r3 || r4;
         let isRandomSearch = (isRandom || !hasCriteria) && !q;
 
         let finalSql = `
@@ -341,8 +349,11 @@ export async function onRequestGet({ request, env }) {
                 r.vowel_set_perf, r.vowel_set_impf, r.vowel_set_imp,
                 r.gloss AS root_gloss,
                 r.id AS root_id,
-                d.text_en, d.text_mt, p.ipa, ar.reliability_index,
-                pat.cv_notation, pat.wizen_notation, e.zokk_morphology
+                json_extract(e.definitions, '$[0].text_en') AS definition_en,
+                json_extract(e.definitions, '$[0].text_mt') AS definition_mt,
+                p.ipa, ar.reliability_index,
+                pat.cv_notation, pat.wizen_notation,
+                ${ENTRY_MORPHOLOGY_SELECT}
             ${sql}
                 `;
 
@@ -373,46 +384,13 @@ export async function onRequestGet({ request, env }) {
         const result = await db.execute({ sql: finalSql, args });
 
         const rows = result.rows.map(r => {
-            let inflections_pl = [];
-            if (r.inflections_pl) {
-                try {
-                    inflections_pl = JSON.parse(r.inflections_pl);
-                    if (!Array.isArray(inflections_pl)) inflections_pl = [];
-                } catch (e) {
-                    console.error(`Malformed inflections_pl for ID ${r.id}:`, r.inflections_pl);
-                    inflections_pl = [];
-                }
-            }
-            const mapped = {
-                ...r,
-                tags: r.tags ? (() => { try { return JSON.parse(r.tags); } catch { return []; } })() : [],
-                is_loanword: Boolean(r.is_loanword),
-                // Map to legacy names for frontend compatibility if needed, or keep unified
-                noun_plural_forms: inflections_pl,
-                verb_morphology: (r.pos === 'verb' || r.verb_form) ? {
-                    form: r.verb_form || '',
-                    transitivity: r.verb_transitivity || 'both',
-                    perfective_3sg_m: r.verb_perfective_3sgm || r.headword,
-                    imperfective_3sg_m: r.verb_imperfective_3sgm || '',
-                    vowel_set_perfect: r.verb_vowel_perf || '',
-                    vowel_set_imperfect: r.verb_vowel_impf || '',
-                    verbal_noun: r.verb_verbal_noun || '',
-                    active_participle: r.verb_active_ptcp || '',
-                    passive_participle: r.verb_passive_ptcp || '',
-                } : undefined,
-                noun_morphology: r.pos === 'noun' ? {
-                    gender: r.gender,
-                    singular: r.lemma_base || r.headword,
-                    plural_forms: inflections_pl
-                } : undefined,
-                adjective_morphology: r.pos === 'adjective' ? {
-                    gender: r.gender,
-                    masculine: r.lemma_base || r.headword,
-                    plural: inflections_pl.join(', ')
-                } : undefined,
+            const mapped = hydrateEntryRow(r);
+            const sourceMeta = normalizeSourceMetadata(r);
+
+            return {
+                ...mapped,
                 definition_en: firstSenseText(r.text_en),
                 definition_mt: firstSenseText(r.text_mt),
-                zokk_morphology: r.zokk_morphology ? (() => { try { return JSON.parse(r.zokk_morphology); } catch { return undefined; } })() : undefined,
                 root_pattern_form: r.root_consonants ? {
                     id: '',
                     root_id: r.root_id || '',
@@ -432,17 +410,15 @@ export async function onRequestGet({ request, env }) {
                         created_at: '',
                         updated_at: ''
                     },
-                    pattern: (r.cv_notation || r.cv_pattern) ? {
+                    pattern: (r.cv_notation || r.nm_morph_pattern || r.am_pattern) ? {
                         id: '',
-                        cv_notation: r.cv_notation || r.cv_pattern || '',
+                        cv_notation: r.cv_notation || r.nm_morph_pattern || r.am_pattern || '',
                         wizen_notation: r.wizen_notation || '',
                         created_at: ''
                     } : undefined
-                } : undefined
-            };
-
-            return {
-                ...mapped,
+                } : undefined,
+                source_display: sourceMeta.display || '',
+                source_tooltip: sourceMeta.tooltip || '',
                 suffix_match: suffix ? (resolveSuffixEntryMatch(mapped, suffix, suffixKind === 'derivational' ? 'derivational' : 'nominal') || undefined) : undefined
             };
         });

@@ -40,8 +40,8 @@ const NOMINAL_MATCHERS = [
 const DERIVATIONAL_MATCHERS = [
     {
         role: 'derivational' as const,
-        matchFields: ['augmentative_pattern', 'morph_pattern', 'lemma_pattern'],
-        displayFields: ['augmentative_form', 'augmentative_pattern', 'morph_pattern', 'lemma_pattern', 'headword'],
+        matchFields: ['augmentative_pattern', 'morph_pattern', 'pattern'],
+        displayFields: ['augmentative_form', 'augmentative_pattern', 'morph_pattern', 'pattern', 'headword'],
     },
 ];
 
@@ -218,7 +218,8 @@ function pickMatchingPluralDisplayValue(entry: RecordLike, suffix: string): stri
             patterns: readPathValue(entry, 'noun_morphology.form_plural_pattern')
                 ?? readPathValue(entry, 'noun_morphology.plural_pattern')
                 ?? readPathValue(entry, 'noun_morphology.sound_suffix')
-                ?? readPathValue(entry, 'noun_morphology.morph_pattern'),
+                ?? readPathValue(entry, 'noun_morphology.morph_pattern')
+                ?? readPathValue(entry, 'noun_morphology.pattern'),
         },
     ];
 

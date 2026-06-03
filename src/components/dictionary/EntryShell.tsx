@@ -27,6 +27,48 @@ export function SideCard({
     );
 }
 
+export function SourceBlock({
+    entry,
+    term,
+}: {
+    entry: any;
+    term: (key: string) => string;
+}) {
+    const source = entry.lexical_source;
+    const citation = entry.source_citation
+        || entry.verb_morphology?.source_citation
+        || entry.noun_morphology?.source_citation
+        || entry.adjective_morphology?.source_citation
+        || entry.numeral_morphology?.source_citation
+        || entry.participle_morphology?.source_citation;
+
+    if (!source && !citation) return null;
+
+    return (
+        <SideCard title={term('sources')}>
+            <div className="space-y-1">
+                {source ? (
+                    <div className="flex flex-col">
+                        <span className="text-sm font-semibold text-black">{source.name}</span>
+                        {source.full_title && <span className="text-[11px] text-black/50 leading-tight">{source.full_title}</span>}
+                        {source.author && <span className="text-[11px] text-black/40 italic">{source.author}</span>}
+                        <span className="text-xs font-medium mt-1" style={{ color: GOLD }}>
+                             {citation || `${source.name}${source.year ? ` (${source.year})` : ''}`}
+                        </span>
+                        {source.url && (
+                             <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-500 hover:underline mt-0.5">
+                                 {term('view-online') || 'View Online'}
+                             </a>
+                        )}
+                    </div>
+                ) : (
+                    <span className="text-sm font-medium" style={{ color: GOLD }}>{citation}</span>
+                )}
+            </div>
+        </SideCard>
+    );
+}
+
 export type EtymologySentenceItem = {
     relationship?: string;
     language: string;

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { normalizeStemMorphology, type StemMorphologySource } from '@/lib/stemMorphology';
+import { normalizeStemMorphology, type StemMorphologyInput, type StemMorphologySource } from '@/lib/stemMorphology';
 import { BLUE, PropRow } from './EntryShell';
 
 export type MorphologySource = StemMorphologySource;
@@ -13,7 +13,7 @@ export function MorphologyProvenanceRows({
     showHybrid = false,
     className,
 }: {
-    source?: Partial<MorphologySource> | null;
+    source?: StemMorphologyInput | null;
     rootDisplayValue?: string | null;
     rootHref?: string;
     showClass?: boolean;

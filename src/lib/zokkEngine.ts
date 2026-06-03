@@ -53,6 +53,10 @@ function applyStem(stem: string): string {
     return cleanStem.replace(/[aeiouy]$/i, '');
 }
 
+function startsWithVowel(value: string) {
+    return /^[aeiou]/i.test(value);
+}
+
 function extractConsonants(s: string): string[] {
     // We treat standard vowels as things to strip for root reanalysis
     const res = s.split('').filter(c => !['a','e','i','o','u','â','ê','î','ô','û'].includes(c.toLowerCase()));
@@ -60,8 +64,10 @@ function extractConsonants(s: string): string[] {
 }
 
 function buildCitationPerfectStem(base: string): string {
+    if (!base) return 'a';
+    if (startsWithVowel(base)) return `${base}a`;
     const initial = base.charAt(0);
-    return initial ? `${initial}${base}a` : `${base}a`;
+    return `${initial}${base}a`;
 }
 
 function buildHybridCitationPerfectStem(base: string): string {
@@ -89,21 +95,29 @@ function buildHybridFormII(base: string, classType: 'ar' | 'ir') {
 }
 
 function buildCitationImperfectStem(classType: 'ar' | 'ir', perfectStem: string): string {
+    const prefix = startsWithVowel(perfectStem) ? 'j' : 'ji';
     if (classType === 'ir') {
-        return `ji${perfectStem.replace(/a$/, 'i')}`;
+        return `${prefix}${perfectStem.replace(/a$/, 'i')}`;
     }
 
-    return `ji${perfectStem}`;
+    return `${prefix}${perfectStem}`;
 }
 
 /**
  * Generates all morphological forms for a Zokk (stem).
  */
-export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
-    const { stem_string, class_type, is_hybrid, agentive_suffix, root } = zokk;
-    const base = applyStem(stem_string);
-    
-    const isAr = class_type === 'ar';
+export function generateZokkForms(zokkInput: any): ZokkResult {
+    const zokk: ZokkMorphology = {
+        stem_string: zokkInput.stem_string ?? zokkInput.stem ?? '',
+        class_type: (zokkInput.class_type ?? zokkInput.class_type ?? '') as 'ar' | 'ir' | '',
+        is_hybrid: !!(zokkInput.is_hybrid ?? zokkInput.is_hybrid),
+        agentive_suffix: zokkInput.agentive_suffix ?? zokkInput.agentive_suffix,
+        root: zokkInput.root ?? zokkInput.root,
+    };
+
+    const { stem_string: stem, class_type: zokk_class, is_hybrid: zokk_is_hybrid, agentive_suffix: zokk_agentive_suffix, root: root_consonants } = zokk;
+    const base = applyStem(stem || '');
+    const isAr = zokk_class === 'ar';
     
     // 1. Conjugation Table
     const rows: ConjugationRow[] = [];
@@ -118,7 +132,7 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
     ];
 
     const prefixes = ["n", "t", "j", "t", "n", "t", "j"];
-    const citationPerfectStem = is_hybrid
+    const citationPerfectStem = zokk_is_hybrid
         ? buildHybridCitationPerfectStem(base)
         : buildCitationPerfectStem(base);
 
@@ -146,9 +160,9 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
         const pfx = prefixes[i];
         if (i < 4) { // Sg
             if (i === 2) {
-                imperfect = is_hybrid
+                imperfect = zokk_is_hybrid
                     ? `j${base}a`
-                    : buildCitationImperfectStem(class_type, citationPerfectStem);
+                    : buildCitationImperfectStem(zokk_class as 'ar' | 'ir', citationPerfectStem);
             } else {
                 imperfect = pfx + base + (isAr ? 'a' : 'i');
             }
@@ -186,7 +200,7 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
     let ag_fem = '';
     let ag_pl = '';
 
-    const ag_sfx = agentive_suffix || (isAr ? 'atur' : 'itur');
+    const ag_sfx = zokk_agentive_suffix || (isAr ? 'atur' : 'itur');
     if (ag_sfx.startsWith('ant') || ag_sfx.startsWith('ent')) {
         ag_masc = base + ag_sfx;
         ag_fem = base + ag_sfx + 'a';
@@ -202,7 +216,6 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
     // 4. Verbal Noun
     const verbal_noun = base + (isAr ? 'ar' : 'ir');
 
-    // 5. Hybrid Forms
     const result: ZokkResult = {
         conjugation,
         passive_participle: {
@@ -221,17 +234,17 @@ export function generateZokkForms(zokk: ZokkMorphology): ZokkResult {
         verbal_noun
     };
 
-    if (is_hybrid) {
+    if (zokk_is_hybrid) {
         // Reanalysis: kanta -> [k, n, t] -> k-n-t-j
-        const cons = root ? root.split('-') : [...extractConsonants(base), 'j'];
-        
+        const cons = root_consonants ? root_consonants.split('-') : [...extractConsonants(base), 'j'];
+
         if (cons.length >= 4) {
             const pp_sem = `m${base}`;
             result.hybrid_forms = {
                 semitic_passive_participle: pp_sem,
-                ...buildHybridFormII(base, class_type),
+                ...buildHybridFormII(base, zokk_class as 'ar' | 'ir'),
             };
-            
+
             if (result.passive_participle) {
                 result.passive_participle.semitic = `*${pp_sem}`;
             }

@@ -73,7 +73,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
 export function getGloss(
     item: any,
     language: 'en' | 'mt',
-    _mode: 'standard' | 'arabised' = 'standard'
+    _mode: any = 'standard'
 ): string {
     if (!item) return '';
 

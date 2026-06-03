@@ -22,8 +22,8 @@ interface AdminSettingsSidebarProps {
     canonicalRoleShortcuts: Array<{ role: string; label: string; count: number }>;
     language: 'en' | 'mt';
     setLanguage: (lang: 'en' | 'mt') => void;
-    mode: 'standard' | 'arabised';
-    setMode: (mode: 'standard' | 'arabised') => void;
+    mode: string;
+    setMode: (mode: any) => void;
     t: (english: string, maltese: string) => string;
     term: (text: string) => string;
 }

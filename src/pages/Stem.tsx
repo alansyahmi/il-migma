@@ -18,8 +18,9 @@ import { buildStemMorphologyViewModel } from '@/lib/stemMorphology';
 import { normalizeStemEtymologyChain } from '@/lib/adminUtils';
 import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymology';
 import { MorphologyProvenanceRows } from '@/components/dictionary/EntryMorphology';
+import { ZokkConjugationTable } from '@/components/dictionary/ZokkConjugationTable';
 import { VerbFormsTable, StackedSurface } from '@/components/dictionary/VerbFormsTable';
-import { resolveAttestedEntryFromEntries } from '@/lib/conjugationEngine';
+import { generateConjugation, resolveAttestedEntryFromEntries } from '@/lib/conjugationEngine';
 import { isHiddenTag } from '@/lib/tagLabel';
 import { shouldHideSurface } from '@/lib/theoreticalForms';
 
@@ -170,7 +171,7 @@ export function Stem() {
         if (!entries) return [];
         const entryWithDef = entries.find(e => e.definitions && e.definitions.length > 0);
         if (entryWithDef) {
-            return entryWithDef.definitions.map(d => (language === 'en' ? d.text_en : d.text_mt)).filter(Boolean);
+            return (entryWithDef.definitions || []).map(d => (language === 'en' ? d.text_en : d.text_mt)).filter(Boolean);
         }
         return [];
     }, [entries, language, stem]);
@@ -201,6 +202,32 @@ export function Stem() {
     const zokkForms = stemMorphology?.forms;
     const displayStem = stemMorphology?.displayStem || stem_string || '';
     const hybridForms = zokkForms?.hybrid_forms;
+    const stemTableConjugation = useMemo(() => {
+        const baseConjugation = zokkForms?.conjugation || null;
+        const rootConsonants = String(root || stemMorphologySource?.root || '').trim();
+        const rootParts = rootConsonants ? rootConsonants.split('-').filter(Boolean) : [];
+
+        if (!is_hybrid || rootParts.length < 4) {
+            return baseConjugation;
+        }
+
+        try {
+            return generateConjugation({
+                root: rootConsonants,
+                form: 'I',
+                strength: 'weak',
+                weakClass: 'defective',
+                vowelSetPerfect: 'e-a',
+                vowelSetImperfect: 'e-i',
+                vowelSetImperative: 'e-i',
+                isImalaBlocked: /[\u0127q]|g\u0127|h/i.test(rootConsonants.replace(/-/g, '')),
+            });
+        } catch {
+            return baseConjugation;
+        }
+    }, [is_hybrid, root, stemMorphologySource?.root, zokkForms?.conjugation]);
+
+    const stemTableRowI = stemTableConjugation?.rows.find((r: any) => r.person_mt === '3ms');
     const passiveAlternates = zokkForms?.passive_participle?.alternates?.masc || [];
     const passiveAlternateEntries = useMemo(() => {
         return passiveAlternates
@@ -536,6 +563,20 @@ export function Stem() {
                     {/* Right Content */}
                     <div className="flex-1 min-w-0 space-y-12 w-full max-w-full">
 
+                        {stemMorphologySource && (
+                            <ZokkConjugationTable
+                                morphology={{
+                                    stem_string: stemMorphologySource.stem_string,
+                                    class_type: stemMorphologySource.class_type,
+                                    is_hybrid: stemMorphologySource.is_hybrid,
+                                    root: stemMorphologySource.root || undefined,
+                                    agentive_suffix: stemMorphologySource.agentive_suffix || undefined,
+                                }}
+                                title={term('conjugation-table')}
+                                term={term}
+                            />
+                        )}
+
                         <VerbFormsTable
                             title={term('verbal-forms')}
                             hideTheoreticalForms={hideTheoreticalForms}
@@ -544,8 +585,18 @@ export function Stem() {
                                 lemma: term('lemma'),
                                 imperfect: term('imperfect'),
                                 imperative: term('imperative'),
-                                passive: term('passive'),
-                                active: term('active'),
+                                passive: (
+                                    <span className="inline-flex flex-col items-start leading-none">
+                                        <span className="text-[9px] uppercase tracking-[0.18em] text-black/35">{term('passive')}</span>
+                                        <span className="text-[10px] uppercase tracking-[0.18em] text-black">{term('participle')}</span>
+                                    </span>
+                                ),
+                                active: (
+                                    <span className="inline-flex flex-col items-start leading-none">
+                                        <span className="text-[9px] uppercase tracking-[0.18em] text-black/35">{term('active')}</span>
+                                        <span className="text-[10px] uppercase tracking-[0.18em] text-black">{term('participle')}</span>
+                                    </span>
+                                ),
                                 verbalNoun: term('verbal-noun'),
                             }}
                             rows={[
@@ -554,19 +605,19 @@ export function Stem() {
                                     form: <span className="font-serif font-bold text-[#1034A6]">I</span>,
                                     lemma: toVerbCell(
                                         <MarkedCell
-                                            data={makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' })}
+                                            data={makeCellData(stemTableRowI?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' })}
                                             isAdmin={isActualAdmin}
                                             hideWhenHidden
                                             onDelete={() => {
-                                                const existing = resolveStemCellEntry(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' });
+                                                const existing = resolveStemCellEntry(stemTableRowI?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' });
                                                 if (existing?.id) handleDeleteEntry(existing.id);
                                             }}
-                                            onEdit={() => openEntryEditor(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', pos: 'verb', form: 'I' })}
+                                            onEdit={() => openEntryEditor(stemTableRowI?.perfect || '', { type: 'lemma', pos: 'verb', form: 'I' })}
                                         />,
-                                        makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' }).marker,
+                                        makeCellData(stemTableRowI?.perfect || '', { type: 'lemma', form: 'I', pos: 'verb' }).marker,
                                     ),
-                                    imperfect: toVerbCell(<MarkedCell data={makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.imperfect || '', { type: 'imperfect', form: 'I', pos: 'verb', parentMarker: getParentVerbMarker(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', 'I') })} hideWhenHidden noLink />, makeCellData(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.imperfect || '', { type: 'imperfect', form: 'I', pos: 'verb', parentMarker: getParentVerbMarker(zokkForms?.conjugation?.rows.find(r => r.person_mt === '3ms')?.perfect || '', 'I') }).marker),
-                                    imperative: toVerbCell(<MarkedCell data={makeCellData(zokkForms?.conjugation?.imperative_sg || '', { type: 'imperative', form: 'I', pos: 'verb' })} hideWhenHidden />, makeCellData(zokkForms?.conjugation?.imperative_sg || '', { type: 'imperative', form: 'I', pos: 'verb' }).marker),
+                                    imperfect: toVerbCell(<MarkedCell data={makeCellData(stemTableRowI?.imperfect || '', { type: 'imperfect', form: 'I', pos: 'verb', parentMarker: getParentVerbMarker(stemTableRowI?.perfect || '', 'I') })} hideWhenHidden noLink />, makeCellData(stemTableRowI?.imperfect || '', { type: 'imperfect', form: 'I', pos: 'verb', parentMarker: getParentVerbMarker(stemTableRowI?.perfect || '', 'I') }).marker),
+                                    imperative: toVerbCell(<MarkedCell data={makeCellData(stemTableConjugation?.imperative_sg || '', { type: 'imperative', form: 'I', pos: 'verb' })} hideWhenHidden />, makeCellData(stemTableConjugation?.imperative_sg || '', { type: 'imperative', form: 'I', pos: 'verb' }).marker),
                                     passive: toVerbCell(
                                         renderPassiveCell(zokkForms?.passive_participle?.masc || ''),
                                         makeCellData(zokkForms?.passive_participle?.masc || '', { type: 'passive', form: 'I', pos: 'participle', participleType: 'passive' }).marker,

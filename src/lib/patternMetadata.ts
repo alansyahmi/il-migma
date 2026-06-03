@@ -540,7 +540,7 @@ export function getPatternMetadataSummary(value: unknown, category?: string): Pa
 
 export function buildPatternOptions(
     source: PatternSourceItem[],
-    mode: 'standard' | 'arabised',
+    mode: 'standard' | 'arabised' | 'latinised',
     filters: {
         pos?: string | string[];
         roles?: string[];
@@ -581,10 +581,11 @@ export function buildPatternOptions(
             if (!role.startsWith(rolePrefix)) return;
         }
 
+        const useStandardLabels = mode === 'standard' || mode === 'latinised';
         unique.set(cv, {
-            label: mode === 'standard' ? cv : wizen,
+            label: useStandardLabels ? cv : wizen,
             value: cv,
-            sub: mode === 'standard' ? wizen : cv,
+            sub: useStandardLabels ? wizen : cv,
         });
     });
 

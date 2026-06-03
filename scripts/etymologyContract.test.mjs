@@ -17,6 +17,7 @@ import {
     formatEtymologySentenceLeadIn,
     isConjunctiveEtymologyRelationship,
     normalizeDictionaryEtymologyChain as normalizeDisplayEtymologyChain,
+    normalizeDictionaryEtymologyChainForDisplay as normalizeDisplayEtymologyChainWithPronunciation,
 } from '../src/components/dictionary/etymology.ts';
 
 const assertEq = (actual, expected, message) => {
@@ -149,7 +150,6 @@ const run = () => {
         form_masc_pattern: '',
         form_fem_pattern: '',
         form_plural_pattern: '',
-        lemma_base: '',
         gender: 'masculine',
         is_inflectable: true,
     });
@@ -187,7 +187,6 @@ const run = () => {
         form_masc_pattern: '',
         form_fem_pattern: '',
         form_plural_pattern: '',
-        lemma_base: '',
         gender: 'masculine',
         is_inflectable: true,
     });
@@ -199,6 +198,58 @@ const run = () => {
         definition: 'to write',
         script: 'كَتَبَ',
     }], 'entry payload should preserve Arabic script when supplied');
+
+    const displayArabicAuto = normalizeDisplayEtymologyChainWithPronunciation([{
+        relationship: 'From',
+        language: 'Arabic',
+        term: 'كَتَبَ',
+        definition: 'to write',
+    }]);
+    assertEq(displayArabicAuto[0].pronunciation, 'kataba', 'display etymology normalization should synthesize missing Arabic pronunciation');
+
+    const displayItalianAuto = normalizeDisplayEtymologyChainWithPronunciation([{
+        relationship: 'From',
+        language: 'Italian',
+        term: 'cena',
+        definition: 'dinner',
+    }]);
+    assertEq(displayItalianAuto[0].pronunciation, 'ċena', 'display etymology normalization should synthesize missing Italian pronunciation');
+
+    const displayItalianRedundant = normalizeDisplayEtymologyChainWithPronunciation([{
+        relationship: 'From',
+        language: 'Italian',
+        term: 'abbondanza',
+        definition: 'abundance',
+    }]);
+    assertEq(displayItalianRedundant[0].pronunciation, undefined, 'display etymology normalization should suppress redundant auto-generated pronunciation');
+
+    const displayStoredPronunciation = normalizeDisplayEtymologyChainWithPronunciation([{
+        relationship: 'From',
+        language: 'Arabic',
+        term: 'كَتَبَ',
+        pronunciation: 'ka-ta-ba',
+        definition: 'to write',
+    }]);
+    assertEq(displayStoredPronunciation[0].pronunciation, 'ka-ta-ba', 'display etymology normalization should keep stored pronunciation values');
+
+    const displayStoredRedundant = normalizeDisplayEtymologyChainWithPronunciation([{
+        relationship: 'From',
+        language: 'Italian',
+        term: 'abbondanza',
+        pronunciation: 'abbondanza',
+        definition: 'abundance',
+    }]);
+    assertEq(displayStoredRedundant[0].pronunciation, undefined, 'display etymology normalization should suppress stored pronunciations that repeat the term verbatim');
+
+    const stemDisplayAuto = normalizeDisplayEtymologyChainWithPronunciation(
+        normalizeStemEtymologyChain([{
+            relationship: 'From',
+            language: 'Arabic',
+            term: 'كَتَبَ',
+            definition: 'to write',
+        }]),
+    );
+    assertEq(stemDisplayAuto[0].pronunciation, 'kataba', 'stem-style etymology should still synthesize pronunciation for display after stem normalization strips it');
 
     const semicolonDefinitions = normalizeEntryDefinitions([{
         text_en: 'alas; woe to me',
@@ -234,7 +285,6 @@ const run = () => {
         form_masc_pattern: '',
         form_fem_pattern: '',
         form_plural_pattern: '',
-        lemma_base: '',
         gender: 'masculine',
         is_inflectable: true,
     });

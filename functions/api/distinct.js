@@ -20,32 +20,31 @@ export async function onRequestGet({ request, env }) {
 
         if (type === 'tags') {
             sql = `
-                SELECT DISTINCT REPLACE(REPLACE(value, '!', ''), '$', '') as val
-                FROM entries, json_each(tags)
-                WHERE value IS NOT NULL AND value != ''
+                SELECT DISTINCT name as val
+                FROM tags
                 ORDER BY val ASC
             `;
         } else if (type === 'vowel_sets') {
             sql = `
-                SELECT DISTINCT verb_vowel_perf as val FROM entries WHERE val IS NOT NULL AND val != ''
+                SELECT DISTINCT vowel_set_perf as val FROM verb_morphology WHERE val IS NOT NULL AND val != ''
                 UNION
-                SELECT DISTINCT verb_vowel_impf as val FROM entries WHERE val IS NOT NULL AND val != ''
+                SELECT DISTINCT vowel_set_impf as val FROM verb_morphology WHERE val IS NOT NULL AND val != ''
                 UNION
-                SELECT DISTINCT verb_vowel_impv as val FROM entries WHERE val IS NOT NULL AND val != ''
+                SELECT DISTINCT vowel_set_impv as val FROM verb_morphology WHERE val IS NOT NULL AND val != ''
                 UNION
-                SELECT DISTINCT vowel_set_sg as val FROM entries WHERE val IS NOT NULL AND val != ''
+                SELECT DISTINCT vowel_set_sg as val FROM noun_morphology WHERE val IS NOT NULL AND val != ''
                 UNION
-                SELECT DISTINCT vowel_set_opp as val FROM entries WHERE val IS NOT NULL AND val != ''
+                SELECT DISTINCT vowel_set_opp as val FROM noun_morphology WHERE val IS NOT NULL AND val != ''
                 UNION
-                SELECT DISTINCT vowel_set_dual as val FROM entries WHERE val IS NOT NULL AND val != ''
+                SELECT DISTINCT vowel_set_dual as val FROM noun_morphology WHERE val IS NOT NULL AND val != ''
                 UNION
-                SELECT DISTINCT vowel_set_pl as val FROM entries WHERE val IS NOT NULL AND val != ''
+                SELECT DISTINCT vowel_set_pl as val FROM noun_morphology WHERE val IS NOT NULL AND val != ''
                 ORDER BY val ASC
             `;
         } else if (type === 'sources') {
             sql = `
-                SELECT DISTINCT source_citation as val
-                FROM entries
+                SELECT DISTINCT full_title as val
+                FROM lexical_sources
                 WHERE val IS NOT NULL AND val != ''
                 ORDER BY val ASC
             `;

@@ -35,6 +35,19 @@ console.log(`Targeting ${target} database at ${url}`);
 const client = createClient({ url, authToken });
 
 const columnsToAdd = [
+    'gender',
+    'inflections_pl',
+    'form_fem',
+    'form_masc',
+    'dual_form',
+    'diminutive_form',
+    'paucal_form',
+    'augmentative_form',
+    'is_collective',
+    'is_singulative',
+    'noun_type',
+    'vowel_set_sg',
+    'vowel_set_pl',
     'vowel_set_opp',
     'vowel_set_dual',
     'lemma_pattern',
@@ -42,18 +55,57 @@ const columnsToAdd = [
     'form_masc_pattern',
     'form_plural_pattern',
     'dual_pattern',
-    'diminutive_pattern',
+    'paucal_pattern',
+    'augmentative_pattern',
     'elative_pattern',
+    'diminutive_pattern',
+    'verb_class',
+    'verb_transitivity',
+    'verb_perfective_3sgm',
+    'verb_imperfective_3sgm',
+    'verb_verbal_noun',
+    'verb_vowel_perf',
+    'verb_vowel_impf',
+    'verb_vowel_impv',
+    'verb_active_ptcp',
+    'verb_passive_ptcp',
+    'verb_form',
+    'verb_type',
+    'verb_weak_class',
+    'elative_form',
+    'participle_type',
     'numeral_type',
     'form_attributive_short',
     'form_attributive_long',
-    'form_opposite',
-    'zokk_morphology'
+    'numeral_ordinal',
+    'numeral_adverbial',
+    'numeral_fractional',
+    'numeral_multiplier',
+    'numeral_distributive',
+    'source_citation',
+    'source_title',
+    'source_year',
+    'source_page',
+    'source_publisher',
+    'source_display',
+    'source_tooltip',
+    'etymology_chain',
+    'etymology_notes',
+    'cv_pattern',
+    'morph_pattern',
+    'sound_suffix',
+    'zokk_morphology',
+    'stem',
+    'zokk_class',
+    'zokk_is_hybrid',
+    'zokk_agentive_suffix',
+    'is_inflectable'
 ];
 
 async function run() {
     for (const col of columnsToAdd) {
-        const sql = `ALTER TABLE entries ADD COLUMN ${col} TEXT`;
+        const colType = col.startsWith('is_') ? 'BOOLEAN DEFAULT false' : 'TEXT';
+        const sql = `ALTER TABLE entries ADD COLUMN ${col} ${colType}`;
         console.log(`Running: ${sql}`);
         try {
             await client.execute(sql);

@@ -269,9 +269,10 @@ export function BrowseSuffixPage() {
     const selectedSummary = resultsLoading
         ? 'Loading entries...'
         : total > 0
-            ? term('browse-suffix-summary')
-                .replace('{count}', total.toLocaleString())
-                .replace('{suffix}', selectedItem?.suffix ?? '')
+            ? term('browse-suffix-summary', {
+                count: total.toLocaleString(),
+                suffix: selectedItem?.suffix ?? '',
+            })
             : term('browse-suffix-empty');
 
     const renderCards = (items: SuffixCatalogItem[], kindLabel: string) => (
@@ -328,9 +329,10 @@ export function BrowseSuffixPage() {
                             </p>
                             <p className="mt-1 text-sm text-text-muted">
                                 {selectedItem
-                                    ? term('browse-suffix-summary')
-                                        .replace('{count}', selectedItem.count.toLocaleString())
-                                        .replace('{suffix}', selectedItem.suffix)
+                                    ? term('browse-suffix-summary', {
+                                        count: selectedItem.count.toLocaleString(),
+                                        suffix: selectedItem.suffix,
+                                    })
                                     : term('browse-suffix-empty')}
                             </p>
                         </div>

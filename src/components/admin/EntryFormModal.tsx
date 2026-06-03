@@ -39,6 +39,7 @@ import {
 } from '@/lib/patternBuckets';
 import { buildSuggestedEntryId } from '@/lib/entryId';
 import { isDashMarkedSuffix, stripLeadingDash } from '@/lib/suffixMatching';
+import type { VerbMorphology } from '@/types';
 
 export interface AdminEntry {
     id: string;
@@ -53,6 +54,7 @@ export interface AdminEntry {
     verb_vowel_perf?: string;
     verb_vowel_impf?: string;
     verb_transitivity?: string;
+    verb_morphology?: VerbMorphology;
     root_consonants?: string;
     verb_form?: string;
     tags?: string | string[];
@@ -1170,16 +1172,18 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
 
         return (
         <div className="space-y-4">
-            <div className="flex justify-end">
-                <button
-                    type="button"
-                    onClick={onApplyDerivedTerms}
-                    className="text-[10px] text-blue-600 font-medium hover:underline flex items-center gap-1"
-                >
-                    <RefreshCw size={10} />
-                    {t('Suggest Numeral Forms', 'Iġġenera Forom tan-Numri')}
-                </button>
-            </div>
+            {(!form.numeral_type || form.numeral_type === 'cardinal') && (
+                <div className="flex justify-end">
+                    <button
+                        type="button"
+                        onClick={onApplyDerivedTerms}
+                        className="text-[10px] text-blue-600 font-medium hover:underline flex items-center gap-1"
+                    >
+                        <RefreshCw size={10} />
+                        {t('Suggest Numeral Forms', 'Iġġenera Forom tan-Numri')}
+                    </button>
+                </div>
+            )}
 
             <div className={styles.grid}>
                 <div>

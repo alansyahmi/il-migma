@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS stems (
   stem_string     TEXT PRIMARY KEY,
   class_type      TEXT NOT NULL DEFAULT 'ar' CHECK(class_type IN ('ar', 'ir')),
-  is_hybrid       INTEGER NOT NULL DEFAULT 0,
+  is_hybrid       BOOLEAN NOT NULL DEFAULT false,
   root            TEXT,
   agentive_suffix TEXT,
   tags            TEXT, -- JSON array

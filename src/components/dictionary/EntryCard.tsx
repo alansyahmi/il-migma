@@ -14,7 +14,6 @@ import { LinkedEntryList } from './LinkedEntryList';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { cn } from '@/lib/utils';
-import { isInflectionDisabled } from '@/lib/inflectionState';
 import type { Entry } from '@/types';
 import { isHiddenTag, resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 import { shouldHideSurface, stripTheoreticalPrefix } from '@/lib/theoreticalForms';
@@ -36,13 +35,13 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
     const { hideTheoreticalForms } = useHideTheoreticalForms();
     const [activeTab, setActiveTab] = useState('definitions');
     const [saved, setSaved] = useState(false);
-    const isTheoretical = isInflectionDisabled(entry) || entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
+    const isTheoretical = entry.tags?.some(tag => tag && tag.includes('THEORETICAL')) || 
         entry.verb_morphology?.root_tags?.includes('THEORETICAL') ||
         entry.headword.startsWith('*') ||
         entry.headword.startsWith('✦');
     const primaryIPA = entry.phonetics?.find(p => p.dialect === 'Standard')?.ipa
         ?? entry.phonetics?.[0]?.ipa;
-    const primaryAttestation = entry.etymologies?.[0]?.attestation;
+    const primaryAttestation = (entry.etymology_chain as any)?.[0]?.attestation;
     const alternativeForms = entry.alternative_forms || [];
     const relatedEntries = [
         ...(entry.verb_morphology?.related_entries || []),
@@ -101,7 +100,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                         </div>
 
                         <div className="flex items-center gap-2 mt-1 flex-wrap">
-                            <Badge variant="pos">{term(entry.pos)}</Badge>
+                            <Badge variant="pos">{term(entry.pos || 'noun')}</Badge>
                             {entry.noun_morphology?.gender && (
                                 <Badge variant="tag">{term(entry.noun_morphology.gender)}</Badge>
                             )}
@@ -109,7 +108,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                         </div>
 
                         {/* First definition */}
-                        {entry.definitions[0] && (
+                        {entry.definitions?.[0] && (
                             <p className="text-sm text-black mt-2 line-clamp-2">
                                 <span className="text-[#A07030] font-semibold mr-1">1.</span>
                                 {entry.definitions[0].text_en}
@@ -147,10 +146,10 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                         )}
 
                         {/* Audio */}
-                        {(entry.audio?.length ?? 0) > 0 && (
+                        {(entry.audio_files?.length ?? 0) > 0 && (
                             <div className="mt-3">
                                 <AudioPlayer
-                                    audio={entry.audio!}
+                                    audio={entry.audio_files!}
                                     entryId={entry.id}
                                     ipa={primaryIPA}
                                 />
@@ -159,7 +158,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
 
                         {/* Badges row */}
                         <div className="flex items-center gap-2 mt-4 flex-wrap">
-                            <Badge variant="pos" className="text-sm px-2.5 py-1">{term(entry.pos)}</Badge>
+                            <Badge variant="pos" className="text-sm px-2.5 py-1">{term(entry.pos || 'noun')}</Badge>
                             {entry.noun_morphology?.gender && (
                                 <Badge variant="tag">{term(entry.noun_morphology.gender)}</Badge>
                             )}
@@ -238,7 +237,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                 {/* Definitions tab */}
                 <TabContent tabId="definitions" activeTab={activeTab}>
                     <div className="p-5 sm:p-6 space-y-4">
-                        {entry.definitions.map((def) => (
+                        {entry.definitions?.map((def) => (
                             <div key={def.id} className="flex gap-3">
                                 <span className="text-[#A07030] font-bold text-sm min-w-[20px] mt-0.5">
                                     {def.sense_number}.
@@ -275,7 +274,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                 </h3>
                                 <div className="space-y-2">
                                     {entry.subentries
-                                        .sort((a, b) => a.sort_order - b.sort_order)
+                                        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
                                         .map(sub => (
                                             <SubEntryBlock key={sub.id} subentry={sub} />
                                         ))}
@@ -295,8 +294,12 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                 {/* Etymology tab */}
                 <TabContent tabId="etymology" activeTab={activeTab}>
                     <div className="p-5 sm:p-6">
-                        {entry.etymologies && entry.etymologies.length > 0 ? (
-                            <EtymologyChain etymologies={entry.etymologies} />
+                        {entry.etymology_chain && entry.etymology_chain.length > 0 ? (
+                            <EtymologyChain etymologies={[{ 
+                                id: entry.id, 
+                                chain: entry.etymology_chain, 
+                                notes: entry.etymology_notes || undefined 
+                            }]} />
                         ) : (
                             <p className="text-sm text-gray-400 italic">{term('etymology-not-available')}</p>
                         )}

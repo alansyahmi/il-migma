@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { adminListConfig, adminCreateConfig, adminUpdateConfig, adminDeleteConfig } from './api';
+import { adminListConfig, adminCreateConfig, adminUpdateConfig, adminDeleteConfig, invalidateDistinctValuesCache } from './api';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { getCategoryById, getRegistryOptions } from './adminCategoryRegistry';
+import { emitCatalogRefresh, useCatalogRefresh } from '@/hooks/useCatalogRefresh';
 
 export interface ConfigItem {
     id: string;
@@ -22,7 +23,7 @@ interface AdminConfigContextType {
     createItem: (item: Partial<ConfigItem>, options?: { refresh?: boolean }) => Promise<void>;
     updateItem: (item: ConfigItem, options?: { refresh?: boolean }) => Promise<void>;
     deleteItem: (id: string, options?: { refresh?: boolean }) => Promise<void>;
-    getOptions: (category: string, mode: 'standard' | 'arabised', lang?: 'en' | 'mt') => { value: string, label: string }[];
+    getOptions: (category: string, mode: 'standard' | 'arabised' | 'latinised', lang?: 'en' | 'mt') => { value: string, label: string }[];
 }
 
 const AdminConfigContext = createContext<AdminConfigContextType | undefined>(undefined);
@@ -31,7 +32,8 @@ const AdminConfigContext = createContext<AdminConfigContextType | undefined>(und
 const FALLBACKS: Record<string, string[]> = {
     pos: ['verb', 'noun', 'adjective', 'adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'interrogative', 'numeral', 'interjection', 'participle'],
     gender: ['masculine', 'feminine', 'neutral'],
-    numeral_type: ['cardinal', 'ordinal', 'adverbial', 'fractional', 'multiplier', 'distributive'],
+    participle_type: ['active', 'passive'],
+    numeral_type: ['cardinal', 'ordinal', 'adverbial', 'fractional', 'multiplier', 'distributive', 'attributive_short', 'attributive_long'],
     verb_class: ['strong', 'weak', 'doubled', 'quadriliteral', 'loan'],
     verb_transitivity: ['transitive', 'intransitive', 'both', 'ditransitive'],
     register: ['formal', 'informal', 'archaic', 'obsolete', 'technical', 'dialectal', 'colloquial'],
@@ -87,6 +89,7 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const refresh = useCallback(async () => {
         setLoading(true);
         try {
+            invalidateDistinctValuesCache();
             const token = await getToken().catch(() => null);
             const res = await adminListConfig(token || '', undefined, Date.now());
             const parsed = res.config.map(item => ({
@@ -100,6 +103,8 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
             setLoading(false);
         }
     }, [getToken]);
+
+    useCatalogRefresh(refresh, { intervalMs: 60_000 });
 
     useEffect(() => {
         refresh();
@@ -140,6 +145,7 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         const token = await getToken();
         if (!token) throw new Error('Not authenticated');
         await adminCreateConfig(token, item);
+        emitCatalogRefresh();
         if (options?.refresh !== false) {
             await refresh();
         }
@@ -149,6 +155,7 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         const token = await getToken();
         if (!token) throw new Error('Not authenticated');
         await adminUpdateConfig(token, item);
+        emitCatalogRefresh();
         if (options?.refresh !== false) {
             await refresh();
         }
@@ -158,12 +165,13 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         const token = await getToken();
         if (!token) throw new Error('Not authenticated');
         await adminDeleteConfig(token, id);
+        emitCatalogRefresh();
         if (options?.refresh !== false) {
             await refresh();
         }
     };
 
-    const getOptions = useCallback((category: string, mode: 'standard' | 'arabised', lang: 'en' | 'mt' = 'mt'): { value: string, label: string }[] => {
+    const getOptions = useCallback((category: string, mode: 'standard' | 'arabised' | 'latinised', lang: 'en' | 'mt' = 'mt'): { value: string, label: string }[] => {
         const items = getCategoryItems(category);
         if (items.length > 0) {
             return dedupeBy(items

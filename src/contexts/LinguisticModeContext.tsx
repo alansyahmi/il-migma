@@ -1,21 +1,35 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import type { LinguisticMode } from '@/types';
 import { resolveTerm as resolveHardcodedTerm } from '@/lib/terminology';
-import { useAdminConfig } from '@/lib/adminConfig';
 import { useLanguage } from '@/contexts/LanguageContext';
+
+type TermParams = Record<string, string | number | null | undefined>;
 
 interface LinguisticModeContextValue {
     mode: LinguisticMode;
     setMode: (mode: LinguisticMode) => void;
-    term: (key: string) => string;
+    term: (key: string, params?: TermParams) => string;
 }
 
 const LinguisticModeContext = createContext<LinguisticModeContextValue | null>(null);
 
 const STORAGE_KEY = 'il-migma:linguistic-mode';
 
+const PLACEHOLDER_RE = /\{([a-zA-Z0-9_-]+)\}/g;
+
+function interpolateTerm(template: string, params: TermParams, resolveNested: (key: string) => string) {
+    return template.replace(PLACEHOLDER_RE, (match, token) => {
+        const param = params[token];
+        if (param !== undefined && param !== null) {
+            return String(param);
+        }
+
+        const nested = resolveNested(token);
+        return nested || match;
+    });
+}
+
 export function LinguisticModeProvider({ children }: { children: React.ReactNode }) {
-    const { byCategoryAndKey } = useAdminConfig();
     const { language } = useLanguage();
     const [mode, setModeState] = useState<LinguisticMode>(() => {
         const stored = localStorage.getItem(STORAGE_KEY);
@@ -27,41 +41,25 @@ export function LinguisticModeProvider({ children }: { children: React.ReactNode
         localStorage.setItem(STORAGE_KEY, newMode);
     };
 
-    const term = useCallback((key: string) => {
+    const resolveTermInternal = useCallback((key: string, params: TermParams, seen: Set<string>) => {
         if (!key) return '';
         const lowerKey = key.toLowerCase();
         const isEn = language === 'en';
 
-        // 1. Check dynamic config via indexed maps
-        // Match order: ui_terminology -> global search (legacy)
-        const safeKey = lowerKey.replace(/[\s_]+/g, '-');
-        let dynamicItem = byCategoryAndKey.get('ui_terminology')?.get(safeKey) || byCategoryAndKey.get('ui_terminology')?.get(lowerKey);
-        
-        if (!dynamicItem) {
-            // Fallback: Global search across all categories (find first match)
-            for (const [cat, map] of byCategoryAndKey.entries()) {
-                if (cat === 'ui_terminology') continue;
-                dynamicItem = map.get(lowerKey);
-                if (dynamicItem) break;
-            }
-        }
+        if (seen.has(lowerKey)) return key;
 
-        if (dynamicItem && typeof dynamicItem.value === 'object' && dynamicItem.value !== null) {
-            const v = dynamicItem.value;
-            if (isEn) {
-                if (v.en) return v.en;
-            } else if (mode === 'arabised') {
-                const val = v.mt_arabised || v.wizen || v.en;
-                if (val) return val;
-            } else {
-                const val = v.mt_standard || v.cv || v.en;
-                if (val) return val;
-            }
-        }
+        const nextSeen = new Set(seen);
+        nextSeen.add(lowerKey);
+        const resolveNested = (nestedKey: string) => resolveTermInternal(nestedKey, params, nextSeen);
 
-        // 2. Fallback to hardcoded terminology
-        return resolveHardcodedTerm(lowerKey, mode, isEn ? 'en' : 'mt');
-    }, [byCategoryAndKey, language, mode]);
+        return interpolateTerm(
+            resolveHardcodedTerm(lowerKey, mode, isEn ? 'en' : 'mt'),
+            params,
+            resolveNested,
+        );
+    }, [language, mode]);
+
+    const term = useCallback((key: string, params: TermParams = {}) => resolveTermInternal(key, params, new Set()), [resolveTermInternal]);
 
     const contextValue = React.useMemo(() => ({ mode, setMode, term }), [mode, term]);
 

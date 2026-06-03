@@ -98,7 +98,7 @@ function DashboardContent() {
                         {user?.fullName ?? user?.firstName ?? 'Utent'}
                     </h1>
                     <div className="flex items-center gap-2 mt-1">
-                        <Badge variant={TIER_BADGE[tier]}>{TIER_LABELS[tier]}</Badge>
+                        <Badge variant={TIER_BADGE[tier as keyof typeof TIER_BADGE]}>{TIER_LABELS[tier as keyof typeof TIER_LABELS]}</Badge>
                         <span className="text-xs text-text-muted">{user?.primaryEmailAddress?.emailAddress}</span>
                     </div>
                 </div>
@@ -122,7 +122,7 @@ function DashboardContent() {
                             </div>
                             <div>
                                 <label className="text-xs font-semibold text-[#A07030] uppercase">Tier</label>
-                                <p className="text-sm text-black mt-0.5">{TIER_LABELS[tier]}</p>
+                                <p className="text-sm text-black mt-0.5">{TIER_LABELS[tier as keyof typeof TIER_LABELS]}</p>
                             </div>
                         </div>
                     </CardBody>
@@ -146,7 +146,7 @@ function DashboardContent() {
                         ) : (
                             <div className="space-y-3">
                                 <p className="text-sm">
-                                    <strong>Pjan:</strong> {TIER_LABELS[tier]}
+                                    <strong>Pjan:</strong> {TIER_LABELS[tier as keyof typeof TIER_LABELS]}
                                 </p>
                                 <p className="text-sm text-text-muted">Il-ġestjoni tal-abbonament tiġi minn Stripe (aktar tard).</p>
                             </div>

@@ -1,11 +1,11 @@
-import { Tag, Users, Globe, Zap, ClipboardList, Package, Library, Settings, Puzzle, Palette, HelpCircle, Languages, Sparkles, type LucideIcon } from 'lucide-react';
-import { normalizeGender } from './gender';
-import { normalizeEntryPos } from './entryId';
-import { resolveTerm as resolveHardcodedTerm } from './terminology';
+import { Tag, Users, Globe, Zap, ClipboardList, Package, Library, Settings, Puzzle, Palette, HelpCircle, Sparkles, type LucideIcon } from 'lucide-react';
+import { normalizeGender } from './gender.ts';
+import { normalizeEntryPos } from './entryId.ts';
+import { resolveTerm as resolveHardcodedTerm } from './terminology.ts';
 
-export type EditorType = 'simple_label' | 'pattern' | 'verb_preset' | 'ui_terminology';
+export type EditorType = 'simple_label' | 'pattern' | 'verb_preset';
 export type ListStrategy = 'label_only' | 'pattern' | 'complex_object';
-export type AdminCategoryGroupId = 'core_grammar' | 'patterns' | 'suffixes' | 'advanced' | 'ui_system';
+export type AdminCategoryGroupId = 'core_grammar' | 'patterns' | 'suffixes' | 'advanced';
 
 export interface AdminCategoryGroup {
     id: AdminCategoryGroupId;
@@ -18,7 +18,6 @@ export const ADMIN_CATEGORY_GROUPS: Record<AdminCategoryGroupId, AdminCategoryGr
     patterns: { id: 'patterns', label: 'patterns', order: 2 },
     suffixes: { id: 'suffixes', label: 'suffixes', order: 3 },
     advanced: { id: 'advanced', label: 'advanced', order: 4 },
-    ui_system: { id: 'ui_system', label: 'ui-system', order: 5 },
 };
 
 export interface AdminCategory {
@@ -33,7 +32,7 @@ export interface AdminCategory {
     hasPosFilter?: boolean;
     visibleInSidebar?: boolean;
     transformValue?: (item: any) => unknown;
-    transformOption?: (item: unknown, mode: 'standard' | 'arabised', lang: 'en' | 'mt') => { value: string, label: string } | null;
+    transformOption?: (item: unknown, mode: 'standard' | 'arabised' | 'latinised', lang: 'en' | 'mt') => { value: string, label: string } | null;
 }
 
 const DEFAULT_LABELS = { en: '', mt_standard: '', mt_arabised: '' };
@@ -45,7 +44,7 @@ const titleCase = (value: string) => value
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
     .join(' ');
 
-const defaultTransformOption = (item: unknown, mode: 'standard' | 'arabised', lang: 'en' | 'mt') => {
+const defaultTransformOption = (item: unknown, mode: 'standard' | 'arabised' | 'latinised', lang: 'en' | 'mt') => {
     const source = item as { key: string; value: unknown };
     const v = source.value as Record<string, string> | null;
     let label = source.key;
@@ -348,22 +347,11 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         listStrategy: 'label_only',
         transformValue: (i) => i.key,
     },
-    ui_terminology: {
-        id: 'ui_terminology',
-        label: 'ui-terminology',
-        icon: Languages,
-        groupId: 'ui_system',
-        storageCategories: ['ui_terminology'],
-        editorType: 'ui_terminology',
-        defaultValueFactory: () => ({ ...DEFAULT_LABELS }),
-        listStrategy: 'label_only',
-        transformValue: (i) => i.value,
-    },
 };
 
 export const getCategoryById = (id: string) => ADMIN_REGISTRY[id] || null;
 
-export const getRegistryOptions = (category: string, item: unknown, mode: 'standard' | 'arabised', lang: 'en' | 'mt') => {
+export const getRegistryOptions = (category: string, item: unknown, mode: 'standard' | 'arabised' | 'latinised', lang: 'en' | 'mt') => {
     const reg = getCategoryById(category);
     if (reg?.transformOption) return reg.transformOption(item, mode, lang);
     return defaultTransformOption(item, mode, lang);

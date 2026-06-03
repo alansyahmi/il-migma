@@ -1,6 +1,6 @@
 const POS_PREFIXES: Record<string, string> = {
-    noun: 'noun',
-    verb: 'verb',
+    noun: 'n',
+    verb: 'v',
     adjective: 'adj',
     adverb: 'adv',
     preposition: 'prep',
@@ -49,6 +49,20 @@ const POS_ALIASES: Record<string, string> = {
     'verbal noun': 'verbal_noun',
 };
 
+const ENTRY_ID_PREFIX_ALIASES: Record<string, string> = {
+    noun: 'n',
+    verb: 'v',
+};
+
+const ENTRY_ID_LEGACY_PREFIXES: Record<string, string[]> = {
+    n: ['noun'],
+    v: ['verb'],
+};
+
+function escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function normalizeKey(value: unknown): string {
     return String(value || '')
         .trim()
@@ -71,6 +85,67 @@ export function slugifyEntryHeadword(headword: unknown): string {
         .replace(/[^a-z0-9àċġħżie-]/gi, '')
         .replace(/-+/g, '-')
         .replace(/^-+|-+$/g, '');
+}
+
+export function normalizeEntryId(id: unknown): string {
+    const raw = String(id || '')
+        .normalize('NFC')
+        .trim();
+
+    if (!raw) return '';
+
+    const [rawPrefix, ...rest] = raw.split('-');
+    const normalizedPrefix = ENTRY_ID_PREFIX_ALIASES[rawPrefix.trim().toLowerCase()] || rawPrefix.trim().toLowerCase();
+    if (rest.length === 0) return normalizedPrefix;
+
+    const normalizedTail = slugifyEntryHeadword(rest.join('-'));
+
+    return normalizedTail ? `${normalizedPrefix}-${normalizedTail}` : normalizedPrefix;
+}
+
+export function getEntryIdVariants(id: unknown): string[] {
+    const normalized = normalizeEntryId(id);
+    if (!normalized) return [];
+
+    const [prefix, ...rest] = normalized.split('-');
+    const tail = rest.join('-');
+    const variants = [normalized];
+
+    if (tail && ENTRY_ID_LEGACY_PREFIXES[prefix]) {
+        for (const legacyPrefix of ENTRY_ID_LEGACY_PREFIXES[prefix]) {
+            variants.push(`${legacyPrefix}-${tail}`);
+        }
+    } else if (!tail && ENTRY_ID_LEGACY_PREFIXES[prefix]) {
+        variants.push(...ENTRY_ID_LEGACY_PREFIXES[prefix]);
+    }
+
+    return [...new Set(variants)];
+}
+
+export function getEntryIdFamily(id: unknown): { exact: string[]; likePatterns: string[] } {
+    const normalized = normalizeEntryId(id);
+    if (!normalized) return { exact: [], likePatterns: [] };
+
+    const [prefix, ...rest] = normalized.split('-');
+    const tail = rest.join('-');
+    const familyPrefixes = [prefix, ...(ENTRY_ID_LEGACY_PREFIXES[prefix] || [])];
+
+    const exact = [...new Set(familyPrefixes.map(p => tail ? `${p}-${tail}` : p))];
+    const likePatterns = tail ? familyPrefixes.map(p => `${p}-${tail}-%`) : [];
+
+    return { exact, likePatterns };
+}
+
+export function getEntryIdSuffixRegexes(id: unknown): RegExp[] {
+    const normalized = normalizeEntryId(id);
+    if (!normalized) return [];
+
+    const [prefix, ...rest] = normalized.split('-');
+    const tail = rest.join('-');
+    if (!tail) return [];
+
+    const familyPrefixes = [prefix, ...(ENTRY_ID_LEGACY_PREFIXES[prefix] || [])];
+    return familyPrefixes.map(p => new RegExp(`^${escapeRegExp(`${p}-${tail}`)}-(\\d+)$`));
 }
 
 export function getEntryIdPrefix(pos: unknown, participleType?: unknown): string {

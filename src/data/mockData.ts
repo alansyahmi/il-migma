@@ -97,17 +97,17 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'transitive',
-            perfective_3sg_m: 'kiteb',
-            imperfective_3sg_m: 'jikteb',
+            perfective_3sgm: 'kiteb',
+            imperfective_3sgm: 'jikteb',
             verbal_noun: 'ktib',
             active_participle: '*kieteb',
             passive_participle: 'miktub',
             form: 'I',
             root_tags: ['BASE', 'STRONG'],
             // Separate vowel sets per tense — engine generates the full table automatically
-            vowel_set_perfect: 'i-e',
-            vowel_set_imperfect: 'i-e',
-            vowel_set_imperative: 'i-e',
+            vowel_set_perf: 'i-e',
+            vowel_set_impf: 'i-e',
+            vowel_set_impv: 'i-e',
             synonyms: [{ headword: 'skrivi', id: 'entry-skrivi', gloss_en: 'to scribe', gloss_mt: 'jikteb' }],
             antonyms: [{ headword: 'maħħa', id: 'entry-mahha', gloss_en: 'to erase', gloss_mt: 'ħassar' }],
             related_entries: [
@@ -156,7 +156,7 @@ export const MOCK_ENTRIES: Entry[] = [
         subentries: [
             {
                 id: 'sub-ifittex',
-                entry_id: 'entry-kiteb',
+                // entry_id: 'entry-kiteb',
                 headword: 'kitba',
                 pos: 'noun',
                 definitions: [
@@ -166,7 +166,7 @@ export const MOCK_ENTRIES: Entry[] = [
             },
             {
                 id: 'sub-miktub',
-                entry_id: 'entry-kiteb',
+                // entry_id: 'entry-kiteb',
                 headword: 'miktub',
                 pos: 'adjective',
                 definitions: [
@@ -179,29 +179,12 @@ export const MOCK_ENTRIES: Entry[] = [
             { id: 'ph-kiteb', ipa: '/ˈkɪtɛp/', dialect: 'Standard' },
             { id: 'ph-kiteb-v', ipa: '/ˈkɪtɛb/', dialect: 'Valletta' },
         ],
-        etymologies: [
-            {
-                id: 'ety-kiteb',
-                entry_id: 'entry-kiteb',
-                chain: [
-                    { language: 'Arabic', form: 'كَتَبَ', meaning: 'to write', script: 'كَتَبَ' },
-                    { language: 'Arabic', form: 'kataba', meaning: 'to write (Classical Arabic)' },
-                    { language: 'Arabic', form: 'kiteb', meaning: 'Siculo-Arabic transmission', time_period: '9th–11th c.' },
-                ],
-                notes: 'Direct descendant of the Semitic root k-t-b, one of the clearest Arabic retentions in Maltese.',
-                attestation: {
-                    id: 'att-kiteb',
-                    entry_id: 'entry-kiteb',
-                    reliability_index: 97,
-                    scores: [
-                        { source_id: 'src-aquilina', source_name: 'Aquilina', reliability_weight: 0.92, attested: true },
-                        { source_id: 'src-kunsill', source_name: 'Kunsill tal-Malti', reliability_weight: 0.88, attested: true },
-                        { source_id: 'src-borg', source_name: 'Borg & Azzopardi-Alexander', reliability_weight: 0.78, attested: true },
-                    ],
-                    computed_at: '2024-01-01T00:00:00Z',
-                },
-            },
+        etymology_chain: [
+            { language: 'Arabic', form: 'كَتَبَ', meaning: 'to write', script: 'كَتَبَ' },
+            { language: 'Arabic', form: 'kataba', meaning: 'to write (Classical Arabic)' },
+            { language: 'Arabic', form: 'kiteb', meaning: 'Siculo-Arabic transmission', time_period: '9th–11th c.' },
         ],
+        etymology_notes: 'Direct descendant of the Semitic root k-t-b, one of the clearest Arabic retentions in Maltese.',
         is_loanword: false,
         source_language: 'Arabic',
         tags: ['semitic-core', 'common'],
@@ -238,13 +221,13 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         noun_morphology: {
             gender: 'masculine',
-            singular: 'ktieb',
+    singular_form: 'ktieb',
             plural_forms: ['kotba'],
-            plural_pattern: 'CvCCa',
-            diminutive: 'ktejjeb',
+            // plural_pattern: 'CvCCa',
+            diminutive_form: 'ktejjeb',
         },
-        cv_pattern: 'CCâC',
-        plural_pattern: 'CvCCa',
+        // // cv_pattern: 'CCâC',
+        // plural_pattern: 'CvCCa',
         definitions: [
             {
                 id: 'def-ktieb-1',
@@ -279,7 +262,7 @@ export const MOCK_ENTRIES: Entry[] = [
         subentries: [
             {
                 id: 'sub-ktejjeb',
-                entry_id: 'entry-ktieb',
+                // entry_id: 'entry-ktieb',
                 headword: 'ktejjeb',
                 pos: 'noun',
                 definitions: [
@@ -289,7 +272,7 @@ export const MOCK_ENTRIES: Entry[] = [
             },
             {
                 id: 'sub-ktieb-skola',
-                entry_id: 'entry-ktieb',
+                // entry_id: 'entry-ktieb',
                 headword: 'ktieb tal-iskola',
                 definitions: [
                     { id: 'def-ktsb-1', sense_number: 1, text_en: 'schoolbook, textbook', text_mt: 'ktieb użat fl-iskola' },
@@ -300,29 +283,12 @@ export const MOCK_ENTRIES: Entry[] = [
         phonetics: [
             { id: 'ph-ktieb', ipa: '/ktieːp/', dialect: 'Standard' },
         ],
-        etymologies: [
-            {
-                id: 'ety-ktieb',
-                entry_id: 'entry-ktieb',
-                chain: [
-                    { language: 'Arabic', form: 'كِتَاب', meaning: 'book', script: 'كِتَاب' },
-                    { language: 'Arabic', form: 'kitāb', meaning: 'book (Classical Arabic)' },
-                    { language: 'Arabic', form: 'ktieb', meaning: 'Siculo-Arabic phonological reduction' },
-                ],
-                notes: 'From Ar. كتاب kitāb. The long vowel /aː/ in the second syllable was reduced, and the final consonant devoiced in the Standard dialect.',
-                attestation: {
-                    id: 'att-ktieb',
-                    entry_id: 'entry-ktieb',
-                    reliability_index: 99,
-                    scores: [
-                        { source_id: 'src-aquilina', source_name: 'Aquilina', reliability_weight: 0.92, attested: true },
-                        { source_id: 'src-kunsill', source_name: 'Kunsill tal-Malti', reliability_weight: 0.88, attested: true },
-                        { source_id: 'src-bartoli', source_name: 'Bartoli', reliability_weight: 0.80, attested: true },
-                    ],
-                    computed_at: '2024-01-01T00:00:00Z',
-                },
-            },
+        etymology_chain: [
+            { language: 'Arabic', form: 'كِتَاب', meaning: 'book', script: 'كِتَاب' },
+            { language: 'Arabic', form: 'kitāb', meaning: 'book (Classical Arabic)' },
+            { language: 'Arabic', form: 'ktieb', meaning: 'Siculo-Arabic phonological reduction' },
         ],
+        etymology_notes: 'From Ar. كتاب kitāb. The long vowel /aː/ in the second syllable was reduced, and the final consonant devoiced in the Standard dialect.',
         is_loanword: false,
         source_language: 'Arabic',
         tags: ['semitic-core', 'common'],
@@ -358,9 +324,9 @@ export const MOCK_ENTRIES: Entry[] = [
             },
         },
         adjective_morphology: {
-            masculine: 'abjad',
-            feminine: 'bajda',
-            plural: 'bojod',
+    form_masc: 'abjad',
+    form_fem: 'bajda',
+    plural_form: 'bojod',
         },
         definitions: [
             {
@@ -384,27 +350,11 @@ export const MOCK_ENTRIES: Entry[] = [
             },
         ],
         phonetics: [{ id: 'ph-abjad', ipa: '/ˈapjat/', dialect: 'Standard' }],
-        etymologies: [
-            {
-                id: 'ety-abjad',
-                entry_id: 'entry-abjad',
-                chain: [
-                    { language: 'Arabic', form: 'أَبْيَض', meaning: 'white (masc.)', script: 'أَبْيَض' },
-                    { language: 'Arabic', form: 'abyaḍ', meaning: 'white (Classical Arabic)' },
-                ],
-                notes: 'From Ar. أبيض abyaḍ. Classic Semitic colour adjective pattern aCCaC (elative). Feminine bajda from Ar. بيضاء baydāʾ.',
-                attestation: {
-                    id: 'att-abjad',
-                    entry_id: 'entry-abjad',
-                    reliability_index: 95,
-                    scores: [
-                        { source_id: 'src-aquilina', source_name: 'Aquilina', reliability_weight: 0.92, attested: true },
-                        { source_id: 'src-kunsill', source_name: 'Kunsill tal-Malti', reliability_weight: 0.88, attested: true },
-                    ],
-                    computed_at: '2024-01-01T00:00:00Z',
-                },
-            },
+        etymology_chain: [
+            { language: 'Arabic', form: 'أَبْيَض', meaning: 'white (masc.)', script: 'أَبْيَض' },
+            { language: 'Arabic', form: 'abyaḍ', meaning: 'white (Classical Arabic)' },
         ],
+        etymology_notes: 'From Ar. أبيض abyaḍ. Classic Semitic colour adjective pattern aCCaC (elative). Feminine bajda from Ar. بيضاء baydāʾ.',
         is_loanword: false,
         source_language: 'Arabic',
         tags: ['semitic-core', 'colour'],
@@ -441,14 +391,14 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'transitive',
-            perfective_3sg_m: 'fagħal',
-            imperfective_3sg_m: 'jifgħal',
+            perfective_3sgm: 'fagħal',
+            imperfective_3sgm: 'jifgħal',
             verbal_noun: 'fagħal',
             form: 'I',
             root_tags: ['BASE', 'STRONG', 'GUTTURAL'],
-            vowel_set_perfect: 'a-a',
-            vowel_set_imperfect: 'i-a',
-            vowel_set_imperative: 'i-a',
+            vowel_set_perf: 'a-a',
+            vowel_set_impf: 'i-a',
+            vowel_set_impv: 'i-a',
         },
         definitions: [
             { id: 'def-faghal-1', sense_number: 1, text_en: 'to do', text_mt: 'li jagħmel' }
@@ -487,13 +437,13 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'intransitive',
-            perfective_3sg_m: 'ħolom',
-            imperfective_3sg_m: 'joħlom',
+            perfective_3sgm: 'ħolom',
+            imperfective_3sgm: 'joħlom',
             form: 'I',
             root_tags: ['BASE', 'STRONG'],
-            vowel_set_perfect: 'o-o',
-            vowel_set_imperfect: 'o-o',
-            vowel_set_imperative: 'o-o',
+            vowel_set_perf: 'o-o',
+            vowel_set_impf: 'o-o',
+            vowel_set_impv: 'o-o',
         },
         definitions: [
             { id: 'def-holom-1', sense_number: 1, text_en: 'to dream', text_mt: 'li joħlom' }
@@ -533,13 +483,13 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'intransitive',
-            perfective_3sg_m: 'dar',
-            imperfective_3sg_m: 'jdur',
+            perfective_3sgm: 'dar',
+            imperfective_3sgm: 'jdur',
             form: 'I',
             root_tags: ['BASE', 'WEAK', 'HOLLOW'],
-            vowel_set_perfect: 'a--',
-            vowel_set_imperfect: 'u--',
-            vowel_set_imperative: 'u--',
+            vowel_set_perf: 'a--',
+            vowel_set_impf: 'u--',
+            vowel_set_impv: 'u--',
         },
         definitions: [
             { id: 'def-dar-1', sense_number: 1, text_en: 'to turn / revolve', text_mt: 'li jdur' }
@@ -579,14 +529,14 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'both',
-            perfective_3sg_m: 'beda',
-            imperfective_3sg_m: 'jibda',
+            perfective_3sgm: 'beda',
+            imperfective_3sgm: 'jibda',
             verbal_noun: 'bidu',
             form: 'I',
             root_tags: ['BASE', 'WEAK', 'DEFECTIVE'],
-            vowel_set_perfect: 'e-a',
-            vowel_set_imperfect: 'i-a',
-            vowel_set_imperative: 'i-a',
+            vowel_set_perf: 'e-a',
+            vowel_set_impf: 'i-a',
+            vowel_set_impv: 'i-a',
         },
         definitions: [
             { id: 'def-beda-1', sense_number: 1, text_en: 'to begin, to start', text_mt: 'li jibda jagħmel xi ħaġa' }
@@ -626,14 +576,14 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'transitive',
-            perfective_3sg_m: 'wiret',
-            imperfective_3sg_m: 'jiret',
+            perfective_3sgm: 'wiret',
+            imperfective_3sgm: 'jiret',
             verbal_noun: 'wirt',
             form: 'I',
             root_tags: ['BASE', 'WEAK', 'ASSIMILATIVE'],
-            vowel_set_perfect: 'i-e',
-            vowel_set_imperfect: 'i-e',
-            vowel_set_imperative: 'i-e',
+            vowel_set_perf: 'i-e',
+            vowel_set_impf: 'i-e',
+            vowel_set_impv: 'i-e',
         },
         definitions: [
             { id: 'def-wiret-1', sense_number: 1, text_en: 'to inherit', text_mt: 'li jieħu bħala wirt' }
@@ -672,14 +622,14 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'transitive',
-            perfective_3sg_m: "laqa'",
-            imperfective_3sg_m: "jilqa'",
+            perfective_3sgm: "laqa'",
+            imperfective_3sgm: "jilqa'",
             verbal_noun: 'laqgħa',
             form: 'I',
             root_tags: ['BASE', 'STRONG-HYBRID'],
-            vowel_set_perfect: 'a-a',
-            vowel_set_imperfect: 'i-a',
-            vowel_set_imperative: 'i-a',
+            vowel_set_perf: 'a-a',
+            vowel_set_impf: 'i-a',
+            vowel_set_impv: 'i-a',
         },
         definitions: [
             { id: 'def-laqa-1', sense_number: 1, text_en: 'to receive, to meet, to welcome', text_mt: 'li jilqa\' lil xi ħadd' }
@@ -718,13 +668,13 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'intransitive',
-            perfective_3sg_m: 'ħeja',
-            imperfective_3sg_m: 'jeħji',
+            perfective_3sgm: 'ħeja',
+            imperfective_3sgm: 'jeħji',
             form: 'I',
             root_tags: ['BASE', 'WEAK', 'DEFECTIVE', 'GEMINATED'],
-            vowel_set_perfect: 'e-a',
-            vowel_set_imperfect: 'a-i',
-            vowel_set_imperative: 'e-i',
+            vowel_set_perf: 'e-a',
+            vowel_set_impf: 'a-i',
+            vowel_set_impv: 'e-i',
         },
         definitions: [
             { id: 'def-heja-1', sense_number: 1, text_en: 'to live, to revive', text_mt: 'li jgħix' }
@@ -763,14 +713,14 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'transitive',
-            perfective_3sg_m: 'fettaħ',
-            imperfective_3sg_m: 'jfettaħ',
+            perfective_3sgm: 'fettaħ',
+            imperfective_3sgm: 'jfettaħ',
             verbal_noun: 'tiftiħ',
             form: 'II',
             root_tags: ['DERIVED', 'STRONG'],
-            vowel_set_perfect: 'e-a',
-            vowel_set_imperfect: 'e-a',
-            vowel_set_imperative: 'e-a',
+            vowel_set_perf: 'e-a',
+            vowel_set_impf: 'e-a',
+            vowel_set_impv: 'e-a',
         },
         definitions: [
             { id: 'def-fettah-1', sense_number: 1, text_en: 'to open repeatedly or wide', text_mt: 'li jiftaħ ħafna' }
@@ -809,14 +759,14 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'transitive',
-            perfective_3sg_m: 'maħħa',
-            imperfective_3sg_m: 'jmaħħi',
+            perfective_3sgm: 'maħħa',
+            imperfective_3sgm: 'jmaħħi',
             verbal_noun: 'tmaħħija', // defective Form II verbal: tCvCCija
             form: 'II',
             root_tags: ['DERIVED', 'WEAK', 'DEFECTIVE'],
-            vowel_set_perfect: 'a-a',
-            vowel_set_imperfect: 'a-i',
-            vowel_set_imperative: 'a-i',
+            vowel_set_perf: 'a-a',
+            vowel_set_impf: 'a-i',
+            vowel_set_impv: 'a-i',
         },
         definitions: [
             { id: 'def-mahha-1', sense_number: 1, text_en: 'to erase, to rub out', text_mt: 'li jħassar' }
@@ -856,14 +806,14 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'transitive',
-            perfective_3sg_m: 'dawwar',
-            imperfective_3sg_m: 'jdawwar',
+            perfective_3sgm: 'dawwar',
+            imperfective_3sgm: 'jdawwar',
             verbal_noun: 'tidwir',
             form: 'II',
             root_tags: ['DERIVED', 'WEAK', 'HOLLOW'],
-            vowel_set_perfect: 'a-a',
-            vowel_set_imperfect: 'a-a',
-            vowel_set_imperative: 'a-a',
+            vowel_set_perf: 'a-a',
+            vowel_set_impf: 'a-a',
+            vowel_set_impv: 'a-a',
         },
         definitions: [
             { id: 'def-dawwar-1', sense_number: 1, text_en: 'to turn, to rotate', text_mt: 'li jdur' }
@@ -902,14 +852,14 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'transitive',
-            perfective_3sg_m: 'bierek',
-            imperfective_3sg_m: 'jbierek',
+            perfective_3sgm: 'bierek',
+            imperfective_3sgm: 'jbierek',
             passive_participle: 'mbierek',
             form: 'III',
             root_tags: ['BASE', 'STRONG'],
-            vowel_set_perfect: 'ie-e',
-            vowel_set_imperfect: 'ie-e',
-            vowel_set_imperative: 'ie-e',
+            vowel_set_perf: 'ie-e',
+            vowel_set_impf: 'ie-e',
+            vowel_set_impv: 'ie-e',
         },
         definitions: [
             { id: 'def-bierek-1', sense_number: 1, text_en: 'to bless', text_mt: 'li jbierek' }
@@ -950,14 +900,14 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'transitive',
-            perfective_3sg_m: 'dawar',
-            imperfective_3sg_m: 'jdawar',
+            perfective_3sgm: 'dawar',
+            imperfective_3sgm: 'jdawar',
             verbal_noun: '*tdawir',
             form: 'III',
             root_tags: ['DERIVED', 'WEAK', 'HOLLOW', 'THEORETICAL'],
-            vowel_set_perfect: 'a-a',
-            vowel_set_imperfect: 'a-a',
-            vowel_set_imperative: 'a-a',
+            vowel_set_perf: 'a-a',
+            vowel_set_impf: 'a-a',
+            vowel_set_impv: 'a-a',
         },
         definitions: [
             { id: 'def-dawar-1', sense_number: 1, text_en: 'to cause to turn (theoretical)', text_mt: 'li jġiegħel idur (teoretiku)' }
@@ -997,13 +947,13 @@ export const MOCK_ENTRIES: Entry[] = [
         },
         verb_morphology: {
             transitivity: 'intransitive',
-            perfective_3sg_m: 'bieda',
-            imperfective_3sg_m: 'jbiedi',
+            perfective_3sgm: 'bieda',
+            imperfective_3sgm: 'jbiedi',
             form: 'III',
             root_tags: ['DERIVED', 'WEAK', 'DEFECTIVE'],
-            vowel_set_perfect: 'ie-a',
-            vowel_set_imperfect: 'ie-i',
-            vowel_set_imperative: 'ie-i',
+            vowel_set_perf: 'ie-a',
+            vowel_set_impf: 'ie-i',
+            vowel_set_impv: 'ie-i',
         },
         definitions: [
             { id: 'def-bieda-1', sense_number: 1, text_en: 'to till the land in a group', text_mt: "li jbeddja l-art b'grupp" }
@@ -1016,17 +966,17 @@ export const MOCK_ENTRIES: Entry[] = [
         id: 'entry-lsien',
         headword: 'lsien',
         pos: 'noun',
-        cv_pattern: 'CCâC',
-        plural_pattern: 'iCCCa',
+        // // cv_pattern: 'CCâC',
+        // plural_pattern: 'iCCCa',
         definitions: [
             { id: 'def-lsien-1', sense_number: 1, text_en: 'tongue', text_mt: 'lsien' },
             { id: 'def-lsien-2', sense_number: 2, text_en: 'language', text_mt: 'ilsien' }
         ],
         noun_morphology: {
             gender: 'masculine',
-            singular: 'lsien',
+    singular_form: 'lsien',
             plural_forms: ['ilsna'],
-            plural_pattern: 'iCCCa',
+            // plural_pattern: 'iCCCa',
         },
         is_loanword: false,
         created_at: '2024-01-01T00:00:00Z',

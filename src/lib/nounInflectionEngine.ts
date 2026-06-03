@@ -36,9 +36,10 @@ export interface NounStems {
 export function generateNounStems(
     base: string,
     pattern?: string,
-    gender: Gender = 'masculine'
+    gender: Gender = 'masculine',
+    ipaHint?: string,
 ): NounStems {
-    return deriveNounAttachmentStems(base, gender, undefined, pattern);
+    return deriveNounAttachmentStems(base, gender, undefined, pattern, ipaHint);
 }
 
 /**
@@ -49,13 +50,14 @@ export function applyPossessiveSuffix(
     idx: PossessiveSuffixIdx,
     gender: Gender = 'masculine',
     pattern?: string,
-    thirdRadical?: string
+    thirdRadical?: string,
+    ipaHint?: string,
 ): string {
     if (!base || base === '-') return '-';
 
     const suffix = SUFFIXES[idx];
     const isVowelSuffix = /^[aeiou]/i.test(suffix);
-    const { stemA, stemB } = generateNounStems(base, pattern, gender);
+    const { stemA, stemB } = generateNounStems(base, pattern, gender, ipaHint);
 
     let stem = isVowelSuffix ? stemB : stemA;
     let finalSuffix: string = suffix;

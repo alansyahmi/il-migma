@@ -168,7 +168,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'dictionary': { en: 'Dictionary', standard: 'Dizzjunarju', arabised: 'Miklem' },
     'comprehensive': { en: 'Comprehensive', standard: 'Komprensiv', arabised: 'Wesgħani' },
     'digital': { en: 'Digital', standard: 'Diġitali', arabised: 'Għaddieni' },
-    'online': { en: 'online', standard: 'onlajn', arabised: 'fuq linja' },
+    'online': { en: 'online', standard: 'online', arabised: 'fuq linja' },
     'researchers': { en: 'researchers', standard: 'riċerkaturi', arabised: 'fittixin' },
 
     // Advanced Search
@@ -201,6 +201,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     "include-suggested-desc": { en: "Include suggested results in the filter.", standard: "Inkludi riżultati ssuġġeriti fil-filtru.", arabised: "Inkludi riżultati ssuġġeriti fil-filtru." },
     "no-results-desc": { en: "If you think this is a mistake, feel free to suggest this term into the database.", standard: "Jekk taħseb li dan huwa żball, tħossok liberu li tissuġġerixxi dan it-terminu fid-database.", arabised: "Jekk taħseb li dan huwa għelt, int ħieles biex tissuġġerixxi dan il-magħlqa fid-database." },
     "no-results-found": { en: "No results found for '{q}'.", standard: "L-ebda riżultat ma nstab għal '{q}'.", arabised: "L-ebda riżultat ma nstab għal '{q}'." },
+    "no-results-found-empty": { en: "No results found.", standard: "L-ebda riżultat ma nstab.", arabised: "L-ebda riżultat ma nstab." },
     "random-entries-desc": { en: "Showing some random entries to get you started.", standard: "Qed juru xi entrati każwali biex tibda.", arabised: "Qed juru xi madħliet kif ġie ġie biex tista' tibda." },
     "filter-options": { en: "Filter Options", standard: "Għażliet tal-Filtru", arabised: "Għażliet tal-Filtru" },
     "advanced-search-desc": { en: "Utilise our advanced search function to narrow down the search further.", standard: "Uża l-funzjoni tat-tiftix avvanzat sabiex tnaqqas ir-riżultati.", arabised: "Uża l-għan tat-tiftix avvanzat sabiex tnaqqas il-ħsiliet." },
@@ -335,13 +336,13 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'help': { en: 'Help', standard: 'Għajnuna', arabised: 'Għajnuna' },
 
     // Home Page
-    'dictionary-title': { en: "A Comprehensive Digital Maltese-English Dictionary", standard: "Dizzjunarju u Konjugatur Komprensiv Diġitali tal-Malti-Ingliż", arabised: "Miklem u Sarraf Wesgħani Għaddieni tal-Malti-Ingliż" },
-    'home-desc': { en: "An ever-growing online tool for learners and researchers to the meaning, history, and usage of 300,000 words in Maltese and its dialects.", standard: "Għodda onlajn li dejjem tikber għal dawk li jitgħallmu u għar-riċerkaturi dwar it-tifsira, l-istorja u l-użu ta' 300,000 kelma bil-Malti u d-djaletti tiegħu.", arabised: "Għodda fuq linja li dejjem tikber għal dawk li jitgħallmu u għall-fittixin dwar it-tagħliq, l-oriġini u l-użu ta' 300,000 kelma bil-Malti u l-lsejnin tiegħu." },
+    'dictionary-title': { en: "A Comprehensive Digital Maltese-English Dictionary", standard: "Dizzjunarju u Konjugatur Komprensiv Diġitali Malti-Ingliż", arabised: "Miklem u Sarraf Wesgħani Diġitali Malti-Ingliż" },
+    'home-desc': { en: "An ever-growing {online} tool for learners and researchers to the meaning, history, and usage of {count} words in Maltese and its dialects.", standard: "Għodda {online} li dejjem tikber għal dawk li jitgħallmu u għar-riċerkaturi dwar it-tifsira, l-istorja u l-użu ta' {count} kelma bil-Malti u bid-djaletti tiegħu.", arabised: "Għodda {online} li dejjem tikber għal dawk li jitgħallmu u għall-fittixin dwar it-tagħliq, l-oriġini u l-użu ta' {count} kelma bil-Malti u l-lsejnin tiegħu." },
     'ipa-audio-title': { en: "IPA & Audio Pronunciation", standard: "IPA u Pronunzja bl-Awdjo", arabised: "IPA u Tlissin bil-Ħoss" },
     'ipa-audio-desc': { en: "Every term will have its own IPA and audio to help learners.", standard: "Kull terminu se jkollu l-IPA u l-awdjo tiegħu biex jgħin lil dawk li jitgħallmu.", arabised: "Kull magħlqa se jkollha l-IPA u ħossha biex tgħin lil dawk li jitgħallmu." },
     'welcome-admin': { en: "Welcome back Admin {name}!", standard: "Merħba lura Admin {name}!", arabised: "Merħba lura Admin {name}!" },
     'root-mgmt-desc': { en: "Manage your consonants, etymology, and derived roots from one point.", standard: "Immaniġġja l-konsonanti, l-etimoloġija, u l-għeruq derivati tiegħek minn punt wieħed.", arabised: "Immaniġġja l-konsonanti, l-oriġini, u l-ġidriet imħarrġa tiegħek minn punt wieħed." },
-    'word-entries-desc': { en: "Add new words, update meanings and IPA in your library of 300k+ entries.", standard: "Żid kliem ġdid, aġġorna t-tifsiriet u l-IPA fil-librerija tiegħek ta' 300k+ entrati.", arabised: "Żid kliem ġdid, aġġorna t-tagħliq u l-IPA fil-librerija tiegħek ta' 300k+ madħliet." },
+    'word-entries-desc': { en: "Add new words, update meanings and IPA in your library of {count} entries.", standard: "Żid kliem ġdid, aġġorna t-tifsiriet u l-IPA fil-librerija tiegħek ta' {count} entrati.", arabised: "Żid kliem ġdid, aġġorna t-tagħliq u l-IPA fil-librerija tiegħek ta' {count} madħliet." },
     'content-blog-desc': { en: "Publish new articles and add usage examples to enhance the user experience.", standard: "Ippubblika artikli ġodda u żid eżempji ta' użu biex ttejjeb l-esperjenza tal-utent.", arabised: "Ippubblika artikli ġodda u żid tixbihat ta' użu biex ttejjeb l-esperjenza tal-utent." },
     'root-mgmt-open': { en: "Open Root Management", standard: "Iftaħ Ġestjoni tal-Għeruq", arabised: "Iftaħ Ġestjoni tal-Ġidriet" },
     'manage-entries': { en: "Manage Entries", standard: "Immaniġġja l-Entrati", arabised: "Immaniġġja l-Madħliet" },
@@ -505,6 +506,8 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'collective': { en: 'Collective', standard: 'Kollettiv', arabised: 'Ġemmiegħi' },
     'singulative': { en: 'Singulative', standard: 'Singulattiv', arabised: 'Farradi' },
     'unit': { en: 'Unit', standard: 'Unità', arabised: 'Unità' },
+    'common': { en: 'Common', standard: 'Komuni', arabised: 'Komuni' },
+    'proper': { en: 'Proper', standard: 'Propju', arabised: 'Propju' },
     'verbal': { en: 'Verbal', standard: 'Verbali', arabised: 'Fagħli' },
     'form-title': { en: 'Form', standard: 'Forma', arabised: 'Forma' },
     'strength-title': { en: 'Strength', standard: 'Saħħa', arabised: 'Saħħa' },
@@ -517,7 +520,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'with-pronoun': { en: 'With Pronoun', standard: 'Bl-Anness', arabised: 'Bl-Anness' },
     'broken-plural': { en: 'Broken Plural', standard: 'Plural Miksur', arabised: 'Ġmigħ Miksur' },
 
-    // Tag labels (ui_terminology convention: tag-<normalized-tag-key>)
+    // Tag labels use the tag-<normalized-tag-key> convention.
     'tag-common': { en: 'Common', standard: 'Komuni', arabised: 'Imferrex' },
     'tag-semitic-core': { en: 'Semitic Core', standard: 'Qalba Semitika', arabised: 'Qalba Siemi' },
     'tag-romance-core': { en: 'Romance Core', standard: 'Qalba Rumanz', arabised: 'Qalba Rumanzi' },

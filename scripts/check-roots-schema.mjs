@@ -16,7 +16,7 @@ async function run() {
         const columnNames = res.rows.map(r => r.name);
         if (!columnNames.includes('is_geminate')) {
             console.log('Adding is_geminate column to roots table...');
-            await db.execute("ALTER TABLE roots ADD COLUMN is_geminate INTEGER DEFAULT 0");
+            await db.execute("ALTER TABLE roots ADD COLUMN is_geminate BOOLEAN DEFAULT false");
             console.log('Column added.');
         } else {
             console.log('is_geminate column already exists.');

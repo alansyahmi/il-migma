@@ -57,26 +57,7 @@ export function validateAndNormalize(category, value) {
         return normalized;
     }
 
-    // 2. UI Terminology
-    if (category === 'ui_terminology') {
-        if (typeof value !== 'object' || value === null) {
-            throw new Error('UI Terminology must be an object of localized strings');
-        }
-
-        const normalized = {
-            en: nfc(value.en || ''),
-            mt_standard: nfc(value.mt_standard || ''),
-            mt_arabised: nfc(value.mt_arabised || '')
-        };
-
-        if (!normalized.en && !normalized.mt_standard && !normalized.mt_arabised) {
-            throw new Error('UI Terminology must have at least one translation');
-        }
-
-        return normalized;
-    }
-
-    // 3. Verb Presets
+    // 2. Verb Presets
     if (category === 'verb_preset') {
         if (typeof value !== 'object' || value === null) {
             throw new Error('Verb Preset must be an object');
@@ -104,7 +85,7 @@ export function validateAndNormalize(category, value) {
         return normalized;
     }
 
-    // 4. Default / Simple Labels
+    // 3. Default / Simple Labels
     // If it's a string, we wrap it into a localized object for consistency
     if (typeof value === 'string') {
         const val = nfc(value);

@@ -108,7 +108,7 @@ export function RootManager() {
     };
 
     const handleDelete = async (id: string, consonants: string) => {
-        if (!confirm(term('delete-root-confirm').replace('{cons}', consonants))) return;
+        if (!confirm(term('delete-root-confirm', { cons: consonants }))) return;
 
         try {
             const token = await getToken();
@@ -123,14 +123,14 @@ export function RootManager() {
 
     const handleBulkDelete = async () => {
         const count = selectedIds.size;
-        if (!confirm(term('bulk-delete-confirm').replace('{count}', count.toString()))) return;
+        if (!confirm(term('bulk-delete-confirm', { count }))) return;
 
         try {
             const token = await getToken();
             if (!token) throw new Error('Not authenticated');
             await adminBulkDeleteRoots(token, Array.from(selectedIds));
             setSelectedIds(new Set());
-            showToast(term('items-deleted').replace('{count}', count.toString()));
+            showToast(term('items-deleted', { count }));
             load();
         } catch (e: unknown) {
             showToast(e instanceof Error ? e.message : String(e), false);
@@ -186,7 +186,7 @@ export function RootManager() {
                 <div className="flex justify-center py-16"><Spinner /></div>
             ) : noResults ? (
                 <WorkspaceEmptyState
-                    title={query ? term('no-results-found').replace('{q}', query) : term('no-results-found').replace(" for '{q}'", '').replace(" għal '{q}'", '')}
+                    title={query ? term('no-results-found', { q: query }) : term('no-results-found-empty')}
                     actionLabel={query ? term('clear-selection') : term('new-root')}
                     onAction={query ? () => setQuery('') : () => setShowAdd(true)}
                 />

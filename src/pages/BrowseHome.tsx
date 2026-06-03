@@ -83,6 +83,7 @@ export function BrowseHome() {
     };
 
     useEffect(() => {
+        let isActive = true;
         let configs: { label: string; filter: Record<string, string>; group?: string; forms?: string[] }[] = [];
 
         if (selectedPOS === 'all') {
@@ -154,7 +155,9 @@ export function BrowseHome() {
                 ...(sub.forms?.length ? { forms: sub.forms } : {}),
             })
                 .then((res) => {
+                    if (!isActive) return;
                     setSubcategories((prev) => {
+                        if (!isActive) return prev;
                         const next = [...prev];
                         if (next[index]) {
                             next[index] = {
@@ -168,16 +171,25 @@ export function BrowseHome() {
                     });
                 })
                 .catch((err) => {
+                    if (!isActive) return;
                     console.error(`Failed to fetch ${sub.label}:`, err);
                     setSubcategories((prev) => {
+                        if (!isActive) return prev;
                         const next = [...prev];
                         if (next[index]) {
-                            next[index].loading = false;
+                            next[index] = {
+                                ...next[index],
+                                loading: false,
+                            };
                         }
                         return next;
                     });
                 });
         });
+
+        return () => {
+            isActive = false;
+        };
     }, [selectedPOS, term]);
 
     useEffect(() => {
@@ -190,9 +202,9 @@ export function BrowseHome() {
         <>
             <BrowsePageHeader
                 active="entries"
-                description={counts.total > 0
-                    ? term('home-desc').replace('300,000', counts.total.toLocaleString())
-                    : term('home-desc')}
+                description={term('home-desc', {
+                    count: counts.total > 0 ? counts.total.toLocaleString() : '—',
+                })}
             />
 
             <div className="mb-10">

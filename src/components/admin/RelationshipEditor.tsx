@@ -191,16 +191,16 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
 
                 if (resolvedEntry) {
                     const nextItems = [...items];
-                    nextItems[index] = {
-                        ...nextItems[index],
-                        id: resolvedEntry.id,
-                        headword: resolvedEntry.headword,
-                        gloss_en: resolvedEntry.definitions?.[0]?.text_en || '',
-                        gloss_mt: resolvedEntry.definitions?.[0]?.text_mt || '',
-                        pos: resolvedEntry.pos,
-                        cv_pattern: resolvedEntry.cv_pattern || resolvedEntry.root_pattern_form?.pattern?.cv_notation || '',
-                        wizen_pattern: resolvedEntry.root_pattern_form?.pattern?.wizen_notation || ''
-                    };
+                        nextItems[index] = {
+                            ...nextItems[index],
+                            id: resolvedEntry.id,
+                            headword: resolvedEntry.headword,
+                            gloss_en: resolvedEntry.definitions?.[0]?.text_en || '',
+                            gloss_mt: resolvedEntry.definitions?.[0]?.text_mt || '',
+                            pos: resolvedEntry.pos,
+                            cv_pattern: resolvedEntry.root_pattern_form?.pattern?.cv_notation || '',
+                            wizen_pattern: resolvedEntry.root_pattern_form?.pattern?.wizen_notation || ''
+                        };
                     onChange(nextItems);
                     setRowState(index, 'success');
                 } else {
@@ -236,7 +236,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
         gloss_en: entry.definitions?.[0]?.text_en || '',
         gloss_mt: entry.definitions?.[0]?.text_mt || '',
         pos: entry.pos,
-        cv_pattern: entry.cv_pattern || entry.root_pattern_form?.pattern?.cv_notation || '',
+        cv_pattern: entry.root_pattern_form?.pattern?.cv_notation || '',
         wizen_pattern: entry.root_pattern_form?.pattern?.wizen_notation || ''
     });
 

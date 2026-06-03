@@ -7,12 +7,30 @@
 
 import { createClient } from '@libsql/client/web';
 import { resolveEntryGender } from '../../../src/lib/gender.ts';
+import { normalizeSourceMetadata } from '../../../src/lib/sourceMetadata.ts';
+import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../../src/lib/entryHydration.ts';
+import { applyVerbMorphologyCompatibility, ensureVerbMorphologyTable } from '../../../src/lib/verbMorphology.ts';
+import { getEntryIdFamily, normalizeEntryId } from '../../../src/lib/entryId.ts';
 
 function firstSenseText(value) {
     if (value === undefined || value === null) return '';
     const text = String(value).trim();
     if (!text) return '';
     return text.split(/\s*;\s*/)[0]?.trim() || '';
+}
+
+function normalizeDefinitionList(definitions) {
+    if (!Array.isArray(definitions)) return [];
+    return definitions.map((def, index) => ({
+        id: def?.id || `definition-${index}`,
+        sense_number: Number(def?.sense_number ?? index + 1),
+        text_en: String(def?.text_en || '').trim(),
+        text_mt: def?.text_mt == null ? null : String(def.text_mt).trim() || null,
+        register: String(def?.register || '').trim(),
+        nuance: String(def?.nuance || '').trim(),
+        field: String(def?.field || '').trim(),
+        example_sentences: Array.isArray(def?.example_sentences) ? def.example_sentences : [],
+    }));
 }
 
 async function ensureDiminutivesTableExists(db) {
@@ -47,14 +65,33 @@ export async function onRequestGet({ params, env }) {
     } catch (e) {
         // Fallback to raw id
     }
+    const normalizedId = normalizeEntryId(id);
+    const family = getEntryIdFamily(id);
 
     try {
         const url = env.TURSO_URL || env.VITE_TURSO_URL;
         const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
         const db = createClient({ url, authToken: token });
+        await ensureVerbMorphologyTable(db, { backfill: true });
         // ── Entry core ──────────────────────────────────────────────────────────
+        const conditions = [];
+        const args = [];
+        if (family.exact.length > 0) {
+            conditions.push(`e.id IN (${family.exact.map(() => '?').join(', ')})`);
+            args.push(...family.exact);
+        }
+        if (family.likePatterns.length > 0) {
+            conditions.push(...family.likePatterns.map(() => 'e.id LIKE ?'));
+            args.push(...family.likePatterns);
+        }
+        if (conditions.length === 0 && normalizedId) {
+            conditions.push('e.id = ?');
+            args.push(normalizedId);
+        }
+
         const entryRes = await db.execute({
             sql: `SELECT e.*,
+               ${ENTRY_MORPHOLOGY_SELECT},
                rpf.derived_form,
                COALESCE(e.root_consonants, r.consonants) AS resolved_root_consonants,
                r.id          AS root_id,
@@ -66,23 +103,25 @@ export async function onRequestGet({ params, env }) {
                COALESCE(pat.wizen_notation, pat2.wizen_notation) AS wizen_notation,
                COALESCE(pat.id, pat2.id) AS pattern_id
             FROM entries e
-            LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
+            ${ENTRY_MORPHOLOGY_JOINS}
+            LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
             LEFT JOIN roots r ON r.id = rpf.root_id OR r.consonants = e.root_consonants
             LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
-            LEFT JOIN patterns pat2 ON pat2.cv_notation = e.cv_pattern AND pat.id IS NULL
-            WHERE e.id = ?`,
-            args: [id],
+            LEFT JOIN patterns pat2 ON pat2.cv_notation = COALESCE(nm.morph_pattern, e.cv_pattern) AND pat.id IS NULL
+            WHERE ${conditions.join(' OR ')}`,
+            args,
         });
 
         if (!entryRes.rows.length) return json({ error: 'Not found' }, 404);
         const entry = entryRes.rows[0];
+        const resolvedEntryId = entry.id;
         await ensureDiminutivesTableExists(db);
 
         const diminutiveRes = await db.execute({
             sql: `SELECT * FROM entry_diminutives
                   WHERE entry_id = ?
                   ORDER BY COALESCE(is_preferred, 0) DESC, sort_order ASC, created_at ASC`,
-            args: [id],
+            args: [resolvedEntryId],
         });
         const diminutives = diminutiveRes.rows.map((row) => ({
             ...row,
@@ -90,33 +129,10 @@ export async function onRequestGet({ params, env }) {
         }));
         const primaryDiminutive = diminutives[0] || null;
 
-        // ── Definitions ─────────────────────────────────────────────────────────
-        const defsRes = await db.execute({
-            sql: `SELECT * FROM definitions WHERE entry_id = ? ORDER BY sort_order, sense_number`,
-            args: [id],
-        });
-
-        // ── Example sentences per definition ────────────────────────────────────
-        const defIds = defsRes.rows.map(d => d.id);
-        let examples = [];
-        if (defIds.length) {
-            const exRes = await db.execute({
-                sql: `SELECT * FROM example_sentences WHERE definition_id IN (${defIds.map(() => '?').join(',')})`,
-                args: defIds,
-            });
-            examples = exRes.rows;
-        }
-
         // ── Phonetics ───────────────────────────────────────────────────────────
         const phonRes = await db.execute({
             sql: `SELECT * FROM phonetics WHERE entry_id = ?`,
-            args: [id],
-        });
-
-        // ── Etymologies ─────────────────────────────────────────────────────────
-        const etymRes = await db.execute({
-            sql: `SELECT * FROM etymologies WHERE entry_id = ?`,
-            args: [id],
+            args: [resolvedEntryId],
         });
 
         // ── Attestation ─────────────────────────────────────────────────────────
@@ -127,19 +143,19 @@ export async function onRequestGet({ params, env }) {
             LEFT JOIN attestation_scores as2 ON as2.attestation_id = ar.id
             LEFT JOIN lexical_sources ls     ON ls.id = as2.source_id
             WHERE ar.entry_id = ?`,
-            args: [id],
+            args: [resolvedEntryId],
         });
 
         // ── Audio ────────────────────────────────────────────────────────────────
         const audioRes = await db.execute({
             sql: `SELECT * FROM audio_files WHERE entry_id = ?`,
-            args: [id],
+            args: [resolvedEntryId],
         });
 
         // ── Subentries ───────────────────────────────────────────────────────────
         const subRes = await db.execute({
             sql: `SELECT * FROM subentries WHERE entry_id = ? ORDER BY sort_order`,
-            args: [id],
+            args: [resolvedEntryId],
         });
 
         // ── Dialect variants ─────────────────────────────────────────────────────
@@ -162,43 +178,16 @@ export async function onRequestGet({ params, env }) {
                 })),
         } : null;
 
-        const definitions = defsRes.rows.flatMap(d => {
-            const textEnParts = firstSenseText(d.text_en) ? String(d.text_en).trim().split(/\s*;\s*/).map(part => part.trim()).filter(Boolean) : [''];
-            const textMtParts = firstSenseText(d.text_mt) ? String(d.text_mt).trim().split(/\s*;\s*/).map(part => part.trim()).filter(Boolean) : [''];
-            const count = Math.max(textEnParts.length, textMtParts.length);
-            const items = count > 1 ? Array.from({ length: count }, (_, index) => ({
-                ...d,
-                sense_number: d.sense_number + index,
-                text_en: textEnParts[index] || '',
-                text_mt: textMtParts[index] || '',
-                example_sentences: index === 0 ? examples.filter(e => e.definition_id === d.id) : [],
-            })) : [{
-                ...d,
-                example_sentences: examples.filter(e => e.definition_id === d.id),
-            }];
-            return items;
-        });
-
+        const entryPayload = hydrateEntryRow(entry);
         const payload = {
-            ...Object.fromEntries(Object.entries(entry).filter(([, v]) => v !== null)),
-            inflections_pl: entry.inflections_pl ? JSON.parse(entry.inflections_pl) : [],
-            tags: entry.tags ? JSON.parse(entry.tags) : [],
-            synonyms: entry.synonyms ? JSON.parse(entry.synonyms) : [],
-            antonyms: entry.antonyms ? JSON.parse(entry.antonyms) : [],
-            related_entries: entry.related_entries ? JSON.parse(entry.related_entries) : [],
-            alternative_forms: entry.alternative_forms ? JSON.parse(entry.alternative_forms) : [],
-            zokk_morphology: entry.zokk_morphology ? JSON.parse(entry.zokk_morphology) : undefined,
+            ...entryPayload,
             diminutives,
-            diminutive_form: primaryDiminutive?.form || entry.diminutive_form || null,
-            diminutive_pattern: primaryDiminutive?.pattern || entry.diminutive_pattern || null,
-            definitions,
+            diminutive_form: primaryDiminutive?.form || entryPayload.noun_morphology?.diminutive || entryPayload.adjective_morphology?.diminutive || null,
+            diminutive_pattern: primaryDiminutive?.pattern || entryPayload.diminutive_pattern || null,
+            definitions: normalizeDefinitionList(entryPayload.definitions),
             phonetics: phonRes.rows.map(ph => ({
                 ...ph,
                 spelling: ph.notes?.startsWith('Spelling: ') ? ph.notes.replace('Spelling: ', '') : ''
-            })),
-            etymologies: etymRes.rows.map(e => ({
-                ...e,
-                chain: e.chain ? JSON.parse(e.chain) : [],
             })),
             attestation,
             audio: audioRes.rows,
@@ -213,9 +202,9 @@ export async function onRequestGet({ params, env }) {
                     gloss: entry.root_gloss || '',
                     etymology: entry.root_etymology || ''
                 },
-                pattern: (entry.pattern_id || entry.cv_notation || entry.cv_pattern) ? {
+                pattern: (entry.pattern_id || entry.cv_notation) ? {
                     id: entry.pattern_id || '',
-                    cv_notation: entry.cv_notation || entry.cv_pattern || '',
+                    cv_notation: entry.cv_notation || '',
                     wizen_notation: entry.wizen_notation || '',
                 } : null,
                 derived_form: entry.derived_form,
@@ -225,6 +214,10 @@ export async function onRequestGet({ params, env }) {
             weak_class: entry.verb_weak_class || entry.root_weak_class || null,
         };
 
+        const sourceMeta = normalizeSourceMetadata(entry);
+        payload.source_display = sourceMeta.display || '';
+        payload.source_tooltip = sourceMeta.tooltip || '';
+
         // ── Enrich Relationship Helpers ──────────────────────────────────────────
         async function enrichRelationships(relArray) {
             if (!relArray || !relArray.length) return [];
@@ -233,60 +226,85 @@ export async function onRequestGet({ params, env }) {
                     .map(r => r.id)
                     .filter(Boolean)
             )];
-            if (idsToEnrich.length === 0) return relArray;
+            const headwordsToEnrich = [...new Set(
+                relArray
+                    .map(r => String(r.headword || '').trim())
+                    .filter(Boolean)
+            )];
+            if (idsToEnrich.length === 0 && headwordsToEnrich.length === 0) return relArray;
+
+            const clauses = [];
+            const queryArgs = [];
+            if (idsToEnrich.length > 0) {
+                clauses.push(`e.id IN (${idsToEnrich.map(() => '?').join(',')})`);
+                queryArgs.push(...idsToEnrich);
+            }
+            if (headwordsToEnrich.length > 0) {
+                clauses.push(`e.headword IN (${headwordsToEnrich.map(() => '?').join(',')})`);
+                queryArgs.push(...headwordsToEnrich);
+            }
 
             const res = await db.execute({
                 sql: `SELECT
                         e.id,
                         e.headword,
                         e.pos,
-                        e.cv_pattern,
-                        e.lemma_pattern,
-                        e.form_masc_pattern,
-                        e.form_fem_pattern,
-                        e.form_plural_pattern,
-                        e.morph_pattern,
                         e.root_consonants,
-                        entry_defs.text_en,
-                        entry_defs.text_mt
+                        e.cv_pattern,
+                        e.morph_pattern,
+                        ${ENTRY_MORPHOLOGY_SELECT},
+                        json_extract(e.definitions, '$[0].text_en') AS text_en,
+                        json_extract(e.definitions, '$[0].text_mt') AS text_mt
                       FROM entries e
-                      LEFT JOIN definitions entry_defs
-                        ON entry_defs.entry_id = e.id AND entry_defs.sense_number = 1
-                      WHERE e.id IN (${idsToEnrich.map(() => '?').join(',')})`,
-                args: idsToEnrich,
+                      ${ENTRY_MORPHOLOGY_JOINS}
+                      WHERE ${clauses.join(' OR ')}`,
+                args: queryArgs,
             });
 
             const entryMap = {};
+            const headwordMap = {};
             res.rows.forEach(r => {
-                entryMap[r.id] = {
+                const hydrated = hydrateEntryRow(r);
+                const enriched = {
                     en: firstSenseText(r.text_en),
                     mt: firstSenseText(r.text_mt),
-                    cv_pattern: r.cv_pattern || null,
-                    lemma_pattern: r.lemma_pattern || null,
-                    form_masc_pattern: r.form_masc_pattern || null,
-                    form_fem_pattern: r.form_fem_pattern || null,
-                    form_plural_pattern: r.form_plural_pattern || null,
-                    morph_pattern: r.morph_pattern || null,
-                    root_consonants: r.root_consonants || null,
-                    headword: r.headword || null,
-                    pos: r.pos || null,
+                    headword: hydrated.headword || null,
+                    pos: hydrated.pos || null,
+                    root_consonants: hydrated.root_consonants || null,
+                    cv_pattern: hydrated.cv_pattern || null,
+                    lemma_pattern: hydrated.lemma_pattern || hydrated.numeral_morphology?.lemma_pattern || null,
+                    form_masc_pattern: hydrated.form_masc_pattern || hydrated.numeral_morphology?.form_masc_pattern || null,
+                    form_fem_pattern: hydrated.form_fem_pattern || null,
+                    form_plural_pattern: hydrated.form_plural_pattern || hydrated.numeral_morphology?.form_plural_pattern || null,
+                    morph_pattern: hydrated.morph_pattern || null,
+                    numeral_morphology: hydrated.numeral_morphology || null,
+                    root_pattern_form: hydrated.root_pattern_form || null,
                 };
+                entryMap[r.id] = enriched;
+                if (hydrated.headword && !headwordMap[hydrated.headword]) {
+                    headwordMap[hydrated.headword] = enriched;
+                }
             });
 
-            return relArray.map(r => ({
-                ...r,
-                cv_pattern: r.cv_pattern || entryMap[r.id]?.cv_pattern || null,
-                lemma_pattern: r.lemma_pattern || entryMap[r.id]?.lemma_pattern || null,
-                form_masc_pattern: r.form_masc_pattern || entryMap[r.id]?.form_masc_pattern || null,
-                form_fem_pattern: r.form_fem_pattern || entryMap[r.id]?.form_fem_pattern || null,
-                form_plural_pattern: r.form_plural_pattern || entryMap[r.id]?.form_plural_pattern || null,
-                morph_pattern: r.morph_pattern || entryMap[r.id]?.morph_pattern || null,
-                root_consonants: r.root_consonants || entryMap[r.id]?.root_consonants || null,
-                headword: r.headword || entryMap[r.id]?.headword || '',
-                pos: r.pos || entryMap[r.id]?.pos || '',
-                gloss_en: r.gloss_en || entryMap[r.id]?.en || '',
-                gloss_mt: r.gloss_mt || entryMap[r.id]?.mt || '',
-            }));
+            return relArray.map(r => {
+                const match = entryMap[r.id] || headwordMap[String(r.headword || '').trim()];
+                return {
+                    ...r,
+                    cv_pattern: r.cv_pattern || match?.cv_pattern || null,
+                    lemma_pattern: r.lemma_pattern || match?.lemma_pattern || null,
+                    form_masc_pattern: r.form_masc_pattern || match?.form_masc_pattern || null,
+                    form_fem_pattern: r.form_fem_pattern || match?.form_fem_pattern || null,
+                    form_plural_pattern: r.form_plural_pattern || match?.form_plural_pattern || null,
+                    morph_pattern: r.morph_pattern || match?.morph_pattern || null,
+                    numeral_morphology: r.numeral_morphology || match?.numeral_morphology || null,
+                    root_pattern_form: r.root_pattern_form || match?.root_pattern_form || null,
+                    root_consonants: r.root_consonants || match?.root_consonants || null,
+                    headword: r.headword || match?.headword || '',
+                    pos: r.pos || match?.pos || '',
+                    gloss_en: r.gloss_en || match?.en || '',
+                    gloss_mt: r.gloss_mt || match?.mt || '',
+                };
+            });
         }
 
         payload.synonyms = await enrichRelationships(payload.synonyms);
@@ -299,11 +317,12 @@ export async function onRequestGet({ params, env }) {
         const rc = entry.resolved_root_consonants;
         if (rc) {
             const relRes = await db.execute({
-                sql: `SELECT e.id, e.headword, d.text_en AS gloss_en, d.text_mt AS gloss_mt 
+                sql: `SELECT e.id, e.headword,
+                        json_extract(e.definitions, '$[0].text_en') AS gloss_en,
+                        json_extract(e.definitions, '$[0].text_mt') AS gloss_mt
                       FROM entries e
-                      LEFT JOIN root_pattern_forms rpf ON rpf.id = e.root_pattern_form_id
+                      LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
                       LEFT JOIN roots r ON r.id = rpf.root_id
-                      LEFT JOIN definitions d ON d.entry_id = e.id AND d.sense_number = 1
                       WHERE (e.root_consonants = ? OR r.consonants = ?) AND e.id != ? LIMIT 10`,
                 args: [rc, rc, entry.id],
             });
@@ -314,90 +333,142 @@ export async function onRequestGet({ params, env }) {
             }));
         }
 
-        // Attach Verb Morphology struct from flat DB rows as expected by Frontend
         if (entry.pos === 'verb') {
-            payload.verb_morphology = {
-                transitivity: entry.verb_transitivity || 'both',
-                perfective_3sg_m: entry.verb_perfective_3sgm || entry.headword,
-                imperfective_3sg_m: entry.verb_imperfective_3sgm || '',
-                verbal_noun: entry.verb_verbal_noun,
-                active_participle: entry.verb_active_ptcp,
-                passive_participle: entry.verb_passive_ptcp,
-                form: entry.verb_form || 'I',
-                verb_class: entry.verb_class || null,
-                weak_class: entry.verb_weak_class || entry.root_weak_class || null,
-                root_tags: entry.verb_class ? [entry.verb_class.toUpperCase()] : [],
-                vowel_set_perfect: entry.verb_vowel_perf || 'a-a',
-                vowel_set_imperfect: entry.verb_vowel_impf || 'a-a',
-                vowel_set_imperative: entry.verb_vowel_impv || entry.verb_vowel_impf || 'a-a',
+            applyVerbMorphologyCompatibility(payload, entry, entry, {
                 synonyms: payload.synonyms,
                 antonyms: payload.antonyms,
                 related_entries: related_entries.length ? related_entries : payload.related_entries,
                 alternative_forms: payload.alternative_forms,
-                source_citation: entry.source_citation || null,
-                is_inflectable: entry.is_inflectable,
-                usage_example: entry.usage_example,
-                usage_example_en: entry.usage_example_en,
-            };
+                source_display: sourceMeta.display || '',
+                source_tooltip: sourceMeta.tooltip || '',
+            });
         }
 
         // Attach Noun Morphology struct
         if (entry.pos === 'noun') {
             const isColl = Boolean(entry.is_collective);
             const isSing = Boolean(entry.is_singulative);
+            const nounMorphology = entryPayload.noun_morphology || {};
             payload.noun_morphology = {
-                gender: resolveEntryGender(entry),
-                singular: entry.lemma_base || entry.headword,
+                ...nounMorphology,
+                gender: resolveEntryGender(entryPayload),
+                singular: nounMorphology.singular || entryPayload.headword,
+                noun_type: nounMorphology.noun_type || null,
                 plural_forms: payload.inflections_pl,
-                sound_plural: entry.sound_suffix || null,
-                dual: entry.dual_form || null,
-                diminutive: primaryDiminutive?.form || entry.diminutive_form || null,
-                paucal: entry.paucal_form || null,
-                augmentative: entry.augmentative_form || null,
+                sound_plural: nounMorphology.sound_plural || entryPayload.sound_suffix || null,
+                dual: nounMorphology.dual || null,
+                diminutive: primaryDiminutive?.form || nounMorphology.diminutive || null,
+                paucal: nounMorphology.paucal || null,
+                augmentative: nounMorphology.augmentative || null,
                 diminutives,
-                collective: isSing ? entry.form_fem : null,
-                singulative: isColl ? entry.form_fem : null,
-                feminine: (!isColl && !isSing && entry.gender === 'masculine') ? entry.form_fem : null,
-                masculine: (!isColl && !isSing && entry.gender === 'feminine') ? entry.form_masc : null,
-                is_inflectable: Boolean(entry.is_inflectable),
-                usage_example: entry.usage_example,
-                usage_example_en: entry.usage_example_en,
+                collective: isSing ? (nounMorphology.feminine || nounMorphology.feminine_form || null) : null,
+                singulative: isColl ? (nounMorphology.feminine || nounMorphology.feminine_form || null) : null,
+                feminine: (!isColl && !isSing && entryPayload.gender === 'masculine') ? (nounMorphology.feminine || nounMorphology.feminine_form || null) : null,
+                masculine: (!isColl && !isSing && entryPayload.gender === 'feminine') ? (nounMorphology.masculine || nounMorphology.masculine_form || null) : null,
+                feminine_form: nounMorphology.feminine || nounMorphology.feminine_form || null,
+                masculine_form: nounMorphology.masculine || nounMorphology.masculine_form || null,
+                form_fem: nounMorphology.feminine || nounMorphology.feminine_form || null,
+                form_masc: nounMorphology.masculine || nounMorphology.masculine_form || null,
+                source_publisher: entryPayload.source_publisher || null,
+                source_display: sourceMeta.display || '',
+                source_tooltip: sourceMeta.tooltip || '',
+                morph_pattern: entryPayload.morph_pattern || null,
+                form_plural_pattern: nounMorphology.form_plural_pattern || null,
+                form_fem_pattern: nounMorphology.form_fem_pattern || null,
+                form_masc_pattern: nounMorphology.form_masc_pattern || null,
+                paucal_pattern: nounMorphology.paucal_pattern || null,
+                augmentative_pattern: nounMorphology.augmentative_pattern || null,
+                diminutive_pattern: primaryDiminutive?.pattern || entryPayload.diminutive_pattern || null,
+                is_collective: nounMorphology.is_collective === undefined ? Boolean(entry.is_collective) : Boolean(nounMorphology.is_collective),
+                is_singulative: nounMorphology.is_singulative === undefined ? Boolean(entry.is_singulative) : Boolean(nounMorphology.is_singulative),
+                is_inflectable_singular: nounMorphology.is_inflectable_singular === undefined
+                    ? Boolean(entryPayload.is_inflectable_singular)
+                    : Boolean(nounMorphology.is_inflectable_singular),
+                is_inflectable_plural: nounMorphology.is_inflectable_plural === undefined
+                    ? Boolean(entryPayload.is_inflectable_plural)
+                    : Boolean(nounMorphology.is_inflectable_plural),
                 synonyms: payload.synonyms,
                 antonyms: payload.antonyms,
                 related_entries: related_entries.length ? related_entries : payload.related_entries,
                 alternative_forms: payload.alternative_forms,
-                source_citation: entry.source_citation || null,
-                morph_pattern: entry.morph_pattern || null,
-                paucal_pattern: entry.paucal_pattern || null,
-                augmentative_pattern: entry.augmentative_pattern || null,
-                diminutive_pattern: primaryDiminutive?.pattern || entry.diminutive_pattern || null,
             };
         }
 
         // Attach Adjective Morphology struct
         if (entry.pos === 'adjective' || entry.pos === 'participle') {
+            const adjectiveMorphology = entryPayload.adjective_morphology || {};
             payload.adjective_morphology = {
-                masculine: entry.lemma_base || entry.headword,
-                feminine: entry.form_fem || null,
-                plural: payload.inflections_pl?.join(', ') || null, 
-                elative: entry.elative_form || null,
-                diminutive: primaryDiminutive?.form || entry.diminutive_form || null,
+                masculine: adjectiveMorphology.masculine || adjectiveMorphology.masculine_form || entryPayload.headword,
+                feminine: adjectiveMorphology.feminine || adjectiveMorphology.feminine_form || null,
+                form_masc: adjectiveMorphology.masculine || adjectiveMorphology.masculine_form || entryPayload.headword,
+                form_fem: adjectiveMorphology.feminine || adjectiveMorphology.feminine_form || null,
+                pattern: adjectiveMorphology.pattern || entryPayload.cv_pattern || entryPayload.morph_pattern || null,
+                morph_pattern: entryPayload.morph_pattern || entryPayload.cv_pattern || adjectiveMorphology.pattern || null,
+                plural_form: payload.inflections_pl || null, // Mapping to UI's plural_form
+                plural_forms: payload.inflections_pl || null, // Forward compatibility
+                has_elative: adjectiveMorphology.has_elative === undefined || adjectiveMorphology.has_elative === null
+                    ? null
+                    : Boolean(adjectiveMorphology.has_elative),
+                elative_form: adjectiveMorphology.elative_form || adjectiveMorphology.elative || null,
+                elative: adjectiveMorphology.elative_form || adjectiveMorphology.elative || null,
+                diminutive: primaryDiminutive?.form || adjectiveMorphology.diminutive || null,
                 diminutives,
+                form_plural_pattern: adjectiveMorphology.form_plural_pattern || null,
+                form_fem_pattern: adjectiveMorphology.form_fem_pattern || null,
+                form_masc_pattern: adjectiveMorphology.form_masc_pattern || null,
+                elative_pattern: adjectiveMorphology.elative_pattern || null,
                 // Optional vowel sets
-                vowel_set_sg: entry.vowel_set_sg || null,
-                vowel_set_pl: entry.vowel_set_pl || null,
+                vowel_set_sg: adjectiveMorphology.vowel_set_sg || null,
+                vowel_set_pl: adjectiveMorphology.vowel_set_pl || null,
+                vowel_set_opp: adjectiveMorphology.vowel_set_opp || null,
+                vowel_set_dual: adjectiveMorphology.vowel_set_dual || null,
+                dual_form: adjectiveMorphology.dual_form || null,
+                dual_pattern: adjectiveMorphology.dual_pattern || null,
+                diminutive_form: adjectiveMorphology.diminutive_form || null,
+                diminutive_pattern: adjectiveMorphology.diminutive_pattern || null,
+                is_inflectable: adjectiveMorphology.is_inflectable === undefined ? null : Boolean(adjectiveMorphology.is_inflectable),
                 synonyms: payload.synonyms,
                 antonyms: payload.antonyms,
                 related_entries: related_entries.length ? related_entries : payload.related_entries,
                 alternative_forms: payload.alternative_forms,
-                source_citation: entry.source_citation || null,
-                morph_pattern: entry.morph_pattern || null,
-                diminutive_pattern: primaryDiminutive?.pattern || entry.diminutive_pattern || null,
+                source_citation: entryPayload.source_citation || null,
+                source_title: entryPayload.source_title || null,
+                source_year: entryPayload.source_year || null,
+                source_page: entryPayload.source_page || null,
+                source_publisher: entryPayload.source_publisher || null,
+                source_display: sourceMeta.display || '',
+                source_tooltip: sourceMeta.tooltip || '',
+                diminutive_pattern: primaryDiminutive?.pattern || entryPayload.diminutive_pattern || null,
             };
+            payload.adj_morphology = payload.adjective_morphology;
             // Participles use adjective morphology but have a type
             if (entry.pos === 'participle') {
-                payload.participle_type = entry.participle_type || 'active';
+                payload.participle_type = entryPayload.participle_type || 'active';
             }
+        }
+
+        // Attach Numeral Morphology struct
+        if (entry.pos === 'numeral') {
+            const numMorphology = entryPayload.numeral_morphology || {};
+            payload.numeral_morphology = {
+                numeral_type: numMorphology.numeral_type || null,
+                form_attributive_short: numMorphology.form_attributive_short || null,
+                form_attributive_short_pattern: numMorphology.form_attributive_short_pattern || null,
+                form_attributive_long: numMorphology.form_attributive_long || null,
+                plural_forms: payload.inflections_pl,
+                synonyms: payload.synonyms,
+                antonyms: payload.antonyms,
+                related_entries: related_entries.length ? related_entries : payload.related_entries,
+                alternative_forms: payload.alternative_forms,
+                ordinal_form: numMorphology.ordinal_form || null,
+                adverbial_form: numMorphology.adverbial_form || null,
+                fractional_form: numMorphology.fractional_form || null,
+                multiplier_form: numMorphology.multiplier_form || null,
+                distributive_form: numMorphology.distributive_form || null,
+                form_plural_pattern: numMorphology.form_plural_pattern || null,
+                source_display: sourceMeta.display || '',
+                source_tooltip: sourceMeta.tooltip || '',
+            };
         }
 
         return json({ entry: payload });

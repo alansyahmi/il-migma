@@ -11,16 +11,15 @@ export default function ScrollToTop() {
         const currParams = new URLSearchParams(search);
 
         // Check if anything other than 'offset' changed
-        const pOffset = prevParams.get('offset');
-        const cOffset = currParams.get('offset');
         
         prevParams.delete('offset');
         currParams.delete('offset');
+        prevParams.delete('limit');
+        currParams.delete('limit');
         
         const baseChanged = pathname !== prevPathname.current || prevParams.toString() !== currParams.toString();
-        const onlyOffsetChanged = !baseChanged && pOffset !== cOffset;
 
-        if (!onlyOffsetChanged) {
+        if (baseChanged) {
             window.scrollTo(0, 0);
         }
 

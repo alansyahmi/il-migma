@@ -2,6 +2,7 @@ import { createClient } from '@libsql/client';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ensureVerbMorphologyTable } from '../src/lib/verbMorphology.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -247,7 +248,6 @@ function rootEntry(pos, index, root) {
             return {
                 ...base,
                 gender: ['masculine', 'feminine', 'masculine', 'masculine', 'masculine'][index - 1],
-                lemma_base: headword,
                 inflections_pl: asJson(['kotba', 'kliem', 'għemejjel', 'ftuħijiet', 'qarijiet'][index - 1] ? [['kotba', 'kliem', 'għemejjel', 'ftuħijiet', 'qarijiet'][index - 1]] : []),
                 form_fem: [null, null, null, null, null][index - 1],
                 form_masc: [null, null, null, null, null][index - 1],
@@ -289,7 +289,6 @@ function rootEntry(pos, index, root) {
             return {
                 ...base,
                 gender: ['masculine', 'feminine', 'masculine', 'masculine', 'masculine'][index - 1],
-                lemma_base: headword,
                 inflections_pl: asJson([
                     ['kbar'],
                     ['sbieħ'],
@@ -401,6 +400,19 @@ function stemEntry(pos, index, stem) {
 function closedClassEntry(pos, index) {
     const headword = CLOSED_CLASS_HEADWORDS[pos]?.[index - 1] || `zz-${pos}-${pad(index)}`;
     const base = makeEntryBase(pos, index, 'closed-class', { source: 'Uncertain' }, headword);
+    const numeralSeedForms = headword === 'tlieta'
+        ? {
+            numeral_type: 'cardinal',
+            form_attributive_short: 'tliet',
+            form_attributive_short_pattern: 'CvCVC',
+            form_attributive_long: 'tlitt',
+            ordinal_form: 'tielet',
+            adverbial_form: 'tliet darbiet',
+            fractional_form: 'terz',
+            multiplier_form: 'triplu',
+            distributive_form: 'tlieta tlieta',
+        }
+        : null;
 
     return {
         ...base,
@@ -410,10 +422,22 @@ function closedClassEntry(pos, index) {
         root_consonants: null,
         gender: pos === 'pronoun' && index % 2 === 0 ? 'neutral' : null,
         numeral_type: pos === 'numeral'
-            ? ['cardinal', 'ordinal', 'adverbial', 'fractional', 'multiplier'][index - 1]
+            ? numeralSeedForms?.numeral_type || ['cardinal', 'ordinal', 'adverbial', 'fractional', 'multiplier'][index - 1]
             : null,
-        form_attributive_short: pos === 'numeral' ? headword : null,
-        form_attributive_long: pos === 'numeral' ? `${headword} (long)` : null,
+        form_attributive_short: pos === 'numeral'
+            ? numeralSeedForms?.form_attributive_short || headword
+            : null,
+        form_attributive_short_pattern: pos === 'numeral'
+            ? numeralSeedForms?.form_attributive_short_pattern || null
+            : null,
+        form_attributive_long: pos === 'numeral'
+            ? numeralSeedForms?.form_attributive_long || `${headword} (long)`
+            : null,
+        ordinal_form: pos === 'numeral' ? numeralSeedForms?.ordinal_form || null : null,
+        adverbial_form: pos === 'numeral' ? numeralSeedForms?.adverbial_form || null : null,
+        fractional_form: pos === 'numeral' ? numeralSeedForms?.fractional_form || null : null,
+        multiplier_form: pos === 'numeral' ? numeralSeedForms?.multiplier_form || null : null,
+        distributive_form: pos === 'numeral' ? numeralSeedForms?.distributive_form || null : null,
         form_opposite: null,
         tags: asJson(['seed', pos, 'closed-class', `variant-${index}`]),
     };
@@ -443,7 +467,7 @@ function buildSeedPack() {
     const childRows = {
         definitions: [],
         phonetics: [],
-        etymologies: [],
+        verb_morphology: [],
     };
 
     const closedClassPos = ['adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'interrogative', 'numeral', 'interjection'];
@@ -477,17 +501,9 @@ function buildSeedPack() {
                     notes: ph.notes,
                 });
             }
-            if (entry.etymology_chain.length > 0) {
-                childRows.etymologies.push({
-                    id: `zz-etym-${pos}-${pad(i)}`,
-                    entry_id: entry.id,
-                    chain: asJson(entry.etymology_chain),
-                    notes: `Seed etymology chain for ${entry.headword}`,
-                });
-            }
+            // keep `etymology_chain` on the entry so it will be persisted with the entries row
             delete entry.definitions;
             delete entry.phonetics;
-            delete entry.etymology_chain;
         }
     }
 
@@ -520,20 +536,92 @@ function buildSeedPack() {
                 });
             }
 
-            if (entry.etymology_chain.length > 0) {
-                childRows.etymologies.push({
-                    id: `zz-etym-${pos}-${pad(i)}`,
-                    entry_id: entry.id,
-                    chain: asJson(entry.etymology_chain),
-                    notes: `Seed etymology chain for ${entry.headword}`,
-                });
-            }
-
+            // keep `etymology_chain` on the entry so it will be persisted with the entries row
             delete entry.definitions;
             delete entry.phonetics;
-            delete entry.etymology_chain;
         }
     }
+
+    const tlietaEntry = entries.find((entry) => entry.id === 'zz-numeral-03');
+    const tieletEntry = {
+        ...makeEntryBase('numeral', 6, 'closed-class-derived', { source: 'Wiktionary' }, 'tielet'),
+        is_loanword: 0,
+        is_inflectable: 0,
+        source_language: 'Wiktionary',
+        root_consonants: 't-l-t',
+        gender: null,
+        numeral_type: 'ordinal',
+        form_attributive_short: 'tielet',
+        form_attributive_short_pattern: 'CâCvC',
+        form_attributive_long: 'tielet',
+        ordinal_form: 'tielet',
+        adverbial_form: null,
+        fractional_form: null,
+        multiplier_form: null,
+        distributive_form: null,
+        related_entries: asJson([
+            { id: 'zz-numeral-03', headword: 'tlieta', gloss_en: 'three', gloss_mt: 'tlieta' },
+        ]),
+    };
+    const tlittEntry = {
+        ...makeEntryBase('numeral', 7, 'closed-class-derived', { source: 'Wiktionary' }, 'tlitt'),
+        is_loanword: 0,
+        is_inflectable: 0,
+        source_language: 'Wiktionary',
+        root_consonants: 't-l-t',
+        gender: null,
+        numeral_type: 'cardinal',
+        form_attributive_short: 'tlitt',
+        form_attributive_short_pattern: 'CâCC',
+        form_attributive_long: 'tlitt',
+        ordinal_form: null,
+        adverbial_form: null,
+        fractional_form: null,
+        multiplier_form: null,
+        distributive_form: null,
+        related_entries: asJson([
+            { id: 'zz-numeral-03', headword: 'tlieta', gloss_en: 'three', gloss_mt: 'tlieta' },
+        ]),
+    };
+
+    if (tlietaEntry) {
+        tlietaEntry.related_entries = asJson([
+            { id: 'zz-numeral-06', headword: 'tielet', gloss_en: 'third', gloss_mt: 'tielet' },
+            { id: 'zz-numeral-07', headword: 'tlitt', gloss_en: 'short attributive form of three', gloss_mt: 'tlitt' },
+        ]);
+    }
+
+    entries.push(tieletEntry, tlittEntry);
+    childRows.definitions.push(
+        ...tieletEntry.definitions.map((definition, senseIndex) => ({
+            id: `zz-def-numeral-06-${senseIndex + 1}`,
+            entry_id: tieletEntry.id,
+            subentry_id: null,
+            sense_number: senseIndex + 1,
+            text_mt: definition.text_mt,
+            text_en: definition.text_en,
+            register: null,
+            nuance: null,
+            field: 'numeral',
+            sort_order: senseIndex,
+        })),
+        ...tlittEntry.definitions.map((definition, senseIndex) => ({
+            id: `zz-def-numeral-07-${senseIndex + 1}`,
+            entry_id: tlittEntry.id,
+            subentry_id: null,
+            sense_number: senseIndex + 1,
+            text_mt: definition.text_mt,
+            text_en: definition.text_en,
+            register: null,
+            nuance: null,
+            field: 'numeral',
+            sort_order: senseIndex,
+        })),
+    );
+    delete tieletEntry.definitions;
+    delete tieletEntry.phonetics;
+    delete tlittEntry.definitions;
+    delete tlittEntry.phonetics;
 
     // Verb pack: 3 root-linked rows and 2 stem-linked rows so the POS exercises both code paths.
     for (let i = 1; i <= 3; i += 1) {
@@ -562,17 +650,25 @@ function buildSeedPack() {
                 notes: ph.notes,
             });
         }
-        if (entry.etymology_chain.length > 0) {
-            childRows.etymologies.push({
-                id: `zz-etym-verb-root-${pad(i)}`,
-                entry_id: entry.id,
-                chain: asJson(entry.etymology_chain),
-                notes: `Seed etymology chain for ${entry.headword}`,
-            });
-        }
+            // keep `etymology_chain` on entry (persisted as part of entries row)
+            childRows.verb_morphology.push({
+            entry_id: entry.id,
+            form: entry.verb_form || null,
+            class: entry.verb_class || null,
+            weak_class: entry.verb_weak_class || null,
+            transitivity: entry.verb_transitivity || null,
+            perfective_3sgm: entry.verb_perfective_3sgm || null,
+            imperfective_3sgm: entry.verb_imperfective_3sgm || null,
+            verbal_noun: entry.verb_verbal_noun || null,
+            active_participle: entry.verb_active_ptcp || null,
+            passive_participle: entry.verb_passive_ptcp || null,
+            vowel_set_perf: entry.verb_vowel_perf || null,
+            vowel_set_impf: entry.verb_vowel_impf || null,
+            vowel_set_impv: entry.verb_vowel_impv || null,
+            type: entry.verb_type || null,
+        });
         delete entry.definitions;
         delete entry.phonetics;
-        delete entry.etymology_chain;
     }
 
     for (let i = 4; i <= 5; i += 1) {
@@ -601,17 +697,25 @@ function buildSeedPack() {
                 notes: ph.notes,
             });
         }
-        if (entry.etymology_chain.length > 0) {
-            childRows.etymologies.push({
-                id: `zz-etym-verb-stem-${pad(i)}`,
-                entry_id: entry.id,
-                chain: asJson(entry.etymology_chain),
-                notes: `Seed etymology chain for ${entry.headword}`,
-            });
-        }
+        // keep `etymology_chain` on entry (persisted as part of entries row)
+        childRows.verb_morphology.push({
+            entry_id: entry.id,
+            form: entry.verb_form || null,
+            class: entry.verb_class || null,
+            weak_class: entry.verb_weak_class || null,
+            transitivity: entry.verb_transitivity || null,
+            perfective_3sgm: entry.verb_perfective_3sgm || null,
+            imperfective_3sgm: entry.verb_imperfective_3sgm || null,
+            verbal_noun: entry.verb_verbal_noun || null,
+            active_participle: entry.verb_active_ptcp || null,
+            passive_participle: entry.verb_passive_ptcp || null,
+            vowel_set_perf: entry.verb_vowel_perf || null,
+            vowel_set_impf: entry.verb_vowel_impf || null,
+            vowel_set_impv: entry.verb_vowel_impv || null,
+            type: entry.verb_type || null,
+        });
         delete entry.definitions;
         delete entry.phonetics;
-        delete entry.etymology_chain;
     }
 
     return { roots, stems, entries, childRows };
@@ -627,12 +731,12 @@ async function ensureZokkColumn(client) {
 async function resetSeedPack(client) {
     const deletes = [
         "DELETE FROM phonetics WHERE entry_id LIKE 'zz-%'",
-        "DELETE FROM etymologies WHERE entry_id LIKE 'zz-%'",
         "DELETE FROM definitions WHERE entry_id LIKE 'zz-%'",
         "DELETE FROM attestation_reliability WHERE entry_id LIKE 'zz-%'",
         "DELETE FROM subentries WHERE entry_id LIKE 'zz-%'",
         "DELETE FROM audio_files WHERE entry_id LIKE 'zz-%'",
         "DELETE FROM dialect_variants WHERE entry_id LIKE 'zz-%'",
+        "DELETE FROM verb_morphology WHERE entry_id LIKE 'zz-%'",
         "DELETE FROM entries WHERE id LIKE 'zz-%'",
         "DELETE FROM roots WHERE id LIKE 'zz-root-%'",
         "DELETE FROM stems WHERE stem_string LIKE 'zz-%'",
@@ -645,7 +749,10 @@ async function resetSeedPack(client) {
 
 async function insertSql(client, table, row) {
     const columns = await getTableColumns(client, table);
-    const entries = Object.entries(row).filter(([key]) => columns.has(key));
+    const entries = Object.entries(row).filter(([key]) => {
+        if (table === 'entries' && String(key).startsWith('verb_')) return false;
+        return columns.has(key);
+    });
     if (entries.length === 0) {
         throw new Error(`No writable columns found for ${table}`);
     }
@@ -668,7 +775,9 @@ async function main() {
         console.log(`  Entries:     ${seedPack.entries.length}`);
         console.log(`  Definitions: ${seedPack.childRows.definitions.length}`);
         console.log(`  Phonetics:   ${seedPack.childRows.phonetics.length}`);
-        console.log(`  Etymologies: ${seedPack.childRows.etymologies.length}`);
+        const etymCountPreview = seedPack.entries.reduce((n, e) => n + ((e.etymology_chain && e.etymology_chain.length) ? 1 : 0), 0);
+        console.log(`  Etymologies: ${etymCountPreview}`);
+        console.log(`  Verb morph:  ${seedPack.childRows.verb_morphology.length}`);
 
         const byPos = seedPack.entries.reduce((acc, entry) => {
             const key = `${entry.pos}:${entry.zokk_morphology ? 'stem' : (entry.root_consonants ? 'root' : 'plain')}`;
@@ -692,6 +801,7 @@ async function main() {
     }
 
     const client = createClient({ url, authToken });
+    await ensureVerbMorphologyTable(client);
     await ensureZokkColumn(client);
 
     if (RESET) {
@@ -721,8 +831,11 @@ async function main() {
         await client.execute(await insertSql(client, 'phonetics', phon));
     }
 
-    for (const etym of seedPack.childRows.etymologies) {
-        await client.execute(await insertSql(client, 'etymologies', etym));
+    // Etymology chains are stored on the `entries` row as `etymology_chain` and will
+    // be persisted by the entries insertion above; no separate etymology table.
+
+    for (const verbMorphology of seedPack.childRows.verb_morphology) {
+        await client.execute(await insertSql(client, 'verb_morphology', verbMorphology));
     }
 
     try {
@@ -731,13 +844,15 @@ async function main() {
         console.warn('FTS rebuild skipped:', error.message);
     }
 
+    const etymCount = seedPack.entries.reduce((n, e) => n + ((e.etymology_chain && e.etymology_chain.length) ? 1 : 0), 0);
     console.log('Seed complete:', {
         roots: seedPack.roots.length,
         stems: seedPack.stems.length,
         entries: seedPack.entries.length,
         definitions: seedPack.childRows.definitions.length,
         phonetics: seedPack.childRows.phonetics.length,
-        etymologies: seedPack.childRows.etymologies.length,
+        entriesWithEtymology: etymCount,
+        verb_morphology: seedPack.childRows.verb_morphology.length,
     });
 }
 

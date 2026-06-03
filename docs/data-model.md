@@ -84,7 +84,7 @@ This is the field the search layer reads when you filter by `stem_string`.
 
 - `definitions`: bilingual sense rows (`text_mt`, `text_en`).
 - `phonetics`: IPA transcriptions tied to entry or subentry.
-- `etymologies`: JSON etymology chain nodes.
+- `entries.etymology_chain`: JSON array of etymology chain nodes; `entries.etymology_notes` for freeform notes.
 - `dialect_variants`: region-specific variant forms.
 - `lexical_sources` + `attestation_*`: source weighting and reliability index.
 
@@ -97,7 +97,7 @@ Common JSON-backed columns include:
 - `roots.gloss`, `roots.etymology`
 - `roots.synonyms`, `roots.antonyms`, `roots.related_entries`, `roots.hidden_forms`
 - `entries.noun_plural_forms`, `entries.tags`
-- `etymologies.chain`
+- `entries.etymology_chain`
 
 When editing admin/data code, treat these as structured values, not opaque strings.
 
@@ -110,7 +110,7 @@ erDiagram
     root_pattern_forms ||--o| entries : realizes
     entries ||--o{ definitions : has
     entries ||--o{ phonetics : has
-    entries ||--o{ etymologies : has
+    %% Etymology data is stored on entries as JSON fields
     entries ||--o{ dialect_variants : has
 ```
 

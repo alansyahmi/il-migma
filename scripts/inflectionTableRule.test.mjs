@@ -7,8 +7,8 @@ const assertEq = (actual, expected, message) => {
 };
 
 const run = () => {
-    const assertRow = (base, gender, expected, pattern, thirdRadical) => {
-        const actual = [0, 1, 2, 3, 4, 5, 6].map((idx) => applyInflectionTableSuffix(base, idx, gender, pattern, thirdRadical));
+    const assertRow = (base, gender, expected, pattern, thirdRadical, ipaHint) => {
+        const actual = [0, 1, 2, 3, 4, 5, 6].map((idx) => applyInflectionTableSuffix(base, idx, gender, pattern, thirdRadical, ipaHint));
         assertEq(actual.join(' | '), expected.join(' | '), `Unexpected table forms for ${base}`);
     };
 
@@ -91,6 +91,14 @@ const run = () => {
         'ziju',
         'masculine',
         ['zijuwi', 'zijuk', 'zijuh', 'zijuha', 'zijuna', 'zijukom', 'zijuhom'],
+    );
+    assertRow(
+        'ajjut',
+        'masculine',
+        ['ajjuti', 'ajjutek', 'ajjutu', 'ajjutha', 'ajjutna', 'ajjutkom', 'ajjuthom'],
+        undefined,
+        undefined,
+        '/ɐj.ˈjʊːt/',
     );
     assertRow(
         'darba',

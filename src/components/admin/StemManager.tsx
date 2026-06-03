@@ -167,7 +167,7 @@ export function StemManager() {
                 <div className="flex justify-center py-16"><Spinner /></div>
             ) : noResults ? (
                 <WorkspaceEmptyState
-                    title={query ? term('no-results-found').replace('{q}', query) : term('no-results-found').replace(" for '{q}'", '').replace(" għal '{q}'", '')}
+                    title={query ? term('no-results-found', { q: query }) : term('no-results-found-empty')}
                     actionLabel={query ? term('clear-selection') : 'New Stem'}
                     onAction={query ? () => setQuery('') : () => setShowAddStem(true)}
                 />

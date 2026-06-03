@@ -16,6 +16,8 @@ import { readFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { config } from 'dotenv';
+import { syncVerbMorphology } from '../src/lib/verbMorphology.js';
+import { syncNounMorphology } from '../src/lib/nounMorphology.js';
 
 // xlsx is CommonJS — must be loaded via require() in an ESM context
 const require = createRequire(import.meta.url);
@@ -76,7 +78,7 @@ const FORM_LABEL = {
 const ALLOWED_NOUN_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
 
 /**
- * Derive noun_gender from the source gender field.
+ * Derive canonical noun morphology gender from the source gender field.
  * Unknown/invalid values are set to null for later review instead of being forced.
  */
 function parseGender(raw) {
@@ -187,10 +189,20 @@ async function importRoots() {
                     // Upsert verb entry
                     await db.execute({
                         sql: `INSERT OR IGNORE INTO entries
-                    (id, headword, pos, verb_class, verb_perfective_3sgm, created_at, updated_at)
-                  VALUES (?, ?, 'verb', ?, ?, ?, ?)`,
-                        args: [verbId, derivedVerb, verbClass, derivedVerb, now(), now()],
+                    (id, headword, pos, root_consonants, is_inflectable, is_loanword, source_language, created_at, updated_at)
+                  VALUES (?, ?, 'verb', ?, 1, 0, ?, ?, ?)`,
+                        args: [verbId, derivedVerb, consonants, SEMITIC_SOURCE_LANGUAGE, now(), now()],
                     });
+                    await syncVerbMorphology(db, verbId, {
+                        pos: 'verb',
+                        verb_morphology: {
+                            form: label,
+                            class: verbClass,
+                            perfective_3sgm: derivedVerb,
+                            transitivity: 'both',
+                            type: 'root',
+                        },
+                    }, derivedVerb);
                     verbsInserted++;
 
                     // Seed a basic definition placeholder so FTS works
@@ -293,9 +305,20 @@ async function importBrokenPlurals() {
                 const canonicalGender = ALLOWED_NOUN_GENDERS.has(gender) ? gender : null;
                 await db.execute({
                     sql: `INSERT OR IGNORE INTO entries
-                  (id, headword, pos, noun_gender, noun_singular, noun_plural_forms, created_at, updated_at)
-                VALUES (?, ?, 'noun', ?, ?, ?, ?, ?)`,
-                    args: [entryId, singular, canonicalGender, singular, pluralFormsJson, now(), now()],
+                  (id, headword, pos, gender, is_loanword, source_language, created_at, updated_at)
+                VALUES (?, ?, 'noun', ?, 0, ?, ?, ?)`,
+                    args: [entryId, singular, canonicalGender, null, now(), now()],
+                });
+                await syncNounMorphology(db, entryId, {
+                    pos: 'noun',
+                    noun_morphology: {
+                        gender: canonicalGender,
+                        noun_type: typeField || null,
+                        singular_form: singular,
+                        plural_forms: plural ? [{ form: plural, pattern: cvPattern || '' }] : [],
+                        form_plural_pattern: cvPattern || null,
+                        is_inflectable: 1,
+                    },
                 });
                 inserted++;
             } catch (e) {

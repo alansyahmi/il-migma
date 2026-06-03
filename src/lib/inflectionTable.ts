@@ -1,5 +1,5 @@
 import { applyPossessiveSuffix, type PossessiveSuffixIdx } from './nounInflectionEngine.ts';
-import { deriveAjPluralStem, isAjPluralPattern } from './nounAttachment.ts';
+import { deriveAjPluralStem, hasStressedOrLongFinalSyllable, isAjPluralPattern } from './nounAttachment.ts';
 
 const A_ENDING_SUFFIXES = ['ja', 'k', 'h', 'ha', 'na', 'kom', 'hom'] as const;
 const CONSTRUCT_SUFFIXES = ['i', 'ek', 'u', 'ha', 'na', 'kom', 'hom'] as const;
@@ -41,6 +41,11 @@ function normalizePattern(pattern?: string) {
         .replace(/ò/gi, 'o');
 }
 
+function isNonSyncopatingPluralPattern(pattern?: string) {
+    const normalized = normalizePattern(pattern).replace(/^-+/, '').toLowerCase();
+    return normalized === 'at' || normalized === 'iet';
+}
+
 function derivePluralConstructStem(base: string, pattern?: string) {
     const normalizedPattern = normalizePattern(pattern);
     const normalizedBase = base.toLowerCase().trim().normalize('NFC');
@@ -77,7 +82,8 @@ export function applyInflectionTableSuffix(
     idx: PossessiveSuffixIdx,
     gender: 'masculine' | 'feminine' = 'masculine',
     pattern?: string,
-    thirdRadical?: string
+    thirdRadical?: string,
+    ipaHint?: string,
 ) {
     if (!base || base === '-') return '-';
 
@@ -92,25 +98,30 @@ export function applyInflectionTableSuffix(
         return `${base}${suffix}`;
     }
 
+    if (isNonSyncopatingPluralPattern(pattern)) {
+        return applyConstructSuffix(base, idx);
+    }
+
     const radical = normalizeRadical(thirdRadical) || normalizeRadical(inferFinalRadicalFromBase(base));
 
-    // The first three attached forms collapse the final syllable vowel before suffixation.
-    if (idx <= 2) {
+    // The first three attached forms normally collapse the final syllable vowel before suffixation.
+    // Keep the full stem when the IPA shows a stressed or long final syllable.
+    if (idx <= 2 && gender !== 'feminine' && !hasStressedOrLongFinalSyllable(ipaHint, base, pattern)) {
         const collapsedBase = collapseFinalSyllableVowel(base);
         if (collapsedBase !== base) {
-            return applyPossessiveSuffix(collapsedBase, idx, gender, pattern, thirdRadical);
+            return applyPossessiveSuffix(collapsedBase, idx, gender, pattern, thirdRadical, ipaHint);
         }
     }
 
     // Vocalic endings: u/i
     if (base.endsWith('u') || base.endsWith('i')) {
-        return applyPossessiveSuffix(base, idx, gender, pattern, thirdRadical);
+        return applyPossessiveSuffix(base, idx, gender, pattern, thirdRadical, ipaHint);
     }
 
     // Handle words ending in 'a'
     if (base.endsWith('a')) {
         if (gender === 'feminine') {
-            return applyPossessiveSuffix(base, idx, gender, pattern, thirdRadical);
+            return applyPossessiveSuffix(base, idx, gender, pattern, thirdRadical, ipaHint);
         }
 
         const pluralConstructStem = derivePluralConstructStem(base, pattern);
@@ -134,5 +145,5 @@ export function applyInflectionTableSuffix(
     }
 
     // Default to standard possessive logic
-    return applyPossessiveSuffix(base, idx, gender, pattern, thirdRadical);
+    return applyPossessiveSuffix(base, idx, gender, pattern, thirdRadical, ipaHint);
 }

@@ -150,7 +150,6 @@ async function run() {
             { name: 'subentries', col: 'entry_id' },
             { name: 'phonetics', col: 'entry_id' },
             { name: 'audio_files', col: 'entry_id' },
-            { name: 'etymologies', col: 'entry_id' },
             { name: 'dialect_variants', col: 'entry_id' },
             { name: 'attestation_reliability', col: 'entry_id' }
         ];

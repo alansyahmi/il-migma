@@ -186,7 +186,7 @@ export function BrowsePattern() {
             <BrowsePageHeader
                 active="pattern"
                 description={counts.total > 0
-                    ? term('home-desc').replace('300,000', counts.total.toLocaleString())
+                            ? term('home-desc', { count: counts.total.toLocaleString() })
                     : term('home-desc')}
             />
 

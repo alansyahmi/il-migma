@@ -12,7 +12,7 @@ import type {
     SubmissionListResponse,
     SubmissionPayload,
     SubmissionStatus,
-} from '@/lib/submissions';
+} from './submissions';
 
 const BASE = '';
 
@@ -78,18 +78,19 @@ export async function apiSearch(
     opts: {
         pos?: string;
         type?: string;
-    limit?: number;
-    offset?: number;
-    root_id?: string;
-    v?: string;
-    form?: string;
-    wizen?: string;
-    verb_type?: string;
-    source?: string;
-    source_language?: string;
-    suffix?: string;
-    suffix_kind?: 'nominal' | 'derivational';
-    gender?: string;
+        noun_type?: string;
+        limit?: number;
+        offset?: number;
+        root_id?: string;
+        v?: string;
+        form?: string;
+        wizen?: string;
+        verb_type?: string;
+        source?: string;
+        source_language?: string;
+        suffix?: string;
+        suffix_kind?: 'nominal' | 'derivational';
+        gender?: string;
         radicals?: string[];
         random?: string;
         regex?: boolean;
@@ -120,6 +121,7 @@ export async function apiSearch(
     if (q) params.set('q', q);
     if (opts.pos) params.set('pos', opts.pos);
     if (opts.type) params.set('type', opts.type);
+    if (opts.noun_type) params.set('noun_type', opts.noun_type);
     if (opts.limit !== undefined) params.set('limit', String(opts.limit));
     if (opts.offset !== undefined) params.set('offset', String(opts.offset));
     if (opts.root_id) params.set('root_id', opts.root_id);
@@ -616,6 +618,49 @@ export async function adminDeleteConfig(token: string, id: string) {
     });
 }
 
+// ── Sources Admin ────────────────────────────────────────────────────────────
+
+export interface LexicalSource {
+    id: string;
+    name: string;
+    full_title: string;
+    author?: string | null;
+    year?: number | null;
+    publisher?: string | null;
+    reliability_weight: number;
+    source_type: string;
+    url?: string | null;
+}
+
+export async function adminListSources(token: string): Promise<{ sources: LexicalSource[] }> {
+    return apiFetch('/api/admin/sources', {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
+export async function adminCreateSource(token: string, data: Partial<LexicalSource>) {
+    return apiFetch('/api/admin/sources', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function adminUpdateSource(token: string, data: LexicalSource) {
+    return apiFetch('/api/admin/sources', {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+    });
+}
+
+export async function adminDeleteSource(token: string, id: string) {
+    return apiFetch(`/api/admin/sources?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+    });
+}
+
 // ── DB Tools Admin ───────────────────────────────────────────────────────────
 
 export async function adminDbToolsFetch<T>(token: string, action: string, data: Record<string, any> = {}): Promise<T> {
@@ -643,7 +688,34 @@ export async function adminDbExport(token: string, table: string) {
         rows: any[];
         total: number;
         table: string;
+        limit?: number;
+        truncated?: boolean;
     }>(token, 'export', { table });
+}
+
+export interface AdminDbExportBundleTable {
+    columns: string[];
+    rows: any[];
+    total: number;
+    table: string;
+    limit?: number;
+    truncated?: boolean;
+}
+
+export interface AdminDbExportBundleResponse {
+    preset: string;
+    generatedAt: string;
+    tableOrder: string[];
+    totalRows: number;
+    truncatedTables: string[];
+    tables: Record<string, AdminDbExportBundleTable>;
+}
+
+export async function adminDbExportBundle(
+    token: string,
+    payload: { preset?: string; tables?: string[]; limit?: number } = {},
+) {
+    return adminDbToolsFetch<AdminDbExportBundleResponse>(token, 'export-bundle', payload);
 }
 
 export async function adminDbIntegrityCheck(token: string) {

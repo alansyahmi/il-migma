@@ -22,7 +22,10 @@ import { resolveTagLabel } from '@/lib/tagLabel';
 const PAGE_SIZE = 50;
 
 export function EntryManager() {
-    const { getToken } = useClerkAuth();
+    const { getToken: clerkGetToken } = useClerkAuth();
+    const getToken = useCallback(async () => {
+        return (await clerkGetToken()) ?? '';
+    }, [clerkGetToken]);
     const { term } = useLinguisticMode();
     const { getValues } = useAdminConfig();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -117,12 +120,12 @@ export function EntryManager() {
     };
 
     const handleDelete = async (id: string, headword: string) => {
-        if (!confirm(term('delete-entry-confirm').replace('{headword}', headword))) return;
+        if (!confirm(term('delete-entry-confirm', { headword }))) return;
         try {
             const token = await getToken();
             if (!token) throw new Error('Not authenticated');
             await adminDeleteEntry(token, id);
-            showToast(term('entry-deleted').replace('{headword}', headword));
+            showToast(term('entry-deleted', { headword }));
             load();
         } catch (e: unknown) {
             showToast(e instanceof Error ? e.message : String(e), false);
@@ -131,13 +134,13 @@ export function EntryManager() {
 
     const handleBulkDelete = async () => {
         const count = selectedIds.size;
-        if (!confirm(term('bulk-delete-confirm').replace('{count}', count.toString()))) return;
+        if (!confirm(term('bulk-delete-confirm', { count }))) return;
 
         try {
             const token = await getToken();
             if (!token) throw new Error('Not authenticated');
             await adminBulkDeleteEntries(token, Array.from(selectedIds));
-            showToast(term('items-deleted').replace('{count}', count.toString()));
+            showToast(term('items-deleted', { count }));
             setSelectedIds(new Set());
             load();
         } catch (e: unknown) {
@@ -227,7 +230,7 @@ export function EntryManager() {
                 <div className="flex justify-center py-20"><Spinner /></div>
             ) : filteredEntries.length === 0 ? (
                 <WorkspaceEmptyState
-                    title={query ? term('no-results-found').replace('{q}', query) : term('no-results-found').replace(" for '{q}'", '').replace(" għal '{q}'", '')}
+                    title={query ? term('no-results-found', { q: query }) : term('no-results-found-empty')}
                     actionLabel={query ? term('clear-selection') : term('new-entry')}
                     onAction={query ? () => setQuery('') : () => { setEditEntry(null); setInitialFormData(null); setShowForm(true); }}
                 />
@@ -286,7 +289,7 @@ export function EntryManager() {
                                                 <div className="mt-3 flex flex-wrap gap-1.5">
                                                     <span className="text-[10px] font-bold text-black/30 uppercase tracking-tighter">{term(entry.pos || 'pos')}</span>
                                                     {entry.gender && <Badge variant="pos" className="bg-sky-50 text-sky-700">{term(entry.gender)}</Badge>}
-                                                    {entry.verb_class && <Badge variant="pos" className="bg-purple-50 text-purple-700">{term(entry.verb_class)}</Badge>}
+                                                    {entry.verb_morphology?.verb_class && <Badge variant="pos" className="bg-purple-50 text-purple-700">{term(entry.verb_morphology.verb_class)}</Badge>}
                                                     {entry.verb_transitivity && <Badge variant="pos" className="bg-indigo-50 text-indigo-700">{term(entry.verb_transitivity)}</Badge>}
                                                     {entry.verb_form && (
                                                         <Link to={`/search?form=${entry.verb_form}`}>
@@ -359,7 +362,7 @@ export function EntryManager() {
                                                         <div className="text-xs font-bold text-black/80">{term(entry.pos || 'pos')}</div>
                                                         <div className="flex flex-wrap gap-1 max-w-[200px]">
                                                             {entry.gender && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term(entry.gender)}</span>}
-                                                            {entry.verb_class && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term(entry.verb_class)}</span>}
+                                                            {entry.verb_morphology?.verb_class && <span className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">{term(entry.verb_morphology.verb_class)}</span>}
                                                             {entry.verb_transitivity && <span className="text-[10px] bg-sky-50 px-1.5 py-0.5 rounded text-sky-700">{term(entry.verb_transitivity)}</span>}
                                                             {entry.verb_form && (
                                                                 <Link to={`/search?form=${entry.verb_form}`} className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 hover:bg-slate-200 transition-colors">
@@ -404,11 +407,11 @@ export function EntryManager() {
                         setInitialFormData(null);
                         if (createEntryRequested) clearCreateParams();
                     }}
-                    onSaved={() => {
+                    onSaved={async () => {
                         setShowForm(false);
                         setInitialFormData(null);
                         if (createEntryRequested) clearCreateParams();
-                        load();
+                        await load();
                     }}
                     getToken={getToken}
                 />

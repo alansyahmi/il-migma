@@ -12,7 +12,7 @@ interface AttestationReliabilityProps {
 
 export function AttestationReliability({ data, compact = false }: AttestationReliabilityProps) {
     const { term } = useLinguisticMode();
-    const score = data.reliability_index;
+    const score = Number(data.reliability_index || 0);
     const barColor = reliabilityBarColor(score);
     const pct = `${score}%`;
 
@@ -66,7 +66,7 @@ export function AttestationReliability({ data, compact = false }: AttestationRel
             {/* Source breakdown */}
             {data.scores && data.scores.length > 0 && (
                 <div className="space-y-1.5">
-                    {data.scores.map((s) => (
+                    {data.scores.map((s: any) => (
                         <div key={s.source_id} className="flex items-center gap-2">
                             <div className={cn(
                                 'w-2 h-2 rounded-full shrink-0',

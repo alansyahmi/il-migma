@@ -2034,10 +2034,10 @@ export function generateConjugation(
     if (isQuadriliteral) {
         if (form === "I") {
             if (strength === "weak" && weakClass === "defective") {
-                const [C1, C2, C3] = consonants;
-                const { v1: pv1 } = parseVset(input.vowelSetPerfect);
                 return buildWeakQuadriliteralDefectiveConjugation(
-                    `${C1}${pv1}${C2}${C3}`,
+                    consonants,
+                    input.vowelSetPerfect,
+                    input.vowelSetImperfect,
                     input.isImalaBlocked,
                     "I",
                 );
@@ -2051,10 +2051,10 @@ export function generateConjugation(
         }
         if (form === "II") {
             if (strength === "weak" && weakClass === "defective") {
-                const [C1, C2, C3] = consonants;
-                const { v1: pv1 } = parseVset(input.vowelSetPerfect);
                 return buildWeakQuadriliteralDefectiveConjugation(
-                    `${C1}${pv1}${C2}${C3}`,
+                    consonants,
+                    input.vowelSetPerfect,
+                    input.vowelSetImperfect,
                     input.isImalaBlocked,
                     "II",
                 );
@@ -3131,16 +3131,6 @@ function generateTriliteralDefective(
     return forms;
 }
 
-const QUADRILITERAL_PERSONS = [
-    { id: "1s", mt: "jiena", en: "I", prefix: "n" },
-    { id: "2s", mt: "inti", en: "you (sg.)", prefix: "t" },
-    { id: "3ms", mt: "huwa", en: "he", prefix: "j" },
-    { id: "3fs", mt: "hija", en: "she", prefix: "t" },
-    { id: "1p", mt: "aħna", en: "we", prefix: "n" },
-    { id: "2p", mt: "intom", en: "you (pl.)", prefix: "t" },
-    { id: "3p", mt: "huma", en: "they", prefix: "j" },
-] as const;
-
 function deriveAssimilatedTPrefixedWord(word: string): string {
     return combinePrefix("t", word);
 }
@@ -3178,84 +3168,131 @@ function deriveQuadriliteralCliticStems(surface: string): StemVariantSet {
 }
 
 function buildWeakQuadriliteralDefectiveConjugation(
-    rootStem: string,
+    consonants: string[],
+    vsetPerf: string,
+    _vsetImpf: string,
     isImalaBlocked: boolean,
     form: "I" | "II",
 ): VerbConjugationTable {
-    const formIPerfect = [
-        `${rootStem}ejt`,
-        `${rootStem}ejt`,
-        `${rootStem}a`,
-        `${rootStem}iet`,
-        `${rootStem}ejna`,
-        `${rootStem}ejtu`,
-        `${rootStem}ew`,
-    ];
-    const formIImperfect = [
-        `n${rootStem}i`,
-        combinePrefix("t", `${rootStem}i`),
-        `j${rootStem}i`,
-        combinePrefix("t", `${rootStem}i`),
-        `n${rootStem}u`,
-        combinePrefix("t", `${rootStem}u`),
-        `j${rootStem}u`,
-    ];
-    const formIImperative = `${rootStem}i`;
-    const formIImperativePl = `${rootStem}u`;
+    // Weak quadriliteral Form I follows the saqsa-style citation stem:
+    // perfect 3ms is the bare stem + -a, while the other perfect forms and
+    // the singular imperfect/imperative forms take fixed weak endings.
+    const [C1, C2, C3] = consonants;
+    const { v1: pv1 } = parseVset(vsetPerf);
+    const baseStem = `${C1}${pv1}${C2}${C3}`;
+    const imperfectPrefixes = ["n", "s", "j", "s", "n", "s", "j"] as const;
+    const perfectSuffixes = ["ejt", "ejt", "a", "iet", "ejna", "ejtu", "ew"] as const;
 
-    const makeRows = (
-        perfectRows: string[],
-        imperfectRows: string[],
-        useCliticStems: boolean,
-    ): ConjugationRow[] =>
-        QUADRILITERAL_PERSONS.map((person, idx) => ({
-            person_mt: person.id,
-            person_en: person.en,
-            perfect: perfectRows[idx],
-            imperfect: imperfectRows[idx],
-            perfect_neg: perfectRows[idx],
-              stems: useCliticStems
-                ? {
-                      attached: deriveQuadriliteralCliticStems(imperfectRows[idx]).attached,
-                      syncopated: deriveQuadriliteralCliticStems(imperfectRows[idx]).syncopated,
-                      ...deriveWeakQuadriliteralPerfectCliticStems(rootStem, idx, perfectRows[idx]),
-                  }
-                  : {
-                      attached: imperfectRows[idx],
-                      syncopated: imperfectRows[idx],
-                    perfectAttached: perfectRows[idx],
-                    perfectSyncopated: perfectRows[idx],
-                },
-        }));
+    const rows: ConjugationRow[] = [
+        {
+            person_mt: "1s",
+            person_en: "I",
+            perfect: `${baseStem}${perfectSuffixes[0]}`,
+            imperfect: `${imperfectPrefixes[0]}${baseStem}i`,
+            perfect_neg: `${baseStem}${perfectSuffixes[0]}`,
+            stems: {
+                attached: `${imperfectPrefixes[0]}${baseStem}i`,
+                syncopated: `${imperfectPrefixes[0]}${baseStem}i`,
+                perfectAttached: `${baseStem}${perfectSuffixes[0]}`,
+                perfectSyncopated: `${baseStem}${perfectSuffixes[0]}`,
+            },
+        },
+        {
+            person_mt: "2s",
+            person_en: "you (sg.)",
+            perfect: `${baseStem}${perfectSuffixes[1]}`,
+            imperfect: `${imperfectPrefixes[1]}${baseStem}i`,
+            perfect_neg: `${baseStem}${perfectSuffixes[1]}`,
+            stems: {
+                attached: `${imperfectPrefixes[1]}${baseStem}i`,
+                syncopated: `${imperfectPrefixes[1]}${baseStem}i`,
+                perfectAttached: `${baseStem}${perfectSuffixes[1]}`,
+                perfectSyncopated: `${baseStem}${perfectSuffixes[1]}`,
+            },
+        },
+        {
+            person_mt: "3ms",
+            person_en: "he",
+            perfect: `${baseStem}${perfectSuffixes[2]}`,
+            imperfect: `${imperfectPrefixes[2]}${baseStem}i`,
+            perfect_neg: `${baseStem}${perfectSuffixes[2]}`,
+            stems: {
+                attached: `${imperfectPrefixes[2]}${baseStem}i`,
+                syncopated: `${imperfectPrefixes[2]}${baseStem}i`,
+                perfectAttached: `${baseStem}${perfectSuffixes[2]}`,
+                perfectSyncopated: `${baseStem}${perfectSuffixes[2]}`,
+            },
+        },
+        {
+            person_mt: "3fs",
+            person_en: "she",
+            perfect: `${baseStem}${perfectSuffixes[3]}`,
+            imperfect: `${imperfectPrefixes[3]}${baseStem}i`,
+            perfect_neg: `${baseStem}${perfectSuffixes[3]}`,
+            stems: {
+                attached: `${imperfectPrefixes[3]}${baseStem}i`,
+                syncopated: `${imperfectPrefixes[3]}${baseStem}i`,
+                perfectAttached: `${baseStem}${perfectSuffixes[3]}`,
+                perfectSyncopated: `${baseStem}${perfectSuffixes[3]}`,
+            },
+        },
+        {
+            person_mt: "1p",
+            person_en: "we",
+            perfect: `${baseStem}${perfectSuffixes[4]}`,
+            imperfect: `${imperfectPrefixes[4]}${baseStem}u`,
+            perfect_neg: `${baseStem}${perfectSuffixes[4]}`,
+            stems: {
+                attached: `${imperfectPrefixes[4]}${baseStem}u`,
+                syncopated: `${imperfectPrefixes[4]}${baseStem}u`,
+                perfectAttached: `${baseStem}${perfectSuffixes[4]}`,
+                perfectSyncopated: `${baseStem}${perfectSuffixes[4]}`,
+            },
+        },
+        {
+            person_mt: "2p",
+            person_en: "you (pl.)",
+            perfect: `${baseStem}${perfectSuffixes[5]}`,
+            imperfect: `${imperfectPrefixes[5]}${baseStem}u`,
+            perfect_neg: `${baseStem}${perfectSuffixes[5]}`,
+            stems: {
+                attached: `${imperfectPrefixes[5]}${baseStem}u`,
+                syncopated: `${imperfectPrefixes[5]}${baseStem}u`,
+                perfectAttached: `${baseStem}${perfectSuffixes[5]}`,
+                perfectSyncopated: `${baseStem}${perfectSuffixes[5]}`,
+            },
+        },
+        {
+            person_mt: "3p",
+            person_en: "they",
+            perfect: `${baseStem}${perfectSuffixes[6]}`,
+            imperfect: `${imperfectPrefixes[6]}${baseStem}u`,
+            perfect_neg: `${baseStem}${perfectSuffixes[6]}`,
+            stems: {
+                attached: `${imperfectPrefixes[6]}${baseStem}u`,
+                syncopated: `${imperfectPrefixes[6]}${baseStem}u`,
+                perfectAttached: `${baseStem}${perfectSuffixes[6]}`,
+                perfectSyncopated: `${baseStem}${perfectSuffixes[6]}`,
+            },
+        },
+    ];
 
-    const baseTable: VerbConjugationTable = {
-        rows: makeRows(formIPerfect, formIImperfect, form === "I"),
-        imperative_sg: formIImperative,
-        imperative_pl: formIImperativePl,
+    const weakBaseTable: VerbConjugationTable = {
+        rows,
+        imperative_sg: `${baseStem}i`,
+        imperative_pl: `${baseStem}u`,
         imperative_sg_stems: {
-            attached: form === "I"
-                ? deriveQuadriliteralCliticStems(formIImperative).attached
-                : formIImperative,
-            syncopated: form === "I"
-                ? deriveQuadriliteralCliticStems(formIImperative).syncopated
-                : formIImperative,
+            attached: `${baseStem}i`,
+            syncopated: `${baseStem}i`,
         },
         imperative_pl_stems: {
-            attached: form === "I"
-                ? deriveQuadriliteralCliticStems(formIImperativePl).attached
-                : formIImperativePl,
-            syncopated: form === "I"
-                ? deriveQuadriliteralCliticStems(formIImperativePl).syncopated
-                : formIImperativePl,
+            attached: `${baseStem}u`,
+            syncopated: `${baseStem}u`,
         },
         blocksImala: isImalaBlocked,
     };
 
-    if (form === "I") {
-        return baseTable;
-    }
-
-    return deriveQuadriliteralFormII(baseTable);
+    return form === "I" ? weakBaseTable : deriveQuadriliteralFormII(weakBaseTable);
 }
 
 function deriveQuadriliteralAssimilatedStem(stem: string): string {
@@ -3270,31 +3307,6 @@ function deriveQuadriliteralAssimilatedStem(stem: string): string {
 
 function deriveQuadriliteralImperfectStem(stem: string): string {
     return `ji${deriveQuadriliteralAssimilatedStem(stem)}`;
-}
-
-function deriveWeakQuadriliteralPerfectCliticStems(
-    rootStem: string,
-    rowIndex: number,
-    perfectRow: string,
-): { perfectAttached: string; perfectSyncopated: string } {
-    if (rowIndex === 2) {
-        return {
-            perfectAttached: `${rootStem}i`,
-            perfectSyncopated: `${rootStem}i`,
-        };
-    }
-
-    if (rowIndex === 3) {
-        return {
-            perfectAttached: `${rootStem}it`,
-            perfectSyncopated: `${rootStem}it`,
-        };
-    }
-
-    return {
-        perfectAttached: deriveQuadriliteralCliticStems(perfectRow).attached,
-        perfectSyncopated: deriveQuadriliteralCliticStems(perfectRow).syncopated,
-    };
 }
 
 function generateQuadriliteralFormI(
@@ -3429,22 +3441,19 @@ function generateQuadriliteralFormIDefective(
     _isImalaBlocked: boolean,
 ): GeneratedVerbForm[] {
     const [C1, C2, C3] = consonants;
-    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
-
-    const rootStem = `${C1}${pv1}${C2}${C3}`;
-    const perfect = `${rootStem}${pv2}`;
-    const imperfect = `j${rootStem}i`;
-
-    const formI: GeneratedVerbForm = {
+    const { v1: pv1 } = parseVset(vsetPerf);
+    const baseStem = `${C1}${pv1}${C2}${C3}`;
+    const formIForm: GeneratedVerbForm = {
         form: "I",
-        perfect,
-        imperfect,
-        imperative: `${rootStem}i`,
-        passiveParticiple: `m${rootStem}i`,
-        activeParticiple: `${rootStem}ej`,
-        verbalNoun: `${rootStem}i`,
+        perfect: `${baseStem}a`,
+        imperfect: `j${baseStem}i`,
+        imperative: `${baseStem}i`,
+        passiveParticiple: `m${baseStem}i`,
+        activeParticiple: `${baseStem}ie`,
+        verbalNoun: `${baseStem}i`,
     };
-    return [formI, buildQuadriliteralFormII(formI, "weak-defective")];
+
+    return [formIForm, buildQuadriliteralFormII(formIForm, "weak-defective")];
 }
 
 function deriveQuadriliteralFormII(base: VerbConjugationTable): VerbConjugationTable {

@@ -31,7 +31,6 @@ erDiagram
     entries ||--o{ definitions : "has"
     entries ||--o{ subentries : "contains"
     entries ||--o{ phonetics : "pronounced as"
-    entries ||--o{ etymologies : "descended from"
     entries ||--o{ dialect_variants : "varies by region"
 ```
 
@@ -96,7 +95,6 @@ The central table. Every word in the dictionary is an entry.
 | `pos` | Part of speech (constrained enum: noun, verb, adjective, etc.) |
 | `root_consonants` | Denormalized copy of the root consonants for query convenience |
 | `cv_pattern` | The CV pattern used for this specific entry |
-| `verb_form` | Verb derivation form: `'I'`, `'II'`, `'III'`, etc. |
 | `root_pattern_form_id` | FK to the junction table (may be NULL for loanwords) |
 | `is_loanword` | `0` = Semitic / `1` = Romance/borrowed |
 | `source_language` | Origin language when `is_loanword = 1` |
@@ -104,13 +102,15 @@ The central table. Every word in the dictionary is an entry.
 | `noun_plural_forms` | JSON array — a noun can have **multiple broken plurals** (e.g. *ktieb* → *kotba, ktejjeb*) |
 | `noun_sound_plural` | Regular sound plural suffix form (e.g. *-iet*, *-jiet*) |
 | `noun_dual` | Dual form (archaic/limited use in Maltese) |
-| `verb_class` | `'strong'`, `'weak'`, `'doubled'`, `'quadriliteral'`, `'loan'` |
-| `verb_perfective_3sgm` | Citation form: 3rd person singular masculine perfect (e.g. *kiteb*) |
-| `verb_imperfective_3sgm` | The imperfect counterpart (e.g. *jikteb*) |
-| `verb_vowel_perf` / `verb_vowel_impf` | Entry-level vowel overrides (copied from root, but can diverge) |
 
 > [!NOTE]
-> **`entries.verb_class` vs `roots.strength`**: These overlap but aren't identical. `verb_class` is the traditional grammatical taxonomy (strong/weak/doubled), while `roots.strength` is the engine-internal classification that drives conjugation generation (`strong`, `weak`, `geminated`, `strong-hybrid`). The `weak_class` sub-field further splits weak verbs into `hollow`, `assimilative`, `defective`.
+> Verb-specific morphology now lives in the `verb_morphology` table, keyed 1:1 by `entry_id`. It stores the verb form, class, weak class, transitivity, citation forms, verbal noun, participles, vowel sets, and verb type. Older databases may still have legacy flat verb columns on `entries` during migration, but those are no longer the preferred schema.
+
+> [!NOTE]
+> Noun type is stored on `entries.noun_type` and is intended for values like `common`, `proper`, and `verbal`. The admin UI can still surface richer noun categories through the config registry, but the persisted field lives on the main entry row.
+
+> [!NOTE]
+> **`verb_morphology.class` vs `roots.strength`**: These overlap but aren't identical. `class` is the traditional grammatical taxonomy (strong/weak/doubled), while `roots.strength` is the engine-internal classification that drives conjugation generation (`strong`, `weak`, `geminated`, `strong-hybrid`). The `weak_class` sub-field further splits weak verbs into `hollow`, `assimilative`, `defective`.
 
 ### `stems` — Canonical Stem Inventory
 
@@ -155,12 +155,12 @@ Can be attached to either an `entry_id` or a `subentry_id`. The `dialect` field 
 
 ### `admin_config` — Dynamic Settings
 
-Stores UI terminology, pattern presets, and other dynamic admin settings.
+Stores pattern presets and other dynamic admin settings.
 
 | Column | Type | Meaning |
 |---|---|---|
 | `id` | TEXT PK | Unique identifier |
-| `category` | TEXT | Grouping key (e.g., `'ui_terminology'`, `'broken_pattern'`) |
+| `category` | TEXT | Grouping key (e.g., `'broken_pattern'`, `'verb_preset'`) |
 | `key` | TEXT | Lookup key within category. Must be unique per category. |
 | `value` | TEXT (JSON) | Configuration payload. Localized objects for terminology, or pattern metadata for presets. |
 | `sort_order` | INTEGER | Display order in Admin UI |
@@ -187,7 +187,8 @@ SQLite has no native JSON column type. All JSON data is stored as `TEXT` and par
 | `roots` | `consonant_array` | `string[]` |
 | `entries` | `noun_plural_forms`, `tags` | `string[]` |
 | `entries` | `zokk_morphology` | `{stem_string, class_type, is_hybrid, root?, agentive_suffix?}` |
-| `etymologies` | `chain` | `EtymologyNode[]` |
+| `entries` | `etymology_chain` | `EtymologyNode[]` |
+| `entries` | `etymology_notes` | Freeform notes about the etymology chain |
 | `flashcard_lists` | `entry_ids` | `string[]` |
 
 > [!CAUTION]

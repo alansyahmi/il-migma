@@ -1,6 +1,7 @@
 import type { Gender } from '@/types';
 
 const VOWEL_CLUSTER_RE = /[aeiouàèìòùâêîôû]/gi;
+const GEMINATE_BEFORE_FINAL_VOWEL_RE = /([bcdfghjklmnpqrstvwxyzċġħż])\1(ie|[aeiouàèìòùâêîôû])[^aeiouàèìòùâêîôû]*$/i;
 
 function normalizeWord(word: string): string {
     return String(word || '').trim().toLowerCase().normalize('NFC');
@@ -8,6 +9,50 @@ function normalizeWord(word: string): string {
 
 function normalizeRadical(radical?: string): string {
     return String(radical || '').trim().toLowerCase();
+}
+
+function hasOrthographicGeminateBeforeFinalVowel(word?: string): boolean {
+    const normalized = normalizeWord(word || '');
+    if (!normalized) return false;
+    return GEMINATE_BEFORE_FINAL_VOWEL_RE.test(normalized);
+}
+
+export function hasStressedOrLongFinalSyllable(ipaHint?: string, word?: string, pattern?: string): boolean {
+    const normalizedIPA = String(ipaHint || '')
+        .trim()
+        .replace(/^\/+|\/+$/g, '');
+
+    if (normalizedIPA) {
+        const syllables = normalizedIPA
+            .split('.')
+            .map((syl) => syl.trim())
+            .filter(Boolean);
+
+        if (syllables.length > 0) {
+            const finalSyllable = syllables[syllables.length - 1];
+            if (finalSyllable.includes('ˈ') || finalSyllable.includes('ː')) return true;
+        }
+    }
+
+    // Heuristic 1: Pattern-based (e.g. CaCiC, vCCiC)
+    if (pattern) {
+        const p = pattern.toLowerCase();
+        if (/(i|u|ie)[^aeiouàèìòùâêîôû]*$/i.test(p)) return true;
+    }
+
+    // Heuristic 2: Word-based (e.g. ħabib, sabiħ, qadim)
+    const normalizedWord = String(word || '').toLowerCase().trim();
+    if (normalizedWord) {
+        const vowels = normalizedWord.match(VOWEL_CLUSTER_RE);
+        if (vowels && vowels.length >= 2) {
+            // Check for long vowels in the final closed syllable
+            if (/(i|u|ie)[^aeiouàèìòùâêîôû]$/i.test(normalizedWord)) return true;
+        }
+
+        if (hasOrthographicGeminateBeforeFinalVowel(normalizedWord)) return true;
+    }
+
+    return false;
 }
 
 function isMasculineAglide(base: string, thirdRadical?: string): boolean {
@@ -86,8 +131,13 @@ export function deriveAjPluralStem(base: string): string {
  * - masculine final -a glide cases only activate for j/w radicals or wara
  * - feminine t-marbuta forms keep the existing feminine stem behavior
  */
-export function prepareSuffixAttachmentStem(word: string): string {
-    const simplified = normalizeWord(word).replace(/jj/g, 'j').replace(/ww/g, 'w');
+export function prepareSuffixAttachmentStem(word: string, ipaHint?: string, pattern?: string): string {
+    const normalized = normalizeWord(word);
+    if (hasStressedOrLongFinalSyllable(ipaHint, normalized, pattern)) {
+        return normalized;
+    }
+
+    const simplified = normalized.replace(/jj/g, 'j').replace(/ww/g, 'w');
     let stem = simplified;
 
     const vowelCount = stem.match(VOWEL_CLUSTER_RE)?.length ?? 0;
@@ -116,6 +166,7 @@ export function deriveNounAttachmentStems(
     gender: Gender = 'masculine',
     thirdRadical?: string,
     pattern?: string,
+    ipaHint?: string,
 ): NounAttachmentStems {
     const normalized = normalizeWord(base);
     const normalizedPattern = String(pattern || '').trim().replace(/û/gi, 'u').replace(/ù/gi, 'u').replace(/î/gi, 'i').replace(/ì/gi, 'i').replace(/â/gi, 'a').replace(/à/gi, 'a').replace(/ê/gi, 'e').replace(/è/gi, 'e').replace(/ô/gi, 'o').replace(/ò/gi, 'o');
@@ -132,15 +183,25 @@ export function deriveNounAttachmentStems(
         return { stemA: stem, stemB: stem };
     }
 
+    if (gender === 'masculine' && normalized.includes('ie')) {
+        return { stemA: normalized, stemB: normalized };
+    }
+
     if (gender === 'feminine' && normalized.endsWith('a')) {
         if (normalized === 'mara') {
             return { stemA: 'mart', stemB: 'mart' };
         }
 
         const rootRaw = normalized.slice(0, -1);
-        const feminineStem = rootRaw.endsWith('j') || rootRaw.endsWith('w')
-            ? `${rootRaw.slice(0, -1)}t`
-            : `${rootRaw}t`;
+        if (rootRaw.includes('ie')) {
+            const shortStem = `${rootRaw.replace(/ie([^aeiouàèìòùâêîôû]+)$/i, 'i$1')}t`;
+            return { stemA: shortStem, stemB: shortStem };
+        }
+
+        const collapsedRoot = prepareSuffixAttachmentStem(rootRaw, ipaHint, pattern);
+        const feminineStem = collapsedRoot.endsWith('j') || collapsedRoot.endsWith('w')
+            ? `${collapsedRoot.slice(0, -1)}t`
+            : `${collapsedRoot}t`;
 
         return { stemA: feminineStem, stemB: feminineStem };
     }
@@ -153,7 +214,7 @@ export function deriveNounAttachmentStems(
         return { stemA: `${normalized}j`, stemB: `${normalized}j` };
     }
 
-    const shortStem = prepareSuffixAttachmentStem(normalized);
+    const shortStem = prepareSuffixAttachmentStem(normalized, ipaHint);
     const longStem = deriveMasculineLongStem(normalized);
     return { stemA: longStem, stemB: shortStem };
 }

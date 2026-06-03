@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { Search as SearchIcon, Keyboard, Filter, ChevronDown, ChevronUp, MessageSquare, Shuffle } from 'lucide-react';
 import { generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
@@ -8,7 +8,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useAdminConfig } from '@/lib/adminConfig';
-import { apiSearch, apiGetDistinctValues } from '@/lib/api';
+import { apiSearch, apiGetDistinctValues, invalidateDistinctValuesCache } from '@/lib/api';
+import { useCatalogRefresh } from '@/hooks/useCatalogRefresh';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { resolveEntryGender } from '@/lib/gender';
 import { getSearchCardLocation } from '@/lib/searchCard';
@@ -585,16 +586,28 @@ export function AdvancedSearch() {
     const [availableVowelSets, setAvailableVowelSets] = useState<string[]>([]);
     const [availableSources, setAvailableSources] = useState<{ value: string; label: string }[]>([]);
 
-    useEffect(() => {
-        apiGetDistinctValues('tags').then(setAvailableTags).catch(e => console.error("Tags fetch error:", e));
-        apiGetDistinctValues('vowel_sets').then(setAvailableVowelSets).catch(e => console.error("Vowel sets fetch error:", e));
-        apiGetDistinctValues('sources').then(srcs => {
-            setAvailableSources([
-                { value: '', label: term('all') },
-                ...srcs.map(s => ({ value: s, label: s }))
-            ]);
-        }).catch(e => console.error("Sources fetch error:", e));
+    const loadDynamicOptions = useCallback(async () => {
+        invalidateDistinctValuesCache();
+
+        const [tags, vowelSets, sources] = await Promise.all([
+            apiGetDistinctValues('tags'),
+            apiGetDistinctValues('vowel_sets'),
+            apiGetDistinctValues('sources'),
+        ]);
+
+        setAvailableTags(tags);
+        setAvailableVowelSets(vowelSets);
+        setAvailableSources([
+            { value: '', label: term('all') },
+            ...sources.map((s) => ({ value: s, label: s })),
+        ]);
     }, [term]);
+
+    useEffect(() => {
+        loadDynamicOptions().catch((e) => console.error('Dynamic options fetch error:', e));
+    }, [loadDynamicOptions]);
+
+    useCatalogRefresh(() => loadDynamicOptions(), { intervalMs: 60_000 });
 
     // Effective results state
     const [results, setResults] = useState<SearchResult[]>([]);
@@ -758,7 +771,7 @@ export function AdvancedSearch() {
                         }
 
                         // 2. Add plural
-                        const pluralForms = r.noun_plural_forms || r.noun_morphology?.plural_forms || (r.adjective_morphology?.plural ? [r.adjective_morphology.plural] : []) || r.inflections_pl;
+                        const pluralForms = r.noun_morphology?.plural_forms || r.inflections_pl || (r.adjective_morphology?.plural ? [r.adjective_morphology.plural] : []);
                         if (pluralForms?.length) {
                             pushMarkedSimple(term('plural'), pluralForms[0], r.pos === 'adjective' ? 'adjective' : 'noun');
                         }
@@ -784,8 +797,8 @@ export function AdvancedSearch() {
                         // 5. Collective/Singulative
                         const nmN = r.noun_morphology;
                         if (nmN) {
-                            if (nmN.collective) pushMarkedSimple(r.is_singulative ? term('collective') : (term('unit-form') || 'Unit Form'), nmN.collective, 'noun');
-                            if (nmN.singulative) pushMarkedSimple(r.is_collective ? term('singulative') : (term('individual-form') || 'Individual Form'), nmN.singulative, 'noun');
+                            if (nmN.collective_form) pushMarkedSimple(r.is_singulative ? term('collective') : (term('unit-form') || 'Unit Form'), nmN.collective_form, 'noun');
+                            if (nmN.singulative_form) pushMarkedSimple(r.is_collective ? term('singulative') : (term('individual-form') || 'Individual Form'), nmN.singulative_form, 'noun');
                         }
                     }
 
@@ -941,10 +954,10 @@ export function AdvancedSearch() {
                     {submitted ? (
                         <>
                             <h1 className="font-serif font-medium text-4xl leading-tight text-black">
-                                {term('results-for').replace('{q}', submitted)}
+                                {term('results-for', { q: submitted })}
                             </h1>
                             <p className="text-sm text-black/40 font-sans mt-1">
-                                {term('entries-shown-simple').replace('{count}', total.toString())}
+                                {term('entries-shown-simple', { count: total.toString() })}
                             </p>
                         </>
                     ) : (
@@ -1253,7 +1266,7 @@ export function AdvancedSearch() {
                         ) : (
                             <div className="bg-white/50 rounded-xl border border-white/40 shadow-sm p-10 text-left">
                                 <p className="text-sm text-black mb-2">
-                                    {term('no-results-found').replace('{q}', submitted || '...')}
+                                    {submitted ? term('no-results-found', { q: submitted }) : term('no-results-found-empty')}
                                 </p>
                                 <p className="text-xs text-black/40 mt-1 mb-4">
                                     {term('include-suggested-desc')}

@@ -4,7 +4,7 @@ import { MOCK_ENTRIES } from '@/data/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
-import { type Entry } from '@/types';
+import { type Entry, type LinguisticMode, type VerbConjugationTable } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
 import { generateConjugation, generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
@@ -100,6 +100,9 @@ function getNodeText(node: React.ReactNode): string {
     if (typeof node === 'string' || typeof node === 'number') return String(node).trim();
     if (Array.isArray(node)) return node.map(getNodeText).join(' ').trim();
     if (React.isValidElement(node)) {
+        if (typeof node.type === 'function' && (node.type as any).name === 'MarkedValue') {
+            return (node.props as any).val?.value || '';
+        }
         return getNodeText((node.props as any)?.children);
     }
     return '';
@@ -451,7 +454,7 @@ function renderPatternValue(
 }
 
 function resolveDisplayedPattern(
-    mode: 'standard' | 'arabised',
+    mode: LinguisticMode,
     cvWizenMap: Map<string, string>,
     cvPattern?: string | null,
     wizenPattern?: string | null,
@@ -1282,14 +1285,21 @@ function AdjectiveMorphologySection({
     const { term } = useLinguisticMode();
 
     const singular = (value?: string | null) => (value && value.trim()) || null;
-    const splitMultiValue = (value?: string | null) => (
-        String(value || '')
+    const splitMultiValue = (value?: unknown) => {
+        if (Array.isArray(value)) {
+            return value
+                .map((item) => typeof item === 'string' ? item : String(item?.form ?? item?.value ?? ''))
+                .map((part) => part.trim())
+                .filter(Boolean);
+        }
+
+        return String(value || '')
             .split(',')
             .map((part) => part.trim())
-            .filter(Boolean)
-    );
+            .filter(Boolean);
+    };
     const buildStackedCell = (
-        value?: string | null,
+        value?: unknown,
         pattern?: string | null,
         theoretical = false,
     ): NounParadigmCell => {
@@ -1557,7 +1567,7 @@ function RelatedGlossRow({
 }: {
     item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string | null };
     language: 'en' | 'mt';
-    mode: 'standard' | 'arabised';
+    mode: LinguisticMode;
     isAdmin?: boolean;
     onEdit?: () => void;
     onDelete?: () => void;
@@ -1596,7 +1606,7 @@ function RelatedGlossGroup({
     title: string;
     items: { id: string; headword: string; gloss_en?: string; gloss_mt?: string | null }[];
     language: 'en' | 'mt';
-    mode: 'standard' | 'arabised';
+    mode: LinguisticMode;
     isAdmin?: boolean;
     onEditItem?: (item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string | null }) => void;
     onDeleteItem?: (item: { id: string; headword: string; gloss_en?: string; gloss_mt?: string | null }) => void;
@@ -2054,7 +2064,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                     <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions.map(def => (
+                                {(entry.definitions ?? []).map(def => (
                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
                                 ))}
                             </ol>
@@ -2066,7 +2076,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                     <div className="w-full md:w-64 shrink-0 space-y-4 hidden md:block">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions.map(def => (
+                                {(entry.definitions ?? []).map(def => (
                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
                                 ))}
                             </ol>
@@ -2461,9 +2471,9 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const isNeg = polarity === 'Negative';
     const isTheoretical = !isInflectableEnabled(entry.is_inflectable, vm.is_inflectable) || entry.tags?.includes('THEORETICAL') || vm.root_tags?.includes('THEORETICAL');
     // Use new per-tense vowel sets
-    const vsetImpf = entry.verb_vowel_impf || vm.vowel_set_imperfect;
-    const vsetPerf = entry.verb_vowel_perf || vm.vowel_set_perfect;
-    const vsetImp = vm.vowel_set_imperative || 'o-o';
+    const vsetImpf = entry.verb_vowel_impf || vm.vowel_set_imperfect || vm.vowel_set_impf || 'i-a';
+    const vsetPerf = entry.verb_vowel_perf || vm.vowel_set_perfect || vm.vowel_set_perf || 'a-a';
+    const vsetImp = vm.vowel_set_imperative || vm.vowel_set_impv || 'o-o';
     const rootImalaBlocked = useMemo(
         () => inferImalaBlocked({
             consonants: entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root || '',
@@ -2476,7 +2486,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const stemDefaults = entry.zokk_morphology ? resolveStemDefaults(entry.zokk_morphology as any) : null;
 
     // Derive or use stored conjugation
-    const conj = useMemo(() => {
+    const conj = useMemo<VerbConjugationTable | null>(() => {
         if (vm.conjugation) return vm.conjugation;
         // Auto-generate
         // Auto-generate using either root_pattern_form or zokk_morphology fallback
@@ -2647,7 +2657,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                     <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions.map(def => (
+                                {(entry.definitions ?? []).map(def => (
                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
                                 ))}
                             </ol>
@@ -2659,7 +2669,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                     <div className="w-full md:w-64 shrink-0 space-y-4 hidden md:block">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions.map(def => (
+                                {(entry.definitions ?? []).map(def => (
                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
                                 ))}
                             </ol>
@@ -3508,11 +3518,20 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
             marker: 'plain',
             entryId: item.id,
             pattern: item.cv_pattern
+                || item.pattern
+                || item.form_attributive_short_pattern
+                || item.form_plural_pattern
+                || item.morph_pattern
                 || item.lemma_pattern
                 || item.form_masc_pattern
                 || item.form_fem_pattern
-                || item.form_plural_pattern
-                || item.morph_pattern
+                || item.numeral_morphology?.form_attributive_short_pattern
+                || item.numeral_morphology?.form_plural_pattern
+                || item.numeral_morphology?.morph_pattern
+                || item.numeral_morphology?.lemma_pattern
+                || item.numeral_morphology?.form_masc_pattern
+                || item.numeral_morphology?.form_fem_pattern
+                || item.numeral_morphology?.pattern
                 || item.root_pattern_form?.pattern?.cv_notation
                 || null,
         };
@@ -3526,33 +3545,12 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
             : (data.pattern || null)
     );
 
-    const buildTypeAwareNumeralRow = (
-        rowType: 'ordinal' | 'adverbial' | 'fractional' | 'multiplier' | 'distributive',
-        label: string,
-        value: NumeralSurfaceValue | NumeralSurfaceValue[],
-        pattern?: string | (string | null)[] | null,
-    ): MorphologyDisplayRow => {
-        if (isNumeralEntry && numeralType === rowType && linkedCardinalSurface) {
-            return {
-                label: term('cardinal') || 'Cardinal',
-                value: renderNumeralLink(linkedCardinalSurface, 'cardinal'),
-                pattern: linkedCardinalSurface.pattern || null,
-            };
-        }
 
-        return {
-            label,
-            value: renderNumeralLink(value, rowType),
-            pattern,
-        };
-    };
 
     const masculineSurfaceValue = nm?.lemma_masc || entry.form_masc || entry.headword;
     const masculineSurfacePattern = nm?.gender?.toLowerCase() === 'masculine'
         ? (nm.lemma_pattern || entry.lemma_pattern)
         : (nm?.form_masc_pattern || entry.form_masc_pattern);
-    const shortAttributiveSurfaceValue = nm?.form_attributive_short || entry.form_attributive_short;
-
     const numeralDisplayForms = useMemo(
         () => buildNumeralDisplayForms(entry.headword, rootConsonants || '', resolvedNumeralEntries),
         [entry.headword, rootConsonants, resolvedNumeralEntries]
@@ -3572,7 +3570,8 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
             setEditEntry(null);
             setInitialFormData({
                 headword: data.value,
-                pos: type === 'ordinal' ? 'adjective' : (type === 'adverbial' ? 'adverb' : 'noun'),
+                pos: 'numeral',
+                numeral_type: type,
                 _rootConsonants: rootConsonants || ''
             });
         }
@@ -3815,70 +3814,69 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                     displayPattern={displayPattern}
                                     hideHeaderLabel
                                     rows={[
-                                        ...(!isNumeralEntry ? [{
-                                            label: term('tag-term') || 'Term',
-                                            secondaryLabel: term('pattern') || 'Pattern',
-                                            value: entry.headword,
-                                            pattern: entry.lemma_pattern || entry.form_masc_pattern || entry.cv_pattern,
-                                        },
-                                        {
-                                            label: term('type') || 'Type',
-                                            value: <span className="capitalize">{entry.numeral_type || nm?.numeral_type || '-'}</span>,
-                                            show: !!(entry.numeral_type || nm?.numeral_type)
-                                        },
-                                        {
-                                            label: term('masculine'),
-                                            value: nm?.lemma_masc || entry.form_masc || entry.headword,
-                                            pattern: nm?.gender?.toLowerCase() === 'masculine' ? (nm.lemma_pattern || entry.lemma_pattern) : (nm?.form_masc_pattern || entry.form_masc_pattern)
+                                        ...(combineMasculineAndShortAttributive
+                                            ? []
+                                            : (numeralGender === 'feminine'
+                                                ? [{
+                                                    label: term('masculine'),
+                                                    value: masculineSurfaceValue,
+                                                    pattern: masculineSurfacePattern
+                                                }]
+                                                : [{
+                                                    label: term('feminine'),
+                                                    value: nm?.lemma_fem || entry.form_fem,
+                                                    pattern: (nm?.gender?.toLowerCase() === 'feminine' && !nm.form_fem_pattern && !entry.form_fem_pattern)
+                                                        ? (nm.lemma_pattern || entry.lemma_pattern)
+                                                        : (nm?.form_fem_pattern || entry.form_fem_pattern)
+                                                }])),
+                                        ...(numeralType !== 'cardinal' ? [{
+                                            label: term('cardinal') || 'Cardinal',
+                                            value: linkedCardinalSurface ? renderNumeralLink(linkedCardinalSurface, 'cardinal') : <span className="opacity-40">-</span>,
+                                            pattern: linkedCardinalSurface?.pattern || null,
+                                            theoretical: false,
                                         }] : []),
-                                        ...(isNumeralEntry
-                                            ? (combineMasculineAndShortAttributive
-                                                ? []
-                                                : (numeralGender === 'feminine'
-                                                    ? [{
-                                                        label: term('masculine'),
-                                                        value: masculineSurfaceValue,
-                                                        pattern: masculineSurfacePattern
-                                                    }]
-                                                    : [{
-                                                        label: term('feminine'),
-                                                        value: nm?.lemma_fem || entry.form_fem,
-                                                        pattern: (nm?.gender?.toLowerCase() === 'feminine' && !nm.form_fem_pattern && !entry.form_fem_pattern)
-                                                            ? (nm.lemma_pattern || entry.lemma_pattern)
-                                                            : (nm?.form_fem_pattern || entry.form_fem_pattern)
-                                                    }]))
-                                            : [{
-                                                label: term('masculine'),
-                                                value: masculineSurfaceValue,
-                                                pattern: masculineSurfacePattern
-                                            }, {
-                                                label: term('feminine'),
-                                                value: nm?.lemma_fem || entry.form_fem,
-                                                pattern: (nm?.gender?.toLowerCase() === 'feminine' && !nm.form_fem_pattern && !entry.form_fem_pattern)
-                                                    ? (nm.lemma_pattern || entry.lemma_pattern)
-                                                    : (nm?.form_fem_pattern || entry.form_fem_pattern)
-                                            }]),
-                                        {
+                                        ...(numeralType !== 'attributive_short' ? [{
                                             label: getNumeralShortAttributiveRowLabel(),
-                                            value: shortAttributiveSurfaceValue,
-                                            theoretical: !nm?.form_attributive_short && !entry.form_attributive_short
-                                        },
-                                        {
-                                            label: term('long-attributive') || 'Long',
-                                            value: nm?.form_attributive_long || entry.form_attributive_long,
-                                            theoretical: !nm?.form_attributive_long && !entry.form_attributive_long
-                                        },
-                                        ...(!isNumeralEntry ? [{
-                                            label: term('plural'),
-                                            value: nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || (entry.headword === 'wieħed' ? 'uħud' : null),
-                                            show: !!(nm?.inflections_pl?.[0] || entry.inflections_pl?.[0] || entry.headword === 'wieħed'),
-                                            pattern: entry.morph_pattern || nm?.morph_pattern || entry.form_plural_pattern || nm?.form_plural_pattern
+                                            value: renderNumeralLink(numeralDisplayForms.attributive_short, 'attributive_short'),
+                                            pattern: getNumeralPattern(numeralDisplayForms.attributive_short),
+                                            theoretical: false,
                                         }] : []),
-                                        buildTypeAwareNumeralRow('ordinal', term('ordinal') || 'Ordinal', numeralDisplayForms.ordinal, getNumeralPattern(numeralDisplayForms.ordinal)),
-                                        buildTypeAwareNumeralRow('adverbial', term('adverbial') || 'Adverbial', numeralDisplayForms.adverbial, getNumeralPattern(numeralDisplayForms.adverbial)),
-                                        buildTypeAwareNumeralRow('fractional', term('fractional') || 'Fractional (Sem.)', numeralDisplayForms.fractional, getNumeralPattern(numeralDisplayForms.fractional)),
-                                        buildTypeAwareNumeralRow('multiplier', term('multiplier') || 'Multiplier', numeralDisplayForms.multiplier, getNumeralPattern(numeralDisplayForms.multiplier)),
-                                        buildTypeAwareNumeralRow('distributive', term('distributive') || 'Distributive', numeralDisplayForms.distributive, getNumeralPattern(numeralDisplayForms.distributive))
+                                        ...(numeralType !== 'attributive_long' ? [{
+                                            label: term('long-attributive') || 'Long',
+                                            value: renderNumeralLink(numeralDisplayForms.attributive_long, 'attributive_long'),
+                                            pattern: getNumeralPattern(numeralDisplayForms.attributive_long),
+                                            theoretical: false,
+                                        }] : []),
+                                        ...(numeralType !== 'ordinal' ? [{
+                                            label: term('ordinal') || 'Ordinal',
+                                            value: renderNumeralLink(numeralDisplayForms.ordinal, 'ordinal'),
+                                            pattern: getNumeralPattern(numeralDisplayForms.ordinal),
+                                            theoretical: false,
+                                        }] : []),
+                                        ...(numeralType !== 'adverbial' ? [{
+                                            label: term('adverbial') || 'Adverbial',
+                                            value: renderNumeralLink(numeralDisplayForms.adverbial, 'adverbial'),
+                                            pattern: getNumeralPattern(numeralDisplayForms.adverbial),
+                                            theoretical: false,
+                                        }] : []),
+                                        ...(numeralType !== 'fractional' ? [{
+                                            label: term('fractional') || 'Fractional (Sem.)',
+                                            value: renderNumeralLink(numeralDisplayForms.fractional, 'fractional'),
+                                            pattern: getNumeralPattern(numeralDisplayForms.fractional),
+                                            theoretical: false,
+                                        }] : []),
+                                        ...(numeralType !== 'multiplier' ? [{
+                                            label: term('multiplier') || 'Multiplier',
+                                            value: renderNumeralLink(numeralDisplayForms.multiplier, 'multiplier'),
+                                            pattern: getNumeralPattern(numeralDisplayForms.multiplier),
+                                            theoretical: false,
+                                        }] : []),
+                                        ...(numeralType !== 'distributive' ? [{
+                                            label: term('distributive') || 'Distributive',
+                                            value: renderNumeralLink(numeralDisplayForms.distributive, 'distributive'),
+                                            pattern: getNumeralPattern(numeralDisplayForms.distributive),
+                                            theoretical: false,
+                                        }] : []),
                                     ]}
                                 />
 
@@ -4072,7 +4070,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                     <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions.map(def => (
+                                {(entry.definitions ?? []).map(def => (
                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
                                 ))}
                             </ol>
@@ -4084,7 +4082,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                     <div className="hidden md:block w-full md:w-64 shrink-0 space-y-4">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions.map(def => (
+                                {(entry.definitions ?? []).map(def => (
                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
                                 ))}
                             </ol>
@@ -4409,7 +4407,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                     <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions.map(def => (
+                                {(entry.definitions ?? []).map(def => (
                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
                                 ))}
                             </ol>
@@ -4421,7 +4419,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                     <div className="hidden md:block w-full md:w-64 shrink-0 space-y-4">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions.map(def => (
+                                {(entry.definitions ?? []).map(def => (
                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
                                 ))}
                             </ol>
@@ -4842,7 +4840,7 @@ export function FunctionWordEntryView({
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
                                 {entry.definitions && entry.definitions.length > 0 ? (
-                                    entry.definitions.map(def => (
+                                    (entry.definitions ?? []).map(def => (
                                         <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
                                     ))
                                 ) : (
@@ -5263,7 +5261,7 @@ export function EntryPage() {
     return (
         <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8">
             <p className="text-sm text-black/40 italic">
-                {term('full-entry-view-coming-soon').replace('{pos}', term(entry.pos))}
+                {term('full-entry-view-coming-soon').replace('{pos}', term(entry.pos || 'pos'))}
             </p>
         </div>
     );

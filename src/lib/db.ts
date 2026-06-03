@@ -46,11 +46,9 @@ export async function searchEntries(
     let sql = `
     SELECT e.*
     FROM entries e
-    WHERE (e.headword LIKE ? OR e.id IN (
-      SELECT entry_id FROM definitions WHERE text_en LIKE ? OR text_mt LIKE ?
-    ))
+    WHERE (e.headword LIKE ? OR COALESCE(e.definitions, '') LIKE ?)
   `;
-    const args: (string | number)[] = [like, like, like];
+    const args: (string | number)[] = [like, like];
 
     if (filters?.pos && filters.pos.length > 0) {
         sql += ` AND e.pos IN (${filters.pos.map(() => '?').join(',')})`;
@@ -91,7 +89,7 @@ export async function getEntry(id: string): Promise<Entry | null> {
     const row = firstRow<Entry>(rs);
     if (!row) return null;
 
-    // TODO: join related tables (subentries, phonetics, audio, etymologies, etc.)
+    // TODO: join related tables (subentries, phonetics, audio, etymology metadata, etc.)
     return row;
 }
 

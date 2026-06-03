@@ -6,6 +6,7 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { apiListPatterns, type PatternApiItem } from '@/lib/api';
 import { getPatternMetadataSummary } from '@/lib/patternMetadata';
 import { cn } from '@/lib/utils';
+import { useCatalogRefresh } from '@/hooks/useCatalogRefresh';
 
 const BUCKET_ORDER = [
     'cv_wizen_pattern',
@@ -197,6 +198,26 @@ export function MorphologyBrowse() {
             cancelled = true;
         };
     }, []);
+
+    useCatalogRefresh(() => {
+        setLoading(true);
+        return apiListPatterns()
+            .then((res) => {
+                setPatterns(
+                    res.patterns.map((pattern) => ({
+                        ...pattern,
+                        applicability: Array.isArray(pattern.applicability) ? pattern.applicability : [],
+                    })),
+                );
+            })
+            .catch((err) => {
+                console.error('Failed to fetch patterns:', err);
+                setPatterns([]);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, { intervalMs: 60_000 });
 
     const bucketMap = useMemo(() => {
         const map = new Map<BucketKey, PatternCardData[]>();

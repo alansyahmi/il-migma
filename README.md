@@ -50,7 +50,7 @@ The linguistic model separates abstract morphology from surface forms:
 - **`patterns`** store CV/wiżen templates.
 - **`root_pattern_forms`** join roots + patterns into realizations.
 - **`entries`** store the actual dictionary headwords and lexical attributes.
-- **`definitions`, `phonetics`, `etymologies`, `dialect_variants`** layer meaning and evidence.
+- **`definitions`, `phonetics`, `dialect_variants`** layer meaning and evidence; etymology is stored on `entries.etymology_chain` and `entries.etymology_notes`.
 
 This makes Il-Miġma’ both searchable for end users and reusable as structured lexical infrastructure.
 

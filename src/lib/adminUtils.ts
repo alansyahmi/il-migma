@@ -31,6 +31,7 @@ export interface EntryDefinition {
     text_mt: string | null;
     register: string;
     nuance: string;
+    example_sentences?: any[];
 }
 
 export interface RootFormData {
@@ -211,8 +212,13 @@ function splitDefinitionText(value: any): string[] {
     const normalized = String(value);
     if (!normalized.trim()) return [''];
 
+    if (!normalized.includes(';')) {
+        return [normalized];
+    }
+
     const parts = normalized
         .split(/\s*;\s*/)
+        .map(part => part.trim())
         .filter(Boolean);
 
     return parts.length > 0 ? parts : [''];
@@ -220,8 +226,8 @@ function splitDefinitionText(value: any): string[] {
 
 function normalizeNullableText(value: any): string | null {
     if (value === undefined || value === null) return null;
-    const normalized = String(value).trim();
-    return normalized ? normalized : null;
+    const raw = String(value);
+    return raw.trim() ? raw : null;
 }
 
 function normalizeEntryDefinition(def: any): EntryDefinition[] {
@@ -229,6 +235,7 @@ function normalizeEntryDefinition(def: any): EntryDefinition[] {
     const textMtParts = splitDefinitionText(def?.text_mt ?? def?.definition_mt ?? def?.gloss_mt ?? def?.mt);
     const register = String(def?.register ?? def?.sense_register ?? '').trim();
     const nuance = String(def?.nuance ?? '').trim();
+    const exampleSentences = Array.isArray(def?.example_sentences) ? def.example_sentences : [];
     const count = Math.max(textEnParts.length, textMtParts.length);
 
     if (count <= 1) {
@@ -237,6 +244,7 @@ function normalizeEntryDefinition(def: any): EntryDefinition[] {
             text_mt: normalizeNullableText(textMtParts[0]),
             register,
             nuance,
+            example_sentences: exampleSentences,
         }];
     }
 
@@ -245,6 +253,7 @@ function normalizeEntryDefinition(def: any): EntryDefinition[] {
         text_mt: normalizeNullableText(textMtParts[index]),
         register,
         nuance,
+        example_sentences: index === 0 ? exampleSentences : [],
     }));
 }
 

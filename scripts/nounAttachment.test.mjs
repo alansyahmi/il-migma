@@ -15,10 +15,23 @@ const cases = [
         expected: ['ġismi', 'ġismek', 'ġismu', 'ġisimha', 'ġisimna', 'ġisimkom', 'ġisimhom'],
     },
     {
+        base: 'ktieb',
+        gender: 'masculine',
+        pattern: undefined,
+        expected: ['ktiebi', 'ktiebek', 'ktiebu', 'ktiebha', 'ktiebna', 'ktiebkom', 'ktiebhom'],
+    },
+    {
         base: 'ziju',
         gender: 'masculine',
         pattern: undefined,
         expected: ['zijuwi', 'zijuk', 'zijuh', 'zijuha', 'zijuna', 'zijukom', 'zijuhom'],
+    },
+    {
+        base: 'ajjut',
+        gender: 'masculine',
+        pattern: undefined,
+        ipaHint: '/ɐj.ˈjʊːt/',
+        expected: ['ajjuti', 'ajjutek', 'ajjutu', 'ajjutha', 'ajjutna', 'ajjutkom', 'ajjuthom'],
     },
     {
         base: 'darba',
@@ -32,6 +45,12 @@ const cases = [
         pattern: undefined,
         expected: ['drabija', 'drabik', 'drabih', 'drabiha', 'drabina', 'drabikom', 'drabihom'],
     },
+    {
+        base: 'kittieba',
+        gender: 'feminine',
+        pattern: undefined,
+        expected: ['kittibti', 'kittibtek', 'kittibtu', 'kittibtha', 'kittibna', 'kittibkom', 'kittibhom'],
+    },
 ];
 
 const suffixes = [0, 1, 2, 3, 4, 5, 6];
@@ -42,6 +61,8 @@ for (const testCase of cases) {
         idx,
         testCase.gender,
         testCase.pattern,
+        undefined,
+        testCase.ipaHint,
     ));
     assert.deepStrictEqual(actual, testCase.expected, `Unexpected possessive forms for ${testCase.base}`);
 }

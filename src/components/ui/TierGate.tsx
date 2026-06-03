@@ -52,9 +52,10 @@ export function TierGate({ feature, children, fallback, className }: TierGatePro
             </div>
             <div>
                 <p className="font-serif text-lg font-semibold text-[#1034A6]">
-                    {term('is-a-feature')
-                        .replace('{label}', term(config.key))
-                        .replace('{tier}', tierLabel)}
+                    {term('is-a-feature', {
+                        label: term(config.key),
+                        tier: tierLabel,
+                    })}
                 </p>
                 <p className="text-sm text-text-muted mt-1">
                     {config.tier === 'pro'
@@ -68,7 +69,7 @@ export function TierGate({ feature, children, fallback, className }: TierGatePro
           bg-[#1034A6] text-white hover:bg-[#0D2A8A] transition-colors"
             >
                 <Sparkles size={14} />
-                {term('upgrade-to').replace('{tier}', tierLabel)}
+                {term('upgrade-to', { tier: tierLabel })}
             </Link>
         </div>
     );

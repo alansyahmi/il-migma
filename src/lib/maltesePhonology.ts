@@ -4,7 +4,7 @@
  * Linguistic engine for Standard Maltese phonology, orthography, and morphology.
  */
 
-import { prepareSuffixAttachmentStem } from './nounAttachment.ts';
+import { prepareSuffixAttachmentStem, hasStressedOrLongFinalSyllable } from './nounAttachment.ts';
 
 // ── CONSTANTS ──────────────────────────────────────────────────────────────
 
@@ -240,11 +240,13 @@ export function extractLongVowelFromPattern(cvPattern: string): number | undefin
 
 /**
  * Derives the CV pattern from a typed word and root consonants.
- * Any vowel in the word is replaced with 'v'. Root consonants become 'C'.
+ * Root consonants become 'C'. Surface long vowels are preserved as
+ * circumflex vowels, `ie` is treated as `â`, and a word-final `a` stays
+ * literal `a` instead of collapsing to `v`.
  * Non-root consonants (prefixes/suffixes) are kept as-is.
  * 
  * e.g. derivePattern('kitba', 'k-t-b') -> 'CvCCa'  (b appears twice -> CC)
- * e.g. derivePattern('kotba', 'k-t-b') -> 'CvCCa'  (any vowel = v)
+ * e.g. derivePattern('fietla', 'f-t-l') -> 'CâCCa'  (`ie` -> â, final a -> a)
  */
 export function derivePattern(word: string, rootConsonants: string): string | null {
     if (!word || !rootConsonants) return null;
@@ -261,6 +263,18 @@ export function derivePattern(word: string, rootConsonants: string): string | nu
     while (i < norm.length) {
         const char = norm[i];
 
+        if (norm.startsWith('ie', i)) {
+            result += 'â';
+            i += 2;
+            continue;
+        }
+
+        if ('âêîôû'.includes(char)) {
+            result += char;
+            i++;
+            continue;
+        }
+
         // Check for multi-character root consonants (għ, ħ, etc.)
         // Try to match current root consonant
         const currentRoot = rootIndex < roots.length ? roots[rootIndex] : null;
@@ -276,7 +290,7 @@ export function derivePattern(word: string, rootConsonants: string): string | nu
         // Actually we iterate greedily left-to-right matching root consonants in order
 
         if (isVowel(char)) {
-            result += 'v';
+            result += i === norm.length - 1 && char === 'a' ? 'a' : 'v';
             i++;
         } else {
             // Non-root consonant (prefix/suffix consonant like 't' in tCvCvC)
@@ -302,12 +316,22 @@ export function derivePattern(word: string, rootConsonants: string): string | nu
 /**
  * Derives the feminine form from a masculine headword.
  */
-export function deriveFeminineFromPattern(_cvPattern: string, headword: string): string | null {
+export function deriveFeminineFromPattern(cvPattern: string, headword: string, ipaHint?: string | null): string | null {
     if (!headword) return null;
-
     const word = headword.toLowerCase();
     const v = VOWELS;
 
+
+    // Exception: If the entry has stress on the final syllable, do NOT syncopate.
+    // We check either the IPA hint or the pattern for long vowels.
+    const longVowelIdx = cvPattern ? extractLongVowelFromPattern(cvPattern) : undefined;
+    const isSecondVowelLong = longVowelIdx === 2;
+
+    if (hasStressedOrLongFinalSyllable(ipaHint || undefined) || isSecondVowelLong) {
+        if (word.endsWith('a') || word.endsWith('à')) return word;
+        if (word.endsWith('i')) return word + 'ja';
+        return word + 'a';
+    }
     // 1. Handle jj/ww degemination + syncopation (tfajjel -> tfajla)
     if (word.includes('jj') || word.includes('ww')) {
         const base = word.replace('jj', 'j').replace('ww', 'w');
@@ -415,15 +439,46 @@ export function detectPluralType(headword: string, _soundSuffixes: string[]): Pl
  * - syncopates a final short vowel when the word has a multi-vowel stem
  * This keeps forms like għomor -> għomrejn instead of għomorejn.
  */
-export function generateTheoreticalDual(word: string, pluralHint?: string | null): string {
+export function generateTheoreticalDual(word: string, pluralHint?: string | null, ipaHint?: string | null, pattern?: string | null, rootConsonants?: string | null): string {
     if (!word) return '';
     const norm = word.toLowerCase().trim().normalize('NFC');
-    const collapseIe = collapseIeForDual(norm, pluralHint);
-    const stem = prepareSuffixAttachmentStem(collapseIe);
+    const roots = rootConsonants ? rootConsonants.toLowerCase().replace(/[-.,\s]+/g, '-').split('-').filter(Boolean) : [];
+
+    // Weak radical duals: ħelu (ħ-l-w) -> ħelwejn, ziju (z-j-w) -> zijuwejn
+    if (norm.endsWith('u') && roots.length >= 3) {
+        const c2 = roots[1];
+        const c3 = roots[2];
+        const isC2Weak = ['j', 'w'].includes(c2);
+        const isC3Weak = ['j', 'w'].includes(c3);
+
+        if (isC3Weak) {
+            if (isC2Weak) {
+                // Both weak: -u -> -uwejn
+                return norm + 'wejn';
+            } else {
+                // Only 3rd weak: -u -> -wejn
+                return norm.slice(0, -1) + 'wejn';
+            }
+        }
+    }
+
+    // Resolve the dual stem once so long-final nouns like `baħħar` and
+    // geminated stems like `ġeddid` stay on the full attachment path while
+    // ordinary `ie` stems such as `ktieb` still reduce to `ktib`.
+    let stem = buildTheoreticalDualStem(norm, pluralHint, ipaHint, pattern);
 
     // Check for guttural ending (għ, ħ, q, h) after stem reduction.
+    // Plural hints ending in -at also take -ajn, since those sound-plural
+    // patterns do not syncopate into an -ejn dual.
+    const normalizedHint = String(pluralHint || '').toLowerCase().trim().normalize('NFC');
     const isGuttural = stem.endsWith('għ') || stem.endsWith('ħ') || stem.endsWith('q') || stem.endsWith('h');
-    const suffix = isGuttural ? 'ajn' : 'ejn';
+    const isAtPlural = normalizedHint.endsWith('at');
+
+    if (isAtPlural && stem.endsWith('a')) {
+        stem = stem.slice(0, -1);
+    }
+
+    const suffix = (isGuttural || isAtPlural) ? 'ajn' : 'ejn';
 
     return stem + suffix;
 }
@@ -456,10 +511,29 @@ function collapseIeForDual(word: string, pluralHint?: string | null): string {
     });
 }
 
-export function generateFeminineDualFromMasculineWithHint(word: string, pluralHint?: string | null): string {
+function buildTheoreticalDualStem(
+    word: string,
+    pluralHint?: string | null,
+    ipaHint?: string | null,
+    pattern?: string | null,
+): string {
+    const collapseIe = collapseIeForDual(word, pluralHint);
+    return prepareSuffixAttachmentStem(collapseIe, ipaHint || undefined, pattern || undefined);
+}
+
+function buildFeminineDualStem(word: string, pluralHint?: string | null, ipaHint?: string | null): string {
+    const attachmentStem = prepareSuffixAttachmentStem(word, ipaHint || undefined);
+    return collapseIeForDual(attachmentStem, pluralHint).replace(/a$/i, '');
+}
+
+export function generateFeminineDualFromMasculineWithHint(
+    word: string,
+    pluralHint?: string | null,
+    ipaHint?: string | null,
+): string {
     if (!word) return '';
     const normalized = word.toLowerCase().trim().normalize('NFC');
-    return `${collapseIeForDual(normalized, pluralHint)}tejn`;
+    return `${buildFeminineDualStem(normalized, pluralHint, ipaHint)}tejn`;
 }
 
 function parseRootConsonants(rootConsonants?: string | null): string[] {
@@ -544,14 +618,14 @@ function hasGuttural(word: string): boolean {
     return /għ|ħ|q|h/i.test(word);
 }
 
-export function generateDiminutiveSoundPlural(word: string): string {
+export function generateDiminutiveSoundPlural(word: string, ipaHint?: string | null): string {
     if (!word) return '';
-    return `${prepareSuffixAttachmentStem(word)}in`;
+    return `${prepareSuffixAttachmentStem(word, ipaHint || undefined)}in`;
 }
 
-export function generateFeminineDiminutiveSoundPlural(word: string): string {
+export function generateFeminineDiminutiveSoundPlural(word: string, ipaHint?: string | null): string {
     if (!word) return '';
-    const attachmentStem = prepareSuffixAttachmentStem(word);
+    const attachmentStem = prepareSuffixAttachmentStem(word, ipaHint || undefined);
     const stem = attachmentStem.replace(/a$/i, '');
     const suffix = hasGuttural(stem) ? 'at' : 'iet';
     return `${stem}${suffix}`;
@@ -561,9 +635,9 @@ export function generateFeminineDiminutiveSoundPlural(word: string): string {
  * Feminine diminutive duals attach -tejn to the diminished feminine stem.
  * This keeps forms like darba -> darbtejn and fgħajla -> fgħajltejn.
  */
-export function generateFeminineDiminutiveDual(word: string): string {
+export function generateFeminineDiminutiveDual(word: string, ipaHint?: string | null): string {
     if (!word) return '';
-    const attachmentStem = prepareSuffixAttachmentStem(word);
+    const attachmentStem = prepareSuffixAttachmentStem(word, ipaHint || undefined);
     return `${attachmentStem.replace(/a$/i, '')}tejn`;
 }
 
@@ -658,15 +732,18 @@ export function generateElative(rootConsonants: string, headword: string): { mas
     let masc = '';
     if (allVowelsA) {
         masc = `a${c1}${c2}a${c3}`;
-    } else if (isGeminated) {
-        masc = `a${c1}a${c2}${c3}`;
     } else {
         // If any radical is guttural, the adjacent masculine elative vowel shifts to "a".
         const v2 = (isGuttural(c1) || isGuttural(c2) || isGuttural(c3)) ? 'a' : 'e';
-        // Check if we should use iCCvC or iCvCC (usually triliteral roots use iCCvC)
-        // Most elatives are iCCvC (e.g. iħla, iqsar, itwal)
-        // But for doubled roots we handle separately.
-        masc = `i${c1}${c2}${v2}${c3}`;
+        
+        if (isGeminated) {
+            // e.g. ġ-d-d -> iġded (Standard) or eġded
+            // Most geminated adjectives take iCCeC or aCCaC
+            masc = `i${c1}${c2}${v2}${c3}`;
+        } else {
+            // Normal triliteral: iCCvC
+            masc = `i${c1}${c2}${v2}${c3}`;
+        }
     }
 
     const fem = `${c1}o${c2}${c3}a`;

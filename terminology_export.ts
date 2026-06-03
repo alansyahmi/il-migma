@@ -406,8 +406,8 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     },
     "dictionary-title": {
         "en": "A Comprehensive Digital Maltese-English Dictionary",
-        "standard": "Dizzjunarju u Konjugatur Komprensiv Diġitali tal-Malti-Ingliż",
-        "arabised": "Miklem u Sarraf Wesgħani Għaddieni tal-Malti-Ingliż"
+        "standard": "Dizzjunarju u Konjugatur Komprensiv Diġitali Malti-Ingliż",
+        "arabised": "Miklem u Sarraf Wesgħani Diġitali Malti-Ingliż"
     },
     "digital": {
         "en": "Digital",
@@ -660,9 +660,9 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
         "arabised": "Għarbel il-Madħliet"
     },
     "home-desc": {
-        "en": "An ever-growing online tool for learners and researchers to the meaning, history, and usage of 300,000 words in Maltese and its dialects.",
-        "standard": "Għodda onlajn li dejjem tikber għal dawk li jitgħallmu u għar-riċerkaturi dwar it-tifsira, l-istorja u l-użu ta' 300,000 kelma bil-Malti u d-djaletti tiegħu.",
-        "arabised": "Għodda fuq linja li dejjem tikber għal dawk li jitgħallmu u għall-fittixin dwar it-tagħliq, l-oriġini u l-użu ta' 300,000 kelma bil-Malti u l-lsejnin tiegħu."
+        "en": "An ever-growing {online} tool for learners and researchers to the meaning, history, and usage of {count} words in Maltese and its dialects.",
+        "standard": "Għodda {online} li dejjem tikber għal dawk li jitgħallmu u għar-riċerkaturi dwar it-tifsira, l-istorja u l-użu ta' {count} kelma bil-Malti u bid-djaletti tiegħu.",
+        "arabised": "Għodda {online} li dejjem tikber għal dawk li jitgħallmu u għall-fittixin dwar it-tagħliq, l-oriġini u l-użu ta' {count} kelma bil-Malti u l-lsejnin tiegħu."
     },
     "home-random-title": {
         "en": "Random Entry",
@@ -899,6 +899,11 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
         "standard": "L-ebda riżultat ma nstab għal '{q}'.",
         "arabised": "L-ebda riżultat ma nstab għal '{q}'."
     },
+    "no-results-found-empty": {
+        "en": "No results found.",
+        "standard": "L-ebda riżultat ma nstab.",
+        "arabised": "L-ebda riżultat ma nstab."
+    },
     "noun": {
         "en": "Noun",
         "standard": "Nom",
@@ -921,7 +926,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     },
     "online": {
         "en": "online",
-        "standard": "onlajn",
+        "standard": "online",
         "arabised": "fuq linja"
     },
     "page-not-found": {
@@ -1645,9 +1650,9 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
         "arabised": "Madħliet il-Kliem"
     },
     "word-entries-desc": {
-        "en": "Add new words, update meanings and IPA in your library of 300k+ entries.",
-        "standard": "Żid kliem ġdid, aġġorna t-tifsiriet u l-IPA fil-librerija tiegħek ta' 300k+ entrati.",
-        "arabised": "Żid kliem ġdid, aġġorna t-tagħliq u l-IPA fil-librerija tiegħek ta' 300k+ madħliet."
+        "en": "Add new words, update meanings and IPA in your library of {count} entries.",
+        "standard": "Żid kliem ġdid, aġġorna t-tifsiriet u l-IPA fil-librerija tiegħek ta' {count} entrati.",
+        "arabised": "Żid kliem ġdid, aġġorna t-tagħliq u l-IPA fil-librerija tiegħek ta' {count} madħliet."
     },
     "yes": {
         "en": "Yes",

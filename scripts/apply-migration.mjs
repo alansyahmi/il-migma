@@ -22,16 +22,17 @@ if (!url) {
 
 const client = createClient({ url, authToken });
 
-const queries = [
+  const queries = [
     "ALTER TABLE entries ADD COLUMN adj_gender TEXT",
     "ALTER TABLE entries ADD COLUMN participle_gender TEXT",
+    "ALTER TABLE entries ADD COLUMN noun_type TEXT",
     "ALTER TABLE entries ADD COLUMN verb_active_ptcp TEXT",
     "ALTER TABLE entries ADD COLUMN verb_vowel_impv TEXT",
     "ALTER TABLE entries ADD COLUMN verb_type TEXT",
     "ALTER TABLE entries ADD COLUMN synonyms TEXT",
     "ALTER TABLE entries ADD COLUMN antonyms TEXT",
     "ALTER TABLE entries ADD COLUMN related_entries TEXT",
-    "ALTER TABLE entries ADD COLUMN is_inflectable INTEGER DEFAULT 1",
+    "ALTER TABLE entries ADD COLUMN is_inflectable BOOLEAN DEFAULT false",
     "ALTER TABLE entries ADD COLUMN usage_example TEXT",
     "ALTER TABLE entries ADD COLUMN usage_example_en TEXT"
 ];

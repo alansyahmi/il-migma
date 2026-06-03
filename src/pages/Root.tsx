@@ -163,13 +163,13 @@ export function Root() {
     // Generate engine data
     const { generatedTable, shownIds } = useMemo(() => {
         if (!rootObj) return { generatedTable: [], shownIds: new Set<string>() };
-        const pvSet = rootObj.vowel_set_perf || vm?.vowel_set_perfect || 'a-a';
-        const ipvSet = rootObj.vowel_set_impf || vm?.vowel_set_imperfect || 'i-a';
+        const pvSet = rootObj.vowel_set_perf || vm?.vowel_set_perf || 'a-a';
+        const ipvSet = rootObj.vowel_set_impf || vm?.vowel_set_impf || 'i-a';
         const imalaBlocked = inferImalaBlocked({
             consonants: rootObj.consonants,
             vowel_set_perf: pvSet,
             vowel_set_impf: ipvSet,
-            vowel_set_imp: rootObj.vowel_set_imp || vm?.vowel_set_imperative || 'o-o',
+            vowel_set_imp: rootObj.vowel_set_imp || vm?.vowel_set_impv || 'o-o',
         });
         const rawGen = generateRootForms(
             rootObj.consonants,
@@ -204,7 +204,7 @@ export function Root() {
         const seenIds = new Set<string>();
 
         const getPattern = (e: any) => {
-            const cv = (e as any).cv_pattern || e.root_pattern_form?.pattern?.cv_notation || '-';
+    const cv = e.root_pattern_form?.pattern?.cv_notation || '-';
             const wizen = e.root_pattern_form?.pattern?.wizen_notation || cv;
             return mode === 'standard' ? cv : wizen;
         };
@@ -260,7 +260,7 @@ export function Root() {
                     terms.push({
                         term: re.headword,
                         class: term(re.pos || 'related'),
-                        cv: mode === 'standard' ? (re.cv_pattern || re.wizen_pattern || '-') : (re.wizen_pattern || re.cv_pattern || '-'),
+    cv: mode === 'standard' ? (re.root_pattern_form?.pattern?.cv_notation || re.wizen_pattern || '-') : (re.wizen_pattern || re.root_pattern_form?.pattern?.cv_notation || '-'),
                         id: re.id,
                         gloss: getGloss(re, language, mode)
                     });
@@ -320,7 +320,7 @@ export function Root() {
                         {term('root-not-found')}
                     </h2>
                     <p className="text-text-muted text-sm mb-8 leading-relaxed">
-                        {term('root-not-found-desc').replace('{id}', id || '')}
+                        {term('root-not-found-desc', { id: id || '' })}
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -711,7 +711,7 @@ export function Root() {
                                                                                 setEditEntry({
                                                                                     id: existing.id,
                                                                                     headword: existing.headword,
-                                                                                    pos: existing.pos,
+                                                                                    pos: existing.pos || 'unknown',
                                                                                     created_at: '',
                                                                                     is_loanword: false
                                                                                 });

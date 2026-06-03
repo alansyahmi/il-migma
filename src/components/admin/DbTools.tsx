@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
     adminDbQuery, adminDbExport, adminDbIntegrityCheck,
-    adminDbMergeRoots, adminDbTableInfo
+    adminDbMergeRoots, adminDbTableInfo, adminDbExportBundle
 } from '@/lib/api';
 
 interface DbToolsProps {
@@ -244,7 +244,58 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
     const { t } = useLanguage();
     const [selectedTable, setSelectedTable] = useState('');
     const [loading, setLoading] = useState(false);
+    const [bundleLoading, setBundleLoading] = useState(false);
     const [preview, setPreview] = useState<any>(null);
+
+    const downloadBlob = (content: string, filename: string, type: string) => {
+        const blob = new Blob([content], { type });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    const downloadPreview = (format: 'json' | 'csv') => {
+        if (!preview) return;
+        const baseName = `${preview.table}_export_${new Date().toISOString().slice(0, 10)}`;
+
+        if (format === 'json') {
+            downloadBlob(JSON.stringify(preview.rows, null, 2), `${baseName}.json`, 'application/json');
+            return;
+        }
+
+        const escapeCsv = (val: any) => {
+            const s = String(val ?? '');
+            if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+                return `"${s.replace(/"/g, '""')}"`;
+            }
+            return s;
+        };
+        const header = preview.columns.join(',');
+        const rows = preview.rows.map((row: any[]) => row.map(escapeCsv).join(',')).join('\n');
+        downloadBlob(`${header}\n${rows}`, `${baseName}.csv`, 'text/csv');
+    };
+
+    const downloadBundle = async () => {
+        setBundleLoading(true);
+        try {
+            const token = await getToken();
+            const bundle = await adminDbExportBundle(token!, {
+                preset: 'entry-linking',
+            });
+            downloadBlob(
+                JSON.stringify(bundle, null, 2),
+                `entry-linking_bundle_${new Date().toISOString().slice(0, 10)}.json`,
+                'application/json',
+            );
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setBundleLoading(false);
+        }
+    };
 
     const handlePreview = async (table: string) => {
         if (!table) return;
@@ -259,37 +310,6 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
         } finally {
             setLoading(false);
         }
-    };
-
-    const download = (format: 'json' | 'csv') => {
-        if (!preview) return;
-        let content = '';
-        let filename = `${preview.table}_export_${new Date().toISOString().slice(0, 10)}`;
-
-        if (format === 'json') {
-            content = JSON.stringify(preview.rows, null, 2);
-            filename += '.json';
-        } else {
-            const escapeCsv = (val: any) => {
-                const s = String(val ?? '');
-                if (s.includes(',') || s.includes('"') || s.includes('\n')) {
-                    return `"${s.replace(/"/g, '""')}"`;
-                }
-                return s;
-            };
-            const header = preview.columns.join(',');
-            const rows = preview.rows.map((row: any[]) => row.map(escapeCsv).join(',')).join('\n');
-            content = header + '\n' + rows;
-            filename += '.csv';
-        }
-
-        const blob = new Blob([content], { type: format === 'json' ? 'application/json' : 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(url);
     };
 
     return (
@@ -309,6 +329,22 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
                         {tables.map(t => <option key={t.name} value={t.name}>{t.name} ({t.rowCount} rows)</option>)}
                     </select>
                 </div>
+
+                <div className="flex flex-wrap gap-2">
+                    <Button
+                        size="sm"
+                        variant="ghost"
+                        className="border border-[#1034A6]/20 text-[#1034A6]"
+                        leftIcon={<Download size={14} />}
+                        onClick={downloadBundle}
+                        disabled={bundleLoading}
+                    >
+                        {bundleLoading ? t('Bundling…', 'Qed jinġabar…') : t('Entries Bundle', 'Pakkett ta\' Entrati')}
+                    </Button>
+                    <p className="text-[11px] leading-5 text-black/45">
+                        {t('Includes entries, definitions, phonetics, etymology data, roots, patterns, and linked relation tables.', 'Jinkludi l-entrati, id-definizzjonijiet, il-fonetiċi, id-data tal-etimoloġija, l-għeruq, ix-xejriet, u t-tabelli ta\' relazzjonijiet marbuta.')}
+                    </p>
+                </div>
             </div>
 
             {loading ? (
@@ -323,8 +359,8 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
                             <span className="text-[11px] font-bold text-black/30 uppercase tracking-widest">{preview.total} {t('Total Rows', 'Ringieli b\'kollox')}</span>
                         </div>
                         <div className="flex gap-2">
-                            <Button size="sm" variant="ghost" className="border border-black/10" leftIcon={<FileSpreadsheet size={14} />} onClick={() => download('csv')}>CSV</Button>
-                            <Button size="sm" variant="ghost" className="border border-black/10" leftIcon={<FileJson size={14} />} onClick={() => download('json')}>JSON</Button>
+                            <Button size="sm" variant="ghost" className="border border-black/10" leftIcon={<FileSpreadsheet size={14} />} onClick={() => downloadPreview('csv')}>CSV</Button>
+                            <Button size="sm" variant="ghost" className="border border-black/10" leftIcon={<FileJson size={14} />} onClick={() => downloadPreview('json')}>JSON</Button>
                         </div>
                     </div>
 

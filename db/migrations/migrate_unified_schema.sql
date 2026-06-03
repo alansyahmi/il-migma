@@ -9,7 +9,6 @@ CREATE TABLE entries_new (
   headword              TEXT NOT NULL,
   pos                   TEXT NOT NULL,
   gender                TEXT CHECK(gender IN ('masculine','feminine','neutral')),
-  lemma_base            TEXT,
   inflections_pl        TEXT,
   form_fem              TEXT,
   form_masc             TEXT,
@@ -18,16 +17,17 @@ CREATE TABLE entries_new (
   paucal_form           TEXT,
   augmentative_form     TEXT,
   elative_form          TEXT,
-  is_collective         INTEGER NOT NULL DEFAULT 0,
-  is_singulative        INTEGER NOT NULL DEFAULT 0,
+  is_collective         BOOLEAN NOT NULL DEFAULT false,
+  is_singulative        BOOLEAN NOT NULL DEFAULT false,
   participle_type       TEXT,
+  noun_type             TEXT,
   root_consonants       TEXT,
   cv_pattern            TEXT,
   morph_pattern         TEXT,
   verb_form             TEXT,
   root_pattern_form_id  TEXT REFERENCES root_pattern_forms(id),
-  is_loanword           INTEGER NOT NULL DEFAULT 0,
-  is_inflectable        INTEGER NOT NULL DEFAULT 1,
+  is_loanword           BOOLEAN NOT NULL DEFAULT false,
+        is_inflectable        BOOLEAN NOT NULL DEFAULT false,
   source_language       TEXT,
   tags                  TEXT,
   sound_suffix          TEXT,
@@ -49,6 +49,12 @@ CREATE TABLE entries_new (
   antonyms              TEXT,
   related_entries       TEXT,
   source_citation       TEXT,
+  source_title          TEXT,
+  source_year           TEXT,
+  source_page           TEXT,
+  source_publisher      TEXT,
+  etymology_chain       TEXT,
+  etymology_notes       TEXT,
   usage_example         TEXT,
   usage_example_en      TEXT,
   created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
@@ -57,8 +63,9 @@ CREATE TABLE entries_new (
 
 -- 2. Migrate data
 INSERT INTO entries_new (
-  id, headword, pos, gender, lemma_base, inflections_pl, form_fem, form_masc, 
+  id, headword, pos, gender, inflections_pl, form_fem, form_masc, 
   dual_form, diminutive_form, paucal_form, augmentative_form, elative_form, is_collective, is_singulative,
+  noun_type,
   participle_type, root_consonants, cv_pattern, morph_pattern, verb_form,
   root_pattern_form_id, is_loanword, is_inflectable, source_language, tags,
   sound_suffix, vowel_set_sg, vowel_set_pl, verb_class, verb_weak_class,
@@ -66,12 +73,13 @@ INSERT INTO entries_new (
   verb_verbal_noun, verb_active_ptcp, verb_passive_ptcp, verb_vowel_perf,
   verb_vowel_impf, verb_vowel_impv, verb_type, synonyms, antonyms,
   related_entries, source_citation, usage_example, usage_example_en,
+  source_title, source_year, source_page, source_publisher,
+  etymology_chain, etymology_notes,
   created_at, updated_at
 )
 SELECT 
   id, headword, pos,
   noun_gender,
-  COALESCE(noun_singular, adj_masculine),
   COALESCE(noun_plural_forms, adj_plural),
   COALESCE(noun_feminine, adj_feminine),
   noun_masculine,
@@ -82,10 +90,11 @@ SELECT
   adj_elative,
   0, -- is_collective
   0, -- is_singulative
+  NULL, -- noun_type
   participle_type, root_consonants, cv_pattern,
   COALESCE(plural_pattern, adj_pattern),
   verb_form, root_pattern_form_id, is_loanword,
-  COALESCE(is_inflectable, 1),
+  COALESCE(is_inflectable, 0),
   source_language, tags, sound_suffix,
   NULL, -- vowel_set_sg
   NULL, -- vowel_set_pl
@@ -99,6 +108,8 @@ SELECT
   NULL, -- verb_type
   synonyms, antonyms, related_entries,
   source_citation, usage_example, usage_example_en,
+  NULL, NULL, NULL, NULL,
+  NULL, NULL,
   created_at, updated_at
 FROM entries;
 

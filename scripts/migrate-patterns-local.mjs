@@ -23,7 +23,7 @@ async function run() {
         category TEXT,
         pos TEXT,
         stress INTEGER,
-        is_active INTEGER DEFAULT 1,
+        is_active BOOLEAN DEFAULT false,
         sort_order INTEGER DEFAULT 0,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP

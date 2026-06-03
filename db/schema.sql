@@ -35,7 +35,7 @@ CREATE INDEX IF NOT EXISTS idx_roots_consonants ON roots(consonants);
 CREATE TABLE IF NOT EXISTS stems (
   stem_string     TEXT PRIMARY KEY,
   class_type      TEXT NOT NULL DEFAULT 'ar' CHECK(class_type IN ('ar', 'ir')),
-  is_hybrid       INTEGER NOT NULL DEFAULT 0,
+  is_hybrid       BOOLEAN NOT NULL DEFAULT false,
   root            TEXT,
   agentive_suffix TEXT,
   tags            TEXT, -- JSON array
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS pattern_applicability (
   category        TEXT NOT NULL,         -- e.g. "broken_plural", "sound_plural"
   pos             TEXT NOT NULL,         -- e.g. "noun", "adjective", "verb" or "all"
   stress          INTEGER,               -- syllable from end
-  is_active       INTEGER DEFAULT 1,
+  is_active       BOOLEAN DEFAULT false,
   sort_order      INTEGER DEFAULT 0,
   linguistic_role TEXT,                  -- explicit role e.g. "feminine_singular"
   gender          TEXT,                  -- target gender e.g. "feminine"
@@ -105,68 +105,22 @@ CREATE TABLE IF NOT EXISTS entries (
   id                    TEXT PRIMARY KEY,
   headword              TEXT NOT NULL,
   pos                   TEXT NOT NULL,
-  gender                TEXT CHECK(gender IN ('masculine','feminine','neutral')), -- Replaces noun_gender, adj_gender, ptcp_gender
-  lemma_base            TEXT, -- Replaces noun_singular, adj_masculine
-  inflections_pl        TEXT, -- JSON array; Replaces noun_plural_forms, adj_plural
-  form_fem              TEXT, -- Replaces noun_feminine, adj_feminine
-  form_masc             TEXT, -- Replaces noun_masculine
-  dual_form             TEXT, -- Replaces noun_dual
-  diminutive_form       TEXT, -- Replaces noun_diminutive
-  paucal_form           TEXT, -- Replaces noun_paucal
-  augmentative_form     TEXT, -- Replaces noun_augmentative
-  elative_form          TEXT, -- Replaces adj_elative
-  is_collective         INTEGER NOT NULL DEFAULT 0,
-  is_singulative        INTEGER NOT NULL DEFAULT 0,
-  participle_type       TEXT,
+  gender                TEXT CHECK(gender IN ('masculine','feminine','neutral')),
   root_consonants       TEXT,
-  cv_pattern            TEXT, -- e.g. "Fagħal" or "CCvC"
-  morph_pattern         TEXT, -- Replaces plural_pattern, adj_pattern
-  verb_form             TEXT, -- 'I', 'II', 'III' etc
-  root_pattern_form_id  TEXT REFERENCES root_pattern_forms(id),
-  is_loanword           INTEGER NOT NULL DEFAULT 0,
-  is_inflectable        INTEGER NOT NULL DEFAULT 1,
+  stem                  TEXT,
+  is_loanword           BOOLEAN NOT NULL DEFAULT false,
+  is_inflectable        BOOLEAN NOT NULL DEFAULT false,
   source_language       TEXT,
-  zokk_morphology       TEXT, -- JSON object for stem-linked / loanword morphology
-  tags                  TEXT,  -- JSON array
-  sound_suffix          TEXT,
-  vowel_set_sg          TEXT,
-  vowel_set_pl          TEXT,
-  vowel_set_opp         TEXT,
-  vowel_set_dual        TEXT,
-  lemma_pattern         TEXT,
-  form_fem_pattern      TEXT,
-  form_masc_pattern     TEXT,
-  form_plural_pattern   TEXT,
-  dual_pattern          TEXT,
-  paucal_pattern        TEXT,
-  augmentative_pattern  TEXT,
-  numeral_type          TEXT,
-  form_attributive_short TEXT,
-  form_attributive_long TEXT,
-  form_opposite         TEXT,
-
-  -- Verb specific morphology (still relatively unique)
-  verb_class            TEXT,
-  verb_weak_class       TEXT,
-  verb_transitivity     TEXT,
-  verb_perfective_3sgm  TEXT,
-  verb_imperfective_3sgm TEXT,
-  verb_verbal_noun      TEXT,
-  verb_active_ptcp      TEXT,
-  verb_passive_ptcp     TEXT,
-  verb_vowel_perf       TEXT,
-  verb_vowel_impf       TEXT,
-  verb_vowel_impv       TEXT,
-  verb_type             TEXT,
-  
-  -- Relationship metadata
-  synonyms              TEXT,  -- JSON array
-  antonyms              TEXT,  -- JSON array
-  related_entries       TEXT,  -- JSON array
+  source_id             TEXT REFERENCES lexical_sources(id),
   source_citation       TEXT,
-  usage_example         TEXT,
-  usage_example_en      TEXT,
-
+  source_title          TEXT,
+  source_year           TEXT,
+  source_page           TEXT,
+  source_publisher      TEXT,
+  etymology_chain       TEXT, -- JSON array of EtymologyNode objects
+  etymology_notes       TEXT,
+  definitions           TEXT NOT NULL DEFAULT '[]', -- JSON array of sense objects
+  usage_examples        TEXT NOT NULL DEFAULT '[]', -- JSON array of entry-level examples
   created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
   updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
@@ -175,6 +129,140 @@ CREATE INDEX IF NOT EXISTS idx_entries_headword ON entries(headword);
 CREATE INDEX IF NOT EXISTS idx_entries_pos ON entries(pos);
 CREATE INDEX IF NOT EXISTS idx_entries_gender ON entries(gender);
 
+-- ─── Tags ────────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS tags (
+  id            TEXT PRIMARY KEY,
+  name          TEXT NOT NULL UNIQUE,
+  category      TEXT, -- e.g. 'Register', 'Status', 'Dialect'
+  description   TEXT,
+  created_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+CREATE TABLE IF NOT EXISTS entry_tags (
+  entry_id      TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+  tag_id        TEXT NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
+  PRIMARY KEY (entry_id, tag_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_entry_tags_entry ON entry_tags(entry_id);
+CREATE INDEX IF NOT EXISTS idx_entry_tags_tag ON entry_tags(tag_id);
+
+-- ─── Relationships ───────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS entry_relationships (
+  id                TEXT PRIMARY KEY,
+  entry_id          TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+  target_entry_id   TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+  relationship_type TEXT NOT NULL CHECK(relationship_type IN ('synonym', 'antonym', 'related')),
+  sort_order        INTEGER NOT NULL DEFAULT 0,
+  created_at        TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  UNIQUE(entry_id, target_entry_id, relationship_type)
+);
+
+CREATE INDEX IF NOT EXISTS idx_relationships_entry ON entry_relationships(entry_id);
+CREATE INDEX IF NOT EXISTS idx_relationships_target ON entry_relationships(target_entry_id);
+
+-- ─── Alternative Forms ────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS alternative_forms (
+  id            TEXT PRIMARY KEY,
+  entry_id      TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+  headword      TEXT NOT NULL,
+  type          TEXT, -- e.g. 'orthographic', 'dialectal', 'archaic'
+  sort_order    INTEGER NOT NULL DEFAULT 0,
+  created_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_alt_forms_entry ON alternative_forms(entry_id);
+
+-- ─── Verb Morphology ─────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS verb_morphology (
+  entry_id              TEXT PRIMARY KEY REFERENCES entries(id) ON DELETE CASCADE,
+  form                  TEXT,  -- I, II, III ...
+  class                 TEXT,  -- strong, weak, loan, etc.
+  weak_class            TEXT,  -- defective, hollow, assimilative
+  transitivity          TEXT,  -- transitive, intransitive, both
+  perfective_3sgm       TEXT,
+  imperfective_3sgm     TEXT,
+  verbal_noun           TEXT,
+  active_participle     TEXT,
+  passive_participle    TEXT,
+  vowel_set_perf        TEXT,
+  vowel_set_impf        TEXT,
+  vowel_set_impv        TEXT,
+  type                  TEXT,  -- root, loan, derived, etc.
+  created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_verb_morphology_type ON verb_morphology(type);
+
+-- ─── Noun Morphology ──────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS noun_morphology (
+  entry_id              TEXT PRIMARY KEY REFERENCES entries(id) ON DELETE CASCADE,
+  gender                TEXT,
+  noun_type             TEXT,
+  singular_form         TEXT,
+  plural_forms          TEXT,
+  sound_plural          TEXT,
+  dual_form             TEXT,
+  diminutive_form       TEXT,
+  collective_form       TEXT,
+  singulative_form      TEXT,
+  paucal_form           TEXT,
+  augmentative_form     TEXT,
+  paucal_pattern        TEXT,
+  augmentative_pattern  TEXT,
+  feminine_form         TEXT,
+  masculine_form        TEXT,
+  is_collective         BOOLEAN NOT NULL DEFAULT false,
+  is_singulative        BOOLEAN NOT NULL DEFAULT false,
+  is_singular           BOOLEAN NOT NULL DEFAULT false,
+  is_inflectable_singular BOOLEAN NOT NULL DEFAULT false,
+  is_inflectable_plural  BOOLEAN NOT NULL DEFAULT false,
+  created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- ─── Adjective Morphology ─────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS adj_morphology (
+  entry_id              TEXT PRIMARY KEY REFERENCES entries(id) ON DELETE CASCADE,
+  masculine_form        TEXT,
+  feminine_form         TEXT,
+  plural_form           TEXT,
+  elative_form          TEXT,
+  elative_pattern       TEXT,
+  pattern               TEXT,
+  gender                TEXT,
+  created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- ─── Participle Morphology ────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS participle_morphology (
+  entry_id              TEXT PRIMARY KEY REFERENCES entries(id) ON DELETE CASCADE,
+  type                  TEXT,
+  gender                TEXT,
+  created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
+-- ─── Numeral Morphology ──────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS numeral_morphology (
+  entry_id              TEXT PRIMARY KEY REFERENCES entries(id) ON DELETE CASCADE,
+  numeral_type          TEXT,
+  form_attributive_short TEXT,
+  form_attributive_long TEXT,
+  feminine_form         TEXT,
+  masculine_form        TEXT,
+  ordinal_form          TEXT,
+  adverbial_form        TEXT,
+  fractional_form       TEXT,
+  multiplier_form       TEXT,
+  distributive_form     TEXT,
+  created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  updated_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+);
+
 -- ─── Full-Text Search ──────────────────────────────────────────────────────
 CREATE VIRTUAL TABLE IF NOT EXISTS entries_fts USING fts5(
   headword,
@@ -182,30 +270,18 @@ CREATE VIRTUAL TABLE IF NOT EXISTS entries_fts USING fts5(
   content_rowid='rowid'
 );
 
--- ─── Definitions ──────────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS definitions (
-  id            TEXT PRIMARY KEY,
-  entry_id      TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
-  subentry_id   TEXT,  -- NULL if directly under entry
-  sense_number  INTEGER NOT NULL DEFAULT 1,
-  text_mt       TEXT,
-  text_en       TEXT NOT NULL,
-  register      TEXT,
-  nuance        TEXT,
-  field         TEXT,  -- domain e.g. "Law", "Medicine"
-  sort_order    INTEGER NOT NULL DEFAULT 0
-);
+CREATE TRIGGER IF NOT EXISTS entries_ai AFTER INSERT ON entries BEGIN
+  INSERT INTO entries_fts(rowid, headword) VALUES (new.rowid, new.headword);
+END;
 
-CREATE INDEX IF NOT EXISTS idx_defs_entry ON definitions(entry_id);
+CREATE TRIGGER IF NOT EXISTS entries_ad AFTER DELETE ON entries BEGIN
+  INSERT INTO entries_fts(entries_fts, rowid, headword) VALUES('delete', old.rowid, old.headword);
+END;
 
--- ─── Example Sentences ────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS example_sentences (
-  id            TEXT PRIMARY KEY,
-  definition_id TEXT NOT NULL REFERENCES definitions(id) ON DELETE CASCADE,
-  maltese       TEXT NOT NULL,
-  english       TEXT,
-  source        TEXT
-);
+CREATE TRIGGER IF NOT EXISTS entries_au AFTER UPDATE ON entries BEGIN
+  INSERT INTO entries_fts(entries_fts, rowid, headword) VALUES('delete', old.rowid, old.headword);
+  INSERT INTO entries_fts(rowid, headword) VALUES (new.rowid, new.headword);
+END;
 
 -- ─── Sub-Entries ──────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS subentries (
@@ -237,7 +313,7 @@ CREATE TABLE IF NOT EXISTS audio_files (
   subentry_id       TEXT REFERENCES subentries(id) ON DELETE CASCADE,
   r2_object_key     TEXT NOT NULL UNIQUE,
   dialect           TEXT DEFAULT 'standard',
-  is_ai_generated   INTEGER NOT NULL DEFAULT 1,
+  is_ai_generated   BOOLEAN NOT NULL DEFAULT false,
   duration_seconds  REAL,
   generated_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
   CHECK(entry_id IS NOT NULL OR subentry_id IS NOT NULL)
@@ -250,6 +326,7 @@ CREATE TABLE IF NOT EXISTS lexical_sources (
   full_title         TEXT NOT NULL,
   author             TEXT,
   year               INTEGER,
+  publisher          TEXT,
   reliability_weight REAL NOT NULL CHECK(reliability_weight >= 0 AND reliability_weight <= 1),
   source_type        TEXT NOT NULL,
   url                TEXT
@@ -281,13 +358,7 @@ CREATE TABLE IF NOT EXISTS attestation_scores (
   notes                 TEXT
 );
 
--- ─── Etymologies ─────────────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS etymologies (
-  id              TEXT PRIMARY KEY,
-  entry_id        TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
-  chain           TEXT NOT NULL,  -- JSON array of EtymologyNode objects
-  notes           TEXT
-);
+-- Etymology data is now stored on the `entries` table in `etymology_chain` and `etymology_notes`.
 
 -- ─── Dialect Variants ────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS dialect_variants (
@@ -318,7 +389,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   started_at                TEXT NOT NULL,
   expires_at                TEXT,
   stripe_subscription_id    TEXT UNIQUE,
-  is_lifetime               INTEGER NOT NULL DEFAULT 0
+  is_lifetime               BOOLEAN NOT NULL DEFAULT false
 );
 
 -- ─── API Keys (Enterprise) ───────────────────────────────────────────────
@@ -330,7 +401,7 @@ CREATE TABLE IF NOT EXISTS api_keys (
   key_prefix            TEXT NOT NULL,          -- first 8 chars for display
   usage_count           INTEGER NOT NULL DEFAULT 0,
   rate_limit_per_month  INTEGER NOT NULL DEFAULT 10000,
-  is_active             INTEGER NOT NULL DEFAULT 1,
+  is_active             BOOLEAN NOT NULL DEFAULT false,
   created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
   last_used_at          TEXT
 );

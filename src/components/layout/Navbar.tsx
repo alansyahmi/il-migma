@@ -1,14 +1,22 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
-import { Menu, X, Sun, Moon, Search, Eye, EyeOff, Shield, Keyboard } from 'lucide-react';
+import { Menu, X, Sun, Moon, Search, Eye, EyeOff, Shield, Keyboard, Loader2 } from 'lucide-react';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useDarkMode } from '@/contexts/DarkModeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
+import { apiSearch } from '@/lib/api';
 import { cn } from '@/lib/utils';
+
+type NavbarSuggestion = {
+    id: string;
+    headword: string;
+    pos: string;
+    definitions: string[];
+};
 
 // Navigation links are now handled inside the component to support localization
 
@@ -20,6 +28,10 @@ export function Navbar() {
     const { isTrueAdmin, adminViewEnabled, setAdminViewEnabled, tier } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [searchFocused, setSearchFocused] = useState(false);
+    const [mobileSearchFocused, setMobileSearchFocused] = useState(false);
+    const [searchSuggestions, setSearchSuggestions] = useState<NavbarSuggestion[]>([]);
+    const [searchSuggestionsLoading, setSearchSuggestionsLoading] = useState(false);
     const [kbOpen, setKbOpen] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const kbRef = useRef<HTMLButtonElement>(null);
@@ -50,7 +62,58 @@ export function Navbar() {
         navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
         setSearchQuery('');
         setMenuOpen(false);
+        setSearchFocused(false);
+        setMobileSearchFocused(false);
+        setSearchSuggestions([]);
+        setSearchSuggestionsLoading(false);
     };
+
+    useEffect(() => {
+        let cancelled = false;
+        const trimmed = searchQuery.trim();
+
+        if (trimmed.length < 2) {
+            setSearchSuggestions([]);
+            setSearchSuggestionsLoading(false);
+            return;
+        }
+
+        setSearchSuggestionsLoading(true);
+        (async () => {
+            try {
+                const res = await apiSearch(trimmed, { limit: 3, offset: 0 });
+                if (cancelled) return;
+
+                setSearchSuggestions(
+                    res.results.slice(0, 3).map((entry: any) => ({
+                        id: entry.id,
+                        headword: entry.headword,
+                        pos: entry.pos,
+                        definitions: entry.definition_en
+                            ? [entry.definition_en]
+                            : (entry.definitions?.length ? entry.definitions.map((d: any) => d.text_en) : []),
+                    })),
+                );
+            } catch (error) {
+                if (!cancelled) {
+                    console.warn('Navbar search suggestions failed:', error);
+                    setSearchSuggestions([]);
+                }
+            } finally {
+                if (!cancelled) setSearchSuggestionsLoading(false);
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [searchQuery]);
+
+    const selectedSuggestionText = (suggestion: Pick<NavbarSuggestion, 'definitions'>) => suggestion.definitions[0] || '';
+
+    const suggestionVisible = searchQuery.trim().length >= 2 && (searchSuggestionsLoading || searchSuggestions.length > 0);
+    const desktopSuggestionVisible = showSearch && searchFocused && suggestionVisible;
+    const mobileSuggestionVisible = menuOpen && mobileSearchFocused && suggestionVisible;
 
     const navLinks = [
         { label: term('advanced-search'), href: '/advanced-search' },
@@ -126,6 +189,8 @@ export function Navbar() {
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
+                                    onFocus={() => setSearchFocused(true)}
+                                    onBlur={() => setSearchFocused(false)}
                                     placeholder={term('search-placeholder')}
                                     className="flex-1 min-w-0 bg-transparent px-2.5 py-2 text-sm focus:outline-none placeholder:text-text-muted text-black"
                                 />
@@ -137,6 +202,46 @@ export function Navbar() {
                                     <Search size={16} />
                                 </button>
                             </div>
+                            {desktopSuggestionVisible && ( // Search Suggestions (Desktop)
+                                <div className="absolute left-0 right-0 top-full z-50 rounded-xl border border-black/10 bg-white shadow-lg overflow-hidden">
+                                    {searchSuggestionsLoading && searchSuggestions.length === 0 && (
+                                        <div className="flex items-center gap-2 px-4 py-4 text-sm text-black/55">
+                                            <Loader2 size={14} className="animate-spin" />
+                                            Searching...
+                                        </div>
+                                    )}
+                                    <div className="px-2 pb-2">
+                                        {searchSuggestions.map((suggestion) => (
+                                            <button
+                                                key={suggestion.id}
+                                                type="button"
+                                                onMouseDown={(e) => e.preventDefault()}
+                                                onClick={() => {
+                                                    setSearchQuery(suggestion.headword);
+                                                    setSearchFocused(false);
+                                                    setSearchSuggestions([]);
+                                                    navigate(`/search?q=${encodeURIComponent(suggestion.headword)}`);
+                                                }}
+                                                className="w-full text-left rounded-lg px-3 py-2.5 hover:bg-black/5 transition-colors flex items-start justify-between gap-4"
+                                            >
+                                                <div className="min-w-0">
+                                                    <div className="font-serif text-sm text-black leading-tight truncate">
+                                                        {suggestion.headword}
+                                                    </div>
+                                                    {selectedSuggestionText(suggestion) && (
+                                                        <div className="text-xs text-black/55 mt-0.5 truncate">
+                                                            {selectedSuggestionText(suggestion)}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="shrink-0 text-[11px] uppercase tracking-wide text-black/35 pt-0.5">
+                                                    {suggestion.pos}
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                             <MalteseCharPicker
                                 open={kbOpen}
                                 onOpenChange={setKbOpen}
@@ -281,9 +386,52 @@ export function Navbar() {
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
+                                    onFocus={() => setMobileSearchFocused(true)}
+                                    onBlur={() => setMobileSearchFocused(false)}
                                     placeholder={term('search-placeholder')}
                                     className="w-full bg-white border border-border rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#1034A6] placeholder:text-gray-400"
                                 />
+                                {mobileSuggestionVisible && (
+                                    <div className="absolute left-0 right-0 top-full mt-2 z-50 rounded-xl border border-black/10 bg-white shadow-lg overflow-hidden">
+                                        {searchSuggestionsLoading && searchSuggestions.length === 0 && (
+                                            <div className="flex items-center gap-2 px-4 py-4 text-sm text-black/55">
+                                                <Loader2 size={14} className="animate-spin" />
+                                                Searching...
+                                            </div>
+                                        )}
+                                        <div className="px-2 pb-2">
+                                            {searchSuggestions.map((suggestion) => (
+                                                <button
+                                                    key={suggestion.id}
+                                                    type="button"
+                                                    onMouseDown={(e) => e.preventDefault()}
+                                                    onClick={() => {
+                                                        setSearchQuery(suggestion.headword);
+                                                        setMobileSearchFocused(false);
+                                                        setSearchSuggestions([]);
+                                                        setMenuOpen(false);
+                                                        navigate(`/search?q=${encodeURIComponent(suggestion.headword)}`);
+                                                    }}
+                                                    className="w-full text-left rounded-lg px-3 py-2.5 hover:bg-black/5 transition-colors flex items-start justify-between gap-4"
+                                                >
+                                                    <div className="min-w-0">
+                                                        <div className="font-serif text-sm text-black leading-tight truncate">
+                                                            {suggestion.headword}
+                                                        </div>
+                                                        {selectedSuggestionText(suggestion) && (
+                                                            <div className="text-xs text-black/55 mt-0.5 truncate">
+                                                                {selectedSuggestionText(suggestion)}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="shrink-0 text-[11px] uppercase tracking-wide text-black/35 pt-0.5">
+                                                        {suggestion.pos}
+                                                    </div>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </form>
                         </div>
                     )}

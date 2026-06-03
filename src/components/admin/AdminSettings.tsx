@@ -13,10 +13,10 @@ import {
 } from '@/lib/adminCategoryRegistry';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { TERMINOLOGY } from '@/lib/terminology';
 import { normalizePatternFormValue } from '@/lib/patternMetadata';
 import { isDashMarkedSuffix } from '@/lib/suffixMatching';
 import { cn } from '@/lib/utils';
+import { emitCatalogRefresh } from '@/hooks/useCatalogRefresh';
 import { AdminSettingsSidebar } from './settings/AdminSettingsSidebar';
 import { AdminSettingsToolbar } from './settings/AdminSettingsToolbar';
 import { AdminSettingsItemList } from './settings/AdminSettingsItemList';
@@ -253,78 +253,6 @@ export function AdminSettings() {
         return lines;
     };
 
-    const handleExportTerminology = async () => {
-        setSyncLoading(true);
-        try {
-            const token = await getClerkToken();
-            const res = await fetch('/api/admin/sync-terminology', {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            const raw = await res.text();
-            const data = parseJsonObject(raw);
-
-            if (!res.ok || data?.error) {
-                throw new Error(buildErrorLines(data, raw, 'Export failed').join('\n'));
-            }
-
-            if (!data?.terminology || typeof data.terminology !== 'object') {
-                throw new Error('Export response did not include a valid terminology object');
-            }
-
-            const tsSnippet = `export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabised: string }> = ${JSON.stringify(data.terminology, null, 4)};`;
-            const blob = new Blob([tsSnippet], { type: 'text/typescript' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'terminology_export.ts';
-            link.click();
-            URL.revokeObjectURL(url);
-        } catch (e: unknown) {
-            alert(`Export failed: ${toErrorMessage(e)}`);
-        } finally {
-            setSyncLoading(false);
-        }
-    };
-
-    const handleImportTerminology = async () => {
-        if (!confirm('This will upsert labels from the in-code TERMINOLOGY into the database. Existing database labels for these keys will be overwritten. Proceed?')) return;
-
-        setSyncLoading(true);
-        setSyncResult(null);
-        try {
-            const token = await getClerkToken();
-            const res = await fetch('/api/admin/sync-terminology', {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ terminology: TERMINOLOGY }),
-            });
-            const raw = await res.text();
-            const data = parseJsonObject(raw);
-
-            if (!res.ok || !data || data.error) {
-                throw new Error(buildErrorLines(data, raw, 'Import failed').join('\n'));
-            }
-
-            const upserted = Number(data.upserted || 0);
-            const errors = Array.isArray(data.errors) ? data.errors.map((item) => String(item)) : [];
-
-            if (upserted === 0 && errors.length === 0) {
-                throw new Error('Import returned 0 upserted rows. Check API connectivity and terminology payload.');
-            }
-
-            setSyncResult({ success: upserted, errors });
-            if (upserted > 0) await refresh();
-        } catch (e: unknown) {
-            const message = toErrorMessage(e) || 'Import failed';
-            setSyncResult({ errors: message.split('\n').map((line) => line.trim()).filter(Boolean) });
-        } finally {
-            setSyncLoading(false);
-        }
-    };
-
     const handleSyncPatterns = async () => {
         if (!confirm('This will scan all dictionary entries and add any new patterns to the registry. Proceed?')) return;
 
@@ -356,7 +284,10 @@ export function AdminSettings() {
             }
 
             setSyncResult({ success: added, errors });
-            if (added > 0 || skipped > 0) await refresh();
+            if (added > 0 || skipped > 0) {
+                await refresh();
+                emitCatalogRefresh();
+            }
         } catch (e: unknown) {
             const message = toErrorMessage(e) || 'Sync failed';
             setSyncResult({ errors: message.split('\n').map((line) => line.trim()).filter(Boolean) });
@@ -473,8 +404,6 @@ export function AdminSettings() {
                     loading={loading}
                     onRefresh={refresh}
                     onAdd={() => setShowAdd(true)}
-                    onExportTerminology={handleExportTerminology}
-                    onImportTerminology={handleImportTerminology}
                     onSyncPatterns={handleSyncPatterns}
                 />
 

@@ -5,6 +5,26 @@
  */
 
 import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
+import { getEntryIdFamily, normalizeEntryId } from '../../../src/lib/entryId.ts';
+
+const MAX_EXPORT_ROWS = 50000;
+const DEFAULT_SINGLE_EXPORT_ROWS = 10000;
+const DEFAULT_BUNDLE_PRESET = 'entry-linking';
+
+export const EXPORT_BUNDLE_PRESETS = Object.freeze({
+    'entry-linking': Object.freeze([
+        'entries',
+        'phonetics',
+        'dialect_variants',
+        'subentries',
+        'root_pattern_forms',
+        'roots',
+        'patterns',
+        'stems',
+        'lexical_sources',
+        'attestation_reliability',
+    ]),
+});
 
 // ── Auth guard (same pattern as entries.js) ───────────────────────────────────
 async function verifyAdmin(request, env) {
@@ -48,6 +68,8 @@ export async function onRequestPost({ request, env }) {
                 return handleQuery(client, body);
             case 'export':
                 return handleExport(client, body);
+            case 'export-bundle':
+                return handleExportBundle(client, body);
             case 'integrity-check':
                 return handleIntegrityCheck(client);
             case 'bulk-update':
@@ -92,49 +114,106 @@ async function handleQuery(client, { sql, allowWrite = false }) {
 }
 
 // ── Data Export ───────────────────────────────────────────────────────────────
-async function handleExport(client, { table, limit = 10000 }) {
+async function handleExport(client, { table, limit = DEFAULT_SINGLE_EXPORT_ROWS }) {
     if (!table) return json({ error: 'Table name is required' }, 400);
-
-    // Sanitize table name (only allow alphanumeric + underscore)
-    if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(table)) {
+    const normalizedTable = normalizeExportTableName(table);
+    if (!validateExportTableName(normalizedTable)) {
         return json({ error: 'Invalid table name' }, 400);
     }
 
-    const result = await client.execute(`SELECT * FROM ${table} LIMIT ${Math.min(limit, 50000)}`);
+    const snapshot = await getTableExportSnapshot(client, normalizedTable, limit);
+    return json(snapshot);
+}
+
+function normalizeExportTableName(table) {
+    if (!table) return '';
+    return String(table).trim();
+}
+
+function validateExportTableName(table) {
+    return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(table);
+}
+
+export function resolveExportBundleTableNames({ preset = DEFAULT_BUNDLE_PRESET, tables } = {}) {
+    const explicitTables = Array.isArray(tables) && tables.length > 0 ? tables : null;
+    const candidateTables = explicitTables || EXPORT_BUNDLE_PRESETS[preset];
+
+    if (!candidateTables) {
+        throw new Error(`Unknown export bundle preset: ${preset}`);
+    }
+
+    const uniqueTables = [];
+    const seen = new Set();
+    for (const rawTable of candidateTables) {
+        const table = normalizeExportTableName(rawTable);
+        if (!table) continue;
+        if (!validateExportTableName(table)) {
+            throw new Error(`Invalid export table name: ${table}`);
+        }
+        if (seen.has(table)) continue;
+        seen.add(table);
+        uniqueTables.push(table);
+    }
+
+    if (uniqueTables.length === 0) {
+        throw new Error('No export tables resolved');
+    }
+
+    return uniqueTables;
+}
+
+async function getTableExportSnapshot(client, table, limit = DEFAULT_SINGLE_EXPORT_ROWS) {
+    const resolvedLimit = Math.max(0, Math.min(Number(limit) || 0, MAX_EXPORT_ROWS));
+    const result = await client.execute(`SELECT * FROM ${table} LIMIT ${resolvedLimit}`);
     const countRes = await client.execute(`SELECT COUNT(*) as total FROM ${table}`);
 
-    return json({
+    return {
         columns: result.columns || [],
         rows: result.rows || [],
         total: Number(countRes.rows[0]?.total ?? 0),
+        truncated: Number(countRes.rows[0]?.total ?? 0) > (result.rows?.length ?? 0),
+        limit: resolvedLimit,
         table,
-    });
+    };
+}
+
+async function handleExportBundle(client, { preset = DEFAULT_BUNDLE_PRESET, tables, limit = MAX_EXPORT_ROWS }) {
+    try {
+        const bundle = await buildExportBundle(client, { preset, tables, limit });
+        return json(bundle);
+    } catch (e) {
+        return json({ error: e.message }, 400);
+    }
+}
+
+export async function buildExportBundle(client, { preset = DEFAULT_BUNDLE_PRESET, tables, limit = MAX_EXPORT_ROWS } = {}) {
+    const tableNames = resolveExportBundleTableNames({ preset, tables });
+    const bundle = {
+        preset,
+        generatedAt: new Date().toISOString(),
+        tables: {},
+        tableOrder: tableNames,
+        totalRows: 0,
+        truncatedTables: [],
+    };
+
+    for (const tableName of tableNames) {
+        const snapshot = await getTableExportSnapshot(client, tableName, limit);
+        bundle.tables[tableName] = snapshot;
+        bundle.totalRows += snapshot.total || 0;
+        if (snapshot.truncated) {
+            bundle.truncatedTables.push(tableName);
+        }
+    }
+
+    return bundle;
 }
 
 // ── Data Integrity Checker ───────────────────────────────────────────────────
 async function handleIntegrityCheck(client) {
     const issues = [];
 
-    // 1. Orphaned definitions (entry_id not in entries)
-    try {
-        const res = await client.execute(`
-            SELECT d.id, d.entry_id, d.text_en
-            FROM definitions d
-            LEFT JOIN entries e ON e.id = d.entry_id
-            WHERE e.id IS NULL LIMIT 50
-        `);
-        if (res.rows.length > 0) {
-            issues.push({
-                category: 'Orphaned Definitions',
-                severity: 'error',
-                count: res.rows.length,
-                details: res.rows.map(r => `Definition "${r.text_en?.slice(0, 40)}..." → missing entry "${r.entry_id}"`),
-                ids: res.rows.map(r => r.id),
-            });
-        }
-    } catch (e) { issues.push({ category: 'Orphaned Definitions', severity: 'warning', count: 0, details: [`Check failed: ${e.message}`] }); }
-
-    // 2. Orphaned subentries
+    // 1. Orphaned subentries
     try {
         const res = await client.execute(`
             SELECT s.id, s.entry_id, s.headword
@@ -153,7 +232,7 @@ async function handleIntegrityCheck(client) {
         }
     } catch (e) { issues.push({ category: 'Orphaned Subentries', severity: 'warning', count: 0, details: [`Check failed: ${e.message}`] }); }
 
-    // 3. Orphaned root_pattern_forms
+    // 2. Orphaned root_pattern_forms
     try {
         const res = await client.execute(`
             SELECT rpf.id, rpf.root_id, rpf.pattern_id, rpf.derived_form
@@ -172,7 +251,7 @@ async function handleIntegrityCheck(client) {
         }
     } catch (e) { issues.push({ category: 'Orphaned Root Pattern Forms', severity: 'warning', count: 0, details: [`Check failed: ${e.message}`] }); }
 
-    // 4. Entries with root_consonants that don't match any root
+    // 3. Entries with root_consonants that don't match any root
     try {
         const res = await client.execute(`
             SELECT e.id, e.headword, e.root_consonants
@@ -193,7 +272,7 @@ async function handleIntegrityCheck(client) {
         }
     } catch (e) { issues.push({ category: 'Unlinked Root Consonants', severity: 'warning', count: 0, details: [`Check failed: ${e.message}`] }); }
 
-    // 5. Malformed JSON in roots (gloss, etymology, synonyms, antonyms, tags)
+    // 4. Malformed JSON in roots (gloss, etymology, synonyms, antonyms, tags)
     try {
         const jsonFields = ['gloss', 'etymology', 'synonyms', 'antonyms', 'tags', 'hidden_forms'];
         for (const field of jsonFields) {
@@ -218,13 +297,12 @@ async function handleIntegrityCheck(client) {
         }
     } catch (e) { issues.push({ category: 'Malformed JSON (roots)', severity: 'warning', count: 0, details: [`Check failed: ${e.message}`] }); }
 
-    // 6. Entries missing definitions
+    // 5. Malformed JSON in entry definitions / usage examples
     try {
         const res = await client.execute(`
-            SELECT e.id, e.headword, e.pos
+            SELECT id, headword, pos, definitions, usage_examples
             FROM entries e
-            LEFT JOIN definitions d ON d.entry_id = e.id
-            WHERE d.id IS NULL LIMIT 50
+            WHERE COALESCE(json_array_length(definitions), 0) = 0 LIMIT 50
         `);
         if (res.rows.length > 0) {
             issues.push({
@@ -237,7 +315,34 @@ async function handleIntegrityCheck(client) {
         }
     } catch (e) { issues.push({ category: 'Entries Without Definitions', severity: 'warning', count: 0, details: [`Check failed: ${e.message}`] }); }
 
-    // 7. Duplicate consonants in roots
+    try {
+        const res = await client.execute(`
+            SELECT id, headword, pos, definitions, usage_examples
+            FROM entries
+            WHERE (
+                definitions IS NOT NULL
+                AND definitions != ''
+                AND json_valid(definitions) = 0
+            )
+            OR (
+                usage_examples IS NOT NULL
+                AND usage_examples != ''
+                AND json_valid(usage_examples) = 0
+            )
+            LIMIT 50
+        `);
+        if (res.rows.length > 0) {
+            issues.push({
+                category: 'Malformed Entry JSON',
+                severity: 'warning',
+                count: res.rows.length,
+                details: res.rows.map(r => `"${r.headword}" (${r.pos}) has invalid JSON in definitions or usage_examples`),
+                ids: res.rows.map(r => r.id),
+            });
+        }
+    } catch (e) { issues.push({ category: 'Malformed Entry JSON', severity: 'warning', count: 0, details: [`Check failed: ${e.message}`] }); }
+
+    // 6. Duplicate consonants in roots
     try {
         const res = await client.execute(`
             SELECT consonants, COUNT(*) as cnt, GROUP_CONCAT(id, ', ') as ids
@@ -370,12 +475,25 @@ async function handleCheckId(client, { table, id }) {
     if (!table || !id) return json({ error: 'table and id required' }, 400);
     if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(table)) return json({ error: 'Invalid table' }, 400);
 
+    const normalizedId = table === 'entries' ? normalizeEntryId(id) : id;
+    const family = table === 'entries' ? getEntryIdFamily(id) : { exact: [normalizedId], likePatterns: [] };
+    const conditions = [];
+    const args = [];
+    if (family.exact.length > 0) {
+        conditions.push(`id IN (${family.exact.map(() => '?').join(', ')})`);
+        args.push(...family.exact);
+    }
+    if (family.likePatterns.length > 0) {
+        conditions.push(...family.likePatterns.map(() => 'id LIKE ?'));
+        args.push(...family.likePatterns);
+    }
+
     const res = await client.execute({
-        sql: `SELECT id FROM ${table} WHERE id = ?`,
-        args: [id],
+        sql: `SELECT id FROM ${table} WHERE ${conditions.join(' OR ')}`,
+        args,
     });
 
-    return json({ exists: res.rows.length > 0, id, table });
+    return json({ exists: res.rows.length > 0, id: normalizedId, table });
 }
 
 // ── Utilities ─────────────────────────────────────────────────────────────────

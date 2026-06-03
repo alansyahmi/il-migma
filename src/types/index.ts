@@ -1,288 +1,409 @@
-// ─── Linguistic Modes ──────────────────────────────────────────────────────
-export type LinguisticMode = 'standard' | 'arabised';
+/**
+ * src/types/index.ts
+ * Core type definitions for the Il-Miġma' application.
+ */
 
-// ─── Parts of Speech ───────────────────────────────────────────────────────
-export type POS =
-    | 'noun'
-    | 'verb'
-    | 'adjective'
-    | 'adverb'
-    | 'preposition'
-    | 'conjunction'
-    | 'particle'
-    | 'article'
-    | 'pronoun'
-    | 'interrogative'
-    | 'numeral'
-    | 'participle'
-    | 'interjection';
+export type POS = 
+  | 'noun' 
+  | 'verb' 
+  | 'adjective' 
+  | 'adverb' 
+  | 'pronoun' 
+  | 'preposition' 
+  | 'conjunction' 
+  | 'interjection' 
+  | 'article' 
+  | 'particle'
+  | 'numeral'
+  | 'interrogative'
+  | 'suffix';
 
-export type Gender = 'masculine' | 'feminine' | 'neutral';
-export type LinguisticRole =
-    | 'masculine_singular'
-    | 'feminine_singular'
-    | 'broken_plural'
-    | 'sound_plural'
-    | 'dual'
-    | 'diminutive'
-    | 'elative_masc'
-    | 'elative_fem';
-export type Transitivity = 'transitive' | 'intransitive' | 'both';
+export type SourceLanguage = 'Semitic' | 'Romance' | 'English' | 'Other' | 'Maltese';
 
-export type VerbStrength = 'strong' | 'strong-hybrid' | 'weak' | 'geminated';
-export type WeakClass = 'assimilative' | 'hollow' | 'defective';
+export type VerbStrength = 'strong' | 'weak' | 'geminated' | 'strong-hybrid';
 
-export type SourceLanguage =
-    | 'Arabic'
-    | 'Sicilian'
-    | 'Italian'
-    | 'Latin'
-    | 'French'
-    | 'English'
-    | 'Spanish'
-    | 'Berber'
-    | 'Greek'
-    | 'Uncertain';
+export type WeakClass = 'first' | 'second' | 'third' | 'hollow' | 'defective' | 'assimilative' | 'none';
 
-// ─── Root / Pattern ────────────────────────────────────────────────────────
-export interface Root {
+export type LinguisticMode = 'latinised' | 'arabised' | 'standard';
+
+export interface StemVariantSet {
+    attached: string;
+    syncopated: string;
+    perfectAttached?: string;
+    perfectSyncopated?: string;
+}
+
+export type NounGender = 'masculine' | 'feminine' | 'both' | 'none' | 'plural' | 'neutral';
+export type Gender = NounGender;
+
+export interface Definition {
     id: string;
-    consonants: string;        // e.g. "k-t-b"
-    consonant_array: string[]; // e.g. ["k","t","b"]
-
-    // Morphological Metadata (centralized)
-    strength: VerbStrength;
-    weak_class?: WeakClass;
-    is_imala_blocked: boolean;
-
-    gloss: string;
-    etymology: string;
-    source?: string;
-    vowel_set_perf?: string;
-    vowel_set_impf?: string;
-    vowel_set_imp?: string;
-
-    notes?: string;
-    created_at: string;
-    updated_at: string;
-}
-
-export interface Pattern {
-    id: string;
-    cv_notation: string;   // e.g. "CvCvC"
-    wizen_notation: string; // e.g. "Fagħal" — Arabised CV name
-    description?: string;
-    example_word?: string;
-    tags?: string[];
-    role?: LinguisticRole;
-    gender?: Gender;
-    created_at: string;
-}
-
-export interface RootPatternForm {
-    id: string;
-    root_id: string;
-    pattern_id: string;
-    derived_form: string; // surface form
-    root?: Root;
-    pattern?: Pattern;
-}
-
-// ─── Morphology ────────────────────────────────────────────────────────────
-export interface NounMorphology {
-    gender: Gender;
-    singular: string;
-    plural_forms: string[];        // can have multiple broken plurals
-    sound_plural?: string;
-    dual?: string;
-    diminutive?: string;
-    paucal?: string;
-    augmentative?: string;
-    collective?: string;           // collective form
-    singulative?: string;          // singulative form
-    is_collective?: boolean;       // flag if the lemma itself is collective
-    is_singulative?: boolean;      // flag if the lemma itself is singulative
-    vowel_set_sg?: string;
-    vowel_set_pl?: string;
-    vowel_set_opp?: string;
-    vowel_set_dual?: string;
-    feminine?: string;
-    masculine?: string;
-    morph_pattern?: string; // @deprecated use form_masc_pattern, form_fem_pattern, or form_plural_pattern
-    lemma_pattern?: string; // @deprecated use form_masc_pattern or form_fem_pattern
-    form_fem_pattern?: string;
-    form_masc_pattern?: string;
-    form_plural_pattern?: string;
-    dual_pattern?: string;
-    diminutive_pattern?: string;
-    paucal_pattern?: string;
-    augmentative_pattern?: string;
-    plural_pattern?: string; // keeping for internal use during transition
-    sound_suffix?: string;
-    is_inflectable?: boolean;
-    usage_example?: string;
-    usage_example_en?: string;
-    // Common metadata
-    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    source_citation?: string;
-    diminutives?: EntryDiminutive[];
-}
-
-export interface EntryDiminutive {
-    id: string;
-    entry_id: string;
-    pos: 'noun' | 'adjective' | 'participle';
-    form: string;
-    pattern?: string;
-    gender?: Gender;
-    sort_order?: number;
-    is_preferred?: boolean;
-    created_at?: string;
-    updated_at?: string;
-}
-
-export interface PluralFormRow {
-    form: string;
-    pattern: string;
+    text_en: string;
+    text_mt?: string | null;
+    sense_number?: number;
+    usage_context?: string;
+    register?: string;
+    nuance?: string;
+    examples?: string[];
+    example_sentences?: any[];
+    field?: string;
 }
 
 export interface ConjugationRow {
-    person_mt: string;   // e.g. "jiena"
-    person_en: string;   // e.g. "I"
-    imperfect: string;          // base positive form (e.g. "nikteb")
-    imperfect_attached?: string; // vowel-adjusted stem for suffix attachment (e.g. "niktib")
-    perfect: string;            // perfect positive
-    perfect_neg?: string;       // perfect negative form (3sg may shift vowel grade)
-    // Stems used for automated suffix attachment (clitics)
-    stems?: StemVariantSet;
+    person_mt: string;
+    person_en: string;
+    perfect: string;
+    imperfect: string;
+    perfect_neg?: string;
+    imperfect_neg?: string;
+    imperfect_attached?: string;
+    imperfect_syncopated?: string;
+    stems?: {
+        attached: string;
+        syncopated: string;
+        perfectAttached?: string;
+        perfectSyncopated?: string;
+    };
 }
 
 export interface VerbConjugationTable {
     rows: ConjugationRow[];
     imperative_sg: string;
     imperative_pl: string;
-    /** Clitic attachment stems for imperative singular */
-    imperative_sg_stems?: StemVariantSet;
-    /** Clitic attachment stems for imperative plural */
-    imperative_pl_stems?: StemVariantSet;
-    // Negative forms (shown when polarity toggle = Negative)
     imperative_sg_neg?: string;
     imperative_pl_neg?: string;
-    /** Whether this verb blocks the automatic a->ie vowel shift (Imala) b/c of a final guttural */
+    imperative_sg_stems?: { attached: string; syncopated: string };
+    imperative_pl_stems?: { attached: string; syncopated: string };
     blocksImala?: boolean;
 }
 
-export interface StemVariantSet {
-    /** Stem used when a clitic prefers the fuller, vowel-preserving form. */
-    attached: string;
-    /** Stem used when a clitic prefers the syncopated, vowel-dropping form. */
-    syncopated: string;
-    /** Perfect attached stem, where relevant. Falls back to `attached` when omitted. */
-    perfectAttached?: string;
-    /** Perfect syncopated stem, where relevant. Falls back to `syncopated` when omitted. */
-    perfectSyncopated?: string;
-}
-
-export interface VerbMorphology {
-    // These are now derived from the root/form combo
-    transitivity: Transitivity;
-    perfective_3sg_m: string;      // citation form
-    imperfective_3sg_m: string;
-    verbal_noun?: string;          // misder
-    active_participle?: string;    // fiegħel
-    passive_participle?: string;   // mifgħul
-    // Verb form (I, II, III …)
-    form: string;
-    verb_class?: string;
-    weak_class?: string;
-    // Root classification tags shown in sub-header
-    root_tags?: string[];          // e.g. ['BASE', 'STRONG'] or ['BASE', 'WEAK', 'HOLLOW']
-    vowel_set_perfect: string;    // e.g. "i-e" for kiteb (perfect)
-    vowel_set_imperfect: string;  // e.g. "i-e" for kiteb (imperfect/attached)
-    vowel_set_imperative: string; // e.g. "i-e" for kiteb (imperative)
-    is_inflectable?: boolean;
+export interface Entry {
+    id: string;
+    headword: string;
+    pos?: string;
+    gender?: string;
+    form_fem?: string;
+    form_masc?: string;
+    form_plural_pattern?: string | null;
+    form_fem_pattern?: string | null;
+    form_masc_pattern?: string | null;
+    dual_form?: string | null;
+    dual_pattern?: string | null;
+    paucal_form?: string | null;
+    paucal_pattern?: string | null;
+    augmentative_form?: string | null;
+    augmentative_pattern?: string | null;
+    diminutive_pattern?: string | null;
+    elative_pattern?: string | null;
+    plural_pattern?: string | null;
+    morph_pattern?: string | null;
+    lemma_pattern?: string | null;
+    cv_pattern?: string | null;
+    sound_suffix?: string | null;
+    definitions?: Definition[];
+    usage_examples?: any[];
     usage_example?: string;
     usage_example_en?: string;
-    // Full conjugation paradigm (optional — engine auto-generates if absent)
-    conjugation?: VerbConjugationTable;
-    // Thesaurus
-    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    // Related entries from same root
-    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    // Source citation
-    source_citation?: string;
+    diminutives?: EntryDiminutive[];
+    // Canonical etymology fields stored on `entries`.
+    etymology_chain?: EntryEtymology[];
+    etymologies?: EntryEtymologyChain[];
+    etymology_notes?: string | null;
+    phonetics?: Phonetic[];
+    audio_files?: AudioFile[];
+    tags?: string[];
+    synonyms?: any[];
+    antonyms?: any[];
+    related_entries?: any[];
+    alternative_forms?: any[];
+    subentries?: Entry[];
+    source_language?: string;
+    is_loanword?: boolean;
+    is_inflectable?: boolean;
+    created_at?: string;
+    updated_at?: string;
+    sort_order?: number;
+    verb_class?: string | null;
+    verb_weak_class?: string | null;
+    verb_vowel_perf?: string | null;
+    verb_vowel_impf?: string | null;
+    participle_type?: string | null;
+    participle_gender?: string | null;
+    numeral_type?: string | null;
+    form_attributive_short?: string | null;
+
+    // Morphological Sub-tables (Normalized)
+    noun_morphology?: NounMorphology;
+    verb_morphology?: VerbMorphology;
+    adjective_morphology?: AdjectiveMorphology;
+    adj_morphology?: AdjectiveMorphology;
+    participle_morphology?: ParticipleMorphology;
+    numeral_morphology?: NumeralMorphology;
+    zokk_morphology?: ZokkMorphology;
+
+    // Root/Pattern Relation
+    root_pattern_form?: RootPatternForm;
 }
 
-export interface NumeralMorphology {
-    numeral_type: 'cardinal' | 'ordinal' | 'adverbial' | 'fractional' | 'multiplier' | 'distributive';
-    lemma_masc: string;
-    lemma_fem: string;
-    form_attributive_short?: string;
-    form_attributive_long?: string;
-    form_opposite?: string;
-    inflections_pl?: string[];
-    // Common metadata
-    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    morph_pattern?: string; // @deprecated
-    lemma_pattern?: string; // @deprecated
-    form_fem_pattern?: string;
-    form_masc_pattern?: string;
-    form_plural_pattern?: string;
-    dual_pattern?: string;
-    source_citation?: string;
+
+export interface Root {
+    id: string;
+    consonants: string;
+    consonant_array: string[];
+    gloss_en?: string;
+    gloss_mt?: string;
+    type?: string;
+    vowel_set_perf?: string;
+    vowel_set_impf?: string;
+    vowel_set_imp?: string;
+    strength?: string;
+    weak_class?: string;
+    is_imala_blocked?: boolean;
+    gloss?: string;
+    etymology?: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
-export interface AdjectiveMorphology {
-    gender?: Gender;
-    masculine: string;
-    feminine: string;
-    plural: string;
-    elative?: string;             // "most X" form
+export interface RootPatternForm {
+    id?: string;
+    root_id?: string;
+    pattern_id?: string;
+    derived_form?: string;
+    root?: Root;
+    pattern?: Pattern;
+}
+
+export type SubEntry = Entry;
+
+export interface Pattern {
+    id: string;
+    cv_notation: string;
+    wizen_notation?: string;
+    pos?: string;
+    gloss_en?: string;
+    gloss_mt?: string;
+    description?: string;
+    example_word?: string;
+    created_at?: string;
+}
+
+export interface EntryEtymologyChain {
+    id: string;
+    entry_id?: string;
+    chain: EntryEtymology[];
+    notes?: string;
+    attestation?: any;
+}
+
+export interface EntryEtymology {
+    language: string;
+    etymon?: string;
+    form?: string;
+    meaning?: string;
+    gloss?: string;
+    notes?: string;
+    time_period?: string;
+    script?: string;
+}
+
+export interface NounMorphology {
+    id?: string;
+    entry_id?: string;
+    gender: string;
+    is_collective?: boolean;
+    is_singulative?: boolean;
+    is_inflectable_singular?: boolean;
+    is_inflectable_plural?: boolean;
+    noun_type?: string;
+    singular_form?: string;
+    plural_forms?: string | string[];
+    plural?: any[];
+    plural_pattern?: string;
+    sound_plural?: string;
+    sound_suffix?: string;
     vowel_set_sg?: string;
     vowel_set_pl?: string;
     vowel_set_opp?: string;
     vowel_set_dual?: string;
-    // Thesaurus
-    synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    antonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    // Related entries
-    related_entries?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-    morph_pattern?: string; // @deprecated
-    lemma_pattern?: string; // @deprecated
+    form_fem?: string;
+    form_fem_pattern?: string;
+    form_masc?: string;
+    form_masc_pattern?: string;
+    feminine_form?: string;
+    masculine_form?: string;
+    form_plural_pattern?: string;
+    dual_form?: string;
+    dual_pattern?: string;
+    diminutive_form?: string;
+    diminutive_pattern?: string;
+    paucal_form?: string;
+    paucal_pattern?: string;
+    augmentative_form?: string;
+    augmentative_pattern?: string;
+    collective_form?: string;
+    singulative_form?: string;
+    source_citation?: string;
+    diminutives?: EntryDiminutive[];
+    related_entries?: any[];
+    synonyms?: any[];
+    antonyms?: any[];
+    pattern?: string;
+    morph_pattern?: string;
+    lemma_pattern?: string;
+    singular?: string;
+    dual?: string;
+    paucal?: string;
+    augmentative?: string;
+    masculine?: string;
+    feminine?: string;
+    is_inflectable?: boolean;
+}
+export interface VerbMorphology {
+    id?: string;
+    entry_id?: string;
+    form: string;
+    class?: string;
+    verb_class?: string;
+    verb_type?: string;
+    transitivity?: string;
+    weak_class?: string;
+    vowel_set_perf?: string;
+    vowel_set_impf?: string;
+    vowel_set_impv?: string;
+    vowel_set_perfect?: string;
+    vowel_set_imperfect?: string;
+    vowel_set_imperative?: string;
+    perfective_3sgm?: string;
+    perfective_3sg_m?: string;
+    imperfective_3sgm?: string;
+    imperfective_3sg_m?: string;
+    imperative_sg?: string;
+    verbal_noun?: string;
+    active_participle?: string;
+    passive_participle?: string;
+    source_citation?: string;
+    conjugation?: any;
+    related_entries?: any[];
+    synonyms?: any[];
+    antonyms?: any[];
+    root_tags?: string[];
+    type?: string;
+    is_inflectable?: boolean;
+}
+
+export interface AdjectiveMorphology {
+    id?: string;
+    entry_id?: string;
+    gender?: string;
+    form_masc?: string;
+    form_fem?: string;
+    masculine?: string;
+    feminine?: string;
+    plural_form?: string | string[];
+    plural_forms?: any[];
+    plural?: any[];
+    vowel_set_sg?: string;
+    vowel_set_pl?: string;
+    vowel_set_opp?: string;
+    vowel_set_dual?: string;
     form_fem_pattern?: string;
     form_masc_pattern?: string;
     form_plural_pattern?: string;
-    elative_pattern?: string;
-    diminutive_pattern?: string;
+    dual_form?: string;
     dual_pattern?: string;
+    diminutive_form?: string;
+    diminutive_pattern?: string;
+    elative_form?: string;
+    elative?: string;
+    elative_pattern?: string;
     source_citation?: string;
     diminutives?: EntryDiminutive[];
+    related_entries?: any[];
+    synonyms?: any[];
+    antonyms?: any[];
+    pattern?: string;
+    morph_pattern?: string;
+    lemma_pattern?: string;
+    has_elative?: boolean;
+    is_inflectable?: boolean;
+}
+
+export interface ParticipleMorphology {
+    id: string;
+    entry_id: string;
+    participle_type: string;
+    type?: string;
+    gender: string;
+    is_inflectable?: boolean;
+    vowel_set_sg?: string;
+    vowel_set_pl?: string;
+    vowel_set_opp?: string;
+    vowel_set_dual?: string;
+    form_fem?: string;
+    form_fem_pattern?: string;
+    form_masc?: string;
+    form_masc_pattern?: string;
+    form_plural_pattern?: string;
+    dual_form?: string;
+    dual_pattern?: string;
+    diminutive_form?: string;
+    diminutive_pattern?: string;
+    elative_form?: string;
+    elative_pattern?: string;
+    source_citation?: string;
+    related_entries?: any[];
+    synonyms?: any[];
+    antonyms?: any[];
+}
+
+export interface NumeralMorphology {
+    id: string;
+    entry_id: string;
+    numeral_type: string;
+    gender: string;
+    form_plural_pattern?: string;
+    form_attributive_short?: string;
+    form_attributive_short_pattern?: string;
+    lemma_pattern?: string;
+    form_masc_pattern?: string;
+    form_attributive_long?: string;
+    numeral_ordinal?: string;
+    numeral_adverbial?: string;
+    numeral_fractional?: string;
+    numeral_multiplier?: string;
+    numeral_distributive?: string;
+    ordinal_form?: string;
+    adverbial_form?: string;
+    fractional_form?: string;
+    multiplier_form?: string;
+    distributive_form?: string;
+    source_citation?: string;
+    related_entries?: any[];
+    synonyms?: any[];
+    antonyms?: any[];
+    pattern?: string;
 }
 
 export interface ZokkMorphology {
+    id?: string;
+    entry_id?: string;
     stem_string: string;
-    class_type: 'ar' | 'ir';
+    class_type: 'ar' | 'ir' | '';
     is_hybrid: boolean;
-    agentive_suffix?: string; // override (ant/ur/ent/itur)
-    root?: string;            // the reanalysed root (e.g. k-n-t-j)
+    agentive_suffix?: string;
+    root?: string;
 }
 
-// ─── Phonetics ─────────────────────────────────────────────────────────────
 export interface Phonetic {
     id: string;
     entry_id?: string;
     subentry_id?: string;
     ipa: string;
-    dialect?: string;            // e.g. "Standard", "Żejtun", "Valletta"
+    dialect?: string;
     notes?: string;
 }
 
-// ─── Audio ─────────────────────────────────────────────────────────────────
 export interface AudioFile {
     id: string;
     entry_id?: string;
@@ -294,262 +415,28 @@ export interface AudioFile {
     duration_seconds?: number;
 }
 
-// ─── Lexical Sources & Attestation ────────────────────────────────────────
 export interface LexicalSource {
     id: string;
-    name: string;              // e.g. "Aquilina"
+    name: string;
     full_title: string;
     author?: string;
-    year?: number;
-    reliability_weight: number; // 0.0 – 1.0
-    source_type: 'academic' | 'official' | 'peer_reviewed' | 'crowdsourced' | 'historical';
-    url?: string;
+    published_year?: number;
 }
 
-export interface AttestationScore {
-    source_id: string;
-    source_name: string;
-    reliability_weight: number;
-    attested: boolean;          // did this source confirm this entry?
-    notes?: string;
-    source?: LexicalSource;
+export interface EntryDiminutive {
+    form: string;
+    pattern?: string;
+    gender?: string | null;
+    theoretical?: boolean;
 }
 
-export interface AttestationReliability {
-    id: string;
-    entry_id: string;
-    reliability_index: number;  // 0–100 computed score
-    scores: AttestationScore[];
-    computed_at: string;
-}
-
-// ─── Etymology ─────────────────────────────────────────────────────────────
-export interface EtymologyNode {
-    language: SourceLanguage;
-    relationship?: string;
-    term?: string;              // word form in source language
-    pronunciation?: string;
-    definition?: string;
-    form?: string;
-    meaning?: string;
-    script?: string;            // e.g. Arabic script version
-    time_period?: string;
-}
-
-export interface Etymology {
-    id: string;
-    entry_id: string;
-    chain: EtymologyNode[];     // ordered oldest → newest
-    notes?: string;
-    attestation?: AttestationReliability;
-}
-
-// ─── SubEntry ──────────────────────────────────────────────────────────────
-export interface SubEntry {
-    id: string;
-    entry_id: string;
-    headword: string;
-    pos?: POS;
-    definitions: Definition[];
-    example_sentences?: ExampleSentence[];
-    phonetics?: Phonetic[];
-    audio?: AudioFile[];
-    tags?: string[];
-    sort_order: number;
-}
-
-// ─── Definitions & Examples ────────────────────────────────────────────────
-export interface Definition {
-    id: string;
-    sense_number: number;
-    text_mt: string | null;      // Maltese definition
-    text_en: string;             // English translation/gloss
-    register?: 'formal' | 'informal' | 'archaic' | 'technical' | 'dialectal' | 'colloquial';
-    field?: string;              // domain, e.g. "Law", "Medicine"
-    example_sentences?: ExampleSentence[];
-}
-
-export interface ExampleSentence {
-    id: string;
-    maltese: string;
-    english?: string;
-    source?: string;
-}
-
-// ─── Dialect Variant ───────────────────────────────────────────────────────
-export interface DialectVariant {
-    id: string;
-    entry_id: string;
-    region: string;             // e.g. "Valletta", "Gozo", "Żejtun"
-    variant_form: string;
-    phonetics?: Phonetic[];
-    audio?: AudioFile[];
-    notes?: string;
-}
-
-// ─── Main Entry ────────────────────────────────────────────────────────────
-export interface Entry {
+export interface SearchResult {
     id: string;
     headword: string;
-    pos: POS;
-    root_pattern_form_id?: string;
-    root_pattern_form?: RootPatternForm;
-
-    // POS-specific morphology (only one will be populated)
-    noun_morphology?: NounMorphology;
-    verb_morphology?: VerbMorphology;
-    adjective_morphology?: AdjectiveMorphology;
-    numeral_morphology?: NumeralMorphology;
-    zokk_morphology?: ZokkMorphology;
-    diminutives?: EntryDiminutive[];
-
-    definitions: Definition[];
-    subentries?: SubEntry[];
-    phonetics?: Phonetic[];
-    audio?: AudioFile[];
-    etymologies?: Etymology[];
-    dialect_variants?: DialectVariant[];
-    alternative_forms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
-
-    // Flags
-    is_loanword: boolean;
-    source_language?: SourceLanguage;
-    tags?: string[];
-
-    // Unified Normalised Fields
-    gender?: string;
-    lemma_base?: string;
-    inflections_pl?: string[];
-    form_fem?: string;
-    form_masc?: string;
-    morph_pattern?: string; // @deprecated
-    dual_form?: string;
-    diminutive_form?: string;
-    paucal_form?: string;
-    augmentative_form?: string;
-    elative_form?: string;
-    numeral_type?: string;
-    form_attributive_short?: string;
-    form_attributive_long?: string;
-    form_opposite?: string;
-    lemma_pattern?: string; // @deprecated
-    form_fem_pattern?: string;
-    form_masc_pattern?: string;
-    form_plural_pattern?: string;
-    diminutive_pattern?: string;
-    paucal_pattern?: string;
-    augmentative_pattern?: string;
-    elative_pattern?: string;
-    dual_pattern?: string;
-    plural_pattern?: string; // @deprecated
-    sound_suffix?: string;
-
-    // Verb specifics (maintained for display logic)
-    cv_pattern?: string;
-    plural_pattern_verb?: string; // disambiguated from shared plural_pattern if needed, but let's just keep one plural_pattern if possible.
-
-    wizen_notation?: string;
-    verb_class?: string;
-    verb_weak_class?: string;
-    verb_vowel_perf?: string;
-    verb_vowel_impf?: string;
-    verb_vowel_impv?: string;
-    verb_verbal_noun?: string;
-    verb_active_ptcp?: string;
-    verb_passive_ptcp?: string;
-    is_inflectable?: boolean;
-    usage_example?: string;
-    usage_example_en?: string;
-    verb_type?: string;
-
-    // Participle specifics
-    participle_type?: 'active' | 'passive';
-    participle_gender?: Gender;
-
-    // Noun specifics
-    is_collective?: boolean;
-    is_singulative?: boolean;
-
-    // Noun/Adj additions for Admin/Display
-    vowel_set_sg?: string;
-    vowel_set_pl?: string;
-    vowel_set_opp?: string;
-    vowel_set_dual?: string;
-
-    created_at: string;
-    updated_at: string;
-}
-
-// ─── User / Auth / Tiers ───────────────────────────────────────────────────
-export type Tier = 'basic' | 'pro' | 'enterprise';
-
-export interface User {
-    id: string;
-    clerk_id: string;
-    email: string;
-    display_name?: string;
-    tier: Tier;
-    ads_disabled: boolean;       // paid €2.99 lifetime to disable ads
-    audio_unlocked: boolean;     // paid €1.99 lifetime or Pro
-    created_at: string;
-}
-
-export interface Subscription {
-    id: string;
-    user_id: string;
-    tier: Tier;
-    started_at: string;
-    expires_at?: string;
-    stripe_subscription_id?: string;
-    is_lifetime: boolean;
-}
-
-export interface ApiKey {
-    id: string;
-    user_id: string;
-    name: string;
-    key_prefix: string;          // show first 8 chars only
-    usage_count: number;
-    rate_limit_per_month: number;
-    created_at: string;
-    last_used_at?: string;
-    is_active: boolean;
-}
-
-// ─── Flashcards ────────────────────────────────────────────────────────────
-export interface FlashcardList {
-    id: string;
-    user_id: string;
-    name: string;
-    entry_ids: string[];
-    created_at: string;
-    updated_at: string;
-}
-
-// ─── Community ─────────────────────────────────────────────────────────────
-export interface SuggestedEntry {
-    id: string;
-    submitted_by_user_id?: string;
-    headword: string;
-    notes: string;
-    status: 'pending' | 'approved' | 'rejected';
-    vote_count: number;
-    submitted_at: string;
-}
-
-export interface Vote {
-    id: string;
-    user_id: string;
-    suggested_entry_id: string;
-    value: 1 | -1;
-    reason?: string;
-    voted_at: string;
-}
-
-// ─── Search ────────────────────────────────────────────────────────────────
-export type SearchResult = Entry & {
-    score?: number;              // relevance score (semantic search)
-    match_type?: 'exact' | 'prefix' | 'fulltext' | 'semantic';
+    pos?: string;
+    gloss_en?: string;
+    gloss_mt?: string;
+    score?: number;
     highlight?: string;
     definition_en?: string;
     definition_mt?: string;
@@ -559,7 +446,8 @@ export type SearchResult = Entry & {
         sourceField: string;
         matchedSuffix: string;
     };
-};
+    zokk_morphology?: ZokkMorphology;
+}
 
 export interface SearchFilters {
     pos?: POS[];
@@ -568,7 +456,6 @@ export interface SearchFilters {
     tags?: string[];
 }
 
-// ─── Chat ──────────────────────────────────────────────────────────────────
 export type ChatRole = 'user' | 'assistant' | 'system';
 
 export interface ChatMessage {
@@ -579,7 +466,6 @@ export interface ChatMessage {
     dialect?: string;
 }
 
-// ─── Blog ──────────────────────────────────────────────────────────────────
 export interface BlogPost {
     id: string;
     slug: string;
@@ -592,7 +478,6 @@ export interface BlogPost {
     cover_image_url?: string;
 }
 
-// ─── Feature gates ─────────────────────────────────────────────────────────
 export type Feature =
     | 'semantic_search'
     | 'unlimited_audio'
@@ -607,3 +492,7 @@ export type Feature =
     | 'vote_suggestions'
     | 'api_access'
     | 'api_key_management';
+
+export type Tier = 'basic' | 'pro' | 'enterprise';
+export type Etymology = EntryEtymologyChain;
+export interface AttestationReliability { reliability_index?: string; scores?: any[]; }

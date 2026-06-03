@@ -26,7 +26,7 @@ The local admin endpoints bypass Clerk on `localhost`, so a dummy token is enoug
 
 ## 2. What the entry API accepts
 
-The entry CRUD API creates rows in the `entries` table and then optionally inserts related rows in `definitions`, `phonetics`, and `etymologies`.
+The entry CRUD API creates rows in the `entries` table and stores etymology data directly on the entry via `etymology_chain` and `etymology_notes` (no separate `etymologies` table).
 
 ### Required fields
 
@@ -80,9 +80,9 @@ Use one row per POS so every major UI filter and renderer gets exercised.
 
 | POS | Canonical `pos` value | Recommended test fields |
 |---|---|---|
-| Noun | `noun` | `gender`, `lemma_base`, `inflections_pl`, `is_collective`, `is_singulative`, `root_consonants`, `definitions`, `phonetics`, `tags` |
+| Noun | `noun` | `gender`, `inflections_pl`, `is_collective`, `is_singulative`, `root_consonants`, `definitions`, `phonetics`, `tags` |
 | Verb | `verb` | `root_consonants`, `verb_form`, `verb_class`, `verb_transitivity`, `verb_perfective_3sgm`, `verb_imperfective_3sgm`, `verb_verbal_noun`, `verb_active_ptcp`, `verb_passive_ptcp`, `verb_vowel_perf`, `verb_vowel_impf`, `definitions` |
-| Adjective | `adjective` | `gender`, `lemma_base`, `inflections_pl`, `form_masc`, `form_fem`, `elative_form`, `vowel_set_sg`, `vowel_set_pl`, `vowel_set_opp`, `definitions` |
+| Adjective | `adjective` | `gender`, `inflections_pl`, `form_masc`, `form_fem`, `elative_form`, `vowel_set_sg`, `vowel_set_pl`, `vowel_set_opp`, `definitions` |
 | Adverb | `adverb` | `definitions`, `tags`, `source_language` if you want source filtering coverage |
 | Preposition | `preposition` | `definitions`, `tags`, `source_language` if you want source filtering coverage |
 | Conjunction | `conjunction` | `definitions`, `tags` |
@@ -138,7 +138,7 @@ Change only `pos` and `headword` for the other closed-class POS.
   "headword": "test-noun-01",
   "pos": "noun",
   "gender": "feminine",
-  "lemma_base": "test-noun-01",
+  
   "inflections_pl": ["test-noun-01s", "test-noun-01ies"],
   "is_collective": false,
   "is_singulative": false,
@@ -214,7 +214,7 @@ Useful extra fields for verbs:
   "headword": "test-adj-01",
   "pos": "adjective",
   "gender": "masculine",
-  "lemma_base": "test-adj-01",
+  
   "inflections_pl": ["test-adj-01a", "test-adj-01i"],
   "form_masc": "test-adj-01",
   "form_fem": "test-adj-01a",
@@ -263,7 +263,7 @@ Useful extra fields for adjectives:
 Useful extra fields for numerals:
 
 - `gender`
-- `lemma_base`
+
 - `form_fem_pattern`
 - `form_masc_pattern`
 - `form_plural_pattern`
@@ -412,7 +412,7 @@ What it does:
 - creates 5 entries for each POS
 - uses root-linked rows for `noun`, `verb`, `adjective`, `participle`, and `verbal_noun`
 - uses stem-linked rows for the closed-class POS set
-- creates matching rows in `roots`, `stems`, `definitions`, `phonetics`, and `etymologies`
+- creates matching rows in `roots`, `stems`, `definitions`, and `phonetics` (etymology stored on `entries.etymology_chain`)
 - rebuilds `entries_fts` at the end
 
 The generated data is intentionally synthetic and prefixed with `zz-` so it is easy to find and safely delete.

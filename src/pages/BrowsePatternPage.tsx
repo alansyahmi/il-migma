@@ -12,6 +12,7 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { apiListPatterns, type PatternApiItem } from '@/lib/api';
 import { getPatternMetadataSummary } from '@/lib/patternMetadata';
 import { cn } from '@/lib/utils';
+import { useCatalogRefresh } from '@/hooks/useCatalogRefresh';
 
 const POS_LIST = [
     { key: 'all', label: 'all' },
@@ -395,6 +396,8 @@ export function BrowsePatternPage() {
         loadPatterns();
     }, [loadPatterns]);
 
+    useCatalogRefresh(() => loadPatterns(), { intervalMs: 60_000 });
+
     const patternConfigItems = useMemo(() => getCategoryItems('cv_wizen_pattern'), [getCategoryItems]);
 
     const openPatternEditor = (pattern?: PatternCardData) => {
@@ -601,10 +604,11 @@ export function BrowsePatternPage() {
                     </p>
                     <p className="mt-1 text-sm text-text-muted">
                         {totalVisible > 0
-                            ? term('browse-pattern-summary')
-                                .replace('{count}', totalVisible.toLocaleString())
-                                .replace('{groups}', String(totalGroups))
-                        : term('browse-pattern-empty')}
+                            ? term('browse-pattern-summary', {
+                                count: totalVisible.toLocaleString(),
+                                groups: String(totalGroups),
+                            })
+                            : term('browse-pattern-empty')}
                     </p>
                 </div>
 
