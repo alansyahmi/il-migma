@@ -454,6 +454,7 @@ interface AdvancedFilters {
     maxResults: string;
     pos: string;
     rootType: string;
+    weakClass: string;
     source: string;
     rootRadicals: string[];
     wizenPattern: string;
@@ -490,6 +491,7 @@ const DEFAULT_FILTERS: AdvancedFilters = {
     maxResults: '25',
     pos: '',
     rootType: '',
+    weakClass: '',
     source: '',
     rootRadicals: ['', '', '', ''],
     wizenPattern: '',
@@ -532,6 +534,13 @@ export function AdvancedSearch() {
         ];
     }, [getOptions, mode, language, term]);
 
+    const WEAK_CLASS_FILTER_OPTIONS = useMemo(() => [
+        { value: '', label: term('all') },
+        { value: 'assimilative', label: term('assimilative') },
+        { value: 'hollow', label: term('hollow') },
+        { value: 'defective', label: term('defective') },
+    ], [term]);
+
     const PATTERN_TYPE_OPTIONS = useMemo(() => [
         { value: 'lemma', label: term('singular') },
         { value: 'plural', label: term('plural') },
@@ -553,7 +562,19 @@ export function AdvancedSearch() {
     const [filters, setFilters] = useState<AdvancedFilters>(() => {
         const f = { ...DEFAULT_FILTERS };
         if (searchParams.has('pos')) f.pos = searchParams.get('pos')!;
-        if (searchParams.has('type')) f.rootType = searchParams.get('type')!;
+        if (searchParams.has('type')) {
+            const typeParam = searchParams.get('type')!;
+            if (['assimilative', 'hollow', 'defective'].includes(typeParam)) {
+                f.rootType = 'weak';
+                f.weakClass = typeParam;
+            } else {
+                f.rootType = typeParam;
+            }
+        }
+        if (searchParams.has('weak_class')) {
+            f.rootType = f.rootType || 'weak';
+            f.weakClass = searchParams.get('weak_class')!;
+        }
         if (searchParams.has('v')) f.vowelSet = searchParams.get('v')!;
         if (searchParams.has('wizen')) f.wizenPattern = searchParams.get('wizen')!;
         
@@ -623,6 +644,7 @@ export function AdvancedSearch() {
     const isSearchPerformed = searchParams.has('q') ||
         searchParams.has('pos') ||
         searchParams.has('type') ||
+        searchParams.has('weak_class') ||
         searchParams.has('v') ||
         searchParams.has('wizen') ||
         searchParams.has('lp') ||
@@ -650,6 +672,7 @@ export function AdvancedSearch() {
         setLoading(true);
         const pos = searchParams.get('pos') || undefined;
         const rootType = searchParams.get('type') || undefined;
+        const weakClass = searchParams.get('weak_class') || undefined;
         const vowelSet = searchParams.get('v') || undefined;
         const wizen = searchParams.get('wizen') || undefined;
         const source = searchParams.get('source') || undefined;
@@ -678,6 +701,7 @@ export function AdvancedSearch() {
         apiSearch(q, {
             pos,
             type: rootType,
+            weak_class: weakClass,
             wizen: wizen || undefined,
             source: source || undefined,
             gender,
@@ -844,6 +868,7 @@ export function AdvancedSearch() {
         const params: Record<string, string> = { q: query.trim() };
         if (filters.pos) params.pos = filters.pos;
         if (filters.rootType) params.type = filters.rootType;
+        if (filters.rootType === 'weak' && filters.weakClass) params.weak_class = filters.weakClass;
         if (filters.vowelSet) params.v = filters.vowelSet;
         if (filters.wizenPattern) params.wizen = filters.wizenPattern;
         
@@ -925,6 +950,9 @@ export function AdvancedSearch() {
     const setFilter = <K extends keyof AdvancedFilters>(key: K, value: AdvancedFilters[K]) => {
         setFilters(f => {
             const next = { ...f, [key]: value };
+            if (key === 'rootType' && value !== 'weak') {
+                next.weakClass = '';
+            }
             if (key === 'maxResults') {
                 const params = Object.fromEntries(searchParams.entries());
                 params.limit = value as string;
@@ -1134,6 +1162,15 @@ export function AdvancedSearch() {
                                         onChange={v => setFilter('rootType', v)}
                                         options={ROOT_TYPE_FILTER_OPTIONS}
                                     />
+
+                                    {filters.rootType === 'weak' && (
+                                        <FilterSelect
+                                            label={term("weak-class")}
+                                            value={filters.weakClass}
+                                            onChange={v => setFilter('weakClass', v)}
+                                            options={WEAK_CLASS_FILTER_OPTIONS}
+                                        />
+                                    )}
 
                                     <FilterText
                                         label={cvPatternLabel}

@@ -56,7 +56,7 @@ const SCHEMA_EXPECTATIONS = {
     verb_morphology: [
         'form', 'class', 'weak_class', 'transitivity', 'perfective_3sgm', 'imperfective_3sgm',
         'verbal_noun', 'active_participle', 'passive_participle', 'vowel_set_perf',
-        'vowel_set_impf', 'vowel_set_impv', 'type'
+        'vowel_set_impf', 'vowel_set_impv', 'type', 'is_imala_blocked'
     ],
     adj_morphology: [
         'masculine_form', 'feminine_form', 'plural_form', 'elative_form', 'elative_pattern',

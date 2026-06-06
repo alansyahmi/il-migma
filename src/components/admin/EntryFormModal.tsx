@@ -12,6 +12,7 @@ import { useAdminConfig } from '@/lib/adminConfig';
 import { buildLoadedEntryPatch, entryToForm, formToPayload, INITIAL_FORM_STATE } from '@/lib/entryAdapter';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
+import { looksLikeStrongHybridVerb } from '@/lib/stemDefaults';
 import {
     generateIPA, deriveFeminineFromPattern, deriveMasculineFromFeminine,
     detectPluralType, derivePattern, extractLongVowelFromPattern
@@ -46,7 +47,12 @@ import {
 import { buildSuggestedEntryId, normalizeEntryPos } from '@/lib/entryId';
 import { isDashMarkedSuffix, stripLeadingDash } from '@/lib/suffixMatching';
 import type { VerbMorphology } from '@/types';
-import { buildEntryFormVerbMorphologyPreview, detectVerbRootType } from '@/lib/verbMorphology';
+import {
+    buildEntryFormVerbMorphologyPreview,
+    deriveEntryFormVerbVowelSets,
+    detectVerbRootType,
+    shouldAutoBlockImalaForVerbVowels,
+} from '@/lib/verbMorphology';
 
 export interface AdminEntry {
     id: string;
@@ -93,6 +99,11 @@ function buildFormSnapshot(form: any): string {
     return JSON.stringify(formToPayload(form));
 }
 
+const VERB_VOWEL_FIELD_KEYS = ['verb_vowel_perf', 'verb_vowel_impf', 'verb_vowel_impv'] as const;
+
+function hasExplicitImalaOverride(value: unknown): boolean {
+    return value !== undefined && value !== null && (typeof value !== 'string' || value.trim() !== '');
+}
 
 // ── Components for Morphology Fields ──────────────────────────────────────
 
@@ -860,6 +871,8 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
 );
 
 const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerms, suggestions }: MorphologyProps) => {
+    const isWeakVerb = String(form.verb_class || '').trim().toLowerCase() === 'weak';
+
     return (
         <div className="space-y-4">
             <div className="flex justify-end">
@@ -898,6 +911,7 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
             </div>
 
             <div className={styles.grid}>
+                {isWeakVerb && (
                 <div>
                     <label className={styles.label}>{t('Weak Class', 'Klassi Dgħajfa')}</label>
                     <select className={styles.sel} value={form._weakClass || ''} onChange={e => set('_weakClass', e.target.value)}>
@@ -907,6 +921,7 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
                         <option value="defective">{t('Defective', 'Nieqes')}</option>
                     </select>
                 </div>
+                )}
                 <div>
                     <label className={styles.label}>{t('Root Type', 'Tip tal-Għerq')}</label>
                     <select className={styles.sel} value={form.verb_type || ''} onChange={e => set('verb_type', e.target.value)}>
@@ -945,6 +960,19 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
                     <label className={styles.label}>{t('Vowel Set (Impv)', 'Sett ta\' vokali (Impv)')}</label>
                     <input className={styles.inp} value={form.verb_vowel_impv} onChange={e => set('verb_vowel_impv', e.target.value)} onFocus={() => onFocus('verb_vowel_impv')} />
                     <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_impv', v)} />
+                </div>
+                <div className="flex items-end pb-2">
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                        <input
+                            type="checkbox"
+                            checked={!!form.is_imala_blocked}
+                            onChange={e => set('is_imala_blocked', e.target.checked)}
+                            className="w-3.5 h-3.5 text-[#1034A6] border-black/20 rounded focus:ring-0 focus:ring-offset-0"
+                        />
+                        <span className={styles.label + " mb-0 group-hover:text-[#1034A6] transition-colors"}>
+                            {t('Blocked Imala', 'Imala Mblukkata')}
+                        </span>
+                    </label>
                 </div>
             </div>
 
@@ -1483,18 +1511,6 @@ function getVerbCvSuggestion(form: string, verbClass: string): { cv: string; wiz
     }
 }
 
-function looksLikeFormIStrongHybridForm(form: any, rootOverride?: string): boolean {
-    const verbForm = String(form?._formLabel || form?.verb_form || '').trim().toUpperCase();
-    if (verbForm !== 'I') return false;
-
-    const headword = String(form?.headword || '').trim();
-    if (!/['’]$/.test(headword)) return false;
-
-    const root = String(rootOverride || form?._rootConsonants || form?.root_consonants || '').trim().toLowerCase();
-    const finalRadical = root.split('-').map(part => part.trim()).filter(Boolean).at(-1) || '';
-    return finalRadical === 'għ' || finalRadical === 'gh';
-}
-
 function ResetButton({ onClick, title = "Reset" }: { onClick: () => void, title?: string }) {
     return (
         <button type="button" onClick={onClick} className="text-slate-400 hover:text-[#1034A6] transition-colors" title={title}>
@@ -1698,6 +1714,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const [suggestedId, setSuggestedId] = useState('');
     const [autoFilledFields, setAutoFilledFields] = useState<Set<string>>(new Set());
     const autoFilledFieldsRef = useRef<Set<string>>(new Set());
+    const manualVerbVowelFieldsRef = useRef<Set<string>>(new Set());
     const [isNotable, setIsNotable] = useState(false);
 
     const [kbOpen, setKbOpen] = useState(false);
@@ -1904,7 +1921,10 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     // ── AUTOMATION: Root Metadata Inheritance ───────────────────────────────
     useEffect(() => {
         const rootStr = form._rootConsonants.trim();
-        if (!rootStr) return;
+        if (!rootStr) {
+            setForm(prev => prev._rootVowelSetPerf ? { ...prev, _rootVowelSetPerf: '' } : prev);
+            return;
+        }
 
         const requestSeq = ++rootLookupSeqRef.current;
         const lookupKey = rootStr.toLowerCase();
@@ -1928,7 +1948,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     const newFilled = new Set(autoFilledFieldsRef.current);
                     let suggestedClass = '';
                     if (rootStrength === 'strong') {
-                        suggestedClass = looksLikeFormIStrongHybridForm(prev, root.consonants || rootStr)
+                        suggestedClass = looksLikeStrongHybridVerb({
+                            form: prev._formLabel,
+                            headword: prev.headword,
+                            root_consonants: root.consonants || rootStr,
+                        })
                             ? 'strong-hybrid'
                             : 'strong';
                     } else if (rootStrength === 'weak') suggestedClass = 'weak';
@@ -1951,10 +1975,35 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         assign('verb_class', suggestedClass);
                     }
 
-                    if (root.weak_class && !prev._weakClass) {
+                    if (suggestedClass === 'weak' && root.weak_class && !prev._weakClass) {
                         newFilled.add('_weakClass');
                         assign('_weakClass', root.weak_class);
+                    } else if (suggestedClass && suggestedClass !== 'weak' && prev._weakClass && newFilled.has('_weakClass')) {
+                        newFilled.delete('_weakClass');
+                        assign('_weakClass', '');
                     }
+
+                    const rootPerfectVowelSet = String(root.vowel_set_perf || '').trim();
+                    assign('_rootVowelSetPerf', rootPerfectVowelSet);
+
+                    const derivedVowels = deriveEntryFormVerbVowelSets(
+                        next._formLabel || prev._formLabel || 'I',
+                        next.verb_class,
+                        next._weakClass || next.verb_weak_class,
+                        rootPerfectVowelSet,
+                        root.consonants || rootStr,
+                    );
+                    const applyDerivedVowel = (key: typeof VERB_VOWEL_FIELD_KEYS[number], value: string) => {
+                        if (!value) return;
+                        if (manualVerbVowelFieldsRef.current.has(key)) return;
+                        if (!String(prev[key] || '').trim() || newFilled.has(key)) {
+                            newFilled.add(key);
+                            assign(key, value);
+                        }
+                    };
+                    applyDerivedVowel('verb_vowel_perf', derivedVowels.perfect);
+                    applyDerivedVowel('verb_vowel_impf', derivedVowels.imperfect);
+                    applyDerivedVowel('verb_vowel_impv', derivedVowels.imperative);
 
                     if (root.source && !prev.source_citation) {
                         newFilled.add('source_citation');
@@ -1996,6 +2045,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
     // Reset auto-filled status when POS changes
     useEffect(() => {
+        manualVerbVowelFieldsRef.current = new Set();
         if (autoFilledFields.size > 0) {
             replaceAutoFilledFields(new Set());
         }
@@ -2156,6 +2206,15 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     ]);
 
     const set = (k: string, v: any) => {
+        if ((VERB_VOWEL_FIELD_KEYS as readonly string[]).includes(k)) {
+            manualVerbVowelFieldsRef.current.add(k);
+            if (autoFilledFieldsRef.current.has(k)) {
+                const nextAutoFilled = new Set(autoFilledFieldsRef.current);
+                nextAutoFilled.delete(k);
+                replaceAutoFilledFields(nextAutoFilled);
+            }
+        }
+
         setForm((f: any) => {
             let next: any = f;
             let changed = false;
@@ -2168,6 +2227,10 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             };
 
             assign(k, v);
+
+            if (k === 'verb_class' && String(v || '').trim().toLowerCase() !== 'weak') {
+                assign('_weakClass', '');
+            }
 
             // Sync headword to legacy base/gendered form fields for POS types
             // whose morphology schema still stores those aliases.
@@ -2243,7 +2306,67 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
     useEffect(() => {
         if (normalizedPos !== 'verb') return;
-        if (!looksLikeFormIStrongHybridForm(form)) return;
+        if (hasExplicitImalaOverride(form.is_imala_blocked)) return;
+        if (!shouldAutoBlockImalaForVerbVowels(form.verb_vowel_perf, form.verb_vowel_impf, form.verb_vowel_impv)) return;
+
+        setForm(prev => {
+            if (hasExplicitImalaOverride(prev.is_imala_blocked)) return prev;
+            if (!shouldAutoBlockImalaForVerbVowels(prev.verb_vowel_perf, prev.verb_vowel_impf, prev.verb_vowel_impv)) return prev;
+            return { ...prev, is_imala_blocked: true };
+        });
+    }, [normalizedPos, form.verb_vowel_perf, form.verb_vowel_impf, form.verb_vowel_impv, form.is_imala_blocked]);
+
+    useEffect(() => {
+        if (normalizedPos !== 'verb') return;
+
+        const derivedVowels = deriveEntryFormVerbVowelSets(
+            form._formLabel || 'I',
+            form.verb_class,
+            form._weakClass,
+            form._rootVowelSetPerf,
+            form._rootConsonants,
+        );
+
+        setForm(prev => {
+            let next: any = prev;
+            let hasChanges = false;
+            const newFilled = new Set(autoFilledFieldsRef.current);
+            const assign = (key: string, value: any) => {
+                if (!Object.is(next[key], value)) {
+                    if (next === prev) next = { ...prev };
+                    next[key] = value;
+                    hasChanges = true;
+                }
+            };
+            const applyDerivedVowel = (key: typeof VERB_VOWEL_FIELD_KEYS[number], value: string) => {
+                if (!value) return;
+                if (manualVerbVowelFieldsRef.current.has(key)) return;
+                if (!String(prev[key] || '').trim() || newFilled.has(key)) {
+                    newFilled.add(key);
+                    assign(key, value);
+                }
+            };
+
+            applyDerivedVowel('verb_vowel_perf', derivedVowels.perfect);
+            applyDerivedVowel('verb_vowel_impf', derivedVowels.imperfect);
+            applyDerivedVowel('verb_vowel_impv', derivedVowels.imperative);
+
+            if (hasChanges) {
+                setTimeout(() => replaceAutoFilledFields(newFilled), 0);
+                return next;
+            }
+
+            return prev;
+        });
+    }, [normalizedPos, form._formLabel, form.verb_class, form._weakClass, form._rootVowelSetPerf, form._rootConsonants, replaceAutoFilledFields]);
+
+    useEffect(() => {
+        if (normalizedPos !== 'verb') return;
+        if (!looksLikeStrongHybridVerb({
+            form: form._formLabel,
+            headword: form.headword,
+            root_consonants: form._rootConsonants,
+        })) return;
         if (form.verb_class && !(form.verb_class === 'strong' && autoFilledFieldsRef.current.has('verb_class'))) return;
 
         setForm(prev => {
@@ -2460,7 +2583,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const conjugationPreview = useMemo(() => {
         if (normalizedPos !== 'verb') return null;
         return buildEntryFormVerbMorphologyPreview(form);
-    }, [normalizedPos, form._rootConsonants, form._formLabel, form.headword, form.tags, form.verb_class, form._weakClass, form.verb_vowel_perf, form.verb_vowel_impf, form.verb_vowel_impv]);
+    }, [normalizedPos, form._rootConsonants, form._formLabel, form.headword, form.tags, form.verb_class, form._weakClass, form.verb_vowel_perf, form.verb_vowel_impf, form.verb_vowel_impv, form.is_imala_blocked]);
 
     const handleApplyDerivedTerms = () => {
         if (normalizedPos === 'numeral' && form._rootConsonants) {

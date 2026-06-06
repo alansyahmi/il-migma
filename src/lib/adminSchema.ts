@@ -79,12 +79,7 @@ export function buildRootPayload(form: RootFormData): Record<string, unknown> {
         synonyms: JSON.stringify(form.synonyms || []),
         antonyms: JSON.stringify(form.antonyms || []),
         related_entries: JSON.stringify(form.related_entries || []),
-        // Linguistic logic for Maltese phonology
-        is_imala_blocked: !!form.is_imala_blocked ||
-            form.vowel_set_perf === 'a-a' ||
-            form.vowel_set_impf === 'a-a' ||
-            form.vowel_set_imp === 'a-a' ||
-            /[\u0127q]|g\u0127|h/i.test(form.consonants),
+        is_imala_blocked: !!form.is_imala_blocked,
     };
 }
 
@@ -140,7 +135,7 @@ export const ENTRY_HANDLED_FIELDS = [
 ] as const;
 
 export const ENTRY_PRIVATE_FIELDS = [
-    '_rootConsonants', '_formLabel', '_hasDual', '_pluralType', '_adjPluralType', '_weakClass',
+    '_rootConsonants', '_rootVowelSetPerf', '_formLabel', '_hasDual', '_pluralType', '_adjPluralType', '_weakClass',
     '_sound_suffix', '_adj_sound_suffix', '_inheritedPattern', 'prefer_zokk'
 ] as const;
 
@@ -360,10 +355,15 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
     }
 
     if (pos === 'verb') {
+        const nestedVerbMorphology = isPlainObject(form.verb_morphology) ? form.verb_morphology : {};
+        const savedVerbClass = String(form.verb_class ?? nestedVerbMorphology.class ?? '').trim().toLowerCase();
+        const verbWeakClass = savedVerbClass === 'weak'
+            ? (form._weakClass || form.verb_weak_class)
+            : '';
         const verbMorphologySource = {
             verb_morphology: form.verb_morphology,
             verb_class: form.verb_class,
-            verb_weak_class: form._weakClass || form.verb_weak_class,
+            verb_weak_class: verbWeakClass,
             verb_transitivity: form.verb_transitivity,
             verb_perfective_3sgm: form.verb_perfective_3sgm,
             verb_imperfective_3sgm: form.verb_imperfective_3sgm,
@@ -375,6 +375,7 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
             verb_vowel_impv: form.verb_vowel_impv,
             verb_form: verbForm,
             verb_type: form.verb_type,
+            is_imala_blocked: form.is_imala_blocked,
         };
 
         payload.verb_morphology = normalizeVerbMorphologyInput(verbMorphologySource);

@@ -54,6 +54,7 @@ export const INITIAL_FORM_STATE = {
     verb_vowel_perf: '',
     verb_vowel_impf: '',
     verb_vowel_impv: '',
+    is_imala_blocked: undefined as boolean | number | string | undefined,
     verb_active_ptcp: '',
     verb_passive_ptcp: '',
     elative_form: '',
@@ -78,6 +79,7 @@ export const INITIAL_FORM_STATE = {
     tags: '',
     _formLabel: '',
     _rootConsonants: '',
+    _rootVowelSetPerf: '',
     _weakClass: '',
     _hasDual: false,
     _pluralType: 'none' as 'none' | 'broken' | 'sound' | 'both',
@@ -149,6 +151,7 @@ vm.vowel_set_perf AS vm_vowel_perf,
 vm.vowel_set_impf AS vm_vowel_impf,
 vm.vowel_set_impv AS vm_vowel_impv,
 vm.type AS vm_type,
+vm.is_imala_blocked AS vm_is_imala_blocked,
 nm.gender AS nm_gender,
 nm.noun_type AS nm_noun_type,
 nm.singular_form AS nm_singular,
@@ -435,6 +438,7 @@ function buildVerbSource(row: Record<string, unknown>) {
         vowel_set_impf: row.vm_vowel_impf,
         vowel_set_impv: row.vm_vowel_impv,
         type: row.vm_type,
+        is_imala_blocked: row.vm_is_imala_blocked,
     };
 }
 
@@ -666,6 +670,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         verb_vowel_perf: ['vowel_set_perf', 'verb_vowel_perf', 'vowel_set_perfect'],
         verb_vowel_impf: ['vowel_set_impf', 'verb_vowel_impf', 'vowel_set_imperfect'],
         verb_vowel_impv: ['vowel_set_impv', 'verb_vowel_impv', 'vowel_set_imperative'],
+        is_imala_blocked: ['is_imala_blocked', 'verb_is_imala_blocked'],
     };
 
     Object.entries(aliasMap).forEach(([formKey, dbKeys]) => {

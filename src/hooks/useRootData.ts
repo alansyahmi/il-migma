@@ -23,6 +23,7 @@ export interface DbRoot {
     vowel_set_perf?: string;
     vowel_set_impf?: string;
     vowel_set_imp?: string;
+    is_imala_blocked?: boolean | number | string;
     tags?: string;
     synonyms?: string | any[];
     antonyms?: string | any[];

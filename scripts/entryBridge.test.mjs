@@ -79,6 +79,7 @@ const verbRow = hydrateEntryRow({
   vm_vowel_perf: 'a-a',
   vm_vowel_impf: 'a-a',
   vm_vowel_impv: 'a-a',
+  vm_is_imala_blocked: 1,
 });
 
 assert.equal(verbRow.verb_morphology?.class, 'weak', 'verb hydration should expose canonical class');
@@ -87,6 +88,7 @@ assert.equal(verbRow.verb_morphology?.perfective_3sgm, 'qara', 'verb hydration s
 assert.equal(verbRow.verb_morphology?.perfective_3sg_m, 'qara', 'verb hydration should keep display perfective alias');
 assert.equal(verbRow.verb_morphology?.vowel_set_perf, 'a-a', 'verb hydration should expose canonical perfect vowel set');
 assert.equal(verbRow.verb_morphology?.vowel_set_perfect, 'a-a', 'verb hydration should keep display perfect vowel alias');
+assert.equal(verbRow.verb_morphology?.is_imala_blocked, 1, 'verb hydration should expose entry-specific imala override');
 
 const verbAliasPosRow = hydrateEntryRow({
   id: 'zz-verb-02',

@@ -3,6 +3,8 @@ import { adminListConfig, adminCreateConfig, adminUpdateConfig, adminDeleteConfi
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { getCategoryById, getRegistryOptions } from './adminCategoryRegistry';
 import { emitCatalogRefresh, useCatalogRefresh } from '@/hooks/useCatalogRefresh';
+import { resolveTerm as resolveHardcodedTerm } from './terminology.ts';
+import { ensureVerbClassFallbackOptions, ensureVerbClassFallbackValues } from './verbClassOptions';
 
 export interface ConfigItem {
     id: string;
@@ -34,7 +36,7 @@ const FALLBACKS: Record<string, string[]> = {
     gender: ['masculine', 'feminine', 'neutral'],
     participle_type: ['active', 'passive'],
     numeral_type: ['cardinal', 'ordinal', 'adverbial', 'fractional', 'multiplier', 'distributive', 'attributive_short', 'attributive_long'],
-    verb_class: ['strong', 'weak', 'doubled', 'quadriliteral', 'loan'],
+    verb_class: ['strong', 'strong-hybrid', 'weak', 'doubled', 'quadriliteral', 'loan'],
     verb_transitivity: ['transitive', 'intransitive', 'both', 'ditransitive'],
     register: ['formal', 'informal', 'archaic', 'obsolete', 'technical', 'dialectal', 'colloquial'],
     dialect: ['Standard', 'Qormi', 'Birkirkara', 'Żejtun', 'Żurrieq', 'Sannat', 'Mosta', 'Nadur (Għawdex)', 'Żebbuġ', 'Marsaxlokk', 'Xewkija (Għawdex)', 'Għarb', 'Victoria (Għawdex)', 'Vassalli (Arkajku)'],
@@ -136,9 +138,11 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
             if (isComplex) {
                 return dedupeBy(items.map(i => i.value), (value) => value);
             }
-            return dedupeBy(items.map(i => i.key), (value) => value);
+            const values = dedupeBy(items.map(i => i.key), (value) => value);
+            return category === 'verb_class' ? ensureVerbClassFallbackValues(values) : values;
         }
-        return FALLBACKS[category] || [];
+        const fallbacks = FALLBACKS[category] || [];
+        return category === 'verb_class' ? ensureVerbClassFallbackValues(fallbacks) : fallbacks;
     }, [getCategoryItems]);
 
     const createItem = async (item: Partial<ConfigItem>, options?: { refresh?: boolean }) => {
@@ -174,18 +178,24 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
     const getOptions = useCallback((category: string, mode: 'standard' | 'arabised' | 'latinised', lang: 'en' | 'mt' = 'mt'): { value: string, label: string }[] => {
         const items = getCategoryItems(category);
         if (items.length > 0) {
-            return dedupeBy(items
+            const mapped = dedupeBy(items
                 .map(item => getRegistryOptions(category, item, mode, lang))
                 .filter(Boolean) as { value: string, label: string }[], (option) => option.value);
+            return category === 'verb_class'
+                ? ensureVerbClassFallbackOptions(mapped, (value) => resolveHardcodedTerm(value, mode, lang))
+                : mapped;
         }
 
         // Use fallbacks if no items in DB
         const fallbacks = FALLBACKS[category] || [];
-        return dedupeBy(fallbacks.map(f => {
+        const mapped = dedupeBy(fallbacks.map(f => {
             const mockItem = { key: f, value: null };
             const opt = getRegistryOptions(category, mockItem, mode, lang);
             return opt || { value: f, label: f };
         }), (option) => option.value);
+        return category === 'verb_class'
+            ? ensureVerbClassFallbackOptions(mapped, (value) => resolveHardcodedTerm(value, mode, lang))
+            : mapped;
     }, [getCategoryItems]);
 
     return (

@@ -17,6 +17,7 @@ export interface VerbMorphologyInput {
     vowel_set_impf?: string | null;
     vowel_set_impv?: string | null;
     type?: string | null;
+    is_imala_blocked?: boolean | number | string | null;
 }
 
 export interface VerbMorphologyRecord extends VerbMorphologyInput {
@@ -39,6 +40,7 @@ export interface VerbMorphologyResponse {
     vowel_set_perfect: string;
     vowel_set_imperfect: string;
     vowel_set_imperative: string;
+    is_imala_blocked?: boolean | number | string | null;
     usage_example?: string;
     usage_example_en?: string;
     synonyms?: Array<{ headword: string; id: string; gloss_en?: string; gloss_mt?: string | null }>;
@@ -56,6 +58,7 @@ export interface VerbMorphologyResponse {
 
 export function hasVerbMorphologyInput(source?: any): boolean;
 export function normalizeVerbMorphologyInput(source?: any): VerbMorphologyInput;
+export function shouldAutoBlockImalaForVerbVowels(perfect?: any, imperfect?: any, imperative?: any): boolean;
 export function buildVerbMorphologyRecord(entry?: any, source?: any): VerbMorphologyRecord;
 export function buildVerbMorphologyResponse(entry?: any, source?: any, extras?: any): VerbMorphologyResponse;
 export function applyVerbMorphologyCompatibility(target?: any, entry?: any, source?: any, extras?: any): any;

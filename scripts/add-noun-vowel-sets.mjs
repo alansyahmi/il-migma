@@ -54,6 +54,7 @@ const migrations = [
     { table: 'noun_morphology', column: 'augmentative_pattern', type: 'TEXT' },
     // verb_morphology — impv may be missing on some DBs
     { table: 'verb_morphology', column: 'vowel_set_impv', type: 'TEXT' },
+    { table: 'verb_morphology', column: 'is_imala_blocked', type: 'BOOLEAN' },
 ];
 
 async function run() {

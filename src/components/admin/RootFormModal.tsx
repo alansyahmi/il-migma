@@ -6,7 +6,7 @@ import { Plus, Trash2, ArrowUp, ArrowDown, AlertCircle } from 'lucide-react';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { adminCreateRoot, adminUpdateRoot } from '@/lib/api';
 import { normalizeRootEtymologyChain, normalizeRootGloss, normalizeRootRelationships, type RootFormData } from '@/lib/adminUtils';
-import { inferImalaBlocked } from '@/lib/imala';
+import { parseImalaBlockedOverride, resolveImalaBlocked } from '@/lib/imala';
 import { buildRootPayload, ROOT_HANDLED_FIELDS } from '@/lib/adminSchema';
 
 const LazyRelationshipEditor = lazy(() =>
@@ -59,7 +59,8 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
             vowel_set_perf: data.vowel_set_perf || 'a-a',
             vowel_set_impf: data.vowel_set_impf || 'i-a',
             vowel_set_imp: data.vowel_set_imp || 'i-a',
-            is_imala_blocked: isNew ? false : inferImalaBlocked({
+            is_imala_blocked: isNew ? false : resolveImalaBlocked({
+                is_imala_blocked: parseImalaBlockedOverride(data.is_imala_blocked),
                 consonants: data.consonants || '',
                 vowel_set_perf: data.vowel_set_perf,
                 vowel_set_impf: data.vowel_set_impf,
@@ -185,12 +186,10 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                                 value={form.consonants}
                                 onChange={e => {
                                     const val = e.target.value;
-                                    const isBlocked = /[\u0127q]|g\u0127|h/i.test(val);
                                     setForm({
                                         ...form,
                                         consonants: val,
                                         id: rootIdFromConsonants(val),
-                                        is_imala_blocked: form.is_imala_blocked || isBlocked
                                     });
                                 }}
                                 placeholder="e.g. f-għ-l"
@@ -256,21 +255,21 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                             <label className={label}>{t('Vowel Set (Perf)', 'Vokali (Perf)')}</label>
                             <input className={inp} value={form.vowel_set_perf || 'a-a'} onChange={e => {
                                 const val = e.target.value;
-                                setForm({ ...form, vowel_set_perf: val, is_imala_blocked: form.is_imala_blocked || val === 'a-a' });
+                                setForm({ ...form, vowel_set_perf: val });
                             }} placeholder="e.g. a-a" />
                         </div>
                         <div>
                             <label className={label}>{t('Vowel Set (Impf)', 'Vokali (Impf)')}</label>
                             <input className={inp} value={form.vowel_set_impf || 'i-a'} onChange={e => {
                                 const val = e.target.value;
-                                setForm({ ...form, vowel_set_impf: val, is_imala_blocked: form.is_imala_blocked || val === 'a-a' });
+                                setForm({ ...form, vowel_set_impf: val });
                             }} placeholder="e.g. i-a" />
                         </div>
                         <div>
                             <label className={label}>{t('Vowel Set (Imp)', 'Vokali (Imp)')}</label>
                             <input className={inp} value={form.vowel_set_imp || 'i-a'} onChange={e => {
                                 const val = e.target.value;
-                                setForm({ ...form, vowel_set_imp: val, is_imala_blocked: form.is_imala_blocked || val === 'a-a' });
+                                setForm({ ...form, vowel_set_imp: val });
                             }} placeholder="e.g. i-a" />
                         </div>
                         <div className="flex flex-col justify-end pb-2">
@@ -278,7 +277,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                                 <input
                                     type="checkbox"
                                     className="w-4 h-4 rounded border-black/20 text-[#1034A6] focus:ring-[#1034A6]"
-                                    checked={isNew ? !!form.is_imala_blocked : inferImalaBlocked(form)}
+                                    checked={!!form.is_imala_blocked}
                                     onChange={(e) => setForm({ ...form, is_imala_blocked: e.target.checked })}
                                 />
                                 <span className="text-xs font-semibold text-black uppercase tracking-wider group-hover:text-[#1034A6] transition-colors">
@@ -286,7 +285,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                                 </span>
                             </label>
                             <p className="text-[9px] text-black/40 mt-1 leading-tight w-full">
-                                Applies 'a' instead of 'ie' to verb suffixes. Auto-checks if 'a-a' is used.
+                                Applies 'a' instead of 'ie' to verb suffixes when manually enabled.
                             </p>
                         </div>
                     </div>

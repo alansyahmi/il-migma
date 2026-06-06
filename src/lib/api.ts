@@ -78,6 +78,7 @@ export async function apiSearch(
     opts: {
         pos?: string;
         type?: string;
+        weak_class?: string;
         noun_type?: string;
         limit?: number;
         offset?: number;
@@ -121,6 +122,7 @@ export async function apiSearch(
     if (q) params.set('q', q);
     if (opts.pos) params.set('pos', opts.pos);
     if (opts.type) params.set('type', opts.type);
+    if (opts.weak_class) params.set('weak_class', opts.weak_class);
     if (opts.noun_type) params.set('noun_type', opts.noun_type);
     if (opts.limit !== undefined) params.set('limit', String(opts.limit));
     if (opts.offset !== undefined) params.set('offset', String(opts.offset));

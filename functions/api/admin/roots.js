@@ -4,6 +4,7 @@
  */
 
 import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
+import { ensureRootCompatibilityColumns } from '../../lib/rootSchema.js';
 import { normalizeRootEtymologyValue } from './etymology.js';
 
 const now = () => new Date().toISOString();
@@ -52,6 +53,7 @@ export async function onRequestGet({ request, env }) {
         const url = new URL(request.url);
         const q = url.searchParams.get('q')?.trim() ?? '';
         const client = getDbClient(env);
+        await ensureRootCompatibilityColumns(client);
 
         let sql = `SELECT * FROM roots`;
         const args = [];
@@ -77,6 +79,7 @@ export async function onRequestPost({ request, env }) {
         if (!consonants) return json({ error: 'consonants required' }, 400);
 
         const client = getDbClient(env);
+        await ensureRootCompatibilityColumns(client);
         const force = body.force === true;
 
         if (!force) {

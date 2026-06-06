@@ -107,8 +107,10 @@ function looksLikeFormIIFinalWeak(source: VerbClassificationSource): boolean {
     return (finalGhainRoot && finalWeakSurface) || hasFinalWeakTag(source);
 }
 
-function looksLikeFormIStrongHybrid(source: VerbClassificationSource): boolean {
-    if (getVerbForm(source) !== 'I') return false;
+export function looksLikeStrongHybridVerb(source: VerbClassificationSource): boolean {
+    const verbForm = getVerbForm(source);
+    const supportedForms = new Set(['I', 'II', 'III', 'V', 'VI', 'VII', 'XB']);
+    if (!supportedForms.has(verbForm)) return false;
 
     const headword = normalizeText(source.headword);
     const rootConsonants = getRootConsonants(source);
@@ -146,9 +148,10 @@ export function resolveStemDefaults(stem?: { strength?: unknown; weak_class?: un
  *
  * Priority:
  * 1. Explicit entry-level classification
- * 2. Hybrid stem override -> weak defective quad Form I
- * 3. Root classification
- * 4. Conservative weak defective fallback
+ * 2. Auto-inference for blank legacy/imported rows
+ * 3. Hybrid stem override -> weak defective quad Form I
+ * 4. Root classification
+ * 5. Conservative weak defective fallback
  */
 export function resolveVerbClassification(source?: VerbClassificationSource | null): StemDefaultClassification {
     if (!source) {
@@ -160,26 +163,26 @@ export function resolveVerbClassification(source?: VerbClassificationSource | nu
 
     const explicitStrength = normalizeStrength(source.verb_class || source.verb_morphology?.class || source.verb_morphology?.verb_class);
     const explicitWeakClass = normalizeWeakClass(source.verb_weak_class || source.verb_morphology?.weak_class);
-    if (looksLikeFormIIFinalWeak(source)) {
+    if (explicitStrength) {
         return {
-            strength: 'weak',
-            weak_class: 'defective',
+            strength: explicitStrength,
+            weak_class: explicitStrength === 'weak'
+                ? (explicitWeakClass || 'defective')
+                : null,
         };
     }
 
-    if (looksLikeFormIStrongHybrid(source)) {
+    if (looksLikeStrongHybridVerb(source)) {
         return {
             strength: 'strong-hybrid',
             weak_class: explicitWeakClass,
         };
     }
 
-    if (explicitStrength) {
+    if (looksLikeFormIIFinalWeak(source)) {
         return {
-            strength: explicitStrength,
-            weak_class: explicitStrength === 'weak'
-                ? (explicitWeakClass || 'defective')
-                : explicitWeakClass,
+            strength: 'weak',
+            weak_class: 'defective',
         };
     }
 

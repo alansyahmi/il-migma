@@ -62,6 +62,7 @@ const run = () => {
         related_entries: [],
     });
     assertEq(JSON.parse(rootPayload.etymology), normalizedRoot, 'root payload should persist the normalized four-field chain');
+    assertEq(rootPayload.is_imala_blocked, false, 'root payload should preserve an explicit unblocked imala flag even for a-a roots');
 
     const stemSource = [{
         relationship: 'From',

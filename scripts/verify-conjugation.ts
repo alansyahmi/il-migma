@@ -239,6 +239,20 @@ const temmekFormII = generateConjugation({
 });
 assertEq(buildPerfectForm(temmekFormII.rows[3].perfect, temmekFormII.rows[3].perfect_neg ?? temmekFormII.rows[3].perfect, false, 1, null, 'e-e', temmekFormII.rows[3].stems, temmekFormII.blocksImala || false, 'II'), 'temmitek', 'Form II 3fs perfect DO 2s should use attached -it stem');
 
+const nesseFormII = generateConjugation({
+    root: 'n-s-y',
+    form: 'II',
+    strength: 'weak',
+    weakClass: 'defective',
+    vowelSetPerfect: 'e-e',
+    vowelSetImperfect: 'e-e',
+    vowelSetImperative: 'e-e',
+    isImalaBlocked: false,
+});
+assertEq(nesseFormII.imperative_sg, 'nesse', 'Form II defective singular imperative should keep the doubled stem');
+assertEq(buildVerbForm(nesseFormII.imperative_sg, false, 1, null, 'e-e', nesseFormII.imperative_sg_stems, nesseFormII.blocksImala || false, 'II'), 'nessik', 'Form II defective suffixed singular imperative should not fall back to Form I stem');
+assertEq(buildVerbForm(nesseFormII.imperative_sg, false, 5, null, 'e-e', nesseFormII.imperative_sg_stems, nesseFormII.blocksImala || false, 'II'), 'nessikom', 'Form II defective suffixed singular imperative should keep the doubled stem before -kom');
+
 const formVDefective = generateConjugation({
     root: 'n-s-y',
     form: 'V',
@@ -250,12 +264,198 @@ const formVDefective = generateConjugation({
     isImalaBlocked: false,
 });
 assertEq(formVDefective.imperative_sg, 'tnesse', 'Form V defective singular imperative should keep the derived t- shape');
-assertEq(buildVerbForm(formVDefective.imperative_sg, false, 5, null, 'e-e', formVDefective.imperative_sg_stems, formVDefective.blocksImala || false, 'V'), 'tnessekom', 'Form V defective suffixed singular imperative should not fall back to Form II stem');
+assertEq(buildVerbForm(formVDefective.imperative_sg, false, 5, null, 'e-e', formVDefective.imperative_sg_stems, formVDefective.blocksImala || false, 'V'), 'tnessikom', 'Form V defective suffixed singular imperative should not fall back to Form II stem');
 assertEq(buildVerbForm(strongQuad.rows[2].imperfect, false, 1, null, 'i-a', strongQuad.rows[2].stems, strongQuad.blocksImala || false, 'I'), 'jqartsek', 'strong quadriliteral clitic imperfect DO 3ms');
 assertEq(buildVerbForm(strongQuad.rows[2].imperfect, false, null, 3, 'i-a', strongQuad.rows[2].stems, strongQuad.blocksImala || false, 'I'), 'jqartsilha', 'strong quadriliteral clitic imperfect IO 3ms');
 assertEq(buildVerbForm(strongQuad.rows[2].imperfect, true, null, 3, 'i-a', strongQuad.rows[2].stems, strongQuad.blocksImala || false, 'I'), 'ma jqartsilhiex', 'strong quadriliteral negative clitic imperfect IO 3ms');
 assertEq(buildVerbForm(strongQuad.imperative_sg, false, 1, null, 'a-a', strongQuad.imperative_sg_stems, strongQuad.blocksImala || false, 'I'), 'qartsek', 'strong quadriliteral clitic imperative DO');
 assertEq(buildVerbForm(strongQuad.imperative_sg, false, null, 3, 'a-a', strongQuad.imperative_sg_stems, strongQuad.blocksImala || false, 'I'), 'qartsilha', 'strong quadriliteral clitic imperative IO');
+
+const finalGħFormI = generateConjugation({
+    root: 'r-f-għ',
+    form: 'I',
+    strength: 'strong-hybrid',
+    vowelSetPerfect: 'e-a',
+    vowelSetImperfect: 'e-a',
+    vowelSetImperative: 'i-a',
+    isImalaBlocked: true,
+});
+assertEq(finalGħFormI.rows[2].imperfect, "jerfa'", "Form I final-għ baseline should keep apostrophe in unsuffixed imperfect");
+assertEq(buildVerbForm(finalGħFormI.rows[2].imperfect, false, 3, null, 'e-a', finalGħFormI.rows[2].stems, finalGħFormI.blocksImala || false, 'I'), 'jerfagħha', 'Form I final-għ baseline should use underlying għ before -ha');
+assertEq(buildVerbForm(finalGħFormI.rows[2].imperfect, false, 1, null, 'e-a', finalGħFormI.rows[2].stems, finalGħFormI.blocksImala || false, 'I'), 'jerfgħek', 'Form I final-għ baseline should use syncopated għ before -ek');
+assertEq(buildVerbForm(finalGħFormI.imperative_sg, false, 3, null, 'i-a', finalGħFormI.imperative_sg_stems, finalGħFormI.blocksImala || false, 'I'), 'irfagħha', 'Form I final-għ baseline imperative should use underlying għ before -ha');
+
+const finalGħFormIIHybrid = generateConjugation({
+    root: 'r-b-għ',
+    form: 'II',
+    strength: 'strong-hybrid',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'a-a',
+    vowelSetImperative: 'a-a',
+    isImalaBlocked: true,
+});
+assertEq(finalGħFormIIHybrid.rows[2].imperfect, "jrabba'", "Form II strong-hybrid should keep apostrophe in unsuffixed imperfect");
+assertEq(finalGħFormIIHybrid.rows[2].perfect, "rabba'", "Form II strong-hybrid should keep apostrophe in unsuffixed perfect");
+assertEq(buildVerbForm(finalGħFormIIHybrid.rows[2].imperfect, false, 3, null, 'a-a', finalGħFormIIHybrid.rows[2].stems, finalGħFormIIHybrid.blocksImala || false, 'II'), 'jrabbagħha', 'Form II strong-hybrid imperfect should use underlying għ before -ha');
+assertEq(buildVerbForm(finalGħFormIIHybrid.rows[2].imperfect, false, 1, null, 'a-a', finalGħFormIIHybrid.rows[2].stems, finalGħFormIIHybrid.blocksImala || false, 'II'), 'jrabbgħek', 'Form II strong-hybrid imperfect should use syncopated għ before -ek');
+assertEq(buildPerfectForm(finalGħFormIIHybrid.rows[2].perfect, finalGħFormIIHybrid.rows[2].perfect_neg ?? finalGħFormIIHybrid.rows[2].perfect, false, 3, null, 'a-a', finalGħFormIIHybrid.rows[2].stems, finalGħFormIIHybrid.blocksImala || false, 'II'), 'rabbagħha', 'Form II strong-hybrid perfect should use underlying għ before -ha');
+assertEq(buildPerfectForm(finalGħFormIIHybrid.rows[2].perfect, finalGħFormIIHybrid.rows[2].perfect_neg ?? finalGħFormIIHybrid.rows[2].perfect, false, 1, null, 'a-a', finalGħFormIIHybrid.rows[2].stems, finalGħFormIIHybrid.blocksImala || false, 'II'), 'rabbgħek', 'Form II strong-hybrid perfect should use syncopated għ before -ek');
+assertEq(buildVerbForm(finalGħFormIIHybrid.imperative_sg, false, 3, null, 'a-a', finalGħFormIIHybrid.imperative_sg_stems, finalGħFormIIHybrid.blocksImala || false, 'II'), 'rabbagħha', 'Form II strong-hybrid imperative should use underlying għ before -ha');
+assertEq(buildVerbForm(finalGħFormIIHybrid.imperative_sg, false, 1, null, 'a-a', finalGħFormIIHybrid.imperative_sg_stems, finalGħFormIIHybrid.blocksImala || false, 'II'), 'rabbgħek', 'Form II strong-hybrid imperative should use syncopated għ before -ek');
+
+const finalGħFormIIIHybrid = generateConjugation({
+    root: 'q-t-għ',
+    form: 'III',
+    strength: 'strong-hybrid',
+    vowelSetPerfect: 'ie-a',
+    vowelSetImperfect: 'ie-a',
+    vowelSetImperative: 'ie-a',
+    isImalaBlocked: true,
+});
+assertEq(finalGħFormIIIHybrid.rows[2].imperfect, "jqieta'", "Form III strong-hybrid should keep apostrophe in unsuffixed imperfect");
+assertEq(finalGħFormIIIHybrid.rows[2].perfect, "qieta'", "Form III strong-hybrid should keep apostrophe in unsuffixed perfect");
+assertEq(buildVerbForm(finalGħFormIIIHybrid.rows[2].imperfect, false, 3, null, 'ie-a', finalGħFormIIIHybrid.rows[2].stems, finalGħFormIIIHybrid.blocksImala || false, 'III'), 'jqetagħha', 'Form III strong-hybrid imperfect should use underlying għ before -ha and keep Form III ie-shortening');
+assertEq(buildVerbForm(finalGħFormIIIHybrid.rows[2].imperfect, false, 1, null, 'ie-a', finalGħFormIIIHybrid.rows[2].stems, finalGħFormIIIHybrid.blocksImala || false, 'III'), 'jqetgħek', 'Form III strong-hybrid imperfect should use syncopated għ before -ek and keep Form III ie-shortening');
+assertEq(buildPerfectForm(finalGħFormIIIHybrid.rows[2].perfect, finalGħFormIIIHybrid.rows[2].perfect_neg ?? finalGħFormIIIHybrid.rows[2].perfect, false, 3, null, 'ie-a', finalGħFormIIIHybrid.rows[2].stems, finalGħFormIIIHybrid.blocksImala || false, 'III'), 'qetagħha', 'Form III strong-hybrid perfect should use underlying għ before -ha and keep Form III ie-shortening');
+assertEq(buildPerfectForm(finalGħFormIIIHybrid.rows[2].perfect, finalGħFormIIIHybrid.rows[2].perfect_neg ?? finalGħFormIIIHybrid.rows[2].perfect, false, 1, null, 'ie-a', finalGħFormIIIHybrid.rows[2].stems, finalGħFormIIIHybrid.blocksImala || false, 'III'), 'qetgħek', 'Form III strong-hybrid perfect should use syncopated għ before -ek and keep Form III ie-shortening');
+assertEq(buildVerbForm(finalGħFormIIIHybrid.imperative_sg, false, 3, null, 'ie-a', finalGħFormIIIHybrid.imperative_sg_stems, finalGħFormIIIHybrid.blocksImala || false, 'III'), 'qetagħha', 'Form III strong-hybrid imperative should use underlying għ before -ha and keep Form III ie-shortening');
+assertEq(buildVerbForm(finalGħFormIIIHybrid.imperative_sg, false, 1, null, 'ie-a', finalGħFormIIIHybrid.imperative_sg_stems, finalGħFormIIIHybrid.blocksImala || false, 'III'), 'qetgħek', 'Form III strong-hybrid imperative should use syncopated għ before -ek and keep Form III ie-shortening');
+
+const finalGħFormVHybrid = generateConjugation({
+    root: 'r-b-għ',
+    form: 'V',
+    strength: 'strong-hybrid',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'a-a',
+    vowelSetImperative: 'a-a',
+    isImalaBlocked: true,
+});
+assertEq(finalGħFormVHybrid.rows[2].perfect, "trabba'", "Form V strong-hybrid should derive visible perfect from Form II hybrid");
+assertEq(finalGħFormVHybrid.rows[2].imperfect, "jitrabba'", "Form V strong-hybrid should derive visible imperfect from Form II hybrid");
+assertEq(finalGħFormVHybrid.imperative_sg, "trabba'", "Form V strong-hybrid should derive visible imperative from Form II hybrid");
+assertEq(buildVerbForm(finalGħFormVHybrid.rows[2].imperfect, false, 3, null, 'a-a', finalGħFormVHybrid.rows[2].stems, finalGħFormVHybrid.blocksImala || false, 'V'), 'jitrabbagħha', 'Form V strong-hybrid imperfect should keep underlying għ before -ha');
+assertEq(buildVerbForm(finalGħFormVHybrid.rows[2].imperfect, false, 1, null, 'a-a', finalGħFormVHybrid.rows[2].stems, finalGħFormVHybrid.blocksImala || false, 'V'), 'jitrabbgħek', 'Form V strong-hybrid imperfect should keep syncopated għ before -ek');
+assertEq(buildPerfectForm(finalGħFormVHybrid.rows[2].perfect, finalGħFormVHybrid.rows[2].perfect_neg ?? finalGħFormVHybrid.rows[2].perfect, false, 3, null, 'a-a', finalGħFormVHybrid.rows[2].stems, finalGħFormVHybrid.blocksImala || false, 'V'), 'trabbagħha', 'Form V strong-hybrid perfect should keep underlying għ before -ha');
+
+const finalGħFormVIHybrid = generateConjugation({
+    root: 'q-t-għ',
+    form: 'VI',
+    strength: 'strong-hybrid',
+    vowelSetPerfect: 'ie-a',
+    vowelSetImperfect: 'ie-a',
+    vowelSetImperative: 'ie-a',
+    isImalaBlocked: true,
+});
+assertEq(finalGħFormVIHybrid.rows[2].perfect, "tqieta'", "Form VI strong-hybrid should derive visible perfect from Form III hybrid");
+assertEq(finalGħFormVIHybrid.rows[2].imperfect, "jitqieta'", "Form VI strong-hybrid should derive visible imperfect from Form III hybrid");
+assertEq(finalGħFormVIHybrid.imperative_sg, "tqieta'", "Form VI strong-hybrid should derive visible imperative from Form III hybrid");
+assertEq(buildVerbForm(finalGħFormVIHybrid.rows[2].imperfect, false, 3, null, 'ie-a', finalGħFormVIHybrid.rows[2].stems, finalGħFormVIHybrid.blocksImala || false, 'VI'), 'jitqetagħha', 'Form VI strong-hybrid imperfect should keep underlying għ before -ha and Form VI ie-shortening');
+assertEq(buildVerbForm(finalGħFormVIHybrid.rows[2].imperfect, false, 1, null, 'ie-a', finalGħFormVIHybrid.rows[2].stems, finalGħFormVIHybrid.blocksImala || false, 'VI'), 'jitqetgħek', 'Form VI strong-hybrid imperfect should keep syncopated għ before -ek and Form VI ie-shortening');
+assertEq(buildPerfectForm(finalGħFormVIHybrid.rows[2].perfect, finalGħFormVIHybrid.rows[2].perfect_neg ?? finalGħFormVIHybrid.rows[2].perfect, false, 3, null, 'ie-a', finalGħFormVIHybrid.rows[2].stems, finalGħFormVIHybrid.blocksImala || false, 'VI'), 'tqetagħha', 'Form VI strong-hybrid perfect should keep underlying għ before -ha and Form VI ie-shortening');
+
+const finalGħFormVIIHybrid = generateConjugation({
+    root: 'r-f-għ',
+    form: 'VII',
+    strength: 'strong-hybrid',
+    vowelSetPerfect: 'e-a',
+    vowelSetImperfect: 'e-a',
+    vowelSetImperative: 'i-a',
+    isImalaBlocked: true,
+});
+assertEq(finalGħFormVIIHybrid.rows[2].perfect, 'nrefa', "Form VII strong-hybrid should derive visible perfect from Form I hybrid");
+assertEq(finalGħFormVIIHybrid.rows[2].imperfect, "jinrefa'", "Form VII strong-hybrid should derive visible imperfect from Form I hybrid");
+assertEq(finalGħFormVIIHybrid.imperative_sg, "nirfa'", "Form VII strong-hybrid should derive visible imperative from Form I hybrid");
+assertEq(buildVerbForm(finalGħFormVIIHybrid.rows[2].imperfect, false, 3, null, 'e-a', finalGħFormVIIHybrid.rows[2].stems, finalGħFormVIIHybrid.blocksImala || false, 'VII'), 'jinrefagħha', 'Form VII strong-hybrid imperfect should keep underlying għ before -ha');
+assertEq(buildVerbForm(finalGħFormVIIHybrid.rows[2].imperfect, false, 1, null, 'e-a', finalGħFormVIIHybrid.rows[2].stems, finalGħFormVIIHybrid.blocksImala || false, 'VII'), 'jinrefgħek', 'Form VII strong-hybrid imperfect should keep syncopated għ before -ek');
+assertEq(buildPerfectForm(finalGħFormVIIHybrid.rows[2].perfect, finalGħFormVIIHybrid.rows[2].perfect_neg ?? finalGħFormVIIHybrid.rows[2].perfect, false, 3, null, 'e-a', finalGħFormVIIHybrid.rows[2].stems, finalGħFormVIIHybrid.blocksImala || false, 'VII'), 'nrefagħha', 'Form VII strong-hybrid perfect should keep underlying għ before -ha');
+
+const finalGħFormXbHybrid = generateConjugation({
+    root: 'r-b-għ',
+    form: 'Xb',
+    strength: 'strong-hybrid',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'a-a',
+    vowelSetImperative: 'a-a',
+    isImalaBlocked: true,
+});
+assertEq(finalGħFormXbHybrid.rows[2].perfect, "strabba'", "Form Xb strong-hybrid should derive visible perfect from Form II hybrid");
+assertEq(finalGħFormXbHybrid.rows[2].imperfect, "jistrabba'", "Form Xb strong-hybrid should derive visible imperfect from Form II hybrid");
+assertEq(finalGħFormXbHybrid.imperative_sg, "strabba'", "Form Xb strong-hybrid should derive visible imperative from Form II hybrid");
+assertEq(buildVerbForm(finalGħFormXbHybrid.rows[2].imperfect, false, 3, null, 'a-a', finalGħFormXbHybrid.rows[2].stems, finalGħFormXbHybrid.blocksImala || false, 'Xb'), 'jistrabbagħha', 'Form Xb strong-hybrid imperfect should keep underlying għ before -ha');
+assertEq(buildVerbForm(finalGħFormXbHybrid.rows[2].imperfect, false, 1, null, 'a-a', finalGħFormXbHybrid.rows[2].stems, finalGħFormXbHybrid.blocksImala || false, 'Xb'), 'jistrabbgħek', 'Form Xb strong-hybrid imperfect should keep syncopated għ before -ek');
+assertEq(buildPerfectForm(finalGħFormXbHybrid.rows[2].perfect, finalGħFormXbHybrid.rows[2].perfect_neg ?? finalGħFormXbHybrid.rows[2].perfect, false, 3, null, 'a-a', finalGħFormXbHybrid.rows[2].stems, finalGħFormXbHybrid.blocksImala || false, 'Xb'), 'strabbagħha', 'Form Xb strong-hybrid perfect should keep underlying għ before -ha');
+
+const formVAssimilatedT = generateConjugation({
+    root: 's-l-m',
+    form: 'V',
+    strength: 'strong',
+    vowelSetPerfect: 'e-e',
+    vowelSetImperfect: 'i-e',
+    vowelSetImperative: 'e-e',
+    isImalaBlocked: false,
+});
+assertEq(formVAssimilatedT.rows[0].imperfect, 'nissillem', 'Form V derivational t should assimilate after n-i');
+assertEq(formVAssimilatedT.rows[1].imperfect, 'tissillem', 'Form V derivational t should assimilate after t-i');
+assertEq(formVAssimilatedT.rows[2].imperfect, 'jissillem', 'Form V derivational t should assimilate after j-i');
+assertEq(formVAssimilatedT.rows[2].perfect, 'ssellem', 'Form V 3ms perfect should assimilate derivational t');
+assertEq(formVAssimilatedT.imperative_sg, 'ssellem', 'Form V singular imperative should assimilate derivational t');
+
+const formVIAssimilatedT = generateConjugation({
+    root: 's-l-m',
+    form: 'VI',
+    strength: 'strong',
+    vowelSetPerfect: 'e-e',
+    vowelSetImperfect: 'i-e',
+    vowelSetImperative: 'e-e',
+    isImalaBlocked: false,
+});
+assertEq(formVIAssimilatedT.rows[0].imperfect, 'nissilem', 'Form VI derivational t should assimilate after n-i');
+assertEq(formVIAssimilatedT.rows[1].imperfect, 'tissilem', 'Form VI derivational t should assimilate after t-i');
+assertEq(formVIAssimilatedT.rows[2].imperfect, 'jissilem', 'Form VI derivational t should assimilate after j-i');
+assertEq(formVIAssimilatedT.rows[2].perfect, 'sselem', 'Form VI 3ms perfect should assimilate derivational t');
+assertEq(formVIAssimilatedT.imperative_sg, 'sselem', 'Form VI singular imperative should assimilate derivational t');
+
+const formIVHareg = generateConjugation({
+    root: 'ħ-r-ġ',
+    form: 'IV',
+    strength: 'strong',
+    vowelSetPerfect: 'o-o',
+    vowelSetImperfect: 'o-o',
+    vowelSetImperative: 'o-o',
+    isImalaBlocked: false,
+});
+assertEq(formIVHareg.rows[2].imperfect, 'joħroġ', 'Form IV sonorant C2 should keep singular visible imperfect');
+assertEq(formIVHareg.rows[4].imperfect, 'noħorġu', 'Form IV sonorant C2 1p imperfect should metathesize the theme vowel');
+assertEq(formIVHareg.rows[5].imperfect, 'toħorġu', 'Form IV sonorant C2 2p imperfect should metathesize the theme vowel');
+assertEq(formIVHareg.rows[6].imperfect, 'joħorġu', 'Form IV sonorant C2 3p imperfect should metathesize the theme vowel');
+assertEq(formIVHareg.imperative_sg, 'oħroġ', 'Form IV sonorant C2 should keep singular visible imperative');
+assertEq(formIVHareg.imperative_pl, 'oħorġu', 'Form IV sonorant C2 plural imperative should metathesize the theme vowel');
+assertEq(formIVHareg.rows[2].stems.syncopated, 'joħorġ', 'Form IV sonorant C2 3ms syncopated stem should not expose raw oħrġ');
+assertEq(formIVHareg.rows[6].stems.syncopated, 'joħorġu', 'Form IV sonorant C2 3p syncopated stem should not expose raw oħrġ');
+assertEq(formIVHareg.imperative_sg_stems?.syncopated, 'oħorġ', 'Form IV sonorant C2 imperative singular syncopated stem should not expose raw oħrġ');
+assertEq(formIVHareg.imperative_pl_stems?.syncopated, 'oħorġu', 'Form IV sonorant C2 imperative plural syncopated stem should not expose raw oħrġ');
+assertEq(buildVerbForm(formIVHareg.rows[2].imperfect, false, 1, null, 'o-o', formIVHareg.rows[2].stems, formIVHareg.blocksImala || false, 'IV'), 'joħorġok', 'Form IV sonorant C2 suffixed imperfect should use metathesized syncopated stem');
+assertEq(buildVerbForm(formIVHareg.imperative_sg, false, 1, null, 'o-o', formIVHareg.imperative_sg_stems, formIVHareg.blocksImala || false, 'IV'), 'oħorġok', 'Form IV sonorant C2 suffixed imperative should use metathesized syncopated stem');
+assertEq(formIVHareg.rows[2].perfect, 'oħroġ', 'Form IV sonorant C2 should keep singular visible perfect');
+assertEq(formIVHareg.rows[3].perfect, 'oħorġet', 'Form IV sonorant C2 3fs perfect should metathesize the syncopated stem');
+assertEq(formIVHareg.rows[6].perfect, 'oħorġu', 'Form IV sonorant C2 3p perfect should metathesize the syncopated stem');
+assertEq(formIVHareg.rows[2].stems.perfectSyncopated, 'oħorġ', 'Form IV sonorant C2 3ms perfect syncopated stem should not expose raw oħrġ');
+assertEq(formIVHareg.rows[3].stems.perfectAttached, 'oħorġit', 'Form IV sonorant C2 3fs perfect attached stem should not expose raw oħrġ');
+assertEq(buildPerfectForm(formIVHareg.rows[2].perfect, formIVHareg.rows[2].perfect_neg ?? formIVHareg.rows[2].perfect, false, 2, null, 'o-o', formIVHareg.rows[2].stems, formIVHareg.blocksImala || false, 'IV'), 'oħorġu', 'Form IV sonorant C2 3ms perfect with DO -u should use metathesized syncopated stem');
+assertEq(buildPerfectForm(formIVHareg.rows[3].perfect, formIVHareg.rows[3].perfect_neg ?? formIVHareg.rows[3].perfect, false, 2, null, 'o-o', formIVHareg.rows[3].stems, formIVHareg.blocksImala || false, 'IV'), 'oħorġitu', 'Form IV sonorant C2 3fs perfect with DO -u should use metathesized attached stem');
+assertEq(buildPerfectForm(formIVHareg.rows[6].perfect, formIVHareg.rows[6].perfect_neg ?? formIVHareg.rows[6].perfect, false, 2, null, 'o-o', formIVHareg.rows[6].stems, formIVHareg.blocksImala || false, 'IV'), 'oħorġuh', 'Form IV sonorant C2 3p perfect with DO -u should use metathesized plural stem');
+
+const formIVControl = generateConjugation({
+    root: 'k-t-b',
+    form: 'IV',
+    strength: 'strong',
+    vowelSetPerfect: 'i-e',
+    vowelSetImperfect: 'i-e',
+    vowelSetImperative: 'i-e',
+    isImalaBlocked: false,
+});
+assertEq(formIVControl.rows[6].imperfect, 'jiktbu', 'Form IV non-sonorant C2 control should keep existing syncopated plural');
+assertEq(formIVControl.imperative_pl, 'iktbu', 'Form IV non-sonorant C2 control should keep existing syncopated imperative plural');
 
 const strongQuadGharghar = generateConjugation({
     root: 'għ-r-għ-r',
@@ -444,5 +644,19 @@ const triliteralForms = generateRootForms('k-t-b', 'e-e', 'i-e', 'strong');
 assertEq(triliteralForms.length, 11, 'triliteral regression should still return 11 forms');
 assertEq(triliteralForms[0].form, 'I', 'triliteral regression first form should be I');
 assertEq(triliteralForms[triliteralForms.length - 1].form, 'Xb', 'triliteral regression last form should be Xb');
+
+const slemRootForms = generateRootForms('s-l-m', 'e-e', 'i-e', 'strong');
+const slemFormV = slemRootForms.find((form) => form.form === 'V');
+const slemFormVI = slemRootForms.find((form) => form.form === 'VI');
+assertEq(slemFormV?.perfect, 'ssellem', 'generated Form V root-form perfect should assimilate derivational t');
+assertEq(slemFormV?.imperfect, 'jissellem', 'generated Form V root-form imperfect should assimilate derivational t');
+assertEq(slemFormV?.imperative, 'ssellem', 'generated Form V root-form imperative should assimilate derivational t');
+assertEq(slemFormV?.passiveParticiple, 'missellem', 'generated Form V passive participle should assimilate derivational t');
+assertEq(slemFormV?.verbalNoun, 'ssellim', 'generated Form V verbal noun should assimilate derivational t');
+assertEq(slemFormVI?.perfect, 'ssielem', 'generated Form VI root-form perfect should assimilate derivational t');
+assertEq(slemFormVI?.imperfect, 'jissielem', 'generated Form VI root-form imperfect should assimilate derivational t');
+assertEq(slemFormVI?.imperative, 'ssielem', 'generated Form VI root-form imperative should assimilate derivational t');
+assertEq(slemFormVI?.passiveParticiple, 'missielem', 'generated Form VI passive participle should assimilate derivational t');
+assertEq(slemFormVI?.verbalNoun, 'ssielim', 'generated Form VI verbal noun should assimilate derivational t');
 
 console.log('quadriliteral root-form tests passed');

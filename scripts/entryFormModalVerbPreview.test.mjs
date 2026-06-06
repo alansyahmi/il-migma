@@ -70,6 +70,72 @@ const run = () => {
     assert.equal(blankVowelPreview.vowel_set_impf, 'i-a', 'blank Form III final-w preview should expose the root-specific imperfect vowel set');
     assert.equal(blankVowelPreview.perfective_3sgm, 'bieda', 'blank Form III preview should still use conjugationEngine for 3ms perfect');
     assert.equal(blankVowelPreview.imperfective_3sgm, 'jbiedi', 'blank Form III preview should still use conjugationEngine for 3ms imperfect');
+
+    const rootDerivedBlankVowelPreview = buildEntryFormVerbMorphologyPreview({
+        pos: 'verb',
+        headword: 'bieda',
+        _rootConsonants: 'b-d-w',
+        _rootVowelSetPerf: 'a-e',
+        _formLabel: 'III',
+        verb_class: 'weak',
+        _weakClass: 'defective',
+        verb_vowel_perf: '',
+        verb_vowel_impf: '',
+        verb_vowel_impv: '',
+    });
+
+    assert.ok(rootDerivedBlankVowelPreview, 'modal preview should generate from root-derived vowel sets when verb fields are blank');
+    assert.equal(rootDerivedBlankVowelPreview.vowel_set_perf, 'a-e', 'blank non-Form-I preview should inherit the root perfect vowel set');
+    assert.equal(rootDerivedBlankVowelPreview.vowel_set_impf, 'a-i', 'blank weak defective Form III preview should derive final i for imperfect');
+    assert.equal(rootDerivedBlankVowelPreview.vowel_set_impv, 'a-i', 'blank weak defective Form III preview should derive final i for imperative');
+
+    const allAaImalaPreview = buildEntryFormVerbMorphologyPreview({
+        pos: 'verb',
+        headword: 'qara',
+        _rootConsonants: 'q-r-a',
+        _formLabel: 'I',
+        verb_class: 'weak',
+        _weakClass: 'defective',
+        verb_vowel_perf: 'a-a',
+        verb_vowel_impf: 'a-a',
+        verb_vowel_impv: 'a-a',
+        is_imala_blocked: true,
+    });
+
+    assert.ok(allAaImalaPreview, 'modal preview should generate with entry-specific imala override');
+    assert.equal(allAaImalaPreview.isImalaBlocked, true, 'modal preview should expose entry-specific blocked imala');
+
+    const qietaPreview = buildEntryFormVerbMorphologyPreview({
+        pos: 'verb',
+        headword: "qieta'",
+        _rootConsonants: 'q-t-għ',
+        _formLabel: 'III',
+        verb_class: '',
+        verb_vowel_perf: 'ie-a',
+        verb_vowel_impf: 'ie-a',
+        verb_vowel_impv: 'ie-a',
+    });
+
+    assert.ok(qietaPreview, "modal preview should generate for Form III strong-hybrid verbs");
+    assert.equal(qietaPreview.vowel_set_perf, 'ie-a', 'Form III strong-hybrid preview should keep the perfect vowel set');
+    assert.equal(qietaPreview.perfective_3sgm, "qieta'", "Form III strong-hybrid preview should use the engine's 3ms perfect");
+    assert.equal(qietaPreview.imperfective_3sgm, "jqieta'", "Form III strong-hybrid preview should use the engine's 3ms imperfect");
+
+    const rabbaPreview = buildEntryFormVerbMorphologyPreview({
+        pos: 'verb',
+        headword: "rabba'",
+        _rootConsonants: 'r-b-għ',
+        _formLabel: 'II',
+        verb_class: '',
+        verb_vowel_perf: 'a-a',
+        verb_vowel_impf: 'a-i',
+        verb_vowel_impv: 'a-i',
+    });
+
+    assert.ok(rabbaPreview, 'modal preview should generate for Form II final-għ verbs');
+    assert.equal(rabbaPreview.vowel_set_perf, 'a-a', 'Form II final-għ preview should keep the perfect vowel set');
+    assert.equal(rabbaPreview.perfective_3sgm, "rabba'", "Form II final-għ preview should use the engine's 3ms perfect");
+    assert.equal(rabbaPreview.imperfective_3sgm, "jrabba'", "Form II final-għ preview should use the engine's 3ms imperfect");
 };
 
 run();

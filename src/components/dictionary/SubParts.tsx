@@ -68,6 +68,9 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
         const strengthSearchPath = `/advanced-search?pos=verb&type=${encodeURIComponent(strengthRaw)}`;
         const weakClassRaw = classification.weak_class;
         const weakClassLabel = weakClassRaw ? term(weakClassRaw) : null;
+        const weakClassSearchPath = weakClassRaw
+            ? `/advanced-search?pos=verb&type=weak&weak_class=${encodeURIComponent(weakClassRaw)}`
+            : '';
 
         const parts = [
             <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">{term(entry.pos || 'noun').toUpperCase()}</Link>,
@@ -77,7 +80,7 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
                 </Link>
             ) : null,
             strengthLabel ? <Link key="strength" to={strengthSearchPath} className="hover:underline">{strengthLabel.toUpperCase()}</Link> : null,
-            weakClassLabel ? <Link key="weak" to={`${basePath}?type=${weakClassRaw}`} className="hover:underline">{weakClassLabel.toUpperCase()}</Link> : null,
+            weakClassLabel ? <Link key="weak" to={weakClassSearchPath} className="hover:underline">{weakClassLabel.toUpperCase()}</Link> : null,
             ...(vm.root_tags ?? [])
                 .filter(tag => {
                     const upperTag = tag.toUpperCase();

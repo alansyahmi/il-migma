@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { generateConjugation } from '../src/lib/conjugationEngine.ts';
+import { buildVerbForm } from '../src/lib/suffixEngine.ts';
 import { buildSeedPack, ENGINE_VERB_BRANCH_FIXTURES } from './seed-test-pack.mjs';
 
 const EXPECTED_BRANCH_KEYS = [
@@ -45,6 +46,19 @@ const pad = (value) => String(value).padStart(2, '0');
 
 const assertSameSet = (actual, expected, message) => {
     assert.deepEqual([...actual].sort(), [...expected].sort(), message);
+};
+
+const assertPreservesImperativeMarker = (fixture, table, suffixForm, suffixLabel) => {
+    const imperative = table.imperative_sg || '';
+    if (imperative.startsWith('st')) {
+        assert.ok(suffixForm.startsWith('st'), `${fixture.branchKey} ${suffixLabel} imperative suffix should preserve st-`);
+    } else if (imperative.startsWith('t')) {
+        assert.ok(suffixForm.startsWith('t'), `${fixture.branchKey} ${suffixLabel} imperative suffix should preserve t-`);
+    } else if (imperative.startsWith('n')) {
+        assert.ok(suffixForm.startsWith('n'), `${fixture.branchKey} ${suffixLabel} imperative suffix should preserve n-`);
+    }
+
+    assert.ok(!suffixForm.startsWith('ji'), `${fixture.branchKey} ${suffixLabel} imperative suffix should not use an imperfect ji- stem`);
 };
 
 const run = () => {
@@ -104,6 +118,43 @@ const run = () => {
         const tags = parseJson(entry.tags);
         assert.ok(tags.includes('engine-branch'), `${fixture.branchKey} should be tagged as an engine branch fixture`);
         assert.ok(tags.includes(fixture.branchKey), `${fixture.branchKey} should be tagged with its branch key`);
+
+        const imperativeEk = buildVerbForm(
+            table.imperative_sg,
+            false,
+            1,
+            null,
+            fixture.vowelSetImperative,
+            table.imperative_sg_stems,
+            table.blocksImala || false,
+            fixture.form,
+        );
+        const imperativeKom = buildVerbForm(
+            table.imperative_sg,
+            false,
+            5,
+            null,
+            fixture.vowelSetImperative,
+            table.imperative_sg_stems,
+            table.blocksImala || false,
+            fixture.form,
+        );
+
+        assertPreservesImperativeMarker(fixture, table, imperativeEk, '-ek');
+        assertPreservesImperativeMarker(fixture, table, imperativeKom, '-kom');
+
+        if (fixture.branchKey === 'quadriliteral-form-ii-strong') {
+            assert.equal(imperativeEk, 'tbalnadek', 'quadriliteral Form II strong imperative -ek should not use the imperfect stem');
+            assert.equal(imperativeKom, 'tbalnadkom', 'quadriliteral Form II strong imperative -kom should not use the imperfect stem');
+        }
+        if (fixture.branchKey === 'quadriliteral-form-ii-weak-defective') {
+            assert.equal(imperativeEk, 'tħarbik', 'quadriliteral Form II defective imperative -ek should not use the imperfect stem');
+            assert.equal(imperativeKom, 'tħarbikom', 'quadriliteral Form II defective imperative -kom should not use the imperfect stem');
+        }
+        if (fixture.branchKey === 'form-xb-weak-defective') {
+            assert.equal(imperativeEk, 'stġarrik', 'Form Xb defective imperative -ek should preserve st-');
+            assert.equal(imperativeKom, 'stġarrikom', 'Form Xb defective imperative -kom should preserve st-');
+        }
     });
 };
 

@@ -285,6 +285,7 @@ export interface VerbMorphology {
     verbal_noun?: string;
     active_participle?: string;
     passive_participle?: string;
+    is_imala_blocked?: boolean | number | string | null;
     source_citation?: string;
     conjugation?: any;
     related_entries?: any[];

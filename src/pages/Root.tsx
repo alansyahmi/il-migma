@@ -10,7 +10,7 @@ import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
 import { RootFormModal } from '@/components/admin/RootFormModal';
 import { type RootFormData } from '@/lib/adminUtils';
-import { inferImalaBlocked } from '@/lib/imala';
+import { resolveImalaBlocked } from '@/lib/imala';
 import { adminUpdateRoot, adminDeleteEntry } from '@/lib/api';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
@@ -165,7 +165,8 @@ export function Root() {
         if (!rootObj) return { generatedTable: [], shownIds: new Set<string>() };
         const pvSet = rootObj.vowel_set_perf || vm?.vowel_set_perf || 'a-a';
         const ipvSet = rootObj.vowel_set_impf || vm?.vowel_set_impf || 'i-a';
-        const imalaBlocked = inferImalaBlocked({
+        const imalaBlocked = resolveImalaBlocked({
+            is_imala_blocked: rootObj.is_imala_blocked,
             consonants: rootObj.consonants,
             vowel_set_perf: pvSet,
             vowel_set_impf: ipvSet,

@@ -1,6 +1,6 @@
 
 import { generateConjugation, generateRootForms } from './conjugationEngine.ts';
-import { inferImalaBlocked } from './imala.ts';
+import { parseImalaBlockedOverride, resolveImalaBlocked } from './imala.ts';
 import { resolveVerbClassification } from './stemDefaults.ts';
 
 export const VERB_MORPHOLOGY_DB_FIELD_KEYS = [
@@ -16,7 +16,8 @@ export const VERB_MORPHOLOGY_DB_FIELD_KEYS = [
     'vowel_set_perf',
     'vowel_set_impf',
     'vowel_set_impv',
-    'type'
+    'type',
+    'is_imala_blocked'
 ];
 
 
@@ -42,7 +43,8 @@ export const VERB_MORPHOLOGY_LEGACY_FIELDS = {
     verb_vowel_perf: 'vowel_set_perf',
     verb_vowel_impf: 'vowel_set_impf',
     verb_vowel_impv: 'vowel_set_impv',
-    verb_type: 'type'
+    verb_type: 'type',
+    verb_is_imala_blocked: 'is_imala_blocked'
 };
 
 const VERB_MORPHOLOGY_DISPLAY_ALIAS_FIELDS = {
@@ -59,6 +61,7 @@ const VERB_MORPHOLOGY_DISPLAY_ALIAS_FIELDS = {
     vm_vowel_impf: 'vowel_set_impf',
     vm_vowel_impv: 'vowel_set_impv',
     vm_type: 'type',
+    vm_is_imala_blocked: 'is_imala_blocked',
     perfective_3sg_m: 'perfective_3sgm',
     imperfective_3sg_m: 'imperfective_3sgm',
     vowel_set_perfect: 'vowel_set_perf',
@@ -104,6 +107,14 @@ function getRootConsonantsForVerb(entry: any = {}): string {
     ) || '';
 }
 
+function firstImalaBlockedOverride(...values: unknown[]): boolean | undefined {
+    for (const value of values) {
+        const parsed = parseImalaBlockedOverride(value);
+        if (parsed !== undefined) return parsed;
+    }
+    return undefined;
+}
+
 export function resolveVerbGenerationInput(entry: any = {}, morphology: any = entry?.verb_morphology || {}) {
     const vm = morphology || {};
     const root = getRootConsonantsForVerb(entry);
@@ -134,7 +145,12 @@ export function resolveVerbGenerationInput(entry: any = {}, morphology: any = en
         vowelSetPerfect,
         vowelSetImperfect,
         vowelSetImperative,
-        isImalaBlocked: inferImalaBlocked({
+        isImalaBlocked: resolveImalaBlocked({
+            is_imala_blocked: firstImalaBlockedOverride(
+                vm.is_imala_blocked,
+                entry?.is_imala_blocked,
+                rootObj?.is_imala_blocked,
+            ),
             consonants: root,
             vowel_set_perf: rootObj?.vowel_set_perf || vowelSetPerfect,
             vowel_set_impf: rootObj?.vowel_set_impf || vowelSetImperfect,
@@ -152,7 +168,13 @@ export function buildVerbConjugationFromEngine(entry: any = {}, morphology: any 
 export function buildEntryFormVerbMorphologyPreview(form: any = {}) {
     const root = normalizeTextField(form._rootConsonants || form.root_consonants || '');
     const selectedForm = normalizeTextField(form._formLabel || form.verb_form || form.form || 'I') || 'I';
-    const vowelDefaults = getDefaultVerbVowelSets(selectedForm, form.verb_class, form._weakClass || form.verb_weak_class, root);
+    const vowelDefaults = deriveEntryFormVerbVowelSets(
+        selectedForm,
+        form.verb_class,
+        form._weakClass || form.verb_weak_class,
+        form._rootVowelSetPerf || form.root_vowel_set_perf || form.root_vowel_perf,
+        root,
+    );
     const vowelSetPerfect = normalizeTextField(form.verb_vowel_perf || form.vowel_set_perf || form.vowel_set_perfect || vowelDefaults.perfect);
     const vowelSetImperfect = normalizeTextField(form.verb_vowel_impf || form.vowel_set_impf || form.vowel_set_imperfect || vowelDefaults.imperfect);
     const vowelSetImperative = normalizeTextField(
@@ -174,7 +196,8 @@ export function buildEntryFormVerbMorphologyPreview(form: any = {}) {
         tags: form.tags,
     });
 
-    const isImalaBlocked = inferImalaBlocked({
+    const isImalaBlocked = resolveImalaBlocked({
+        is_imala_blocked: firstImalaBlockedOverride(form.is_imala_blocked),
         consonants: root,
         vowel_set_perf: vowelSetPerfect,
         vowel_set_impf: vowelSetImperfect,
@@ -217,6 +240,8 @@ export function buildEntryFormVerbMorphologyPreview(form: any = {}) {
             vowel_set_perf: vowelSetPerfect,
             vowel_set_impf: vowelSetImperfect,
             vowel_set_impv: vowelSetImperative || vowelSetImperfect,
+            isImalaBlocked,
+            is_imala_blocked: isImalaBlocked,
             imperative: conjugation.imperative_sg || derivedPreview?.imperative || '',
             perfective_3sg_m: perfect,
             imperfective_3sg_m: imperfect,
@@ -263,6 +288,49 @@ export function getDefaultVerbVowelSets(form: any, verbClass: any = '', weakClas
     }
 }
 
+export function deriveEntryFormVerbVowelSets(
+    form: any,
+    verbClass: any = '',
+    weakClass: any = '',
+    rootVowelSetPerf: any = '',
+    rootConsonants: any = '',
+) {
+    const fallback = getDefaultVerbVowelSets(form, verbClass, weakClass, rootConsonants);
+    const selectedForm = String(form || 'I').trim().toUpperCase();
+
+    if (selectedForm === 'I') return fallback;
+
+    const rootPerfect = normalizeTextField(rootVowelSetPerf);
+    if (typeof rootPerfect !== 'string') return fallback;
+
+    const parts = rootPerfect.split('-').map((part: string) => part.trim()).filter(Boolean);
+    if (parts.length !== 2) return fallback;
+
+    const cls = String(verbClass || '').trim().toLowerCase();
+    const weak = String(weakClass || '').trim().toLowerCase();
+    const isWeakDefective = (cls === 'weak' && weak === 'defective') || cls === 'defective';
+    const shouldUseDefectiveFinalI = isWeakDefective && (selectedForm === 'II' || selectedForm === 'III');
+    const imperfect = shouldUseDefectiveFinalI ? `${parts[0]}-i` : rootPerfect;
+
+    return {
+        perfect: rootPerfect,
+        imperfect,
+        imperative: imperfect,
+    };
+}
+
+function normalizeVowelSetForRule(value: any): string {
+    return String(value ?? '').trim().toLowerCase();
+}
+
+export function shouldAutoBlockImalaForVerbVowels(perfect: any, imperfect: any, imperative: any): boolean {
+    return (
+        normalizeVowelSetForRule(perfect) === 'a-a' &&
+        normalizeVowelSetForRule(imperfect) === 'a-a' &&
+        normalizeVowelSetForRule(imperative) === 'a-a'
+    );
+}
+
 export function detectVerbRootType(rootConsonants: any): 'triliteral' | 'quadriliteral' {
     const root = normalizeTextField(rootConsonants || '');
     if (!root) return 'triliteral';
@@ -284,10 +352,15 @@ export function hasVerbMorphologyInput(source: any) {
     if (!source) return false;
     const nested = source.verb_morphology || {};
     // Check for any of the legacy fields or the new field structure
-    const hasLegacy = Object.keys(VERB_MORPHOLOGY_LEGACY_FIELDS).some(k => !!source[k] || !!nested[k]);
-    const hasDisplayAlias = Object.keys(VERB_MORPHOLOGY_DISPLAY_ALIAS_FIELDS).some(k => !!source[k] || !!nested[k]);
-    const hasNew = VERB_MORPHOLOGY_DB_FIELD_KEYS.some(k => !!source[k] || !!nested[k]);
-    const hasNestedDisplayAlias = Object.keys(VERB_MORPHOLOGY_DISPLAY_ALIAS_FIELDS).some(k => !!nested[k]);
+    const hasField = (obj: any, key: string) => {
+        if (!obj || !Object.prototype.hasOwnProperty.call(obj, key)) return false;
+        const value = obj[key];
+        return value !== undefined && value !== null && (typeof value !== 'string' || value.trim() !== '');
+    };
+    const hasLegacy = Object.keys(VERB_MORPHOLOGY_LEGACY_FIELDS).some(k => hasField(source, k) || hasField(nested, k));
+    const hasDisplayAlias = Object.keys(VERB_MORPHOLOGY_DISPLAY_ALIAS_FIELDS).some(k => hasField(source, k) || hasField(nested, k));
+    const hasNew = VERB_MORPHOLOGY_DB_FIELD_KEYS.some(k => hasField(source, k) || hasField(nested, k));
+    const hasNestedDisplayAlias = Object.keys(VERB_MORPHOLOGY_DISPLAY_ALIAS_FIELDS).some(k => hasField(nested, k));
     return hasLegacy || hasDisplayAlias || hasNew || hasNestedDisplayAlias;
 }
 
@@ -320,6 +393,7 @@ export function applyVerbMorphologyCompatibility(target: any, _entry: any, sourc
     target.verb_vowel_impf = normalized.vowel_set_impf;
     target.verb_vowel_impv = normalized.vowel_set_impv;
     target.verb_type = normalized.type;
+    target.is_imala_blocked = normalized.is_imala_blocked;
     target.verb_morphology = {
         form: normalized.form,
         class: normalized.class,
@@ -340,6 +414,7 @@ export function applyVerbMorphologyCompatibility(target: any, _entry: any, sourc
         vowel_set_impv: normalized.vowel_set_impv,
         vowel_set_imperative: normalized.vowel_set_impv,
         type: normalized.type,
+        is_imala_blocked: normalized.is_imala_blocked,
     };
 
     return target;
@@ -394,6 +469,7 @@ export function buildVerbMorphologyResponse(entry: any = {}, source: any = {}, e
         vowel_set_impv: normalized.vowel_set_impv || entry.verb_vowel_impv || '',
         vowel_set_imperative: normalized.vowel_set_impv || entry.verb_vowel_impv || '',
         type: normalized.type || entry.verb_type || undefined,
+        is_imala_blocked: normalized.is_imala_blocked ?? entry.is_imala_blocked,
         is_inflectable: entry.is_inflectable === 1 || entry.is_inflectable === true,
         usage_example: entry.usage_example,
         usage_example_en: entry.usage_example_en,
@@ -431,11 +507,17 @@ export async function ensureVerbMorphologyTable(client: any, options: any = {}) 
                 vowel_set_impf TEXT,
                 vowel_set_impv TEXT,
                 type TEXT,
+                is_imala_blocked BOOLEAN,
                 created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
                 updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
             )
         `);
         await client.execute("CREATE INDEX IF NOT EXISTS idx_verb_morphology_type ON verb_morphology(type)");
+    } else {
+        const columns = new Set((info.rows || []).map((row: any) => row.name || (Array.isArray(row) ? row[1] : '')));
+        if (!columns.has('is_imala_blocked')) {
+            await client.execute("ALTER TABLE verb_morphology ADD COLUMN is_imala_blocked BOOLEAN");
+        }
     }
 
 

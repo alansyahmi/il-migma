@@ -3,6 +3,7 @@ export interface ImalaBlockedSource {
     vowel_set_perf?: string;
     vowel_set_impf?: string;
     vowel_set_imp?: string;
+    is_imala_blocked?: unknown;
 }
 
 function normalizeVowelSet(value: string | undefined): string {
@@ -26,4 +27,21 @@ export function inferImalaBlocked(source: ImalaBlockedSource): boolean {
         vowelSets.some(v => v === 'a-a') ||
         /[\u0127q]|g\u0127|h/i.test(consonants)
     );
+}
+
+export function parseImalaBlockedOverride(value: unknown): boolean | undefined {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') return value !== 0;
+    if (typeof value !== 'string') return undefined;
+
+    const normalized = value.trim().toLowerCase();
+    if (!normalized) return undefined;
+    if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
+    if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
+    return undefined;
+}
+
+export function resolveImalaBlocked(source: ImalaBlockedSource): boolean {
+    const explicit = parseImalaBlockedOverride(source.is_imala_blocked);
+    return explicit === undefined ? inferImalaBlocked(source) : explicit;
 }

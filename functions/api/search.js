@@ -14,6 +14,7 @@ import { ensureVerbMorphologyTable } from '../../src/lib/verbMorphology.ts';
 
 const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
 const VERB_STRENGTH_FILTERS = new Set(['strong', 'strong-hybrid', 'weak', 'geminated', 'doubled']);
+const VERB_WEAK_CLASS_FILTERS = new Set(['assimilative', 'hollow', 'defective']);
 
 function normalizeSuffixToken(value) {
     return String(value || '')
@@ -53,7 +54,8 @@ export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const q = url.searchParams.get('q')?.trim() ?? '';
     const pos = url.searchParams.get('pos') ?? '';
-    const rootType = url.searchParams.get('type') ?? '';
+    const rootType = url.searchParams.get('type')?.trim().toLowerCase() ?? '';
+    const weakClassFilter = url.searchParams.get('weak_class')?.trim().toLowerCase() ?? '';
     const nounType = url.searchParams.get('noun_type')?.trim().toLowerCase() ?? '';
     const vowelSet = url.searchParams.get('v') ?? '';
     const wizen = url.searchParams.get('wizen') ?? '';
@@ -211,6 +213,13 @@ export async function onRequestGet({ request, env }) {
                 sql += " AND (e.source_language IS NULL OR e.source_language IN ('Arabic', 'Berber'))";
             } else if (rootType === 'romance') {
                 sql += " AND e.source_language IN ('Sicilian', 'Italian', 'Latin', 'French', 'Spanish')";
+            } else if (pos === 'verb' && (VERB_WEAK_CLASS_FILTERS.has(rootType) || (rootType === 'weak' && VERB_WEAK_CLASS_FILTERS.has(weakClassFilter)))) {
+                const selectedWeakClass = VERB_WEAK_CLASS_FILTERS.has(weakClassFilter) ? weakClassFilter : rootType;
+                sql += ` AND (
+                    LOWER(COALESCE(vm.class, e.verb_class, r.strength, '')) = 'weak'
+                    AND LOWER(COALESCE(vm.weak_class, e.verb_weak_class, r.weak_class, '')) = ?
+                )`;
+                args.push(selectedWeakClass);
             } else if (pos === 'verb' && VERB_STRENGTH_FILTERS.has(rootType)) {
                 const canonicalVerbClass = rootType === 'doubled' ? 'geminated' : rootType;
                 if (canonicalVerbClass === 'strong-hybrid') {

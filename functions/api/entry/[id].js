@@ -11,6 +11,7 @@ import { normalizeSourceMetadata } from '../../../src/lib/sourceMetadata.ts';
 import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../../src/lib/entryHydration.ts';
 import { applyVerbMorphologyCompatibility, ensureVerbMorphologyTable } from '../../../src/lib/verbMorphology.ts';
 import { getEntryIdFamily, normalizeEntryId, normalizeEntryPos } from '../../../src/lib/entryId.ts';
+import { ensureRootCompatibilityColumns } from '../../lib/rootSchema.js';
 
 function firstSenseText(value) {
     if (value === undefined || value === null) return '';
@@ -73,6 +74,7 @@ export async function onRequestGet({ params, env }) {
         const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
         const db = createClient({ url, authToken: token });
         await ensureVerbMorphologyTable(db, { backfill: true });
+        await ensureRootCompatibilityColumns(db);
         // ── Entry core ──────────────────────────────────────────────────────────
         const conditions = [];
         const args = [];
@@ -97,6 +99,10 @@ export async function onRequestGet({ params, env }) {
                r.id          AS root_id,
                r.strength    AS root_strength,
                r.weak_class  AS root_weak_class,
+               r.vowel_set_perf AS root_vowel_set_perf,
+               r.vowel_set_impf AS root_vowel_set_impf,
+               r.vowel_set_imp  AS root_vowel_set_imp,
+               r.is_imala_blocked AS root_is_imala_blocked,
                r.gloss       AS root_gloss,
                r.etymology   AS root_etymology,
                COALESCE(pat.cv_notation, pat2.cv_notation) AS cv_notation,
@@ -199,6 +205,10 @@ export async function onRequestGet({ params, env }) {
                     consonants: entry.resolved_root_consonants,
                     strength: entry.root_strength || 'strong',
                     weak_class: entry.root_weak_class || null,
+                    vowel_set_perf: entry.root_vowel_set_perf || null,
+                    vowel_set_impf: entry.root_vowel_set_impf || null,
+                    vowel_set_imp: entry.root_vowel_set_imp || null,
+                    is_imala_blocked: entry.root_is_imala_blocked,
                     gloss: entry.root_gloss || '',
                     etymology: entry.root_etymology || ''
                 },

@@ -29,7 +29,7 @@ import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
 import { isSuffixLikeValue } from '@/lib/suffixMatching';
 import { isInflectableEnabled, shouldHideInflectionTableForEntry } from '@/lib/inflectionState';
 import { getEntryAdjectiveMorphology, resolveEntryViewKind } from '@/lib/entryDisplay';
-import { inferImalaBlocked } from '@/lib/imala';
+import { parseImalaBlockedOverride, resolveImalaBlocked } from '@/lib/imala';
 import {
     buildNumeralMorphologyDisplayForms,
     getNumeralShortAttributiveRowLabel,
@@ -2489,7 +2489,12 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const vsetPerf = vm.vowel_set_perf || vm.vowel_set_perfect || entry.verb_vowel_perf || 'a-a';
     const vsetImp = vm.vowel_set_impv || vm.vowel_set_imperative || entry.verb_vowel_impv || 'o-o';
     const rootImalaBlocked = useMemo(
-        () => inferImalaBlocked({
+        () => resolveImalaBlocked({
+            is_imala_blocked: parseImalaBlockedOverride(
+                (vm as any).is_imala_blocked ??
+                (entry as any).is_imala_blocked ??
+                entry.root_pattern_form?.root?.is_imala_blocked
+            ),
             consonants: entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root || '',
             vowel_set_perf: entry.root_pattern_form?.root?.vowel_set_perf || vsetPerf,
             vowel_set_impf: entry.root_pattern_form?.root?.vowel_set_impf || vsetImpf,

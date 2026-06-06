@@ -1,4 +1,5 @@
 import { getDbClient, toApiErrorPayload } from '../../../lib/dbClient.js';
+import { ensureRootCompatibilityColumns } from '../../../lib/rootSchema.js';
 import { normalizeRootEtymologyValue } from '../etymology.js';
 
 async function verifyAdmin(request, env) {
@@ -52,6 +53,7 @@ export async function onRequestGet({ request, env, params }) {
         const decodedId = decodeURIComponent(id).normalize('NFC');
 
         const client = getDbClient(env);
+        await ensureRootCompatibilityColumns(client);
         const rootRes = await client.execute({
             sql: `SELECT * FROM roots WHERE id = ? OR LOWER(consonants) = LOWER(?)`,
             args: [decodedId, decodedId],
@@ -85,6 +87,7 @@ export async function onRequestPut({ request, env, params }) {
         const body = await request.json();
 
         const client = getDbClient(env);
+        await ensureRootCompatibilityColumns(client);
 
         // Dynamic column discovery
         const tableInfo = await client.execute("PRAGMA table_info(roots)");
