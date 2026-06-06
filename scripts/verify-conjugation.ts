@@ -369,6 +369,22 @@ assertEq(buildVerbForm(finalGħFormVIIHybrid.rows[2].imperfect, false, 3, null, 
 assertEq(buildVerbForm(finalGħFormVIIHybrid.rows[2].imperfect, false, 1, null, 'e-a', finalGħFormVIIHybrid.rows[2].stems, finalGħFormVIIHybrid.blocksImala || false, 'VII'), 'jinrefgħek', 'Form VII strong-hybrid imperfect should keep syncopated għ before -ek');
 assertEq(buildPerfectForm(finalGħFormVIIHybrid.rows[2].perfect, finalGħFormVIIHybrid.rows[2].perfect_neg ?? finalGħFormVIIHybrid.rows[2].perfect, false, 3, null, 'e-a', finalGħFormVIIHybrid.rows[2].stems, finalGħFormVIIHybrid.blocksImala || false, 'VII'), 'nrefagħha', 'Form VII strong-hybrid perfect should keep underlying għ before -ha');
 
+const finalGħFormXaHybrid = generateConjugation({
+    root: 'r-f-għ',
+    form: 'Xa',
+    strength: 'strong-hybrid',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'a-a',
+    vowelSetImperative: 'a-a',
+    isImalaBlocked: true,
+});
+assertEq(finalGħFormXaHybrid.rows[2].perfect, 'starfa', "Form Xa strong-hybrid should follow Form I final-għ perfect surface behavior");
+assertEq(finalGħFormXaHybrid.rows[2].imperfect, "jistarfa'", "Form Xa strong-hybrid should follow Form I final-għ imperfect apostrophe behavior");
+assertEq(finalGħFormXaHybrid.imperative_sg, "starfa'", "Form Xa strong-hybrid should follow Form I final-għ imperative apostrophe behavior");
+assertEq(buildVerbForm(finalGħFormXaHybrid.rows[2].imperfect, false, 3, null, 'a-a', finalGħFormXaHybrid.rows[2].stems, finalGħFormXaHybrid.blocksImala || false, 'Xa'), 'jistarfagħha', 'Form Xa strong-hybrid imperfect should keep underlying għ before -ha');
+assertEq(buildVerbForm(finalGħFormXaHybrid.rows[2].imperfect, false, 1, null, 'a-a', finalGħFormXaHybrid.rows[2].stems, finalGħFormXaHybrid.blocksImala || false, 'Xa'), 'jistarfgħek', 'Form Xa strong-hybrid imperfect should keep syncopated għ before -ek');
+assertEq(buildPerfectForm(finalGħFormXaHybrid.rows[2].perfect, finalGħFormXaHybrid.rows[2].perfect_neg ?? finalGħFormXaHybrid.rows[2].perfect, false, 3, null, 'a-a', finalGħFormXaHybrid.rows[2].stems, finalGħFormXaHybrid.blocksImala || false, 'Xa'), 'starfagħha', 'Form Xa strong-hybrid perfect should keep underlying għ before -ha');
+
 const finalGħFormXbHybrid = generateConjugation({
     root: 'r-b-għ',
     form: 'Xb',

@@ -27,15 +27,20 @@ const EXPECTED_BRANCH_KEYS = [
     'form-iv',
     'form-v-strong',
     'form-v-weak-defective',
+    'form-v-weak-hollow',
+    'form-v-geminated',
     'form-vi-strong',
+    'form-vi-weak-hollow',
     'form-vi-weak-defective',
     'form-vii',
     'form-viii',
     'form-ix',
     'form-xa-strong',
+    'form-xa-strong-hybrid',
     'form-xa-weak-defective',
     'form-xa-geminated',
     'form-xb-strong',
+    'form-xb-weak-assimilative',
     'form-xb-weak-defective',
     'form-xb-weak-hollow',
 ];
@@ -59,6 +64,154 @@ const assertPreservesImperativeMarker = (fixture, table, suffixForm, suffixLabel
     }
 
     assert.ok(!suffixForm.startsWith('ji'), `${fixture.branchKey} ${suffixLabel} imperative suffix should not use an imperfect ji- stem`);
+};
+
+const assertBlockedImalaNegatives = () => {
+    const cases = [
+        {
+            label: 'Form I assimilative waqaf',
+            input: {
+                root: 'w-q-f',
+                form: 'I',
+                strength: 'weak',
+                weakClass: 'assimilative',
+                vowelSetPerfect: 'a-a',
+                vowelSetImperfect: 'ie-a',
+                vowelSetImperative: 'ie-a',
+            },
+            expected3msNegative: 'ma jieqafx',
+            expected2sImperativeNegative: 'tieqafx',
+        },
+        {
+            label: 'Form Xb strong stqassam',
+            input: {
+                root: 'q-s-m',
+                form: 'Xb',
+                strength: 'strong',
+                vowelSetPerfect: 'a-a',
+                vowelSetImperfect: 'a-a',
+                vowelSetImperative: 'a-a',
+            },
+            expected3msNegative: 'ma jistqassamx',
+            expected2sImperativeNegative: 'tistqassamx',
+        },
+        {
+            label: 'Form III strong',
+            input: {
+                root: 'q-s-m',
+                form: 'III',
+                strength: 'strong',
+                vowelSetPerfect: 'a-a',
+                vowelSetImperfect: 'a-a',
+                vowelSetImperative: 'a-a',
+            },
+            expected3msNegative: 'ma jqasamx',
+            expected2sImperativeNegative: 'tqasamx',
+        },
+        {
+            label: 'Form V strong',
+            input: {
+                root: 's-l-m',
+                form: 'V',
+                strength: 'strong',
+                vowelSetPerfect: 'a-a',
+                vowelSetImperfect: 'a-a',
+                vowelSetImperative: 'a-a',
+            },
+            expected3msNegative: 'ma jissallamx',
+            expected2sImperativeNegative: 'tissallamx',
+        },
+        {
+            label: 'Form VI strong',
+            input: {
+                root: 's-l-m',
+                form: 'VI',
+                strength: 'strong',
+                vowelSetPerfect: 'a-a',
+                vowelSetImperfect: 'a-a',
+                vowelSetImperative: 'a-a',
+            },
+            expected3msNegative: 'ma jissalamx',
+            expected2sImperativeNegative: 'tissalamx',
+        },
+        {
+            label: 'Form VII strong',
+            input: {
+                root: 'ħ-r-ġ',
+                form: 'VII',
+                strength: 'strong',
+                vowelSetPerfect: 'a-a',
+                vowelSetImperfect: 'a-a',
+                vowelSetImperative: 'a-a',
+            },
+            expected3msNegative: 'ma jinħaraġx',
+            expected2sImperativeNegative: 'tinħaraġx',
+        },
+        {
+            label: 'Form Xa strong',
+            input: {
+                root: 'f-h-m',
+                form: 'Xa',
+                strength: 'strong',
+                vowelSetPerfect: 'a-a',
+                vowelSetImperfect: 'a-a',
+                vowelSetImperative: 'a-a',
+            },
+            expected3msNegative: 'ma jistafhamx',
+            expected2sImperativeNegative: 'tistafhamx',
+        },
+        {
+            label: 'Form Xb hollow',
+            input: {
+                root: 'ħ-w-d',
+                form: 'Xb',
+                strength: 'weak',
+                weakClass: 'hollow',
+                vowelSetPerfect: 'a-a',
+                vowelSetImperfect: 'a-a',
+                vowelSetImperative: 'a-a',
+            },
+            expected3msNegative: 'ma jistħawwadx',
+            expected2sImperativeNegative: 'tistħawwadx',
+        },
+    ];
+
+    cases.forEach(({ label, input, expected3msNegative, expected2sImperativeNegative }) => {
+        const table = generateConjugation({
+            ...input,
+            isImalaBlocked: true,
+        });
+
+        assert.equal(table.blocksImala, true, `${label} should expose blocked imala to suffix generation`);
+        assert.equal(
+            buildVerbForm(
+                table.rows[2].imperfect,
+                true,
+                null,
+                null,
+                input.vowelSetImperfect,
+                table.rows[2].stems,
+                table.blocksImala || false,
+                input.form,
+            ),
+            expected3msNegative,
+            `${label} 3ms negative imperfect should preserve final a`,
+        );
+        assert.equal(
+            buildVerbForm(
+                table.rows[1].imperfect,
+                true,
+                null,
+                null,
+                input.vowelSetImperfect,
+                table.rows[1].stems,
+                table.blocksImala || false,
+                input.form,
+            ).replace(/^ma /, ''),
+            expected2sImperativeNegative,
+            `${label} negative imperative should preserve final a`,
+        );
+    });
 };
 
 const run = () => {
@@ -155,7 +308,55 @@ const run = () => {
             assert.equal(imperativeEk, 'stġarrik', 'Form Xb defective imperative -ek should preserve st-');
             assert.equal(imperativeKom, 'stġarrikom', 'Form Xb defective imperative -kom should preserve st-');
         }
+        if (fixture.branchKey === 'form-xa-strong-hybrid') {
+            assert.equal(citationRow.perfect, 'starfa', 'Form Xa strong-hybrid 3ms perfect should follow Form I final-għ surface behavior');
+            assert.equal(citationRow.imperfect, "jistarfa'", 'Form Xa strong-hybrid 3ms imperfect should keep Form I apostrophe behavior');
+            assert.equal(table.imperative_sg, "starfa'", 'Form Xa strong-hybrid singular imperative should keep Form I apostrophe behavior');
+            assert.equal(citationRow.stems?.attached, 'jistarfagħ', 'Form Xa strong-hybrid attached imperfect stem should expose underlying għ');
+            assert.equal(citationRow.stems?.syncopated, 'jistarfgħ', 'Form Xa strong-hybrid syncopated imperfect stem should expose underlying għ');
+            assert.equal(imperativeEk, 'starfgħek', 'Form Xa strong-hybrid imperative -ek should use syncopated underlying għ');
+            assert.equal(imperativeKom, 'starfagħkom', 'Form Xa strong-hybrid imperative -kom should use attached underlying għ');
+        }
+        if (fixture.branchKey === 'form-v-weak-hollow') {
+            assert.equal(citationRow.perfect, 'tħawwad', 'Form V hollow 3ms perfect should derive from Form II hollow');
+            assert.equal(citationRow.imperfect, 'jitħawwad', 'Form V hollow 3ms imperfect should derive from Form II hollow');
+            assert.equal(citationRow.stems?.syncopated, 'jitħawd', 'Form V hollow syncopated imperfect stem should use Form II hollow stem');
+            assert.equal(citationRow.stems?.perfectSyncopated, 'tħawd', 'Form V hollow syncopated perfect stem should use Form II hollow stem');
+            assert.equal(table.imperative_sg_stems?.syncopated, 'tħawd', 'Form V hollow imperative syncopated stem should use Form II hollow stem');
+            assert.equal(imperativeEk, 'tħawdek', 'Form V hollow imperative -ek should use the hollow syncopated stem');
+        }
+        if (fixture.branchKey === 'form-v-geminated') {
+            const row3p = table.rows.find((row) => row.person_mt === '3p') || table.rows[6];
+            assert.equal(citationRow.perfect, 'ttemmam', 'Form V geminated 3ms perfect should derive from Form II geminated');
+            assert.equal(citationRow.imperfect, 'jitemmam', 'Form V geminated 3ms imperfect should use Form II geminated stem');
+            assert.equal(row3p.imperfect, 'jitemmu', 'Form V geminated plural imperfect should use Form II geminated stem');
+            assert.equal(citationRow.stems?.syncopated, 'jitemm', 'Form V geminated syncopated imperfect stem should use Form II geminated stem');
+            assert.equal(citationRow.stems?.perfectSyncopated, 'ttemm', 'Form V geminated syncopated perfect stem should use Form II geminated stem');
+            assert.equal(table.imperative_pl, 'ttemmu', 'Form V geminated plural imperative should use Form II geminated stem');
+        }
+        if (fixture.branchKey === 'form-vi-weak-hollow') {
+            const row3p = table.rows.find((row) => row.person_mt === '3p') || table.rows[6];
+            assert.equal(citationRow.perfect, 'tqiewem', 'Form VI hollow 3ms perfect should derive from Form III hollow');
+            assert.equal(citationRow.imperfect, 'jitqiewem', 'Form VI hollow 3ms imperfect should derive from Form III hollow');
+            assert.equal(row3p.imperfect, 'jitqiewmu', 'Form VI hollow plural imperfect should use Form III hollow stem');
+            assert.equal(citationRow.stems?.attached, 'jitqewim', 'Form VI hollow attached imperfect stem should use Form III hollow stem');
+            assert.equal(citationRow.stems?.syncopated, 'jitqiewm', 'Form VI hollow syncopated imperfect stem should use Form III hollow stem');
+            assert.equal(citationRow.stems?.perfectSyncopated, 'tqiewm', 'Form VI hollow syncopated perfect stem should use Form III hollow stem');
+            assert.equal(table.imperative_sg_stems?.syncopated, 'tqiewm', 'Form VI hollow imperative syncopated stem should use Form III hollow stem');
+            assert.equal(imperativeEk, 'tqiewmek', 'Form VI hollow imperative -ek should use the Form III hollow syncopated stem');
+        }
+        if (fixture.branchKey === 'form-xb-weak-assimilative') {
+            const row3p = table.rows.find((row) => row.person_mt === '3p') || table.rows[6];
+            assert.equal(citationRow.perfect, 'sttemmam', 'Form Xb weak assimilative 3ms perfect should derive from Form II geminated');
+            assert.equal(citationRow.imperfect, 'jistemmam', 'Form Xb weak assimilative 3ms imperfect should use Form II geminated stem');
+            assert.equal(row3p.imperfect, 'jistemmu', 'Form Xb weak assimilative plural imperfect should use Form II geminated stem');
+            assert.equal(citationRow.stems?.syncopated, 'jistemm', 'Form Xb weak assimilative syncopated imperfect stem should use Form II geminated stem');
+            assert.equal(citationRow.stems?.perfectSyncopated, 'sttemm', 'Form Xb weak assimilative syncopated perfect stem should use Form II geminated stem');
+            assert.equal(table.imperative_pl, 'sttemmu', 'Form Xb weak assimilative plural imperative should use Form II geminated stem');
+        }
     });
+
+    assertBlockedImalaNegatives();
 };
 
 run();
