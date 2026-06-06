@@ -7,6 +7,8 @@ const run = () => {
         headword: 'bejn',
         pos: 'preposition',
         cv_pattern: 'CCvC',
+        is_inflectable: false,
+        has_inflection: true,
         form_masc_pattern: 'WRONG',
         form_fem_pattern: 'WRONG',
     });
@@ -18,6 +20,8 @@ const run = () => {
     );
     assert.ok(!('participle_morphology' in prepositionPayload), 'preposition payload should not include participle morphology');
     assert.ok(!('numeral_morphology' in prepositionPayload), 'preposition payload should not include numeral morphology');
+    assert.strictEqual(prepositionPayload.is_inflectable, 1, 'preposition payload should map has_inflection to is_inflectable');
+    assert.ok(!('has_inflection' in prepositionPayload), 'preposition payload should not emit has_inflection as a DB field');
 
     const adjectivePayload = buildEntryPayload({
         id: 'adj-twil',
@@ -245,6 +249,11 @@ const run = () => {
         numeral_fractional: 'terz',
         numeral_multiplier: 'uniku',
         numeral_distributive: 'uħud',
+        plural_forms: [{ form: 'uħud', pattern: 'vCvC' }],
+        form_plural_pattern: 'vCvC',
+        lemma_pattern: 'stale',
+        form_masc_pattern: 'stale',
+        form_fem_pattern: 'stale',
     });
 
     assert.ok(!('noun_morphology' in numeralPayload), 'numeral payload should not include noun morphology');
@@ -259,7 +268,57 @@ const run = () => {
     assert.strictEqual(numeralPayload.numeral_morphology.fractional_form, 'terz');
     assert.strictEqual(numeralPayload.numeral_morphology.multiplier_form, 'uniku');
     assert.strictEqual(numeralPayload.numeral_morphology.distributive_form, 'uħud');
+    assert.strictEqual(numeralPayload.numeral_morphology.form_plural_pattern, 'vCvC');
+    assert.deepStrictEqual(numeralPayload.numeral_morphology.plural_forms, [{ form: 'uħud', pattern: 'vCvC' }], 'numeral payload should persist schema-backed plural_forms');
     assert.ok(!('numeral_ordinal' in numeralPayload), 'numeral UI aliases should not leak into the payload');
+    assert.ok(!('lemma_pattern' in numeralPayload.numeral_morphology), 'numeral morphology should not persist deprecated lemma_pattern');
+    assert.ok(!('form_masc_pattern' in numeralPayload.numeral_morphology), 'numeral morphology should not persist deprecated form_masc_pattern');
+    assert.ok(!('form_fem_pattern' in numeralPayload.numeral_morphology), 'numeral morphology should not persist deprecated form_fem_pattern');
+    assert.ok(!('form_masc_pattern' in numeralPayload), 'numeral payload should not emit flat masculine pattern aliases');
+    assert.ok(!('form_fem_pattern' in numeralPayload), 'numeral payload should not emit flat feminine pattern aliases');
+
+    const derivedOrdinalPayload = buildEntryPayload({
+        id: 'num-raba',
+        headword: "raba'",
+        pos: 'numeral',
+        numeral_type: 'ordinal',
+        cv_pattern: 'CvCv',
+        form_attributive_short: 'stale-short',
+        form_attributive_long: 'stale-long',
+        numeral_ordinal: 'stale-ordinal',
+        numeral_adverbial: 'stale-adverbial',
+        numeral_fractional: 'stale-fractional',
+        numeral_multiplier: 'stale-multiplier',
+        numeral_distributive: 'stale-distributive',
+        form_attributive_short_pattern: 'stale-pattern',
+        form_plural_pattern: 'stale-plural',
+        plural_forms: [{ form: 'stale-plural', pattern: 'stale-plural' }],
+    });
+
+    assert.strictEqual(derivedOrdinalPayload.numeral_morphology.numeral_type, 'ordinal');
+    assert.strictEqual(derivedOrdinalPayload.numeral_morphology.ordinal_form, "raba'", 'derived ordinal should mirror headword into ordinal_form');
+    assert.ok(!('form_attributive_short' in derivedOrdinalPayload.numeral_morphology), 'derived ordinal should strip sibling short attributive');
+    assert.ok(!('form_attributive_long' in derivedOrdinalPayload.numeral_morphology), 'derived ordinal should strip sibling long attributive');
+    assert.ok(!('adverbial_form' in derivedOrdinalPayload.numeral_morphology), 'derived ordinal should strip sibling adverbial');
+    assert.ok(!('form_attributive_short_pattern' in derivedOrdinalPayload.numeral_morphology), 'derived ordinal should strip sibling short pattern');
+    assert.ok(!('form_plural_pattern' in derivedOrdinalPayload.numeral_morphology), 'derived ordinal should strip sibling plural pattern');
+    assert.ok(!('plural_forms' in derivedOrdinalPayload.numeral_morphology), 'derived ordinal should strip sibling plural forms');
+
+    const derivedShortPayload = buildEntryPayload({
+        id: 'num-erba',
+        headword: "erba'",
+        pos: 'numeral',
+        numeral_type: 'attributive_short',
+        cv_pattern: 'vCCv',
+        form_attributive_long: 'stale-long',
+        numeral_ordinal: 'stale-ordinal',
+    });
+
+    assert.strictEqual(derivedShortPayload.numeral_morphology.numeral_type, 'attributive_short');
+    assert.strictEqual(derivedShortPayload.numeral_morphology.form_attributive_short, "erba'", 'derived short attributive should mirror headword');
+    assert.strictEqual(derivedShortPayload.numeral_morphology.form_attributive_short_pattern, 'vCCv', 'derived short attributive should mirror cv_pattern into short pattern');
+    assert.ok(!('form_attributive_long' in derivedShortPayload.numeral_morphology), 'derived short attributive should strip sibling long attributive');
+    assert.ok(!('ordinal_form' in derivedShortPayload.numeral_morphology), 'derived short attributive should strip sibling ordinal');
 
     const participlePayload = buildEntryPayload({
         id: 'ptcp-kitieb',

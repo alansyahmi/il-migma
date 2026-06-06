@@ -13,7 +13,7 @@ import { applyNounMorphologyCompatibility, ensureNounMorphologyTable, hasNounMor
 import { ensureAdjMorphologyTable, syncAdjMorphology } from '../../../src/lib/adjMorphology.ts';
 import { applyParticipleMorphologyCompatibility, ensureParticipleMorphologyTable, hasParticipleMorphologyInput, syncParticipleMorphology } from '../../../src/lib/participleMorphology.ts';
 import { ensureNumeralMorphologyTable, syncNumeralMorphology } from '../../../src/lib/numeralMorphology.ts';
-import { ensureRelationshipsTable, syncEntryRelationships } from '../../../src/lib/entryRelationships.ts';
+import { ensureRelationshipsTable, syncEntryRelationships, syncReciprocalNumeralRelatedRelationships } from '../../../src/lib/entryRelationships.ts';
 import { ensureTagsTables, syncEntryTags } from '../../../src/lib/entryTags.ts';
 import { ensureStemsTable, syncStemMorphology } from '../../../src/lib/stemMorphology.ts';
 import { ADJECTIVE_ENTRY_TOP_LEVEL_STRIP_FIELDS } from '../../../src/lib/adminSchema.ts';
@@ -136,7 +136,17 @@ async function renameEntryReferences(tx, oldId, newId) {
 }
 
 function normalizeDbBoolean(value) {
-    return (value === true || value === 1 || value === '1') ? 1 : 0;
+    if (value === true || value === 1) return 1;
+    if (typeof value === 'string') {
+        const normalized = value.trim().toLowerCase();
+        return ['1', 'true', 'yes', 'on'].includes(normalized) ? 1 : 0;
+    }
+    return 0;
+}
+
+function readInflectableFlag(body) {
+    if (Object.prototype.hasOwnProperty.call(body, 'has_inflection')) return body.has_inflection;
+    return body.is_inflectable;
 }
 
 function buildEntryWriteRecord(body, entryColumns, entryPos) {
@@ -156,7 +166,7 @@ function buildEntryWriteRecord(body, entryColumns, entryPos) {
 
         if (col === 'is_loanword' || col === 'is_inflectable') {
             includeCol = true;
-            val = normalizeDbBoolean(val);
+            val = normalizeDbBoolean(col === 'is_inflectable' ? readInflectableFlag(body) : val);
         } else if (col === 'root_consonants') {
             includeCol = true;
             val = body._rootConsonants || body.root_consonants;
@@ -206,17 +216,19 @@ async function persistEntryRecord(client, {
 }) {
     const tx = await client.transaction('write');
     try {
-        const writeBody = { ...body, id: entryId, pos: entryPos || body.pos };
+        const normalizedEntryPos = normalizeEntryPos(entryPos || body.pos);
+        const writeBody = { ...body, id: entryId, pos: normalizedEntryPos };
 
         await upsertEntryRow(tx, writeBody, entryColumns, entryId);
 
-        if (entryPos === 'verb') await syncVerbMorphology(tx, entryId, writeBody);
-        if (entryPos === 'noun' || entryPos === 'pronoun') await syncNounMorphology(tx, entryId, writeBody);
-        if (entryPos === 'adjective' || entryPos === 'participle') await syncAdjMorphology(tx, entryId, writeBody);
-        if (entryPos === 'participle') await syncParticipleMorphology(tx, entryId, writeBody);
-        if (entryPos === 'numeral') await syncNumeralMorphology(tx, entryId, writeBody);
+        if (normalizedEntryPos === 'verb') await syncVerbMorphology(tx, entryId, writeBody);
+        if (normalizedEntryPos === 'noun' || normalizedEntryPos === 'pronoun') await syncNounMorphology(tx, entryId, writeBody);
+        if (normalizedEntryPos === 'adjective' || normalizedEntryPos === 'participle') await syncAdjMorphology(tx, entryId, writeBody);
+        if (normalizedEntryPos === 'participle') await syncParticipleMorphology(tx, entryId, writeBody);
+        if (normalizedEntryPos === 'numeral') await syncNumeralMorphology(tx, entryId, writeBody);
 
         await syncEntryRelationships(tx, entryId, writeBody);
+        await syncReciprocalNumeralRelatedRelationships(tx, entryId, writeBody);
         await syncEntryTags(tx, entryId, writeBody.tags);
         await syncStemMorphology(tx, writeBody.stem, writeBody);
         await syncAlternativeForms(tx, entryId, writeBody);

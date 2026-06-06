@@ -111,6 +111,16 @@ export function Navbar() {
 
     const selectedSuggestionText = (suggestion: Pick<NavbarSuggestion, 'definitions'>) => suggestion.definitions[0] || '';
 
+    const goToSuggestion = (suggestion: NavbarSuggestion) => {
+        setSearchQuery('');
+        setSearchFocused(false);
+        setMobileSearchFocused(false);
+        setSearchSuggestions([]);
+        setSearchSuggestionsLoading(false);
+        setMenuOpen(false);
+        navigate(`/entry/${encodeURIComponent(suggestion.id)}`);
+    };
+
     const suggestionVisible = searchQuery.trim().length >= 2 && (searchSuggestionsLoading || searchSuggestions.length > 0);
     const desktopSuggestionVisible = showSearch && searchFocused && suggestionVisible;
     const mobileSuggestionVisible = menuOpen && mobileSearchFocused && suggestionVisible;
@@ -135,7 +145,7 @@ export function Navbar() {
     }, [menuOpen]);
 
     return (
-        <header className="sticky top-0 z-40 bg-[#F4F3F0]/95 backdrop-blur-sm border-b border-border/50">
+        <header className="sticky top-0 z-40 w-full shrink-0 bg-[#F4F3F0]/95 backdrop-blur-sm border-b border-border/50">
             <div className="max-w-6xl mx-auto px-7 sm:px-8 flex items-center justify-between h-14">
 
                 {/* Left Section (Logo + Nav) */}
@@ -216,12 +226,7 @@ export function Navbar() {
                                                 key={suggestion.id}
                                                 type="button"
                                                 onMouseDown={(e) => e.preventDefault()}
-                                                onClick={() => {
-                                                    setSearchQuery(suggestion.headword);
-                                                    setSearchFocused(false);
-                                                    setSearchSuggestions([]);
-                                                    navigate(`/search?q=${encodeURIComponent(suggestion.headword)}`);
-                                                }}
+                                                onClick={() => goToSuggestion(suggestion)}
                                                 className="w-full text-left rounded-lg px-3 py-2.5 hover:bg-black/5 transition-colors flex items-start justify-between gap-4"
                                             >
                                                 <div className="min-w-0">
@@ -405,13 +410,7 @@ export function Navbar() {
                                                     key={suggestion.id}
                                                     type="button"
                                                     onMouseDown={(e) => e.preventDefault()}
-                                                    onClick={() => {
-                                                        setSearchQuery(suggestion.headword);
-                                                        setMobileSearchFocused(false);
-                                                        setSearchSuggestions([]);
-                                                        setMenuOpen(false);
-                                                        navigate(`/search?q=${encodeURIComponent(suggestion.headword)}`);
-                                                    }}
+                                                    onClick={() => goToSuggestion(suggestion)}
                                                     className="w-full text-left rounded-lg px-3 py-2.5 hover:bg-black/5 transition-colors flex items-start justify-between gap-4"
                                                 >
                                                     <div className="min-w-0">

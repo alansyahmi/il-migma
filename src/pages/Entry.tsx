@@ -7,7 +7,8 @@ import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext'
 import { type Entry, type LinguisticMode, type VerbConjugationTable } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
-import { generateConjugation, generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
+import { generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
+import { generateZokkForms } from '@/lib/zokkEngine';
 import { applyInflectionTableSuffix } from '@/lib/inflectionTable';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Edit2, ArrowLeft, Search, Plus, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
@@ -19,21 +20,30 @@ import { cn, getGloss } from '@/lib/utils';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { generateTheoreticalDual, generateFeminineDualFromMasculineWithHint, generateElative, generateDiminutiveForm, generateDiminutiveSoundPlural, generateFeminineDiminutiveSoundPlural, generateFeminineDiminutiveDual } from '@/lib/maltesePhonology';
 import { isHiddenTag, resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
-import { resolveStemDefaults } from '@/lib/stemDefaults';
+import { resolveVerbClassification } from '@/lib/stemDefaults';
 import { MorphologyProvenanceRows } from '@/components/dictionary/EntryMorphology';
 import { BLUE, CREAM_RGBA, GOLD, EtymologySentence, PropRow, SideCard } from '@/components/dictionary/EntryShell';
 import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymology';
 import { StackedSurface } from '@/components/dictionary/VerbFormsTable';
 import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
 import { isSuffixLikeValue } from '@/lib/suffixMatching';
-import { isInflectableEnabled, shouldHideInflectionTable } from '@/lib/inflectionState';
+import { isInflectableEnabled, shouldHideInflectionTableForEntry } from '@/lib/inflectionState';
+import { getEntryAdjectiveMorphology, resolveEntryViewKind } from '@/lib/entryDisplay';
 import { inferImalaBlocked } from '@/lib/imala';
 import {
-    buildNumeralDisplayForms,
+    buildNumeralMorphologyDisplayForms,
     getNumeralShortAttributiveRowLabel,
+    getNumeralRoleLabel,
+    hasVisibleNumeralSurface,
+    normalizeNumeralLookupKey,
+    normalizeNumeralRole,
+    NUMERAL_ROLE_ORDER,
+    NUMERAL_ROLE_META,
     shouldCombineMasculineAndShortAttributive,
+    type NumeralRole,
     type NumeralSurfaceValue,
 } from '@/lib/numeralMorphology';
+import { buildVerbConjugationFromEngine, shouldMarkVerbConjugationTheoretical } from '@/lib/verbMorphology';
 import { stripTheoreticalPrefix, shouldHideSurface } from '@/lib/theoreticalForms';
 
 export { BLUE, CREAM_RGBA, GOLD, EntryShell, EtymologySentence, PropRow, SideCard } from '@/components/dictionary/EntryShell';
@@ -2455,7 +2465,8 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const displayAlternativeForms: any[] = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
     const displayRelatedEntries: any[] = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
 
-    const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root;
+    const rootObj = entry.root_pattern_form?.root;
+    const rootConsonants = rootObj?.consonant_array?.join('-') || rootObj?.consonants || entry.zokk_morphology?.root;
     const pattern = entry.root_pattern_form?.pattern;
 
     // State
@@ -2469,11 +2480,14 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     };
 
     const isNeg = polarity === 'Negative';
-    const isTheoretical = !isInflectableEnabled(entry.is_inflectable, vm.is_inflectable) || entry.tags?.includes('THEORETICAL') || vm.root_tags?.includes('THEORETICAL');
+    const isTheoretical = shouldMarkVerbConjugationTheoretical(entry, vm);
+    const verbForm = vm.form || (entry as any).verb_form || 'I';
+    const verbClass = vm.class || vm.verb_class || entry.verb_class;
+    const verbWeakClass = vm.weak_class || entry.verb_weak_class;
     // Use new per-tense vowel sets
-    const vsetImpf = entry.verb_vowel_impf || vm.vowel_set_imperfect || vm.vowel_set_impf || 'i-a';
-    const vsetPerf = entry.verb_vowel_perf || vm.vowel_set_perfect || vm.vowel_set_perf || 'a-a';
-    const vsetImp = vm.vowel_set_imperative || vm.vowel_set_impv || 'o-o';
+    const vsetImpf = vm.vowel_set_impf || vm.vowel_set_imperfect || entry.verb_vowel_impf || 'i-a';
+    const vsetPerf = vm.vowel_set_perf || vm.vowel_set_perfect || entry.verb_vowel_perf || 'a-a';
+    const vsetImp = vm.vowel_set_impv || vm.vowel_set_imperative || entry.verb_vowel_impv || 'o-o';
     const rootImalaBlocked = useMemo(
         () => inferImalaBlocked({
             consonants: entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root || '',
@@ -2483,39 +2497,27 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         }),
         [entry, vsetPerf, vsetImpf, vsetImp]
     );
-    const stemDefaults = entry.zokk_morphology ? resolveStemDefaults(entry.zokk_morphology as any) : null;
+    const effectiveVerbClassification = useMemo(() => resolveVerbClassification({
+        form: verbForm,
+        headword: entry.headword,
+        verb_class: verbClass,
+        verb_weak_class: verbWeakClass,
+        root_consonants: rootConsonants,
+        tags: entry.tags,
+        root_tags: vm.root_tags,
+        root: rootObj,
+        zokk_morphology: entry.zokk_morphology as any,
+    }), [entry.headword, entry.tags, entry.zokk_morphology, rootConsonants, rootObj, verbClass, verbForm, verbWeakClass, vm.root_tags]);
 
     // Derive or use stored conjugation
     const conj = useMemo<VerbConjugationTable | null>(() => {
-        if (vm.conjugation) return vm.conjugation;
-        // Auto-generate
-        // Auto-generate using either root_pattern_form or zokk_morphology fallback
-        const rootStr = entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root;
-
-        const rootObj = entry.root_pattern_form?.root;
-        if (!rootStr) return null;
-
-        // Resolve morphological defaults if missing (critical for stem-based verbs)
-        const stemDefaults = entry.zokk_morphology ? resolveStemDefaults(entry.zokk_morphology as any) : null;
-
-
         try {
-            return generateConjugation({
-                root: rootStr,
-                form: vm.form,
-                strength: (entry.verb_class as any) || rootObj?.strength || stemDefaults?.strength || 'strong',
-
-                weakClass: (entry.verb_weak_class as any) || rootObj?.weak_class || stemDefaults?.weak_class,
-                isImalaBlocked: rootImalaBlocked,
-                vowelSetPerfect: vsetPerf,
-                vowelSetImperfect: vsetImpf,
-                vowelSetImperative: vsetImp,
-            });
+            return buildVerbConjugationFromEngine(entry, vm) || vm.conjugation || null;
         } catch (e) {
             console.error("Conjugation error:", e);
-            return null;
+            return vm.conjugation || null;
         }
-    }, [vm, vsetPerf, vsetImpf, vsetImp, entry]);
+    }, [vm, entry]);
 
     // Fetch siblings for accurate theoretical/plain markers
     const { entries: rootEntries } = useRootData(entry.root_pattern_form?.root?.id);
@@ -2527,8 +2529,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     // Auto-derive root forms (verbal noun, participles) using the SAME logic as Root.tsx
     const autoDerived = useMemo(() => {
         const rootStr = entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root;
-        const rootObj = entry.root_pattern_form?.root;
-        if (!rootStr || !vm.form) return null;
+        if (!rootStr || !verbForm) return null;
 
         // Use root-level primary vowels for auto-derivation matching Root.tsx
         const f1 = derivedRootEntries?.find(e => e.pos === 'verb' && e.verb_morphology?.form === 'I');
@@ -2541,19 +2542,19 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                 rootStr,
                 pvSet,
                 ipvSet,
-                (rootObj?.strength || f1vm?.verb_class || stemDefaults?.strength || 'strong') as any,
-                (rootObj?.weak_class || f1vm?.weak_class || stemDefaults?.weak_class) as any,
+                effectiveVerbClassification.strength as any,
+                (effectiveVerbClassification.weak_class || undefined) as any,
                 rootImalaBlocked
             );
             // Use siblings if available, otherwise just itself
             const attested = getAttestedEntries(derivedRootEntries);
             const markedTable = markGeneratedForms(rawGen, attested);
-            return markedTable.find(f => f.form === vm.form);
+            return markedTable.find(f => f.form === verbForm);
         } catch (e) {
             console.error("Auto-derivation error:", e);
             return null;
         }
-    }, [entry, derivedRootEntries, stemDefaults, vm.form, rootImalaBlocked]);
+    }, [entry, derivedRootEntries, verbForm, rootImalaBlocked, effectiveVerbClassification]);
     const isVisibleDerivedTerm = (data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string }) =>
         data.value !== '-' && !shouldHideSurface(data, hideTheoreticalForms);
 
@@ -2571,13 +2572,13 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
     const handleEditDerived = (data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string }, type: 'active' | 'passive' | 'noun') => {
         const rootObj = entry.root_pattern_form?.root;
-        const existing = derivedRootEntries?.find(e => e.headword === data.value && (e.verb_morphology?.form === vm.form || e.pos !== 'verb'));
+        const existing = derivedRootEntries?.find(e => e.headword === data.value && (e.verb_morphology?.form === verbForm || e.pos !== 'verb'));
 
         if (existing) {
             setEditEntry({
                 ...existing,
                 _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                _formLabel: existing.verb_morphology?.form || vm.form,
+                _formLabel: existing.verb_morphology?.form || verbForm,
             } as any);
             setInitialFormData(null);
         } else {
@@ -2586,7 +2587,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                 headword: data.value,
                 pos: type === 'noun' ? 'noun' : 'participle',
                 participle_type: type === 'noun' ? '' : type,
-                _formLabel: vm.form,
+                _formLabel: verbForm,
                 _rootConsonants: rootObj?.consonants || '',
             });
         }
@@ -2792,9 +2793,9 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                 <PropRow label={term("vowel-set")} className="col-span-2 sm:col-span-1 md:col-span-1">
                                     <div className="space-y-0 text-sm">
-                                        <p>{term('perfect')} <span className="opacity-55 text-[0.7rem]">{term('(past)')}</span>: <span className="font-mono">{vm.vowel_set_perfect}</span></p>
-                                        <p>{term('imperfect')} <span className="opacity-55 text-[0.7rem]">{term('(present)')}</span>: <span className="font-mono">{vm.vowel_set_imperfect}</span></p>
-                                        <p>{term('imperative')}: <span className="font-mono">{vm.vowel_set_imperative}</span></p>
+                                        <p>{term('perfect')} <span className="opacity-55 text-[0.7rem]">{term('(past)')}</span>: <span className="font-mono">{vsetPerf}</span></p>
+                                        <p>{term('imperfect')} <span className="opacity-55 text-[0.7rem]">{term('(present)')}</span>: <span className="font-mono">{vsetImpf}</span></p>
+                                        <p>{term('imperative')}: <span className="font-mono">{vsetImp}</span></p>
                                     </div>
                                 </PropRow>
 
@@ -2803,8 +2804,8 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     <div className="pt-0 border-t border-black/5">
                                         <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
                                         <div className="text-[11px] font-mono space-y-1 text-black/50">
-                                            <p>{term('strength')}: {entry.verb_class || entry.root_pattern_form.root.strength}</p>
-                                            {(entry.verb_weak_class || entry.root_pattern_form.root.weak_class) && <p>{term('weak-class')}: {entry.verb_weak_class || entry.root_pattern_form.root.weak_class}</p>}
+                                            <p>{term('strength')}: {effectiveVerbClassification.strength}</p>
+                                            {effectiveVerbClassification.weak_class && <p>{term('weak-class')}: {effectiveVerbClassification.weak_class}</p>}
                                             <p>{term('imala-blocked')}: {
                                                 rootImalaBlocked
                                                     ? term('yes') : term('no')}
@@ -2850,7 +2851,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 vsetImpf,
                                                                 row.stems,
                                                                 conj?.blocksImala || false,
-                                                                vm.form
+                                                                verbForm
                                                             )} theoretical={isTheoretical} />
                                                         </td>
                                                         <td className="py-1.5 font-serif font-normal text-black">
@@ -2863,7 +2864,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                 vsetPerf,
                                                                 row.stems,
                                                                 conj?.blocksImala || false,
-                                                                vm.form
+                                                                verbForm
                                                             )} theoretical={isTheoretical} />
                                                         </td>
                                                     </tr>
@@ -2886,7 +2887,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                             syncopated: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1')
                                                         });
 
-                                                        const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
+                                                        const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, verbForm);
                                                         const finalVal = isNeg ? result.replace(/^ma /, '') : result;
                                                         return <MarkedValue val={finalVal} theoretical={isTheoretical} />;
                                                     })()}
@@ -2905,7 +2906,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                             syncopated: conj.imperative_pl
                                                         });
 
-                                                        const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
+                                                        const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, verbForm);
                                                         const finalVal = isNeg ? result.replace(/^ma /, '') : result;
                                                         return <MarkedValue val={finalVal} theoretical={isTheoretical} />;
                                                     })()}
@@ -2941,7 +2942,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                         vsetPerf,
                                                                         row.stems,
                                                                         conj?.blocksImala || false,
-                                                                        vm.form
+                                                                        verbForm
                                                                     )} theoretical={isTheoretical} />
                                                                 </td>
                                                             </tr>
@@ -2975,7 +2976,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                         vsetImpf,
                                                                         row.stems,
                                                                         conj?.blocksImala || false,
-                                                                        vm.form
+                                                                        verbForm
                                                                     )} theoretical={isTheoretical} />
                                                                 </td>
                                                             </tr>
@@ -3004,7 +3005,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                     const row = conj.rows[1];
                                                                     const base = isNeg ? row.imperfect : conj.imperative_sg;
                                                                     const stems = isNeg ? row.stems : (conj.imperative_sg_stems || { attached: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1'), syncopated: conj.imperative_sg.replace(/e([^aeiou])$/, 'i$1') });
-                                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
+                                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, verbForm);
                                                                     return <MarkedValue val={isNeg ? result.replace(/^ma /, '') : result} theoretical={isTheoretical} />;
                                                                 })()}
                                                             </td>
@@ -3016,7 +3017,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                                     const row = conj.rows[5];
                                                                     const base = isNeg ? row.imperfect : conj.imperative_pl;
                                                                     const stems = isNeg ? row.stems : (conj.imperative_pl_stems || { attached: conj.imperative_pl, syncopated: conj.imperative_pl });
-                                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, vm.form);
+                                                                    const result = buildVerbForm(base, isNeg, doIdx, ioIdx, isNeg ? vsetImpf : vsetImp, stems, conj?.blocksImala || false, verbForm);
                                                                     return <MarkedValue val={isNeg ? result.replace(/^ma /, '') : result} theoretical={isTheoretical} />;
                                                                 })()}
                                                             </td>
@@ -3230,6 +3231,67 @@ export function ZokkEntryView({
 
          return [];
      }, [ety, entry.source_language, term]);
+    const zokkForms = useMemo(
+        () => entry.zokk_morphology ? generateZokkForms(entry.zokk_morphology as any) : null,
+        [entry.zokk_morphology]
+    );
+    const zokkConjugation = zokkForms?.conjugation;
+    const zokkDerivedRows: MorphologyDisplayRow[] = useMemo(() => {
+        if (!zokkForms) return [];
+        const rows: MorphologyDisplayRow[] = [];
+
+        if (zokkForms.passive_participle?.masc) {
+            rows.push({
+                label: term('passive-participle'),
+                value: zokkForms.passive_participle.masc,
+            });
+        }
+        if (zokkForms.passive_participle?.semitic) {
+            rows.push({
+                label: term('semitic-passive') || term('passive-participle'),
+                value: zokkForms.passive_participle.semitic,
+                theoretical: true,
+            });
+        }
+        if (zokkForms.agentive?.masc) {
+            rows.push({
+                label: term('agentive'),
+                value: zokkForms.agentive.masc,
+            });
+        }
+        if (zokkForms.verbal_noun) {
+            rows.push({
+                label: term('verbal-noun'),
+                value: zokkForms.verbal_noun,
+            });
+        }
+        if (zokkForms.hybrid_forms?.form_ii) {
+            rows.push({
+                label: term('form-ii') || 'Form II',
+                value: zokkForms.hybrid_forms.form_ii,
+            });
+        }
+        if (zokkForms.hybrid_forms?.form_ii_imperfect) {
+            rows.push({
+                label: `${term('form-ii') || 'Form II'} ${term('imperfect')}`,
+                value: zokkForms.hybrid_forms.form_ii_imperfect,
+            });
+        }
+        if (zokkForms.hybrid_forms?.form_ii_passive_participle) {
+            rows.push({
+                label: `${term('form-ii') || 'Form II'} ${term('passive-participle')}`,
+                value: zokkForms.hybrid_forms.form_ii_passive_participle,
+            });
+        }
+        if (zokkForms.hybrid_forms?.form_ii_verbal_noun) {
+            rows.push({
+                label: `${term('form-ii') || 'Form II'} ${term('verbal-noun')}`,
+                value: zokkForms.hybrid_forms.form_ii_verbal_noun,
+            });
+        }
+
+        return rows;
+    }, [term, zokkForms]);
 
      const handleRemoveRelationship = async (targetId: string) => {
          if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -3315,8 +3377,10 @@ export function ZokkEntryView({
                             )}>
                                 <MorphologyProvenanceRows
                                     source={entry.zokk_morphology}
-                                    rootDisplayValue={entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root || null}
+                                    rootDisplayValue={entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root || (entry.zokk_morphology as any)?.root_consonants || null}
                                     rootHref={entry.root_pattern_form?.root?.consonants ? `/root/${entry.root_pattern_form.root.consonants}` : undefined}
+                                    showClass
+                                    showHybrid
                                 />
 
                                 {entry.phonetics && entry.phonetics.length > 0 && (
@@ -3347,6 +3411,63 @@ export function ZokkEntryView({
                                 )}
                             </div>
 
+                            {zokkConjugation && (
+                                <div className="flex-1 min-w-0 w-full max-w-[680px] mx-auto md:mx-0 space-y-10">
+                                    <div>
+                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                                            {term('conjugation-table')}
+                                        </h2>
+                                        <div className="overflow-x-auto overflow-y-hidden pb-4">
+                                            <table className="w-full text-sm border-collapse min-w-[500px]">
+                                                <thead>
+                                                    <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                        <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('person')}</th>
+                                                        <th className="text-left font-semibold text-black pb-2 pr-4">
+                                                            {term('imperfect')} <span className="opacity-55 font-normal text-xs">{term('(present)')}</span>
+                                                        </th>
+                                                        <th className="text-left font-semibold text-black pb-2">
+                                                            {term('perfect')} <span className="opacity-55 font-normal text-xs">{term('(past)')}</span>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {zokkConjugation.rows.map(row => (
+                                                        <tr key={row.person_mt} className="border-b border-black/4 whitespace-nowrap">
+                                                            <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
+                                                                {term(row.person_mt)}
+                                                            </td>
+                                                            <td className="py-1.5 pr-4 font-serif font-normal text-black">
+                                                                {row.imperfect}
+                                                            </td>
+                                                            <td className="py-1.5 font-serif font-normal text-black">
+                                                                {row.perfect}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                            <div className="mt-4 grid grid-cols-3 gap-2 text-sm border-t border-black/8 pt-3">
+                                                <p className="font-sans font-semibold text-black self-center">{term('imperative')}</p>
+                                                <div>
+                                                    <p className="text-xs text-black/40 mb-0.5">{term('singular')}</p>
+                                                    <p className="font-serif font-normal text-black">{zokkConjugation.imperative_sg}</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-xs text-black/40 mb-0.5">{term('plural')}</p>
+                                                    <p className="font-serif font-normal text-black">{zokkConjugation.imperative_pl}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <MorphologyTable
+                                        title={term('morphology')}
+                                        rows={zokkDerivedRows}
+                                        labelHeader={term('form') || 'Form'}
+                                        hideHeaderLabel
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         <div className="mt-16">
@@ -3477,19 +3598,145 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
     const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants;
     const pattern = entry.root_pattern_form?.pattern;
+    const [hydratedNumeralFamilyEntries, setHydratedNumeralFamilyEntries] = useState<any[]>([]);
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
     const patternValue = resolveDisplayedPattern(mode, cvWizenMap, (entry as any).cv_pattern || pattern?.cv_notation, pattern?.wizen_notation);
-    const { entries: rootEntries } = useRootData(entry.root_pattern_form?.root?.id);
+    const numeralFamilyEntries = useMemo(
+        () => [...relatedEntries],
+        [relatedEntries]
+    );
+
+    const numeralFamilySeedKey = useMemo(() => {
+        const describe = (item: any) => [
+            item?.id || item?.target_id || '',
+            item?.headword || '',
+            item?.numeral_type || item?.numeral_morphology?.numeral_type || '',
+        ].join(':');
+        return [describe(entry), ...numeralFamilyEntries.map(describe)].join('|');
+    }, [entry, numeralFamilyEntries]);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        if (!isNumeralEntry) {
+            setHydratedNumeralFamilyEntries([]);
+            return () => {
+                cancelled = true;
+            };
+        }
+
+        const seedEntries = [entry, ...numeralFamilyEntries];
+        const seenIds = new Set<string>();
+        const seenHeadwords = new Set<string>();
+        const familyEntryIndexes = new Map<string, number>();
+        const familyEntries: any[] = [];
+
+        const unwrapEntry = (item: any) => item?.entry && typeof item.entry === 'object' ? item.entry : item;
+        const getEntryId = (item: any) => String(item?.id || item?.target_id || item?.entry_id || '').trim();
+        const getEntryPattern = (item: any) => (
+            item?.root_pattern_form?.pattern?.cv_notation
+            || item?.cv_pattern
+            || item?.pattern
+            || item?.morph_pattern
+            || item?.numeral_morphology?.pattern
+            || item?.numeral_morphology?.morph_pattern
+            || ''
+        );
+        const getNestedFamilyItems = (item: any) => {
+            const source = unwrapEntry(item);
+            return [
+                ...((source as any)?.related_entries || []),
+                ...((source as any)?.numeral_morphology?.related_entries || []),
+            ];
+        };
+        const isRicherNumeralEntry = (next: any, current: any) => {
+            const nextRole = normalizeNumeralRole(next?.numeral_type || next?.numeral_morphology?.numeral_type);
+            const currentRole = normalizeNumeralRole(current?.numeral_type || current?.numeral_morphology?.numeral_type);
+            if (nextRole && !currentRole) return true;
+            if (getEntryPattern(next) && !getEntryPattern(current)) return true;
+            if (next?.numeral_morphology && !current?.numeral_morphology) return true;
+            return false;
+        };
+        const appendEntry = (item: any) => {
+            const source = unwrapEntry(item);
+            if (!source || typeof source !== 'object') return;
+            const id = getEntryId(source);
+            const headword = normalizeNumeralLookupKey(String(source.headword || ''));
+            const key = id || headword;
+            if (!key) return;
+            if (String(source.pos || 'numeral').trim().toLowerCase() !== 'numeral') return;
+
+            const existingIndex = familyEntryIndexes.get(key) ?? (headword ? familyEntryIndexes.get(headword) : undefined);
+            if (existingIndex !== undefined) {
+                if (isRicherNumeralEntry(source, familyEntries[existingIndex])) {
+                    familyEntries[existingIndex] = { ...familyEntries[existingIndex], ...source };
+                }
+                return;
+            }
+
+            if (seenIds.has(key) || seenHeadwords.has(headword)) return;
+            if (id) seenIds.add(id);
+            if (headword) seenHeadwords.add(headword);
+            familyEntryIndexes.set(key, familyEntries.length);
+            if (id && headword) familyEntryIndexes.set(headword, familyEntries.length);
+            familyEntries.push(source);
+        };
+        const appendFamily = (item: any) => {
+            const source = unwrapEntry(item);
+            appendEntry(source);
+            getNestedFamilyItems(source).forEach(appendEntry);
+        };
+
+        seedEntries.forEach(appendFamily);
+        const hydratedIds = new Set<string>();
+        const enqueueHydrationIds = (items: any[]) => items
+            .map(getEntryId)
+            .filter((id) => id && id !== entry.id && !hydratedIds.has(id));
+
+        const hydrateFamilyIds = async (initialIds: string[]) => {
+            let queue = Array.from(new Set(initialIds));
+            let depth = 0;
+
+            while (queue.length > 0 && depth < 3) {
+                queue.forEach((id) => hydratedIds.add(id));
+                const results = await Promise.allSettled(queue.map((id) => apiGetEntry(id)));
+                const nextIds: string[] = [];
+
+                results.forEach((result) => {
+                    if (result.status !== 'fulfilled') return;
+                    const hydratedEntry = result.value.entry;
+                    appendFamily(hydratedEntry);
+                    nextIds.push(...enqueueHydrationIds(getNestedFamilyItems(hydratedEntry)));
+                });
+
+                queue = Array.from(new Set(nextIds));
+                depth += 1;
+            }
+        };
+
+        hydrateFamilyIds(enqueueHydrationIds(seedEntries))
+            .then(() => {
+                if (!cancelled) setHydratedNumeralFamilyEntries(familyEntries);
+            })
+            .catch(() => {
+                if (!cancelled) setHydratedNumeralFamilyEntries(familyEntries);
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [isNumeralEntry, numeralFamilySeedKey]);
+
     const linkedNumeralEntries: any[] = useMemo(() => {
         const seen = new Set<string>();
-        return [...rootEntries, ...relatedEntries, ...alternativeForms].filter((item: any) => {
+        return [entry, ...hydratedNumeralFamilyEntries, ...numeralFamilyEntries].filter((item: any) => {
             const key = String(item?.id || item?.headword || '').toLowerCase().trim();
             if (!key || seen.has(key)) return false;
             seen.add(key);
             return true;
         });
-    }, [rootEntries, relatedEntries, alternativeForms]);
+    }, [entry, hydratedNumeralFamilyEntries, numeralFamilyEntries]);
 
     const resolvedNumeralEntries: any[] = useMemo(() => {
         const seen = new Set<string>();
@@ -3502,42 +3749,17 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     }, [linkedNumeralEntries]);
 
     const numeralType = String(entry.numeral_type || nm?.numeral_type || 'cardinal').trim() || 'cardinal';
+    const currentNumeralRole = normalizeNumeralRole(numeralType) || 'cardinal';
     const numeralGender = String(nm?.gender || entry.gender || '').trim().toLowerCase();
     const combineMasculineAndShortAttributive = isNumeralEntry && shouldCombineMasculineAndShortAttributive(entry.headword || '');
-    const linkedCardinalEntry = useMemo(() => {
-        if (!isNumeralEntry || numeralType === 'cardinal') return null;
-        return resolvedNumeralEntries.find((item: any) => {
-            const headword = String(item?.headword || '').trim().toLowerCase();
-            const type = String(item?.numeral_type || '').trim().toLowerCase();
-            return headword === 'wieħed' || type === 'cardinal';
-        }) || null;
-    }, [isNumeralEntry, numeralType, resolvedNumeralEntries]);
-    function buildLinkedNumeralSurface(item: any): NumeralSurfaceValue {
-        return {
-            value: item.headword || '',
-            marker: 'plain',
-            entryId: item.id,
-            pattern: item.cv_pattern
-                || item.pattern
-                || item.form_attributive_short_pattern
-                || item.form_plural_pattern
-                || item.morph_pattern
-                || item.lemma_pattern
-                || item.form_masc_pattern
-                || item.form_fem_pattern
-                || item.numeral_morphology?.form_attributive_short_pattern
-                || item.numeral_morphology?.form_plural_pattern
-                || item.numeral_morphology?.morph_pattern
-                || item.numeral_morphology?.lemma_pattern
-                || item.numeral_morphology?.form_masc_pattern
-                || item.numeral_morphology?.form_fem_pattern
-                || item.numeral_morphology?.pattern
-                || item.root_pattern_form?.pattern?.cv_notation
-                || null,
-        };
-    }
-
-    const linkedCardinalSurface = linkedCardinalEntry ? buildLinkedNumeralSurface(linkedCardinalEntry) : null;
+    const explicitNumeralRelationshipIds = useMemo(() => {
+        const ids = new Set<string>();
+        relatedEntries.forEach((item: any) => {
+            const id = String(item?.id || item?.target_id || '').trim();
+            if (id) ids.add(id);
+        });
+        return ids;
+    }, [relatedEntries]);
 
     const getNumeralPattern = (data: NumeralSurfaceValue | NumeralSurfaceValue[]): MorphologyDisplayRow['pattern'] => (
         Array.isArray(data)
@@ -3548,29 +3770,45 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
 
     const masculineSurfaceValue = nm?.lemma_masc || entry.form_masc || entry.headword;
-    const masculineSurfacePattern = nm?.gender?.toLowerCase() === 'masculine'
-        ? (nm.lemma_pattern || entry.lemma_pattern)
-        : (nm?.form_masc_pattern || entry.form_masc_pattern);
+    const numeralEntryPattern = (entry as any).cv_pattern || pattern?.cv_notation || null;
+    const masculineSurfacePattern = numeralEntryPattern;
     const numeralDisplayForms = useMemo(
-        () => buildNumeralDisplayForms(entry.headword, rootConsonants || '', resolvedNumeralEntries),
-        [entry.headword, rootConsonants, resolvedNumeralEntries]
+        () => buildNumeralMorphologyDisplayForms(entry.headword, rootConsonants || '', { ...(nm || {}), cv_pattern: numeralEntryPattern }, resolvedNumeralEntries),
+        [entry.headword, rootConsonants, nm, numeralEntryPattern, resolvedNumeralEntries]
+    );
+
+    const getInitialNumeralFormGender = (type: string, source?: any) => (
+        source?.gender
+        || source?.numeral_morphology?.gender
+        || (type === 'attributive_short' ? 'masculine' : '')
+        || nm?.gender
+        || entry.gender
+        || 'masculine'
     );
 
     const handleEditNumeralForm = (data: NumeralSurfaceValue, type: string) => {
         if (data.marker === 'plain' && data.entryId) {
             const existing = linkedNumeralEntries?.find(e => e.id === data.entryId);
             if (existing) {
+                const gender = getInitialNumeralFormGender(type, existing);
                 setEditEntry({
                     ...existing,
+                    gender,
+                    numeral_morphology: {
+                        ...(existing as any).numeral_morphology,
+                        gender,
+                    },
                     _rootConsonants: (existing as any).root_consonants || existing.root_pattern_form?.root?.consonants || rootConsonants || ''
                 } as any);
                 setInitialFormData(null);
             }
         } else {
+            const gender = getInitialNumeralFormGender(type);
             setEditEntry(null);
             setInitialFormData({
                 headword: data.value,
                 pos: 'numeral',
+                gender,
                 numeral_type: type,
                 _rootConsonants: rootConsonants || ''
             });
@@ -3583,6 +3821,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
         const hasLinkedEntry = data.marker === 'plain' && !!data.entryId;
         const linkedEntryId = data.entryId;
+        const canRemoveLinkedEntry = !!linkedEntryId && explicitNumeralRelationshipIds.has(linkedEntryId);
         const displayValue = <MarkedValue val={{ value: data.value, theoretical: data.marker !== 'plain' }} />;
         const content = hasLinkedEntry ? (
             <Link to={`/entry/${linkedEntryId}`} style={{ color: BLUE }} className="hover:underline">
@@ -3603,7 +3842,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                     >
                         {hasLinkedEntry ? <Edit2 size={12} /> : <Plus size={12} />}
                     </button>
-                    {hasLinkedEntry && linkedEntryId && (
+                    {hasLinkedEntry && canRemoveLinkedEntry && (
                         <button
                             onClick={(e) => { e.preventDefault(); handleRemoveRelationship(linkedEntryId); }}
                             className="p-1 rounded hover:bg-black/5 text-red-400 hover:text-red-600 transition-all"
@@ -3632,8 +3871,50 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
             );
         }
 
+        if (shouldHideSurface(data, hideTheoreticalForms)) return <span className="opacity-40">-</span>;
         return renderNumeralValue(data, type);
     };
+
+    const hasVisibleNumeralRole = (data: NumeralSurfaceValue | NumeralSurfaceValue[]) => {
+        const values = Array.isArray(data) ? data : [data];
+        return hasVisibleNumeralSurface(values.filter((item) => !shouldHideSurface(item, hideTheoreticalForms)));
+    };
+
+    const getNumeralRowLabel = (role: NumeralRole) => {
+        if (role === 'attributive_short') return getNumeralShortAttributiveRowLabel();
+        if (role === 'attributive_long') return term('long-attributive') || NUMERAL_ROLE_META[role].label;
+        return term(role) || NUMERAL_ROLE_META[role].label;
+    };
+
+    const numeralBaseRows: MorphologyDisplayRow[] = combineMasculineAndShortAttributive
+        ? []
+        : (numeralGender === 'feminine'
+            ? [{
+                label: term('masculine'),
+                value: masculineSurfaceValue,
+                pattern: masculineSurfacePattern,
+            }]
+            : [{
+                label: term('feminine'),
+                value: nm?.lemma_fem || entry.form_fem,
+                pattern: numeralEntryPattern,
+            }]);
+
+    const numeralRoleRows: MorphologyDisplayRow[] = NUMERAL_ROLE_ORDER.flatMap((role) => {
+        const roleMeta = NUMERAL_ROLE_META[role];
+        const data = numeralDisplayForms[roleMeta.displayKey] as NumeralSurfaceValue[];
+        const isCurrentRole = role === currentNumeralRole;
+
+        if (!isCurrentRole && !hasVisibleNumeralRole(data)) return [];
+        if (isCurrentRole && !hasVisibleNumeralSurface(data)) return [];
+
+        return [{
+            label: getNumeralRowLabel(role),
+            value: renderNumeralLink(data, role),
+            pattern: getNumeralPattern(data),
+            theoretical: false,
+        }];
+    });
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -3801,10 +4082,10 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                 {isNumeralEntry && (
                                     <div className="mb-4 border-b border-black/8 pb-3">
                                         <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/35">
-                                            Type
+                                            {term('type')}
                                         </div>
                                         <div className="font-sans text-[1.18rem] md:text-[1.25rem] font-semibold leading-tight text-black capitalize">
-                                            {numeralType}
+                                            {getNumeralRoleLabel(numeralType)}
                                         </div>
                                     </div>
                                 )}
@@ -3813,71 +4094,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                     labelHeader={term('form') || 'Form'}
                                     displayPattern={displayPattern}
                                     hideHeaderLabel
-                                    rows={[
-                                        ...(combineMasculineAndShortAttributive
-                                            ? []
-                                            : (numeralGender === 'feminine'
-                                                ? [{
-                                                    label: term('masculine'),
-                                                    value: masculineSurfaceValue,
-                                                    pattern: masculineSurfacePattern
-                                                }]
-                                                : [{
-                                                    label: term('feminine'),
-                                                    value: nm?.lemma_fem || entry.form_fem,
-                                                    pattern: (nm?.gender?.toLowerCase() === 'feminine' && !nm.form_fem_pattern && !entry.form_fem_pattern)
-                                                        ? (nm.lemma_pattern || entry.lemma_pattern)
-                                                        : (nm?.form_fem_pattern || entry.form_fem_pattern)
-                                                }])),
-                                        ...(numeralType !== 'cardinal' ? [{
-                                            label: term('cardinal') || 'Cardinal',
-                                            value: linkedCardinalSurface ? renderNumeralLink(linkedCardinalSurface, 'cardinal') : <span className="opacity-40">-</span>,
-                                            pattern: linkedCardinalSurface?.pattern || null,
-                                            theoretical: false,
-                                        }] : []),
-                                        ...(numeralType !== 'attributive_short' ? [{
-                                            label: getNumeralShortAttributiveRowLabel(),
-                                            value: renderNumeralLink(numeralDisplayForms.attributive_short, 'attributive_short'),
-                                            pattern: getNumeralPattern(numeralDisplayForms.attributive_short),
-                                            theoretical: false,
-                                        }] : []),
-                                        ...(numeralType !== 'attributive_long' ? [{
-                                            label: term('long-attributive') || 'Long',
-                                            value: renderNumeralLink(numeralDisplayForms.attributive_long, 'attributive_long'),
-                                            pattern: getNumeralPattern(numeralDisplayForms.attributive_long),
-                                            theoretical: false,
-                                        }] : []),
-                                        ...(numeralType !== 'ordinal' ? [{
-                                            label: term('ordinal') || 'Ordinal',
-                                            value: renderNumeralLink(numeralDisplayForms.ordinal, 'ordinal'),
-                                            pattern: getNumeralPattern(numeralDisplayForms.ordinal),
-                                            theoretical: false,
-                                        }] : []),
-                                        ...(numeralType !== 'adverbial' ? [{
-                                            label: term('adverbial') || 'Adverbial',
-                                            value: renderNumeralLink(numeralDisplayForms.adverbial, 'adverbial'),
-                                            pattern: getNumeralPattern(numeralDisplayForms.adverbial),
-                                            theoretical: false,
-                                        }] : []),
-                                        ...(numeralType !== 'fractional' ? [{
-                                            label: term('fractional') || 'Fractional (Sem.)',
-                                            value: renderNumeralLink(numeralDisplayForms.fractional, 'fractional'),
-                                            pattern: getNumeralPattern(numeralDisplayForms.fractional),
-                                            theoretical: false,
-                                        }] : []),
-                                        ...(numeralType !== 'multiplier' ? [{
-                                            label: term('multiplier') || 'Multiplier',
-                                            value: renderNumeralLink(numeralDisplayForms.multiplier, 'multiplier'),
-                                            pattern: getNumeralPattern(numeralDisplayForms.multiplier),
-                                            theoretical: false,
-                                        }] : []),
-                                        ...(numeralType !== 'distributive' ? [{
-                                            label: term('distributive') || 'Distributive',
-                                            value: renderNumeralLink(numeralDisplayForms.distributive, 'distributive'),
-                                            pattern: getNumeralPattern(numeralDisplayForms.distributive),
-                                            theoretical: false,
-                                        }] : []),
-                                    ]}
+                                    rows={[...numeralBaseRows, ...numeralRoleRows]}
                                 />
 
                                 <div className="mt-12 space-y-12">
@@ -3977,7 +4194,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
     const [initialFormData, setInitialFormData] = useState<any>(null);
 
     const isActualAdmin = isAdmin && adminViewEnabled;
-    const am = entry.adjective_morphology!;
+    const am = getEntryAdjectiveMorphology(entry)!;
     const ety = entry.etymologies?.[0];
 
     const allRelatedEntries = am.related_entries || [];
@@ -4340,7 +4557,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     }), hideTheoreticalForms);
     const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
     const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
-    //const pm = entry.adjective_morphology!;
+    const adjectiveMorphology = getEntryAdjectiveMorphology(entry);
 
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -4536,8 +4753,8 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                         },
                                         {
                                             label: term('elative') || 'Elative',
-                                            value: (entry as any).adj_elative || entry.adjective_morphology?.elative,
-                                            show: !!((entry as any).adj_elative || entry.adjective_morphology?.elative) && !entry.tags?.some(t => t.includes('$') || isHiddenTag(t))
+                                            value: (entry as any).adj_elative || adjectiveMorphology?.elative,
+                                            show: !!((entry as any).adj_elative || adjectiveMorphology?.elative) && !entry.tags?.some(t => t.includes('$') || isHiddenTag(t))
                                         }
                                     ]}
                                 />
@@ -4670,7 +4887,7 @@ export function FunctionWordEntryView({
     const isInterjection = pos === 'interjection';
     const isPronoun = pos === 'pronoun';
     const isArticle = pos === 'article';
-    const hasInflection = !shouldHideInflectionTable(pos, entry.is_inflectable);
+    const hasInflection = !shouldHideInflectionTableForEntry(pos, entry);
 
     const parseMaybeArray = <T,>(val: any): T[] => {
         if (Array.isArray(val)) return val as T[];
@@ -4992,15 +5209,15 @@ export function FunctionWordEntryView({
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-sm">
                                             <div className="rounded-lg border border-black/10 p-4 bg-white shadow-sm overflow-hidden">
                                                 <p className="text-xs font-bold uppercase tracking-wider text-black/50 mb-3 border-b border-black/5 pb-2">
-                                                    {term('sun-letters') || 'Sun Letters'} (Assimilated)
+                                                    {term('sun-letters')} ({term('assimilated')})
                                                 </p>
                                                 <div className="overflow-x-auto">
                                                     <table className="w-full">
                                                         <thead>
                                                             <tr className="text-[10px] text-black/30 uppercase tracking-widest text-left">
-                                                                <th className="pb-1">Letter</th>
-                                                                <th className="pb-1">Rule</th>
-                                                                <th className="pb-1">Example</th>
+                                                                <th className="pb-1">{term('letter')}</th>
+                                                                <th className="pb-1">{term('rule')}</th>
+                                                                <th className="pb-1">{term('example')}</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody className="divide-y divide-black/5">
@@ -5022,15 +5239,15 @@ export function FunctionWordEntryView({
 
                                             <div className="rounded-lg border border-black/10 p-4 bg-white shadow-sm overflow-hidden">
                                                 <p className="text-xs font-bold uppercase tracking-wider text-black/50 mb-3 border-b border-black/5 pb-2">
-                                                    {term('moon-letters') || 'Moon Letters'} (Standard)
+                                                    {term('moon-letters')} ({term('standard-label')})
                                                 </p>
                                                 <div className="overflow-x-auto">
                                                     <table className="w-full">
                                                         <thead>
                                                             <tr className="text-[10px] text-black/30 uppercase tracking-widest text-left">
-                                                                <th className="pb-1">Letter</th>
-                                                                <th className="pb-1">Rule</th>
-                                                                <th className="pb-1">Example</th>
+                                                                <th className="pb-1">{term('letter')}</th>
+                                                                <th className="pb-1">{term('rule')}</th>
+                                                                <th className="pb-1">{term('example')}</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody className="divide-y divide-black/5">
@@ -5224,37 +5441,50 @@ export function EntryPage() {
         );
     }
 
-    const pos = (entry.pos || '').toLowerCase();
-    const nm = entry.noun_morphology;
-    const vm = entry.verb_morphology;
-    const am = entry.adjective_morphology;
+    const viewKind = resolveEntryViewKind(entry);
 
-
-    if (pos === 'verb' && vm) {
+    if (viewKind === 'verb') {
         return <VerbEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if (pos === 'numeral') {
+    if (viewKind === 'numeral') {
         return <NumeralEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if (pos === 'noun' && nm) {
+    if (viewKind === 'noun') {
         return <NounEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if (pos === 'adjective' && am) {
+    if (viewKind === 'adjective') {
         return <AdjectiveEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if (pos === 'participle') {
+    if (viewKind === 'participle') {
         return <ParticipleEntryView entry={entry} onRefetch={refetch} />;
     }
 
-    if (['pronoun', 'particle', 'adverb', 'preposition', 'interjection', 'article', 'conjunction', 'interrogative'].includes(pos)) {
-        return <FunctionWordEntryView entry={entry} onRefetch={refetch} />;
+    if (viewKind === 'function-word') {
+        const zokk = entry.zokk_morphology;
+        const rootDisplayValue = zokk?.root
+            || entry.root_pattern_form?.root?.consonant_array?.join('-')
+            || entry.root_pattern_form?.root?.consonants
+            || (entry as any).root_consonants
+            || undefined;
+
+        return (
+            <FunctionWordEntryView
+                entry={entry}
+                onRefetch={refetch}
+                stemDisplayValue={zokk?.stem_string}
+                rootDisplayValue={rootDisplayValue}
+                rootHref={rootDisplayValue ? `/root/${rootDisplayValue}` : undefined}
+                classType={zokk?.class_type}
+                isHybrid={zokk?.is_hybrid}
+            />
+        );
     }
 
-    if (entry.zokk_morphology) {
+    if (viewKind === 'zokk') {
         return <ZokkEntryView entry={entry} onRefetch={refetch} />;
     }
 

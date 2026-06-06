@@ -10,7 +10,7 @@ import { resolveEntryGender } from '../../../src/lib/gender.ts';
 import { normalizeSourceMetadata } from '../../../src/lib/sourceMetadata.ts';
 import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../../src/lib/entryHydration.ts';
 import { applyVerbMorphologyCompatibility, ensureVerbMorphologyTable } from '../../../src/lib/verbMorphology.ts';
-import { getEntryIdFamily, normalizeEntryId } from '../../../src/lib/entryId.ts';
+import { getEntryIdFamily, normalizeEntryId, normalizeEntryPos } from '../../../src/lib/entryId.ts';
 
 function firstSenseText(value) {
     if (value === undefined || value === null) return '';
@@ -270,10 +270,11 @@ export async function onRequestGet({ params, env }) {
                     mt: firstSenseText(r.text_mt),
                     headword: hydrated.headword || null,
                     pos: hydrated.pos || null,
+                    numeral_type: hydrated.numeral_type || hydrated.numeral_morphology?.numeral_type || null,
                     root_consonants: hydrated.root_consonants || null,
                     cv_pattern: hydrated.cv_pattern || null,
-                    lemma_pattern: hydrated.lemma_pattern || hydrated.numeral_morphology?.lemma_pattern || null,
-                    form_masc_pattern: hydrated.form_masc_pattern || hydrated.numeral_morphology?.form_masc_pattern || null,
+                    lemma_pattern: hydrated.lemma_pattern || null,
+                    form_masc_pattern: hydrated.form_masc_pattern || null,
                     form_fem_pattern: hydrated.form_fem_pattern || null,
                     form_plural_pattern: hydrated.form_plural_pattern || hydrated.numeral_morphology?.form_plural_pattern || null,
                     morph_pattern: hydrated.morph_pattern || null,
@@ -291,6 +292,7 @@ export async function onRequestGet({ params, env }) {
                 return {
                     ...r,
                     cv_pattern: r.cv_pattern || match?.cv_pattern || null,
+                    numeral_type: r.numeral_type || match?.numeral_type || r.numeral_morphology?.numeral_type || match?.numeral_morphology?.numeral_type || null,
                     lemma_pattern: r.lemma_pattern || match?.lemma_pattern || null,
                     form_masc_pattern: r.form_masc_pattern || match?.form_masc_pattern || null,
                     form_fem_pattern: r.form_fem_pattern || match?.form_fem_pattern || null,
@@ -333,8 +335,10 @@ export async function onRequestGet({ params, env }) {
             }));
         }
 
-        if (entry.pos === 'verb') {
-            applyVerbMorphologyCompatibility(payload, entry, entry, {
+        const normalizedPos = normalizeEntryPos(entry.pos);
+
+        if (normalizedPos === 'verb') {
+            applyVerbMorphologyCompatibility(payload, entryPayload, entryPayload.verb_morphology || entryPayload, {
                 synonyms: payload.synonyms,
                 antonyms: payload.antonyms,
                 related_entries: related_entries.length ? related_entries : payload.related_entries,
@@ -345,7 +349,7 @@ export async function onRequestGet({ params, env }) {
         }
 
         // Attach Noun Morphology struct
-        if (entry.pos === 'noun') {
+        if (normalizedPos === 'noun') {
             const isColl = Boolean(entry.is_collective);
             const isSing = Boolean(entry.is_singulative);
             const nounMorphology = entryPayload.noun_morphology || {};
@@ -395,7 +399,7 @@ export async function onRequestGet({ params, env }) {
         }
 
         // Attach Adjective Morphology struct
-        if (entry.pos === 'adjective' || entry.pos === 'participle') {
+        if (normalizedPos === 'adjective' || normalizedPos === 'participle') {
             const adjectiveMorphology = entryPayload.adjective_morphology || {};
             payload.adjective_morphology = {
                 masculine: adjectiveMorphology.masculine || adjectiveMorphology.masculine_form || entryPayload.headword,
@@ -442,13 +446,13 @@ export async function onRequestGet({ params, env }) {
             };
             payload.adj_morphology = payload.adjective_morphology;
             // Participles use adjective morphology but have a type
-            if (entry.pos === 'participle') {
+            if (normalizedPos === 'participle') {
                 payload.participle_type = entryPayload.participle_type || 'active';
             }
         }
 
         // Attach Numeral Morphology struct
-        if (entry.pos === 'numeral') {
+        if (normalizedPos === 'numeral') {
             const numMorphology = entryPayload.numeral_morphology || {};
             payload.numeral_morphology = {
                 numeral_type: numMorphology.numeral_type || null,

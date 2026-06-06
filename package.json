@@ -29,6 +29,8 @@
     "test:inflection-state": "node --experimental-strip-types scripts/inflectionState.test.mjs",
     "test:db-tools-export": "node --experimental-strip-types scripts/dbToolsExport.test.mjs",
     "test:verb-morphology": "node --experimental-strip-types scripts/verbMorphology.test.mjs",
+    "test:engine-verb-fixtures": "node --experimental-strip-types scripts/engineVerbFixtures.test.mjs",
+    "test:entry-form-verb-preview": "node --experimental-strip-types scripts/entryFormModalVerbPreview.test.mjs",
     "import:dry": "node scripts/import-xls.mjs --dry-run",
     "import:all": "node scripts/import-xls.mjs --execute",
     "import:roots": "node scripts/import-xls.mjs --execute --roots-only",

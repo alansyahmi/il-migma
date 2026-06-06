@@ -44,7 +44,7 @@ Available skills:
 
 ## MCP Servers
 
-Treat the project-local `.codex/config.toml` as the default Codex baseline for ECC. The current ECC baseline enables GitHub, Context7, Exa, Memory, Playwright, and Sequential Thinking; add heavier extras in `~/.codex/config.toml` only when a task actually needs them.
+Treat the project-local `.codex/config.toml` as the default Codex baseline for ECC. Keep the default baseline lean for day-to-day Il-miġma' work: MCP servers are defined there, but disabled unless a task actually needs them. Enable GitHub, Context7, Exa, Memory, Playwright, or Sequential Thinking only for the session that needs that capability, then restart Codex so the MCP list is refreshed.
 
 ## Multi-Agent Support
 
@@ -59,6 +59,11 @@ Sample role configs in this repo:
 - `.codex/agents/explorer.toml` — read-only evidence gathering
 - `.codex/agents/reviewer.toml` — correctness/security review
 - `.codex/agents/docs-researcher.toml` — API and release-note verification
+
+Speed guidance:
+- Use subagents for read-heavy parallel work such as exploration, docs checks, triage, and review.
+- Avoid spawning subagents for narrow single-file fixes or straightforward test updates.
+- Prefer targeted file paths and targeted tests in prompts; broad scans are slower in this repo because generated artifacts, databases, OCR assets, and import scratch files live alongside the app code.
 
 ## Key Differences from Claude Code
 

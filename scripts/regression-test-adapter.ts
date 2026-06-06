@@ -283,7 +283,7 @@ assert.strictEqual(
 );
 assert.strictEqual(
     getNumeralShortAttributiveRowLabel(),
-    'Short-Attributive (Masculine)',
+    'Short-Attributive',
 );
 console.log('✅ Numeral auto-fill seeding passed');
 

@@ -5,11 +5,9 @@ import {
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants, apiGetDistinctValues, apiGetEntry, adminCheckIdExists, invalidateDistinctValuesCache } from '@/lib/api';
+import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants, apiGetDistinctValues, apiGetEntry, adminCheckIdExists, invalidateDistinctValuesCache, apiSearch } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
-import { generateRootForms } from '@/lib/conjugationEngine';
-import type { WeakClass } from '@/types';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { buildLoadedEntryPatch, entryToForm, formToPayload, INITIAL_FORM_STATE } from '@/lib/entryAdapter';
 import { Badge } from '@/components/ui/Badge';
@@ -18,7 +16,15 @@ import {
     generateIPA, deriveFeminineFromPattern, deriveMasculineFromFeminine,
     detectPluralType, derivePattern, extractLongVowelFromPattern
 } from '@/lib/maltesePhonology';
-import { buildNumeralAutoForms, seedNumeralDerivedFields } from '@/lib/numeralMorphology';
+import {
+    buildNumeralAutoForms,
+    getNumeralDerivedCandidateHeadwords,
+    getNumeralRoleLabel,
+    isCardinalNumeralRole,
+    normalizeNumeralLookupKey,
+    selectNumeralRelationshipEntries,
+    seedNumeralDerivedFields,
+} from '@/lib/numeralMorphology';
 import { normalizeEntryDefinitions, normalizeRootEtymologyChain } from '@/lib/adminUtils';
 import { resolveEntryMorphologyMode } from '@/lib/adminSchema';
 import { applyInflectableToggle } from '@/lib/inflectionState';
@@ -37,9 +43,10 @@ import {
     type PatternOption,
     type PatternSourceItem,
 } from '@/lib/patternBuckets';
-import { buildSuggestedEntryId } from '@/lib/entryId';
+import { buildSuggestedEntryId, normalizeEntryPos } from '@/lib/entryId';
 import { isDashMarkedSuffix, stripLeadingDash } from '@/lib/suffixMatching';
 import type { VerbMorphology } from '@/types';
+import { buildEntryFormVerbMorphologyPreview, detectVerbRootType } from '@/lib/verbMorphology';
 
 export interface AdminEntry {
     id: string;
@@ -132,6 +139,9 @@ interface MorphologyProps {
         verb_presets?: Record<string, any>;
     };
     onApplyDerivedTerms?: () => void;
+    onFindDerivedEntries?: () => void | Promise<void>;
+    findDerivedStatus?: string;
+    isFindingDerivedEntries?: boolean;
     suggestions?: string[];
 }
 
@@ -865,6 +875,49 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
 
             <div className={styles.grid}>
                 <div>
+                    <label className={styles.label}>{t('Verb Form', 'Forma tal-Verb')}</label>
+                    <select className={styles.sel} value={form._formLabel || ''} onChange={e => set('_formLabel', e.target.value)}>
+                        <option value="">{t('Select...', 'Agħżel...')}</option>
+                        {(options?.verb_form || []).map((opt: any) => {
+                            const value = typeof opt === 'string' ? opt : opt.value;
+                            const label = typeof opt === 'string' ? opt : opt.label;
+                            return <option key={value} value={value}>{label}</option>;
+                        })}
+                    </select>
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Verb Class', 'Klassi tal-Verb')}</label>
+                    <select className={styles.sel} value={form.verb_class || ''} onChange={e => set('verb_class', e.target.value)}>
+                        <option value="">{t('Select...', 'Agħżel...')}</option>
+                        {form.verb_class === 'strong-hybrid' && !options?.verb_class?.some((opt: any) => opt.value === 'strong-hybrid') && (
+                            <option value="strong-hybrid">{t('Strong Hybrid', 'Sħiħ Ibridu')}</option>
+                        )}
+                        {options?.verb_class?.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    </select>
+                </div>
+            </div>
+
+            <div className={styles.grid}>
+                <div>
+                    <label className={styles.label}>{t('Weak Class', 'Klassi Dgħajfa')}</label>
+                    <select className={styles.sel} value={form._weakClass || ''} onChange={e => set('_weakClass', e.target.value)}>
+                        <option value="">{t('None', 'Xejn')}</option>
+                        <option value="assimilative">{t('Assimilative', 'Assimilattiv')}</option>
+                        <option value="hollow">{t('Hollow', 'Vojt')}</option>
+                        <option value="defective">{t('Defective', 'Nieqes')}</option>
+                    </select>
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Root Type', 'Tip tal-Għerq')}</label>
+                    <select className={styles.sel} value={form.verb_type || ''} onChange={e => set('verb_type', e.target.value)}>
+                        <option value="">{t('Select...', 'Agħżel...')}</option>
+                        {options?.verb_type?.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    </select>
+                </div>
+            </div>
+
+            <div className={styles.grid}>
+                <div>
                     <label className={styles.label}>{t('Perfect (3sg.m)', 'Perfett (3sg.m)')}</label>
                     <input className={styles.inp} value={form.verb_perfective_3sgm} onChange={e => set('verb_perfective_3sgm', e.target.value)} onFocus={() => onFocus('verb_perfective_3sgm')} />
                 </div>
@@ -1161,7 +1214,20 @@ const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => {
 };
 
 
-const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onApplyDerivedTerms, suggestions }: MorphologyProps) => (
+const NumeralFields = ({
+    form,
+    set,
+    t,
+    styles,
+    options,
+    insertChar,
+    onFocus,
+    onApplyDerivedTerms,
+    onFindDerivedEntries,
+    findDerivedStatus,
+    isFindingDerivedEntries,
+    suggestions,
+}: MorphologyProps) => (
     (() => {
         const pluralRows = Array.isArray(form.plural_forms) && form.plural_forms.length > 0
             ? form.plural_forms
@@ -1169,11 +1235,28 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
         const updatePluralRows = (rows: PluralFormRow[]) => {
             set('plural_forms', rows);
         };
+        const isCardinal = isCardinalNumeralRole(form.numeral_type);
+        const roleLabel = getNumeralRoleLabel(form.numeral_type);
 
         return (
         <div className="space-y-4">
-            {(!form.numeral_type || form.numeral_type === 'cardinal') && (
-                <div className="flex justify-end">
+            <div className="rounded-lg border border-blue-100 bg-blue-50/60 px-3 py-2 text-[11px] leading-relaxed text-slate-700">
+                <div className="flex items-center gap-1.5 font-bold text-blue-700 uppercase tracking-wider text-[10px] mb-1">
+                    <AlertTriangle size={12} />
+                    {t('Numeral setup', 'Tħejjija tan-numeral')}
+                </div>
+                <p>
+                    {isCardinal
+                        ? t('For a cardinal, set Numeral Type to cardinal, keep the headword pattern in the entry CV Pattern field, then use the schema-backed attributive and derived-form fields below.', 'Għal kardinal, agħżel cardinal, żomm il-mudell tal-kelma fil-CV Pattern tal-entrata, imbagħad uża l-forom attributtivi u derivati hawn taħt.')
+                        : t('For a role-specific numeral, set Numeral Type to its real role and keep its own pattern in the entry CV Pattern field. Link a family entry under Numeral Family only when one exists.', 'Għal numeral b’rwol speċifiku, agħżel it-tip skont ir-rwol u żomm il-mudell tiegħu fil-CV Pattern tal-entrata. Rabat entrata tal-familja f’Familja tan-Numeral biss meta teżisti.')}
+                </p>
+                <p className="mt-1 text-slate-500">
+                    {t('Alternative Forms are spelling or surface variants; Derived Terms are real linked entries. Numeral morphology is stored in the numeral_morphology fields shown here.', 'Forom Alternattivi huma varjanti ortografiċi jew tal-wiċċ; Termini Derivati huma entrati marbuta. Il-morfoloġija tan-numerali tinżamm fl-oqsma numeral_morphology murija hawn.')}
+                </p>
+            </div>
+
+            <div className="flex flex-wrap justify-end gap-2">
+                {isCardinal && (
                     <button
                         type="button"
                         onClick={onApplyDerivedTerms}
@@ -1182,6 +1265,25 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
                         <RefreshCw size={10} />
                         {t('Suggest Numeral Forms', 'Iġġenera Forom tan-Numri')}
                     </button>
+                )}
+                <button
+                    type="button"
+                    onClick={onFindDerivedEntries}
+                    disabled={!onFindDerivedEntries || isFindingDerivedEntries}
+                    className="text-[10px] text-blue-600 font-medium hover:underline flex items-center gap-1 disabled:opacity-40 disabled:hover:no-underline"
+                >
+                    <Sparkles size={10} />
+                    {isFindingDerivedEntries
+                        ? t('Finding Numeral Family...', 'Qed Tinstab il-Familja tan-Numeral...')
+                        : isCardinal
+                            ? t('Find Derived Entries', 'Sib Entrati Derivati')
+                            : t('Find Numeral Family', 'Sib il-Familja tan-Numeral')}
+                </button>
+            </div>
+
+            {findDerivedStatus && (
+                <div className="text-[11px] text-slate-500 px-1 -mt-2">
+                    {findDerivedStatus}
                 </div>
             )}
 
@@ -1202,40 +1304,90 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
                 </div>
             </div>
 
+            {!isCardinal && (
+                <div className="rounded-lg border border-slate-200 bg-white/70 p-3 space-y-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <div className={styles.label}>{t('Role', 'Rwol')}</div>
+                            <div className="text-sm font-semibold text-slate-900">{roleLabel}</div>
+                        </div>
+                        <div>
+                            <div className={styles.label}>{t('Surface Form', 'Forma')}</div>
+                            <div className="text-sm font-serif text-slate-900">{form.headword || '-'}</div>
+                        </div>
+                        <div>
+                            <div className={styles.label}>{t('Entry CV Pattern', 'CV Pattern tal-Entrata')}</div>
+                            <div className="text-sm font-mono text-slate-900">{form.cv_pattern || '-'}</div>
+                        </div>
+                    </div>
+                    <div className="text-[11px] leading-relaxed text-slate-500">
+                        {t('This numeral stores only this role. If a cardinal or family entry exists, link it under Numeral Family; otherwise standalone role numerals such as Romance fractions can remain unlinked.', 'Dan in-numeral iżomm dan ir-rwol biss. Jekk teżisti entrata kardinali jew tal-familja, rabatha f’Familja tan-Numeral; inkella numerali waħedhom bħal frazzjonijiet Rumanz jistgħu jibqgħu bla rabta.')}
+                    </div>
+                </div>
+            )}
+
+            <Suspense fallback={<div className="rounded-xl border border-border-light bg-slate-50 p-4 text-xs text-black/40">{t('Loading numeral family editor…', 'Qed jitgħabba l-editur tal-familja tan-numeral…')}</div>}>
+                <LazyRelationshipEditor
+                    type="derived"
+                    title={t('Numeral Family', 'Familja tan-Numeral')}
+                    items={Array.isArray(form.related_entries) ? form.related_entries : []}
+                    onChange={(items) => set('related_entries', items)}
+                    enableSuggestions
+                    suggestionScope="entries"
+                    currentEntryId={form.id}
+                    extraActions={[
+                        { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
+                    ]}
+                />
+            </Suspense>
+
+            {!isCardinal ? null : (
+                <>
+
             <div className={styles.grid}>
                 <div>
-                    <label className={styles.label}>{t('Lemma Base', 'Lemma Bażi')}</label>
-                    <input className={styles.inp} value={form.lemma_base || ''} onChange={e => set('lemma_base', e.target.value)} />
+                    <label className={styles.label}>{t('Short Attributive', 'Attributtiv Qasir')}</label>
+                    <input className={styles.inp} value={form.form_attributive_short || ''} onChange={e => set('form_attributive_short', e.target.value)} />
                 </div>
                 <div>
-                    <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
-                    <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
+                    <label className={styles.label}>{t('Long Attributive', 'Attributtiv Twil')}</label>
+                    <input className={styles.inp} value={form.form_attributive_long || ''} onChange={e => set('form_attributive_long', e.target.value)} />
                 </div>
             </div>
 
             <div className={styles.grid}>
                 <div>
-                    <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
-                    <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                    <label className={styles.label}>{t('Ordinal Form', 'Ordinal')}</label>
+                    <input className={styles.inp} value={form.numeral_ordinal || ''} onChange={e => set('numeral_ordinal', e.target.value)} />
                 </div>
-                <div className="space-y-4">
-                    <div>
-                        <label className={styles.label}>{t('Short Attributive', 'Attributtiv Qasir')}</label>
-                        <input className={styles.inp} value={form.form_attributive_short || ''} onChange={e => set('form_attributive_short', e.target.value)} />
-                    </div>
-                    <div>
-                        <label className={styles.label}>{t('Long Attributive', 'Attributtiv Twil')}</label>
-                        <input className={styles.inp} value={form.form_attributive_long || ''} onChange={e => set('form_attributive_long', e.target.value)} />
-                    </div>
+                <div>
+                    <label className={styles.label}>{t('Adverbial Form', 'Avverbjali')}</label>
+                    <input className={styles.inp} value={form.numeral_adverbial || ''} onChange={e => set('numeral_adverbial', e.target.value)} />
                 </div>
+            </div>
+
+            <div className={styles.grid}>
+                <div>
+                    <label className={styles.label}>{t('Fractional Form', 'Frazzjonali')}</label>
+                    <input className={styles.inp} value={form.numeral_fractional || ''} onChange={e => set('numeral_fractional', e.target.value)} />
+                </div>
+                <div>
+                    <label className={styles.label}>{t('Multiplier Form', 'Multiplikatur')}</label>
+                    <input className={styles.inp} value={form.numeral_multiplier || ''} onChange={e => set('numeral_multiplier', e.target.value)} />
+                </div>
+            </div>
+
+            <div>
+                <label className={styles.label}>{t('Distributive Form', 'Distributtiv')}</label>
+                <input className={styles.inp} value={form.numeral_distributive || ''} onChange={e => set('numeral_distributive', e.target.value)} />
             </div>
 
             <div className={styles.grid}>
                 <div>
                     <PatternTagField
-                        label={t('Masculine Pattern', 'Mudell Mask.')}
-                        value={form.form_masc_pattern || ''}
-                        onChange={v => set('form_masc_pattern', v)}
+                        label={t('Short Attributive Pattern', 'Mudell Attributtiv Qasir')}
+                        value={form.form_attributive_short_pattern || ''}
+                        onChange={v => set('form_attributive_short_pattern', v)}
                         placeholder="e.g. CVCVC"
                         presets={options?.patterns}
                         styles={styles}
@@ -1244,11 +1396,11 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
                 </div>
                 <div>
                     <PatternTagField
-                        label={t('Feminine Pattern', 'Mudell Fem.')}
-                        value={form.form_fem_pattern || ''}
-                        onChange={v => set('form_fem_pattern', v)}
-                        placeholder="e.g. CVCVCa"
-                        presets={options?.patterns}
+                        label={t('Plural Pattern', 'Mudell Plural')}
+                        value={form.form_plural_pattern || ''}
+                        onChange={v => set('form_plural_pattern', v)}
+                        placeholder="e.g. CVCVC"
+                        presets={options?.plural_patterns || options?.patterns}
                         styles={styles}
                         t={t}
                     />
@@ -1278,6 +1430,8 @@ const NumeralFields = ({ form, set, t, styles, options, insertChar, onFocus, onA
                 styles={styles}
                 pluralPatterns={options?.plural_patterns}
             />
+                </>
+            )}
         </div>
         );
     })()
@@ -1327,6 +1481,18 @@ function getVerbCvSuggestion(form: string, verbClass: string): { cv: string; wiz
         default:
             return null;
     }
+}
+
+function looksLikeFormIStrongHybridForm(form: any, rootOverride?: string): boolean {
+    const verbForm = String(form?._formLabel || form?.verb_form || '').trim().toUpperCase();
+    if (verbForm !== 'I') return false;
+
+    const headword = String(form?.headword || '').trim();
+    if (!/['’]$/.test(headword)) return false;
+
+    const root = String(rootOverride || form?._rootConsonants || form?.root_consonants || '').trim().toLowerCase();
+    const finalRadical = root.split('-').map(part => part.trim()).filter(Boolean).at(-1) || '';
+    return finalRadical === 'għ' || finalRadical === 'gh';
 }
 
 function ResetButton({ onClick, title = "Reset" }: { onClick: () => void, title?: string }) {
@@ -1561,6 +1727,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     };
 
     const [form, setForm] = useState(() => entryToForm(entry, initialForm));
+    const [isFindingNumeralDerivedEntries, setIsFindingNumeralDerivedEntries] = useState(false);
+    const [numeralDerivedStatus, setNumeralDerivedStatus] = useState('');
     const deferredForm = useDeferredValue(form);
     const loadRequestSeqRef = useRef(0);
     const idCheckSeqRef = useRef(0);
@@ -1725,10 +1893,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     // ── AUTOMATION: Verb Type/Category from Root ──────────────────────────────
     useEffect(() => {
         if (form.pos !== 'verb') return;
-        const rootClean = form._rootConsonants.replace(/-/g, '').trim();
-        if (!rootClean) return;
+        if (!String(form._rootConsonants || '').trim()) return;
 
-        const detected = rootClean.length >= 4 ? 'quadriliteral' : 'triliteral';
+        const detected = detectVerbRootType(form._rootConsonants);
         if (form.verb_type !== detected) {
             set('verb_type', detected);
         }
@@ -1754,15 +1921,18 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 if (!active || requestSeq !== rootLookupSeqRef.current || !root) return;
 
                 const rootStrength = root.strength?.toLowerCase();
-                let suggestedClass = '';
-                if (rootStrength === 'strong') suggestedClass = 'strong';
-                else if (rootStrength === 'weak') suggestedClass = 'weak';
-                else if (rootStrength === 'geminated') suggestedClass = 'doubled';
 
                 setForm(prev => {
                     let next: any = prev;
                     let hasChanges = false;
                     const newFilled = new Set(autoFilledFieldsRef.current);
+                    let suggestedClass = '';
+                    if (rootStrength === 'strong') {
+                        suggestedClass = looksLikeFormIStrongHybridForm(prev, root.consonants || rootStr)
+                            ? 'strong-hybrid'
+                            : 'strong';
+                    } else if (rootStrength === 'weak') suggestedClass = 'weak';
+                    else if (rootStrength === 'geminated') suggestedClass = 'doubled';
                     const assign = (key: string, value: any) => {
                         if (!Object.is(next[key], value)) {
                             if (next === prev) next = { ...prev };
@@ -1771,7 +1941,12 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         }
                     };
 
-                    if (suggestedClass && !prev.verb_class) {
+                    const canPromoteAutoStrongHybrid =
+                        suggestedClass === 'strong-hybrid'
+                        && prev.verb_class === 'strong'
+                        && newFilled.has('verb_class');
+
+                    if (suggestedClass && (!prev.verb_class || canPromoteAutoStrongHybrid)) {
                         newFilled.add('verb_class');
                         assign('verb_class', suggestedClass);
                     }
@@ -1839,7 +2014,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
     // ── AUTOMATION: Smart Defaults ──────────────────────────────────────────
     useEffect(() => {
-        const isMorphPos = ['noun', 'adjective', 'participle', 'numeral', 'pronoun'].includes(form.pos);
+        const isMorphPos = ['noun', 'adjective', 'participle', 'pronoun'].includes(form.pos);
         if (form.headword && isMorphPos) {
             setForm(prev => {
                 let next: any = prev;
@@ -1994,22 +2169,21 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
             assign(k, v);
 
-            // Sync headword to lemma_base/form_fem/form_masc
-            if (k === 'headword' && ['noun', 'adjective', 'participle', 'numeral'].includes(next.pos)) {
+            // Sync headword to legacy base/gendered form fields for POS types
+            // whose morphology schema still stores those aliases.
+            if (k === 'headword' && ['noun', 'adjective', 'participle'].includes(next.pos)) {
                 if (next.gender?.toLowerCase() === 'feminine') {
                     assign('form_fem', v);
                 } else if (next.gender?.toLowerCase() === 'masculine') {
                     assign('lemma_base', v);
-                    if (next.pos === 'numeral' && !next.form_masc) {
-                        assign('form_masc', v);
-                    }
                 } else {
                     assign('lemma_base', v);
                 }
             }
 
-            // Sync CV pattern to gender-specific pattern for relevant POS
-            if (k === 'cv_pattern' && ['noun', 'adjective', 'participle', 'numeral'].includes(next.pos)) {
+            // Sync CV pattern to gender-specific pattern fields for POS types
+            // that still use gendered morphology patterns.
+            if (k === 'cv_pattern' && ['noun', 'adjective', 'participle'].includes(next.pos)) {
                 if (next.gender?.toLowerCase() === 'feminine') {
                     assign('form_fem_pattern', v);
                 } else {
@@ -2018,7 +2192,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             }
 
             // Sync back when gender changes
-            if (k === 'gender' && ['noun', 'adjective', 'participle', 'numeral'].includes(next.pos)) {
+            if (k === 'gender' && ['noun', 'adjective', 'participle'].includes(next.pos)) {
                 // When switching gender, also ensure the headword is synced to the new base
                 if (v?.toLowerCase() === 'feminine') {
                     assign('form_fem', next.headword);
@@ -2027,9 +2201,6 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     }
                 } else {
                     assign('lemma_base', next.headword);
-                    if (next.pos === 'numeral' && !next.form_masc) {
-                        assign('form_masc', next.headword);
-                    }
                     if (next.form_masc_pattern) {
                         assign('cv_pattern', next.form_masc_pattern);
                     }
@@ -2067,8 +2238,22 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         });
     };
 
-    const normalizedPos = useMemo(() => form.pos?.toLowerCase() || '', [form.pos]);
+    const normalizedPos = useMemo(() => normalizeEntryPos(form.pos) || form.pos?.toLowerCase() || '', [form.pos]);
     const isInflectedFunctionPos = ['pronoun', 'adverb', 'preposition', 'particle', 'article'].includes(normalizedPos);
+
+    useEffect(() => {
+        if (normalizedPos !== 'verb') return;
+        if (!looksLikeFormIStrongHybridForm(form)) return;
+        if (form.verb_class && !(form.verb_class === 'strong' && autoFilledFieldsRef.current.has('verb_class'))) return;
+
+        setForm(prev => {
+            if (prev.verb_class === 'strong-hybrid') return prev;
+            const newFilled = new Set(autoFilledFieldsRef.current);
+            newFilled.add('verb_class');
+            setTimeout(() => replaceAutoFilledFields(newFilled), 0);
+            return { ...prev, verb_class: 'strong-hybrid' };
+        });
+    }, [normalizedPos, form.headword, form._formLabel, form._rootConsonants, form.verb_class]);
 
     // Context-aware CV pattern suggestion for verbs
     const verbCvSuggestion = useMemo(() => {
@@ -2273,24 +2458,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     }, []);
 
     const conjugationPreview = useMemo(() => {
-        if (normalizedPos !== 'verb' || !form._rootConsonants || !form.verb_vowel_perf || !form.verb_vowel_impf) return null;
-        if (!form.verb_vowel_perf.includes('-') || !form.verb_vowel_impf.includes('-')) return null;
-
-        try {
-            const forms = generateRootForms(
-                form._rootConsonants,
-                form.verb_vowel_perf,
-                form.verb_vowel_impf,
-                form.verb_class === 'strong' ? 'strong' : 'weak',
-                form._weakClass as WeakClass
-            );
-            return forms.find((f: any) => f.form === (form._formLabel || 'I')) || null;
-        } catch (err) {
-            console.error(err);
-            return null;
-        }
-
-    }, [normalizedPos, form._rootConsonants, form._formLabel, form.verb_class, form._weakClass, form.verb_vowel_perf, form.verb_vowel_impf]);
+        if (normalizedPos !== 'verb') return null;
+        return buildEntryFormVerbMorphologyPreview(form);
+    }, [normalizedPos, form._rootConsonants, form._formLabel, form.headword, form.tags, form.verb_class, form._weakClass, form.verb_vowel_perf, form.verb_vowel_impf, form.verb_vowel_impv]);
 
     const handleApplyDerivedTerms = () => {
         if (normalizedPos === 'numeral' && form._rootConsonants) {
@@ -2308,12 +2478,101 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
         setForm((f: any) => ({
             ...f,
+            _formLabel: f._formLabel || (conjugationPreview as any).form || 'I',
+            verb_vowel_perf: f.verb_vowel_perf || (conjugationPreview as any).vowel_set_perf || (conjugationPreview as any).vowelSetPerfect || '',
+            verb_vowel_impf: f.verb_vowel_impf || (conjugationPreview as any).vowel_set_impf || (conjugationPreview as any).vowelSetImperfect || '',
+            verb_vowel_impv: f.verb_vowel_impv || (conjugationPreview as any).vowel_set_impv || (conjugationPreview as any).vowelSetImperative || '',
             verb_verbal_noun: f.verb_verbal_noun || (vn !== '-' ? vn : ''),
             verb_passive_ptcp: f.verb_passive_ptcp || (ptcpPass !== '-' ? ptcpPass : ''),
             verb_active_ptcp: f.verb_active_ptcp || (ptcpAct !== '-' ? ptcpAct : ''),
-            verb_perfective_3sgm: f.verb_perfective_3sgm || perf3sgm,
-            verb_imperfective_3sgm: f.verb_imperfective_3sgm || impf3sgm
+            verb_perfective_3sgm: perf3sgm || f.verb_perfective_3sgm,
+            verb_imperfective_3sgm: impf3sgm || f.verb_imperfective_3sgm
         }));
+    };
+
+    const handleFindNumeralDerivedEntries = async () => {
+        if (normalizedPos !== 'numeral') return;
+
+        const rootConsonants = String(form._rootConsonants || '').trim();
+        const currentIsCardinal = isCardinalNumeralRole(form.numeral_type);
+        if (!rootConsonants) {
+            setNumeralDerivedStatus(currentIsCardinal
+                ? t('Add root consonants first so derived numeral forms can be suggested.', 'Żid il-konsonanti tal-għerq l-ewwel biex jiġu ssuġġeriti forom derivati.')
+                : t('No root/family key is set. This role-specific numeral can remain standalone, or you can add relationships manually under Numeral Family.', 'M’hemmx għerq jew ċavetta tal-familja. Dan in-numeral b’rwol speċifiku jista’ jibqa’ waħdu, jew tista’ żżid rabtiet manwalment f’Familja tan-Numeral.'));
+            return;
+        }
+
+        const candidates = getNumeralDerivedCandidateHeadwords(form.headword, rootConsonants);
+        setIsFindingNumeralDerivedEntries(true);
+        setNumeralDerivedStatus('');
+        try {
+            const familyEntries: any[] = [];
+            const appendResults = (items: any[] = []) => {
+                familyEntries.push(...items.map((item: any) => item?.entry || item).filter(Boolean));
+            };
+
+            const sameRoot = await apiSearch('', {
+                pos: 'numeral',
+                root_id: rootConsonants,
+                limit: 100,
+                includeSuggested: true,
+                includePending: true,
+            });
+            appendResults(sameRoot.results || []);
+
+            for (const candidate of candidates) {
+                const res = await apiSearch(candidate, {
+                    pos: 'numeral',
+                    limit: 8,
+                    searchLemma: true,
+                    searchEnglishGloss: true,
+                    includeSuggested: true,
+                    includePending: true,
+                });
+                appendResults((res.results || []).filter((result: any) => {
+                    const entryResult = result?.entry || result;
+                    return normalizeNumeralLookupKey(entryResult?.headword || '') === normalizeNumeralLookupKey(candidate);
+                }));
+            }
+
+            const matches = selectNumeralRelationshipEntries({
+                currentEntryId: form.id,
+                currentNumeralType: form.numeral_type,
+                existingRelatedEntries: Array.isArray(form.related_entries) ? form.related_entries : [],
+                candidateHeadwords: candidates,
+                entries: familyEntries,
+            }).map((entryResult: any) => ({
+                id: String(entryResult.id || '').trim(),
+                headword: entryResult.headword || '',
+                gloss_en: entryResult.definitions?.[0]?.text_en || entryResult.gloss_en || entryResult.text_en || '',
+                gloss_mt: entryResult.definitions?.[0]?.text_mt || entryResult.gloss_mt || entryResult.text_mt || '',
+                pos: entryResult.pos || 'numeral',
+                numeral_type: entryResult.numeral_type || entryResult.numeral_morphology?.numeral_type || '',
+                cv_pattern: entryResult.root_pattern_form?.pattern?.cv_notation || entryResult.cv_pattern || '',
+                wizen_pattern: entryResult.root_pattern_form?.pattern?.wizen_notation || '',
+            }));
+
+            if (matches.length === 0) {
+                setNumeralDerivedStatus(currentIsCardinal
+                    ? t('No existing derived numeral entries matched this family.', 'Ma nstabux entrati derivati eżistenti f’din il-familja.')
+                    : t('No existing numeral family entries matched. This role-specific numeral can remain standalone.', 'Ma nstabux entrati eżistenti tal-familja tan-numeral. Dan in-numeral b’rwol speċifiku jista’ jibqa’ waħdu.'));
+                return;
+            }
+
+            setForm((current: any) => ({
+                ...current,
+                related_entries: [
+                    ...(Array.isArray(current.related_entries) ? current.related_entries : []),
+                    ...matches,
+                ],
+            }));
+            setNumeralDerivedStatus(`${currentIsCardinal ? t('Added derived entries:', 'Żdiedu entrati derivati:') : t('Added numeral family entries:', 'Żdiedu entrati tal-familja tan-numeral:')} ${matches.map((item) => item.headword).join(', ')}`);
+        } catch (err) {
+            console.error('Failed to find numeral derived entries:', err);
+            setNumeralDerivedStatus(t('Could not find numeral family entries right now.', 'Ma setgħux jinstabu entrati tal-familja tan-numeral bħalissa.'));
+        } finally {
+            setIsFindingNumeralDerivedEntries(false);
+        }
     };
 
     const renderPosMorphologyFields = () => (
@@ -2377,6 +2636,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         numeral_type: NUMERAL_TYPE_OPTIONS,
                     }}
                     onApplyDerivedTerms={handleApplyDerivedTerms}
+                    onFindDerivedEntries={handleFindNumeralDerivedEntries}
+                    findDerivedStatus={numeralDerivedStatus}
+                    isFindingDerivedEntries={isFindingNumeralDerivedEntries}
                     suggestions={availableVowelSets}
                 />
             )}
@@ -2392,9 +2654,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     options={{
                         verb_class: VERB_CLASS_OPTIONS,
                         verb_type: [
-                            { label: t('Strong', 'Sħiħ'), value: 'strong' },
-                            { label: t('Weak', 'Dgħajjef'), value: 'weak' },
-                            { label: t('Doubled', 'Irmidlat'), value: 'doubled' }
+                            { label: t('Triliteral', 'Trilitterali'), value: 'triliteral' },
+                            { label: t('Quadriliteral', 'Kwadrilitterali'), value: 'quadriliteral' },
+                            { label: t('Loanword', 'Self'), value: 'loan' }
                         ],
                         verb_transitivity: VERB_TRANSITIVITY_OPTIONS,
                         verb_form: VERB_FORM_OPTIONS
@@ -2952,19 +3214,21 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
                                 ]}
                             />
-                            <LazyRelationshipEditor
-                                type="derived"
-                                title={t('Derived Terms', 'Termini Derivati')}
-                                items={form.related_entries || []}
-                                onChange={(items) => set('related_entries', items)}
-                                enableSuggestions
-                                suggestionScope="entries"
-                                currentEntryId={form.id}
-                                extraActions={[
-                                    { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') },
-                                    { label: t('New Root', 'Għerq Ġdid'), icon: <Plus size={12} />, onClick: () => window.open('/admin?tab=roots&new=root', '_blank') }
-                                ]}
-                            />
+                            {normalizedPos !== 'numeral' && (
+                                <LazyRelationshipEditor
+                                    type="derived"
+                                    title={t('Derived Terms', 'Termini Derivati')}
+                                    items={form.related_entries || []}
+                                    onChange={(items) => set('related_entries', items)}
+                                    enableSuggestions
+                                    suggestionScope="entries"
+                                    currentEntryId={form.id}
+                                    extraActions={[
+                                        { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') },
+                                        { label: t('New Root', 'Għerq Ġdid'), icon: <Plus size={12} />, onClick: () => window.open('/admin?tab=roots&new=root', '_blank') }
+                                    ]}
+                                />
+                            )}
                             <LazyRelationshipEditor
                                 type="thesaurus"
                                 title={t('Synonyms', 'Sinonimi')}

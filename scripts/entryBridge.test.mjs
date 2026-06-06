@@ -4,6 +4,10 @@ import { ENTRY_MORPHOLOGY_SELECT, hydrateEntryRow } from '../src/lib/entryHydrat
 
 assert.doesNotMatch(ENTRY_MORPHOLOGY_SELECT, /\bt\.lemma_pattern\b/, 'relationship SQL should not read lemma_pattern from entries');
 assert.doesNotMatch(ENTRY_MORPHOLOGY_SELECT, /\bt\.form_(?:masc|fem|plural)_pattern\b/, 'relationship SQL should not read form patterns from entries');
+assert.doesNotMatch(ENTRY_MORPHOLOGY_SELECT, /\btnum\.form_masc_pattern\b/, 'relationship SQL should not read deprecated numeral masculine pattern');
+assert.doesNotMatch(ENTRY_MORPHOLOGY_SELECT, /\btnum\.form_fem_pattern\b/, 'relationship SQL should not read deprecated numeral feminine pattern');
+assert.doesNotMatch(ENTRY_MORPHOLOGY_SELECT, /'lemma_pattern',\s*COALESCE\(t\.morph_pattern,\s*t\.cv_pattern,\s*tpat\.cv_notation\)/, 'relationship SQL should not expose entry CV pattern as numeral lemma_pattern');
+assert.match(ENTRY_MORPHOLOGY_SELECT, /'numeral_type',\s*tnum\.numeral_type/, 'relationship SQL should expose target numeral_type');
 assert.match(ENTRY_MORPHOLOGY_SELECT, /LEFT JOIN noun_morphology tnm ON tnm\.entry_id = t\.id/, 'relationship SQL should join target noun morphology for patterns');
 assert.match(ENTRY_MORPHOLOGY_SELECT, /LEFT JOIN adj_morphology tam ON tam\.entry_id = t\.id/, 'relationship SQL should join target adjective morphology for patterns');
 assert.match(ENTRY_MORPHOLOGY_SELECT, /LEFT JOIN participle_morphology tpm ON tpm\.entry_id = t\.id/, 'relationship SQL should join target participle morphology for patterns');
@@ -50,6 +54,57 @@ assert.equal(form.vowel_set_dual, 'a-i', 'form adapter should load vowel_set_dua
 assert.equal(form.diminutive_form, 'tweiwel', 'form adapter should load diminutive form');
 assert.equal(form.diminutive_pattern, 'CCeiCeC', 'form adapter should load diminutive pattern');
 assert.equal(form.is_inflectable, true, 'form adapter should load is_inflectable');
+
+const functionWordForm = entryToForm({
+  id: 'prep-bejn',
+  headword: 'bejn',
+  pos: 'preposition',
+  is_inflectable: false,
+  has_inflection: true,
+});
+
+assert.equal(functionWordForm.is_inflectable, true, 'function-word form adapter should accept has_inflection as the enabled flag');
+
+const verbRow = hydrateEntryRow({
+  id: 'v-qara',
+  headword: 'qara',
+  pos: 'verb',
+  root_consonants: 'q-r-a',
+  vm_form: 'I',
+  vm_class: 'weak',
+  vm_weak_class: 'defective',
+  vm_transitivity: 'transitive',
+  vm_perfective_3sgm: 'qara',
+  vm_imperfective_3sgm: 'jaqra',
+  vm_vowel_perf: 'a-a',
+  vm_vowel_impf: 'a-a',
+  vm_vowel_impv: 'a-a',
+});
+
+assert.equal(verbRow.verb_morphology?.class, 'weak', 'verb hydration should expose canonical class');
+assert.equal(verbRow.verb_morphology?.verb_class, 'weak', 'verb hydration should keep display class alias');
+assert.equal(verbRow.verb_morphology?.perfective_3sgm, 'qara', 'verb hydration should expose canonical perfective');
+assert.equal(verbRow.verb_morphology?.perfective_3sg_m, 'qara', 'verb hydration should keep display perfective alias');
+assert.equal(verbRow.verb_morphology?.vowel_set_perf, 'a-a', 'verb hydration should expose canonical perfect vowel set');
+assert.equal(verbRow.verb_morphology?.vowel_set_perfect, 'a-a', 'verb hydration should keep display perfect vowel alias');
+
+const verbAliasPosRow = hydrateEntryRow({
+  id: 'zz-verb-02',
+  headword: 'kellem',
+  pos: 'v',
+  root_consonants: 'k-l-m',
+  vm_form: 'II',
+  vm_class: 'strong',
+  vm_transitivity: 'transitive',
+  vm_perfective_3sgm: 'kellem',
+  vm_imperfective_3sgm: 'jitkellem',
+  vm_vowel_perf: 'e-e',
+  vm_vowel_impf: 'e-e',
+  vm_vowel_impv: 'e-e',
+});
+
+assert.equal(verbAliasPosRow.verb_morphology?.form, 'II', 'verb hydration should attach morphology for POS aliases like v');
+assert.equal(verbAliasPosRow.verb_morphology?.class, 'strong', 'verb alias POS should hydrate canonical class');
 
 form.form_fem = 'twilja';
 form.form_fem_pattern = 'CCiCja';

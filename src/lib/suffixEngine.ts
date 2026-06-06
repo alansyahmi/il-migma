@@ -459,7 +459,9 @@ export function buildPerfectForm(
                 perfBase = syncopatedStem;
             }
         } else if (doIdx === 1) {
-            perfBase = base.endsWith('na') ? attachedStem : syncopatedStem;
+            perfBase = base.endsWith('et') && !base.endsWith('iet') && attachedStem.endsWith('it')
+                ? attachedStem
+                : (base.endsWith('na') ? attachedStem : syncopatedStem);
         }
         const result = applyDo(perfBase, doIdx, vset, verbForm, blocksImala);
         finalResult = isNeg ? result.negative : result.positive;

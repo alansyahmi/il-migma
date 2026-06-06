@@ -282,6 +282,14 @@ function deriveTable(
     perfPrefix: string,
     impfTransform: (baseImpf: string, pIdx: number) => string,
 ): VerbConjugationTable {
+    const deriveImperativeStem = (stem: string | undefined, fallback: string) => {
+        const sourceStem = stem || fallback;
+        if (fallback && sourceStem && sourceStem[0] !== fallback[0]) {
+            return perfPrefix + fallback;
+        }
+        return perfPrefix + sourceStem;
+    };
+
     const mapRow = (row: ConjugationRow, pIdx: number): ConjugationRow => ({
         ...row,
         perfect: perfPrefix + row.perfect,
@@ -315,8 +323,8 @@ function deriveTable(
             : undefined,
         imperative_sg_stems: base.imperative_sg_stems
             ? {
-                attached: perfPrefix + base.imperative_sg_stems.attached,
-                syncopated: perfPrefix + base.imperative_sg_stems.syncopated,
+                attached: deriveImperativeStem(base.imperative_sg_stems.attached, base.imperative_sg),
+                syncopated: deriveImperativeStem(base.imperative_sg_stems.syncopated, base.imperative_sg),
             }
             : undefined,
         imperative_pl_stems: base.imperative_pl_stems
@@ -333,6 +341,29 @@ function deriveTable(
 function parseVset(vset: string): { v1: string; v2: string } {
     const parts = vset.split("-");
     return { v1: parts[0] ?? "i", v2: parts[1] ?? "" };
+}
+
+function isFinalWeakRadical(radical?: string): boolean {
+    return ["w", "j", "y", "għ", "gh"].includes(String(radical || "").toLowerCase());
+}
+
+function normalizeFormIIIDefectiveVsets(
+    C: string[],
+    vsetPerf: string,
+    vsetImpf: string,
+    vsetImp: string,
+): { perf: string; impf: string; imp: string } {
+    const finalRadical = String(C[2] || "").toLowerCase();
+    const defaultSecondVowel = finalRadical === "w" ? "i" : "a";
+    const perf = parseVset(vsetPerf);
+    const impf = parseVset(vsetImpf);
+    const imp = parseVset(vsetImp);
+
+    return {
+        perf: perf.v1 === "ie" ? vsetPerf : "ie-a",
+        impf: impf.v1 === "ie" ? vsetImpf : `ie-${defaultSecondVowel}`,
+        imp: imp.v1 === "ie" ? vsetImp : `ie-${defaultSecondVowel}`,
+    };
 }
 
 /** Derive the imperfect prefix vowel from the vowel set */
@@ -475,13 +506,16 @@ function genStrong(
     const isGutturalLocal = (c: string) => ["għ", "ħ", "q"].includes(c);
 
     const perfSyncRoot = `${C1}${pv1}${C2}${C3}`;
-    const perfRedRoot = `${C1}${C2}${pv1}${C3}`;
+    const perfRedRoot = isPharyngeal(C1)
+        ? `${C1}${pv1}${C2}${applyAttachedShift(pv2 || pv1, C3)}${C3}`
+        : `${C1}${C2}${pv1}${C3}`;
     const perfFull = `${C1}${pv1}${C2}${pv2}${C3}`;
 
     const impfT1 = (pfx: string) =>
         `${pfx}${C1}${C2}${applyAttachedShift(iv2 || "", C3)}${C3}`;
     const impfT2 = (pfx: string) => {
         const theme = iv2 || "i";
+        if (isPharyngeal(C1)) return `${pfx}${C1}${C2}${C3}`;
         if (isGutturalLocal(C2) || isSonorant(C2))
             return `${pfx}${C1}${theme}${C2}${C3}`;
         return `${pfx}${C1}${C2}${C3}`;
@@ -543,17 +577,15 @@ function genAssimilative(
 
     const impfBase = (person: number) => {
         const pfx = buildPrefix(person, vsetImpf);
-        const pfxCons = pfx.replace(/[aeiou]+$/, "");
         const stem = `${C2}${iv2}${C3}`;
         return person >= 4
-            ? combinePrefixPlural(pfxCons, `${C2}${C3}`, "u")
-            : combinePrefix(pfxCons, stem);
+            ? combinePrefixPlural(pfx, `${C2}${C3}`, "u")
+            : combinePrefix(pfx, stem);
     };
 
-    const { v1: impV1 } = parseVset(vsetImp);
-    const pfx1 = buildPrefix(1, vsetImpf);
-    const impSg = impfBase(1).replace(pfx1, impV1);
-    const impPl = impfBase(5).replace(pfx1, impV1);
+    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
+    const impSg = `${impV1}${C2}${impV2}${C3}`;
+    const impPl = `${impV1}${C2}${C3}u`;
 
     return buildConjugationTable(
         {
@@ -563,18 +595,18 @@ function genAssimilative(
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) => {
-                const p = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+                const p = buildPrefix(i, vsetImpf);
                 return combinePrefix(
                     p,
                     `${C2}${applyAttachedShift(iv2 || "", C3)}${C3}`,
                 );
             },
             impfType2: (i) => {
-                const p = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+                const p = buildPrefix(i, vsetImpf);
                 return combinePrefix(p, `${C2}${C3}`);
             },
             impfPlural: (i) => {
-                const p = buildPrefix(i, vsetImpf).replace(/[aeiou]+$/, "");
+                const p = buildPrefix(i, vsetImpf);
                 return combinePrefixPlural(p, `${C2}${C3}`, "u");
             },
             impSg,
@@ -675,7 +707,7 @@ function genGeminated(
     const { v1: impV1 } = parseVset(vsetImp);
     const pfx1 = buildPrefix(1, vsetImpf);
     const impSg = impfBase(1).replace(pfx1, impV1);
-    const impPl = impfBase(5).replace(pfx1, impV1);
+    const impPl = impfBase(5).replace(pfx1, impV1) + `u`;
 
     return buildConjugationTable(
         {
@@ -1177,8 +1209,9 @@ export function genFormIIIDefective(
     isImalaBlocked: boolean = false,
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
-    const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
-    const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
+    const normalizedVsets = normalizeFormIIIDefectiveVsets(C, vsetPerf, vsetImpf, vsetImp);
+    const { v1: pv1, v2: pv2 } = parseVset(normalizedVsets.perf);
+    const { v1: iv1, v2: iv2 } = parseVset(normalizedVsets.impf);
     const ImalaBlockedVowel = pv1 === "ie" ? "e" : "a";
     const suffixIV2assimilation = iv2 === "i" ? "u" : "ew";
 
@@ -1192,7 +1225,7 @@ export function genFormIIIDefective(
             : `${pfx}${C1}${iv1}${C2}${iv2}`;
     };
 
-    const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
+    const { v1: impV1, v2: impV2 } = parseVset(normalizedVsets.imp);
     const impSg = `${C1}${impV1}${C2}${impV2}`;
     const impPl = `${C1}${impV1}${C2}u`;
 
@@ -2191,6 +2224,7 @@ export function generateConjugation(
     }
 
     if (form === "III") {
+        const hasFinalWeakRadical = isFinalWeakRadical(consonants[2]);
         if (strength === "strong") {
             return genFormIIIStrong(
                 consonants,
@@ -2201,6 +2235,16 @@ export function generateConjugation(
             );
         }
         if (strength === "weak") {
+            if (hasFinalWeakRadical) {
+                return genFormIIIDefective(
+                    consonants,
+                    input.vowelSetPerfect,
+                    input.vowelSetImperfect,
+                    input.vowelSetImperative,
+                    form,
+                    input.isImalaBlocked,
+                );
+            }
             if (weakClass === "assimilative") {
                 return genFormIIIStrong(
                     consonants,
@@ -2229,6 +2273,15 @@ export function generateConjugation(
                     input.isImalaBlocked,
                 );
             }
+        }
+        if (strength === "geminated") {
+            return genFormIIIStrong(
+                consonants,
+                input.vowelSetPerfect,
+                input.vowelSetImperfect,
+                input.vowelSetImperative,
+                form,
+            );
         }
     }
 
@@ -2687,7 +2740,7 @@ function generateTriliteralGeminated(
 function generateTriliteralAssimilative(
     C1: string,
     C2: string,
-    _C3: string,
+    C3: string,
     pv1: string,
     pv2: string,
     ipv1: string,
@@ -2696,13 +2749,13 @@ function generateTriliteralAssimilative(
 ): GeneratedVerbForm[] {
     const forms: GeneratedVerbForm[] = [];
 
-    const f1_perf = `${C1}${pv1}${C2}${pv2}`;
-    const f1_impf = `j${ipv1}${C1}${C2}${ipv2}`;
-    const f1_pass = `m${ipv1}${C1}${C2}${ipv2}`;
+    const f1_perf = `${C1}${pv1}${C2}${pv2}${C3}`;
+    const f1_impf = `j${ipv1}${C2}${ipv2}${C3}`;
+    const f1_pass = `m${ipv1}${C2}${ipv2}${C3}`;
     const a1 = hasIorE(pv1) ? "ie" : "a";
-    const f1_act = `${C1}${a1}${C2}i`;
-    const f1_vn = `${C1}i${C2}i`;
-    const f1_impv = `${ipv1}${C1}${C2}${ipv2}`;
+    const f1_act = `${C1}${a1}${C2}i${C3}`;
+    const f1_vn = `${C1}i${C2}${C3}`;
+    const f1_impv = `${ipv1}${C2}${ipv2}${C3}`;
 
     forms.push({
         form: "I",
@@ -2714,13 +2767,13 @@ function generateTriliteralAssimilative(
         verbalNoun: f1_vn,
     });
 
-    const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}`;
-    const f2_impf = `j${C1}${pv1}${C2}${C2}i`;
-    const f2_pass = `m${C1}${pv1}${C2}${C2}i`;
-    const b1 = isGuttural(C2) ? "a" : "e";
-    const f2_act = `${C1}${pv1}${C2}${C2}${b1}j`; // beddej
+    const f2_perf = `${C1}${pv1}${C2}${C2}${pv2}${C3}`;
+    const f2_impf = `j${C1}${pv1}${C2}${C2}${ipv2}${C3}`;
+    const f2_pass = `m${C1}${pv1}${C2}${C2}${ipv2}${C3}`;
+    const b1 = isGuttural(C3) ? "a" : "e";
+    const f2_act = `${C1}${pv1}${C2}${C2}${b1}${C3}`;
     const vnv1 = isGuttural(C1) ? "a" : "i";
-    const f2_vn = `t${vnv1}${C1}${C2}ija`; // tibdija
+    const f2_vn = `t${vnv1}${C1}${C2}i${C3}`;
     forms.push({
         form: "II",
         perfect: f2_perf,
@@ -2734,19 +2787,19 @@ function generateTriliteralAssimilative(
     const f3 = `${C1}${c1}${C2}`;
     forms.push({
         form: "III",
-        perfect: f3 + pv2,
-        imperfect: `j${f3}i`,
-        passiveParticiple: `m${f3}i`,
+        perfect: `${f3}${pv2}${C3}`,
+        imperfect: `j${f3}${ipv2}${C3}`,
+        passiveParticiple: `m${f3}${ipv2}${C3}`,
         activeParticiple: "-",
         verbalNoun: "-",
     });
 
-    const f4_perf = `${ipv1}${C1}${C2}${ipv2}`;
-    const f4_impf = `jo${C1}${C2}${ipv2}`;
-    const f4_act = `mi${C1}${C2}${ipv2}`;
+    const f4_perf = `${ipv1}${C1}${C2}${ipv2}${C3}`;
+    const f4_impf = `jo${C1}${C2}${ipv2}${C3}`;
+    const f4_act = `mi${C1}${C2}${ipv2}${C3}`;
     const h1 = C1 === "w" ? "u" : "i";
     const h2 = pv1 === "a" && pv2 === "a" ? "a" : "ie";
-    const f4_vn = `${h1}${C1}${C2}${h2}ja`;
+    const f4_vn = `${h1}${C1}${C2}${h2}${C3}`;
     forms.push({
         form: "IV",
         perfect: f4_perf,
@@ -2763,17 +2816,17 @@ function generateTriliteralAssimilative(
         imperfect: `ji${f5_perf}`,
         passiveParticiple: `mi${f5_perf}`,
         activeParticiple: "-",
-        verbalNoun: `t${C1}${pv1}${C2}${C2}ija`,
+        verbalNoun: `t${C1}${pv1}${C2}${C2}i${C3}`,
     });
 
-    const f6_perf = `t${f3}${pv2}`;
+    const f6_perf = `t${f3}${pv2}${C3}`;
     forms.push({
         form: "VI",
         perfect: f6_perf,
         imperfect: `ji${f6_perf}`,
         passiveParticiple: `mi${f6_perf}`,
         activeParticiple: "-",
-        verbalNoun: `t${f3}ija`,
+        verbalNoun: `t${f3}i${C3}`,
     });
 
     const f7_perf = `n${f1_perf}`;
@@ -2786,17 +2839,17 @@ function generateTriliteralAssimilative(
         verbalNoun: `n${f1_vn}`,
     });
 
-    const f8_perf = `${C1}t${pv1}${C2}${pv2}`;
+    const f8_perf = `${C1}t${pv1}${C2}${pv2}${C3}`;
     forms.push({
         form: "VIII",
         perfect: f8_perf,
         imperfect: `ji${f8_perf}`,
         passiveParticiple: `mi${f8_perf}`,
         activeParticiple: "-",
-        verbalNoun: `${C1}t${pv1}${C2}ija`,
+        verbalNoun: `${C1}t${pv1}${C2}i${C3}`,
     });
 
-    const f9_perf = `${C1}${C2}${c1}`;
+    const f9_perf = `${C1}${C2}${c1}${C3}`;
     forms.push({
         form: "IX",
         perfect: f9_perf,
@@ -2806,24 +2859,24 @@ function generateTriliteralAssimilative(
         verbalNoun: f9_perf,
     });
 
-    const f10a_perf = `st${pv1}${C1}${C2}${pv2}`;
+    const f10a_perf = `st${pv1}${C1}${C2}${pv2}${C3}`;
     forms.push({
         form: "Xa",
         perfect: f10a_perf,
         imperfect: `ji${f10a_perf}`,
         passiveParticiple: `mi${f10a_perf}`,
         activeParticiple: "-",
-        verbalNoun: `st${pv1}${C1}${C2}ija`,
+        verbalNoun: `st${pv1}${C1}${C2}i${C3}`,
     });
 
-    const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}`;
+    const f10b_perf = `st${C1}${pv1}${C2}${C2}${pv2}${C3}`;
     forms.push({
         form: "Xb",
         perfect: f10b_perf,
         imperfect: `ji${f10b_perf}`,
         passiveParticiple: `mi${f10b_perf}`,
         activeParticiple: "-",
-        verbalNoun: `st${C1}${pv1}${C2}${C2}ija`,
+        verbalNoun: `st${C1}${pv1}${C2}${C2}i${C3}`,
     });
 
     return forms;
@@ -3219,8 +3272,8 @@ function buildWeakQuadriliteralDefectiveConjugation(
             stems: {
                 attached: `${imperfectPrefixes[2]}${baseStem}i`,
                 syncopated: `${imperfectPrefixes[2]}${baseStem}i`,
-                perfectAttached: `${baseStem}${perfectSuffixes[2]}`,
-                perfectSyncopated: `${baseStem}${perfectSuffixes[2]}`,
+                perfectAttached: `${baseStem}i`,
+                perfectSyncopated: `${baseStem}i`,
             },
         },
         {
@@ -3232,8 +3285,8 @@ function buildWeakQuadriliteralDefectiveConjugation(
             stems: {
                 attached: `${imperfectPrefixes[3]}${baseStem}i`,
                 syncopated: `${imperfectPrefixes[3]}${baseStem}i`,
-                perfectAttached: `${baseStem}${perfectSuffixes[3]}`,
-                perfectSyncopated: `${baseStem}${perfectSuffixes[3]}`,
+                perfectAttached: `${baseStem}it`,
+                perfectSyncopated: `${baseStem}it`,
             },
         },
         {
@@ -3449,7 +3502,7 @@ function generateQuadriliteralFormIDefective(
         imperfect: `j${baseStem}i`,
         imperative: `${baseStem}i`,
         passiveParticiple: `m${baseStem}i`,
-        activeParticiple: `${baseStem}ie`,
+        activeParticiple: `${baseStem}ej`,
         verbalNoun: `${baseStem}i`,
     };
 
@@ -3797,18 +3850,18 @@ export function markGeneratedForms(
         if (!ag.anyAttested && reconstructableForms.has(g.form))
             rowTheoretical = true;
 
-            const applyMarker = (
-                generatedVal: string,
-                formType: "lemma" | "passive" | "active" | "noun" | "imperfect" | "imperative",
-                isImperfect: boolean = false,
-            ): { value: string; marker: FormMarker; entryId?: string } => {
-                if (generatedVal === "-") return { value: generatedVal, marker: "plain" };
+        const applyMarker = (
+            generatedVal: string,
+            formType: "lemma" | "passive" | "active" | "noun" | "imperfect" | "imperative",
+            isImperfect: boolean = false,
+        ): { value: string; marker: FormMarker; entryId?: string } => {
+            if (generatedVal === "-") return { value: generatedVal, marker: "plain" };
 
-                if (isImperfect) return { value: generatedVal, marker: "plain" };
+            if (isImperfect) return { value: generatedVal, marker: "plain" };
 
-                const att =
-                    formType === "lemma"
-                        ? resolveAttestedEntry(attested, {
+            const att =
+                formType === "lemma"
+                    ? resolveAttestedEntry(attested, {
                         surface: g.perfect,
                         form: g.form,
                         type: "lemma",

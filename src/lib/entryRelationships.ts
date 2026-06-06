@@ -81,6 +81,75 @@ export async function syncEntryRelationships(client: any, entryId: string, paylo
     }
 }
 
+function normalizeRelatedTargetIds(payload: any): string[] {
+    if (!Array.isArray(payload?.related_entries)) return [];
+
+    const seen = new Set<string>();
+    const ids: string[] = [];
+    payload.related_entries.forEach((item: any) => {
+        const targetId = String(typeof item === 'string' ? item : (item?.id || item?.target_id) || '').trim();
+        if (!targetId || seen.has(targetId)) return;
+        seen.add(targetId);
+        ids.push(targetId);
+    });
+    return ids;
+}
+
+function isNumeralPayload(payload: any): boolean {
+    const pos = String(payload?.pos || payload?.numeral_morphology?.pos || '').toLowerCase().trim();
+    return pos === 'numeral';
+}
+
+/**
+ * Mirrors numeral related-entry links so derived numeral pages can navigate
+ * back to their base form without requiring a manual reverse edit.
+ */
+export async function syncReciprocalNumeralRelatedRelationships(client: any, entryId: string, payload: any) {
+    if (!isNumeralPayload(payload) || !Array.isArray(payload?.related_entries)) return;
+
+    const requestedTargetIds = normalizeRelatedTargetIds(payload).filter((targetId) => targetId !== entryId);
+    const placeholders = requestedTargetIds.map(() => '?').join(', ');
+    let validTargetIds = new Set<string>();
+
+    if (requestedTargetIds.length > 0) {
+        const res = await client.execute({
+            sql: `SELECT id FROM entries WHERE LOWER(TRIM(pos)) = 'numeral' AND id IN (${placeholders})`,
+            args: requestedTargetIds,
+        });
+        validTargetIds = new Set((res.rows || []).map((row: any) => String(row.id)).filter(Boolean));
+    }
+
+    const keepIds = [...validTargetIds];
+    if (keepIds.length > 0) {
+        await client.execute({
+            sql: `DELETE FROM entry_relationships
+                  WHERE target_entry_id = ?
+                    AND relationship_type = 'related'
+                    AND entry_id IN (SELECT id FROM entries WHERE LOWER(TRIM(pos)) = 'numeral')
+                    AND entry_id NOT IN (${keepIds.map(() => '?').join(', ')})`,
+            args: [entryId, ...keepIds],
+        });
+    } else {
+        await client.execute({
+            sql: `DELETE FROM entry_relationships
+                  WHERE target_entry_id = ?
+                    AND relationship_type = 'related'
+                    AND entry_id IN (SELECT id FROM entries WHERE LOWER(TRIM(pos)) = 'numeral')`,
+            args: [entryId],
+        });
+    }
+
+    for (let i = 0; i < keepIds.length; i++) {
+        const targetId = keepIds[i];
+        await client.execute({
+            sql: `INSERT OR REPLACE INTO entry_relationships
+                  (id, entry_id, target_entry_id, relationship_type, sort_order)
+                  VALUES (?, ?, ?, 'related', ?)`,
+            args: [`rel_${targetId}_${entryId}_related`, targetId, entryId, i],
+        });
+    }
+}
+
 /**
  * Backfills relationships from the JSON columns in the entries table.
  */

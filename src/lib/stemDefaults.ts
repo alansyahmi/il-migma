@@ -6,8 +6,20 @@ export interface StemDefaultClassification {
 }
 
 export interface VerbClassificationSource {
+    form?: unknown;
+    headword?: unknown;
     verb_class?: unknown;
     verb_weak_class?: unknown;
+    root_consonants?: unknown;
+    tags?: unknown;
+    root_tags?: unknown;
+    verb_morphology?: {
+        form?: unknown;
+        class?: unknown;
+        verb_class?: unknown;
+        weak_class?: unknown;
+        root_tags?: unknown;
+    } | null;
     root_strength?: unknown;
     root_weak_class?: unknown;
     root?: {
@@ -30,6 +42,7 @@ function normalizeStrength(value: unknown): VerbStrength | null {
     if (typeof value !== 'string') return null;
     const normalized = value.trim().toLowerCase();
     if (normalized === 'doubled') return 'geminated';
+    if (normalized === 'quadriliteral' || normalized === 'loan') return 'strong';
     if (normalized === 'strong' || normalized === 'strong-hybrid' || normalized === 'weak' || normalized === 'geminated') {
         return normalized;
     }
@@ -44,6 +57,66 @@ function normalizeWeakClass(value: unknown): WeakClass | null {
         return normalized as WeakClass;
     }
     return null;
+}
+
+function normalizeText(value: unknown): string {
+    return typeof value === 'string' ? value.trim().toLowerCase() : '';
+}
+
+function asStringArray(value: unknown): string[] {
+    if (Array.isArray(value)) return value.map(item => String(item));
+    if (typeof value !== 'string' || !value.trim()) return [];
+    try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed.map(item => String(item)) : [value];
+    } catch {
+        return value.split(',').map(item => item.trim()).filter(Boolean);
+    }
+}
+
+function getRootConsonants(source: VerbClassificationSource): string {
+    return normalizeText(
+        source.root?.consonants ||
+        source.root_consonants ||
+        source.zokk_morphology?.root
+    );
+}
+
+function getVerbForm(source: VerbClassificationSource): string {
+    return normalizeText(source.form || source.verb_morphology?.form).toUpperCase();
+}
+
+function hasFinalWeakTag(source: VerbClassificationSource): boolean {
+    const tags = [
+        ...asStringArray(source.tags),
+        ...asStringArray(source.root_tags),
+        ...asStringArray(source.verb_morphology?.root_tags),
+    ].map(tag => tag.toLowerCase());
+    return tags.some(tag => tag.includes('defective') || tag.includes('final-weak') || tag.includes('final weak'));
+}
+
+function looksLikeFormIIFinalWeak(source: VerbClassificationSource): boolean {
+    if (getVerbForm(source) !== 'II') return false;
+
+    const headword = normalizeText(source.headword);
+    const rootConsonants = getRootConsonants(source);
+    const finalRadical = rootConsonants.split('-').map(part => part.trim()).filter(Boolean).at(-1) || '';
+    const finalGhainRoot = finalRadical === 'għ' || finalRadical === 'gh';
+    const finalWeakSurface = /a['’]?$/.test(headword);
+
+    return (finalGhainRoot && finalWeakSurface) || hasFinalWeakTag(source);
+}
+
+function looksLikeFormIStrongHybrid(source: VerbClassificationSource): boolean {
+    if (getVerbForm(source) !== 'I') return false;
+
+    const headword = normalizeText(source.headword);
+    const rootConsonants = getRootConsonants(source);
+    const finalRadical = rootConsonants.split('-').map(part => part.trim()).filter(Boolean).at(-1) || '';
+    const finalGhainRoot = finalRadical === 'għ' || finalRadical === 'gh';
+    const apostropheFinalSurface = /['’]$/.test(headword);
+
+    return finalGhainRoot && apostropheFinalSurface;
 }
 
 /**
@@ -85,8 +158,22 @@ export function resolveVerbClassification(source?: VerbClassificationSource | nu
         };
     }
 
-    const explicitStrength = normalizeStrength(source.verb_class);
-    const explicitWeakClass = normalizeWeakClass(source.verb_weak_class);
+    const explicitStrength = normalizeStrength(source.verb_class || source.verb_morphology?.class || source.verb_morphology?.verb_class);
+    const explicitWeakClass = normalizeWeakClass(source.verb_weak_class || source.verb_morphology?.weak_class);
+    if (looksLikeFormIIFinalWeak(source)) {
+        return {
+            strength: 'weak',
+            weak_class: 'defective',
+        };
+    }
+
+    if (looksLikeFormIStrongHybrid(source)) {
+        return {
+            strength: 'strong-hybrid',
+            weak_class: explicitWeakClass,
+        };
+    }
+
     if (explicitStrength) {
         return {
             strength: explicitStrength,

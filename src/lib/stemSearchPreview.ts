@@ -4,11 +4,16 @@ import { resolveAttestedEntryFromEntries, type FormMarker } from './conjugationE
 export type StemSearchPreviewKind = 'imperfect' | 'imperative' | 'passive' | 'verbal-noun';
 
 type StemSearchMorphologySource = {
-    stem_string: string;
-    class_type: 'ar' | 'ir';
-    is_hybrid: boolean;
+    stem_string?: string;
+    stem?: string;
+    class_type?: 'ar' | 'ir';
+    zokk_class?: 'ar' | 'ir';
+    is_hybrid?: boolean;
+    zokk_is_hybrid?: boolean | number;
     root?: string | null;
+    root_consonants?: string | null;
     agentive_suffix?: string | null;
+    zokk_agentive_suffix?: string | null;
 };
 
 export interface StemSearchPreviewSecondary {
@@ -30,19 +35,25 @@ export interface StemSearchPreviewRow {
 function normalizeStemMorphology(source?: Partial<StemSearchMorphologySource> | null): StemSearchMorphologySource | null {
     if (!source) return null;
 
-    const stem_string = String(source.stem_string || '').trim();
-    const class_type = source.class_type === 'ar' || source.class_type === 'ir' ? source.class_type : null;
+    const stem_string = String(source.stem_string || source.stem || '').trim();
+    const class_type = source.class_type === 'ar' || source.class_type === 'ir'
+        ? source.class_type
+        : source.zokk_class === 'ar' || source.zokk_class === 'ir'
+            ? source.zokk_class
+            : null;
     if (!stem_string || !class_type) return null;
 
-    const root = typeof source.root === 'string' ? source.root.trim() : source.root ?? null;
-    const agentive_suffix = typeof source.agentive_suffix === 'string'
-        ? source.agentive_suffix.trim()
-        : source.agentive_suffix ?? null;
+    const rootSource = source.root ?? source.root_consonants;
+    const root = typeof rootSource === 'string' ? rootSource.trim() : rootSource ?? null;
+    const agentiveSource = source.agentive_suffix ?? source.zokk_agentive_suffix;
+    const agentive_suffix = typeof agentiveSource === 'string'
+        ? agentiveSource.trim()
+        : agentiveSource ?? null;
 
     return {
         stem_string,
         class_type,
-        is_hybrid: !!source.is_hybrid,
+        is_hybrid: !!(source.is_hybrid ?? source.zokk_is_hybrid),
         root: root || null,
         agentive_suffix: agentive_suffix || null,
     };

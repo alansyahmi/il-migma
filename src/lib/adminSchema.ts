@@ -21,9 +21,10 @@ import { NOUN_MORPHOLOGY_DB_FIELD_KEYS, isNounLikePos, normalizeNounMorphologyIn
 import { ADJ_MORPHOLOGY_DB_FIELD_KEYS, isAdjLikePos, normalizeAdjMorphologyInput } from './adjMorphology.ts';
 import { PARTICIPLE_MORPHOLOGY_DB_FIELD_KEYS, normalizeParticipleMorphologyInput } from './participleMorphology.ts';
 import { VERB_MORPHOLOGY_DB_FIELD_KEYS, hasVerbMorphologyInput, normalizeVerbMorphologyInput } from './verbMorphology.ts';
-import { NUMERAL_MORPHOLOGY_DB_FIELD_KEYS, normalizeNumeralMorphologyInput } from './numeralMorphology.ts';
+import { NUMERAL_MORPHOLOGY_DB_FIELD_KEYS, normalizeNumeralMorphologyForEntry } from './numeralMorphology.ts';
 import { resolveMainPatternByGenderForPos } from './gender.ts';
 import { isHiddenTag } from './tagLabel.ts';
+import { isFunctionWordInflectionPos, resolveEntryInflectableValue } from './inflectionState.ts';
 
 export const ADJECTIVE_ENTRY_TOP_LEVEL_STRIP_FIELDS = new Set<string>([
     'morph_pattern',
@@ -121,7 +122,7 @@ export function buildStemPayload(form: StemFormData): Record<string, unknown> {
  * - form_fem: Replaces noun_feminine, adj_feminine
  */
 export const ENTRY_HANDLED_FIELDS = [
-    'id', 'headword', 'pos', 'gender', 'is_loanword', 'is_inflectable',
+    'id', 'headword', 'pos', 'gender', 'is_loanword', 'is_inflectable', 'has_inflection',
     'source_language',
     'source_display', 'source_tooltip',
     'definitions', 'etymology_chain', 'etymology_notes',
@@ -277,6 +278,9 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
             allowedFields.add(field);
         });
     }
+    if (isFunctionWordInflectionPos(pos)) {
+        allowedFields.add('is_inflectable');
+    }
 
     const pluralContract = normalizePluralContract(
         form.plural_forms,
@@ -321,6 +325,12 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
     payload.sound_suffix = soundSuffix;
     payload.morph_pattern = morphPattern;
     payload.is_loanword = inferredIsLoanword;
+    if (isFunctionWordInflectionPos(pos)) {
+        const inflectableValue = resolveEntryInflectableValue(form);
+        if (inflectableValue !== undefined) {
+            payload.is_inflectable = inflectableValue;
+        }
+    }
     const sourceMetadata: SourceMetadataLike = {
         source_citation: String(form.source_citation ?? ''),
         source_title: String(form.source_title ?? ''),
@@ -385,7 +395,7 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
         payload.participle_morphology = normalizeParticipleMorphologyInput(form);
     }
     if (pos === 'numeral') {
-        payload.numeral_morphology = normalizeNumeralMorphologyInput(form);
+        payload.numeral_morphology = normalizeNumeralMorphologyForEntry(form);
     }
 
     // Adjective and participle saves now keep only the canonical nested
@@ -401,6 +411,7 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
             delete payload[field];
         }
     } else if (pos === 'numeral') {
+        delete payload.lemma_pattern;
         delete payload.form_masc;
         delete payload.form_fem;
         delete payload.form_masc_pattern;

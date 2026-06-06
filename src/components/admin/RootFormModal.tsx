@@ -25,6 +25,18 @@ interface RootFormModalProps {
     getToken: () => Promise<string | null>;
 }
 
+function rootIdFromConsonants(consonants: string): string {
+    return String(consonants || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFC')
+        .replace(/[–—−]/g, '-')
+        .replace(/\s*-\s*/g, '-')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+}
+
 export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken }: RootFormModalProps) {
     const { getValues } = useAdminConfig();
     const RELATIONSHIP_OPTIONS = getValues('root_relationship');
@@ -37,7 +49,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
     // Normalize initial state from raw data
     const initialState = useMemo<RootFormData>(() => {
         return {
-            id: data.id || '',
+            id: data.id || rootIdFromConsonants(data.consonants || ''),
             consonants: data.consonants || '',
             glosses: normalizeRootGloss(data.glosses || data.gloss),
             etymology: normalizeRootEtymologyChain(data.etymology),
@@ -177,6 +189,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                                     setForm({
                                         ...form,
                                         consonants: val,
+                                        id: rootIdFromConsonants(val),
                                         is_imala_blocked: form.is_imala_blocked || isBlocked
                                     });
                                 }}
@@ -192,9 +205,9 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                         <div className="col-span-2 md:col-span-2">
                             <label className={label}>{t('Root ID', 'ID tal-Għerq')}</label>
                             <input
-                                className={inp + " font-mono text-[10px]"}
+                                className={inp + " font-mono text-[10px] bg-black/5 text-black/60"}
                                 value={form.id}
-                                onChange={e => setForm({ ...form, id: e.target.value })}
+                                readOnly
                                 placeholder="e.g. k-t-b"
                             />
                         </div>

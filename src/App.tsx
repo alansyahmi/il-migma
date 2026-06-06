@@ -63,7 +63,7 @@ function AppShell() {
     const hideFooter = pathname === '/suggest' || pathname === '/feedback';
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#F4F3F0] overflow-x-hidden">
+        <div className="min-h-screen flex flex-col bg-[#F4F3F0] overflow-x-clip">
             <Navbar />
             <main className="flex-1 min-h-0 flex flex-col">
                 <Outlet />

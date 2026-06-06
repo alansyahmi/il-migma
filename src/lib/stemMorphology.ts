@@ -11,6 +11,11 @@ export type StemMorphologySource = {
 
 export type StemMorphologyInput = Omit<Partial<StemMorphologySource>, 'class_type'> & {
     class_type?: 'ar' | 'ir' | '' | null;
+    stem?: string | null;
+    zokk_class?: 'ar' | 'ir' | '' | null;
+    zokk_is_hybrid?: boolean | number | null;
+    root_consonants?: string | null;
+    zokk_agentive_suffix?: string | null;
 };
 
 export interface StemMorphologyViewModel {
@@ -28,19 +33,21 @@ function normalizeClassType(value: unknown): 'ar' | 'ir' | null {
 export function normalizeStemMorphology(source?: StemMorphologyInput | null): StemMorphologySource | null {
     if (!source) return null;
 
-    const stem_string = String(source.stem_string || '').trim();
-    const class_type = normalizeClassType(source.class_type);
+    const stem_string = String(source.stem_string || source.stem || '').trim();
+    const class_type = normalizeClassType(source.class_type || source.zokk_class);
     if (!stem_string || !class_type) return null;
 
-    const root = typeof source.root === 'string' ? source.root.trim() : source.root ?? null;
-    const agentive_suffix = typeof source.agentive_suffix === 'string'
-        ? source.agentive_suffix.trim()
-        : source.agentive_suffix ?? null;
+    const rootSource = source.root ?? source.root_consonants;
+    const root = typeof rootSource === 'string' ? rootSource.trim() : rootSource ?? null;
+    const agentiveSource = source.agentive_suffix ?? source.zokk_agentive_suffix;
+    const agentive_suffix = typeof agentiveSource === 'string'
+        ? agentiveSource.trim()
+        : agentiveSource ?? null;
 
     return {
         stem_string,
         class_type,
-        is_hybrid: !!source.is_hybrid,
+        is_hybrid: !!(source.is_hybrid ?? source.zokk_is_hybrid),
         root: root || null,
         agentive_suffix: agentive_suffix || null,
     };

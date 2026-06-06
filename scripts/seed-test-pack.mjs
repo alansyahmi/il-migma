@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ensureVerbMorphologyTable } from '../src/lib/verbMorphology.ts';
+import { generateConjugation } from '../src/lib/conjugationEngine.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -114,6 +115,43 @@ const SECONDARY_GLOSSES = {
     interjection: ['greeting', 'expression of annoyance', 'expression of surprise', 'affirmative response', 'negative response'],
 };
 
+export const ENGINE_VERB_BRANCH_FIXTURES = [
+    { branchKey: 'quadriliteral-form-i-strong', root: 'q-r-t-s', form: 'I', strength: 'strong', weakClass: null, vowelSetPerfect: 'a-a', vowelSetImperfect: 'i-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'quadriliteral-form-i-weak-defective', root: 's-q-s-w', form: 'I', strength: 'weak', weakClass: 'defective', vowelSetPerfect: 'a-a', vowelSetImperfect: 'i-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'quadriliteral-form-ii-strong', root: 'b-l-n-d', form: 'II', strength: 'strong', weakClass: null, vowelSetPerfect: 'a-a', vowelSetImperfect: 'i-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'quadriliteral-form-ii-weak-defective', root: 'ħ-r-b-j', form: 'II', strength: 'weak', weakClass: 'defective', vowelSetPerfect: 'a-a', vowelSetImperfect: 'i-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'form-i-strong', root: 'p-l-t', form: 'I', strength: 'strong', weakClass: null, vowelSetPerfect: 'i-e', vowelSetImperfect: 'i-e', vowelSetImperative: 'i-e' },
+    { branchKey: 'form-i-geminated', root: 'd-m-m', form: 'I', strength: 'geminated', weakClass: null, vowelSetPerfect: 'e-a', vowelSetImperfect: 'i-a', vowelSetImperative: 'i-a' },
+    { branchKey: 'form-i-strong-hybrid', root: 'l-f-għ', form: 'I', strength: 'strong-hybrid', weakClass: null, vowelSetPerfect: 'a-a', vowelSetImperfect: 'i-a', vowelSetImperative: 'i-a' },
+    { branchKey: 'form-i-weak-assimilative', root: 'w-ż-n', form: 'I', strength: 'weak', weakClass: 'assimilative', vowelSetPerfect: 'i-e', vowelSetImperfect: 'i-e', vowelSetImperative: 'i-e' },
+    { branchKey: 'form-i-weak-hollow', root: 's-w-f', form: 'I', strength: 'weak', weakClass: 'hollow', vowelSetPerfect: 'a-a', vowelSetImperfect: 'u-u', vowelSetImperative: 'u-u' },
+    { branchKey: 'form-i-weak-defective', root: 'ħ-b-y', form: 'I', strength: 'weak', weakClass: 'defective', vowelSetPerfect: 'a-i', vowelSetImperfect: 'a-i', vowelSetImperative: 'a-i' },
+    { branchKey: 'form-ii-strong', root: 'k-s-r', form: 'II', strength: 'strong', weakClass: null, vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'form-ii-weak-assimilative', root: 'w-q-f', form: 'II', strength: 'weak', weakClass: 'assimilative', vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'form-ii-weak-hollow', root: 'd-w-b', form: 'II', strength: 'weak', weakClass: 'hollow', vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'form-ii-weak-defective', root: 'r-b-għ', form: 'II', strength: 'weak', weakClass: 'defective', vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-i', vowelSetImperative: 'a-i' },
+    { branchKey: 'form-ii-geminated', root: 'ġ-n-n', form: 'II', strength: 'geminated', weakClass: null, vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'form-iii-strong', root: 'b-r-k', form: 'III', strength: 'strong', weakClass: null, vowelSetPerfect: 'ie-e', vowelSetImperfect: 'ie-e', vowelSetImperative: 'ie-e' },
+    { branchKey: 'form-iii-weak-assimilative', root: 'w-s-l', form: 'III', strength: 'weak', weakClass: 'assimilative', vowelSetPerfect: 'ie-e', vowelSetImperfect: 'ie-e', vowelSetImperative: 'ie-e' },
+    { branchKey: 'form-iii-weak-hollow', root: 'q-w-m', form: 'III', strength: 'weak', weakClass: 'hollow', vowelSetPerfect: 'ie-e', vowelSetImperfect: 'ie-e', vowelSetImperative: 'ie-e' },
+    { branchKey: 'form-iii-weak-defective', root: 'b-n-y', form: 'III', strength: 'weak', weakClass: 'defective', vowelSetPerfect: 'ie-a', vowelSetImperfect: 'ie-a', vowelSetImperative: 'ie-a' },
+    { branchKey: 'form-iii-geminated', root: 'ħ-b-b', form: 'III', strength: 'geminated', weakClass: null, vowelSetPerfect: 'ie-a', vowelSetImperfect: 'ie-a', vowelSetImperative: 'ie-a' },
+    { branchKey: 'form-iv', root: 'g-l-b', form: 'IV', strength: 'strong', weakClass: null, vowelSetPerfect: 'i-e', vowelSetImperfect: 'i-e', vowelSetImperative: 'i-e' },
+    { branchKey: 'form-v-strong', root: 'f-r-k', form: 'V', strength: 'strong', weakClass: null, vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'form-v-weak-defective', root: 'n-s-y', form: 'V', strength: 'weak', weakClass: 'defective', vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-i', vowelSetImperative: 'a-i' },
+    { branchKey: 'form-vi-strong', root: 's-l-m', form: 'VI', strength: 'strong', weakClass: null, vowelSetPerfect: 'ie-a', vowelSetImperfect: 'ie-a', vowelSetImperative: 'ie-a' },
+    { branchKey: 'form-vi-weak-defective', root: 'r-m-y', form: 'VI', strength: 'weak', weakClass: 'defective', vowelSetPerfect: 'ie-a', vowelSetImperfect: 'ie-a', vowelSetImperative: 'ie-a' },
+    { branchKey: 'form-vii', root: 'ħ-r-ġ', form: 'VII', strength: 'strong', weakClass: null, vowelSetPerfect: 'i-e', vowelSetImperfect: 'i-e', vowelSetImperative: 'i-e' },
+    { branchKey: 'form-viii', root: 'ġ-b-d', form: 'VIII', strength: 'strong', weakClass: null, vowelSetPerfect: 'i-e', vowelSetImperfect: 'i-e', vowelSetImperative: 'i-e' },
+    { branchKey: 'form-ix', root: 's-f-r', form: 'IX', strength: 'strong', weakClass: null, vowelSetPerfect: 'i-e', vowelSetImperfect: 'i-e', vowelSetImperative: 'i-e' },
+    { branchKey: 'form-xa-strong', root: 'f-h-m', form: 'Xa', strength: 'strong', weakClass: null, vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'form-xa-weak-defective', root: 't-l-y', form: 'Xa', strength: 'weak', weakClass: 'defective', vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-i', vowelSetImperative: 'a-i' },
+    { branchKey: 'form-xa-geminated', root: 'm-d-d', form: 'Xa', strength: 'geminated', weakClass: null, vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'form-xb-strong', root: 'q-s-m', form: 'Xb', strength: 'strong', weakClass: null, vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-a', vowelSetImperative: 'a-a' },
+    { branchKey: 'form-xb-weak-defective', root: 'ġ-r-y', form: 'Xb', strength: 'weak', weakClass: 'defective', vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-i', vowelSetImperative: 'a-i' },
+    { branchKey: 'form-xb-weak-hollow', root: 'ħ-w-d', form: 'Xb', strength: 'weak', weakClass: 'hollow', vowelSetPerfect: 'a-a', vowelSetImperfect: 'a-a', vowelSetImperative: 'a-a' },
+];
+
 function makeRootFamily(index, consonants, strength, weakClass, vowelSetPerf, vowelSetImpf, vowelSetImp, gloss, sourceTerm) {
     return {
         id: `zz-root-${pad(index)}`,
@@ -138,6 +176,101 @@ function makeRootFamily(index, consonants, strength, weakClass, vowelSetPerf, vo
         synonyms: asJson([]),
         antonyms: asJson([]),
         related_entries: asJson([]),
+    };
+}
+
+function generateEngineVerbConjugation(fixture) {
+    return generateConjugation({
+        root: fixture.root,
+        form: fixture.form,
+        strength: fixture.strength,
+        weakClass: fixture.weakClass || undefined,
+        vowelSetPerfect: fixture.vowelSetPerfect,
+        vowelSetImperfect: fixture.vowelSetImperfect,
+        vowelSetImperative: fixture.vowelSetImperative,
+        isImalaBlocked: fixture.isImalaBlocked ?? fixture.root.includes('għ'),
+    });
+}
+
+function engineFixtureId(index, kind) {
+    return kind === 'root'
+        ? `zz-root-verb-engine-${pad(index)}`
+        : `zz-verb-engine-${pad(index)}`;
+}
+
+function makeEngineVerbRoot(fixture, index) {
+    return {
+        id: engineFixtureId(index, 'root'),
+        consonants: fixture.root,
+        consonant_array: asJson(fixture.root.split('-')),
+        strength: fixture.strength,
+        weak_class: fixture.weakClass ?? null,
+        gloss: asJson([{ en: `engine branch ${fixture.branchKey}`, mt: fixture.branchKey }]),
+        etymology: asJson({
+            relationship: 'Fixture',
+            language: 'Il-Miġma seed pack',
+            term: fixture.branchKey,
+            pronunciation: fixture.root,
+            definition: `Conjugation engine branch fixture for ${fixture.branchKey}`,
+        }),
+        source: 'seed-pack',
+        hidden_forms: asJson([]),
+        notes: `Verb entry-view fixture for ${fixture.branchKey}`,
+        vowel_set_perf: fixture.vowelSetPerfect,
+        vowel_set_impf: fixture.vowelSetImperfect,
+        vowel_set_imp: fixture.vowelSetImperative,
+        synonyms: asJson([]),
+        antonyms: asJson([]),
+        related_entries: asJson([]),
+    };
+}
+
+function makeEngineVerbEntry(fixture, index) {
+    const conjugation = generateEngineVerbConjugation(fixture);
+    const citationRow = conjugation.rows.find((row) => row.person_mt === '3ms') || conjugation.rows[2];
+    const headword = citationRow.perfect;
+
+    return {
+        ...makeEntryBase('verb', index, 'engine-branch', { source: 'seed-pack' }, headword),
+        id: engineFixtureId(index, 'verb'),
+        headword,
+        tags: asJson(['seed', 'verb', 'engine-branch', fixture.branchKey]),
+        root_consonants: fixture.root,
+        verb_form: fixture.form,
+        verb_class: fixture.strength,
+        verb_weak_class: fixture.weakClass ?? null,
+        verb_transitivity: 'both',
+        verb_perfective_3sgm: citationRow.perfect,
+        verb_imperfective_3sgm: citationRow.imperfect,
+        verb_verbal_noun: `${headword}-vn`,
+        verb_active_ptcp: `${headword}-ap`,
+        verb_passive_ptcp: `${headword}-pp`,
+        verb_vowel_perf: fixture.vowelSetPerfect,
+        verb_vowel_impf: fixture.vowelSetImperfect,
+        verb_vowel_impv: fixture.vowelSetImperative,
+        verb_type: 'engine-branch',
+        is_loanword: 0,
+        source_language: SEMITIC_SOURCE_LANGUAGE,
+        source_citation: `Fixture pack verb engine ${pad(index)}: ${fixture.branchKey}`,
+    };
+}
+
+function verbMorphologyRowFromEntry(entry) {
+    return {
+        entry_id: entry.id,
+        form: entry.verb_form || null,
+        class: entry.verb_class || null,
+        weak_class: entry.verb_weak_class || null,
+        transitivity: entry.verb_transitivity || null,
+        perfective_3sgm: entry.verb_perfective_3sgm || null,
+        imperfective_3sgm: entry.verb_imperfective_3sgm || null,
+        verbal_noun: entry.verb_verbal_noun || null,
+        active_participle: entry.verb_active_ptcp || null,
+        passive_participle: entry.verb_passive_ptcp || null,
+        vowel_set_perf: entry.verb_vowel_perf || null,
+        vowel_set_impf: entry.verb_vowel_impf || null,
+        vowel_set_impv: entry.verb_vowel_impv || null,
+        type: entry.verb_type || null,
     };
 }
 
@@ -237,6 +370,13 @@ function makeEntryBase(pos, index, familyKind, familyRef, headword) {
         usage_example: `Example usage of ${headword}`,
         usage_example_en: `Example usage of ${headword}`,
     };
+}
+
+function finalizeEntryForInsert(entry) {
+    if (Array.isArray(entry.definitions)) {
+        entry.definitions = asJson(entry.definitions);
+    }
+    delete entry.phonetics;
 }
 
 function rootEntry(pos, index, root) {
@@ -443,8 +583,8 @@ function closedClassEntry(pos, index) {
     };
 }
 
-function buildSeedPack() {
-    const roots = [
+export function buildSeedPack() {
+    const baseRoots = [
         makeRootFamily(1, 'k-t-b', 'strong', null, 'i-e', 'i-e', 'i-u', { en: 'write', mt: 'ikteb' }, 'כתב'),
         makeRootFamily(2, 'k-l-m', 'strong', null, 'e-e', 'e-e', 'e-e', { en: 'speak / word', mt: 'kelma' }, 'كلم'),
         makeRootFamily(3, 'għ-m-l', 'strong', null, 'a-a', 'a-a', 'a-a', { en: 'do / make', mt: 'agħmel' }, 'عمل'),
@@ -454,6 +594,8 @@ function buildSeedPack() {
         ...root,
         verb_class: root.strength === 'weak' ? 'weak' : 'strong',
     }));
+    const engineVerbRoots = ENGINE_VERB_BRANCH_FIXTURES.map((fixture, index) => makeEngineVerbRoot(fixture, index + 1));
+    const roots = [...baseRoots, ...engineVerbRoots];
 
     const stems = [
         makeStemFamily(1, 'serv', 'ar', false, null, '-i', 'Italian', { en: 'serve', mt: 'servizz' }),
@@ -501,9 +643,8 @@ function buildSeedPack() {
                     notes: ph.notes,
                 });
             }
-            // keep `etymology_chain` on the entry so it will be persisted with the entries row
-            delete entry.definitions;
-            delete entry.phonetics;
+            // keep entry-level JSON fields so they persist with the entries row
+            finalizeEntryForInsert(entry);
         }
     }
 
@@ -536,9 +677,8 @@ function buildSeedPack() {
                 });
             }
 
-            // keep `etymology_chain` on the entry so it will be persisted with the entries row
-            delete entry.definitions;
-            delete entry.phonetics;
+            // keep entry-level JSON fields so they persist with the entries row
+            finalizeEntryForInsert(entry);
         }
     }
 
@@ -618,10 +758,8 @@ function buildSeedPack() {
             sort_order: senseIndex,
         })),
     );
-    delete tieletEntry.definitions;
-    delete tieletEntry.phonetics;
-    delete tlittEntry.definitions;
-    delete tlittEntry.phonetics;
+    finalizeEntryForInsert(tieletEntry);
+    finalizeEntryForInsert(tlittEntry);
 
     // Verb pack: 3 root-linked rows and 2 stem-linked rows so the POS exercises both code paths.
     for (let i = 1; i <= 3; i += 1) {
@@ -667,8 +805,7 @@ function buildSeedPack() {
             vowel_set_impv: entry.verb_vowel_impv || null,
             type: entry.verb_type || null,
         });
-        delete entry.definitions;
-        delete entry.phonetics;
+        finalizeEntryForInsert(entry);
     }
 
     for (let i = 4; i <= 5; i += 1) {
@@ -714,9 +851,40 @@ function buildSeedPack() {
             vowel_set_impv: entry.verb_vowel_impv || null,
             type: entry.verb_type || null,
         });
-        delete entry.definitions;
-        delete entry.phonetics;
+        finalizeEntryForInsert(entry);
     }
+
+    ENGINE_VERB_BRANCH_FIXTURES.forEach((fixture, index) => {
+        const fixtureIndex = index + 1;
+        const entry = makeEngineVerbEntry(fixture, fixtureIndex);
+        entries.push(entry);
+        childRows.definitions.push(...entry.definitions.map((definition, senseIndex) => ({
+            id: `zz-def-verb-engine-${pad(fixtureIndex)}-${senseIndex + 1}`,
+            entry_id: entry.id,
+            subentry_id: null,
+            sense_number: senseIndex + 1,
+            text_mt: definition.text_mt,
+            text_en: senseIndex === 0
+                ? `engine branch fixture: ${fixture.branchKey}`
+                : definition.text_en,
+            register: null,
+            nuance: null,
+            field: 'verb',
+            sort_order: senseIndex,
+        })));
+        for (const ph of entry.phonetics) {
+            childRows.phonetics.push({
+                id: `zz-phon-verb-engine-${pad(fixtureIndex)}`,
+                entry_id: entry.id,
+                subentry_id: null,
+                ipa: ph.ipa,
+                dialect: ph.dialect,
+                notes: ph.notes,
+            });
+        }
+        childRows.verb_morphology.push(verbMorphologyRowFromEntry(entry));
+        finalizeEntryForInsert(entry);
+    });
 
     return { roots, stems, entries, childRows };
 }
@@ -823,8 +991,13 @@ async function main() {
         await client.execute(await insertSql(client, 'entries', entry));
     }
 
-    for (const def of seedPack.childRows.definitions) {
-        await client.execute(await insertSql(client, 'definitions', def));
+    const definitionColumns = await getTableColumns(client, 'definitions');
+    if (definitionColumns.size > 0) {
+        for (const def of seedPack.childRows.definitions) {
+            await client.execute(await insertSql(client, 'definitions', def));
+        }
+    } else {
+        console.warn('Definitions child table not found; using entries.definitions JSON only.');
     }
 
     for (const phon of seedPack.childRows.phonetics) {
@@ -856,7 +1029,9 @@ async function main() {
     });
 }
 
-main().catch((error) => {
-    console.error('Seed pack failed:', error);
-    process.exitCode = 1;
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+    main().catch((error) => {
+        console.error('Seed pack failed:', error);
+        process.exitCode = 1;
+    });
+}

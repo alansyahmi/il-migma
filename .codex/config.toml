@@ -14,17 +14,20 @@
 # built-in defaults. Uncomment and pin them only if you intentionally want
 # repo-local or global model overrides.
 
-# Top-level runtime settings (current Codex schema)
+# Top-level runtime settings (current Codex schema). Keep the default path
+# lightweight; turn on live search or MCP-heavy workflows only when a task
+# actually needs external state.
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
-web_search = "live"
+web_search = "cached"
 
 # External notifications receive a JSON payload on stdin.
 notify = [
-  "terminal-notifier",
-  "-title", "Codex ECC",
-  "-message", "Task completed!",
-  "-sound", "default",
+  "powershell.exe",
+  "-NoLogo",
+  "-NoProfile",
+  "-ExecutionPolicy", "Bypass",
+  "-File", ".codex/notify.ps1",
 ]
 
 # Prefer AGENTS.md and project-local .codex/AGENTS.md for instructions.
@@ -33,24 +36,31 @@ notify = [
 # model_instructions_file = "/absolute/path/to/instructions.md"
 
 # MCP servers
-# Keep the default project set lean. API-backed servers inherit credentials from
-# the launching environment or can be supplied by a user-level ~/.codex/config.toml.
+# Keep the project set defined but disabled by default. Each enabled stdio MCP
+# server adds startup cost, especially when launched through npx. Flip the
+# relevant `enabled` value to true for docs, browser, GitHub, or research-heavy
+# tasks, then restart the Codex session.
 [mcp_servers.github]
+enabled = false
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-github"]
 
 [mcp_servers.context7]
+enabled = false
 command = "npx"
 args = ["-y", "@upstash/context7-mcp@latest"]
 
 [mcp_servers.exa]
+enabled = false
 url = "https://mcp.exa.ai/mcp"
 
 [mcp_servers.memory]
+enabled = false
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-memory"]
 
 [mcp_servers.playwright]
+enabled = false
 command = "npx"
 args = ["-y", "@playwright/mcp@latest", "--extension"]
 
@@ -61,6 +71,7 @@ approval_mode = "approve"
 approval_mode = "approve"
 
 [mcp_servers.sequential-thinking]
+enabled = false
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-sequential-thinking"]
 
@@ -97,7 +108,7 @@ sandbox_mode = "workspace-write"
 web_search = "live"
 
 [agents]
-max_threads = 6
+max_threads = 3
 max_depth = 1
 
 [agents.explorer]

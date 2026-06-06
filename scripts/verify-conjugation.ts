@@ -227,6 +227,30 @@ assertEq(buildPerfectForm(strongQuad.rows[3].perfect, strongQuad.rows[3].perfect
 assertEq(buildPerfectForm(strongQuad.rows[3].perfect, strongQuad.rows[3].perfect_neg ?? strongQuad.rows[3].perfect, true, 0, null, 'a-a', strongQuad.rows[3].stems, strongQuad.blocksImala || false, 'I'), 'ma qartsitnix', 'strong quadriliteral negative clitic perfect DO 1s 3fs');
 assertEq(buildPerfectForm(strongQuad.rows[3].perfect, strongQuad.rows[3].perfect_neg ?? strongQuad.rows[3].perfect, true, 1, null, 'a-a', strongQuad.rows[3].stems, strongQuad.blocksImala || false, 'I'), 'ma qartsitekx', 'strong quadriliteral negative clitic perfect DO 2s 3fs');
 assertEq(buildPerfectForm(strongQuad.rows[2].perfect, strongQuad.rows[2].perfect_neg ?? strongQuad.rows[2].perfect, true, 1, null, 'a-a', strongQuad.rows[2].stems, strongQuad.blocksImala || false, 'I'), 'ma qartsekx', 'strong quadriliteral negative clitic perfect DO 3ms');
+
+const temmekFormII = generateConjugation({
+    root: 't-m-m',
+    form: 'II',
+    strength: 'geminated',
+    vowelSetPerfect: 'e-e',
+    vowelSetImperfect: 'e-e',
+    vowelSetImperative: 'e-e',
+    isImalaBlocked: false,
+});
+assertEq(buildPerfectForm(temmekFormII.rows[3].perfect, temmekFormII.rows[3].perfect_neg ?? temmekFormII.rows[3].perfect, false, 1, null, 'e-e', temmekFormII.rows[3].stems, temmekFormII.blocksImala || false, 'II'), 'temmitek', 'Form II 3fs perfect DO 2s should use attached -it stem');
+
+const formVDefective = generateConjugation({
+    root: 'n-s-y',
+    form: 'V',
+    strength: 'weak',
+    weakClass: 'defective',
+    vowelSetPerfect: 'e-e',
+    vowelSetImperfect: 'e-e',
+    vowelSetImperative: 'e-e',
+    isImalaBlocked: false,
+});
+assertEq(formVDefective.imperative_sg, 'tnesse', 'Form V defective singular imperative should keep the derived t- shape');
+assertEq(buildVerbForm(formVDefective.imperative_sg, false, 5, null, 'e-e', formVDefective.imperative_sg_stems, formVDefective.blocksImala || false, 'V'), 'tnessekom', 'Form V defective suffixed singular imperative should not fall back to Form II stem');
 assertEq(buildVerbForm(strongQuad.rows[2].imperfect, false, 1, null, 'i-a', strongQuad.rows[2].stems, strongQuad.blocksImala || false, 'I'), 'jqartsek', 'strong quadriliteral clitic imperfect DO 3ms');
 assertEq(buildVerbForm(strongQuad.rows[2].imperfect, false, null, 3, 'i-a', strongQuad.rows[2].stems, strongQuad.blocksImala || false, 'I'), 'jqartsilha', 'strong quadriliteral clitic imperfect IO 3ms');
 assertEq(buildVerbForm(strongQuad.rows[2].imperfect, true, null, 3, 'i-a', strongQuad.rows[2].stems, strongQuad.blocksImala || false, 'I'), 'ma jqartsilhiex', 'strong quadriliteral negative clitic imperfect IO 3ms');

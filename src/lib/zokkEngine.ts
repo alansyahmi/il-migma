@@ -109,10 +109,10 @@ function buildCitationImperfectStem(classType: 'ar' | 'ir', perfectStem: string)
 export function generateZokkForms(zokkInput: any): ZokkResult {
     const zokk: ZokkMorphology = {
         stem_string: zokkInput.stem_string ?? zokkInput.stem ?? '',
-        class_type: (zokkInput.class_type ?? zokkInput.class_type ?? '') as 'ar' | 'ir' | '',
-        is_hybrid: !!(zokkInput.is_hybrid ?? zokkInput.is_hybrid),
-        agentive_suffix: zokkInput.agentive_suffix ?? zokkInput.agentive_suffix,
-        root: zokkInput.root ?? zokkInput.root,
+        class_type: (zokkInput.class_type ?? zokkInput.zokk_class ?? '') as 'ar' | 'ir' | '',
+        is_hybrid: !!(zokkInput.is_hybrid ?? zokkInput.zokk_is_hybrid),
+        agentive_suffix: zokkInput.agentive_suffix ?? zokkInput.zokk_agentive_suffix,
+        root: zokkInput.root ?? zokkInput.root_consonants,
     };
 
     const { stem_string: stem, class_type: zokk_class, is_hybrid: zokk_is_hybrid, agentive_suffix: zokk_agentive_suffix, root: root_consonants } = zokk;

@@ -4,7 +4,7 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { cn } from '@/lib/utils';
 import { resolveEntryGender } from '@/lib/gender';
 import { isHiddenTag, resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
-import { resolveStemDefaults } from '@/lib/stemDefaults';
+import { resolveVerbClassification } from '@/lib/stemDefaults';
 
 import { type Entry } from '@/types';
 
@@ -52,14 +52,20 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
 
     if (entry.pos === 'verb' && entry.verb_morphology) {
         const vm = entry.verb_morphology;
-        const stemDefaults = entry.zokk_morphology ? resolveStemDefaults(entry.zokk_morphology as any) : null;
-        const strengthRaw = entry.zokk_morphology
-            ? stemDefaults?.strength || 'weak'
-            : ((entry.verb_morphology?.verb_class) || entry.root_pattern_form?.root?.strength || 'strong');
+        const classification = resolveVerbClassification({
+            form: vm.form,
+            headword: entry.headword,
+            verb_class: vm.class || vm.verb_class || (entry as any).verb_class,
+            verb_weak_class: vm.weak_class || (entry as any).verb_weak_class,
+            root_consonants: entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants,
+            tags: entry.tags,
+            root_tags: vm.root_tags,
+            root: entry.root_pattern_form?.root,
+            zokk_morphology: entry.zokk_morphology as any,
+        });
+        const strengthRaw = classification.strength;
         const strengthLabel = term(strengthRaw === 'strong-hybrid' ? 'strong-hybrid' : strengthRaw);
-        const weakClassRaw = entry.zokk_morphology
-            ? stemDefaults?.weak_class || 'defective'
-            : ((entry.verb_morphology?.weak_class) || entry.root_pattern_form?.root?.weak_class || vm.weak_class);
+        const weakClassRaw = classification.weak_class;
         const weakClassLabel = weakClassRaw ? term(weakClassRaw) : null;
 
         const parts = [

@@ -15,6 +15,7 @@ export type POS =
   | 'article' 
   | 'particle'
   | 'numeral'
+  | 'participle'
   | 'interrogative'
   | 'suffix';
 
@@ -120,6 +121,7 @@ export interface Entry {
     source_language?: string;
     is_loanword?: boolean;
     is_inflectable?: boolean;
+    has_inflection?: boolean;
     created_at?: string;
     updated_at?: string;
     sort_order?: number;
@@ -127,6 +129,7 @@ export interface Entry {
     verb_weak_class?: string | null;
     verb_vowel_perf?: string | null;
     verb_vowel_impf?: string | null;
+    verb_vowel_impv?: string | null;
     participle_type?: string | null;
     participle_gender?: string | null;
     numeral_type?: string | null;

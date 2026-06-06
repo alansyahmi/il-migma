@@ -18,6 +18,7 @@ import { PARTICIPLE_MORPHOLOGY_DB_FIELD_KEYS } from './participleMorphology.ts';
 import { NUMERAL_MORPHOLOGY_DB_FIELD_KEYS } from './numeralMorphology.ts';
 import { applyVerbMorphologyCompatibility, VERB_MORPHOLOGY_DB_FIELD_KEYS } from './verbMorphology.ts';
 import { isHiddenTag } from './tagLabel.ts';
+import { isFunctionWordInflectionPos, resolveEntryInflectableValue } from './inflectionState.ts';
 
 export const INITIAL_FORM_STATE = {
     id: '',
@@ -37,6 +38,7 @@ export const INITIAL_FORM_STATE = {
     is_inflectable_singular: false,
     is_inflectable_plural: false,
     is_inflectable: true,
+    has_inflection: undefined as boolean | undefined,
     vowel_set_sg: '',
     vowel_set_pl: '',
     vowel_set_opp: '',
@@ -220,6 +222,7 @@ num.plural_forms AS num_plural_forms,
     'id', r.target_entry_id, 
     'headword', t.headword, 
     'pos', t.pos,
+    'numeral_type', tnum.numeral_type,
     'cv_pattern', COALESCE(t.cv_pattern, t.morph_pattern, tpat.cv_notation, tnm.morph_pattern, tam.pattern),
     'lemma_pattern', COALESCE(t.morph_pattern, t.cv_pattern, tnm.morph_pattern, tam.pattern, tpat.cv_notation),
     'form_masc_pattern', COALESCE(tnm.form_masc_pattern, tam.form_masc_pattern, tpm.form_masc_pattern),
@@ -227,10 +230,9 @@ num.plural_forms AS num_plural_forms,
     'form_plural_pattern', COALESCE(tnm.form_plural_pattern, tam.form_plural_pattern, tpm.form_plural_pattern, tnum.form_plural_pattern),
     'morph_pattern', COALESCE(t.morph_pattern, tnm.morph_pattern, tam.pattern, t.cv_pattern, tpat.cv_notation),
     'numeral_morphology', json_object(
+        'numeral_type', tnum.numeral_type,
         'form_attributive_short_pattern', tnum.form_attributive_short_pattern,
-        'form_plural_pattern', tnum.form_plural_pattern,
-        'lemma_pattern', COALESCE(t.morph_pattern, t.cv_pattern, tpat.cv_notation),
-        'form_masc_pattern', NULL
+        'form_plural_pattern', tnum.form_plural_pattern
     ),
     'gloss_en', json_extract(t.definitions, '$[0].text_en'),
     'gloss_mt', json_extract(t.definitions, '$[0].text_mt')
@@ -248,6 +250,7 @@ num.plural_forms AS num_plural_forms,
     'id', r.target_entry_id, 
     'headword', t.headword, 
     'pos', t.pos,
+    'numeral_type', tnum.numeral_type,
     'cv_pattern', COALESCE(t.cv_pattern, t.morph_pattern, tpat.cv_notation, tnm.morph_pattern, tam.pattern),
     'lemma_pattern', COALESCE(t.morph_pattern, t.cv_pattern, tnm.morph_pattern, tam.pattern, tpat.cv_notation),
     'form_masc_pattern', COALESCE(tnm.form_masc_pattern, tam.form_masc_pattern, tpm.form_masc_pattern),
@@ -255,10 +258,9 @@ num.plural_forms AS num_plural_forms,
     'form_plural_pattern', COALESCE(tnm.form_plural_pattern, tam.form_plural_pattern, tpm.form_plural_pattern, tnum.form_plural_pattern),
     'morph_pattern', COALESCE(t.morph_pattern, tnm.morph_pattern, tam.pattern, t.cv_pattern, tpat.cv_notation),
     'numeral_morphology', json_object(
+        'numeral_type', tnum.numeral_type,
         'form_attributive_short_pattern', tnum.form_attributive_short_pattern,
-        'form_plural_pattern', tnum.form_plural_pattern,
-        'lemma_pattern', COALESCE(t.morph_pattern, t.cv_pattern, tpat.cv_notation),
-        'form_masc_pattern', NULL
+        'form_plural_pattern', tnum.form_plural_pattern
     ),
     'gloss_en', json_extract(t.definitions, '$[0].text_en'),
     'gloss_mt', json_extract(t.definitions, '$[0].text_mt')
@@ -276,6 +278,7 @@ num.plural_forms AS num_plural_forms,
     'id', r.target_entry_id, 
     'headword', t.headword, 
     'pos', t.pos,
+    'numeral_type', tnum.numeral_type,
     'cv_pattern', COALESCE(t.cv_pattern, t.morph_pattern, tpat.cv_notation, tnm.morph_pattern, tam.pattern),
     'lemma_pattern', COALESCE(t.morph_pattern, t.cv_pattern, tnm.morph_pattern, tam.pattern, tpat.cv_notation),
     'form_masc_pattern', COALESCE(tnm.form_masc_pattern, tam.form_masc_pattern, tpm.form_masc_pattern),
@@ -283,10 +286,9 @@ num.plural_forms AS num_plural_forms,
     'form_plural_pattern', COALESCE(tnm.form_plural_pattern, tam.form_plural_pattern, tpm.form_plural_pattern, tnum.form_plural_pattern),
     'morph_pattern', COALESCE(t.morph_pattern, tnm.morph_pattern, tam.pattern, t.cv_pattern, tpat.cv_notation),
     'numeral_morphology', json_object(
+        'numeral_type', tnum.numeral_type,
         'form_attributive_short_pattern', tnum.form_attributive_short_pattern,
-        'form_plural_pattern', tnum.form_plural_pattern,
-        'lemma_pattern', COALESCE(t.morph_pattern, t.cv_pattern, tpat.cv_notation),
-        'form_masc_pattern', NULL
+        'form_plural_pattern', tnum.form_plural_pattern
     ),
     'gloss_en', json_extract(t.definitions, '$[0].text_en'),
     'gloss_mt', json_extract(t.definitions, '$[0].text_mt')
@@ -542,8 +544,6 @@ function buildNumeralSource(row: Record<string, unknown>) {
         vowel_set_dual: row.num_vowel_set_dual,
         form_plural_pattern: row.num_plural_pattern,
         plural_forms: row.num_plural_forms,
-        lemma_pattern: row.lemma_pattern,
-        form_masc_pattern: row.form_masc_pattern,
     };
 }
 
@@ -771,6 +771,13 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         }
     }
 
+    if (isFunctionWordInflectionPos(pos)) {
+        const inflectableValue = resolveEntryInflectableValue(full);
+        if (inflectableValue !== undefined) {
+            form.is_inflectable = parseBooleanLike(inflectableValue);
+        }
+    }
+
     const hasZokkMorphology = !!full.zokk_morphology;
     form.is_loanword = full.is_loanword === undefined || full.is_loanword === null || full.is_loanword === ''
         ? hasZokkMorphology
@@ -825,7 +832,7 @@ export function buildLoadedEntryPatch(full: any, _prev: AdminForm): Partial<Admi
     const patch: Partial<AdminForm> = {};
     (patch as any)._manualFormMasc = false;
 
-    const coreFields = ['id', 'headword', 'pos', 'gender', 'definitions', 'phonetics', 'tags', 'is_loanword', 'is_inflectable_singular', 'is_inflectable_plural'];
+    const coreFields = ['id', 'headword', 'pos', 'gender', 'definitions', 'phonetics', 'tags', 'is_loanword', 'is_inflectable_singular', 'is_inflectable_plural', 'is_inflectable'];
 
     Object.keys(fullForm).forEach(key => {
         const val = (fullForm as any)[key];
@@ -919,7 +926,7 @@ export function hydrateEntryRow(row: Record<string, unknown> | undefined | null)
     payload.zokk_morphology = zokkFromCols || parseObject(row.zokk_morphology);
     payload.inflections_pl = deriveInflections(row, String(row.pos || '').toLowerCase()).map(r => r.form);
 
-    const pos = String(row.pos || '').toLowerCase();
+    const pos = normalizeEntryPos(row.pos);
 
     if (pos === 'verb') {
         applyVerbMorphologyCompatibility(payload, payload, buildVerbSource(row), payload);
