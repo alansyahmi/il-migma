@@ -65,6 +65,7 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
         });
         const strengthRaw = classification.strength;
         const strengthLabel = term(strengthRaw === 'strong-hybrid' ? 'strong-hybrid' : strengthRaw);
+        const strengthSearchPath = `/advanced-search?pos=verb&type=${encodeURIComponent(strengthRaw)}`;
         const weakClassRaw = classification.weak_class;
         const weakClassLabel = weakClassRaw ? term(weakClassRaw) : null;
 
@@ -75,7 +76,7 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
                     {`${term('form-label')} ${vm.form}`.toUpperCase()}
                 </Link>
             ) : null,
-            strengthLabel ? <Link key="strength" to={`${basePath}?type=${strengthRaw}`} className="hover:underline">{strengthLabel.toUpperCase()}</Link> : null,
+            strengthLabel ? <Link key="strength" to={strengthSearchPath} className="hover:underline">{strengthLabel.toUpperCase()}</Link> : null,
             weakClassLabel ? <Link key="weak" to={`${basePath}?type=${weakClassRaw}`} className="hover:underline">{weakClassLabel.toUpperCase()}</Link> : null,
             ...(vm.root_tags ?? [])
                 .filter(tag => {

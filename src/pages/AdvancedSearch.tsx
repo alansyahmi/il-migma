@@ -522,10 +522,15 @@ export function AdvancedSearch() {
         ...getOptions('pos', mode, language)
     ], [getOptions, mode, language, term]);
 
-    const ROOT_TYPE_FILTER_OPTIONS = useMemo(() => [
-        { value: '', label: term('all') },
-        ...getOptions('verb_class', mode, language)
-    ], [getOptions, mode, language, term]);
+    const ROOT_TYPE_FILTER_OPTIONS = useMemo(() => {
+        const options = getOptions('verb_class', mode, language);
+        const hasStrongHybrid = options.some((option: any) => option.value === 'strong-hybrid');
+        return [
+            { value: '', label: term('all') },
+            ...options,
+            ...(hasStrongHybrid ? [] : [{ value: 'strong-hybrid', label: term('strong-hybrid') }]),
+        ];
+    }, [getOptions, mode, language, term]);
 
     const PATTERN_TYPE_OPTIONS = useMemo(() => [
         { value: 'lemma', label: term('singular') },

@@ -13,6 +13,7 @@ import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from
 import { ensureVerbMorphologyTable } from '../../src/lib/verbMorphology.ts';
 
 const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
+const VERB_STRENGTH_FILTERS = new Set(['strong', 'strong-hybrid', 'weak', 'geminated', 'doubled']);
 
 function normalizeSuffixToken(value) {
     return String(value || '')
@@ -210,6 +211,23 @@ export async function onRequestGet({ request, env }) {
                 sql += " AND (e.source_language IS NULL OR e.source_language IN ('Arabic', 'Berber'))";
             } else if (rootType === 'romance') {
                 sql += " AND e.source_language IN ('Sicilian', 'Italian', 'Latin', 'French', 'Spanish')";
+            } else if (pos === 'verb' && VERB_STRENGTH_FILTERS.has(rootType)) {
+                const canonicalVerbClass = rootType === 'doubled' ? 'geminated' : rootType;
+                if (canonicalVerbClass === 'strong-hybrid') {
+                    sql += ` AND (
+                        LOWER(COALESCE(vm.class, e.verb_class, '')) = ?
+                        OR (
+                            COALESCE(vm.form, e.verb_form, '') = 'I'
+                            AND LOWER(COALESCE(vm.class, e.verb_class, r.strength, '')) = 'strong'
+                            AND (LOWER(COALESCE(r.consonants, e.root_consonants, '')) LIKE '%-għ' OR LOWER(COALESCE(r.consonants, e.root_consonants, '')) LIKE '%-gh')
+                            AND (e.headword LIKE ? OR e.headword LIKE ?)
+                        )
+                    )`;
+                    args.push(canonicalVerbClass, "%'", "%’");
+                } else {
+                    sql += ' AND (LOWER(COALESCE(vm.class, e.verb_class, r.strength, \'\')) = ?)';
+                    args.push(canonicalVerbClass);
+                }
             } else {
                 sql += ' AND (r.strength = ? OR vm.class = ?)';
                 args.push(rootType, rootType);
