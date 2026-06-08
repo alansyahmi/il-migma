@@ -104,6 +104,40 @@ function getVisibleEntryForms<T extends { headword?: string }>(items: T[], hideT
         }));
 }
 
+function toRecord(value: unknown): Record<string, unknown> | null {
+    return value && typeof value === 'object' ? value as Record<string, unknown> : null;
+}
+
+function getRelationshipTargetId(item: unknown) {
+    const source = toRecord(item);
+    if (!source) return '';
+    const nestedEntry = toRecord(source.entry);
+    return String(source.id ?? source.target_id ?? source.entry_id ?? nestedEntry?.id ?? '').trim();
+}
+
+function getRelationshipHeadword(item: unknown) {
+    const source = toRecord(item);
+    if (!source) return '';
+    const nestedEntry = toRecord(source.entry);
+    return String(source.headword ?? nestedEntry?.headword ?? '').trim();
+}
+
+function getRelationshipGlossSource(item: unknown) {
+    const source = toRecord(item);
+    return toRecord(source?.entry) || item;
+}
+
+function getRelationshipSource(item: unknown) {
+    const source = toRecord(item);
+    const nestedEntry = toRecord(source?.entry);
+    return String(source?.relationship_source ?? nestedEntry?.relationship_source ?? '').trim().toLowerCase();
+}
+
+function isExplicitRelationship(item: unknown) {
+    const source = getRelationshipSource(item);
+    return !source || source === 'explicit' || source === 'manual';
+}
+
 function getNodeText(node: React.ReactNode): string {
     if (node === null || node === undefined || typeof node === 'boolean') return '';
     if (typeof node === 'string' || typeof node === 'number') return String(node).trim();
@@ -3547,7 +3581,28 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const ety = entry.etymologies?.[0];
     const isNumeralEntry = entry.pos === 'numeral';
 
-    const allRelatedEntries = (entry as any).related_entries || [];
+    const allRelatedEntries = useMemo(() => {
+        const entries = [
+            ...((entry as any).related_entries || []),
+            ...((nm as any)?.related_entries || []),
+        ];
+        const indexes = new Map<string, number>();
+        const merged: any[] = [];
+        entries.forEach((item: any) => {
+            const key = String(getRelationshipTargetId(item) || getRelationshipHeadword(item)).toLowerCase().trim();
+            if (!key) return;
+            const existingIndex = indexes.get(key);
+            if (existingIndex === undefined) {
+                indexes.set(key, merged.length);
+                merged.push(item);
+                return;
+            }
+            if (isExplicitRelationship(item) && !isExplicitRelationship(merged[existingIndex])) {
+                merged[existingIndex] = item;
+            }
+        });
+        return merged;
+    }, [entry, nm]);
     const directAlternativeForms = (entry as any).alternative_forms || [];
     const markedAlternativeForms = allRelatedEntries.filter((item: any) => {
         const kind = String(item?.relation_kind || item?.relationship_type || item?._rel || '').toLowerCase().trim();
@@ -3561,8 +3616,6 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
     const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
 
-    if (!entry) return null;
-
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
         try {
@@ -3575,9 +3628,33 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
         }
     };
 
-    const handleEditEntry = (target: { id: string }) => {
-        setEditEntry(target as any);
+    const handleEditEntry = (target: unknown) => {
+        setEditEntry(target as AdminEntry);
         setShowForm(true);
+    };
+
+    const renderRelationshipLink = (item: unknown) => {
+        const targetId = getRelationshipTargetId(item);
+        const headword = getRelationshipHeadword(item);
+        const glossSource = getRelationshipGlossSource(item);
+        const content = (
+            <>
+                {headword || targetId}{' '}
+                <span className="opacity-55 font-sans text-xs text-black">
+                    "{getGloss(glossSource, language, mode)}"
+                </span>
+            </>
+        );
+
+        return targetId ? (
+            <Link to={`/entry/${targetId}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                {content}
+            </Link>
+        ) : (
+            <span className="block text-sm font-serif text-black/70">
+                {content}
+            </span>
+        );
     };
 
     const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants;
@@ -3586,6 +3663,10 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
     const patternValue = resolveDisplayedPattern(mode, cvWizenMap, (entry as any).cv_pattern || pattern?.cv_notation, pattern?.wizen_notation);
+    const patternHrefForProp = usePatternHrefResolver();
+    const patternHref = pattern?.id
+        ? `/pattern/${pattern.id}`
+        : patternHrefForProp((entry as any).cv_pattern || pattern?.cv_notation || patternValue);
     const numeralFamilyEntries = useMemo(
         () => [...relatedEntries],
         [relatedEntries]
@@ -3738,8 +3819,9 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const combineMasculineAndShortAttributive = isNumeralEntry && shouldCombineMasculineAndShortAttributive(entry.headword || '');
     const explicitNumeralRelationshipIds = useMemo(() => {
         const ids = new Set<string>();
-        relatedEntries.forEach((item: any) => {
-            const id = String(item?.id || item?.target_id || '').trim();
+        relatedEntries.forEach((item) => {
+            if (!isExplicitRelationship(item)) return;
+            const id = getRelationshipTargetId(item);
             if (id) ids.add(id);
         });
         return ids;
@@ -3757,8 +3839,8 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const numeralEntryPattern = (entry as any).cv_pattern || pattern?.cv_notation || null;
     const masculineSurfacePattern = numeralEntryPattern;
     const numeralDisplayForms = useMemo(
-        () => buildNumeralMorphologyDisplayForms(entry.headword, rootConsonants || '', { ...(nm || {}), cv_pattern: numeralEntryPattern }, resolvedNumeralEntries),
-        [entry.headword, rootConsonants, nm, numeralEntryPattern, resolvedNumeralEntries]
+        () => buildNumeralMorphologyDisplayForms(entry.headword, rootConsonants || '', { ...(nm || {}), numeral_type: numeralType, cv_pattern: numeralEntryPattern }, resolvedNumeralEntries),
+        [entry.headword, rootConsonants, nm, numeralType, numeralEntryPattern, resolvedNumeralEntries]
     );
 
     const getInitialNumeralFormGender = (type: string, source?: any) => (
@@ -3993,18 +4075,13 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                         {displayRelatedEntries.length > 0 && (
                             <SideCard title={term('related-entries')}>
                                 <div className="space-y-1">
-                                    {displayRelatedEntries.map((rel: any) => (
-                                        <div key={rel.id} className="flex items-center justify-between group">
-                                            <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
-                                                {rel.headword}{' '}
-                                                <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{getGloss(rel, language, mode)}"
-                                                </span>
-                                            </Link>
+                                    {displayRelatedEntries.map((rel) => (
+                                        <div key={getRelationshipTargetId(rel) || getRelationshipHeadword(rel)} className="flex items-center justify-between group">
+                                            {renderRelationshipLink(rel)}
                                             {isActualAdmin && (
                                                 <AdminActionButtons
                                                     onEdit={() => handleEditEntry(rel)}
-                                                    onDelete={() => handleRemoveRelationship(rel.id)}
+                                                    onDelete={isExplicitRelationship(rel) ? () => handleRemoveRelationship(getRelationshipTargetId(rel)) : undefined}
                                                 />
                                             )}
                                         </div>
@@ -4052,9 +4129,13 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
                                 {patternValue && (
                                     <PropRow label={patternLabel}>
-                                        <Link to={`/pattern/${pattern?.id}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
-                                            {patternValue}
-                                        </Link>
+                                        {patternHref ? (
+                                            <Link to={patternHref} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
+                                                {patternValue}
+                                            </Link>
+                                        ) : (
+                                            <span className="font-sans font-regular text-black">{patternValue}</span>
+                                        )}
                                     </PropRow>
                                 )}
 
@@ -4108,6 +4189,24 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                                     "{getGloss(alt, language, mode)}"
                                                 </span>
                                             </Link>
+                                        ))}
+                                    </div>
+                                </SideCard>
+                            )}
+
+                            {displayRelatedEntries.length > 0 && (
+                                <SideCard title={term('related-entries')}>
+                                    <div className="space-y-1">
+                                        {displayRelatedEntries.map((rel) => (
+                                            <div key={getRelationshipTargetId(rel) || getRelationshipHeadword(rel)} className="flex items-center justify-between group">
+                                                {renderRelationshipLink(rel)}
+                                                {isActualAdmin && (
+                                                    <AdminActionButtons
+                                                        onEdit={() => handleEditEntry(rel)}
+                                                        onDelete={isExplicitRelationship(rel) ? () => handleRemoveRelationship(getRelationshipTargetId(rel)) : undefined}
+                                                    />
+                                                )}
+                                            </div>
                                         ))}
                                     </div>
                                 </SideCard>

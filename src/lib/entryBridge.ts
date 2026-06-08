@@ -533,21 +533,21 @@ function buildAdjSource(row: Record<string, unknown>) {
 
 function buildNumeralSource(row: Record<string, unknown>) {
     return {
-        numeral_type: row.num_type,
-        form_attributive_short: row.num_attr_short,
-        form_attributive_short_pattern: row.num_attr_short_pattern,
-        form_attributive_long: row.num_attr_long,
-        ordinal_form: row.num_ordinal,
-        adverbial_form: row.num_adverbial,
-        fractional_form: row.num_fractional,
-        multiplier_form: row.num_multiplier,
-        distributive_form: row.num_distributive,
-        vowel_set_sg: row.num_vowel_set_sg,
-        vowel_set_pl: row.num_vowel_set_pl,
-        vowel_set_opp: row.num_vowel_set_opp,
-        vowel_set_dual: row.num_vowel_set_dual,
-        form_plural_pattern: row.num_plural_pattern,
-        plural_forms: row.num_plural_forms,
+        numeral_type: row.numeral_type ?? row.num_type,
+        form_attributive_short: row.num_attr_short ?? row.form_attributive_short,
+        form_attributive_short_pattern: row.num_attr_short_pattern ?? row.form_attributive_short_pattern,
+        form_attributive_long: row.num_attr_long ?? row.form_attributive_long,
+        ordinal_form: row.num_ordinal ?? row.ordinal_form ?? row.numeral_ordinal,
+        adverbial_form: row.num_adverbial ?? row.adverbial_form ?? row.numeral_adverbial,
+        fractional_form: row.num_fractional ?? row.fractional_form ?? row.numeral_fractional,
+        multiplier_form: row.num_multiplier ?? row.multiplier_form ?? row.numeral_multiplier,
+        distributive_form: row.num_distributive ?? row.distributive_form ?? row.numeral_distributive,
+        vowel_set_sg: row.num_vowel_set_sg ?? row.vowel_set_sg,
+        vowel_set_pl: row.num_vowel_set_pl ?? row.vowel_set_pl,
+        vowel_set_opp: row.num_vowel_set_opp ?? row.vowel_set_opp,
+        vowel_set_dual: row.num_vowel_set_dual ?? row.vowel_set_dual,
+        form_plural_pattern: row.num_plural_pattern ?? row.form_plural_pattern,
+        plural_forms: row.num_plural_forms ?? row.plural_forms,
     };
 }
 

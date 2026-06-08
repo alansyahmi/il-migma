@@ -34,6 +34,70 @@ function normalizeDefinitionList(definitions) {
     }));
 }
 
+function relationshipKey(item) {
+    return String(item?.id || item?.target_id || item?.entry_id || item?.headword || '')
+        .trim()
+        .toLowerCase();
+}
+
+function markRelationshipSource(items, source) {
+    return (items || []).map((item) => ({
+        ...item,
+        relationship_source: item?.relationship_source || source,
+    }));
+}
+
+function mergeRelationshipEntries(...lists) {
+    const merged = [];
+    const indexes = new Map();
+
+    for (const list of lists) {
+        for (const item of list || []) {
+            if (!item) continue;
+            const key = relationshipKey(item);
+            if (!key) continue;
+
+            const existingIndex = indexes.get(key);
+            if (existingIndex === undefined) {
+                indexes.set(key, merged.length);
+                merged.push(item);
+                continue;
+            }
+
+            const existing = merged[existingIndex];
+            const nextIsExplicit = item.relationship_source === 'explicit';
+            const existingIsExplicit = existing.relationship_source === 'explicit';
+            if (nextIsExplicit || !existingIsExplicit) {
+                merged[existingIndex] = { ...existing, ...item };
+            }
+        }
+    }
+
+    return merged;
+}
+
+function buildRelationshipEntry(row, relationshipSource) {
+    const hydrated = hydrateEntryRow(row);
+    return {
+        id: hydrated.id || row.id || null,
+        headword: hydrated.headword || row.headword || '',
+        pos: hydrated.pos || row.pos || '',
+        numeral_type: hydrated.numeral_type || hydrated.numeral_morphology?.numeral_type || null,
+        root_consonants: hydrated.root_consonants || row.resolved_root_consonants || null,
+        cv_pattern: hydrated.cv_pattern || row.cv_notation || null,
+        lemma_pattern: hydrated.lemma_pattern || null,
+        form_masc_pattern: hydrated.form_masc_pattern || null,
+        form_fem_pattern: hydrated.form_fem_pattern || null,
+        form_plural_pattern: hydrated.form_plural_pattern || hydrated.numeral_morphology?.form_plural_pattern || null,
+        morph_pattern: hydrated.morph_pattern || null,
+        numeral_morphology: hydrated.numeral_morphology || null,
+        root_pattern_form: hydrated.root_pattern_form || null,
+        gloss_en: firstSenseText(row.gloss_en || row.text_en),
+        gloss_mt: firstSenseText(row.gloss_mt || row.text_mt),
+        relationship_source: relationshipSource,
+    };
+}
+
 async function ensureDiminutivesTableExists(db) {
     const tableCheck = await db.execute({
         sql: `SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'entry_diminutives'`,
@@ -301,6 +365,7 @@ export async function onRequestGet({ params, env }) {
                 const match = entryMap[r.id] || headwordMap[String(r.headword || '').trim()];
                 return {
                     ...r,
+                    relationship_source: r.relationship_source || 'explicit',
                     cv_pattern: r.cv_pattern || match?.cv_pattern || null,
                     numeral_type: r.numeral_type || match?.numeral_type || r.numeral_morphology?.numeral_type || match?.numeral_morphology?.numeral_type || null,
                     lemma_pattern: r.lemma_pattern || match?.lemma_pattern || null,
@@ -321,13 +386,37 @@ export async function onRequestGet({ params, env }) {
 
         payload.synonyms = await enrichRelationships(payload.synonyms);
         payload.antonyms = await enrichRelationships(payload.antonyms);
-        payload.related_entries = await enrichRelationships(payload.related_entries);
+        payload.related_entries = markRelationshipSource(await enrichRelationships(payload.related_entries), 'explicit');
         payload.alternative_forms = await enrichRelationships(payload.alternative_forms);
 
         // ── Shared Related Entries ──────────────────────────────────────────────
         let related_entries = [];
+        const normalizedPos = normalizeEntryPos(entry.pos);
         const rc = entry.resolved_root_consonants;
-        if (rc) {
+        if (rc && normalizedPos === 'numeral') {
+            const relRes = await db.execute({
+                sql: `SELECT e.*,
+                        ${ENTRY_MORPHOLOGY_SELECT},
+                        COALESCE(e.root_consonants, r.consonants) AS resolved_root_consonants,
+                        COALESCE(pat.cv_notation, pat2.cv_notation, e.cv_pattern) AS cv_notation,
+                        COALESCE(pat.wizen_notation, pat2.wizen_notation) AS wizen_notation,
+                        COALESCE(pat.id, pat2.id) AS pattern_id,
+                        json_extract(e.definitions, '$[0].text_en') AS gloss_en,
+                        json_extract(e.definitions, '$[0].text_mt') AS gloss_mt
+                      FROM entries e
+                      ${ENTRY_MORPHOLOGY_JOINS}
+                      LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
+                      LEFT JOIN roots r ON r.id = rpf.root_id OR r.consonants = e.root_consonants
+                      LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
+                      LEFT JOIN patterns pat2 ON pat2.cv_notation = COALESCE(num.form_attributive_short_pattern, e.cv_pattern) AND pat.id IS NULL
+                      WHERE LOWER(TRIM(e.pos)) = 'numeral'
+                        AND (e.root_consonants = ? OR r.consonants = ?)
+                        AND e.id != ?
+                      LIMIT 30`,
+                args: [rc, rc, resolvedEntryId],
+            });
+            related_entries = relRes.rows.map((row) => buildRelationshipEntry(row, 'same_root'));
+        } else if (rc) {
             const relRes = await db.execute({
                 sql: `SELECT e.id, e.headword,
                         json_extract(e.definitions, '$[0].text_en') AS gloss_en,
@@ -344,8 +433,12 @@ export async function onRequestGet({ params, env }) {
                 gloss_mt: firstSenseText(row.gloss_mt),
             }));
         }
-
-        const normalizedPos = normalizeEntryPos(entry.pos);
+        const numeralFamilyEntries = normalizedPos === 'numeral'
+            ? mergeRelationshipEntries(payload.related_entries, related_entries)
+            : [];
+        if (normalizedPos === 'numeral') {
+            payload.related_entries = numeralFamilyEntries;
+        }
 
         if (normalizedPos === 'verb') {
             applyVerbMorphologyCompatibility(payload, entryPayload, entryPayload.verb_morphology || entryPayload, {
@@ -472,7 +565,7 @@ export async function onRequestGet({ params, env }) {
                 plural_forms: payload.inflections_pl,
                 synonyms: payload.synonyms,
                 antonyms: payload.antonyms,
-                related_entries: related_entries.length ? related_entries : payload.related_entries,
+                related_entries: numeralFamilyEntries.length ? numeralFamilyEntries : payload.related_entries,
                 alternative_forms: payload.alternative_forms,
                 ordinal_form: numMorphology.ordinal_form || null,
                 adverbial_form: numMorphology.adverbial_form || null,

@@ -41,6 +41,7 @@
     "cleanup:numeral-morphology": "node scripts/cleanup-numeral-morphology.mjs",
     "cleanup:participle-morphology": "node scripts/cleanup-participle-morphology.mjs",
     "backfill:numeral-suppletives": "node scripts/backfill-numeral-suppletive-links.mjs",
+    "backfill:numeral-families": "node --experimental-strip-types scripts/backfill-numeral-families.mjs",
     "backfill:pattern-metadata": "node scripts/backfill-pattern-metadata-cleanup.mjs",
     "validate:api": "node scripts/validate_api.mjs",
     "seed:test-pack": "node scripts/seed-test-pack.mjs",

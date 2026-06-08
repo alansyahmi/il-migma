@@ -40,6 +40,26 @@ const triplu = {
     pos: 'numeral',
     numeral_morphology: { numeral_type: 'multiplier' },
 };
+const kwart = {
+    id: 'num-kwart',
+    headword: 'kwart',
+    pos: 'numeral',
+    numeral_type: 'fractional',
+};
+const rbiegh = {
+    id: 'num-rbiegh',
+    headword: 'rbiegħ',
+    pos: 'numeral',
+    root_consonants: 'r-b-għ',
+    numeral_type: 'distributive',
+};
+const rbieghi = {
+    id: 'num-rbieghi',
+    headword: 'rbiegħi',
+    pos: 'numeral',
+    root_consonants: 'r-b-għ',
+    numeral_type: 'multiplier',
+};
 const blankRoleCardinal = {
     id: 'num-blank-cardinal',
     headword: 'blank cardinal',
@@ -56,20 +76,25 @@ assert.equal(
     'cardinal',
     'blank numeral_type should be treated as cardinal'
 );
+assert.equal(
+    getNumeralEntryRole(rbiegh),
+    'distributive',
+    'top-level numeral_type should resolve the numeral role'
+);
 
 {
     const matches = selectNumeralRelationshipEntries({
         currentEntryId: 'num-erbgħa',
         currentNumeralType: 'cardinal',
         existingRelatedEntries: [],
-        candidateHeadwords: ["erba'", 'erbat', "raba'"],
-        entries: [erbgħa, erba, erbat, raba, blankRoleCardinal, nonNumeral],
+        candidateHeadwords: ["erba'", 'erbat', "raba'", 'kwart', 'rbiegħ', 'rbiegħi'],
+        entries: [erbgħa, erba, erbat, raba, kwart, rbiegh, rbieghi, triplu, blankRoleCardinal, nonNumeral],
     });
 
     assert.deepEqual(
         matches.map((entry) => entry.id),
-        ['num-erba', 'num-erbat', 'num-raba'],
-        'cardinal should select non-cardinal numeral siblings only'
+        ['num-erba', 'num-erbat', 'num-raba', 'num-kwart', 'num-rbiegh', 'num-rbieghi'],
+        'cardinal should select candidate non-cardinal numeral siblings only'
     );
 }
 
@@ -150,6 +175,22 @@ assert.equal(
         matches.map((entry) => entry.id),
         [],
         'standalone role-specific numerals should be allowed to have no relationship matches'
+    );
+}
+
+{
+    const matches = selectNumeralRelationshipEntries({
+        currentEntryId: 'num-rbiegh',
+        currentNumeralType: 'distributive',
+        existingRelatedEntries: [],
+        candidateHeadwords: [],
+        entries: [erbgħa, erba, erbat, kwart, rbiegh, rbieghi, nonNumeral],
+    });
+
+    assert.deepEqual(
+        matches.map((entry) => entry.id),
+        ['num-erbgħa'],
+        'top-level-role distributive numerals should select the same-root cardinal'
     );
 }
 

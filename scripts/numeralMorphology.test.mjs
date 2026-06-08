@@ -305,6 +305,45 @@ const run = () => {
     assertEq(familyOnlyDisplay.fractional[0]?.value, 'sest', 'family entries should populate role rows even without saved/generated forms');
     assertEq(familyOnlyDisplay.fractional[0]?.entryId, 'num-sest', 'family-only role rows should link to the family entry');
 
+    const rbieghTopLevelRoleDisplay = buildNumeralMorphologyDisplayForms('rbiegħ', 'r-b-għ', {
+        numeral_type: 'distributive',
+        cv_pattern: 'CCieC',
+    }, [
+        {
+            id: 'num-erbgħa',
+            headword: 'erbgħa',
+            pos: 'numeral',
+            root_consonants: 'r-b-għ',
+            numeral_type: 'cardinal',
+            cv_pattern: 'vCCvC',
+            numeral_morphology: {
+                numeral_type: 'cardinal',
+                form_attributive_long: 'erbat',
+                fractional_form: 'kwart',
+                multiplier_form: 'rbiegħi',
+                distributive_form: 'rbiegħ',
+            },
+        },
+        { id: 'num-rbieghi', headword: 'rbiegħi', pos: 'numeral', root_consonants: 'r-b-għ', numeral_type: 'multiplier', cv_pattern: 'CCieCi' },
+    ]);
+    assertEq(rbieghTopLevelRoleDisplay.cardinal[0]?.value, 'erbgħa', 'top-level-only distributive should show the family cardinal');
+    assertEq(rbieghTopLevelRoleDisplay.cardinal[0]?.entryId, 'num-erbgħa', 'top-level-only distributive should link the family cardinal');
+    assertEq(rbieghTopLevelRoleDisplay.distributive[0]?.value, 'rbiegħ', 'top-level-only distributive should use itself in the distributive row');
+    assertEq(rbieghTopLevelRoleDisplay.distributive[0]?.marker, 'plain', 'top-level-only distributive own row should be plain');
+    assertEq(rbieghTopLevelRoleDisplay.multiplier[0]?.value, 'rbiegħi', 'top-level-only distributive should show sibling multiplier rows');
+    assertEq(rbieghTopLevelRoleDisplay.multiplier[0]?.entryId, 'num-rbieghi', 'top-level-only distributive should link sibling multiplier rows');
+
+    const sameRootInferredFamilyDisplay = buildNumeralMorphologyDisplayForms('erbgħa', 'r-b-għ', {
+        numeral_type: 'cardinal',
+        multiplier_form: 'rbiegħi',
+        distributive_form: 'rbiegħ',
+    }, [
+        { id: 'num-rbiegh', headword: 'rbiegħ', pos: 'numeral', root_consonants: 'r-b-għ', cv_pattern: 'CCieC' },
+        { id: 'num-rbieghi', headword: 'rbiegħi', pos: 'numeral', root_consonants: 'r-b-għ', cv_pattern: 'CCieCi' },
+    ]);
+    assertEq(sameRootInferredFamilyDisplay.distributive[0]?.entryId, 'num-rbiegh', 'same-root saved cardinal surfaces should infer the distributive sibling row');
+    assertEq(sameRootInferredFamilyDisplay.multiplier[0]?.entryId, 'num-rbieghi', 'same-root saved cardinal surfaces should infer the multiplier sibling row');
+
     const tmienjaDisplay = buildNumeralDisplayForms('tmienja', 't-m-n-j', []);
     assertEq(tmienjaDisplay.ordinal[0]?.value, 'tmien', 'tmienja should use the canonical ordinal');
     assertEq(tmienjaDisplay.adverbial[0]?.value, 'tmien darbiet', 'tmienja should use the canonical adverbial');

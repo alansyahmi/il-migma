@@ -82,4 +82,18 @@ assert.equal(numeralHydrated.numeral_morphology?.fractional_form, 'terz');
 assert.equal(numeralHydrated.numeral_morphology?.multiplier_form, 'triplu');
 assert.equal(numeralHydrated.numeral_morphology?.distributive_form, 'tlieta tlieta');
 
+const topLevelRoleNumeral = hydrateEntryRow({
+  id: 'num-rbiegh',
+  headword: 'rbiegħ',
+  pos: 'numeral',
+  is_loanword: 0,
+  numeral_type: 'distributive',
+  root_consonants: 'r-b-għ',
+  cv_pattern: 'CCieC',
+  num_type: null,
+});
+
+assert.equal(topLevelRoleNumeral.numeral_type, 'distributive');
+assert.equal(topLevelRoleNumeral.numeral_morphology?.numeral_type, 'distributive');
+
 console.log('entryHydration.test.mjs passed');

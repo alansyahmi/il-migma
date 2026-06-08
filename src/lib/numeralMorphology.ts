@@ -83,6 +83,8 @@ type LinkedNumeralEntry = {
     headword?: string | null;
     pos?: string | null;
     numeral_type?: string | null;
+    num_type?: string | null;
+    relationship_source?: string | null;
     root_consonants?: string | null;
     cv_pattern?: string | null;
     pattern?: string | null;
@@ -355,8 +357,16 @@ function extractLinkedEntryPattern(entry: LinkedNumeralEntry): string | null {
     );
 }
 
+function getLinkedNumeralRootKey(entry: LinkedNumeralEntry): string {
+    return String(
+        entry.root_consonants
+        || (entry as any).root_pattern_form?.root?.consonants
+        || '',
+    ).trim().toLowerCase();
+}
+
 function getExplicitLinkedNumeralRole(entry: LinkedNumeralEntry): NumeralRole | null {
-    return normalizeNumeralRole(entry.numeral_type || entry.numeral_morphology?.numeral_type);
+    return getExplicitNumeralEntryRole(entry);
 }
 
 export function normalizeNumeralRole(value: unknown): NumeralRole | null {
@@ -371,8 +381,77 @@ export function isCardinalNumeralRole(value: unknown): boolean {
     return (normalizeNumeralRole(value) || 'cardinal') === 'cardinal';
 }
 
-export function getNumeralEntryRole(entry: any): NumeralRole {
-    return normalizeNumeralRole(entry?.numeral_type || entry?.numeral_morphology?.numeral_type) || 'cardinal';
+export function getExplicitNumeralEntryRole(entry: any): NumeralRole | null {
+    return (
+        normalizeNumeralRole(entry?.numeral_type)
+        || normalizeNumeralRole(entry?.numeral_morphology?.numeral_type)
+        || normalizeNumeralRole(entry?.num_type)
+    );
+}
+
+function addNumeralRoleSurfaceKey(target: Set<string>, value: unknown) {
+    const normalized = normalizeNumeralLookupKey(stripTheoreticalPrefix(String(value || '').trim()));
+    if (normalized && normalized !== '-') target.add(normalized);
+}
+
+function getCardinalRoleSurfaceKeys(cardinal: LinkedNumeralEntry): Partial<Record<NumeralRole, Set<string>>> {
+    const source = cardinal.numeral_morphology
+        ? { ...cardinal, ...cardinal.numeral_morphology }
+        : cardinal;
+    const rootConsonants = getLinkedNumeralRootKey(cardinal);
+    const generated = buildNumeralDisplayForms(String(cardinal.headword || ''), rootConsonants, []);
+    const roleKeys: Partial<Record<NumeralRole, Set<string>>> = {};
+
+    NUMERAL_ROLE_ORDER.forEach((role) => {
+        if (role === 'cardinal') return;
+        const roleMeta = NUMERAL_ROLE_META[role];
+        const keys = new Set<string>();
+        if (roleMeta.dbField) {
+            splitNumeralStoredValues((source as any)[roleMeta.dbField]).forEach((value) => addNumeralRoleSurfaceKey(keys, value));
+        }
+        const displayKey = roleMeta.displayKey as keyof NumeralDisplayForms;
+        (generated[displayKey] as NumeralSurfaceValue[] | undefined)?.forEach((item) => {
+            addNumeralRoleSurfaceKey(keys, item.value);
+        });
+        if (keys.size > 0) roleKeys[role] = keys;
+    });
+
+    return roleKeys;
+}
+
+function inferNumeralRoleFromCardinalSurfaces(
+    entry: LinkedNumeralEntry,
+    familyEntries: LinkedNumeralEntry[] = [],
+): NumeralRole | null {
+    const headwordKey = normalizeNumeralLookupKey(String(entry.headword || ''));
+    if (!headwordKey) return null;
+
+    const entryRootKey = getLinkedNumeralRootKey(entry);
+
+    for (const familyEntry of familyEntries) {
+        if (!familyEntry || familyEntry === entry) continue;
+        const explicitFamilyRole = getExplicitLinkedNumeralRole(familyEntry);
+        if (explicitFamilyRole && explicitFamilyRole !== 'cardinal') continue;
+
+        const familyRootKey = getLinkedNumeralRootKey(familyEntry);
+        if (entryRootKey && familyRootKey && entryRootKey !== familyRootKey) continue;
+
+        const roleKeys = getCardinalRoleSurfaceKeys(familyEntry);
+        for (const role of NUMERAL_ROLE_ORDER) {
+            if (role === 'cardinal') continue;
+            if (roleKeys[role]?.has(headwordKey)) return role;
+        }
+    }
+
+    return null;
+}
+
+export function getNumeralEntryRole(entry: any, familyEntries: any[] = []): NumeralRole {
+    return (
+        getExplicitNumeralEntryRole(entry)
+        || inferNumeralRoleFromCardinalSurfaces(entry, familyEntries as LinkedNumeralEntry[])
+        || 'cardinal'
+    );
 }
 
 export function getNumeralRoleLabel(value: unknown): string {
@@ -518,7 +597,7 @@ function buildNumeralFamilyRoleForms(
         const surface = toLinkedNumeralSurface(entry);
         if (!surface) return;
 
-        const role = getExplicitLinkedNumeralRole(entry);
+        const role = getExplicitLinkedNumeralRole(entry) || inferNumeralRoleFromCardinalSurfaces(entry, linkedEntries);
         if (!role) return;
         if (!forms[role]) forms[role] = [];
         forms[role]!.push(surface);
@@ -634,11 +713,13 @@ export function selectNumeralRelationshipEntries({
     currentEntryId,
     currentNumeralType,
     existingRelatedEntries = [],
+    candidateHeadwords = [],
     entries = [],
 }: NumeralRelationshipSelectionOptions): NumeralRelationshipCandidate[] {
     const currentId = String(currentEntryId || '').trim();
     const currentRole = normalizeNumeralRole(currentNumeralType) || 'cardinal';
     const existingIds = new Set(existingRelatedEntries.map(getRelationshipTargetId).filter(Boolean));
+    const candidateHeadwordKeys = new Set(candidateHeadwords.map(normalizeNumeralLookupKey).filter(Boolean));
     const seenIds = new Set<string>();
     const candidates: NumeralRelationshipCandidate[] = [];
 
@@ -649,19 +730,20 @@ export function selectNumeralRelationshipEntries({
         const id = getRelationshipTargetId(entry);
         if (!id || id === currentId || existingIds.has(id) || seenIds.has(id)) continue;
         if (String(entry.pos || '').trim().toLowerCase() !== 'numeral') continue;
+        if (candidateHeadwordKeys.size > 0 && !candidateHeadwordKeys.has(normalizeNumeralLookupKey(entry.headword || ''))) continue;
 
         seenIds.add(id);
         candidates.push(entry);
     }
 
     if (currentRole === 'cardinal') {
-        return candidates.filter((entry) => getNumeralEntryRole(entry) !== 'cardinal');
+        return candidates.filter((entry) => getNumeralEntryRole(entry, candidates) !== 'cardinal');
     }
 
-    const cardinalMatches = candidates.filter((entry) => getNumeralEntryRole(entry) === 'cardinal');
+    const cardinalMatches = candidates.filter((entry) => getNumeralEntryRole(entry, candidates) === 'cardinal');
     if (cardinalMatches.length > 0) return cardinalMatches;
 
-    return candidates.filter((entry) => getNumeralEntryRole(entry) !== currentRole);
+    return candidates.filter((entry) => getNumeralEntryRole(entry, candidates) !== currentRole);
 }
 
 export function buildNumeralDisplayForms(
@@ -728,13 +810,23 @@ export function buildNumeralMorphologyDisplayForms(
     linkedEntries: LinkedNumeralEntry[] = [],
 ): NumeralMorphologyDisplayForms {
     const expandedLinkedEntries = expandLinkedNumeralEntries(linkedEntries);
-    const saved = morphology || {};
-    const role = normalizeNumeralRole(saved.numeral_type) || 'cardinal';
+    const saved = morphology?.numeral_morphology
+        ? { ...morphology, ...morphology.numeral_morphology }
+        : (morphology || {});
+    const currentEntryForRole = {
+        ...saved,
+        headword,
+        root_consonants: saved.root_consonants || rootConsonants,
+    };
+    const role = normalizeNumeralRole(saved.numeral_type)
+        || inferNumeralRoleFromCardinalSurfaces(currentEntryForRole, expandedLinkedEntries)
+        || 'cardinal';
     const roleMeta = NUMERAL_ROLE_META[role];
     const familyRoleForms = buildNumeralFamilyRoleForms(expandedLinkedEntries, headword);
     const currentRolePattern = saved.cv_pattern || saved.entry_cv_pattern || saved.pattern || (roleMeta.patternField ? saved[roleMeta.patternField] : null);
     const currentRoleSurface = toCurrentNumeralRoleSurface(headword, currentRolePattern);
-    const linkedCardinal = expandedLinkedEntries.find((entry) => getExplicitLinkedNumeralRole(entry) === 'cardinal');
+    const linkedCardinal = expandedLinkedEntries.find((entry) => getExplicitLinkedNumeralRole(entry) === 'cardinal')
+        || expandedLinkedEntries.find((entry) => getNumeralEntryRole(entry, expandedLinkedEntries) === 'cardinal');
     const cardinal = role === 'cardinal'
         ? currentRoleSurface
         : linkedCardinal

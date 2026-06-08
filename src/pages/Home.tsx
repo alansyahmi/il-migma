@@ -84,7 +84,25 @@ export function Home() {
         });
     };
 
-    const handleRandom = () => navigate('/search?q=&random=1');
+    const [loadingRandom, setLoadingRandom] = useState(false);
+
+    const handleRandom = async () => {
+        if (loadingRandom) return;
+        setLoadingRandom(true);
+        try {
+            const res = await apiSearch('', { random: 'true', limit: 1 });
+            if (res.results && res.results.length > 0) {
+                navigate(`/entry/${res.results[0].id}`);
+            } else {
+                navigate('/search?q=&random=1');
+            }
+        } catch (err) {
+            console.error("Failed to fetch random entry:", err);
+            navigate('/search?q=&random=1');
+        } finally {
+            setLoadingRandom(false);
+        }
+    };
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}),
@@ -287,7 +305,8 @@ export function Home() {
                         </Link>
                         <button
                             onClick={handleRandom}
-                            className="bg-white text-black text-sm font-sans font-medium px-5 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors"
+                            disabled={loadingRandom}
+                            className="bg-white text-black text-sm font-sans font-medium px-5 py-2.5 rounded-lg border border-black/15 hover:bg-black/5 transition-colors disabled:opacity-50"
                         >
                             {term('random-entry')}
                         </button>
