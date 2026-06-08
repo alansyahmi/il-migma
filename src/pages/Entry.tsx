@@ -7,7 +7,6 @@ import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext'
 import { type Entry, type LinguisticMode, type VerbConjugationTable } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
-import { generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
 import { generateZokkForms } from '@/lib/zokkEngine';
 import { applyInflectionTableSuffix } from '@/lib/inflectionTable';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
@@ -43,7 +42,7 @@ import {
     type NumeralRole,
     type NumeralSurfaceValue,
 } from '@/lib/numeralMorphology';
-import { buildVerbConjugationFromEngine, shouldMarkVerbConjugationTheoretical } from '@/lib/verbMorphology';
+import { buildVerbConjugationFromEngine, buildVerbPreviewFromEngine, shouldMarkVerbConjugationTheoretical } from '@/lib/verbMorphology';
 import { stripTheoreticalPrefix, shouldHideSurface } from '@/lib/theoreticalForms';
 
 export { BLUE, CREAM_RGBA, GOLD, EntryShell, EtymologySentence, PropRow, SideCard } from '@/components/dictionary/EntryShell';
@@ -2531,35 +2530,15 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         [rootEntries, entry]
     );
 
-    // Auto-derive root forms (verbal noun, participles) using the SAME logic as Root.tsx
+    // Auto-derive root forms (verbal noun, participles) using the shared entry-aware preview helper.
     const autoDerived = useMemo(() => {
-        const rootStr = entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root;
-        if (!rootStr || !verbForm) return null;
-
-        // Use root-level primary vowels for auto-derivation matching Root.tsx
-        const f1 = derivedRootEntries?.find(e => e.pos === 'verb' && e.verb_morphology?.form === 'I');
-        const f1vm = f1?.verb_morphology;
-        const pvSet = rootObj?.vowel_set_perf || entry.verb_vowel_perf || f1vm?.vowel_set_perfect || 'a-a';
-        const ipvSet = rootObj?.vowel_set_impf || entry.verb_vowel_impf || f1vm?.vowel_set_imperfect || 'i-a';
-
         try {
-            const rawGen = generateRootForms(
-                rootStr,
-                pvSet,
-                ipvSet,
-                effectiveVerbClassification.strength as any,
-                (effectiveVerbClassification.weak_class || undefined) as any,
-                rootImalaBlocked
-            );
-            // Use siblings if available, otherwise just itself
-            const attested = getAttestedEntries(derivedRootEntries);
-            const markedTable = markGeneratedForms(rawGen, attested);
-            return markedTable.find(f => f.form === verbForm);
+            return buildVerbPreviewFromEngine(entry, derivedRootEntries).rootForm;
         } catch (e) {
             console.error("Auto-derivation error:", e);
             return null;
         }
-    }, [entry, derivedRootEntries, verbForm, rootImalaBlocked, effectiveVerbClassification]);
+    }, [entry, derivedRootEntries]);
     const isVisibleDerivedTerm = (data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string }) =>
         data.value !== '-' && !shouldHideSurface(data, hideTheoreticalForms);
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { Search as SearchIcon, Keyboard, Filter, ChevronDown, ChevronUp, MessageSquare, Shuffle } from 'lucide-react';
-import { generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
+import { getAttestedEntries } from '@/lib/conjugationEngine';
+import { buildVerbPreviewFromEngine } from '@/lib/verbMorphology';
 import { cn } from '@/lib/utils';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -736,23 +737,19 @@ export function AdvancedSearch() {
                     let generated: any = null;
 
                     if (vm) {
-                        const rc = r.root_pattern_form?.root?.consonants;
-                        if (rc) {
-                            try {
-                                const forms = generateRootForms(
-                                    rc,
-                                    vm.vowel_set_perfect || 'a-a',
-                                    vm.vowel_set_imperfect || 'i-a',
-                                    r.verb_class || r.root_pattern_form.root.strength || 'strong',
-                                    r.verb_weak_class || r.root_pattern_form.root.weak_class,
-                                    r.root_pattern_form.root.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rc)
-                                );
-                                const attestedEntries = getAttestedEntries(r.root_pattern_form?.root?.entries || [r]);
-                                const marked = markGeneratedForms(forms, attestedEntries);
-                                generated = marked.find((f: any) => f.form === vm.form);
-                            } catch (e) {
-                                console.warn("Advanced search conjugation error:", e);
-                            }
+                        try {
+                            const preview = buildVerbPreviewFromEngine(
+                                r,
+                                r.root_pattern_form?.root?.entries || [r],
+                            );
+                            generated = preview.rootForm || {
+                                imperfect: preview.marked.imperfect,
+                                imperative: preview.marked.imperative,
+                                passiveParticiple: preview.marked.passiveParticiple,
+                                verbalNoun: preview.marked.verbalNoun,
+                            };
+                        } catch (e) {
+                            console.warn("Advanced search conjugation error:", e);
                         }
 
                         const pushMarked = (label: string, data: any) => {

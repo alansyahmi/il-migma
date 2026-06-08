@@ -3,7 +3,8 @@ import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
-import { generateRootForms, markGeneratedForms, type FormMarker, type MarkedVerbForm, type AttestedEntry } from '@/lib/conjugationEngine';
+import { generateRootForms, getAttestedEntries, markGeneratedForms, type FormMarker, type MarkedVerbForm } from '@/lib/conjugationEngine';
+import { overlayVerbPreviewRowsFromEngine } from '@/lib/verbMorphology';
 import { apiSearch, apiSearchRoots } from '@/lib/api';
 import { Spinner } from '@/components/ui/Spinner';
 import type { SearchResult } from '@/types';
@@ -45,7 +46,7 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
         if (!matchingRootsMap.has(r.consonants)) {
             matchingRootsMap.set(r.consonants, {
                 rootObj: r,
-                verbs: [] // We might not have entries yet for DB-only roots in this view
+                verbs: Array.isArray(r.entries) ? r.entries : [] // Some root rows are DB-only; overlay only when entries are present.
             });
         }
     });
@@ -64,26 +65,12 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
             rootObj.weak_class
         );
 
-        const attested: AttestedEntry[] = [];
-        verbs.forEach((v: any) => {
-            const form = v.verb_morphology?.form || '';
-            if (!form) return;
-            attested.push({ word: v.headword, id: v.id, form, type: 'lemma' });
-            if (v.verb_morphology?.passive_participle) {
-                attested.push({ word: v.verb_morphology.passive_participle, id: v.id, form, type: 'passive' });
-            }
-            if (v.verb_morphology?.active_participle) {
-                attested.push({ word: v.verb_morphology.active_participle, id: v.id, form, type: 'active' });
-            }
-            if (v.verb_morphology?.verbal_noun) {
-                attested.push({ word: v.verb_morphology.verbal_noun, id: v.id, form, type: 'noun' });
-            }
-        });
+        const attested = getAttestedEntries(verbs);
 
         return {
             rootObj,
             verbs,
-            rowsData: markGeneratedForms(rawGen, attested),
+            rowsData: overlayVerbPreviewRowsFromEngine(markGeneratedForms(rawGen, attested), verbs),
         };
     });
     const visibleFormLabels = hideTheoreticalForms

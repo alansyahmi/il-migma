@@ -5788,9 +5788,12 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
                 type: "noun",
             });
         }
-        if (e.verb_morphology?.imperfective_3sg_m) {
+        const storedImperfective3sg =
+            e.verb_morphology?.imperfective_3sgm ||
+            e.verb_morphology?.imperfective_3sg_m;
+        if (storedImperfective3sg) {
             attested.push({
-                word: e.verb_morphology.imperfective_3sg_m,
+                word: storedImperfective3sg,
                 id: e.id,
                 form,
                 pos: "verb",

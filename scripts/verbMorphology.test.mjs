@@ -5,6 +5,7 @@ import { buildPerfectForm, buildVerbForm } from '../src/lib/suffixEngine.ts';
 import {
     applyVerbMorphologyCompatibility,
     buildVerbConjugationFromEngine,
+    buildVerbPreviewFromEngine,
     buildVerbMorphologyResponse,
     deriveEntryFormVerbVowelSets,
     detectVerbRootType,
@@ -1455,6 +1456,151 @@ const run = () => {
         ghtazelRootForms.some((form) => form.form === 'VIII' && form.perfect === 'egħtażel' && form.imperfect === 'jegħtażel' && form.imperative === 'egħtażel'),
         'Form VIII pharyngeal C1 root preview should prefix e- for egħtażel, not *għtażel',
     );
+
+    const makePreviewVerbEntry = ({
+        id,
+        headword,
+        root,
+        form = 'VIII',
+        strength = 'strong',
+        weakClass = '',
+        vowelSetPerfect = 'a-a',
+        vowelSetImperfect = vowelSetPerfect,
+        vowelSetImperative = vowelSetImperfect,
+        rootImalaBlocked = false,
+        entryImalaBlocked,
+        storedPerfect = 'stored-perfect',
+        storedImperfect = 'stored-imperfect',
+        storedImperative = 'stored-imperative',
+    }) => ({
+        id,
+        headword,
+        pos: 'verb',
+        root_pattern_form: {
+            root: {
+                consonants: root,
+                strength,
+                weak_class: weakClass,
+                vowel_set_perf: vowelSetPerfect,
+                vowel_set_impf: vowelSetImperfect,
+                vowel_set_imp: vowelSetImperative,
+                is_imala_blocked: rootImalaBlocked,
+            },
+        },
+        verb_morphology: {
+            form,
+            class: strength,
+            weak_class: weakClass,
+            vowel_set_perf: vowelSetPerfect,
+            vowel_set_impf: vowelSetImperfect,
+            vowel_set_impv: vowelSetImperative,
+            perfective_3sgm: storedPerfect,
+            imperfective_3sgm: storedImperfect,
+            imperative_sg: storedImperative,
+            is_imala_blocked: entryImalaBlocked,
+        },
+    });
+
+    const formVIIIPreviewCases = [
+        {
+            label: 'stad',
+            entry: makePreviewVerbEntry({
+                id: 'stad-entry',
+                headword: 'stad',
+                root: 's-j-d',
+                strength: 'weak',
+                weakClass: 'hollow',
+                vowelSetPerfect: 'a-a',
+                entryImalaBlocked: true,
+            }),
+            perfect: 'stad',
+            imperfect: 'jistad',
+            imperative: 'stad',
+            blocksImala: true,
+        },
+        {
+            label: 'egħtażel',
+            entry: makePreviewVerbEntry({
+                id: 'eghtazel-entry',
+                headword: 'egħtażel',
+                root: 'għ-ż-l',
+                vowelSetPerfect: 'a-e',
+            }),
+            perfect: 'egħtażel',
+            imperfect: 'jegħtażel',
+            imperative: 'egħtażel',
+        },
+        {
+            label: 'xtara',
+            entry: makePreviewVerbEntry({
+                id: 'xtara-entry',
+                headword: 'xtara',
+                root: 'x-r-j',
+                strength: 'weak',
+                weakClass: 'defective',
+                vowelSetPerfect: 'a-a',
+                vowelSetImperfect: 'i-i',
+                vowelSetImperative: 'i-i',
+            }),
+            perfect: 'xtara',
+            imperfect: 'jixtri',
+            imperative: 'ixtri',
+        },
+        {
+            label: 'rtefa’',
+            entry: makePreviewVerbEntry({
+                id: 'rtefa-entry',
+                headword: 'rtefa’',
+                root: 'r-f-għ',
+                strength: 'strong-hybrid',
+                vowelSetPerfect: 'e-a',
+            }),
+            perfect: 'rtefa’',
+            imperfect: 'jirtefa’',
+            imperative: 'rtefa’',
+        },
+        {
+            label: 'xtedd',
+            entry: makePreviewVerbEntry({
+                id: 'xtedd-entry',
+                headword: 'xtedd',
+                root: 'x-d-d',
+                strength: 'geminated',
+                vowelSetPerfect: 'e-e',
+            }),
+            perfect: 'xtedd',
+            imperfect: 'jixtedd',
+            imperative: 'xtedd',
+        },
+    ];
+
+    formVIIIPreviewCases.forEach(({ label, entry, perfect, imperfect, imperative, blocksImala }) => {
+        const preview = buildVerbPreviewFromEngine(entry, [entry]);
+        assert.equal(preview.perfective_3sgm, perfect, `${label} preview should override stale stored perfect with engine output`);
+        assert.equal(preview.imperfective_3sgm, imperfect, `${label} preview should override stale stored imperfect with engine output`);
+        assert.equal(preview.imperative_sg, imperative, `${label} preview should use engine imperative`);
+        assert.equal(preview.rootForm?.perfect.value, perfect, `${label} marked root row should carry engine perfect`);
+        assert.equal(preview.rootForm?.imperfect.value, imperfect, `${label} marked root row should carry engine imperfect`);
+        if (blocksImala !== undefined) {
+            assert.equal(preview.conjugation?.blocksImala, blocksImala, `${label} preview should respect entry-level imala override`);
+        }
+    });
+
+    const noRootPreview = buildVerbPreviewFromEngine({
+        id: 'stored-only',
+        headword: 'stored-only',
+        pos: 'verb',
+        verb_morphology: {
+            form: 'VIII',
+            perfective_3sgm: 'stored-perfect',
+            imperfective_3sgm: 'stored-imperfect',
+            imperative_sg: 'stored-imperative',
+        },
+    });
+    assert.equal(noRootPreview.conjugation, null, 'preview helper should not generate without root data');
+    assert.equal(noRootPreview.perfective_3sgm, 'stored-perfect', 'missing root preview should fall back to stored perfect');
+    assert.equal(noRootPreview.imperfective_3sgm, 'stored-imperfect', 'missing root preview should fall back to stored imperfect');
+    assert.equal(noRootPreview.imperative_sg, 'stored-imperative', 'missing root preview should fall back to stored imperative');
 
     const higherFormGeminatedCases = [
         {

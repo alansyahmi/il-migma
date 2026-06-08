@@ -8,7 +8,8 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { apiSearch } from '@/lib/api';
 import { useAdminConfig } from '@/lib/adminConfig';
-import { generateRootForms, markGeneratedForms, getAttestedEntries } from '@/lib/conjugationEngine';
+import { getAttestedEntries } from '@/lib/conjugationEngine';
+import { buildVerbPreviewFromEngine } from '@/lib/verbMorphology';
 import { getSearchCardLocation } from '@/lib/searchCard';
 import { buildStemSearchPreview, type StemSearchPreviewKind } from '@/lib/stemSearchPreview';
 import { SubParts } from '@/components/dictionary/SubParts';
@@ -495,23 +496,19 @@ export function Search() {
                             });
                         });
                     } else if (vm) {
-                        const rc = r.root_pattern_form?.root?.consonants;
-                        if (rc) {
-                            try {
-                                const forms = generateRootForms(
-                                    rc,
-                                    vm.vowel_set_perfect || 'a-a',
-                                    vm.vowel_set_imperfect || 'i-a',
-                                    r.verb_class || r.root_pattern_form.root.strength || 'strong',
-                                    r.verb_weak_class || r.root_pattern_form.root.weak_class,
-                                    r.root_pattern_form.root.is_imala_blocked || /[\u0127q]|g\u0127|h/i.test(rc)
-                                );
-                                const attestedEntries = getAttestedEntries(r.root_pattern_form?.root?.entries || [r]);
-                                const marked = markGeneratedForms(forms, attestedEntries);
-                                generated = marked.find((f: any) => f.form === vm.form);
-                            } catch (e) {
-                                console.warn('Search conjugation error:', e);
-                            }
+                        try {
+                            const preview = buildVerbPreviewFromEngine(
+                                r,
+                                r.root_pattern_form?.root?.entries || [r],
+                            );
+                            generated = preview.rootForm || {
+                                imperfect: preview.marked.imperfect,
+                                imperative: preview.marked.imperative,
+                                passiveParticiple: preview.marked.passiveParticiple,
+                                verbalNoun: preview.marked.verbalNoun,
+                            };
+                        } catch (e) {
+                            console.warn('Search conjugation error:', e);
                         }
 
                         const pushMarked = (label: string, data: any) => {

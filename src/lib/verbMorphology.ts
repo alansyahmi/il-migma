@@ -1,9 +1,38 @@
 
-import { generateConjugation, generateRootForms } from './conjugationEngine.ts';
+import {
+    generateConjugation,
+    generateRootForms,
+    getAttestedEntries,
+    markGeneratedForms,
+    type AttestedEntry,
+    type FormMarker,
+    type MarkedVerbForm,
+} from './conjugationEngine.ts';
 import { parseImalaBlockedOverride, resolveImalaBlocked } from './imala.ts';
 import { resolveVerbClassification } from './stemDefaults.ts';
 import { generateZokkForms } from './zokkEngine.ts';
 import type { ConjugationRow, VerbConjugationTable } from '@/types';
+
+export type VerbPreviewCell = { value: string; marker: FormMarker; entryId?: string };
+
+export interface EngineVerbPreview {
+    conjugation: VerbConjugationTable | null;
+    rootForm: MarkedVerbForm | null;
+    perfective_3sgm: string;
+    imperfective_3sgm: string;
+    imperative_sg: string;
+    verbal_noun: string;
+    active_participle: string;
+    passive_participle: string;
+    marked: {
+        perfect: VerbPreviewCell;
+        imperfect: VerbPreviewCell;
+        imperative: VerbPreviewCell;
+        verbalNoun: VerbPreviewCell;
+        activeParticiple: VerbPreviewCell;
+        passiveParticiple: VerbPreviewCell;
+    };
+}
 
 export const VERB_MORPHOLOGY_DB_FIELD_KEYS = [
     'form',
@@ -286,6 +315,176 @@ export function buildVerbConjugationFromEngine(entry: any = {}, morphology: any 
     const input = resolveVerbGenerationInput(entry, morphology);
     if (!input) return null;
     return generateConjugation(input);
+}
+
+function getStoredVerbMorphologyValue(morphology: any = {}, ...keys: string[]): string {
+    for (const key of keys) {
+        const value = normalizeTextField(morphology?.[key]);
+        if (value) return value;
+    }
+    return '';
+}
+
+function findPreviewAttestation(
+    attested: AttestedEntry[],
+    value: string,
+    form: string,
+    type: AttestedEntry['type'],
+): AttestedEntry | undefined {
+    const surface = normalizeComparableSurface(value);
+    const formKey = normalizeComparableSurface(form);
+    return attested.find((candidate) =>
+        normalizeComparableSurface(candidate.word) === surface &&
+        (!formKey || normalizeComparableSurface(candidate.form) === formKey) &&
+        candidate.type === type
+    );
+}
+
+function buildPreviewCell(
+    value: string,
+    type: AttestedEntry['type'],
+    form: string,
+    entry: any,
+    attested: AttestedEntry[],
+    fallback?: VerbPreviewCell,
+    storedFallback = false,
+): VerbPreviewCell {
+    const normalizedValue = normalizeTextField(value);
+    if (!normalizedValue || normalizedValue === '-') {
+        return fallback || { value: '-', marker: 'plain' };
+    }
+
+    const attestedMatch = findPreviewAttestation(attested, normalizedValue, form, type);
+    if (attestedMatch) {
+        return { value: attestedMatch.word, marker: 'plain', entryId: attestedMatch.id };
+    }
+
+    if (
+        type === 'lemma' &&
+        normalizeComparableSurface(entry?.headword) === normalizeComparableSurface(normalizedValue)
+    ) {
+        return { value: normalizedValue, marker: 'plain', entryId: entry?.id };
+    }
+
+    if (storedFallback) {
+        return { value: normalizedValue, marker: 'plain', entryId: entry?.id };
+    }
+
+    return {
+        value: normalizedValue,
+        marker: fallback?.marker || 'auto_generated',
+        entryId: fallback?.entryId,
+    };
+}
+
+function buildMarkedRootPreviewRow(
+    entry: any = {},
+    morphology: any = entry?.verb_morphology || {},
+    attested: AttestedEntry[],
+): MarkedVerbForm | null {
+    const input = resolveVerbGenerationInput(entry, morphology);
+    if (!input) return null;
+
+    try {
+        const rawRootForms = generateRootForms(
+            input.root,
+            input.vowelSetPerfect,
+            input.vowelSetImperfect,
+            input.strength as any,
+            input.weakClass as any,
+            input.isImalaBlocked,
+        );
+        return markGeneratedForms(rawRootForms, attested).find((row) => row.form === input.form) || null;
+    } catch (_err) {
+        return null;
+    }
+}
+
+export function buildVerbPreviewFromEngine(
+    entry: any = {},
+    rootEntries: any[] = [],
+    morphology: any = entry?.verb_morphology || {},
+): EngineVerbPreview {
+    const vm = morphology || {};
+    const entriesForMarkers = Array.isArray(rootEntries) && rootEntries.length > 0 ? rootEntries : [entry];
+    const attested = getAttestedEntries(entriesForMarkers);
+    const form = normalizeTextField(vm.form || entry?.verb_form || entry?._formLabel || 'I') || 'I';
+    const rootRow = buildMarkedRootPreviewRow(entry, vm, attested);
+    let conjugation: VerbConjugationTable | null = null;
+
+    try {
+        conjugation = buildVerbConjugationFromEngine(entry, vm);
+    } catch (_err) {
+        conjugation = null;
+    }
+
+    const citationRow = conjugation?.rows.find((row: any) => row.person_mt === '3ms') || conjugation?.rows[2];
+    const storedPerfect = getStoredVerbMorphologyValue(vm, 'perfective_3sgm', 'perfective_3sg_m');
+    const storedImperfect = getStoredVerbMorphologyValue(vm, 'imperfective_3sgm', 'imperfective_3sg_m');
+    const storedImperative = getStoredVerbMorphologyValue(vm, 'imperative_sg');
+    const storedVerbalNoun = getStoredVerbMorphologyValue(vm, 'verbal_noun');
+    const storedActiveParticiple = getStoredVerbMorphologyValue(vm, 'active_participle');
+    const storedPassiveParticiple = getStoredVerbMorphologyValue(vm, 'passive_participle');
+    const usedStoredFallback = !conjugation;
+
+    const perfect = normalizeTextField(citationRow?.perfect || (conjugation ? rootRow?.perfect.value : storedPerfect) || rootRow?.perfect.value || storedPerfect);
+    const imperfect = normalizeTextField(citationRow?.imperfect || (conjugation ? rootRow?.imperfect.value : storedImperfect) || rootRow?.imperfect.value || storedImperfect);
+    const imperative = normalizeTextField(conjugation?.imperative_sg || (conjugation ? rootRow?.imperative.value : storedImperative) || rootRow?.imperative.value || storedImperative);
+    const verbalNoun = normalizeTextField(rootRow?.verbalNoun.value || storedVerbalNoun);
+    const activeParticiple = normalizeTextField(rootRow?.activeParticiple.value || storedActiveParticiple);
+    const passiveParticiple = normalizeTextField(rootRow?.passiveParticiple.value || storedPassiveParticiple);
+
+    const marked = {
+        perfect: buildPreviewCell(perfect, 'lemma', form, entry, attested, rootRow?.perfect, usedStoredFallback && !!storedPerfect),
+        imperfect: buildPreviewCell(imperfect, 'imperfect', form, entry, attested, rootRow?.imperfect, usedStoredFallback && !!storedImperfect),
+        imperative: buildPreviewCell(imperative, 'imperative', form, entry, attested, rootRow?.imperative, usedStoredFallback && !!storedImperative),
+        verbalNoun: buildPreviewCell(verbalNoun, 'noun', form, entry, attested, rootRow?.verbalNoun, !rootRow && !!storedVerbalNoun),
+        activeParticiple: buildPreviewCell(activeParticiple, 'active', form, entry, attested, rootRow?.activeParticiple, !rootRow && !!storedActiveParticiple),
+        passiveParticiple: buildPreviewCell(passiveParticiple, 'passive', form, entry, attested, rootRow?.passiveParticiple, !rootRow && !!storedPassiveParticiple),
+    };
+
+    const rootForm = rootRow
+        ? {
+            ...rootRow,
+            perfect: marked.perfect,
+            imperfect: marked.imperfect,
+            imperative: marked.imperative,
+            verbalNoun: marked.verbalNoun,
+            activeParticiple: marked.activeParticiple,
+            passiveParticiple: marked.passiveParticiple,
+        }
+        : null;
+
+    return {
+        conjugation,
+        rootForm,
+        perfective_3sgm: perfect,
+        imperfective_3sgm: imperfect,
+        imperative_sg: imperative,
+        verbal_noun: verbalNoun,
+        active_participle: activeParticiple,
+        passive_participle: passiveParticiple,
+        marked,
+    };
+}
+
+export function overlayVerbPreviewRowsFromEngine(
+    rows: MarkedVerbForm[] = [],
+    rootEntries: any[] = [],
+): MarkedVerbForm[] {
+    if (!Array.isArray(rows) || rows.length === 0 || !Array.isArray(rootEntries) || rootEntries.length === 0) {
+        return rows;
+    }
+
+    const overlays = new Map<string, MarkedVerbForm>();
+    rootEntries.forEach((entry) => {
+        if (entry?.pos !== 'verb' || !entry?.verb_morphology?.form) return;
+        const preview = buildVerbPreviewFromEngine(entry, rootEntries);
+        if (preview.rootForm) overlays.set(preview.rootForm.form, preview.rootForm);
+    });
+
+    if (overlays.size === 0) return rows;
+    return rows.map((row) => overlays.get(row.form) || row);
 }
 
 export function buildEntryFormVerbMorphologyPreview(form: any = {}) {

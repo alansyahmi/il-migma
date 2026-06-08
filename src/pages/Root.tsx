@@ -22,6 +22,7 @@ import { EntryShell, type EntryViewModel, EtymologySentence, SideCard } from '@/
 import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymology';
 import { VerbFormsTable } from '@/components/dictionary/VerbFormsTable';
 import { shouldHideSurface } from '@/lib/theoreticalForms';
+import { overlayVerbPreviewRowsFromEngine } from '@/lib/verbMorphology';
 
 const LazyRelationshipEditor = lazy(() =>
     import('@/components/admin/RelationshipEditor').then(module => ({ default: module.RelationshipEditor }))
@@ -184,7 +185,10 @@ export function Root() {
         // Collect attested forms from all rootEntries
         const attested = getAttestedEntries(rootEntries);
 
-        const rowsData = markGeneratedForms(rawGen, attested);
+        const rowsData = overlayVerbPreviewRowsFromEngine(
+            markGeneratedForms(rawGen, attested),
+            rootEntries,
+        );
 
         // Keep track of which entries are already shown in the table
         const shownIds = new Set<string>();

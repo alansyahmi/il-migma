@@ -8,6 +8,7 @@ import { resolveAdjMasculineForm } from '@/lib/adjMorphology';
 import { resolveMainPatternByGenderForPos } from '@/lib/gender';
 import { generateDiminutiveForm } from '@/lib/maltesePhonology';
 import { stripTheoreticalPrefix, shouldHideSurface } from '@/lib/theoreticalForms';
+import { buildVerbPreviewFromEngine } from '@/lib/verbMorphology';
 
 import type { Entry } from '@/types';
 
@@ -146,6 +147,9 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
 
     if (entry.pos === 'verb' && entry.verb_morphology) {
         const m = entry.verb_morphology;
+        const verbPreview = buildVerbPreviewFromEngine(entry);
+        const perfective3sg = verbPreview.perfective_3sgm || m.perfective_3sgm;
+        const imperfective3sg = verbPreview.imperfective_3sgm || m.imperfective_3sgm;
         return (
             <div className="rounded-lg border border-border-light bg-surface-soft overflow-hidden">
                 <div className="px-3 py-1.5 bg-[#1034A6]/5 border-b border-border-light">
@@ -154,8 +158,8 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                     </span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 divide-x divide-y divide-border-light">
-                    <Cell label={term('perfect') + " (3sg.m)"} value={hideValue(m.perfective_3sgm, isTheoretical) ? '-' : <strong className="font-headword">{visibleText(m.perfective_3sgm)}</strong>} />
-                    <Cell label={term('imperfect') + " (3sg.m)"} value={hideValue(m.imperfective_3sgm, isTheoretical) ? '-' : <strong className="font-headword">{visibleText(m.imperfective_3sgm)}</strong>} />
+                    <Cell label={term('perfect') + " (3sg.m)"} value={hideValue(perfective3sg, isTheoretical) ? '-' : <strong className="font-headword">{visibleText(perfective3sg)}</strong>} />
+                    <Cell label={term('imperfect') + " (3sg.m)"} value={hideValue(imperfective3sg, isTheoretical) ? '-' : <strong className="font-headword">{visibleText(imperfective3sg)}</strong>} />
                     <Cell label={term('form-title')} value={<Link to={`/search?form=${m.form}`} className="text-[#1034A6] hover:underline font-bold">{visibleText(m.form)}</Link>} />
                     <Cell label={term('strength-title')} value={entry.root_pattern_form?.root?.strength === 'strong-hybrid' ? 'Strong' : entry.root_pattern_form?.root?.strength} />
                     <Cell label={term('transitivity')} value={m.transitivity ? term(m.transitivity) : '-'} />
