@@ -1,1 +1,0 @@
-const { Client } = require('pg'); const client = new Client({ connectionString: 'postgres://postgres:postgres@localhost:5432/migma' }); client.connect().then(() => client.query(SELECT headword, cv_pattern, lemma_pattern, form_masc_pattern, root_pattern_form_id FROM entries WHERE headword IN ('rbieghi', 'mrebba''', 'rbiegh'))).then(res => { console.log(res.rows); client.end(); });
