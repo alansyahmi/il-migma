@@ -88,7 +88,7 @@ const run = () => {
     assertEq(hybridIrCitation?.perfect, 'serva', 'ir hybrid citation perfect');
     assertEq(hybridIrCitation?.imperfect, 'jserva', 'ir hybrid citation imperfect');
     assertEq(hybridIr.hybrid_forms?.form_ii, 'sserva', 'ir hybrid form II lemma');
-    assertEq(hybridIr.hybrid_forms?.form_ii_imperfect, 'jisservi', 'ir hybrid form II imperfect');
+    assertEq(hybridIr.hybrid_forms?.form_ii_imperfect, 'jisserva', 'ir hybrid form II imperfect');
     assertEq(hybridIr.hybrid_forms?.form_ii_imperative, 'sserva', 'ir hybrid form II imperative');
     assertEq(hybridIr.hybrid_forms?.form_ii_passive_participle, 'misservi', 'ir hybrid form II passive');
     assertEq(hybridIr.hybrid_forms?.form_ii_active_participle, '-', 'ir hybrid form II active');
@@ -246,7 +246,7 @@ const run = () => {
         {
             form: 'II',
             perfect: 'sserva',
-            imperfect: 'jisservi',
+            imperfect: 'jisserva',
             imperative: 'sserva',
             passiveParticiple: 'misservi',
             activeParticiple: '-',
@@ -278,20 +278,20 @@ const run = () => {
         {
             form: 'II',
             perfect: 'sserva',
-            imperfect: 'jisservi',
+            imperfect: 'jisserva',
             imperative: 'sserva',
             passiveParticiple: 'misservi',
             activeParticiple: '-',
             verbalNoun: 'sservija',
         },
     ], getAttestedEntries(imperfectParentAttested));
-    assertEq(markedImperfectParent[0].imperfect.value, 'jisservi', 'imperfect should keep the generated surface');
+    assertEq(markedImperfectParent[0].imperfect.value, 'jisserva', 'imperfect should keep the generated surface');
     assertEq(markedImperfectParent[0].imperfect.marker, 'plain', 'imperfect should follow an attested parent verb');
     assertEq(markedImperfectParent[0].imperfect.entryId, undefined, 'imperfect should not link even when parent is attested');
 
     const imperfectSurfaceOnly = [{
         id: 'imperfect-1',
-        headword: 'jisservi',
+        headword: 'jisserva',
         pos: 'noun',
         verb_morphology: {
             form: 'I',
@@ -309,14 +309,14 @@ const run = () => {
         {
             form: 'II',
             perfect: 'sserva',
-            imperfect: 'jisservi',
+            imperfect: 'jisserva',
             imperative: 'sserva',
             passiveParticiple: 'misservi',
             activeParticiple: '-',
             verbalNoun: 'sservija',
         },
     ], getAttestedEntries(imperfectSurfaceOnly));
-    assertEq(markedImperfectSurface[0].imperfect.value, 'jisservi', 'imperfect should stay generated when only the imperfect surface is attested');
+    assertEq(markedImperfectSurface[0].imperfect.value, 'jisserva', 'imperfect should stay generated when only the imperfect surface is attested');
     assertEq(markedImperfectSurface[0].imperfect.marker, 'auto_generated', 'imperfect should stay generated when the parent verb is unattested');
 };
 

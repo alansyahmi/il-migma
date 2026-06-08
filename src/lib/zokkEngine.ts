@@ -77,13 +77,13 @@ function buildHybridCitationPerfectStem(base: string): string {
 function buildHybridFormII(base: string, classType: 'ar' | 'ir') {
     if (classType === 'ir') {
         const lemma = `s${base}a`;
-        const imperfectStem = lemma.replace(/a$/, 'i');
+        const passiveStem = lemma.replace(/a$/, 'i');
 
         return {
             form_ii: lemma,
-            form_ii_imperfect: `ji${imperfectStem}`,
+            form_ii_imperfect: `ji${lemma}`,
             form_ii_imperative: lemma,
-            form_ii_passive_participle: `mi${imperfectStem}`,
+            form_ii_passive_participle: `mi${passiveStem}`,
             form_ii_active_participle: '-',
             form_ii_verbal_noun: `s${base}ija`,
         };

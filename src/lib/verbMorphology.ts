@@ -2,6 +2,8 @@
 import { generateConjugation, generateRootForms } from './conjugationEngine.ts';
 import { parseImalaBlockedOverride, resolveImalaBlocked } from './imala.ts';
 import { resolveVerbClassification } from './stemDefaults.ts';
+import { generateZokkForms } from './zokkEngine.ts';
+import type { ConjugationRow, VerbConjugationTable } from '@/types';
 
 export const VERB_MORPHOLOGY_DB_FIELD_KEYS = [
     'form',
@@ -140,6 +142,7 @@ export function resolveVerbGenerationInput(entry: any = {}, morphology: any = en
     return {
         root,
         form,
+        headword: entry?.headword,
         strength: classification.strength,
         weakClass: classification.weak_class || undefined,
         vowelSetPerfect,
@@ -159,7 +162,127 @@ export function resolveVerbGenerationInput(entry: any = {}, morphology: any = en
     };
 }
 
+function normalizeComparableSurface(value: unknown): string {
+    return normalizeTextField(value).toLowerCase().replace(/[’]/g, "'");
+}
+
+function normalizeZokkClassType(zokk: any = {}): 'ar' | 'ir' | '' {
+    const value = normalizeTextField(zokk?.class_type || zokk?.zokk_class).toLowerCase();
+    return value === 'ar' || value === 'ir' ? value : '';
+}
+
+function normalizeZokkStemBase(zokk: any = {}): string {
+    const stem = normalizeTextField(zokk?.stem_string ?? zokk?.stem ?? '');
+    return stem.replace(/^-+|-+$/g, '').replace(/[aeiouy]$/i, '');
+}
+
+function hasFinalJRoot(zokk: any = {}): boolean {
+    const root = normalizeTextField(zokk?.root || zokk?.root_consonants);
+    const consonants = root.split('-').filter(Boolean);
+    return consonants[consonants.length - 1] === 'j';
+}
+
+function buildHybridZokkConjugation(entry: any = {}, forms: ReturnType<typeof generateZokkForms>): VerbConjugationTable | null {
+    const hybrid = forms.hybrid_forms;
+    const zokk = entry?.zokk_morphology || {};
+    const zokkClass = normalizeZokkClassType(zokk);
+    const stemBase = normalizeZokkStemBase(zokk);
+    const headword = normalizeComparableSurface(entry?.headword);
+    const sHybridLemma = stemBase ? `s${stemBase}a` : '';
+    const useSFormIIHybrid =
+        !!sHybridLemma &&
+        headword === normalizeComparableSurface(sHybridLemma) &&
+        (zokkClass === 'ir' || hasFinalJRoot(zokk));
+    const lemma = useSFormIIHybrid
+        ? sHybridLemma
+        : normalizeTextField(hybrid?.form_ii || '');
+    if (!lemma) return null;
+
+    if (headword && headword !== normalizeComparableSurface(lemma)) return null;
+
+    const usesWeakHybridEndings = useSFormIIHybrid || zokkClass === 'ir';
+    const base = lemma.replace(/a$/, '');
+    const imperfectCitation = useSFormIIHybrid
+        ? `ji${lemma}`
+        : normalizeTextField(hybrid?.form_ii_imperfect || '');
+    const imperfectStem = imperfectCitation.replace(/^[ntj]/, '') || `${usesWeakHybridEndings ? `i${base}a` : `${base}a`}`;
+    const imperfectPluralStem = usesWeakHybridEndings
+        ? imperfectStem.replace(/a$/, 'ew')
+        : imperfectStem.replace(/a$/, 'aw');
+    const perfectTheme = usesWeakHybridEndings ? 'ej' : 'aj';
+    const prefixes = ['n', 't', 'j', 't', 'n', 't', 'j'];
+    const persons = [
+        { id: '1s', en: 'I' },
+        { id: '2s', en: 'you (sg.)' },
+        { id: '3ms', en: 'he' },
+        { id: '3fs', en: 'she' },
+        { id: '1p', en: 'we' },
+        { id: '2p', en: 'you (pl.)' },
+        { id: '3p', en: 'they' },
+    ];
+
+    const rows: ConjugationRow[] = persons.map((person, index) => {
+        const perfect = index === 0 || index === 1
+            ? `${base}${perfectTheme}t`
+            : index === 2
+                ? lemma
+            : index === 3
+                    ? `${base}${usesWeakHybridEndings ? 'iet' : 'at'}`
+                    : index === 4
+                        ? `${base}${perfectTheme}na`
+                        : index === 5
+                            ? `${base}${perfectTheme}tu`
+                            : `${base}${usesWeakHybridEndings ? 'ew' : 'aw'}`;
+        const imperfect = index >= 4
+            ? `${prefixes[index]}${imperfectPluralStem}`
+            : index === 2 && imperfectCitation
+                ? imperfectCitation
+                : `${prefixes[index]}${imperfectStem}`;
+
+        return {
+            person_mt: person.id,
+            person_en: person.en,
+            perfect,
+            imperfect,
+            stems: {
+                attached: imperfect,
+                syncopated: imperfect,
+                perfectAttached: perfect,
+                perfectSyncopated: perfect,
+            },
+        };
+    });
+
+    const imperativeSg = normalizeTextField(hybrid?.form_ii_imperative || lemma);
+    const imperativePl = `${base}${usesWeakHybridEndings ? 'ew' : 'aw'}`;
+
+    return {
+        rows,
+        imperative_sg: imperativeSg,
+        imperative_pl: imperativePl,
+        imperative_sg_stems: {
+            attached: imperativeSg,
+            syncopated: imperativeSg,
+        },
+        imperative_pl_stems: {
+            attached: imperativePl,
+            syncopated: imperativePl,
+        },
+        blocksImala: false,
+    };
+}
+
+function buildZokkVerbConjugation(entry: any = {}): VerbConjugationTable | null {
+    if (!entry?.zokk_morphology) return null;
+
+    const forms = generateZokkForms(entry.zokk_morphology);
+    return buildHybridZokkConjugation(entry, forms) || forms.conjugation || null;
+}
+
 export function buildVerbConjugationFromEngine(entry: any = {}, morphology: any = entry?.verb_morphology || {}) {
+    const zokkConjugation = buildZokkVerbConjugation(entry);
+    if (zokkConjugation) return zokkConjugation;
+
     const input = resolveVerbGenerationInput(entry, morphology);
     if (!input) return null;
     return generateConjugation(input);
@@ -218,6 +341,7 @@ export function buildEntryFormVerbMorphologyPreview(form: any = {}) {
         const conjugation = generateConjugation({
             root,
             form: selectedForm,
+            headword: form.headword,
             strength: classification.strength,
             weakClass: classification.weak_class || undefined,
             vowelSetPerfect,

@@ -362,8 +362,10 @@ const finalGħFormVIIHybrid = generateConjugation({
     vowelSetImperative: 'i-a',
     isImalaBlocked: true,
 });
-assertEq(finalGħFormVIIHybrid.rows[2].perfect, 'nrefa', "Form VII strong-hybrid should derive visible perfect from Form I hybrid");
+assertEq(finalGħFormVIIHybrid.rows[2].perfect, "nrefa'", "Form VII strong-hybrid should derive visible perfect from Form I hybrid");
 assertEq(finalGħFormVIIHybrid.rows[2].imperfect, "jinrefa'", "Form VII strong-hybrid should derive visible imperfect from Form I hybrid");
+assertEq(finalGħFormVIIHybrid.rows[3].perfect, 'nrefgħet', 'Form VII strong-hybrid should restore għ before the 3fs suffix');
+assertEq(finalGħFormVIIHybrid.rows[6].perfect, 'nrefgħu', 'Form VII strong-hybrid should restore għ before the 3p suffix');
 assertEq(finalGħFormVIIHybrid.imperative_sg, "nirfa'", "Form VII strong-hybrid should derive visible imperative from Form I hybrid");
 assertEq(buildVerbForm(finalGħFormVIIHybrid.rows[2].imperfect, false, 3, null, 'e-a', finalGħFormVIIHybrid.rows[2].stems, finalGħFormVIIHybrid.blocksImala || false, 'VII'), 'jinrefagħha', 'Form VII strong-hybrid imperfect should keep underlying għ before -ha');
 assertEq(buildVerbForm(finalGħFormVIIHybrid.rows[2].imperfect, false, 1, null, 'e-a', finalGħFormVIIHybrid.rows[2].stems, finalGħFormVIIHybrid.blocksImala || false, 'VII'), 'jinrefgħek', 'Form VII strong-hybrid imperfect should keep syncopated għ before -ek');
@@ -564,7 +566,7 @@ verifyQuadriliteralConjugation(
         },
         row1s: {
             perfect: 'ssaqsejt',
-            imperfect: 'jissaqsi',
+            imperfect: 'nissaqsi',
         },
     }
 );
@@ -627,12 +629,12 @@ assertEq(weakQuadFormII.rows[3].perfect, 'ssaqsiet', 'weak quadriliteral Form II
 assertEq(weakQuadFormII.rows[4].perfect, 'ssaqsejna', 'weak quadriliteral Form II 1p perfect');
 assertEq(weakQuadFormII.rows[5].perfect, 'ssaqsejtu', 'weak quadriliteral Form II 2p perfect');
 assertEq(weakQuadFormII.rows[6].perfect, 'ssaqsew', 'weak quadriliteral Form II 3p perfect');
-assertEq(weakQuadFormII.rows[0].imperfect, 'jissaqsi', 'weak quadriliteral Form II 1s imperfect');
-assertEq(weakQuadFormII.rows[1].imperfect, 'jissaqsi', 'weak quadriliteral Form II 2s imperfect');
+assertEq(weakQuadFormII.rows[0].imperfect, 'nissaqsi', 'weak quadriliteral Form II 1s imperfect');
+assertEq(weakQuadFormII.rows[1].imperfect, 'tissaqsi', 'weak quadriliteral Form II 2s imperfect');
 assertEq(weakQuadFormII.rows[2].imperfect, 'jissaqsi', 'weak quadriliteral Form II 3ms imperfect');
-assertEq(weakQuadFormII.rows[3].imperfect, 'jissaqsi', 'weak quadriliteral Form II 3fs imperfect');
-assertEq(weakQuadFormII.rows[4].imperfect, 'jissaqsu', 'weak quadriliteral Form II 1p imperfect');
-assertEq(weakQuadFormII.rows[5].imperfect, 'jissaqsu', 'weak quadriliteral Form II 2p imperfect');
+assertEq(weakQuadFormII.rows[3].imperfect, 'tissaqsi', 'weak quadriliteral Form II 3fs imperfect');
+assertEq(weakQuadFormII.rows[4].imperfect, 'nissaqsu', 'weak quadriliteral Form II 1p imperfect');
+assertEq(weakQuadFormII.rows[5].imperfect, 'tissaqsu', 'weak quadriliteral Form II 2p imperfect');
 assertEq(weakQuadFormII.rows[6].imperfect, 'jissaqsu', 'weak quadriliteral Form II 3p imperfect');
 
 const hollowBlocked = generateConjugation({

@@ -913,8 +913,10 @@ export function AdvancedSearch() {
     };
 
     const handleLoadMore = () => {
-        const nextOffset = results.length;
         const params = new URLSearchParams(searchParams);
+        const currentOffset = Number(params.get('offset') ?? 0);
+        const currentLimit = Number(params.get('limit') ?? filters.maxResults);
+        const nextOffset = currentOffset + currentLimit;
         params.set('offset', String(nextOffset));
         if (!params.has('limit')) params.set('limit', filters.maxResults);
         navigate(`?${params.toString()}`, { replace: true, preventScrollReset: true });
