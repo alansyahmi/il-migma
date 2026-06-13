@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { buildEntryPayload } from '../src/lib/adminSchema.ts';
-import { generateConjugation, generateRootForms } from '../src/lib/conjugationEngine.ts';
+import { generateConjugation, generateRootForms, getAttestedEntries, resolveAttestedEntry } from '../src/lib/conjugationEngine.ts';
 import { buildPerfectForm, buildVerbForm } from '../src/lib/suffixEngine.ts';
 import {
     applyVerbMorphologyCompatibility,
@@ -221,6 +221,107 @@ const run = () => {
         stemVerbSsaqsa?.rows.map((row) => row.imperfect),
         ['nissaqsa', 'tissaqsa', 'jissaqsa', 'tissaqsa', 'nissaqsew', 'tissaqsew', 'jissaqsew'],
         'stem verb imperfect rows should vary person prefixes instead of reusing the 3ms j- form',
+    );
+
+    const habbPreviewWithDerivedParticiple = buildVerbPreviewFromEngine({
+        id: 'verb-habb',
+        headword: 'ħabb',
+        pos: 'verb',
+        root_consonants: 'ħ-b-b',
+        verb_morphology: {
+            form: 'I',
+            class: 'geminated',
+            vowel_set_perf: 'a-a',
+            vowel_set_impf: 'o-o',
+            vowel_set_impv: 'o-o',
+        },
+    }, [
+        {
+            id: 'verb-habb',
+            headword: 'ħabb',
+            pos: 'verb',
+            root_consonants: 'ħ-b-b',
+            verb_morphology: {
+                form: 'I',
+                class: 'geminated',
+                vowel_set_perf: 'a-a',
+                vowel_set_impf: 'o-o',
+                vowel_set_impv: 'o-o',
+            },
+        },
+        {
+            id: 'ptcp-mahbub',
+            headword: 'maħbub',
+            pos: 'participle',
+            root_consonants: 'ħ-b-b',
+            participle_morphology: {
+                type: 'passive',
+                gender: 'masculine',
+                verbal_form: 'I',
+            },
+        },
+        {
+            id: 'n-hbib',
+            headword: 'ħbib',
+            pos: 'noun',
+            root_consonants: 'ħ-b-b',
+            noun_morphology: {
+                noun_type: 'verbal_noun',
+                verbal_form: 'I',
+            },
+        },
+    ]);
+    assert.equal(habbPreviewWithDerivedParticiple.rootForm?.passiveParticiple.value, 'maħbub', 'verb preview should recognize standalone passive participle entries by surface');
+    assert.equal(habbPreviewWithDerivedParticiple.rootForm?.passiveParticiple.marker, 'plain', 'recognized standalone passive participle should be plain');
+    assert.equal(habbPreviewWithDerivedParticiple.rootForm?.passiveParticiple.entryId, 'ptcp-mahbub', 'recognized standalone passive participle should link to the participle entry');
+    assert.equal(habbPreviewWithDerivedParticiple.rootForm?.verbalNoun.value, 'ħbib', 'verb preview should recognize standalone verbal noun entries by verbal form metadata');
+    assert.equal(habbPreviewWithDerivedParticiple.rootForm?.verbalNoun.marker, 'plain', 'recognized standalone verbal noun should be plain');
+    assert.equal(habbPreviewWithDerivedParticiple.rootForm?.verbalNoun.entryId, 'n-hbib', 'recognized standalone verbal noun should link to the noun entry');
+
+    const explicitDerivedAttested = getAttestedEntries([
+        {
+            id: 'ptcp-mahbub',
+            headword: 'maħbub',
+            pos: 'participle',
+            root_consonants: 'ħ-b-b',
+            participle_morphology: {
+                type: 'passive',
+                verbal_form: 'I',
+            },
+        },
+        {
+            id: 'n-hbib',
+            headword: 'ħbib',
+            pos: 'noun',
+            root_consonants: 'ħ-b-b',
+            noun_morphology: {
+                noun_type: 'verbal_noun',
+                verbal_form: 'I',
+            },
+        },
+    ]);
+    assert.equal(
+        resolveAttestedEntry(explicitDerivedAttested, {
+            surface: 'maħbub',
+            form: 'II',
+            pos: 'participle',
+            type: 'passive',
+            participleType: 'passive',
+            root: 'ħ-b-b',
+        }),
+        null,
+        'explicit participle verbal_form should prevent matching the wrong verb form',
+    );
+    assert.equal(
+        resolveAttestedEntry(explicitDerivedAttested, {
+            surface: 'ħbib',
+            form: 'II',
+            pos: 'noun',
+            type: 'noun',
+            root: 'ħ-b-b',
+        }),
+        null,
+        'explicit verbal noun verbal_form should prevent matching the wrong verb form',
     );
 
     const verbPayload = buildEntryPayload({
@@ -1991,6 +2092,42 @@ const run = () => {
 
     assert.equal(geminatedFormIII.rows[2].perfect, 'dielal', 'geminated Form III should route to the Form III conjugation table');
     assert.equal(geminatedFormIII.rows[2].imperfect, 'jdielal', 'geminated Form III should expose a 3ms imperfect');
+
+    const geminatedFormI = generateConjugation({
+        root: 'ħ-b-b',
+        form: 'I',
+        strength: 'geminated',
+        vowelSetPerfect: 'a--',
+        vowelSetImperfect: 'o--',
+        vowelSetImperative: 'o--',
+        isImalaBlocked: false,
+    });
+
+    assert.deepEqual(
+        geminatedFormI.rows.map((row) => row.imperfect),
+        ['nħobb', 'tħobb', 'jħobb', 'tħobb', 'nħobbu', 'tħobbu', 'jħobbu'],
+        'geminated Form I should keep the visible imperfect vowel aligned with the perfect stem',
+    );
+    assert.deepEqual(
+        geminatedFormI.rows.map((row) => row.perfect),
+        ['ħabbt', 'ħabbt', 'ħabb', 'ħabbet', 'ħabbna', 'ħabbtu', 'ħabbu'],
+        'geminated Form I perfect rows should remain doubled on the middle consonant',
+    );
+    assert.deepEqual(
+        [geminatedFormI.imperative_sg, geminatedFormI.imperative_pl],
+        ['ħobb', 'ħobbu'],
+        'geminated Form I imperative should use the same visible stem as the perfect',
+    );
+    assert.equal(
+        buildVerbForm(geminatedFormI.rows[0].imperfect, true, null, null, 'o--', geminatedFormI.rows[0].stems, geminatedFormI.blocksImala || false, 'I'),
+        'ma nħobbx',
+        'geminated Form I negative imperfect 1s should preserve the doubled visible stem',
+    );
+    assert.equal(
+        buildVerbForm(geminatedFormI.imperative_sg, false, 1, null, 'o--', geminatedFormI.imperative_sg_stems, geminatedFormI.blocksImala || false, 'I'),
+        'ħobbok',
+        'geminated Form I imperative with a DO clitic should keep the doubled visible stem',
+    );
 
     const biedaFromStaleFormIIIInput = generateConjugation({
         root: 'b-d-w',

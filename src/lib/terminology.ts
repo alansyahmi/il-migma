@@ -18,6 +18,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'weak': { en: 'Weak', standard: 'Dgħajjef', arabised: 'Magħlul' },
     'geminated': { en: 'Geminated', standard: 'Trux', arabised: 'Imżewweġ' },
     'verbal-forms': { en: 'Verbal Forms', standard: 'Forom Verbali', arabised: 'Użien' },
+    'verbal-form': { en: 'Verbal Form', standard: 'Forma Verbali', arabised: 'Wiżen' },
     'lemma': { en: 'Lemma', standard: 'Lemma', arabised: 'Ras il-Kelma' },
     'passive': { en: 'Passive', standard: 'Passiv', arabised: 'Mifgħul' },
     'active': { en: 'Active', standard: 'Attiv', arabised: 'Fiegħel' },

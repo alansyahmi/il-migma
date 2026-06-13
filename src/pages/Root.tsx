@@ -3,7 +3,7 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { generateRootForms, markGeneratedForms, getAttestedEntries, type MarkedVerbForm } from '@/lib/conjugationEngine';
+import { generateRootForms, markGeneratedForms, getAttestedEntries, getEntryVerbalForm, type MarkedVerbForm } from '@/lib/conjugationEngine';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
@@ -208,7 +208,7 @@ export function Root() {
         const seenIds = new Set<string>();
 
         const getPattern = (e: any) => {
-    const cv = e.root_pattern_form?.pattern?.cv_notation || '-';
+            const cv = e.root_pattern_form?.pattern?.cv_notation || '-';
             const wizen = e.root_pattern_form?.pattern?.wizen_notation || cv;
             return mode === 'standard' ? cv : wizen;
         };
@@ -264,7 +264,7 @@ export function Root() {
                     terms.push({
                         term: re.headword,
                         class: term(re.pos || 'related'),
-    cv: mode === 'standard' ? (re.root_pattern_form?.pattern?.cv_notation || re.wizen_pattern || '-') : (re.wizen_pattern || re.root_pattern_form?.pattern?.cv_notation || '-'),
+                        cv: mode === 'standard' ? (re.root_pattern_form?.pattern?.cv_notation || re.wizen_pattern || '-') : (re.wizen_pattern || re.root_pattern_form?.pattern?.cv_notation || '-'),
                         id: re.id,
                         gloss: getGloss(re, language, mode)
                     });
@@ -454,460 +454,471 @@ export function Root() {
 
     return (
         <EntryShell viewModel={viewModel}>
-                <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
-                    {/* Left Sidebar */}
-                    <div className="w-full md:w-64 shrink-0 space-y-4">
-                        <SideCard title={term('gloss')}>
-                            {glossList.length === 1 ? (
-                                <p className="text-sm text-black">{glossList[0]}</p>
-                            ) : (
-                                <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                    {glossList.map((g: string, i: number) => (
-                                        <li key={i}>{g}</li>
-                                    ))}
-                                </ol>
-                            )}
-                        </SideCard>
-
-                        {etymologyItems.length > 0 && (
-                            <SideCard title={term('etymology')}>
-                                <EtymologySentence prefix={term('from')} items={etymologyItems} />
-                            </SideCard>
-                        )}
-
-                        {sourceText && (
-                            <SideCard title={term('sources')}>
-                                <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceText}</span>
-                            </SideCard>
-                        )}
-
-                        {tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1 px-1">
-                                {tags.filter((tag: string) => !isHiddenTag(tag)).map((tag: string) => (
-                                    <span key={tag} className="px-2 py-0.5 bg-black/5 text-black/40 rounded-full text-[10px] font-bold uppercase tracking-wider border border-black/5">
-                                        {resolveTagLabel(tag, term)}
-                                    </span>
+            <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
+                {/* Left Sidebar */}
+                <div className="w-full md:w-64 shrink-0 space-y-4">
+                    <SideCard title={term('gloss')}>
+                        {glossList.length === 1 ? (
+                            <p className="text-sm text-black">{glossList[0]}</p>
+                        ) : (
+                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                {glossList.map((g: string, i: number) => (
+                                    <li key={i}>{g}</li>
                                 ))}
-                            </div>
+                            </ol>
                         )}
+                    </SideCard>
 
-                        {isActualAdmin && (
-                            <div className="mt-8 pt-8 border-t border-black/5 space-y-4">
-                                <div>
-                                    <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
-                                    <div className="text-[11px] font-mono space-y-1 text-black/50">
-                                        <p>{term('strength')}: {rootObj.strength}</p>
-                                        {rootObj.weak_class && <p>{term('weak-class')}: {rootObj.weak_class}</p>}
-                                        <p>{term('vowel-set-perfect')}: {rootObj.vowel_set_perf || 'a-a'}</p>
-                                        <p>{term('vowel-set-imperfect')}: {rootObj.vowel_set_impf || 'i-a'}</p>
-                                        <p>{term('vowel-set-imperative')}: {rootObj.vowel_set_imp || 'o-o'}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    {etymologyItems.length > 0 && (
+                        <SideCard title={term('etymology')}>
+                            <EtymologySentence prefix={term('from')} items={etymologyItems} />
+                        </SideCard>
+                    )}
 
-                    {/* Right Content */}
-                    <div className="flex-1 min-w-0 space-y-12 w-full max-w-full">
+                    {sourceText && (
+                        <SideCard title={term('sources')}>
+                            <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceText}</span>
+                        </SideCard>
+                    )}
 
-                        <VerbFormsTable
-                            title={term('verbal-forms')}
-                            hideTheoreticalForms={hideTheoreticalForms}
-                            columnLabels={{
-                                form: term('form'),
-                                lemma: term('lemma'),
-                                imperfect: term('imperfect'),
-                                imperative: term('imperative'),
-                                passive: term('passive'),
-                                active: term('active'),
-                                verbalNoun: term('verbal-noun'),
-                            }}
-                            rows={generatedTable.map((row: MarkedVerbForm) => ({
-                                key: row.form,
-                                form: <Link to={`/search?form=${row.form}`} className="text-[#1034A6] hover:underline font-bold">{row.form}</Link>,
-                                lemma: toVerbCell(
-                                    renderVerbCell(
-                                        row.perfect,
-                                        <MarkedCell
-                                            data={row.perfect}
-                                            isAdmin={isActualAdmin}
-                                            onDelete={() => row.perfect.entryId && handleDeleteEntry(row.perfect.entryId)}
-                                            onEdit={() => {
-                                                const existing = rootEntries.find(e => e.headword === row.perfect.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                if (existing) {
-                                                    setEditEntry({
-                                                        ...existing,
-                                                        _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                        _formLabel: existing.verb_morphology?.form || row.form,
-                                                    } as any);
-                                                    setInitialFormData(null);
-                                                } else {
-                                                    setEditEntry(null);
-                                                    setInitialFormData({
-                                                        headword: row.perfect.value,
-                                                        pos: 'verb',
-                                                        verb_class: rootObj?.strength || '',
-                                                        _rootConsonants: rootObj?.consonants || '',
-                                                        _formLabel: row.form,
-                                                        verb_vowel_perf: rootObj?.vowel_set_perf || '',
-                                                        verb_vowel_impf: rootObj?.vowel_set_impf || '',
-                                                    });
-                                                }
-                                                setShowForm(true);
-                                            }}
-                                        />,
-                                    ),
-                                    row.perfect.marker,
-                                    row.perfect.value === '-',
-                                ),
-                                imperfect: toVerbCell(renderVerbCell(row.imperfect, <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} noLink />), row.imperfect.marker, row.imperfect.value === '-'),
-                                imperative: toVerbCell(renderVerbCell(row.imperative, <MarkedCell data={row.imperative} isAdmin={isActualAdmin} noLink />), row.imperative.marker, row.imperative.value === '-'),
-                                passive: toVerbCell(
-                                    renderVerbCell(
-                                        row.passiveParticiple,
-                                        <MarkedCell
-                                            data={row.passiveParticiple}
-                                            isAdmin={isActualAdmin}
-                                            onDelete={() => row.passiveParticiple.entryId && handleDeleteEntry(row.passiveParticiple.entryId)}
-                                            onEdit={() => {
-                                                const existing = rootEntries.find(e => e.headword === row.passiveParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                if (existing) {
-                                                    setEditEntry({
-                                                        ...existing,
-                                                        _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                        _formLabel: existing.verb_morphology?.form || row.form,
-                                                    } as any);
-                                                    setInitialFormData(null);
-                                                } else {
-                                                    setEditEntry(null);
-                                                    setInitialFormData({
-                                                        headword: row.passiveParticiple.value,
-                                                        pos: 'participle',
-                                                        participle_type: 'passive',
-                                                        _formLabel: row.form,
-                                                        _rootConsonants: rootObj?.consonants || '',
-                                                    });
-                                                }
-                                                setShowForm(true);
-                                            }}
-                                        />,
-                                    ),
-                                    row.passiveParticiple.marker,
-                                    row.passiveParticiple.value === '-',
-                                ),
-                                active: toVerbCell(
-                                    renderVerbCell(
-                                        row.activeParticiple,
-                                        <MarkedCell
-                                            data={row.activeParticiple}
-                                            isAdmin={isActualAdmin}
-                                            onDelete={() => row.activeParticiple.entryId && handleDeleteEntry(row.activeParticiple.entryId)}
-                                            onEdit={() => {
-                                                const existing = rootEntries.find(e => e.headword === row.activeParticiple.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                if (existing) {
-                                                    setEditEntry({
-                                                        ...existing,
-                                                        _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                        _formLabel: existing.verb_morphology?.form || row.form,
-                                                    } as any);
-                                                    setInitialFormData(null);
-                                                } else {
-                                                    setEditEntry(null);
-                                                    setInitialFormData({
-                                                        headword: row.activeParticiple.value,
-                                                        pos: 'participle',
-                                                        participle_type: 'active',
-                                                        _formLabel: row.form,
-                                                        _rootConsonants: rootObj?.consonants || '',
-                                                    });
-                                                }
-                                                setShowForm(true);
-                                            }}
-                                        />,
-                                    ),
-                                    row.activeParticiple.marker,
-                                    row.activeParticiple.value === '-',
-                                ),
-                                verbalNoun: toVerbCell(
-                                    renderVerbCell(
-                                        row.verbalNoun,
-                                        <MarkedCell
-                                            data={row.verbalNoun}
-                                            isAdmin={isActualAdmin}
-                                            onDelete={() => row.verbalNoun.entryId && handleDeleteEntry(row.verbalNoun.entryId)}
-                                            onEdit={() => {
-                                                const existing = rootEntries.find(e => e.headword === row.verbalNoun.value && (e.verb_morphology?.form === row.form || e.pos !== 'verb'));
-                                                if (existing) {
-                                                    setEditEntry({
-                                                        ...existing,
-                                                        _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                                                        _formLabel: existing.verb_morphology?.form || row.form,
-                                                    } as any);
-                                                    setInitialFormData(null);
-                                                } else {
-                                                    setEditEntry(null);
-                                                    setInitialFormData({
-                                                        headword: row.verbalNoun.value,
-                                                        pos: 'noun',
-                                                        _formLabel: row.form,
-                                                        _rootConsonants: rootObj?.consonants || '',
-                                                    });
-                                                }
-                                                setShowForm(true);
-                                            }}
-                                        />,
-                                    ),
-                                    row.verbalNoun.marker,
-                                    row.verbalNoun.value === '-',
-                                ),
-                            }))}
-                        />
-
-                        {/* Derived Terms Table */}
-                        {(derivedTerms.length > 0 || isActualAdmin) && (
-                            <div className="w-full max-w-full">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <h2 className="font-sans font-semibold text-[1.1rem] text-black">{term('derived-terms')}</h2>
-                                    {isActualAdmin && (
-                                        <button
-                                            onClick={() => {
-                                                setRelForm({
-                                                    synonyms: rootRelationships.synonyms,
-                                                    antonyms: rootRelationships.antonyms,
-                                                    related_entries: rootRelationships.related_entries
-                                                });
-                                                setActiveRelEdit('derived');
-                                            }}
-                                            className="p-1 text-black/30 hover:text-[#1034A6] hover:bg-black/5 rounded transition-all"
-                                        >
-                                            <Edit2 size={14} />
-                                        </button>
-                                    )}
-                                </div>
-                                <div className="overflow-x-auto overflow-y-hidden pb-4 w-full">
-                                    <table className="w-full text-sm border-collapse text-left">
-                                        <thead>
-                                            <tr className="border-b border-black/8 font-sans text-black/80">
-                                                <th className="font-semibold pb-2 pr-4">{term('term')}</th>
-                                                <th className="font-semibold pb-2 pr-4">{term('class')}</th>
-                                                <th className="font-semibold pb-2">
-                                                    {term('cv-pattern')}
-                                                    {rootObj.strength === 'geminated' && <span> • {term('geminated').toUpperCase()}</span>}
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {derivedTerms.map((termObj, idx) => (
-                                                <tr key={idx} className="border-b border-black/4 last:border-0 hover:bg-black/2 group transition-colors">
-                                                    <td className="py-1.5 pr-4 font-serif">
-                                                        <div className="flex items-center gap-2">
-                                                            <Link to={`/entry/${termObj.id}`} style={{ color: BLUE }} className="hover:underline">{termObj.term}</Link>
-                                                            <span className="text-black/55 italic">
-                                                                {termObj.gloss}
-                                                            </span>
-                                                            {isActualAdmin && (
-                                                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                    <button
-                                                                        onClick={(e) => {
-                                                                            e.preventDefault();
-                                                                            const existing = rootEntries.find(re => re.id === termObj.id);
-                                                                            if (existing) {
-                                                                                setEditEntry({
-                                                                                    id: existing.id,
-                                                                                    headword: existing.headword,
-                                                                                    pos: existing.pos || 'unknown',
-                                                                                    created_at: '',
-                                                                                    is_loanword: false
-                                                                                });
-                                                                                setInitialFormData(null);
-                                                                                setShowForm(true);
-                                                                            }
-                                                                        }}
-                                                                        className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
-                                                                        title={term('edit-entry')}
-                                                                    >
-                                                                        <Edit2 size={12} />
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={(e) => { e.preventDefault(); handleDeleteEntry(termObj.id); }}
-                                                                        className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                                                                        title={term('delete-entry')}
-                                                                    >
-                                                                        <Trash2 size={12} />
-                                                                    </button>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-1.5 pr-4 font-sans text-black/70">{termObj.class}</td>
-                                                    <td className="py-1.5 font-sans" style={{ color: BLUE }}>{termObj.cv}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Thesaurus */}
-                        {((vm?.synonyms?.length ?? 0) > 0 || (vm?.antonyms?.length ?? 0) > 0 || (rootRelationships.synonyms?.length ?? 0) > 0 || (rootRelationships.antonyms?.length ?? 0) > 0 || isActualAdmin) && (
-                            <div className="border-t border-black/10 pt-6">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <h2 className="font-sans font-semibold text-[1.1rem] text-black">{term('thesaurus')}</h2>
-                                    {isActualAdmin && (
-                                        <button
-                                            onClick={() => {
-                                                setRelForm({
-                                                    synonyms: rootRelationships.synonyms,
-                                                    antonyms: rootRelationships.antonyms,
-                                                    related_entries: rootRelationships.related_entries
-                                                });
-                                                setActiveRelEdit('thesaurus');
-                                            }}
-                                            className="p-1 text-black/30 hover:text-[#1034A6] hover:bg-black/5 rounded transition-all"
-                                        >
-                                            <Edit2 size={14} />
-                                        </button>
-                                    )}
-                                </div>
-                                <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm">
-                                    {((vm?.synonyms && vm.synonyms.length > 0) || (rootRelationships.synonyms?.length > 0)) && (
-                                        <div>
-                                            <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
-                                            {[...(vm?.synonyms || []), ...(rootRelationships.synonyms || [])].map((s, idx) => (
-                                                <div key={s.id || idx} className="mb-1 flex items-center gap-2 group">
-                                                    <Link
-                                                        to={s.pos === 'ROOT' ? `/root/${s.id}` : `/search?q=${s.headword}`}
-                                                        style={{ color: BLUE }}
-                                                        className="hover:underline font-serif"
-                                                    >
-                                                        -{s.headword}-
-                                                    </Link>
-                                                    <span className="text-black/40 italic ml-2">
-                                                        "{getGloss(s, language, mode)}"
-                                                    </span>
-                                                    {isActualAdmin && !vm?.synonyms?.some((v: any) => v.id === s.id) && (
-                                                        <button
-                                                            onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('synonyms', s.id); }}
-                                                            className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                                                            title={term('unlink-synonym')}
-                                                        >
-                                                            <Trash2 size={10} />
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                    {((vm?.antonyms && vm.antonyms.length > 0) || (rootRelationships.antonyms?.length > 0)) && (
-                                        <div>
-                                            <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
-                                            {[...(vm?.antonyms || []), ...(rootRelationships.antonyms || [])].map((a, idx) => (
-                                                <div key={a.id || idx} className="mb-1 flex items-center gap-2 group">
-                                                    <Link
-                                                        to={a.pos === 'ROOT' ? `/root/${a.id}` : `/search?q=${a.headword}`}
-                                                        style={{ color: BLUE }}
-                                                        className="hover:underline font-serif"
-                                                    >
-                                                        {a.headword}
-                                                    </Link>
-                                                    <span className="text-black/40 italic ml-2">
-                                                        "{getGloss(a, language, mode)}"
-                                                    </span>
-                                                    {isActualAdmin && !vm?.antonyms?.some((v: any) => v.id === a.id) && (
-                                                        <button
-                                                            onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('antonyms', a.id); }}
-                                                            className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                                                            title={term('unlink-antonym')}
-                                                        >
-                                                            <Trash2 size={10} />
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                    </div>
-                </div>
-
-        {activeRelEdit && (
-            <Modal
-                open
-                onClose={() => setActiveRelEdit(null)}
-                title={activeRelEdit === 'derived' ? term('manage-derived') : term('manage-thesaurus')}
-                size="lg"
-            >
-                <Suspense
-                    fallback={(
-                        <div className="space-y-5 overflow-y-auto flex-1 rounded-xl border border-border-light bg-slate-50 p-4 text-xs text-black/40">
-                            Loading relationship editor…
+                    {tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 px-1">
+                            {tags.filter((tag: string) => !isHiddenTag(tag)).map((tag: string) => (
+                                <span key={tag} className="px-2 py-0.5 bg-black/5 text-black/40 rounded-full text-[10px] font-bold uppercase tracking-wider border border-black/5">
+                                    {resolveTagLabel(tag, term)}
+                                </span>
+                            ))}
                         </div>
                     )}
-                >
-                    <div className="space-y-5 overflow-y-auto flex-1">
-                        <p className="text-xs text-black/40 leading-relaxed -mt-2">
-                            {activeRelEdit === 'derived'
-                                ? term('link-derived-desc')
-                                : term('link-thesaurus-desc')
-                            }
-                        </p>
 
-                        {activeRelEdit === 'derived' ? (
-                            <LazyRelationshipEditor
-                                type="derived"
-                                title={term('derived-terms')}
-                                items={relForm.related_entries}
-                                onChange={(items) => setRelForm(f => ({ ...f, related_entries: items }))}
-                                extraActions={[
-                                    {
-                                        label: term('new-entry'),
-                                        icon: <Plus size={12} />,
-                                        onClick: () => {
-                                            setEditEntry(null);
-                                            setInitialFormData({ _rootConsonants: rootObj.consonants });
+                    {isActualAdmin && (
+                        <div className="mt-8 pt-8 border-t border-black/5 space-y-4">
+                            <div>
+                                <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
+                                <div className="text-[11px] font-mono space-y-1 text-black/50">
+                                    <p>{term('strength')}: {rootObj.strength}</p>
+                                    {rootObj.weak_class && <p>{term('weak-class')}: {rootObj.weak_class}</p>}
+                                    <p>{term('vowel-set-perfect')}: {rootObj.vowel_set_perf || 'a-a'}</p>
+                                    <p>{term('vowel-set-imperfect')}: {rootObj.vowel_set_impf || 'i-a'}</p>
+                                    <p>{term('vowel-set-imperative')}: {rootObj.vowel_set_imp || 'o-o'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Right Content */}
+                <div className="flex-1 min-w-0 space-y-12 w-full max-w-full">
+
+                    <VerbFormsTable
+                        title={term('verbal-forms')}
+                        hideTheoreticalForms={hideTheoreticalForms}
+                        columnLabels={{
+                            form: term('form'),
+                            lemma: term('lemma'),
+                            imperfect: term('imperfect'),
+                            imperative: term('imperative'),
+                            passive: term('passive'),
+                            active: term('active'),
+                            verbalNoun: term('verbal-noun'),
+                        }}
+                        rows={generatedTable.map((row: MarkedVerbForm) => ({
+                            key: row.form,
+                            form: <Link to={`/search?form=${row.form}`} className="text-[#1034A6] hover:underline font-bold">{row.form}</Link>,
+                            lemma: toVerbCell(
+                                renderVerbCell(
+                                    row.perfect,
+                                    <MarkedCell
+                                        data={row.perfect}
+                                        isAdmin={isActualAdmin}
+                                        onDelete={() => row.perfect.entryId && handleDeleteEntry(row.perfect.entryId)}
+                                        onEdit={() => {
+                                            const existing = rootEntries.find(e => e.headword === row.perfect.value && e.pos === 'verb' && getEntryVerbalForm(e) === row.form);
+                                            if (existing) {
+                                                setEditEntry({
+                                                    ...existing,
+                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                    _formLabel: existing.verb_morphology?.form || row.form,
+                                                } as any);
+                                                setInitialFormData(null);
+                                            } else {
+                                                setEditEntry(null);
+                                                setInitialFormData({
+                                                    headword: row.perfect.value,
+                                                    pos: 'verb',
+                                                    verb_class: rootObj?.strength || '',
+                                                    _rootConsonants: rootObj?.consonants || '',
+                                                    _formLabel: row.form,
+                                                    verb_vowel_perf: rootObj?.vowel_set_perf || '',
+                                                    verb_vowel_impf: rootObj?.vowel_set_impf || '',
+                                                });
+                                            }
                                             setShowForm(true);
-                                        }
-                                    }
-                                ]}
-                            />
-                        ) : (
-                            <div className="space-y-6">
-                                <LazyRelationshipEditor
-                                    type="thesaurus"
-                                    lookupType="root"
-                                    title={term('synonyms')}
-                                    items={relForm.synonyms}
-                                    onChange={(items) => setRelForm(f => ({ ...f, synonyms: items }))}
-                                    extraActions={[
-                                        {
-                                            label: term('new-root'),
-                                            icon: <Plus size={12} />,
-                                            onClick: () => setShowNewRootForm(true)
-                                        }
-                                    ]}
-                                />
-                                <LazyRelationshipEditor
-                                    type="thesaurus"
-                                    lookupType="root"
-                                    title={term('antonyms')}
-                                    items={relForm.antonyms}
-                                    onChange={(items) => setRelForm(f => ({ ...f, antonyms: items }))}
-                                    extraActions={[
-                                        {
-                                            label: term('new-root'),
-                                            icon: <Plus size={12} />,
-                                            onClick: () => setShowNewRootForm(true)
-                                        }
-                                    ]}
-                                />
+                                        }}
+                                    />,
+                                ),
+                                row.perfect.marker,
+                                row.perfect.value === '-',
+                            ),
+                            imperfect: toVerbCell(renderVerbCell(row.imperfect, <MarkedCell data={row.imperfect} isAdmin={isActualAdmin} noLink />), row.imperfect.marker, row.imperfect.value === '-'),
+                            imperative: toVerbCell(renderVerbCell(row.imperative, <MarkedCell data={row.imperative} isAdmin={isActualAdmin} noLink />), row.imperative.marker, row.imperative.value === '-'),
+                            passive: toVerbCell(
+                                renderVerbCell(
+                                    row.passiveParticiple,
+                                    <MarkedCell
+                                        data={row.passiveParticiple}
+                                        isAdmin={isActualAdmin}
+                                        onDelete={() => row.passiveParticiple.entryId && handleDeleteEntry(row.passiveParticiple.entryId)}
+                                        onEdit={() => {
+                                            const existing = rootEntries.find(e => {
+                                                if (e.headword !== row.passiveParticiple.value || e.pos !== 'participle') return false;
+                                                const pt = e.participle_morphology?.type || e.participle_morphology?.participle_type || e.participle_type || (e.verb_morphology as any)?.participle_type || 'active';
+                                                return pt === 'passive' && getEntryVerbalForm(e) === row.form;
+                                            });
+                                            if (existing) {
+                                                setEditEntry({
+                                                    ...existing,
+                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                    _formLabel: existing.verb_morphology?.form || row.form,
+                                                } as any);
+                                                setInitialFormData(null);
+                                            } else {
+                                                setEditEntry(null);
+                                                setInitialFormData({
+                                                    headword: row.passiveParticiple.value,
+                                                    pos: 'participle',
+                                                    participle_type: 'passive',
+                                                    _formLabel: row.form,
+                                                    _rootConsonants: rootObj?.consonants || '',
+                                                });
+                                            }
+                                            setShowForm(true);
+                                        }}
+                                    />,
+                                ),
+                                row.passiveParticiple.marker,
+                                row.passiveParticiple.value === '-',
+                            ),
+                            active: toVerbCell(
+                                renderVerbCell(
+                                    row.activeParticiple,
+                                    <MarkedCell
+                                        data={row.activeParticiple}
+                                        isAdmin={isActualAdmin}
+                                        onDelete={() => row.activeParticiple.entryId && handleDeleteEntry(row.activeParticiple.entryId)}
+                                        onEdit={() => {
+                                            const existing = rootEntries.find(e => {
+                                                if (e.headword !== row.activeParticiple.value || e.pos !== 'participle') return false;
+                                                const pt = e.participle_morphology?.type || e.participle_morphology?.participle_type || e.participle_type || (e.verb_morphology as any)?.participle_type || 'active';
+                                                return pt === 'active' && getEntryVerbalForm(e) === row.form;
+                                            });
+                                            if (existing) {
+                                                setEditEntry({
+                                                    ...existing,
+                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                    _formLabel: existing.verb_morphology?.form || row.form,
+                                                } as any);
+                                                setInitialFormData(null);
+                                            } else {
+                                                setEditEntry(null);
+                                                setInitialFormData({
+                                                    headword: row.activeParticiple.value,
+                                                    pos: 'participle',
+                                                    participle_type: 'active',
+                                                    _formLabel: row.form,
+                                                    _rootConsonants: rootObj?.consonants || '',
+                                                });
+                                            }
+                                            setShowForm(true);
+                                        }}
+                                    />,
+                                ),
+                                row.activeParticiple.marker,
+                                row.activeParticiple.value === '-',
+                            ),
+                            verbalNoun: toVerbCell(
+                                renderVerbCell(
+                                    row.verbalNoun,
+                                    <MarkedCell
+                                        data={row.verbalNoun}
+                                        isAdmin={isActualAdmin}
+                                        onDelete={() => row.verbalNoun.entryId && handleDeleteEntry(row.verbalNoun.entryId)}
+                                        onEdit={() => {
+                                            const existing = rootEntries.find(e => {
+                                                if (e.headword !== row.verbalNoun.value || (e.pos !== 'noun' && e.pos !== 'verbal_noun')) return false;
+                                                return getEntryVerbalForm(e) === row.form;
+                                            });
+                                            if (existing) {
+                                                setEditEntry({
+                                                    ...existing,
+                                                    _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                    _formLabel: existing.verb_morphology?.form || row.form,
+                                                } as any);
+                                                setInitialFormData(null);
+                                            } else {
+                                                setEditEntry(null);
+                                                setInitialFormData({
+                                                    headword: row.verbalNoun.value,
+                                                    pos: 'noun',
+                                                    _formLabel: row.form,
+                                                    _rootConsonants: rootObj?.consonants || '',
+                                                });
+                                            }
+                                            setShowForm(true);
+                                        }}
+                                    />,
+                                ),
+                                row.verbalNoun.marker,
+                                row.verbalNoun.value === '-',
+                            ),
+                        }))}
+                    />
+
+                    {/* Derived Terms Table */}
+                    {(derivedTerms.length > 0 || isActualAdmin) && (
+                        <div className="w-full max-w-full">
+                            <div className="flex items-center gap-3 mb-4">
+                                <h2 className="font-sans font-semibold text-[1.1rem] text-black">{term('derived-terms')}</h2>
+                                {isActualAdmin && (
+                                    <button
+                                        onClick={() => {
+                                            setRelForm({
+                                                synonyms: rootRelationships.synonyms,
+                                                antonyms: rootRelationships.antonyms,
+                                                related_entries: rootRelationships.related_entries
+                                            });
+                                            setActiveRelEdit('derived');
+                                        }}
+                                        className="p-1 text-black/30 hover:text-[#1034A6] hover:bg-black/5 rounded transition-all"
+                                    >
+                                        <Edit2 size={14} />
+                                    </button>
+                                )}
+                            </div>
+                            <div className="overflow-x-auto overflow-y-hidden pb-4 w-full">
+                                <table className="w-full text-sm border-collapse text-left">
+                                    <thead>
+                                        <tr className="border-b border-black/8 font-sans text-black/80">
+                                            <th className="font-semibold pb-2 pr-4">{term('term')}</th>
+                                            <th className="font-semibold pb-2 pr-4">{term('class')}</th>
+                                            <th className="font-semibold pb-2">
+                                                {term('cv-pattern')}
+                                                {rootObj.strength === 'geminated' && <span> • {term('geminated').toUpperCase()}</span>}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {derivedTerms.map((termObj, idx) => (
+                                            <tr key={idx} className="border-b border-black/4 last:border-0 hover:bg-black/2 group transition-colors">
+                                                <td className="py-1.5 pr-4 font-serif">
+                                                    <div className="flex items-center gap-2">
+                                                        <Link to={`/entry/${termObj.id}`} style={{ color: BLUE }} className="hover:underline">{termObj.term}</Link>
+                                                        <span className="text-black/55 italic">
+                                                            {termObj.gloss}
+                                                        </span>
+                                                        {isActualAdmin && (
+                                                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        const existing = rootEntries.find(re => re.id === termObj.id);
+                                                                        if (existing) {
+                                                                            setEditEntry({
+                                                                                id: existing.id,
+                                                                                headword: existing.headword,
+                                                                                pos: existing.pos || 'unknown',
+                                                                                created_at: '',
+                                                                                is_loanword: false
+                                                                            });
+                                                                            setInitialFormData(null);
+                                                                            setShowForm(true);
+                                                                        }
+                                                                    }}
+                                                                    className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
+                                                                    title={term('edit-entry')}
+                                                                >
+                                                                    <Edit2 size={12} />
+                                                                </button>
+                                                                <button
+                                                                    onClick={(e) => { e.preventDefault(); handleDeleteEntry(termObj.id); }}
+                                                                    className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                                    title={term('delete-entry')}
+                                                                >
+                                                                    <Trash2 size={12} />
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                <td className="py-1.5 pr-4 font-sans text-black/70">{termObj.class}</td>
+                                                <td className="py-1.5 font-sans" style={{ color: BLUE }}>{termObj.cv}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Thesaurus */}
+                    {((vm?.synonyms?.length ?? 0) > 0 || (vm?.antonyms?.length ?? 0) > 0 || (rootRelationships.synonyms?.length ?? 0) > 0 || (rootRelationships.antonyms?.length ?? 0) > 0 || isActualAdmin) && (
+                        <div className="border-t border-black/10 pt-6">
+                            <div className="flex items-center gap-3 mb-4">
+                                <h2 className="font-sans font-semibold text-[1.1rem] text-black">{term('thesaurus')}</h2>
+                                {isActualAdmin && (
+                                    <button
+                                        onClick={() => {
+                                            setRelForm({
+                                                synonyms: rootRelationships.synonyms,
+                                                antonyms: rootRelationships.antonyms,
+                                                related_entries: rootRelationships.related_entries
+                                            });
+                                            setActiveRelEdit('thesaurus');
+                                        }}
+                                        className="p-1 text-black/30 hover:text-[#1034A6] hover:bg-black/5 rounded transition-all"
+                                    >
+                                        <Edit2 size={14} />
+                                    </button>
+                                )}
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-sm">
+                                {((vm?.synonyms && vm.synonyms.length > 0) || (rootRelationships.synonyms?.length > 0)) && (
+                                    <div>
+                                        <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
+                                        {[...(vm?.synonyms || []), ...(rootRelationships.synonyms || [])].map((s, idx) => (
+                                            <div key={s.id || idx} className="mb-1 flex items-center gap-2 group">
+                                                <Link
+                                                    to={s.pos === 'ROOT' ? `/root/${s.id}` : `/search?q=${s.headword}`}
+                                                    style={{ color: BLUE }}
+                                                    className="hover:underline font-serif"
+                                                >
+                                                    -{s.headword}-
+                                                </Link>
+                                                <span className="text-black/40 italic ml-2">
+                                                    "{getGloss(s, language, mode)}"
+                                                </span>
+                                                {isActualAdmin && !vm?.synonyms?.some((v: any) => v.id === s.id) && (
+                                                    <button
+                                                        onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('synonyms', s.id); }}
+                                                        className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                        title={term('unlink-synonym')}
+                                                    >
+                                                        <Trash2 size={10} />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                                {((vm?.antonyms && vm.antonyms.length > 0) || (rootRelationships.antonyms?.length > 0)) && (
+                                    <div>
+                                        <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
+                                        {[...(vm?.antonyms || []), ...(rootRelationships.antonyms || [])].map((a, idx) => (
+                                            <div key={a.id || idx} className="mb-1 flex items-center gap-2 group">
+                                                <Link
+                                                    to={a.pos === 'ROOT' ? `/root/${a.id}` : `/search?q=${a.headword}`}
+                                                    style={{ color: BLUE }}
+                                                    className="hover:underline font-serif"
+                                                >
+                                                    {a.headword}
+                                                </Link>
+                                                <span className="text-black/40 italic ml-2">
+                                                    "{getGloss(a, language, mode)}"
+                                                </span>
+                                                {isActualAdmin && !vm?.antonyms?.some((v: any) => v.id === a.id) && (
+                                                    <button
+                                                        onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('antonyms', a.id); }}
+                                                        className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                        title={term('unlink-antonym')}
+                                                    >
+                                                        <Trash2 size={10} />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                </div>
+            </div>
+
+            {activeRelEdit && (
+                <Modal
+                    open
+                    onClose={() => setActiveRelEdit(null)}
+                    title={activeRelEdit === 'derived' ? term('manage-derived') : term('manage-thesaurus')}
+                    size="lg"
+                >
+                    <Suspense
+                        fallback={(
+                            <div className="space-y-5 overflow-y-auto flex-1 rounded-xl border border-border-light bg-slate-50 p-4 text-xs text-black/40">
+                                Loading relationship editor…
                             </div>
                         )}
-                    </div>
-                </Suspense>
+                    >
+                        <div className="space-y-5 overflow-y-auto flex-1">
+                            <p className="text-xs text-black/40 leading-relaxed -mt-2">
+                                {activeRelEdit === 'derived'
+                                    ? term('link-derived-desc')
+                                    : term('link-thesaurus-desc')
+                                }
+                            </p>
+
+                            {activeRelEdit === 'derived' ? (
+                                <LazyRelationshipEditor
+                                    type="derived"
+                                    title={term('derived-terms')}
+                                    items={relForm.related_entries}
+                                    onChange={(items) => setRelForm(f => ({ ...f, related_entries: items }))}
+                                    extraActions={[
+                                        {
+                                            label: term('new-entry'),
+                                            icon: <Plus size={12} />,
+                                            onClick: () => {
+                                                setEditEntry(null);
+                                                setInitialFormData({ _rootConsonants: rootObj.consonants });
+                                                setShowForm(true);
+                                            }
+                                        }
+                                    ]}
+                                />
+                            ) : (
+                                <div className="space-y-6">
+                                    <LazyRelationshipEditor
+                                        type="thesaurus"
+                                        lookupType="root"
+                                        title={term('synonyms')}
+                                        items={relForm.synonyms}
+                                        onChange={(items) => setRelForm(f => ({ ...f, synonyms: items }))}
+                                        extraActions={[
+                                            {
+                                                label: term('new-root'),
+                                                icon: <Plus size={12} />,
+                                                onClick: () => setShowNewRootForm(true)
+                                            }
+                                        ]}
+                                    />
+                                    <LazyRelationshipEditor
+                                        type="thesaurus"
+                                        lookupType="root"
+                                        title={term('antonyms')}
+                                        items={relForm.antonyms}
+                                        onChange={(items) => setRelForm(f => ({ ...f, antonyms: items }))}
+                                        extraActions={[
+                                            {
+                                                label: term('new-root'),
+                                                icon: <Plus size={12} />,
+                                                onClick: () => setShowNewRootForm(true)
+                                            }
+                                        ]}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </Suspense>
 
                     <div className="flex justify-end gap-3 pt-4 mt-4 border-t border-black/8 shrink-0">
                         <button

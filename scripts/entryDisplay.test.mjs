@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict';
 import {
+    formatDefinitionGloss,
     getEntryAdjectiveMorphology,
+    hasNounNuanceDefinition,
+    isRootConsonantSurfaceArtifact,
     isFunctionWordEntryPos,
+    resolveEntryParticipleType,
+    resolveParticipleMorphologyInheritance,
     resolveEntryViewKind,
 } from '../src/lib/entryDisplay.ts';
 
@@ -39,6 +44,78 @@ assert.equal(
     'participle',
     'participle POS should route to the participle view'
 );
+
+assert.equal(
+    resolveEntryParticipleType({
+        pos: 'participle',
+        participle_morphology: { type: 'passive', gender: 'masculine' },
+    }),
+    'passive',
+    'participle type should resolve from nested morphology aliases'
+);
+
+assert.equal(
+    resolveEntryParticipleType({
+        pos: 'participle',
+        participle_type: 'active',
+        participle_morphology: { type: 'passive', gender: 'masculine' },
+    }),
+    'passive',
+    'nested participle type should beat stale flat aliases'
+);
+
+assert.equal(
+    resolveParticipleMorphologyInheritance({
+        pos: 'participle',
+        participle_morphology: { type: 'passive' },
+    }),
+    'noun',
+    'passive participles should inherit noun morphology display'
+);
+
+assert.equal(
+    resolveParticipleMorphologyInheritance({
+        pos: 'participle',
+        participle_morphology: { type: 'active' },
+    }),
+    'adjective',
+    'active participles should inherit adjective morphology display'
+);
+
+assert.equal(
+    hasNounNuanceDefinition({
+        definitions: [
+            { text_en: 'beloved', nuance: 'adjective' },
+            { text_en: 'beloved person', nuance: 'noun' },
+        ],
+    }),
+    true,
+    'participle definitions with noun nuance should be noun-inflection eligible'
+);
+
+assert.equal(
+    hasNounNuanceDefinition({
+        definitions: [
+            { text_en: 'beloved', nuance: 'adjective' },
+        ],
+    }),
+    false,
+    'adjective-only participle definitions should not be noun-inflection eligible'
+);
+
+assert.equal(
+    formatDefinitionGloss(
+        { text_en: 'beloved', text_mt: 'maħbub', nuance: 'adjective' },
+        'en',
+        key => ({ adjective: 'Adjective' }[key] || key),
+    ),
+    '(Adjective) beloved',
+    'definition gloss should prefix translated nuance'
+);
+
+assert.equal(isRootConsonantSurfaceArtifact('r', 'r-q-d'), true, 'single root consonant should be treated as a surface artifact');
+assert.equal(isRootConsonantSurfaceArtifact('r-q-d', 'r-q-d'), true, 'root consonant sequence should be treated as a surface artifact');
+assert.equal(isRootConsonantSurfaceArtifact('rieqed', 'r-q-d'), false, 'full participle surface should not be treated as a root artifact');
 
 assert.equal(
     resolveEntryViewKind({

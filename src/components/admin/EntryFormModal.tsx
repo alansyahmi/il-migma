@@ -525,6 +525,22 @@ const NounFields = ({ form, set, t, styles, insertChar, onFocus, options, sugges
                         {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
                     </select>
                 </div>
+                <div>
+                    <label className={styles.label}>{t('Noun Type', 'Tip ta’ Nom')}</label>
+                    <select className={styles.sel} value={form.noun_type || ''} onChange={e => set('noun_type', e.target.value)}>
+                        <option value="">{t('Select...', 'Agħżel...')}</option>
+                        {options?.noun_type?.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    </select>
+                </div>
+                {(form.noun_type === 'verbal_noun' || form.noun_type === 'verbal noun' || form.noun_type === 'verbal') && (
+                    <div>
+                        <label className={styles.label}>{t('Verbal Form', 'Forma Verbali')}</label>
+                        <select className={styles.sel} value={form.verbal_form || ''} onChange={e => set('verbal_form', e.target.value)}>
+                            <option value="">{t('Select...', 'Agħżel...')}</option>
+                            {options?.verb_form?.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
+                        </select>
+                    </div>
+                )}
             </div>
 
             <div className={styles.grid}>
@@ -1022,6 +1038,13 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
                 <select className={styles.sel} value={form.participle_type} onChange={e => set('participle_type', e.target.value)}>
                     <option value="">{t('Select...', 'Agħżel...')}</option>
                     {options?.participle_type?.map((opt: any) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                </select>
+            </div>
+            <div>
+                <label className={styles.label}>{t('Verbal Form', 'Forma Verbali')}</label>
+                <select className={styles.sel} value={form.verbal_form || ''} onChange={e => set('verbal_form', e.target.value)}>
+                    <option value="">{t('Select...', 'Agħżel...')}</option>
+                    {options?.verb_form?.map((opt: string) => <option key={opt} value={opt}>{opt}</option>)}
                 </select>
             </div>
             <div>
@@ -2399,11 +2422,13 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     }, [normalizedPos, form.headword, form._formLabel, form._rootConsonants, form.verb_class]);
 
     // Context-aware CV pattern suggestion for verbs
+    const derivedVerbalForm = form._formLabel || form.verbal_form;
     const verbCvSuggestion = useMemo(() => {
-        if (normalizedPos !== 'verb' && normalizedPos !== 'participle') return null;
-        if (!form._formLabel) return null;
-        return getVerbCvSuggestion(form._formLabel, form.verb_class || 'strong');
-    }, [normalizedPos, form._formLabel, form.verb_class]);
+        const isVerbDerivedNoun = normalizedPos === 'noun' && ['verbal', 'verbal_noun', 'verbal noun'].includes(String(form.noun_type || '').trim().toLowerCase());
+        if (normalizedPos !== 'verb' && normalizedPos !== 'participle' && !isVerbDerivedNoun) return null;
+        if (!derivedVerbalForm) return null;
+        return getVerbCvSuggestion(derivedVerbalForm, form.verb_class || 'strong');
+    }, [normalizedPos, form.noun_type, derivedVerbalForm, form.verb_class]);
 
     const suggestionDiffersFromCurrent = verbCvSuggestion && form.cv_pattern !== verbCvSuggestion.cv;
 
@@ -2731,6 +2756,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     options={{
                         gender: GENDER_OPTIONS,
                         noun_type: NOUN_TYPE_OPTIONS,
+                        verb_form: VERB_FORM_OPTIONS,
                         patterns: nounPatterns,
                         dual_suffixes: DUAL_SUFFIX_OPTIONS,
                         derivational_suffixes: getValues('derivational_suffix')
@@ -2840,6 +2866,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     options={{
                         participle_type: PARTICIPLE_TYPES,
                         participle_gender: GENDER_OPTIONS,
+                        verb_form: VERB_FORM_OPTIONS,
                         patterns: adjPatterns,
                         elative_patterns: elativePatterns,
                         plural_patterns: pluralPatterns,
@@ -3001,7 +3028,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         {verbCvSuggestion!.cv}
                                     </span>
                                     <span className="text-[10px] text-blue-500 shrink-0">({verbCvSuggestion!.wizen})</span>
-                                    <span className="text-[10px] text-blue-400 flex-1">{t('suggested for Form', 'suġġerit għal Forma')} {form._formLabel} {form.verb_class}</span>
+                                    <span className="text-[10px] text-blue-400 flex-1">{t('suggested for Form', 'suġġerit għal Forma')} {derivedVerbalForm} {form.verb_class}</span>
                                     <button
                                         type="button"
                                         onClick={() => set('cv_pattern', verbCvSuggestion!.cv)}
@@ -3022,7 +3049,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                             />
 
                             {/* Verb Presets based on Form */}
-                            {form._formLabel && (normalizedPos === 'verb' || normalizedPos === 'participle' || (normalizedPos === 'noun' && form.noun_type === 'verbal')) && (
+                            {derivedVerbalForm && (normalizedPos === 'verb' || normalizedPos === 'participle' || (normalizedPos === 'noun' && ['verbal', 'verbal_noun', 'verbal noun'].includes(String(form.noun_type || '').trim().toLowerCase()))) && (
                                 <MorphologyPresetSelector
                                     label={t('Verb Presets', 'Mudelli tal-Verbi')}
                                     currentValue={form.cv_pattern}

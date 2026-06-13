@@ -60,6 +60,7 @@ export const INITIAL_FORM_STATE = {
     elative_form: '',
     has_elative: true,
     participle_type: '',
+    verbal_form: '',
     is_loanword: false,
     source_language: '',
     source_citation: '',
@@ -154,6 +155,7 @@ vm.type AS vm_type,
 vm.is_imala_blocked AS vm_is_imala_blocked,
 nm.gender AS nm_gender,
 nm.noun_type AS nm_noun_type,
+nm.verbal_form AS nm_verbal_form,
 nm.singular_form AS nm_singular,
 nm.plural_forms AS nm_plural_forms,
 nm.sound_plural AS nm_sound_plural,
@@ -203,6 +205,7 @@ am.diminutive_pattern AS am_diminutive_pattern,
 am.is_inflectable AS am_is_inflectable,
 pm.type AS pm_type,
 pm.gender AS pm_gender,
+pm.verbal_form AS pm_verbal_form,
 pm.form_plural_pattern AS pm_plural_pattern,
 pm.form_fem_pattern AS pm_fem_pattern,
 pm.form_masc_pattern AS pm_masc_pattern,
@@ -382,11 +385,17 @@ function normalizeMeaningfulPluralRows(forms: unknown, patterns?: unknown): Plur
 }
 
 function pickPluralRows(...sources: Array<{ forms?: unknown; patterns?: unknown }>): PluralFormRow[] {
+    let firstPatternOnlyRows: PluralFormRow[] = [];
+
     for (const source of sources) {
         const rows = normalizeMeaningfulPluralRows(source.forms, source.patterns);
-        if (rows.length > 0) return rows;
+        if (rows.some(row => row.form.trim())) return rows;
+        if (rows.length > 0 && firstPatternOnlyRows.length === 0) {
+            firstPatternOnlyRows = rows;
+        }
     }
-    return [];
+
+    return firstPatternOnlyRows;
 }
 
 function firstNonEmptyText(...values: unknown[]): string {
@@ -452,6 +461,7 @@ function buildNounSource(row: Record<string, unknown>) {
         pos: row.pos || 'noun',
         gender: row.nm_gender || row.gender,
         noun_type: row.nm_noun_type || row.noun_type,
+        verbal_form: row.nm_verbal_form || row.verbal_form,
         singular_form: row.nm_singular,
         plural_forms: pluralRows.length > 0 ? pluralRows : row.nm_plural_forms,
         sound_plural: row.nm_sound_plural,
@@ -555,6 +565,7 @@ function buildParticipleSource(row: Record<string, unknown>) {
     return {
         type: row.pm_type,
         gender: row.pm_gender,
+        verbal_form: row.pm_verbal_form || row.verbal_form,
         form_plural_pattern: row.pm_plural_pattern,
         form_fem_pattern: row.pm_fem_pattern,
         form_masc_pattern: row.pm_masc_pattern,
@@ -620,6 +631,15 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
                 ['numeral_morphology', NUMERAL_MORPHOLOGY_DB_FIELD_KEYS],
                 ['verb_morphology', VERB_MORPHOLOGY_DB_FIELD_KEYS],
             ]
+            : pos === 'participle'
+                ? [
+                    ['participle_morphology', PARTICIPLE_MORPHOLOGY_DB_FIELD_KEYS],
+                    ['adj_morphology', ADJ_MORPHOLOGY_DB_FIELD_KEYS],
+                    ['adjective_morphology', ADJ_MORPHOLOGY_DB_FIELD_KEYS],
+                    ['noun_morphology', NOUN_MORPHOLOGY_DB_FIELD_KEYS],
+                    ['verb_morphology', VERB_MORPHOLOGY_DB_FIELD_KEYS],
+                    ['numeral_morphology', NUMERAL_MORPHOLOGY_DB_FIELD_KEYS],
+                ]
             : [
                 ['verb_morphology', VERB_MORPHOLOGY_DB_FIELD_KEYS],
                 ['noun_morphology', NOUN_MORPHOLOGY_DB_FIELD_KEYS],
@@ -645,6 +665,7 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
     });
 
     const aliasMap: Record<string, string | string[]> = {
+        participle_type: ['type', 'participle_type'],
         form_fem: ['feminine_form', 'feminine'],
         form_masc: ['masculine_form', 'masculine'],
         form_attributive_short: ['num_attr_short', 'form_attributive_short'],

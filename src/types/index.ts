@@ -134,6 +134,7 @@ export interface Entry {
     participle_gender?: string | null;
     numeral_type?: string | null;
     form_attributive_short?: string | null;
+    root_consonants?: string | null;
 
     // Morphological Sub-tables (Normalized)
     noun_morphology?: NounMorphology;
@@ -214,6 +215,7 @@ export interface NounMorphology {
     id?: string;
     entry_id?: string;
     gender: string;
+    verbal_form?: string;
     is_collective?: boolean;
     is_singulative?: boolean;
     is_inflectable_singular?: boolean;
@@ -338,6 +340,7 @@ export interface ParticipleMorphology {
     entry_id: string;
     participle_type: string;
     type?: string;
+    verbal_form?: string;
     gender: string;
     is_inflectable?: boolean;
     vowel_set_sg?: string;

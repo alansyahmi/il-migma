@@ -255,7 +255,7 @@ function buildHybridZokkConjugation(entry: any = {}, forms: ReturnType<typeof ge
             ? `${base}${perfectTheme}t`
             : index === 2
                 ? lemma
-            : index === 3
+                : index === 3
                     ? `${base}${usesWeakHybridEndings ? 'iet' : 'at'}`
                     : index === 4
                         ? `${base}${perfectTheme}na`
@@ -690,7 +690,7 @@ export function hasVerbMorphologyInput(source: any) {
 export function buildVerbMorphologyRecord(entry: any, source: any) {
     const entryId = entry?.id || source?.entry_id || source?.id;
     const normalized = normalizeVerbMorphologyInput(source?.verb_morphology || source);
-    
+
     return {
         entry_id: entryId,
         ...normalized,
@@ -747,7 +747,7 @@ export function normalizeVerbMorphologyInput(source: any) {
     if (!source) return {};
     const src = source?.verb_morphology || source;
     const result: any = {};
-    
+
     // Map legacy fields if present
     for (const [legacy, canonical] of Object.entries(VERB_MORPHOLOGY_LEGACY_FIELDS)) {
         if (src[legacy] !== undefined) result[canonical] = normalizeTextField(src[legacy]);
@@ -756,12 +756,12 @@ export function normalizeVerbMorphologyInput(source: any) {
     for (const [alias, canonical] of Object.entries(VERB_MORPHOLOGY_DISPLAY_ALIAS_FIELDS)) {
         if (src[alias] !== undefined) result[canonical] = normalizeTextField(src[alias]);
     }
-    
+
     // Map canonical fields
     for (const key of VERB_MORPHOLOGY_DB_FIELD_KEYS) {
         if (src[key] !== undefined) result[key] = normalizeTextField(src[key]);
     }
-    
+
     return result;
 }
 
@@ -848,11 +848,11 @@ export async function ensureVerbMorphologyTable(client: any, options: any = {}) 
         // Check if legacy columns still exist in entries table
         const tableInfo = await client.execute("PRAGMA table_info(entries)");
         const availableColumns = new Set((tableInfo.rows || []).map((r: any) => (r as any).name || (Array.isArray(r) ? r[1] : '')));
-        
+
         const legacyCols = [
-            'verb_form', 'verb_class', 'verb_weak_class', 'verb_transitivity', 
-            'verb_perfective_3sgm', 'verb_imperfective_3sgm', 'verb_verbal_noun', 
-            'verb_active_ptcp', 'verb_passive_ptcp', 'verb_vowel_perf', 
+            'verb_form', 'verb_class', 'verb_weak_class', 'verb_transitivity',
+            'verb_perfective_3sgm', 'verb_imperfective_3sgm', 'verb_verbal_noun',
+            'verb_active_ptcp', 'verb_passive_ptcp', 'verb_vowel_perf',
             'verb_vowel_impf', 'verb_vowel_impv', 'verb_type'
         ].filter(c => availableColumns.has(c));
 

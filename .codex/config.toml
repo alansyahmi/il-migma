@@ -41,26 +41,26 @@ notify = [
 # relevant `enabled` value to true for docs, browser, GitHub, or research-heavy
 # tasks, then restart the Codex session.
 [mcp_servers.github]
-enabled = false
+enabled = true
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-github"]
 
 [mcp_servers.context7]
-enabled = false
+enabled = true
 command = "npx"
 args = ["-y", "@upstash/context7-mcp@latest"]
 
 [mcp_servers.exa]
-enabled = false
+enabled = true
 url = "https://mcp.exa.ai/mcp"
 
 [mcp_servers.memory]
-enabled = false
+enabled = true
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-memory"]
 
 [mcp_servers.playwright]
-enabled = false
+enabled = true
 command = "npx"
 args = ["-y", "@playwright/mcp@latest", "--extension"]
 
@@ -71,7 +71,7 @@ approval_mode = "approve"
 approval_mode = "approve"
 
 [mcp_servers.sequential-thinking]
-enabled = false
+enabled = true
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-sequential-thinking"]
 

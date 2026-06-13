@@ -17,6 +17,8 @@ const statements = [
     "ALTER TABLE participle_morphology ADD COLUMN form_plural_pattern TEXT",
     "ALTER TABLE participle_morphology ADD COLUMN form_fem_pattern TEXT",
     "ALTER TABLE participle_morphology ADD COLUMN form_masc_pattern TEXT",
+    "ALTER TABLE participle_morphology ADD COLUMN verbal_form TEXT",
+    "ALTER TABLE noun_morphology ADD COLUMN verbal_form TEXT",
     "ALTER TABLE numeral_morphology ADD COLUMN form_plural_pattern TEXT",
     "ALTER TABLE numeral_morphology ADD COLUMN form_fem_pattern TEXT",
     "ALTER TABLE numeral_morphology ADD COLUMN form_masc_pattern TEXT",

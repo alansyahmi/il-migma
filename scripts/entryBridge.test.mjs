@@ -188,6 +188,59 @@ assert.deepEqual(legacyPluralForm.plural_forms, [{ form: 'twal', pattern: '' }],
 assert.equal(legacyPluralForm.inflections_pl, 'twal', 'bridge should expose the derived plural text for editing');
 assert.equal(legacyPluralForm.form_plural_pattern, '', 'bridge should not invent a plural pattern for legacy text-only plurals');
 
+const participleRow = hydrateEntryRow({
+  id: 'ptcp-mahbub',
+  headword: 'maħbub',
+  pos: 'participle',
+  gender: 'masculine',
+  form_fem: 'maħbuba',
+  plural_forms: '[{"form":"maħbubin","pattern":"-in"}]',
+  form_plural_pattern: '-in',
+  pm_type: 'passive',
+  pm_gender: 'masculine',
+  pm_verbal_form: 'I',
+  pm_masc_pattern: 'mvCCuC',
+  pm_fem_pattern: 'mvCCuCa',
+  pm_plural_pattern: '-in',
+  definitions: JSON.stringify([{ text_en: 'beloved', nuance: 'adjective' }]),
+});
+
+assert.equal(participleRow.participle_morphology?.type, 'passive', 'participle hydration should expose nested participle type');
+assert.equal(participleRow.participle_morphology?.verbal_form, 'I', 'participle hydration should expose nested verbal form');
+assert.equal(participleRow.adjective_morphology?.feminine_form, 'maħbuba', 'participle hydration should expose feminine surface through adjective-like morphology');
+assert.deepEqual(participleRow.adjective_morphology?.plural, [{ form: 'maħbubin', pattern: '-in' }], 'participle hydration should expose plural rows through adjective-like morphology');
+assert.equal(participleRow.form_fem, 'maħbuba', 'participle hydration should populate flat feminine alias');
+assert.equal(participleRow.form_plural_pattern, '-in', 'participle hydration should populate flat plural pattern alias');
+
+const participleForm = entryToForm(participleRow);
+assert.equal(participleForm.form_fem, 'maħbuba', 'participle form adapter should load feminine form');
+assert.deepEqual(participleForm.plural_forms, [{ form: 'maħbubin', pattern: '-in' }], 'participle form adapter should load plural rows');
+assert.equal(participleForm.participle_type, 'passive', 'participle form adapter should load nested participle type');
+assert.equal(participleForm.verbal_form, 'I', 'participle form adapter should load nested verbal form');
+
+const verbalNounRow = hydrateEntryRow({
+  id: 'n-hbib',
+  headword: 'ħbib',
+  pos: 'noun',
+  gender: 'masculine',
+  nm_noun_type: 'verbal_noun',
+  nm_verbal_form: 'I',
+  definitions: JSON.stringify([{ text_en: 'act of loving', nuance: 'noun' }]),
+});
+assert.equal(verbalNounRow.noun_morphology?.noun_type, 'verbal_noun', 'verbal noun hydration should expose noun type');
+assert.equal(verbalNounRow.noun_morphology?.verbal_form, 'I', 'verbal noun hydration should expose nested verbal form');
+assert.equal(entryToForm(verbalNounRow).verbal_form, 'I', 'verbal noun form adapter should load nested verbal form');
+
+const staleFlatParticipleForm = entryToForm(hydrateEntryRow({
+  id: 'ptcp-mahbub-stale',
+  headword: 'maħbub',
+  pos: 'participle',
+  participle_type: 'active',
+  pm_type: 'passive',
+  pm_gender: 'masculine',
+}));
+assert.equal(staleFlatParticipleForm.participle_type, 'passive', 'participle form adapter should prefer nested participle type over stale flat aliases');
+
 const patch = buildLoadedEntryPatch({
   ...row,
   am_feminine: 'twila',

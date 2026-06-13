@@ -183,8 +183,8 @@ export function Home() {
                         <div className="max-w-xl relative z-10">
                             <h2 className="text-2xl font-serif mb-4">{term('quick-search-verification')}</h2>
                             <p className="text-white/70 text-sm mb-6">{term('quick-search-verification-desc')}</p>
-                            <form onSubmit={handleSearch} className="flex flex-wrap gap-2 relative">
-                                <div className="flex-1 flex items-center bg-white/10 border border-white/20 rounded-xl overflow-hidden focus-within:bg-white/20 transition-all">
+                            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 relative">
+                                <div className="w-full sm:flex-1 flex items-center bg-white/10 border border-white/20 rounded-xl overflow-hidden focus-within:bg-white/20 transition-all">
                                     <button
                                         ref={kbRef2}
                                         type="button"
@@ -201,18 +201,20 @@ export function Home() {
                                         value={query}
                                         onChange={e => setQuery(e.target.value)}
                                         placeholder={term('search-word-placeholder')}
-                                        className="flex-1 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-white/40 text-white"
+                                        className="flex-1 min-w-0 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-white/40 text-white"
                                     />
                                 </div>
-                                <button type="submit" className="bg-white text-[#1034A6] px-6 py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all shrink-0">
-                                    {term('check')}
-                                </button>
-                                <Link
-                                    to="/browse"
-                                    className="bg-link text-white text-sm font-sans font-medium px-5 py-2.5 rounded-lg hover:bg-link-hover transition-colors shadow-lg shadow-link/20 shrink-0"
-                                >
-                                    {term('browse-entries')}
-                                </Link>
+                                <div className="flex gap-2 w-full sm:w-auto items-center mt-2 sm:mt-0">
+                                    <button type="submit" className="flex-1 sm:flex-none bg-white text-[#1034A6] px-6 py-3 rounded-xl font-bold text-sm hover:brightness-110 transition-all shrink-0">
+                                        {term('check')}
+                                    </button>
+                                    <Link
+                                        to="/browse"
+                                        className="flex-1 sm:flex-none text-center bg-link text-white text-sm font-sans font-medium px-5 py-2.5 rounded-lg hover:bg-link-hover transition-colors shadow-lg shadow-link/20 shrink-0"
+                                    >
+                                        {term('browse-entries')}
+                                    </Link>
+                                </div>
                                 <MalteseCharPicker
                                     open={kbOpen2}
                                     onOpenChange={setKbOpen2}

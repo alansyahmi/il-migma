@@ -117,6 +117,35 @@ export function normalizeRootRelationships(rel: any): any[] {
     }
 }
 
+/**
+ * Normalizes a root tag field into a string array.
+ * Supports JSON arrays, comma-separated legacy strings, and arrays.
+ */
+export function normalizeRootTags(tags: any): string[] {
+    if (!tags) return [];
+    if (Array.isArray(tags)) return tags.map(t => String(t).trim()).filter(Boolean);
+
+    if (typeof tags === 'string') {
+        const trimmed = tags.trim();
+        if (!trimmed) return [];
+
+        if (trimmed.startsWith('[')) {
+            try {
+                const parsed = JSON.parse(trimmed);
+                if (Array.isArray(parsed)) {
+                    return parsed.map(t => String(t).trim()).filter(Boolean);
+                }
+            } catch {
+                return trimmed.split(',').map(t => t.trim()).filter(Boolean);
+            }
+        }
+
+        return trimmed.split(',').map(t => t.trim()).filter(Boolean);
+    }
+
+    return [];
+}
+
 export interface StemMorphology {
     stem_string: string;
     class_type: 'ar' | 'ir';

@@ -1,10 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MOCK_ENTRIES } from '@/data/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
-import { type Entry, type LinguisticMode, type VerbConjugationTable } from '@/types';
+import { type Entry, type LinguisticMode, type VerbConjugationTable, type NounMorphology, type AdjectiveMorphology } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
 import { generateZokkForms } from '@/lib/zokkEngine';
@@ -27,7 +26,7 @@ import { StackedSurface } from '@/components/dictionary/VerbFormsTable';
 import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
 import { isSuffixLikeValue } from '@/lib/suffixMatching';
 import { isInflectableEnabled, shouldHideInflectionTableForEntry } from '@/lib/inflectionState';
-import { getEntryAdjectiveMorphology, resolveEntryViewKind } from '@/lib/entryDisplay';
+import { getEntryAdjectiveMorphology, resolveEntryViewKind, formatDefinitionGloss, hasNounNuanceDefinition } from '@/lib/entryDisplay';
 import { parseImalaBlockedOverride, resolveImalaBlocked } from '@/lib/imala';
 import {
     buildNumeralMorphologyDisplayForms,
@@ -1372,8 +1371,18 @@ function AdjectiveMorphologySection({
     const oppositeVariant: NounGenderVariant = primaryVariant === 'masculine' ? 'feminine' : 'masculine';
 
     const explicitVariantForms: Record<NounGenderVariant, string | null> = {
-        masculine: singular(morphology.masculine || (morphology.gender !== 'feminine' ? entry.headword : null)),
-        feminine: singular(morphology.feminine || (morphology.gender === 'feminine' ? entry.headword : null)),
+        masculine: singular(
+            morphology.masculine ||
+            morphology.form_masc ||
+            entry.form_masc ||
+            (morphology.gender !== 'feminine' ? entry.headword : null)
+        ),
+        feminine: singular(
+            morphology.feminine ||
+            morphology.form_fem ||
+            entry.form_fem ||
+            (morphology.gender === 'feminine' ? entry.headword : null)
+        ),
     };
 
     const hasOppositeGender = !!(
@@ -2499,7 +2508,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const displayRelatedEntries: any[] = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
 
     const rootObj = entry.root_pattern_form?.root;
-    const rootConsonants = rootObj?.consonant_array?.join('-') || rootObj?.consonants || entry.zokk_morphology?.root;
+    const rootConsonants = rootObj?.consonant_array?.join('-') || rootObj?.consonants || entry.root_consonants || entry.zokk_morphology?.root;
     const pattern = entry.root_pattern_form?.pattern;
 
     // State
@@ -2590,13 +2599,33 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
     const handleEditDerived = (data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string }, type: 'active' | 'passive' | 'noun') => {
         const rootObj = entry.root_pattern_form?.root;
-        const existing = derivedRootEntries?.find(e => e.headword === data.value && (e.verb_morphology?.form === verbForm || e.pos !== 'verb'));
+        const existing = derivedRootEntries?.find(e => {
+            if (e.headword !== data.value) return false;
+            const derivedForm = (e as any).participle_morphology?.verbal_form
+                || (e as any).noun_morphology?.verbal_form
+                || (e as any).verb_morphology?.form
+                || (e as any).verbal_form
+                || 'I';
+            if (derivedForm !== verbForm) return false;
+            if (type === 'noun') {
+                return e.pos === 'noun' || e.pos === 'verbal_noun';
+            } else {
+                if (e.pos !== 'participle') return false;
+                const pt = e.participle_morphology?.type || e.participle_morphology?.participle_type || e.participle_type || (e.verb_morphology as any)?.participle_type || 'active';
+                return pt === type;
+            }
+        });
 
         if (existing) {
+            const existingVerbalForm = (existing as any).participle_morphology?.verbal_form
+                || (existing as any).noun_morphology?.verbal_form
+                || existing.verb_morphology?.form
+                || verbForm;
             setEditEntry({
                 ...existing,
-                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
-                _formLabel: existing.verb_morphology?.form || verbForm,
+                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || rootConsonants || '',
+                _formLabel: existing.verb_morphology?.form || '',
+                verbal_form: existingVerbalForm,
             } as any);
             setInitialFormData(null);
         } else {
@@ -2604,9 +2633,11 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
             setInitialFormData({
                 headword: data.value,
                 pos: type === 'noun' ? 'noun' : 'participle',
+                noun_type: type === 'noun' ? 'verbal_noun' : '',
                 participle_type: type === 'noun' ? '' : type,
-                _formLabel: verbForm,
-                _rootConsonants: rootObj?.consonants || '',
+                verbal_form: verbForm,
+                _formLabel: '',
+                _rootConsonants: rootObj?.consonants || rootConsonants || '',
             });
         }
         setShowForm(true);
@@ -4640,7 +4671,6 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     }), hideTheoreticalForms);
     const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
     const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
-    const adjectiveMorphology = getEntryAdjectiveMorphology(entry);
 
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -4664,6 +4694,137 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
 
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
     const patternValue = resolveDisplayedPattern(mode, cvWizenMap, (entry as any).cv_pattern || pattern?.cv_notation, pattern?.wizen_notation);
+
+    const pm = (entry.participle_morphology || {}) as any;
+    const participleType = (pm.type || pm.participle_type || entry.participle_type || '').toLowerCase();
+    const isPassive = participleType === 'passive';
+    const hasNounNuance = hasNounNuanceDefinition(entry);
+    const verbalForm = pm.verbal_form || (entry as any).verbal_form || (entry as any).pm_verbal_form;
+
+    const virtualNounMorphology = useMemo<NounMorphology>(() => ({
+        gender: pm.gender || entry.gender || 'masculine',
+        is_inflectable: pm.is_inflectable,
+        form_fem: pm.form_fem || (entry as any).adj_feminine || (entry as any).form_fem,
+        form_fem_pattern: pm.form_fem_pattern || (entry as any).form_fem_pattern,
+        form_masc: pm.form_masc || (entry as any).adj_masculine || (entry as any).form_masc,
+        form_masc_pattern: pm.form_masc_pattern || (entry as any).form_masc_pattern,
+        form_plural_pattern: pm.form_plural_pattern || (entry as any).form_plural_pattern || (entry as any).morph_pattern,
+        plural_forms: (entry as any).inflections_pl || (entry as any).adj_morphology?.plural || (entry as any).adjective_morphology?.plural || (entry as any).adj_plural || pm.form_plural || [],
+        dual_form: pm.dual_form,
+        dual_pattern: pm.dual_pattern,
+        diminutive_form: pm.diminutive_form,
+        diminutive_pattern: pm.diminutive_pattern,
+        elative_form: pm.elative_form,
+        elative_pattern: pm.elative_pattern,
+        source_citation: (entry as any).source_citation || pm.source_citation,
+        synonyms: (entry as any).synonyms,
+        antonyms: (entry as any).antonyms,
+        related_entries: (entry as any).related_entries,
+    }), [pm, entry]);
+
+    const virtualAdjectiveMorphology = useMemo<AdjectiveMorphology>(() => ({
+        gender: pm.gender || entry.gender || 'masculine',
+        is_inflectable: pm.is_inflectable,
+        form_fem: pm.form_fem || (entry as any).adj_feminine || (entry as any).form_fem,
+        form_fem_pattern: pm.form_fem_pattern || (entry as any).form_fem_pattern,
+        form_masc: pm.form_masc || (entry as any).adj_masculine || (entry as any).form_masc,
+        form_masc_pattern: pm.form_masc_pattern || (entry as any).form_masc_pattern,
+        form_plural_pattern: pm.form_plural_pattern || (entry as any).form_plural_pattern || (entry as any).morph_pattern,
+        plural: (entry as any).inflections_pl || (entry as any).adj_morphology?.plural || (entry as any).adjective_morphology?.plural || (entry as any).adj_plural || pm.form_plural || [],
+        dual_form: pm.dual_form,
+        dual_pattern: pm.dual_pattern,
+        diminutive_form: pm.diminutive_form,
+        diminutive_pattern: pm.diminutive_pattern,
+        elative: pm.elative_form || (entry as any).adj_elative,
+        elative_pattern: pm.elative_pattern,
+        source_citation: (entry as any).source_citation || pm.source_citation,
+        synonyms: (entry as any).synonyms,
+        antonyms: (entry as any).antonyms,
+        related_entries: (entry as any).related_entries,
+    }), [pm, entry]);
+
+    const elative = useMemo(() => {
+        const isElativeDisabled = entry.tags?.some(tag => tag.includes('$') || isHiddenTag(tag));
+        if (isElativeDisabled) return null;
+
+        const generated = rootConsonants ? generateElative(rootConsonants, entry.headword) : null;
+        const ptcpElative = pm.elative_form || (entry as any).adj_elative;
+        if (!generated) {
+            return ptcpElative ? { masculine: ptcpElative, feminine: null } : null;
+        }
+        return {
+            masculine: ptcpElative || generated.masculine,
+            feminine: generated.feminine,
+        };
+    }, [pm.elative_form, (entry as any).adj_elative, rootConsonants, entry.headword, entry.tags]);
+
+    const isTheoretical = !isInflectableEnabled(virtualNounMorphology.is_inflectable, entry.is_inflectable);
+    const pluralRows = getNormalizedPluralRows(entry, virtualNounMorphology);
+    const trimOrNull = (value?: string | null) => (value && value.trim()) || null;
+    const pluralPattern = trimOrNull(virtualNounMorphology.form_plural_pattern || entry.form_plural_pattern || virtualNounMorphology.plural_pattern || entry.plural_pattern || virtualNounMorphology.morph_pattern || entry.morph_pattern || null);
+    const soundPluralPattern = trimOrNull(virtualNounMorphology.sound_suffix || entry.sound_suffix || null);
+    const pluralInflectionRows = pluralRows.filter(row => !!row.form);
+    const pluralInflectionRowsWithFallback = pluralInflectionRows.length > 0
+        ? pluralInflectionRows
+        : ((virtualNounMorphology.plural_forms?.[0] || virtualNounMorphology.sound_plural)
+            ? [{
+                form: trimOrNull((Array.isArray(virtualNounMorphology.plural_forms) ? virtualNounMorphology.plural_forms[0] : virtualNounMorphology.plural_forms) || virtualNounMorphology.sound_plural || null) || '',
+                pattern: pluralPattern || soundPluralPattern || '',
+            }]
+            : []);
+    const singularBase = trimOrNull(virtualNounMorphology.singular || entry.headword || null) || entry.headword;
+    const POSSESSIVE_SUFFIX_KEYS = ['pos-1s', 'pos-2s', 'pos-3ms', 'pos-3fs', 'pos-1p', 'pos-2p', 'pos-3p'];
+    const thirdRadical = rootConsonants?.split('-')?.[2] || rootConsonants?.[2] || '';
+
+    const applySuffix = (base: string, idx: number, theoreticalOverride?: boolean, customPattern?: string) => {
+        const isT = theoreticalOverride ?? isTheoretical;
+        const activePattern = customPattern || (entry as any).cv_pattern || (entry.root_pattern_form?.pattern?.cv_notation);
+        const result = applyInflectionTableSuffix(
+            base,
+            idx as any,
+            virtualNounMorphology.gender === 'feminine' ? 'feminine' : 'masculine',
+            activePattern,
+            thirdRadical,
+        );
+
+        if (result === '-') return { value: '-', theoretical: false };
+
+        const parts = result.split(' / ');
+        if (parts.length > 1) {
+            return {
+                value: <StackedSurface primary={parts[0]} alternates={parts.slice(1)} />,
+                theoretical: isT
+            };
+        }
+        return { value: result, theoretical: isT };
+    };
+
+    const inflectionRows = useMemo(() => {
+        if (!hasNounNuance) return [];
+        return POSSESSIVE_SUFFIX_KEYS.map((key, idx) => {
+            const singularCell = applySuffix(singularBase, idx);
+            const singularVisible = !(hideTheoreticalForms && (singularCell.theoretical || isDashLikeValue(singularCell.value)));
+
+            const pluralResolvedCells = pluralInflectionRowsWithFallback.map(row => applySuffix(
+                row.form,
+                idx,
+                isTheoretical,
+                row.pattern || pluralPattern || soundPluralPattern || undefined,
+            ));
+            const pluralVisible = pluralResolvedCells.length > 0 && pluralResolvedCells.some(cell => !(hideTheoreticalForms && (cell.theoretical || isDashLikeValue(cell.value))));
+
+            return {
+                key,
+                singularCell,
+                singularVisible,
+                pluralResolvedCells,
+                pluralVisible,
+            };
+        }).filter(row => row.singularVisible || row.pluralVisible);
+    }, [hasNounNuance, hideTheoreticalForms, isTheoretical, pluralPattern, soundPluralPattern, virtualNounMorphology.gender, entry, thirdRadical, singularBase, pluralInflectionRowsWithFallback]);
+
+    const showSingularInflectionColumn = hideTheoreticalForms ? inflectionRows.some(row => row.singularVisible) : true;
+    const showPluralInflectionColumn = hideTheoreticalForms ? inflectionRows.some(row => row.pluralVisible) : true;
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -4697,9 +4858,6 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                         </div>
                     </div>
                     <SubParts entry={entry} showGender />
-                    <div className="mt-2 text-xs font-sans uppercase tracking-[0.2em] text-[#1034A6] font-bold">
-                        {entry.participle_type ? term(entry.participle_type) : term('participle')}
-                    </div>
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
@@ -4708,7 +4866,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
                                 {(entry.definitions ?? []).map(def => (
-                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                    <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
                                 ))}
                             </ol>
                             <TagChips entry={entry} />
@@ -4720,7 +4878,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
                                 {(entry.definitions ?? []).map(def => (
-                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                    <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
                                 ))}
                             </ol>
                             <TagChips entry={entry} />
@@ -4792,6 +4950,24 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                         </Link>
                                     </PropRow>
                                 )}
+
+                                {entry.phonetics && entry.phonetics.length > 0 && (
+                                    <PropRow label={term('pronunciation')}>
+                                        <div className="space-y-0 mt-1">
+                                            {entry.phonetics.map((ph, idx) => (
+                                                <div key={idx} className="flex flex-col sm:flex-row sm:items-center sm:gap-1 mb-0 last:mb-0">
+                                                    {ph.dialect && (
+                                                        <span className="text-[10px] font-bold text-black/40 uppercase tracking-tighter">
+                                                            {ph.dialect.replace(' (Għawdex)', '').replace(' (Arkajku)', '')}:
+                                                        </span>
+                                                    )}
+                                                    {ph.ipa && <span className="text-[14px] tracking-tighter font-mono whitespace-nowrap">{ph.ipa}</span>}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </PropRow>
+                                )}
+
                                 {patternValue && (
                                     <PropRow label={patternLabel}>
                                         <Link to={`/pattern/${pattern?.id}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
@@ -4799,48 +4975,148 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                         </Link>
                                     </PropRow>
                                 )}
-                                <VowelSetGrid morphology={entry} />
+
+                                {verbalForm && (
+                                    <PropRow label={term('verbal-form') || 'Verbal Form'}>
+                                        <Link to={`/advanced-search?verbal_form=${verbalForm}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
+                                            {`${term('form-label')} ${verbalForm}`.toUpperCase()}
+                                        </Link>
+                                    </PropRow>
+                                )}
+
+                                <VowelSetGrid morphology={{ ...entry, ...pm }} />
 
                                 <div className="mt-4 border-t border-black/5" />
                             </div>
 
                             <div className="flex-1 min-w-0 w-full space-y-12">
-                                <MorphologyTable
-                                    title={term('morphology')}
-                                    displayPattern={displayPattern}
-                                    hideHeaderLabel
-                                    rows={[
-                                        {
-                                            label: term('gender'),
-                                            value: <span className="capitalize">{entry.participle_gender ? term(entry.participle_gender) : '-'}</span>,
-                                            show: !!entry.participle_gender
-                                        },
-                                        {
-                                            label: term('masculine'),
-                                            value: (entry as any).adj_masculine || (entry.participle_gender !== 'feminine' ? entry.headword : null),
-                                            show: entry.participle_gender !== 'feminine' || !!(entry as any).adj_masculine,
-                                            pattern: entry.participle_gender?.toLowerCase() === 'masculine' ? entry.lemma_pattern : entry.form_masc_pattern
-                                        },
-                                        {
-                                            label: term('feminine'),
-                                            value: (entry as any).adj_feminine || (entry.participle_gender === 'feminine' ? entry.headword : null),
-                                            show: entry.participle_gender === 'feminine' || !!(entry as any).adj_feminine,
-                                            pattern: (entry.participle_gender?.toLowerCase() === 'feminine' && !entry.form_fem_pattern)
-                                                ? entry.lemma_pattern
-                                                : entry.form_fem_pattern
-                                        },
-                                        {
-                                            label: term('plural'),
-                                            value: (entry as any).adj_plural,
-                                            pattern: entry.form_plural_pattern || entry.morph_pattern
-                                        },
-                                        {
-                                            label: term('elative') || 'Elative',
-                                            value: (entry as any).adj_elative || adjectiveMorphology?.elative,
-                                            show: !!((entry as any).adj_elative || adjectiveMorphology?.elative) && !entry.tags?.some(t => t.includes('$') || isHiddenTag(t))
-                                        }
-                                    ]}
-                                />
+                                {isPassive ? (
+                                    <NounMorphologySection
+                                        entry={entry}
+                                        morphology={virtualNounMorphology}
+                                        rootConsonants={rootConsonants}
+                                        displayPattern={displayPattern}
+                                    />
+                                ) : (
+                                    <AdjectiveMorphologySection
+                                        entry={entry}
+                                        morphology={virtualAdjectiveMorphology}
+                                        elative={elative}
+                                        rootConsonants={rootConsonants}
+                                        displayPattern={displayPattern}
+                                    />
+                                )}
+
+                                {/* Inflection Table (Noun-nuanced Active or Passive Participle) */}
+                                {hasNounNuance && inflectionRows.length > 0 && (
+                                    <>
+                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                                            {term('inflection-table')}
+                                        </h2>
+
+                                        {/* Desktop Table View */}
+                                        <div className="hidden md:block overflow-x-auto overflow-y-hidden pb-4">
+                                            <table className="w-full text-sm border-collapse md:min-w-[500px]">
+                                                <thead>
+                                                    <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                        <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('person')}</th>
+                                                        {showSingularInflectionColumn && (
+                                                            <th className="text-left font-semibold text-black pb-2 pr-4">
+                                                                {term('singular')}
+                                                            </th>
+                                                        )}
+                                                        {showPluralInflectionColumn && (
+                                                            <th className="text-left font-semibold text-black pb-2">
+                                                                {term('plural')}
+                                                            </th>
+                                                        )}
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {inflectionRows.map(({ key, singularCell, singularVisible, pluralResolvedCells, pluralVisible }, idx) => {
+                                                        return (
+                                                            <tr key={key} className="border-b border-black/4 whitespace-nowrap">
+                                                                <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
+                                                                    {term(key)}
+                                                                </td>
+                                                                {showSingularInflectionColumn && (
+                                                                    <td className="py-1.5 pr-4 font-serif font-normal text-black">
+                                                                        {singularVisible ? <MarkedValue val={singularCell} /> : null}
+                                                                    </td>
+                                                                )}
+                                                                {showPluralInflectionColumn && (
+                                                                    <td className="py-1.5 font-serif font-normal text-black">
+                                                                        {pluralVisible ? (
+                                                                            pluralResolvedCells.length === 1 ? (
+                                                                                <MarkedValue val={pluralResolvedCells[0]} />
+                                                                            ) : (
+                                                                                <StackedSurface
+                                                                                    primary={<MarkedValue val={pluralResolvedCells[0]} />}
+                                                                                    alternates={pluralResolvedCells.slice(1).map((value, altIdx) => (
+                                                                                        <MarkedValue key={`plural-${idx}-${altIdx}`} val={value} />
+                                                                                    ))}
+                                                                                />
+                                                                            )
+                                                                        ) : null}
+                                                                    </td>
+                                                                )}
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        {/* Mobile Unspooled View */}
+                                        <div className="block md:hidden space-y-6">
+                                            <div className="w-full overflow-hidden">
+                                                <table className="w-full border-collapse table-fixed">
+                                                    <thead>
+                                                        <tr className="border-b border-black/8 font-semibold text-[10px] uppercase tracking-wider text-black/40">
+                                                            <th className="text-left pb-1 w-24 sm:w-[130px]">{term('person')}</th>
+                                                            {showSingularInflectionColumn && (
+                                                                <th className="text-left pb-1">{term('singular')}</th>
+                                                            )}
+                                                            {showPluralInflectionColumn && (
+                                                                <th className="text-right pb-1">{term('plural')}</th>
+                                                            )}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-black/2">
+                                                        {inflectionRows.map(({ key, singularCell, singularVisible, pluralResolvedCells, pluralVisible }, idx) => {
+                                                            return (
+                                                                <tr key={`mobile-${key}`}>
+                                                                    <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term(key)}</td>
+                                                                    {showSingularInflectionColumn && (
+                                                                        <td className="py-2 text-left">
+                                                                            {singularVisible ? <MarkedValue val={singularCell} /> : null}
+                                                                        </td>
+                                                                    )}
+                                                                    {showPluralInflectionColumn && (
+                                                                        <td className="py-2 text-right">
+                                                                            {pluralVisible ? (
+                                                                                pluralResolvedCells.length === 1 ? (
+                                                                                    <MarkedValue val={pluralResolvedCells[0]} />
+                                                                                ) : (
+                                                                                    <StackedSurface
+                                                                                        primary={<MarkedValue val={pluralResolvedCells[0]} />}
+                                                                                        alternates={pluralResolvedCells.slice(1).map((value, altIdx) => (
+                                                                                            <MarkedValue key={`mobile-plural-${idx}-${altIdx}`} val={value} />
+                                                                                        ))}
+                                                                                    />
+                                                                                )
+                                                                            ) : null}
+                                                                        </td>
+                                                                    )}
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
 
                                 <UsageExampleBlock entry={entry} />
 
@@ -5457,9 +5733,7 @@ export function EntryPage() {
                 apiGetEntry(id)
                     .then(res => setEntry(res.entry))
                     .catch(() => {
-                        // Fallback to mock if API fails
-                        const mock = MOCK_ENTRIES.find(e => e.id === id);
-                        setEntry(mock || null);
+                        setEntry(null);
                     })
                     .finally(() => setLoading(false));
             }

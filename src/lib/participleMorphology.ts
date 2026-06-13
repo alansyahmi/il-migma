@@ -1,7 +1,7 @@
 import { normalizeEntryPos } from './entryId.ts';
 
 export const PARTICIPLE_MORPHOLOGY_DB_FIELD_KEYS = [
-    'type', 'gender', 'is_inflectable', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern'
+    'type', 'gender', 'verbal_form', 'is_inflectable', 'form_fem_pattern', 'form_masc_pattern', 'form_plural_pattern'
 ];
 
 export const PARTICIPLE_MORPHOLOGY_LEGACY_FIELDS = {
@@ -15,7 +15,7 @@ export function hasParticipleMorphologyInput(source: any) {
     const src = source.participle_morphology || source;
     const hasIsInflectable = Object.prototype.hasOwnProperty.call(src, 'is_inflectable');
     return !!(
-        src.type || src.gender || hasIsInflectable ||
+        src.type || src.gender || src.verbal_form || hasIsInflectable ||
         src.form_fem_pattern || src.form_masc_pattern || src.form_plural_pattern
     );
 }
@@ -39,6 +39,7 @@ export function applyParticipleMorphologyCompatibility(target: any, entry: any, 
     target.participle_morphology = {
         type: normalized.type,
         gender: normalized.gender || entry.gender,
+        verbal_form: normalized.verbal_form,
     };
 
     if (target.participle_morphology.gender) target.gender = target.participle_morphology.gender;
@@ -75,6 +76,7 @@ export async function ensureParticipleMorphologyTable(client: any, options: any 
                 entry_id TEXT PRIMARY KEY REFERENCES entries(id) ON DELETE CASCADE,
                 type TEXT,
                 gender TEXT,
+                verbal_form TEXT,
                 form_fem_pattern TEXT,
                 form_masc_pattern TEXT,
                 form_plural_pattern TEXT,
@@ -89,6 +91,7 @@ export async function ensureParticipleMorphologyTable(client: any, options: any 
             ['form_fem_pattern', 'TEXT'],
             ['form_masc_pattern', 'TEXT'],
             ['form_plural_pattern', 'TEXT'],
+            ['verbal_form', 'TEXT'],
             ['is_inflectable', 'BOOLEAN DEFAULT false'],
         ];
 

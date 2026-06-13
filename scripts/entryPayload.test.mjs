@@ -334,6 +334,33 @@ const run = () => {
     assert.ok(!('numeral_morphology' in participlePayload), 'participle payload should not include numeral morphology');
     assert.ok(participlePayload.adj_morphology, 'participle payload should include adjective morphology');
     assert.ok(participlePayload.participle_morphology, 'participle payload should include participle morphology');
+    assert.strictEqual(participlePayload.participle_morphology.type, 'active', 'active participle payload should store participle type');
+
+    const passiveParticiplePayload = buildEntryPayload({
+        id: 'ptcp-mahbub',
+        headword: 'maħbub',
+        pos: 'participle',
+        participle_type: 'passive',
+        verbal_form: 'I',
+        gender: 'masculine',
+        form_masc: 'maħbub',
+        form_fem: 'maħbuba',
+    });
+
+    assert.strictEqual(passiveParticiplePayload.participle_morphology.type, 'passive', 'passive participle payload should store participle type');
+    assert.strictEqual(passiveParticiplePayload.participle_morphology.verbal_form, 'I', 'passive participle payload should store source verbal form');
+
+    const verbalNounPayload = buildEntryPayload({
+        id: 'n-hbib',
+        headword: 'ħbib',
+        pos: 'noun',
+        gender: 'masculine',
+        noun_type: 'verbal_noun',
+        verbal_form: 'I',
+    });
+
+    assert.strictEqual(verbalNounPayload.noun_morphology.noun_type, 'verbal_noun', 'verbal noun payload should store noun type');
+    assert.strictEqual(verbalNounPayload.noun_morphology.verbal_form, 'I', 'verbal noun payload should store source verbal form');
 };
 
 run();

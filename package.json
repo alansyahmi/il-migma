@@ -28,6 +28,7 @@
     "test:adj-morphology-save": "node --experimental-strip-types scripts/adjMorphologySave.test.mjs",
     "test:adjective-fem-masc-sync": "node --experimental-strip-types scripts/adjectiveFeminineMascSync.test.mjs",
     "test:entry-id": "node --experimental-strip-types scripts/entryId.test.mjs",
+    "test:root-tags": "node --experimental-strip-types scripts/rootTags.test.mjs",
     "test:morphology-sync-guards": "node --experimental-strip-types scripts/morphologySyncGuards.test.mjs",
     "test:numeral-family-backfill": "node --experimental-strip-types scripts/numeralFamilyBackfill.test.mjs",
     "test:numeral-entry-family-api": "node --experimental-strip-types scripts/numeralEntryFamilyApi.test.mjs",

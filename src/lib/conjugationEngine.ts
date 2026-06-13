@@ -816,9 +816,9 @@ function genGeminated(
     };
 
     const { v1: impV1 } = parseVset(vsetImp);
-    const pfx1 = buildPrefix(1, vsetImpf);
-    const impSg = impfBase(1).replace(pfx1, impV1);
-    const impPl = impfBase(5).replace(pfx1, impV1) + `u`;
+    const impV = impV1 || iv1;
+    const impSg = `${C1}${impV}${C2}${C2}`;
+    const impPl = `${C1}${impV}${C2}${C2}u`;
 
     return buildConjugationTable(
         {
@@ -836,8 +836,8 @@ function genGeminated(
             impSg,
             impPl,
             impSgStems: {
-                impfType1: impfBase(1).replace(pfx1, impV1),
-                impfType2: impfBase(1).replace(pfx1, impV1),
+                impfType1: impSg,
+                impfType2: impSg,
             },
             blocksImala:
                 C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
@@ -5496,6 +5496,28 @@ function getEntryStemKey(entry: any): string {
         || "";
 }
 
+export function getEntryVerbalForm(entry: any): string {
+    if (!entry) return "";
+    if (entry.pos === "verb") {
+        return entry.verb_morphology?.form || entry._formLabel || "I";
+    }
+    if (entry.pos === "participle") {
+        return entry.participle_morphology?.verbal_form
+            || entry.verbal_form
+            || entry.verb_morphology?.form
+            || entry._formLabel
+            || "I";
+    }
+    if (entry.pos === "noun" || entry.pos === "verbal_noun") {
+        return entry.noun_morphology?.verbal_form
+            || entry.verbal_form
+            || entry.verb_morphology?.form
+            || entry._formLabel
+            || "I";
+    }
+    return entry.verb_morphology?.form || entry._formLabel || "I";
+}
+
 function matchesAttestedCriteria(
     entry: AttestedEntry,
     criteria: AttestedEntryMatchCriteria,
@@ -5505,8 +5527,11 @@ function matchesAttestedCriteria(
         return false;
     }
 
-    if (criteria.form && normalizeMatchKey(entry.form) !== normalizeMatchKey(criteria.form)) {
-        return false;
+    if (criteria.form) {
+        const entryForm = entry.form || "I";
+        if (normalizeMatchKey(entryForm) !== normalizeMatchKey(criteria.form)) {
+            return false;
+        }
     }
 
     if (criteria.pos && normalizeMatchKey(entry.pos) !== normalizeMatchKey(criteria.pos)) {
@@ -5727,8 +5752,7 @@ export function markGeneratedForms(
 export function getAttestedEntries(entries: any[]): AttestedEntry[] {
     const attested: AttestedEntry[] = [];
     entries.forEach((e: any) => {
-        const form = e.verb_morphology?.form || e._formLabel || "";
-        if (!form) return;
+        const form = getEntryVerbalForm(e);
         const root = getEntryRootKey(e);
         const stem = getEntryStemKey(e);
 
@@ -5737,7 +5761,11 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
             attested.push({ word: e.headword, id: e.id, form, pos: e.pos, root, stem, type: "lemma" });
         } else if (e.pos === "participle") {
             const pt =
-                e.verb_morphology?.participle_type || e.participle_type || "active";
+                e.participle_morphology?.type ||
+                e.participle_morphology?.participle_type ||
+                e.verb_morphology?.participle_type ||
+                e.participle_type ||
+                "active";
             attested.push({
                 word: e.headword,
                 id: e.id,
@@ -5748,8 +5776,8 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
                 type: pt === "passive" ? "passive" : "active",
                 participleType: pt === "passive" ? "passive" : "active",
             });
-        } else if (e.pos === "noun") {
-            attested.push({ word: e.headword, id: e.id, form, pos: e.pos, root, stem, type: "noun" });
+        } else if (e.pos === "noun" || e.pos === "verbal_noun") {
+            attested.push({ word: e.headword, id: e.id, form, pos: "noun", root, stem, type: "noun" });
         }
 
         // 2. Also check internal fields within the entry (e.g. for legacy verbs)
@@ -5817,11 +5845,14 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
         // 3. Similarly check subentries
         if (e.subentries) {
             e.subentries.forEach((sub: any) => {
-                const subForm = sub.verb_morphology?.form || sub._formLabel || form;
-                if (sub.pos === "noun") {
-                    attested.push({ word: sub.headword, id: sub.id, form: subForm, pos: sub.pos, root: getEntryRootKey(sub) || root, stem: getEntryStemKey(sub) || stem, type: "noun" });
-                } else if (sub.pos === "participle") {
+                const subForm = getEntryVerbalForm(sub) || form;
+                const subPos = sub.pos === "verbal_noun" ? "noun" : sub.pos;
+                if (subPos === "noun") {
+                    attested.push({ word: sub.headword, id: sub.id, form: subForm, pos: subPos, root: getEntryRootKey(sub) || root, stem: getEntryStemKey(sub) || stem, type: "noun" });
+                } else if (subPos === "participle") {
                     const pt =
+                        sub.participle_morphology?.type ||
+                        sub.participle_morphology?.participle_type ||
                         sub.verb_morphology?.participle_type ||
                         sub.participle_type ||
                         "active";
@@ -5829,7 +5860,7 @@ export function getAttestedEntries(entries: any[]): AttestedEntry[] {
                         word: sub.headword,
                         id: sub.id,
                         form: subForm,
-                        pos: sub.pos,
+                        pos: subPos,
                         root: getEntryRootKey(sub) || root,
                         stem: getEntryStemKey(sub) || stem,
                         type: pt === "passive" ? "passive" : "active",

@@ -4,6 +4,7 @@ import { normalizeEntryPos } from './entryId.ts';
 
 export const NOUN_MORPHOLOGY_DB_FIELD_KEYS = [
     'gender', 'noun_type', 'singular_form', 'plural_forms', 'sound_plural',
+    'verbal_form',
     'dual_form', 'diminutive_form', 'collective_form', 'singulative_form',
     'paucal_form', 'augmentative_form', 'paucal_pattern', 'augmentative_pattern',
     'feminine_form', 'masculine_form', 'is_collective', 'is_singulative',
@@ -29,7 +30,7 @@ export function hasNounMorphologyInput(source: any): boolean {
         Object.prototype.hasOwnProperty.call(src, 'is_inflectable_singular') ||
         Object.prototype.hasOwnProperty.call(src, 'is_inflectable_plural');
     return !!(
-        src.gender || src.noun_type || src.singular_form || 
+        src.gender || src.noun_type || src.singular_form || src.verbal_form ||
         src.plural_forms || src.sound_plural || src.dual_form || 
         src.diminutive_form || src.feminine_form || src.masculine_form ||
         src.collective_form || src.singulative_form ||
@@ -89,6 +90,7 @@ export function applyNounMorphologyCompatibility(target: any, entry: Partial<Ent
     target.noun_morphology = {
         gender: normalized.gender || entry.gender,
         noun_type: normalized.noun_type,
+        verbal_form: normalized.verbal_form,
         singular_form: normalized.singular_form,
         plural_forms: pluralRowsToLegacyForms(pluralRows),
         sound_plural: normalized.sound_plural,
@@ -166,6 +168,7 @@ export async function ensureNounMorphologyTable(client: any, options: { backfill
                 entry_id TEXT PRIMARY KEY REFERENCES entries(id) ON DELETE CASCADE,
                 gender TEXT,
                 noun_type TEXT,
+                verbal_form TEXT,
                 singular_form TEXT,
                 plural_forms TEXT,
                 sound_plural TEXT,
@@ -205,6 +208,7 @@ export async function ensureNounMorphologyTable(client: any, options: { backfill
             ['is_singulative', 'INTEGER DEFAULT 0'],
             ['is_inflectable_singular', 'INTEGER DEFAULT 0'],
             ['is_inflectable_plural', 'INTEGER DEFAULT 0'],
+            ['verbal_form', 'TEXT'],
             ['vowel_set_sg', 'TEXT'],
             ['vowel_set_opp', 'TEXT'],
             ['vowel_set_dual', 'TEXT'],

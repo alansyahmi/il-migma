@@ -5,6 +5,7 @@ import {
     normalizeRootEtymology,
     normalizeRootEtymologyChain,
     normalizeRootRelationships,
+    normalizeRootTags,
     type RootGloss,
     type RootEtymology
 } from '@/lib/adminUtils';
@@ -77,24 +78,17 @@ export function useRootData(id: string | undefined) {
             const entries = (searchRes.results as any) as Entry[];
 
             // Normalize fields using shared utilities
-        const normalized = {
-            glosses: normalizeRootGloss(root.gloss),
-            etymology: normalizeRootEtymology(root.etymology),
-            etymologyChain: normalizeRootEtymologyChain(root.etymology),
-            tags: typeof root.tags === 'string'
-                ? JSON.parse(root.tags || '[]')
-                : (Array.isArray(root.tags) ? root.tags : []),
+            const normalized = {
+                glosses: normalizeRootGloss(root.gloss),
+                etymology: normalizeRootEtymology(root.etymology),
+                etymologyChain: normalizeRootEtymologyChain(root.etymology),
+                tags: normalizeRootTags(root.tags),
                 relationships: {
                     synonyms: normalizeRootRelationships(root.synonyms),
                     antonyms: normalizeRootRelationships(root.antonyms),
                     related_entries: normalizeRootRelationships(root.related_entries),
                 }
             };
-
-            // Fix potential tag parsing from string
-            if (typeof root.tags === 'string' && !root.tags.startsWith('[')) {
-                normalized.tags = root.tags.split(',').map(s => s.trim()).filter(Boolean);
-            }
 
             if (!signal?.aborted) {
                 setState({

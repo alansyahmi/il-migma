@@ -34,6 +34,7 @@ async function run() {
             entry_id TEXT PRIMARY KEY,
             gender TEXT,
             noun_type TEXT,
+            verbal_form TEXT,
             singular_form TEXT,
             plural_forms TEXT,
             sound_plural TEXT,
@@ -71,6 +72,7 @@ async function run() {
             entry_id TEXT PRIMARY KEY,
             type TEXT,
             gender TEXT,
+            verbal_form TEXT,
             is_inflectable BOOLEAN DEFAULT false,
             created_at TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
             updated_at TEXT DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))

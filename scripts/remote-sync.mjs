@@ -33,6 +33,7 @@ const statements = [
     "ALTER TABLE noun_morphology ADD COLUMN is_inflectable_plural BOOLEAN DEFAULT false",
     "ALTER TABLE noun_morphology ADD COLUMN feminine_form TEXT",
     "ALTER TABLE noun_morphology ADD COLUMN masculine_form TEXT",
+    "ALTER TABLE noun_morphology ADD COLUMN verbal_form TEXT",
     "ALTER TABLE noun_morphology ADD COLUMN paucal_pattern TEXT",
     "ALTER TABLE noun_morphology ADD COLUMN augmentative_pattern TEXT",
     
@@ -47,6 +48,7 @@ const statements = [
     
     // Participle Morphology
     "ALTER TABLE participle_morphology ADD COLUMN is_inflectable BOOLEAN DEFAULT false",
+    "ALTER TABLE participle_morphology ADD COLUMN verbal_form TEXT",
     
     // Numeral Morphology
     "ALTER TABLE numeral_morphology ADD COLUMN numeral_type TEXT",

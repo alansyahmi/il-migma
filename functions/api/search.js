@@ -124,7 +124,7 @@ export async function onRequestGet({ request, env }) {
             -- stored on the entry. This avoids fanning out across homographic
             -- roots that share the same consonants.
             LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id)
-            LEFT JOIN roots r ON r.id = COALESCE(rpf.root_id, e.root_consonants)
+            LEFT JOIN roots r ON r.id = rpf.root_id OR (rpf.root_id IS NULL AND r.consonants = e.root_consonants)
             LEFT JOIN patterns pat ON (rpf.pattern_id = pat.id)
             LEFT JOIN phonetics p   ON p.entry_id = e.id AND p.dialect = 'Standard'
             LEFT JOIN attestation_reliability ar ON ar.entry_id = e.id

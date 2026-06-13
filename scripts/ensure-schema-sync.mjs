@@ -46,7 +46,7 @@ const SCHEMA_EXPECTATIONS = {
         'is_inflectable', 'definitions', 'usage_examples'
     ],
     noun_morphology: [
-        'gender', 'noun_type', 'singular_form', 'plural_forms', 'sound_plural', 'dual_form',
+        'gender', 'noun_type', 'verbal_form', 'singular_form', 'plural_forms', 'sound_plural', 'dual_form',
         'diminutive_form', 'collective_form', 'singulative_form', 'paucal_form', 'augmentative_form',
         'paucal_pattern', 'augmentative_pattern', 'feminine_form', 'masculine_form', 'is_collective',
         'is_singulative', 'is_inflectable_singular', 'is_inflectable_plural', 'vowel_set_sg', 'vowel_set_opp', 'vowel_set_dual',
@@ -63,7 +63,7 @@ const SCHEMA_EXPECTATIONS = {
         'pattern', 'gender', 'is_inflectable'
     ],
     participle_morphology: [
-        'type', 'gender', 'is_inflectable'
+        'type', 'gender', 'verbal_form', 'is_inflectable'
     ],
     numeral_morphology: [
         'numeral_type', 'form_attributive_short', 'form_attributive_long', 'feminine_form',

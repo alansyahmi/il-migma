@@ -449,8 +449,8 @@ function StemSearchPanelContent() {
                 </div>
             ) : hasSearched && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {results.length > 0 ? (
-                            results.map((res) => (
+                    {results.length > 0 ? (
+                        results.map((res) => (
                             <Link
                                 key={res.id}
                                 to={res.zokk_morphology ? `/stem/${res.zokk_morphology.stem_string}` : `/entry/${res.id}`}
@@ -500,7 +500,7 @@ function StemSearchPanelContent() {
 export function RootSearch() {
     const [searchParams] = useSearchParams();
     const mode = searchParams.get('mode') === 'stem' ? 'stem' : 'root';
-    
+
     return (
         <SearchPageShell>
             <SearchModeTabs mode={mode} />

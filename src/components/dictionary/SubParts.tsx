@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { resolveEntryGender } from '@/lib/gender';
 import { isHiddenTag, resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 import { resolveVerbClassification } from '@/lib/stemDefaults';
+import { resolveEntryParticipleType } from '@/lib/entryDisplay';
 
 import { type Entry } from '@/types';
 
@@ -101,24 +102,16 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
     }
 
     if (entry.pos === 'participle') {
-        const participleType = (entry.participle_morphology?.participle_type) ? term((entry.participle_morphology?.participle_type)).toUpperCase() : '';
-        const participleLabel = term('participle').toUpperCase();
-        const participlePart = (
-            <span className="inline-flex flex-col items-start leading-snug">
-                {participleType && (
-                    <span className="text-[10px] md:text-xs font-sans uppercase tracking-wide text-black/60">
-                        {participleType}
-                    </span>
-                )}
-                <span className="text-[10px] md:text-xs font-sans uppercase tracking-wide leading-snug">
-                    {participleLabel}
-                </span>
-            </span>
-        );
+        const participleType = resolveEntryParticipleType(entry);
 
         const parts = [
+            participleType ? (
+                <Link key="type" to={`${basePath}?pos=${entry.pos}&participle_type=${encodeURIComponent(participleType)}`} className="hover:underline">
+                    {term(participleType).toUpperCase()}
+                </Link>
+            ) : null,
             <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">
-                {participlePart}
+                {term('participle').toUpperCase()}
             </Link>,
             ...titleTags,
         ].filter(Boolean) as ReactNode[];
