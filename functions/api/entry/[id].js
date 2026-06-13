@@ -11,6 +11,7 @@ import { normalizeSourceMetadata } from '../../../src/lib/sourceMetadata.ts';
 import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../../src/lib/entryHydration.ts';
 import { applyVerbMorphologyCompatibility, ensureVerbMorphologyTable } from '../../../src/lib/verbMorphology.ts';
 import { getEntryIdFamily, normalizeEntryId, normalizeEntryPos } from '../../../src/lib/entryId.ts';
+import { mergeNumeralFamilyEntries } from '../../../src/lib/numeralMorphology.ts';
 import { ensureRootCompatibilityColumns } from '../../lib/rootSchema.js';
 
 function firstSenseText(value) {
@@ -34,46 +35,11 @@ function normalizeDefinitionList(definitions) {
     }));
 }
 
-function relationshipKey(item) {
-    return String(item?.id || item?.target_id || item?.entry_id || item?.headword || '')
-        .trim()
-        .toLowerCase();
-}
-
 function markRelationshipSource(items, source) {
     return (items || []).map((item) => ({
         ...item,
         relationship_source: item?.relationship_source || source,
     }));
-}
-
-function mergeRelationshipEntries(...lists) {
-    const merged = [];
-    const indexes = new Map();
-
-    for (const list of lists) {
-        for (const item of list || []) {
-            if (!item) continue;
-            const key = relationshipKey(item);
-            if (!key) continue;
-
-            const existingIndex = indexes.get(key);
-            if (existingIndex === undefined) {
-                indexes.set(key, merged.length);
-                merged.push(item);
-                continue;
-            }
-
-            const existing = merged[existingIndex];
-            const nextIsExplicit = item.relationship_source === 'explicit';
-            const existingIsExplicit = existing.relationship_source === 'explicit';
-            if (nextIsExplicit || !existingIsExplicit) {
-                merged[existingIndex] = { ...existing, ...item };
-            }
-        }
-    }
-
-    return merged;
 }
 
 function buildRelationshipEntry(row, relationshipSource) {
@@ -91,11 +57,127 @@ function buildRelationshipEntry(row, relationshipSource) {
         form_plural_pattern: hydrated.form_plural_pattern || hydrated.numeral_morphology?.form_plural_pattern || null,
         morph_pattern: hydrated.morph_pattern || null,
         numeral_morphology: hydrated.numeral_morphology || null,
+        zokk_morphology: hydrated.zokk_morphology || null,
         root_pattern_form: hydrated.root_pattern_form || null,
         gloss_en: firstSenseText(row.gloss_en || row.text_en),
         gloss_mt: firstSenseText(row.gloss_mt || row.text_mt),
         relationship_source: relationshipSource,
     };
+}
+
+function normalizeNumeralRootKey(value) {
+    return String(value || '').trim().toLowerCase();
+}
+
+function getNumeralFamilyRootKey(entry) {
+    return normalizeNumeralRootKey(
+        entry?.root_consonants
+        || entry?.resolved_root_consonants
+        || entry?.root_pattern_form?.root?.consonants
+        || '',
+    );
+}
+
+async function fetchNumeralRelationshipRows(db, currentEntryId, direction, relationshipSource) {
+    if (!currentEntryId) return [];
+    const joinColumn = direction === 'forward' ? 'r.target_entry_id' : 'r.entry_id';
+    const whereColumn = direction === 'forward' ? 'r.entry_id' : 'r.target_entry_id';
+
+    const relRes = await db.execute({
+        sql: `SELECT e.*,
+                ${ENTRY_MORPHOLOGY_SELECT},
+                COALESCE(e.root_consonants, root.consonants) AS resolved_root_consonants,
+                COALESCE(pat.cv_notation, pat2.cv_notation, e.cv_pattern) AS cv_notation,
+                COALESCE(pat.wizen_notation, pat2.wizen_notation) AS wizen_notation,
+                COALESCE(pat.id, pat2.id) AS pattern_id,
+                json_extract(e.definitions, '$[0].text_en') AS gloss_en,
+                json_extract(e.definitions, '$[0].text_mt') AS gloss_mt
+              FROM entry_relationships r
+              JOIN entries e ON ${joinColumn} = e.id
+              ${ENTRY_MORPHOLOGY_JOINS}
+              LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
+              LEFT JOIN roots root ON root.id = rpf.root_id OR root.consonants = e.root_consonants
+              LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
+              LEFT JOIN patterns pat2 ON pat2.cv_notation = COALESCE(num.form_attributive_short_pattern, e.cv_pattern) AND pat.id IS NULL
+              WHERE ${whereColumn} = ?
+                AND r.relationship_type = 'related'
+                AND LOWER(TRIM(e.pos)) = 'numeral'
+                AND e.id != ?
+              LIMIT 30`,
+        args: [currentEntryId, currentEntryId],
+    });
+
+    return relRes.rows.map((row) => buildRelationshipEntry(row, relationshipSource));
+}
+
+async function fetchSameRootNumeralRows(db, rootKey, currentEntryId) {
+    const normalizedRoot = normalizeNumeralRootKey(rootKey);
+    if (!normalizedRoot || !currentEntryId) return [];
+
+    const relRes = await db.execute({
+        sql: `SELECT e.*,
+                ${ENTRY_MORPHOLOGY_SELECT},
+                COALESCE(e.root_consonants, root.consonants) AS resolved_root_consonants,
+                COALESCE(pat.cv_notation, pat2.cv_notation, e.cv_pattern) AS cv_notation,
+                COALESCE(pat.wizen_notation, pat2.wizen_notation) AS wizen_notation,
+                COALESCE(pat.id, pat2.id) AS pattern_id,
+                json_extract(e.definitions, '$[0].text_en') AS gloss_en,
+                json_extract(e.definitions, '$[0].text_mt') AS gloss_mt
+              FROM entries e
+              ${ENTRY_MORPHOLOGY_JOINS}
+              LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
+              LEFT JOIN roots root ON root.id = rpf.root_id OR root.consonants = e.root_consonants
+              LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
+              LEFT JOIN patterns pat2 ON pat2.cv_notation = COALESCE(num.form_attributive_short_pattern, e.cv_pattern) AND pat.id IS NULL
+              WHERE LOWER(TRIM(e.pos)) = 'numeral'
+                AND (LOWER(TRIM(e.root_consonants)) = ? OR LOWER(TRIM(root.consonants)) = ?)
+                AND e.id != ?
+              LIMIT 30`,
+        args: [normalizedRoot, normalizedRoot, currentEntryId],
+    });
+
+    return relRes.rows.map((row) => buildRelationshipEntry(row, 'same_root'));
+}
+
+export async function resolveNumeralFamilyEntries(db, {
+    currentEntryId,
+    currentRootConsonants = '',
+    explicitRelatedEntries = [],
+} = {}) {
+    const currentId = String(currentEntryId || '').trim();
+    if (!currentId) return [];
+
+    const explicitEntries = markRelationshipSource(explicitRelatedEntries || [], 'explicit');
+    const [forwardEntries, reciprocalEntries] = await Promise.all([
+        fetchNumeralRelationshipRows(db, currentId, 'forward', 'explicit'),
+        fetchNumeralRelationshipRows(db, currentId, 'reciprocal', 'reciprocal'),
+    ]);
+
+    let familyEntries = mergeNumeralFamilyEntries(
+        explicitEntries,
+        forwardEntries,
+        reciprocalEntries,
+    );
+
+    const rootKeys = new Set(
+        [
+            currentRootConsonants,
+            ...familyEntries.map(getNumeralFamilyRootKey),
+        ]
+            .map(normalizeNumeralRootKey)
+            .filter(Boolean),
+    );
+
+    const sameRootResults = await Promise.all(
+        [...rootKeys].map((rootKey) => fetchSameRootNumeralRows(db, rootKey, currentId)),
+    );
+
+    familyEntries = mergeNumeralFamilyEntries(
+        familyEntries,
+        sameRootResults.flat(),
+    );
+
+    return familyEntries.filter((entry) => String(entry?.id || '').trim() !== currentId);
 }
 
 async function ensureDiminutivesTableExists(db) {
@@ -393,29 +475,12 @@ export async function onRequestGet({ params, env }) {
         let related_entries = [];
         const normalizedPos = normalizeEntryPos(entry.pos);
         const rc = entry.resolved_root_consonants;
-        if (rc && normalizedPos === 'numeral') {
-            const relRes = await db.execute({
-                sql: `SELECT e.*,
-                        ${ENTRY_MORPHOLOGY_SELECT},
-                        COALESCE(e.root_consonants, r.consonants) AS resolved_root_consonants,
-                        COALESCE(pat.cv_notation, pat2.cv_notation, e.cv_pattern) AS cv_notation,
-                        COALESCE(pat.wizen_notation, pat2.wizen_notation) AS wizen_notation,
-                        COALESCE(pat.id, pat2.id) AS pattern_id,
-                        json_extract(e.definitions, '$[0].text_en') AS gloss_en,
-                        json_extract(e.definitions, '$[0].text_mt') AS gloss_mt
-                      FROM entries e
-                      ${ENTRY_MORPHOLOGY_JOINS}
-                      LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
-                      LEFT JOIN roots r ON r.id = rpf.root_id OR r.consonants = e.root_consonants
-                      LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
-                      LEFT JOIN patterns pat2 ON pat2.cv_notation = COALESCE(num.form_attributive_short_pattern, e.cv_pattern) AND pat.id IS NULL
-                      WHERE LOWER(TRIM(e.pos)) = 'numeral'
-                        AND (e.root_consonants = ? OR r.consonants = ?)
-                        AND e.id != ?
-                      LIMIT 30`,
-                args: [rc, rc, resolvedEntryId],
+        if (normalizedPos === 'numeral') {
+            related_entries = await resolveNumeralFamilyEntries(db, {
+                currentEntryId: resolvedEntryId,
+                currentRootConsonants: rc,
+                explicitRelatedEntries: payload.related_entries,
             });
-            related_entries = relRes.rows.map((row) => buildRelationshipEntry(row, 'same_root'));
         } else if (rc) {
             const relRes = await db.execute({
                 sql: `SELECT e.id, e.headword,
@@ -434,7 +499,7 @@ export async function onRequestGet({ params, env }) {
             }));
         }
         const numeralFamilyEntries = normalizedPos === 'numeral'
-            ? mergeRelationshipEntries(payload.related_entries, related_entries)
+            ? related_entries
             : [];
         if (normalizedPos === 'numeral') {
             payload.related_entries = numeralFamilyEntries;

@@ -103,7 +103,9 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                             if (Array.isArray(parsed) && typeof parsed[0] === 'object') {
                                 return { en: parsed[0].en, mt: parsed[0].mt };
                             }
-                        } catch (e) { }
+                        } catch {
+                            return { en: root.gloss || '', mt: '' };
+                        }
                         return { en: root.gloss || '', mt: '' };
                     })();
 
@@ -122,7 +124,7 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                 }
             } else if (lookupType === 'stem') {
                 const lookupId = normalizeStemLookupId(id);
-                let res = await apiGetStem(lookupId);
+                const res = await apiGetStem(lookupId);
                 if (res?.stem) {
                     const stem = res.stem as any;
                     const firstGloss = Array.isArray(stem.glosses) ? stem.glosses[0] : null;

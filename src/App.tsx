@@ -28,11 +28,7 @@ const Search = lazyNamed(() => import('@/pages/Search'), 'Search');
 const EntryPage = lazyNamed(() => import('@/pages/Entry'), 'EntryPage');
 const Chatbot = lazyNamed(() => import('@/pages/Chatbot'), 'Chatbot');
 const Dashboard = lazyNamed(() => import('@/pages/Dashboard'), 'Dashboard');
-const Conjugator = lazyNamed(() => import('@/pages/Conjugator'), 'Conjugator');
 const IsSemmej = lazyNamed(() => import('@/pages/IsSemmej'), 'IsSemmej');
-const Blog = lazyNamed(() => import('@/pages/Blog'), 'Blog');
-const BlogPost = lazyNamed(() => import('@/pages/Blog'), 'BlogPost');
-const Course = lazyNamed(() => import('@/pages/Course'), 'Course');
 const NotFound = lazyNamed(() => import('@/pages/NotFound'), 'NotFound');
 const Admin = lazyNamed(() => import('@/pages/Admin'), 'Admin');
 const AdvancedSearch = lazyNamed(() => import('@/pages/AdvancedSearch'), 'AdvancedSearch');
@@ -101,11 +97,7 @@ export default function App() {
                                                     <Route path="root/:id" element={<Root />} />
                                                     <Route path="chatbot" element={<Chatbot />} />
                                                     <Route path="dashboard" element={<Dashboard />} />
-                                                    <Route path="conjugator" element={<Conjugator />} />
                                                     <Route path="semmej" element={<IsSemmej />} />
-                                                    <Route path="blog" element={<Blog />} />
-                                                    <Route path="blog/:slug" element={<BlogPost />} />
-                                                    <Route path="course" element={<Course />} />
                                                     <Route path="admin" element={<Admin />} />
                                                     <Route path="advanced-search" element={<AdvancedSearch />} />
                                                     <Route path="root-search" element={<RootSearch />} />

@@ -11,8 +11,18 @@ node_modules
 dist
 dist-ssr
 *.local
+*.db
+*.sqlite
+*.pyc
+__pycache__/
+tsc_errors*.txt
+tmp_*
+schema.txt
+table_info.txt
+tags_dump.txt
 
 # Environment variables — NEVER commit real keys
+.dev.vars
 .env
 .env.local
 .env.production
@@ -31,4 +41,7 @@ dist-ssr
 local.db*
 .wrangler/
 tmp/
+scratch/
 everything-claude-code
+.antigravity/
+.codex/*.sqlite

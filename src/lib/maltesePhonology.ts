@@ -620,7 +620,9 @@ function hasGuttural(word: string): boolean {
 
 export function generateDiminutiveSoundPlural(word: string, ipaHint?: string | null): string {
     if (!word) return '';
-    return `${prepareSuffixAttachmentStem(word, ipaHint || undefined)}in`;
+    const collapsedDiminutive = word.trim().toLowerCase().normalize('NFC').replace(/jj/g, 'j').replace(/ww/g, 'w');
+    const stem = prepareSuffixAttachmentStem(collapsedDiminutive, ipaHint || undefined);
+    return `${stem}in`;
 }
 
 export function generateFeminineDiminutiveSoundPlural(word: string, ipaHint?: string | null): string {

@@ -118,7 +118,6 @@ export function Root() {
         }
     }, [dbRoot]);
 
-    // Use entries from hook (removed MOCK_ENTRIES filter)
     const rootEntries = apiEntries;
 
     const bgStyle = {

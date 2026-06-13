@@ -158,12 +158,10 @@ export async function backfillRelationships(client: any) {
     const tableInfo = await client.execute("PRAGMA table_info(entries)");
     const hasSyn = tableInfo.rows.some((r: any) => r.name === 'synonyms');
     if (!hasSyn) {
-        console.log("Legacy relationship columns missing; skipping backfill.");
         return;
     }
 
     const entries = await client.execute("SELECT id, synonyms, antonyms, related_entries FROM entries");
-    console.log(`Backfilling relationships for ${entries.rows.length} entries...`);
 
     for (const row of entries.rows) {
         await syncEntryRelationships(client, row.id as string, {

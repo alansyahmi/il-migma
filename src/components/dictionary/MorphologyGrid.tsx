@@ -26,7 +26,7 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
     const isElativeDisabled = (() => {
         const adjMorphology = (entry as any).adjective_morphology || (entry as any).adj_morphology || {};
         if (adjMorphology.has_elative === undefined || adjMorphology.has_elative === null) return false;
-        return !Boolean(adjMorphology.has_elative);
+        return !adjMorphology.has_elative;
     })();
     const visibleText = (value?: string | null) => (hideTheoreticalForms ? stripTheoreticalPrefix(value || '') : (value || ''));
     const hideValue = (value?: string | null, theoretical = false) => hideTheoreticalForms && (theoretical || isTheoretical || shouldHideSurface(value || '', hideTheoreticalForms));

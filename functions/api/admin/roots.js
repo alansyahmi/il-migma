@@ -16,10 +16,8 @@ async function verifyAdmin(request, env) {
 
     // LOCAL DEV OVERRIDE
     const isLocal = request.url.includes('localhost') || request.url.includes('127.0.0.1');
-    console.log('VerifyAdmin Check:', { url: request.url, isLocal, hasSecret: !!env.CLERK_SECRET_KEY });
 
     if (isLocal || !env.CLERK_SECRET_KEY || env.CLERK_SECRET_KEY === 'dummy') {
-        console.log('Admin verify bypass activated');
         return true;
     }
 

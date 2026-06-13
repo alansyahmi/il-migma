@@ -74,7 +74,7 @@ function ChatInterface() {
                 content: reply,
                 timestamp: new Date().toISOString(),
             }]);
-        } catch (e) {
+        } catch {
             setMessages(prev => [...prev, {
                 id: generateId(),
                 role: 'assistant',

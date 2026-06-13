@@ -3,8 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
     Search, Keyboard, Layers, FileText,
     Database, Globe, Settings,
-    ArrowRight, PlusCircle, LayoutDashboard,
-    Edit3
+    ArrowRight, PlusCircle
 } from 'lucide-react';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
@@ -174,19 +173,6 @@ export function Home() {
                             </Link>
                         </Card>
 
-                        {/* Interactive Tools */}
-                        <Card className="p-6 border-none shadow-sm bg-white/60 backdrop-blur-md relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 p-4 text-[#1034A6]/10 group-hover:text-[#1034A6]/20 transition-colors">
-                                <LayoutDashboard size={80} strokeWidth={1.5} />
-                            </div>
-                            <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                                <Edit3 className="text-[#1034A6]" size={20} /> {term('content-and-blog')}
-                            </h3>
-                            <p className="text-sm text-black/60 mb-6">{term('content-blog-desc')}</p>
-                            <Link to="/blog" className="text-[#1034A6] text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                {term('edit-blog')} <ArrowRight size={14} />
-                            </Link>
-                        </Card>
                     </div>
 
                     {/* Bottom Section: Search Preview */}

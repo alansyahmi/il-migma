@@ -1,4 +1,4 @@
-import { generateForeignScriptPronunciation } from '../../lib/foreignScriptPronunciation';
+import { generateForeignScriptPronunciation } from '../../lib/foreignScriptPronunciation.ts';
 
 export type DictionaryEtymologyStep = {
     relationship?: string;

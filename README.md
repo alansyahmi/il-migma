@@ -60,20 +60,9 @@ For contributor-level docs, see:
 - [`docs/import-pipeline.md`](./docs/import-pipeline.md)
 - [`docs/search-api.md`](./docs/search-api.md)
 
-## Screenshots / demo tour
+## Demo tour
 
-> Recommended: replace these with GIFs as workflows stabilize.
-
-| Surface | Preview |
-|---|---|
-| Home | `public/screenshots/home.png` |
-| Search | `public/screenshots/search.png` |
-| Root Search | `public/screenshots/root-search.png` |
-| Conjugator | `public/screenshots/conjugator.png` |
-| Chatbot | `public/screenshots/chatbot.png` |
-| Browse | `public/screenshots/browse.png` |
-| Admin | `public/screenshots/admin.png` |
-| Suggest | `public/screenshots/suggest.png` |
+Beta walkthrough assets are not checked into the repository yet. When the public beta workflow stabilizes, add current screenshots or short GIFs for the main public surfaces: home, search, entry detail, root search, browse, admin, suggestions, and feedback.
 
 ## Local setup
 

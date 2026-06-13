@@ -202,7 +202,7 @@ function buildConjugationTable(
         const attachedPerfectBuilder = recipe.attachedPerfectBuilder ?? recipe.perfType1Builder;
 
         // Attached perfect version (e -> i shift usually) unless overridden
-        let attachedPerfect = attachedPerfectBuilder
+        const attachedPerfect = attachedPerfectBuilder
             ? attachedPerfectBuilder(perfRows[i], i)
             : perfRows[i].replace(/e([^aeiou])$/, "i$1");
 

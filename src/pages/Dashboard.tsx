@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { SignIn, SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
@@ -8,8 +8,7 @@ import { Card, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { TierGate } from '@/components/ui/TierGate';
 import { Tabs, TabContent } from '@/components/ui/Tabs';
-import { Key, Copy, Plus, Trash2, Check, Sparkles, BookMarked, CreditCard } from 'lucide-react';
-import { generateId } from '@/lib/utils';
+import { Sparkles, BookMarked, CreditCard } from 'lucide-react';
 
 
 const DASHBOARD_TABS = [
@@ -54,11 +53,6 @@ function DashboardContent() {
     const activeTab = isDashboardTab(rawTab)
         ? rawTab
         : DEFAULT_DASHBOARD_TAB;
-    const [mockKeys, setMockKeys] = useState([
-        { id: 'k1', name: 'Production', key_prefix: 'im_prod_1', usage_count: 4821, is_active: true, created_at: '2025-01-01' },
-    ]);
-    const [copied, setCopied] = useState<string | null>(null);
-
     useEffect(() => {
         const labels: Record<string, string> = {
             account: t('Account', 'Kont'),
@@ -75,12 +69,6 @@ function DashboardContent() {
         const nextParams = new URLSearchParams(searchParams);
         nextParams.set('tab', nextTab);
         setSearchParams(nextParams);
-    };
-
-    const copyKey = (id: string) => {
-        navigator.clipboard.writeText('im_prod_••••••••••••[masked]');
-        setCopied(id);
-        setTimeout(() => setCopied(null), 2000);
     };
 
     const TIER_LABELS = { basic: 'Basic — Gratis', pro: 'Pro', enterprise: 'Enterprise' };
@@ -161,37 +149,15 @@ function DashboardContent() {
                             <TierGate feature="api_key_management" />
                         ) : (
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between">
+                                <div>
                                     <h3 className="text-sm font-semibold text-[#1034A6]">API Keys</h3>
-                                    <Button size="sm" leftIcon={<Plus size={14} />} onClick={() => {
-                                        setMockKeys(prev => [...prev, {
-                                            id: generateId(), name: 'New Key', key_prefix: 'im_key_' + generateId().slice(0, 6),
-                                            usage_count: 0, is_active: true, created_at: new Date().toISOString().slice(0, 10),
-                                        }]);
-                                    }}>
-                                        Oħloq Key
-                                    </Button>
+                                    <p className="text-sm text-text-muted mt-1">
+                                        API key management will be enabled for approved beta partners once usage limits and billing are finalized.
+                                    </p>
                                 </div>
-                                <div className="space-y-2">
-                                    {mockKeys.map(k => (
-                                        <div key={k.id} className="flex items-center gap-3 p-3 rounded-lg border border-border-light bg-surface-soft">
-                                            <Key size={14} className="text-[#A07030] shrink-0" />
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium text-black">{k.name}</p>
-                                                <p className="text-xs text-gray-400 font-mono">{k.key_prefix}••••••</p>
-                                            </div>
-                                            <span className="text-xs text-[#A07030]">{k.usage_count.toLocaleString()} calls</span>
-                                            <button onClick={() => copyKey(k.id)} className="text-gray-400 hover:text-[#1034A6] transition-colors">
-                                                {copied === k.id ? <Check size={14} className="text-blue-500" /> : <Copy size={14} />}
-                                            </button>
-                                            <button onClick={() => setMockKeys(prev => prev.filter(kk => kk.id !== k.id))}
-                                                className="text-gray-400 hover:text-[#B22222] transition-colors">
-                                                <Trash2 size={14} />
-                                            </button>
-                                        </div>
-                                    ))}
+                                <div className="rounded-lg border border-border-light bg-surface-soft p-4 text-sm text-text-muted">
+                                    No API keys are available for this account yet.
                                 </div>
-                                <p className="text-xs text-text-muted">Rata: €99/xahar + €0.10 / 1k calls wara l-limitu.</p>
                             </div>
                         )}
                     </CardBody>

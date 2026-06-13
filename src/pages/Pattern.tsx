@@ -134,8 +134,6 @@ export function Pattern() {
         minHeight: '100vh',
     };
 
-    if (!id) return <Navigate to="/404" replace />;
-
     const entryGroups = data?.entry_groups?.[selectedMode] ?? [];
     const visibleEntryGroups: PatternDetailGroup[] = entryGroups
         .map((group) => {
@@ -177,6 +175,8 @@ export function Pattern() {
             setSelectedGroupKey('all');
         }
     }, [selectedGroupKey, visibleEntryGroups]);
+
+    if (!id) return <Navigate to="/404" replace />;
 
     const setMode = (nextMode: BrowseViewMode) => {
         const nextParams = new URLSearchParams(searchParams);

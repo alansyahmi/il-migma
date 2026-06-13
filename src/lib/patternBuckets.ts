@@ -446,9 +446,18 @@ export function buildPatternOptions(
 
         if (!cv) return;
         if (posFilters && posTypes.length > 0 && !posTypes.some((pos) => posFilters.includes(pos) || pos === 'all')) return;
-        if (roleFilters && role && !roleFilters.includes(role)) return;
-        if (genderFilters && gender && !genderFilters.includes(gender)) return;
-        if (rolePrefix && role && !role.startsWith(rolePrefix)) return;
+        if (roleFilters) {
+            if (!role) return;
+            if (!roleFilters.includes(role)) return;
+        }
+        if (genderFilters) {
+            if (!gender) return;
+            if (!genderFilters.includes(gender)) return;
+        }
+        if (rolePrefix) {
+            if (!role) return;
+            if (!role.startsWith(rolePrefix)) return;
+        }
 
         const useStandardLabels = mode === 'standard' || mode === 'latinised';
         unique.set(cv, {

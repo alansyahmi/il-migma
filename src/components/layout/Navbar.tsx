@@ -129,7 +129,6 @@ export function Navbar() {
         { label: term('advanced-search'), href: '/advanced-search' },
         { label: term('root-search'), href: '/root-search' },
         { label: term('suggest-entry'), href: '/suggest' },
-        { label: term('blog'), href: '/blog' },
         { label: term('help'), href: '/help' },
     ];
 

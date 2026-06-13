@@ -526,13 +526,18 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
             if (key === 'etymology_chain') {
                 result[key] = normalizeEntryEtymologyChain(parseArrayField(key, val));
             } else if (key === 'definitions') {
-                const normalizedDefinitions = normalizeEntryDefinitions(val).map(def => ({
-                    text_en: String(def.text_en || '').trim(),
-                    text_mt: def.text_mt == null ? null : String(def.text_mt).trim() || null,
-                    register: String(def.register || '').trim(),
-                    nuance: String(def.nuance || '').trim(),
-                    example_sentences: Array.isArray(def.example_sentences) ? def.example_sentences : [],
-                })).filter(def => def.text_en || def.text_mt || def.register || def.nuance);
+                const normalizedDefinitions = normalizeEntryDefinitions(val).map(def => {
+                    const normalized = {
+                        text_en: String(def.text_en || '').trim(),
+                        text_mt: def.text_mt == null ? null : String(def.text_mt).trim() || null,
+                        register: String(def.register || '').trim(),
+                        nuance: String(def.nuance || '').trim(),
+                    } as Record<string, unknown>;
+                    if (Array.isArray(def.example_sentences) && def.example_sentences.length > 0) {
+                        normalized.example_sentences = def.example_sentences;
+                    }
+                    return normalized;
+                }).filter(def => def.text_en || def.text_mt || def.register || def.nuance);
 
                 result[key] = normalizedDefinitions.length > 0
                     ? normalizedDefinitions
@@ -553,25 +558,25 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
         }
     });
 
-    // Noun saves must not carry verb-only fields, even if the form still has
-    // legacy values from older payloads or a previous edit state.
+    // Entry saves must not carry verb morphology fields on the top-level row.
+    // The canonical destination is payload.verb_morphology / verb_morphology.
+    VERB_MORPHOLOGY_DB_FIELD_KEYS.forEach((key) => {
+        delete result[key];
+    });
+    delete result.verb_form;
+    delete result.verb_class;
+    delete result.verb_weak_class;
+    delete result.verb_transitivity;
+    delete result.verb_perfective_3sgm;
+    delete result.verb_imperfective_3sgm;
+    delete result.verb_verbal_noun;
+    delete result.verb_active_ptcp;
+    delete result.verb_passive_ptcp;
+    delete result.verb_vowel_perf;
+    delete result.verb_vowel_impf;
+    delete result.verb_vowel_impv;
+    delete result.verb_type;
     if (pos !== 'verb') {
-        VERB_MORPHOLOGY_DB_FIELD_KEYS.forEach((key) => {
-            delete result[key];
-        });
-        delete result.verb_form;
-        delete result.verb_class;
-        delete result.verb_weak_class;
-        delete result.verb_transitivity;
-        delete result.verb_perfective_3sgm;
-        delete result.verb_imperfective_3sgm;
-        delete result.verb_verbal_noun;
-        delete result.verb_active_ptcp;
-        delete result.verb_passive_ptcp;
-        delete result.verb_vowel_perf;
-        delete result.verb_vowel_impf;
-        delete result.verb_vowel_impv;
-        delete result.verb_type;
         delete result.verb_morphology;
     }
 

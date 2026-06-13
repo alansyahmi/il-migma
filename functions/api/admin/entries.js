@@ -26,7 +26,6 @@ async function verifyAdmin(request, env) {
 
     const url = new URL(request.url);
     const isLocal = url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '::1' || url.hostname === '0.0.0.0' || url.hostname.startsWith('192.168.');
-    console.log(`[AUTH] Verifying admin. Host: ${url.hostname}, isLocal: ${isLocal}`);
     if (isLocal || !env.CLERK_SECRET_KEY || env.CLERK_SECRET_KEY === 'dummy') {
         return true;
     }
@@ -315,19 +314,6 @@ const ENTRY_WRITE_FIELD_ALLOWLIST = new Set([
     'etymology_notes',
     'definitions',
     'usage_examples',
-    'verb_class',
-    'verb_transitivity',
-    'verb_perfective_3sgm',
-    'verb_imperfective_3sgm',
-    'verb_verbal_noun',
-    'verb_vowel_perf',
-    'verb_vowel_impf',
-    'verb_vowel_impv',
-    'verb_active_ptcp',
-    'verb_passive_ptcp',
-    'verb_form',
-    'verb_type',
-    'verb_weak_class',
     'elative_form',
     'participle_type',
     'numeral_type',
@@ -531,7 +517,6 @@ export async function onRequestPut({ request, env }) {
         await ensureTagsTables(client);
         await ensureStemsTable(client);
 
-        console.log(`[PUT] Starting update for ${id}. Body keys:`, Object.keys(body));
         await persistEntryRecord(client, {
             body,
             entryColumns: columns,
@@ -540,7 +525,6 @@ export async function onRequestPut({ request, env }) {
             previousId: shouldRename ? id : null,
         });
 
-        console.log(`[PUT] Update completed for ${requestedId || id}`);
         return json({ id: requestedId || id, updated: true, renamed: shouldRename });
 
     } catch (e) {

@@ -7,6 +7,7 @@ import {
     getNumeralRoleLabel,
     hasVisibleNumeralSurface,
     getNumeralShortAttributiveRowLabel,
+    mergeNumeralFamilyEntries,
     NUMERAL_MORPHOLOGY_DB_FIELD_KEYS,
     normalizeNumeralMorphologyInput,
     shouldCombineMasculineAndShortAttributive,
@@ -332,6 +333,67 @@ const run = () => {
     assertEq(rbieghTopLevelRoleDisplay.distributive[0]?.marker, 'plain', 'top-level-only distributive own row should be plain');
     assertEq(rbieghTopLevelRoleDisplay.multiplier[0]?.value, 'rbiegħi', 'top-level-only distributive should show sibling multiplier rows');
     assertEq(rbieghTopLevelRoleDisplay.multiplier[0]?.entryId, 'num-rbieghi', 'top-level-only distributive should link sibling multiplier rows');
+
+    const mergedKwartFamily = mergeNumeralFamilyEntries(
+        [
+            {
+                id: 'num-erbgħa',
+                headword: 'erbgħa',
+                pos: 'numeral',
+                root_consonants: 'r-b-għ',
+                numeral_type: 'cardinal',
+                relationship_source: 'reciprocal',
+                numeral_morphology: {
+                    numeral_type: 'cardinal',
+                    form_attributive_short: "erba'",
+                    form_attributive_long: 'erbat',
+                    ordinal_form: "raba'",
+                    fractional_form: 'kwart',
+                    multiplier_form: 'rbiegħi',
+                    distributive_form: 'rbiegħ',
+                },
+            },
+            { id: 'noun-kwart', headword: 'kwart', pos: 'noun', relationship_source: 'explicit' },
+        ],
+        [
+            {
+                id: 'num-erbgħa',
+                headword: 'erbgħa',
+                pos: 'numeral',
+                root_consonants: 'r-b-għ',
+                numeral_type: 'cardinal',
+                cv_pattern: 'vCCvC',
+                relationship_source: 'same_root',
+                numeral_morphology: { numeral_type: 'cardinal' },
+            },
+            { id: 'num-erbat', headword: 'erbat', pos: 'numeral', root_consonants: 'r-b-għ', numeral_type: 'attributive_long', cv_pattern: 'vCCvC', relationship_source: 'same_root' },
+            { id: 'num-raba', headword: "raba'", pos: 'numeral', root_consonants: 'r-b-għ', numeral_type: 'ordinal', cv_pattern: 'CvCv', relationship_source: 'same_root' },
+            { id: 'num-rbiegh', headword: 'rbiegħ', pos: 'numeral', root_consonants: 'r-b-għ', numeral_type: 'distributive', cv_pattern: 'CCieC', relationship_source: 'same_root' },
+            { id: 'num-rbieghi', headword: 'rbiegħi', pos: 'numeral', root_consonants: 'r-b-għ', numeral_type: 'multiplier', cv_pattern: 'CCieCi', relationship_source: 'same_root' },
+        ],
+    );
+    const mergedKwartCardinal = mergedKwartFamily.find((item) => item.id === 'num-erbgħa');
+    assertEq(mergedKwartCardinal?.relationship_source, 'reciprocal', 'reciprocal family links should outrank same-root duplicates');
+    assertEq(mergedKwartCardinal?.cv_pattern, 'vCCvC', 'same-root duplicates should enrich shallow reciprocal family entries');
+    assertEq(mergedKwartFamily.some((item) => item.id === 'noun-kwart'), true, 'generic merge should preserve non-numeral explicit related entries for thesaurus display');
+
+    const kwartImmediateDisplay = buildNumeralMorphologyDisplayForms('kwart', 'r-b-għ', {
+        numeral_type: 'fractional',
+        cv_pattern: 'CCvCC',
+    }, mergedKwartFamily);
+    assertEq(kwartImmediateDisplay.cardinal[0]?.value, 'erbgħa', 'kwart should receive its erbgħa family cardinal without async hydration');
+    assertEq(kwartImmediateDisplay.cardinal[0]?.entryId, 'num-erbgħa', 'kwart cardinal row should link to erbgħa');
+    assertEq(kwartImmediateDisplay.cardinal[0]?.pattern, 'vCCvC', 'kwart cardinal row should use hydrated erbgħa pattern');
+    assertEq(kwartImmediateDisplay.fractional[0]?.value, 'kwart', 'kwart should render itself as the fractional row');
+    assertEq(kwartImmediateDisplay.ordinal[0]?.entryId, 'num-raba', 'kwart should receive ordinal siblings from the immediate family payload');
+    assertEq(kwartImmediateDisplay.attributive_long[0]?.entryId, 'num-erbat', 'kwart should receive attributive siblings from the immediate family payload');
+    assertEq(kwartImmediateDisplay.multiplier[0]?.entryId, 'num-rbieghi', 'kwart should receive multiplier siblings from the immediate family payload');
+    assertEq(kwartImmediateDisplay.distributive[0]?.entryId, 'num-rbiegh', 'kwart should receive distributive siblings from the immediate family payload');
+    assertEq(
+        Object.values(kwartImmediateDisplay).flat().some((item) => item?.entryId === 'noun-kwart'),
+        false,
+        'non-numeral related entries should be ignored by numeral family role rows',
+    );
 
     const sameRootInferredFamilyDisplay = buildNumeralMorphologyDisplayForms('erbgħa', 'r-b-għ', {
         numeral_type: 'cardinal',

@@ -356,9 +356,12 @@ const run = () => {
     assertEq(stemEntryPayload.vowel_set_pl, 'i-ie', 'stem-led payload should keep plural vowel set');
     assertEq(stemEntryPayload.vowel_set_opp, 'e-a', 'stem-led payload should keep opposite-gender vowel set');
     assertEq(stemEntryPayload.vowel_set_dual, 'i-e', 'stem-led payload should keep dual vowel set');
-    assertEq(stemEntryPayload.verb_vowel_perf, 'i-a', 'stem-led verb payload should keep perfect vowel set');
-    assertEq(stemEntryPayload.verb_vowel_impf, 'u-a', 'stem-led verb payload should keep imperfect vowel set');
-    assertEq(stemEntryPayload.verb_vowel_impv, 'i-u', 'stem-led verb payload should keep imperative vowel set');
+    assertEq(stemEntryPayload.verb_morphology.vowel_set_perf, 'i-a', 'stem-led verb payload should keep perfect vowel set in nested morphology');
+    assertEq(stemEntryPayload.verb_morphology.vowel_set_impf, 'u-a', 'stem-led verb payload should keep imperfect vowel set in nested morphology');
+    assertEq(stemEntryPayload.verb_morphology.vowel_set_impv, 'i-u', 'stem-led verb payload should keep imperative vowel set in nested morphology');
+    assert(!Object.prototype.hasOwnProperty.call(stemEntryPayload, 'verb_vowel_perf'), 'stem-led verb payload should not persist legacy perfect vowel field');
+    assert(!Object.prototype.hasOwnProperty.call(stemEntryPayload, 'verb_vowel_impf'), 'stem-led verb payload should not persist legacy imperfect vowel field');
+    assert(!Object.prototype.hasOwnProperty.call(stemEntryPayload, 'verb_vowel_impv'), 'stem-led verb payload should not persist legacy imperative vowel field');
     assertEq(JSON.parse(stemEntryPayload.zokk_morphology).stem_string, 'serv', 'stem-led payload should keep zokk morphology');
 
     const displayChain = normalizeDisplayEtymologyChain([{

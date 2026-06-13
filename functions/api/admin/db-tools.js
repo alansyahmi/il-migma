@@ -14,6 +14,7 @@ const DEFAULT_BUNDLE_PRESET = 'entry-linking';
 export const EXPORT_BUNDLE_PRESETS = Object.freeze({
     'entry-linking': Object.freeze([
         'entries',
+        'definitions',
         'phonetics',
         'dialect_variants',
         'subentries',

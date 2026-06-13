@@ -39,7 +39,7 @@ function SemmejInterface() {
         try {
             const result = await generateMalteseName(concept, roots ? roots.split(',').map(r => r.trim()) : undefined);
             setSuggestions(result.suggestions);
-        } catch (e) {
+        } catch {
             setSuggestions([{ word: 'Żball', rationale: 'Żball tekniku. Prova mill-ġdid.' }]);
         } finally {
             setLoading(false);

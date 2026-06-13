@@ -246,8 +246,14 @@ const run = () => {
     assert.equal(verbPayload.verb_morphology.form, 'II');
     assert.equal(verbPayload.verb_morphology.class, 'strong');
     assert.equal(verbPayload.verb_morphology.is_imala_blocked, true, 'verb payload should persist entry-specific imala override in nested morphology');
+    assert.equal(verbPayload.verb_morphology.vowel_set_perf, 'i-e', 'verb payload should persist perfect vowel set in nested morphology');
+    assert.equal(verbPayload.verb_morphology.vowel_set_impf, 'i-e', 'verb payload should persist imperfect vowel set in nested morphology');
+    assert.equal(verbPayload.verb_morphology.vowel_set_impv, 'i-e', 'verb payload should persist imperative vowel set in nested morphology');
     assert.ok(!Object.prototype.hasOwnProperty.call(verbPayload, 'verb_form'), 'legacy verb_form should not be persisted on entries payloads');
     assert.ok(!Object.prototype.hasOwnProperty.call(verbPayload, 'verb_class'), 'legacy verb_class should not be persisted on entries payloads');
+    assert.ok(!Object.prototype.hasOwnProperty.call(verbPayload, 'verb_vowel_perf'), 'legacy verb_vowel_perf should not be persisted on entries payloads');
+    assert.ok(!Object.prototype.hasOwnProperty.call(verbPayload, 'verb_vowel_impf'), 'legacy verb_vowel_impf should not be persisted on entries payloads');
+    assert.ok(!Object.prototype.hasOwnProperty.call(verbPayload, 'verb_vowel_impv'), 'legacy verb_vowel_impv should not be persisted on entries payloads');
 
     const nonWeakPayload = buildEntryPayload({
         pos: 'verb',

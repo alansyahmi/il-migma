@@ -72,8 +72,9 @@ export function EntryManager() {
             if (loadRequestId.current !== requestId) return;
             setError(e instanceof Error ? e.message : String(e));
         } finally {
-            if (loadRequestId.current !== requestId) return;
-            setLoading(false);
+            if (loadRequestId.current === requestId) {
+                setLoading(false);
+            }
         }
     }, [getToken, query, selectedPos]);
 

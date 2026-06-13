@@ -529,17 +529,115 @@ function getNestedLinkedNumeralEntries(entry: LinkedNumeralEntry): LinkedNumeral
         .filter((item): item is LinkedNumeralEntry => Boolean(item));
 }
 
+function getNumeralFamilyRelationshipSourcePriority(entry: LinkedNumeralEntry): number {
+    const source = String((entry as any).relationship_source || '').trim().toLowerCase();
+    if (source === 'explicit' || source === 'manual') return 3;
+    if (source === 'reciprocal') return 2;
+    if (source === 'same_root') return 1;
+    return 0;
+}
+
+function hasMeaningfulNumeralMergeValue(value: unknown): boolean {
+    return value !== undefined && value !== null && String(value).trim() !== '';
+}
+
+function mergeNumeralEntryData(primary: LinkedNumeralEntry, secondary: LinkedNumeralEntry): LinkedNumeralEntry {
+    const result: LinkedNumeralEntry = { ...secondary };
+    Object.entries(primary as Record<string, unknown>).forEach(([key, value]) => {
+        if (key === 'numeral_morphology') return;
+        if (hasMeaningfulNumeralMergeValue(value)) {
+            (result as any)[key] = value;
+        }
+    });
+
+    const secondaryMorphology = secondary.numeral_morphology && typeof secondary.numeral_morphology === 'object'
+        ? secondary.numeral_morphology
+        : {};
+    const primaryMorphology = primary.numeral_morphology && typeof primary.numeral_morphology === 'object'
+        ? primary.numeral_morphology
+        : {};
+    const mergedMorphology = { ...secondaryMorphology };
+    Object.entries(primaryMorphology as Record<string, unknown>).forEach(([key, value]) => {
+        if (hasMeaningfulNumeralMergeValue(value)) {
+            (mergedMorphology as any)[key] = value;
+        }
+    });
+    if (Object.keys(mergedMorphology).length > 0) {
+        result.numeral_morphology = mergedMorphology as LinkedNumeralEntry['numeral_morphology'];
+    }
+
+    return result;
+}
+
+function getNumeralFamilyEntryAliases(entry: LinkedNumeralEntry): string[] {
+    const aliases = [
+        (entry as any).id,
+        (entry as any).target_id,
+        (entry as any).entry_id,
+        normalizeNumeralLookupKey(String(entry.headword || '')),
+    ]
+        .map((value) => String(value || '').trim().toLowerCase())
+        .filter(Boolean);
+
+    return Array.from(new Set(aliases));
+}
+
+function isRicherLinkedNumeralEntry(next: LinkedNumeralEntry, current: LinkedNumeralEntry) {
+    const nextRole = getExplicitLinkedNumeralRole(next);
+    const currentRole = getExplicitLinkedNumeralRole(current);
+    if (nextRole && !currentRole) return true;
+    if (next.numeral_morphology && !current.numeral_morphology) return true;
+    if (extractLinkedEntryPattern(next) && !extractLinkedEntryPattern(current)) return true;
+    if (getLinkedNumeralRootKey(next) && !getLinkedNumeralRootKey(current)) return true;
+    return false;
+}
+
+export function mergeNumeralFamilyEntries(...entryLists: LinkedNumeralEntry[][]): LinkedNumeralEntry[] {
+    const merged: LinkedNumeralEntry[] = [];
+    const indexes = new Map<string, number>();
+
+    const indexAliases = (entry: LinkedNumeralEntry, index: number) => {
+        getNumeralFamilyEntryAliases(entry).forEach((alias) => {
+            if (!indexes.has(alias)) indexes.set(alias, index);
+        });
+    };
+
+    const append = (rawEntry: LinkedNumeralEntry | null) => {
+        const entry = unwrapLinkedNumeralEntry(rawEntry);
+        if (!entry) return;
+        const aliases = getNumeralFamilyEntryAliases(entry);
+        if (aliases.length === 0) return;
+
+        const existingIndex = aliases
+            .map((alias) => indexes.get(alias))
+            .find((index): index is number => index !== undefined);
+
+        if (existingIndex === undefined) {
+            merged.push(entry);
+            indexAliases(entry, merged.length - 1);
+            return;
+        }
+
+        const current = merged[existingIndex];
+        const nextPriority = getNumeralFamilyRelationshipSourcePriority(entry);
+        const currentPriority = getNumeralFamilyRelationshipSourcePriority(current);
+        const nextWins = nextPriority > currentPriority
+            || (nextPriority === currentPriority && isRicherLinkedNumeralEntry(entry, current));
+        const next = nextWins
+            ? mergeNumeralEntryData(entry, current)
+            : mergeNumeralEntryData(current, entry);
+
+        merged[existingIndex] = next;
+        indexAliases(next, existingIndex);
+    };
+
+    entryLists.forEach((list) => (list || []).forEach(append));
+    return merged;
+}
+
 function expandLinkedNumeralEntries(linkedEntries: LinkedNumeralEntry[]): LinkedNumeralEntry[] {
     const expanded: LinkedNumeralEntry[] = [];
     const indexes = new Map<string, number>();
-    const isRicherEntry = (next: LinkedNumeralEntry, current: LinkedNumeralEntry) => {
-        const nextRole = getExplicitLinkedNumeralRole(next);
-        const currentRole = getExplicitLinkedNumeralRole(current);
-        if (nextRole && !currentRole) return true;
-        if (next.numeral_morphology && !current.numeral_morphology) return true;
-        if (extractLinkedEntryPattern(next) && !extractLinkedEntryPattern(current)) return true;
-        return false;
-    };
     const append = (entry: LinkedNumeralEntry | null) => {
         if (!entry) return;
         const key = String(entry.id || normalizeNumeralLookupKey(entry.headword || '')).toLowerCase().trim();
@@ -547,7 +645,7 @@ function expandLinkedNumeralEntries(linkedEntries: LinkedNumeralEntry[]): Linked
 
         const existingIndex = indexes.get(key);
         if (existingIndex !== undefined) {
-            if (isRicherEntry(entry, expanded[existingIndex])) {
+            if (isRicherLinkedNumeralEntry(entry, expanded[existingIndex])) {
                 expanded[existingIndex] = { ...expanded[existingIndex], ...entry };
             }
             return;

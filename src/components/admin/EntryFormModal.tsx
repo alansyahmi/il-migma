@@ -1369,96 +1369,114 @@ const NumeralFields = ({
                 />
             </Suspense>
 
-            {!isCardinal ? null : (
-                <>
+            {isCardinal && (
+                <details className="group rounded-xl border border-slate-200 bg-white/75 shadow-sm">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3.5 py-3 text-left">
+                        <div>
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-700">
+                                {t('Stored fallback forms', 'Forom riżervi maħżuna')}
+                            </div>
+                            <div className="mt-0.5 text-[11px] leading-snug text-slate-500">
+                                {t('Used when no linked numeral entry exists, and for role inference.', 'Jintużaw meta ma teżistix entrata marbuta, u għall-għarfien tar-rwol.')}
+                            </div>
+                        </div>
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-600 group-open:hidden">
+                            {t('Show', 'Uri')}
+                        </span>
+                        <span className="hidden text-[11px] font-semibold uppercase tracking-wider text-blue-600 group-open:inline">
+                            {t('Hide', 'Aħbi')}
+                        </span>
+                    </summary>
 
-            <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>{t('Short Attributive', 'Attributtiv Qasir')}</label>
-                    <input className={styles.inp} value={form.form_attributive_short || ''} onChange={e => set('form_attributive_short', e.target.value)} />
-                </div>
-                <div>
-                    <label className={styles.label}>{t('Long Attributive', 'Attributtiv Twil')}</label>
-                    <input className={styles.inp} value={form.form_attributive_long || ''} onChange={e => set('form_attributive_long', e.target.value)} />
-                </div>
-            </div>
+                    <div className="space-y-4 border-t border-slate-100 px-3.5 py-4">
+                        <div className={styles.grid}>
+                            <div>
+                                <label className={styles.label}>{t('Short Attributive', 'Attributtiv Qasir')}</label>
+                                <input className={styles.inp} value={form.form_attributive_short || ''} onChange={e => set('form_attributive_short', e.target.value)} />
+                            </div>
+                            <div>
+                                <label className={styles.label}>{t('Long Attributive', 'Attributtiv Twil')}</label>
+                                <input className={styles.inp} value={form.form_attributive_long || ''} onChange={e => set('form_attributive_long', e.target.value)} />
+                            </div>
+                        </div>
 
-            <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>{t('Ordinal Form', 'Ordinal')}</label>
-                    <input className={styles.inp} value={form.numeral_ordinal || ''} onChange={e => set('numeral_ordinal', e.target.value)} />
-                </div>
-                <div>
-                    <label className={styles.label}>{t('Adverbial Form', 'Avverbjali')}</label>
-                    <input className={styles.inp} value={form.numeral_adverbial || ''} onChange={e => set('numeral_adverbial', e.target.value)} />
-                </div>
-            </div>
+                        <div className={styles.grid}>
+                            <div>
+                                <label className={styles.label}>{t('Ordinal Form', 'Ordinal')}</label>
+                                <input className={styles.inp} value={form.numeral_ordinal || ''} onChange={e => set('numeral_ordinal', e.target.value)} />
+                            </div>
+                            <div>
+                                <label className={styles.label}>{t('Adverbial Form', 'Avverbjali')}</label>
+                                <input className={styles.inp} value={form.numeral_adverbial || ''} onChange={e => set('numeral_adverbial', e.target.value)} />
+                            </div>
+                        </div>
 
-            <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>{t('Fractional Form', 'Frazzjonali')}</label>
-                    <input className={styles.inp} value={form.numeral_fractional || ''} onChange={e => set('numeral_fractional', e.target.value)} />
-                </div>
-                <div>
-                    <label className={styles.label}>{t('Multiplier Form', 'Multiplikatur')}</label>
-                    <input className={styles.inp} value={form.numeral_multiplier || ''} onChange={e => set('numeral_multiplier', e.target.value)} />
-                </div>
-            </div>
+                        <div className={styles.grid}>
+                            <div>
+                                <label className={styles.label}>{t('Fractional Form', 'Frazzjonali')}</label>
+                                <input className={styles.inp} value={form.numeral_fractional || ''} onChange={e => set('numeral_fractional', e.target.value)} />
+                            </div>
+                            <div>
+                                <label className={styles.label}>{t('Multiplier Form', 'Multiplikatur')}</label>
+                                <input className={styles.inp} value={form.numeral_multiplier || ''} onChange={e => set('numeral_multiplier', e.target.value)} />
+                            </div>
+                        </div>
 
-            <div>
-                <label className={styles.label}>{t('Distributive Form', 'Distributtiv')}</label>
-                <input className={styles.inp} value={form.numeral_distributive || ''} onChange={e => set('numeral_distributive', e.target.value)} />
-            </div>
+                        <div>
+                            <label className={styles.label}>{t('Distributive Form', 'Distributtiv')}</label>
+                            <input className={styles.inp} value={form.numeral_distributive || ''} onChange={e => set('numeral_distributive', e.target.value)} />
+                        </div>
 
-            <div className={styles.grid}>
-                <div>
-                    <PatternTagField
-                        label={t('Short Attributive Pattern', 'Mudell Attributtiv Qasir')}
-                        value={form.form_attributive_short_pattern || ''}
-                        onChange={v => set('form_attributive_short_pattern', v)}
-                        placeholder="e.g. CVCVC"
-                        presets={options?.patterns}
-                        styles={styles}
-                        t={t}
-                    />
-                </div>
-                <div>
-                    <PatternTagField
-                        label={t('Plural Pattern', 'Mudell Plural')}
-                        value={form.form_plural_pattern || ''}
-                        onChange={v => set('form_plural_pattern', v)}
-                        placeholder="e.g. CVCVC"
-                        presets={options?.plural_patterns || options?.patterns}
-                        styles={styles}
-                        t={t}
-                    />
-                </div>
-            </div>
+                        <div className={styles.grid}>
+                            <div>
+                                <PatternTagField
+                                    label={t('Short Attributive Pattern', 'Mudell Attributtiv Qasir')}
+                                    value={form.form_attributive_short_pattern || ''}
+                                    onChange={v => set('form_attributive_short_pattern', v)}
+                                    placeholder="e.g. CVCVC"
+                                    presets={options?.patterns}
+                                    styles={styles}
+                                    t={t}
+                                />
+                            </div>
+                            <div>
+                                <PatternTagField
+                                    label={t('Plural Pattern', 'Mudell Plural')}
+                                    value={form.form_plural_pattern || ''}
+                                    onChange={v => set('form_plural_pattern', v)}
+                                    placeholder="e.g. CVCVC"
+                                    presets={options?.plural_patterns || options?.patterns}
+                                    styles={styles}
+                                    t={t}
+                                />
+                            </div>
+                        </div>
 
-            <VowelSetRow
-                form={form}
-                set={set}
-                t={t}
-                styles={styles}
-                onFocus={onFocus}
-                insertChar={insertChar}
-                suggestions={suggestions}
-                fields={[
-                    { key: 'vowel_set_sg', label: 'Vowel Set (Singular)', placeholder: 'e.g. i-a' },
-                    { key: 'vowel_set_opp', label: 'Vowel Set (Opp. Gender)', placeholder: 'e.g. i-a' },
-                    { key: 'vowel_set_dual', label: 'Vowel Set (Dual)', placeholder: 'e.g. i-e' },
-                    { key: 'vowel_set_pl', label: 'Vowel Set (Plural)', placeholder: 'e.g. i-ie' }
-                ]}
-            />
+                        <VowelSetRow
+                            form={form}
+                            set={set}
+                            t={t}
+                            styles={styles}
+                            onFocus={onFocus}
+                            insertChar={insertChar}
+                            suggestions={suggestions}
+                            fields={[
+                                { key: 'vowel_set_sg', label: 'Vowel Set (Singular)', placeholder: 'e.g. i-a' },
+                                { key: 'vowel_set_opp', label: 'Vowel Set (Opp. Gender)', placeholder: 'e.g. i-a' },
+                                { key: 'vowel_set_dual', label: 'Vowel Set (Dual)', placeholder: 'e.g. i-e' },
+                                { key: 'vowel_set_pl', label: 'Vowel Set (Plural)', placeholder: 'e.g. i-ie' }
+                            ]}
+                        />
 
-            <PluralFormsEditor
-                rows={pluralRows}
-                onChange={updatePluralRows}
-                t={t}
-                styles={styles}
-                pluralPatterns={options?.plural_patterns}
-            />
-                </>
+                        <PluralFormsEditor
+                            rows={pluralRows}
+                            onChange={updatePluralRows}
+                            t={t}
+                            styles={styles}
+                            pluralPatterns={options?.plural_patterns}
+                        />
+                    </div>
+                </details>
             )}
         </div>
         );
@@ -1902,7 +1920,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 const res = await adminCheckIdExists(token, 'entries', form.id);
                 if (requestSeq !== idCheckSeqRef.current) return;
                 setIdExists(res.exists);
-            } catch { }
+            } catch {
+                setIdExists(null);
+            }
         }, 500);
         return () => clearTimeout(timer);
     }, [form.id, getToken, entry?.id]);

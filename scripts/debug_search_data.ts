@@ -9,7 +9,7 @@ async function checkData() {
     console.log(JSON.stringify(res.rows, null, 2));
 }
 
-checkData().catch(e => {
+checkData().catch(() => {
     console.error("Query failed, likely due to missing column. Trying a simpler query...");
     const db = createClient({ url: tursoUrl, authToken: dbToken });
     db.execute("SELECT headword, pos FROM entries WHERE headword = 'sofor' OR headword = 'isfar'")

@@ -4,12 +4,12 @@ import { Instagram, Linkedin } from 'lucide-react';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 
 const getInfoCol1 = (term: (key: string) => string) => [
-    { label: term('maltese-alphabets'), href: '/blog/alphabets' },
-    { label: term('morphology'), href: '/blog/morphology' },
+    { label: term('advanced-search'), href: '/advanced-search' },
+    { label: term('root-search'), href: '/root-search' },
 ];
 const getInfoCol2 = (term: (key: string) => string) => [
-    { label: term('terminologies'), href: '/blog/terminologies' },
-    { label: term('dialects'), href: '/blog/dialects' },
+    { label: term('browse-entries'), href: '/browse' },
+    { label: term('submit-feedback'), href: '/feedback' },
 ];
 const getContributeCol1 = (term: (key: string) => string) => [
     { label: term('suggest-entry'), href: '/suggest' },

@@ -15,9 +15,9 @@ export interface EtymologyBaseStep {
     definition: string;
 }
 
-export interface RootEtymology extends EtymologyBaseStep {}
+export type RootEtymology = EtymologyBaseStep;
 
-export interface StemEtymology extends EtymologyBaseStep {}
+export type StemEtymology = EtymologyBaseStep;
 
 export interface EntryEtymology extends EtymologyBaseStep {
     pronunciation: string;
@@ -86,7 +86,7 @@ export function normalizeRootGloss(gloss: any): RootGloss[] {
         }
 
         return [{ en: String(parsed), mt: '' }];
-    } catch (e) {
+    } catch {
         // Fallback for non-JSON strings
         return [{ en: String(gloss), mt: '' }];
     }
@@ -112,7 +112,7 @@ export function normalizeRootRelationships(rel: any): any[] {
     try {
         const parsed = typeof rel === 'string' ? JSON.parse(rel) : rel;
         return Array.isArray(parsed) ? parsed : [];
-    } catch (e) {
+    } catch {
         return [];
     }
 }
@@ -165,7 +165,7 @@ export function normalizeStemMorphology(zokk: any, defaultStem = ''): StemMorpho
             root: parsed.root ? String(parsed.root) : null,
             agentive_suffix: parsed.agentive_suffix ? String(parsed.agentive_suffix) : null
         };
-    } catch (e) {
+    } catch {
         return defaultVal;
     }
 }
@@ -186,7 +186,9 @@ export function normalizeStemGloss(gloss: any): StemGloss[] {
             }
             return parsed.map(s => ({ en: String(s), mt: '' }));
         }
-    } catch { }
+    } catch {
+        return [{ en: String(gloss), mt: '' }];
+    }
     return [{ en: String(gloss), mt: '' }];
 }
 
@@ -237,24 +239,25 @@ function normalizeEntryDefinition(def: any): EntryDefinition[] {
     const nuance = String(def?.nuance ?? '').trim();
     const exampleSentences = Array.isArray(def?.example_sentences) ? def.example_sentences : [];
     const count = Math.max(textEnParts.length, textMtParts.length);
-
-    if (count <= 1) {
-        return [{
-            text_en: textEnParts[0] || '',
-            text_mt: normalizeNullableText(textMtParts[0]),
+    const buildDefinition = (index: number): EntryDefinition => {
+        const normalized: EntryDefinition = {
+            text_en: textEnParts[index] || '',
+            text_mt: normalizeNullableText(textMtParts[index]),
             register,
             nuance,
-            example_sentences: exampleSentences,
-        }];
+        };
+        const examples = index === 0 ? exampleSentences : [];
+        if (examples.length > 0) {
+            normalized.example_sentences = examples;
+        }
+        return normalized;
+    };
+
+    if (count <= 1) {
+        return [buildDefinition(0)];
     }
 
-    return Array.from({ length: count }, (_, index) => ({
-        text_en: textEnParts[index] || '',
-        text_mt: normalizeNullableText(textMtParts[index]),
-        register,
-        nuance,
-        example_sentences: index === 0 ? exampleSentences : [],
-    }));
+    return Array.from({ length: count }, (_, index) => buildDefinition(index));
 }
 
 export function normalizeEntryDefinitions(definitions: any): EntryDefinition[] {
@@ -290,7 +293,9 @@ export function normalizeStemTags(tags: any): string[] {
             try {
                 const parsed = JSON.parse(trimmed);
                 if (Array.isArray(parsed)) return parsed.map(t => String(t)).filter(Boolean);
-            } catch { }
+            } catch {
+                return trimmed.split(',').map(t => t.trim()).filter(Boolean);
+            }
         }
         return trimmed.split(',').map(t => t.trim()).filter(Boolean);
     }
