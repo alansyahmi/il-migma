@@ -199,13 +199,13 @@ export const POS_FEATURES: Record<string, string[]> = {
         ...COMMON_FIELDS, 'is_inflectable', 'plural_forms', 'inflections_pl', 'form_plural_pattern'
     ],
     'particle': [
-        ...COMMON_FIELDS
+        ...COMMON_FIELDS, 'is_inflectable', 'plural_forms', 'inflections_pl', 'form_plural_pattern'
     ],
     'article': [
         ...COMMON_FIELDS
     ],
     'interjection': [
-        ...COMMON_FIELDS
+        ...COMMON_FIELDS, 'is_inflectable', 'plural_forms', 'inflections_pl', 'form_plural_pattern'
     ],
     'conjunction': [
         ...COMMON_FIELDS, 'is_inflectable', 'plural_forms', 'inflections_pl', 'form_plural_pattern'

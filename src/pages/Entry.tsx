@@ -5397,8 +5397,8 @@ export function FunctionWordEntryView({
         return { value: result, theoretical: false };
     };
 
-    const pluralBase = (isPronoun || pos === 'preposition' || pos === 'conjunction') ? (inflectionPlurals[0] || '') : '';
-    const showPluralColumn = (isPronoun || pos === 'preposition' || pos === 'conjunction') && !!pluralBase;
+    const pluralBase = (isPronoun || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') ? (inflectionPlurals[0] || '') : '';
+    const showPluralColumn = (isPronoun || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') && !!pluralBase;
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -5590,7 +5590,7 @@ export function FunctionWordEntryView({
                             </div>
 
                             <div className="flex-1 min-w-0 w-full space-y-12">
-                                {!isInterjection && hasInflection && (
+                                {hasInflection && (
                                     <div className="w-full overflow-x-auto">
                                         <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
                                             {term('inflection-table')}

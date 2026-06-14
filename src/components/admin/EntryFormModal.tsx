@@ -2345,7 +2345,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     };
 
     const normalizedPos = useMemo(() => normalizeEntryPos(form.pos) || form.pos?.toLowerCase() || '', [form.pos]);
-    const isInflectedFunctionPos = ['pronoun', 'adverb', 'preposition', 'particle', 'article', 'conjunction'].includes(normalizedPos);
+    const isInflectedFunctionPos = ['pronoun', 'adverb', 'preposition', 'particle', 'article', 'conjunction', 'interjection'].includes(normalizedPos);
 
     useEffect(() => {
         if (normalizedPos !== 'verb') return;
@@ -2778,7 +2778,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 />
             )}
 
-            {(normalizedPos === 'pronoun' || normalizedPos === 'preposition' || normalizedPos === 'conjunction') && !!form.is_inflectable && (
+            {(normalizedPos === 'pronoun' || normalizedPos === 'preposition' || normalizedPos === 'conjunction' || normalizedPos === 'particle' || normalizedPos === 'interjection') && !!form.is_inflectable && (
                 <PronounFields
                     form={form}
                     set={set}
@@ -2877,7 +2877,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 />
             )}
 
-            {isInflectedFunctionPos && !form.is_inflectable && normalizedPos !== 'interjection' && (
+            {isInflectedFunctionPos && !form.is_inflectable && (
                 <p className="text-xs text-black/50 italic">
                     {t('No morphology fields when inflection is disabled.', 'L-ebda oqsma ta\' morfoloġija meta l-inflessjoni hija mitfija.')}
                 </p>
