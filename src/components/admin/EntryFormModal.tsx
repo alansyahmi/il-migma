@@ -2778,7 +2778,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 />
             )}
 
-            {normalizedPos === 'pronoun' && !!form.is_inflectable && (
+            {(normalizedPos === 'pronoun' || normalizedPos === 'preposition') && !!form.is_inflectable && (
                 <PronounFields
                     form={form}
                     set={set}

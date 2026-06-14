@@ -5414,8 +5414,31 @@ export function generateRootForms(
     const [pv1 = "a", pv2 = "a"] = pvSet.split("-");
     const [ipv1 = "i", ipv2 = "a"] = ipvSet.split("-");
 
-    const strength = strengthStr.toLowerCase();
-    const weakClass = weakClassStr?.toLowerCase();
+    let strength = strengthStr.toLowerCase();
+    let weakClass = weakClassStr?.toLowerCase();
+
+    // Auto-detect strength/weakClass from consonants if it's classified as strong but contains weak/geminated characteristics
+    if (strength === "strong") {
+        if (arr.length === 3) {
+            if (C3 === "j" || C3 === "w") {
+                strength = "weak";
+                weakClass = "defective";
+            } else if (C2 === "j" || C2 === "w") {
+                strength = "weak";
+                weakClass = "hollow";
+            } else if (C1 === "w") {
+                strength = "weak";
+                weakClass = "assimilative";
+            } else if (C2 === C3 && C2 !== "") {
+                strength = "geminated";
+            }
+        } else if (arr.length === 4) {
+            if (C4 === "j" || C4 === "w") {
+                strength = "weak";
+                weakClass = "defective";
+            }
+        }
+    }
 
     if (arr.length === 4) {
         if (strength === "weak" && weakClass === "defective") {

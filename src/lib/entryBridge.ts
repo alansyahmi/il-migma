@@ -573,7 +573,7 @@ function buildParticipleSource(row: Record<string, unknown>) {
 }
 
 function deriveInflections(row: Record<string, unknown>, pos: string) {
-    if (pos === 'noun') {
+    if (pos === 'noun' || pos === 'pronoun' || pos === 'preposition') {
         return pickPluralRows(
             { forms: row.nm_plural_forms, patterns: row.nm_plural_pattern },
             { forms: row.plural_forms, patterns: row.form_plural_pattern },
@@ -956,7 +956,7 @@ export function hydrateEntryRow(row: Record<string, unknown> | undefined | null)
 
     if (pos === 'verb') {
         applyVerbMorphologyCompatibility(payload, payload, buildVerbSource(row), payload);
-    } else if (pos === 'noun') {
+    } else if (pos === 'noun' || pos === 'pronoun' || pos === 'preposition') {
         applyNounMorphologyCompatibility(payload, payload, buildNounSource(row));
     } else if (pos === 'adjective') {
         applyAdjMorphologyCompatibility(payload, payload, buildAdjSource(row));

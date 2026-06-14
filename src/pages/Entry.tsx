@@ -89,6 +89,21 @@ function buildDisplayEtymologyItems(chain: any, translateLanguage: (language: st
     return normalizeDictionaryEtymologyChain(chain, translateLanguage);
 }
 
+function getEntryEtymologyRecord(entry: Entry) {
+    const legacyChain = (entry as any).etymologies?.[0];
+    if (legacyChain?.chain?.length) return legacyChain;
+
+    const chain = Array.isArray(entry.etymology_chain) ? entry.etymology_chain : [];
+    if (chain.length === 0) return null;
+
+    return {
+        id: entry.id,
+        entry_id: entry.id,
+        chain,
+        notes: entry.etymology_notes || undefined,
+    };
+}
+
 function getVisibleEntryLabel(value: string, hideTheoreticalForms: boolean) {
     return hideTheoreticalForms ? stripTheoreticalPrefix(value) : value;
 }
@@ -1579,8 +1594,10 @@ function VowelSetGrid({ morphology }: { morphology: any }) {
 function UsageExampleBlock({ entry }: { entry: Entry }) {
     const { term } = useLinguisticMode();
 
-    const primaryMaltese = (entry.usage_example || '').trim();
-    const primaryEnglish = (entry.usage_example_en || '').trim();
+    const usageExamples = Array.isArray(entry.usage_examples) ? entry.usage_examples : [];
+    const firstUsageExample = usageExamples[0] as Record<string, unknown> | undefined;
+    const primaryMaltese = (entry.usage_example || String(firstUsageExample?.text_mt || '')).trim();
+    const primaryEnglish = (entry.usage_example_en || String(firstUsageExample?.text_en || '')).trim();
     const fallbackExample = entry.definitions?.[0]?.example_sentences?.[0];
     const fallbackMaltese = (fallbackExample?.maltese || '').trim();
     const fallbackEnglish = (fallbackExample?.english || '').trim();
@@ -1972,7 +1989,8 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         return cvWizenMap.get(pattern.toLowerCase().trim()) || pattern;
     };
     const nm = entry.noun_morphology!;
-    const ety = entry.etymologies?.[0];
+    const ety = getEntryEtymologyRecord(entry);
+    const etyItems = useMemo(() => ety?.chain ? buildDisplayEtymologyItems(ety.chain, term) : [], [ety, term]);
 
     const allRelatedEntries = nm.related_entries || [];
     const directAlternativeForms = (entry as any).alternative_forms || [];
@@ -2135,11 +2153,11 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             <TagChips entry={entry} />
                         </SideCard>
 
-                        {ety && ety.chain.length > 0 && (
+                        {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
                                 <EtymologySentence
                                     prefix={term('from')}
-                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                    items={etyItems}
                                 />
                             </SideCard>
                         )}
@@ -2406,11 +2424,11 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                         {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
                         <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                            {ety && ety.chain.length > 0 && (
+                            {etyItems.length > 0 && (
                                 <SideCard title={term('etymology')}>
                                     <EtymologySentence
                                         prefix={term('from')}
-                                        items={buildDisplayEtymologyItems(ety.chain, term)}
+                                        items={etyItems}
                                     />
                                 </SideCard>
                             )}
@@ -2491,7 +2509,8 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const isActualAdmin = isAdmin && adminViewEnabled;
 
     const vm = entry.verb_morphology!;
-    const ety = entry.etymologies?.[0];
+    const ety = getEntryEtymologyRecord(entry);
+    const etyItems = useMemo(() => ety?.chain ? buildDisplayEtymologyItems(ety.chain, term) : [], [ety, term]);
 
     const allRelatedEntries = vm.related_entries || (entry as any).related_entries || [];
     const directAlternativeForms = (entry as any).alternative_forms || [];
@@ -2726,11 +2745,11 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             <TagChips entry={entry} />
                         </SideCard>
 
-                        {ety && ety.chain.length > 0 && (
+                        {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
                                 <EtymologySentence
                                     prefix={term('from')}
-                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                    items={etyItems}
                                 />
                             </SideCard>
                         )}
@@ -3193,11 +3212,11 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                         {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
                         <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                            {ety && ety.chain.length > 0 && (
+                            {etyItems.length > 0 && (
                                 <SideCard title={term('etymology')}>
                                     <EtymologySentence
                                         prefix={term('from')}
-                                        items={buildDisplayEtymologyItems(ety.chain, term)}
+                                        items={etyItems}
                                     />
                                 </SideCard>
                             )}
@@ -3266,7 +3285,7 @@ export function ZokkEntryView({
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
  
     const isActualAdmin = isAdmin && adminViewEnabled;
-     const ety = entry.etymologies?.[0];
+     const ety = getEntryEtymologyRecord(entry);
      const zokkEtymologyItems = useMemo(() => {
          if (ety?.chain?.length) {
              return buildDisplayEtymologyItems(ety.chain, term);
@@ -3609,7 +3628,8 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
     const isActualAdmin = isAdmin && adminViewEnabled;
     const nm = entry.numeral_morphology || (entry as any).numeral_morphology;
-    const ety = entry.etymologies?.[0];
+    const ety = getEntryEtymologyRecord(entry);
+    const etyItems = useMemo(() => ety?.chain ? buildDisplayEtymologyItems(ety.chain, term) : [], [ety, term]);
     const isNumeralEntry = entry.pos === 'numeral';
 
     const allRelatedEntries = useMemo(() => {
@@ -4071,11 +4091,11 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                             <TagChips entry={entry} />
                         </SideCard>
 
-                        {ety && ety.chain.length > 0 && (
+                        {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
                                 <EtymologySentence
                                     prefix={term('from')}
-                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                    items={etyItems}
                                 />
                             </SideCard>
                         )}
@@ -4201,11 +4221,11 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
                         {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
                         <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                            {ety && ety.chain.length > 0 && (
+                            {etyItems.length > 0 && (
                                 <SideCard title={term('etymology')}>
                                     <EtymologySentence
                                         prefix={term('from')}
-                                        items={buildDisplayEtymologyItems(ety.chain, term)}
+                                        items={etyItems}
                                     />
                                 </SideCard>
                             )}
@@ -4309,7 +4329,8 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
 
     const isActualAdmin = isAdmin && adminViewEnabled;
     const am = getEntryAdjectiveMorphology(entry)!;
-    const ety = entry.etymologies?.[0];
+    const ety = getEntryEtymologyRecord(entry);
+    const etyItems = useMemo(() => ety?.chain ? buildDisplayEtymologyItems(ety.chain, term) : [], [ety, term]);
 
     const allRelatedEntries = am.related_entries || [];
     const directAlternativeForms = (entry as any).alternative_forms || [];
@@ -4420,11 +4441,11 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                             <TagChips entry={entry} />
                         </SideCard>
 
-                        {ety && ety.chain.length > 0 && (
+                        {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
                                 <EtymologySentence
                                     prefix={term('from')}
-                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                    items={etyItems}
                                 />
                             </SideCard>
                         )}
@@ -4567,11 +4588,11 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
 
                         {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
                         <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                            {ety && ety.chain.length > 0 && (
+                            {etyItems.length > 0 && (
                                 <SideCard title={term('etymology')}>
                                     <EtymologySentence
                                         prefix={term('from')}
-                                        items={buildDisplayEtymologyItems(ety.chain, term)}
+                                        items={etyItems}
                                     />
                                 </SideCard>
                             )}
@@ -4656,7 +4677,8 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     const [initialFormData, setInitialFormData] = useState<any>(null);
 
     const isActualAdmin = isAdmin && adminViewEnabled;
-    const ety = entry.etymologies?.[0];
+    const ety = getEntryEtymologyRecord(entry);
+    const etyItems = useMemo(() => ety?.chain ? buildDisplayEtymologyItems(ety.chain, term) : [], [ety, term]);
 
     const allRelatedEntries = (entry as any).related_entries || [];
     const directAlternativeForms = (entry as any).alternative_forms || [];
@@ -4884,11 +4906,11 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                             <TagChips entry={entry} />
                         </SideCard>
 
-                        {ety && ety.chain.length > 0 && (
+                        {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
                                 <EtymologySentence
                                     prefix={term('from')}
-                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                    items={etyItems}
                                 />
                             </SideCard>
                         )}
@@ -5151,11 +5173,11 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
 
                             {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
                             <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                                {ety && ety.chain.length > 0 && (
+                                {etyItems.length > 0 && (
                                     <SideCard title={term('etymology')}>
                                         <EtymologySentence
                                             prefix={term('from')}
-                                            items={buildDisplayEtymologyItems(ety.chain, term)}
+                                            items={etyItems}
                                         />
                                     </SideCard>
                                 )}
@@ -5283,7 +5305,8 @@ export function FunctionWordEntryView({
     const antonyms = parseMaybeArray<any>((entry as any).antonyms);
     const inflectionPlurals = parseMaybeArray<string>((entry as any).inflections_pl);
 
-    const ety = entry.etymologies?.[0];
+    const ety = getEntryEtymologyRecord(entry);
+    const etyItems = useMemo(() => ety?.chain ? buildDisplayEtymologyItems(ety.chain, term) : [], [ety, term]);
     const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-')
         || entry.root_pattern_form?.root?.consonants
         || (entry as any).root_consonants;
@@ -5374,8 +5397,8 @@ export function FunctionWordEntryView({
         return { value: result, theoretical: false };
     };
 
-    const pluralBase = isPronoun ? (inflectionPlurals[0] || '') : '';
-    const showPluralColumn = isPronoun && !!pluralBase;
+    const pluralBase = (isPronoun || pos === 'preposition') ? (inflectionPlurals[0] || '') : '';
+    const showPluralColumn = (isPronoun || pos === 'preposition') && !!pluralBase;
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
@@ -5412,7 +5435,23 @@ export function FunctionWordEntryView({
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
-                    <div className="w-full md:w-64 shrink-0 space-y-4">
+                    {/* Top Mobile Gloss */}
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
+                        <SideCard title={term('gloss')}>
+                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                {entry.definitions && entry.definitions.length > 0 ? (
+                                    (entry.definitions ?? []).map(def => (
+                                        <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                    ))
+                                ) : (
+                                    <li>{language === 'mt' && (entry as any).definition_mt ? (entry as any).definition_mt : (entry as any).definition_en || '-'}</li>
+                                )}
+                            </ol>
+                            <TagChips entry={entry} />
+                        </SideCard>
+                    </div>
+
+                    <div className="w-full md:w-64 shrink-0 space-y-4 hidden md:block">
                         <SideCard title={term('gloss')}>
                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
                                 {entry.definitions && entry.definitions.length > 0 ? (
@@ -5426,11 +5465,11 @@ export function FunctionWordEntryView({
                             <TagChips entry={entry} />
                         </SideCard>
 
-                        {ety && ety.chain.length > 0 && (
+                        {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
                                 <EtymologySentence
                                     prefix={term('from')}
-                                    items={buildDisplayEtymologyItems(ety.chain, term)}
+                                    items={etyItems}
                                 />
                             </SideCard>
                         )}
@@ -5480,6 +5519,18 @@ export function FunctionWordEntryView({
                                 </div>
                             </SideCard>
                         )}
+
+                        {(entry as any).source_display && (
+                            <SideCard title={term('sources')}>
+                                <span
+                                    className="text-sm font-medium"
+                                    style={{ color: GOLD }}
+                                    title={(entry as any).source_tooltip || undefined}
+                                >
+                                    {(entry as any).source_display}
+                                </span>
+                            </SideCard>
+                        )}
                     </div>
 
                     <div className="flex-1 min-w-0 space-y-8 w-full">
@@ -5494,6 +5545,13 @@ export function FunctionWordEntryView({
                                         rootDisplayValue={displayRoot || undefined}
                                         rootHref={rootHref}
                                     />
+                                )}
+                                {!stemMetadataSource && displayRoot && (
+                                    <PropRow label={term('root')}>
+                                        <Link to={`/root/${displayRoot}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
+                                            {displayRoot}
+                                        </Link>
+                                    </PropRow>
                                 )}
                                 {entry.phonetics && entry.phonetics.length > 0 && (
                                     <PropRow label={term('pronunciation')}>
@@ -5511,6 +5569,11 @@ export function FunctionWordEntryView({
                                         </div>
                                     </PropRow>
                                 )}
+                                {entry.source_language && !(ety && ety.chain && ety.chain.length > 0) && (
+                                    <PropRow label={term('source-language') || 'Origin'}>
+                                        <span className="capitalize">{term(entry.source_language) || entry.source_language}</span>
+                                    </PropRow>
+                                )}
                                 {patternValue && (
                                     <PropRow label={mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern')}>
                                         <Link to={`/pattern/${pattern?.id}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
@@ -5518,6 +5581,7 @@ export function FunctionWordEntryView({
                                         </Link>
                                     </PropRow>
                                 )}
+                                
                                 {isPronoun && entry.gender && (
                                     <PropRow label={term('gender')}>
                                         <span className="capitalize">{term(entry.gender)}</span>
@@ -5672,11 +5736,11 @@ export function FunctionWordEntryView({
 
                             {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
                             <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                                {ety && ety.chain.length > 0 && (
+                                {etyItems.length > 0 && (
                                     <SideCard title={term('etymology')}>
                                         <EtymologySentence
                                             prefix={term('from')}
-                                            items={buildDisplayEtymologyItems(ety.chain, term)}
+                                            items={etyItems}
                                         />
                                     </SideCard>
                                 )}
@@ -5693,6 +5757,18 @@ export function FunctionWordEntryView({
                                                 </Link>
                                             ))}
                                         </div>
+                                    </SideCard>
+                                )}
+
+                                {(entry as any).source_display && (
+                                    <SideCard title={term('sources')}>
+                                        <span
+                                            className="text-sm font-medium"
+                                            style={{ color: GOLD }}
+                                            title={(entry as any).source_tooltip || undefined}
+                                        >
+                                            {(entry as any).source_display}
+                                        </span>
                                     </SideCard>
                                 )}
                             </div>

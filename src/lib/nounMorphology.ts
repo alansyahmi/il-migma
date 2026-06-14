@@ -19,7 +19,7 @@ export const NOUN_MORPHOLOGY_LEGACY_FIELDS = {
 
 export function isNounLikePos(pos: unknown): boolean {
     const normalized = normalizeEntryPos(pos);
-    return normalized === 'noun' || normalized === 'pronoun';
+    return normalized === 'noun' || normalized === 'pronoun' || normalized === 'preposition';
 }
 
 export function hasNounMorphologyInput(source: any): boolean {

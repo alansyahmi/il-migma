@@ -221,7 +221,7 @@ async function persistEntryRecord(client, {
         await upsertEntryRow(tx, writeBody, entryColumns, entryId);
 
         if (normalizedEntryPos === 'verb') await syncVerbMorphology(tx, entryId, writeBody);
-        if (normalizedEntryPos === 'noun' || normalizedEntryPos === 'pronoun') await syncNounMorphology(tx, entryId, writeBody);
+        if (normalizedEntryPos === 'noun' || normalizedEntryPos === 'pronoun' || normalizedEntryPos === 'preposition') await syncNounMorphology(tx, entryId, writeBody);
         if (normalizedEntryPos === 'adjective' || normalizedEntryPos === 'participle') await syncAdjMorphology(tx, entryId, writeBody);
         if (normalizedEntryPos === 'participle') await syncParticipleMorphology(tx, entryId, writeBody);
         if (normalizedEntryPos === 'numeral') await syncNumeralMorphology(tx, entryId, writeBody);
@@ -432,7 +432,7 @@ export async function onRequestPost({ request, env }) {
         if (entryPos === 'verb') {
             await ensureVerbMorphologyTable(client);
         }
-        if (entryPos === 'noun' || entryPos === 'pronoun') {
+        if (entryPos === 'noun' || entryPos === 'pronoun' || entryPos === 'preposition') {
             await ensureNounMorphologyTable(client);
         }
         if (entryPos === 'adjective' || entryPos === 'participle') {
@@ -501,7 +501,7 @@ export async function onRequestPut({ request, env }) {
         if (entryPos === 'verb') {
             await ensureVerbMorphologyTable(client);
         }
-        if (entryPos === 'noun' || entryPos === 'pronoun') {
+        if (entryPos === 'noun' || entryPos === 'pronoun' || entryPos === 'preposition') {
             await ensureNounMorphologyTable(client);
         }
         if (entryPos === 'adjective' || entryPos === 'participle') {

@@ -120,7 +120,7 @@ export const ENTRY_HANDLED_FIELDS = [
     'id', 'headword', 'pos', 'gender', 'is_loanword', 'is_inflectable', 'has_inflection',
     'source_language',
     'source_display', 'source_tooltip',
-    'definitions', 'etymology_chain', 'etymology_notes',
+    'definitions', 'usage_examples', 'etymology_chain', 'etymology_notes',
     'phonetics', 'tags', 'cv_pattern',
     'synonyms', 'antonyms', 'related_entries', 'alternative_forms', 'created_at', 'updated_at',
     'root_consonants', 'source_id',
@@ -141,7 +141,7 @@ export const ENTRY_PRIVATE_FIELDS = [
 
 export const COMMON_FIELDS = [
     'id', 'headword', 'pos', 'is_loanword', 'source_language',
-    'definitions', 'etymology_chain', 'etymology_notes', 'phonetics', 'tags', 'cv_pattern',
+    'definitions', 'usage_examples', 'etymology_chain', 'etymology_notes', 'phonetics', 'tags', 'cv_pattern',
     'synonyms', 'antonyms', 'related_entries', 'alternative_forms',
     'root_consonants', 'source_id',
     'source_citation', 'source_title', 'source_year', 'source_page', 'source_publisher'
@@ -196,7 +196,7 @@ export const POS_FEATURES: Record<string, string[]> = {
         ...COMMON_FIELDS
     ],
     'preposition': [
-        ...COMMON_FIELDS
+        ...COMMON_FIELDS, 'is_inflectable', 'plural_forms', 'inflections_pl', 'form_plural_pattern'
     ],
     'particle': [
         ...COMMON_FIELDS
@@ -486,6 +486,7 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
         'alternative_forms',
         'tags',
         'inflections_pl',
+        'usage_examples',
     ]);
 
     const parseArrayField = (key: string, val: unknown) => {
