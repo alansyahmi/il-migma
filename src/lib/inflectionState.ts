@@ -11,6 +11,7 @@ const FUNCTION_WORD_INFLECTION_POS = new Set([
     'preposition',
     'particle',
     'article',
+    'conjunction',
 ]);
 
 export function isFunctionWordInflectionPos(pos?: string | null): boolean {

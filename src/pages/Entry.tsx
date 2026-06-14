@@ -5397,8 +5397,8 @@ export function FunctionWordEntryView({
         return { value: result, theoretical: false };
     };
 
-    const pluralBase = (isPronoun || pos === 'preposition') ? (inflectionPlurals[0] || '') : '';
-    const showPluralColumn = (isPronoun || pos === 'preposition') && !!pluralBase;
+    const pluralBase = (isPronoun || pos === 'preposition' || pos === 'conjunction') ? (inflectionPlurals[0] || '') : '';
+    const showPluralColumn = (isPronoun || pos === 'preposition' || pos === 'conjunction') && !!pluralBase;
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,

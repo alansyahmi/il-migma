@@ -2345,7 +2345,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     };
 
     const normalizedPos = useMemo(() => normalizeEntryPos(form.pos) || form.pos?.toLowerCase() || '', [form.pos]);
-    const isInflectedFunctionPos = ['pronoun', 'adverb', 'preposition', 'particle', 'article'].includes(normalizedPos);
+    const isInflectedFunctionPos = ['pronoun', 'adverb', 'preposition', 'particle', 'article', 'conjunction'].includes(normalizedPos);
 
     useEffect(() => {
         if (normalizedPos !== 'verb') return;
@@ -2778,7 +2778,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 />
             )}
 
-            {(normalizedPos === 'pronoun' || normalizedPos === 'preposition') && !!form.is_inflectable && (
+            {(normalizedPos === 'pronoun' || normalizedPos === 'preposition' || normalizedPos === 'conjunction') && !!form.is_inflectable && (
                 <PronounFields
                     form={form}
                     set={set}

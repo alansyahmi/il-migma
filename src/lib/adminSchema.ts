@@ -208,7 +208,7 @@ export const POS_FEATURES: Record<string, string[]> = {
         ...COMMON_FIELDS
     ],
     'conjunction': [
-        ...COMMON_FIELDS
+        ...COMMON_FIELDS, 'is_inflectable', 'plural_forms', 'inflections_pl', 'form_plural_pattern'
     ],
 };
 
