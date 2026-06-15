@@ -365,7 +365,7 @@ function MorphologyTable({
             if (!ancestorsOpen) return;
 
             renderedRows.push(
-                <tr key={`section-${row.id}-${idx}`} className="border-b border-black/4 bg-black/[0.02]">
+                <tr key={`section-${row.id}-${idx}`} className="border-b border-black/4 bg-black/2">
                     <td colSpan={columnCount} className={`py-2.5 ${depth > 0 ? 'pl-6' : 'pl-3'} pr-3`}>
                         <button
                             type="button"
@@ -713,19 +713,19 @@ function NounParadigmCellView({
                     const hasValue = !!(item.value && item.value !== '-');
                     return (
                         <div key={`${item.value}-${index}`} className="leading-tight">
-                                    {hasValue ? (
-                                        <>
-                                            <div className="font-serif font-medium text-black">
-                                                <MarkedValue val={item.value || '-'} theoretical={item.theoretical} />
-                                            </div>
-                                            {item.pattern && (
-                                                <div className="mt-0.5 text-[11px] font-sans tracking-tight text-black/40">
-                                                    {renderPatternValue(item.pattern, displayPattern, patternHrefForValue)}
-                                                </div>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <span className="text-black/30">-</span>
+                            {hasValue ? (
+                                <>
+                                    <div className="font-serif font-medium text-black">
+                                        <MarkedValue val={item.value || '-'} theoretical={item.theoretical} />
+                                    </div>
+                                    {item.pattern && (
+                                        <div className="mt-0.5 text-[11px] font-sans tracking-tight text-black/40">
+                                            {renderPatternValue(item.pattern, displayPattern, patternHrefForValue)}
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <span className="text-black/30">-</span>
                             )}
                         </div>
                     );
@@ -830,7 +830,7 @@ function NounParadigmTable({
             if (!ancestorsOpen) return;
 
             renderedRows.push(
-                <tr key={`section-${row.id}-${idx}`} className="border-b border-black/4 bg-black/[0.02]">
+                <tr key={`section-${row.id}-${idx}`} className="border-b border-black/4 bg-black/2">
                     <td colSpan={1 + (showSingularColumn ? 1 : 0) + (showDualColumn ? 1 : 0) + (showPluralColumn ? 1 : 0) + (showPaucalColumn ? 1 : 0)} className={`py-2 ${depth > 0 ? 'pl-6' : 'pl-3'} pr-3`}>
                         <button
                             type="button"
@@ -994,7 +994,7 @@ function AdjectiveParadigmTable({
             if (!ancestorsOpen) return;
 
             renderedRows.push(
-                <tr key={`section-${row.id}-${idx}`} className="border-b border-black/4 bg-black/[0.02]">
+                <tr key={`section-${row.id}-${idx}`} className="border-b border-black/4 bg-black/2">
                     <td colSpan={1 + (showSingularColumn ? 1 : 0) + (showDualColumn ? 1 : 0) + (showPluralColumn ? 1 : 0) + (showElativeColumn ? 1 : 0)} className={`py-2 ${depth > 0 ? 'pl-6' : 'pl-3'} pr-3`}>
                         <button
                             type="button"
@@ -2105,10 +2105,10 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                 {/* Header */}
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
-                            <div className="relative inline-flex items-center justify-center">
-                                <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
+                        <div className="relative inline-flex items-center justify-center">
+                            <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
                                 {getVisibleEntryLabel(entry.headword, hideTheoreticalForms)}
-                                </h1>
+                            </h1>
                             {isActualAdmin && (
                                 <button
                                     onClick={() => {
@@ -2279,111 +2279,111 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 {/* Inflection Table */}
                                 {inflectionRows.length > 0 && (
                                     <>
-                                <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
-                                    {term('inflection-table')}
-                                </h2>
+                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                                            {term('inflection-table')}
+                                        </h2>
 
-                                {/* Desktop Table View */}
-                                <div className="hidden md:block overflow-x-auto overflow-y-hidden pb-4">
-                                    <table className="w-full text-sm border-collapse md:min-w-[500px]">
-                                        <thead>
-                                            <tr className="border-b border-black/8 font-sans whitespace-nowrap">
-                                                <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('person')}</th>
-                                                {showSingularInflectionColumn && (
-                                                <th className="text-left font-semibold text-black pb-2 pr-4">
-                                                    {(entry as any).is_collective ? term('collective') : (entry as any).is_singulative ? term('singulative') : term('singular')}
-                                                </th>
-                                                )}
-                                                {showPluralInflectionColumn && (
-                                                <th className="text-left font-semibold text-black pb-2">
-                                                    {(entry as any).is_collective || (entry as any).is_singulative ? (term('unit-form') || 'Unit Form / Pl.') : term('plural')}
-                                                </th>
-                                                )}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {inflectionRows.map(({ key, singularCell, singularVisible, pluralResolvedCells, pluralVisible }, idx) => {
-                                                return (
-                                                    <tr key={key} className="border-b border-black/4 whitespace-nowrap">
-                                                        <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
-                                                            {term(key)}
-                                                        </td>
+                                        {/* Desktop Table View */}
+                                        <div className="hidden md:block overflow-x-auto overflow-y-hidden pb-4">
+                                            <table className="w-full text-sm border-collapse md:min-w-[500px]">
+                                                <thead>
+                                                    <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                        <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('person')}</th>
                                                         {showSingularInflectionColumn && (
-                                                            <td className="py-1.5 pr-4 font-serif font-normal text-black">
-                                                                {singularVisible ? <MarkedValue val={singularCell} /> : null}
-                                                            </td>
+                                                            <th className="text-left font-semibold text-black pb-2 pr-4">
+                                                                {(entry as any).is_collective ? term('collective') : (entry as any).is_singulative ? term('singulative') : term('singular')}
+                                                            </th>
                                                         )}
                                                         {showPluralInflectionColumn && (
-                                                            <td className="py-1.5 font-serif font-normal text-black">
-                                                                {pluralVisible ? (
-                                                                    pluralResolvedCells.length === 1 ? (
-                                                                        <MarkedValue val={pluralResolvedCells[0]} />
-                                                                    ) : (
-                                                                        <StackedSurface
-                                                                            primary={<MarkedValue val={pluralResolvedCells[0]} />}
-                                                                            alternates={pluralResolvedCells.slice(1).map((value, altIdx) => (
-                                                                                <MarkedValue key={`plural-${idx}-${altIdx}`} val={value} />
-                                                                            ))}
-                                                                        />
-                                                                    )
-                                                                ) : null}
-                                                            </td>
+                                                            <th className="text-left font-semibold text-black pb-2">
+                                                                {(entry as any).is_collective || (entry as any).is_singulative ? (term('unit-form') || 'Unit Form / Pl.') : term('plural')}
+                                                            </th>
                                                         )}
                                                     </tr>
-                                                );
-                                            })}
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                {/* Mobile Unspooled View */}
-                                <div className="block md:hidden space-y-6">
-                                    <div className="w-full overflow-hidden">
-                                        <table className="w-full border-collapse table-fixed">
-                                            <thead>
-                                                <tr className="border-b border-black/8 font-semibold text-[10px] uppercase tracking-wider text-black/40">
-                                                    <th className="text-left pb-1 w-24 sm:w-[130px]">{term('person')}</th>
-                                                    {showSingularInflectionColumn && (
-                                                        <th className="text-left pb-1">{(entry as any).is_collective ? term('collective') : (entry as any).is_singulative ? term('singulative') : term('singular')}</th>
-                                                    )}
-                                                    {showPluralInflectionColumn && (
-                                                        <th className="text-right pb-1">{(entry as any).is_collective || (entry as any).is_singulative ? (term('unit-form') || 'Unit Form') : term('plural')}</th>
-                                                    )}
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-black/2">
-                                                {inflectionRows.map(({ key, singularCell, singularVisible, pluralResolvedCells, pluralVisible }, idx) => {
-                                                    return (
-                                                        <tr key={`mobile-${key}`}>
-                                                            <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term(key)}</td>
-                                                            {showSingularInflectionColumn && (
-                                                                <td className="py-2 text-left">
-                                                                    {singularVisible ? <MarkedValue val={singularCell} /> : null}
+                                                </thead>
+                                                <tbody>
+                                                    {inflectionRows.map(({ key, singularCell, singularVisible, pluralResolvedCells, pluralVisible }, idx) => {
+                                                        return (
+                                                            <tr key={key} className="border-b border-black/4 whitespace-nowrap">
+                                                                <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
+                                                                    {term(key)}
                                                                 </td>
+                                                                {showSingularInflectionColumn && (
+                                                                    <td className="py-1.5 pr-4 font-serif font-normal text-black">
+                                                                        {singularVisible ? <MarkedValue val={singularCell} /> : null}
+                                                                    </td>
+                                                                )}
+                                                                {showPluralInflectionColumn && (
+                                                                    <td className="py-1.5 font-serif font-normal text-black">
+                                                                        {pluralVisible ? (
+                                                                            pluralResolvedCells.length === 1 ? (
+                                                                                <MarkedValue val={pluralResolvedCells[0]} />
+                                                                            ) : (
+                                                                                <StackedSurface
+                                                                                    primary={<MarkedValue val={pluralResolvedCells[0]} />}
+                                                                                    alternates={pluralResolvedCells.slice(1).map((value, altIdx) => (
+                                                                                        <MarkedValue key={`plural-${idx}-${altIdx}`} val={value} />
+                                                                                    ))}
+                                                                                />
+                                                                            )
+                                                                        ) : null}
+                                                                    </td>
+                                                                )}
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        {/* Mobile Unspooled View */}
+                                        <div className="block md:hidden space-y-6">
+                                            <div className="w-full overflow-hidden">
+                                                <table className="w-full border-collapse table-fixed">
+                                                    <thead>
+                                                        <tr className="border-b border-black/8 font-semibold text-[10px] uppercase tracking-wider text-black/40">
+                                                            <th className="text-left pb-1 w-24 sm:w-[130px]">{term('person')}</th>
+                                                            {showSingularInflectionColumn && (
+                                                                <th className="text-left pb-1">{(entry as any).is_collective ? term('collective') : (entry as any).is_singulative ? term('singulative') : term('singular')}</th>
                                                             )}
                                                             {showPluralInflectionColumn && (
-                                                                <td className="py-2 text-right">
-                                                                    {pluralVisible ? (
-                                                                        pluralResolvedCells.length === 1 ? (
-                                                                            <MarkedValue val={pluralResolvedCells[0]} />
-                                                                        ) : (
-                                                                            <StackedSurface
-                                                                                primary={<MarkedValue val={pluralResolvedCells[0]} />}
-                                                                                alternates={pluralResolvedCells.slice(1).map((value, altIdx) => (
-                                                                                    <MarkedValue key={`mobile-plural-${idx}-${altIdx}`} val={value} />
-                                                                                ))}
-                                                                            />
-                                                                        )
-                                                                    ) : null}
-                                                                </td>
+                                                                <th className="text-right pb-1">{(entry as any).is_collective || (entry as any).is_singulative ? (term('unit-form') || 'Unit Form') : term('plural')}</th>
                                                             )}
                                                         </tr>
-                                                    );
-                                                })}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-black/2">
+                                                        {inflectionRows.map(({ key, singularCell, singularVisible, pluralResolvedCells, pluralVisible }, idx) => {
+                                                            return (
+                                                                <tr key={`mobile-${key}`}>
+                                                                    <td className="py-2 text-black/40 font-sans text-[11px] leading-tight truncate pr-2">{term(key)}</td>
+                                                                    {showSingularInflectionColumn && (
+                                                                        <td className="py-2 text-left">
+                                                                            {singularVisible ? <MarkedValue val={singularCell} /> : null}
+                                                                        </td>
+                                                                    )}
+                                                                    {showPluralInflectionColumn && (
+                                                                        <td className="py-2 text-right">
+                                                                            {pluralVisible ? (
+                                                                                pluralResolvedCells.length === 1 ? (
+                                                                                    <MarkedValue val={pluralResolvedCells[0]} />
+                                                                                ) : (
+                                                                                    <StackedSurface
+                                                                                        primary={<MarkedValue val={pluralResolvedCells[0]} />}
+                                                                                        alternates={pluralResolvedCells.slice(1).map((value, altIdx) => (
+                                                                                            <MarkedValue key={`mobile-plural-${idx}-${altIdx}`} val={value} />
+                                                                                        ))}
+                                                                                    />
+                                                                                )
+                                                                            ) : null}
+                                                                        </td>
+                                                                    )}
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </>
                                 )}
 
@@ -3283,22 +3283,22 @@ export function ZokkEntryView({
 
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
- 
+
     const isActualAdmin = isAdmin && adminViewEnabled;
-     const ety = getEntryEtymologyRecord(entry);
-     const zokkEtymologyItems = useMemo(() => {
-         if (ety?.chain?.length) {
-             return buildDisplayEtymologyItems(ety.chain, term);
-         }
+    const ety = getEntryEtymologyRecord(entry);
+    const zokkEtymologyItems = useMemo(() => {
+        if (ety?.chain?.length) {
+            return buildDisplayEtymologyItems(ety.chain, term);
+        }
 
-         if (entry.source_language) {
-             return [{
-                 language: term(entry.source_language),
-             }];
-         }
+        if (entry.source_language) {
+            return [{
+                language: term(entry.source_language),
+            }];
+        }
 
-         return [];
-     }, [ety, entry.source_language, term]);
+        return [];
+    }, [ety, entry.source_language, term]);
     const zokkForms = useMemo(
         () => entry.zokk_morphology ? generateZokkForms(entry.zokk_morphology as any) : null,
         [entry.zokk_morphology]
@@ -3361,79 +3361,79 @@ export function ZokkEntryView({
         return rows;
     }, [term, zokkForms]);
 
-     const handleRemoveRelationship = async (targetId: string) => {
-         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
-         try {
-             const token = await getToken();
-             const updated = removeRelationshipFromEntry(entry, targetId);
-             await adminUpdateEntry(token!, updated as any);
-             onRefetch?.();
-         } catch (err: any) {
-             alert((term('failed-remove-relationship') || 'Failed to remove relationship: ') + (err.message || String(err)));
-         }
-     };
+    const handleRemoveRelationship = async (targetId: string) => {
+        if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
+        try {
+            const token = await getToken();
+            const updated = removeRelationshipFromEntry(entry, targetId);
+            await adminUpdateEntry(token!, updated as any);
+            onRefetch?.();
+        } catch (err: any) {
+            alert((term('failed-remove-relationship') || 'Failed to remove relationship: ') + (err.message || String(err)));
+        }
+    };
 
-     const handleEditEntry = (target: { id: string }) => {
-         setEditEntry(target as any);
-         setShowForm(true);
-     };
- 
-     const bgStyle = {
-         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
-         minHeight: '100vh',
-     };
- 
-     return (
-         <div style={bgStyle} className="w-full overflow-hidden">
-             <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
-                 {/* Header */}
-                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
-                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
-                         <div className="relative inline-flex items-center justify-center">
-                             <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
-                                 {getVisibleEntryLabel(entry.headword, hideTheoreticalForms)}
-                             </h1>
-                             {(isActualAdmin || headerAccessory) && (
-                                 <div className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 flex items-center gap-1">
-                                     {isActualAdmin && (
-                                         <button
-                                             onClick={() => {
-                                                 setEditEntry({ ...entry } as any);
-                                                 setShowForm(true);
-                                             }}
-                                             className="p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
-                                             title={term('edit-entry')}
-                                         >
-                                             <Edit2 size={16} />
-                                         </button>
-                                     )}
-                                     {headerAccessory}
-                                 </div>
-                             )}
-                         </div>
-                     </div>
-                     <SubParts entry={entry} showGender />
-                 </div>
- 
-                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
-                     <div className="w-full md:w-64 shrink-0 space-y-4">
-                         <SideCard title={term('gloss')}>
-                             <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                 {entry.definitions?.map(def => (
-                                     <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
-                                 )) || <li>-</li>}
-                             </ol>
-                             <TagChips entry={entry} />
-                         </SideCard>
- 
+    const handleEditEntry = (target: { id: string }) => {
+        setEditEntry(target as any);
+        setShowForm(true);
+    };
+
+    const bgStyle = {
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        minHeight: '100vh',
+    };
+
+    return (
+        <div style={bgStyle} className="w-full overflow-hidden">
+            <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
+                {/* Header */}
+                <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
+                    <div className="relative inline-flex items-center justify-center flex-col gap-1">
+                        <div className="relative inline-flex items-center justify-center">
+                            <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
+                                {getVisibleEntryLabel(entry.headword, hideTheoreticalForms)}
+                            </h1>
+                            {(isActualAdmin || headerAccessory) && (
+                                <div className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 flex items-center gap-1">
+                                    {isActualAdmin && (
+                                        <button
+                                            onClick={() => {
+                                                setEditEntry({ ...entry } as any);
+                                                setShowForm(true);
+                                            }}
+                                            className="p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
+                                            title={term('edit-entry')}
+                                        >
+                                            <Edit2 size={16} />
+                                        </button>
+                                    )}
+                                    {headerAccessory}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <SubParts entry={entry} showGender />
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-6 items-start w-full">
+                    <div className="w-full md:w-64 shrink-0 space-y-4">
+                        <SideCard title={term('gloss')}>
+                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                {entry.definitions?.map(def => (
+                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
+                                )) || <li>-</li>}
+                            </ol>
+                            <TagChips entry={entry} />
+                        </SideCard>
+
                         {zokkEtymologyItems.length > 0 && (
-                             <SideCard title={term('etymology')}>
-                                 <EtymologySentence prefix={term('from')} items={zokkEtymologyItems} />
-                             </SideCard>
-                         )}
- 
-                     </div>
- 
+                            <SideCard title={term('etymology')}>
+                                <EtymologySentence prefix={term('from')} items={zokkEtymologyItems} />
+                            </SideCard>
+                        )}
+
+                    </div>
+
                     <div className="flex-1 min-w-0 space-y-0 w-full">
                         <div className={cn(
                             "flex flex-col gap-8 items-start w-full",
@@ -3573,24 +3573,24 @@ export function ZokkEntryView({
                     </div>
                 </div>
             </div>
- 
-             {showForm && (
-                 <EntryFormModal
-                     entry={editEntry}
-                     onClose={() => { setShowForm(false); setEditEntry(null); }}
-                     onSaved={() => {
-                         setShowForm(false);
-                         setEditEntry(null);
-                         onRefetch?.();
-                     }}
-                     getToken={getToken}
-                 />
-             )}
-         </div>
-     );
- }
- 
- // ── Numeral View ──────────────────────────────────────────────────────────
+
+            {showForm && (
+                <EntryFormModal
+                    entry={editEntry}
+                    onClose={() => { setShowForm(false); setEditEntry(null); }}
+                    onSaved={() => {
+                        setShowForm(false);
+                        setEditEntry(null);
+                        onRefetch?.();
+                    }}
+                    getToken={getToken}
+                />
+            )}
+        </div>
+    );
+}
+
+// ── Numeral View ──────────────────────────────────────────────────────────
 
 function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => void }) {
     const { language } = useLanguage();
@@ -4042,28 +4042,28 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
         <div style={bgStyle} className="w-full overflow-hidden">
             <div className="max-w-6xl mx-auto px-7 sm:px-8 py-6 pb-10 w-full mt-2 sm:mt-10">
                 <div className="text-center mb-4 sm:mb-8 relative group max-w-fit mx-auto px-4">
-                     <div className="relative inline-flex items-center justify-center flex-col gap-1">
-                         <div className="relative inline-flex items-center justify-center">
+                    <div className="relative inline-flex items-center justify-center flex-col gap-1">
+                        <div className="relative inline-flex items-center justify-center">
                             <h1 className="font-serif font-bold text-[2rem] sm:text-[3rem] leading-tight text-black tracking-tight wrap-break-word">
                                 {stripTheoreticalPrefix(entry.headword)}
                             </h1>
-                             {isActualAdmin && (
-                                 <button
-                                     onClick={() => {
-                                         setEditEntry({
-                                             ...entry,
-                                             _rootConsonants: entry.root_pattern_form?.root?.consonants || ''
-                                         } as any);
-                                         setShowForm(true);
-                                     }}
-                                     className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
-                                     title={term('edit-entry')}
-                                 >
-                                     <Edit2 size={16} />
-                                 </button>
-                             )}
-                         </div>
-                     </div>
+                            {isActualAdmin && (
+                                <button
+                                    onClick={() => {
+                                        setEditEntry({
+                                            ...entry,
+                                            _rootConsonants: entry.root_pattern_form?.root?.consonants || ''
+                                        } as any);
+                                        setShowForm(true);
+                                    }}
+                                    className="absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2 p-1 px-1.5 text-black/55 hover:bg-black/5 rounded transition-colors"
+                                    title={term('edit-entry')}
+                                >
+                                    <Edit2 size={16} />
+                                </button>
+                            )}
+                        </div>
+                    </div>
                     <SubParts entry={entry} showGender />
                 </div>
 
@@ -4542,7 +4542,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                 )}
 
                                 <VowelSetGrid morphology={{ ...entry, ...am }} />
-                                </div>
+                            </div>
 
                             {/* Morphology Table */}
                             <div className="flex-1 min-w-0 w-full max-w-[340px] mx-auto md:max-w-none">
@@ -4586,38 +4586,38 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                 )}
                             </div>
 
-                        {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
-                        <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                            {etyItems.length > 0 && (
-                                <SideCard title={term('etymology')}>
-                                    <EtymologySentence
-                                        prefix={term('from')}
-                                        items={etyItems}
-                                    />
-                                </SideCard>
-                            )}
+                            {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
+                            <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
+                                {etyItems.length > 0 && (
+                                    <SideCard title={term('etymology')}>
+                                        <EtymologySentence
+                                            prefix={term('from')}
+                                            items={etyItems}
+                                        />
+                                    </SideCard>
+                                )}
 
-                            {alternativeForms.length > 0 && (
-                                <SideCard title={term('alternative-forms')}>
-                                    <div className="space-y-1">
-                                        {alternativeForms.map((alt: any) => (
-                                            <Link key={alt.id} to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
-                                                {alt.headword}{' '}
-                                                <span className="opacity-55 font-sans text-xs text-black">
-                                                    "{getGloss(alt, language, mode)}"
-                                                </span>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </SideCard>
-                            )}
+                                {alternativeForms.length > 0 && (
+                                    <SideCard title={term('alternative-forms')}>
+                                        <div className="space-y-1">
+                                            {alternativeForms.map((alt: any) => (
+                                                <Link key={alt.id} to={`/entry/${alt.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                    {alt.headword}{' '}
+                                                    <span className="opacity-55 font-sans text-xs text-black">
+                                                        "{getGloss(alt, language, mode)}"
+                                                    </span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </SideCard>
+                                )}
 
-                            {am.source_citation && (
-                                <SideCard title={term('sources')}>
-                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{am.source_citation}</span>
-                                </SideCard>
-                            )}
-                        </div>
+                                {am.source_citation && (
+                                    <SideCard title={term('sources')}>
+                                        <span className="text-sm font-medium" style={{ color: GOLD }}>{am.source_citation}</span>
+                                    </SideCard>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -5219,6 +5219,180 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     );
 }
 
+function PronounParadigmTable({ entry, term }: { entry: Entry; term: (key: string) => string }) {
+    const { language } = useLanguage();
+    const cleanHeadword = (entry.headword || '').trim().toLowerCase();
+
+    const t = (key: string) => {
+        const dict: Record<string, { mt: string; en: string }> = {
+            'pronoun-paradigm': { mt: 'Paradigma tal-Pronomi', en: 'Pronoun Paradigm' },
+            'demonstrative-pronouns': { mt: 'Pronomi Dimostrattivi', en: 'Demonstrative Pronouns' },
+            'person': { mt: 'Persuna', en: 'Person' },
+            'form': { mt: 'Forma', en: 'Form' },
+            'subject-pronoun': { mt: 'Pronom Suġġett', en: 'Subject Pronoun' },
+            'object-suffix': { mt: 'Suffiss tal-Oġġett', en: 'Object Suffix' },
+            'possessive-suffix': { mt: 'Suffiss tal-Pussess', en: 'Possessive Suffix' },
+            'near': { mt: 'Qrib (Dan / Dawn)', en: 'Near (This / These)' },
+            'far': { mt: 'Imbiegħed (Dak / Dawk)', en: 'Far (That / Those)' },
+            'singular-masculine': { mt: 'Singular Maskil', en: 'Singular Masculine' },
+            'singular-feminine': { mt: 'Singular Femminil', en: 'Singular Feminine' },
+            'plural': { mt: 'Plural', en: 'Plural' },
+            'pos-1s': { mt: '1. pers. sing. (jien)', en: '1st Singular (I)' },
+            'pos-2s': { mt: '2. pers. sing. (int)', en: '2nd Singular (you)' },
+            'pos-3ms': { mt: '3. pers. sing. mask. (hu)', en: '3rd Singular Masculine (he)' },
+            'pos-3fs': { mt: '3. pers. sing. femm. (hi)', en: '3rd Singular Feminine (she)' },
+            'pos-1p': { mt: '1. pers. plur. (aħna)', en: '1st Plural (we)' },
+            'pos-2p': { mt: '2. pers. plur. (intom)', en: '2nd Plural (you)' },
+            'pos-3p': { mt: '3. pers. plur. (huma)', en: '3rd Plural (they)' },
+        };
+        return dict[key] ? (language === 'mt' ? dict[key].mt : dict[key].en) : term(key);
+    };
+
+    const personalParadigm = [
+        { personKey: 'pos-1s', subject: 'jien / jiena', objSuffix: '-ni', possSuffix: '-i / -ja', matches: ['jien', 'jiena', 'jien-stess', 'jiena-stess'] },
+        { personKey: 'pos-2s', subject: 'int / inti', objSuffix: '-ek / -k / -ik', possSuffix: '-ek / -k', matches: ['int', 'inti', 'int-stess', 'inti-stess'] },
+        { personKey: 'pos-3ms', subject: 'hu / huwa', objSuffix: '-h / -u', possSuffix: '-u / -h', matches: ['hu', 'huwa', 'hu-stess', 'huwa-stess'] },
+        { personKey: 'pos-3fs', subject: 'hi / hija', objSuffix: '-ha', possSuffix: '-ha', matches: ['hi', 'hija', 'hi-stess', 'hija-stess'] },
+        { personKey: 'pos-1p', subject: 'aħna', objSuffix: '-na', possSuffix: '-na', matches: ['aħna', 'aħna-stess'] },
+        { personKey: 'pos-2p', subject: 'intom', objSuffix: '-kom', possSuffix: '-kom', matches: ['intom', 'intom-stess'] },
+        { personKey: 'pos-3p', subject: 'huma', objSuffix: '-hom', possSuffix: '-hom', matches: ['huma', 'huma-stess'] },
+    ];
+
+    const demonstrativeParadigm = [
+        { typeKey: 'singular-masculine', near: 'dan', far: 'dak', matches: ['dan', 'dak'] },
+        { typeKey: 'singular-feminine', near: 'din', far: 'dik / dika', matches: ['din', 'dik', 'dika'] },
+        { typeKey: 'plural', near: 'dawn', far: 'dawk', matches: ['dawn', 'dawk'] },
+    ];
+
+    const isDemonstrative = ['dan', 'din', 'dawn', 'dak', 'dik', 'dawk', 'dika'].some(d => cleanHeadword.startsWith(d));
+
+    const renderPersonalSubject = (row: typeof personalParadigm[0], isCurrent: boolean) => {
+        if (isCurrent) {
+            return <span className="font-bold text-black">{row.subject}</span>;
+        }
+        if (row.personKey === 'pos-1p') {
+            return <Link to="/entry/art-aħna" className="hover:underline text-[#1034A6]">aħna</Link>;
+        }
+        if (row.personKey === 'pos-2p') {
+            return <Link to="/entry/art-intom" className="hover:underline text-[#1034A6]">intom</Link>;
+        }
+        if (row.personKey === 'pos-3p') {
+            return <Link to="/entry/art-huma" className="hover:underline text-[#1034A6]">huma</Link>;
+        }
+        const parts = row.subject.split(' / ');
+        const short = parts[0].trim();
+        const long = parts[1].trim();
+        return (
+            <>
+                <Link to={`/entry/art-${short}`} className="hover:underline text-[#1034A6]">{short}</Link>
+                {' / '}
+                <Link to={`/entry/art-${long}`} className="hover:underline text-[#1034A6]">{long}</Link>
+            </>
+        );
+    };
+
+    const renderDemoCell = (val: string) => {
+        const parts = val.split(' / ');
+        const rendered = parts.map((p, idx) => {
+            const word = p.trim();
+            const isSelf = cleanHeadword === word || cleanHeadword.startsWith(word + '-');
+            if (isSelf) {
+                return <span key={idx} className="font-bold text-black">{word}</span>;
+            }
+            return (
+                <Link key={idx} to={`/entry/art-${word}`} className="hover:underline text-[#1034A6]">
+                    {word}
+                </Link>
+            );
+        });
+
+        if (rendered.length === 1) return rendered[0];
+        return (
+            <>
+                {rendered[0]}
+                {' / '}
+                {rendered[1]}
+            </>
+        );
+    };
+
+    if (isDemonstrative) {
+        return (
+            <div className="w-full overflow-x-auto">
+                <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                    {t('demonstrative-pronouns')}
+                </h2>
+                <table className="w-full text-sm border-collapse md:min-w-[500px]">
+                    <thead>
+                        <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                            <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{t('form')}</th>
+                            <th className="text-left font-semibold text-black pb-2 pr-4">{t('near')}</th>
+                            <th className="text-left font-semibold text-black pb-2">{t('far')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {demonstrativeParadigm.map((row) => {
+                            const isCurrent = row.matches.some(m => cleanHeadword === m || cleanHeadword.startsWith(m + '-'));
+                            return (
+                                <tr key={row.typeKey} className="border-b border-black/4 whitespace-nowrap">
+                                    <td className={`py-2 pr-4 text-xs font-sans ${isCurrent ? 'font-bold text-black' : 'text-black/40'}`}>
+                                        {t(row.typeKey)}
+                                    </td>
+                                    <td className="py-2 pr-4 font-serif text-[15px]">
+                                        {renderDemoCell(row.near)}
+                                    </td>
+                                    <td className="py-2 font-serif text-[15px]">
+                                        {renderDemoCell(row.far)}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+
+    return (
+        <div className="w-full overflow-x-auto">
+            <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                {t('pronoun-paradigm')}
+            </h2>
+            <table className="w-full text-sm border-collapse md:min-w-[500px]">
+                <thead>
+                    <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                        <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{t('person')}</th>
+                        <th className="text-left font-semibold text-black pb-2 pr-4">{t('subject-pronoun')}</th>
+                        <th className="text-left font-semibold text-black pb-2 pr-4">{t('object-suffix')}</th>
+                        <th className="text-left font-semibold text-black pb-2">{t('possessive-suffix')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {personalParadigm.map((row) => {
+                        const isCurrent = row.matches.some(m => cleanHeadword === m || cleanHeadword.startsWith(m + '-'));
+                        return (
+                            <tr key={row.personKey} className="border-b border-black/4 whitespace-nowrap">
+                                <td className={`py-2 pr-4 text-xs font-sans ${isCurrent ? 'font-bold text-black' : 'text-black/40'}`}>
+                                    {t(row.personKey)}
+                                </td>
+                                <td className="py-2 pr-4 font-serif text-[15px]">
+                                    {renderPersonalSubject(row, isCurrent)}
+                                </td>
+                                <td className={`py-2 pr-4 font-serif text-[15px] ${isCurrent ? 'font-bold text-black' : 'text-black/60'}`}>
+                                    {row.objSuffix}
+                                </td>
+                                <td className={`py-2 font-serif text-[15px] ${isCurrent ? 'font-bold text-black' : 'text-black/60'}`}>
+                                    {row.possSuffix}
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
 export function FunctionWordEntryView({
     entry,
     onRefetch,
@@ -5265,7 +5439,7 @@ export function FunctionWordEntryView({
     const [initialFormData, setInitialFormData] = useState<any>(null);
 
     const pos = (entry.pos || '').toLowerCase();
-    const isInterjection = pos === 'interjection';
+    //const isInterjection = pos === 'interjection';
     const isPronoun = pos === 'pronoun';
     const isArticle = pos === 'article';
     const hasInflection = !shouldHideInflectionTableForEntry(pos, entry);
@@ -5569,7 +5743,9 @@ export function FunctionWordEntryView({
                                         </div>
                                     </PropRow>
                                 )}
-                                {entry.source_language && !(ety && ety.chain && ety.chain.length > 0) && (
+                                {entry.source_language && 
+                                 !['uncertain', 'unknown', 'null', 'none'].includes(entry.source_language.trim().toLowerCase()) && 
+                                 !(etyItems.length > 0) && (
                                     <PropRow label={term('source-language') || 'Origin'}>
                                         <span className="capitalize">{term(entry.source_language) || entry.source_language}</span>
                                     </PropRow>
@@ -5581,7 +5757,7 @@ export function FunctionWordEntryView({
                                         </Link>
                                     </PropRow>
                                 )}
-                                
+
                                 {isPronoun && entry.gender && (
                                     <PropRow label={term('gender')}>
                                         <span className="capitalize">{term(entry.gender)}</span>
@@ -5590,7 +5766,9 @@ export function FunctionWordEntryView({
                             </div>
 
                             <div className="flex-1 min-w-0 w-full space-y-12">
-                                {hasInflection && (
+                                {isPronoun ? (
+                                    <PronounParadigmTable entry={entry} term={term} />
+                                ) : hasInflection && (
                                     <div className="w-full overflow-x-auto">
                                         <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
                                             {term('inflection-table')}
@@ -5630,25 +5808,25 @@ export function FunctionWordEntryView({
                                             {term('sun-moon-letters') || 'Sun & Moon Letters'}
                                         </h2>
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-sm">
-                                            <div className="rounded-lg border border-black/10 p-4 bg-white shadow-sm overflow-hidden">
-                                                <p className="text-xs font-bold uppercase tracking-wider text-black/50 mb-3 border-b border-black/5 pb-2">
+                                            <div className="overflow-hidden">
+                                                <h3 className="font-sans font-semibold text-[1.1rem] text-black/70 mb-3 md:text-left text-center">
                                                     {term('sun-letters')} ({term('assimilated')})
-                                                </p>
-                                                <div className="overflow-x-auto">
-                                                    <table className="w-full">
+                                                </h3>
+                                                <div className="overflow-x-auto pb-2">
+                                                    <table className="w-full text-sm border-collapse">
                                                         <thead>
-                                                            <tr className="text-[10px] text-black/30 uppercase tracking-widest text-left">
-                                                                <th className="pb-1">{term('letter')}</th>
-                                                                <th className="pb-1">{term('rule')}</th>
-                                                                <th className="pb-1">{term('example')}</th>
+                                                            <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                                <th className="text-left font-semibold text-black pb-2 pr-4 w-16">{term('letter')}</th>
+                                                                <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('rule')}</th>
+                                                                <th className="text-left font-semibold text-black pb-2">{term('example')}</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody className="divide-y divide-black/5">
+                                                        <tbody>
                                                             {sunTransformations.map((t, idx) => (
-                                                                <tr key={idx} className="group hover:bg-black/2">
-                                                                    <td className="py-2 pr-4 font-serif font-bold text-lg text-black">{t.letter}</td>
-                                                                    <td className="py-2 pr-4 font-mono text-black/40 text-[11px] whitespace-nowrap">{t.rule}</td>
-                                                                    <td className="py-2 pr-2 font-serif text-black leading-tight">
+                                                                <tr key={idx} className="border-b border-black/4 whitespace-nowrap">
+                                                                    <td className="py-1.5 pr-4 font-serif font-bold text-lg text-black">{t.letter}</td>
+                                                                    <td className="py-1.5 pr-4 font-mono text-black/40 text-[11px]">{t.rule}</td>
+                                                                    <td className="py-1.5 font-serif text-black leading-tight">
                                                                         <span className="opacity-40">{t.example}</span>
                                                                         <span className="mx-2 opacity-20">→</span>
                                                                         <span className="font-bold underline decoration-black/10 underline-offset-4">{t.result}</span>
@@ -5660,25 +5838,25 @@ export function FunctionWordEntryView({
                                                 </div>
                                             </div>
 
-                                            <div className="rounded-lg border border-black/10 p-4 bg-white shadow-sm overflow-hidden">
-                                                <p className="text-xs font-bold uppercase tracking-wider text-black/50 mb-3 border-b border-black/5 pb-2">
+                                            <div className="overflow-hidden">
+                                                <h3 className="font-sans font-semibold text-[1.1rem] text-black/70 mb-3 md:text-left text-center">
                                                     {term('moon-letters')} ({term('standard-label')})
-                                                </p>
-                                                <div className="overflow-x-auto">
-                                                    <table className="w-full">
+                                                </h3>
+                                                <div className="overflow-x-auto pb-2">
+                                                    <table className="w-full text-sm border-collapse">
                                                         <thead>
-                                                            <tr className="text-[10px] text-black/30 uppercase tracking-widest text-left">
-                                                                <th className="pb-1">{term('letter')}</th>
-                                                                <th className="pb-1">{term('rule')}</th>
-                                                                <th className="pb-1">{term('example')}</th>
+                                                            <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                                <th className="text-left font-semibold text-black pb-2 pr-4 w-16">{term('letter')}</th>
+                                                                <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('rule')}</th>
+                                                                <th className="text-left font-semibold text-black pb-2">{term('example')}</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody className="divide-y divide-black/5">
+                                                        <tbody>
                                                             {moonTransformations.map((t, idx) => (
-                                                                <tr key={idx} className="group hover:bg-black/2">
-                                                                    <td className="py-2 pr-4 font-serif font-bold text-lg text-black">{t.letter}</td>
-                                                                    <td className="py-2 pr-4 font-mono text-black/40 text-[11px] whitespace-nowrap">{t.rule}</td>
-                                                                    <td className="py-2 pr-2 font-serif text-black leading-tight">
+                                                                <tr key={idx} className="border-b border-black/4 whitespace-nowrap">
+                                                                    <td className="py-1.5 pr-4 font-serif font-bold text-lg text-black">{t.letter}</td>
+                                                                    <td className="py-1.5 pr-4 font-mono text-black/40 text-[11px]">{t.rule}</td>
+                                                                    <td className="py-1.5 font-serif text-black leading-tight">
                                                                         <span className="opacity-40">{t.example}</span>
                                                                         <span className="mx-2 opacity-20">→</span>
                                                                         <span className="font-bold underline decoration-black/10 underline-offset-4">{t.result}</span>
