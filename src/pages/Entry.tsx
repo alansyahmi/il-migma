@@ -1742,12 +1742,12 @@ function TogglePill<T extends string>({
     options, active, onChange, labels,
 }: { options: T[]; active: T; onChange: (v: T) => void; labels?: string[] }) {
     return (
-        <div className="inline-flex rounded-md border border-black/10 overflow-hidden text-[15px]">
+        <div className="inline-flex rounded-md border border-black/10 overflow-hidden">
             {options.map((opt, i) => (
                 <button
                     key={opt}
                     onClick={() => onChange(opt)}
-                    className={`px-4 py-2 transition-colors font-sans ${active === opt
+                    className={`px-4 py-2 text-[15px] md:px-3 md:py-1 md:text-xs transition-colors font-sans ${active === opt
                         ? 'bg-[#1034A6] text-white'
                         : 'bg-white text-[#555] hover:bg-black/5'
                         }`}
@@ -1772,7 +1772,7 @@ function SuffixStrip({ labels, activeIdx, onToggle, disabledIndices = [] }: {
     const secondRow = labels.slice(4);
 
     const renderRow = (rowLabels: string[], offset: number, isMobile: boolean = false) => (
-        <div className={`${isMobile ? 'flex w-full' : 'inline-flex'} rounded-md border border-black/10 overflow-hidden text-[14px]`}>
+        <div className={`${isMobile ? 'flex w-full' : 'inline-flex'} rounded-md border border-black/10 overflow-hidden`}>
             {rowLabels.map((lbl, i) => {
                 const actualIdx = i + offset;
                 const isDisabled = dis.includes(actualIdx);
@@ -1781,7 +1781,7 @@ function SuffixStrip({ labels, activeIdx, onToggle, disabledIndices = [] }: {
                         key={lbl}
                         disabled={isDisabled}
                         onClick={() => onToggle(actualIdx)}
-                        className={`px-1 py-2 transition-colors font-mono border-r border-black/5 last:border-r-0 flex items-center justify-center text-center ${isMobile ? 'flex-1 h-8' : 'px-2'} ${activeIdx === actualIdx
+                        className={`transition-colors font-mono border-r border-black/5 last:border-r-0 flex items-center justify-center text-center ${isMobile ? 'flex-1 h-8 px-1 py-2 text-[14px]' : 'px-2.5 py-1 text-xs'} ${activeIdx === actualIdx
                             ? 'bg-[#1034A6] text-white border-[#1034A6]'
                             : isDisabled
                                 ? 'bg-black/5 text-black/20 cursor-not-allowed'
@@ -2892,7 +2892,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                                     {/* Desktop Table View */}
                                     <div className="hidden md:block overflow-x-auto overflow-y-hidden pb-4">
-                                        <table className="w-full text-[17px] border-collapse md:min-w-[500px]">
+                                        <table className="w-full text-sm border-collapse md:min-w-[500px]">
                                             <thead>
                                                 <tr className="border-b border-black/8 font-sans whitespace-nowrap">
                                                     <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('person')}</th>
@@ -2907,7 +2907,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             <tbody>
                                                 {conj.rows.map(row => (
                                                     <tr key={row.person_mt} className="border-b border-black/4 whitespace-nowrap">
-                                                        <td className="py-1.5 pr-4 text-black/40 text-[15px] font-sans">
+                                                        <td className="py-1.5 pr-4 text-black/40 text-xs font-sans">
                                                             {term(row.person_mt)}
                                                         </td>
                                                         <td className="py-1.5 pr-4 font-serif font-normal text-black">
@@ -2940,11 +2940,11 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             </tbody>
                                         </table>
 
-                                        <div className="mt-4 grid grid-cols-3 gap-2 text-[17px] border-t border-black/8 pt-3">
+                                        <div className="mt-4 grid grid-cols-3 gap-2 text-sm border-t border-black/8 pt-3">
                                             <p className="font-sans font-semibold text-black self-center">{term('imperative')}</p>
                                             <div>
-                                                <p className="text-[15px] text-black/40 mb-0.5">{term('singular')}</p>
-                                                <p className="font-serif font-normal text-black">
+                                                <p className="text-xs text-black/40 mb-0.5">{term('singular')}</p>
+                                                <p className="font-serif font-normal text-black text-[15px] md:text-sm">
                                                     {(() => {
                                                         const row = conj.rows[1]; // inti
                                                         const base = isNeg ? row.imperfect : conj.imperative_sg;
@@ -2962,8 +2962,8 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                 </p>
                                             </div>
                                             <div>
-                                                <p className="text-[15px] text-black/40 mb-0.5">{term('plural')}</p>
-                                                <p className="font-serif font-normal text-black">
+                                                <p className="text-xs text-black/40 mb-0.5">{term('plural')}</p>
+                                                <p className="font-serif font-normal text-black text-[15px] md:text-sm">
                                                     {(() => {
                                                         const row = conj.rows[5]; // intom
                                                         const base = isNeg ? row.imperfect : conj.imperative_pl;
@@ -3099,7 +3099,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     {/* Controls (Polarity & Pronouns) */}
                                     <div className="mt-4 pt-6 border-t border-black/8 space-y-4 w-full max-w-[340px] mx-auto md:max-w-none md:mx-0">
                                         <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                                            <p className="text-[15px] text-black font-semibold mb-1.5 font-sans">{term('polarity')}</p>
+                                            <p className="text-xs uppercase tracking-wider text-black/50 font-bold mb-2 font-sans">{term('polarity')}</p>
                                             <TogglePill
                                                 options={['Positive', 'Negative']}
                                                 active={polarity}
@@ -3109,7 +3109,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                                             <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                                                <p className="text-[15px] text-black font-semibold mb-1.5 font-sans">{term('direct-object')}</p>
+                                                <p className="text-xs uppercase tracking-wider text-black/50 font-bold mb-2 font-sans">{term('direct-object')}</p>
                                                 <SuffixStrip
                                                     labels={doLabels}
                                                     activeIdx={doIdx}
@@ -3118,7 +3118,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                                 />
                                             </div>
                                             <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                                                <p className="text-[15px] text-black font-semibold mb-1.5 font-sans">{term('indirect-object')}</p>
+                                                <p className="text-xs uppercase tracking-wider text-black/50 font-bold mb-2 font-sans">{term('indirect-object')}</p>
                                                 <SuffixStrip
                                                     labels={ioLabels}
                                                     activeIdx={ioIdx}
