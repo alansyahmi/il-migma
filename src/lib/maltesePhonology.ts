@@ -6,6 +6,17 @@
 
 import { prepareSuffixAttachmentStem, hasStressedOrLongFinalSyllable } from './nounAttachment.ts';
 
+function capitalizeFirst(s: string): string {
+    if (!s) return s;
+    const prefixMatch = s.match(/^([*✦\s]+)/);
+    if (prefixMatch) {
+        const prefix = prefixMatch[1];
+        const rest = s.slice(prefix.length);
+        return prefix + (rest ? rest.charAt(0).toUpperCase() + rest.slice(1) : '');
+    }
+    return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 // ── CONSTANTS ──────────────────────────────────────────────────────────────
 
 const VOWELS = ['a', 'e', 'i', 'o', 'u', 'à', 'è', 'ì', 'ò', 'ù', 'â', 'ê', 'î', 'ô', 'û'];
@@ -22,6 +33,7 @@ function isIPAVowel(c: string): boolean { return IPA_VOWELS.includes(c); }
 const GRAPHEME_MAP: Record<string, string> = {
     'ċ': 't͡ʃ',
     'ġ': 'd͡ʒ',
+    'g': 'ɡ',
     'ħ': 'ħ',
     'q': 'ʔ',
     'x': 'ʃ',
@@ -33,6 +45,11 @@ const GRAPHEME_MAP: Record<string, string> = {
     'i': 'ɪ',
     'o': 'ɔ',
     'u': 'ʊ',
+    'à': 'ɐ',
+    'è': 'ɛ',
+    'ì': 'ɪ',
+    'ò': 'ɔ',
+    'ù': 'ʊ',
     'â': 'ɐː',
     'ê': 'ɛː',
     'î': 'ɪː',
@@ -124,7 +141,10 @@ function syllabifyIPA(ipa: string): string[] {
  */
 export function generateIPA(word: string, stressSyllableFromEnd?: number, longVowelIdx?: number): string {
     if (!word) return '';
-    let text = word.toLowerCase().normalize('NFC');
+    const originalText = word.toLowerCase().normalize('NFC');
+    const hasFinalAccent = /[àèìòù]$/.test(originalText);
+
+    let text = originalText;
 
     // 1. Multi-character grapheme substitutions
     text = text.replace(/għi/g, 'ɛj');
@@ -174,10 +194,10 @@ export function generateIPA(word: string, stressSyllableFromEnd?: number, longVo
             stressIdx = numSyllables - stressSyllableFromEnd;
         } else {
             // Auto: penultimate by default
-            // Ultimate if final syllable has long vowel already
+            // Ultimate if final syllable has long vowel already, or had an explicit accent
             const lastSyl = syllables[numSyllables - 1];
             const hasLongVowelInLast = /[ɐɛɪɔʊi]ː/.test(lastSyl);
-            stressIdx = hasLongVowelInLast ? numSyllables - 1 : numSyllables - 2;
+            stressIdx = (hasLongVowelInLast || hasFinalAccent) ? numSyllables - 1 : numSyllables - 2;
         }
         stressIdx = Math.max(0, Math.min(stressIdx, numSyllables - 1));
     }
@@ -440,8 +460,9 @@ export function detectPluralType(headword: string, _soundSuffixes: string[]): Pl
  * This keeps forms like għomor -> għomrejn instead of għomorejn.
  */
 export function generateTheoreticalDual(word: string, pluralHint?: string | null, ipaHint?: string | null, pattern?: string | null, rootConsonants?: string | null): string {
-    if (!word) return '';
-    const norm = word.toLowerCase().trim().normalize('NFC');
+    const cleanWord = word.replace(/^[*✦\s]+/, '');
+    const isCapitalized = cleanWord.length > 0 && cleanWord[0] === cleanWord[0].toUpperCase() && cleanWord[0] !== cleanWord[0].toLowerCase();
+    const norm = word.replace(/^[*✦\s]+/, '').toLowerCase().trim().normalize('NFC');
     const roots = rootConsonants ? rootConsonants.toLowerCase().replace(/[-.,\s]+/g, '-').split('-').filter(Boolean) : [];
 
     // Weak radical duals: ħelu (ħ-l-w) -> ħelwejn, ziju (z-j-w) -> zijuwejn
@@ -454,10 +475,10 @@ export function generateTheoreticalDual(word: string, pluralHint?: string | null
         if (isC3Weak) {
             if (isC2Weak) {
                 // Both weak: -u -> -uwejn
-                return norm + 'wejn';
+                return isCapitalized ? capitalizeFirst(norm + 'wejn') : norm + 'wejn';
             } else {
                 // Only 3rd weak: -u -> -wejn
-                return norm.slice(0, -1) + 'wejn';
+                return isCapitalized ? capitalizeFirst(norm.slice(0, -1) + 'wejn') : norm.slice(0, -1) + 'wejn';
             }
         }
     }
@@ -479,8 +500,9 @@ export function generateTheoreticalDual(word: string, pluralHint?: string | null
     }
 
     const suffix = (isGuttural || isAtPlural) ? 'ajn' : 'ejn';
+    const result = stem + suffix;
 
-    return stem + suffix;
+    return isCapitalized ? capitalizeFirst(result) : result;
 }
 
 /**
@@ -489,8 +511,11 @@ export function generateTheoreticalDual(word: string, pluralHint?: string | null
  */
 export function generateFeminineDualFromMasculine(word: string): string {
     if (!word) return '';
-    const normalized = word.toLowerCase().trim().normalize('NFC');
-    return `${normalized.replace(/ie/g, 'e')}tejn`;
+    const cleanWord = word.replace(/^[*✦\s]+/, '');
+    const isCapitalized = cleanWord.length > 0 && cleanWord[0] === cleanWord[0].toUpperCase() && cleanWord[0] !== cleanWord[0].toLowerCase();
+    const normalized = word.replace(/^[*✦\s]+/, '').toLowerCase().trim().normalize('NFC');
+    const result = `${normalized.replace(/ie/g, 'e')}tejn`;
+    return isCapitalized ? capitalizeFirst(result) : result;
 }
 
 function inferIeCollapseVowel(pluralHint?: string | null): 'e' | 'i' {
@@ -532,8 +557,11 @@ export function generateFeminineDualFromMasculineWithHint(
     ipaHint?: string | null,
 ): string {
     if (!word) return '';
-    const normalized = word.toLowerCase().trim().normalize('NFC');
-    return `${buildFeminineDualStem(normalized, pluralHint, ipaHint)}tejn`;
+    const cleanWord = word.replace(/^[*✦\s]+/, '');
+    const isCapitalized = cleanWord.length > 0 && cleanWord[0] === cleanWord[0].toUpperCase() && cleanWord[0] !== cleanWord[0].toLowerCase();
+    const normalized = word.replace(/^[*✦\s]+/, '').toLowerCase().trim().normalize('NFC');
+    const result = `${buildFeminineDualStem(normalized, pluralHint, ipaHint)}tejn`;
+    return isCapitalized ? capitalizeFirst(result) : result;
 }
 
 function parseRootConsonants(rootConsonants?: string | null): string[] {

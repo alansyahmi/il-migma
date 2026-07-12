@@ -3,6 +3,7 @@ import {
     Plus, RefreshCw, RotateCcw, Keyboard, Sparkles, ArrowUp, ArrowDown, AlertTriangle
 } from 'lucide-react';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
+import { IPAKeyboard } from '@/components/ui/IPAKeyboard';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants, apiGetDistinctValues, apiGetEntry, adminCheckIdExists, invalidateDistinctValuesCache, apiSearch } from '@/lib/api';
@@ -1219,8 +1220,6 @@ const ParticipleFields = ({ form, set, t, styles, options, insertChar, onFocus, 
 );
 
 const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => {
-    const head = (form.headword || '').trim().toLowerCase();
-    const showGender = head === 'huwa' || head === 'hija';
     const pluralRows = Array.isArray(form.plural_forms) && form.plural_forms.length > 0
         ? form.plural_forms
         : compactPluralRows(normalizePluralFormRows(form.plural_forms, form.form_plural_pattern));
@@ -1230,29 +1229,27 @@ const PronounFields = ({ form, set, t, styles, options }: MorphologyProps) => {
 
     return (
         <div className="space-y-4">
-            {showGender && (
-                <div className={styles.grid}>
-                    <div>
-                        <label className={styles.label}>{t('Gender', 'Ġens')}</label>
-                        <select className={styles.sel} value={form.gender} onChange={e => set('gender', e.target.value)}>
-                            <option value="">{t('Select...', 'Agħżel...')}</option>
-                            {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
-                        </select>
-                    </div>
-                    {form.gender?.toLowerCase() === 'masculine' && (
-                        <div>
-                            <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
-                            <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
-                        </div>
-                    )}
-                    {form.gender?.toLowerCase() === 'feminine' && (
-                        <div>
-                            <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
-                            <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
-                        </div>
-                    )}
+            <div className={styles.grid}>
+                <div>
+                    <label className={styles.label}>{t('Gender', 'Ġens')}</label>
+                    <select className={styles.sel} value={form.gender} onChange={e => set('gender', e.target.value)}>
+                        <option value="">{t('Select...', 'Agħżel...')}</option>
+                        {options?.gender?.map((g: any) => <option key={g.value} value={g.value}>{g.label}</option>)}
+                    </select>
                 </div>
-            )}
+                {form.gender?.toLowerCase() === 'masculine' && (
+                    <div>
+                        <label className={styles.label}>{t('Feminine Form', 'Femminil')}</label>
+                        <input className={styles.inp} value={form.form_fem || ''} onChange={e => set('form_fem', e.target.value)} />
+                    </div>
+                )}
+                {form.gender?.toLowerCase() === 'feminine' && (
+                    <div>
+                        <label className={styles.label}>{t('Masculine Form', 'Maskil')}</label>
+                        <input className={styles.inp} value={form.form_masc || ''} onChange={e => set('form_masc', e.target.value)} />
+                    </div>
+                )}
+            </div>
             <PluralFormsEditor
                 rows={pluralRows}
                 onChange={updatePluralRows}
@@ -1759,6 +1756,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const [isNotable, setIsNotable] = useState(false);
 
     const [kbOpen, setKbOpen] = useState(false);
+    const [ipaKbOpenIndex, setIpaKbOpenIndex] = useState<number | null>(null);
     const [activeInput, setActiveInput] = useState<string | null>(null);
     const kbTriggerRef = useRef<HTMLButtonElement>(null);
     const activeInputRef = useRef<HTMLInputElement>(null);
@@ -1769,14 +1767,34 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         const start = el.selectionStart || 0;
         const end = el.selectionEnd || 0;
 
-        setForm((prev: any) => {
-            const currentVal = prev[activeInput] || '';
-            const newVal = currentVal.substring(0, start) + char + currentVal.substring(end);
-            return {
-                ...prev,
-                [activeInput]: newVal
-            };
-        });
+        if (activeInput.startsWith('phonetics.')) {
+            const parts = activeInput.split('.');
+            const idx = parseInt(parts[1], 10);
+            const field = parts[2] as 'ipa' | 'spelling' | 'dialect';
+            
+            setForm((prev: any) => {
+                const nextPhonetics = [...prev.phonetics];
+                const currentVal = nextPhonetics[idx][field] || '';
+                const newVal = currentVal.substring(0, start) + char + currentVal.substring(end);
+                nextPhonetics[idx] = {
+                    ...nextPhonetics[idx],
+                    [field]: newVal
+                };
+                return {
+                    ...prev,
+                    phonetics: nextPhonetics
+                };
+            });
+        } else {
+            setForm((prev: any) => {
+                const currentVal = prev[activeInput] || '';
+                const newVal = currentVal.substring(0, start) + char + currentVal.substring(end);
+                return {
+                    ...prev,
+                    [activeInput]: newVal
+                };
+            });
+        }
 
         setTimeout(() => {
             el.focus();
@@ -3235,11 +3253,40 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                 </div>
                                 <div className="flex-1 w-full sm:w-2/4">
                                     {i === 0 && <label className={label}>{t('IPA', 'IPA')}</label>}
-                                    <input className={inp} value={ph.ipa} placeholder="/ˈkɪtɛp/" onChange={e => {
-                                        const next = [...form.phonetics];
-                                        next[i].ipa = e.target.value;
-                                        set('phonetics', next);
-                                    }} />
+                                    <div className="flex gap-2 relative">
+                                        <input
+                                            className={cn(inp, "flex-1")}
+                                            value={ph.ipa}
+                                            placeholder="/ˈkɪtɛp/"
+                                            onChange={e => {
+                                                const next = [...form.phonetics];
+                                                next[i].ipa = e.target.value;
+                                                set('phonetics', next);
+                                            }}
+                                            onFocus={(e) => {
+                                                setActiveInput(`phonetics.${i}.ipa`);
+                                                activeInputRef.current = e.target;
+                                            }}
+                                            id={`ipa-input-${i}`}
+                                        />
+                                        <button
+                                            type="button"
+                                            id={`ipa-kb-trigger-${i}`}
+                                            onClick={() => setIpaKbOpenIndex(ipaKbOpenIndex === i ? null : i)}
+                                            className={cn(
+                                                "px-3 border border-black/10 rounded-lg transition-colors shrink-0",
+                                                ipaKbOpenIndex === i ? "bg-[#1034A6] text-white border-[#1034A6]" : "bg-white text-black/40 hover:text-black/60 hover:bg-black/5"
+                                            )}
+                                        >
+                                            <Keyboard size={16} />
+                                        </button>
+                                        <IPAKeyboard
+                                            open={ipaKbOpenIndex === i}
+                                            onOpenChange={(open) => setIpaKbOpenIndex(open ? i : null)}
+                                            onInsert={insertChar}
+                                            triggerRef={{ current: document.getElementById(`ipa-kb-trigger-${i}`) }}
+                                        />
+                                    </div>
                                 </div>
                                 <button type="button" onClick={() => set('phonetics', form.phonetics.filter((_: any, idx: number) => idx !== i))}
                                     className="mb-2 text-slate-400 hover:text-red-500 px-1 shrink-0">

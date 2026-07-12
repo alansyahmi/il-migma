@@ -569,10 +569,10 @@ function prepareDiminutiveStemForAttachment(word: string) {
     return String(word || '').replace(/jj/g, 'j').replace(/ww/g, 'w');
 }
 
-function getTheoreticalDualPattern(baseForm: string | null | undefined, pluralHint?: string | null, isFeminine = false) {
+function getTheoreticalDualPattern(baseForm: string | null | undefined, pluralHint?: string | null, isFeminine = false, ipaHint?: string | null) {
     if (!baseForm) return '-';
     if (isFeminine) return '-tejn';
-    return generateTheoreticalDual(baseForm, pluralHint).endsWith('ajn') ? '-ajn' : '-ejn';
+    return generateTheoreticalDual(baseForm, pluralHint, ipaHint).endsWith('ajn') ? '-ajn' : '-ejn';
 }
 
 function getDualSurfaceForVariant(
@@ -583,6 +583,7 @@ function getDualSurfaceForVariant(
     hasOppositeGender: boolean,
     masculineSource: string | null | undefined,
     explicitDual: string | null | undefined,
+    ipaHint?: string | null,
 ) {
     if (!baseForm) return null;
 
@@ -591,10 +592,10 @@ function getDualSurfaceForVariant(
     }
 
     if (!explicitDual && variant === 'feminine' && hasOppositeGender && masculineSource) {
-        return generateFeminineDualFromMasculineWithHint(masculineSource, pluralHint);
+        return generateFeminineDualFromMasculineWithHint(masculineSource, pluralHint, ipaHint);
     }
 
-    return generateTheoreticalDual(baseForm, pluralHint);
+    return generateTheoreticalDual(baseForm, pluralHint, ipaHint);
 }
 
 function getDualPatternForVariant(
@@ -604,14 +605,15 @@ function getDualPatternForVariant(
     primaryVariant: 'masculine' | 'feminine',
     explicitPattern: string | null | undefined,
     explicitDual: string | null | undefined,
+    ipaHint?: string | null,
 ) {
     if (!baseForm) return '-';
 
     if (explicitDual && variant === primaryVariant) {
-        return explicitPattern || getTheoreticalDualPattern(baseForm, pluralHint, variant === 'feminine');
+        return explicitPattern || getTheoreticalDualPattern(baseForm, pluralHint, variant === 'feminine', ipaHint);
     }
 
-    return getTheoreticalDualPattern(baseForm, pluralHint, variant === 'feminine');
+    return getTheoreticalDualPattern(baseForm, pluralHint, variant === 'feminine', ipaHint);
 }
 
 function buildDiminutivePlural(word: string) {
@@ -1221,6 +1223,7 @@ function NounMorphologySection({
                 },
                 dual: {
                     value: (() => {
+                        const ipaHint = entry.phonetics?.find((ph: any) => ph.dialect === 'Standard')?.ipa || entry.phonetics?.[0]?.ipa;
                         return getDualSurfaceForVariant(
                             baseForm,
                             pluralHint,
@@ -1229,9 +1232,13 @@ function NounMorphologySection({
                             hasOppositeGender,
                             masculineSource,
                             dual,
+                            ipaHint,
                         );
                     })(),
-                    pattern: getDualPatternForVariant(baseForm, pluralHint, variant, primaryVariant, dualPattern, dual),
+                    pattern: (() => {
+                        const ipaHint = entry.phonetics?.find((ph: any) => ph.dialect === 'Standard')?.ipa || entry.phonetics?.[0]?.ipa;
+                        return getDualPatternForVariant(baseForm, pluralHint, variant, primaryVariant, dualPattern, dual, ipaHint);
+                    })(),
                     theoretical: !(variant === primaryVariant && !!dual),
                 },
                 plural: {
@@ -2044,12 +2051,14 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         const isT = theoreticalOverride ?? isTheoretical;
         // Use the passed customPattern (for plurals) or the entry's cv_pattern
         const activePattern = customPattern || (entry as any).cv_pattern || (entry.root_pattern_form?.pattern?.cv_notation);
+        const ipaHint = entry.phonetics?.find((ph: any) => ph.dialect === 'Standard')?.ipa || entry.phonetics?.[0]?.ipa;
         const result = applyInflectionTableSuffix(
             base,
             idx as any,
             nm.gender === 'feminine' ? 'feminine' : 'masculine',
             activePattern,
             thirdRadical,
+            ipaHint,
         );
 
         if (result === '-') return { value: '-', theoretical: false };
@@ -4801,12 +4810,14 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     const applySuffix = (base: string, idx: number, theoreticalOverride?: boolean, customPattern?: string) => {
         const isT = theoreticalOverride ?? isTheoretical;
         const activePattern = customPattern || (entry as any).cv_pattern || (entry.root_pattern_form?.pattern?.cv_notation);
+        const ipaHint = entry.phonetics?.find((ph: any) => ph.dialect === 'Standard')?.ipa || entry.phonetics?.[0]?.ipa;
         const result = applyInflectionTableSuffix(
             base,
             idx as any,
             virtualNounMorphology.gender === 'feminine' ? 'feminine' : 'masculine',
             activePattern,
             thirdRadical,
+            ipaHint,
         );
 
         if (result === '-') return { value: '-', theoretical: false };
@@ -5250,8 +5261,8 @@ function PronounParadigmTable({ entry, term }: { entry: Entry; term: (key: strin
 
     const personalParadigm = [
         { personKey: 'pos-1s', subject: 'jien / jiena', objSuffix: '-ni', possSuffix: '-i / -ja', matches: ['jien', 'jiena', 'jien-stess', 'jiena-stess'] },
-        { personKey: 'pos-2s', subject: 'int / inti', objSuffix: '-ek / -k / -ik', possSuffix: '-ek / -k', matches: ['int', 'inti', 'int-stess', 'inti-stess'] },
-        { personKey: 'pos-3ms', subject: 'hu / huwa', objSuffix: '-h / -u', possSuffix: '-u / -h', matches: ['hu', 'huwa', 'hu-stess', 'huwa-stess'] },
+        { personKey: 'pos-2s', subject: 'int / inti', objSuffix: '-ek / -k / -ik / -ok', possSuffix: '-ek / -k / -ik / -ok', matches: ['int', 'inti', 'int-stess', 'inti-stess'] },
+        { personKey: 'pos-3ms', subject: 'hu / huwa', objSuffix: '-h / -u', possSuffix: '-h / -u', matches: ['hu', 'huwa', 'hu-stess', 'huwa-stess'] },
         { personKey: 'pos-3fs', subject: 'hi / hija', objSuffix: '-ha', possSuffix: '-ha', matches: ['hi', 'hija', 'hi-stess', 'hija-stess'] },
         { personKey: 'pos-1p', subject: 'aħna', objSuffix: '-na', possSuffix: '-na', matches: ['aħna', 'aħna-stess'] },
         { personKey: 'pos-2p', subject: 'intom', objSuffix: '-kom', possSuffix: '-kom', matches: ['intom', 'intom-stess'] },
@@ -5271,22 +5282,22 @@ function PronounParadigmTable({ entry, term }: { entry: Entry; term: (key: strin
             return <span className="font-bold text-black">{row.subject}</span>;
         }
         if (row.personKey === 'pos-1p') {
-            return <Link to="/entry/art-aħna" className="hover:underline text-[#1034A6]">aħna</Link>;
+            return <Link to="/entry/pron-aħna" className="hover:underline text-[#1034A6]">aħna</Link>;
         }
         if (row.personKey === 'pos-2p') {
-            return <Link to="/entry/art-intom" className="hover:underline text-[#1034A6]">intom</Link>;
+            return <Link to="/entry/pron-intom" className="hover:underline text-[#1034A6]">intom</Link>;
         }
         if (row.personKey === 'pos-3p') {
-            return <Link to="/entry/art-huma" className="hover:underline text-[#1034A6]">huma</Link>;
+            return <Link to="/entry/pron-huma" className="hover:underline text-[#1034A6]">huma</Link>;
         }
         const parts = row.subject.split(' / ');
         const short = parts[0].trim();
         const long = parts[1].trim();
         return (
             <>
-                <Link to={`/entry/art-${short}`} className="hover:underline text-[#1034A6]">{short}</Link>
+                <Link to={`/entry/pron-${short}`} className="hover:underline text-[#1034A6]">{short}</Link>
                 {' / '}
-                <Link to={`/entry/art-${long}`} className="hover:underline text-[#1034A6]">{long}</Link>
+                <Link to={`/entry/pron-${long}`} className="hover:underline text-[#1034A6]">{long}</Link>
             </>
         );
     };
@@ -5553,12 +5564,14 @@ export function FunctionWordEntryView({
     const POSSESSIVE_SUFFIX_KEYS = ['pos-1s', 'pos-2s', 'pos-3ms', 'pos-3fs', 'pos-1p', 'pos-2p', 'pos-3p'];
     const applySuffix = (base: string, idx: number) => {
         if (!base) return { value: '-', theoretical: false };
+        const ipaHint = entry.phonetics?.find((ph: any) => ph.dialect === 'Standard')?.ipa || entry.phonetics?.[0]?.ipa;
         const result = applyInflectionTableSuffix(
             base,
             idx as any,
             (entry.gender as any) || 'masculine',
             (entry as any).cv_pattern || pattern?.cv_notation,
-            thirdRadical
+            thirdRadical,
+            ipaHint,
         );
         if (result === '-') return { value: '-', theoretical: false };
         const parts = result.split(' / ');
@@ -5743,13 +5756,13 @@ export function FunctionWordEntryView({
                                         </div>
                                     </PropRow>
                                 )}
-                                {entry.source_language && 
-                                 !['uncertain', 'unknown', 'null', 'none'].includes(entry.source_language.trim().toLowerCase()) && 
-                                 !(etyItems.length > 0) && (
-                                    <PropRow label={term('source-language') || 'Origin'}>
-                                        <span className="capitalize">{term(entry.source_language) || entry.source_language}</span>
-                                    </PropRow>
-                                )}
+                                {entry.source_language &&
+                                    !['uncertain', 'unknown', 'null', 'none'].includes(entry.source_language.trim().toLowerCase()) &&
+                                    !(etyItems.length > 0) && (
+                                        <PropRow label={term('source-language') || 'Origin'}>
+                                            <span className="capitalize">{term(entry.source_language) || entry.source_language}</span>
+                                        </PropRow>
+                                    )}
                                 {patternValue && (
                                     <PropRow label={mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern')}>
                                         <Link to={`/pattern/${pattern?.id}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">

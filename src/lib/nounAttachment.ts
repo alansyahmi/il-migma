@@ -147,7 +147,7 @@ export function prepareSuffixAttachmentStem(word: string, ipaHint?: string, patt
             stem = shortenedIe;
         } else {
             const finalClusterMatch = stem.match(/([aeiouàèìòùâêîôû])([^aeiouàèìòùâêîôû]+)$/i);
-            if (finalClusterMatch && finalClusterMatch[2].length === 1) {
+            if (finalClusterMatch && finalClusterMatch[2].length === 1 && vowelCount === 2) {
                 stem = stem.replace(/([aeiouàèìòùâêîôû])([^aeiouàèìòùâêîôû]+)$/i, '$2');
             }
         }
@@ -198,7 +198,16 @@ export function deriveNounAttachmentStems(
             return { stemA: shortStem, stemB: shortStem };
         }
 
-        const collapsedRoot = prepareSuffixAttachmentStem(rootRaw, ipaHint, pattern);
+        let stemIpaHint = ipaHint;
+        if (ipaHint) {
+            const cleanIpa = ipaHint.replace(/^\/+|\/+$/g, '');
+            const syllables = cleanIpa.split('.');
+            if (syllables.length > 1) {
+                stemIpaHint = '/' + syllables.slice(0, -1).join('.') + '/';
+            }
+        }
+
+        const collapsedRoot = prepareSuffixAttachmentStem(rootRaw, stemIpaHint, pattern);
         const feminineStem = collapsedRoot.endsWith('j') || collapsedRoot.endsWith('w')
             ? `${collapsedRoot.slice(0, -1)}t`
             : `${collapsedRoot}t`;
@@ -206,7 +215,7 @@ export function deriveNounAttachmentStems(
         return { stemA: feminineStem, stemB: feminineStem };
     }
 
-    if (normalized.endsWith('u') || normalized.endsWith('i')) {
+    if (normalized.endsWith('u') || normalized.endsWith('i') || normalized.endsWith('o')) {
         return { stemA: normalized, stemB: normalized };
     }
 

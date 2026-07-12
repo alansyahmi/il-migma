@@ -77,7 +77,41 @@ function applyConstructSuffix(stem: string, idx: PossessiveSuffixIdx) {
     return `${stem}${suffix}`;
 }
 
+function capitalizeFirst(s: string): string {
+    if (!s) return s;
+    const prefixMatch = s.match(/^([*✦\s]+)/);
+    if (prefixMatch) {
+        const prefix = prefixMatch[1];
+        const rest = s.slice(prefix.length);
+        return prefix + (rest ? rest.charAt(0).toUpperCase() + rest.slice(1) : '');
+    }
+    return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 export function applyInflectionTableSuffix(
+    base: string,
+    idx: PossessiveSuffixIdx,
+    gender: 'masculine' | 'feminine' = 'masculine',
+    pattern?: string,
+    thirdRadical?: string,
+    ipaHint?: string,
+) {
+    if (!base || base === '-') return '-';
+    const cleanBase = base.replace(/^[*✦\s]+/, '');
+    const isCapitalized = cleanBase.length > 0 && cleanBase[0] === cleanBase[0].toUpperCase() && cleanBase[0] !== cleanBase[0].toLowerCase();
+    
+    const normalizedBase = isCapitalized ? cleanBase.charAt(0).toLowerCase() + cleanBase.slice(1) : base;
+    const result = applyInflectionTableSuffixInternal(normalizedBase, idx, gender, pattern, thirdRadical, ipaHint);
+    
+    if (result === '-') return '-';
+    
+    const hasOriginalAsterisk = base.startsWith('*');
+    const finalResult = hasOriginalAsterisk && !result.startsWith('*') ? '*' + result : result;
+
+    return isCapitalized ? capitalizeFirst(finalResult) : finalResult;
+}
+
+function applyInflectionTableSuffixInternal(
     base: string,
     idx: PossessiveSuffixIdx,
     gender: 'masculine' | 'feminine' = 'masculine',
@@ -113,8 +147,8 @@ export function applyInflectionTableSuffix(
         }
     }
 
-    // Vocalic endings: u/i
-    if (base.endsWith('u') || base.endsWith('i')) {
+    // Vocalic endings: u/i/o
+    if (base.endsWith('u') || base.endsWith('i') || base.endsWith('o')) {
         return applyPossessiveSuffix(base, idx, gender, pattern, thirdRadical, ipaHint);
     }
 

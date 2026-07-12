@@ -76,8 +76,8 @@ export function applyPossessiveSuffix(
         return base + finalSuffix;
     }
 
-    // ── Vocalic Endings (i) -> Glide Attachment ──────────────────────────────
-    if (base.endsWith('i')) {
+    // ── Vocalic Endings (i, o) -> Glide Attachment ───────────────────────────
+    if (base.endsWith('i') || base.endsWith('o')) {
         if (idx === 0) return base + 'ja';
         if (idx === 1) return base + 'k';
         if (idx === 2) return base + 'h';

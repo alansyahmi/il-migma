@@ -1,8 +1,10 @@
-import { useId } from 'react';
-import { Trash2 } from 'lucide-react';
+import { useId, useState } from 'react';
+import { Trash2, Keyboard } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import type { EtymologyBaseStep } from '@/lib/adminUtils';
 import { generateForeignScriptPronunciation } from '@/lib/foreignScriptPronunciation';
+import { cn } from '@/lib/utils';
+import { ArabicKeyboard } from '@/components/ui/ArabicKeyboard';
 
 type EtymologyFieldKey = keyof EtymologyBaseStep | 'pronunciation';
 type EtymologyChainItem = EtymologyBaseStep & { pronunciation?: string; script?: string };
@@ -47,6 +49,8 @@ export function EtymologyChainEditor({
     selectClassName,
 }: EtymologyChainEditorProps) {
     const datalistId = useId();
+    const [arabicKbOpenIndex, setArabicKbOpenIndex] = useState<number | null>(null);
+
     const mergeRelationshipChoices = (choices: string[]) => {
         const seen = new Set<string>();
         return choices.filter((choice) => {
@@ -152,12 +156,51 @@ export function EtymologyChainEditor({
                             </div>
                             <div>
                                 <label className={labelClassName}>{termLabel}</label>
-                                <input
-                                    className={inputClassName}
-                                    value={item.term || ''}
-                                    onChange={e => updateStep(index, 'term', e.target.value)}
-                                    placeholder="e.g. cantare"
-                                />
+                                <div className="flex gap-2 relative">
+                                    <input
+                                        className={cn(inputClassName, "flex-1")}
+                                        value={item.term || ''}
+                                        onChange={e => updateStep(index, 'term', e.target.value)}
+                                        placeholder="e.g. cantare"
+                                        id={`etym-term-${index}`}
+                                    />
+                                    {String(item.language || '').trim().toLowerCase() === 'arabic' && (
+                                        <>
+                                            <button
+                                                type="button"
+                                                id={`etym-kb-trigger-${index}`}
+                                                onClick={() => {
+                                                    setArabicKbOpenIndex(arabicKbOpenIndex === index ? null : index);
+                                                }}
+                                                className={cn(
+                                                    "px-3 border border-black/10 rounded-lg transition-colors shrink-0",
+                                                    arabicKbOpenIndex === index ? "bg-[#1034A6] text-white border-[#1034A6]" : "bg-white text-black/40 hover:text-black/60 hover:bg-black/5"
+                                                )}
+                                            >
+                                                <Keyboard size={16} />
+                                            </button>
+                                            <ArabicKeyboard
+                                                open={arabicKbOpenIndex === index}
+                                                onOpenChange={(open) => setArabicKbOpenIndex(open ? index : null)}
+                                                onInsert={(char) => {
+                                                    const el = document.getElementById(`etym-term-${index}`) as HTMLInputElement;
+                                                    if (el) {
+                                                        const start = el.selectionStart || 0;
+                                                        const end = el.selectionEnd || 0;
+                                                        const currentVal = item.term || '';
+                                                        const newVal = currentVal.substring(0, start) + char + currentVal.substring(end);
+                                                        updateStep(index, 'term', newVal);
+                                                        setTimeout(() => {
+                                                            el.focus();
+                                                            el.setSelectionRange(start + char.length, start + char.length);
+                                                        }, 0);
+                                                    }
+                                                }}
+                                                triggerRef={{ current: document.getElementById(`etym-kb-trigger-${index}`) }}
+                                            />
+                                        </>
+                                    )}
+                                </div>
                             </div>
                             {showPronunciation && (
                                 <div>

@@ -61,6 +61,7 @@
     "validate:api": "node scripts/validate_api.mjs",
     "seed:test-pack": "node scripts/seed-test-pack.mjs",
     "dev:api": "wrangler pages dev --port 8788 --no-show-interactive-dev-session",
+    "dev:all": "npx concurrently \"npm run dev\" \"npm run dev:api\"",
     "deploy": "npm run build && wrangler pages deploy dist",
     "deploy:pages": "npm run build && wrangler pages deploy dist"
   },

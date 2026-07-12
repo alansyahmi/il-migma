@@ -4,7 +4,7 @@ import {
     Database, Table, CheckCircle2, AlertCircle, Info, Download,
     Play, Trash2, GitMerge, RefreshCw, Lock, Unlock, Search,
     ChevronRight, ChevronDown, FileJson, FileSpreadsheet,
-    Link as LinkIcon, AlertTriangle
+    Link as LinkIcon, AlertTriangle, Upload
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -14,7 +14,8 @@ import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
     adminDbQuery, adminDbExport, adminDbIntegrityCheck,
-    adminDbMergeRoots, adminDbTableInfo, adminDbExportBundle
+    adminDbMergeRoots, adminDbTableInfo, adminDbExportBundle,
+    adminCreateEntry, adminUpdateEntry
 } from '@/lib/api';
 
 interface DbToolsProps {
@@ -527,13 +528,20 @@ function IntegrityCheck({ getToken }: { getToken: () => Promise<string | null> }
 // ── SUB-COMPONENT: Bulk Operations ──────────────────────────────────────────
 function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; tables: any[] }) {
     const { t } = useLanguage();
-    const [activeWorkflow, setActiveWorkflow] = useState<'merge' | 'bulk-update' | null>(null);
+    const [activeWorkflow, setActiveWorkflow] = useState<'merge' | 'bulk-update' | 'import-jsonl' | null>(null);
 
     // Merge State
     const [mergeSource, setMergeSource] = useState('');
     const [mergeTarget, setMergeTarget] = useState('');
     const [mergePreview, setMergePreview] = useState<any>(null);
     const [loading, setLoading] = useState(false);
+
+    // JSONL Import State
+    const [jsonlFile, setJsonlFile] = useState<File | null>(null);
+    const [importing, setImporting] = useState(false);
+    const [importProgress, setImportProgress] = useState(0);
+    const [importStats, setImportStats] = useState({ total: 0, processed: 0, updated: 0, inserted: 0, failed: 0 });
+    const [importLogs, setImportLogs] = useState<string[]>([]);
 
     const handleMergePreview = async () => {
         if (!mergeSource || !mergeTarget) return;
@@ -560,10 +568,104 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
         finally { setLoading(false); }
     };
 
+    const handleJsonlFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files?.[0]) {
+            setJsonlFile(e.target.files[0]);
+            setImportProgress(0);
+            setImportStats({ total: 0, processed: 0, updated: 0, inserted: 0, failed: 0 });
+            setImportLogs([]);
+        }
+    };
+
+    const handleJsonlUpload = async () => {
+        if (!jsonlFile) return;
+        const token = await getToken();
+        if (!token) return;
+
+        setImporting(true);
+        setImportProgress(0);
+        setImportLogs([]);
+        
+        const log = (msg: string) => {
+            setImportLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
+        };
+
+        log(t('Starting import process...', 'Qed tibda l-importazzjoni...'));
+
+        try {
+            const text = await jsonlFile.text();
+            const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+            const total = lines.length;
+            
+            setImportStats({ total, processed: 0, updated: 0, inserted: 0, failed: 0 });
+            log(t(`Loaded ${total} lines from file.`, `Sibt ${total} linja fil-file.`));
+
+            let processed = 0;
+            let updated = 0;
+            let inserted = 0;
+            let failed = 0;
+
+            for (let i = 0; i < total; i++) {
+                const line = lines[i];
+                let entry: any;
+                try {
+                    entry = JSON.parse(line);
+                } catch (e: any) {
+                    failed++;
+                    log(t(`Line ${i + 1} is invalid JSON: ${e.message}`, `Linja ${i + 1} mhix JSON valida: ${e.message}`));
+                    setImportStats({ total, processed: ++processed, updated, inserted, failed });
+                    continue;
+                }
+
+                if (!entry.headword || !entry.pos) {
+                    failed++;
+                    log(t(`Line ${i + 1} is missing headword or pos.`, `Linja ${i + 1} nieqsa mill-headword jew pos.`));
+                    setImportStats({ total, processed: ++processed, updated, inserted, failed });
+                    continue;
+                }
+
+                try {
+                    const escapedId = (entry.id || '').replace(/'/g, "''");
+                    const escapedHeadword = (entry.headword || '').replace(/'/g, "''");
+                    const escapedPos = (entry.pos || '').replace(/'/g, "''");
+                    const checkSql = `SELECT id FROM entries WHERE id = '${escapedId}' OR (headword = '${escapedHeadword}' AND pos = '${escapedPos}') LIMIT 1`;
+                    const checkRes = await adminDbQuery(token, checkSql);
+                    const existingId = checkRes.rows?.[0]?.[0];
+
+                    if (existingId) {
+                        await adminUpdateEntry(token, { ...entry, id: existingId });
+                        updated++;
+                        log(t(`Updated: ${entry.headword} (${entry.pos})`, `Aġġornat: ${entry.headword} (${entry.pos})`));
+                    } else {
+                        await adminCreateEntry(token, entry);
+                        inserted++;
+                        log(t(`Inserted: ${entry.headword} (${entry.pos})`, `Daħħal: ${entry.headword} (${entry.pos})`));
+                    }
+                } catch (err: any) {
+                    failed++;
+                    log(t(`Failed to import ${entry.headword} (${entry.pos}): ${err.message}`, `Naqas li jimporta ${entry.headword} (${entry.pos}): ${err.message}`));
+                }
+
+                processed++;
+                setImportStats({ total, processed, updated, inserted, failed });
+                setImportProgress(Math.round((processed / total) * 100));
+
+                // Yield to event loop to keep UI responsive
+                await new Promise(resolve => setTimeout(resolve, 30));
+            }
+
+            log(t('Import process completed!', 'L-importazzjoni lesta!'));
+        } catch (e: any) {
+            log(t(`Critical error during import: ${e.message}`, `Żball kritiku fl-importazzjoni: ${e.message}`));
+        } finally {
+            setImporting(false);
+        }
+    };
+
     return (
         <div className="p-6 space-y-6">
             {!activeWorkflow && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
                     <button
                         onClick={() => setActiveWorkflow('merge')}
                         className="p-8 border-2 border-dashed border-[#ede9e1] rounded-3xl hover:border-[#1034A6] hover:bg-[#1034A6]/[0.02] transition-all group text-left flex flex-col items-start gap-4"
@@ -574,6 +676,19 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
                         <div>
                             <h4 className="font-bold text-lg text-black">{t('Merge Duplicate Roots', 'Għaqqad Għeruq Duplikati')}</h4>
                             <p className="text-sm text-black/50 mt-1">{t('Reassign all entries from one root to another and delete the duplicate.', 'Assenja mill-ġdid l-entrati kollha għall-għerq l-ieħor.')}</p>
+                        </div>
+                    </button>
+
+                    <button
+                        onClick={() => setActiveWorkflow('import-jsonl')}
+                        className="p-8 border-2 border-dashed border-[#ede9e1] rounded-3xl hover:border-blue-500 hover:bg-blue-50/[0.02] transition-all group text-left flex flex-col items-start gap-4"
+                    >
+                        <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl group-hover:scale-110 transition-transform">
+                            <Upload size={32} />
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-lg text-black">{t('Upload JSONL Entries', 'Tella\' Entrati minn JSONL')}</h4>
+                            <p className="text-sm text-black/50 mt-1">{t('Import or update dictionary entries from a wiktionary-scraper JSONL output file.', 'Importa jew aġġorna entrati mid-dizzjunarju minn file JSONL tal-Wiktionary.')}</p>
                         </div>
                     </button>
 
@@ -669,6 +784,108 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
                                 <Button onClick={handleMergeExec} disabled={loading} className="bg-red-600 hover:bg-red-700 border-red-700 shadow-lg shadow-red-500/20">
                                     {t('Confirm & Merge', 'Ikkonferma u Għaqqad')}
                                 </Button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {activeWorkflow === 'import-jsonl' && (
+                <div className="space-y-6 animate-in slide-in-from-right-4 duration-500 max-w-3xl">
+                    <button onClick={() => setActiveWorkflow(null)} className="text-xs font-bold text-[#1034A6] hover:underline mb-2 flex items-center gap-1">
+                        &larr; {t('Back to Workflows', 'Lura għall-għażliet')}
+                    </button>
+                    
+                    <div className="flex items-center justify-between border-b border-black/5 pb-4">
+                        <h3 className="text-lg font-bold text-black flex items-center gap-2">
+                            <Upload size={20} className="text-[#1034A6]" />
+                            {t('Upload Wiktionary Scraper Entries (JSONL)', 'Tella\' Entrati tal-Wiktionary (JSONL)')}
+                        </h3>
+                    </div>
+
+                    <div className="bg-[#f9f7f3] p-6 rounded-2xl border border-[#ede9e1] space-y-4">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">{t('Select JSONL File', 'Agħżel File JSONL')}</label>
+                            <input
+                                type="file"
+                                accept=".jsonl,.json"
+                                onChange={handleJsonlFileChange}
+                                disabled={importing}
+                                className="w-full p-2.5 bg-white border border-[#ede9e1] rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
+                            />
+                        </div>
+
+                        {jsonlFile && (
+                            <div className="text-xs text-black/60 flex gap-4 bg-white/50 p-3 rounded-lg border border-black/[0.03] w-fit">
+                                <span><strong>Size:</strong> {(jsonlFile.size / 1024).toFixed(2)} KB</span>
+                                <span><strong>Type:</strong> {jsonlFile.name.endsWith('.jsonl') ? 'JSON Lines' : 'JSON'}</span>
+                            </div>
+                        )}
+
+                        <div className="flex justify-end gap-3 pt-2">
+                            <Button
+                                onClick={handleJsonlUpload}
+                                disabled={importing || !jsonlFile}
+                                leftIcon={importing ? <Spinner size="sm" /> : <Upload size={14} />}
+                            >
+                                {importing ? t('Importing...', 'Qed Jimporta...') : t('Upload & Import', 'Tella\' u Importa')}
+                            </Button>
+                        </div>
+                    </div>
+
+                    {(importing || importStats.processed > 0) && (
+                        <div className="bg-white border border-[#ede9e1] rounded-2xl p-6 space-y-6 animate-in zoom-in-95 duration-300 shadow-sm">
+                            <div className="space-y-2">
+                                <div className="flex justify-between text-xs font-bold text-black/60">
+                                    <span>{t('Import Progress', 'Progress tal-Importazzjoni')}</span>
+                                    <span>{importProgress}% ({importStats.processed}/{importStats.total})</span>
+                                </div>
+                                <div className="w-full bg-black/5 rounded-full h-2 overflow-hidden">
+                                    <div 
+                                        className="bg-[#1034A6] h-full transition-all duration-300" 
+                                        style={{ width: `${importProgress}%` }}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-4 gap-4">
+                                <div className="bg-blue-50/50 p-4 rounded-xl text-center border border-blue-100">
+                                    <div className="text-2xl font-bold text-blue-700">{importStats.total}</div>
+                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-1">{t('Total', 'Total')}</div>
+                                </div>
+                                <div className="bg-green-50/50 p-4 rounded-xl text-center border border-green-100">
+                                    <div className="text-2xl font-bold text-green-700">{importStats.inserted}</div>
+                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-1">{t('Inserted', 'Daħlu')}</div>
+                                </div>
+                                <div className="bg-indigo-50/50 p-4 rounded-xl text-center border border-indigo-100">
+                                    <div className="text-2xl font-bold text-indigo-700">{importStats.updated}</div>
+                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-1">{t('Updated', 'Aġġornati')}</div>
+                                </div>
+                                <div className="bg-red-50/50 p-4 rounded-xl text-center border border-red-100">
+                                    <div className="text-2xl font-bold text-red-700">{importStats.failed}</div>
+                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-1">{t('Failed', 'Naqsu')}</div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <span className="text-[10px] font-bold text-black/40 uppercase tracking-widest">{t('Activity Log', 'Log tal-Attività')}</span>
+                                <div className="bg-slate-950 text-slate-100 font-mono text-[11px] p-4 rounded-xl h-60 overflow-y-auto space-y-1 shadow-inner border border-slate-900 select-text">
+                                    {importLogs.map((logLine, idx) => (
+                                        <div 
+                                            key={idx} 
+                                            className={cn(
+                                                logLine.includes('Failed') && "text-red-400",
+                                                logLine.includes('Inserted') && "text-green-400",
+                                                logLine.includes('Updated') && "text-indigo-300"
+                                            )}
+                                        >
+                                            {logLine}
+                                        </div>
+                                    ))}
+                                    {importLogs.length === 0 && (
+                                        <div className="text-slate-500 italic">{t('Waiting to start...', 'Qed nistenna biex nibda...')}</div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     )}

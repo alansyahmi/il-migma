@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""
+Python script to delete uploaded wiktionary entries (JSONL) from the Il-Migma database.
+Useful for rolling back imports/uploads.
+
+Usage:
+  python wiktionary-scraper/delete.py --file wiktionary-scraper/scraped-results/wiktionary_maltese_Ċ.jsonl
+  python wiktionary-scraper/delete.py --file wiktionary-scraper/scraped-results/wiktionary_maltese_Ċ.jsonl --url https://your-production-domain.com --token YOUR_CLERK_ADMIN_JWT
+"""
+
+import argparse
+import json
+import os
+import urllib.request
+import urllib.parse
+import sys
+import time
+
+def api_request(url, path, method="GET", body=None, token=None):
+    headers = {
+        "Content-Type": "application/json"
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    else:
+        # Bypasses auth checks on localhost
+        headers["Authorization"] = "Bearer local-dev"
+
+    full_url = f"{url.rstrip('/')}{path}"
+    data = json.dumps(body).encode("utf-8") if body else None
+    
+    req = urllib.request.Request(full_url, data=data, headers=headers, method=method)
+    
+    try:
+        with urllib.request.urlopen(req) as response:
+            return response.status, json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        try:
+            err_body = json.loads(e.read().decode("utf-8"))
+            err_msg = err_body.get("error", str(e))
+        except Exception:
+            err_msg = str(e)
+        return e.code, {"error": err_msg}
+    except Exception as e:
+        return 500, {"error": str(e)}
+
+def find_existing_entry(url, headword, pos):
+    query = urllib.parse.urlencode({
+        "q": headword,
+        "pos": pos,
+        "lemma": "true",
+        "limit": "5"
+    })
+    status, res = api_request(url, f"/api/search?{query}")
+    if status == 200 and "results" in res:
+        for item in res["results"]:
+            if item.get("headword") == headword and item.get("pos") == pos:
+                return item.get("id")
+    return None
+
+def main():
+    parser = argparse.ArgumentParser(description="Delete wiktionary entries from Il-Migma")
+    parser.add_argument("-f", "--file", required=True, help="Path to JSONL file containing entries to delete")
+    parser.add_argument("-u", "--url", default="http://localhost:8788", help="Base URL of the Il-Migma server")
+    parser.add_argument("-t", "--token", help="Admin Clerk JWT token (optional for localhost)")
+    parser.add_argument("--delay", type=float, default=0.05, help="Delay in seconds between delete requests")
+    args = parser.parse_args()
+
+    if not os.path.exists(args.file):
+        print(f"Error: File not found: {args.file}")
+        sys.exit(1)
+
+    print(f"Reading entries from {args.file}...")
+    entries = []
+    with open(args.file, "r", encoding="utf-8") as f:
+        for line_num, line in enumerate(f, 1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                entries.append(json.loads(line))
+            except Exception as e:
+                print(f"Warning: Invalid JSON on line {line_num}: {e}")
+
+    total = len(entries)
+    print(f"Loaded {total} entries to delete. Connecting to API at {args.url}...")
+
+    stats = {"deleted": 0, "not_found": 0, "failed": 0}
+
+    for idx, entry in enumerate(entries, 1):
+        headword = entry.get("headword")
+        pos = entry.get("pos")
+        entry_id = entry.get("id")
+
+        if not entry_id and (not headword or not pos):
+            print(f"[{idx}/{total}] Skipping invalid entry: {entry}")
+            stats["failed"] += 1
+            continue
+
+        # 1. Identify target ID (prefer JSONL ID, fallback to searching headword/pos)
+        target_id = entry_id
+        if not target_id:
+            target_id = find_existing_entry(args.url, headword, pos)
+
+        if not target_id:
+            print(f"[{idx}/{total}] Not found in DB (skipped): {headword or entry_id} ({pos or 'unknown'})")
+            stats["not_found"] += 1
+            continue
+
+        # 2. Call DELETE endpoint
+        status, res = api_request(
+            args.url, 
+            f"/api/admin/entries?id={urllib.parse.quote(target_id)}", 
+            method="DELETE", 
+            token=args.token
+        )
+
+        if status == 200:
+            print(f"[{idx}/{total}] Deleted: {headword or target_id} ({pos or 'unknown'}) -> ID: {target_id}")
+            stats["deleted"] += 1
+        elif status == 404 or (status == 500 and "not found" in res.get("error", "").lower()):
+            # Try searching by headword/pos as a fallback if the ID delete failed
+            if entry_id and headword and pos:
+                fallback_id = find_existing_entry(args.url, headword, pos)
+                if fallback_id and fallback_id != entry_id:
+                    status, res = api_request(
+                        args.url, 
+                        f"/api/admin/entries?id={urllib.parse.quote(fallback_id)}", 
+                        method="DELETE", 
+                        token=args.token
+                    )
+                    if status == 200:
+                        print(f"[{idx}/{total}] Deleted (via fallback search): {headword} ({pos}) -> ID: {fallback_id}")
+                        stats["deleted"] += 1
+                        continue
+            
+            print(f"[{idx}/{total}] Not found in DB: {headword or target_id} ({pos or 'unknown'})")
+            stats["not_found"] += 1
+        else:
+            print(f"[{idx}/{total}] Failed to delete {headword or target_id}: {res.get('error')}")
+            stats["failed"] += 1
+
+        if args.delay > 0:
+            time.sleep(args.delay)
+
+    print("\nDeletion Complete!")
+    print(f"Total entries processed: {total}")
+    print(f"Deleted:                 {stats['deleted']}")
+    print(f"Not Found (skipped):     {stats['not_found']}")
+    print(f"Failed:                  {stats['failed']}")
+
+if __name__ == "__main__":
+    main()

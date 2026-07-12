@@ -68,14 +68,35 @@ export async function syncEntryRelationships(client: any, entryId: string, paylo
 
     // Insert new
     if (relationships.length > 0) {
+        const targetIds = Array.from(new Set(relationships.map(r => r.target_id)));
+        const existingTargets = new Set<string>();
+        if (targetIds.length > 0) {
+            const placeholders = targetIds.map(() => '?').join(', ');
+            const res = await client.execute({
+                sql: `SELECT id FROM entries WHERE id IN (${placeholders})`,
+                args: targetIds
+            });
+            if (res.rows) {
+                res.rows.forEach((row: any) => {
+                    const idVal = row.id ?? row[0];
+                    if (idVal) existingTargets.add(String(idVal));
+                });
+            }
+        }
+
+        let insertedCount = 0;
         for (let i = 0; i < relationships.length; i++) {
             const rel = relationships[i];
+            if (!existingTargets.has(rel.target_id)) {
+                // Skip target IDs that do not exist to prevent SQLITE_CONSTRAINT foreign key failures
+                continue;
+            }
             const id = `rel_${entryId}_${rel.target_id}_${rel.type}`;
             await client.execute({
                 sql: `INSERT OR REPLACE INTO entry_relationships 
                       (id, entry_id, target_entry_id, relationship_type, sort_order) 
                       VALUES (?, ?, ?, ?, ?)`,
-                args: [id, entryId, rel.target_id, rel.type, i]
+                args: [id, entryId, rel.target_id, rel.type, insertedCount++]
             });
         }
     }

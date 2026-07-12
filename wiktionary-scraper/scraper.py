@@ -310,6 +310,23 @@ def first_alpha_letter(value: str) -> str:
     return match.group(0).casefold() if match else ''
 
 
+LETTER_MAP = {
+    'a': 'A', 'b': 'B', 'ċ': 'C', 'c': 'C', 'd': 'D', 'e': 'E', 'f': 'F',
+    'ġ': 'G', 'g': 'G', 'għ': 'G', 'h': 'H', 'ħ': 'H', 'i': 'I', 'ie': 'I',
+    'j': 'J', 'k': 'K', 'l': 'L', 'm': 'M', 'n': 'N', 'o': 'O', 'p': 'P',
+    'q': 'Q', 'r': 'R', 's': 'S', 't': 'T', 'u': 'U', 'v': 'V', 'w': 'W',
+    'x': 'X', 'ż': 'Z', 'z': 'Z'
+}
+
+
+def get_collation_char(title: str) -> str:
+    first = first_alpha_letter(title)
+    if not first:
+        return ''
+    return LETTER_MAP.get(first, first.upper())
+
+
+
 # Global lookup counter for the "first 3" feature request
 ET_LOOKUP_COUNT = 0
 MAX_ET_LOOKUPS = 3
@@ -659,30 +676,102 @@ def parse_entry_rows(title: str, html_text: str) -> List[dict]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description='Scrape Maltese A entries from Wiktionary into JSONL.')
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except (AttributeError, IOError):
+        pass
+
+    parser = argparse.ArgumentParser(description='Scrape Maltese entries from Wiktionary.')
     parser.add_argument('--seed-url', action='append', dest='seed_urls', help='Category listing URL to scan. Can be passed multiple times.')
+    parser.add_argument('--letter', default=None, help='Target Maltese letter to scrape (e.g. A, B, Ċ, D, etc.).')
     parser.add_argument('--output', default=str(DEFAULT_OUTPUT), help='Output JSONL file path.')
     parser.add_argument('--db-output-prefix', default=None, help='If provided, write DB-shaped JSONL files with this path prefix (e.g. tmp/wik_A)')
     parser.add_argument('--limit', type=int, default=0, help='Limit the number of source pages processed.')
     parser.add_argument('--sleep', type=float, default=0.0, help='Optional delay between page requests.')
+    parser.add_argument('--all-letters', action='store_true', help='Scan all letters instead of stopping at target letter.')
+    parser.add_argument('--no-overwrite', action='store_true', help='Do not overwrite existing entries in output files to protect manual edits.')
     args = parser.parse_args()
 
-    seed_urls = args.seed_urls or DEFAULT_SEED_URLS
+    target_letter = args.letter.strip().lower() if args.letter else None
+    target_collation = LETTER_MAP.get(target_letter) if target_letter else None
+
+    # Automatically set output file paths based on target letter
+    if target_letter:
+        letter_upper = target_letter.upper()
+        if args.output == str(DEFAULT_OUTPUT):
+            args.output = f"wiktionary-scraper/scraped-results/wiktionary_maltese_{letter_upper}.jsonl"
+
+    seed_urls = args.seed_urls
+    if not seed_urls:
+        if target_collation:
+            seed_urls = [f'https://en.wiktionary.org/w/index.php?title=Category:Maltese_lemmas&from={quote(target_collation)}']
+        else:
+            seed_urls = DEFAULT_SEED_URLS
+
     titles: List[str] = []
     seen_titles = set()
-    reached_b = False
+    stop_scraping = False
+
     for seed_url in seed_urls:
-        for title in fetch_category_titles_from_page(seed_url):
-            if title in seen_titles:
-                continue
-            first_letter = first_alpha_letter(title)
-            if first_letter and first_letter > 'a':
-                if first_letter >= 'b':
-                    reached_b = True
+        current_url = seed_url
+        while current_url:
+            print(f"Fetching category page: {current_url}", file=sys.stderr)
+            try:
+                html_text = request_text(current_url)
+            except Exception as e:
+                print(f"Error fetching page {current_url}: {e}", file=sys.stderr)
+                break
+
+            # Extract titles from this page
+            page_titles = []
+            start = html_text.find('<div id="mw-pages">')
+            if start >= 0:
+                mw_pages_content = html_text[start:]
+                for group_html in re.findall(r'<div class="mw-category-group">(.*?)</div>', mw_pages_content, flags=re.S):
+                    for match in re.finditer(r'<a href="/wiki/[^"]+" title="([^"]+)">([^<]+)</a>', group_html):
+                        title = html.unescape(match.group(1)).strip()
+                        if title and ':' not in title:
+                            page_titles.append(title)
+
+            # Process page titles
+            for title in page_titles:
+                if title in seen_titles:
+                    continue
+
+                if not args.all_letters:
+                    if target_collation:
+                        current_collation = get_collation_char(title)
+                        # Stop if we went past the target collation letter
+                        if current_collation and current_collation > target_collation:
+                            stop_scraping = True
+                            break
+                    else:
+                        # Default A behavior: stop when we reach B
+                        first_letter = first_alpha_letter(title)
+                        if first_letter and first_letter > 'a':
+                            if first_letter >= 'b':
+                                stop_scraping = True
+                                break
+
+                seen_titles.add(title)
+                titles.append(title)
+                if args.limit and len(titles) >= args.limit:
+                    stop_scraping = True
                     break
-            seen_titles.add(title)
-            titles.append(title)
-        if reached_b:
+
+            if stop_scraping:
+                break
+
+            # Find next page link if exists
+            next_match = re.search(r'<a href="([^"]+)"[^>]*>next page</a>', html_text)
+            if next_match:
+                next_url = html.unescape(next_match.group(1)).replace('&amp;', '&')
+                current_url = 'https://en.wiktionary.org' + next_url
+            else:
+                current_url = None
+
+        if stop_scraping:
             break
 
     if args.limit and args.limit > 0:
@@ -704,86 +793,184 @@ def main() -> int:
 
     all_rows.sort(key=lambda row: (row['headword'].casefold(), row['pos'], row['id']))
 
-    # If db-output-prefix provided, emit DB-shaped JSONL files: entries, definitions, entry_tags
+    # If db-output-prefix provided, emit DB-shaped JSONL files: entries, tags, entry_tags
     if args.db_output_prefix:
         prefix = Path(args.db_output_prefix)
         prefix.parent.mkdir(parents=True, exist_ok=True)
         entries_f = prefix.with_name(prefix.name + '-entries.jsonl')
-        defs_f = prefix.with_name(prefix.name + '-definitions.jsonl')
+        tags_f = prefix.with_name(prefix.name + '-tags.jsonl')
         etags_f = prefix.with_name(prefix.name + '-entry_tags.jsonl')
 
-        with entries_f.open('w', encoding='utf-8', newline='\n') as efh, \
-             defs_f.open('w', encoding='utf-8', newline='\n') as dfh, \
-             etags_f.open('w', encoding='utf-8', newline='\n') as etfh:
-            for row in all_rows:
-                entry_id = row.get('id')
-                # entries table shape
-                chain_for_detection = row.get('etymology_chain') or []
-                # Consider Maltese and Arabic (and variants) as native; anything else => loan
-                def _is_foreign(chain_list: List[dict]) -> bool:
-                    for node in chain_list:
-                        lang = (node.get('language') or '').strip().lower()
-                        if not lang:
-                            continue
-                        if lang == 'maltese':
-                            continue
-                        if lang.startswith('arab'):
-                            continue
-                        # Not Maltese/Arabic => foreign
-                        return True
-                    return False
+        # Load existing files for merging/conflict resolution
+        existing_entries = {}
+        if entries_f.exists():
+            try:
+                with entries_f.open('r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        if line:
+                            entry_obj = json.loads(line)
+                            existing_entries[entry_obj['id']] = entry_obj
+            except Exception as e:
+                print(f"Warning: Failed to load existing entries for merge: {e}", file=sys.stderr)
 
-                detected_loan = 1 if _is_foreign(chain_for_detection) else 0
+        unique_tags = {}
+        if tags_f.exists():
+            try:
+                with tags_f.open('r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        if line:
+                            tag_obj = json.loads(line)
+                            unique_tags[tag_obj['id']] = tag_obj
+            except Exception as e:
+                print(f"Warning: Failed to load existing tags for merge: {e}", file=sys.stderr)
 
-                entry_obj = {
-                    'id': entry_id,
-                    'headword': row.get('headword'),
-                    'pos': row.get('pos'),
-                    'gender': row.get('noun_type') if row.get('noun_type') else None,
-                    'root_consonants': None,
-                    'stem': None,
-                    'is_loanword': detected_loan,
-                    'source_language': row.get('source_language'),
-                    'source_id': 'src-crowd',
-                    'etymology_chain': chain_for_detection if chain_for_detection else None,
-                    'etymology_notes': row.get('etymology_notes')
-                }
+        # Determine which entries to overwrite vs preserve
+        entries_to_overwrite = set()
+        for row in all_rows:
+            entry_id = row.get('id')
+            if entry_id in existing_entries:
+                existing = existing_entries[entry_id]
+                is_curated = existing.get('curated') is True or existing.get('manual') is True
+                if args.no_overwrite or is_curated:
+                    continue
+            entries_to_overwrite.add(entry_id)
+
+        merged_etags = []
+        if etags_f.exists():
+            try:
+                with etags_f.open('r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        if line:
+                            etag_obj = json.loads(line)
+                            # Remove old tag mappings ONLY for entries we are overwriting
+                            if etag_obj.get('entry_id') not in entries_to_overwrite:
+                                merged_etags.append(etag_obj)
+            except Exception as e:
+                print(f"Warning: Failed to load existing entry_tags for merge: {e}", file=sys.stderr)
+
+        for row in all_rows:
+            entry_id = row.get('id')
+            if entry_id not in entries_to_overwrite:
+                continue
+
+            chain_for_detection = row.get('etymology_chain') or []
+            
+            # Consider Maltese and Arabic (and variants) as native; anything else => loan
+            def _is_foreign(chain_list: List[dict]) -> bool:
+                for node in chain_list:
+                    lang = (node.get('language') or '').strip().lower()
+                    if not lang:
+                        continue
+                    if lang == 'maltese':
+                        continue
+                    if lang.startswith('arab'):
+                        continue
+                    return True
+                return False
+
+            detected_loan = 1 if _is_foreign(chain_for_detection) else 0
+
+            # Map definitions inline as JSON array of EntryDefinition shapes
+            defs_list = []
+            for d in row.get('definitions') or []:
+                defs_list.append({
+                    'text_en': d.get('text_en') or d.get('text') or '',
+                    'text_mt': d.get('text_mt'),
+                    'register': '',
+                    'nuance': ''
+                })
+
+            entry_obj = {
+                'id': entry_id,
+                'headword': row.get('headword'),
+                'pos': row.get('pos').lower(),
+                'gender': row.get('noun_type') if row.get('noun_type') else None,
+                'root_consonants': None,
+                'stem': None,
+                'is_loanword': detected_loan,
+                'is_inflectable': 0,
+                'source_language': row.get('source_language'),
+                'source_id': 'src-crowd',
+                'source_citation': row.get('source_citation'),
+                'source_title': row.get('source_title'),
+                'source_year': None,
+                'source_page': row.get('source_page'),
+                'source_publisher': row.get('source_publisher'),
+                'etymology_chain': chain_for_detection if chain_for_detection else None,
+                'etymology_notes': row.get('etymology_notes'),
+                'definitions': defs_list,
+                'usage_examples': []
+            }
+            # Overwrite/insert
+            existing_entries[entry_id] = entry_obj
+
+            # Process tags
+            tags = row.get('tags') or []
+            for tag in tags:
+                tag_slug = slugify(tag)
+                tag_id = f"tag-{tag_slug}"
+                if tag_id not in unique_tags:
+                    unique_tags[tag_id] = {
+                        'id': tag_id,
+                        'name': tag,
+                        'category': None,
+                        'description': None
+                    }
+                
+                merged_etags.append({
+                    'entry_id': entry_id,
+                    'tag_id': tag_id
+                })
+
+        # Write merged entries
+        with entries_f.open('w', encoding='utf-8', newline='\n') as efh:
+            for entry_obj in sorted(existing_entries.values(), key=lambda e: (e['headword'].casefold(), e['pos'], e['id'])):
                 efh.write(json.dumps(entry_obj, ensure_ascii=False) + '\n')
 
-                # definitions table shape
-                defs = row.get('definitions') or []
-                for i, d in enumerate(defs, start=1):
-                    def_id = f"def-{entry_id}-{i}"
-                    def_obj = {
-                        'id': def_id,
-                        'entry_id': entry_id,
-                        'subentry_id': None,
-                        'sense_number': i,
-                        'text_mt': d.get('text_mt'),
-                        'text_en': d.get('text_en') or d.get('text'),
-                        'register': None,
-                        'nuance': None,
-                        'field': None,
-                        'sort_order': i - 1
-                    }
-                    dfh.write(json.dumps(def_obj, ensure_ascii=False) + '\n')
+        # Write unique tags file
+        with tags_f.open('w', encoding='utf-8', newline='\n') as tfh:
+            for tag_obj in sorted(unique_tags.values(), key=lambda t: t['id']):
+                tfh.write(json.dumps(tag_obj, ensure_ascii=False) + '\n')
 
-                # entry tags rows (simple approach: write pair rows linking entry to tag name)
-                tags = row.get('tags') or []
-                for tag in tags:
-                    tag_row = {
-                        'entry_id': entry_id,
-                        'tag_name': tag
-                    }
-                    etfh.write(json.dumps(tag_row, ensure_ascii=False) + '\n')
-        print(f'Wrote {len(all_rows)} entries to {entries_f} (+ definitions, entry_tags)')
+        # Write entry-to-tag relationships
+        with etags_f.open('w', encoding='utf-8', newline='\n') as etfh:
+            for etag_obj in sorted(merged_etags, key=lambda et: (et['entry_id'], et['tag_id'])):
+                etfh.write(json.dumps(etag_obj, ensure_ascii=False) + '\n')
+
+        print(f'Merged & wrote entries to {entries_f}')
+        print(f'Merged & wrote unique tags to {tags_f}')
+        print(f'Merged & wrote entry-to-tag relationships to {etags_f}')
     else:
         output_path = Path(args.output)
+        existing_rows = {}
+        if output_path.exists():
+            try:
+                with output_path.open('r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        if line:
+                            row = json.loads(line)
+                            existing_rows[row['id']] = row
+            except Exception as e:
+                print(f"Warning: Failed to load existing output: {e}", file=sys.stderr)
+                
+        for row in all_rows:
+            entry_id = row.get('id')
+            if entry_id in existing_rows:
+                existing = existing_rows[entry_id]
+                is_curated = existing.get('curated') is True or existing.get('manual') is True
+                if args.no_overwrite or is_curated:
+                    continue
+            existing_rows[entry_id] = row
+
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with output_path.open('w', encoding='utf-8', newline='\n') as fh:
-            for row in all_rows:
+            for row in sorted(existing_rows.values(), key=lambda r: (r['headword'].casefold(), r['pos'], r['id'])):
                 fh.write(json.dumps(row, ensure_ascii=False) + '\n')
-        print(f'Wrote {len(all_rows)} rows to {output_path}')
+        print(f'Merged & wrote rows to {output_path}')
     return 0
 
 
