@@ -95,5 +95,8 @@ export function resolveEntryViewKind(entry: Entry | null | undefined): EntryView
     if (isFunctionWordEntryPos(pos)) return 'function-word';
     if (entry.zokk_morphology) return 'zokk';
 
+    // Fall back to generic view for content words lacking morphology
+    if (['verb', 'noun', 'adjective'].includes(pos)) return 'function-word';
+
     return 'fallback';
 }
