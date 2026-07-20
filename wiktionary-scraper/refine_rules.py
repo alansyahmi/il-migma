@@ -163,7 +163,12 @@ CANONICAL_DIALECTS = {
 def clean_text(text):
     if not text:
         return ""
-    return re.sub(r'\s+', ' ', text).strip()
+    text = re.sub(r'\s+', ' ', text)
+    text = re.sub(r'\(\s+', '(', text)
+    text = re.sub(r'\s+\)', ')', text)
+    text = re.sub(r'\[\s+', '[', text)
+    text = re.sub(r'\s+\]', ']', text)
+    return text.strip()
 
 def convert_to_uk_english(text: str) -> str:
     if not text:
@@ -520,12 +525,20 @@ def refine_entry(raw_entry, headword_defs_lookup=None):
     stem = None
     has_spaces = ' ' in headword or '\t' in headword
 
+    zokk_class = raw_entry.get("zokk_class")
     if root_consonants:
         _scratchpad["morph_1v_consonants"] = root_consonants.split("-")
         _scratchpad["morph_1v_vocalic_map"] = "Mapping of vowels to numerical anchors"
     else:
         if not has_spaces:
-            stem = f"-{headword}-"
+            stem = headword
+        if pos == 'verb':
+            # Determine from headword ending
+            last_char = headword.lower()[-1]
+            if last_char == 'a':
+                zokk_class = 'ar'
+            elif last_char in ('i', 'e'):
+                zokk_class = 'ir'
 
     # Verb type derivation (triliteral/quadriliteral/loan)
     verb_type = None
@@ -726,7 +739,7 @@ def refine_entry(raw_entry, headword_defs_lookup=None):
         "source_tooltip": None,
         "sound_suffix": raw_entry.get("sound_suffix"),
         "zokk_morphology": raw_entry.get("zokk_morphology"),
-        "zokk_class": raw_entry.get("zokk_class"),
+        "zokk_class": zokk_class,
         "zokk_is_hybrid": raw_entry.get("zokk_is_hybrid"),
         "zokk_agentive_suffix": raw_entry.get("zokk_agentive_suffix"),
         

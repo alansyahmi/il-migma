@@ -2779,9 +2779,15 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const verbClass = vm.class || vm.verb_class || entry.verb_class;
     const verbWeakClass = vm.weak_class || entry.verb_weak_class;
     // Use new per-tense vowel sets
-    const vsetImpf = vm.vowel_set_impf || vm.vowel_set_imperfect || entry.verb_vowel_impf || 'i-a';
-    const vsetPerf = vm.vowel_set_perf || vm.vowel_set_perfect || entry.verb_vowel_perf || 'a-a';
-    const vsetImp = vm.vowel_set_impv || vm.vowel_set_imperative || entry.verb_vowel_impv || 'o-o';
+    const storedVsetImpf = vm.vowel_set_impf || vm.vowel_set_imperfect || entry.verb_vowel_impf || '';
+    const storedVsetPerf = vm.vowel_set_perf || vm.vowel_set_perfect || entry.verb_vowel_perf || '';
+    const storedVsetImp = vm.vowel_set_impv || vm.vowel_set_imperative || entry.verb_vowel_impv || '';
+    const hasStoredVowelSets = Boolean(storedVsetPerf || storedVsetImpf || storedVsetImp);
+    // The engine needs valid strings, but those internal defaults must not be
+    // presented as stored metadata when the entry has no vowel sets.
+    const vsetImpf = storedVsetImpf || 'i-a';
+    const vsetPerf = storedVsetPerf || 'a-a';
+    const vsetImp = storedVsetImp || 'o-o';
     const rootImalaBlocked = useMemo(
         () => resolveImalaBlocked({
             is_imala_blocked: parseImalaBlockedOverride(
@@ -3092,13 +3098,15 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     <span className="capitalize">{term(vm.transitivity || 'both')}</span>
                                 </PropRow>
 
-                                <PropRow label={term("vowel-set")} className="col-span-2 sm:col-span-1 md:col-span-1">
-                                    <div className="space-y-0 text-sm">
-                                        <p>{term('perfect')} <span className="opacity-55 text-[0.7rem]">{term('(past)')}</span>: <span className="font-mono">{vsetPerf}</span></p>
-                                        <p>{term('imperfect')} <span className="opacity-55 text-[0.7rem]">{term('(present)')}</span>: <span className="font-mono">{vsetImpf}</span></p>
-                                        <p>{term('imperative')}: <span className="font-mono">{vsetImp}</span></p>
-                                    </div>
-                                </PropRow>
+                                {hasStoredVowelSets && (
+                                    <PropRow label={term("vowel-set")} className="col-span-2 sm:col-span-1 md:col-span-1">
+                                        <div className="space-y-0 text-sm">
+                                            {storedVsetPerf && <p>{term('perfect')} <span className="opacity-55 text-[0.7rem]">{term('(past)')}</span>: <span className="font-mono">{storedVsetPerf}</span></p>}
+                                            {storedVsetImpf && <p>{term('imperfect')} <span className="opacity-55 text-[0.7rem]">{term('(present)')}</span>: <span className="font-mono">{storedVsetImpf}</span></p>}
+                                            {storedVsetImp && <p>{term('imperative')}: <span className="font-mono">{storedVsetImp}</span></p>}
+                                        </div>
+                                    </PropRow>
+                                )}
 
                                 {/* Admin / Technical Metadata */}
                                 {isAdmin && entry.root_pattern_form?.root && (

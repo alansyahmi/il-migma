@@ -239,7 +239,8 @@ function buildHybridZokkConjugation(entry: any = {}, forms: ReturnType<typeof ge
         ? imperfectStem.replace(/a$/, 'ew')
         : imperfectStem.replace(/a$/, 'aw');
     const perfectTheme = usesWeakHybridEndings ? 'ej' : 'aj';
-    const prefixes = ['n', 't', 'j', 't', 'n', 't', 'j'];
+    // Stem-based imperfectives retain the initial i- of the prefix.
+    const prefixes = ['ni', 'ti', 'ji', 'ti', 'ni', 'ti', 'ji'];
     const persons = [
         { id: '1s', en: 'I' },
         { id: '2s', en: 'you (sg.)' },

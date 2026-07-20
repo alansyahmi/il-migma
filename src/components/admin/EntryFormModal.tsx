@@ -889,6 +889,7 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
 
 const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerms, suggestions }: MorphologyProps) => {
     const isWeakVerb = String(form.verb_class || '').trim().toLowerCase() === 'weak';
+    const hasRoot = String(form._rootConsonants || '').trim() !== '';
 
     return (
         <div className="space-y-4">
@@ -959,39 +960,43 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
                 </div>
             </div>
 
-            <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>{t('Vowel Set (Perf)', 'Sett ta\' vokali (Perf)')}</label>
-                    <input className={styles.inp} value={form.verb_vowel_perf} onChange={e => set('verb_vowel_perf', e.target.value)} onFocus={() => onFocus('verb_vowel_perf')} />
-                    <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_perf', v)} />
-                </div>
-                <div>
-                    <label className={styles.label}>{t('Vowel Set (Impf)', 'Sett ta\' vokali (Impf)')}</label>
-                    <input className={styles.inp} value={form.verb_vowel_impf} onChange={e => set('verb_vowel_impf', e.target.value)} onFocus={() => onFocus('verb_vowel_impf')} />
-                    <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_impf', v)} />
-                </div>
-            </div>
+            {hasRoot && (
+                <>
+                    <div className={styles.grid}>
+                        <div>
+                            <label className={styles.label}>{t('Vowel Set (Perf)', 'Sett ta\' vokali (Perf)')}</label>
+                            <input className={styles.inp} value={form.verb_vowel_perf} onChange={e => set('verb_vowel_perf', e.target.value)} onFocus={() => onFocus('verb_vowel_perf')} />
+                            <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_perf', v)} />
+                        </div>
+                        <div>
+                            <label className={styles.label}>{t('Vowel Set (Impf)', 'Sett ta\' vokali (Impf)')}</label>
+                            <input className={styles.inp} value={form.verb_vowel_impf} onChange={e => set('verb_vowel_impf', e.target.value)} onFocus={() => onFocus('verb_vowel_impf')} />
+                            <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_impf', v)} />
+                        </div>
+                    </div>
 
-            <div className={styles.grid}>
-                <div>
-                    <label className={styles.label}>{t('Vowel Set (Impv)', 'Sett ta\' vokali (Impv)')}</label>
-                    <input className={styles.inp} value={form.verb_vowel_impv} onChange={e => set('verb_vowel_impv', e.target.value)} onFocus={() => onFocus('verb_vowel_impv')} />
-                    <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_impv', v)} />
-                </div>
-                <div className="flex items-end pb-2">
-                    <label className="flex items-center gap-2 cursor-pointer group">
-                        <input
-                            type="checkbox"
-                            checked={!!form.is_imala_blocked}
-                            onChange={e => set('is_imala_blocked', e.target.checked)}
-                            className="w-3.5 h-3.5 text-[#1034A6] border-black/20 rounded focus:ring-0 focus:ring-offset-0"
-                        />
-                        <span className={styles.label + " mb-0 group-hover:text-[#1034A6] transition-colors"}>
-                            {t('Blocked Imala', 'Imala Mblukkata')}
-                        </span>
-                    </label>
-                </div>
-            </div>
+                    <div className={styles.grid}>
+                        <div>
+                            <label className={styles.label}>{t('Vowel Set (Impv)', 'Sett ta\' vokali (Impv)')}</label>
+                            <input className={styles.inp} value={form.verb_vowel_impv} onChange={e => set('verb_vowel_impv', e.target.value)} onFocus={() => onFocus('verb_vowel_impv')} />
+                            <SuggestionRow options={suggestions?.slice(0, 10) || []} onSelect={v => set('verb_vowel_impv', v)} />
+                        </div>
+                        <div className="flex items-end pb-2">
+                            <label className="flex items-center gap-2 cursor-pointer group">
+                                <input
+                                    type="checkbox"
+                                    checked={!!form.is_imala_blocked}
+                                    onChange={e => set('is_imala_blocked', e.target.checked)}
+                                    className="w-3.5 h-3.5 text-[#1034A6] border-black/20 rounded focus:ring-0 focus:ring-offset-0"
+                                />
+                                <span className={styles.label + " mb-0 group-hover:text-[#1034A6] transition-colors"}>
+                                    {t('Blocked Imala', 'Imala Mblukkata')}
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </>
+            )}
 
             <div className={styles.grid}>
                 <div>
@@ -2084,6 +2089,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                         root.consonants || rootStr,
                     );
                     const applyDerivedVowel = (key: typeof VERB_VOWEL_FIELD_KEYS[number], value: string) => {
+                        // A root without vowel metadata must not manufacture a
+                        // vowel set for the child entry. Empty/null is a real
+                        // value here, not permission to apply the generic form
+                        // defaults.
+                        if (!rootPerfectVowelSet) return;
                         if (!value) return;
                         if (manualVerbVowelFieldsRef.current.has(key)) return;
                         if (!String(prev[key] || '').trim() || newFilled.has(key)) {
@@ -2416,6 +2426,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             form._rootVowelSetPerf,
             form._rootConsonants,
         );
+        const hasRootVowelSet = String(form._rootVowelSetPerf || '').trim() !== '';
 
         setForm(prev => {
             let next: any = prev;
@@ -2429,6 +2440,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                 }
             };
             const applyDerivedVowel = (key: typeof VERB_VOWEL_FIELD_KEYS[number], value: string) => {
+                if (!hasRootVowelSet) return;
                 if (!value) return;
                 if (manualVerbVowelFieldsRef.current.has(key)) return;
                 if (!String(prev[key] || '').trim() || newFilled.has(key)) {
@@ -2685,6 +2697,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         }
 
         if (!conjugationPreview) return;
+        if (String(form._rootVowelSetPerf || '').trim() === '') return;
         const ptcpPass = (conjugationPreview as any).passiveParticiple || '';
         const ptcpAct = (conjugationPreview as any).activeParticiple || '';
         const vn = (conjugationPreview as any).verbalNoun || '';

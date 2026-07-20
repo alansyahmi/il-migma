@@ -131,7 +131,9 @@ export function generateZokkForms(zokkInput: any): ZokkResult {
         { id: "3p", mt: "huma", en: "they" },
     ];
 
-    const prefixes = ["n", "t", "j", "t", "n", "t", "j"];
+    // Stem-based imperfectives retain the initial i- of the prefix:
+    // niċċaffronta, tiċċaffronta, jiċċaffronta, etc.
+    const prefixes = ["ni", "ti", "ji", "ti", "ni", "ti", "ji"];
     const citationPerfectStem = zokk_is_hybrid
         ? buildHybridCitationPerfectStem(base)
         : buildCitationPerfectStem(base);
@@ -161,7 +163,7 @@ export function generateZokkForms(zokkInput: any): ZokkResult {
         if (i < 4) { // Sg
             if (i === 2) {
                 imperfect = zokk_is_hybrid
-                    ? `j${base}a`
+                    ? `ji${base}a`
                     : buildCitationImperfectStem(zokk_class as 'ar' | 'ir', citationPerfectStem);
             } else {
                 imperfect = pfx + base + (isAr ? 'a' : 'i');
