@@ -677,4 +677,114 @@ assertEq(slemFormVI?.imperative, 'ssielem', 'generated Form VI root-form imperat
 assertEq(slemFormVI?.passiveParticiple, 'missielem', 'generated Form VI passive participle should assimilate derivational t');
 assertEq(slemFormVI?.verbalNoun, 'ssielim', 'generated Form VI verbal noun should assimilate derivational t');
 
+const cahad = generateConjugation({
+    root: 'ċ-ħ-d',
+    form: 'I',
+    strength: 'strong',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'i-a',
+    vowelSetImperative: 'i-a',
+    isImalaBlocked: false,
+});
+assertEq(cahad.rows[4].imperfect, 'niċħdu', 'ċaħad 1p imperfect should not insert V2 after C2 ħ');
+assertEq(cahad.rows[5].imperfect, 'tiċħdu', 'ċaħad 2p imperfect should not insert V2 after C2 ħ');
+assertEq(cahad.rows[6].imperfect, 'jiċħdu', 'ċaħad 3p imperfect should not insert V2 after C2 ħ');
+
+const talab = generateConjugation({
+    root: 't-l-b',
+    form: 'I',
+    strength: 'strong',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'i-o',
+    vowelSetImperative: 'i-o',
+    isImalaBlocked: false,
+});
+assertEq(talab.rows[4].imperfect, 'nitolbu', 'talab 1p imperfect should insert imperfect V2 after liquid C2');
+assertEq(talab.rows[5].imperfect, 'titolbu', 'talab 2p imperfect should insert imperfect V2 after liquid C2');
+assertEq(talab.rows[6].imperfect, 'jitolbu', 'talab 3p imperfect should insert imperfect V2 after liquid C2');
+
+const tanas = generateConjugation({
+    root: 't-n-s',
+    form: 'I',
+    strength: 'strong',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'o-o',
+    vowelSetImperative: 'o-o',
+    isImalaBlocked: false,
+});
+assertEq(tanas.rows[4].imperfect, 'notonsu', 'tanas 1p imperfect should insert imperfect V2 after liquid C2');
+
+const ghC2 = generateConjugation({
+    root: 'q-għ-d',
+    form: 'I',
+    strength: 'strong',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'i-a',
+    vowelSetImperative: 'i-a',
+    isImalaBlocked: false,
+});
+assertEq(ghC2.rows[4].imperfect, 'niqagħdu', 'C2 għ should retain imperfect V2 insertion');
+
+const obstruentC2 = generateConjugation({
+    root: 'k-t-b',
+    form: 'I',
+    strength: 'strong',
+    vowelSetPerfect: 'i-e',
+    vowelSetImperfect: 'i-o',
+    vowelSetImperative: 'i-o',
+    isImalaBlocked: false,
+});
+assertEq(obstruentC2.rows[4].imperfect, 'niktbu', 'ordinary C2 should not insert imperfect V2');
+assertEq(obstruentC2.rows[0].perfect, 'ktibt', 'kiteb i-e 1s perfect should remain ktibt');
+assertEq(obstruentC2.rows[1].perfect, 'ktibt', 'kiteb i-e 2s perfect should remain ktibt');
+
+const formIIAa = generateConjugation({
+    root: 'f-t-ħ',
+    form: 'II',
+    strength: 'strong',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'a-a',
+    vowelSetImperative: 'a-a',
+    isImalaBlocked: false,
+});
+assertEq(formIIAa.rows[0].perfect, 'fattaħt', 'Form II a-a 1s perfect should preserve attached a');
+assertEq(formIIAa.rows[1].perfect, 'fattaħt', 'Form II a-a 2s perfect should preserve attached a');
+
+const formIIHollowAa = generateConjugation({
+    root: 'd-w-r',
+    form: 'II',
+    strength: 'weak',
+    weakClass: 'hollow',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'a-a',
+    vowelSetImperative: 'a-a',
+    isImalaBlocked: false,
+});
+assertEq(formIIHollowAa.rows[0].perfect, 'dawwart', 'hollow Form II a-a 1s perfect should preserve attached a');
+assertEq(formIIHollowAa.rows[1].perfect, 'dawwart', 'hollow Form II a-a 2s perfect should preserve attached a');
+
+const formVAa = generateConjugation({
+    root: 's-l-m',
+    form: 'V',
+    strength: 'strong',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'a-a',
+    vowelSetImperative: 'a-a',
+    isImalaBlocked: false,
+});
+assertEq(formVAa.rows[0].perfect, 'ssallamt', 'Form V a-a 1s perfect should preserve attached a');
+assertEq(formVAa.rows[1].perfect, 'ssallamt', 'Form V a-a 2s perfect should preserve attached a');
+
+const formVIIIAa = generateConjugation({
+    root: 'q-t-l',
+    form: 'VIII',
+    strength: 'strong',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'a-a',
+    vowelSetImperative: 'a-a',
+    isImalaBlocked: false,
+});
+assertEq(formVIIIAa.rows[0].perfect, 'qtatalt', 'Form VIII a-a 1s perfect should preserve attached a');
+assertEq(formVIIIAa.rows[1].perfect, 'qtatalt', 'Form VIII a-a 2s perfect should preserve attached a');
+
 console.log('quadriliteral root-form tests passed');

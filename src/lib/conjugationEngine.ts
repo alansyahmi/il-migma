@@ -522,6 +522,17 @@ function attachedStrongPerfectVowel(vowel: string, C3: string | undefined, isIma
     return applyAttachedShiftUnlessBlocked(vowel || "i", C3, isImalaBlocked);
 }
 
+/** Preserve the full `a-a` perfect grade in attached/reduced stems. */
+function attachedPerfectVowel(
+    v1: string,
+    v2: string,
+    C3: string | undefined,
+    isImalaBlocked: boolean,
+): string {
+    if (v1 === "a" && v2 === "a") return "a";
+    return applyAttachedShiftUnlessBlocked(v2, C3, isImalaBlocked);
+}
+
 /**
  * Normalizes theme vowels for base lemma generation,
  * ensuring pharyngeal compatibility (e.g. laqqa' instead of laqqe').
@@ -593,7 +604,7 @@ function genStrong(
     const { v2: iv2 } = parseVset(vsetImpf);
 
     const isSonorant = (c: string) => ["l", "m", "n", "r"].includes(c);
-    const isGutturalLocal = (c: string) => ["għ", "ħ", "q"].includes(c);
+    const usesImperfectV2InPlural = (c: string) => c === "għ" || isSonorant(c);
 
     const perfSyncRoot = `${C1}${pv1}${C2}${C3}`;
     const perfRedRoot = isPharyngeal(C1)
@@ -606,7 +617,7 @@ function genStrong(
     const impfT2 = (pfx: string) => {
         const theme = iv2 || "i";
         if (isPharyngeal(C1)) return `${pfx}${C1}${C2}${C3}`;
-        if (isGutturalLocal(C2) || isSonorant(C2))
+        if (usesImperfectV2InPlural(C2))
             return `${pfx}${C1}${theme}${C2}${C3}`;
         return `${pfx}${C1}${C2}${C3}`;
     };
@@ -1161,7 +1172,7 @@ function genFormIIStrong(
         {
             perfFull,
             perfSync,
-            perfReduced: `${C1}${pv1}${C2D}${shiftAttachedVowel(pv2)}${C3}`,
+            perfReduced: `${C1}${pv1}${C2D}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>
@@ -1374,7 +1385,7 @@ function genFormIIHollow(
         {
             perfFull,
             perfSync,
-            perfReduced: `${C1}${pv1}${C2D}${shiftAttachedVowel(pv2)}${C3}`,
+            perfReduced: `${C1}${pv1}${C2D}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>
@@ -2061,7 +2072,7 @@ function genFormVII(
         {
             perfFull,
             perfSync,
-            perfReduced: `n${C1}${pv1}${C2}${applyAttachedShiftUnlessBlocked(pv2, C3, isImalaBlocked)}${C3}`,
+            perfReduced: `n${C1}${pv1}${C2}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>
@@ -2500,8 +2511,8 @@ function genFormVIII(
             perfFull,
             perfSync,
             perfReduced: pharyngealC1
-                ? `e${C1}t${pv1}${C2}${applyAttachedShiftUnlessBlocked(pv2, C3, isImalaBlocked)}${C3}`
-                : `${C1}t${pv1}${C2}${applyAttachedShiftUnlessBlocked(pv2, C3, isImalaBlocked)}${C3}`,
+                ? `e${C1}t${pv1}${C2}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`
+                : `${C1}t${pv1}${C2}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>
@@ -3083,7 +3094,7 @@ function genFormXaStrong(
         {
             perfFull,
             perfSync,
-            perfReduced: `st${pv1}${C1}${C2}${applyAttachedShiftUnlessBlocked(pv2, C3, isImalaBlocked)}${C3}`,
+            perfReduced: `st${pv1}${C1}${C2}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>
@@ -3226,7 +3237,7 @@ function genFormXaDefective(
         {
             perfFull,
             perfSync,
-            perfReduced: `st${pv1}${C1}${C2}${applyAttachedShiftUnlessBlocked(pv2, C3, isImalaBlocked)}${C3}`,
+            perfReduced: `st${pv1}${C1}${C2}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>
@@ -3383,7 +3394,7 @@ function genFormXbStrong(
         {
             perfFull,
             perfSync,
-            perfReduced: `st${C1}${pv1}${C2D}${applyAttachedShiftUnlessBlocked(pv2, C3, isImalaBlocked)}${C3}`,
+            perfReduced: `st${C1}${pv1}${C2D}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>
@@ -3506,7 +3517,7 @@ function genFormXbHollow(
         {
             perfFull,
             perfSync,
-            perfReduced: `st${C1}${pv1}${C2D}${applyAttachedShiftUnlessBlocked(pv2, C3, isImalaBlocked)}${C3}`,
+            perfReduced: `st${C1}${pv1}${C2D}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>

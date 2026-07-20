@@ -434,6 +434,15 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
             root: rootConsonants || form.zokk_root || null,
             agentive_suffix: form.zokk_agentive_suffix || null
         });
+    } else {
+        // An empty stem is an explicit removal in the admin form. Send nulls
+        // so an existing stem relationship is cleared instead of surviving
+        // because the serializer omitted the fields entirely.
+        payload.stem = null;
+        payload.zokk_class = null;
+        payload.zokk_is_hybrid = 0;
+        payload.zokk_agentive_suffix = null;
+        payload.zokk_morphology = null;
     }
 
     // ── CV PATTERN RESOLUTION ───────────────────────────────────────────────
