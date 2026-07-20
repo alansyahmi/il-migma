@@ -248,7 +248,13 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                         <p className="text-sm text-text-muted italic">{def.text_mt}</p>
                                     )}
                                     <div className="flex items-center gap-2 flex-wrap">
-                                        {def.register && <Badge variant="register">{def.register}</Badge>}
+                                        {def.register && (
+                                            <Badge variant="register">
+                                                {def.register.toLowerCase().includes('dialect') && def.dialect
+                                                    ? def.dialect
+                                                    : def.register}
+                                            </Badge>
+                                        )}
                                         {def.field && <Badge variant="tag">{def.field}</Badge>}
                                     </div>
                                     {def.example_sentences?.map(ex => (

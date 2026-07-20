@@ -67,19 +67,40 @@ export function hasNounNuanceDefinition(entry: Pick<Entry, 'definitions'> | null
 }
 
 export function formatDefinitionGloss(
-    definition: { text_en?: string | null; text_mt?: string | null; nuance?: string | null } | null | undefined,
+    definition: { text_en?: string | null; text_mt?: string | null; nuance?: string | null; register?: string | null; dialect?: string | null } | null | undefined,
     language: 'en' | 'mt',
     translate: (key: string) => string,
 ): string {
     const gloss = language === 'mt' && definition?.text_mt
         ? normalizeText(definition.text_mt)
         : normalizeText(definition?.text_en);
-    const nuance = normalizeText(definition?.nuance);
-    if (!nuance) return gloss;
 
-    const label = normalizeText(translate(nuance)) || nuance;
-    const capitalizedLabel = label.charAt(0).toUpperCase() + label.slice(1);
-    return `(${capitalizedLabel}) ${gloss}`.trim();
+    const parts: string[] = [];
+    const register = normalizeText(definition?.register) || '';
+    const dialect = normalizeText(definition?.dialect);
+    if (register) {
+        // When register is dialectal and a specific dialect is set, show
+        // the dialect name directly instead of "Dialectal (Żejtun)".
+        if ((register.toLowerCase().includes('dialect') || register.toLowerCase().includes('dialett')) && dialect) {
+            const dialects = dialect.split(',').map(d => d.trim()).filter(Boolean);
+            parts.push(dialects.join(', '));
+        } else {
+            const regLabel = normalizeText(translate(register)) || register;
+            parts.push(regLabel.charAt(0).toUpperCase() + regLabel.slice(1));
+            if (dialect) {
+                parts.push(`(${dialect})`);
+            }
+        }
+    }
+    const nuance = normalizeText(definition?.nuance);
+    if (nuance) {
+        const nuanceLabel = normalizeText(translate(nuance)) || nuance;
+        parts.push(nuanceLabel.charAt(0).toUpperCase() + nuanceLabel.slice(1));
+    }
+
+    if (parts.length === 0) return gloss;
+
+    return `(${parts.join(', ')}) ${gloss}`.trim();
 }
 
 export function resolveEntryViewKind(entry: Entry | null | undefined): EntryViewKind {

@@ -1,0 +1,34 @@
+{"id": "Q2VDQ3xmZWfEp2w", "cv_notation": "CeCC", "wizen_notation": "fegħl", "description": "fiʿl — basic noun pattern", "example_word": "għelm", "tags": "[\"noun\", \"adjective\"]"}
+{"id": "Q29Db0N8Zm9nxKdvbA", "cv_notation": "CoCoC", "wizen_notation": "fogħol", "description": "fuʿl — noun pattern", "example_word": "bogħod", "tags": "[\"noun\", \"adjective\"]"}
+{"id": "Q0NpZUN8ZmfEp2llbA", "cv_notation": "CCieC", "wizen_notation": "fgħiel", "description": "fiʿal / afʿal — broken plural or noun", "example_word": "ktieb", "tags": "[\"noun\", \"adjective\"]"}
+{"id": "Q0NpQ3xmZ8SnaWw", "cv_notation": "CCiC", "wizen_notation": "fgħil", "description": "faʿil — adjective pattern", "example_word": "kbir", "tags": "[\"noun\", \"adjective\"]"}
+{"id": "Q2FDaUN8ZmFnxKdpbA", "cv_notation": "CaCiC", "wizen_notation": "fagħil", "description": "faʿil — noun pattern", "example_word": "ħabib", "tags": "[\"noun\", \"adjective\"]"}
+{"id": "bWlDQ2VDfG1pZmfEp2Vs", "cv_notation": "miCCeC", "wizen_notation": "mifgħel", "description": "mafʿal — place/instrument noun", "example_word": "miġles", "tags": "[\"noun\", \"adjective\"]"}
+{"id": "bWFDQ2FDfG1hZmfEp2Fs", "cv_notation": "maCCaC", "wizen_notation": "mafgħal", "description": "mafʿal — variant", "example_word": "madħal", "tags": "[\"noun\", \"adjective\"]"}
+{"id": "Q2FDQ2FDfGZhZ8SnZ8SnYWw", "cv_notation": "CaCCaC", "wizen_notation": "fagħgħal", "description": "faʿʿal — agentive noun", "example_word": "sajjad", "tags": "[\"noun\", \"adjective\"]"}
+{"id": "Q2lDQ2llQ3xmaWfEp2fEp2llbA", "cv_notation": "CiCCieC", "wizen_notation": "figħgħiel", "description": "faʿʿal — agentive noun (i-ie)", "example_word": "kittieb", "tags": "[\"noun\", \"adjective\"]"}
+{"id": "YUNDYUN8YWZnxKdhbA", "cv_notation": "aCCaC", "wizen_notation": "afgħal", "description": "afʿal — comparative / colour", "example_word": "akbar", "tags": "[\"noun\", \"adjective\"]"}
+{"id": "Q2FDYUN8ZmFnxKdhbA", "cv_notation": "CaCaC", "wizen_notation": "fagħal", "description": "Form I root lemma", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "Q0N1Q3xmZ8SndWw", "cv_notation": "CCuC", "wizen_notation": "fgħul", "description": "Form I verbal noun", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "bWFDQ3VDfG1hZmfEp3Vs", "cv_notation": "maCCuC", "wizen_notation": "mafgħul", "description": "Form I passive participle", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "Q2FDZUN8ZmFnxKdlbA", "cv_notation": "CaCeC", "wizen_notation": "fagħel", "description": "Form I active participle", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "dGFDQ2lDfHRhZmfEp2ls", "cv_notation": "taCCiC", "wizen_notation": "tafgħil", "description": "Form II verbal noun", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "dGlDQ2lDfHRpZmfEp2ls", "cv_notation": "tiCCiC", "wizen_notation": "tifgħil", "description": "Form II verbal noun", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "bUNhQ0NhQ3xtZmFnxKdnxKdhbA", "cv_notation": "mCaCCaC", "wizen_notation": "mfagħgħal", "description": "Form II passive participle", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "Q2FDQ2llQ3xmYWfEp2fEp2llbA", "cv_notation": "CaCCieC", "wizen_notation": "fagħgħiel", "description": "Form II active participle", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "Q2VDaUN8ZmVnxKdpbA", "cv_notation": "CeCiC", "wizen_notation": "fegħil", "description": "Form III verbal noun", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "bUNpZUNhQ3xtZmllZ8SnYWw", "cv_notation": "mCieCaC", "wizen_notation": "mfiegħal", "description": "Form III passive participle", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "dENhQ0NhQ3x0ZmFnxKdnxKdhbA", "cv_notation": "tCaCCaC", "wizen_notation": "tfagħgħal", "description": "Form V root lemma", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "dENhQ0NpQ3x0ZmFnxKdnxKdpbA", "cv_notation": "tCaCCiC", "wizen_notation": "tfagħgħil", "description": "Form V verbal noun", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "bWl0Q2FDQ2FDfG1pdGZhZ8SnZ8SnYWw", "cv_notation": "mitCaCCaC", "wizen_notation": "mitfagħgħal", "description": "Form V passive participle", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "dENpZUNhQ3x0ZmllZ8SnYWw", "cv_notation": "tCieCaC", "wizen_notation": "tfiegħal", "description": "Form VI root lemma", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "dENpZUNpQ3x0ZmllZ8SnaWw", "cv_notation": "tCieCiC", "wizen_notation": "tfiegħil", "description": "Form VI verbal noun", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "bWl0Q2llQ2FDfG1pdGZpZWfEp2Fs", "cv_notation": "mitCieCaC", "wizen_notation": "mitfiegħal", "description": "Form VI passive participle", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "bkNhQ2FDfG5mYWfEp2Fs", "cv_notation": "nCaCaC", "wizen_notation": "nfagħal", "description": "Form VII root lemma", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "ZnRDYUNhQ3xmdGZhZ8SnYWw", "cv_notation": "ftCaCaC", "wizen_notation": "ftfagħal", "description": "Form VIII root lemma", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "ZnRDYUNpQ3xmdGZhZ8SnaWw", "cv_notation": "ftCaCiC", "wizen_notation": "ftfagħil", "description": "Form VIII verbal noun", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "ZnRDZUNpQ3xmdGZlZ8SnaWw", "cv_notation": "ftCeCiC", "wizen_notation": "ftfegħil", "description": "Form VIII verbal noun", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "bXVDQ2llQ3xtdWZnxKdpZWw", "cv_notation": "muCCieC", "wizen_notation": "mufgħiel", "description": "Form IX passive participle", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "YXN0YUNDYUN8YXN0YWZnxKdhbA", "cv_notation": "astaCCaC", "wizen_notation": "astafgħal", "description": "Form X root lemma", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "c3RhQ0NpQ3xzdGFmZ8SnaWw", "cv_notation": "staCCiC", "wizen_notation": "stafgħil", "description": "Form X verbal noun", "example_word": "", "tags": "[\"verb\"]"}
+{"id": "bWlzdGFDQ2FDfG1pc3RhZmfEp2Fs", "cv_notation": "mistaCCaC", "wizen_notation": "mistafgħal", "description": "Form X passive participle", "example_word": "", "tags": "[\"verb\"]"}

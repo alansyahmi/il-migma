@@ -50,7 +50,14 @@ export function SubEntryBlock({ subentry, defaultOpen = false }: SubEntryBlockPr
                                     <span className="text-xs text-text-muted ml-2 italic">— {def.text_mt}</span>
                                 )}
                                 {def.register && (
-                                    <Badge variant="register" className="ml-2">{def.register}</Badge>
+                                    <Badge variant="register" className="ml-2">
+                                        {def.register.toLowerCase().includes('dialect') && def.dialect
+                                            ? def.dialect
+                                            : def.register}
+                                        {!def.register.toLowerCase().includes('dialect') && def.dialect && (
+                                            <span className="ml-1 font-normal">({def.dialect})</span>
+                                        )}
+                                    </Badge>
                                 )}
                                 {def.example_sentences?.map((ex: any) => (
                                     <div key={ex.id} className="mt-1 ml-2 text-xs text-text-muted">

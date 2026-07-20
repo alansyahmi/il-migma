@@ -88,7 +88,14 @@ def main():
 
     stats = {"inserted": 0, "updated": 0, "failed": 0}
 
-    for idx, entry in enumerate(entries, 1):
+    for idx, raw_item in enumerate(entries, 1):
+        if "entry" in raw_item:
+            entry = raw_item["entry"]
+            if "tags" in raw_item:
+                entry["tags"] = [t["name"] for t in raw_item["tags"] if "name" in t]
+        else:
+            entry = raw_item
+
         headword = entry.get("headword")
         pos = entry.get("pos")
         if not headword or not pos:
@@ -129,4 +136,9 @@ def main():
     print(f"Failed:        {stats['failed']}")
 
 if __name__ == "__main__":
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except (AttributeError, IOError):
+        pass
     main()

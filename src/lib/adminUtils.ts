@@ -32,6 +32,7 @@ export interface EntryDefinition {
     register: string;
     nuance: string;
     example_sentences?: any[];
+    dialect?: string;
 }
 
 export interface RootFormData {
@@ -266,6 +267,7 @@ function normalizeEntryDefinition(def: any): EntryDefinition[] {
     const textMtParts = splitDefinitionText(def?.text_mt ?? def?.definition_mt ?? def?.gloss_mt ?? def?.mt);
     const register = String(def?.register ?? def?.sense_register ?? '').trim();
     const nuance = String(def?.nuance ?? '').trim();
+    const dialect = String(def?.dialect ?? '').trim();
     const exampleSentences = Array.isArray(def?.example_sentences) ? def.example_sentences : [];
     const count = Math.max(textEnParts.length, textMtParts.length);
     const buildDefinition = (index: number): EntryDefinition => {
@@ -275,6 +277,9 @@ function normalizeEntryDefinition(def: any): EntryDefinition[] {
             register,
             nuance,
         };
+        if (dialect) {
+            normalized.dialect = dialect;
+        }
         const examples = index === 0 ? exampleSentences : [];
         if (examples.length > 0) {
             normalized.example_sentences = examples;
@@ -298,7 +303,7 @@ export function normalizeEntryDefinitions(definitions: any): EntryDefinition[] {
         const parsed = typeof definitions === 'string' ? JSON.parse(definitions) : definitions;
         const items = Array.isArray(parsed) ? parsed : [parsed];
         const normalized = items.flatMap(item => normalizeEntryDefinition(item)).filter(item =>
-            item.text_en.trim() || (item.text_mt?.trim() ?? '') || item.register || item.nuance
+            item.text_en.trim() || (item.text_mt?.trim() ?? '') || item.register || item.nuance || item.dialect
         );
 
         return normalized.length > 0

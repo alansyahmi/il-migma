@@ -39,7 +39,36 @@ const FALLBACKS: Record<string, string[]> = {
     verb_class: ['strong', 'strong-hybrid', 'weak', 'doubled', 'quadriliteral', 'loan'],
     verb_transitivity: ['transitive', 'intransitive', 'both', 'ditransitive'],
     register: ['formal', 'informal', 'archaic', 'obsolete', 'technical', 'dialectal', 'colloquial'],
-    dialect: ['Standard', 'Qormi', 'Birkirkara', 'Żejtun', 'Żurrieq', 'Sannat', 'Mosta', 'Nadur (Għawdex)', 'Żebbuġ', 'Marsaxlokk', 'Xewkija (Għawdex)', 'Għarb', 'Victoria (Għawdex)', 'Vassalli (Arkajku)'],
+    dialect: [
+        'Standard',
+        // ―― Malta ――
+        // Southern Harbour
+        'Birgu (Vittoriosa)', 'Bormla (Cospicua)', 'Fgura', 'Floriana',
+        'Għaxaq', 'Il-Marsa', 'Il-Paola (Raħal Ġdid)', 'Isla (Senglea)',
+        'Kalkara', 'Luqa', 'Marsaskala (Wied il-Għajn)',
+        'Marsaxlokk', 'Mqabba', 'Qormi', 'Qrendi',
+        'Safi', 'Santa Luċija', 'Tarxien', 'Valletta',
+        'Xgħajra', 'Żabbar', 'Żejtun', 'Żurrieq',
+        // South Eastern
+        'Birżebbuġa', 'Gudja', 'Kirkop',
+        // Northern Harbour
+        'Birkirkara', 'Gżira', 'Ħamrun', 'Msida', 'Pembroke',
+        'Pietà', 'San Ġiljan (St Julian\'s)', 'San Ġwann',
+        'Santa Venera', 'Sliema', 'Swieqi', 'Ta\' Xbiex',
+        // Western
+        'Attard', 'Balzan', 'Dingli', 'Iklin', 'Lija',
+        'Mdina', 'Mtarfa', 'Rabat', 'Siġġiewi', 'Żebbuġ',
+        // Northern
+        'Buġibba', 'Għargħur', 'Mellieħa', 'Mġarr',
+        'Mosta', 'Naxxar', 'San Pawl il-Baħar (St Paul\'s Bay)',
+        // ―― Gozo (Għawdex) ――
+        'Fontana', 'Għajnsielem', 'Għarb', 'Għasri',
+        'Kerċem', 'Marsalforn', 'Munxar', 'Nadur',
+        'Qala', 'San Lawrenz', 'Sannat', 'Victoria (Rabat)',
+        'Xagħra', 'Xewkija', 'Żebbuġ (Għawdex)',
+        // ―― Historic / archaic ――
+        'Vassalli (Arkajku)',
+    ],
 };
 
 function optionKey(value: unknown) {
@@ -177,17 +206,31 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
     const getOptions = useCallback((category: string, mode: 'standard' | 'arabised' | 'latinised', lang: 'en' | 'mt' = 'mt'): { value: string, label: string }[] => {
         const items = getCategoryItems(category);
+        const fallbacks = FALLBACKS[category] || [];
+
         if (items.length > 0) {
             const mapped = dedupeBy(items
                 .map(item => getRegistryOptions(category, item, mode, lang))
                 .filter(Boolean) as { value: string, label: string }[], (option) => option.value);
+
+            // Merge fallback values not already in the DB so that newly-added
+            // defaults (e.g. an expanded dialect list) show up immediately.
+            const seen = new Set(mapped.map(m => m.value));
+            for (const f of fallbacks) {
+                const mockItem = { key: f, value: null };
+                const opt = getRegistryOptions(category, mockItem, mode, lang) || { value: f, label: f };
+                if (!seen.has(opt.value)) {
+                    mapped.push(opt);
+                    seen.add(opt.value);
+                }
+            }
+
             return category === 'verb_class'
                 ? ensureVerbClassFallbackOptions(mapped, (value) => resolveHardcodedTerm(value, mode, lang))
                 : mapped;
         }
 
         // Use fallbacks if no items in DB
-        const fallbacks = FALLBACKS[category] || [];
         const mapped = dedupeBy(fallbacks.map(f => {
             const mockItem = { key: f, value: null };
             const opt = getRegistryOptions(category, mockItem, mode, lang);

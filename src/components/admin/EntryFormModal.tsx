@@ -1669,7 +1669,7 @@ function StemMorphologyFields({
 }
 
 export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm }: EntryFormModalProps) {
-    const { getValues, getOptions, createItem, updateItem, refresh, byCategoryAndKey } = useAdminConfig();
+    const { getValues, getOptions, createItem, updateItem, deleteItem, refresh, byCategoryAndKey, getCategoryItems } = useAdminConfig();
     const { mode, term } = useLinguisticMode();
     const { language, t } = useLanguage();
 
@@ -1754,6 +1754,35 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const autoFilledFieldsRef = useRef<Set<string>>(new Set());
     const manualVerbVowelFieldsRef = useRef<Set<string>>(new Set());
     const [isNotable, setIsNotable] = useState(false);
+
+    const [isManagingRegister, setIsManagingRegister] = useState(false);
+    const [newRegisterName, setNewRegisterName] = useState('');
+
+    const handleAddRegister = async () => {
+        const name = newRegisterName.trim();
+        if (!name) return;
+        try {
+            await createItem({
+                category: 'register',
+                key: name,
+                value: { en: name, mt_standard: name, mt_arabised: name }
+            });
+            setNewRegisterName('');
+            await refresh();
+        } catch (err) {
+            console.error('Failed to add register:', err);
+        }
+    };
+
+    const handleDeleteRegister = async (id: string, key: string) => {
+        if (!confirm(t(`Are you sure you want to delete register "${key}"?`, `Żgur li trid tħassar ir-reġistru "${key}"?`))) return;
+        try {
+            await deleteItem(id);
+            await refresh();
+        } catch (err) {
+            console.error('Failed to delete register:', err);
+        }
+    };
 
     const [kbOpen, setKbOpen] = useState(false);
     const [ipaKbOpenIndex, setIpaKbOpenIndex] = useState<number | null>(null);
@@ -2458,7 +2487,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         set('definitions', next);
     };
 
-    const updateDefinitionField = (index: number, field: 'text_en' | 'text_mt' | 'register' | 'nuance', value: string) => {
+    const updateDefinitionField = (index: number, field: 'text_en' | 'text_mt' | 'register' | 'nuance' | 'dialect', value: string) => {
         const next = [...form.definitions];
         next[index] = { ...next[index], [field]: value };
         set('definitions', normalizeEntryDefinitions(next));
@@ -3371,11 +3400,51 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         <input className={inp} value={def.text_mt ?? ''} onChange={e => updateDefinitionField(i, 'text_mt', e.target.value)} />
                                     </div>
                                     <div>
-                                        <label className={label}>{term('register')}</label>
+                                        <div className="flex justify-between items-center mb-1">
+                                            <label className={label + " mb-0"}>{term('register')}</label>
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsManagingRegister(true)}
+                                                className="text-[10px] text-[#1034A6] hover:underline font-bold uppercase tracking-wider"
+                                            >
+                                                {t('Manage', 'Immaniġġja')}
+                                            </button>
+                                        </div>
                                         <select className={sel} value={def.register} onChange={e => updateDefinitionField(i, 'register', e.target.value)}>
                                             <option value="">—</option>
                                             {REGISTER_OPTIONS.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
                                         </select>
+                                        {def.register && def.register.toLowerCase().includes('dialect') && (
+                                            <div className="mt-2">
+                                                <label className={label}>{t('Dialect(s)', 'Djalett(i)')}</label>
+                                                <div className="flex flex-wrap gap-2 p-2.5 bg-white border border-black/10 rounded-lg min-h-[42px]">
+                                                    {DIALECT_OPTIONS.map(d => {
+                                                        const selected = (def.dialect || '').split(',').map((s: string) => s.trim()).includes(d.value);
+                                                        return (
+                                                            <button
+                                                                key={d.value}
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    const current = (def.dialect || '').split(',').map((s: string) => s.trim()).filter(Boolean);
+                                                                    const next = selected
+                                                                        ? current.filter((v: string) => v !== d.value)
+                                                                        : [...current, d.value];
+                                                                    updateDefinitionField(i, 'dialect', next.join(', '));
+                                                                }}
+                                                                className={cn(
+                                                                    "px-2 py-1 text-[10px] rounded border transition-all",
+                                                                    selected
+                                                                        ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                                                                        : "bg-white text-slate-600 border-slate-200 hover:border-blue-400"
+                                                                )}
+                                                            >
+                                                                {d.label}
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                     {normalizedPos === 'participle' && (
                                         <div>
@@ -3656,6 +3725,60 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     </div>
                 </div>
             </div>
+            {isManagingRegister && (
+                <Modal
+                    open={true}
+                    onClose={() => setIsManagingRegister(false)}
+                    title={t('Manage Registers', 'Immaniġġja Reġistri')}
+                    size="md"
+                >
+                    <div className="space-y-4 text-black p-1">
+                        <div className="flex gap-2">
+                            <input
+                                className={inp}
+                                value={newRegisterName}
+                                onChange={e => setNewRegisterName(e.target.value)}
+                                placeholder={t('New register name...', 'Isem ta\' reġistru ġdid...')}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleAddRegister();
+                                    }
+                                }}
+                            />
+                            <Button onClick={handleAddRegister}>
+                                {t('Add', 'Żid')}
+                            </Button>
+                        </div>
+                        
+                        <div className="max-h-60 overflow-y-auto space-y-2 border border-slate-100 rounded-lg p-2 bg-slate-50">
+                            {REGISTER_OPTIONS.filter(o => o.value !== '').map(opt => {
+                                const dbItem = getCategoryItems('register').find(
+                                    item => item.key.toLowerCase() === opt.value.toLowerCase()
+                                );
+                                return (
+                                    <div key={opt.value} className="flex justify-between items-center bg-white p-2 rounded border border-slate-100 text-sm">
+                                        <span className="font-medium">{opt.label}</span>
+                                        {dbItem ? (
+                                            <button
+                                                type="button"
+                                                onClick={() => handleDeleteRegister(dbItem.id, dbItem.key)}
+                                                className="text-red-500 hover:text-red-700 text-xs font-bold px-1"
+                                            >
+                                                {t('Delete', 'Ħassar')}
+                                            </button>
+                                        ) : (
+                                            <span className="text-[10px] text-black/35 italic bg-slate-100 px-1.5 py-0.5 rounded">
+                                                {t('Default', 'Default')}
+                                            </span>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </Modal>
+            )}
         </Modal>
     );
 }

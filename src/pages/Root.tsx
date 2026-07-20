@@ -23,6 +23,7 @@ import { normalizeDictionaryEtymologyChain } from '@/components/dictionary/etymo
 import { VerbFormsTable } from '@/components/dictionary/VerbFormsTable';
 import { shouldHideSurface } from '@/lib/theoreticalForms';
 import { overlayVerbPreviewRowsFromEngine } from '@/lib/verbMorphology';
+import { convertCVTo1V } from '@/lib/maltesePhonology';
 
 const LazyRelationshipEditor = lazy(() =>
     import('@/components/admin/RelationshipEditor').then(module => ({ default: module.RelationshipEditor }))
@@ -210,7 +211,7 @@ export function Root() {
         const getPattern = (e: any) => {
             const cv = e.root_pattern_form?.pattern?.cv_notation || '-';
             const wizen = e.root_pattern_form?.pattern?.wizen_notation || cv;
-            return mode === 'standard' ? cv : wizen;
+            return mode === 'standard' ? convertCVTo1V(cv) : wizen;
         };
 
         // 1. Core entries and subentries
@@ -264,7 +265,7 @@ export function Root() {
                     terms.push({
                         term: re.headword,
                         class: term(re.pos || 'related'),
-                        cv: mode === 'standard' ? (re.root_pattern_form?.pattern?.cv_notation || re.wizen_pattern || '-') : (re.wizen_pattern || re.root_pattern_form?.pattern?.cv_notation || '-'),
+                        cv: mode === 'standard' ? convertCVTo1V(re.root_pattern_form?.pattern?.cv_notation || re.wizen_pattern || '-') : (re.wizen_pattern || re.root_pattern_form?.pattern?.cv_notation || '-'),
                         id: re.id,
                         gloss: getGloss(re, language, mode)
                     });

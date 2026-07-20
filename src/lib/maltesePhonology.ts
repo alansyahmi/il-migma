@@ -227,6 +227,19 @@ export function generateIPA(word: string, stressSyllableFromEnd?: number, longVo
 // ── PATTERN ENGINE ─────────────────────────────────────────────────────────
 
 /**
+ * Converts a CV-based pattern (e.g. CvCvC, CaCaC) to the 1V system (e.g. 1v2v3, 1a2a3).
+ * Uppercase 'C's representing root consonants are replaced with sequential 1-indexed numbers.
+ */
+export function convertCVTo1V(cvPattern: string | null | undefined): string {
+    if (!cvPattern) return '';
+    let radicalCount = 0;
+    return cvPattern.replace(/C/g, () => {
+        radicalCount++;
+        return String(radicalCount);
+    });
+}
+
+/**
  * Extracts the position (1-indexed) of the long vowel marker 'V' from a CV pattern string.
  * In the pattern notation, 'v' = short vowel, 'V' = long (stressed) vowel.
  * Returns undefined if no 'V' or circumflexed indicator is found.

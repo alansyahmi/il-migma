@@ -122,7 +122,12 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
     // Noun / Adjective / Other
 
     const gender = showGender ? resolveEntryGender(entry) : null;
-    const nounType = (entry as any).noun_type || (entry as any).noun_morphology?.noun_type || '';
+    let nounType = (entry as any).noun_type || (entry as any).noun_morphology?.noun_type || '';
+    if ((entry as any).is_singulative || (entry as any).noun_morphology?.is_singulative) {
+        nounType = 'singulative';
+    } else if ((entry as any).is_collective || (entry as any).noun_morphology?.is_collective) {
+        nounType = 'collective';
+    }
     const nounLabel = nounType
         ? `${term(nounType).toUpperCase()} ${term(entry.pos || 'noun').toUpperCase()}`
         : term(entry.pos || 'noun').toUpperCase();
@@ -180,4 +185,3 @@ function SubPartsRenderer({ parts, layout }: { parts: ReactNode[], layout: 'dots
         </div>
     );
 }
-

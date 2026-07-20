@@ -45,6 +45,7 @@ export interface Definition {
     usage_context?: string;
     register?: string;
     nuance?: string;
+    dialect?: string;
     examples?: string[];
     example_sentences?: any[];
     field?: string;

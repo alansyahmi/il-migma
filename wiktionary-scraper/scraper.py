@@ -56,7 +56,7 @@ SHORT_POS_MAP = {
     'verbal_noun': 'vn',
 }
 
-USER_AGENT = 'il-migma-wiktionary-scraper/1.0 (+https://github.com/openai)'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 API = 'https://en.wiktionary.org/w/api.php'
 
 
@@ -85,6 +85,7 @@ class SectionCapture(HTMLParser):
         self._li_depth = 0
         self._li_text: List[str] = []
         self._skip_depth = 0
+        self._in_style_or_script = False
 
     def _flush_etymology(self) -> None:
         if not self._collect_etymology:
@@ -118,6 +119,24 @@ class SectionCapture(HTMLParser):
         if not self.in_target or level < 3:
             return
 
+        # Handle h4 headings as potential POS sections
+        if level == 4:
+            self._flush_etymology()
+            normalized = text.casefold()
+            pos = POS_ALIASES.get(normalized)
+            self.current_pos = pos
+            self.current_pos_label = pos
+            self._in_definition_list = False
+            self._definition_list_depth = 0
+            if pos:
+                self.section_labels[pos] = text
+                if pos not in self.sections:
+                    self.sections[pos] = []
+            else:
+                self.current_pos = None
+                self.current_pos_label = None
+            return
+
         normalized = text.casefold()
         self._flush_etymology()
         if normalized.startswith('etymology'):
@@ -131,7 +150,7 @@ class SectionCapture(HTMLParser):
 
         pos = POS_ALIASES.get(normalized)
         self.current_pos = pos
-        self.current_pos_label = text if pos else None
+        self.section_labels[pos] = text
         self._in_definition_list = False
         self._definition_list_depth = 0
         if pos:
@@ -153,11 +172,21 @@ class SectionCapture(HTMLParser):
             self.sections.setdefault(self.current_pos, []).append(text)
 
     def handle_starttag(self, tag: str, attrs):
-        if tag in {'h2', 'h3'}:
+        if tag in {'style', 'script'}:
+            self._in_style_or_script = True
+            self._skip_depth += 1
+            return
+
+        if tag in {'h2', 'h3', 'h4'}:
             self._flush_li()
             self._flush_heading()
             self._heading_tag = tag
-            self._heading_level = 2 if tag == 'h2' else 3
+            if tag == 'h2':
+                self._heading_level = 2
+            elif tag == 'h4':
+                self._heading_level = 4
+            else:
+                self._heading_level = 3
             self._heading_text = []
             return
 
@@ -165,6 +194,15 @@ class SectionCapture(HTMLParser):
             return
 
         if self.in_target and self.current_pos and tag == 'ol' and not self._in_definition_list:
+            self._in_definition_list = True
+            self._definition_list_depth = 1
+            return
+
+        # Detect unheaded <ol> definitions inside etymology sections
+        # (e.g. ċavi has a Noun <ol> under Etymology 1 with no <h4> heading)
+        if self.in_target and self._collect_etymology and tag == 'ol' and not self._in_definition_list:
+            self._collect_etymology = False
+            self.current_pos = 'noun'
             self._in_definition_list = True
             self._definition_list_depth = 1
             return
@@ -194,6 +232,11 @@ class SectionCapture(HTMLParser):
                 self._li_text.append(f'<{tag}>')
 
     def handle_endtag(self, tag: str):
+        if tag in {'style', 'script'}:
+            self._in_style_or_script = False
+            self._skip_depth = max(0, self._skip_depth - 1)
+            return
+
         if self._heading_tag and tag == self._heading_tag:
             self._flush_heading()
             return
@@ -228,6 +271,8 @@ class SectionCapture(HTMLParser):
                     self._li_text.append(f'</{tag}>')
 
     def handle_data(self, data: str):
+        if self._in_style_or_script:
+            return
         if self._heading_tag:
             self._heading_text.append(data)
         elif self._collect_etymology:
@@ -326,10 +371,88 @@ def get_collation_char(title: str) -> str:
     return LETTER_MAP.get(first, first.upper())
 
 
+def detect_loanword_from_chain(chain: List[dict]) -> int:
+    """Returns 1 if the etymology chain indicates a loanword, 0 if native (Arabic/Maltese)."""
+    for node in chain:
+        lang = (node.get('language') or '').strip().lower()
+        if not lang:
+            continue
+        if lang == 'maltese':
+            continue
+        if lang.startswith('arab'):
+            continue
+        return 1
+    return 0
+
+
+def extract_page_categories(html_text: str) -> List[str]:
+    """Extract Maltese-specific category display names from page HTML."""
+    matches = re.findall(
+        r'<a\s+href="/wiki/Category:Maltese[^"]*"[^>]*>([^<]+)</a>',
+        html_text
+    )
+    return matches
+
+
+def parse_verb_form_and_class(categories: List[str]) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+    """Parse verb form (I, II, III...) and verb class (hollow, sound, weak...)
+    from Wiktionary category tags like 'Maltese hollow form-I verbs'."""
+    verb_form: Optional[str] = None
+    verb_class: Optional[str] = None
+
+    # Combined: "Maltese hollow form-I verbs" or "Maltese form-I verbs" (class optional)
+    form_pat = re.compile(
+        r'^Maltese\s+(?:(sound|hollow|weak|geminated|defective|irregular)\s+)?'
+        r'form-([IVX]+)\s+verbs?$',
+        re.IGNORECASE
+    )
+    # Class only: "Maltese hollow verbs"
+    class_pat = re.compile(
+        r'^Maltese\s+(sound|hollow|weak|geminated|defective|irregular)\s+verbs?$',
+        re.IGNORECASE
+    )
+
+    # Wiktionary category → (verb_class, verb_weak_class) mapping
+    # verb_class is broad: "strong" or "weak"
+    # verb_weak_class is the specific subtype for weak verbs
+    CLASS_MAP = {
+        'sound':     ('strong',  None),
+        'hollow':    ('weak',    'hollow'),
+        'weak':      ('weak',    'defective'),
+        'geminated': ('weak',    'doubled'),
+        'defective': ('weak',    'defective'),
+        'irregular': ('weak',    'irregular'),
+    }
+
+    for cat in categories:
+        m = form_pat.match(cat)
+        if m:
+            raw_class = m.group(1).lower() if m.group(1) else None
+            if raw_class and not verb_class:
+                mapped = CLASS_MAP.get(raw_class)
+                if mapped:
+                    verb_class, verb_weak_class = mapped
+                else:
+                    verb_class = raw_class
+            if not verb_form:
+                verb_form = m.group(2)
+            continue
+
+        m = class_pat.match(cat)
+        if m and not verb_class:
+            raw_class = m.group(1).lower()
+            mapped = CLASS_MAP.get(raw_class)
+            if mapped:
+                verb_class, verb_weak_class = mapped
+            else:
+                verb_class = raw_class
+
+    return verb_form, verb_class, verb_weak_class
+
 
 # Global lookup counter for the "first 3" feature request
 ET_LOOKUP_COUNT = 0
-MAX_ET_LOOKUPS = 3
+MAX_ET_LOOKUPS = 200
 GLOSBE_LANG_MAP = {
     'Arabic': 'ar', 'Italian': 'it', 'Sicilian': 'scn', 'Latin': 'la', 'French': 'fr', 
     'Greek': 'el', 'English': 'en', 'Spanish': 'es', 'Berber': 'ber', 'Phoenician': 'phn', 
@@ -573,35 +696,279 @@ def is_non_lemma_definition(text: str) -> bool:
     """Detects if a definition describes a non-lemma (inflectional) form."""
     if not text:
         return True
-    
+
     text_clean = text.lower()
-    # Patterns that strongly indicate a non-base form
-    non_lemma_patterns = [
+
+    # Patterns that ALWAYS indicate non-lemma forms, even with colon content
+    # e.g. "inflection of x: second-person singular imperfect" is still an inflection
+    strong_non_lemma = [
         r'\binflection of\b',
         r'\bimperative of\b',
-        r'\bperson singular\b',
-        r'\bperson plural\b',
-        r'\bperson dual\b',
         r'\bparticiple of\b',
         r'\bpast participle of\b',
         r'\bpresent participle of\b',
-        r'\balternative form of\b',
-        r'\balternative spelling of\b',
     ]
-    
-    # If the definition contains a colon, usually everything after the colon is the real definition
-    # e.g. "alternative form of x: meaning"
-    if ':' in text_clean:
-        main_part, definition_part = text.split(':', 1)
-        # If the part after the colon has significant content, it's a good definition
-        if len(definition_part.strip().split()) >= 1:
-            return False
-            
-    for p in non_lemma_patterns:
+    for p in strong_non_lemma:
         if re.search(p, text_clean):
             return True
-            
+
+    # Person-specific patterns (always inflectional)
+    for p in [r'\bperson singular\b', r'\bperson plural\b', r'\bperson dual\b']:
+        if re.search(p, text_clean):
+            return True
+
+    # Alternative form/spelling patterns: check if there's real meaning after the colon
+    # e.g. "alternative form of x: to insult" → keep as lemma (colon has meaning)
+    # e.g. "alternative form of x" (no colon) → non-lemma, skip
+    for p in [r'\balternative form of\b', r'\balternative spelling of\b']:
+        if re.search(p, text_clean):
+            if ':' in text_clean:
+                _, definition_part = text.split(':', 1)
+                if len(definition_part.strip().split()) >= 1:
+                    return False  # Has real content after colon → keep as lemma
+            return True  # No colon → non-lemma
+
     return False
+
+
+def extract_root_consonants(html_text: str) -> Optional[str]:
+    """Extracts Semitic root consonants from the Wiktionary page HTML."""
+    import urllib.parse
+    import html
+    
+    # Matches Appendix:Maltese_roots/xxx or Category:Maltese_terms_belonging_to_the_root_xxx
+    matches = re.findall(r'(?:Appendix:Maltese_roots/|Category:Maltese_terms_belonging_to_the_root_)([^\"#\s>]+)', html_text)
+    
+    roots = set()
+    for m in matches:
+        decoded = urllib.parse.unquote(m).replace('_', ' ')
+        decoded = html.unescape(decoded)
+        # Strip query parameters
+        decoded = decoded.split('&')[0].split('?')[0]
+        root = decoded.strip().lower()
+        if '-' in root:
+            roots.add(root)
+            
+    if roots:
+        return sorted(list(roots), key=len)[0]
+    return None
+
+
+def extract_vowels(word: str) -> Optional[str]:
+    if not word:
+        return None
+    w = word.lower().strip()
+    norm_map = {
+        'ā': 'a', 'ē': 'e', 'ī': 'i', 'ō': 'o', 'ū': 'u',
+        'à': 'a', 'è': 'e', 'ì': 'i', 'ò': 'o', 'ù': 'u',
+        'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'
+    }
+    for k, v in norm_map.items():
+        w = w.replace(k, v)
+    found = re.findall(r'(ie|[aeiou])', w)
+    return "-".join(found) if found else None
+
+
+def normalize_vowel_set(vowels: Optional[str], root_consonants: Optional[str] = None, gender: Optional[str] = None) -> Optional[str]:
+    """Pad/trim a vowel set to match the number of root positions.
+
+    Format rules:
+    - Always has (num_radicals - 1) positions (2 for triliteral, 3 for quadriliteral)
+    - Missing vowel positions shown as '-'
+    - Feminine suffix vowels (-a, -i) are stripped for feminine-gender entries
+    - 'ie' counts as a single vowel (diphthong)
+
+    Examples:
+      root=ċ-j-k, vowels="ie"        → "ie-"    (hollow verb, no position-2 vowel)
+      root=k-t-b, vowels="i-e"       → "i-e"    (standard triliteral)
+      root=ħ-r-b-t, vowels="a-a"     → "a-a-"   (quadriliteral, missing 3rd vowel)
+      gender=f, vowels="a-i-a"        → "a-i"    (feminine suffix -a stripped)
+    """
+    if not vowels:
+        return None
+
+    parts = vowels.split('-')
+
+    # Strip trailing feminine suffix vowel (-a Semitic, -i Romance)
+    # This removes one trailing vowel BEFORE truncating to 2 positions
+    if gender == 'feminine' and len(parts) > 2:
+        parts = parts[:-1]
+
+    # Always enforce v-v format: exactly 2 vowel positions
+    # Pad with '-' if fewer, truncate if more
+    while len(parts) < 2:
+        parts.append('-')
+    if len(parts) > 2:
+        parts = parts[:2]
+
+    return '-'.join(parts)
+
+
+def deduce_verb_vowel_sets(perfect: str, imperfect: str, root_consonants: str) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+    if not perfect:
+        return None, None, None
+
+    v_perf = normalize_vowel_set(extract_vowels(perfect), root_consonants)
+    if not imperfect:
+        return v_perf, None, None
+
+    impf = imperfect.lower().strip()
+
+    # Determine stem by stripping person prefix (j-, n-, t-)
+    # and detecting any prefix vowel
+    pfx_vowel = ''
+    stem = impf
+
+    if impf.startswith('j') and len(impf) > 1:
+        if impf[1] in 'aeiou':
+            # "jV..." – prefix vowel present (e.g. "jikteb")
+            pfx_vowel = impf[1]
+            stem = impf[2:]
+        else:
+            # "jC..." – just person prefix, no vowel (e.g. "jcallam")
+            stem = impf[1:]
+    elif impf.startswith(('t', 'n')) and len(impf) > 1 and impf[1] in 'aeiou':
+        pfx_vowel = impf[1]
+        stem = impf[2:]
+
+    stem_vowels = extract_vowels(stem)
+    theme_vowel = stem_vowels if stem_vowels else 'a'
+
+    # Heuristic: if stem has >= 2 vowels, the prefix is just
+    # a consonant (j/n/t) with no prefix vowel.  If stem has
+    # only 1 vowel, assume a prefix vowel merged into it.
+    has_prefix_vowel = bool(pfx_vowel) or (
+        not pfx_vowel and stem_vowels and len(stem_vowels.split('-')) <= 1
+    )
+
+    if has_prefix_vowel:
+        pfx = pfx_vowel if pfx_vowel else 'i'
+        v_impf = f"{pfx}-{theme_vowel}"
+    else:
+        v_impf = theme_vowel
+
+    # Imperative vowel set
+    if has_prefix_vowel:
+        imp_pfx = 'i'
+        if root_consonants:
+            c1 = root_consonants.split('-')[0].strip().lower()
+            if c1 in ['għ', 'h', 'ħ']:
+                imp_pfx = 'a'
+        v_impv = f"{imp_pfx}-{theme_vowel}"
+    else:
+        v_impv = theme_vowel
+
+    return v_perf, v_impf, v_impv
+
+
+def get_pos_section_headword_paragraph(html_text: str, pos_label: str) -> str:
+    pos_match = re.search(fr'id="({pos_label}(?:_\d+)?)"', html_text, re.IGNORECASE)
+    if not pos_match:
+        return ""
+    start_pos = pos_match.start()
+    search_space = html_text[start_pos : start_pos + 4000]
+    for p in re.findall(r'<p>.*?</p>', search_space, re.DOTALL):
+        if 'Latn headword' in p:
+            return p
+    return ""
+
+
+def parse_headword_paragraph(paragraph: str) -> dict:
+    if not paragraph:
+        return {}
+    
+    gender = None
+    gender_match = re.search(r'class="gender"[^>]*><abbr[^>]*>([mf])</abbr>', paragraph)
+    if gender_match:
+        gender = "masculine" if gender_match.group(1) == "m" else "feminine"
+        
+    inflections = {}
+    if gender:
+        inflections['gender'] = gender
+        
+    match = re.search(r'\((.*)\)', paragraph, re.DOTALL)
+    if not match:
+        return inflections
+        
+    parts = match.group(1).split(',')
+    for part in parts:
+        part = part.strip()
+        labels = [l.strip().lower() for l in re.findall(r'<i>(.*?)</i>', part)]
+        values = []
+        for b_match in re.finditer(r'<b class="Latn" lang="mt">(.*?)</b>', part, re.DOTALL):
+            b_content = b_match.group(1)
+            val = re.sub(r'<[^>]+>', '', b_content).strip()
+            if val:
+                values.append(val)
+        
+        if not values:
+            for a_match in re.finditer(r'<a [^>]+>([^<]+)</a>', part):
+                val = a_match.group(1).strip()
+                if val and not val.startswith('or') and not val.startswith('and'):
+                    values.append(val)
+        
+        for label in labels:
+            if label == 'collective' and not values:
+                inflections['is_collective'] = True
+            elif label == 'singulative' and values:
+                inflections['singulative_form'] = values[0]
+                inflections['is_collective'] = True
+            elif label == 'collective' and values:
+                inflections['collective_form'] = values[0]
+                inflections['is_singulative'] = True
+            elif label == 'plural' and values:
+                inflections['plural_forms'] = values
+            elif label == 'dual' and values:
+                inflections['dual_form'] = values[0]
+            elif label == 'paucal' and values:
+                inflections['paucal_form'] = values[0]
+            elif label in ['feminine', 'fem'] and values:
+                inflections['feminine_form'] = values[0]
+            elif label in ['masculine', 'masc'] and values:
+                inflections['masculine_form'] = values[0]
+            elif label == 'imperfect' and values:
+                inflections['imperfect'] = values[0]
+            elif label in ['verbal noun', 'verbal_noun'] and values:
+                inflections['verbal_noun'] = values[0]
+            elif label in ['active participle', 'active_ptcp'] and values:
+                inflections['active_ptcp'] = values[0]
+            elif label in ['passive participle', 'past participle', 'passive_ptcp', 'past_ptcp'] and values:
+                inflections['passive_ptcp'] = values[0]
+
+    return inflections
+
+
+def parse_alternative_forms(html_text: str) -> List[str]:
+    match = re.search(r'id="Alternative_forms".*?</h3>.*?<ul>(.*?)</ul>', html_text, re.DOTALL)
+    if not match:
+        return []
+    ul_content = match.group(1)
+    items = []
+    for li in re.findall(r'<li>(.*?)</li>', ul_content, re.DOTALL):
+        word_match = re.search(r'lang="mt"[^>]*>(.*?)<\/(?:a|b|span)>', li)
+        if word_match:
+            word = re.sub(r'<[^>]+>', '', word_match.group(1)).strip()
+            word = word.split('&')[0].split('?')[0].strip()
+            if word:
+                items.append(word)
+    return items
+
+
+def parse_related_terms(html_text: str) -> List[str]:
+    items = []
+    for sec_id in ["Related_terms", "Derived_terms"]:
+        pattern = r'id="' + sec_id + r'".*?(?:</h[34]>|<div class="mw-heading[^"]*">).*?(?:<ul>|<div class="list-switcher-wrapper">.*?<ul>)(.*?)(?:</ul>|</div>\s*</div>)'
+        match = re.search(pattern, html_text, re.DOTALL | re.IGNORECASE)
+        if match:
+            ul_content = match.group(1)
+            for li in re.findall(r'<li>(.*?)</li>', ul_content, re.DOTALL):
+                word_match = re.search(r'lang="mt"[^>]*>(.*?)<\/(?:a|b|span|strong)>', li)
+                if word_match:
+                    word = re.sub(r'<[^>]+>', '', word_match.group(1)).strip()
+                    word = word.split('&')[0].split('?')[0].strip()
+                    if word:
+                        items.append(word)
+    return list(dict.fromkeys(items))
 
 
 def parse_entry_rows(title: str, html_text: str) -> List[dict]:
@@ -626,9 +993,9 @@ def parse_entry_rows(title: str, html_text: str) -> List[dict]:
                 if not is_non_lemma_definition(cleaned):
                     is_pos_non_lemma = False
                 
-                text_clean, tags = extract_tags(cleaned)
-                for t in tags: all_entry_tags.add(t)
-                cleaned_defs.append({'text_en': text_clean, 'text_mt': None})
+                # Keep the raw text with parentheticals — the refine pipeline
+                # handles register/dialect/tag extraction from leading brackets.
+                cleaned_defs.append({'text_en': cleaned, 'text_mt': None})
         
         # SKIP if the entire POS section for this word is just inflections/non-lemmas
         if is_pos_non_lemma or not cleaned_defs:
@@ -652,20 +1019,134 @@ def parse_entry_rows(title: str, html_text: str) -> List[dict]:
                     item['definition'] = d_clean
                     for t in d_tags: all_entry_tags.add(t)
 
+        # Parse specific POS headword paragraph
+        paragraph = get_pos_section_headword_paragraph(html_text, pos)
+        infl = parse_headword_paragraph(paragraph)
+        alt_words = parse_alternative_forms(html_text)
+        alt_list = [{'headword': a, 'type': 'orthographic'} for a in alt_words]
+        related_terms = parse_related_terms(html_text)
+
+        # Calculate inflections and vowel sets
+        plural_forms = infl.get('plural_forms')
+        gender_val = infl.get('gender')
+        is_collective = 1 if infl.get('is_collective') else 0
+        is_singulative = 1 if infl.get('is_singulative') else 0
+
+        collective_form = infl.get('collective_form')
+        singulative_form = infl.get('singulative_form')
+        feminine_form = infl.get('feminine_form')
+        masculine_form = infl.get('masculine_form')
+
+        if is_collective and singulative_form:
+            feminine_form = singulative_form
+            masculine_form = title
+            gender_val = gender_val or 'masculine'
+        elif is_singulative and collective_form:
+            masculine_form = collective_form
+            feminine_form = title
+            gender_val = gender_val or 'feminine'
+        
+        has_inflections = (
+            plural_forms or
+            infl.get('dual_form') or
+            infl.get('paucal_form') or
+            collective_form or
+            singulative_form or
+            feminine_form or
+            masculine_form
+        )
+        is_inflectable = 1 if (has_inflections or pos.lower() == 'verb') else 0
+
+        # Calculate verb vowel sets if POS is a verb
+        verb_vowel_perf = None
+        verb_vowel_impf = None
+        verb_vowel_impv = None
+        verb_form = None
+        verb_class = None
+        verb_weak_class = None
+        verb_transitivity = None
+        verb_perfective_3sgm = None
+        verb_imperfective_3sgm = None
+        verb_verbal_noun = None
+        verb_active_ptcp = None
+        verb_passive_ptcp = None
+        if pos.lower() == 'verb':
+            imperfect_val = infl.get('imperfect')
+            rcs = extract_root_consonants(html_text)
+            if rcs:
+                verb_vowel_perf, verb_vowel_impf, verb_vowel_impv = deduce_verb_vowel_sets(title, imperfect_val, rcs)
+            # else: loan verbs without roots keep null vowel sets
+            # Extract verb form/class from Wiktionary category tags
+            categories = extract_page_categories(html_text)
+            verb_form, verb_class, verb_weak_class = parse_verb_form_and_class(categories)
+            # Verb fields from headword paragraph and categories
+            verb_perfective_3sgm = title  # headword IS the 3ms perfect form for Maltese
+            verb_imperfective_3sgm = imperfect_val
+            verb_verbal_noun = infl.get('verbal_noun')
+            verb_active_ptcp = infl.get('active_ptcp')
+            verb_passive_ptcp = infl.get('passive_ptcp')
+            # Detect transitivity from categories
+            for cat in categories:
+                cat_lower = cat.lower()
+                if re.search(r'\btransitive\b', cat_lower):
+                    verb_transitivity = 'transitive'
+                elif re.search(r'\bintransitive\b', cat_lower):
+                    verb_transitivity = 'intransitive'
+
+        rc = extract_root_consonants(html_text)
         row = {
             'id': final_id,
             'headword': title,
             'pos': pos,
             'definitions': cleaned_defs,
-            'source_language': 'Uncertain',
-            'is_loanword': False,
+            'gender': gender_val,
+            'root_consonants': rc,
+            'is_loanword': detect_loanword_from_chain(chain),
+            'is_inflectable': is_inflectable,
             'source_title': 'Wiktionary',
             'source_page': f'https://en.wiktionary.org/wiki/{quote(title.replace(" ", "_"), safe="")}',
             'source_citation': f'Wiktionary: {title}',
             'source_publisher': 'Wiktionary',
             'tags': sorted(list(all_entry_tags)) if all_entry_tags else None,
             'etymology_notes': None,
-            'etymology_chain': chain
+            'etymology_chain': chain,
+            
+            # Inflection fields
+            'is_collective': is_collective,
+            'is_singulative': is_singulative,
+            'collective_form': collective_form,
+            'singulative_form': singulative_form,
+            'dual_form': infl.get('dual_form'),
+            'paucal_form': infl.get('paucal_form'),
+            'feminine_form': feminine_form,
+            'masculine_form': masculine_form,
+            'plural_forms': [{'form': f, 'pattern': None} for f in plural_forms] if plural_forms else None,
+            'plural_form': [{'form': f, 'pattern': None} for f in plural_forms] if plural_forms else None,
+            
+            # Vowel sets
+            'vowel_set_sg': normalize_vowel_set(extract_vowels(title), rc, gender_val) if rc else None,
+            'vowel_set_pl': extract_vowels(plural_forms[0]) if plural_forms else None,
+            'vowel_set_dual': extract_vowels(infl.get('dual_form')),
+            'vowel_set_opp': extract_vowels(feminine_form or masculine_form),
+            
+            # Verb vowel sets
+            'verb_vowel_perf': verb_vowel_perf,
+            'verb_vowel_impf': verb_vowel_impf,
+            'verb_vowel_impv': verb_vowel_impv,
+            # Verb form & class (extracted from Wiktionary category tags)
+            'verb_form': verb_form,
+            'verb_class': verb_class,
+            'verb_weak_class': verb_weak_class,
+            # Verb fields from headword paragraph and categories
+            'verb_transitivity': verb_transitivity,
+            'verb_perfective_3sgm': verb_perfective_3sgm,
+            'verb_imperfective_3sgm': verb_imperfective_3sgm,
+            'verb_verbal_noun': verb_verbal_noun,
+            'verb_active_ptcp': verb_active_ptcp,
+            'verb_passive_ptcp': verb_passive_ptcp,
+            'alternative_forms': alt_list,
+            'raw_related_terms': related_terms,
+            'related_entries': []
         }
 
         if parser.section_labels.get(pos) == 'Proper noun':
@@ -791,6 +1272,87 @@ def main() -> int:
         if args.sleep:
             time.sleep(args.sleep)
 
+    # Auto-create alternative form stubs
+    scraped_headwords = {r['headword'].lower() for r in all_rows}
+    alternative_stubs = []
+    seen_stub_ids = set()
+    for row in all_rows:
+        alt_list = row.get('alternative_forms') or []
+        for alt in alt_list:
+            alt_hw = alt.get('headword')
+            if alt_hw and alt_hw.lower() not in scraped_headwords:
+                pos = row.get('pos')
+                short_pos = row.get('id').split('-')[0]
+                alt_id = f"{short_pos}-{slugify(alt_hw)}"
+                if alt_id not in seen_stub_ids:
+                    seen_stub_ids.add(alt_id)
+                    stub_row = {
+                        'id': alt_id,
+                        'headword': alt_hw,
+                        'pos': pos,
+                        'definitions': [],
+                        'is_loanword': row.get('is_loanword', False),
+                        'is_inflectable': 0,
+                        'source_language': row.get('source_language', 'Uncertain'),
+                        'source_title': 'Wiktionary',
+                        'source_page': f'https://en.wiktionary.org/wiki/{quote(alt_hw.replace(" ", "_"), safe="")}',
+                        'source_citation': f'Wiktionary: {alt_hw} (Alternative spelling of {row["headword"]})',
+                        'source_publisher': 'Wiktionary',
+                        'tags': ['alternative-form'],
+                        'etymology_notes': None,
+                        'etymology_chain': row.get('etymology_chain'),
+                        'alternative_forms': [{'headword': row['headword'], 'type': 'orthographic'}],
+                        'related_entries': [row['id']],
+                        
+                        # Set default null inflection fields
+                        'is_collective': 0,
+                        'is_singulative': 0,
+                        'collective_form': None,
+                        'singulative_form': None,
+                        'dual_form': None,
+                        'paucal_form': None,
+                        'feminine_form': None,
+                        'masculine_form': None,
+                        'plural_forms': None,
+                        'plural_form': None,
+                        'vowel_set_sg': extract_vowels(alt_hw),
+                        'vowel_set_pl': None,
+                        'vowel_set_dual': None,
+                        'vowel_set_opp': None
+                    }
+                    alternative_stubs.append(stub_row)
+    all_rows.extend(alternative_stubs)
+
+    # Resolve related entries using scraped headwords mapping
+    headword_to_ids = {}
+    for row in all_rows:
+        hw = row.get('headword')
+        if hw:
+            headword_to_ids.setdefault(hw, []).append(row['id'])
+
+    for row in all_rows:
+        raw_related = row.pop('raw_related_terms', [])
+        related_ids = list(row.get('related_entries') or [])
+        for term in raw_related:
+            if term == row.get('headword'):
+                continue
+            # Look up in our scraped entries
+            if term in headword_to_ids:
+                for target_id in headword_to_ids[term]:
+                    if target_id not in related_ids:
+                        related_ids.append(target_id)
+            else:
+                # Guess ID if not found in this scrape set (default to noun, or verb if double-consonant prefix)
+                guessed_id = None
+                if term.startswith(('ċċ', 'pp', 'tt', 'ss', 'ff', 'gg', 'ġġ', 'kk', 'qq', 'zz', 'żż', 'mm', 'nn')):
+                    guessed_id = f"v-{slugify(term)}"
+                else:
+                    guessed_id = f"n-{slugify(term)}"
+                if guessed_id and guessed_id not in related_ids:
+                    related_ids.append(guessed_id)
+        if related_ids:
+            row['related_entries'] = related_ids
+
     all_rows.sort(key=lambda row: (row['headword'].casefold(), row['pos'], row['id']))
 
     # If db-output-prefix provided, emit DB-shaped JSONL files: entries, tags, entry_tags
@@ -857,21 +1419,8 @@ def main() -> int:
                 continue
 
             chain_for_detection = row.get('etymology_chain') or []
-            
-            # Consider Maltese and Arabic (and variants) as native; anything else => loan
-            def _is_foreign(chain_list: List[dict]) -> bool:
-                for node in chain_list:
-                    lang = (node.get('language') or '').strip().lower()
-                    if not lang:
-                        continue
-                    if lang == 'maltese':
-                        continue
-                    if lang.startswith('arab'):
-                        continue
-                    return True
-                return False
 
-            detected_loan = 1 if _is_foreign(chain_for_detection) else 0
+            detected_loan = detect_loanword_from_chain(chain_for_detection)
 
             # Map definitions inline as JSON array of EntryDefinition shapes
             defs_list = []
@@ -883,15 +1432,23 @@ def main() -> int:
                     'nuance': ''
                 })
 
+            root_consonants = row.get('root_consonants')
+            headword = row.get('headword')
+            has_spaces = ' ' in headword or '\t' in headword
+            
+            stem = None
+            if not root_consonants and not has_spaces:
+                stem = f"-{headword}-"
+
             entry_obj = {
                 'id': entry_id,
-                'headword': row.get('headword'),
+                'headword': headword,
                 'pos': row.get('pos').lower(),
-                'gender': row.get('noun_type') if row.get('noun_type') else None,
-                'root_consonants': None,
-                'stem': None,
+                'gender': row.get('gender') or (row.get('noun_type') if row.get('noun_type') else None),
+                'root_consonants': root_consonants,
+                'stem': stem,
                 'is_loanword': detected_loan,
-                'is_inflectable': 0,
+                'is_inflectable': row.get('is_inflectable', 0),
                 'source_language': row.get('source_language'),
                 'source_id': 'src-crowd',
                 'source_citation': row.get('source_citation'),
@@ -902,7 +1459,24 @@ def main() -> int:
                 'etymology_chain': chain_for_detection if chain_for_detection else None,
                 'etymology_notes': row.get('etymology_notes'),
                 'definitions': defs_list,
-                'usage_examples': []
+                'usage_examples': [],
+                
+                # Copy inflection/vowel fields
+                'is_collective': row.get('is_collective', 0),
+                'is_singulative': row.get('is_singulative', 0),
+                'collective_form': row.get('collective_form'),
+                'singulative_form': row.get('singulative_form'),
+                'dual_form': row.get('dual_form'),
+                'paucal_form': row.get('paucal_form'),
+                'feminine_form': row.get('feminine_form'),
+                'masculine_form': row.get('masculine_form'),
+                'plural_forms': row.get('plural_forms'),
+                'plural_form': row.get('plural_form'),
+                'vowel_set_sg': row.get('vowel_set_sg'),
+                'vowel_set_pl': row.get('vowel_set_pl'),
+                'vowel_set_dual': row.get('vowel_set_dual'),
+                'vowel_set_opp': row.get('vowel_set_opp'),
+                'alternative_forms': row.get('alternative_forms')
             }
             # Overwrite/insert
             existing_entries[entry_id] = entry_obj

@@ -537,8 +537,11 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
                     if (Array.isArray(def.example_sentences) && def.example_sentences.length > 0) {
                         normalized.example_sentences = def.example_sentences;
                     }
+                    if (def.dialect) {
+                        normalized.dialect = String(def.dialect).trim();
+                    }
                     return normalized;
-                }).filter(def => def.text_en || def.text_mt || def.register || def.nuance);
+                }).filter(def => def.text_en || def.text_mt || def.register || def.nuance || def.dialect);
 
                 result[key] = normalizedDefinitions.length > 0
                     ? normalizedDefinitions

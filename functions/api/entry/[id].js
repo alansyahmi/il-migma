@@ -30,6 +30,7 @@ function normalizeDefinitionList(definitions) {
         text_mt: def?.text_mt == null ? null : String(def.text_mt).trim() || null,
         register: String(def?.register || '').trim(),
         nuance: String(def?.nuance || '').trim(),
+        dialect: def?.dialect ? String(def.dialect).trim() : undefined,
         field: String(def?.field || '').trim(),
         example_sentences: Array.isArray(def?.example_sentences) ? def.example_sentences : [],
     }));

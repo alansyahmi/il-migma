@@ -201,13 +201,18 @@ function SqlConsole({ getToken }: { getToken: () => Promise<string | null> }) {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-[#ede9e1]">
-                                        {result.rows.map((row: any[], i: number) => (
+                                        {result.rows.map((row: any, i: number) => (
                                             <tr key={i} className="hover:bg-blue-50/30 transition-colors">
-                                                {result.columns.map((_: any, j: number) => (
-                                                    <td key={j} className="p-3 font-medium text-black/70 border-r last:border-0 border-[#ede9e1] whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]" title={String(row[j])}>
-                                                        {row[j] === null ? <em className="text-black/20 italic">null</em> : String(row[j])}
-                                                    </td>
-                                                ))}
+                                                {result.columns.map((colName: string, j: number) => {
+                                                    const cell = row && typeof row === 'object'
+                                                        ? (Array.isArray(row) ? row[j] : (row[colName] !== undefined ? row[colName] : row[j]))
+                                                        : null;
+                                                    return (
+                                                        <td key={j} className="p-3 font-medium text-black/70 border-r last:border-0 border-[#ede9e1] whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]" title={String(cell)}>
+                                                            {cell === null || cell === undefined ? <em className="text-black/20 italic">null</em> : String(cell)}
+                                                        </td>
+                                                    );
+                                                })}
                                             </tr>
                                         ))}
                                     </tbody>
@@ -275,7 +280,14 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
             return s;
         };
         const header = preview.columns.join(',');
-        const rows = preview.rows.map((row: any[]) => row.map(escapeCsv).join(',')).join('\n');
+        const rows = preview.rows.map((row: any) => {
+            return preview.columns.map((col: string, j: number) => {
+                const cell = row && typeof row === 'object'
+                    ? (Array.isArray(row) ? row[j] : (row[col] !== undefined ? row[col] : row[j]))
+                    : null;
+                return escapeCsv(cell);
+            }).join(',');
+        }).join('\n');
         downloadBlob(`${header}\n${rows}`, `${baseName}.csv`, 'text/csv');
     };
 
@@ -375,13 +387,18 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[#ede9e1]">
-                                {preview.rows.slice(0, 100).map((row: any[], i: number) => (
+                                {preview.rows.slice(0, 100).map((row: any, i: number) => (
                                     <tr key={i} className="hover:bg-blue-50/20">
-                                        {row.map((cell: any, j: number) => (
-                                            <td key={j} className="p-3 border-r border-[#ede9e1] text-black/70 max-w-[150px] truncate">
-                                                {cell === null ? <em className="opacity-20 italic">null</em> : String(cell)}
-                                            </td>
-                                        ))}
+                                        {preview.columns.map((col: string, j: number) => {
+                                            const cell = row && typeof row === 'object'
+                                                ? (Array.isArray(row) ? row[j] : (row[col] !== undefined ? row[col] : row[j]))
+                                                : null;
+                                            return (
+                                                <td key={j} className="p-3 border-r border-[#ede9e1] text-black/70 max-w-[150px] truncate">
+                                                    {cell === null || cell === undefined ? <em className="opacity-20 italic">null</em> : String(cell)}
+                                                </td>
+                                            );
+                                        })}
                                     </tr>
                                 ))}
                             </tbody>
@@ -537,7 +554,9 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
     const [loading, setLoading] = useState(false);
 
     // JSONL Import State
+    const [importMode, setImportMode] = useState<'file' | 'paste'>('file');
     const [jsonlFile, setJsonlFile] = useState<File | null>(null);
+    const [pastedJsonl, setPastedJsonl] = useState('');
     const [importing, setImporting] = useState(false);
     const [importProgress, setImportProgress] = useState(0);
     const [importStats, setImportStats] = useState({ total: 0, processed: 0, updated: 0, inserted: 0, failed: 0 });
@@ -578,7 +597,8 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
     };
 
     const handleJsonlUpload = async () => {
-        if (!jsonlFile) return;
+        if (importMode === 'file' && !jsonlFile) return;
+        if (importMode === 'paste' && !pastedJsonl.trim()) return;
         const token = await getToken();
         if (!token) return;
 
@@ -593,12 +613,12 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
         log(t('Starting import process...', 'Qed tibda l-importazzjoni...'));
 
         try {
-            const text = await jsonlFile.text();
+            const text = importMode === 'file' ? await jsonlFile!.text() : pastedJsonl;
             const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
             const total = lines.length;
             
             setImportStats({ total, processed: 0, updated: 0, inserted: 0, failed: 0 });
-            log(t(`Loaded ${total} lines from file.`, `Sibt ${total} linja fil-file.`));
+            log(t(`Loaded ${total} lines for import.`, `Sibt ${total} linja għall-importazzjoni.`));
 
             let processed = 0;
             let updated = 0;
@@ -607,9 +627,9 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
 
             for (let i = 0; i < total; i++) {
                 const line = lines[i];
-                let entry: any;
+                let item: any;
                 try {
-                    entry = JSON.parse(line);
+                    item = JSON.parse(line);
                 } catch (e: any) {
                     failed++;
                     log(t(`Line ${i + 1} is invalid JSON: ${e.message}`, `Linja ${i + 1} mhix JSON valida: ${e.message}`));
@@ -617,7 +637,17 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
                     continue;
                 }
 
-                if (!entry.headword || !entry.pos) {
+                let entry: any;
+                if (item && item.entry) {
+                    entry = item.entry;
+                    if (item.tags) {
+                        entry.tags = item.tags.map((t: any) => typeof t === 'object' && t.name ? t.name : t);
+                    }
+                } else {
+                    entry = item;
+                }
+
+                if (!entry || !entry.headword || !entry.pos) {
                     failed++;
                     log(t(`Line ${i + 1} is missing headword or pos.`, `Linja ${i + 1} nieqsa mill-headword jew pos.`));
                     setImportStats({ total, processed: ++processed, updated, inserted, failed });
@@ -799,36 +829,72 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
                     <div className="flex items-center justify-between border-b border-black/5 pb-4">
                         <h3 className="text-lg font-bold text-black flex items-center gap-2">
                             <Upload size={20} className="text-[#1034A6]" />
-                            {t('Upload Wiktionary Scraper Entries (JSONL)', 'Tella\' Entrati tal-Wiktionary (JSONL)')}
+                            {t('Import Wiktionary Scraper Entries (JSONL)', 'Importa Entrati tal-Wiktionary (JSONL)')}
                         </h3>
                     </div>
 
-                    <div className="bg-[#f9f7f3] p-6 rounded-2xl border border-[#ede9e1] space-y-4">
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">{t('Select JSONL File', 'Agħżel File JSONL')}</label>
-                            <input
-                                type="file"
-                                accept=".jsonl,.json"
-                                onChange={handleJsonlFileChange}
-                                disabled={importing}
-                                className="w-full p-2.5 bg-white border border-[#ede9e1] rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
-                            />
-                        </div>
+                    <div className="flex gap-2 p-1 bg-black/5 rounded-xl w-fit">
+                        <button
+                            type="button"
+                            onClick={() => !importing && setImportMode('file')}
+                            className={cn(
+                                "px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
+                                importMode === 'file' ? "bg-white text-black shadow-sm" : "text-black/50 hover:text-black"
+                            )}
+                        >
+                            {t('Upload File', 'Tella\' Fajl')}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => !importing && setImportMode('paste')}
+                            className={cn(
+                                "px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
+                                importMode === 'paste' ? "bg-white text-black shadow-sm" : "text-black/50 hover:text-black"
+                            )}
+                        >
+                            {t('Direct Paste', 'Ikkopja u Waħħal')}
+                        </button>
+                    </div>
 
-                        {jsonlFile && (
-                            <div className="text-xs text-black/60 flex gap-4 bg-white/50 p-3 rounded-lg border border-black/[0.03] w-fit">
-                                <span><strong>Size:</strong> {(jsonlFile.size / 1024).toFixed(2)} KB</span>
-                                <span><strong>Type:</strong> {jsonlFile.name.endsWith('.jsonl') ? 'JSON Lines' : 'JSON'}</span>
+                    <div className="bg-[#f9f7f3] p-6 rounded-2xl border border-[#ede9e1] space-y-4">
+                        {importMode === 'file' ? (
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">{t('Select JSONL File', 'Agħżel File JSONL')}</label>
+                                <input
+                                    type="file"
+                                    accept=".jsonl,.json"
+                                    onChange={handleJsonlFileChange}
+                                    disabled={importing}
+                                    className="w-full p-2.5 bg-white border border-[#ede9e1] rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
+                                />
+                                {jsonlFile && (
+                                    <div className="text-xs text-black/60 flex gap-4 bg-white/50 p-3 rounded-lg border border-black/[0.03] w-fit mt-2">
+                                        <span><strong>Size:</strong> {(jsonlFile.size / 1024).toFixed(2)} KB</span>
+                                        <span><strong>Type:</strong> {jsonlFile.name.endsWith('.jsonl') ? 'JSON Lines' : 'JSON'}</span>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">{t('Paste JSONL Lines', 'Waħħal Linji JSONL')}</label>
+                                <textarea
+                                    value={pastedJsonl}
+                                    onChange={e => setPastedJsonl(e.target.value)}
+                                    disabled={importing}
+                                    placeholder='{"entry": {"headword": "ċikka", "pos": "noun", "definitions": [{"text_en": "a cigarette butt", "text_mt": "il-fdal ta’ sigarett"}]}}'
+                                    className="w-full h-48 p-4 font-mono text-sm bg-white border border-[#ede9e1] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-y shadow-inner"
+                                    spellCheck={false}
+                                />
                             </div>
                         )}
 
                         <div className="flex justify-end gap-3 pt-2">
                             <Button
                                 onClick={handleJsonlUpload}
-                                disabled={importing || !jsonlFile}
+                                disabled={importing || (importMode === 'file' ? !jsonlFile : !pastedJsonl.trim())}
                                 leftIcon={importing ? <Spinner size="sm" /> : <Upload size={14} />}
                             >
-                                {importing ? t('Importing...', 'Qed Jimporta...') : t('Upload & Import', 'Tella\' u Importa')}
+                                {importing ? t('Importing...', 'Qed Jimporta...') : t('Import Entries', 'Importa Entrati')}
                             </Button>
                         </div>
                     </div>

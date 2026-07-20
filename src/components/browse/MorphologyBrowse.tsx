@@ -7,6 +7,7 @@ import { apiListPatterns, type PatternApiItem } from '@/lib/api';
 import { getPatternMetadataSummary } from '@/lib/patternMetadata';
 import { cn } from '@/lib/utils';
 import { useCatalogRefresh } from '@/hooks/useCatalogRefresh';
+import { convertCVTo1V } from '@/lib/maltesePhonology';
 
 const BUCKET_ORDER = [
     'cv_wizen_pattern',
@@ -98,7 +99,7 @@ function PatternCard({
     pattern: PatternCardData;
     bucketId: BucketKey;
 }) {
-    const { term } = useLinguisticMode();
+    const { term, mode } = useLinguisticMode();
     const summary = getPatternMetadataSummary({
         cv: pattern.cv_notation,
         wizen: pattern.wizen_notation,
@@ -122,7 +123,7 @@ function PatternCard({
                 <div className="flex items-start justify-between gap-4 mb-6">
                     <div>
                         <h3 className="font-serif text-2xl font-bold text-black group-hover:text-link transition-colors">
-                            {pattern.cv_notation}
+                            {mode !== 'arabised' ? convertCVTo1V(pattern.cv_notation) : pattern.cv_notation}
                         </h3>
                         <p className="text-sm italic text-black/50 mt-1">{pattern.wizen_notation}</p>
                     </div>

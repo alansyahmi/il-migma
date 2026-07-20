@@ -2,6 +2,7 @@
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { Tooltip } from '@/components/ui/Tooltip';
 import type { RootPatternForm } from '@/types';
+import { convertCVTo1V } from '@/lib/maltesePhonology';
 
 interface RootPatternBadgeProps {
     form?: RootPatternForm;
@@ -16,7 +17,7 @@ export function RootPatternBadge({ form, size = 'md' }: RootPatternBadgeProps) {
     const rootLabel = form.root.consonants;
     const patternLabel = mode === 'arabised'
         ? form.pattern.wizen_notation
-        : form.pattern.cv_notation;
+        : convertCVTo1V(form.pattern.cv_notation);
 
     const isSmall = size === 'sm';
 
