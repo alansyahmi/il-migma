@@ -61,6 +61,14 @@ API = 'https://en.wiktionary.org/w/api.php'
 
 
 @dataclass
+class POSSection:
+    pos: str
+    pos_label: str
+    etymology_text: Optional[str] = None
+    definitions: List[str] = field(default_factory=list)
+
+
+@dataclass
 class SectionCapture(HTMLParser):
     target_language: str = "Maltese"
     in_target: bool = False
@@ -69,16 +77,20 @@ class SectionCapture(HTMLParser):
     etymology_text: Optional[str] = None
     sections: Dict[str, List[str]] = field(default_factory=dict)
     section_labels: Dict[str, str] = field(default_factory=dict)
+    pos_sections: List[POSSection] = field(default_factory=list)
 
     def __post_init__(self):
         super().__init__()
         self.sections = {}
         self.section_labels = {}
+        self.pos_sections = []
         self._heading_tag: Optional[str] = None
         self._heading_text: List[str] = []
         self._heading_level: Optional[int] = None
         self._collect_etymology = False
         self._etymology_text: List[str] = []
+        self._current_etymology_text: Optional[str] = None
+        self._current_pos_section: Optional[POSSection] = None
         self._in_definition_list = False
         self._definition_list_depth = 0
         self._collect_li = False
@@ -93,8 +105,10 @@ class SectionCapture(HTMLParser):
         text = clean_text(''.join(self._etymology_text))
         self._collect_etymology = False
         self._etymology_text = []
-        if text and not self.etymology_text:
-            self.etymology_text = text
+        if text:
+            self._current_etymology_text = text
+            if not self.etymology_text:
+                self.etymology_text = text
 
     def _flush_heading(self) -> None:
         if self._heading_level is None or self._heading_tag is None:
@@ -110,6 +124,8 @@ class SectionCapture(HTMLParser):
             self.in_target = text == self.target_language
             self.current_pos = None
             self.current_pos_label = None
+            self._current_etymology_text = None
+            self._current_pos_section = None
             self._collect_etymology = False
             self._etymology_text = []
             self._in_definition_list = False
@@ -119,29 +135,14 @@ class SectionCapture(HTMLParser):
         if not self.in_target or level < 3:
             return
 
-        # Handle h4 headings as potential POS sections
-        if level == 4:
-            self._flush_etymology()
-            normalized = text.casefold()
-            pos = POS_ALIASES.get(normalized)
-            self.current_pos = pos
-            self.current_pos_label = pos
-            self._in_definition_list = False
-            self._definition_list_depth = 0
-            if pos:
-                self.section_labels[pos] = text
-                if pos not in self.sections:
-                    self.sections[pos] = []
-            else:
-                self.current_pos = None
-                self.current_pos_label = None
-            return
-
         normalized = text.casefold()
-        self._flush_etymology()
-        if normalized.startswith('etymology'):
+
+        if level == 3 and normalized.startswith('etymology'):
+            self._flush_etymology()
+            self._current_etymology_text = None
             self.current_pos = None
             self.current_pos_label = None
+            self._current_pos_section = None
             self._collect_etymology = True
             self._etymology_text = []
             self._in_definition_list = False
@@ -150,16 +151,28 @@ class SectionCapture(HTMLParser):
 
         pos = POS_ALIASES.get(normalized)
         self.current_pos = pos
-        self.section_labels[pos] = text
         self._in_definition_list = False
         self._definition_list_depth = 0
         if pos:
+            self._flush_etymology()
+            self.current_pos_label = text
             self.section_labels[pos] = text
+            
+            section = POSSection(
+                pos=pos,
+                pos_label=text,
+                etymology_text=self._current_etymology_text,
+                definitions=[]
+            )
+            self.pos_sections.append(section)
+            self._current_pos_section = section
+            
             if pos not in self.sections:
                 self.sections[pos] = []
         else:
             self.current_pos = None
             self.current_pos_label = None
+            self._current_pos_section = None
 
     def _flush_li(self) -> None:
         if not self._collect_li:
@@ -168,8 +181,11 @@ class SectionCapture(HTMLParser):
         self._collect_li = False
         self._li_depth = 0
         self._li_text = []
-        if self.in_target and self.current_pos and text:
-            self.sections.setdefault(self.current_pos, []).append(text)
+        if self.in_target and text:
+            if self._current_pos_section:
+                self._current_pos_section.definitions.append(text)
+            if self.current_pos:
+                self.sections.setdefault(self.current_pos, []).append(text)
 
     def handle_starttag(self, tag: str, attrs):
         if tag in {'style', 'script'}:
@@ -399,6 +415,7 @@ def parse_verb_form_and_class(categories: List[str]) -> Tuple[Optional[str], Opt
     from Wiktionary category tags like 'Maltese hollow form-I verbs'."""
     verb_form: Optional[str] = None
     verb_class: Optional[str] = None
+    verb_weak_class: Optional[str] = None
 
     # Combined: "Maltese hollow form-I verbs" or "Maltese form-I verbs" (class optional)
     form_pat = re.compile(
@@ -773,13 +790,14 @@ def normalize_vowel_set(vowels: Optional[str], root_consonants: Optional[str] = 
     """Pad/trim a vowel set to match the number of root positions.
 
     Format rules:
-    - Always has (num_radicals - 1) positions (2 for triliteral, 3 for quadriliteral)
+    - Standard triliterals have 2 vowel positions (e.g. "i-e")
+    - Single-vowel hollow triliterals have 2 hyphens (e.g. "a--", "u--", "ie--")
     - Missing vowel positions shown as '-'
     - Feminine suffix vowels (-a, -i) are stripped for feminine-gender entries
     - 'ie' counts as a single vowel (diphthong)
 
     Examples:
-      root=ċ-j-k, vowels="ie"        → "ie-"    (hollow verb, no position-2 vowel)
+      root=d-w-m, vowels="a"         → "a--"    (hollow verb, 3 radicals)
       root=k-t-b, vowels="i-e"       → "i-e"    (standard triliteral)
       root=ħ-r-b-t, vowels="a-a"     → "a-a-"   (quadriliteral, missing 3rd vowel)
       gender=f, vowels="a-i-a"        → "a-i"    (feminine suffix -a stripped)
@@ -787,19 +805,25 @@ def normalize_vowel_set(vowels: Optional[str], root_consonants: Optional[str] = 
     if not vowels:
         return None
 
-    parts = vowels.split('-')
+    raw = vowels.rstrip('-')
+    if not raw:
+        return None
+
+    parts = raw.split('-')
 
     # Strip trailing feminine suffix vowel (-a Semitic, -i Romance)
-    # This removes one trailing vowel BEFORE truncating to 2 positions
     if gender == 'feminine' and len(parts) > 2:
         parts = parts[:-1]
 
-    # Always enforce v-v format: exactly 2 vowel positions
-    # Pad with '-' if fewer, truncate if more
-    while len(parts) < 2:
-        parts.append('-')
-    if len(parts) > 2:
-        parts = parts[:2]
+    # Format rules:
+    # Single-vowel triliteral hollow verbs use 3 parts (2 hyphens: "a--", "u--")
+    num_radicals = len(root_consonants.split('-')) if root_consonants else 0
+    target_parts = 3 if (num_radicals == 3 and len(parts) == 1) else 2
+
+    while len(parts) < target_parts:
+        parts.append('')
+    if len(parts) > target_parts:
+        parts = parts[:target_parts]
 
     return '-'.join(parts)
 
@@ -834,18 +858,22 @@ def deduce_verb_vowel_sets(perfect: str, imperfect: str, root_consonants: str) -
     stem_vowels = extract_vowels(stem)
     theme_vowel = stem_vowels if stem_vowels else 'a'
 
-    # Heuristic: if stem has >= 2 vowels, the prefix is just
-    # a consonant (j/n/t) with no prefix vowel.  If stem has
-    # only 1 vowel, assume a prefix vowel merged into it.
-    has_prefix_vowel = bool(pfx_vowel) or (
-        not pfx_vowel and stem_vowels and len(stem_vowels.split('-')) <= 1
-    )
+    # Check if stem starts with the first root consonant (no prefix vowel)
+    c1 = root_consonants.split('-')[0].strip().lower() if root_consonants else ''
+    if c1 and stem.startswith(c1):
+        has_prefix_vowel = bool(pfx_vowel)
+    else:
+        has_prefix_vowel = bool(pfx_vowel) or (
+            not pfx_vowel and stem_vowels and len(stem_vowels.split('-')) <= 1
+        )
 
     if has_prefix_vowel:
         pfx = pfx_vowel if pfx_vowel else 'i'
-        v_impf = f"{pfx}-{theme_vowel}"
+        raw_impf = f"{pfx}-{theme_vowel}"
     else:
-        v_impf = theme_vowel
+        raw_impf = theme_vowel
+
+    v_impf = normalize_vowel_set(raw_impf, root_consonants)
 
     # Imperative vowel set
     if has_prefix_vowel:
@@ -861,10 +889,32 @@ def deduce_verb_vowel_sets(perfect: str, imperfect: str, root_consonants: str) -
     return v_perf, v_impf, v_impv
 
 
-def get_pos_section_headword_paragraph(html_text: str, pos_label: str) -> str:
-    pos_match = re.search(fr'id="({pos_label}(?:_\d+)?)"', html_text, re.IGNORECASE)
-    if not pos_match:
-        return ""
+def extract_maltese_section_html(html_text: str) -> str:
+    m = re.search(r'<h2[^>]*id="Maltese"[^>]*>.*?</h2>', html_text, re.DOTALL | re.IGNORECASE)
+    if not m:
+        m = re.search(r'id="Maltese"', html_text, re.IGNORECASE)
+        if not m:
+            return html_text
+        start_idx = m.start()
+    else:
+        start_idx = m.start()
+    
+    next_h2 = re.search(r'<h2[\s>]', html_text[start_idx + 20:], re.IGNORECASE)
+    if next_h2:
+        end_idx = start_idx + 20 + next_h2.start()
+        return html_text[start_idx:end_idx]
+    return html_text[start_idx:]
+
+
+def get_pos_section_headword_paragraph(html_text: str, pos_label: str, pos_index: int = 1) -> str:
+    matches = list(re.finditer(fr'id="({pos_label}(?:_\d+)?)"', html_text, re.IGNORECASE))
+    if not matches or len(matches) < pos_index:
+        if not matches:
+            return ""
+        pos_match = matches[0]
+    else:
+        pos_match = matches[pos_index - 1]
+
     start_pos = pos_match.start()
     search_space = html_text[start_pos : start_pos + 4000]
     for p in re.findall(r'<p>.*?</p>', search_space, re.DOTALL):
@@ -972,15 +1022,29 @@ def parse_related_terms(html_text: str) -> List[str]:
 
 
 def parse_entry_rows(title: str, html_text: str) -> List[dict]:
+    maltese_html = extract_maltese_section_html(html_text)
+
     parser = SectionCapture(target_language="Maltese")
-    parser.feed(html_text)
+    parser.feed(maltese_html)
     parser.close()
 
     rows: List[dict] = []
-    # Count occurrences of (headword, short_pos) to create unique IDs
     id_counts: Dict[str, int] = {}
+    pos_counts_by_type: Dict[str, int] = {}
 
-    for pos, defs in parser.sections.items():
+    pos_sections_to_process = parser.pos_sections if parser.pos_sections else [
+        POSSection(pos=p, pos_label=p, etymology_text=parser.etymology_text, definitions=d)
+        for p, d in parser.sections.items()
+    ]
+
+    for pos_section in pos_sections_to_process:
+        pos = pos_section.pos
+        defs = pos_section.definitions
+        etymology_text = pos_section.etymology_text
+
+        pos_counts_by_type[pos] = pos_counts_by_type.get(pos, 0) + 1
+        pos_index = pos_counts_by_type[pos]
+
         all_entry_tags = set()
         cleaned_defs = []
         is_pos_non_lemma = True
@@ -988,16 +1052,10 @@ def parse_entry_rows(title: str, html_text: str) -> List[dict]:
         for definition in defs:
             cleaned = clean_text(definition)
             if cleaned:
-                # If we find at least one definition that isn't just an inflection, 
-                # the POS section is considered a lemma section
                 if not is_non_lemma_definition(cleaned):
                     is_pos_non_lemma = False
-                
-                # Keep the raw text with parentheticals — the refine pipeline
-                # handles register/dialect/tag extraction from leading brackets.
                 cleaned_defs.append({'text_en': cleaned, 'text_mt': None})
         
-        # SKIP if the entire POS section for this word is just inflections/non-lemmas
         if is_pos_non_lemma or not cleaned_defs:
             continue
 
@@ -1009,22 +1067,20 @@ def parse_entry_rows(title: str, html_text: str) -> List[dict]:
         if id_counts[base_id] > 1:
             final_id = base_id + "-" + str(id_counts[base_id])
 
-        # Handle etymology chain and tags
         chain = []
-        if parser.etymology_text:
-            chain = build_etymology_chain(parser.etymology_text)
+        if etymology_text:
+            chain = build_etymology_chain(etymology_text)
             for item in chain:
                 if item.get('definition'):
                     d_clean, d_tags = extract_tags(item['definition'])
                     item['definition'] = d_clean
                     for t in d_tags: all_entry_tags.add(t)
 
-        # Parse specific POS headword paragraph
-        paragraph = get_pos_section_headword_paragraph(html_text, pos)
+        paragraph = get_pos_section_headword_paragraph(maltese_html, pos, pos_index)
         infl = parse_headword_paragraph(paragraph)
-        alt_words = parse_alternative_forms(html_text)
+        alt_words = parse_alternative_forms(maltese_html)
         alt_list = [{'headword': a, 'type': 'orthographic'} for a in alt_words]
-        related_terms = parse_related_terms(html_text)
+        related_terms = parse_related_terms(maltese_html)
 
         # Calculate inflections and vowel sets
         plural_forms = infl.get('plural_forms')
@@ -1079,6 +1135,19 @@ def parse_entry_rows(title: str, html_text: str) -> List[dict]:
             # Extract verb form/class from Wiktionary category tags
             categories = extract_page_categories(html_text)
             verb_form, verb_class, verb_weak_class = parse_verb_form_and_class(categories)
+            # Fallback for loan verbs: check definition text for "i-type unadapted loan" /
+            # "a-type unadapted loan" tags that Wiktionary uses on pages without Semitic
+            # category tags (e.g. abbona, ċċaffronta).
+            if not verb_weak_class:
+                for definition in defs:
+                    cleaned = clean_text(definition)
+                    lower = cleaned.lower()
+                    if 'i-type unadapted loan' in lower:
+                        verb_weak_class = '-ir'
+                        break
+                    elif 'a-type unadapted loan' in lower:
+                        verb_weak_class = '-ar'
+                        break
             # Verb fields from headword paragraph and categories
             verb_perfective_3sgm = title  # headword IS the 3ms perfect form for Maltese
             verb_imperfective_3sgm = imperfect_val

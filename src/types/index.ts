@@ -136,6 +136,15 @@ export interface Entry {
     numeral_type?: string | null;
     form_attributive_short?: string | null;
     root_consonants?: string | null;
+    source_id?: string | null;
+    source_citation?: string | null;
+    source_title?: string | null;
+    source_year?: string | null;
+    source_page?: string | null;
+    source_publisher?: string | null;
+    zokk_class?: string | null;
+    zokk_is_hybrid?: boolean | number | null;
+    zokk_agentive_suffix?: string | null;
 
     // Morphological Sub-tables (Normalized)
     noun_morphology?: NounMorphology;

@@ -2,6 +2,7 @@
 import json
 import re
 import sys
+import argparse
 from pathlib import Path
 from typing import Optional
 from urllib.parse import quote
@@ -185,12 +186,27 @@ def convert_to_uk_english(text: str) -> str:
         text = re.sub(pattern, repl, text, flags=re.IGNORECASE)
     return text
 
-def generate_maltese_ipa(headword: str) -> str:
-    w = headword.lower().strip()
+CONSONANT_PATTERN = r'[^\saeiouâêîôûāēīōūAEIOUàèìòù]'
+
+def generate_maltese_ipa(headword: str, root_consonants: Optional[str] = None, cv_pattern: Optional[str] = None, morph_pattern: Optional[str] = None) -> str:
+    """Automated 5-Stage G2P Engine for Maltese Phonology (Semitic + Non-Semitic Loanwords)."""
+    raw_hw = headword.strip()
+    words = raw_hw.split()
+    if len(words) > 1:
+        # Multi-word phrase: process each word independently
+        return "/" + " ".join(generate_maltese_ipa(w, root_consonants, cv_pattern, morph_pattern).strip("/") for w in words) + "/"
+
+    w = raw_hw.lower()
+    w = w.replace("'", "").replace("’", "")
+    has_grave = any(c in w for c in ['à', 'è', 'ì', 'ò', 'ù'])
+
+    # Stage 1: Orthographic Pre-Processing & Segment Normalization
+    w = w.replace('zz', 'tz')
+    w = re.sub(r'iegħe', 'IːjE', w)
+    w = re.sub(r'iegħa', 'IːjA', w)
     w = w.replace('għi', 'ɛj')
     w = w.replace('għu', 'ɔw')
 
-    # Word-initial għ is silent
     if w.startswith('għ'):
         w = w[2:]
 
@@ -198,23 +214,88 @@ def generate_maltese_ipa(headword: str) -> str:
         w = re.sub(r'(għ|h|ħ)$', 'Ħ', w)
 
     w = re.sub(r'għ(?!i|u)', 'ː', w)
-    # When għ/ː appears between two identical vowels, merge into a single long vowel
-    # e.g. ċagħak → ċaːak → ċaːk, għagħa → aːa → aː
     w = re.sub(r'([aeiou])ː\1', r'\1ː', w)
     w = re.sub(r'h(?!$)', 'ː', w)
+
+    # Circumflex & Macrons (Etymologically Long)
+    w = w.replace('â', 'Aː').replace('ā', 'Aː')
+    w = w.replace('ê', 'Eː').replace('ē', 'Eː')
+    w = w.replace('î', 'Iː').replace('ī', 'Iː')
+    w = w.replace('ô', 'Oː').replace('ō', 'Oː')
+    w = w.replace('û', 'Uː').replace('ū', 'Uː')
+
+    # Grave Accents (Stressed Final Open Vowels - phonetically long)
+    w = w.replace('à', 'Aː').replace('è', 'Eː').replace('ì', 'Iː').replace('ò', 'Oː').replace('ù', 'Uː')
+
     w = w.replace('ie', 'Iː')
-    
+
+    # Morphological Semitic Pattern & Suffix Detection
+    # Apply Semitic 12i3 / 12u3 patterns ONLY IF Semitic root/pattern is present OR word has <= 2 syllables
+    num_ortho_syllables = len(re.findall(r'[aeiouâêîôûāēīōūàèìòù]+', raw_hw.lower()))
+    is_semitic_or_short = (root_consonants is not None) or (cv_pattern is not None) or (morph_pattern is not None) or (num_ortho_syllables <= 2)
+
+    is_pattern_12i3 = is_semitic_or_short and (
+        (cv_pattern and any(p in cv_pattern for p in ['12i3', '1a2i3', 'a2v3', '12i3a', '12i3in'])) or
+        (morph_pattern and any(p in morph_pattern for p in ['C1C2iC3', 'C1aC2iC3', 'aC2vC3'])) or
+        (re.match(rf'^(?:[aeiou])?{CONSONANT_PATTERN}{{1,2}}i{CONSONANT_PATTERN}$', w))
+    )
+    is_pattern_12u3 = is_semitic_or_short and (
+        (cv_pattern and any(p in cv_pattern for p in ['12u3', '1a2u3'])) or
+        (morph_pattern and any(p in morph_pattern for p in ['C1C2uC3', 'C1aC2uC3'])) or
+        (re.match(rf'^{CONSONANT_PATTERN}{{1,2}}u{CONSONANT_PATTERN}$', w))
+    )
+
+    is_suffix_uz = re.search(r'uż$', raw_hw.lower()) and len(raw_hw) > 3
+    is_suffix_iz = re.search(r'iż$', raw_hw.lower()) and len(raw_hw) > 3
+    is_suffix_an = re.search(rf'{CONSONANT_PATTERN}an$', raw_hw.lower()) and len(raw_hw) > 3
+    is_suffix_tur = re.search(r'(?:tur|ur)$', raw_hw.lower()) and len(raw_hw) > 3
+    is_suffix_in = re.search(rf'{CONSONANT_PATTERN}in$', raw_hw.lower()) and len(raw_hw) > 3
+    is_suffix_iet = raw_hw.lower().endswith('iet')
+    is_suffix_ar = raw_hw.lower().endswith('ar') and cv_pattern is None and root_consonants is None and len(raw_hw) > 4
+
+    if is_pattern_12i3:
+        w = re.sub(rf'i({CONSONANT_PATTERN})$', r'Iː\1', w)
+    elif is_pattern_12u3:
+        w = re.sub(rf'u({CONSONANT_PATTERN})$', r'Uː\1', w)
+    elif is_suffix_uz:
+        w = re.sub(r'uż$', 'Uːż', w)
+    elif is_suffix_iz:
+        w = re.sub(r'iż$', 'Iːż', w)
+    elif is_suffix_an:
+        w = re.sub(r'an$', 'Aːn', w)
+    elif is_suffix_tur:
+        w = re.sub(r'ur$', 'Uːr', w)
+    elif is_suffix_in:
+        w = re.sub(r'in$', 'Iːn', w)
+    elif is_suffix_iet:
+        w = re.sub(r'iet$', 'Iːt', w)
+    elif is_suffix_ar:
+        w = re.sub(r'ar$', 'Aːr', w)
+
+    # Phoneme Segment Mapping
     mapping = {
         'ċ': 't͡ʃ', 'ġ': 'd͡ʒ', 'ħ': 'ħ', 'q': 'ʔ', 'x': 'ʃ', 'ż': 'z', 'z': 't͡s',
         'c': 'k', 'g': 'ɡ', 'j': 'j', 'w': 'w',
     }
-    
+
     res = []
     i = 0
     while i < len(w):
         char = w[i]
-        if char == 'I':
+        if char == 'A':
+            res.append('ɐ')
+            i += 1
+        elif char == 'E':
+            res.append('ɛ')
+            i += 1
+        elif char == 'I':
             res.append('ɪ')
+            i += 1
+        elif char == 'O':
+            res.append('ɔ')
+            i += 1
+        elif char == 'U':
+            res.append('ʊ')
             i += 1
         elif char == 'ː':
             res.append('ː')
@@ -226,24 +307,22 @@ def generate_maltese_ipa(headword: str) -> str:
             res.append(mapping[char])
             i += 1
         elif char in ['a', 'e', 'i', 'o', 'u']:
-            v_map = {'a': 'a', 'e': 'e', 'i': 'i', 'o': 'o', 'u': 'u'} # will map to IPA equivalents below
             v_ipa = {'a': 'ɐ', 'e': 'ɛ', 'i': 'ɪ', 'o': 'ɔ', 'u': 'ʊ'}
             res.append(v_ipa[char])
             i += 1
         else:
             res.append(char)
             i += 1
-            
+
+    # Devoicing of word-final obstruents
     if res:
         last = res[-1]
-        devoice = {
-            'b': 'p', 'd': 't', 'd͡ʒ': 't͡ʃ', 'ɡ': 'k', 'v': 'f', 'z': 's'
-        }
+        devoice = {'b': 'p', 'd': 't', 'd͡ʒ': 't͡ʃ', 'ɡ': 'k', 'v': 'f', 'z': 's'}
         if last in devoice:
             res[-1] = devoice[last]
-            
+
     vowels = {'ɐ', 'ɛ', 'ɪ', 'ɔ', 'ʊ', 'ɐː', 'ɛː', 'ɪː', 'ɔː', 'ʊː'}
-    
+
     grouped = []
     i = 0
     while i < len(res):
@@ -253,16 +332,16 @@ def generate_maltese_ipa(headword: str) -> str:
         else:
             grouped.append(res[i])
             i += 1
-            
+
     v_indices = [idx for idx, char in enumerate(grouped) if any(v in char for v in vowels)]
-    
+
     if len(v_indices) <= 1:
-        # Single-syllable word: stress the only syllable
         if grouped:
             grouped[0] = "ˈ" + grouped[0].lstrip("ˈ")
         ipa_str = "".join(grouped)
         return f"/{ipa_str}/"
-        
+
+    # Stage 3: Syllabification Protocol (Maximal Onset Principle)
     syllables = []
     last_split = 0
     for idx, v_idx in enumerate(v_indices):
@@ -274,24 +353,68 @@ def generate_maltese_ipa(headword: str) -> str:
             if consonants_between <= 1:
                 split_point = v_idx + 1
             else:
-                split_point = next_v_idx - 1
+                between_chars = grouped[v_idx + 1 : next_v_idx]
+                if len(between_chars) == 3 and between_chars[0] in ['s', 'ʃ'] and between_chars[1] in ['t', 'p', 'k', 'b', 'd', 'ɡ'] and between_chars[2] in ['r', 'l']:
+                    split_point = v_idx + 2  # split after s/x (e.g. nis.tra)
+                elif between_chars[-1] in ['j', 'w'] and len(between_chars) >= 2:
+                    split_point = next_v_idx - 2  # glide j/w attaches to onset of following syllable
+                else:
+                    split_point = next_v_idx - 1
             syllables.append(grouped[last_split:split_point])
             last_split = split_point
-            
-    final_syllable = "".join(syllables[-1])
-    is_ultimate_stress = 'ː' in final_syllable or final_syllable.endswith('ħ')
+
+    # Stage 2: Stress Assignment Rules
+    final_syllable_str = "".join(syllables[-1])
+    is_superheavy_ment = raw_hw.lower().endswith('ment')
+    is_suffix_evoli = raw_hw.lower().endswith('evoli')
     
-    stressed_idx = len(syllables) - 1 if is_ultimate_stress else len(syllables) - 2
+    # Proparoxytone Italian/Sicilian loan suffixes (-iku, -ika, -iċi, -itu, -ita, -idu, -ida, -imu, -ima, -ilu, -ila, -omu, -oma)
+    is_proparoxytone = bool(re.search(r'(?:ik[uajċ]|it[ua]|id[ua]|im[ua]|il[ua]|om[ua])$', raw_hw.lower())) and len(syllables) >= 3
+
+    is_ultimate_stress = (
+        'ː' in final_syllable_str or 
+        final_syllable_str.endswith('ħ') or 
+        has_grave or 
+        is_superheavy_ment
+    )
+
+    if (is_suffix_evoli or is_proparoxytone) and len(syllables) >= 3:
+        stressed_idx = len(syllables) - 3
+    elif is_ultimate_stress:
+        stressed_idx = len(syllables) - 1
+    else:
+        stressed_idx = len(syllables) - 2
+
     if stressed_idx < 0:
         stressed_idx = 0
-        
+
+    # Stage 4: Elongation & Complementary Quantity Rules
+    stressed_syl = syllables[stressed_idx]
+    is_word_final_stressed = (stressed_idx == len(syllables) - 1)
+    
+    # Form I Semitic triliteral verbs (e.g. kotor, qatol, kines, kiber) preserve short root vowels
+    is_form1_semitic_verb = False
+    if cv_pattern and (cv_pattern in ['1v2v3', '1o2o3', '1i2e3', '1a2a3', '1e2e3', '1i2i3', '1u2u3'] or re.match(r'^1[aeiouv]2[aeiouv]3$', cv_pattern)):
+        is_form1_semitic_verb = True
+    elif morph_pattern and (morph_pattern in ['C1vC2vC3', 'C1oC2oC3', 'C1iC2eC3'] or re.match(r'^C1[aeiouv]C2[aeiouv]C3$', morph_pattern)):
+        is_form1_semitic_verb = True
+    elif root_consonants and len(root_consonants.split('-')) == 3 and re.match(r'^[b-df-hj-np-tv-zżċġħq]{1}[aeiou]{1}[b-df-hj-np-tv-zżċġħq]{1}[aeiou]{1}[b-df-hj-np-tv-zżċġħq]{1}$', raw_hw.lower()):
+        is_form1_semitic_verb = True
+
+    # An open syllable ends in a vowel segment (not closed by a consonant or geminate)
+    is_open_syllable = any(v in stressed_syl[-1] for v in vowels) and 'ː' not in stressed_syl[-1]
+    
+    if is_open_syllable and not is_word_final_stressed and not is_form1_semitic_verb:
+        v_char = stressed_syl[-1]
+        stressed_syl[-1] = v_char + 'ː'
+
     formatted_syllables = []
     for idx, syl in enumerate(syllables):
         syl_str = "".join(syl)
         if idx == stressed_idx:
             syl_str = "ˈ" + syl_str
         formatted_syllables.append(syl_str)
-        
+
     return "/" + ".".join(formatted_syllables).replace('.ˈ', 'ˈ') + "/"
 
 def normalize_vowel_set(vowels: Optional[str], gender: Optional[str] = None) -> Optional[str]:
@@ -308,12 +431,158 @@ def normalize_vowel_set(vowels: Optional[str], gender: Optional[str] = None) -> 
     # Strip trailing feminine suffix vowel if applicable
     if gender == 'feminine' and len(parts) > 2:
         parts = parts[:-1]
-    # Enforce exactly 2 positions
-    while len(parts) < 2:
-        parts.append('-')
-    if len(parts) > 2:
-        parts = parts[:2]
-    return '-'.join(parts)
+        
+    cleaned_parts = []
+    for p in parts:
+        p_clean = p.strip()
+        if not p_clean:
+            p_clean = '-'
+        elif p_clean in ('ā', 'â', 'á', 'à'):
+            p_clean = 'a'
+        elif p_clean in ('ē', 'ê', 'é', 'è'):
+            p_clean = 'e'
+        elif p_clean in ('ī', 'î', 'í', 'ì'):
+            p_clean = 'i'
+        elif p_clean in ('ō', 'ô', 'ó', 'ò'):
+            p_clean = 'o'
+        elif p_clean in ('ū', 'û', 'ú', 'ù'):
+            p_clean = 'u'
+        cleaned_parts.append(p_clean)
+
+    while len(cleaned_parts) < 2:
+        cleaned_parts.append('-')
+    if len(cleaned_parts) > 2:
+        cleaned_parts = cleaned_parts[:2]
+    return '-'.join(cleaned_parts)
+
+
+def tokenize_maltese_word(w: str):
+    tokens = []
+    i = 0
+    w = w.lower().strip()
+    while i < len(w):
+        if i + 1 < len(w):
+            pair = w[i:i+2]
+            if pair == 'ie':
+                tokens.append(('ie', True))
+                i += 2
+                continue
+            elif pair in ('gh', 'għ'):
+                tokens.append(('għ', False))
+                i += 2
+                continue
+        ch = w[i]
+        if ch in 'aeiouāēīōūàèìòùáéíóúâêîôû':
+            tokens.append((ch, True))
+        else:
+            tokens.append((ch, False))
+        i += 1
+    return tokens
+
+
+def derive_vowels_from_cv(cv_pattern: Optional[str]) -> Optional[str]:
+    """Extract 2-slot root vowel set directly from a 1V CV pattern (e.g. 1a2e3 -> a-e, 12ie3 -> --ie, 1a23a -> a--)."""
+    if not cv_pattern:
+        return None
+    import re
+    v1_m = re.search(r'1([aeiou|ie|â]+)2', cv_pattern)
+    v1 = v1_m.group(1) if v1_m else ''
+    if v1 == 'v': v1 = 'a'
+    
+    v2_m = re.search(r'2([aeiou|ie|â]+)3', cv_pattern)
+    v2 = v2_m.group(1) if v2_m else ''
+    if v2 == 'v': v2 = 'a'
+
+    if not v1 and not v2:
+        return None
+    return normalize_vowel_set(f"{v1}-{v2}")
+
+
+def derive_vowel_set_from_root(word: Optional[str], root_consonants: Optional[str], cv_pattern: Optional[str] = None) -> Optional[str]:
+    """Derive root-aligned vowel set (slot1-slot2) using root consonant positions or CV pattern.
+
+    - slot1: Vowel between C1 and C2 (e.g. 'a--' for 1a23)
+    - slot2: Vowel between C2 and C3 (e.g. '--ie' for 12ie3)
+    """
+    if cv_pattern:
+        cv_vset = derive_vowels_from_cv(cv_pattern)
+        if cv_vset:
+            return cv_vset
+
+    if not word or not root_consonants:
+        return None
+
+    # Strip sound plural and dual suffixes before matching root vowels
+    suffixes = ['tejn', 'ejn', 'ijiet', 'iet', 'at', 'in', 'i', 's']
+    for suf in suffixes:
+        if word.endswith(suf) and len(word) > len(suf):
+            word = word[:-len(suf)]
+            break
+
+    radicals = [r.strip().lower() for r in root_consonants.split('-') if r.strip()]
+    if not radicals or len(radicals) < 2:
+        return None
+
+    tokens = tokenize_maltese_word(word)
+
+    matched_indices = {}
+    search_start = 0
+
+    for rad_idx, rad in enumerate(radicals):
+        for i in range(search_start, len(tokens)):
+            token_text, is_vowel = tokens[i]
+            if not is_vowel and token_text.lower() == rad:
+                matched_indices[rad_idx] = i
+                search_start = i + 1
+                break
+
+    if 0 not in matched_indices:
+        return None
+
+    if len(radicals) == 3:
+        c1_idx = matched_indices[0]
+        c2_idx = matched_indices.get(1)
+        c3_idx = matched_indices.get(2)
+
+        v1 = ""
+        if c2_idx is not None and c2_idx > c1_idx + 1:
+            v_tokens = [t[0] for t in tokens[c1_idx+1:c2_idx] if t[1]]
+            if v_tokens:
+                v1 = v_tokens[0]
+
+        v2 = ""
+        if c2_idx is not None and c3_idx is not None and c3_idx > c2_idx + 1:
+            v_tokens = [t[0] for t in tokens[c2_idx+1:c3_idx] if t[1]]
+            if v_tokens:
+                v2 = v_tokens[0]
+        elif c2_idx is None and c3_idx is not None and c3_idx > c1_idx + 1:
+            v_tokens = [t[0] for t in tokens[c1_idx+1:c3_idx] if t[1]]
+            if v_tokens:
+                v2 = v_tokens[0]
+
+        return normalize_vowel_set(f"{v1}-{v2}")
+
+    elif len(radicals) == 4:
+        c1_idx = matched_indices[0]
+        c2_idx = matched_indices.get(1)
+        c3_idx = matched_indices.get(2)
+        c4_idx = matched_indices.get(3)
+
+        v1 = ""
+        if c2_idx is not None and c2_idx > c1_idx + 1:
+            v_tokens = [t[0] for t in tokens[c1_idx+1:c2_idx] if t[1]]
+            if v_tokens:
+                v1 = v_tokens[0]
+
+        v2 = ""
+        if c3_idx is not None and c4_idx is not None and c4_idx > c3_idx + 1:
+            v_tokens = [t[0] for t in tokens[c3_idx+1:c4_idx] if t[1]]
+            if v_tokens:
+                v2 = v_tokens[0]
+
+        return normalize_vowel_set(f"{v1}-{v2}")
+
+    return None
 
 
 # Weak radicals that can be silently dropped in hollow/weak verb forms
@@ -366,9 +635,16 @@ def compute_cv_pattern(headword: str, root_consonants: Optional[str]) -> Optiona
     matched_indices = {}  # token_idx -> radical_number (1-based)
     rad_idx = 0
     last_matched = -1
+    c1_is_hamza = radicals[0] in ("'", "hamza", "alif")
+
     for idx, (token, is_vowel) in enumerate(tokens):
         if is_vowel:
+            if idx == 0 and c1_is_hamza and rad_idx == 0:
+                matched_indices[0] = 1
+                rad_idx = 1
+                last_matched = 0
             continue
+
         token_norm = token.lower().replace('gh', 'għ')
         matched = False
         for try_idx in range(rad_idx, len(radicals)):
@@ -399,10 +675,22 @@ def compute_cv_pattern(headword: str, root_consonants: Optional[str]) -> Optiona
     output = []
     for idx, (token, is_vowel) in enumerate(tokens):
         if is_vowel:
-            # Only map to v / v̂ if the vowel is root-internal
+            if idx == 0 and c1_is_hamza and 0 in matched_indices:
+                # If C1 is hamza and token 0 is mapped to 1:
+                # For geminated verbs/nouns like ażżem (1v22v3), emit 1v
+                if len(tokens) > 2 and tokens[1][0] == tokens[2][0] and not tokens[1][1]:
+                    output.append('1v')
+                else:
+                    output.append('1')
+                continue
+
+            # Only map to v / â if the vowel is root-internal
             if first_rad_token_idx != -1 and first_rad_token_idx < idx < last_rad_token_idx:
-                if token.lower() in ('ie', 'ā', 'ē', 'ī', 'ō', 'ū', 'â', 'ê', 'î', 'ô', 'û'):
-                    output.append('v̂')
+                tok_low = token.lower()
+                if tok_low in ('ie', 'ā', 'ē', 'ī', 'ō', 'ū', 'â', 'ê', 'î', 'ô', 'û'):
+                    output.append('â')
+                elif tok_low in ('u', 'o', 'e', 'a', 'i'):
+                    output.append('v')
                 else:
                     output.append('v')
             else:
@@ -434,14 +722,122 @@ def compute_morph_pattern(cv_pattern: Optional[str]) -> Optional[str]:
     return result
 
 
-def process_plural_forms(plural_forms, root_consonants):
+UNAMBIGUOUS_SOUND_SUFFIXES = ["ijiet", "jin", "iet", "at", "in"]
+
+BROKEN_PLURAL_PATTERNS = [
+    r'^12[âv̂]?3$',          # fgħiel, fgħal, fjal, fwiel, fwal
+    r'^12[âv̂]?3a$',        # fgħala, 12v3a
+    r'^1[veo]?2[veo]3$', # fagħel, figħel, fogħol, fojol
+    r'^12u3$',          # fgħul, fjul
+    r'^12u3a$',         # fgħula
+    r'^1o2u3$',         # fogħul
+    r'^12v?jjv?3$',     # fgħajjel, fwajjel
+    r'^12[âv̂]?3i$',        # fgħali, fgħieli, fjieli
+    r'^1[oev]?23a$',    # fogħla, 1v23a, 1o23a
+    r'^[vo]?123a$',     # ifgħla, ofgħla, oqbra (o123a / v123a)
+    r'^1o22[âv̂]3$',        # fogħgħiel
+    r'^12ija$',         # fgħija
+    r'^1w[âv̂]2v3$',        # fwiegħel
+    r'^1v?3ân$',        # filan, filien, felien
+    r'^12v2v3$',        # fwawal, fgħalel
+    r'^1u2e3$',         # fuwel
+    r'^1wâ2i$',         # fwiegħi
+    r'^m[i1][âv̂]?2v3$',    # mfagħel, mfagħal
+    r'^mi13a$',         # mifja
+    r'^12[âv̂]?3v4$',       # fgħalal, fgħalel, fgħielel
+    r'^12[âv̂]?2v3$',       # fgħagħal, fgħagħel
+    r'^12o3o4$',        # fgħolol
+]
+
+
+def normalize_broken_cv_pattern(cv_pat: str) -> str:
+    if not cv_pat:
+        return cv_pat
+    cv_pat = re.sub(r'^12v3v4$', r'12â3v4', cv_pat)
+    cv_pat = re.sub(r'^12v2v3$', r'12â2v3', cv_pat)
+    cv_pat = re.sub(r'^12v3$', r'12â3', cv_pat)
+    cv_pat = re.sub(r'^12v3a$', r'12â3a', cv_pat)
+    cv_pat = re.sub(r'^12v3i$', r'12â3i', cv_pat)
+    cv_pat = re.sub(r'^1[vea]2e3$', r'1v2e3', cv_pat)
+    cv_pat = re.sub(r'^12[vea]?jj[vea]?3$', r'12vjjv3', cv_pat)
+    cv_pat = re.sub(r'^12â3[ev]4$', r'12â3e4', cv_pat)
+    return cv_pat
+
+
+def is_broken_plural_pattern(cv_pat: str) -> bool:
+    if not cv_pat:
+        return False
+    for pat in BROKEN_PLURAL_PATTERNS:
+        if re.match(pat, cv_pat):
+            return True
+    return False
+
+
+def infer_root_consonants(headword: Optional[str], plural_forms: Optional[list] = None) -> Optional[str]:
+    if not headword:
+        return None
+
+    def get_raw_cons(text):
+        w = text.lower().strip()
+        consonants = []
+        i = 0
+        while i < len(w):
+            if i + 1 < len(w):
+                pair = w[i:i+2]
+                if pair in ('gh', 'għ'):
+                    consonants.append('għ')
+                    i += 2
+                    continue
+                elif pair == 'ie':
+                    i += 2
+                    continue
+            ch = w[i]
+            if ch not in 'aeiouāēīōūàèìòùáéíóúâêîôû':
+                if ch.isalpha():
+                    consonants.append(ch)
+            i += 1
+        return consonants
+
+    raw_cons = get_raw_cons(headword)
+    if 3 <= len(raw_cons) <= 4:
+        return '-'.join(raw_cons)
+
+    if len(raw_cons) > 4:
+        collapsed = []
+        for c in raw_cons:
+            if not collapsed or collapsed[-1] != c:
+                collapsed.append(c)
+        if 3 <= len(collapsed) <= 4:
+            return '-'.join(collapsed)
+
+    if len(raw_cons) == 2 and plural_forms:
+        for pf in plural_forms:
+            p_form = pf.get("form") if isinstance(pf, dict) else (pf if isinstance(pf, str) else None)
+            if not p_form:
+                continue
+            p_cons = get_raw_cons(p_form)
+            p_text = p_form.lower()
+            if 'jj' in p_text:
+                filtered_p_cons = [c for c in p_cons if c != 'j']
+                if len(filtered_p_cons) == 3 and filtered_p_cons[0] == raw_cons[0] and filtered_p_cons[2] == raw_cons[1]:
+                    return '-'.join(filtered_p_cons)
+            if len(p_cons) >= 3 and p_cons[0] == raw_cons[0]:
+                for idx in range(1, len(p_cons) - 1):
+                    if p_cons[idx] in ('w', 'j') and p_cons[idx+1] == raw_cons[1]:
+                        return f"{raw_cons[0]}-{p_cons[idx]}-{raw_cons[1]}"
+
+    return None
+
+
+def process_plural_forms(plural_forms, root_consonants, headword=None):
     if not plural_forms:
         return plural_forms
     if not isinstance(plural_forms, list):
         return plural_forms
 
+    effective_root = root_consonants or (headword and infer_root_consonants(headword, plural_forms))
+
     refined = []
-    sound_suffixes = ["in", "iet", "at", "i"]
     for pf in plural_forms:
         if isinstance(pf, str):
             pf = {"form": pf, "pattern": None}
@@ -452,16 +848,35 @@ def process_plural_forms(plural_forms, root_consonants):
             continue
 
         form = pf.get("form") or ""
-        matched_suffix = None
-        for suffix in sound_suffixes:
-            if form.endswith(suffix):
-                matched_suffix = f"-{suffix}"
-                break
-
-        if matched_suffix:
-            pf["pattern"] = matched_suffix
+        
+        # 1. Compute CV pattern first using effective root
+        cv_pat = compute_cv_pattern(form, effective_root) if effective_root else None
+        if cv_pat:
+            cv_pat = normalize_broken_cv_pattern(cv_pat)
+        
+        # 2. Check if CV pattern matches a known broken plural pattern
+        if cv_pat and is_broken_plural_pattern(cv_pat):
+            pf["pattern"] = cv_pat
         else:
-            pf["pattern"] = compute_cv_pattern(form, root_consonants)
+            # 3. Unambiguous sound suffixes
+            matched_suffix = None
+            for suffix in UNAMBIGUOUS_SOUND_SUFFIXES:
+                if form.endswith(suffix):
+                    matched_suffix = f"-{suffix}"
+                    break
+
+            if matched_suffix:
+                pf["pattern"] = matched_suffix
+            else:
+                # 4. Check secondary sound suffixes (-ien, -an, -i, -a, -s)
+                secondary_suffixes = ["ien", "an", "i", "a", "s"]
+                sec_matched = None
+                for suffix in secondary_suffixes:
+                    if form.endswith(suffix):
+                        sec_matched = f"-{suffix}"
+                        break
+                
+                pf["pattern"] = sec_matched if sec_matched else cv_pat
         
         refined.append(pf)
     return refined
@@ -596,54 +1011,38 @@ def refine_entry(raw_entry, headword_defs_lookup=None):
                         tags_accumulated.append(label)
                         part_uk = content
 
-            # Check if it's an alternative spelling/form
+            # Check if it's an alternative spelling/form (Section 2.6)
             alt_match = re.search(r'\balternative\s+(?:form|spelling)\s+of\s+([a-zċġħżĊĠĦŻ\s\-\']+)', part_uk, re.IGNORECASE)
             if alt_match:
-                canonical = alt_match.group(1).strip()
+                canonical = alt_match.group(1).split(':')[0].split('(')[0].strip()
                 alternative_forms.append({"headword": canonical, "type": "orthographic"})
-                # Preserve the actual meaning after the colon, e.g.
-                # "alternative form of ziek: to insult" → keep "to insult" as definition
-                colon_idx = part_uk.find(':')
-                if colon_idx >= 0:
-                    meaning = part_uk[colon_idx + 1:].strip()
-                    if meaning:
-                        mt_val = text_mt if text_mt else None
-                        if mt_val:
-                            mt_val = mt_val[0].upper() + mt_val[1:]
-                        def_entry = {
-                            "text_en": meaning,
-                            "text_mt": mt_val,
-                            "register": register_val,
-                            "nuance": nuance_val,
-                        }
-                        if dialect_val:
-                            def_entry["dialect"] = dialect_val
-                        processed_defs.append(def_entry)
-                elif headword_defs_lookup:
-                    # No colon — copy definitions from the canonical entry
-                    canon_lower = canonical.lower()
-                    if canon_lower in headword_defs_lookup:
-                        for canon_def in headword_defs_lookup[canon_lower]:
-                            canon_text = clean_text(canon_def.get("text_en") or canon_def.get("text") or "")
-                            if canon_text:
-                                mt_val = text_mt if text_mt else None
-                                if mt_val:
-                                    mt_val = mt_val[0].upper() + mt_val[1:]
-                                def_entry = {
-                                    "text_en": convert_to_uk_english(canon_text),
-                                    "text_mt": mt_val,
-                                    "register": register_val,
-                                    "nuance": nuance_val,
-                                }
-                                if dialect_val:
-                                    def_entry["dialect"] = dialect_val
-                                processed_defs.append(def_entry)
+                # Section 2.6: Drop the definition object block out of definitions structure completely
                 continue
 
-            # Ensure capitalization on text_mt if present
-            mt_val = text_mt if text_mt else None
+            # Ensure clean capitalization, handle missing text_mt without generic fallbacks
+            mt_val = text_mt if text_mt and "tifsira tradizzjonali" not in text_mt else None
             if mt_val:
                 mt_val = mt_val[0].upper() + mt_val[1:]
+                if not mt_val.endswith(('.', '!', '?', '"')):
+                    mt_val += '.'
+            elif part_uk:
+                # Contextual non-generic fallback generation for missing Maltese definitions
+                en_low = part_uk.lower().strip()
+                if en_low.startswith('verbal noun of '):
+                    base_v = en_low.replace('verbal noun of ', '').split(':')[0].strip()
+                    mt_val = f"L-att u l-proċess verbali ta' {base_v}."
+                elif en_low.startswith('plural of '):
+                    base_w = en_low.replace('plural of ', '').strip()
+                    mt_val = f"Forma plurali ta' {base_w}."
+                elif en_low.startswith('female equivalent of '):
+                    base_w = en_low.replace('female equivalent of ', '').strip()
+                    mt_val = f"Forma femminili ta' {base_w}."
+                elif en_low.startswith('alternative form of ') or en_low.startswith('alternative spelling of '):
+                    canon = en_low.replace('alternative form of ', '').replace('alternative spelling of ', '').split(':')[0].strip()
+                    mt_val = f"Forma ortografika alternattiva ta' {canon}."
+                else:
+                    clean_p = re.sub(r'^\([^)]+\)\s*', '', part_uk).strip()
+                    mt_val = f"Tifsira u deskrizzjoni ta' '{headword}': {clean_p}."
 
             def_entry = {
                 "text_en": part_uk,
@@ -702,11 +1101,43 @@ def refine_entry(raw_entry, headword_defs_lookup=None):
     cv_pattern_val = raw_entry.get("cv_pattern") or (root_consonants and compute_cv_pattern(headword, root_consonants))
     if pos == "noun" and cv_pattern_val:
         vowels_pat = r'(?:ie|[aeiouāēīōūàèìòùáéíóúâêîôû])'
-        if re.match(r'^1' + vowels_pat + r'22' + vowels_pat + r'3$', cv_pattern_val) or cv_pattern_val == "1v22v3":
-            cv_pattern_val = "1v22v̂3"
-        elif re.match(r'^1' + vowels_pat + r'22' + vowels_pat + r'3a$', cv_pattern_val) or cv_pattern_val == "1v22v3a":
-            cv_pattern_val = "1v22v̂3a"
+        if re.match(r'^1' + vowels_pat + r'22' + vowels_pat + r'3$', cv_pattern_val) or cv_pattern_val in ("1v22v3", "1v22v̂3"):
+            cv_pattern_val = "1v22â3"
+        elif re.match(r'^1' + vowels_pat + r'22' + vowels_pat + r'3a$', cv_pattern_val) or cv_pattern_val in ("1v22v3a", "1v22v̂3a"):
+            cv_pattern_val = "1v22â3a"
     morph_pattern_val = raw_entry.get("morph_pattern") or (cv_pattern_val and compute_morph_pattern(cv_pattern_val))
+
+    raw_p_forms = raw_entry.get("plural_forms") or raw_entry.get("plural_form")
+    pl_form_str = None
+    if raw_p_forms and isinstance(raw_p_forms, list) and len(raw_p_forms) > 0:
+        first_pf = raw_p_forms[0]
+        pl_form_str = first_pf.get("form") if isinstance(first_pf, dict) else (first_pf if isinstance(first_pf, str) else None)
+
+    dual_form_str = raw_entry.get("dual_form")
+    opp_form_str = raw_entry.get("feminine_form") or raw_entry.get("masculine_form")
+
+    # Phonetics IPA with pattern context
+    ipa = generate_maltese_ipa(headword, root_consonants, cv_pattern_val, morph_pattern_val)
+    phonetics = [{"dialect": "Standard", "ipa": ipa, "notes": None}]
+
+    vowel_set_sg_val = (derive_vowel_set_from_root(headword, root_consonants) or normalize_vowel_set(raw_entry.get("vowel_set_sg"), raw_entry.get("gender"))) if root_consonants else None
+    vowel_set_pl_val = (derive_vowel_set_from_root(pl_form_str, root_consonants) or normalize_vowel_set(raw_entry.get("vowel_set_pl"))) if root_consonants else None
+    vowel_set_dual_val = (derive_vowel_set_from_root(dual_form_str, root_consonants) or normalize_vowel_set(raw_entry.get("vowel_set_dual"))) if root_consonants else None
+    vowel_set_opp_val = (derive_vowel_set_from_root(opp_form_str, root_consonants) or normalize_vowel_set(raw_entry.get("vowel_set_opp"))) if root_consonants else None
+
+    verb_perf_str = raw_entry.get("verb_perfective_3sgm") or (headword if pos == "verb" else None)
+    verb_impf_str = raw_entry.get("verb_imperfective_3sgm")
+    verb_impv_str = raw_entry.get("verb_vowel_impv")
+
+    verb_vowel_perf_val = (derive_vowel_set_from_root(verb_perf_str, root_consonants) or normalize_vowel_set(raw_entry.get("verb_vowel_perf"), raw_entry.get("gender"))) if root_consonants else None
+    verb_vowel_impf_val = (derive_vowel_set_from_root(verb_impf_str, root_consonants) or normalize_vowel_set(raw_entry.get("verb_vowel_impf"), raw_entry.get("gender"))) if root_consonants else None
+    verb_vowel_impv_val = (derive_vowel_set_from_root(verb_impv_str, root_consonants) or normalize_vowel_set(raw_entry.get("verb_vowel_impv"), raw_entry.get("gender"))) if root_consonants else None
+
+    all_vsets = [v for v in [vowel_set_sg_val, vowel_set_pl_val, vowel_set_dual_val, vowel_set_opp_val, verb_vowel_perf_val, verb_vowel_impf_val, verb_vowel_impv_val] if v is not None]
+
+    is_imala_blocked_val = raw_entry.get("is_imala_blocked", 0)
+    if all_vsets and all(v == 'a-a' for v in all_vsets):
+        is_imala_blocked_val = 1
 
     # Assemble relational entry layout
     entry_dict = {
@@ -720,7 +1151,7 @@ def refine_entry(raw_entry, headword_defs_lookup=None):
         "morph_pattern": morph_pattern_val,
         "is_loanword": is_loan,
         "is_inflectable": is_inflectable,
-        "is_imala_blocked": raw_entry.get("is_imala_blocked", 0),
+        "is_imala_blocked": is_imala_blocked_val,
         "source_language": source_lang,
         "source_id": "src-crowd",
         "source_citation": raw_entry.get("source_citation") or f"Wiktionary: {headword}",
@@ -731,7 +1162,10 @@ def refine_entry(raw_entry, headword_defs_lookup=None):
         "etymology_chain": chain,
         "etymology_notes": raw_entry.get("etymology_notes"),
         "definitions": processed_defs,
-        "usage_examples": raw_entry.get("usage_examples") or [],
+        "usage_examples": [
+            ex for ex in (raw_entry.get("usage_examples") or [])
+            if "Użu tradizzjonali" not in ex.get("mt", "") and "fil-kitba Maltija" not in ex.get("mt", "") and "b'mod korrett u bla dewmien" not in ex.get("mt", "") and "fil-bini u fl-użu" not in ex.get("mt", "")
+        ],
         "related_entries": raw_entry.get("related_entries") or [],
         "alternative_forms": unique_alts,
         "phonetics": phonetics,
@@ -752,12 +1186,12 @@ def refine_entry(raw_entry, headword_defs_lookup=None):
         "paucal_form": raw_entry.get("paucal_form"),
         "feminine_form": raw_entry.get("feminine_form"),
         "masculine_form": raw_entry.get("masculine_form"),
-        "plural_forms": process_plural_forms(raw_entry.get("plural_forms"), root_consonants),
-        "plural_form": process_plural_forms(raw_entry.get("plural_form"), root_consonants),
-        "vowel_set_sg": normalize_vowel_set(raw_entry.get("vowel_set_sg"), raw_entry.get("gender")) if root_consonants else None,
-        "vowel_set_pl": normalize_vowel_set(raw_entry.get("vowel_set_pl")) if root_consonants else None,
-        "vowel_set_dual": normalize_vowel_set(raw_entry.get("vowel_set_dual")) if root_consonants else None,
-        "vowel_set_opp": normalize_vowel_set(raw_entry.get("vowel_set_opp")) if root_consonants else None,
+        "plural_forms": process_plural_forms(raw_entry.get("plural_forms"), root_consonants, headword),
+        "plural_form": process_plural_forms(raw_entry.get("plural_form"), root_consonants, headword),
+        "vowel_set_sg": vowel_set_sg_val,
+        "vowel_set_pl": vowel_set_pl_val,
+        "vowel_set_dual": vowel_set_dual_val,
+        "vowel_set_opp": vowel_set_opp_val,
         
         # Inject all other possible POS specific values as Null
         "verb_form": raw_entry.get("verb_form"),
@@ -770,9 +1204,9 @@ def refine_entry(raw_entry, headword_defs_lookup=None):
         "verb_verbal_noun": raw_entry.get("verb_verbal_noun"),
         "verb_active_ptcp": raw_entry.get("verb_active_ptcp"),
         "verb_passive_ptcp": raw_entry.get("verb_passive_ptcp"),
-        "verb_vowel_perf": normalize_vowel_set(raw_entry.get("verb_vowel_perf"), raw_entry.get("gender")) if root_consonants else None,
-        "verb_vowel_impf": normalize_vowel_set(raw_entry.get("verb_vowel_impf"), raw_entry.get("gender")) if root_consonants else None,
-        "verb_vowel_impv": normalize_vowel_set(raw_entry.get("verb_vowel_impv"), raw_entry.get("gender")) if root_consonants else None,
+        "verb_vowel_perf": verb_vowel_perf_val,
+        "verb_vowel_impf": verb_vowel_impf_val,
+        "verb_vowel_impv": verb_vowel_impv_val,
         "elative_form": raw_entry.get("elative_form"),
         "participle_type": raw_entry.get("participle_type"),
         "numeral_type": raw_entry.get("numeral_type"),
@@ -819,17 +1253,50 @@ def main():
     except (AttributeError, IOError):
         pass
 
-    src_file = Path("wiktionary-scraper/scraped-results/wiktionary_maltese_Ċ.jsonl")
+    parser = argparse.ArgumentParser(
+        description="Refine a scraped Maltese Wiktionary letter batch into unified relational JSONL."
+    )
+    parser.add_argument(
+        "--letter",
+        default="Ċ",
+        help="Maltese letter batch to refine, e.g. A, B, C, or Ċ (default: Ċ).",
+    )
+    parser.add_argument(
+        "--update",
+        action="store_true",
+        help="Use existing refined-results batch JSONL file as source instead of scraped-results to update rules without losing AI-refined fields.",
+    )
+    args = parser.parse_args()
+
+    letter = args.letter.strip()
+    if len(letter) != 1:
+        parser.error("--letter must be exactly one letter, such as A, C, or Ċ")
+
+    letter_upper = letter.upper()
+    src_dir = Path("wiktionary-scraper/scraped-results")
+    out_dir = Path("wiktionary-scraper/refined-results")
+    
+    if args.update:
+        src_file = out_dir / f"wiktionary_maltese_{letter_upper}.jsonl"
+    else:
+        src_file = src_dir / f"wiktionary_maltese_{letter_upper}.jsonl"
+
     if not src_file.exists():
         print(f"Error: {src_file} does not exist.")
         sys.exit(1)
-        
-    out_dir = Path("wiktionary-scraper/refined-results")
+
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    refined_file = out_dir / f"wiktionary_maltese_{letter_upper}.jsonl"
     
-    refined_file = out_dir / "wiktionary_maltese_Ċ.jsonl"
-    
-    print(f"Refining entries from {src_file} into unified relational format...")
+    source_type = "refined-results (update mode)" if args.update else "scraped-results"
+    print(f"Refining entries from {src_file} [{source_type}] into unified relational format...")
+
+    def extract_entry(line_str):
+        obj = json.loads(line_str)
+        if "entry" in obj and isinstance(obj["entry"], dict):
+            return obj["entry"]
+        return obj
 
     # Build headword→definitions lookup for cross-referencing alternative forms
     headword_defs_lookup = {}
@@ -838,7 +1305,7 @@ def main():
             line = line.strip()
             if not line:
                 continue
-            entry = json.loads(line)
+            entry = extract_entry(line)
             hw = entry.get("headword", "").strip().lower()
             defs = entry.get("definitions") or []
             if hw and defs:
@@ -850,7 +1317,7 @@ def main():
             line = line.strip()
             if not line:
                 continue
-            entry = json.loads(line)
+            entry = extract_entry(line)
             refined, _ = refine_entry(entry, headword_defs_lookup)
             refined_lines.append(refined)
 
@@ -859,24 +1326,33 @@ def main():
     # alternative_forms, copy the canonical entry's definitions over.
     filled_count = 0
     hw_refined_defs = {}
+    hw_refined_exs = {}
     for rl in refined_lines:
         e = rl["entry"]
         hw = e.get("headword", "").strip().lower()
         defs = e.get("definitions") or []
+        exs = e.get("usage_examples") or []
         if hw and defs:
             hw_refined_defs[hw] = defs
+        if hw and exs:
+            hw_refined_exs[hw] = exs
 
     for rl in refined_lines:
         e = rl["entry"]
-        if e.get("definitions"):
-            continue
         alts = e.get("alternative_forms") or []
-        for alt in alts:
-            canon = alt.get("headword", "").strip().lower()
-            if canon in hw_refined_defs:
-                e["definitions"] = hw_refined_defs[canon]
-                filled_count += 1
-                break
+        if not e.get("definitions"):
+            for alt in alts:
+                canon = alt.get("headword", "").strip().lower()
+                if canon in hw_refined_defs:
+                    e["definitions"] = hw_refined_defs[canon]
+                    filled_count += 1
+                    break
+        if not e.get("usage_examples"):
+            for alt in alts:
+                canon = alt.get("headword", "").strip().lower()
+                if canon in hw_refined_exs:
+                    e["usage_examples"] = hw_refined_exs[canon]
+                    break
 
     if filled_count:
         print(f"Filled definitions for {filled_count} alternative-form stubs via cross-reference.")

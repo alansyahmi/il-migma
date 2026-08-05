@@ -5,7 +5,7 @@
 ## Pipeline Position
 
 ```
-Wiktionary HTML  ──[scraper.py]──▶  scraped-results/*.jsonl  ──[REFINE]──▶  refined-results/*.jsonl  ──[upload.py]──▶  Database
+Wiktionary HTML  ──[scraper.py]──▶  scraped-results/*.jsonl  ──[REFINE]──▶  refined-results/*.jsonl
 ```
 
 Raw scrapes contain English definitions, partial etymology chains, and mechanical tags. The refinement step fills in Maltese definitions, usage examples, register/nuance adjustments, smart tags, and phonetics before database upload.
@@ -21,6 +21,12 @@ Raw scrapes contain English definitions, partial etymology chains, and mechanica
 > [!IMPORTANT]
 > **ENGLISH ORTHOGRAPHY:**
 > You **MUST** use UK English spelling for all English-language text fields (e.g., use *centre* instead of *center*, *colour* instead of *color*, *paralysed* instead of *paralyzed*, *grey* instead of *gray*).
+
+> [!IMPORTANT]
+> **VERBAL NOUN GLOSS REPLACEMENT (`text_en` & `text_mt`):**
+> Scraped glosses containing `"verbal noun of <verb>"` are **STRICTLY DISALLOWED** in refined output. You **MUST** replace any mechanical `"verbal noun of <verb>"` gloss with:
+> 1. An active English `-ing` equivalent or proper descriptive action gloss in `text_en` (e.g., `"drafting, sketching"`, `"abbreviating, shortening"`, `"authorizing, permitting"`).
+> 2. A proper Oxford-style definition in `text_mt` explaining what action, process, or concept it represents (e.g., `"L-att ta' preparazzjoni u kitba preliminari ta' pjan jew dokument."`). Never output robotic placeholder text like `"In-nom verbal ta'..."`.
 
 ---
 
@@ -126,7 +132,7 @@ Inject only the corresponding attributes into the flat base layer of the nested 
 * `verb_perfective_3sgm`: 3rd person singular masculine perfect string (e.g., `"kiteb"`)
 * `verb_imperfective_3sgm`: 3rd person singular masculine imperfect string (e.g., `"jikteb"`)
 * `verb_verbal_noun`: Mapped verbal noun format string (e.g., `"kitba"`)
-* `verb_active_ptcp`: Mapped active participle form (e.g., `"kieles"`)
+* `verb_active_ptcp`: Mapped active participle form (e.g., `"nieżel"`)
 * `verb_passive_ptcp`: Mapped passive participle form (e.g., `"miktub"`)
 * `verb_vowel_perf`: Vowel template sequence string for perfect tense forms (e.g., `"i-e"`)
 * `verb_vowel_impf`: Vowel template sequence string for imperfect tense forms (e.g., `"i-e"`)
@@ -165,6 +171,7 @@ If the entry contains `"curated": true`, pass it directly to output lines comple
 ### Step 2.2 — Oxford-Style Maltese Translation Formatting (`text_mt`)
 For every definition object containing an empty or null `text_mt` payload, construct an accurate definition using Oxford lexicographic principles:
 * **Genus + Differentia structural patterns:** Begin using a broad taxonomical category, then narrow the specific criteria (e.g., Noun: *Għodda tal-injam li...*, Verb: *Jagħmel xi ħaġa...*).
+* **Verbal Noun Gloss Resolution:** Replace mechanical `"verbal noun of <verb>"` text with active English `-ing` equivalents (e.g., `"drafting, sketching"`) in `text_en` and descriptive Oxford-style definitions in `text_mt` (e.g., *"L-att jew il-proċess ta'..."*).
 * **Case Constraint:** Every string written into `text_mt` **MUST** begin with a capitalized first letter.
 * **Strict Avoidance of Circularity:** Never use variant components of the headword base to establish its core definition boundaries.
 
@@ -173,16 +180,16 @@ Wiktionary context files embed structural markers in parentheses. Parse and clea
 
 | Parenthetical Input String | Target Action Protocol | Destination Key | Tag Field Value |
 | --- | --- | --- | --- |
-| `"(archaic)"` | Extract Register String | `definitions[].register` | `"arkajku"` |
-| `"(slang)"` | Extract Register String | `definitions[].register` | `"sleng"` |
-| `"(colloquial)"` | Extract Register String | `definitions[].register` | `"kollokwali"` |
-| `"(technical)"` | Extract Register String | `definitions[].register` | `"tekniku"` |
+| `"(archaic)"` | Extract Register String | `definitions[].register` | `"archaic"` |
+| `"(slang)"` | Extract Register String | `definitions[].register` | `"slang"` |
+| `"(colloquial)"` | Extract Register String | `definitions[].register` | `"colloquial"` |
+| `"(technical)"` | Extract Register String | `definitions[].register` | `"technical"` |
 | `"(childish)"` | Map Global Relational Tag | Core tags Relational Array | `"childish"` |
 | `"(figurative)"` | Map Global Relational Tag | Core tags Relational Array | `"figurative"` |
 | `"(pejorative)"` | Map Global Relational Tag | Core tags Relational Array | `"pejorative"` |
 | `"(euphemistic)"` | Map Global Relational Tag | Core tags Relational Array | `"euphemistic"` |
 
-* **Enforcement:** For non-participle items, `definitions[].nuance` must be kept as an empty string (`""`). Do not place register strings or descriptive categories into nuance.
+* **Enforcement:** `definitions[].register` must **STRICTLY USE UK/ENGLISH LOWERCASE STRINGS ONLY** (e.g., `"archaic"`, `"colloquial"`, `"technical"`, `"slang"`, `"formal"`, `"literary"`, `"obsolete"`, `"dialectal"`). Never write Maltese translations for register fields. For non-participle items, `definitions[].nuance` must be kept as an empty string (`""`). Do not place register strings or descriptive categories into nuance.
 
 ### Step 2.3 — Context Examples Array Insertion
 Generate 1 to 3 contextually rich, natural Maltese language usage sentence blocks within the main `usage_examples` array. Do not associate them with specific sense indices; they are handled at entry level. Each example must consist of an exact `"mt"` sentence paired to an accurate UK English translation string `"en"`.
@@ -213,13 +220,12 @@ Follow this decision table to assign patterns, root radicals, and stems:
 | **Multi-Word Phrase (Contains spaces)** | Explicitly set to `null` | Explicitly set to `null` | Explicitly set to `null` |
 
 ### Step 2.6 — Alternative Forms Normalization
-If the scraped entry represents a non-canonical spelling variant containing definitions like `"alternative form of [CANONICAL_ENTRY]"`, execute this cleanup process:
-* Drop the definition object block out of the `definitions` structure completely.
+If the scraped entry represents a non-canonical spelling variant containing generic definitions like `"alternative form of [CANONICAL_ENTRY]"`, execute this cleanup process:
+* Drop the definition object block out of the `definitions` structure completely, then fill it by inheriting the canonical headword's definition.
 * Inject a matching relationship block linking back to the primary canonical headword into the `alternative_forms` list array:
   ```json
   "alternative_forms": [{ "headword": "CANONICAL_ENTRY", "type": "orthographic" }]
   ```
-
 ---
 
 ## 3. Phonological Engine Contract (Standard Maltese IPA Generation)
@@ -237,10 +243,13 @@ You must process the target headword sequentially in the tracking object `_scrat
 | `e` | `/ɛ/` | `o` | `/ɔ/` | `x` | `/ʃ/` |
 | `f` | `/f/` | `p` | `/p/` | `ż` | `/z/` |
 | `ġ` | `/d͡ʒ/` (Tie bar required) | `q` | `/ʔ/` (Glottal stop) | `z` | `/t͡s/` (Tie bar required) |
-| `g` | `/ɡ/` | `r` | `/r/` | `ħ` | `/ħ/` |
-| `i` | `/ɪ/` | `s` | `/s/` | `j` | `/j/` |
+| `g` | `/ɡ/` | `r` | `/r/` | `zz` | `/t.t͡s/` (Split geminate affricate) |
+| `i` | `/ɪ/` | `s` | `/s/` | `ħ` | `/ħ/` |
+| `j` | `/j/` | | | | |
 
 ### Structural Digraph & Vowel Expansion Engine Rules
+* **`zz` Geminate Affricate:** Map orthographic `zz` into split geminate stop+affricate segments `t.t͡s`. Under the Maximal Onset Principle, the stop `/t/` closes the preceding syllable as a coda while the affricate `/t͡s/` forms the onset of the following syllable (e.g. `demoralizzazzjoni` $\rightarrow$ `/dɛ.mɔ.rɐ.lɪt.t͡sɐtˈt͡sjɔː.nɪ/`, `azzjoni` $\rightarrow$ `/ɐtˈt͡sjɔː.nɪ/`).
+* **Complex Onset Glides (`j`, `w`):** Palatal and labial glides (`j`, `w`) following consonants form complex onsets attached to the following syllable (e.g. `/t͡sjɔː/` rather than splitting across `/t͡st͡s.jɔː/`).
 * **`ie` Digraph:** Map consistently to long open form `/%` $\rightarrow$ `/tf ɪː/`. Never map to short variants `/i/` or standard long `/iː/`.
 * **Circumflex Vowels (`â`, `ê`, `î`, `ô`, `û`):** Map to corresponding long variants using the triangular length mark: `/ɐː/`, `/ɛː/`, `/ɪː/`, `/ɔː/`, `/ʊː/`.
 * **The `għi` Sequence Pattern:** Map ahead of vowels directly to `/ɛj/`.
@@ -248,6 +257,13 @@ You must process the target headword sequentially in the tracking object `_scrat
 * **Word-Final Position `għ` / `h` / `ħ`:** Mutate tracking elements directly into a voiceless pharyngeal fricative terminal sound: `/ħ/`.
 * **Internal Position `għ` / `h`:** Act as structural vowel lengthening markers. Drop the positional consonant token completely and append the long value indicator symbol (`ː`) directly onto the preceding vowel sound segment.
 * **Geminate Fricative Clusters (`ħħ`, `għh`, `hħ`):** Compress directly into a unified long pharyngeal cluster block: `/ħː/`.
+
+### Root Vowel Set Derivation Engine (`vowel_set_sg`, `vowel_set_pl`, `vowel_set_dual`, `vowel_set_opp`)
+* **2-Slot Standard Hyphenation:** All root-aligned vowel sets must use exactly 2 slots separated by hyphens (e.g. `a-e`, `e--`, `u--`, `a-a`). Single isolated vowels (like `a` or `u`) are strictly disallowed for Semitic entries.
+* **Suffix-Aware Stem Extraction:**
+  * **Sound Plural Suffixes (`-ijiet`, `-iet`, `-in`, `-at`, `-i`, `-s`):** Sound plural suffixes are stripped from the word before extracting stem root vowels (e.g. `dellijiet` $\rightarrow$ stem `dell` with root `d-l-l` $\rightarrow$ `"vowel_set_pl": "e--"`).
+  * **Dual Suffixes (`-tejn`, `-ejn`):** Dual suffixes are stripped from the word before extracting stem root vowels (e.g. `demagħtejn` $\rightarrow$ stem `demagħ` with root `d-m-għ` $\rightarrow$ `"vowel_set_dual": "e-a"`).
+* **Non-Semitic Loanwords:** Entries marked with `is_loanword: 1` and no root consonants must have `null` for all `vowel_set_*` fields.
 
 ### Word-Final Obstruent Devoicing Matrix
 If a voiced obstruent occurs immediately prior to a word boundary space context, it **MUST** map to its voiceless counterpart:

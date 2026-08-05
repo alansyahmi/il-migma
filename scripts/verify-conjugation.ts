@@ -1,5 +1,6 @@
 import { generateConjugation, generateRootForms } from '../src/lib/conjugationEngine.ts';
 import { buildPerfectForm, buildVerbForm } from '../src/lib/suffixEngine.ts';
+import { generateZokkForms } from '../src/lib/zokkEngine.ts';
 
 const testCases = [
     { root: 'k-t-b', perfect: 'e-e', imperfect: 'i-e', form: 'I', strength: 'strong' },
@@ -786,5 +787,23 @@ const formVIIIAa = generateConjugation({
 });
 assertEq(formVIIIAa.rows[0].perfect, 'qtatalt', 'Form VIII a-a 1s perfect should preserve attached a');
 assertEq(formVIIIAa.rows[1].perfect, 'qtatalt', 'Form VIII a-a 2s perfect should preserve attached a');
+
+const vowelInitialStem = generateZokkForms({
+    stem_string: 'incana',
+    class_type: 'ar',
+    is_hybrid: true,
+});
+assertEq(vowelInitialStem.conjugation?.rows[0].imperfect, 'nincana', 'vowel-initial stem 1s imperfect should use bare n-');
+assertEq(vowelInitialStem.conjugation?.rows[1].imperfect, 'tincana', 'vowel-initial stem 2s imperfect should use bare t-');
+assertEq(vowelInitialStem.conjugation?.rows[2].imperfect, 'jincana', 'vowel-initial stem 3ms imperfect should use bare j-');
+assertEq(vowelInitialStem.conjugation?.rows[4].imperfect, 'nincanaw', 'vowel-initial stem 1p imperfect should use bare n-');
+
+const consonantInitialStem = generateZokkForms({
+    stem_string: 'ċċaffront',
+    class_type: 'ar',
+    is_hybrid: true,
+});
+assertEq(consonantInitialStem.conjugation?.rows[0].imperfect, 'niċċaffronta', 'consonant-initial stem 1s imperfect should retain ni-');
+assertEq(consonantInitialStem.conjugation?.rows[2].imperfect, 'jiċċaffronta', 'consonant-initial stem 3ms imperfect should retain ji-');
 
 console.log('quadriliteral root-form tests passed');

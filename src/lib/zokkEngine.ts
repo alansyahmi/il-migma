@@ -54,7 +54,7 @@ function applyStem(stem: string): string {
 }
 
 function startsWithVowel(value: string) {
-    return /^[aeiou]/i.test(value);
+    return /^[aeiouàèìòùâêîôû]/i.test(value);
 }
 
 function extractConsonants(s: string): string[] {
@@ -131,9 +131,11 @@ export function generateZokkForms(zokkInput: any): ZokkResult {
         { id: "3p", mt: "huma", en: "they" },
     ];
 
-    // Stem-based imperfectives retain the initial i- of the prefix:
-    // niċċaffronta, tiċċaffronta, jiċċaffronta, etc.
-    const prefixes = ["ni", "ti", "ji", "ti", "ni", "ti", "ji"];
+    // Consonant-initial stems retain the initial i- of the prefix, while
+    // vowel-initial stems use the bare n-/t-/j- variants.
+    const prefixes = startsWithVowel(base)
+        ? ["n", "t", "j", "t", "n", "t", "j"]
+        : ["ni", "ti", "ji", "ti", "ni", "ti", "ji"];
     const citationPerfectStem = zokk_is_hybrid
         ? buildHybridCitationPerfectStem(base)
         : buildCitationPerfectStem(base);
@@ -163,7 +165,7 @@ export function generateZokkForms(zokkInput: any): ZokkResult {
         if (i < 4) { // Sg
             if (i === 2) {
                 imperfect = zokk_is_hybrid
-                    ? `ji${base}a`
+                    ? `${startsWithVowel(base) ? 'j' : 'ji'}${base}a`
                     : buildCitationImperfectStem(zokk_class as 'ar' | 'ir', citationPerfectStem);
             } else {
                 imperfect = pfx + base + (isAr ? 'a' : 'i');

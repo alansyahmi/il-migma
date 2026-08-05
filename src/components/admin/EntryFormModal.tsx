@@ -887,6 +887,63 @@ const AdjectiveFields = ({ form, set, t, styles, options, insertChar, onFocus, s
     })()
 );
 
+const MultiFormTagField = ({
+    value,
+    onChange,
+    label,
+    placeholder,
+    styles,
+}: {
+    value: string;
+    onChange: (v: string) => void;
+    label: string;
+    placeholder?: string;
+    styles: any;
+}) => {
+    const values = (value || '').split(/[;,]/).map(s => s.trim()).filter(Boolean);
+
+    return (
+        <div className="space-y-1">
+            <label className={styles.label}>{label}</label>
+            <div className="flex flex-wrap gap-1.5 p-2 bg-white border border-black/10 rounded-lg min-h-[38px] items-center">
+                {values.map(val => (
+                    <Badge key={val} variant="tag" className="bg-slate-100 border-slate-200 text-slate-700 pr-1 text-xs py-0.5">
+                        {val}
+                        <button
+                            type="button"
+                            onClick={() => onChange(values.filter(v => v !== val).join('; '))}
+                            className="ml-1 text-slate-400 hover:text-red-500 font-bold"
+                        >
+                            &times;
+                        </button>
+                    </Badge>
+                ))}
+                <input
+                    className="bg-transparent text-sm focus:outline-none min-w-[100px] flex-1 text-black"
+                    placeholder={values.length === 0 ? placeholder : ''}
+                    onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ';' || e.key === ',') {
+                            e.preventDefault();
+                            const val = e.currentTarget.value.trim();
+                            if (val && !values.includes(val)) {
+                                onChange([...values, val].join('; '));
+                                e.currentTarget.value = '';
+                            }
+                        }
+                    }}
+                    onBlur={e => {
+                        const val = e.currentTarget.value.trim();
+                        if (val && !values.includes(val)) {
+                            onChange([...values, val].join('; '));
+                            e.currentTarget.value = '';
+                        }
+                    }}
+                />
+            </div>
+        </div>
+    );
+};
+
 const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerms, suggestions }: MorphologyProps) => {
     const isWeakVerb = String(form.verb_class || '').trim().toLowerCase() === 'weak';
     const hasRoot = String(form._rootConsonants || '').trim() !== '';
@@ -1000,8 +1057,13 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
 
             <div className={styles.grid}>
                 <div>
-                    <label className={styles.label}>{t('Verbal Noun', 'Nom Verb')}</label>
-                    <input className={styles.inp} value={form.verb_verbal_noun} onChange={e => set('verb_verbal_noun', e.target.value)} />
+                    <MultiFormTagField
+                        label={t('Verbal Noun', 'Nom Verb')}
+                        value={form.verb_verbal_noun || ''}
+                        onChange={v => set('verb_verbal_noun', v)}
+                        placeholder="e.g. tjassir; tajsir"
+                        styles={styles}
+                    />
                 </div>
                 <div>
                     <label className={styles.label}>{t('Transitivity', 'Tranzittività')}</label>
@@ -1014,12 +1076,22 @@ const VerbFields = ({ form, set, t, styles, onFocus, options, onApplyDerivedTerm
 
             <div className={styles.grid}>
                 <div>
-                    <label className={styles.label}>{t('Active Participle', 'Partiċipju Attiv')}</label>
-                    <input className={styles.inp} value={form.verb_active_ptcp} onChange={e => set('verb_active_ptcp', e.target.value)} />
+                    <MultiFormTagField
+                        label={t('Active Participle', 'Partiċipju Attiv')}
+                        value={form.verb_active_ptcp || ''}
+                        onChange={v => set('verb_active_ptcp', v)}
+                        placeholder="e.g. ħafieq"
+                        styles={styles}
+                    />
                 </div>
                 <div>
-                    <label className={styles.label}>{t('Passive Participle', 'Partiċipju Passiv')}</label>
-                    <input className={styles.inp} value={form.verb_passive_ptcp} onChange={e => set('verb_passive_ptcp', e.target.value)} />
+                    <MultiFormTagField
+                        label={t('Passive Participle', 'Partiċipju Passiv')}
+                        value={form.verb_passive_ptcp || ''}
+                        onChange={v => set('verb_passive_ptcp', v)}
+                        placeholder="e.g. mjassar"
+                        styles={styles}
+                    />
                 </div>
             </div>
         </div>

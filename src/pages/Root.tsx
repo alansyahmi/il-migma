@@ -51,21 +51,32 @@ function MarkedCell({
     const rawValue = String(data.value || '').trim();
     const hidden = hideTheoreticalForms && (data.marker !== 'plain' || rawValue.startsWith('*') || rawValue.startsWith('✦'));
     if (data.value === '-' || hidden) return <span className="opacity-40">-</span>;
-    const displayValue = hideTheoreticalForms ? rawValue.replace(/^[*✦]+\s*/, '').trim() : data.value;
 
-    const content = (data.marker === 'plain' && !noLink) ? (
-        <Link to={`/entry/${data.entryId || data.value}`} className="text-[#1034A6] hover:underline">
-            {displayValue}
-        </Link>
-    ) : (
-        <span className={data.marker === 'plain' ? 'text-black' : 'opacity-45'}>
-            {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}{displayValue}
-        </span>
-    );
+    const items = rawValue.split(';').map(s => s.trim()).filter(Boolean);
+
+    const renderItem = (itemValue: string, index: number) => {
+        const displayValue = hideTheoreticalForms ? itemValue.replace(/^[*✦]+\s*/, '').trim() : itemValue;
+        return (
+            <Fragment key={index}>
+                {index > 0 && <span className="text-black/40 font-sans mx-0.5">, </span>}
+                {data.marker === 'plain' && !noLink ? (
+                    <Link to={`/entry/${data.entryId || displayValue}`} className="text-[#1034A6] hover:underline">
+                        {displayValue}
+                    </Link>
+                ) : (
+                    <span className={data.marker === 'plain' ? 'text-black' : 'opacity-45'}>
+                        {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}{displayValue}
+                    </span>
+                )}
+            </Fragment>
+        );
+    };
 
     return (
-        <div className="group flex items-center gap-1.5">
-            {content}
+        <div className="group flex items-center gap-1.5 flex-wrap">
+            <span className="inline-flex items-center flex-wrap">
+                {items.map((item, idx) => renderItem(item, idx))}
+            </span>
             {isAdmin && onEdit && (
                 <div className="flex items-center gap-1">
                     <button

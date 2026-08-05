@@ -5173,8 +5173,21 @@ function generateQuadriliteralFormI(
     const [C1, C2, C3, C4] = consonants;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const rootStem = `${C1}${pv1}${C2}${C3}${pv2}${C4}`;
-    const rootClusterStem = `${C1}${pv1}${C2}${C3}${C4}`;
-    const pluralStem = `${C1}${pv1}${C2}${C3}${C4}`;
+
+    // When C3 is a sonorant (l, m, n, r), the syncopated stem retains
+    // the theme vowel by metathesis — it shifts from after C3 to before C3,
+    // mirroring the triliteral Form I rule where a liquid/għ C2 shifts the
+    // theme vowel before C2 (e.g. jaħrab → jaħarbu, not *jaħrbu).
+    // (għ at C3 does NOT trigger this — reduplicated roots like għargħar
+    // keep the plain syncopation: għargħret, not *għaragħret.)
+    // Example: ċaflas (C3=l) → ċafalset / ċafalsu, not *ċaflset / *ċaflsu.
+    const isSonorant = (c: string) => ["l", "m", "n", "r"].includes(c);
+    const retainQuadThemeVowel = isSonorant(C3);
+    const syncStem = retainQuadThemeVowel
+        ? `${C1}${pv1}${C2}${pv2}${C3}${C4}`
+        : `${C1}${pv1}${C2}${C3}${C4}`;
+    const rootClusterStem = syncStem;
+    const pluralStem = syncStem;
     const perfect3fs = `${rootClusterStem}et`;
 
     const rows: ConjugationRow[] = [

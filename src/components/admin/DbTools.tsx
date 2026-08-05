@@ -263,12 +263,28 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
         URL.revokeObjectURL(url);
     };
 
-    const downloadPreview = (format: 'json' | 'csv') => {
+    const rowToObject = (row: any): Record<string, any> => {
+        return preview.columns.reduce((obj: Record<string, any>, col: string, j: number) => {
+            const cell = row && typeof row === 'object'
+                ? (Array.isArray(row) ? row[j] : (row[col] !== undefined ? row[col] : row[j]))
+                : null;
+            obj[col] = cell;
+            return obj;
+        }, {});
+    };
+
+    const downloadPreview = (format: 'json' | 'csv' | 'jsonl') => {
         if (!preview) return;
         const baseName = `${preview.table}_export_${new Date().toISOString().slice(0, 10)}`;
 
         if (format === 'json') {
             downloadBlob(JSON.stringify(preview.rows, null, 2), `${baseName}.json`, 'application/json');
+            return;
+        }
+
+        if (format === 'jsonl') {
+            const lines = preview.rows.map((row: any) => JSON.stringify(rowToObject(row)));
+            downloadBlob(lines.join('\n'), `${baseName}.jsonl`, 'application/jsonl');
             return;
         }
 
@@ -374,6 +390,7 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
                         <div className="flex gap-2">
                             <Button size="sm" variant="ghost" className="border border-black/10" leftIcon={<FileSpreadsheet size={14} />} onClick={() => downloadPreview('csv')}>CSV</Button>
                             <Button size="sm" variant="ghost" className="border border-black/10" leftIcon={<FileJson size={14} />} onClick={() => downloadPreview('json')}>JSON</Button>
+                            <Button size="sm" variant="ghost" className="border border-emerald-600/20 text-emerald-700" leftIcon={<FileJson size={14} />} onClick={() => downloadPreview('jsonl')}>JSONL</Button>
                         </div>
                     </div>
 

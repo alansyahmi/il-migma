@@ -2051,50 +2051,71 @@ function DerivedTermLink({
     onDelete
 }: {
     label: string;
-    data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string };
+    data?: { value?: string; marker?: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string } | null;
     gloss?: string;
     isAdmin?: boolean;
     onEdit?: () => void;
     onDelete?: () => void;
 }) {
     const { hideTheoreticalForms } = useHideTheoreticalForms();
-    if (data.value === '-' || shouldHideSurface(data, hideTheoreticalForms)) return null;
-    const hasMarkerPrefix = data.value.trim().startsWith('*') || data.value.trim().startsWith('✦');
+    if (!data || typeof data.value !== 'string' || !data.value.trim() || data.value.trim() === '-' || shouldHideSurface(data as any, hideTheoreticalForms)) return null;
 
-    const displayValue = hideTheoreticalForms ? stripTheoreticalPrefix(data.value).trim() : data.value.trim();
-    const markerPrefix = data.marker === 'theoretical'
-        ? '*'
-        : (data.marker === 'auto_generated' ? '✦' : '');
+    const rawValue = data.value.trim();
+    const items = rawValue.split(';').map(s => s.trim()).filter(Boolean);
+    if (items.length === 0) return null;
 
-    const content = (data.marker === 'plain' && data.entryId) ? (
-        <Link to={`/entry/${data.entryId}`} style={{ color: BLUE }} className="font-serif hover:underline">
-            {displayValue}
-        </Link>
-    ) : (
-        <span className={`font-serif ${data.marker !== 'plain' ? 'opacity-45' : ''} text-black`}>
-            {markerPrefix && !hasMarkerPrefix ? markerPrefix : ''}{displayValue}
-        </span>
-    );
+    const renderItem = (itemValue: string, index: number) => {
+        const hasMarkerPrefix = itemValue.startsWith('*') || itemValue.startsWith('✦');
+        const displayValue = hideTheoreticalForms ? stripTheoreticalPrefix(itemValue).trim() : itemValue.trim();
+        const markerPrefix = data.marker === 'theoretical'
+            ? '*'
+            : (data.marker === 'auto_generated' ? '✦' : '');
+
+        const isPlain = data.marker === 'plain' || !data.marker;
+
+        return (
+            <React.Fragment key={index}>
+                {index > 0 && <span className="text-black/40 font-sans mx-0.5">, </span>}
+                {isPlain && data.entryId ? (
+                    <Link to={`/entry/${data.entryId}`} style={{ color: BLUE }} className="font-serif hover:underline">
+                        {displayValue}
+                    </Link>
+                ) : isPlain ? (
+                    <Link to={`/entry/${displayValue}`} style={{ color: BLUE }} className="font-serif hover:underline">
+                        {displayValue}
+                    </Link>
+                ) : (
+                    <span className={`font-serif ${data.marker !== 'plain' ? 'opacity-45' : ''} text-black`}>
+                        {markerPrefix && !hasMarkerPrefix ? markerPrefix : ''}{displayValue}
+                    </span>
+                )}
+            </React.Fragment>
+        );
+    };
 
     return (
         <div className="group relative">
             <p className="text-xs text-black/55 mb-1.5 font-sans">{label}</p>
             <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
-                {content}
+                <span className="inline-flex items-center flex-wrap">
+                    {items.map((item, idx) => renderItem(item, idx))}
+                </span>
                 {gloss && (
                     <span className="opacity-55 font-sans text-xs text-black">
                         &quot;{gloss}&quot;
                     </span>
                 )}
-                {isAdmin && onEdit && (
+                {isAdmin && (onEdit || onDelete) && (
                     <div className="flex items-center gap-1">
-                        <button
-                            onClick={(e) => { e.preventDefault(); onEdit(); }}
-                            className="p-1 rounded hover:bg-black/5 text-black/55 transition-all"
-                            title={data.marker === 'plain' ? 'Edit Entry' : 'Add Entry'}
-                        >
-                            {data.marker === 'plain' ? <Edit2 size={12} /> : <Plus size={12} />}
-                        </button>
+                        {onEdit && (
+                            <button
+                                onClick={(e) => { e.preventDefault(); onEdit(); }}
+                                className="p-1 rounded hover:bg-black/5 text-black/55 transition-all"
+                                title={data.marker === 'plain' ? 'Edit Entry' : 'Add Entry'}
+                            >
+                                {data.marker === 'plain' ? <Edit2 size={12} /> : <Plus size={12} />}
+                            </button>
+                        )}
                         {data.marker === 'plain' && data.entryId && onDelete && (
                             <button
                                 onClick={(e) => { e.preventDefault(); onDelete(); }}
