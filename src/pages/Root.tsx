@@ -7,7 +7,8 @@ import { generateRootForms, markGeneratedForms, getAttestedEntries, getEntryVerb
 import { useAuth } from '@/contexts/AuthContext';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
-import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
+import { type AdminEntry } from '@/components/admin/EntryFormModal';
+const EntryFormModal = lazy(() => import('@/components/admin/EntryFormModal').then(m => ({ default: m.EntryFormModal })));
 import { RootFormModal } from '@/components/admin/RootFormModal';
 import { type RootFormData } from '@/lib/adminUtils';
 import { resolveImalaBlocked } from '@/lib/imala';

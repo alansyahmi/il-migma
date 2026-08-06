@@ -220,8 +220,6 @@ export async function onRequestGet({ params, env }) {
         const url = env.TURSO_URL || env.VITE_TURSO_URL;
         const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
         const db = createClient({ url, authToken: token });
-        await ensureVerbMorphologyTable(db, { backfill: true });
-        await ensureRootCompatibilityColumns(db);
         // ── Entry core ──────────────────────────────────────────────────────────
         const conditions = [];
         const args = [];
@@ -268,54 +266,53 @@ export async function onRequestGet({ params, env }) {
         if (!entryRes.rows.length) return json({ error: 'Not found' }, 404);
         const entry = entryRes.rows[0];
         const resolvedEntryId = entry.id;
-        await ensureDiminutivesTableExists(db);
 
-        const diminutiveRes = await db.execute({
-            sql: `SELECT * FROM entry_diminutives
-                  WHERE entry_id = ?
-                  ORDER BY COALESCE(is_preferred, 0) DESC, sort_order ASC, created_at ASC`,
-            args: [resolvedEntryId],
-        });
-        const diminutives = diminutiveRes.rows.map((row) => ({
+        // ── Secondary Details Queries (Parallelized) ──────────────────────────────
+        const [
+            diminutiveRes,
+            phonRes,
+            attnRes,
+            audioRes,
+            subRes,
+            dialRes
+        ] = await Promise.all([
+            db.execute({
+                sql: `SELECT * FROM entry_diminutives
+                      WHERE entry_id = ?
+                      ORDER BY COALESCE(is_preferred, 0) DESC, sort_order ASC, created_at ASC`,
+                args: [resolvedEntryId],
+            }),
+            db.execute({
+                sql: `SELECT * FROM phonetics WHERE entry_id = ?`,
+                args: [resolvedEntryId],
+            }),
+            db.execute({
+                sql: `SELECT ar.*, as2.source_id, as2.attested, as2.notes AS score_notes,
+                       ls.name AS source_name, ls.reliability_weight
+                FROM attestation_reliability ar
+                LEFT JOIN attestation_scores as2 ON as2.attestation_id = ar.id
+                LEFT JOIN lexical_sources ls     ON ls.id = as2.source_id
+                WHERE ar.entry_id = ?`,
+                args: [resolvedEntryId],
+            }),
+            db.execute({
+                sql: `SELECT * FROM audio_files WHERE entry_id = ?`,
+                args: [resolvedEntryId],
+            }),
+            db.execute({
+                sql: `SELECT * FROM subentries WHERE entry_id = ? ORDER BY sort_order`,
+                args: [resolvedEntryId],
+            }),
+            db.execute({
+                sql: `SELECT * FROM dialect_variants WHERE entry_id = ?`,
+                args: [resolvedEntryId],
+            }),
+        ]);
+        const diminutives = (diminutiveRes.rows || []).map((row) => ({
             ...row,
             is_preferred: Boolean(row.is_preferred),
         }));
         const primaryDiminutive = diminutives[0] || null;
-
-        // ── Phonetics ───────────────────────────────────────────────────────────
-        const phonRes = await db.execute({
-            sql: `SELECT * FROM phonetics WHERE entry_id = ?`,
-            args: [resolvedEntryId],
-        });
-
-        // ── Attestation ─────────────────────────────────────────────────────────
-        const attnRes = await db.execute({
-            sql: `SELECT ar.*, as2.source_id, as2.attested, as2.notes AS score_notes,
-                   ls.name AS source_name, ls.reliability_weight
-            FROM attestation_reliability ar
-            LEFT JOIN attestation_scores as2 ON as2.attestation_id = ar.id
-            LEFT JOIN lexical_sources ls     ON ls.id = as2.source_id
-            WHERE ar.entry_id = ?`,
-            args: [resolvedEntryId],
-        });
-
-        // ── Audio ────────────────────────────────────────────────────────────────
-        const audioRes = await db.execute({
-            sql: `SELECT * FROM audio_files WHERE entry_id = ?`,
-            args: [resolvedEntryId],
-        });
-
-        // ── Subentries ───────────────────────────────────────────────────────────
-        const subRes = await db.execute({
-            sql: `SELECT * FROM subentries WHERE entry_id = ? ORDER BY sort_order`,
-            args: [resolvedEntryId],
-        });
-
-        // ── Dialect variants ─────────────────────────────────────────────────────
-        const dialRes = await db.execute({
-            sql: `SELECT * FROM dialect_variants WHERE entry_id = ?`,
-            args: [id],
-        });
 
         // ── Assemble ─────────────────────────────────────────────────────────────
         const attestation = attnRes.rows.length ? {
@@ -467,10 +464,16 @@ export async function onRequestGet({ params, env }) {
             });
         }
 
-        payload.synonyms = await enrichRelationships(payload.synonyms);
-        payload.antonyms = await enrichRelationships(payload.antonyms);
-        payload.related_entries = markRelationshipSource(await enrichRelationships(payload.related_entries), 'explicit');
-        payload.alternative_forms = await enrichRelationships(payload.alternative_forms);
+        const [synonyms, antonyms, related_entries_enriched, alternative_forms] = await Promise.all([
+            enrichRelationships(payload.synonyms),
+            enrichRelationships(payload.antonyms),
+            enrichRelationships(payload.related_entries),
+            enrichRelationships(payload.alternative_forms),
+        ]);
+        payload.synonyms = synonyms;
+        payload.antonyms = antonyms;
+        payload.related_entries = markRelationshipSource(related_entries_enriched, 'explicit');
+        payload.alternative_forms = alternative_forms;
 
         // ── Shared Related Entries ──────────────────────────────────────────────
         let related_entries = [];

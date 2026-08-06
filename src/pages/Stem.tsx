@@ -1,4 +1,4 @@
-import { useMemo, useState, isValidElement, type ReactNode } from 'react';
+import { lazy, useMemo, useState, isValidElement, type ReactNode } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
@@ -11,7 +11,8 @@ import { EntryShell, type EntryViewModel, EtymologySentence, SideCard } from '@/
 import { FunctionWordEntryView } from './Entry';
 import { getGloss } from '@/lib/utils';
 import { Edit2, Plus, Trash2 } from 'lucide-react';
-import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
+import { type AdminEntry } from '@/components/admin/EntryFormModal';
+const EntryFormModal = lazy(() => import('@/components/admin/EntryFormModal').then(m => ({ default: m.EntryFormModal })));
 import { StemFormModal } from '@/components/admin/StemFormModal';
 import { adminDeleteEntry } from '@/lib/api';
 import { buildStemMorphologyViewModel } from '@/lib/stemMorphology';
