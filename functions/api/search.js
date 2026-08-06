@@ -10,7 +10,6 @@ import { createClient } from '@libsql/client/web';
 import { resolveSuffixEntryMatch } from '../../src/lib/suffixMatching.ts';
 import { normalizeSourceMetadata } from '../../src/lib/sourceMetadata.ts';
 import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../src/lib/entryHydration.ts';
-import { ensureVerbMorphologyTable } from '../../src/lib/verbMorphology.ts';
 
 const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
 const VERB_STRENGTH_FILTERS = new Set(['strong', 'strong-hybrid', 'weak', 'geminated', 'doubled']);
@@ -109,7 +108,6 @@ export async function onRequestGet({ request, env }) {
         const tursoUrl = env.TURSO_URL || env.VITE_TURSO_URL;
         const dbToken = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
         const db = createClient({ url: tursoUrl, authToken: dbToken });
-        await ensureVerbMorphologyTable(db, { backfill: true });
 
         // Normalize search string for better matches
         const normalizedQ = q.toLowerCase().trim().normalize('NFC');
@@ -334,7 +332,7 @@ export async function onRequestGet({ request, env }) {
             sql += ` AND EXISTS (SELECT 1 FROM entry_tags et JOIN tags t ON et.tag_id = t.id WHERE et.entry_id = e.id AND LOWER(t.name) = ?)`;
             args.push(tag.toLowerCase());
         }
-   // Pattern filters
+        // Pattern filters
         if (lp) { sql += ' AND LOWER(COALESCE(pat.cv_notation, \'\')) LIKE ?'; args.push(`%${lp.toLowerCase()}%`); }
         if (fp) { sql += ' AND LOWER(COALESCE(nm.feminine_form, am.feminine_form, \'\')) LIKE ?'; args.push(`%${fp.toLowerCase()}%`); }
         if (mp) { sql += ' AND LOWER(COALESCE(nm.masculine_form, am.masculine_form, \'\')) LIKE ?'; args.push(`%${mp.toLowerCase()}%`); }
@@ -358,6 +356,13 @@ export async function onRequestGet({ request, env }) {
             args.push(stemString);
         }
 
+        // Status filtering (approved by default; pending/suggested included when requested)
+        if (!includePending || !includeSuggested) {
+            const statusConditions = ["COALESCE(e.status, 'approved') = 'approved'"];
+            if (includePending) statusConditions.push("e.status = 'pending'");
+            if (includeSuggested) statusConditions.push("e.status = 'suggested'");
+            sql += ` AND (${statusConditions.join(' OR ')})`;
+        }
 
         const totalRes = await db.execute({ sql: `SELECT COUNT(*) as total ${sql}`, args });
         const total = Number(totalRes.rows[0]?.total ?? 0);
@@ -365,7 +370,7 @@ export async function onRequestGet({ request, env }) {
         if (limit === 0) {
             return json({ results: [], total, query: q });
         }
-
+        
         const hasCriteria = q || rootId || pos || rootType || nounType || vowelSet || wizen || source || sourceLanguage || suffix || gender || r1 || r2 || r3 || r4;
         let isRandomSearch = (isRandom || !hasCriteria) && !q;
 
@@ -462,12 +467,16 @@ export async function onRequestGet({ request, env }) {
     }
 }
 
-function json(data, status = 200) {
+function json(data, status = 200, cacheSeconds = 300) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+    };
+    if (status === 200) {
+        headers['Cache-Control'] = `public, max-age=60, s-maxage=${cacheSeconds}, stale-while-revalidate=86400`;
+    }
     return new Response(JSON.stringify(data), {
         status,
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-        },
+        headers,
     });
 }

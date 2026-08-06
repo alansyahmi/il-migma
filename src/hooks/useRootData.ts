@@ -70,8 +70,8 @@ export function useRootData(id: string | undefined) {
         try {
             // Fetch root metadata and entries in parallel
             const [rootRes, searchRes] = await Promise.all([
-                apiGetRoot(id),
-                apiSearch('', { root_id: id } as any)
+                apiGetRoot(id, signal),
+                apiSearch('', { root_id: id, signal } as any)
             ]);
 
             const root = rootRes.root as DbRoot;

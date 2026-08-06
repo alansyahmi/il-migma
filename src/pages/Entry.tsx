@@ -2349,7 +2349,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const showPluralInflectionColumn = hideTheoreticalForms ? inflectionRows.some(row => row.pluralVisible) : true;
 
     const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
         minHeight: '100vh',
     };
 
@@ -2944,7 +2944,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const patternValue = resolveDisplayedPattern(mode, cvWizenMap, entry.cv_pattern || pattern?.cv_notation, pattern?.wizen_notation);
 
     const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
         minHeight: '100vh',
     };
 
@@ -3641,7 +3641,7 @@ export function ZokkEntryView({
     };
 
     const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
         minHeight: '100vh',
     };
 
@@ -4296,7 +4296,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     });
 
     const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
         minHeight: '100vh',
     };
 
@@ -4631,7 +4631,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
     const patternLabel = mode === 'arabised' ? term('wizen-pattern') : term('cv-pattern');
     const patternValue = resolveDisplayedPattern(mode, cvWizenMap, (entry as any).cv_pattern || pattern?.cv_notation, pattern?.wizen_notation);
     const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
         minHeight: '100vh',
     };
 
@@ -5120,7 +5120,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     const showPluralInflectionColumn = hideTheoreticalForms ? inflectionRows.some(row => row.pluralVisible) : true;
 
     const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
         minHeight: '100vh',
     };
 
@@ -5862,7 +5862,7 @@ export function FunctionWordEntryView({
     const showPluralColumn = (isPronoun || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') && !!pluralBase;
 
     const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
         minHeight: '100vh',
     };
 
@@ -6302,7 +6302,7 @@ export function EntryPage() {
     if (!entry) {
         return (
             <div style={{
-                background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+                background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
                 minHeight: '60vh'
             }} className="flex flex-col items-center justify-center px-4 text-center">
                 <div className="flex items-center gap-2 mb-8">

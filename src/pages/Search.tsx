@@ -400,6 +400,7 @@ export function Search() {
     // Effect to fetch from API
     useEffect(() => {
         let cancelled = false;
+        const controller = new AbortController();
 
         const load = async () => {
             setLoading(true);
@@ -438,36 +439,22 @@ export function Search() {
                     forms: forms.length > 0 ? forms : undefined,
                     includePending: pending,
                     includeSuggested: suggested,
+                    signal: controller.signal,
                 });
 
-                if (cancelled) return;
+                if (cancelled || controller.signal.aborted) return;
 
                 setTotal(res.total);
 
-                const stemStrings = Array.from(new Set(
-                    res.results
-                        .map((r: any) => r?.zokk_morphology?.stem_string?.trim())
-                        .filter((stem: string | undefined): stem is string => !!stem),
-                ));
-
                 const stemEntriesMap = new Map<string, any[]>();
-                await Promise.all(stemStrings.map(async (stemString) => {
-                    try {
-                        const stemRes = await apiSearch('', {
-                            zokk: true,
-                            stem_string: stemString,
-                            limit: 50,
-                            includePending: pending,
-                            includeSuggested: suggested,
-                        } as any);
-                        stemEntriesMap.set(stemString, stemRes.results);
-                    } catch (error) {
-                        console.warn('Stem preview fetch failed:', error);
-                        stemEntriesMap.set(stemString, []);
+                res.results.forEach((r: any) => {
+                    const s = r?.zokk_morphology?.stem_string?.trim();
+                    if (s) {
+                        const existing = stemEntriesMap.get(s) || [];
+                        existing.push(r);
+                        stemEntriesMap.set(s, existing);
                     }
-                }));
-
-                if (cancelled) return;
+                });
 
                 const mapped: SearchResult[] = res.results.map((r: any) => {
                     const inflections: InflectionRow[] = [];
@@ -624,6 +611,7 @@ export function Search() {
 
         return () => {
             cancelled = true;
+            controller.abort();
         };
     }, [searchParams.toString(), isSearchPerformed, term]);
 
@@ -673,6 +661,7 @@ export function Search() {
 
     useEffect(() => {
         let cancelled = false;
+        const controller = new AbortController();
         const trimmed = query.trim();
 
         if (trimmed.length < 2) {
@@ -682,7 +671,7 @@ export function Search() {
         }
 
         setSuggestionsLoading(true);
-        (async () => {
+        const timer = setTimeout(async () => {
             try {
                 const pos = searchParams.get('pos') || undefined;
                 const type = searchParams.get('type') || undefined;
@@ -712,9 +701,10 @@ export function Search() {
                     forms: forms.length > 0 ? forms : undefined,
                     includePending: pending,
                     includeSuggested: suggested,
+                    signal: controller.signal,
                 });
 
-                if (!cancelled) {
+                if (!cancelled && !controller.signal.aborted) {
                     setSuggestions(
                         res.results.slice(0, 3).map((r: any) => ({
                             id: r.id,
@@ -727,17 +717,19 @@ export function Search() {
                     );
                 }
             } catch (error) {
-                if (!cancelled) {
+                if (!cancelled && !controller.signal.aborted) {
                     console.warn('Search suggestions fetch failed:', error);
                     setSuggestions([]);
                 }
             } finally {
-                if (!cancelled) setSuggestionsLoading(false);
+                if (!cancelled && !controller.signal.aborted) setSuggestionsLoading(false);
             }
-        })();
+        }, 250);
 
         return () => {
             cancelled = true;
+            clearTimeout(timer);
+            controller.abort();
         };
     }, [query, searchParams.toString()]);
 
@@ -756,7 +748,7 @@ export function Search() {
 
     const bgStyle = {
         background: `linear-gradient(rgba(244,243,240,0.88), rgba(244,243,240,0.88)),
-                 url("/bg-pattern.png") center/cover no-repeat`,
+                 url("/bg-pattern.webp") center/cover no-repeat`,
         minHeight: '100vh',
     };
 

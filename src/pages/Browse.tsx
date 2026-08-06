@@ -4,7 +4,7 @@ const CREAM_RGBA = 'rgba(244,243,240,0.88)';
 
 export function Browse() {
     const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
         minHeight: '100vh',
     };
 

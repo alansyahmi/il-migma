@@ -214,7 +214,7 @@ function SearchModeTabs({ mode }: { mode: SearchMode }) {
 function SearchPageShell({ children }: { children: React.ReactNode }) {
     return (
         <div style={{
-            background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+            background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
             minHeight: 'calc(100vh - 56px)',
         }}>
             <div className="max-w-6xl mx-auto px-7 sm:px-8 py-8 animate-fade-in">

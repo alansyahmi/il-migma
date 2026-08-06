@@ -39,8 +39,8 @@ export function useStemData(id: string | undefined) {
 
         try {
             const [stemRes, searchRes] = await Promise.all([
-                apiGetStem(id).catch(() => null),
-                apiSearch('', { zokk: true, stem_string: id } as any),
+                apiGetStem(id, signal).catch(() => null),
+                apiSearch('', { zokk: true, stem_string: id, signal } as any),
             ]);
             const entries = (searchRes.results as any) as Entry[];
 

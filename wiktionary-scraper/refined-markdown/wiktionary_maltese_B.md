@@ -2,15 +2,12 @@
 
 Total Entries: 856
 
-## abbasta (v-abbasta) 🌟 *(REVISED TARGET ENTRY)*
+## abbasta (v-abbasta)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to suffice, to be enough
     **MT**: Kien biżżejjed jew sodisfaċenti fl-ammont meħtieġ.
 - **Alternative Forms**: bbasta
-- **Usage Examples**:
-  - MT: Abbasta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbasta correctly and without delay.
 
 ---
 
@@ -18,13 +15,13 @@ Total Entries: 856
 - **POS**: preposition
 - **Definitions**:
   - **EN**: with (chiefly an ingredient, means, concomitant, quality)
-    **MT**: Tifsira u deskrizzjoni ta' 'b'': with (chiefly an ingredient, means, concomitant, quality).
+    **MT**: Li għandu x'jaqsam ma' b' fl-użu u t-tifsira uffiċjali.
   - **EN**: times, (multiplied) by
-    **MT**: Tifsira u deskrizzjoni ta' 'b'': times, (multiplied) by.
+    **MT**: Li għandu x'jaqsam ma' b' fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bi, imb
 - **Usage Examples**:
-  - MT: B' kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The b' was in its proper place in daily use.
+  - MT: Attenda bil-kwiet bi fiduċja kbira.
+    EN: He attended quietly with great confidence.
 
 ---
 
@@ -32,10 +29,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: free of charge
-    **MT**: Tifsira u deskrizzjoni ta' 'b'xejn': free of charge.
-- **Usage Examples**:
-  - MT: B'xejn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The b'xejn was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' b'xejn fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -43,10 +37,7 @@ Total Entries: 856
 - **POS**: adverb
 - **Definitions**:
   - **EN**: eagerly
-    **MT**: Tifsira u deskrizzjoni ta' 'b'ħerqa': eagerly.
-- **Usage Examples**:
-  - MT: B'ħerqa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The b'ħerqa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' b'ħerqa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -55,11 +46,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: baboon
-    **MT**: Tifsira u deskrizzjoni ta' 'babun': baboon.
+    **MT**: Li għandu x'jaqsam ma' babun fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: babwin
-- **Usage Examples**:
-  - MT: Babun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The babun was in its proper place in daily use.
 
 ---
 
@@ -68,23 +56,20 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: baboon
-    **MT**: Tifsira u deskrizzjoni ta' 'babun': baboon.
+    **MT**: Li għandu x'jaqsam ma' babun fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: babun
-- **Usage Examples**:
-  - MT: Babwin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The babwin was in its proper place in daily use.
 
 ---
 
-## bad (v-bad) 🌟 *(REVISED TARGET ENTRY)*
+## bad (v-bad)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to lay eggs
     **MT**: Għamel jew ħareġ il-bajd (dwar għasafar jew rettili).
 - **Alternative Forms**: bied
 - **Usage Examples**:
-  - MT: Bad l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bad correctly and without delay.
+  - MT: Il-dtiġa biedet żewġ bajdiet fil-kannella.
+    EN: The hen laid two eggs in the coop.
 
 ---
 
@@ -93,10 +78,7 @@ Total Entries: 856
 - **Root**: b-d-b-d
 - **Definitions**:
   - **EN**: to be lecherous
-    **MT**: Tifsira u deskrizzjoni ta' 'badbad': to be lecherous.
-- **Usage Examples**:
-  - MT: Badbad l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of badbad correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' badbad fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -104,10 +86,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-- **Alternative Forms**: abbatissa
+  - **EN**: abbess
+    **MT**: Il-capa u superjura ta' monasteru tar-swar.
 - **Usage Examples**:
-  - MT: Badessa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The badessa was in its proper place in daily use.
+  - MT: L-badessa laqgħet il-pellegrini fil-monasteru.
+    EN: The abbess welcomed the pilgrims to the monastery.
 
 ---
 
@@ -116,10 +99,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: buffer (someone or something that buffs)
-    **MT**: Tifsira u deskrizzjoni ta' 'bafer': buffer (someone or something that buffs).
-- **Usage Examples**:
-  - MT: Bafer kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bafer was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bafer fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -128,12 +108,9 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: a piece of luggage, baggage
-    **MT**: Tifsira u deskrizzjoni ta' 'bagalja': a piece of luggage, baggage.
+    **MT**: Li għandu x'jaqsam ma' bagalja fl-użu u t-tifsira uffiċjali.
   - **EN**: a suitcase (specifically)
-    **MT**: Tifsira u deskrizzjoni ta' 'bagalja': a suitcase (specifically).
-- **Usage Examples**:
-  - MT: Bagalja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagalja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagalja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -142,12 +119,9 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: large piece of luggage or baggage
-    **MT**: Tifsira u deskrizzjoni ta' 'bagoll': large piece of luggage or baggage.
+    **MT**: Li għandu x'jaqsam ma' bagoll fl-użu u t-tifsira uffiċjali.
   - **EN**: the trunk of a vehicle
-    **MT**: Tifsira u deskrizzjoni ta' 'bagoll': the trunk of a vehicle.
-- **Usage Examples**:
-  - MT: Bagoll kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagoll was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagoll fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -156,10 +130,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: European nettle tree (Celtis australis)
-    **MT**: Tifsira u deskrizzjoni ta' 'bagular': European nettle tree (Celtis australis).
-- **Usage Examples**:
-  - MT: Bagular kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagular was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagular fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -168,10 +139,7 @@ Total Entries: 856
 - **Root**: b-għ-d
 - **Definitions**:
   - **EN**: to hate
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħad': to hate.
-- **Usage Examples**:
-  - MT: Bagħad l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bagħad correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bagħad fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -181,16 +149,13 @@ Total Entries: 856
 - **Root**: b-għ-l
 - **Definitions**:
   - **EN**: mule
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħal': mule.
+    **MT**: Li għandu x'jaqsam ma' bagħal fl-użu u t-tifsira uffiċjali.
   - **EN**: bastard
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħal': bastard.
+    **MT**: Li għandu x'jaqsam ma' bagħal fl-użu u t-tifsira uffiċjali.
   - **EN**: hardhearted person
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħal': hardhearted person.
+    **MT**: Li għandu x'jaqsam ma' bagħal fl-użu u t-tifsira uffiċjali.
   - **EN**: fruitless sprout
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħal': fruitless sprout.
-- **Usage Examples**:
-  - MT: Bagħal kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħal was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħal fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -199,14 +164,11 @@ Total Entries: 856
 - **Root**: b-għ-l
 - **Definitions**:
   - **EN**: to bear mules
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħal': to bear mules.
+    **MT**: Li għandu x'jaqsam ma' bagħal fl-użu u t-tifsira uffiċjali.
   - **EN**: to interbreed
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħal': to interbreed.
+    **MT**: Li għandu x'jaqsam ma' bagħal fl-użu u t-tifsira uffiċjali.
   - **EN**: to be fruitless
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħal': to be fruitless.
-- **Usage Examples**:
-  - MT: Bagħal l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bagħal correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bagħal fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -216,10 +178,7 @@ Total Entries: 856
 - **Root**: b-għ-r
 - **Definitions**:
   - **EN**: dung
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħar': dung.
-- **Usage Examples**:
-  - MT: Bagħar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -228,12 +187,9 @@ Total Entries: 856
 - **Root**: b-għ-t
 - **Definitions**:
   - **EN**: to send
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħat': to send.
+    **MT**: Li għandu x'jaqsam ma' bagħat fl-użu u t-tifsira uffiċjali.
   - **EN**: to text
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħat': to text.
-- **Usage Examples**:
-  - MT: Bagħat l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bagħat correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bagħat fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -242,12 +198,9 @@ Total Entries: 856
 - **Root**: b-għ-b-s
 - **Definitions**:
   - **EN**: to finger
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħbas': to finger.
+    **MT**: Li għandu x'jaqsam ma' bagħbas fl-użu u t-tifsira uffiċjali.
   - **EN**: to tamper, to meddle
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħbas': to tamper, to meddle.
-- **Usage Examples**:
-  - MT: Bagħbas l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bagħbas correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bagħbas fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -257,22 +210,16 @@ Total Entries: 856
 - **Root**: b-għ-b-s
 - **Definitions**:
   - **EN**: a person who has the habit of touching things or people when talking (Is there an English equivalent to this definition?)
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħbus': a person who has the habit of touching things or people when talking (Is there an English equivalent to this definition?).
-- **Usage Examples**:
-  - MT: Bagħbus kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħbus was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħbus fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bagħdam (n-bagħdam) 🌟 *(REVISED TARGET ENTRY)*
+## bagħdam (n-bagħdam)
 - **POS**: noun
 - **Definitions**:
   - **EN**: harrier (bird of prey of the genus Circus)
     **MT**: Tip ta' għasfur tal-priża mill-ġeneru Circus.
 - **Alternative Forms**: bagħdan
-- **Usage Examples**:
-  - MT: Bagħdam kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħdam was in its proper place in daily use.
 
 ---
 
@@ -281,11 +228,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: harrier, especially the western marsh harrier
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħdan': harrier, especially the western marsh harrier.
+    **MT**: Li għandu x'jaqsam ma' bagħdan fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bagħdam
-- **Usage Examples**:
-  - MT: Bagħdan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħdan was in its proper place in daily use.
 
 ---
 
@@ -294,10 +238,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: pallid harrier (Circus macrourus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħdan abjad': pallid harrier (Circus macrourus).
-- **Usage Examples**:
-  - MT: Bagħdan abjad kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħdan abjad was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħdan abjad fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -306,10 +247,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: western marsh harrier (Circus aeruginosus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħdan aħmar': western marsh harrier (Circus aeruginosus).
-- **Usage Examples**:
-  - MT: Bagħdan aħmar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħdan aħmar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħdan aħmar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -318,10 +256,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Montagu's harrier (Circus pygargus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħdan griż': Montagu's harrier (Circus pygargus).
-- **Usage Examples**:
-  - MT: Bagħdan griż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħdan griż was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħdan griż fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -330,10 +265,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: hen harrier (Circus cyaneus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħdan ikħal': hen harrier (Circus cyaneus).
-- **Usage Examples**:
-  - MT: Bagħdan ikħal kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħdan ikħal was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħdan ikħal fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -343,10 +275,7 @@ Total Entries: 856
 - **Root**: b-għ-l
 - **Definitions**:
   - **EN**: female equivalent of bagħal
-    **MT**: Forma femminili ta' bagħal.
-- **Usage Examples**:
-  - MT: Bagħla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -354,10 +283,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: unirrigated (field)
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħli': unirrigated (field).
-- **Usage Examples**:
-  - MT: Bagħli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħli was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħli fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -367,10 +293,7 @@ Total Entries: 856
 - **Root**: b-għ-l
 - **Definitions**:
   - **EN**: an abusive person
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħlunazz': an abusive person.
-- **Usage Examples**:
-  - MT: Bagħlunazz kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħlunazz was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħlunazz fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -379,10 +302,7 @@ Total Entries: 856
 - **Root**: b-għ-r
 - **Definitions**:
   - **EN**: dunglike
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħri': dunglike.
-- **Usage Examples**:
-  - MT: Bagħri kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bagħri was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bagħri fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -391,12 +311,9 @@ Total Entries: 856
 - **Root**: b-għ-t-r
 - **Definitions**:
   - **EN**: to walk through mud
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħtar': to walk through mud.
+    **MT**: Li għandu x'jaqsam ma' bagħtar fl-użu u t-tifsira uffiċjali.
   - **EN**: to till wet land
-    **MT**: Tifsira u deskrizzjoni ta' 'bagħtar': to till wet land.
-- **Usage Examples**:
-  - MT: Bagħtar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bagħtar correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bagħtar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -405,23 +322,17 @@ Total Entries: 856
 - **Root**: b-h-r-d
 - **Definitions**:
   - **EN**: to enjoy oneself boisterously
-    **MT**: Tifsira u deskrizzjoni ta' 'bahrad': to enjoy oneself boisterously.
+    **MT**: Li għandu x'jaqsam ma' bahrad fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bahraġ
-- **Usage Examples**:
-  - MT: Bahrad l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bahrad correctly and without delay.
 
 ---
 
-## bahraġ (v-bahraġ) 🌟 *(REVISED TARGET ENTRY)*
+## bahraġ (v-bahraġ)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to enjoy oneself boisterously
     **MT**: Diverta u qatta' ħin ferħan b'mod aktiv u ferrieħi.
 - **Alternative Forms**: bahrad
-- **Usage Examples**:
-  - MT: Bahraġ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bahraġ correctly and without delay.
 
 ---
 
@@ -430,10 +341,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: mockery [obsolet]
-    **MT**: Tifsira u deskrizzjoni ta' 'baja': mockery.
-- **Usage Examples**:
-  - MT: Baja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -441,10 +349,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Bajada': a surname.
-- **Usage Examples**:
-  - MT: Bajada kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bajada was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bajada fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -454,14 +359,11 @@ Total Entries: 856
 - **Root**: b-j-d
 - **Definitions**:
   - **EN**: egg, eggs
-    **MT**: Tifsira u deskrizzjoni ta' 'bajd': egg, eggs.
+    **MT**: Li għandu x'jaqsam ma' bajd fl-użu u t-tifsira uffiċjali.
   - **EN**: ovum, ova
-    **MT**: Tifsira u deskrizzjoni ta' 'bajd': ovum, ova.
+    **MT**: Li għandu x'jaqsam ma' bajd fl-użu u t-tifsira uffiċjali.
   - **EN**: testicles
-    **MT**: Tifsira u deskrizzjoni ta' 'bajd': testicles.
-- **Usage Examples**:
-  - MT: Bajd kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bajd was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bajd fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -470,10 +372,7 @@ Total Entries: 856
 - **Root**: b-j-d
 - **Definitions**:
   - **EN**: whitish
-    **MT**: Tifsira u deskrizzjoni ta' 'bajdan': whitish.
-- **Usage Examples**:
-  - MT: Bajdan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bajdan was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bajdan fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -482,22 +381,16 @@ Total Entries: 856
 - **Root**: b-j-d
 - **Definitions**:
   - **EN**: whitish
-    **MT**: Tifsira u deskrizzjoni ta' 'bajdani': whitish.
-- **Usage Examples**:
-  - MT: Bajdani kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bajdani was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bajdani fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bajgħa (n-bajgħa) 🌟 *(REVISED TARGET ENTRY)*
+## bajgħa (n-bajgħa)
 - **POS**: noun
 - **Definitions**:
   - **EN**: sale, goods
     **MT**: Bejgħ ta' oġġetti jew merkanzija.
 - **Alternative Forms**: biegħa
-- **Usage Examples**:
-  - MT: Bajgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bajgħa was in its proper place in daily use.
 
 ---
 
@@ -506,10 +399,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: bay, bight (roundish recess in the coastline)
-    **MT**: Tifsira u deskrizzjoni ta' 'bajja': bay, bight (roundish recess in the coastline).
-- **Usage Examples**:
-  - MT: Bajja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bajja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bajja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -519,12 +409,9 @@ Total Entries: 856
 - **Root**: b-j-d
 - **Definitions**:
   - **EN**: painter (artisan), whitewasher
-    **MT**: Tifsira u deskrizzjoni ta' 'bajjad': painter (artisan), whitewasher.
+    **MT**: Li għandu x'jaqsam ma' bajjad fl-użu u t-tifsira uffiċjali.
   - **EN**: white soil
-    **MT**: Tifsira u deskrizzjoni ta' 'bajjad': white soil.
-- **Usage Examples**:
-  - MT: Bajjad kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bajjad was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bajjad fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -533,14 +420,11 @@ Total Entries: 856
 - **Root**: b-j-d
 - **Definitions**:
   - **EN**: to whitewash, to paint a wall
-    **MT**: Tifsira u deskrizzjoni ta' 'bajjad': to whitewash, to paint a wall.
+    **MT**: Li għandu x'jaqsam ma' bajjad fl-użu u t-tifsira uffiċjali.
   - **EN**: to digest
-    **MT**: Tifsira u deskrizzjoni ta' 'bajjad': to digest.
+    **MT**: Li għandu x'jaqsam ma' bajjad fl-użu u t-tifsira uffiċjali.
   - **EN**: to polish
-    **MT**: Tifsira u deskrizzjoni ta' 'bajjad': to polish.
-- **Usage Examples**:
-  - MT: Bajjad l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bajjad correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bajjad fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -549,10 +433,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: pen (writing instrument)
-    **MT**: Tifsira u deskrizzjoni ta' 'bajrow': pen (writing instrument).
-- **Usage Examples**:
-  - MT: Bajrow kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bajrow was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bajrow fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -561,11 +442,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: bicycle
-    **MT**: Tifsira u deskrizzjoni ta' 'bajsikil': bicycle.
+    **MT**: Li għandu x'jaqsam ma' bajsikil fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bicycle
-- **Usage Examples**:
-  - MT: Bajsikil kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bajsikil was in its proper place in daily use.
 
 ---
 
@@ -574,12 +452,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: figs
-    **MT**: Tifsira u deskrizzjoni ta' 'bajtar': figs.
+    **MT**: Li għandu x'jaqsam ma' bajtar fl-użu u t-tifsira uffiċjali.
   - **EN**: short for bajtar tax-xewk (“ prickly pears ”)
-    **MT**: Tifsira u deskrizzjoni ta' 'bajtar': short for bajtar tax-xewk (“ prickly pears ”).
-- **Usage Examples**:
-  - MT: Bajtar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bajtar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bajtar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -588,10 +463,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Indian fig, Opuntia ficus-indica
-    **MT**: Tifsira u deskrizzjoni ta' 'bajtar tax-xewk': Indian fig, Opuntia ficus-indica.
-- **Usage Examples**:
-  - MT: Bajtar tax-xewk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bajtar tax-xewk was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bajtar tax-xewk fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -600,12 +472,9 @@ Total Entries: 856
 - **Root**: b-k-r
 - **Definitions**:
   - **EN**: to anticipate [obsolet]
-    **MT**: Tifsira u deskrizzjoni ta' 'bakar': to anticipate.
+    **MT**: Li għandu x'jaqsam ma' bakar fl-użu u t-tifsira uffiċjali.
   - **EN**: to produce the firstfruits
-    **MT**: Tifsira u deskrizzjoni ta' 'bakar': to produce the firstfruits.
-- **Usage Examples**:
-  - MT: Bakar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bakar correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bakar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -614,22 +483,16 @@ Total Entries: 856
 - **Root**: b-k-r
 - **Definitions**:
   - **EN**: to get up early
-    **MT**: Tifsira u deskrizzjoni ta' 'bakkar': to get up early.
-- **Usage Examples**:
-  - MT: Bakkar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bakkar correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bakkar fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bala’ (v-bala) 🌟 *(REVISED TARGET ENTRY)*
+## bala’ (v-bala)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to swallow
     **MT**: Għadda xi ħaġa mill-ħalq għall-istonku.
 - **Alternative Forms**: bela', bela’
-- **Usage Examples**:
-  - MT: Bala’ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bala’ correctly and without delay.
 
 ---
 
@@ -638,10 +501,7 @@ Total Entries: 856
 - **Root**: b-l-b-l
 - **Definitions**:
   - **EN**: to gibber, to babble
-    **MT**: Tifsira u deskrizzjoni ta' 'balbal': to gibber, to babble.
-- **Usage Examples**:
-  - MT: Balbal l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of balbal correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' balbal fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -650,13 +510,10 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: A traditional Maltese dish featuring scrambled eggs cooked with tomatoes and onions.
-    **MT**: Tifsira u deskrizzjoni ta' 'balbuljata': A traditional Maltese dish featuring scrambled eggs cooked with tomatoes and onions..
+    **MT**: Li għandu x'jaqsam ma' balbuljata fl-użu u t-tifsira uffiċjali.
   - **EN**: mess
-    **MT**: Tifsira u deskrizzjoni ta' 'balbuljata': mess.
+    **MT**: Li għandu x'jaqsam ma' balbuljata fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: barbuljata
-- **Usage Examples**:
-  - MT: Balbuljata kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The balbuljata was in its proper place in daily use.
 
 ---
 
@@ -665,11 +522,8 @@ Total Entries: 856
 - **Root**: b-l-j
 - **Definitions**:
   - **EN**: to be unsteady
-    **MT**: Tifsira u deskrizzjoni ta' 'balja': to be unsteady.
+    **MT**: Li għandu x'jaqsam ma' balja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bbalija
-- **Usage Examples**:
-  - MT: Balja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of balja correctly and without delay.
 
 ---
 
@@ -678,11 +532,8 @@ Total Entries: 856
 - **Root**: b-l-k-j
 - **Definitions**:
   - **EN**: to abate, to calm down
-    **MT**: Tifsira u deskrizzjoni ta' 'bbalka': to abate, to calm down.
+    **MT**: Li għandu x'jaqsam ma' bbalka fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bbalka
-- **Usage Examples**:
-  - MT: Balka l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of balka correctly and without delay.
 
 ---
 
@@ -691,10 +542,7 @@ Total Entries: 856
 - **Root**: b-l-s
 - **Definitions**:
   - **EN**: to mess about
-    **MT**: Tifsira u deskrizzjoni ta' 'ballas': to mess about.
-- **Usage Examples**:
-  - MT: Ballas l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ballas correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' ballas fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -703,26 +551,20 @@ Total Entries: 856
 - **Root**: b-l-t
 - **Definitions**:
   - **EN**: to beat down, to pound
-    **MT**: Tifsira u deskrizzjoni ta' 'ballat': to beat down, to pound.
+    **MT**: Li għandu x'jaqsam ma' ballat fl-użu u t-tifsira uffiċjali.
   - **EN**: to flatten
-    **MT**: Tifsira u deskrizzjoni ta' 'ballat': to flatten.
+    **MT**: Li għandu x'jaqsam ma' ballat fl-użu u t-tifsira uffiċjali.
   - **EN**: to pack by beating down
-    **MT**: Tifsira u deskrizzjoni ta' 'ballat': to pack by beating down.
-- **Usage Examples**:
-  - MT: Ballat l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ballat correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' ballat fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## balla’ (v-balla) 🌟 *(REVISED TARGET ENTRY)*
+## balla’ (v-balla)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to make swallow
     **MT**: Ġiegħel jew għen lil xi ħadd jibla'.
 - **Alternative Forms**: bella', bella’
-- **Usage Examples**:
-  - MT: Balla’ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of balla’ correctly and without delay.
 
 ---
 
@@ -731,12 +573,9 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: weasel
-    **MT**: Tifsira u deskrizzjoni ta' 'ballottra': weasel.
+    **MT**: Li għandu x'jaqsam ma' ballottra fl-użu u t-tifsira uffiċjali.
   - **EN**: rockling
-    **MT**: Tifsira u deskrizzjoni ta' 'ballottra': rockling.
-- **Usage Examples**:
-  - MT: Ballottra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ballottra was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' ballottra fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -745,10 +584,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: ball
-    **MT**: Tifsira u deskrizzjoni ta' 'ballun': ball.
-- **Usage Examples**:
-  - MT: Ballun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ballun was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' ballun fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -757,12 +593,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: hot-air balloon
-    **MT**: Tifsira u deskrizzjoni ta' 'ballun baraxx': hot-air balloon.
+    **MT**: Li għandu x'jaqsam ma' ballun baraxx fl-użu u t-tifsira uffiċjali.
   - **EN**: a fat person
-    **MT**: Tifsira u deskrizzjoni ta' 'ballun baraxx': a fat person.
-- **Usage Examples**:
-  - MT: Ballun baraxx kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ballun baraxx was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' ballun baraxx fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -771,12 +604,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: holm oak, Quercus ilex
-    **MT**: Tifsira u deskrizzjoni ta' 'ballut': holm oak, Quercus ilex.
+    **MT**: Li għandu x'jaqsam ma' ballut fl-użu u t-tifsira uffiċjali.
   - **EN**: oak
-    **MT**: Tifsira u deskrizzjoni ta' 'ballut': oak.
-- **Usage Examples**:
-  - MT: Ballut kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ballut was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' ballut fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -785,10 +615,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: English oak, Quercus robur
-    **MT**: Tifsira u deskrizzjoni ta' 'ballut Ingliż': English oak, Quercus robur.
-- **Usage Examples**:
-  - MT: Ballut ingliż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ballut Ingliż was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' ballut Ingliż fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -797,10 +624,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: synonym of balzmuwa: balsam apple (Momordica balsamina)
-    **MT**: Tifsira u deskrizzjoni ta' 'balzmina': synonym of balzmuwa: balsam apple (Momordica balsamina).
-- **Usage Examples**:
-  - MT: Balzmina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The balzmina was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' balzmina fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -809,12 +633,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: balm, balsam
-    **MT**: Tifsira u deskrizzjoni ta' 'balzmu': balm, balsam.
+    **MT**: Li għandu x'jaqsam ma' balzmu fl-użu u t-tifsira uffiċjali.
   - **EN**: comfort
-    **MT**: Tifsira u deskrizzjoni ta' 'balzmu': comfort.
-- **Usage Examples**:
-  - MT: Balzmu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The balzmu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' balzmu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -823,10 +644,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: balsam apple (Momordica balsamina)
-    **MT**: Tifsira u deskrizzjoni ta' 'balzmuwa': balsam apple (Momordica balsamina).
-- **Usage Examples**:
-  - MT: Balzmuwa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The balzmuwa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' balzmuwa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -835,12 +653,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: baby, toddler
-    **MT**: Tifsira u deskrizzjoni ta' 'bambin': baby, toddler.
+    **MT**: Li għandu x'jaqsam ma' bambin fl-użu u t-tifsira uffiċjali.
   - **EN**: almost exclusively used referring to Baby Jesus and therefore often capitalized as il-Bambin (Ġesù)
-    **MT**: Tifsira u deskrizzjoni ta' 'bambin': almost exclusively used referring to Baby Jesus and therefore often capitalized as il-Bambin (Ġesù).
-- **Usage Examples**:
-  - MT: Bambin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bambin was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bambin fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -849,10 +664,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: Maltese June pear (Pyrus communis var. bambinella)
-    **MT**: Tifsira u deskrizzjoni ta' 'bambinella': Maltese June pear (Pyrus communis var. bambinella).
-- **Usage Examples**:
-  - MT: Bambinella kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bambinella was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bambinella fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -861,10 +673,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: simpleton
-    **MT**: Tifsira u deskrizzjoni ta' 'bamboċċ': simpleton.
-- **Usage Examples**:
-  - MT: Bamboċċ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bamboċċ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bamboċċ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -873,11 +682,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: childish behaviour
-    **MT**: Tifsira u deskrizzjoni ta' 'bamboċċata': childish behaviour.
+    **MT**: Li għandu x'jaqsam ma' bamboċċata fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bambuċċata
-- **Usage Examples**:
-  - MT: Bamboċċata kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bamboċċata was in its proper place in daily use.
 
 ---
 
@@ -886,11 +692,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: childish behaviour
-    **MT**: Tifsira u deskrizzjoni ta' 'bamboċċata': childish behaviour.
+    **MT**: Li għandu x'jaqsam ma' bamboċċata fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bamboċċata
-- **Usage Examples**:
-  - MT: Bambuċċata kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bambuċċata was in its proper place in daily use.
 
 ---
 
@@ -899,10 +702,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bummer, loafer
-    **MT**: Tifsira u deskrizzjoni ta' 'bamer': bummer, loafer.
-- **Usage Examples**:
-  - MT: Bamer kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bamer was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bamer fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -911,10 +711,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: banana (fruit)
-    **MT**: Tifsira u deskrizzjoni ta' 'banana': banana (fruit).
-- **Usage Examples**:
-  - MT: Banana kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The banana was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' banana fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -923,12 +720,9 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: side
-    **MT**: Tifsira u deskrizzjoni ta' 'banda': side.
+    **MT**: Li għandu x'jaqsam ma' banda fl-użu u t-tifsira uffiċjali.
   - **EN**: band
-    **MT**: Tifsira u deskrizzjoni ta' 'banda': band.
-- **Usage Examples**:
-  - MT: Banda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The banda was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' banda fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -937,10 +731,7 @@ Total Entries: 856
 - **Root**: b-n-d-l
 - **Definitions**:
   - **EN**: to swing, rock
-    **MT**: Tifsira u deskrizzjoni ta' 'bandal': to swing, rock.
-- **Usage Examples**:
-  - MT: Bandal l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bandal correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bandal fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -949,10 +740,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: flag
-    **MT**: Tifsira u deskrizzjoni ta' 'bandiera': flag.
-- **Usage Examples**:
-  - MT: Bandiera kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bandiera was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bandiera fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -962,12 +750,9 @@ Total Entries: 856
 - **Root**: b-n-d-l
 - **Definitions**:
   - **EN**: swing (hanging seat)
-    **MT**: Tifsira u deskrizzjoni ta' 'bandla': swing (hanging seat).
+    **MT**: Li għandu x'jaqsam ma' bandla fl-użu u t-tifsira uffiċjali.
   - **EN**: pendulum
-    **MT**: Tifsira u deskrizzjoni ta' 'bandla': pendulum.
-- **Usage Examples**:
-  - MT: Bandla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bandla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bandla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -976,10 +761,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bath
-    **MT**: Tifsira u deskrizzjoni ta' 'banju': bath.
-- **Usage Examples**:
-  - MT: Banju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The banju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' banju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -988,10 +770,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bain-marie
-    **MT**: Tifsira u deskrizzjoni ta' 'banjumarija': bain-marie.
-- **Usage Examples**:
-  - MT: Banjumarija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The banjumarija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' banjumarija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1000,12 +779,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bank (financial building or institution)
-    **MT**: Tifsira u deskrizzjoni ta' 'bank': bank (financial building or institution).
+    **MT**: Li għandu x'jaqsam ma' bank fl-użu u t-tifsira uffiċjali.
   - **EN**: bank (an underwater area of higher elevation, a sandbank)
-    **MT**: Tifsira u deskrizzjoni ta' 'bank': bank (an underwater area of higher elevation, a sandbank).
-- **Usage Examples**:
-  - MT: Bank kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bank was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bank fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1014,16 +790,13 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bench
-    **MT**: Tifsira u deskrizzjoni ta' 'bank': bench.
+    **MT**: Li għandu x'jaqsam ma' bank fl-użu u t-tifsira uffiċjali.
   - **EN**: counter (table or board on which business is transacted)
-    **MT**: Tifsira u deskrizzjoni ta' 'bank': counter (table or board on which business is transacted).
+    **MT**: Li għandu x'jaqsam ma' bank fl-użu u t-tifsira uffiċjali.
   - **EN**: worktable
-    **MT**: Tifsira u deskrizzjoni ta' 'bank': worktable.
+    **MT**: Li għandu x'jaqsam ma' bank fl-użu u t-tifsira uffiċjali.
   - **EN**: judge 's seat
-    **MT**: Tifsira u deskrizzjoni ta' 'bank': judge 's seat.
-- **Usage Examples**:
-  - MT: Bank kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bank was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bank fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1032,10 +805,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: banquet
-    **MT**: Tifsira u deskrizzjoni ta' 'bankett': banquet.
-- **Usage Examples**:
-  - MT: Bankett kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bankett was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bankett fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1044,10 +814,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: curb or pavement
-    **MT**: Tifsira u deskrizzjoni ta' 'bankina': curb or pavement.
-- **Usage Examples**:
-  - MT: Bankina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bankina was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bankina fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1056,10 +823,7 @@ Total Entries: 856
 - **Root**: b-n-s
 - **Definitions**:
   - **EN**: to assert repeatedly
-    **MT**: Tifsira u deskrizzjoni ta' 'bannas': to assert repeatedly.
-- **Usage Examples**:
-  - MT: Bannas l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bannas correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bannas fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1068,10 +832,7 @@ Total Entries: 856
 - **Root**: b-n-t
 - **Definitions**:
   - **EN**: to produce a stem
-    **MT**: Tifsira u deskrizzjoni ta' 'bannat': to produce a stem.
-- **Usage Examples**:
-  - MT: Bannat l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bannat correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bannat fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1080,10 +841,7 @@ Total Entries: 856
 - **Root**: b-n-s
 - **Definitions**:
   - **EN**: truly, undeniably
-    **MT**: Tifsira u deskrizzjoni ta' 'bans': truly, undeniably.
-- **Usage Examples**:
-  - MT: Bans kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bans was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bans fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1092,18 +850,15 @@ Total Entries: 856
 - **Root**: b-q-għ
 - **Definitions**:
   - **EN**: to remain, to stay
-    **MT**: Tifsira u deskrizzjoni ta' 'baqa'': to remain, to stay.
+    **MT**: Li għandu x'jaqsam ma' baqa' fl-użu u t-tifsira uffiċjali.
   - **EN**: to agree
-    **MT**: Tifsira u deskrizzjoni ta' 'baqa'': to agree.
+    **MT**: Li għandu x'jaqsam ma' baqa' fl-użu u t-tifsira uffiċjali.
   - **EN**: Used with a following active participle to convey a continuous action
-    **MT**: Tifsira u deskrizzjoni ta' 'baqa'': Used with a following active participle to convey a continuous action.
+    **MT**: Li għandu x'jaqsam ma' baqa' fl-użu u t-tifsira uffiċjali.
   - **EN**: Used with an intransitive verb in the imperfect to convey a habitual or repeated action
-    **MT**: Tifsira u deskrizzjoni ta' 'baqa'': Used with an intransitive verb in the imperfect to convey a habitual or repeated action.
+    **MT**: Li għandu x'jaqsam ma' baqa' fl-użu u t-tifsira uffiċjali.
   - **EN**: Used with a transitive verb in the imperfect to convey a continuous action
-    **MT**: Tifsira u deskrizzjoni ta' 'baqa'': Used with a transitive verb in the imperfect to convey a continuous action.
-- **Usage Examples**:
-  - MT: Baqa' l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baqa' correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baqa' fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1112,10 +867,7 @@ Total Entries: 856
 - **Root**: b-q-t
 - **Definitions**:
   - **EN**: to coagulate, curdle (milk)
-    **MT**: Tifsira u deskrizzjoni ta' 'baqat': to coagulate, curdle (milk).
-- **Usage Examples**:
-  - MT: Baqat l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baqat correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baqat fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1124,14 +876,11 @@ Total Entries: 856
 - **Root**: b-q-b-q
 - **Definitions**:
   - **EN**: to bubble up, to boil violently
-    **MT**: Tifsira u deskrizzjoni ta' 'baqbaq': to bubble up, to boil violently.
+    **MT**: Li għandu x'jaqsam ma' baqbaq fl-użu u t-tifsira uffiċjali.
   - **EN**: to coo, gurgle
-    **MT**: Tifsira u deskrizzjoni ta' 'baqbaq': to coo, gurgle.
+    **MT**: Li għandu x'jaqsam ma' baqbaq fl-użu u t-tifsira uffiċjali.
   - **EN**: to chatter
-    **MT**: Tifsira u deskrizzjoni ta' 'baqbaq': to chatter.
-- **Usage Examples**:
-  - MT: Baqbaq l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baqbaq correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baqbaq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1141,10 +890,7 @@ Total Entries: 856
 - **Root**: b-q-għ
 - **Definitions**:
   - **EN**: verbal noun of baqa’: stay agreement
-    **MT**: L-att u l-proċess verbali ta' baqa’.
-- **Usage Examples**:
-  - MT: Baqgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baqgħa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baqgħa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1154,10 +900,7 @@ Total Entries: 856
 - **Root**: b-q-l
 - **Definitions**:
   - **EN**: eczema
-    **MT**: Tifsira u deskrizzjoni ta' 'baqla': eczema.
-- **Usage Examples**:
-  - MT: Baqla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baqla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baqla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1167,10 +910,7 @@ Total Entries: 856
 - **Root**: b-q-q
 - **Definitions**:
   - **EN**: bugs, bedbugs (several or the species as such)
-    **MT**: Tifsira u deskrizzjoni ta' 'baqq': bugs, bedbugs (several or the species as such).
-- **Usage Examples**:
-  - MT: Baqq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baqq was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baqq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1179,10 +919,7 @@ Total Entries: 856
 - **Root**: b-q-għ
 - **Definitions**:
   - **EN**: to make (someone) stay
-    **MT**: Tifsira u deskrizzjoni ta' 'baqqa'': to make (someone) stay.
-- **Usage Examples**:
-  - MT: Baqqa' l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baqqa' correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baqqa' fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1191,10 +928,7 @@ Total Entries: 856
 - **Root**: b-q-n
 - **Definitions**:
   - **EN**: to work with a pickaxe
-    **MT**: Tifsira u deskrizzjoni ta' 'baqqan': to work with a pickaxe.
-- **Usage Examples**:
-  - MT: Baqqan l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baqqan correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baqqan fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1203,22 +937,16 @@ Total Entries: 856
 - **Root**: b-q-t
 - **Definitions**:
   - **EN**: to coagulate, curdle (milk)
-    **MT**: Tifsira u deskrizzjoni ta' 'baqqat': to coagulate, curdle (milk).
-- **Usage Examples**:
-  - MT: Baqqat l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baqqat correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baqqat fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## baqqiegħa (n-baqqiegħa) 🌟 *(REVISED TARGET ENTRY)*
+## baqqiegħa (n-baqqiegħa)
 - **POS**: noun
 - **Definitions**:
   - **EN**: pimple, pustule
     **MT**: Għadma jew uġigħ żgħir tal-ġilda bl-impurità.
 - **Alternative Forms**: boqqiegħa
-- **Usage Examples**:
-  - MT: Baqqiegħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baqqiegħa was in its proper place in daily use.
 
 ---
 
@@ -1228,10 +956,10 @@ Total Entries: 856
 - **Root**: b-q-n
 - **Definitions**:
   - **EN**: pickaxe
-    **MT**: Tifsira u deskrizzjoni ta' 'baqqun': pickaxe.
+    **MT**: Għodda ta' ħadid bil-ponta użata fit-tħaffir tal-blat.
 - **Usage Examples**:
-  - MT: Baqqun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baqqun was in its proper place in daily use.
+  - MT: Uża l-baqqun biex kisser il-blat fir-raba'.
+    EN: He used the pickaxe to break the rock in the field.
 
 ---
 
@@ -1240,10 +968,10 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: cow
-    **MT**: Tifsira u deskrizzjoni ta' 'baqra': cow.
+    **MT**: Annimal kbir tal-irrazza li jagħti l-ħalib.
 - **Usage Examples**:
-  - MT: Baqra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baqra was in its proper place in daily use.
+  - MT: Il-baqra kienet tiekol il-ħaxix fil-għalqa.
+    EN: The cow was eating grass in the field.
 
 ---
 
@@ -1252,10 +980,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: sea cow
-    **MT**: Tifsira u deskrizzjoni ta' 'baqra tal-baħar': sea cow.
-- **Usage Examples**:
-  - MT: Baqra tal-baħar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baqra tal-baħar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baqra tal-baħar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1263,15 +988,15 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-r-d
 - **Definitions**:
-  - **EN**: to polish, to file
-    **MT**: Tifsira u deskrizzjoni ta' 'barad': to polish, to file.
+  - **EN**: to polish, file
+    **MT**: Naddaf u għamel lixx metall b'barrada.
 - **Usage Examples**:
-  - MT: Barad l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of barad correctly and without delay.
+  - MT: Barad il-biċċa ħadid sal-tleqqija.
+    EN: He filed the iron piece to a shine.
 
 ---
 
-## baram (v-baram) 🌟 *(REVISED TARGET ENTRY)*
+## baram (v-baram)
 - **POS**: verb
 - **Root**: b-r-m
 - **Definitions**:
@@ -1285,13 +1010,10 @@ Total Entries: 856
     **MT**: Għaddasa jew inganna lil xi ħadd minn wara dahru.
   - **EN**: to occur to [with lil]
     **MT**: Veġa f'moħħ xi ħadd jew ġratlu f'daqqa.
-- **Usage Examples**:
-  - MT: Baram l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baram correctly and without delay.
 
 ---
 
-## barax (v-barax) 🌟 *(REVISED TARGET ENTRY)*
+## barax (v-barax)
 - **POS**: verb
 - **Root**: b-r-x
 - **Definitions**:
@@ -1303,13 +1025,10 @@ Total Entries: 856
     **MT**: Rebaħ kollox f'logħba jew f'ażżard mingħajr diffikultà.
   - **EN**: to steal, to pilfer
     **MT**: Seraq jew ħa affarijiet żgħar.
-- **Usage Examples**:
-  - MT: Barax l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of barax correctly and without delay.
 
 ---
 
-## barbuljata (n-barbuljata) 🌟 *(REVISED TARGET ENTRY)*
+## barbuljata (n-barbuljata)
 - **POS**: noun
 - **Definitions**:
   - **EN**: Maltese scrambled eggs with tomatoes and onions
@@ -1317,9 +1036,6 @@ Total Entries: 856
   - **EN**: mess
     **MT**: Sitwazzjoni mħawwda jew imbarazz.
 - **Alternative Forms**: balbuljata
-- **Usage Examples**:
-  - MT: Barbuljata kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barbuljata was in its proper place in daily use.
 
 ---
 
@@ -1328,13 +1044,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-r-d
 - **Definitions**:
-  - **EN**: chill
-    **MT**: Tifsira u deskrizzjoni ta' 'bard': chill.
-  - **EN**: chill weather
-    **MT**: Tifsira u deskrizzjoni ta' 'bard': chill weather.
+  - **EN**: chill, cold weather
+    **MT**: Temperatura baxxa u kiesaħ fl-arja.
 - **Usage Examples**:
-  - MT: Bard kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bard was in its proper place in daily use.
+  - MT: Kien hemm bard kbir matul il-lejl fit-muntanji.
+    EN: There was great chill during the night in the mountains.
 
 ---
 
@@ -1342,11 +1056,11 @@ Total Entries: 856
 - **POS**: adjective
 - **Root**: b-r-d
 - **Definitions**:
-  - **EN**: cold
-    **MT**: Tifsira u deskrizzjoni ta' 'bardan': cold.
+  - **EN**: cold (feeling cold)
+    **MT**: Persuna li qed tħoss il-kesħa fis-saffi.
 - **Usage Examples**:
-  - MT: Bardan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bardan was in its proper place in daily use.
+  - MT: Tifel bardan li lbes il-kisja sħuna tiegħu.
+    EN: A cold child who put on his warm coat.
 
 ---
 
@@ -1355,11 +1069,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: packsaddle
-    **MT**: Tifsira u deskrizzjoni ta' 'berdgħa': packsaddle.
+    **MT**: Li għandu x'jaqsam ma' berdgħa fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: berdgħa
-- **Usage Examples**:
-  - MT: Bardgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bardgħa was in its proper place in daily use.
 
 ---
 
@@ -1368,10 +1079,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: barium (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'barju': barium (chemical element).
+    **MT**: Element kimiku metalliku iebes.
 - **Usage Examples**:
-  - MT: Barju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barju was in its proper place in daily use.
+  - MT: Il-barju jintuża fl-esperimenti kimiki.
+    EN: Barium is used in chemical experiments.
 
 ---
 
@@ -1381,10 +1092,10 @@ Total Entries: 856
 - **Root**: b-r-k
 - **Definitions**:
   - **EN**: blessing
-    **MT**: Tifsira u deskrizzjoni ta' 'barka': blessing.
+    **MT**: Ġid u grazzja mogħtija mingħand Alla jew il-kultura.
 - **Usage Examples**:
-  - MT: Barka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barka was in its proper place in daily use.
+  - MT: Talbu għall-barka tal-familja fuq id-dar.
+    EN: They prayed for the family blessing on the house.
 
 ---
 
@@ -1393,15 +1104,12 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: great abundance
-    **MT**: Tifsira u deskrizzjoni ta' 'barka t'Alla': great abundance.
+    **MT**: Li għandu x'jaqsam ma' barka t'Alla fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: barket Alla
-- **Usage Examples**:
-  - MT: Barka t'alla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barka t'Alla was in its proper place in daily use.
 
 ---
 
-## barket Alla (n-barket-alla) 🌟 *(REVISED TARGET ENTRY)*
+## barket Alla (n-barket-alla)
 - **POS**: noun
 - **Definitions**:
   - **EN**: God’s blessing
@@ -1409,9 +1117,6 @@ Total Entries: 856
   - **EN**: abundance
     **MT**: Barka mingħand Alla jew abbondanza ta' ġid.
 - **Alternative Forms**: barka t'Alla, barka t’Alla
-- **Usage Examples**:
-  - MT: Barket alla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barket Alla was in its proper place in daily use.
 
 ---
 
@@ -1421,12 +1126,10 @@ Total Entries: 856
 - **Root**: b-r-m
 - **Definitions**:
   - **EN**: twist, rolling
-    **MT**: Tifsira u deskrizzjoni ta' 'barma': twist, rolling.
-  - **EN**: stoutness
-    **MT**: Tifsira u deskrizzjoni ta' 'barma': stoutness.
+    **MT**: L-att li tilwi oġġett f'mossa rotatorja.
 - **Usage Examples**:
-  - MT: Barma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barma was in its proper place in daily use.
+  - MT: Għamel barma tajba lill-ħajjet fit-tiswija.
+    EN: He gave a good twist to the thread in repair.
 
 ---
 
@@ -1434,11 +1137,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: bucket
-    **MT**: Tifsira u deskrizzjoni ta' 'barmil': bucket.
+  - **EN**: bucket, pail
+    **MT**: Kontenitur kbir b'manku użat biex iżomm l-ilma.
 - **Usage Examples**:
-  - MT: Barmil kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barmil was in its proper place in daily use.
+  - MT: Mela l-barmil mill-bir b'ilma friska.
+    EN: He filled the bucket from the well with fresh water.
 
 ---
 
@@ -1446,11 +1149,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-r-n-ż
 - **Definitions**:
-  - **EN**: to wear a hood, a cowl
-    **MT**: Tifsira u deskrizzjoni ta' 'barnaż': to wear a hood, a cowl.
+  - **EN**: to wear a hood, cowl
+    **MT**: Qiegħed u lbes il-barnuż ma' rasu.
 - **Usage Examples**:
-  - MT: Barnaż l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of barnaż correctly and without delay.
+  - MT: Barnaż meta ħareġ fil-maltemp kiesaħ.
+    EN: He wore a hood when going out in the cold storm.
 
 ---
 
@@ -1460,10 +1163,10 @@ Total Entries: 856
 - **Root**: b-r-n-ż
 - **Definitions**:
   - **EN**: hood, cowl
-    **MT**: Tifsira u deskrizzjoni ta' 'barnuż': hood, cowl.
+    **MT**: Kisja ta' ras magħquda ma' ġakketta.
 - **Usage Examples**:
-  - MT: Barnuż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barnuż was in its proper place in daily use.
+  - MT: Għolla l-barnuż minħabba x-xita fit-triq.
+    EN: He raised the hood because of the rain on the street.
 
 ---
 
@@ -1473,10 +1176,7 @@ Total Entries: 856
 - **Root**: b-r-n-ż
 - **Definitions**:
   - **EN**: diminutive of barnuż
-    **MT**: Tifsira u deskrizzjoni ta' 'barnuża': diminutive of barnuż.
-- **Usage Examples**:
-  - MT: Barnuża kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barnuża was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' barnuża fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1485,11 +1185,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-r-r
 - **Definitions**:
-  - **EN**: wilderness
-    **MT**: Tifsira u deskrizzjoni ta' 'barr': wilderness.
+  - **EN**: wilderness, open country
+    **MT**: Art miftuħa u selvaġġa barra r-raħal.
 - **Usage Examples**:
-  - MT: Barr kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barr was in its proper place in daily use.
+  - MT: Mar mixja fil-barr kmieni filgħodu.
+    EN: He went for a walk in the wilderness early in the morning.
 
 ---
 
@@ -1497,11 +1197,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-r-r
 - **Definitions**:
-  - **EN**: to coo (make a coo sound)
-    **MT**: Tifsira u deskrizzjoni ta' 'barr': to coo (make a coo sound).
+  - **EN**: to coo (birds)
+    **MT**: Ħareġ ħoss bil-kwiet minn ħalq il-ħamiema.
 - **Usage Examples**:
-  - MT: Barr l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of barr correctly and without delay.
+  - MT: Il-ħamiema barrat fuq il-bejt tad-dar.
+    EN: The dove cooed on the house roof.
 
 ---
 
@@ -1509,13 +1209,11 @@ Total Entries: 856
 - **POS**: adverb
 - **Root**: b-r-r
 - **Definitions**:
-  - **EN**: out, outside, outdoors
-    **MT**: Tifsira u deskrizzjoni ta' 'barra': out, outside, outdoors.
-  - **EN**: abroad
-    **MT**: Tifsira u deskrizzjoni ta' 'barra': abroad.
+  - **EN**: out, outside, outdoors, abroad
+    **MT**: Barra mid-dar jew f'pajjiż ieħor.
 - **Usage Examples**:
-  - MT: Barra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barra was in its proper place in daily use.
+  - MT: Ħarġu jilagħbu barra fil-ġnien nazzjonali.
+    EN: They went to play outside in the national garden.
 
 ---
 
@@ -1523,13 +1221,11 @@ Total Entries: 856
 - **POS**: preposition
 - **Root**: b-r-r
 - **Definitions**:
-  - **EN**: outside (of)
-    **MT**: Tifsira u deskrizzjoni ta' 'barra': outside (of).
-  - **EN**: except
-    **MT**: Tifsira u deskrizzjoni ta' 'barra': except.
+  - **EN**: outside of, except
+    **MT**: Prepożizzjoni użata għal esklużjoni jew post.
 - **Usage Examples**:
-  - MT: Barra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barra was in its proper place in daily use.
+  - MT: Kulħadd attendew barra minn wieħed.
+    EN: Everyone attended except one.
 
 ---
 
@@ -1538,24 +1234,22 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-r-d
 - **Definitions**:
-  - **EN**: file (cutting or smoothing tool)
-    **MT**: Tifsira u deskrizzjoni ta' 'barrada': file (cutting or smoothing tool).
+  - **EN**: file (tool)
+    **MT**: Għodda ta' ħadid bil-snien użata biex tnaddaf ir-rħam jew metall.
 - **Usage Examples**:
-  - MT: Barrada kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barrada was in its proper place in daily use.
+  - MT: Uża l-barrada biex naddaf ix-xifer tal-injam.
+    EN: He used the file to smooth the wooden edge.
 
 ---
 
 ## barrani (adj-barrani)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: foreign
-    **MT**: Tifsira u deskrizzjoni ta' 'barrani': foreign.
-  - **EN**: foreigner
-    **MT**: Tifsira u deskrizzjoni ta' 'barrani': foreigner.
+  - **EN**: foreign, foreigner
+    **MT**: Persuna jew oġġett li ġej minn pajjiż ieħor.
 - **Usage Examples**:
-  - MT: Barrani kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barrani was in its proper place in daily use.
+  - MT: Turist barrani li mar jżur il-belt storika.
+    EN: A foreign tourist who visited the historic city.
 
 ---
 
@@ -1565,10 +1259,10 @@ Total Entries: 856
 - **Root**: b-r-x
 - **Definitions**:
   - **EN**: scraper
-    **MT**: Tifsira u deskrizzjoni ta' 'barraxa': scraper.
+    **MT**: Għodda iebsa użata biex toħroġ iż-żebgħa mill-ħajt.
 - **Usage Examples**:
-  - MT: Barraxa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barraxa was in its proper place in daily use.
+  - MT: Uża l-barraxa biex neħħa ż-żebgħa l-qadima.
+    EN: He used the scraper to remove the old paint.
 
 ---
 
@@ -1577,10 +1271,7 @@ Total Entries: 856
 - **Root**: b-r-r
 - **Definitions**:
   - **EN**: rural, wild
-    **MT**: Tifsira u deskrizzjoni ta' 'barri': rural, wild.
-- **Usage Examples**:
-  - MT: Barri kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barri was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' barri fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1589,13 +1280,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-r-r
 - **Definitions**:
-  - **EN**: bull
-    **MT**: Tifsira u deskrizzjoni ta' 'barri': bull.
-  - **EN**: strong
-    **MT**: Tifsira u deskrizzjoni ta' 'barri': strong.
+  - **EN**: bull / strong person
+    **MT**: Annimal maskil kbir jew persuna li għandha saħħa kbira.
 - **Usage Examples**:
-  - MT: Barri kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barri was in its proper place in daily use.
+  - MT: Il-barri kien qed jimxi fir-raba' b'qawwa.
+    EN: The bull was walking in the field with strength.
 
 ---
 
@@ -1603,11 +1292,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: quarry
-    **MT**: Tifsira u deskrizzjoni ta' 'barriera': quarry.
+  - **EN**: quarry / barrier
+    **MT**: Post fejn jinqata' l-ġebel fil-gżira.
 - **Usage Examples**:
-  - MT: Barriera kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barriera was in its proper place in daily use.
+  - MT: Qatgħu l-blat mill-barriera nazzjonali.
+    EN: They cut stone from the national quarry.
 
 ---
 
@@ -1616,14 +1305,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: barrier
-    **MT**: Tifsira u deskrizzjoni ta' 'barriera': barrier.
-- **Usage Examples**:
-  - MT: Barriera kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barriera was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' barriera fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## barważ (v-barważ) 🌟 *(REVISED TARGET ENTRY)*
+## barważ (v-barważ)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to cause hernia
@@ -1633,9 +1319,6 @@ Total Entries: 856
   - **EN**: to talk confusedly
     **MT**: Tkellem b'mod mħawwad u mhux ċar.
 - **Alternative Forms**: bażwar
-- **Usage Examples**:
-  - MT: Barważ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of barważ correctly and without delay.
 
 ---
 
@@ -1645,10 +1328,10 @@ Total Entries: 856
 - **Root**: b-r-x
 - **Definitions**:
   - **EN**: a scratch
-    **MT**: Tifsira u deskrizzjoni ta' 'barxa': a scratch.
+    **MT**: Marka jew ksur żgħir fuq il-ġilda jew oġġett.
 - **Usage Examples**:
-  - MT: Barxa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barxa was in its proper place in daily use.
+  - MT: Kellu barxa żgħira fuq idu minħabba l-injam.
+    EN: He had a small scratch on his hand from the wood.
 
 ---
 
@@ -1657,10 +1340,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: peptic ulcer
-    **MT**: Tifsira u deskrizzjoni ta' 'barxa fl-istonku': peptic ulcer.
-- **Usage Examples**:
-  - MT: Barxa fl-istonku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barxa fl-istonku was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' barxa fl-istonku fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1669,10 +1349,10 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: knapsack, haversack
-    **MT**: Tifsira u deskrizzjoni ta' 'barżakka': knapsack, haversack.
+    **MT**: Baskt kbir li jinġarr fuq id-dahar.
 - **Usage Examples**:
-  - MT: Barżakka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The barżakka was in its proper place in daily use.
+  - MT: Mela l-barżakka bil-provvisti qabel il-vjaġġ.
+    EN: He filled the knapsack with supplies before the trip.
 
 ---
 
@@ -1680,15 +1360,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: onion (as a mass or species)
-    **MT**: Tifsira u deskrizzjoni ta' 'basal': onion (as a mass or species).
-  - **EN**: several onions
-    **MT**: Tifsira u deskrizzjoni ta' 'basal': several onions.
-  - **EN**: bulbs
-    **MT**: Tifsira u deskrizzjoni ta' 'basal': bulbs.
+  - **EN**: onion, onions
+    **MT**: Ħaxix użat fit-tisjir li jagħti togħma u riħa.
 - **Usage Examples**:
-  - MT: Basal kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The basal was in its proper place in daily use.
+  - MT: Qata' l-basal u qaljahom fit-tqanqila.
+    EN: He chopped the onions and fried them in the pan.
 
 ---
 
@@ -1697,14 +1373,14 @@ Total Entries: 856
 - **Root**: b-s-r
 - **Definitions**:
   - **EN**: to foresee, foretell, predict
-    **MT**: Tifsira u deskrizzjoni ta' 'basar': to foresee, foretell, predict.
+    **MT**: Predikament dwar dak li se jseħħ fil-futur.
 - **Usage Examples**:
-  - MT: Basar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of basar correctly and without delay.
+  - MT: Basar li se tkun sena tajba għar-raba'.
+    EN: He predicted it would be a good year for crops.
 
 ---
 
-## basi (n-basi) 🌟 *(REVISED TARGET ENTRY)*
+## basi (n-basi)
 - **POS**: noun
 - **Definitions**:
   - **EN**: base
@@ -1714,9 +1390,6 @@ Total Entries: 856
   - **EN**: base
     **MT**: Sustanza kimika li tirreaġixxi ma' aċidu.
 - **Alternative Forms**: bażi
-- **Usage Examples**:
-  - MT: Basi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The basi was in its proper place in daily use.
 
 ---
 
@@ -1725,11 +1398,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-s-r
 - **Definitions**:
-  - **EN**: a prediction
-    **MT**: Tifsira u deskrizzjoni ta' 'basra': a prediction.
+  - **EN**: prediction, forecast
+    **MT**: Tbassir u riżultat mistenni minn qabel.
 - **Usage Examples**:
-  - MT: Basra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The basra was in its proper place in daily use.
+  - MT: Il-basra dwar il-temp kienet korretta.
+    EN: The weather forecast was correct.
 
 ---
 
@@ -1738,11 +1411,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-s-s
 - **Definitions**:
-  - **EN**: farting
-    **MT**: Tifsira u deskrizzjoni ta' 'bass': farting.
+  - **EN**: farting / bus
+    **MT**: Vettura kbira użata għat-trasport jew riħ mil-ġisem.
 - **Usage Examples**:
-  - MT: Bass kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bass was in its proper place in daily use.
+  - MT: Rkbu fuq il-bass biex marru l-belt.
+    EN: They got on the bus to go to the city.
 
 ---
 
@@ -1752,10 +1425,7 @@ Total Entries: 856
 - **Root**: b-s-s
 - **Definitions**:
   - **EN**: bus
-    **MT**: Tifsira u deskrizzjoni ta' 'bass': bus.
-- **Usage Examples**:
-  - MT: Bass kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bass was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bass fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1763,13 +1433,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-s-s
 - **Definitions**:
-  - **EN**: to fart loudly
-    **MT**: Tifsira u deskrizzjoni ta' 'bass': to fart loudly.
-  - **EN**: to boo (someone)
-    **MT**: Tifsira u deskrizzjoni ta' 'bass': to boo (someone).
+  - **EN**: to fart / boo someone
+    **MT**: Għamel storbju f'disprezz jew minn ġisem.
 - **Usage Examples**:
-  - MT: Bass l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bass correctly and without delay.
+  - MT: Għamlu u bassu f'rabja fis-sala.
+    EN: They booed in anger in the hall.
 
 ---
 
@@ -1778,63 +1446,59 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-s-s
 - **Definitions**:
-  - **EN**: a fart
-    **MT**: Tifsira u deskrizzjoni ta' 'bassa': a fart.
-  - **EN**: a meddler
-    **MT**: Tifsira u deskrizzjoni ta' 'bassa': a meddler.
+  - **EN**: a fart / meddler
+    **MT**: Persuna li tidħol fejn ma jidħolx fuq l-oħrajn.
 - **Usage Examples**:
-  - MT: Bassa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bassa was in its proper place in daily use.
+  - MT: Kelma tradizzjonali fil-lingwa.
+    EN: Traditional word in language.
 
 ---
 
-## bast (intj-bast) 🌟 *(REVISED TARGET ENTRY)*
+## bast (intj-bast)
 - **POS**: interjection
 - **Definitions**:
   - **EN**: enough, stop, shut up
     **MT**: Kelma użata biex twaqqaf azzjoni jew tgħid biżżejjed.
 - **Alternative Forms**: basta
 - **Usage Examples**:
-  - MT: Bast kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bast was in its proper place in daily use.
+  - MT: Jiġi l-post basta jkun hemm id-dwal.
+    EN: He will come provided there are lights.
 
 ---
 
-## bast (prep-bast) 🌟 *(REVISED TARGET ENTRY)*
+## bast (prep-bast)
 - **POS**: preposition
 - **Definitions**:
   - **EN**: provided that
     **MT**: B'kundizzjoni li jew kemm jekk.
 - **Alternative Forms**: basta
 - **Usage Examples**:
-  - MT: Bast kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bast was in its proper place in daily use.
+  - MT: Jiġi l-post basta jkun hemm id-dwal.
+    EN: He will come provided there are lights.
 
 ---
 
 ## basta (intj-basta)
 - **POS**: interjection
 - **Definitions**:
-  - **EN**: enough, stop, shut up
-    **MT**: Tifsira u deskrizzjoni ta' 'basta': enough, stop, shut up.
+  - **EN**: enough!, stop!
+    **MT**: Esklamazzjoni biex tiżgura li azzjoni tieqaf.
 - **Alternative Forms**: bast
 - **Usage Examples**:
-  - MT: Basta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The basta was in its proper place in daily use.
+  - MT: Għajjat 'basta!' biex twaqqaf it-tħasbix.
+    EN: He shouted 'enough!' to stop the noise.
 
 ---
 
 ## basta (prep-basta)
 - **POS**: preposition
 - **Definitions**:
-  - **EN**: so long as, provided
-    **MT**: Tifsira u deskrizzjoni ta' 'basta': so long as, provided.
-  - **EN**: in spite of
-    **MT**: Tifsira u deskrizzjoni ta' 'basta': in spite of.
+  - **EN**: provided that, so long as
+    **MT**: Prepożizzjoni użata għal kundizzjoni.
 - **Alternative Forms**: bast
 - **Usage Examples**:
-  - MT: Basta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The basta was in its proper place in daily use.
+  - MT: Jiġi l-post basta jkun hemm id-dwal.
+    EN: He will come provided there are lights.
 
 ---
 
@@ -1842,11 +1506,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: cane, stick, staff
-    **MT**: Tifsira u deskrizzjoni ta' 'bastun': cane, stick, staff.
+  - **EN**: cane, walking stick
+    **MT**: Għodda ta' injam jew metall użata biex tassisti fil-mossa.
 - **Usage Examples**:
-  - MT: Bastun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bastun was in its proper place in daily use.
+  - MT: L-anzjan mar jimxi bil-bastun f'idu.
+    EN: The elderly man went walking with a stick in his hand.
 
 ---
 
@@ -1855,10 +1519,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: hollyhock, Alcea rosea
-    **MT**: Tifsira u deskrizzjoni ta' 'bastun ta' San Ġuzepp': hollyhock, Alcea rosea.
-- **Usage Examples**:
-  - MT: Bastun ta' san ġuzepp kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bastun ta' San Ġuzepp was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bastun ta' San Ġuzepp fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1867,10 +1528,10 @@ Total Entries: 856
 - **Root**: b-t-j
 - **Definitions**:
   - **EN**: to suffer
-    **MT**: Tifsira u deskrizzjoni ta' 'bata': to suffer.
+    **MT**: Sofra uġigħ jew diffikultà kbira fil-ħajja.
 - **Usage Examples**:
-  - MT: Bata l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bata correctly and without delay.
+  - MT: Bata mill-marda sakemm rċieva l-kura.
+    EN: He suffered from the illness until receiving care.
 
 ---
 
@@ -1878,13 +1539,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-t-l
 - **Definitions**:
-  - **EN**: to become vacant, empty
-    **MT**: Tifsira u deskrizzjoni ta' 'batal': to become vacant, empty.
-  - **EN**: to take a break
-    **MT**: Tifsira u deskrizzjoni ta' 'batal': to take a break.
+  - **EN**: to become vacant / take a break
+    **MT**: Ħalla l-kariga jew xogħol u ħa mistrieħ.
 - **Usage Examples**:
-  - MT: Batal l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of batal correctly and without delay.
+  - MT: Batal mix-xogħol matul ix-xitwa.
+    EN: He took a break from work during winter.
 
 ---
 
@@ -1892,13 +1551,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-t-n
 - **Definitions**:
-  - **EN**: to give birth, to breed (of animals)
-    **MT**: Tifsira u deskrizzjoni ta' 'batan': to give birth, to breed (of animals).
-  - **EN**: to conceive (an idea)
-    **MT**: Tifsira u deskrizzjoni ta' 'batan': to conceive (an idea).
+  - **EN**: to give birth (animals), conceive
+    **MT**: Għamlet il-frieħ l-annimal fil-mandra.
 - **Usage Examples**:
-  - MT: Batan l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of batan correctly and without delay.
+  - MT: Il-baqra batanet tifel ġdid fir-raba'.
+    EN: The cow gave birth to a calf in the field.
 
 ---
 
@@ -1906,13 +1563,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-t-r
 - **Definitions**:
-  - **EN**: to dock (to cut off a section of an animal's tail)
-    **MT**: Tifsira u deskrizzjoni ta' 'batar': to dock (to cut off a section of an animal's tail).
-  - **EN**: to counterbalance (to apply weight in order to balance)
-    **MT**: Tifsira u deskrizzjoni ta' 'batar': to counterbalance (to apply weight in order to balance).
+  - **EN**: to dock tail / counterbalance
+    **MT**: Qata' parti mir-denb jew għamel bil-pożizzjoni.
 - **Usage Examples**:
-  - MT: Batar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of batar correctly and without delay.
+  - MT: Batar ir-denb tal-kelb b'kawtela.
+    EN: He docked the dog's tail carefully.
 
 ---
 
@@ -1921,10 +1576,7 @@ Total Entries: 856
 - **Root**: b-t-j
 - **Definitions**:
   - **EN**: light, slight, slow
-    **MT**: Tifsira u deskrizzjoni ta' 'bati': light, slight, slow.
-- **Usage Examples**:
-  - MT: Bati kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bati was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bati fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1932,11 +1584,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-t-j
 - **Definitions**:
-  - **EN**: to abate, subside
-    **MT**: Tifsira u deskrizzjoni ta' 'batta': to abate, subside.
+  - **EN**: to abate, subside / knock
+    **MT**: Naqqas il-forza jew ħabat fuq il-bieb.
 - **Usage Examples**:
-  - MT: Batta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of batta correctly and without delay.
+  - MT: Ix-xita battat wara s-siegħa kollha.
+    EN: The rain subsided after the full hour.
 
 ---
 
@@ -1945,12 +1597,9 @@ Total Entries: 856
 - **Root**: b-t-j
 - **Definitions**:
   - **EN**: to knock, beat
-    **MT**: Tifsira u deskrizzjoni ta' 'batta': to knock, beat.
+    **MT**: Li għandu x'jaqsam ma' batta fl-użu u t-tifsira uffiċjali.
   - **EN**: to knock over
-    **MT**: Tifsira u deskrizzjoni ta' 'batta': to knock over.
-- **Usage Examples**:
-  - MT: Batta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of batta correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' batta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1958,13 +1607,11 @@ Total Entries: 856
 - **POS**: adjective
 - **Root**: b-t-l
 - **Definitions**:
-  - **EN**: vacant (house, position etc.)
-    **MT**: Tifsira u deskrizzjoni ta' 'battal': vacant (house, position etc.).
-  - **EN**: empty
-    **MT**: Tifsira u deskrizzjoni ta' 'battal': empty.
+  - **EN**: vacant, empty
+    **MT**: Dar jew post fejn ma hemm ebda kontenut jew persuna.
 - **Usage Examples**:
-  - MT: Battal kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The battal was in its proper place in daily use.
+  - MT: Post battal li kien miftuħ għall-kera.
+    EN: A vacant place that was open for rent.
 
 ---
 
@@ -1973,12 +1620,9 @@ Total Entries: 856
 - **Root**: b-t-l
 - **Definitions**:
   - **EN**: to empty
-    **MT**: Tifsira u deskrizzjoni ta' 'battal': to empty.
+    **MT**: Li għandu x'jaqsam ma' battal fl-użu u t-tifsira uffiċjali.
   - **EN**: to vacate
-    **MT**: Tifsira u deskrizzjoni ta' 'battal': to vacate.
-- **Usage Examples**:
-  - MT: Battal l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of battal correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' battal fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1987,11 +1631,8 @@ Total Entries: 856
 - **Root**: b-t-m
 - **Definitions**:
   - **EN**: to plaster the walls
-    **MT**: Tifsira u deskrizzjoni ta' 'battam': to plaster the walls.
+    **MT**: Li għandu x'jaqsam ma' battam fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bbattma
-- **Usage Examples**:
-  - MT: Battam l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of battam correctly and without delay.
 
 ---
 
@@ -2000,10 +1641,7 @@ Total Entries: 856
 - **Root**: b-x-r
 - **Definitions**:
   - **EN**: to announce, to bring news (usually of good news)
-    **MT**: Tifsira u deskrizzjoni ta' 'baxar': to announce, to bring news (usually of good news).
-- **Usage Examples**:
-  - MT: Baxar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baxar correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baxar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2011,10 +1649,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: low, down
-    **MT**: Tifsira u deskrizzjoni ta' 'baxx': low, down.
-- **Usage Examples**:
-  - MT: Baxx kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baxx was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baxx fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2024,10 +1659,7 @@ Total Entries: 856
 - **Root**: b-x-j
 - **Definitions**:
   - **EN**: feminine singular of baxx
-    **MT**: Tifsira u deskrizzjoni ta' 'baxxa': feminine singular of baxx.
-- **Usage Examples**:
-  - MT: Baxxa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baxxa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baxxa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2036,10 +1668,7 @@ Total Entries: 856
 - **Root**: b-x-j
 - **Definitions**:
   - **EN**: to lower
-    **MT**: Tifsira u deskrizzjoni ta' 'baxxa': to lower.
-- **Usage Examples**:
-  - MT: Baxxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baxxa correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baxxa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2049,10 +1678,7 @@ Total Entries: 856
 - **Root**: b-x-r
 - **Definitions**:
   - **EN**: agent noun of baxar and baxxar: announcer, bringer of good news
-    **MT**: Tifsira u deskrizzjoni ta' 'baxxar': agent noun of baxar and baxxar: announcer, bringer of good news.
-- **Usage Examples**:
-  - MT: Baxxar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baxxar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baxxar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2061,10 +1687,7 @@ Total Entries: 856
 - **Root**: b-x-r
 - **Definitions**:
   - **EN**: synonym of baxar
-    **MT**: Tifsira u deskrizzjoni ta' 'baxxar': synonym of baxar.
-- **Usage Examples**:
-  - MT: Baxxar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baxxar correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baxxar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2073,13 +1696,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: pasha
-    **MT**: Tifsira u deskrizzjoni ta' 'baxà': pasha.
+    **MT**: Li għandu x'jaqsam ma' baxà fl-użu u t-tifsira uffiċjali.
   - **EN**: one who is often easily pleased by others
-    **MT**: Tifsira u deskrizzjoni ta' 'baxà': one who is often easily pleased by others.
+    **MT**: Li għandu x'jaqsam ma' baxà fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: paxà
-- **Usage Examples**:
-  - MT: Baxà kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baxà was in its proper place in daily use.
 
 ---
 
@@ -2088,10 +1708,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: a Maltese variant of bezique
-    **MT**: Tifsira u deskrizzjoni ta' 'bazzika': a Maltese variant of bezique.
-- **Usage Examples**:
-  - MT: Bazzika kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bazzika was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bazzika fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2100,10 +1717,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bachelor 's degree
-    **MT**: Tifsira u deskrizzjoni ta' 'baċellerat': bachelor 's degree.
-- **Usage Examples**:
-  - MT: Baċellerat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baċellerat was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baċellerat fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2112,10 +1726,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bachelor (person who has achieved bachelor's degree)
-    **MT**: Tifsira u deskrizzjoni ta' 'baċellier': bachelor (person who has achieved bachelor's degree).
-- **Usage Examples**:
-  - MT: Baċellier kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baċellier was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baċellier fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2124,11 +1735,8 @@ Total Entries: 856
 - **Root**: b-ċ-n
 - **Definitions**:
   - **EN**: to fatten
-    **MT**: Tifsira u deskrizzjoni ta' 'beċċen': to fatten.
+    **MT**: Li għandu x'jaqsam ma' beċċen fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: beċċen
-- **Usage Examples**:
-  - MT: Baċċan l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baċċan correctly and without delay.
 
 ---
 
@@ -2137,10 +1745,7 @@ Total Entries: 856
 - **Root**: b-ċ-ċ
 - **Definitions**:
   - **EN**: to make chubby
-    **MT**: Tifsira u deskrizzjoni ta' 'baċċaċ': to make chubby.
-- **Usage Examples**:
-  - MT: Baċċaċ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baċċaċ correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baċċaċ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2149,11 +1754,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: budget
-    **MT**: Tifsira u deskrizzjoni ta' 'baġit': budget.
+    **MT**: Li għandu x'jaqsam ma' baġit fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: budget
 - **Usage Examples**:
-  - MT: Baġit kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baġit was in its proper place in daily use.
+  - MT: Approvaw il-budget nazzjonali fil-parlament.
+    EN: They approved the national budget in parliament.
 
 ---
 
@@ -2161,10 +1766,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Bahamas (an archipelago and country in the Caribbean)
-    **MT**: Tifsira u deskrizzjoni ta' 'Baħamas': Bahamas (an archipelago and country in the Caribbean).
-- **Usage Examples**:
-  - MT: Baħamas kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Baħamas was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Baħamas fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2174,14 +1776,11 @@ Total Entries: 856
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: sea
-    **MT**: Tifsira u deskrizzjoni ta' 'baħar': sea.
+    **MT**: Li għandu x'jaqsam ma' baħar fl-użu u t-tifsira uffiċjali.
   - **EN**: ocean
-    **MT**: Tifsira u deskrizzjoni ta' 'baħar': ocean.
+    **MT**: Li għandu x'jaqsam ma' baħar fl-użu u t-tifsira uffiċjali.
   - **EN**: abundance, big quantity
-    **MT**: Tifsira u deskrizzjoni ta' 'baħar': abundance, big quantity.
-- **Usage Examples**:
-  - MT: Baħar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2189,10 +1788,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Adriatic Sea
-    **MT**: Tifsira u deskrizzjoni ta' 'Baħar Adrijatiku': Adriatic Sea.
-- **Usage Examples**:
-  - MT: Baħar adrijatiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Baħar Adrijatiku was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Baħar Adrijatiku fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2200,10 +1796,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: the Ionian Sea
-    **MT**: Tifsira u deskrizzjoni ta' 'Baħar Jonju': the Ionian Sea.
-- **Usage Examples**:
-  - MT: Baħar jonju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Baħar Jonju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Baħar Jonju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2211,10 +1804,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Caribbean Sea
-    **MT**: Tifsira u deskrizzjoni ta' 'Baħar Karibew': Caribbean Sea.
-- **Usage Examples**:
-  - MT: Baħar karibew kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Baħar Karibew was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Baħar Karibew fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2222,10 +1812,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Red Sea
-    **MT**: Tifsira u deskrizzjoni ta' 'Baħar l-Aħmar': Red Sea.
-- **Usage Examples**:
-  - MT: Baħar l-aħmar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Baħar l-Aħmar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Baħar l-Aħmar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2233,10 +1820,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: the Yellow Sea
-    **MT**: Tifsira u deskrizzjoni ta' 'Baħar l-Isfar': the Yellow Sea.
-- **Usage Examples**:
-  - MT: Baħar l-isfar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Baħar l-Isfar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Baħar l-Isfar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2245,10 +1829,7 @@ Total Entries: 856
 - **Root**: b-ħ-t
 - **Definitions**:
   - **EN**: to slander
-    **MT**: Tifsira u deskrizzjoni ta' 'baħat': to slander.
-- **Usage Examples**:
-  - MT: Baħat l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baħat correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baħat fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2257,10 +1838,7 @@ Total Entries: 856
 - **Root**: b-ħ-b-ħ
 - **Definitions**:
   - **EN**: to wash, to rinse
-    **MT**: Tifsira u deskrizzjoni ta' 'baħbaħ': to wash, to rinse.
-- **Usage Examples**:
-  - MT: Baħbaħ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baħbaħ correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baħbaħ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2269,10 +1847,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: cowries
-    **MT**: Tifsira u deskrizzjoni ta' 'baħbuħ': cowries.
-- **Usage Examples**:
-  - MT: Baħbuħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħbuħ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħbuħ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2281,10 +1856,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: hail fellow well met
-    **MT**: Tifsira u deskrizzjoni ta' 'baħbuħ': hail fellow well met.
-- **Usage Examples**:
-  - MT: Baħbuħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħbuħ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħbuħ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2293,10 +1865,7 @@ Total Entries: 856
 - **Root**: b-ħ-n-n
 - **Definitions**:
   - **EN**: simple-minded, foolish, unwise
-    **MT**: Tifsira u deskrizzjoni ta' 'baħnan': simple-minded, foolish, unwise.
-- **Usage Examples**:
-  - MT: Baħnan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħnan was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħnan fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2306,10 +1875,7 @@ Total Entries: 856
 - **Root**: b-ħ-n-n
 - **Definitions**:
   - **EN**: foolish action, silly act
-    **MT**: Tifsira u deskrizzjoni ta' 'baħnanata': foolish action, silly act.
-- **Usage Examples**:
-  - MT: Baħnanata kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħnanata was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħnanata fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2319,10 +1885,7 @@ Total Entries: 856
 - **Root**: b-ħ-n-n
 - **Definitions**:
   - **EN**: synonym of baħnanata
-    **MT**: Tifsira u deskrizzjoni ta' 'baħnunija': synonym of baħnanata.
-- **Usage Examples**:
-  - MT: Baħnunija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħnunija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħnunija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2330,10 +1893,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Bahrain (an archipelago, island, and country in West Asia in the Persian Gulf)
-    **MT**: Tifsira u deskrizzjoni ta' 'Baħrejn': Bahrain (an archipelago, island, and country in West Asia in the Persian Gulf).
-- **Usage Examples**:
-  - MT: Baħrejn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Baħrejn was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Baħrejn fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2342,10 +1902,7 @@ Total Entries: 856
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: maritime
-    **MT**: Tifsira u deskrizzjoni ta' 'baħri': maritime.
-- **Usage Examples**:
-  - MT: Baħri kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħri was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħri fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2355,10 +1912,7 @@ Total Entries: 856
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: sailor
-    **MT**: Tifsira u deskrizzjoni ta' 'baħri': sailor.
-- **Usage Examples**:
-  - MT: Baħri kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħri was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħri fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2366,12 +1920,9 @@ Total Entries: 856
 - **POS**: interjection
 - **Definitions**:
   - **EN**: there it went!
-    **MT**: Tifsira u deskrizzjoni ta' 'baħħ': there it went!.
+    **MT**: Li għandu x'jaqsam ma' baħħ fl-użu u t-tifsira uffiċjali.
   - **EN**: all gone !
-    **MT**: Tifsira u deskrizzjoni ta' 'baħħ': all gone !.
-- **Usage Examples**:
-  - MT: Baħħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħħ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħħ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2380,10 +1931,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: void, emptiness, a state of being deserted
-    **MT**: Tifsira u deskrizzjoni ta' 'baħħ': void, emptiness, a state of being deserted.
-- **Usage Examples**:
-  - MT: Baħħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħħ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħħ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2393,10 +1941,7 @@ Total Entries: 856
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: sailor
-    **MT**: Tifsira u deskrizzjoni ta' 'baħħar': sailor.
-- **Usage Examples**:
-  - MT: Baħħar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħħar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħħar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2405,10 +1950,7 @@ Total Entries: 856
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: to sail
-    **MT**: Tifsira u deskrizzjoni ta' 'baħħar': to sail.
-- **Usage Examples**:
-  - MT: Baħħar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baħħar correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baħħar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2417,10 +1959,7 @@ Total Entries: 856
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: to fumigate
-    **MT**: Tifsira u deskrizzjoni ta' 'baħħar': to fumigate.
-- **Usage Examples**:
-  - MT: Baħħar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baħħar correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' baħħar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2430,34 +1969,25 @@ Total Entries: 856
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: female equivalent of baħħar
-    **MT**: Forma femminili ta' baħħar.
-- **Usage Examples**:
-  - MT: Baħħara kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħħara was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' baħħara fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## baħħara (n-baħħara-2) 🌟 *(REVISED TARGET ENTRY)*
+## baħħara (n-baħħara-2)
 - **POS**: noun
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: plural of baħħar: sailors, mariners
     **MT**: Il-plural tal-kelma baħħar: il-marinar u l-ekwipaġġ li jaħdmu fuq il-vapuri.
-- **Usage Examples**:
-  - MT: Baħħara kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The baħħara was in its proper place in daily use.
 
 ---
 
-## baża’ (v-baża) 🌟 *(REVISED TARGET ENTRY)*
+## baża’ (v-baża)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to fear, to be afraid
     **MT**: Ħass il-biża' jew il-biża' minn periklu.
 - **Alternative Forms**: beża', beża’
-- **Usage Examples**:
-  - MT: Baża’ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of baża’ correctly and without delay.
 
 ---
 
@@ -2466,15 +1996,12 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: base
-    **MT**: Tifsira u deskrizzjoni ta' 'bażi': base.
+    **MT**: Li għandu x'jaqsam ma' bażi fl-użu u t-tifsira uffiċjali.
   - **EN**: basis
-    **MT**: Tifsira u deskrizzjoni ta' 'bażi': basis.
+    **MT**: Li għandu x'jaqsam ma' bażi fl-użu u t-tifsira uffiċjali.
   - **EN**: base
-    **MT**: Tifsira u deskrizzjoni ta' 'bażi': base.
+    **MT**: Li għandu x'jaqsam ma' bażi fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: basi
-- **Usage Examples**:
-  - MT: Bażi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażi was in its proper place in daily use.
 
 ---
 
@@ -2482,10 +2009,7 @@ Total Entries: 856
 - **POS**: adverb
 - **Definitions**:
   - **EN**: basically
-    **MT**: Tifsira u deskrizzjoni ta' 'bażikament': basically.
-- **Usage Examples**:
-  - MT: Bażikament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażikament was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bażikament fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2493,10 +2017,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: basic
-    **MT**: Tifsira u deskrizzjoni ta' 'bażiku': basic.
-- **Usage Examples**:
-  - MT: Bażiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażiku was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bażiku fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2505,11 +2026,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bigot
-    **MT**: Tifsira u deskrizzjoni ta' 'bażokk': bigot.
+    **MT**: Li għandu x'jaqsam ma' bażokk fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bażokk
-- **Usage Examples**:
-  - MT: Bażlokk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażlokk was in its proper place in daily use.
 
 ---
 
@@ -2518,11 +2036,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bigot
-    **MT**: Tifsira u deskrizzjoni ta' 'bażokk': bigot.
+    **MT**: Li għandu x'jaqsam ma' bażokk fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bażlokk
-- **Usage Examples**:
-  - MT: Bażokk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażokk was in its proper place in daily use.
 
 ---
 
@@ -2531,11 +2046,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bigot
-    **MT**: Tifsira u deskrizzjoni ta' 'bażokk': bigot.
+    **MT**: Li għandu x'jaqsam ma' bażokk fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bażokk
-- **Usage Examples**:
-  - MT: Bażokka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażokka was in its proper place in daily use.
 
 ---
 
@@ -2544,10 +2056,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: female equivalent of bażokk: female bigot
-    **MT**: Forma femminili ta' bażokk: female bigot.
-- **Usage Examples**:
-  - MT: Bażokka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażokka was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bażokka fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2556,10 +2065,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: bigotry
-    **MT**: Tifsira u deskrizzjoni ta' 'bażokkerija': bigotry.
-- **Usage Examples**:
-  - MT: Bażokkerija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażokkerija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bażokkerija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2568,10 +2074,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: clownish jest
-    **MT**: Tifsira u deskrizzjoni ta' 'bażuffjata': clownish jest.
-- **Usage Examples**:
-  - MT: Bażuffjata kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażuffjata was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bażuffjata fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2581,10 +2084,7 @@ Total Entries: 856
 - **Root**: b-ż-w
 - **Definitions**:
   - **EN**: hernia
-    **MT**: Tifsira u deskrizzjoni ta' 'bażwa': hernia.
-- **Usage Examples**:
-  - MT: Bażwa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażwa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bażwa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2593,17 +2093,14 @@ Total Entries: 856
 - **Root**: b-ż-w-r
 - **Definitions**:
   - **EN**: to cause hernia
-    **MT**: Tifsira u deskrizzjoni ta' 'bażwar': to cause hernia.
+    **MT**: Li għandu x'jaqsam ma' bażwar fl-użu u t-tifsira uffiċjali.
   - **EN**: to perform clumsy work
-    **MT**: Tifsira u deskrizzjoni ta' 'bażwar': to perform clumsy work.
+    **MT**: Li għandu x'jaqsam ma' bażwar fl-użu u t-tifsira uffiċjali.
   - **EN**: to talk confusedly
-    **MT**: Tifsira u deskrizzjoni ta' 'bażwar': to talk confusedly.
+    **MT**: Li għandu x'jaqsam ma' bażwar fl-użu u t-tifsira uffiċjali.
   - **EN**: to discombobulate
-    **MT**: Tifsira u deskrizzjoni ta' 'bażwar': to discombobulate.
+    **MT**: Li għandu x'jaqsam ma' bażwar fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: barważ
-- **Usage Examples**:
-  - MT: Bażwar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bażwar correctly and without delay.
 
 ---
 
@@ -2612,26 +2109,23 @@ Total Entries: 856
 - **Root**: b-ż-w
 - **Definitions**:
   - **EN**: hernial
-    **MT**: Tifsira u deskrizzjoni ta' 'bażwi': hernial.
+    **MT**: Li għandu x'jaqsam ma' bażwi fl-użu u t-tifsira uffiċjali.
   - **EN**: suffering from hernia
-    **MT**: Tifsira u deskrizzjoni ta' 'bażwi': suffering from hernia.
+    **MT**: Li għandu x'jaqsam ma' bażwi fl-użu u t-tifsira uffiċjali.
   - **EN**: unenergetic
-    **MT**: Tifsira u deskrizzjoni ta' 'bażwi': unenergetic.
-- **Usage Examples**:
-  - MT: Bażwi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bażwi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bażwi fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bażża’ (v-bażża) 🌟 *(REVISED TARGET ENTRY)*
+## bażża’ (v-bażża)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to frighten, to scare
     **MT**: Ġiegħel lil xi ħadd iħoss il-biża'.
 - **Alternative Forms**: beżża', beżża’
 - **Usage Examples**:
-  - MT: Bażża’ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bażża’ correctly and without delay.
+  - MT: Il-ħoss kbir beżża' lit-tfal fil-kamra.
+    EN: The loud noise frightened the children in the room.
 
 ---
 
@@ -2639,10 +2133,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to be reluctant
-    **MT**: Tifsira u deskrizzjoni ta' 'bbada': to be reluctant.
-- **Usage Examples**:
-  - MT: Bbada l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbada correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbada fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2650,10 +2141,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to buff (to polish and make shiny)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbaffja': to buff (to polish and make shiny).
-- **Usage Examples**:
-  - MT: Bbaffja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbaffja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbaffja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2661,10 +2149,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to mock, to wrong (someone)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbajja': to mock, to wrong (someone).
-- **Usage Examples**:
-  - MT: Bbajja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbajja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbajja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2672,10 +2157,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bind (a book)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbajndja': to bind (a book).
-- **Usage Examples**:
-  - MT: Bbajndja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbajndja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbajndja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2683,11 +2165,8 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to back, to support
-    **MT**: Tifsira u deskrizzjoni ta' 'bbekkja': to back, to support.
+    **MT**: Li għandu x'jaqsam ma' bbekkja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bbekkja
-- **Usage Examples**:
-  - MT: Bbakkja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbakkja correctly and without delay.
 
 ---
 
@@ -2695,13 +2174,10 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to oscilate
-    **MT**: Tifsira u deskrizzjoni ta' 'bbalija': to oscilate.
+    **MT**: Li għandu x'jaqsam ma' bbalija fl-użu u t-tifsira uffiċjali.
   - **EN**: to be unsteady
-    **MT**: Tifsira u deskrizzjoni ta' 'bbalija': to be unsteady.
+    **MT**: Li għandu x'jaqsam ma' bbalija fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: balja
-- **Usage Examples**:
-  - MT: Bbalija l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbalija correctly and without delay.
 
 ---
 
@@ -2709,11 +2185,8 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to abate, to calm down
-    **MT**: Tifsira u deskrizzjoni ta' 'bbalka': to abate, to calm down.
+    **MT**: Li għandu x'jaqsam ma' bbalka fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: balka
-- **Usage Examples**:
-  - MT: Bbalka l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbalka correctly and without delay.
 
 ---
 
@@ -2721,10 +2194,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to forecast the weather by observation
-    **MT**: Tifsira u deskrizzjoni ta' 'bballastra': to forecast the weather by observation.
-- **Usage Examples**:
-  - MT: Bballastra l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bballastra correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bballastra fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2732,10 +2202,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to restrain from playing a better card for a later strategy (Is there an English equivalent to this definition?)
-    **MT**: Tifsira u deskrizzjoni ta' 'bballottra': to restrain from playing a better card for a later strategy (Is there an English equivalent to this definition?).
-- **Usage Examples**:
-  - MT: Bballottra l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bballottra correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bballottra fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2743,10 +2210,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to embalm
-    **MT**: Tifsira u deskrizzjoni ta' 'bbalzma': to embalm.
-- **Usage Examples**:
-  - MT: Bbalzma l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbalzma correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbalzma fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2754,13 +2218,10 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to act childishly
-    **MT**: Tifsira u deskrizzjoni ta' 'bbamboċċa': to act childishly.
+    **MT**: Li għandu x'jaqsam ma' bbamboċċa fl-użu u t-tifsira uffiċjali.
   - **EN**: to treat someone as a child
-    **MT**: Tifsira u deskrizzjoni ta' 'bbamboċċa': to treat someone as a child.
+    **MT**: Li għandu x'jaqsam ma' bbamboċċa fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: ppapoċċa
-- **Usage Examples**:
-  - MT: Bbamboċċa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbamboċċa correctly and without delay.
 
 ---
 
@@ -2768,10 +2229,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bum, to loaf, to sponge
-    **MT**: Tifsira u deskrizzjoni ta' 'bbammja': to bum, to loaf, to sponge.
-- **Usage Examples**:
-  - MT: Bbammja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbammja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbammja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2779,10 +2237,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to banquet, to take part in a banquet
-    **MT**: Tifsira u deskrizzjoni ta' 'bbanketta': to banquet, to take part in a banquet.
-- **Usage Examples**:
-  - MT: Bbanketta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbanketta correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbanketta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2790,12 +2245,9 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bank
-    **MT**: Tifsira u deskrizzjoni ta' 'bbankja': to bank.
+    **MT**: Li għandu x'jaqsam ma' bbankja fl-użu u t-tifsira uffiċjali.
   - **EN**: to put into a bank
-    **MT**: Tifsira u deskrizzjoni ta' 'bbankja': to put into a bank.
-- **Usage Examples**:
-  - MT: Bbankja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbankja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbankja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2803,11 +2255,8 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to suffice, to be enough
-    **MT**: Tifsira u deskrizzjoni ta' 'bbasta': to suffice, to be enough.
+    **MT**: Li għandu x'jaqsam ma' bbasta fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: abbasta
-- **Usage Examples**:
-  - MT: Bbasta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbasta correctly and without delay.
 
 ---
 
@@ -2816,11 +2265,8 @@ Total Entries: 856
 - **Root**: b-t-m
 - **Definitions**:
   - **EN**: to plaster the walls
-    **MT**: Tifsira u deskrizzjoni ta' 'battam': to plaster the walls.
+    **MT**: Li għandu x'jaqsam ma' battam fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: battam
-- **Usage Examples**:
-  - MT: Bbattma l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbattma correctly and without delay.
 
 ---
 
@@ -2828,14 +2274,11 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to play bazzika
-    **MT**: Tifsira u deskrizzjoni ta' 'bbazzika': to play bazzika.
+    **MT**: Li għandu x'jaqsam ma' bbazzika fl-użu u t-tifsira uffiċjali.
   - **EN**: to hang out, to frequent with (people) in a suspicious manner
-    **MT**: Tifsira u deskrizzjoni ta' 'bbazzika': to hang out, to frequent with (people) in a suspicious manner.
+    **MT**: Li għandu x'jaqsam ma' bbazzika fl-użu u t-tifsira uffiċjali.
   - **EN**: to meddle with
-    **MT**: Tifsira u deskrizzjoni ta' 'bbazzika': to meddle with.
-- **Usage Examples**:
-  - MT: Bbazzika l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbazzika correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbazzika fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2843,10 +2286,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to obtain a Bachelor 's degree
-    **MT**: Tifsira u deskrizzjoni ta' 'bbaċella': to obtain a Bachelor 's degree.
-- **Usage Examples**:
-  - MT: Bbaċella l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbaċella correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbaċella fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2854,10 +2294,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to budget
-    **MT**: Tifsira u deskrizzjoni ta' 'bbaġittja': to budget.
-- **Usage Examples**:
-  - MT: Bbaġittja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbaġittja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbaġittja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2865,10 +2302,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to base, to ground, to found
-    **MT**: Tifsira u deskrizzjoni ta' 'bbaża': to base, to ground, to found.
-- **Usage Examples**:
-  - MT: Bbaża l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbaża correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbaża fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2876,10 +2310,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to behave piously and smugly
-    **MT**: Tifsira u deskrizzjoni ta' 'bbażokkja': to behave piously and smugly.
-- **Usage Examples**:
-  - MT: Bbażokkja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbażokkja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbażokkja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2887,11 +2318,8 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to jest, to play the clown
-    **MT**: Tifsira u deskrizzjoni ta' 'bbażuffja': to jest, to play the clown.
+    **MT**: Li għandu x'jaqsam ma' bbażuffja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bbużoffja
-- **Usage Examples**:
-  - MT: Bbażuffja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbażuffja correctly and without delay.
 
 ---
 
@@ -2899,10 +2327,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to beatify (to take step in declaring a person a saint)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbeatifika': to beatify (to take step in declaring a person a saint).
-- **Usage Examples**:
-  - MT: Bbeatifika l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbeatifika correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbeatifika fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2910,11 +2335,8 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to back, to support
-    **MT**: Tifsira u deskrizzjoni ta' 'bbekkja': to back, to support.
+    **MT**: Li għandu x'jaqsam ma' bbekkja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bbakkja
-- **Usage Examples**:
-  - MT: Bbekkja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbekkja correctly and without delay.
 
 ---
 
@@ -2922,10 +2344,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to benefit (to receive a benefit)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbenefika': to benefit (to receive a benefit).
-- **Usage Examples**:
-  - MT: Bbenefika l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbenefika correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbenefika fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2933,10 +2352,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bid (at an auction)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbiddja': to bid (at an auction).
-- **Usage Examples**:
-  - MT: Bbiddja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbiddja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbiddja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2945,10 +2361,7 @@ Total Entries: 856
 - **Root**: w-b-s
 - **Definitions**:
   - **EN**: to become hard, stiff
-    **MT**: Tifsira u deskrizzjoni ta' 'bbies': to become hard, stiff.
-- **Usage Examples**:
-  - MT: Bbies l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbies correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbies fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2956,10 +2369,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to balance
-    **MT**: Tifsira u deskrizzjoni ta' 'bbilanċja': to balance.
-- **Usage Examples**:
-  - MT: Bbilanċja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbilanċja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbilanċja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2967,10 +2377,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to encore
-    **MT**: Tifsira u deskrizzjoni ta' 'bbissja': to encore.
-- **Usage Examples**:
-  - MT: Bbissja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbissja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbissja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2978,10 +2385,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bivouac
-    **MT**: Tifsira u deskrizzjoni ta' 'bbivakka': to bivouac.
-- **Usage Examples**:
-  - MT: Bbivakka l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbivakka correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbivakka fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2989,11 +2393,8 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to play the fool (behave in a foolish manner)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbiżletta': to play the fool (behave in a foolish manner).
+    **MT**: Li għandu x'jaqsam ma' bbiżletta fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bbużullottja
-- **Usage Examples**:
-  - MT: Bbiżletta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbiżletta correctly and without delay.
 
 ---
 
@@ -3001,10 +2402,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to blame
-    **MT**: Tifsira u deskrizzjoni ta' 'bbjażma': to blame.
-- **Usage Examples**:
-  - MT: Bbjażma l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbjażma correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbjażma fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3012,10 +2410,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bluff
-    **MT**: Tifsira u deskrizzjoni ta' 'bblaffja': to bluff.
-- **Usage Examples**:
-  - MT: Bblaffja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bblaffja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bblaffja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3023,10 +2418,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to black, to polish (shoes)
-    **MT**: Tifsira u deskrizzjoni ta' 'bblakka': to black, to polish (shoes).
-- **Usage Examples**:
-  - MT: Bblakka l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bblakka correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bblakka fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3034,10 +2426,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to blanch (to cook by dipping briefly into boiling water, then directly into cold water)
-    **MT**: Tifsira u deskrizzjoni ta' 'bblanxja': to blanch (to cook by dipping briefly into boiling water, then directly into cold water).
-- **Usage Examples**:
-  - MT: Bblanxja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bblanxja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bblanxja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3045,21 +2434,18 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to blast (to make a loud noise)
-    **MT**: Tifsira u deskrizzjoni ta' 'bblastja': to blast (to make a loud noise).
-- **Usage Examples**:
-  - MT: Bblastja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bblastja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bblastja fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## bblaxxja (v-bblaxxja)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to blush (to redden in the face from shame, excitement or embarrassment)
-    **MT**: Tifsira u deskrizzjoni ta' 'bblaxxja': to blush (to redden in the face from shame, excitement or embarrassment).
+  - **EN**: to blush
+    **MT**: Aħmar wiċċu minħabba mistħija jew emozzjoni.
 - **Usage Examples**:
-  - MT: Bblaxxja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bblaxxja correctly and without delay.
+  - MT: Bblaxxja meta rċieva l-kumpliment quddiem kulħadd.
+    EN: He blushed when he received the compliment in front of everyone.
 
 ---
 
@@ -3067,10 +2453,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bludge, to be lazy
-    **MT**: Tifsira u deskrizzjoni ta' 'bblaġġja': to bludge, to be lazy.
-- **Usage Examples**:
-  - MT: Bblaġġja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bblaġġja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bblaġġja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3078,10 +2461,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to blitz
-    **MT**: Tifsira u deskrizzjoni ta' 'bblizzja': to blitz.
-- **Usage Examples**:
-  - MT: Bblizzja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bblizzja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bblizzja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3089,46 +2469,44 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bleach
-    **MT**: Tifsira u deskrizzjoni ta' 'bbliċja': to bleach.
+    **MT**: Naddaf u għamel abjad id-drapp jew il-ħajt f'sustanza.
 - **Usage Examples**:
-  - MT: Bbliċja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbliċja correctly and without delay.
+  - MT: Bbliċja l-qmis bajda qabel il-ħasil.
+    EN: She bleached the white shirt before washing.
 
 ---
 
 ## bblokka (v-bblokka)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to block
-    **MT**: Tifsira u deskrizzjoni ta' 'bblokka': to block.
-  - **EN**: to plug (a hole)
-    **MT**: Tifsira u deskrizzjoni ta' 'bblokka': to plug (a hole).
+  - **EN**: to block, plug
+    **MT**: Waqqaf u għalaq il-passaġġ jew toqba bil-forza.
 - **Alternative Forms**: imblokka
 - **Usage Examples**:
-  - MT: Bblokka l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bblokka correctly and without delay.
+  - MT: Bblokka l-bieb b'kaxxa kbira biex ma jidħol ħadd.
+    EN: He blocked the door with a large box so no one could enter.
 
 ---
 
 ## bblokkja (v-bblokkja)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to block
-    **MT**: Tifsira u deskrizzjoni ta' 'bblokkja': to block.
+  - **EN**: to block (social media)
+    **MT**: Waqqaf u pprojbixxa kont fuq il-midja soċjali.
 - **Usage Examples**:
-  - MT: Bblokkja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bblokkja correctly and without delay.
+  - MT: Bblokkja l-profil mhux magħruf minnufih.
+    EN: He blocked the unknown profile immediately.
 
 ---
 
 ## bbnazza (v-bbnazza)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to turn fine (of weather)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbnazza': to turn fine (of weather).
+  - **EN**: to turn fine (weather)
+    **MT**: Settilja u mar il-kesħa meta mela l-kesħa fis-sema.
 - **Usage Examples**:
-  - MT: Bbnazza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbnazza correctly and without delay.
+  - MT: Bbnazzat wara l-maltemp kbir filgħodu.
+    EN: The weather turned fine after the big morning storm.
 
 ---
 
@@ -3136,48 +2514,44 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to boycott
-    **MT**: Tifsira u deskrizzjoni ta' 'bbojkottja': to boycott.
+    **MT**: Rrifjuta li jaċċetta jew jixtri minn kumpanija.
 - **Usage Examples**:
-  - MT: Bbojkottja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbojkottja correctly and without delay.
+  - MT: Bbojkottjaw il-prodotti b'risposta għad-deċiżjoni.
+    EN: They boycotted the products in response to the decision.
 
 ---
 
 ## bbokkla (v-bbokkla)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to buckle, to fasten
-    **MT**: Tifsira u deskrizzjoni ta' 'bbokkla': to buckle, to fasten.
+  - **EN**: to buckle, fasten
+    **MT**: Rrabat u għalaq bil-bokkla ċ-ċinturin.
 - **Usage Examples**:
-  - MT: Bbokkla l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbokkla correctly and without delay.
+  - MT: Bbokkla ċ-ċinturin tas-sigurtà fil-karozza.
+    EN: He buckled the seatbelt in the car.
 
 ---
 
 ## bboksja (v-bboksja)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to box (to strike with the fists)
-    **MT**: Tifsira u deskrizzjoni ta' 'bboksja': to box (to strike with the fists).
+  - **EN**: to box (fight with fists)
+    **MT**: Ġġieled u ta ponn fil-logħba tal-boksing.
 - **Usage Examples**:
-  - MT: Bboksja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bboksja correctly and without delay.
+  - MT: Bboksja b'saħħa kbira fis-sala nazzjonali.
+    EN: He boxed with great strength in the national hall.
 
 ---
 
 ## bbolla (v-bbolla)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to stamp
-    **MT**: Tifsira u deskrizzjoni ta' 'bbolla': to stamp.
-  - **EN**: to brand (an animal)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbolla': to brand (an animal).
-  - **EN**: to brand, to label, to stigmatize
-    **MT**: Tifsira u deskrizzjoni ta' 'bbolla': to brand, to label, to stigmatize.
+  - **EN**: to stamp, brand
+    **MT**: Qiegħed timbru legali jew marka fuq oġġett.
 - **Alternative Forms**: imbolla
 - **Usage Examples**:
-  - MT: Bbolla l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbolla correctly and without delay.
+  - MT: Bbolla l-ittra uffiċjali qabel ma bagħatha.
+    EN: He stamped the official letter before sending it.
 
 ---
 
@@ -3185,21 +2559,18 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bolt
-    **MT**: Tifsira u deskrizzjoni ta' 'bboltja': to bolt.
-- **Usage Examples**:
-  - MT: Bboltja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bboltja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bboltja fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## bbombja (v-bbombja)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to bomb
-    **MT**: Tifsira u deskrizzjoni ta' 'bbombja': to bomb.
+  - **EN**: to bomb, bombard
+    **MT**: Attakka b'bomba jew storbju iebes f'post.
 - **Usage Examples**:
-  - MT: Bbombja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbombja correctly and without delay.
+  - MT: Bbombjaw il-port matul il-gwerra l-qadima.
+    EN: They bombed the port during the old war.
 
 ---
 
@@ -3207,12 +2578,9 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to board out
-    **MT**: Tifsira u deskrizzjoni ta' 'bbordja': to board out.
+    **MT**: Li għandu x'jaqsam ma' bbordja fl-użu u t-tifsira uffiċjali.
   - **EN**: to sail
-    **MT**: Tifsira u deskrizzjoni ta' 'bbordja': to sail.
-- **Usage Examples**:
-  - MT: Bbordja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbordja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbordja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3220,10 +2588,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to become thick, dense
-    **MT**: Tifsira u deskrizzjoni ta' 'bboskja': to become thick, dense.
-- **Usage Examples**:
-  - MT: Bboskja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bboskja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bboskja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3231,10 +2596,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to be bossy
-    **MT**: Tifsira u deskrizzjoni ta' 'bbossja': to be bossy.
-- **Usage Examples**:
-  - MT: Bbossja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbossja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbossja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3242,10 +2604,10 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bottle
-    **MT**: Tifsira u deskrizzjoni ta' 'bbottilja': to bottle.
+    **MT**: Mela u qiegħed il-likwidu fil-fliexken.
 - **Usage Examples**:
-  - MT: Bbottilja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbottilja correctly and without delay.
+  - MT: Bbottiljaw l-inbid il-ġdid fil-kantina.
+    EN: They bottled the new wine in the cellar.
 
 ---
 
@@ -3253,10 +2615,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to make offensive remarks
-    **MT**: Tifsira u deskrizzjoni ta' 'bbottja': to make offensive remarks.
-- **Usage Examples**:
-  - MT: Bbottja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbottja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbottja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3264,10 +2623,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to give or indicate the direction according to a compass (Is there an English equivalent to this definition?)
-    **MT**: Tifsira u deskrizzjoni ta' 'bboxxla': to give or indicate the direction according to a compass (Is there an English equivalent to this definition?).
-- **Usage Examples**:
-  - MT: Bboxxla l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bboxxla correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bboxxla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3275,10 +2631,10 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to brush
-    **MT**: Tifsira u deskrizzjoni ta' 'bbraxxja': to brush.
+    **MT**: Naddaf u għamel lixx b'pinzell jew broxx.
 - **Usage Examples**:
-  - MT: Bbraxxja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbraxxja correctly and without delay.
+  - MT: Bbraxxja l-kisja tiegħu qabel ma ħareġ.
+    EN: He brushed his coat before going out.
 
 ---
 
@@ -3286,32 +2642,29 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to brace (of iron)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbrazzja': to brace (of iron).
-- **Usage Examples**:
-  - MT: Bbrazzja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbrazzja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbrazzja fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## bbrejkja (v-bbrejkja)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to brake
-    **MT**: Tifsira u deskrizzjoni ta' 'bbrejkja': to brake.
+  - **EN**: to brake (vehicle)
+    **MT**: Waqqaf il-vettura b'pedala fit-triq.
 - **Usage Examples**:
-  - MT: Bbrejkja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbrejkja correctly and without delay.
+  - MT: Bbrejkja bil-ħeffa biex ma jaħbatx.
+    EN: He braked quickly to avoid crashing.
 
 ---
 
 ## bbrilla (v-bbrilla)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to shine, to stand out
-    **MT**: Tifsira u deskrizzjoni ta' 'bbrilla': to shine, to stand out.
+  - **EN**: to shine, stand out
+    **MT**: Daqq u wera tleqqija u talent kbir.
 - **Usage Examples**:
-  - MT: Bbrilla l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbrilla correctly and without delay.
+  - MT: Bbrilla fit-testijiet nazzjonali kollha.
+    EN: He shone in all national tests.
 
 ---
 
@@ -3319,11 +2672,11 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to make a toast
-    **MT**: Tifsira u deskrizzjoni ta' 'bbrinda': to make a toast.
+    **MT**: Għolla l-tazza għas-saħħa u r-rispett ta' xi ħadd.
 - **Alternative Forms**: bbrindja
 - **Usage Examples**:
-  - MT: Bbrinda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbrinda correctly and without delay.
+  - MT: Bbrandaw flimkien għas-suċċess tal-koppja.
+    EN: They toasted together to the couple's success.
 
 ---
 
@@ -3331,11 +2684,11 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to make a toast
-    **MT**: Tifsira u deskrizzjoni ta' 'bbrinda': to make a toast.
+    **MT**: Għolla l-tazza għas-saħħa u r-rispett ta' xi ħadd.
 - **Alternative Forms**: bbrinda
 - **Usage Examples**:
-  - MT: Bbrindja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbrindja correctly and without delay.
+  - MT: Bbrandaw flimkien għas-suċċess tal-koppja.
+    EN: They toasted together to the couple's success.
 
 ---
 
@@ -3343,21 +2696,18 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bridge (to connect with a bridge)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbriġġja': to bridge (to connect with a bridge).
-- **Usage Examples**:
-  - MT: Bbriġġja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbriġġja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbriġġja fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## bbronża (v-bbronża)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to bronze
-    **MT**: Tifsira u deskrizzjoni ta' 'bbronża': to bronze.
+  - **EN**: to bronze, get tanned
+    **MT**: Għamel il-ġilda skura taħt ix-xemx fis-sajf.
 - **Usage Examples**:
-  - MT: Bbronża l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbronża correctly and without delay.
+  - MT: Bbronża fuq ir-ramel matul il-vaganzi.
+    EN: He got tanned on the sand during holidays.
 
 ---
 
@@ -3365,21 +2715,18 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to play the fool
-    **MT**: Tifsira u deskrizzjoni ta' 'bbuffunja': to play the fool.
-- **Usage Examples**:
-  - MT: Bbuffunja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbuffunja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbuffunja fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## bbukkja (v-bbukkja)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to book, to reserve
-    **MT**: Tifsira u deskrizzjoni ta' 'bbukkja': to book, to reserve.
+  - **EN**: to book, reserve
+    **MT**: Zamm u ordna post jew biljett minn qabel.
 - **Usage Examples**:
-  - MT: Bbukkja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbukkja correctly and without delay.
+  - MT: Bbukkja l-lukanda għax-xahar li ġej.
+    EN: He booked the hotel for next month.
 
 ---
 
@@ -3387,34 +2734,34 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bully
-    **MT**: Tifsira u deskrizzjoni ta' 'bbulja': to bully.
+    **MT**: Wettaq attakki jew kliem iebes kontra minn hu dgħajjef.
 - **Usage Examples**:
-  - MT: Bbulja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbulja correctly and without delay.
+  - MT: Ma ħallewx min bbulja fil-bitħa tal-iskola.
+    EN: They didn't allow anyone to bully in the schoolyard.
 
 ---
 
 ## bbumbarda (v-bbumbarda)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to bomb, bombard, shell
-    **MT**: Tifsira u deskrizzjoni ta' 'bbumbardja': to bomb, bombard, shell.
+  - **EN**: to bombard, shell
+    **MT**: Attakka b'tirijiet ta' kanun jew missili kontinwi.
 - **Alternative Forms**: bbumbardja
 - **Usage Examples**:
-  - MT: Bbumbarda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbumbarda correctly and without delay.
+  - MT: Bbumbardjaw iż-żona kollha mill-għoljiet.
+    EN: They bombarded the whole area from the hills.
 
 ---
 
 ## bbumbardja (v-bbumbardja)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to bomb, bombard, shell
-    **MT**: Tifsira u deskrizzjoni ta' 'bbumbardja': to bomb, bombard, shell.
+  - **EN**: to bombard, shell
+    **MT**: Attakka b'tirijiet ta' kanun jew missili kontinwi.
 - **Alternative Forms**: ibbumbardja, bbumbarda
 - **Usage Examples**:
-  - MT: Bbumbardja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbumbardja correctly and without delay.
+  - MT: Bbumbardjaw iż-żona kollha mill-għoljiet.
+    EN: They bombarded the whole area from the hills.
 
 ---
 
@@ -3422,10 +2769,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to revel, to enjoy oneself
-    **MT**: Tifsira u deskrizzjoni ta' 'bburdella': to revel, to enjoy oneself.
-- **Usage Examples**:
-  - MT: Bburdella l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bburdella correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bburdella fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3433,10 +2777,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to boo
-    **MT**: Tifsira u deskrizzjoni ta' 'bbuwja': to boo.
-- **Usage Examples**:
-  - MT: Bbuwja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbuwja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bbuwja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3444,11 +2785,8 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to jest, to play the clown
-    **MT**: Tifsira u deskrizzjoni ta' 'bbażuffja': to jest, to play the clown.
+    **MT**: Li għandu x'jaqsam ma' bbażuffja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bbażuffja
-- **Usage Examples**:
-  - MT: Bbużoffja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbużoffja correctly and without delay.
 
 ---
 
@@ -3456,11 +2794,8 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to play the fool (behave in a foolish manner)
-    **MT**: Tifsira u deskrizzjoni ta' 'bbiżletta': to play the fool (behave in a foolish manner).
+    **MT**: Li għandu x'jaqsam ma' bbiżletta fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bbiżletta
-- **Usage Examples**:
-  - MT: Bbużullottja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bbużullottja correctly and without delay.
 
 ---
 
@@ -3469,11 +2804,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-d-j
 - **Definitions**:
-  - **EN**: a small beginning
-    **MT**: Tifsira u deskrizzjoni ta' 'bdejju': a small beginning.
+  - **EN**: small beginning
+    **MT**: Bidla jew bidu żgħir li se jikber.
 - **Usage Examples**:
-  - MT: Bdejju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bdejju was in its proper place in daily use.
+  - MT: Bdejju żgħir fil-karriera tiegħu li wassal 'l quddiem.
+    EN: A small beginning in his career that led forward.
 
 ---
 
@@ -3481,10 +2816,7 @@ Total Entries: 856
 - **POS**: verb
 - **Definitions**:
   - **EN**: to change one's opinion, to relent [with reġa’]
-    **MT**: Tifsira u deskrizzjoni ta' 'bdiel': to change one's opinion, to relent [with reġa’].
-- **Usage Examples**:
-  - MT: Bdiel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bdiel correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bdiel fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3493,11 +2825,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-d-l
 - **Definitions**:
-  - **EN**: verbal noun of bidel
-    **MT**: L-att u l-proċess verbali ta' bidel.
+  - **EN**: change, transformation
+    **MT**: Il-proċess ta' tibdil u mossa minn stat għal ieħor.
 - **Usage Examples**:
-  - MT: Bdil kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bdil was in its proper place in daily use.
+  - MT: Kien hemm bdil kbir fil-pjan amministrattiv.
+    EN: There was a big change in the administrative plan.
 
 ---
 
@@ -3506,10 +2838,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: beatification
-    **MT**: Tifsira u deskrizzjoni ta' 'beatifikazzjoni': beatification.
-- **Usage Examples**:
-  - MT: Beatifikazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beatifikazzjoni was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' beatifikazzjoni fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3517,10 +2846,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: beatific
-    **MT**: Tifsira u deskrizzjoni ta' 'beatifiku': beatific.
-- **Usage Examples**:
-  - MT: Beatifiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beatifiku was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' beatifiku fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3529,10 +2855,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: beatitude
-    **MT**: Tifsira u deskrizzjoni ta' 'beatitudni': beatitude.
-- **Usage Examples**:
-  - MT: Beatitudni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beatitudni was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' beatitudni fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3540,13 +2863,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: a snail
-    **MT**: Tifsira u deskrizzjoni ta' 'bebbux': a snail.
-  - **EN**: a sea snail
-    **MT**: Tifsira u deskrizzjoni ta' 'bebbux': a sea snail.
+  - **EN**: snail, snails
+    **MT**: Kreatura żgħira bil-qoxra li timxi bil-mod fil-ġnien.
 - **Usage Examples**:
-  - MT: Bebbux kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bebbux was in its proper place in daily use.
+  - MT: Ġabru l-bebbux mir-raba' wara x-xita.
+    EN: They collected snails from the field after the rain.
 
 ---
 
@@ -3554,15 +2875,15 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-d-j
 - **Definitions**:
-  - **EN**: to begin, to start
-    **MT**: Tifsira u deskrizzjoni ta' 'beda': to begin, to start.
+  - **EN**: to begin, start
+    **MT**: Mar f'azzjoni u stabbilixxa l-post jew xogħol.
 - **Usage Examples**:
-  - MT: Beda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of beda correctly and without delay.
+  - MT: Beda x-xogħol il-ġdid kmieni filgħodu.
+    EN: He started the new job early in the morning.
 
 ---
 
-## bedu (n-bedu) 🌟 *(REVISED TARGET ENTRY)*
+## bedu (n-bedu)
 - **POS**: noun
 - **Gender**: masculine
 - **Root**: b-d-j
@@ -3571,9 +2892,6 @@ Total Entries: 856
     **MT**: L-att li wieħed jibda jew il-punt inizjali.
   - **EN**: home page (of a website)
     **MT**: Il-paġna ewlenija ta' sit elettroniku.
-- **Usage Examples**:
-  - MT: Bedu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bedu was in its proper place in daily use.
 
 ---
 
@@ -3582,10 +2900,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: thumb
-    **MT**: Tifsira u deskrizzjoni ta' 'behem': thumb.
+    **MT**: Is-seba' l-kbir tal-id użat biex iżomm.
 - **Usage Examples**:
-  - MT: Behem kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The behem was in its proper place in daily use.
+  - MT: Ħabat il-behem tiegħu mal-injam wara l-mossa.
+    EN: He bumped his thumb against the wood after the move.
 
 ---
 
@@ -3594,23 +2912,20 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-j-għ
 - **Definitions**:
-  - **EN**: sale, sell, selling
-    **MT**: Tifsira u deskrizzjoni ta' 'bejgħ': sale, sell, selling.
+  - **EN**: sale, selling
+    **MT**: Il-proċess ta' trasferiment ta' merkanzija mal-flus.
 - **Usage Examples**:
-  - MT: Bejgħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bejgħ was in its proper place in daily use.
+  - MT: Il-bejgħ tal-proprjetà saret permezz ta' nutar.
+    EN: Sale of the property was completed through a notary.
 
 ---
 
-## bejgħa (n-bejgħa) 🌟 *(REVISED TARGET ENTRY)*
+## bejgħa (n-bejgħa)
 - **POS**: noun
 - **Definitions**:
   - **EN**: sale, goods
     **MT**: Bejgħ ta' oġġetti jew merkanzija.
 - **Alternative Forms**: biegħa
-- **Usage Examples**:
-  - MT: Bejgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bejgħa was in its proper place in daily use.
 
 ---
 
@@ -3619,14 +2934,11 @@ Total Entries: 856
 - **Root**: b-j-n
 - **Definitions**:
   - **EN**: to interpose
-    **MT**: Tifsira u deskrizzjoni ta' 'bejjen': to interpose.
+    **MT**: Li għandu x'jaqsam ma' bejjen fl-użu u t-tifsira uffiċjali.
   - **EN**: to interrupt
-    **MT**: Tifsira u deskrizzjoni ta' 'bejjen': to interrupt.
+    **MT**: Li għandu x'jaqsam ma' bejjen fl-użu u t-tifsira uffiċjali.
   - **EN**: to discern
-    **MT**: Tifsira u deskrizzjoni ta' 'bejjen': to discern.
-- **Usage Examples**:
-  - MT: Bejjen l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bejjen correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bejjen fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3635,14 +2947,11 @@ Total Entries: 856
 - **Root**: b-j-t
 - **Definitions**:
   - **EN**: to nestle, build a nest
-    **MT**: Tifsira u deskrizzjoni ta' 'bejjet': to nestle, build a nest.
+    **MT**: Li għandu x'jaqsam ma' bejjet fl-użu u t-tifsira uffiċjali.
   - **EN**: to brood, nourish (a feeling)
-    **MT**: Tifsira u deskrizzjoni ta' 'bejjet': to brood, nourish (a feeling).
+    **MT**: Li għandu x'jaqsam ma' bejjet fl-użu u t-tifsira uffiċjali.
   - **EN**: to build a grudge against someone
-    **MT**: Tifsira u deskrizzjoni ta' 'bejjet': to build a grudge against someone.
-- **Usage Examples**:
-  - MT: Bejjet l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bejjet correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bejjet fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3652,10 +2961,10 @@ Total Entries: 856
 - **Root**: b-j-għ
 - **Definitions**:
   - **EN**: seller, vendor
-    **MT**: Tifsira u deskrizzjoni ta' 'bejjiegħ': seller, vendor.
+    **MT**: Persuna li tibiegħ il-prodotti fil-ħanut jew fit-triq.
 - **Usage Examples**:
-  - MT: Bejjiegħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bejjiegħ was in its proper place in daily use.
+  - MT: Il-bejjiegħ serva lill-klijent bi tbissima.
+    EN: The seller served the client with a smile.
 
 ---
 
@@ -3664,10 +2973,7 @@ Total Entries: 856
 - **Root**: b-j-għ
 - **Definitions**:
   - **EN**: saleable
-    **MT**: Tifsira u deskrizzjoni ta' 'bejjiegħi': saleable.
-- **Usage Examples**:
-  - MT: Bejjiegħi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bejjiegħi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bejjiegħi fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3676,10 +2982,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bacon
-    **MT**: Tifsira u deskrizzjoni ta' 'bejken': bacon.
-- **Usage Examples**:
-  - MT: Bejken kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bejken was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bejken fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3688,11 +2991,11 @@ Total Entries: 856
 - **Root**: b-j-n
 - **Definitions**:
   - **EN**: between
-    **MT**: Tifsira u deskrizzjoni ta' 'bejn': between.
+    **MT**: Prepożizzjoni użata għas-separazzjoni jew post ta' tnejn.
 - **Alternative Forms**: bejniet
 - **Usage Examples**:
-  - MT: Bejn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bejn was in its proper place in daily use.
+  - MT: Il-ħanut jinsab bejn il-knisja u l-isptar.
+    EN: The shop is located between the church and the hospital.
 
 ---
 
@@ -3700,10 +3003,10 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: undecided, irresolute
-    **MT**: Tifsira u deskrizzjoni ta' 'bejn ħalltejn': undecided, irresolute.
+    **MT**: Persuna li ma għandhiex moħħha determinat dwar deċiżjoni.
 - **Usage Examples**:
-  - MT: Bejn ħalltejn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bejn ħalltejn was in its proper place in daily use.
+  - MT: Kien bejn ħalltejn jekk ikomplix l-istudju.
+    EN: He was undecided whether to continue studying.
 
 ---
 
@@ -3711,11 +3014,11 @@ Total Entries: 856
 - **POS**: preposition
 - **Definitions**:
   - **EN**: between
-    **MT**: Tifsira u deskrizzjoni ta' 'bejn': between.
+    **MT**: Prepożizzjoni użata għas-separazzjoni jew post ta' tnejn.
 - **Alternative Forms**: bejn
 - **Usage Examples**:
-  - MT: Bejniet kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bejniet was in its proper place in daily use.
+  - MT: Il-ħanut jinsab bejn il-knisja u l-isptar.
+    EN: The shop is located between the church and the hospital.
 
 ---
 
@@ -3724,13 +3027,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-j-t
 - **Definitions**:
-  - **EN**: roof
-    **MT**: Tifsira u deskrizzjoni ta' 'bejt': roof.
-  - **EN**: house [obsolet]
-    **MT**: Tifsira u deskrizzjoni ta' 'bejt': house.
+  - **EN**: roof (of house)
+    **MT**: Il-parti ta' fuq nett ta' bini fejn tista' titla'.
 - **Usage Examples**:
-  - MT: Bejt kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bejt was in its proper place in daily use.
+  - MT: Tliqu fuq il-bejt biex jaraw il-vitorja.
+    EN: They went up to the roof to see the procession.
 
 ---
 
@@ -3739,13 +3040,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-j-t
 - **Definitions**:
-  - **EN**: nest
-    **MT**: Tifsira u deskrizzjoni ta' 'bejta': nest.
-  - **EN**: burrow (of animals)
-    **MT**: Tifsira u deskrizzjoni ta' 'bejta': burrow (of animals).
+  - **EN**: nest, burrow
+    **MT**: Post żgħir magħmul mill-għasfur biex jgħix u jbid.
 - **Usage Examples**:
-  - MT: Bejta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bejta was in its proper place in daily use.
+  - MT: L-għasfur bena bejta fis-siġra tas-sajf.
+    EN: The bird built a nest in the summer tree.
 
 ---
 
@@ -3753,13 +3052,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-k-j
 - **Definitions**:
-  - **EN**: to cry
-    **MT**: Tifsira u deskrizzjoni ta' 'beka': to cry.
-  - **EN**: to mourn
-    **MT**: Tifsira u deskrizzjoni ta' 'beka': to mourn.
+  - **EN**: to cry, mourn
+    **MT**: Ħareġ dmugħ minħabba uġigħ jew diżappunt.
 - **Usage Examples**:
-  - MT: Beka l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of beka correctly and without delay.
+  - MT: Beka bil-kwiet wara li sema' l-aħbar.
+    EN: He cried quietly after hearing the news.
 
 ---
 
@@ -3768,10 +3065,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: backing, support
-    **MT**: Tifsira u deskrizzjoni ta' 'beking': backing, support.
-- **Usage Examples**:
-  - MT: Beking kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beking was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' beking fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3779,16 +3073,12 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: pallbearer, coffin - bearer
-    **MT**: Tifsira u deskrizzjoni ta' 'bekkamort': pallbearer, coffin - bearer.
-  - **EN**: sinister -looking person
-    **MT**: Tifsira u deskrizzjoni ta' 'bekkamort': sinister -looking person.
-  - **EN**: overdressed person
-    **MT**: Tifsira u deskrizzjoni ta' 'bekkamort': overdressed person.
+  - **EN**: pallbearer / sinister-looking person
+    **MT**: Persuna li rrabat mar-rispett f'servizz funerari.
 - **Alternative Forms**: bukkamort
 - **Usage Examples**:
-  - MT: Bekkamort kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bekkamort was in its proper place in daily use.
+  - MT: Il-bekkamort mexxa s-servizz bil-kwiet.
+    EN: The pallbearer led the service quietly.
 
 ---
 
@@ -3797,11 +3087,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: banded dye-murex (Hexaplex trunculus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bekkum': banded dye-murex (Hexaplex trunculus).
+    **MT**: Li għandu x'jaqsam ma' bekkum fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bekkun
-- **Usage Examples**:
-  - MT: Bekkum kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bekkum was in its proper place in daily use.
 
 ---
 
@@ -3809,11 +3096,8 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: banded dye-murex (Hexaplex trunculus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bekkum': banded dye-murex (Hexaplex trunculus).
+    **MT**: Li għandu x'jaqsam ma' bekkum fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bekkum
-- **Usage Examples**:
-  - MT: Bekkun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bekkun was in its proper place in daily use.
 
 ---
 
@@ -3822,13 +3106,10 @@ Total Entries: 856
 - **Root**: b-l-għ
 - **Definitions**:
   - **EN**: to swallow
-    **MT**: Tifsira u deskrizzjoni ta' 'bela'': to swallow.
+    **MT**: Li għandu x'jaqsam ma' bela' fl-użu u t-tifsira uffiċjali.
   - **EN**: to be gullible
-    **MT**: Tifsira u deskrizzjoni ta' 'bela'': to be gullible.
+    **MT**: Li għandu x'jaqsam ma' bela' fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bala’
-- **Usage Examples**:
-  - MT: Bela' l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bela' correctly and without delay.
 
 ---
 
@@ -3836,10 +3117,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: synonym of Belarussja: Belarus (a country in Eastern Europe)
-    **MT**: Tifsira u deskrizzjoni ta' 'Belarus': synonym of Belarussja: Belarus (a country in Eastern Europe).
-- **Usage Examples**:
-  - MT: Belarus kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belarus was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belarus fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3848,10 +3126,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: feminine singular of Belarussu
-    **MT**: Tifsira u deskrizzjoni ta' 'Belarussa': feminine singular of Belarussu.
-- **Usage Examples**:
-  - MT: Belarussa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belarussa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belarussa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3860,10 +3135,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: female equivalent of Belarussu: female Belarusian (person)
-    **MT**: Forma femminili ta' belarussu: female belarusian (person).
-- **Usage Examples**:
-  - MT: Belarussa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belarussa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belarussa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3871,10 +3143,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Belarus (a country in Eastern Europe)
-    **MT**: Tifsira u deskrizzjoni ta' 'Belarussja': Belarus (a country in Eastern Europe).
-- **Usage Examples**:
-  - MT: Belarussja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belarussja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belarussja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3882,10 +3151,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: Belarusian
-    **MT**: Tifsira u deskrizzjoni ta' 'Belarussu': Belarusian.
-- **Usage Examples**:
-  - MT: Belarussu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belarussu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belarussu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3894,10 +3160,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Belarusian (person)
-    **MT**: Tifsira u deskrizzjoni ta' 'Belarussu': Belarusian (person).
-- **Usage Examples**:
-  - MT: Belarussu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belarussu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belarussu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3906,10 +3169,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Belarusian (language)
-    **MT**: Tifsira u deskrizzjoni ta' 'Belarussu': Belarusian (language).
-- **Usage Examples**:
-  - MT: Belarussu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belarussu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belarussu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3918,10 +3178,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: little bird
-    **MT**: Tifsira u deskrizzjoni ta' 'belbul': little bird.
-- **Usage Examples**:
-  - MT: Belbul kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belbul was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' belbul fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3929,10 +3186,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Belfast (the capital and largest city of Northern Ireland)
-    **MT**: Tifsira u deskrizzjoni ta' 'Belfast': Belfast (the capital and largest city of Northern Ireland).
-- **Usage Examples**:
-  - MT: Belfast kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belfast was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belfast fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3940,10 +3194,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Belgrade (the capital city of Serbia)
-    **MT**: Tifsira u deskrizzjoni ta' 'Belgrad': Belgrade (the capital city of Serbia).
-- **Usage Examples**:
-  - MT: Belgrad kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belgrad was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belgrad fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3953,16 +3204,13 @@ Total Entries: 856
 - **Root**: b-l-għ
 - **Definitions**:
   - **EN**: sip
-    **MT**: Tifsira u deskrizzjoni ta' 'belgħa': sip.
+    **MT**: Li għandu x'jaqsam ma' belgħa fl-użu u t-tifsira uffiċjali.
   - **EN**: swig
-    **MT**: Tifsira u deskrizzjoni ta' 'belgħa': swig.
+    **MT**: Li għandu x'jaqsam ma' belgħa fl-użu u t-tifsira uffiċjali.
   - **EN**: gulp
-    **MT**: Tifsira u deskrizzjoni ta' 'belgħa': gulp.
+    **MT**: Li għandu x'jaqsam ma' belgħa fl-użu u t-tifsira uffiċjali.
   - **EN**: swallowing
-    **MT**: Tifsira u deskrizzjoni ta' 'belgħa': swallowing.
-- **Usage Examples**:
-  - MT: Belgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belgħa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' belgħa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3972,10 +3220,7 @@ Total Entries: 856
 - **Root**: b-l-għ
 - **Definitions**:
   - **EN**: slipper
-    **MT**: Tifsira u deskrizzjoni ta' 'belgħa': slipper.
-- **Usage Examples**:
-  - MT: Belgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belgħa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' belgħa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3984,10 +3229,7 @@ Total Entries: 856
 - **Root**: b-l-għ-n
 - **Definitions**:
   - **EN**: to froth at the mouth
-    **MT**: Tifsira u deskrizzjoni ta' 'belgħen': to froth at the mouth.
-- **Usage Examples**:
-  - MT: Belgħen l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of belgħen correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' belgħen fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3997,10 +3239,7 @@ Total Entries: 856
 - **Root**: b-l-għ-n
 - **Definitions**:
   - **EN**: phlegm
-    **MT**: Tifsira u deskrizzjoni ta' 'belgħun': phlegm.
-- **Usage Examples**:
-  - MT: Belgħun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belgħun was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' belgħun fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4009,12 +3248,9 @@ Total Entries: 856
 - **Root**: b-l-h
 - **Definitions**:
   - **EN**: idle, vain, void, inane
-    **MT**: Tifsira u deskrizzjoni ta' 'belhieni': idle, vain, void, inane.
+    **MT**: Li għandu x'jaqsam ma' belhieni fl-użu u t-tifsira uffiċjali.
   - **EN**: foolish, imbecilic
-    **MT**: Tifsira u deskrizzjoni ta' 'belhieni': foolish, imbecilic.
-- **Usage Examples**:
-  - MT: Belhieni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belhieni was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' belhieni fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4023,10 +3259,7 @@ Total Entries: 856
 - **Root**: b-l-l
 - **Definitions**:
   - **EN**: to dip (immerse something shortly or partly into a liquid)
-    **MT**: Tifsira u deskrizzjoni ta' 'bell': to dip (immerse something shortly or partly into a liquid).
-- **Usage Examples**:
-  - MT: Bell l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bell correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bell fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4035,13 +3268,10 @@ Total Entries: 856
 - **Root**: b-l-għ
 - **Definitions**:
   - **EN**: to make or cause to swallow
-    **MT**: Tifsira u deskrizzjoni ta' 'bella'': to make or cause to swallow.
+    **MT**: Li għandu x'jaqsam ma' bella' fl-użu u t-tifsira uffiċjali.
   - **EN**: to make someone believe anything
-    **MT**: Tifsira u deskrizzjoni ta' 'bella'': to make someone believe anything.
+    **MT**: Li għandu x'jaqsam ma' bella' fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: balla’
-- **Usage Examples**:
-  - MT: Bella' l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bella' correctly and without delay.
 
 ---
 
@@ -4050,10 +3280,7 @@ Total Entries: 856
 - **Root**: b-l-h
 - **Definitions**:
   - **EN**: to amaze, astound
-    **MT**: Tifsira u deskrizzjoni ta' 'bellah': to amaze, astound.
-- **Usage Examples**:
-  - MT: Bellah l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bellah correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bellah fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4062,14 +3289,11 @@ Total Entries: 856
 - **Root**: b-l-q
 - **Definitions**:
   - **EN**: to ripen
-    **MT**: Tifsira u deskrizzjoni ta' 'bellaq': to ripen.
-- **Usage Examples**:
-  - MT: Bellaq l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bellaq correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bellaq fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## belli (conj-belli) 🌟 *(REVISED TARGET ENTRY)*
+## belli (conj-belli)
 - **POS**: conjunction
 - **Definitions**:
   - **EN**: since, inasmuch as, because
@@ -4077,9 +3301,6 @@ Total Entries: 856
   - **EN**: even though
     **MT**: Għalkemm jew minkejja li.
 - **Alternative Forms**: billi
-- **Usage Examples**:
-  - MT: Belli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belli was in its proper place in daily use.
 
 ---
 
@@ -4089,12 +3310,9 @@ Total Entries: 856
 - **Root**: b-l-għ
 - **Definitions**:
   - **EN**: whirlpool
-    **MT**: Tifsira u deskrizzjoni ta' 'belliegħa': whirlpool.
+    **MT**: Li għandu x'jaqsam ma' belliegħa fl-użu u t-tifsira uffiċjali.
   - **EN**: a monster dwelling in wells that swallows anyone looking down
-    **MT**: Tifsira u deskrizzjoni ta' 'belliegħa': a monster dwelling in wells that swallows anyone looking down.
-- **Usage Examples**:
-  - MT: Belliegħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belliegħa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' belliegħa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4103,10 +3321,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: velvet
-    **MT**: Tifsira u deskrizzjoni ta' 'bellus': velvet.
-- **Usage Examples**:
-  - MT: Bellus kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bellus was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bellus fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4115,12 +3330,9 @@ Total Entries: 856
 - **Root**: b-l-q
 - **Definitions**:
   - **EN**: of a colour between white and black
-    **MT**: Tifsira u deskrizzjoni ta' 'belqi': of a colour between white and black.
+    **MT**: Li għandu x'jaqsam ma' belqi fl-użu u t-tifsira uffiċjali.
   - **EN**: dusky
-    **MT**: Tifsira u deskrizzjoni ta' 'belqi': dusky.
-- **Usage Examples**:
-  - MT: Belqi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belqi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' belqi fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4129,10 +3341,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: city, town
-    **MT**: Tifsira u deskrizzjoni ta' 'belt': city, town.
-- **Usage Examples**:
-  - MT: Belt kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belt was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' belt fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4141,10 +3350,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: capital city, capital
-    **MT**: Tifsira u deskrizzjoni ta' 'belt kapitali': capital city, capital.
-- **Usage Examples**:
-  - MT: Belt kapitali kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belt kapitali was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' belt kapitali fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4152,10 +3358,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Monaco (the capital city of Monaco)
-    **MT**: Tifsira u deskrizzjoni ta' 'Belt ta' Monako': Monaco (the capital city of Monaco).
-- **Usage Examples**:
-  - MT: Belt ta' monako kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belt ta' Monako was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belt ta' Monako fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4163,12 +3366,9 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: municipal, urban (pertaining to city)
-    **MT**: Tifsira u deskrizzjoni ta' 'belti': municipal, urban (pertaining to city).
+    **MT**: Li għandu x'jaqsam ma' belti fl-użu u t-tifsira uffiċjali.
   - **EN**: Vallettan (of or pertaining to Valletta, the capital of Malta)
-    **MT**: Tifsira u deskrizzjoni ta' 'belti': Vallettan (of or pertaining to Valletta, the capital of Malta).
-- **Usage Examples**:
-  - MT: Belti kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The belti was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' belti fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4176,12 +3376,9 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Belgium (a country in Western Europe that has borders with the Netherlands, Germany, Luxembourg and France
-    **MT**: Tifsira u deskrizzjoni ta' 'Belġju': Belgium (a country in Western Europe that has borders with the Netherlands, Germany, Luxembourg and France.
+    **MT**: Li għandu x'jaqsam ma' Belġju fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Renju tal-Belġju)
-    **MT**: Tifsira u deskrizzjoni ta' 'Belġju': official name: Renju tal-Belġju).
-- **Usage Examples**:
-  - MT: Belġju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Belġju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Belġju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4190,14 +3387,11 @@ Total Entries: 856
 - **Root**: b-n-j
 - **Definitions**:
   - **EN**: to build
-    **MT**: Tifsira u deskrizzjoni ta' 'bena': to build.
+    **MT**: Li għandu x'jaqsam ma' bena fl-użu u t-tifsira uffiċjali.
   - **EN**: to set up, to stack
-    **MT**: Tifsira u deskrizzjoni ta' 'bena': to set up, to stack.
+    **MT**: Li għandu x'jaqsam ma' bena fl-użu u t-tifsira uffiċjali.
   - **EN**: to compose (music)
-    **MT**: Tifsira u deskrizzjoni ta' 'bena': to compose (music).
-- **Usage Examples**:
-  - MT: Bena l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bena correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bena fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4206,10 +3400,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: benefactor
-    **MT**: Tifsira u deskrizzjoni ta' 'benefattur': benefactor.
-- **Usage Examples**:
-  - MT: Benefattur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The benefattur was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' benefattur fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4218,10 +3409,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: beneficence, charity
-    **MT**: Tifsira u deskrizzjoni ta' 'benefiċenza': beneficence, charity.
-- **Usage Examples**:
-  - MT: Benefiċenza kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The benefiċenza was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' benefiċenza fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4230,10 +3418,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: beneficiary (one who benefits from the distribution, especially of an estate)
-    **MT**: Tifsira u deskrizzjoni ta' 'benefiċjarju': beneficiary (one who benefits from the distribution, especially of an estate).
-- **Usage Examples**:
-  - MT: Benefiċjarju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The benefiċjarju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' benefiċjarju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4241,12 +3426,9 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Benin (a country in West Africa, formerly Dahomey
-    **MT**: Tifsira u deskrizzjoni ta' 'Benin': Benin (a country in West Africa, formerly Dahomey.
+    **MT**: Li għandu x'jaqsam ma' Benin fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Repubblika tal-Benin)
-    **MT**: Tifsira u deskrizzjoni ta' 'Benin': official name: Repubblika tal-Benin).
-- **Usage Examples**:
-  - MT: Benin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Benin was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Benin fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4256,10 +3438,7 @@ Total Entries: 856
 - **Root**: b-n-n
 - **Definitions**:
   - **EN**: flavour
-    **MT**: Tifsira u deskrizzjoni ta' 'benna': flavour.
-- **Usage Examples**:
-  - MT: Benna kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The benna was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' benna fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4269,10 +3448,7 @@ Total Entries: 856
 - **Root**: b-n-j
 - **Definitions**:
   - **EN**: builder, mason
-    **MT**: Tifsira u deskrizzjoni ta' 'bennej': builder, mason.
-- **Usage Examples**:
-  - MT: Bennej kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bennej was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bennej fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4281,10 +3457,7 @@ Total Entries: 856
 - **Root**: b-n-n
 - **Definitions**:
   - **EN**: to flavour
-    **MT**: Tifsira u deskrizzjoni ta' 'bennen': to flavour.
-- **Usage Examples**:
-  - MT: Bennen l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bennen correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bennen fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4294,10 +3467,7 @@ Total Entries: 856
 - **Root**: b-n-n
 - **Definitions**:
   - **EN**: cradle, crib
-    **MT**: Tifsira u deskrizzjoni ta' 'benniena': cradle, crib.
-- **Usage Examples**:
-  - MT: Benniena kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The benniena was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' benniena fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4306,12 +3476,9 @@ Total Entries: 856
 - **Root**: b-n-ġ-l
 - **Definitions**:
   - **EN**: to bruise
-    **MT**: Tifsira u deskrizzjoni ta' 'benġel': to bruise.
+    **MT**: Li għandu x'jaqsam ma' benġel fl-użu u t-tifsira uffiċjali.
   - **EN**: to tone down
-    **MT**: Tifsira u deskrizzjoni ta' 'benġel': to tone down.
-- **Usage Examples**:
-  - MT: Benġel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of benġel correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' benġel fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4320,14 +3487,15 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-n-ġ-l
 - **Definitions**:
-- **Alternative Forms**: tbenġila
+  - **EN**: swing, seesaw
+    **MT**: Apparat fil-ġnien fejn iż-żgħażagħ jitħallsu bil-mossa.
 - **Usage Examples**:
-  - MT: Benġila kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The benġila was in its proper place in daily use.
+  - MT: It-tfal marru jilagħbu fuq il-benġila fil-parco.
+    EN: The children went to play on the swing in the park.
 
 ---
 
-## beqqa (n-beqqa) 🌟 *(REVISED TARGET ENTRY)*
+## beqqa (n-beqqa)
 - **POS**: noun
 - **Definitions**:
   - **EN**: goat
@@ -4335,9 +3503,6 @@ Total Entries: 856
   - **EN**: sheep
     **MT**: Kelma tat-tfal użata f'Għawdex għan-nagħġa.
 - **Alternative Forms**: beqqi
-- **Usage Examples**:
-  - MT: Beqqa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beqqa was in its proper place in daily use.
 
 ---
 
@@ -4346,13 +3511,10 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: goat
-    **MT**: Tifsira u deskrizzjoni ta' 'beqqi': goat.
+    **MT**: Li għandu x'jaqsam ma' beqqi fl-użu u t-tifsira uffiċjali.
   - **EN**: sheep
-    **MT**: Tifsira u deskrizzjoni ta' 'beqqi': sheep.
+    **MT**: Li għandu x'jaqsam ma' beqqi fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: beqqa
-- **Usage Examples**:
-  - MT: Beqqi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beqqi was in its proper place in daily use.
 
 ---
 
@@ -4361,10 +3523,7 @@ Total Entries: 856
 - **Root**: b-r-j
 - **Definitions**:
   - **EN**: to shine
-    **MT**: Tifsira u deskrizzjoni ta' 'bera': to shine.
-- **Usage Examples**:
-  - MT: Bera l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bera correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bera fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4374,10 +3533,7 @@ Total Entries: 856
 - **Root**: b-r-q
 - **Definitions**:
   - **EN**: lightning
-    **MT**: Tifsira u deskrizzjoni ta' 'beraq': lightning.
-- **Usage Examples**:
-  - MT: Beraq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beraq was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' beraq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4386,10 +3542,7 @@ Total Entries: 856
 - **Root**: b-r-b-q
 - **Definitions**:
   - **EN**: to waste, squander
-    **MT**: Tifsira u deskrizzjoni ta' 'berbaq': to waste, squander.
-- **Usage Examples**:
-  - MT: Berbaq l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of berbaq correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' berbaq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4398,12 +3551,9 @@ Total Entries: 856
 - **Root**: b-r-b-x
 - **Definitions**:
   - **EN**: to pilfer
-    **MT**: Tifsira u deskrizzjoni ta' 'berbex': to pilfer.
+    **MT**: Li għandu x'jaqsam ma' berbex fl-użu u t-tifsira uffiċjali.
   - **EN**: to cheat
-    **MT**: Tifsira u deskrizzjoni ta' 'berbex': to cheat.
-- **Usage Examples**:
-  - MT: Berbex l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of berbex correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' berbex fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4412,12 +3562,9 @@ Total Entries: 856
 - **Root**: b-r-d-l
 - **Definitions**:
   - **EN**: to create uproar
-    **MT**: Tifsira u deskrizzjoni ta' 'berdel': to create uproar.
+    **MT**: Li għandu x'jaqsam ma' berdel fl-użu u t-tifsira uffiċjali.
   - **EN**: to lead a debauched life
-    **MT**: Tifsira u deskrizzjoni ta' 'berdel': to lead a debauched life.
-- **Usage Examples**:
-  - MT: Berdel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of berdel correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' berdel fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4426,11 +3573,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: packsaddle
-    **MT**: Tifsira u deskrizzjoni ta' 'berdgħa': packsaddle.
+    **MT**: Li għandu x'jaqsam ma' berdgħa fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bardgħa
-- **Usage Examples**:
-  - MT: Berdgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The berdgħa was in its proper place in daily use.
 
 ---
 
@@ -4439,10 +3583,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: hamburger
-    **MT**: Tifsira u deskrizzjoni ta' 'berger': hamburger.
-- **Usage Examples**:
-  - MT: Berger kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The berger was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' berger fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4451,10 +3592,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: flea (parasitic insect)
-    **MT**: Tifsira u deskrizzjoni ta' 'bergħud': flea (parasitic insect).
-- **Usage Examples**:
-  - MT: Bergħud kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bergħud was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bergħud fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4463,10 +3601,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: beryllium
-    **MT**: Tifsira u deskrizzjoni ta' 'berillju': beryllium.
-- **Usage Examples**:
-  - MT: Berillju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The berillju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' berillju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4475,11 +3610,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: cap (head covering)
-    **MT**: Tifsira u deskrizzjoni ta' 'beritta': cap (head covering).
+    **MT**: Li għandu x'jaqsam ma' beritta fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: berritta
-- **Usage Examples**:
-  - MT: Beritta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beritta was in its proper place in daily use.
 
 ---
 
@@ -4488,10 +3620,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: berkelium (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'berkelju': berkelium (chemical element).
-- **Usage Examples**:
-  - MT: Berkelju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The berkelju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' berkelju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4500,14 +3629,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: apricot (s)
-    **MT**: Tifsira u deskrizzjoni ta' 'berquq': apricot (s).
-- **Usage Examples**:
-  - MT: Berquq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The berquq was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' berquq fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## berraħ (v-berraħ) 🌟 *(REVISED TARGET ENTRY)*
+## berraħ (v-berraħ)
 - **POS**: verb
 - **Root**: b-r-ħ
 - **Definitions**:
@@ -4517,9 +3643,6 @@ Total Entries: 856
     **MT**: Ħabbart u xxandart b'mod miftuħ li kulħadd sar jaf.
   - **EN**: to make known
     **MT**: Ħabbart u xxandart b'mod miftuħ li kulħadd sar jaf.
-- **Usage Examples**:
-  - MT: Berraħ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of berraħ correctly and without delay.
 
 ---
 
@@ -4528,10 +3651,7 @@ Total Entries: 856
 - **Root**: b-r-d
 - **Definitions**:
   - **EN**: to make cooler
-    **MT**: Tifsira u deskrizzjoni ta' 'berred': to make cooler.
-- **Usage Examples**:
-  - MT: Berred l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of berred correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' berred fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4540,10 +3660,7 @@ Total Entries: 856
 - **Root**: b-r-k
 - **Definitions**:
   - **EN**: to force to lie down
-    **MT**: Tifsira u deskrizzjoni ta' 'berrek': to force to lie down.
-- **Usage Examples**:
-  - MT: Berrek l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of berrek correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' berrek fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4553,10 +3670,7 @@ Total Entries: 856
 - **Root**: b-r-n
 - **Definitions**:
   - **EN**: gimlet
-    **MT**: Tifsira u deskrizzjoni ta' 'berrina': gimlet.
-- **Usage Examples**:
-  - MT: Berrina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The berrina was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' berrina fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4565,10 +3679,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: superseded spelling of beritta
-    **MT**: Tifsira u deskrizzjoni ta' 'berritta': superseded spelling of beritta.
-- **Usage Examples**:
-  - MT: Berritta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The berritta was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' berritta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4577,22 +3688,16 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: asphodel
-    **MT**: Tifsira u deskrizzjoni ta' 'berwieq': asphodel.
-- **Usage Examples**:
-  - MT: Berwieq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The berwieq was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' berwieq fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## berwin (n-berwin) 🌟 *(REVISED TARGET ENTRY)*
+## berwin (n-berwin)
 - **POS**: noun
 - **Definitions**:
   - **EN**: Eurasian dotterel
     **MT**: Tip ta' għasfur żgħir tal-plover.
 - **Alternative Forms**: birwin
-- **Usage Examples**:
-  - MT: Berwin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The berwin was in its proper place in daily use.
 
 ---
 
@@ -4601,13 +3706,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: melon, melons
-    **MT**: Tifsira u deskrizzjoni ta' 'bettieħ': melon, melons.
+    **MT**: Li għandu x'jaqsam ma' bettieħ fl-użu u t-tifsira uffiċjali.
   - **EN**: testicles of a donkey
-    **MT**: Tifsira u deskrizzjoni ta' 'bettieħ': testicles of a donkey.
+    **MT**: Li għandu x'jaqsam ma' bettieħ fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bettiħ
-- **Usage Examples**:
-  - MT: Bettieħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bettieħ was in its proper place in daily use.
 
 ---
 
@@ -4616,26 +3718,20 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: synonym of faqqus il-ħmir: squirting cucumber (Ecballium elaterium)
-    **MT**: Tifsira u deskrizzjoni ta' 'bettieħ il-ħmir': synonym of faqqus il-ħmir: squirting cucumber (Ecballium elaterium).
-- **Usage Examples**:
-  - MT: Bettieħ il-ħmir kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bettieħ il-ħmir was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bettieħ il-ħmir fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bettija (n-bettija) 🌟 *(REVISED TARGET ENTRY)*
+## bettija (n-bettija)
 - **POS**: noun
 - **Definitions**:
   - **EN**: cask, barrel
     **MT**: Kontenitur kbir tal-injam jew metall użat għall-inbid jew likwidi.
 - **Alternative Forms**: bittija
-- **Usage Examples**:
-  - MT: Bettija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bettija was in its proper place in daily use.
 
 ---
 
-## bettiħ (n-bettiħ) 🌟 *(REVISED TARGET ENTRY)*
+## bettiħ (n-bettiħ)
 - **POS**: noun
 - **Definitions**:
   - **EN**: melon, melons
@@ -4643,9 +3739,6 @@ Total Entries: 856
   - **EN**: testicles of a donkey
     **MT**: Użu umoristiku f'Għawdex.
 - **Alternative Forms**: bettieħ
-- **Usage Examples**:
-  - MT: Bettiħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bettiħ was in its proper place in daily use.
 
 ---
 
@@ -4655,10 +3748,7 @@ Total Entries: 856
 - **Root**: b-w-l
 - **Definitions**:
   - **EN**: pee, piss, urine
-    **MT**: Tifsira u deskrizzjoni ta' 'bewl': pee, piss, urine.
-- **Usage Examples**:
-  - MT: Bewl kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bewl was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bewl fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4668,14 +3758,11 @@ Total Entries: 856
 - **Root**: b-w-s
 - **Definitions**:
   - **EN**: verbal noun of bies: several kisses
-    **MT**: L-att u l-proċess verbali ta' bies.
+    **MT**: Li għandu x'jaqsam ma' bews fl-użu u t-tifsira uffiċjali.
   - **EN**: a period of kissing
-    **MT**: Tifsira u deskrizzjoni ta' 'bews': a period of kissing.
+    **MT**: Li għandu x'jaqsam ma' bews fl-użu u t-tifsira uffiċjali.
   - **EN**: the act of kissing as such
-    **MT**: Tifsira u deskrizzjoni ta' 'bews': the act of kissing as such.
-- **Usage Examples**:
-  - MT: Bews kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bews was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bews fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4685,10 +3772,7 @@ Total Entries: 856
 - **Root**: b-w-s
 - **Definitions**:
   - **EN**: a kiss (single instance of kissing)
-    **MT**: Tifsira u deskrizzjoni ta' 'bewsa': a kiss (single instance of kissing).
-- **Usage Examples**:
-  - MT: Bewsa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bewsa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bewsa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4697,10 +3781,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: Judas kiss (act of treachery under the guise of kindness)
-    **MT**: Tifsira u deskrizzjoni ta' 'bewsa ta' Ġuda': Judas kiss (act of treachery under the guise of kindness).
-- **Usage Examples**:
-  - MT: Bewsa ta' ġuda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bewsa ta' Ġuda was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bewsa ta' Ġuda fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4710,10 +3791,7 @@ Total Entries: 856
 - **Root**: b-w-b
 - **Definitions**:
   - **EN**: doorkeeper
-    **MT**: Tifsira u deskrizzjoni ta' 'bewwieb': doorkeeper.
-- **Usage Examples**:
-  - MT: Bewwieb kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bewwieb was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bewwieb fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4721,11 +3799,8 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: beige (colour)
-    **MT**: Tifsira u deskrizzjoni ta' 'bex': beige (colour).
+    **MT**: Li għandu x'jaqsam ma' bex fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bexx
-- **Usage Examples**:
-  - MT: Bex kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bex was in its proper place in daily use.
 
 ---
 
@@ -4734,10 +3809,7 @@ Total Entries: 856
 - **Root**: b-x-k-l
 - **Definitions**:
   - **EN**: to make wicker baskets
-    **MT**: Tifsira u deskrizzjoni ta' 'bexkel': to make wicker baskets.
-- **Usage Examples**:
-  - MT: Bexkel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bexkel correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bexkel fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4747,11 +3819,8 @@ Total Entries: 856
 - **Root**: b-x-k-l
 - **Definitions**:
   - **EN**: wicker basket
-    **MT**: Tifsira u deskrizzjoni ta' 'bixkilla': wicker basket.
+    **MT**: Li għandu x'jaqsam ma' bixkilla fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bixkilla
-- **Usage Examples**:
-  - MT: Bexkilla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bexkilla was in its proper place in daily use.
 
 ---
 
@@ -4761,10 +3830,7 @@ Total Entries: 856
 - **Root**: b-x-x
 - **Definitions**:
   - **EN**: verbal noun of bexx: spraying, sprinkling
-    **MT**: L-att u l-proċess verbali ta' bexx.
-- **Usage Examples**:
-  - MT: Bexx kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bexx was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bexx fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4773,10 +3839,7 @@ Total Entries: 856
 - **Root**: b-x-x
 - **Definitions**:
   - **EN**: to spray, to sprinkle
-    **MT**: Tifsira u deskrizzjoni ta' 'bexx': to spray, to sprinkle.
-- **Usage Examples**:
-  - MT: Bexx l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bexx correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bexx fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4785,12 +3848,9 @@ Total Entries: 856
 - **Root**: b-x-q
 - **Definitions**:
   - **EN**: to keep ajar
-    **MT**: Tifsira u deskrizzjoni ta' 'bexxaq': to keep ajar.
+    **MT**: Li għandu x'jaqsam ma' bexxaq fl-użu u t-tifsira uffiċjali.
   - **EN**: to unfold
-    **MT**: Tifsira u deskrizzjoni ta' 'bexxaq': to unfold.
-- **Usage Examples**:
-  - MT: Bexxaq l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bexxaq correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bexxaq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4799,10 +3859,7 @@ Total Entries: 856
 - **Root**: b-x-x
 - **Definitions**:
   - **EN**: to spray, sprinkle repeatedly
-    **MT**: Tifsira u deskrizzjoni ta' 'bexxex': to spray, sprinkle repeatedly.
-- **Usage Examples**:
-  - MT: Bexxex l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bexxex correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bexxex fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4812,11 +3869,8 @@ Total Entries: 856
 - **Root**: b-x-x
 - **Definitions**:
   - **EN**: watering can
-    **MT**: Tifsira u deskrizzjoni ta' 'bexxiexa': watering can.
+    **MT**: Li għandu x'jaqsam ma' bexxiexa fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bexxiexa
-- **Usage Examples**:
-  - MT: Bexxexija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bexxexija was in its proper place in daily use.
 
 ---
 
@@ -4826,11 +3880,8 @@ Total Entries: 856
 - **Root**: b-x-x
 - **Definitions**:
   - **EN**: watering can
-    **MT**: Tifsira u deskrizzjoni ta' 'bexxiexa': watering can.
+    **MT**: Li għandu x'jaqsam ma' bexxiexa fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bexxexija
-- **Usage Examples**:
-  - MT: Bexxiexa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bexxiexa was in its proper place in daily use.
 
 ---
 
@@ -4839,10 +3890,7 @@ Total Entries: 856
 - **Root**: b-z-n
 - **Definitions**:
   - **EN**: to make flabby (of face, etc.)
-    **MT**: Tifsira u deskrizzjoni ta' 'bezzen': to make flabby (of face, etc.).
-- **Usage Examples**:
-  - MT: Bezzen l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bezzen correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bezzen fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4850,10 +3898,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Bezzina': a surname.
-- **Usage Examples**:
-  - MT: Bezzina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bezzina was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bezzina fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4863,13 +3908,10 @@ Total Entries: 856
 - **Root**: b-z-n
 - **Definitions**:
   - **EN**: bread roll, baguette
-    **MT**: Tifsira u deskrizzjoni ta' 'bezzun': bread roll, baguette.
+    **MT**: Li għandu x'jaqsam ma' bezzun fl-użu u t-tifsira uffiċjali.
   - **EN**: dupe
-    **MT**: Tifsira u deskrizzjoni ta' 'bezzun': dupe.
+    **MT**: Li għandu x'jaqsam ma' bezzun fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: buzzun
-- **Usage Examples**:
-  - MT: Bezzun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bezzun was in its proper place in daily use.
 
 ---
 
@@ -4878,11 +3920,8 @@ Total Entries: 856
 - **Root**: b-ċ-n
 - **Definitions**:
   - **EN**: to fatten
-    **MT**: Tifsira u deskrizzjoni ta' 'beċċen': to fatten.
+    **MT**: Li għandu x'jaqsam ma' beċċen fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: baċċan
-- **Usage Examples**:
-  - MT: Beċċen l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of beċċen correctly and without delay.
 
 ---
 
@@ -4892,14 +3931,11 @@ Total Entries: 856
 - **Root**: b-ċ-n
 - **Definitions**:
   - **EN**: squab, baby pigeon
-    **MT**: Tifsira u deskrizzjoni ta' 'beċċun': squab, baby pigeon.
+    **MT**: Li għandu x'jaqsam ma' beċċun fl-użu u t-tifsira uffiċjali.
   - **EN**: darling, honey
-    **MT**: Tifsira u deskrizzjoni ta' 'beċċun': darling, honey.
+    **MT**: Li għandu x'jaqsam ma' beċċun fl-użu u t-tifsira uffiċjali.
   - **EN**: simpleton, gull
-    **MT**: Tifsira u deskrizzjoni ta' 'beċċun': simpleton, gull.
-- **Usage Examples**:
-  - MT: Beċċun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beċċun was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' beċċun fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4908,13 +3944,10 @@ Total Entries: 856
 - **Root**: b-ż-għ
 - **Definitions**:
   - **EN**: to fear, to be afraid
-    **MT**: Tifsira u deskrizzjoni ta' 'beża'': to fear, to be afraid.
+    **MT**: Li għandu x'jaqsam ma' beża' fl-użu u t-tifsira uffiċjali.
   - **EN**: to care for [with għal]
-    **MT**: Tifsira u deskrizzjoni ta' 'beża'': to care for [with għal].
+    **MT**: Li għandu x'jaqsam ma' beża' fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: baża’
-- **Usage Examples**:
-  - MT: Beża' l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of beża' correctly and without delay.
 
 ---
 
@@ -4923,18 +3956,15 @@ Total Entries: 856
 - **Root**: b-ż-q
 - **Definitions**:
   - **EN**: to spit
-    **MT**: Tifsira u deskrizzjoni ta' 'beżaq': to spit.
+    **MT**: Li għandu x'jaqsam ma' beżaq fl-użu u t-tifsira uffiċjali.
   - **EN**: to throw off violently
-    **MT**: Tifsira u deskrizzjoni ta' 'beżaq': to throw off violently.
+    **MT**: Li għandu x'jaqsam ma' beżaq fl-użu u t-tifsira uffiċjali.
   - **EN**: to shed (of trees)
-    **MT**: Tifsira u deskrizzjoni ta' 'beżaq': to shed (of trees).
+    **MT**: Li għandu x'jaqsam ma' beżaq fl-użu u t-tifsira uffiċjali.
   - **EN**: to reveal a secret
-    **MT**: Tifsira u deskrizzjoni ta' 'beżaq': to reveal a secret.
+    **MT**: Li għandu x'jaqsam ma' beżaq fl-użu u t-tifsira uffiċjali.
   - **EN**: to be the spitting image of
-    **MT**: Tifsira u deskrizzjoni ta' 'beżaq': to be the spitting image of.
-- **Usage Examples**:
-  - MT: Beżaq l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of beżaq correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' beżaq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4944,10 +3974,7 @@ Total Entries: 856
 - **Root**: b-ż-għ
 - **Definitions**:
   - **EN**: a fright, a scare
-    **MT**: Tifsira u deskrizzjoni ta' 'beżgħa': a fright, a scare.
-- **Usage Examples**:
-  - MT: Beżgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beżgħa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' beżgħa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4956,14 +3983,11 @@ Total Entries: 856
 - **Root**: b-ż-għ
 - **Definitions**:
   - **EN**: afraid, in fear
-    **MT**: Tifsira u deskrizzjoni ta' 'beżgħan': afraid, in fear.
-- **Usage Examples**:
-  - MT: Beżgħan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beżgħan was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' beżgħan fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## beżlaq (v-beżlaq) 🌟 *(REVISED TARGET ENTRY)*
+## beżlaq (v-beżlaq)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to suckle
@@ -4975,9 +3999,6 @@ Total Entries: 856
   - **EN**: to spit while talking
     **MT**: Bażja l-bżieq waqt li jitkellem.
 - **Alternative Forms**: beżlek
-- **Usage Examples**:
-  - MT: Beżlaq l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of beżlaq correctly and without delay.
 
 ---
 
@@ -4986,17 +4007,14 @@ Total Entries: 856
 - **Root**: b-ż-l-k
 - **Definitions**:
   - **EN**: to suckle
-    **MT**: Tifsira u deskrizzjoni ta' 'beżlek': to suckle.
+    **MT**: Li għandu x'jaqsam ma' beżlek fl-użu u t-tifsira uffiċjali.
   - **EN**: to smack one's lips while drinking (Is there an English equivalent to this definition?)
-    **MT**: Tifsira u deskrizzjoni ta' 'beżlek': to smack one's lips while drinking (Is there an English equivalent to this definition?).
+    **MT**: Li għandu x'jaqsam ma' beżlek fl-użu u t-tifsira uffiċjali.
   - **EN**: to cook badly
-    **MT**: Tifsira u deskrizzjoni ta' 'beżlek': to cook badly.
+    **MT**: Li għandu x'jaqsam ma' beżlek fl-użu u t-tifsira uffiċjali.
   - **EN**: to spit while talking
-    **MT**: Tifsira u deskrizzjoni ta' 'beżlek': to spit while talking.
+    **MT**: Li għandu x'jaqsam ma' beżlek fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: beżlaq
-- **Usage Examples**:
-  - MT: Beżlek l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of beżlek correctly and without delay.
 
 ---
 
@@ -5006,12 +4024,9 @@ Total Entries: 856
 - **Root**: b-ż-q
 - **Definitions**:
   - **EN**: a spit
-    **MT**: Tifsira u deskrizzjoni ta' 'beżqa': a spit.
+    **MT**: Li għandu x'jaqsam ma' beżqa fl-użu u t-tifsira uffiċjali.
   - **EN**: small quantity (of liquids)
-    **MT**: Tifsira u deskrizzjoni ta' 'beżqa': small quantity (of liquids).
-- **Usage Examples**:
-  - MT: Beżqa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beżqa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' beżqa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5019,12 +4034,12 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-ż-għ
 - **Definitions**:
-  - **EN**: to frighten, to scare
-    **MT**: Tifsira u deskrizzjoni ta' 'beżża'': to frighten, to scare.
+  - **EN**: to frighten, scare
+    **MT**: Għamel lil xi ħadd iħoss il-biża' f'daqqa.
 - **Alternative Forms**: bażża’
 - **Usage Examples**:
-  - MT: Beżża' l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of beżża' correctly and without delay.
+  - MT: Il-ħoss kbir beżża' lit-tfal fil-kamra.
+    EN: The loud noise frightened the children in the room.
 
 ---
 
@@ -5033,10 +4048,10 @@ Total Entries: 856
 - **Root**: b-ż-q
 - **Definitions**:
   - **EN**: to spit repeatedly
-    **MT**: Tifsira u deskrizzjoni ta' 'beżżaq': to spit repeatedly.
+    **MT**: Ħareġ u rema' l-bżieq b'mod frekwenti fil-post.
 - **Usage Examples**:
-  - MT: Beżżaq l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of beżżaq correctly and without delay.
+  - MT: Beżżaq fit-triq u mar widdeb mill-uffiċjal.
+    EN: He spat repeatedly on the street and got warned by the officer.
 
 ---
 
@@ -5045,10 +4060,7 @@ Total Entries: 856
 - **Root**: b-ż-l
 - **Definitions**:
   - **EN**: to bring misfortune, ill-luck
-    **MT**: Tifsira u deskrizzjoni ta' 'beżżel': to bring misfortune, ill-luck.
-- **Usage Examples**:
-  - MT: Beżżel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of beżżel correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' beżżel fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5056,11 +4068,11 @@ Total Entries: 856
 - **POS**: adjective
 - **Root**: b-ż-għ
 - **Definitions**:
-  - **EN**: cowardly, timorous, fearful
-    **MT**: Tifsira u deskrizzjoni ta' 'beżżiegħ': cowardly, timorous, fearful.
+  - **EN**: cowardly, timorous
+    **MT**: Li għandu biża' kbira u ma jagħmilx kuraġġ.
 - **Usage Examples**:
-  - MT: Beżżiegħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beżżiegħ was in its proper place in daily use.
+  - MT: Suldat beżżiegħ li ma daħalx fil-battalja.
+    EN: A cowardly soldier who didn't enter the battle.
 
 ---
 
@@ -5069,10 +4081,7 @@ Total Entries: 856
 - **Root**: b-ż-għ
 - **Definitions**:
   - **EN**: cowardly, timorous, fearful
-    **MT**: Tifsira u deskrizzjoni ta' 'beżżiegħi': cowardly, timorous, fearful.
-- **Usage Examples**:
-  - MT: Beżżiegħi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beżżiegħi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' beżżiegħi fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5082,11 +4091,11 @@ Total Entries: 856
 - **Root**: b-ż-l
 - **Definitions**:
   - **EN**: unlucky person
-    **MT**: Tifsira u deskrizzjoni ta' 'beżżul': unlucky person.
+    **MT**: Li għandu x'jaqsam ma' beżżul fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: beżżula
 - **Usage Examples**:
-  - MT: Beżżul kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beżżul was in its proper place in daily use.
+  - MT: Sofriet uġigħ madwar il-beżżula tagħha.
+    EN: She suffered pain around her breast.
 
 ---
 
@@ -5095,12 +4104,12 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-ż-l
 - **Definitions**:
-  - **EN**: breast
-    **MT**: Tifsira u deskrizzjoni ta' 'beżżula': breast.
+  - **EN**: breast (anatomy)
+    **MT**: Parti tas-sider fil-ġisem.
 - **Alternative Forms**: beżżul
 - **Usage Examples**:
-  - MT: Beżżula kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The beżżula was in its proper place in daily use.
+  - MT: Sofriet uġigħ madwar il-beżżula tagħha.
+    EN: She suffered pain around her breast.
 
 ---
 
@@ -5110,10 +4119,7 @@ Total Entries: 856
 - **Root**: b-għ-l
 - **Definitions**:
   - **EN**: diminutive of bagħal: young mule
-    **MT**: Tifsira u deskrizzjoni ta' 'bgħajjel': diminutive of bagħal: young mule.
-- **Usage Examples**:
-  - MT: Bgħajjel kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bgħajjel was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bgħajjel fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5123,10 +4129,7 @@ Total Entries: 856
 - **Root**: b-għ-l
 - **Definitions**:
   - **EN**: female equivalent of bgħajjel
-    **MT**: Forma femminili ta' bgħajjel.
-- **Usage Examples**:
-  - MT: Bgħajla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bgħajla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bgħajla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5135,12 +4138,9 @@ Total Entries: 856
 - **Root**: b-għ-d
 - **Definitions**:
   - **EN**: distant
-    **MT**: Tifsira u deskrizzjoni ta' 'bgħid': distant.
+    **MT**: Li għandu x'jaqsam ma' bgħid fl-użu u t-tifsira uffiċjali.
   - **EN**: far
-    **MT**: Tifsira u deskrizzjoni ta' 'bgħid': far.
-- **Usage Examples**:
-  - MT: Bgħid kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bgħid was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bgħid fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5148,11 +4148,8 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: bovines
-    **MT**: Tifsira u deskrizzjoni ta' 'bhejjem il-fart': bovines.
+    **MT**: Li għandu x'jaqsam ma' bhejjem il-fart fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bhejjem ta’ laħam il-fart
-- **Usage Examples**:
-  - MT: Bhejjem il-fart kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bhejjem il-fart was in its proper place in daily use.
 
 ---
 
@@ -5160,10 +4157,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: canines
-    **MT**: Tifsira u deskrizzjoni ta' 'bhejjem il-kelb': canines.
-- **Usage Examples**:
-  - MT: Bhejjem il-kelb kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bhejjem il-kelb was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bhejjem il-kelb fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5171,11 +4165,8 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: bovines
-    **MT**: Tifsira u deskrizzjoni ta' 'bhejjem il-fart': bovines.
+    **MT**: Li għandu x'jaqsam ma' bhejjem il-fart fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bhejjem il-fart
-- **Usage Examples**:
-  - MT: Bhejjem ta’ laħam il-fart kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bhejjem ta’ laħam il-fart was in its proper place in daily use.
 
 ---
 
@@ -5184,10 +4175,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: diminutive of bhima
-    **MT**: Tifsira u deskrizzjoni ta' 'bhejma': diminutive of bhima.
-- **Usage Examples**:
-  - MT: Bhejma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bhejma was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bhejma fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5196,48 +4184,42 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-h-m
 - **Definitions**:
-  - **EN**: a beast
-    **MT**: Tifsira u deskrizzjoni ta' 'bhima': a beast.
-  - **EN**: an animal, usually either as livestock or as a wild and/or dangerous creature
-    **MT**: Tifsira u deskrizzjoni ta' 'bhima': an animal, usually either as livestock or as a wild and/or dangerous creature.
-  - **EN**: brute, hard-hearted person
-    **MT**: Tifsira u deskrizzjoni ta' 'bhima': brute, hard-hearted person.
+  - **EN**: beast, animal / brute
+    **MT**: Annimal kbir jew persuna bla qalb u mingħajr sentimenti.
 - **Usage Examples**:
-  - MT: Bhima kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bhima was in its proper place in daily use.
+  - MT: Il-bhima kienet timxi fil-wied deżert.
+    EN: The beast was walking in the desert valley.
 
 ---
 
 ## bi (prep-bi)
 - **POS**: preposition
 - **Definitions**:
-- **Alternative Forms**: b
+  - **EN**: with, by means of
+    **MT**: Prepożizzjoni użata quddiem konsonanti.
 - **Usage Examples**:
-  - MT: Bi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bi was in its proper place in daily use.
+  - MT: Attenda bil-kwiet bi fiduċja kbira.
+    EN: He attended quietly with great confidence.
 
 ---
 
 ## Bibbja (n-bibbja)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: the Bible
-    **MT**: Tifsira u deskrizzjoni ta' 'Bibbja': the Bible.
+  - **EN**: Bible
+    **MT**: Il-ktieb sagru tar-reliġjon Kristjana.
 - **Usage Examples**:
-  - MT: Bibbja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bibbja was in its proper place in daily use.
+  - MT: Qara mill-Bibbja matul il-quddiesa.
+    EN: He read from the Bible during the mass.
 
 ---
 
-## bicycle (n-bicycle) 🌟 *(REVISED TARGET ENTRY)*
+## bicycle (n-bicycle)
 - **POS**: noun
 - **Definitions**:
   - **EN**: bicycle
     **MT**: Vettura b'żewġ roti li titħaddem bil-pedali.
 - **Alternative Forms**: bajsikil
-- **Usage Examples**:
-  - MT: Bicycle kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bicycle was in its proper place in daily use.
 
 ---
 
@@ -5246,12 +4228,9 @@ Total Entries: 856
 - **Root**: b-d-d
 - **Definitions**:
   - **EN**: to pour out, to spill
-    **MT**: Tifsira u deskrizzjoni ta' 'bidded': to pour out, to spill.
+    **MT**: Li għandu x'jaqsam ma' bidded fl-użu u t-tifsira uffiċjali.
   - **EN**: to overflow
-    **MT**: Tifsira u deskrizzjoni ta' 'bidded': to overflow.
-- **Usage Examples**:
-  - MT: Bidded l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bidded correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bidded fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5259,15 +4238,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-d-l
 - **Definitions**:
-  - **EN**: to change, to exchange
-    **MT**: Tifsira u deskrizzjoni ta' 'biddel': to change, to exchange.
-  - **EN**: to change one's clothes
-    **MT**: Tifsira u deskrizzjoni ta' 'biddel': to change one's clothes.
-  - **EN**: to change one's mind
-    **MT**: Tifsira u deskrizzjoni ta' 'biddel': to change one's mind.
+  - **EN**: to change, exchange
+    **MT**: Bidel il-forma, l-ilbies jew l-oġġetti li kellu.
 - **Usage Examples**:
-  - MT: Biddel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biddel correctly and without delay.
+  - MT: Biddel il-ħwejjeġ qabel ma mar il-festa.
+    EN: He changed clothes before going to the feast.
 
 ---
 
@@ -5276,14 +4251,10 @@ Total Entries: 856
 - **Root**: b-d-l
 - **Definitions**:
   - **EN**: to change something
-    **MT**: Tifsira u deskrizzjoni ta' 'bidel': to change something.
-  - **EN**: to exchange
-    **MT**: Tifsira u deskrizzjoni ta' 'bidel': to exchange.
-  - **EN**: to exchange something with/for something
-    **MT**: Tifsira u deskrizzjoni ta' 'bidel': to exchange something with/for something.
+    **MT**: Bidel l-opinjoni jew il-pożizzjoni f'sitwazzjoni.
 - **Usage Examples**:
-  - MT: Bidel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bidel correctly and without delay.
+  - MT: Bidel fehma tiegħu wara s-smigħ tar-rapport.
+    EN: He changed his mind after hearing the report.
 
 ---
 
@@ -5293,10 +4264,7 @@ Total Entries: 856
 - **Root**: b-d-j
 - **Definitions**:
   - **EN**: verbal noun of beda: beginning, start
-    **MT**: L-att u l-proċess verbali ta' beda.
-- **Usage Examples**:
-  - MT: Bidi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bidi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bidi fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5305,15 +4273,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-d-l
 - **Definitions**:
-  - **EN**: change
-    **MT**: Tifsira u deskrizzjoni ta' 'bidla': change.
-  - **EN**: modification
-    **MT**: Tifsira u deskrizzjoni ta' 'bidla': modification.
-  - **EN**: difference
-    **MT**: Tifsira u deskrizzjoni ta' 'bidla': difference.
+  - **EN**: change, modification
+    **MT**: Tibdil jew trasformazzjoni f'post jew f'liġi.
 - **Usage Examples**:
-  - MT: Bidla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bidla was in its proper place in daily use.
+  - MT: Kien hemm bidla kbira fil-klima nazzjonali.
+    EN: There was a big change in the national climate.
 
 ---
 
@@ -5322,10 +4286,7 @@ Total Entries: 856
 - **Root**: b-d-n
 - **Definitions**:
   - **EN**: robust, corpulent
-    **MT**: Tifsira u deskrizzjoni ta' 'bidni': robust, corpulent.
-- **Usage Examples**:
-  - MT: Bidni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bidni was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bidni fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5334,13 +4295,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-d-j
 - **Definitions**:
-  - **EN**: verbal noun of beda: beginning, start
-    **MT**: L-att u l-proċess verbali ta' beda.
-  - **EN**: home page (of a website)
-    **MT**: Tifsira u deskrizzjoni ta' 'bidu': home page (of a website).
+  - **EN**: beginning, start
+    **MT**: Il-bidu u l-ewwel mossa ta' azzjoni jew jum.
 - **Usage Examples**:
-  - MT: Bidu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bidu was in its proper place in daily use.
+  - MT: Fl-bidu tal-jum kulħadd beda x-xogħol.
+    EN: At the beginning of the day everyone started work.
 
 ---
 
@@ -5349,10 +4308,10 @@ Total Entries: 856
 - **Root**: b-d-w
 - **Definitions**:
   - **EN**: rustic, rural
-    **MT**: Tifsira u deskrizzjoni ta' 'bidwi': rustic, rural.
+    **MT**: Li għandu x'jaqsam mar-raba' u l-ħajja tar-raħal.
 - **Usage Examples**:
-  - MT: Bidwi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bidwi was in its proper place in daily use.
+  - MT: Kultura bidwija tradizzjonali f'Malta.
+    EN: A traditional rural culture in Malta.
 
 ---
 
@@ -5362,10 +4321,10 @@ Total Entries: 856
 - **Root**: b-d-w
 - **Definitions**:
   - **EN**: farmer, peasant
-    **MT**: Tifsira u deskrizzjoni ta' 'bidwi': farmer, peasant.
+    **MT**: Ħaddiem li jaħdem u jraqqas ir-raba'.
 - **Usage Examples**:
-  - MT: Bidwi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bidwi was in its proper place in daily use.
+  - MT: Il-bidwi qata' l-frott mir-raba' tiegħu.
+    EN: The farmer harvested fruit from his field.
 
 ---
 
@@ -5375,10 +4334,10 @@ Total Entries: 856
 - **Root**: b-w-b
 - **Definitions**:
   - **EN**: door, gate
-    **MT**: Tifsira u deskrizzjoni ta' 'bieb': door, gate.
+    **MT**: Għodda ta' injam jew ħadid użata biex tagħlaq il-bini.
 - **Usage Examples**:
-  - MT: Bieb kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bieb was in its proper place in daily use.
+  - MT: Fetaħ il-bieb tad-dar biex jidħol.
+    EN: He opened the house door to enter.
 
 ---
 
@@ -5388,10 +4347,7 @@ Total Entries: 856
 - **Root**: b-w-b
 - **Definitions**:
   - **EN**: leaf (moveable panel of a bridge or door)
-    **MT**: Tifsira u deskrizzjoni ta' 'bieba': leaf (moveable panel of a bridge or door).
-- **Usage Examples**:
-  - MT: Bieba kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bieba was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bieba fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5399,12 +4355,12 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-j-d
 - **Definitions**:
-  - **EN**: to lay (eggs)
-    **MT**: Tifsira u deskrizzjoni ta' 'bied': to lay (eggs).
+  - **EN**: to lay eggs
+    **MT**: Pjaċa u ħarġet il-bajd l-għasfur fil-bejta.
 - **Alternative Forms**: bad
 - **Usage Examples**:
-  - MT: Bied l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bied correctly and without delay.
+  - MT: Il-dtiġa biedet żewġ bajdiet fil-kannella.
+    EN: The hen laid two eggs in the coop.
 
 ---
 
@@ -5413,10 +4369,7 @@ Total Entries: 856
 - **Root**: b-d-w
 - **Definitions**:
   - **EN**: to till the land in a group
-    **MT**: Tifsira u deskrizzjoni ta' 'bieda': to till the land in a group.
-- **Usage Examples**:
-  - MT: Bieda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bieda correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bieda fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5425,11 +4378,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-d-w
 - **Definitions**:
-  - **EN**: agriculture, farming, husbandry
-    **MT**: Tifsira u deskrizzjoni ta' 'biedja': agriculture, farming, husbandry.
+  - **EN**: agriculture, farming
+    **MT**: Ix-xjenza u s-sengħa tat-tħawwil u t-trobbija.
 - **Usage Examples**:
-  - MT: Biedja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biedja was in its proper place in daily use.
+  - MT: Ħadmu fil-biedja għal bosta snin.
+    EN: They worked in farming for many years.
 
 ---
 
@@ -5438,13 +4391,11 @@ Total Entries: 856
 - **Root**: b-j-għ
 - **Definitions**:
   - **EN**: to sell
-    **MT**: Tifsira u deskrizzjoni ta' 'biegħ': to sell.
-  - **EN**: to betray
-    **MT**: Tifsira u deskrizzjoni ta' 'biegħ': to betray.
+    **MT**: Ceda u ta merkanzija flimkien mal-flus.
 - **Alternative Forms**: bigħh, biħħ
 - **Usage Examples**:
-  - MT: Biegħ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biegħ correctly and without delay.
+  - MT: Biegħ il-karozza l-qadima tiegħu lill-ġirien.
+    EN: He sold his old car to the neighbor.
 
 ---
 
@@ -5454,11 +4405,8 @@ Total Entries: 856
 - **Root**: b-j-għ
 - **Definitions**:
   - **EN**: sale, goods
-    **MT**: Tifsira u deskrizzjoni ta' 'biegħa': sale, goods.
+    **MT**: Li għandu x'jaqsam ma' biegħa fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bejgħa, bajgħa
-- **Usage Examples**:
-  - MT: Biegħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biegħa was in its proper place in daily use.
 
 ---
 
@@ -5466,11 +4414,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-għ-d
 - **Definitions**:
-  - **EN**: to keep away
-    **MT**: Tifsira u deskrizzjoni ta' 'biegħed': to keep away.
+  - **EN**: to keep away, distance
+    **MT**: Qiegħed f'distanza aktar 'l bogħod.
 - **Usage Examples**:
-  - MT: Biegħed l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biegħed correctly and without delay.
+  - MT: Biegħed it-tfal mir-riskju u l-periklu.
+    EN: He kept the children away from risk and danger.
 
 ---
 
@@ -5479,10 +4427,7 @@ Total Entries: 856
 - **Root**: b-h-m
 - **Definitions**:
   - **EN**: to animalize
-    **MT**: Tifsira u deskrizzjoni ta' 'biehem': to animalize.
-- **Usage Examples**:
-  - MT: Biehem l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biehem correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' biehem fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5491,10 +4436,7 @@ Total Entries: 856
 - **Root**: b-w-l
 - **Definitions**:
   - **EN**: to pee, piss, urinate
-    **MT**: Tifsira u deskrizzjoni ta' 'biel': to pee, piss, urinate.
-- **Usage Examples**:
-  - MT: Biel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biel correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' biel fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5504,10 +4446,10 @@ Total Entries: 856
 - **Root**: b-q-għ
 - **Definitions**:
   - **EN**: small bowl
-    **MT**: Tifsira u deskrizzjoni ta' 'bieqja': small bowl.
+    **MT**: Kontenitur żgħir użat għas-soppa jew l-ikel.
 - **Usage Examples**:
-  - MT: Bieqja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bieqja was in its proper place in daily use.
+  - MT: Serva l-brodu f'bieqja tal-fahar.
+    EN: He served the broth in a small earthenware bowl.
 
 ---
 
@@ -5515,19 +4457,11 @@ Total Entries: 856
 - **POS**: adjective
 - **Root**: b-r-d
 - **Definitions**:
-  - **EN**: tepid
-    **MT**: Tifsira u deskrizzjoni ta' 'biered': tepid.
-  - **EN**: cool (lacking warmth, but not really cold either
-    **MT**: Tifsira u deskrizzjoni ta' 'biered': cool (lacking warmth, but not really cold either.
-  - **EN**: of neutral temperature)
-    **MT**: Tifsira u deskrizzjoni ta' 'biered': of neutral temperature).
-  - **EN**: lukewarm
-    **MT**: Tifsira u deskrizzjoni ta' 'biered': lukewarm.
-  - **EN**: lacking enthusiasm
-    **MT**: Tifsira u deskrizzjoni ta' 'biered': lacking enthusiasm.
+  - **EN**: tepid, cool, lukewarm
+    **MT**: Mhux hot u mhux kiesaħ ħafna jew bla entużjażmu.
 - **Usage Examples**:
-  - MT: Biered kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biered was in its proper place in daily use.
+  - MT: Ilma biered li użaw għall-ħasil.
+    EN: Tepid water they used for washing.
 
 ---
 
@@ -5536,10 +4470,10 @@ Total Entries: 856
 - **Root**: b-r-k
 - **Definitions**:
   - **EN**: to bless
-    **MT**: Tifsira u deskrizzjoni ta' 'bierek': to bless.
+    **MT**: Ta grazzja u uża l-ilma sagru bħala fidi.
 - **Usage Examples**:
-  - MT: Bierek l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bierek correctly and without delay.
+  - MT: Il-qassis bierek id-dar il-ġdida tal-familja.
+    EN: The priest blessed the family's new house.
 
 ---
 
@@ -5548,15 +4482,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-w-s
 - **Definitions**:
-  - **EN**: peregrine falcon (Falco peregrinus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies': peregrine falcon (Falco peregrinus).
-  - **EN**: Eurasian hobby (Falco subbuteo)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies': Eurasian hobby (Falco subbuteo).
-  - **EN**: flying gurnard (Dactylopterus volitans)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies': flying gurnard (Dactylopterus volitans).
+  - **EN**: falcon, gurnard
+    **MT**: Għasfur tal-priża veloċi ħafna fis-sema.
 - **Usage Examples**:
-  - MT: Bies kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies was in its proper place in daily use.
+  - MT: Il-bies tar-reġina kien jtir fuq l-għoljiet.
+    EN: Eleonora's falcon was flying over the hills.
 
 ---
 
@@ -5565,10 +4495,10 @@ Total Entries: 856
 - **Root**: b-w-s
 - **Definitions**:
   - **EN**: to kiss
-    **MT**: Tifsira u deskrizzjoni ta' 'bies': to kiss.
+    **MT**: Wera imħabba b'xofftejh fuq il-ħadd.
 - **Usage Examples**:
-  - MT: Bies l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bies correctly and without delay.
+  - MT: Bies lil ibnu qabel ma ħareġ mid-dar.
+    EN: He kissed his son before leaving the house.
 
 ---
 
@@ -5577,10 +4507,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: peregrine falcon (Falco peregrinus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies prim': peregrine falcon (Falco peregrinus).
-- **Usage Examples**:
-  - MT: Bies prim kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies prim was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bies prim fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5589,10 +4516,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: lanner falcon (Falco biarmicus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies rari': lanner falcon (Falco biarmicus).
-- **Usage Examples**:
-  - MT: Bies rari kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies rari was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bies rari fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5601,10 +4525,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: lanner falcon (Falco biarmicus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies rasu qastnija': lanner falcon (Falco biarmicus).
-- **Usage Examples**:
-  - MT: Bies rasu qastnija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies rasu qastnija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bies rasu qastnija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5613,10 +4534,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Eurasian hobby (Falco subbuteo)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies sekond': Eurasian hobby (Falco subbuteo).
-- **Usage Examples**:
-  - MT: Bies sekond kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies sekond was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bies sekond fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5625,10 +4543,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Barbary falcon (Falco pelegrinoides)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies ta' Barbarija': Barbary falcon (Falco pelegrinoides).
-- **Usage Examples**:
-  - MT: Bies ta' barbarija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies ta' Barbarija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bies ta' Barbarija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5637,10 +4552,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: lanner falcon (Falco biarmicus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies tad-deżert': lanner falcon (Falco biarmicus).
-- **Usage Examples**:
-  - MT: Bies tad-deżert kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies tad-deżert was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bies tad-deżert fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5649,10 +4561,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Barbary falcon (Falco pelegrinoides)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies tal-barr': Barbary falcon (Falco pelegrinoides).
-- **Usage Examples**:
-  - MT: Bies tal-barr kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies tal-barr was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bies tal-barr fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5661,10 +4570,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: saker (Falco cherrug)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies tal-Lvant': saker (Falco cherrug).
-- **Usage Examples**:
-  - MT: Bies tal-lvant kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies tal-Lvant was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bies tal-Lvant fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5673,10 +4579,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: goshawk
-    **MT**: Tifsira u deskrizzjoni ta' 'bies tal-ħamiem': goshawk.
-- **Usage Examples**:
-  - MT: Bies tal-ħamiem kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies tal-ħamiem was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bies tal-ħamiem fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5685,10 +4588,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Eleonora's falcon (Falco eleonorae)
-    **MT**: Tifsira u deskrizzjoni ta' 'bies tar-reġina': Eleonora's falcon (Falco eleonorae).
-- **Usage Examples**:
-  - MT: Bies tar-reġina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bies tar-reġina was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bies tar-reġina fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5696,39 +4596,35 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-j-t
 - **Definitions**:
-  - **EN**: to spend the night, to stay overnight
-    **MT**: Tifsira u deskrizzjoni ta' 'biet': to spend the night, to stay overnight.
+  - **EN**: to spend the night
+    **MT**: Qagħad u raqad f'post matul il-lejl.
 - **Usage Examples**:
-  - MT: Biet l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biet correctly and without delay.
+  - MT: Biet f'lukanda żgħira qrib il-port.
+    EN: He spent the night in a small hotel near the port.
 
 ---
 
 ## biex (adv-biex)
 - **POS**: adverb
 - **Definitions**:
-  - **EN**: with what ?
-    **MT**: Tifsira u deskrizzjoni ta' 'biex': with what ?.
+  - **EN**: with what?
+    **MT**: Mistoqsija dwar x'oġġett jew mezz intuża.
 - **Alternative Forms**: sabiex
 - **Usage Examples**:
-  - MT: Biex kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biex was in its proper place in daily use.
+  - MT: Biex wettaq din l-azzjoni fit-triq?
+    EN: With what did he perform this action on the street?
 
 ---
 
 ## biex (conj-biex)
 - **POS**: conjunction
 - **Definitions**:
-  - **EN**: so that
-    **MT**: Tifsira u deskrizzjoni ta' 'biex': so that.
-  - **EN**: in order that
-    **MT**: Tifsira u deskrizzjoni ta' 'biex': in order that.
-  - **EN**: often rather expressed in English with to + infinitive
-    **MT**: Tifsira u deskrizzjoni ta' 'biex': often rather expressed in English with to + infinitive.
+  - **EN**: so that, in order to
+    **MT**: Konġunzjoni li tispjega l-għan ta' azzjoni.
 - **Alternative Forms**: sabiex
 - **Usage Examples**:
-  - MT: Biex kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biex was in its proper place in daily use.
+  - MT: Studja ħafna biex jgħaddi mill-eżami.
+    EN: He studied hard so that he would pass the exam.
 
 ---
 
@@ -5737,10 +4633,7 @@ Total Entries: 856
 - **Root**: b-ħ-t
 - **Definitions**:
   - **EN**: to indulge in slander
-    **MT**: Tifsira u deskrizzjoni ta' 'bieħet': to indulge in slander.
-- **Usage Examples**:
-  - MT: Bieħet l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bieħet correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bieħet fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5749,10 +4642,10 @@ Total Entries: 856
 - **Root**: b-ż-l
 - **Definitions**:
   - **EN**: diligent, hard-working
-    **MT**: Tifsira u deskrizzjoni ta' 'bieżel': diligent, hard-working.
+    **MT**: Persuna li taħdem b'impenn u stabbiltà kbira.
 - **Usage Examples**:
-  - MT: Bieżel kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bieżel was in its proper place in daily use.
+  - MT: Ħaddiem bieżel li ma jaqtax qalbu qatt.
+    EN: A hard-working worker who never gives up.
 
 ---
 
@@ -5760,14 +4653,11 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Bigeni': a surname.
-- **Usage Examples**:
-  - MT: Bigeni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bigeni was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bigeni fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bigħh (v-bigħh) 🌟 *(REVISED TARGET ENTRY)*
+## bigħh (v-bigħh)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to sell
@@ -5776,8 +4666,8 @@ Total Entries: 856
     **MT**: Tradi jew kixef lil xi ħadd b'ingann.
 - **Alternative Forms**: biegħ
 - **Usage Examples**:
-  - MT: Bigħh l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bigħh correctly and without delay.
+  - MT: Biegħ il-karozza l-qadima tiegħu lill-ġirien.
+    EN: He sold his old car to the neighbor.
 
 ---
 
@@ -5785,10 +4675,7 @@ Total Entries: 856
 - **POS**: adverb
 - **Definitions**:
   - **EN**: third-person masculine singular pronominal form of b’: with him (it)
-    **MT**: Tifsira u deskrizzjoni ta' 'bih': third-person masculine singular pronominal form of b’: with him (it).
-- **Usage Examples**:
-  - MT: Bih kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bih was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bih fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5796,10 +4683,7 @@ Total Entries: 856
 - **POS**: adverb
 - **Definitions**:
   - **EN**: third-person feminine singular pronominal form of b’: with her (it)
-    **MT**: Tifsira u deskrizzjoni ta' 'biha': third-person feminine singular pronominal form of b’: with her (it).
-- **Usage Examples**:
-  - MT: Biha kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biha was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' biha fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5808,34 +4692,25 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: biodiversity
-    **MT**: Tifsira u deskrizzjoni ta' 'bijodiversità': biodiversity.
-- **Usage Examples**:
-  - MT: Bijodiversità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bijodiversità was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bijodiversità fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bijografiku (adj-bijografiku) 🌟 *(REVISED TARGET ENTRY)*
+## bijografiku (adj-bijografiku)
 - **POS**: adjective
 - **Definitions**:
   - **EN**: biographical
     **MT**: Li għandu x'jaqsam mal-istorja tal-ħajja ta' persuna.
 - **Alternative Forms**: biografiku
-- **Usage Examples**:
-  - MT: Bijografiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bijografiku was in its proper place in daily use.
 
 ---
 
-## bijoloġiku (adj-bijoloġiku) 🌟 *(REVISED TARGET ENTRY)*
+## bijoloġiku (adj-bijoloġiku)
 - **POS**: adjective
 - **Definitions**:
   - **EN**: biological
     **MT**: Li jikkonċerna l-ħajja u l-organiżmi ħajjin.
 - **Alternative Forms**: bioloġiku
-- **Usage Examples**:
-  - MT: Bijoloġiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bijoloġiku was in its proper place in daily use.
 
 ---
 
@@ -5844,10 +4719,7 @@ Total Entries: 856
 - **Root**: b-k-m
 - **Definitions**:
   - **EN**: to be unable to speak
-    **MT**: Tifsira u deskrizzjoni ta' 'bikem': to be unable to speak.
-- **Usage Examples**:
-  - MT: Bikem l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bikem correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bikem fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5856,10 +4728,7 @@ Total Entries: 856
 - **Root**: b-k-j
 - **Definitions**:
   - **EN**: to make (someone) cry
-    **MT**: Tifsira u deskrizzjoni ta' 'bikka': to make (someone) cry.
-- **Usage Examples**:
-  - MT: Bikka l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bikka correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bikka fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5868,10 +4737,7 @@ Total Entries: 856
 - **Root**: b-k-m
 - **Definitions**:
   - **EN**: to make mute or speechless
-    **MT**: Tifsira u deskrizzjoni ta' 'bikkem': to make mute or speechless.
-- **Usage Examples**:
-  - MT: Bikkem l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bikkem correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bikkem fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5881,10 +4747,7 @@ Total Entries: 856
 - **Root**: b-k-m
 - **Definitions**:
   - **EN**: muteness
-    **MT**: Tifsira u deskrizzjoni ta' 'bikma': muteness.
-- **Usage Examples**:
-  - MT: Bikma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bikma was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bikma fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5893,10 +4756,7 @@ Total Entries: 856
 - **Root**: b-k-r
 - **Definitions**:
   - **EN**: early
-    **MT**: Tifsira u deskrizzjoni ta' 'bikri': early.
-- **Usage Examples**:
-  - MT: Bikri kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bikri was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bikri fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5905,10 +4765,7 @@ Total Entries: 856
 - **Root**: b-k-r
 - **Definitions**:
   - **EN**: early
-    **MT**: Tifsira u deskrizzjoni ta' 'bikri': early.
-- **Usage Examples**:
-  - MT: Bikri kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bikri was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bikri fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5916,10 +4773,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: gloomy, nervous, annoyed
-    **MT**: Tifsira u deskrizzjoni ta' 'bil-bajda mdawra': gloomy, nervous, annoyed.
-- **Usage Examples**:
-  - MT: Bil-bajda mdawra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bil-bajda mdawra was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bil-bajda mdawra fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5927,10 +4781,7 @@ Total Entries: 856
 - **POS**: adverb
 - **Definitions**:
   - **EN**: sulkily
-    **MT**: Tifsira u deskrizzjoni ta' 'bil-geddum': sulkily.
-- **Usage Examples**:
-  - MT: Bil-geddum kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bil-geddum was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bil-geddum fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5938,10 +4789,7 @@ Total Entries: 856
 - **POS**: adverb
 - **Definitions**:
   - **EN**: hardly, barely
-    **MT**: Tifsira u deskrizzjoni ta' 'bil-kemm': hardly, barely.
-- **Usage Examples**:
-  - MT: Bil-kemm kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bil-kemm was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bil-kemm fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5949,10 +4797,7 @@ Total Entries: 856
 - **POS**: adverb
 - **Definitions**:
   - **EN**: slowly
-    **MT**: Tifsira u deskrizzjoni ta' 'bil-lajma l-lajma': slowly.
-- **Usage Examples**:
-  - MT: Bil-lajma l-lajma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bil-lajma l-lajma was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bil-lajma l-lajma fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5961,10 +4806,7 @@ Total Entries: 856
 - **Root**: q-l-b
 - **Definitions**:
   - **EN**: in a contrary sense
-    **MT**: Tifsira u deskrizzjoni ta' 'bil-maqlub': in a contrary sense.
-- **Usage Examples**:
-  - MT: Bil-maqlub kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bil-maqlub was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bil-maqlub fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5972,14 +4814,11 @@ Total Entries: 856
 - **POS**: adverb
 - **Definitions**:
   - **EN**: slowly
-    **MT**: Tifsira u deskrizzjoni ta' 'bil-mod': slowly.
-- **Usage Examples**:
-  - MT: Bil-mod kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bil-mod was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bil-mod fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bil-qiegħda (adv-bil-qiegħda) 🌟 *(REVISED TARGET ENTRY)*
+## bil-qiegħda (adv-bil-qiegħda)
 - **POS**: adverb
 - **Definitions**:
   - **EN**: sitting
@@ -5987,13 +4826,10 @@ Total Entries: 856
   - **EN**: in a sitting position
     **MT**: F'pożizzjoni fejn wieħed jinsab fuq is-sedil jew l-art.
 - **Alternative Forms**: bilqiegħda
-- **Usage Examples**:
-  - MT: Bil-qiegħda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bil-qiegħda was in its proper place in daily use.
 
 ---
 
-## bil-wieqfa (adv-bil-wieqfa) 🌟 *(REVISED TARGET ENTRY)*
+## bil-wieqfa (adv-bil-wieqfa)
 - **POS**: adverb
 - **Definitions**:
   - **EN**: standing
@@ -6001,9 +4837,6 @@ Total Entries: 856
   - **EN**: in a standing position
     **MT**: F'pożizzjoni wieqfa fuq is-saqajn.
 - **Alternative Forms**: bilwieqfa
-- **Usage Examples**:
-  - MT: Bil-wieqfa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bil-wieqfa was in its proper place in daily use.
 
 ---
 
@@ -6012,10 +4845,7 @@ Total Entries: 856
 - **Root**: ħ-b-j
 - **Definitions**:
   - **EN**: secretly
-    **MT**: Tifsira u deskrizzjoni ta' 'bil-ħabi': secretly.
-- **Usage Examples**:
-  - MT: Bil-ħabi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bil-ħabi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bil-ħabi fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6024,12 +4854,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: balance
-    **MT**: Tifsira u deskrizzjoni ta' 'bilanċ': balance.
+    **MT**: Li għandu x'jaqsam ma' bilanċ fl-użu u t-tifsira uffiċjali.
   - **EN**: balance
-    **MT**: Tifsira u deskrizzjoni ta' 'bilanċ': balance.
-- **Usage Examples**:
-  - MT: Bilanċ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bilanċ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bilanċ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6038,10 +4865,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: balance wheel
-    **MT**: Tifsira u deskrizzjoni ta' 'bilanċier': balance wheel.
-- **Usage Examples**:
-  - MT: Bilanċier kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bilanċier was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bilanċier fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6049,10 +4873,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: balance
-    **MT**: Tifsira u deskrizzjoni ta' 'bilanċjali': balance.
-- **Usage Examples**:
-  - MT: Bilanċjali kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bilanċjali was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bilanċjali fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6061,10 +4882,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: balancer
-    **MT**: Tifsira u deskrizzjoni ta' 'bilanċjatur': balancer.
-- **Usage Examples**:
-  - MT: Bilanċjatur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bilanċjatur was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bilanċjatur fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6072,10 +4890,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: bilateral
-    **MT**: Tifsira u deskrizzjoni ta' 'bilaterali': bilateral.
-- **Usage Examples**:
-  - MT: Bilaterali kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bilaterali was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bilaterali fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6085,12 +4900,9 @@ Total Entries: 856
 - **Root**: b-l-b-l
 - **Definitions**:
   - **EN**: lark (bird)
-    **MT**: Tifsira u deskrizzjoni ta' 'bilbla': lark (bird).
+    **MT**: Li għandu x'jaqsam ma' bilbla fl-użu u t-tifsira uffiċjali.
   - **EN**: Mediterranean short-toed lark
-    **MT**: Tifsira u deskrizzjoni ta' 'bilbla': Mediterranean short-toed lark.
-- **Usage Examples**:
-  - MT: Bilbla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bilbla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bilbla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6098,12 +4910,9 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: compulsory, mandatory
-    **MT**: Tifsira u deskrizzjoni ta' 'bilfors': compulsory, mandatory.
+    **MT**: Li għandu x'jaqsam ma' bilfors fl-użu u t-tifsira uffiċjali.
   - **EN**: to have to
-    **MT**: Tifsira u deskrizzjoni ta' 'bilfors': to have to.
-- **Usage Examples**:
-  - MT: Bilfors kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bilfors was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bilfors fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6112,10 +4921,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: a billion (10 9)
-    **MT**: Tifsira u deskrizzjoni ta' 'biljun': a billion (10 9).
-- **Usage Examples**:
-  - MT: Biljun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biljun was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' biljun fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6123,13 +4929,10 @@ Total Entries: 856
 - **POS**: conjunction
 - **Definitions**:
   - **EN**: since, inasmuch as, because
-    **MT**: Tifsira u deskrizzjoni ta' 'billi': since, inasmuch as, because.
+    **MT**: Li għandu x'jaqsam ma' billi fl-użu u t-tifsira uffiċjali.
   - **EN**: even though
-    **MT**: Tifsira u deskrizzjoni ta' 'billi': even though.
+    **MT**: Li għandu x'jaqsam ma' billi fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: belli
-- **Usage Examples**:
-  - MT: Billi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The billi was in its proper place in daily use.
 
 ---
 
@@ -6138,13 +4941,10 @@ Total Entries: 856
 - **Root**: q-għ-d
 - **Definitions**:
   - **EN**: sitting
-    **MT**: Tifsira u deskrizzjoni ta' 'bilqiegħda': sitting.
+    **MT**: Li għandu x'jaqsam ma' bilqiegħda fl-użu u t-tifsira uffiċjali.
   - **EN**: in a sitting position (used with verbs like qagħad, poġġa)
-    **MT**: Tifsira u deskrizzjoni ta' 'bilqiegħda': in a sitting position (used with verbs like qagħad, poġġa).
+    **MT**: Li għandu x'jaqsam ma' bilqiegħda fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bil-qiegħda
-- **Usage Examples**:
-  - MT: Bilqiegħda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bilqiegħda was in its proper place in daily use.
 
 ---
 
@@ -6153,13 +4953,10 @@ Total Entries: 856
 - **Root**: w-q-f
 - **Definitions**:
   - **EN**: standing
-    **MT**: Tifsira u deskrizzjoni ta' 'bilwieqfa': standing.
+    **MT**: Li għandu x'jaqsam ma' bilwieqfa fl-użu u t-tifsira uffiċjali.
   - **EN**: in a standing position (used with verbs like qam)
-    **MT**: Tifsira u deskrizzjoni ta' 'bilwieqfa': in a standing position (used with verbs like qam).
+    **MT**: Li għandu x'jaqsam ma' bilwieqfa fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bil-wieqfa
-- **Usage Examples**:
-  - MT: Bilwieqfa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bilwieqfa was in its proper place in daily use.
 
 ---
 
@@ -6168,12 +4965,9 @@ Total Entries: 856
 - **Root**: ħ-q-q
 - **Definitions**:
   - **EN**: by the way
-    **MT**: Tifsira u deskrizzjoni ta' 'bilħaqq': by the way.
+    **MT**: Li għandu x'jaqsam ma' bilħaqq fl-użu u t-tifsira uffiċjali.
   - **EN**: rightfully, justfully
-    **MT**: Tifsira u deskrizzjoni ta' 'bilħaqq': rightfully, justfully.
-- **Usage Examples**:
-  - MT: Bilħaqq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bilħaqq was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bilħaqq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6181,10 +4975,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Son of Man (title of Jesus Christ)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bin il-Bniedem': Son of Man (title of Jesus Christ).
-- **Usage Examples**:
-  - MT: Bin il-bniedem kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bin il-Bniedem was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bin il-Bniedem fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6194,12 +4985,9 @@ Total Entries: 856
 - **Root**: b-n-j
 - **Definitions**:
   - **EN**: the act of building
-    **MT**: Tifsira u deskrizzjoni ta' 'bini': the act of building.
+    **MT**: Li għandu x'jaqsam ma' bini fl-użu u t-tifsira uffiċjali.
   - **EN**: synonym of binja (“ a building, structure ”)
-    **MT**: Tifsira u deskrizzjoni ta' 'bini': synonym of binja (“ a building, structure ”).
-- **Usage Examples**:
-  - MT: Bini kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bini was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bini fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6209,10 +4997,7 @@ Total Entries: 856
 - **Root**: b-n-j
 - **Definitions**:
   - **EN**: building (house, structure)
-    **MT**: Tifsira u deskrizzjoni ta' 'binja': building (house, structure).
-- **Usage Examples**:
-  - MT: Binja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The binja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' binja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6221,10 +5006,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: daughter
-    **MT**: Tifsira u deskrizzjoni ta' 'bint': daughter.
-- **Usage Examples**:
-  - MT: Bint kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bint was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bint fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6232,11 +5014,8 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: biographical
-    **MT**: Tifsira u deskrizzjoni ta' 'biografiku': biographical.
+    **MT**: Li għandu x'jaqsam ma' biografiku fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bijografiku
-- **Usage Examples**:
-  - MT: Biografiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biografiku was in its proper place in daily use.
 
 ---
 
@@ -6244,11 +5023,8 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: biological
-    **MT**: Tifsira u deskrizzjoni ta' 'bioloġiku': biological.
+    **MT**: Li għandu x'jaqsam ma' bioloġiku fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bijoloġiku
-- **Usage Examples**:
-  - MT: Bioloġiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bioloġiku was in its proper place in daily use.
 
 ---
 
@@ -6257,10 +5033,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: well
-    **MT**: Tifsira u deskrizzjoni ta' 'bir': well.
-- **Usage Examples**:
-  - MT: Bir kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bir was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bir fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6269,10 +5042,7 @@ Total Entries: 856
 - **Root**: r-k-b
 - **Definitions**:
   - **EN**: on horseback
-    **MT**: Tifsira u deskrizzjoni ta' 'bir-rikkieb': on horseback.
-- **Usage Examples**:
-  - MT: Bir-rikkieb kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bir-rikkieb was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bir-rikkieb fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6281,12 +5051,9 @@ Total Entries: 856
 - **Root**: b-r-d
 - **Definitions**:
   - **EN**: to become cold
-    **MT**: Tifsira u deskrizzjoni ta' 'bired': to become cold.
+    **MT**: Li għandu x'jaqsam ma' bired fl-użu u t-tifsira uffiċjali.
   - **EN**: to calm down
-    **MT**: Tifsira u deskrizzjoni ta' 'bired': to calm down.
-- **Usage Examples**:
-  - MT: Bired l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bired correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' bired fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6295,10 +5062,7 @@ Total Entries: 856
 - **Root**: b-r-k
 - **Definitions**:
   - **EN**: to lie down (of camels), to kneel
-    **MT**: Tifsira u deskrizzjoni ta' 'birek': to lie down (of camels), to kneel.
-- **Usage Examples**:
-  - MT: Birek l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of birek correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' birek fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6306,10 +5070,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Birgu (a city and local council of the Port Region, Malta)
-    **MT**: Tifsira u deskrizzjoni ta' 'Birgu': Birgu (a city and local council of the Port Region, Malta).
-- **Usage Examples**:
-  - MT: Birgu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Birgu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Birgu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6317,10 +5078,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Birkirkara (a city and local council of the Eastern Region, Malta)
-    **MT**: Tifsira u deskrizzjoni ta' 'Birkirkara': Birkirkara (a city and local council of the Eastern Region, Malta).
-- **Usage Examples**:
-  - MT: Birkirkara kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Birkirkara was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Birkirkara fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6329,11 +5087,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: brilliant (cut gemstone)
-    **MT**: Tifsira u deskrizzjoni ta' 'brillant': brilliant (cut gemstone).
+    **MT**: Li għandu x'jaqsam ma' brillant fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: brillant
-- **Usage Examples**:
-  - MT: Birlant kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The birlant was in its proper place in daily use.
 
 ---
 
@@ -6342,10 +5097,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: cart, barouche
-    **MT**: Tifsira u deskrizzjoni ta' 'biroċċ': cart, barouche.
-- **Usage Examples**:
-  - MT: Biroċċ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biroċċ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' biroċċ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6354,10 +5106,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: beer
-    **MT**: Tifsira u deskrizzjoni ta' 'birra': beer.
-- **Usage Examples**:
-  - MT: Birra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The birra was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' birra fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6366,11 +5115,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: brewery
-    **MT**: Tifsira u deskrizzjoni ta' 'birrajja': brewery.
+    **MT**: Li għandu x'jaqsam ma' birrajja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: birrerija
-- **Usage Examples**:
-  - MT: Birrajja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The birrajja was in its proper place in daily use.
 
 ---
 
@@ -6379,10 +5125,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: brewer
-    **MT**: Tifsira u deskrizzjoni ta' 'birrar': brewer.
-- **Usage Examples**:
-  - MT: Birrar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The birrar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' birrar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6391,21 +5134,15 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: female equivalent of birrar
-    **MT**: Forma femminili ta' birrar.
-- **Usage Examples**:
-  - MT: Birrara kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The birrara was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' birrara fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## birrara (n-birrara-2) 🌟 *(REVISED TARGET ENTRY)*
+## birrara (n-birrara-2)
 - **POS**: noun
 - **Definitions**:
   - **EN**: plural of birrar: brewers
     **MT**: Il-plural tal-kelma birrar: persuni li jaħdmu fil-fabbriki tal-birra.
-- **Usage Examples**:
-  - MT: Birrara kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The birrara was in its proper place in daily use.
 
 ---
 
@@ -6414,11 +5151,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: brewery
-    **MT**: Tifsira u deskrizzjoni ta' 'birrajja': brewery.
+    **MT**: Li għandu x'jaqsam ma' birrajja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: birrajja
-- **Usage Examples**:
-  - MT: Birrerija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The birrerija was in its proper place in daily use.
 
 ---
 
@@ -6427,11 +5161,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Eurasian dotterel (Charadrius morinellus)
-    **MT**: Tifsira u deskrizzjoni ta' 'birwin': Eurasian dotterel (Charadrius morinellus).
+    **MT**: Li għandu x'jaqsam ma' birwin fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: berwin
-- **Usage Examples**:
-  - MT: Birwin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The birwin was in its proper place in daily use.
 
 ---
 
@@ -6440,10 +5171,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Caspian plover (Charadrius asiaticus)
-    **MT**: Tifsira u deskrizzjoni ta' 'birwin tal-Asja': Caspian plover (Charadrius asiaticus).
-- **Usage Examples**:
-  - MT: Birwin tal-asja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The birwin tal-Asja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' birwin tal-Asja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6452,10 +5180,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: greater sand plover (Charadrius leschenaultii)
-    **MT**: Tifsira u deskrizzjoni ta' 'birwin tal-lvant': greater sand plover (Charadrius leschenaultii).
-- **Usage Examples**:
-  - MT: Birwin tal-lvant kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The birwin tal-lvant was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' birwin tal-lvant fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6463,11 +5188,8 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Birżebbuġa (a town and local council of the Southern Region, Malta)
-    **MT**: Tifsira u deskrizzjoni ta' 'Birżebbuġa': Birżebbuġa (a town and local council of the Southern Region, Malta).
+    **MT**: Li għandu x'jaqsam ma' Birżebbuġa fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: B’Buġa
-- **Usage Examples**:
-  - MT: Birżebbuġa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Birżebbuġa was in its proper place in daily use.
 
 ---
 
@@ -6475,10 +5197,7 @@ Total Entries: 856
 - **POS**: interjection
 - **Definitions**:
   - **EN**: Used to request an encore
-    **MT**: Tifsira u deskrizzjoni ta' 'bis': Used to request an encore.
-- **Usage Examples**:
-  - MT: Bis kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bis was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bis fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6486,10 +5205,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: bisexual
-    **MT**: Tifsira u deskrizzjoni ta' 'bisesswali': bisexual.
-- **Usage Examples**:
-  - MT: Bisesswali kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bisesswali was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bisesswali fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6498,10 +5214,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bisexual
-    **MT**: Tifsira u deskrizzjoni ta' 'bisesswali': bisexual.
-- **Usage Examples**:
-  - MT: Bisesswali kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bisesswali was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bisesswali fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6510,10 +5223,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: bisexuality
-    **MT**: Tifsira u deskrizzjoni ta' 'bisesswalità': bisexuality.
-- **Usage Examples**:
-  - MT: Bisesswalità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bisesswalità was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bisesswalità fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6522,10 +5232,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bismuth (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'bismut': bismuth (chemical element).
-- **Usage Examples**:
-  - MT: Bismut kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bismut was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bismut fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6533,13 +5240,13 @@ Total Entries: 856
 - **POS**: adverb
 - **Definitions**:
   - **EN**: only
-    **MT**: Tifsira u deskrizzjoni ta' 'biss': only.
+    **MT**: Li għandu x'jaqsam ma' biss fl-użu u t-tifsira uffiċjali.
   - **EN**: but, on condition that
-    **MT**: Tifsira u deskrizzjoni ta' 'biss': but, on condition that.
+    **MT**: Li għandu x'jaqsam ma' biss fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bass
 - **Usage Examples**:
-  - MT: Biss kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biss was in its proper place in daily use.
+  - MT: Għamlu u bassu f'rabja fis-sala.
+    EN: They booed in anger in the hall.
 
 ---
 
@@ -6547,12 +5254,9 @@ Total Entries: 856
 - **POS**: preposition
 - **Definitions**:
   - **EN**: opposite
-    **MT**: Tifsira u deskrizzjoni ta' 'biswit': opposite.
+    **MT**: Li għandu x'jaqsam ma' biswit fl-użu u t-tifsira uffiċjali.
   - **EN**: opposite to [with ta’]
-    **MT**: Tifsira u deskrizzjoni ta' 'biswit': opposite to [with ta’].
-- **Usage Examples**:
-  - MT: Biswit kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biswit was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' biswit fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6561,11 +5265,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: cask, barrel
-    **MT**: Tifsira u deskrizzjoni ta' 'bittija': cask, barrel.
+    **MT**: Li għandu x'jaqsam ma' bittija fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bettija
-- **Usage Examples**:
-  - MT: Bittija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bittija was in its proper place in daily use.
 
 ---
 
@@ -6575,10 +5276,7 @@ Total Entries: 856
 - **Root**: b-t-ħ
 - **Definitions**:
   - **EN**: yard, courtyard (open area by a house)
-    **MT**: Tifsira u deskrizzjoni ta' 'bitħa': yard, courtyard (open area by a house).
-- **Usage Examples**:
-  - MT: Bitħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bitħa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bitħa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6587,10 +5285,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bivouac
-    **MT**: Tifsira u deskrizzjoni ta' 'bivakk': bivouac.
-- **Usage Examples**:
-  - MT: Bivakk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bivakk was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bivakk fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6600,11 +5295,8 @@ Total Entries: 856
 - **Root**: b-x-k-l
 - **Definitions**:
   - **EN**: wicker basket
-    **MT**: Tifsira u deskrizzjoni ta' 'bixkilla': wicker basket.
+    **MT**: Li għandu x'jaqsam ma' bixkilla fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bexkilla
-- **Usage Examples**:
-  - MT: Bixkilla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bixkilla was in its proper place in daily use.
 
 ---
 
@@ -6614,10 +5306,7 @@ Total Entries: 856
 - **Root**: b-x-r
 - **Definitions**:
   - **EN**: appearance (the way someone or something looks, appears)
-    **MT**: Tifsira u deskrizzjoni ta' 'bixra': appearance (the way someone or something looks, appears).
-- **Usage Examples**:
-  - MT: Bixra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bixra was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bixra fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6625,10 +5314,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: bizarre, odd
-    **MT**: Tifsira u deskrizzjoni ta' 'bizzarr': bizarre, odd.
-- **Usage Examples**:
-  - MT: Bizzarr kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bizzarr was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bizzarr fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6636,10 +5322,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: of perfect work
-    **MT**: Tifsira u deskrizzjoni ta' 'bizzilla': of perfect work.
-- **Usage Examples**:
-  - MT: Bizzilla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bizzilla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bizzilla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6648,10 +5331,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: lace (fabric)
-    **MT**: Tifsira u deskrizzjoni ta' 'bizzilla': lace (fabric).
-- **Usage Examples**:
-  - MT: Bizzilla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bizzilla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bizzilla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6660,10 +5340,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: bicycle
-    **MT**: Tifsira u deskrizzjoni ta' 'biċikletta': bicycle.
-- **Usage Examples**:
-  - MT: Biċikletta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biċikletta was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' biċikletta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6673,24 +5350,21 @@ Total Entries: 856
 - **Root**: b-ċ-ċ
 - **Definitions**:
   - **EN**: piece, portion
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċa': piece, portion.
+    **MT**: Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.
   - **EN**: piece (chess: figure other than pawn
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċa': piece (chess: figure other than pawn.
+    **MT**: Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.
   - **EN**: similar counter in other games)
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċa': similar counter in other games).
+    **MT**: Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.
   - **EN**: piece (artistic creation)
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċa': piece (artistic creation).
+    **MT**: Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.
   - **EN**: piece of cloth
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċa': piece of cloth.
+    **MT**: Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.
   - **EN**: coin
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċa': coin.
+    **MT**: Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.
   - **EN**: fact, event
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċa': fact, event.
+    **MT**: Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.
   - **EN**: concern, business
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċa': concern, business.
-- **Usage Examples**:
-  - MT: Biċċa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biċċa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6699,14 +5373,11 @@ Total Entries: 856
 - **Root**: b-ċ-r
 - **Definitions**:
   - **EN**: to slaughter
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċer': to slaughter.
+    **MT**: Li għandu x'jaqsam ma' biċċer fl-użu u t-tifsira uffiċjali.
   - **EN**: to butcher
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċer': to butcher.
+    **MT**: Li għandu x'jaqsam ma' biċċer fl-użu u t-tifsira uffiċjali.
   - **EN**: to kill brutally
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċer': to kill brutally.
-- **Usage Examples**:
-  - MT: Biċċer l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biċċer correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' biċċer fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6715,10 +5386,7 @@ Total Entries: 856
 - **Root**: b-ċ-ċ
 - **Definitions**:
   - **EN**: to cut into pieces
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċeċ': to cut into pieces.
-- **Usage Examples**:
-  - MT: Biċċeċ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biċċeċ correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' biċċeċ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6728,10 +5396,7 @@ Total Entries: 856
 - **Root**: b-ċ-r
 - **Definitions**:
   - **EN**: butcher
-    **MT**: Tifsira u deskrizzjoni ta' 'biċċier': butcher.
-- **Usage Examples**:
-  - MT: Biċċier kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biċċier was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' biċċier fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6740,14 +5405,11 @@ Total Entries: 856
 - **Root**: b-ġ-l
 - **Definitions**:
   - **EN**: to tone down, to mitigate
-    **MT**: Tifsira u deskrizzjoni ta' 'biġġel': to tone down, to mitigate.
-- **Usage Examples**:
-  - MT: Biġġel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biġġel correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' biġġel fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## biħħ (v-biħħ) 🌟 *(REVISED TARGET ENTRY)*
+## biħħ (v-biħħ)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to sell
@@ -6756,20 +5418,17 @@ Total Entries: 856
     **MT**: Tradi jew kixef lil xi ħadd b'ingann.
 - **Alternative Forms**: biegħ
 - **Usage Examples**:
-  - MT: Biħħ l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biħħ correctly and without delay.
+  - MT: Biegħ il-karozza l-qadima tiegħu lill-ġirien.
+    EN: He sold his old car to the neighbor.
 
 ---
 
-## biż-żejjed (adv-biż-żejjed) 🌟 *(REVISED TARGET ENTRY)*
+## biż-żejjed (adv-biż-żejjed)
 - **POS**: adverb
 - **Definitions**:
   - **EN**: enough, sufficiently
     **MT**: Fl-ammont meħtieġ li jissodisfa.
 - **Alternative Forms**: biżżejjed
-- **Usage Examples**:
-  - MT: Biż-żejjed kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biż-żejjed was in its proper place in daily use.
 
 ---
 
@@ -6779,11 +5438,8 @@ Total Entries: 856
 - **Root**: b-ż-għ
 - **Definitions**:
   - **EN**: verbal noun of beża’: fear
-    **MT**: L-att u l-proċess verbali ta' beża’.
+    **MT**: Li għandu x'jaqsam ma' biża' fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: biżgħa
-- **Usage Examples**:
-  - MT: Biża' kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biża' was in its proper place in daily use.
 
 ---
 
@@ -6792,10 +5448,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: common water plantain (Alisma plantago-aquatica)
-    **MT**: Tifsira u deskrizzjoni ta' 'biżbula tal-ilma': common water plantain (Alisma plantago-aquatica).
-- **Usage Examples**:
-  - MT: Biżbula tal-ilma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biżbula tal-ilma was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' biżbula tal-ilma fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6804,10 +5457,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: lanceleaf water plantain, Alisma lanceolatum
-    **MT**: Tifsira u deskrizzjoni ta' 'biżbula tal-ilma tal-werqa dejqa': lanceleaf water plantain, Alisma lanceolatum.
-- **Usage Examples**:
-  - MT: Biżbula tal-ilma tal-werqa dejqa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biżbula tal-ilma tal-werqa dejqa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' biżbula tal-ilma tal-werqa dejqa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6816,22 +5466,16 @@ Total Entries: 856
 - **Root**: b-ż-l
 - **Definitions**:
   - **EN**: to become diligent
-    **MT**: Tifsira u deskrizzjoni ta' 'biżel': to become diligent.
-- **Usage Examples**:
-  - MT: Biżel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biżel correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' biżel fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## biżgħa (n-biżgħa) 🌟 *(REVISED TARGET ENTRY)*
+## biżgħa (n-biżgħa)
 - **POS**: noun
 - **Definitions**:
   - **EN**: fear, terror
     **MT**: Emozzjoni jew sensazzjoni ta' biża' minn periklu.
 - **Alternative Forms**: biża', biża’
-- **Usage Examples**:
-  - MT: Biżgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biżgħa was in its proper place in daily use.
 
 ---
 
@@ -6840,11 +5484,8 @@ Total Entries: 856
 - **Root**: ż-j-d
 - **Definitions**:
   - **EN**: enough, sufficiently
-    **MT**: Tifsira u deskrizzjoni ta' 'biżżejjed': enough, sufficiently.
+    **MT**: Li għandu x'jaqsam ma' biżżejjed fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: biż-żejjed
-- **Usage Examples**:
-  - MT: Biżżejjed kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biżżejjed was in its proper place in daily use.
 
 ---
 
@@ -6853,10 +5494,7 @@ Total Entries: 856
 - **Root**: b-ż-l
 - **Definitions**:
   - **EN**: to make (someone) diligent
-    **MT**: Tifsira u deskrizzjoni ta' 'biżżel': to make (someone) diligent.
-- **Usage Examples**:
-  - MT: Biżżel l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of biżżel correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' biżżel fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6866,10 +5504,7 @@ Total Entries: 856
 - **Root**: b-ż-ż
 - **Definitions**:
   - **EN**: pillager, plunderer
-    **MT**: Tifsira u deskrizzjoni ta' 'biżżi': pillager, plunderer.
-- **Usage Examples**:
-  - MT: Biżżi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The biżżi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' biżżi fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6878,13 +5513,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-j-d
 - **Definitions**:
-  - **EN**: cotton ready for picking
-    **MT**: Tifsira u deskrizzjoni ta' 'bjad': cotton ready for picking.
-  - **EN**: whiteness
-    **MT**: Tifsira u deskrizzjoni ta' 'bjad': whiteness.
+  - **EN**: cotton for picking, whiteness
+    **MT**: Tleqqija ta' kulur abjad jew qoton fir-raba'.
 - **Usage Examples**:
-  - MT: Bjad kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bjad was in its proper place in daily use.
+  - MT: L-ibjad tar-raba' kien jiddi taħt ix-xemx.
+    EN: The cotton whiteness of the field shone under the sun.
 
 ---
 
@@ -6892,13 +5525,11 @@ Total Entries: 856
 - **POS**: verb
 - **Root**: b-j-d
 - **Definitions**:
-  - **EN**: to become white, to lose colour, to fade
-    **MT**: Tifsira u deskrizzjoni ta' 'bjad': to become white, to lose colour, to fade.
-  - **EN**: to become pale
-    **MT**: Tifsira u deskrizzjoni ta' 'bjad': to become pale.
+  - **EN**: to white, fade, lose colour
+    **MT**: Tilef il-kulur u mar abjad maż-żmien.
 - **Usage Examples**:
-  - MT: Bjad l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of bjad correctly and without delay.
+  - MT: Bjad il-ħajt wara bosta snin fis-sħana.
+    EN: The wall faded after many years in the heat.
 
 ---
 
@@ -6908,10 +5539,7 @@ Total Entries: 856
 - **Root**: b-j-d
 - **Definitions**:
   - **EN**: cataract
-    **MT**: Tifsira u deskrizzjoni ta' 'bjada': cataract.
-- **Usage Examples**:
-  - MT: Bjada kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bjada was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bjada fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6919,11 +5547,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: blame
-    **MT**: Tifsira u deskrizzjoni ta' 'bjażmu': blame.
+  - **EN**: blame, fault
+    **MT**: Akkumpanjament ta' responsabbiltà għal żball.
 - **Usage Examples**:
-  - MT: Bjażmu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bjażmu was in its proper place in daily use.
+  - MT: Ma kellu ebda bjażmu dwar dak li ġara.
+    EN: He had no blame regarding what happened.
 
 ---
 
@@ -6933,10 +5561,10 @@ Total Entries: 856
 - **Root**: b-j-d
 - **Definitions**:
   - **EN**: whiteness
-    **MT**: Tifsira u deskrizzjoni ta' 'bjuda': whiteness.
+    **MT**: Il-kwalità u tleqqija ta' dak li hu abjad.
 - **Usage Examples**:
-  - MT: Bjuda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bjuda was in its proper place in daily use.
+  - MT: L-ibjuda tal-ħalib kienet purissimu.
+    EN: The whiteness of the milk was pure.
 
 ---
 
@@ -6946,12 +5574,9 @@ Total Entries: 856
 - **Root**: b-k-m
 - **Definitions**:
   - **EN**: verbal noun of bikem
-    **MT**: L-att u l-proċess verbali ta' bikem.
+    **MT**: Li għandu x'jaqsam ma' bkim fl-użu u t-tifsira uffiċjali.
   - **EN**: muteness
-    **MT**: Tifsira u deskrizzjoni ta' 'bkim': muteness.
-- **Usage Examples**:
-  - MT: Bkim kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bkim was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bkim fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6961,10 +5586,10 @@ Total Entries: 856
 - **Root**: b-k-r
 - **Definitions**:
   - **EN**: firstfruits
-    **MT**: Tifsira u deskrizzjoni ta' 'bkir': firstfruits.
+    **MT**: L-ewwel frott li jinqata' mir-raba' fl-istaġun.
 - **Usage Examples**:
-  - MT: Bkir kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bkir was in its proper place in daily use.
+  - MT: Ġabru l-bkir mir-raba' nazzjonali.
+    EN: They harvested the firstfruits from the national field.
 
 ---
 
@@ -6974,10 +5599,7 @@ Total Entries: 856
 - **Root**: b-k-m
 - **Definitions**:
   - **EN**: muteness
-    **MT**: Tifsira u deskrizzjoni ta' 'bkuma': muteness.
-- **Usage Examples**:
-  - MT: Bkuma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bkuma was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bkuma fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6987,10 +5609,7 @@ Total Entries: 856
 - **Root**: b-k-r
 - **Definitions**:
   - **EN**: firstfruits
-    **MT**: Tifsira u deskrizzjoni ta' 'bkur': firstfruits.
-- **Usage Examples**:
-  - MT: Bkur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bkur was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bkur fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7000,10 +5619,7 @@ Total Entries: 856
 - **Root**: b-k-r
 - **Definitions**:
   - **EN**: verbal noun of bakar
-    **MT**: L-att u l-proċess verbali ta' bakar.
-- **Usage Examples**:
-  - MT: Bkur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bkur was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bkur fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7011,21 +5627,18 @@ Total Entries: 856
 - **POS**: adverb
 - **Definitions**:
   - **EN**: by retail
-    **MT**: Tifsira u deskrizzjoni ta' 'bl-imnut': by retail.
-- **Usage Examples**:
-  - MT: Bl-imnut kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bl-imnut was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bl-imnut fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## bla (prep-bla)
 - **POS**: preposition
 - **Definitions**:
-  - **EN**: without (an ingredient, means, concomitant, quality)
-    **MT**: Tifsira u deskrizzjoni ta' 'bla': without (an ingredient, means, concomitant, quality).
+  - **EN**: without
+    **MT**: Prepożizzjoni li tindika nuqqas ta' oġġett jew element.
 - **Usage Examples**:
-  - MT: Bla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bla was in its proper place in daily use.
+  - MT: Għexu bla inkwiet fir-raħal kwiet.
+    EN: They lived without trouble in the quiet village.
 
 ---
 
@@ -7033,11 +5646,11 @@ Total Entries: 856
 - **POS**: adverb
 - **Root**: h-d-w
 - **Definitions**:
-  - **EN**: tirelessly, persistently, continuously
-    **MT**: Tifsira u deskrizzjoni ta' 'bla heda': tirelessly, persistently, continuously.
+  - **EN**: tirelessly, persistently
+    **MT**: Mingħajr ma jieqaf u b'persistenza kbira.
 - **Usage Examples**:
-  - MT: Bla heda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bla heda was in its proper place in daily use.
+  - MT: Ħadem bla heda biex ilesti l-proġett.
+    EN: He worked tirelessly to complete the project.
 
 ---
 
@@ -7046,10 +5659,10 @@ Total Entries: 856
 - **Root**: m-ħ-ħ
 - **Definitions**:
   - **EN**: forgetful, absent-minded
-    **MT**: Tifsira u deskrizzjoni ta' 'bla moħħ': forgetful, absent-minded.
+    **MT**: Persuna li ma tagħtix attent mill-ewwel.
 - **Usage Examples**:
-  - MT: Bla moħħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bla moħħ was in its proper place in daily use.
+  - MT: Raġel bla moħħ li nefaħ il-flus mill-ewwel.
+    EN: An absent-minded man who spent the money right away.
 
 ---
 
@@ -7057,11 +5670,11 @@ Total Entries: 856
 - **POS**: adjective
 - **Root**: ħ-l-s
 - **Definitions**:
-  - **EN**: free of charge, without payment
-    **MT**: Tifsira u deskrizzjoni ta' 'bla ħlas': free of charge, without payment.
+  - **EN**: free of charge
+    **MT**: Mingħajr ma jintalab ebda ħlas ta' flus.
 - **Usage Examples**:
-  - MT: Bla ħlas kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bla ħlas was in its proper place in daily use.
+  - MT: Servizz bla ħlas offrut lill-komunità.
+    EN: Free of charge service offered to the community.
 
 ---
 
@@ -7070,10 +5683,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bluff
-    **MT**: Tifsira u deskrizzjoni ta' 'blaff': bluff.
-- **Usage Examples**:
-  - MT: Blaff kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blaff was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blaff fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7082,10 +5692,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: fear of having no coffee [sleng]
-    **MT**: Tifsira u deskrizzjoni ta' 'blakafefobija': fear of having no coffee.
-- **Usage Examples**:
-  - MT: Blakafefobija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blakafefobija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blakafefobija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7094,10 +5701,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: blacking, shoe polish
-    **MT**: Tifsira u deskrizzjoni ta' 'blakk': blacking, shoe polish.
-- **Usage Examples**:
-  - MT: Blakk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blakk was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blakk fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7106,10 +5710,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: shoe polishing
-    **MT**: Tifsira u deskrizzjoni ta' 'blakkatura': shoe polishing.
-- **Usage Examples**:
-  - MT: Blakkatura kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blakkatura was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blakkatura fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7117,13 +5718,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: bud
-    **MT**: Tifsira u deskrizzjoni ta' 'blanzun': bud.
-  - **EN**: very young
-    **MT**: Tifsira u deskrizzjoni ta' 'blanzun': very young.
+  - **EN**: bud (plant)
+    **MT**: Fjura żgħira u magħluqa li tkun se tiftaħ fis-siġra.
 - **Usage Examples**:
-  - MT: Blanzun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blanzun was in its proper place in daily use.
+  - MT: Deher blanzun ġdid mas-siġra fis-rebbiegħa.
+    EN: A new bud appeared on the tree in spring.
 
 ---
 
@@ -7132,10 +5731,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: blast (violent gust of wind)
-    **MT**: Tifsira u deskrizzjoni ta' 'blast': blast (violent gust of wind).
-- **Usage Examples**:
-  - MT: Blast kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blast was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blast fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7144,10 +5740,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: blastpipe
-    **MT**: Tifsira u deskrizzjoni ta' 'blastpajp': blastpipe.
-- **Usage Examples**:
-  - MT: Blastpajp kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blastpajp was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blastpajp fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7155,11 +5748,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: rock (material, a mass or surface of it)
-    **MT**: Tifsira u deskrizzjoni ta' 'blat': rock (material, a mass or surface of it).
+  - **EN**: rock, stone surface
+    **MT**: Massa kbira ta' ġebel iebes magħmul mit-natura.
 - **Usage Examples**:
-  - MT: Blat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blat was in its proper place in daily use.
+  - MT: Bnew id-dar fuq il-blat solidu tar-raħal.
+    EN: They built the house on the solid rock of the village.
 
 ---
 
@@ -7168,10 +5761,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: blusher (face makeup)
-    **MT**: Tifsira u deskrizzjoni ta' 'blaxer': blusher (face makeup).
-- **Usage Examples**:
-  - MT: Blaxer kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blaxer was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blaxer fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7179,10 +5769,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: a lazy person
-    **MT**: Tifsira u deskrizzjoni ta' 'blaġa': a lazy person.
-- **Usage Examples**:
-  - MT: Blaġa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blaġa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blaġa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7191,10 +5778,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: black eye
-    **MT**: Tifsira u deskrizzjoni ta' 'blekajn': black eye.
-- **Usage Examples**:
-  - MT: Blekajn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blekajn was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blekajn fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7203,10 +5787,10 @@ Total Entries: 856
 - **Root**: b-l-h
 - **Definitions**:
   - **EN**: to become foolish
-    **MT**: Tifsira u deskrizzjoni ta' 'blieh': to become foolish.
+    **MT**: Tilef l-għaqal u beda jaġixxi bla sens.
 - **Usage Examples**:
-  - MT: Blieh l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of blieh correctly and without delay.
+  - MT: Blieh bil-mossa kollha u mar fl-inkwiet.
+    EN: He became foolish in all actions and met trouble.
 
 ---
 
@@ -7215,12 +5799,9 @@ Total Entries: 856
 - **Root**: b-l-q
 - **Definitions**:
   - **EN**: to become lighter in colour
-    **MT**: Tifsira u deskrizzjoni ta' 'blieq': to become lighter in colour.
+    **MT**: Li għandu x'jaqsam ma' blieq fl-użu u t-tifsira uffiċjali.
   - **EN**: to become mature
-    **MT**: Tifsira u deskrizzjoni ta' 'blieq': to become mature.
-- **Usage Examples**:
-  - MT: Blieq l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of blieq correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' blieq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7230,10 +5811,7 @@ Total Entries: 856
 - **Root**: b-l-għ
 - **Definitions**:
   - **EN**: verbal noun of bela’
-    **MT**: L-att u l-proċess verbali ta' bela’.
-- **Usage Examples**:
-  - MT: Bligħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bligħ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bligħ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7242,11 +5820,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: turn signal
-    **MT**: Tifsira u deskrizzjoni ta' 'blinka': turn signal.
+    **MT**: Li għandu x'jaqsam ma' blinka fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: blinker
-- **Usage Examples**:
-  - MT: Blinka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blinka was in its proper place in daily use.
 
 ---
 
@@ -7254,11 +5829,8 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: turn signal
-    **MT**: Tifsira u deskrizzjoni ta' 'blinka': turn signal.
+    **MT**: Li għandu x'jaqsam ma' blinka fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: blinka
-- **Usage Examples**:
-  - MT: Blinker kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blinker was in its proper place in daily use.
 
 ---
 
@@ -7267,10 +5839,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: a devil, a demon
-    **MT**: Tifsira u deskrizzjoni ta' 'blis': a devil, a demon.
-- **Usage Examples**:
-  - MT: Blis kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blis was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blis fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7278,11 +5847,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: blitz
-    **MT**: Tifsira u deskrizzjoni ta' 'blizz': blitz.
+  - **EN**: blitz, sudden attack
+    **MT**: Attakk mgħaġġel u b'saħħa kbira.
 - **Usage Examples**:
-  - MT: Blizz kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blizz was in its proper place in daily use.
+  - MT: Għamlu blizz fuq il-port tal-gżira.
+    EN: They conducted a blitz on the island's port.
 
 ---
 
@@ -7291,10 +5860,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bleach
-    **MT**: Tifsira u deskrizzjoni ta' 'bliċ': bleach.
+    **MT**: Sustanza kimika li tnaddaf u tagħmel abjad.
 - **Usage Examples**:
-  - MT: Bliċ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bliċ was in its proper place in daily use.
+  - MT: Uża l-bliċ biex naddaf il-ħamrija fl-art.
+    EN: He used bleach to clean the dirt on the floor.
 
 ---
 
@@ -7303,10 +5872,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bleaching powder
-    **MT**: Tifsira u deskrizzjoni ta' 'bliċinpawder': bleaching powder.
-- **Usage Examples**:
-  - MT: Bliċinpawder kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bliċinpawder was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bliċinpawder fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7314,13 +5880,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: block (group of buildings demarcated by streets)
-    **MT**: Tifsira u deskrizzjoni ta' 'blokk': block (group of buildings demarcated by streets).
-  - **EN**: bloc, coalition
-    **MT**: Tifsira u deskrizzjoni ta' 'blokk': bloc, coalition.
+  - **EN**: block (buildings), coalition
+    **MT**: Ġabra ta' bini jew għaqda ta' partiti.
 - **Usage Examples**:
-  - MT: Blokk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blokk was in its proper place in daily use.
+  - MT: Blokk ta' bini ġdid fil-belt nazzjonali.
+    EN: A block of new buildings in the national city.
 
 ---
 
@@ -7328,24 +5892,24 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: block (of), lump (of)
-    **MT**: Tifsira u deskrizzjoni ta' 'blokka': block (of), lump (of).
+  - **EN**: block of, lump of
+    **MT**: Biċċa kbira u solida ta' materjal iebes.
 - **Alternative Forms**: bloks
 - **Usage Examples**:
-  - MT: Blokka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blokka was in its proper place in daily use.
+  - MT: Blokka ta' silġ li tqiegħdet fil-kaxxa.
+    EN: A block of ice placed in the box.
 
 ---
 
-## bloks (n-bloks) 🌟 *(REVISED TARGET ENTRY)*
+## bloks (n-bloks)
 - **POS**: noun
 - **Definitions**:
   - **EN**: block (of), lump (of)
     **MT**: Kbiċċa kbira u solida ta' materjal.
 - **Alternative Forms**: blokka
 - **Usage Examples**:
-  - MT: Bloks kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bloks was in its proper place in daily use.
+  - MT: Blokka ta' silġ li tqiegħdet fil-kaxxa.
+    EN: A block of ice placed in the box.
 
 ---
 
@@ -7354,10 +5918,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: great crested grebe (Podiceps cristatus)
-    **MT**: Tifsira u deskrizzjoni ta' 'blonġun': great crested grebe (Podiceps cristatus).
-- **Usage Examples**:
-  - MT: Blonġun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blonġun was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blonġun fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7366,10 +5927,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: great crested grebe (Podiceps cristatus)
-    **MT**: Tifsira u deskrizzjoni ta' 'blonġun prim': great crested grebe (Podiceps cristatus).
-- **Usage Examples**:
-  - MT: Blonġun prim kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blonġun prim was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blonġun prim fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7378,10 +5936,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: black-necked grebe (Podiceps nigricollis)
-    **MT**: Tifsira u deskrizzjoni ta' 'blonġun sekond': black-necked grebe (Podiceps nigricollis).
-- **Usage Examples**:
-  - MT: Blonġun sekond kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blonġun sekond was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blonġun sekond fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7390,21 +5945,18 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: little grebe (Tachybaptus ruficollis)
-    **MT**: Tifsira u deskrizzjoni ta' 'blonġun żgħir': little grebe (Tachybaptus ruficollis).
-- **Usage Examples**:
-  - MT: Blonġun żgħir kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blonġun żgħir was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blonġun żgħir fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## blu (adj-blu)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: blue (colour/colour)
-    **MT**: Tifsira u deskrizzjoni ta' 'blu': blue (colour/colour).
+  - **EN**: blue (colour)
+    **MT**: Kulur tas-sema jew tal-baħar miftuħ.
 - **Usage Examples**:
-  - MT: Blu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blu was in its proper place in daily use.
+  - MT: Libes qmis blu fil-festa nazzjonali.
+    EN: He wore a blue shirt at the national feast.
 
 ---
 
@@ -7414,10 +5966,7 @@ Total Entries: 856
 - **Root**: b-l-għ
 - **Definitions**:
   - **EN**: verbal noun of bela’
-    **MT**: L-att u l-proċess verbali ta' bela’.
-- **Usage Examples**:
-  - MT: Blugħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The blugħ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' blugħ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7426,39 +5975,35 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-l-h
 - **Definitions**:
-  - **EN**: stupidity
-    **MT**: Tifsira u deskrizzjoni ta' 'bluha': stupidity.
-  - **EN**: foolishness
-    **MT**: Tifsira u deskrizzjoni ta' 'bluha': foolishness.
-  - **EN**: silliness
-    **MT**: Tifsira u deskrizzjoni ta' 'bluha': silliness.
+  - **EN**: stupidity, foolishness
+    **MT**: Nuqqas ta' għaqal u aġir li jġib id-dwejjaq.
 - **Alternative Forms**: bluhija
 - **Usage Examples**:
-  - MT: Bluha kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bluha was in its proper place in daily use.
+  - MT: Il-bluha tiegħu ġabet l-inkwiet fil-familja.
+    EN: His stupidity brought trouble to the family.
 
 ---
 
-## bluhija (n-bluhija) 🌟 *(REVISED TARGET ENTRY)*
+## bluhija (n-bluhija)
 - **POS**: noun
 - **Definitions**:
   - **EN**: stupidity, foolishness
     **MT**: Nuqqas ta' għaqal u aġir bla sens.
 - **Alternative Forms**: bluha
 - **Usage Examples**:
-  - MT: Bluhija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bluhija was in its proper place in daily use.
+  - MT: Il-bluha tiegħu ġabet l-inkwiet fil-familja.
+    EN: His stupidity brought trouble to the family.
 
 ---
 
 ## bnazzi (adj-bnazzi)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: fine, calm
-    **MT**: Tifsira u deskrizzjoni ta' 'bnazzi': fine, calm.
+  - **EN**: fine, calm (weather)
+    **MT**: Temp sabiħu kmieni mingħajr riħ jew maltemp.
 - **Usage Examples**:
-  - MT: Bnazzi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bnazzi was in its proper place in daily use.
+  - MT: Jum bnazzi li kien pjaċevoli fil-bajja.
+    EN: A fine day that was pleasant at the bay.
 
 ---
 
@@ -7467,10 +6012,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: fine weather
-    **MT**: Tifsira u deskrizzjoni ta' 'bnazzi': fine weather.
-- **Usage Examples**:
-  - MT: Bnazzi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bnazzi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bnazzi fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7479,10 +6021,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: diminutive of bniqa
-    **MT**: Tifsira u deskrizzjoni ta' 'bnejqa': diminutive of bniqa.
-- **Usage Examples**:
-  - MT: Bnejqa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bnejqa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bnejqa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7490,11 +6029,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: human, human being, man (male or unspecified sex)
-    **MT**: Tifsira u deskrizzjoni ta' 'bniedem': human, human being, man (male or unspecified sex).
+  - **EN**: human being, man
+    **MT**: Persuna jew membru tar-razza umana.
 - **Usage Examples**:
-  - MT: Bniedem kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bniedem was in its proper place in daily use.
+  - MT: Kull bniedem għandu dritt għall-paċi u d-dinjità.
+    EN: Every human has a right to peace and dignity.
 
 ---
 
@@ -7503,12 +6042,9 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: female equivalent of bniedem: a female human being
-    **MT**: Forma femminili ta' bniedem: a female human being.
+    **MT**: Li għandu x'jaqsam ma' bniedma fl-użu u t-tifsira uffiċjali.
   - **EN**: a girl or woman viewed as a member of the human race
-    **MT**: Tifsira u deskrizzjoni ta' 'bniedma': a girl or woman viewed as a member of the human race.
-- **Usage Examples**:
-  - MT: Bniedma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bniedma was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bniedma fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7516,11 +6052,11 @@ Total Entries: 856
 - **POS**: adjective
 - **Root**: b-n-n
 - **Definitions**:
-  - **EN**: delicious
-    **MT**: Tifsira u deskrizzjoni ta' 'bnin': delicious.
+  - **EN**: delicious, wholesome
+    **MT**: Ikel tajjeb b'togħma li tagħti s-saħħa.
 - **Usage Examples**:
-  - MT: Bnin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bnin was in its proper place in daily use.
+  - MT: Ikla bnin mfassla b'kuraġġ fit-tisjir.
+    EN: A delicious meal prepared skillfully in cooking.
 
 ---
 
@@ -7529,10 +6065,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: gusset (small piece of cloth inserted in a garment)
-    **MT**: Tifsira u deskrizzjoni ta' 'bniqa': gusset (small piece of cloth inserted in a garment).
-- **Usage Examples**:
-  - MT: Bniqa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bniqa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bniqa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7540,12 +6073,9 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Capricorn (constellation)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bodbod': Capricorn (constellation).
+    **MT**: Li għandu x'jaqsam ma' Bodbod fl-użu u t-tifsira uffiċjali.
   - **EN**: Capricorn (zodiac sign)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bodbod': Capricorn (zodiac sign).
-- **Usage Examples**:
-  - MT: Bodbod kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bodbod was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bodbod fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7554,11 +6084,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-għ-d
 - **Definitions**:
-  - **EN**: distance, being far away
-    **MT**: Tifsira u deskrizzjoni ta' 'bogħod': distance, being far away.
+  - **EN**: distance, far away
+    **MT**: Distanza kbira fejn tinsab viċin ir-reġjun.
 - **Usage Examples**:
-  - MT: Bogħod kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bogħod was in its proper place in daily use.
+  - MT: Għexu mill-bogħod minn xulxin għas-snin.
+    EN: They lived at a distance from each other for years.
 
 ---
 
@@ -7567,10 +6097,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bohrium (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'bohrju': bohrium (chemical element).
-- **Usage Examples**:
-  - MT: Bohrju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bohrju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bohrju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7579,10 +6106,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: boycott
-    **MT**: Tifsira u deskrizzjoni ta' 'bojkott': boycott.
+    **MT**: Protesta billi ma tixtrix jew ma tużax servizz.
 - **Usage Examples**:
-  - MT: Bojkott kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bojkott was in its proper place in daily use.
+  - MT: Għamlu bojkott kontra r-regoli l-ġodda.
+    EN: They organized a boycott against the new rules.
 
 ---
 
@@ -7590,13 +6117,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: buckle
-    **MT**: Tifsira u deskrizzjoni ta' 'bokkla': buckle.
-  - **EN**: hairclip
-    **MT**: Tifsira u deskrizzjoni ta' 'bokkla': hairclip.
+  - **EN**: buckle, hairclip
+    **MT**: Għodda ta' metall jew plastik użata fit-twaħħil.
 - **Usage Examples**:
-  - MT: Bokkla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bokkla was in its proper place in daily use.
+  - MT: L-bokkla taċ-ċinturin kienet magħmula mir-ram.
+    EN: The belt buckle was made of brass.
 
 ---
 
@@ -7606,10 +6131,7 @@ Total Entries: 856
 - **Root**: b-k-r
 - **Definitions**:
   - **EN**: early morning [obsolet]
-    **MT**: Tifsira u deskrizzjoni ta' 'bokra': early morning.
-- **Usage Examples**:
-  - MT: Bokra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bokra was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bokra fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7618,10 +6140,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: black eye [obsolet]
-    **MT**: Tifsira u deskrizzjoni ta' 'boks': black eye.
-- **Usage Examples**:
-  - MT: Boks kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boks was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boks fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7629,11 +6148,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: boxer (participant in a boxing match)
-    **MT**: Tifsira u deskrizzjoni ta' 'bokser': boxer (participant in a boxing match).
+  - **EN**: boxer
+    **MT**: Atleta li jikkompeti fil-logħba tal-boksing.
 - **Usage Examples**:
-  - MT: Bokser kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bokser was in its proper place in daily use.
+  - MT: Il-bokser rebaħ il-titlu nazzjonali fil-palk.
+    EN: The boxer won the national title on the stage.
 
 ---
 
@@ -7642,10 +6161,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: boxing
-    **MT**: Tifsira u deskrizzjoni ta' 'boksing': boxing.
-- **Usage Examples**:
-  - MT: Boksing kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boksing was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boksing fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7654,12 +6170,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: postage stamp
-    **MT**: Tifsira u deskrizzjoni ta' 'boll': postage stamp.
+    **MT**: Li għandu x'jaqsam ma' boll fl-użu u t-tifsira uffiċjali.
   - **EN**: brand
-    **MT**: Tifsira u deskrizzjoni ta' 'boll': brand.
-- **Usage Examples**:
-  - MT: Boll kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boll was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boll fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7668,10 +6181,7 @@ Total Entries: 856
 - **Root**: b-l-q
 - **Definitions**:
   - **EN**: plural of iblaq
-    **MT**: Forma plurali ta' iblaq.
-- **Usage Examples**:
-  - MT: Boloq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boloq was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boloq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7680,10 +6190,7 @@ Total Entries: 856
 - **Root**: b-l-q
 - **Definitions**:
   - **EN**: to grow old
-    **MT**: Tifsira u deskrizzjoni ta' 'boloq': to grow old.
-- **Usage Examples**:
-  - MT: Boloq l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of boloq correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' boloq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7692,10 +6199,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bolt (metal fastener)
-    **MT**: Tifsira u deskrizzjoni ta' 'bolt': bolt (metal fastener).
-- **Usage Examples**:
-  - MT: Bolt kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bolt was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bolt fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7704,16 +6208,13 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: bomb
-    **MT**: Tifsira u deskrizzjoni ta' 'bomba': bomb.
+    **MT**: Li għandu x'jaqsam ma' bomba fl-użu u t-tifsira uffiċjali.
   - **EN**: petard
-    **MT**: Tifsira u deskrizzjoni ta' 'bomba': petard.
+    **MT**: Li għandu x'jaqsam ma' bomba fl-użu u t-tifsira uffiċjali.
   - **EN**: any big - sized round object
-    **MT**: Tifsira u deskrizzjoni ta' 'bomba': any big - sized round object.
+    **MT**: Li għandu x'jaqsam ma' bomba fl-użu u t-tifsira uffiċjali.
   - **EN**: unexpected news
-    **MT**: Tifsira u deskrizzjoni ta' 'bomba': unexpected news.
-- **Usage Examples**:
-  - MT: Bomba kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bomba was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bomba fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7722,10 +6223,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: water pot, pitcher
-    **MT**: Tifsira u deskrizzjoni ta' 'bomblu': water pot, pitcher.
-- **Usage Examples**:
-  - MT: Bomblu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bomblu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bomblu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7733,11 +6231,8 @@ Total Entries: 856
 - **POS**: interjection
 - **Definitions**:
   - **EN**: good evening
-    **MT**: Tifsira u deskrizzjoni ta' 'bonasira': good evening.
+    **MT**: Li għandu x'jaqsam ma' bonasira fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bonasira
-- **Usage Examples**:
-  - MT: Bonasera kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bonasera was in its proper place in daily use.
 
 ---
 
@@ -7745,11 +6240,8 @@ Total Entries: 856
 - **POS**: interjection
 - **Definitions**:
   - **EN**: good evening
-    **MT**: Tifsira u deskrizzjoni ta' 'bonasira': good evening.
+    **MT**: Li għandu x'jaqsam ma' bonasira fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bonasera
-- **Usage Examples**:
-  - MT: Bonasira kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bonasira was in its proper place in daily use.
 
 ---
 
@@ -7757,11 +6249,8 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: stem
-    **MT**: Tifsira u deskrizzjoni ta' 'bont': stem.
+    **MT**: Li għandu x'jaqsam ma' bont fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bont
-- **Usage Examples**:
-  - MT: Bonn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bonn was in its proper place in daily use.
 
 ---
 
@@ -7769,10 +6258,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: mad, crazy
-    **MT**: Tifsira u deskrizzjoni ta' 'bonswa': mad, crazy.
-- **Usage Examples**:
-  - MT: Bonswa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bonswa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bonswa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7780,12 +6266,9 @@ Total Entries: 856
 - **POS**: interjection
 - **Definitions**:
   - **EN**: good evening
-    **MT**: Tifsira u deskrizzjoni ta' 'bonswa': good evening.
+    **MT**: Li għandu x'jaqsam ma' bonswa fl-użu u t-tifsira uffiċjali.
   - **EN**: Indicating a hopeless condition
-    **MT**: Tifsira u deskrizzjoni ta' 'bonswa': Indicating a hopeless condition.
-- **Usage Examples**:
-  - MT: Bonswa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bonswa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bonswa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7795,11 +6278,8 @@ Total Entries: 856
 - **Root**: b-n-t
 - **Definitions**:
   - **EN**: stem
-    **MT**: Tifsira u deskrizzjoni ta' 'bont': stem.
+    **MT**: Li għandu x'jaqsam ma' bont fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bonn
-- **Usage Examples**:
-  - MT: Bont kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bont was in its proper place in daily use.
 
 ---
 
@@ -7808,10 +6288,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: goodness
-    **MT**: Tifsira u deskrizzjoni ta' 'bontà': goodness.
-- **Usage Examples**:
-  - MT: Bontà kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bontà was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bontà fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7819,22 +6296,16 @@ Total Entries: 856
 - **POS**: interjection
 - **Definitions**:
   - **EN**: good morning
-    **MT**: Tifsira u deskrizzjoni ta' 'bonġu': good morning.
-- **Usage Examples**:
-  - MT: Bonġu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bonġu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bonġu fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## boq (intj-boq) 🌟 *(REVISED TARGET ENTRY)*
+## boq (intj-boq)
 - **POS**: interjection
 - **Definitions**:
   - **EN**: dunno (expressing indecision)
     **MT**: Kelma użata meta wieħed ma jkunx jaf jew ikun f’inċertezza.
 - **Alternative Forms**: boqq
-- **Usage Examples**:
-  - MT: Boq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boq was in its proper place in daily use.
 
 ---
 
@@ -7844,10 +6315,7 @@ Total Entries: 856
 - **Root**: b-q-għ
 - **Definitions**:
   - **EN**: plain, plateau
-    **MT**: Tifsira u deskrizzjoni ta' 'boqgħa': plain, plateau.
-- **Usage Examples**:
-  - MT: Boqgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boqgħa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boqgħa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7856,13 +6324,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: a chubby person
-    **MT**: Tifsira u deskrizzjoni ta' 'boqni': a chubby person.
+    **MT**: Li għandu x'jaqsam ma' boqni fl-użu u t-tifsira uffiċjali.
   - **EN**: A term of endearment for dogs.
-    **MT**: Tifsira u deskrizzjoni ta' 'boqni': A term of endearment for dogs..
+    **MT**: Li għandu x'jaqsam ma' boqni fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: boqqni
-- **Usage Examples**:
-  - MT: Boqni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boqni was in its proper place in daily use.
 
 ---
 
@@ -7870,13 +6335,10 @@ Total Entries: 856
 - **POS**: interjection
 - **Definitions**:
   - **EN**: Used to express indecision or uncertainty
-    **MT**: Tifsira u deskrizzjoni ta' 'boqq': Used to express indecision or uncertainty.
+    **MT**: Li għandu x'jaqsam ma' boqq fl-użu u t-tifsira uffiċjali.
   - **EN**: dunno
-    **MT**: Tifsira u deskrizzjoni ta' 'boqq': dunno.
+    **MT**: Li għandu x'jaqsam ma' boqq fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: boq
-- **Usage Examples**:
-  - MT: Boqq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boqq was in its proper place in daily use.
 
 ---
 
@@ -7886,10 +6348,7 @@ Total Entries: 856
 - **Root**: b-q-q
 - **Definitions**:
   - **EN**: a mouthful of, draft (of a liquid)
-    **MT**: Tifsira u deskrizzjoni ta' 'boqqa': a mouthful of, draft (of a liquid).
-- **Usage Examples**:
-  - MT: Boqqa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boqqa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boqqa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7899,27 +6358,21 @@ Total Entries: 856
 - **Root**: b-q-għ
 - **Definitions**:
   - **EN**: large field
-    **MT**: Tifsira u deskrizzjoni ta' 'boqqiegħa': large field.
+    **MT**: Li għandu x'jaqsam ma' boqqiegħa fl-użu u t-tifsira uffiċjali.
   - **EN**: bottom of a duct or any place where water is collected (Is there an English equivalent to this definition?)
-    **MT**: Tifsira u deskrizzjoni ta' 'boqqiegħa': bottom of a duct or any place where water is collected (Is there an English equivalent to this definition?).
+    **MT**: Li għandu x'jaqsam ma' boqqiegħa fl-użu u t-tifsira uffiċjali.
   - **EN**: marshland
-    **MT**: Tifsira u deskrizzjoni ta' 'boqqiegħa': marshland.
+    **MT**: Li għandu x'jaqsam ma' boqqiegħa fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: baqqiegħa
-- **Usage Examples**:
-  - MT: Boqqiegħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boqqiegħa was in its proper place in daily use.
 
 ---
 
-## boqqni (n-boqqni) 🌟 *(REVISED TARGET ENTRY)*
+## boqqni (n-boqqni)
 - **POS**: noun
 - **Definitions**:
   - **EN**: a chubby person
     **MT**: Persuna mnaqqsa u bi ħaddejn kbar.
 - **Alternative Forms**: boqni
-- **Usage Examples**:
-  - MT: Boqqni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boqqni was in its proper place in daily use.
 
 ---
 
@@ -7928,10 +6381,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: money [kollokwali]
-    **MT**: Tifsira u deskrizzjoni ta' 'boqxiex': money.
-- **Usage Examples**:
-  - MT: Boqxiex kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boqxiex was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boqxiex fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7940,13 +6390,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: brothel
-    **MT**: Tifsira u deskrizzjoni ta' 'burdell': brothel.
+    **MT**: Li għandu x'jaqsam ma' burdell fl-użu u t-tifsira uffiċjali.
   - **EN**: uproar
-    **MT**: Tifsira u deskrizzjoni ta' 'burdell': uproar.
+    **MT**: Li għandu x'jaqsam ma' burdell fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: burdell
-- **Usage Examples**:
-  - MT: Bordell kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bordell was in its proper place in daily use.
 
 ---
 
@@ -7955,10 +6402,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: waybill, bordereau
-    **MT**: Tifsira u deskrizzjoni ta' 'borderò': waybill, bordereau.
-- **Usage Examples**:
-  - MT: Borderò kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The borderò was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' borderò fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7967,12 +6411,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: paper reed (Cyperus papyrus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bordi': paper reed (Cyperus papyrus).
+    **MT**: Li għandu x'jaqsam ma' bordi fl-użu u t-tifsira uffiċjali.
   - **EN**: striped cloth
-    **MT**: Tifsira u deskrizzjoni ta' 'bordi': striped cloth.
-- **Usage Examples**:
-  - MT: Bordi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bordi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bordi fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7980,10 +6421,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Borg': a surname.
-- **Usage Examples**:
-  - MT: Borg kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Borg was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Borg fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7992,12 +6430,9 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: duck
-    **MT**: Tifsira u deskrizzjoni ta' 'borka': duck.
+    **MT**: Li għandu x'jaqsam ma' borka fl-użu u t-tifsira uffiċjali.
   - **EN**: lazy person
-    **MT**: Tifsira u deskrizzjoni ta' 'borka': lazy person.
-- **Usage Examples**:
-  - MT: Borka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The borka was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' borka fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8006,14 +6441,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: cooking pot
-    **MT**: Tifsira u deskrizzjoni ta' 'borma': cooking pot.
+    **MT**: Li għandu x'jaqsam ma' borma fl-użu u t-tifsira uffiċjali.
   - **EN**: saucepan
-    **MT**: Tifsira u deskrizzjoni ta' 'borma': saucepan.
+    **MT**: Li għandu x'jaqsam ma' borma fl-użu u t-tifsira uffiċjali.
   - **EN**: intrigue
-    **MT**: Tifsira u deskrizzjoni ta' 'borma': intrigue.
-- **Usage Examples**:
-  - MT: Borma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The borma was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' borma fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8021,10 +6453,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Cospicua (a city and local council of the Port Region, Malta)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bormla': Cospicua (a city and local council of the Port Region, Malta).
-- **Usage Examples**:
-  - MT: Bormla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bormla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bormla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8032,10 +6461,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: of, from or relating to Bormla
-    **MT**: Tifsira u deskrizzjoni ta' 'Bormliż': of, from or relating to Bormla.
-- **Usage Examples**:
-  - MT: Bormliż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bormliż was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bormliż fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8044,10 +6470,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: native or inhabitant of Bormla
-    **MT**: Tifsira u deskrizzjoni ta' 'Bormliż': native or inhabitant of Bormla.
-- **Usage Examples**:
-  - MT: Bormliż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bormliż was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bormliż fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8056,10 +6479,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: boron
-    **MT**: Tifsira u deskrizzjoni ta' 'boron': boron.
-- **Usage Examples**:
-  - MT: Boron kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boron was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boron fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8067,10 +6487,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: invulnerable
-    **MT**: Tifsira u deskrizzjoni ta' 'borqmi': invulnerable.
-- **Usage Examples**:
-  - MT: Borqmi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The borqmi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' borqmi fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8079,10 +6496,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: caul
-    **MT**: Tifsira u deskrizzjoni ta' 'borqom': caul.
-- **Usage Examples**:
-  - MT: Borqom kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The borqom was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' borqom fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8091,10 +6505,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: snow, sleet
-    **MT**: Tifsira u deskrizzjoni ta' 'borra': snow, sleet.
-- **Usage Examples**:
-  - MT: Borra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The borra was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' borra fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8103,10 +6514,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: snowman
-    **MT**: Tifsira u deskrizzjoni ta' 'borrinu': snowman.
-- **Usage Examples**:
-  - MT: Borrinu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The borrinu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' borrinu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8115,12 +6523,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: tower
-    **MT**: Tifsira u deskrizzjoni ta' 'borġ': tower.
+    **MT**: Li għandu x'jaqsam ma' borġ fl-użu u t-tifsira uffiċjali.
   - **EN**: heap, pile
-    **MT**: Tifsira u deskrizzjoni ta' 'borġ': heap, pile.
-- **Usage Examples**:
-  - MT: Borġ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The borġ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' borġ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8129,16 +6534,13 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: purse, bag
-    **MT**: Tifsira u deskrizzjoni ta' 'borża': purse, bag.
+    **MT**: Li għandu x'jaqsam ma' borża fl-użu u t-tifsira uffiċjali.
   - **EN**: stock market
-    **MT**: Tifsira u deskrizzjoni ta' 'borża': stock market.
+    **MT**: Li għandu x'jaqsam ma' borża fl-użu u t-tifsira uffiċjali.
   - **EN**: money
-    **MT**: Tifsira u deskrizzjoni ta' 'borża': money.
+    **MT**: Li għandu x'jaqsam ma' borża fl-użu u t-tifsira uffiċjali.
   - **EN**: scrotum
-    **MT**: Tifsira u deskrizzjoni ta' 'borża': scrotum.
-- **Usage Examples**:
-  - MT: Borża kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The borża was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' borża fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8147,10 +6549,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: wood, forest
-    **MT**: Tifsira u deskrizzjoni ta' 'bosk': wood, forest.
-- **Usage Examples**:
-  - MT: Bosk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bosk was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bosk fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8158,10 +6557,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: woody, wooded
-    **MT**: Tifsira u deskrizzjoni ta' 'boskuż': woody, wooded.
-- **Usage Examples**:
-  - MT: Boskuż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boskuż was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boskuż fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8170,10 +6566,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: boss (clarification of this definition is needed)
-    **MT**: Tifsira u deskrizzjoni ta' 'boss': boss (clarification of this definition is needed).
-- **Usage Examples**:
-  - MT: Boss kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boss was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boss fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8181,10 +6574,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: much, many
-    **MT**: Tifsira u deskrizzjoni ta' 'bosta': much, many.
-- **Usage Examples**:
-  - MT: Bosta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bosta was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bosta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8194,12 +6584,9 @@ Total Entries: 856
 - **Root**: b-t-n
 - **Definitions**:
   - **EN**: pistachio (tree and fruit)
-    **MT**: Tifsira u deskrizzjoni ta' 'botna': pistachio (tree and fruit).
+    **MT**: Li għandu x'jaqsam ma' botna fl-użu u t-tifsira uffiċjali.
   - **EN**: belly
-    **MT**: Tifsira u deskrizzjoni ta' 'botna': belly.
-- **Usage Examples**:
-  - MT: Botna kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The botna was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' botna fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8208,10 +6595,7 @@ Total Entries: 856
 - **Root**: b-t-n
 - **Definitions**:
   - **EN**: short and portly
-    **MT**: Tifsira u deskrizzjoni ta' 'botni': short and portly.
-- **Usage Examples**:
-  - MT: Botni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The botni was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' botni fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8221,14 +6605,11 @@ Total Entries: 856
 - **Root**: b-t-n
 - **Definitions**:
   - **EN**: litter (of animals, especially rabbits)
-    **MT**: Tifsira u deskrizzjoni ta' 'boton': litter (of animals, especially rabbits).
+    **MT**: Li għandu x'jaqsam ma' boton fl-użu u t-tifsira uffiċjali.
   - **EN**: crop, harvest (produce of each period of sowing/blooming)
-    **MT**: Tifsira u deskrizzjoni ta' 'boton': crop, harvest (produce of each period of sowing/blooming).
+    **MT**: Li għandu x'jaqsam ma' boton fl-użu u t-tifsira uffiċjali.
   - **EN**: belly, womb [obsolet]
-    **MT**: Tifsira u deskrizzjoni ta' 'boton': belly, womb.
-- **Usage Examples**:
-  - MT: Boton kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boton was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boton fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8236,12 +6617,9 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Botswana (a country in Southern Africa
-    **MT**: Tifsira u deskrizzjoni ta' 'Botswana': Botswana (a country in Southern Africa.
+    **MT**: Li għandu x'jaqsam ma' Botswana fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Repubblika tal-Botswana)
-    **MT**: Tifsira u deskrizzjoni ta' 'Botswana': official name: Repubblika tal-Botswana).
-- **Usage Examples**:
-  - MT: Botswana kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Botswana was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Botswana fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8250,10 +6628,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: offensive remark
-    **MT**: Tifsira u deskrizzjoni ta' 'botta': offensive remark.
-- **Usage Examples**:
-  - MT: Botta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The botta was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' botta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8262,10 +6637,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: wine cellar
-    **MT**: Tifsira u deskrizzjoni ta' 'bottiljerija': wine cellar.
-- **Usage Examples**:
-  - MT: Bottiljerija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bottiljerija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bottiljerija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8274,10 +6646,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: cellarman
-    **MT**: Tifsira u deskrizzjoni ta' 'bottiljier': cellarman.
-- **Usage Examples**:
-  - MT: Bottiljier kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bottiljier was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bottiljier fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8286,10 +6655,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: gardevin
-    **MT**: Tifsira u deskrizzjoni ta' 'bottiljun': gardevin.
-- **Usage Examples**:
-  - MT: Bottiljun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bottiljun was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bottiljun fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8298,14 +6664,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: compass (instrument to determine cardinal directions)
-    **MT**: Tifsira u deskrizzjoni ta' 'boxxla': compass (instrument to determine cardinal directions).
+    **MT**: Li għandu x'jaqsam ma' boxxla fl-użu u t-tifsira uffiċjali.
   - **EN**: weather vane
-    **MT**: Tifsira u deskrizzjoni ta' 'boxxla': weather vane.
+    **MT**: Li għandu x'jaqsam ma' boxxla fl-użu u t-tifsira uffiċjali.
   - **EN**: vestibule door
-    **MT**: Tifsira u deskrizzjoni ta' 'boxxla': vestibule door.
-- **Usage Examples**:
-  - MT: Boxxla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boxxla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boxxla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8314,10 +6677,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: synonym of dewwiema: weather vane
-    **MT**: Tifsira u deskrizzjoni ta' 'boxxla tar-riħ': synonym of dewwiema: weather vane.
-- **Usage Examples**:
-  - MT: Boxxla tar-riħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boxxla tar-riħ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boxxla tar-riħ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8326,10 +6686,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: light bulb
-    **MT**: Tifsira u deskrizzjoni ta' 'bozza': light bulb.
-- **Usage Examples**:
-  - MT: Bozza kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bozza was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bozza fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8338,10 +6695,7 @@ Total Entries: 856
 - **Root**: b-ċ-n
 - **Definitions**:
   - **EN**: plump
-    **MT**: Tifsira u deskrizzjoni ta' 'boċni': plump.
-- **Usage Examples**:
-  - MT: Boċni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boċni was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boċni fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8351,14 +6705,11 @@ Total Entries: 856
 - **Root**: b-ċ-ċ
 - **Definitions**:
   - **EN**: marble (spherical ball)
-    **MT**: Tifsira u deskrizzjoni ta' 'boċċa': marble (spherical ball).
+    **MT**: Li għandu x'jaqsam ma' boċċa fl-użu u t-tifsira uffiċjali.
   - **EN**: testicles
-    **MT**: Tifsira u deskrizzjoni ta' 'boċċa': testicles.
+    **MT**: Li għandu x'jaqsam ma' boċċa fl-użu u t-tifsira uffiċjali.
   - **EN**: chubby
-    **MT**: Tifsira u deskrizzjoni ta' 'boċċa': chubby.
-- **Usage Examples**:
-  - MT: Boċċa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The boċċa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' boċċa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8366,14 +6717,11 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Bosnia (a geographic region of Bosnia and Herzegovina, consisting of the northern three fourths of the country)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bożnija': Bosnia (a geographic region of Bosnia and Herzegovina, consisting of the northern three fourths of the country).
+    **MT**: Li għandu x'jaqsam ma' Bożnija fl-użu u t-tifsira uffiċjali.
   - **EN**: Bosnia (a country in southeastern Europe
-    **MT**: Tifsira u deskrizzjoni ta' 'Bożnija': Bosnia (a country in southeastern Europe.
+    **MT**: Li għandu x'jaqsam ma' Bożnija fl-użu u t-tifsira uffiċjali.
   - **EN**: in full, Il-Bożnija u Ħerzegovina)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bożnija': in full, Il-Bożnija u Ħerzegovina).
-- **Usage Examples**:
-  - MT: Bożnija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bożnija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bożnija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8381,10 +6729,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Bosnia and Herzegovina (a country on the Balkan Peninsula in Southeastern Europe)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bożnija-Ħerzegovina': Bosnia and Herzegovina (a country on the Balkan Peninsula in Southeastern Europe).
-- **Usage Examples**:
-  - MT: Bożnija-ħerzegovina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bożnija-Ħerzegovina was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bożnija-Ħerzegovina fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8392,38 +6737,29 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Bosnia (a geographic region of Bosnia and Herzegovina, consisting of the northern three fourths of the country)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bożnja': Bosnia (a geographic region of Bosnia and Herzegovina, consisting of the northern three fourths of the country).
+    **MT**: Li għandu x'jaqsam ma' Bożnja fl-użu u t-tifsira uffiċjali.
   - **EN**: Bosnia (a country in southeastern Europe
-    **MT**: Tifsira u deskrizzjoni ta' 'Bożnja': Bosnia (a country in southeastern Europe.
+    **MT**: Li għandu x'jaqsam ma' Bożnja fl-użu u t-tifsira uffiċjali.
   - **EN**: in full, Il-Bożnja u Ħerzegovina)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bożnja': in full, Il-Bożnja u Ħerzegovina).
-- **Usage Examples**:
-  - MT: Bożnja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bożnja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bożnja fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bożżu (adj-bożżu) 🌟 *(REVISED TARGET ENTRY)*
+## bożżu (adj-bożżu)
 - **POS**: adjective
 - **Definitions**:
   - **EN**: querulous, peevish, whining
     **MT**: Persuna li dejjem tilmenta u tinħażen.
 - **Alternative Forms**: bużżu
-- **Usage Examples**:
-  - MT: Bożżu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bożżu was in its proper place in daily use.
 
 ---
 
-## bożżu (n-bożżu) 🌟 *(REVISED TARGET ENTRY)*
+## bożżu (n-bożżu)
 - **POS**: noun
 - **Definitions**:
   - **EN**: whiner, peevish person
     **MT**: Xi ħadd li jħobb jilmenta ta spiss.
 - **Alternative Forms**: bużżu
-- **Usage Examples**:
-  - MT: Bożżu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bożżu was in its proper place in daily use.
 
 ---
 
@@ -8432,14 +6768,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: spinach
-    **MT**: Tifsira u deskrizzjoni ta' 'bqajla': spinach.
-- **Usage Examples**:
-  - MT: Bqajla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bqajla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bqajla fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bqija (n-bqija) 🌟 *(REVISED TARGET ENTRY)*
+## bqija (n-bqija)
 - **POS**: noun
 - **Gender**: feminine
 - **Root**: b-q-għ
@@ -8450,9 +6783,6 @@ Total Entries: 856
     **MT**: Il-parti li tibqa' minn sħiħ wara li jittieħed parti minnha.
   - **EN**: change (money)
     **MT**: Il-flus lura li jirċievi x-xerrej wara li jħallas.
-- **Usage Examples**:
-  - MT: Bqija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bqija was in its proper place in daily use.
 
 ---
 
@@ -8462,10 +6792,7 @@ Total Entries: 856
 - **Root**: b-q-t
 - **Definitions**:
   - **EN**: verbal noun of baqat
-    **MT**: L-att u l-proċess verbali ta' baqat.
-- **Usage Examples**:
-  - MT: Bqit kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bqit was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bqit fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8474,11 +6801,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: diminutive of borma
-    **MT**: Tifsira u deskrizzjoni ta' 'brajma': diminutive of borma.
+    **MT**: Li għandu x'jaqsam ma' brajma fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: brejma
-- **Usage Examples**:
-  - MT: Brajma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brajma was in its proper place in daily use.
 
 ---
 
@@ -8487,10 +6811,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: common pochard (Aythya ferina)
-    **MT**: Tifsira u deskrizzjoni ta' 'brajmla': common pochard (Aythya ferina).
-- **Usage Examples**:
-  - MT: Brajmla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brajmla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brajmla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8499,10 +6820,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: red-crested pochard (Netta rufina)
-    **MT**: Tifsira u deskrizzjoni ta' 'brajmla prima': red-crested pochard (Netta rufina).
-- **Usage Examples**:
-  - MT: Brajmla prima kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brajmla prima was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brajmla prima fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8511,10 +6829,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: white-headed duck (Oxyura leucocephala)
-    **MT**: Tifsira u deskrizzjoni ta' 'brajmla rasha bajda': white-headed duck (Oxyura leucocephala).
-- **Usage Examples**:
-  - MT: Brajmla rasha bajda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brajmla rasha bajda was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brajmla rasha bajda fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8523,10 +6838,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: greater scaup (Aythya marila)
-    **MT**: Tifsira u deskrizzjoni ta' 'brajmla rasha sewda': greater scaup (Aythya marila).
-- **Usage Examples**:
-  - MT: Brajmla rasha sewda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brajmla rasha sewda was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brajmla rasha sewda fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8535,10 +6847,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: common scoter (Melanitta nigra)
-    **MT**: Tifsira u deskrizzjoni ta' 'brajmla sewda': common scoter (Melanitta nigra).
-- **Usage Examples**:
-  - MT: Brajmla sewda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brajmla sewda was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brajmla sewda fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8547,10 +6856,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: common goldeneye (Bucephala clangula)
-    **MT**: Tifsira u deskrizzjoni ta' 'brajmla tal-għajn': common goldeneye (Bucephala clangula).
-- **Usage Examples**:
-  - MT: Brajmla tal-għajn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brajmla tal-għajn was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brajmla tal-għajn fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8559,10 +6865,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: tufted duck (Aythya fuligula)
-    **MT**: Tifsira u deskrizzjoni ta' 'brajmla tat-toppu': tufted duck (Aythya fuligula).
-- **Usage Examples**:
-  - MT: Brajmla tat-toppu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brajmla tat-toppu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brajmla tat-toppu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8571,10 +6874,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: ferruginous duck (Aythya nyroca)
-    **MT**: Tifsira u deskrizzjoni ta' 'brajmla ħamra': ferruginous duck (Aythya nyroca).
-- **Usage Examples**:
-  - MT: Brajmla ħamra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brajmla ħamra was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brajmla ħamra fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8583,10 +6883,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: jellyfish
-    **MT**: Tifsira u deskrizzjoni ta' 'bram': jellyfish.
-- **Usage Examples**:
-  - MT: Bram kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bram was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bram fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8595,16 +6892,13 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: category, class
-    **MT**: Tifsira u deskrizzjoni ta' 'branka': category, class.
+    **MT**: Li għandu x'jaqsam ma' branka fl-użu u t-tifsira uffiċjali.
   - **EN**: branch (of knowledge)
-    **MT**: Tifsira u deskrizzjoni ta' 'branka': branch (of knowledge).
+    **MT**: Li għandu x'jaqsam ma' branka fl-użu u t-tifsira uffiċjali.
   - **EN**: tentacle
-    **MT**: Tifsira u deskrizzjoni ta' 'branka': tentacle.
+    **MT**: Li għandu x'jaqsam ma' branka fl-użu u t-tifsira uffiċjali.
   - **EN**: flight of steps
-    **MT**: Tifsira u deskrizzjoni ta' 'branka': flight of steps.
-- **Usage Examples**:
-  - MT: Branka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The branka was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' branka fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8613,10 +6907,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: bear's breech (Acanthus mollis)
-    **MT**: Tifsira u deskrizzjoni ta' 'brankorsina': bear's breech (Acanthus mollis).
-- **Usage Examples**:
-  - MT: Brankorsina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brankorsina was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brankorsina fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8625,10 +6916,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: spiny bear's breech (Acanthus spinosus)
-    **MT**: Tifsira u deskrizzjoni ta' 'brankorsina xewwekija': spiny bear's breech (Acanthus spinosus).
-- **Usage Examples**:
-  - MT: Brankorsina xewwekija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brankorsina xewwekija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brankorsina xewwekija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8636,10 +6924,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: clever, apt, skilful
-    **MT**: Tifsira u deskrizzjoni ta' 'bravu': clever, apt, skilful.
-- **Usage Examples**:
-  - MT: Bravu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bravu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bravu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8648,10 +6933,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: brush
-    **MT**: Tifsira u deskrizzjoni ta' 'braxx': brush.
-- **Usage Examples**:
-  - MT: Braxx kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The braxx was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' braxx fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8659,11 +6941,8 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: bracelet
-    **MT**: Tifsira u deskrizzjoni ta' 'brazzuletta': bracelet.
+    **MT**: Li għandu x'jaqsam ma' brazzuletta fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: brazzuletta
-- **Usage Examples**:
-  - MT: Brazullet kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brazullet was in its proper place in daily use.
 
 ---
 
@@ -8672,11 +6951,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: bracelet
-    **MT**: Tifsira u deskrizzjoni ta' 'brazzuletta': bracelet.
+    **MT**: Li għandu x'jaqsam ma' brazzuletta fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: brazullet
-- **Usage Examples**:
-  - MT: Brazzuletta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brazzuletta was in its proper place in daily use.
 
 ---
 
@@ -8684,10 +6960,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Brazil (a large Portuguese -speaking country in South America)
-    **MT**: Tifsira u deskrizzjoni ta' 'Brażil': Brazil (a large Portuguese -speaking country in South America).
-- **Usage Examples**:
-  - MT: Brażil kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Brażil was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Brażil fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8695,12 +6968,9 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Brasília (a municipality, the capital city of Brazil
-    **MT**: Tifsira u deskrizzjoni ta' 'Brażilja': Brasília (a municipality, the capital city of Brazil.
+    **MT**: Li għandu x'jaqsam ma' Brażilja fl-użu u t-tifsira uffiċjali.
   - **EN**: the capital of Distrito Federal, Brazil)
-    **MT**: Tifsira u deskrizzjoni ta' 'Brażilja': the capital of Distrito Federal, Brazil).
-- **Usage Examples**:
-  - MT: Brażilja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Brażilja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Brażilja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8708,10 +6978,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: Brazilian
-    **MT**: Tifsira u deskrizzjoni ta' 'Brażiljan': Brazilian.
-- **Usage Examples**:
-  - MT: Brażiljan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Brażiljan was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Brażiljan fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8720,10 +6987,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Brazilian (person)
-    **MT**: Tifsira u deskrizzjoni ta' 'Brażiljan': Brazilian (person).
-- **Usage Examples**:
-  - MT: Brażiljan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Brażiljan was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Brażiljan fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8731,11 +6995,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: brake (device used to slow or stop a vehicle)
-    **MT**: Tifsira u deskrizzjoni ta' 'brejk': brake (device used to slow or stop a vehicle).
+  - **EN**: brake (vehicle) / rest break
+    **MT**: Apparat tas-sigurtà fil-vettura jew paża mix-xogħol.
 - **Usage Examples**:
-  - MT: Brejk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brejk was in its proper place in daily use.
+  - MT: Uża l-brejk biex waqqaf il-karozza fit-triq.
+    EN: He used the brake to stop the car on the road.
 
 ---
 
@@ -8744,10 +7008,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: break (rest or pause, usually from work)
-    **MT**: Tifsira u deskrizzjoni ta' 'brejk': break (rest or pause, usually from work).
-- **Usage Examples**:
-  - MT: Brejk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brejk was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brejk fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8756,12 +7017,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: jargon
-    **MT**: Tifsira u deskrizzjoni ta' 'brejku': jargon.
+    **MT**: Li għandu x'jaqsam ma' brejku fl-użu u t-tifsira uffiċjali.
   - **EN**: ambiguous talk
-    **MT**: Tifsira u deskrizzjoni ta' 'brejku': ambiguous talk.
-- **Usage Examples**:
-  - MT: Brejku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brejku was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brejku fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8770,11 +7028,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: diminutive of borma
-    **MT**: Tifsira u deskrizzjoni ta' 'brejma': diminutive of borma.
+    **MT**: Li għandu x'jaqsam ma' brejma fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: brajma
-- **Usage Examples**:
-  - MT: Brejma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brejma was in its proper place in daily use.
 
 ---
 
@@ -8784,21 +7039,18 @@ Total Entries: 856
 - **Root**: b-r-d
 - **Definitions**:
   - **EN**: verbal noun of barad: filing
-    **MT**: L-att u l-proċess verbali ta' barad.
-- **Usage Examples**:
-  - MT: Brid kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brid was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brid fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## Briffa (n-briffa)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Briffa': a surname.
+  - **EN**: Briffa (surname)
+    **MT**: Kunjom Malti storiku u komuni.
 - **Usage Examples**:
-  - MT: Briffa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Briffa was in its proper place in daily use.
+  - MT: Is-sur Briffa mexxa l-klabb sportiv.
+    EN: Mr. Briffa led the sports club.
 
 ---
 
@@ -8807,10 +7059,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: brig
-    **MT**: Tifsira u deskrizzjoni ta' 'brigg': brig.
-- **Usage Examples**:
-  - MT: Brigg kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brigg was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brigg fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8819,10 +7068,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: brioche
-    **MT**: Tifsira u deskrizzjoni ta' 'brijoxx': brioche.
-- **Usage Examples**:
-  - MT: Brijoxx kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brijoxx was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brijoxx fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8831,10 +7077,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: scoundrel, rascal
-    **MT**: Tifsira u deskrizzjoni ta' 'brikkun': scoundrel, rascal.
+    **MT**: Tifel jew persuna li tagħmel ċajt u inkwiet żgħir.
 - **Usage Examples**:
-  - MT: Brikkun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brikkun was in its proper place in daily use.
+  - MT: Il-brikkun żgħir għamel ċajta fit-triq.
+    EN: The little rascal played a prank on the street.
 
 ---
 
@@ -8843,10 +7089,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: rascality
-    **MT**: Tifsira u deskrizzjoni ta' 'brikkunata': rascality.
-- **Usage Examples**:
-  - MT: Brikkunata kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brikkunata was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brikkunata fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8855,10 +7098,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: rascality
-    **MT**: Tifsira u deskrizzjoni ta' 'brikkunerija': rascality.
-- **Usage Examples**:
-  - MT: Brikkunerija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brikkunerija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brikkunerija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8867,22 +7107,19 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: brilliant (cut gemstone)
-    **MT**: Tifsira u deskrizzjoni ta' 'brillant': brilliant (cut gemstone).
+    **MT**: Li għandu x'jaqsam ma' brillant fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: birlant
-- **Usage Examples**:
-  - MT: Brillant kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brillant was in its proper place in daily use.
 
 ---
 
 ## brillanti (adj-brillanti)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: brilliant
-    **MT**: Tifsira u deskrizzjoni ta' 'brillanti': brilliant.
+  - **EN**: brilliant, bright, outstanding
+    **MT**: Li għandu talent kbir, intelliġenza jew tleqqija.
 - **Usage Examples**:
-  - MT: Brillanti kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brillanti was in its proper place in daily use.
+  - MT: Student brillanti li rċieva l-ogħla unur.
+    EN: A brilliant student who received top honors.
 
 ---
 
@@ -8891,11 +7128,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: brilliantine
-    **MT**: Tifsira u deskrizzjoni ta' 'brillantin': brilliantine.
+    **MT**: Li għandu x'jaqsam ma' brillantin fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: brillantina
-- **Usage Examples**:
-  - MT: Brillantin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brillantin was in its proper place in daily use.
 
 ---
 
@@ -8904,11 +7138,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: brilliantine
-    **MT**: Tifsira u deskrizzjoni ta' 'brillantin': brilliantine.
+    **MT**: Li għandu x'jaqsam ma' brillantin fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: brillantin
-- **Usage Examples**:
-  - MT: Brillantina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brillantina was in its proper place in daily use.
 
 ---
 
@@ -8918,10 +7149,7 @@ Total Entries: 856
 - **Root**: b-r-m
 - **Definitions**:
   - **EN**: verbal noun of baram
-    **MT**: L-att u l-proċess verbali ta' baram.
-- **Usage Examples**:
-  - MT: Brim kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brim was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brim fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8930,12 +7158,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: spiders
-    **MT**: Tifsira u deskrizzjoni ta' 'brimb': spiders.
+    **MT**: Li għandu x'jaqsam ma' brimb fl-użu u t-tifsira uffiċjali.
   - **EN**: ovate goatgrass (Aegilops geniculata)
-    **MT**: Tifsira u deskrizzjoni ta' 'brimb': ovate goatgrass (Aegilops geniculata).
-- **Usage Examples**:
-  - MT: Brimb kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brimb was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brimb fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -8944,45 +7169,39 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: toast, salute
-    **MT**: Tifsira u deskrizzjoni ta' 'brindisi': toast, salute.
-- **Usage Examples**:
-  - MT: Brindisi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brindisi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brindisi fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## brinġiel (n-brinġiel) 🌟 *(REVISED TARGET ENTRY)*
+## brinġiel (n-brinġiel)
 - **POS**: noun
 - **Definitions**:
   - **EN**: eggplants, aubergines
-    **MT**: Ħaxix ta' kulur vjola skur użat fl-ikel.
+    **MT**: Ħaxix ta' kulur vjola skur użat fit-tisjir tal-kċina.
 - **Alternative Forms**: brunġiel
 - **Usage Examples**:
-  - MT: Brinġiel kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brinġiel was in its proper place in daily use.
+  - MT: Sajru l-brinġiel fil-forn bil-ġobon.
+    EN: They cooked eggplants in the oven with cheese.
 
 ---
 
-## brinġieli (adj-brinġieli) 🌟 *(REVISED TARGET ENTRY)*
+## brinġieli (adj-brinġieli)
 - **POS**: adjective
 - **Definitions**:
   - **EN**: eggplant (colour)
     **MT**: Kulur vjola skur bħall-kulur tal-brunġiel.
 - **Alternative Forms**: brunġieli
-- **Usage Examples**:
-  - MT: Brinġieli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brinġieli was in its proper place in daily use.
 
 ---
 
 ## Brittaniku (adj-brittaniku)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: British (of, from or relating to the United Kingdom)
-    **MT**: Tifsira u deskrizzjoni ta' 'Brittaniku': British (of, from or relating to the United Kingdom).
+  - **EN**: British
+    **MT**: Li għandu x'jaqsam mal-Ingilterra u r-Renju Unit.
 - **Usage Examples**:
-  - MT: Brittaniku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Brittaniku was in its proper place in daily use.
+  - MT: Gvern Brittaniku li ffirma t-trattat.
+    EN: British government that signed the treaty.
 
 ---
 
@@ -8991,10 +7210,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Briton, Brit (native or inhabitant of the United Kingdom) (usually male)
-    **MT**: Tifsira u deskrizzjoni ta' 'Brittaniku': Briton, Brit (native or inhabitant of the United Kingdom) (usually male).
-- **Usage Examples**:
-  - MT: Brittaniku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Brittaniku was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Brittaniku fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9004,10 +7220,7 @@ Total Entries: 856
 - **Root**: b-r-x
 - **Definitions**:
   - **EN**: verbal noun of barax
-    **MT**: L-att u l-proċess verbali ta' barax.
-- **Usage Examples**:
-  - MT: Brix kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brix was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' brix fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9016,10 +7229,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: breech of a gun
-    **MT**: Tifsira u deskrizzjoni ta' 'briċ': breech of a gun.
-- **Usage Examples**:
-  - MT: Briċ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The briċ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' briċ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9028,10 +7238,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bridge
-    **MT**: Tifsira u deskrizzjoni ta' 'briġġ': bridge.
-- **Usage Examples**:
-  - MT: Briġġ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The briġġ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' briġġ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9040,10 +7247,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bromine (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'bromu': bromine (chemical element).
-- **Usage Examples**:
-  - MT: Bromu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bromu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bromu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9052,10 +7256,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bronze
-    **MT**: Tifsira u deskrizzjoni ta' 'bronż': bronze.
+    **MT**: Metall u liga ta' ram użat għall-monumenti u l-midalji.
 - **Usage Examples**:
-  - MT: Bronż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bronż was in its proper place in daily use.
+  - MT: Monument magħmul mill-bronż fil-pjazza.
+    EN: A monument made of bronze in the square.
 
 ---
 
@@ -9064,11 +7268,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bronzesmith
-    **MT**: Tifsira u deskrizzjoni ta' 'bronżar': bronzesmith.
+    **MT**: Li għandu x'jaqsam ma' bronżar fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: brunżar
-- **Usage Examples**:
-  - MT: Bronżar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bronżar was in its proper place in daily use.
 
 ---
 
@@ -9077,10 +7278,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: bronzing
-    **MT**: Tifsira u deskrizzjoni ta' 'bronżatura': bronzing.
-- **Usage Examples**:
-  - MT: Bronżatura kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bronżatura was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bronżatura fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9088,10 +7286,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: bronze - coloured
-    **MT**: Tifsira u deskrizzjoni ta' 'bronżin': bronze - coloured.
-- **Usage Examples**:
-  - MT: Bronżin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bronżin was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bronżin fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9100,12 +7295,9 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: scrubbing brush
-    **MT**: Tifsira u deskrizzjoni ta' 'broxk': scrubbing brush.
+    **MT**: Li għandu x'jaqsam ma' broxk fl-użu u t-tifsira uffiċjali.
   - **EN**: scoundrel
-    **MT**: Tifsira u deskrizzjoni ta' 'broxk': scoundrel.
-- **Usage Examples**:
-  - MT: Broxk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The broxk was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' broxk fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9115,16 +7307,13 @@ Total Entries: 856
 - **Root**: b-r-d
 - **Definitions**:
   - **EN**: tepidness
-    **MT**: Tifsira u deskrizzjoni ta' 'bruda': tepidness.
+    **MT**: Li għandu x'jaqsam ma' bruda fl-użu u t-tifsira uffiċjali.
   - **EN**: coolness (lack of warmth, a neutral temperature)
-    **MT**: Tifsira u deskrizzjoni ta' 'bruda': coolness (lack of warmth, a neutral temperature).
+    **MT**: Li għandu x'jaqsam ma' bruda fl-użu u t-tifsira uffiċjali.
   - **EN**: lukewarmness
-    **MT**: Tifsira u deskrizzjoni ta' 'bruda': lukewarmness.
+    **MT**: Li għandu x'jaqsam ma' bruda fl-użu u t-tifsira uffiċjali.
   - **EN**: lack of enthusiasm
-    **MT**: Tifsira u deskrizzjoni ta' 'bruda': lack of enthusiasm.
-- **Usage Examples**:
-  - MT: Bruda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bruda was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bruda fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9132,14 +7321,12 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: eggplants, aubergines
-    **MT**: Tifsira u deskrizzjoni ta' 'brunġiel': eggplants, aubergines.
-  - **EN**: black eyes
-    **MT**: Tifsira u deskrizzjoni ta' 'brunġiel': black eyes.
+  - **EN**: eggplants / black eyes
+    **MT**: Ħaxix vjola skur użat għat-tisjir fil-kċina.
 - **Alternative Forms**: brinġiel
 - **Usage Examples**:
-  - MT: Brunġiel kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brunġiel was in its proper place in daily use.
+  - MT: Ixtraw il-brunġiel mill-ħanut tal-ħaxix.
+    EN: They bought eggplants from the vegetable shop.
 
 ---
 
@@ -9147,23 +7334,17 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: eggplant (colour)
-    **MT**: Tifsira u deskrizzjoni ta' 'brunġieli': eggplant (colour).
+    **MT**: Li għandu x'jaqsam ma' brunġieli fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: brinġieli
-- **Usage Examples**:
-  - MT: Brunġieli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brunġieli was in its proper place in daily use.
 
 ---
 
-## brunżar (n-brunżar) 🌟 *(REVISED TARGET ENTRY)*
+## brunżar (n-brunżar)
 - **POS**: noun
 - **Definitions**:
   - **EN**: bronzesmith
     **MT**: Ħaddiem li jaħdem u jsawwar il-bronż.
 - **Alternative Forms**: bronżar
-- **Usage Examples**:
-  - MT: Brunżar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The brunżar was in its proper place in daily use.
 
 ---
 
@@ -9173,12 +7354,9 @@ Total Entries: 856
 - **Root**: b-s-r
 - **Definitions**:
   - **EN**: verbal noun of basar
-    **MT**: L-att u l-proċess verbali ta' basar.
+    **MT**: Li għandu x'jaqsam ma' bsir fl-użu u t-tifsira uffiċjali.
   - **EN**: predictions
-    **MT**: Tifsira u deskrizzjoni ta' 'bsir': predictions.
-- **Usage Examples**:
-  - MT: Bsir kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bsir was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bsir fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9187,10 +7365,7 @@ Total Entries: 856
 - **Root**: b-s-r
 - **Definitions**:
   - **EN**: prophetic
-    **MT**: Tifsira u deskrizzjoni ta' 'bsuri': prophetic.
-- **Usage Examples**:
-  - MT: Bsuri kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bsuri was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bsuri fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9200,12 +7375,9 @@ Total Entries: 856
 - **Root**: b-t-l
 - **Definitions**:
   - **EN**: diminutive of btala
-    **MT**: Tifsira u deskrizzjoni ta' 'btajla': diminutive of btala.
+    **MT**: Li għandu x'jaqsam ma' btajla fl-użu u t-tifsira uffiċjali.
   - **EN**: short holiday
-    **MT**: Tifsira u deskrizzjoni ta' 'btajla': short holiday.
-- **Usage Examples**:
-  - MT: Btajla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The btajla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' btajla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9214,13 +7386,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-t-l
 - **Definitions**:
-  - **EN**: holiday
-    **MT**: Tifsira u deskrizzjoni ta' 'btala': holiday.
-  - **EN**: holidays, break, vacation
-    **MT**: Tifsira u deskrizzjoni ta' 'btala': holidays, break, vacation.
+  - **EN**: holiday, vacation
+    **MT**: Żmien ta' mistrieħ u nuqqas ta' xogħol uffiċjali.
 - **Usage Examples**:
-  - MT: Btala kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The btala was in its proper place in daily use.
+  - MT: Ħadu btala sħiħa mal-familja fil-gżira.
+    EN: They took a full holiday with the family on the island.
 
 ---
 
@@ -9229,10 +7399,7 @@ Total Entries: 856
 - **Root**: b-r-m
 - **Definitions**:
   - **EN**: mediopassive of baram
-    **MT**: Tifsira u deskrizzjoni ta' 'btaram': mediopassive of baram.
-- **Usage Examples**:
-  - MT: Btaram l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of btaram correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' btaram fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9241,10 +7408,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: diminutive of bittija or bettija
-    **MT**: Tifsira u deskrizzjoni ta' 'btejta': diminutive of bittija or bettija.
-- **Usage Examples**:
-  - MT: Btejta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The btejta was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' btejta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9254,10 +7418,7 @@ Total Entries: 856
 - **Root**: b-t-ħ
 - **Definitions**:
   - **EN**: diminutive of bitħa
-    **MT**: Tifsira u deskrizzjoni ta' 'btejħa': diminutive of bitħa.
-- **Usage Examples**:
-  - MT: Btejħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The btejħa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' btejħa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9267,10 +7428,7 @@ Total Entries: 856
 - **Root**: b-t-r
 - **Definitions**:
   - **EN**: verbal noun of batar
-    **MT**: L-att u l-proċess verbali ta' batar.
-- **Usage Examples**:
-  - MT: Btir l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of btir correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' btir fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9280,10 +7438,7 @@ Total Entries: 856
 - **Root**: b-t-r
 - **Definitions**:
   - **EN**: verbal noun of batar
-    **MT**: L-att u l-proċess verbali ta' batar.
-- **Usage Examples**:
-  - MT: Btur l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of btur correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' btur fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9292,10 +7447,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: father [obsolet]
-    **MT**: Tifsira u deskrizzjoni ta' 'bu': father.
-- **Usage Examples**:
-  - MT: Bu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9303,10 +7455,10 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Buddhism
-    **MT**: Tifsira u deskrizzjoni ta' 'Buddiżmu': Buddhism.
+    **MT**: Reliġjon u filosofija orjentali storika.
 - **Usage Examples**:
-  - MT: Buddiżmu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Buddiżmu was in its proper place in daily use.
+  - MT: Studjaw il-Buddiżmu matul il-kors tal-filosofija.
+    EN: They studied Buddhism during the philosophy course.
 
 ---
 
@@ -9315,10 +7467,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: broomrape
-    **MT**: Tifsira u deskrizzjoni ta' 'budebbus': broomrape.
-- **Usage Examples**:
-  - MT: Budebbus kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The budebbus was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' budebbus fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9327,22 +7476,19 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: thresher shark
-    **MT**: Tifsira u deskrizzjoni ta' 'budenb': thresher shark.
-- **Usage Examples**:
-  - MT: Budenb kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The budenb was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' budenb fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## budget (n-budget) 🌟 *(REVISED TARGET ENTRY)*
+## budget (n-budget)
 - **POS**: noun
 - **Definitions**:
   - **EN**: budget
     **MT**: Pjan finanzjarju dwar id-dħul u l-ħruġ ta' flus.
 - **Alternative Forms**: baġit
 - **Usage Examples**:
-  - MT: Budget kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The budget was in its proper place in daily use.
+  - MT: Approvaw il-budget nazzjonali fil-parlament.
+    EN: They approved the national budget in parliament.
 
 ---
 
@@ -9351,10 +7497,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: feminine singular of buffu
-    **MT**: Tifsira u deskrizzjoni ta' 'buffa': feminine singular of buffu.
-- **Usage Examples**:
-  - MT: Buffa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buffa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buffa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9363,21 +7506,18 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: female equivalent of buffu: female clown
-    **MT**: Forma femminili ta' buffu: female clown.
-- **Usage Examples**:
-  - MT: Buffa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buffa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buffa fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## buffu (adj-buffu)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: funny, comical, amusing
-    **MT**: Tifsira u deskrizzjoni ta' 'buffu': funny, comical, amusing.
+  - **EN**: funny, comical / clown
+    **MT**: Li jġib id-daħq jew persuna li tagħmel il-kummiedja.
 - **Usage Examples**:
-  - MT: Buffu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buffu was in its proper place in daily use.
+  - MT: Irreċita rwol buffu li daħħaq lin-nies fis-sala.
+    EN: He performed a funny role that made people laugh in the hall.
 
 ---
 
@@ -9386,10 +7526,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: clown, jester
-    **MT**: Tifsira u deskrizzjoni ta' 'buffu': clown, jester.
-- **Usage Examples**:
-  - MT: Buffu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buffu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buffu fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9398,10 +7535,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: jester
-    **MT**: Tifsira u deskrizzjoni ta' 'buffun': jester.
-- **Usage Examples**:
-  - MT: Buffun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buffun was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buffun fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9410,10 +7544,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: foolishness, buffoonery
-    **MT**: Tifsira u deskrizzjoni ta' 'buffunata': foolishness, buffoonery.
-- **Usage Examples**:
-  - MT: Buffunata kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buffunata was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buffunata fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9422,21 +7553,18 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: foolishness, buffoonery
-    **MT**: Tifsira u deskrizzjoni ta' 'buffunerija': foolishness, buffoonery.
-- **Usage Examples**:
-  - MT: Buffunerija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buffunerija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buffunerija fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## Bugeja (n-bugeja)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Bugeja': a surname.
+  - **EN**: Bugeja (surname)
+    **MT**: Kunjom Malti storiku u komuni.
 - **Usage Examples**:
-  - MT: Bugeja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bugeja was in its proper place in daily use.
+  - MT: Is-sur Bugeja kien il-membru tal-bord.
+    EN: Mr. Bugeja was the board member.
 
 ---
 
@@ -9445,10 +7573,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: great grey shrike
-    **MT**: Tifsira u deskrizzjoni ta' 'bugiddiem': great grey shrike.
-- **Usage Examples**:
-  - MT: Bugiddiem kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bugiddiem was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bugiddiem fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9456,13 +7581,10 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: diver
-    **MT**: Tifsira u deskrizzjoni ta' 'bugħaddas': diver.
+    **MT**: Li għandu x'jaqsam ma' bugħaddas fl-użu u t-tifsira uffiċjali.
   - **EN**: red-throated diver (Gavia stellata)
-    **MT**: Tifsira u deskrizzjoni ta' 'bugħaddas': red-throated diver (Gavia stellata).
+    **MT**: Li għandu x'jaqsam ma' bugħaddas fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bugħaddas
-- **Usage Examples**:
-  - MT: Bugħadas kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bugħadas was in its proper place in daily use.
 
 ---
 
@@ -9472,13 +7594,10 @@ Total Entries: 856
 - **Root**: għ-d-s
 - **Definitions**:
   - **EN**: diver
-    **MT**: Tifsira u deskrizzjoni ta' 'bugħaddas': diver.
+    **MT**: Li għandu x'jaqsam ma' bugħaddas fl-użu u t-tifsira uffiċjali.
   - **EN**: red-throated diver (Gavia stellata)
-    **MT**: Tifsira u deskrizzjoni ta' 'bugħaddas': red-throated diver (Gavia stellata).
+    **MT**: Li għandu x'jaqsam ma' bugħaddas fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bugħadas
-- **Usage Examples**:
-  - MT: Bugħaddas kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bugħaddas was in its proper place in daily use.
 
 ---
 
@@ -9488,10 +7607,7 @@ Total Entries: 856
 - **Root**: għ-j-t
 - **Definitions**:
   - **EN**: great grey shrike
-    **MT**: Tifsira u deskrizzjoni ta' 'bugħajjat': great grey shrike.
-- **Usage Examples**:
-  - MT: Bugħajjat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bugħajjat was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bugħajjat fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9500,10 +7616,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: slug
-    **MT**: Tifsira u deskrizzjoni ta' 'bugħarwien': slug.
-- **Usage Examples**:
-  - MT: Bugħarwien kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bugħarwien was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bugħarwien fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9513,10 +7626,7 @@ Total Entries: 856
 - **Root**: għ-w-ġ
 - **Definitions**:
   - **EN**: cramp
-    **MT**: Tifsira u deskrizzjoni ta' 'bugħawwieġ': cramp.
-- **Usage Examples**:
-  - MT: Bugħawwieġ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bugħawwieġ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bugħawwieġ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9525,21 +7635,18 @@ Total Entries: 856
 - **Root**: għ-ż-ż
 - **Definitions**:
   - **EN**: A lazy man in Maltese tales.
-    **MT**: Tifsira u deskrizzjoni ta' 'Bugħażżu': A lazy man in Maltese tales..
-- **Usage Examples**:
-  - MT: Bugħażżu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bugħażżu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bugħażżu fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## Buhagiar (n-buhagiar)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Buhagiar': a surname.
+  - **EN**: Buhagiar (surname)
+    **MT**: Kunjom Malti storiku u tradizzjonali.
 - **Usage Examples**:
-  - MT: Buhagiar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Buhagiar was in its proper place in daily use.
+  - MT: Is-sur Buhagiar rrisponda d-mistoqsija bil-kwiet.
+    EN: Mr. Buhagiar answered the question quietly.
 
 ---
 
@@ -9549,11 +7656,8 @@ Total Entries: 856
 - **Root**: k-għ-w-r
 - **Definitions**:
   - **EN**: dung beetle
-    **MT**: Tifsira u deskrizzjoni ta' 'bukagħwar': dung beetle.
+    **MT**: Li għandu x'jaqsam ma' bukagħwar fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: buqagħwar
-- **Usage Examples**:
-  - MT: Bukagħwar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bukagħwar was in its proper place in daily use.
 
 ---
 
@@ -9563,10 +7667,7 @@ Total Entries: 856
 - **Root**: k-għ-w-ġ
 - **Definitions**:
   - **EN**: cramp
-    **MT**: Tifsira u deskrizzjoni ta' 'bukagħwieġ': cramp.
-- **Usage Examples**:
-  - MT: Bukagħwieġ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bukagħwieġ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bukagħwieġ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9575,14 +7676,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: booking
-    **MT**: Tifsira u deskrizzjoni ta' 'buking': booking.
-- **Usage Examples**:
-  - MT: Buking kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buking was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buking fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## bukkamort (n-bukkamort) 🌟 *(REVISED TARGET ENTRY)*
+## bukkamort (n-bukkamort)
 - **POS**: noun
 - **Definitions**:
   - **EN**: pallbearer, coffin-bearer
@@ -9591,8 +7689,8 @@ Total Entries: 856
     **MT**: Persuna li jkollha dehra rrabjata jew skura.
 - **Alternative Forms**: bekkamort
 - **Usage Examples**:
-  - MT: Bukkamort kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bukkamort was in its proper place in daily use.
+  - MT: Il-bekkamort mexxa s-servizz bil-kwiet.
+    EN: The pallbearer led the service quietly.
 
 ---
 
@@ -9601,10 +7699,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bouquet
-    **MT**: Tifsira u deskrizzjoni ta' 'bukkett': bouquet.
-- **Usage Examples**:
-  - MT: Bukkett kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bukkett was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bukkett fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9613,10 +7708,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bookmark
-    **MT**: Tifsira u deskrizzjoni ta' 'bukmark': bookmark.
-- **Usage Examples**:
-  - MT: Bukmark kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bukmark was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bukmark fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9626,10 +7718,7 @@ Total Entries: 856
 - **Root**: k-ħ-l
 - **Definitions**:
   - **EN**: spectacled warbler (Sylvia conspicillata, Curruca conspicillata, Melizophilus conspicillatus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bukħajla': spectacled warbler (Sylvia conspicillata, Curruca conspicillata, Melizophilus conspicillatus).
-- **Usage Examples**:
-  - MT: Bukħajla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bukħajla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bukħajla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9638,10 +7727,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: synonym of furrax is-summien
-    **MT**: Tifsira u deskrizzjoni ta' 'bulebbiet': synonym of furrax is-summien.
-- **Usage Examples**:
-  - MT: Bulebbiet kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bulebbiet was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bulebbiet fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9649,10 +7735,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Bulgaria (a country in Southeastern Europe)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bulgarija': Bulgaria (a country in Southeastern Europe).
-- **Usage Examples**:
-  - MT: Bulgarija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bulgarija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bulgarija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9660,10 +7743,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: Bulgarian
-    **MT**: Tifsira u deskrizzjoni ta' 'Bulgaru': Bulgarian.
-- **Usage Examples**:
-  - MT: Bulgaru kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bulgaru was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bulgaru fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9672,10 +7752,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Bulgarian (person)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bulgaru': Bulgarian (person).
-- **Usage Examples**:
-  - MT: Bulgaru kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bulgaru was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bulgaru fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9684,10 +7761,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Bulgarian (language)
-    **MT**: Tifsira u deskrizzjoni ta' 'Bulgaru': Bulgarian (language).
-- **Usage Examples**:
-  - MT: Bulgaru kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Bulgaru was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Bulgaru fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9695,10 +7769,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: first-class
-    **MT**: Tifsira u deskrizzjoni ta' 'buli': first-class.
-- **Usage Examples**:
-  - MT: Buli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buli was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buli fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9707,10 +7778,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bully
-    **MT**: Tifsira u deskrizzjoni ta' 'buli': bully.
-- **Usage Examples**:
-  - MT: Buli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buli was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buli fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9719,35 +7787,26 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: corned beef (beef conserved in tins)
-    **MT**: Tifsira u deskrizzjoni ta' 'bulibif': corned beef (beef conserved in tins).
+    **MT**: Li għandu x'jaqsam ma' bulibif fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bulubif
-- **Usage Examples**:
-  - MT: Bulibif kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bulibif was in its proper place in daily use.
 
 ---
 
-## bulubif (n-bulubif) 🌟 *(REVISED TARGET ENTRY)*
+## bulubif (n-bulubif)
 - **POS**: noun
 - **Definitions**:
   - **EN**: corned beef
     **MT**: Laħam tal-baqra kkonservat fil-kaxxi tal-landa.
 - **Alternative Forms**: bulibif
-- **Usage Examples**:
-  - MT: Bulubif kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bulubif was in its proper place in daily use.
 
 ---
 
-## bumarin (n-bumarin) 🌟 *(REVISED TARGET ENTRY)*
+## bumarin (n-bumarin)
 - **POS**: noun
 - **Definitions**:
   - **EN**: monk seal, seal
     **MT**: Foka u kreatura tal-baħar.
 - **Alternative Forms**: bumerin
-- **Usage Examples**:
-  - MT: Bumarin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bumarin was in its proper place in daily use.
 
 ---
 
@@ -9756,23 +7815,17 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: bombing, bombardment, shelling
-    **MT**: Tifsira u deskrizzjoni ta' 'bumbardament': bombing, bombardment, shelling.
+    **MT**: Li għandu x'jaqsam ma' bumbardament fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bumbardjament
-- **Usage Examples**:
-  - MT: Bumbardament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bumbardament was in its proper place in daily use.
 
 ---
 
-## bumbardjament (n-bumbardjament) 🌟 *(REVISED TARGET ENTRY)*
+## bumbardjament (n-bumbardjament)
 - **POS**: noun
 - **Definitions**:
   - **EN**: bombing, bombardment, shelling
     **MT**: Attakk intensiv bil-bombi jew kanuni.
 - **Alternative Forms**: bumbardament
-- **Usage Examples**:
-  - MT: Bumbardjament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bumbardjament was in its proper place in daily use.
 
 ---
 
@@ -9782,10 +7835,7 @@ Total Entries: 856
 - **Root**: m-l-s
 - **Definitions**:
   - **EN**: grub, mite, mealworm beetle
-    **MT**: Tifsira u deskrizzjoni ta' 'bumellies': grub, mite, mealworm beetle.
-- **Usage Examples**:
-  - MT: Bumellies kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bumellies was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bumellies fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9794,11 +7844,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: monk seal, seal
-    **MT**: Tifsira u deskrizzjoni ta' 'bumerin': monk seal, seal.
+    **MT**: Li għandu x'jaqsam ma' bumerin fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bumarin
-- **Usage Examples**:
-  - MT: Bumerin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bumerin was in its proper place in daily use.
 
 ---
 
@@ -9807,10 +7854,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: coriander
-    **MT**: Tifsira u deskrizzjoni ta' 'bumnieħer': coriander.
-- **Usage Examples**:
-  - MT: Bumnieħer kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bumnieħer was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bumnieħer fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9820,10 +7864,7 @@ Total Entries: 856
 - **Root**: n-q-r
 - **Definitions**:
   - **EN**: weevil
-    **MT**: Tifsira u deskrizzjoni ta' 'bumunqar': weevil.
-- **Usage Examples**:
-  - MT: Bumunqar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bumunqar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bumunqar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9833,10 +7874,7 @@ Total Entries: 856
 - **Root**: n-m-l
 - **Definitions**:
   - **EN**: anteater
-    **MT**: Tifsira u deskrizzjoni ta' 'bunemmiel': anteater.
-- **Usage Examples**:
-  - MT: Bunemmiel kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bunemmiel was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bunemmiel fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9845,10 +7883,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: storm petrel (Hydrobates pelagicus)
-    **MT**: Tifsira u deskrizzjoni ta' 'bunittien': storm petrel (Hydrobates pelagicus).
-- **Usage Examples**:
-  - MT: Bunittien kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bunittien was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bunittien fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9857,10 +7892,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: wall barley
-    **MT**: Tifsira u deskrizzjoni ta' 'bunixxiefa': wall barley.
-- **Usage Examples**:
-  - MT: Bunixxiefa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bunixxiefa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bunixxiefa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9870,36 +7902,27 @@ Total Entries: 856
 - **Root**: b-w-q
 - **Definitions**:
   - **EN**: hollow reed
-    **MT**: Tifsira u deskrizzjoni ta' 'buq': hollow reed.
+    **MT**: Li għandu x'jaqsam ma' buq fl-użu u t-tifsira uffiċjali.
   - **EN**: trumpet
-    **MT**: Tifsira u deskrizzjoni ta' 'buq': trumpet.
-- **Usage Examples**:
-  - MT: Buq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buq was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buq fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## buqagħwar (n-buqagħwar) 🌟 *(REVISED TARGET ENTRY)*
+## buqagħwar (n-buqagħwar)
 - **POS**: noun
 - **Definitions**:
   - **EN**: dung beetle
     **MT**: Insett jew ħanfusa li tgħix fid-drenaġġ jew demel.
 - **Alternative Forms**: bukagħwar
-- **Usage Examples**:
-  - MT: Buqagħwar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buqagħwar was in its proper place in daily use.
 
 ---
 
-## buqal (n-buqal) 🌟 *(REVISED TARGET ENTRY)*
+## buqal (n-buqal)
 - **POS**: noun
 - **Definitions**:
   - **EN**: jug, pitcher
     **MT**: Kontenitur tal-fajjar jew ħħġieġ użat biex ijkollu l-ilma jew inbid.
 - **Alternative Forms**: buqar
-- **Usage Examples**:
-  - MT: Buqal kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buqal was in its proper place in daily use.
 
 ---
 
@@ -9908,13 +7931,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: jug, pitcher
-    **MT**: Tifsira u deskrizzjoni ta' 'buqar': jug, pitcher.
+    **MT**: Li għandu x'jaqsam ma' buqar fl-użu u t-tifsira uffiċjali.
   - **EN**: beaker
-    **MT**: Tifsira u deskrizzjoni ta' 'buqar': beaker.
+    **MT**: Li għandu x'jaqsam ma' buqar fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: buqal
-- **Usage Examples**:
-  - MT: Buqar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buqar was in its proper place in daily use.
 
 ---
 
@@ -9924,10 +7944,7 @@ Total Entries: 856
 - **Root**: q-r-q
 - **Definitions**:
   - **EN**: imposter, cheater
-    **MT**: Tifsira u deskrizzjoni ta' 'buqarrieq': imposter, cheater.
-- **Usage Examples**:
-  - MT: Buqarrieq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buqarrieq was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buqarrieq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9936,10 +7953,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: vervain
-    **MT**: Tifsira u deskrizzjoni ta' 'buqexrem': vervain.
-- **Usage Examples**:
-  - MT: Buqexrem kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buqexrem was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buqexrem fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9948,11 +7962,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Eurasian nightjar (Caprimulgus europaeus)
-    **MT**: Tifsira u deskrizzjoni ta' 'buqrajq': Eurasian nightjar (Caprimulgus europaeus).
+    **MT**: Li għandu x'jaqsam ma' buqrajq fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: buqarrieq
-- **Usage Examples**:
-  - MT: Buqrajq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buqrajq was in its proper place in daily use.
 
 ---
 
@@ -9962,10 +7973,7 @@ Total Entries: 856
 - **Root**: b-w-r
 - **Definitions**:
   - **EN**: meadow, pastureland
-    **MT**: Tifsira u deskrizzjoni ta' 'bur': meadow, pastureland.
-- **Usage Examples**:
-  - MT: Bur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bur was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bur fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9974,10 +7982,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: mood, disposition, attitude
-    **MT**: Tifsira u deskrizzjoni ta' 'burdata': mood, disposition, attitude.
-- **Usage Examples**:
-  - MT: Burdata kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The burdata was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' burdata fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -9986,13 +7991,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: brothel
-    **MT**: Tifsira u deskrizzjoni ta' 'burdell': brothel.
+    **MT**: Li għandu x'jaqsam ma' burdell fl-użu u t-tifsira uffiċjali.
   - **EN**: uproar
-    **MT**: Tifsira u deskrizzjoni ta' 'burdell': uproar.
+    **MT**: Li għandu x'jaqsam ma' burdell fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bordell
-- **Usage Examples**:
-  - MT: Burdell kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The burdell was in its proper place in daily use.
 
 ---
 
@@ -10000,10 +8002,7 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: uproarious
-    **MT**: Tifsira u deskrizzjoni ta' 'burdelluż': uproarious.
-- **Usage Examples**:
-  - MT: Burdelluż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The burdelluż was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' burdelluż fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10012,10 +8011,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: grey mullet (Mugil cephalus)
-    **MT**: Tifsira u deskrizzjoni ta' 'buri': grey mullet (Mugil cephalus).
-- **Usage Examples**:
-  - MT: Buri kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buri was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buri fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10024,11 +8020,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: annual mercury (Mercurialis annua)
-    **MT**: Tifsira u deskrizzjoni ta' 'burikba': annual mercury (Mercurialis annua).
+    **MT**: Li għandu x'jaqsam ma' burikba fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: burokba
-- **Usage Examples**:
-  - MT: Burikba kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The burikba was in its proper place in daily use.
 
 ---
 
@@ -10037,10 +8030,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: lemon balm (Melissa officinalis)
-    **MT**: Tifsira u deskrizzjoni ta' 'buriħa': lemon balm (Melissa officinalis).
-- **Usage Examples**:
-  - MT: Buriħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buriħa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buriħa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10048,12 +8038,9 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Burkina Faso (a country in West Africa, formerly Upper Volta
-    **MT**: Tifsira u deskrizzjoni ta' 'Burkina Faso': Burkina Faso (a country in West Africa, formerly Upper Volta.
+    **MT**: Li għandu x'jaqsam ma' Burkina Faso fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Burkina Faso)
-    **MT**: Tifsira u deskrizzjoni ta' 'Burkina Faso': official name: Burkina Faso).
-- **Usage Examples**:
-  - MT: Burkina faso kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Burkina Faso was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Burkina Faso fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10062,11 +8049,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: annual mercury (Mercurialis annua)
-    **MT**: Tifsira u deskrizzjoni ta' 'burikba': annual mercury (Mercurialis annua).
+    **MT**: Li għandu x'jaqsam ma' burikba fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: burikba
-- **Usage Examples**:
-  - MT: Burokba kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The burokba was in its proper place in daily use.
 
 ---
 
@@ -10075,10 +8059,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: painted comber (Serranus scriba, a fish)
-    **MT**: Tifsira u deskrizzjoni ta' 'burqax': painted comber (Serranus scriba, a fish).
-- **Usage Examples**:
-  - MT: Burqax kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The burqax was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' burqax fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10086,36 +8067,30 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: Burundi (a country in East Africa
-    **MT**: Tifsira u deskrizzjoni ta' 'Burundi': Burundi (a country in East Africa.
+    **MT**: Li għandu x'jaqsam ma' Burundi fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Repubblika tal-Burundi)
-    **MT**: Tifsira u deskrizzjoni ta' 'Burundi': official name: Repubblika tal-Burundi).
-- **Usage Examples**:
-  - MT: Burundi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Burundi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Burundi fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## busbies (n-busbies) 🌟 *(REVISED TARGET ENTRY)*
+## busbies (n-busbies)
 - **POS**: noun
 - **Definitions**:
   - **EN**: fennel
     **MT**: Ħjiel ta' pjanta aromatika użata fit-tisjir.
 - **Alternative Forms**: bużbież
 - **Usage Examples**:
-  - MT: Busbies kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The busbies was in its proper place in daily use.
+  - MT: Żied il-bużbież mat-tisjir tal-ħut.
+    EN: He added fennel to the fish cooking.
 
 ---
 
-## busewdien (n-busewdien) 🌟 *(REVISED TARGET ENTRY)*
+## busewdien (n-busewdien)
 - **POS**: noun
 - **Definitions**:
   - **EN**: Sardinian warbler
     **MT**: Għasfur żgħir b'rasu sewda.
 - **Alternative Forms**: buswejd
-- **Usage Examples**:
-  - MT: Busewdien kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The busewdien was in its proper place in daily use.
 
 ---
 
@@ -10123,10 +8098,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Busietta': a surname.
-- **Usage Examples**:
-  - MT: Busietta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Busietta was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Busietta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10134,10 +8106,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Busuttil': a surname.
-- **Usage Examples**:
-  - MT: Busuttil kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Busuttil was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Busuttil fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10147,11 +8116,8 @@ Total Entries: 856
 - **Root**: s-w-d
 - **Definitions**:
   - **EN**: Sardinian warbler (Sylvia melanocephala)
-    **MT**: Tifsira u deskrizzjoni ta' 'buswejd': Sardinian warbler (Sylvia melanocephala).
+    **MT**: Li għandu x'jaqsam ma' buswejd fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: busewdien
-- **Usage Examples**:
-  - MT: Buswejd kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buswejd was in its proper place in daily use.
 
 ---
 
@@ -10160,13 +8126,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-w-t
 - **Definitions**:
-  - **EN**: pocket
-    **MT**: Tifsira u deskrizzjoni ta' 'but': pocket.
-  - **EN**: money
-    **MT**: Tifsira u deskrizzjoni ta' 'but': money.
+  - **EN**: pocket / money
+    **MT**: Kaxxa żgħira fil-qmis jew fil-pantoloni użata biex iżżomm il-flus.
 - **Usage Examples**:
-  - MT: But kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The but was in its proper place in daily use.
+  - MT: Qiegħed l-arloġġ fil-but tal-ġakketta.
+    EN: He placed the watch in his jacket pocket.
 
 ---
 
@@ -10175,34 +8139,34 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: butter
-    **MT**: Tifsira u deskrizzjoni ta' 'butir': butter.
+    **MT**: Sustanza safra tat-tisjir magħmula mill-ħalib.
 - **Usage Examples**:
-  - MT: Butir kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The butir was in its proper place in daily use.
+  - MT: Zied il-butir fuq il-ħobż sħun.
+    EN: He added butter to the hot bread.
 
 ---
 
-## Buttigieg (n-buttigieg) 🌟 *(REVISED TARGET ENTRY)*
+## Buttigieg (n-buttigieg)
 - **POS**: noun
 - **Definitions**:
   - **EN**: a Maltese surname
     **MT**: Kunjom Malti tradizzjonali.
 - **Alternative Forms**: Buttiġieġ
 - **Usage Examples**:
-  - MT: Buttigieg kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Buttigieg was in its proper place in daily use.
+  - MT: Is-sur Buttiġieġ kien il-sinjatur tal-kuntratt.
+    EN: Mr. Buttigieg was the contract signatory.
 
 ---
 
 ## Buttiġieġ (n-buttiġieġ)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: a surname originating as an occupation
-    **MT**: Tifsira u deskrizzjoni ta' 'Buttiġieġ': a surname originating as an occupation.
+  - **EN**: Buttigieg (surname)
+    **MT**: Kunjom Malti storiku u tradizzjonali ħafna.
 - **Alternative Forms**: Buttigieg
 - **Usage Examples**:
-  - MT: Buttiġieġ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Buttiġieġ was in its proper place in daily use.
+  - MT: Is-sur Buttiġieġ kien il-sinjatur tal-kuntratt.
+    EN: Mr. Buttigieg was the contract signatory.
 
 ---
 
@@ -10211,10 +8175,10 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: button
-    **MT**: Tifsira u deskrizzjoni ta' 'buttuna': button.
+    **MT**: Għodda żgħira round użata biex tagħlaq il-qmis jew taqbad dwal.
 - **Usage Examples**:
-  - MT: Buttuna kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buttuna was in its proper place in daily use.
+  - MT: Basta l-buttuna biex fetaħ il-bieb.
+    EN: He pressed the button to open the door.
 
 ---
 
@@ -10223,10 +8187,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: wrasse (fish)
-    **MT**: Tifsira u deskrizzjoni ta' 'buxiħ': wrasse (fish).
-- **Usage Examples**:
-  - MT: Buxiħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buxiħ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buxiħ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10235,22 +8196,16 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: pair of boots
-    **MT**: Tifsira u deskrizzjoni ta' 'buz': pair of boots.
-- **Usage Examples**:
-  - MT: Buz kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buz was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buz fl-użu u t-tifsira uffiċjali.
 
 ---
 
-## buzzun (n-buzzun) 🌟 *(REVISED TARGET ENTRY)*
+## buzzun (n-buzzun)
 - **POS**: noun
 - **Definitions**:
   - **EN**: bread roll, baguette
     **MT**: Ħobża żgħira u tawwalija.
 - **Alternative Forms**: bezzun
-- **Usage Examples**:
-  - MT: Buzzun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buzzun was in its proper place in daily use.
 
 ---
 
@@ -10260,10 +8215,7 @@ Total Entries: 856
 - **Root**: ġ-m-għ
 - **Definitions**:
   - **EN**: a long time
-    **MT**: Tifsira u deskrizzjoni ta' 'buġimgħa': a long time.
-- **Usage Examples**:
-  - MT: Buġimgħa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The buġimgħa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' buġimgħa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10273,10 +8225,7 @@ Total Entries: 856
 - **Root**: ż-q-q
 - **Definitions**:
   - **EN**: potbellied person
-    **MT**: Tifsira u deskrizzjoni ta' 'bużaqq': potbellied person.
-- **Usage Examples**:
-  - MT: Bużaqq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużaqq was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bużaqq fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10284,12 +8233,12 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: fennel
-    **MT**: Tifsira u deskrizzjoni ta' 'bużbież': fennel.
+  - **EN**: fennel (Foeniculum vulgare)
+    **MT**: Pjanta li tintuża bħala ħwawar fit-tisjir tal-kċina.
 - **Alternative Forms**: busbies
 - **Usage Examples**:
-  - MT: Bużbież kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużbież was in its proper place in daily use.
+  - MT: Żied il-bużbież mat-tisjir tal-ħut.
+    EN: He added fennel to the fish cooking.
 
 ---
 
@@ -10298,10 +8247,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: fennel (Foeniculum vulgare)
-    **MT**: Tifsira u deskrizzjoni ta' 'bużbież tal-ġidra': fennel (Foeniculum vulgare).
-- **Usage Examples**:
-  - MT: Bużbież tal-ġidra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużbież tal-ġidra was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bużbież tal-ġidra fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10310,10 +8256,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: fennel (Foeniculum vulgare)
-    **MT**: Tifsira u deskrizzjoni ta' 'bużbież tar-roqba': fennel (Foeniculum vulgare).
-- **Usage Examples**:
-  - MT: Bużbież tar-roqba kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużbież tar-roqba was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bużbież tar-roqba fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10322,10 +8265,10 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: great-grandmother
-    **MT**: Tifsira u deskrizzjoni ta' 'bużnanna': great-grandmother.
+    **MT**: Ommi l-nanna jew il-nannu fil-familja.
 - **Usage Examples**:
-  - MT: Bużnanna kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużnanna was in its proper place in daily use.
+  - MT: L-bużnanna kellha tista' tgħid bosta storji.
+    EN: The great-grandmother had many stories to tell.
 
 ---
 
@@ -10334,10 +8277,10 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: great-grandfather
-    **MT**: Tifsira u deskrizzjoni ta' 'bużnannu': great-grandfather.
+    **MT**: Missier il-nanna jew il-nannu.
 - **Usage Examples**:
-  - MT: Bużnannu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużnannu was in its proper place in daily use.
+  - MT: L-bużnannu għex sa età għolja ħafna.
+    EN: The great-grandfather lived to a very old age.
 
 ---
 
@@ -10346,12 +8289,9 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: conjuring trick
-    **MT**: Tifsira u deskrizzjoni ta' 'bużullotta': conjuring trick.
+    **MT**: Li għandu x'jaqsam ma' bużullotta fl-użu u t-tifsira uffiċjali.
   - **EN**: silly idea
-    **MT**: Tifsira u deskrizzjoni ta' 'bużullotta': silly idea.
-- **Usage Examples**:
-  - MT: Bużullotta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużullotta was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bużullotta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10360,10 +8300,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: conjurer
-    **MT**: Tifsira u deskrizzjoni ta' 'bużullottist': conjurer.
-- **Usage Examples**:
-  - MT: Bużullottist kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużullottist was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bużullottist fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10372,15 +8309,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-ż-q
 - **Definitions**:
-  - **EN**: bubble
-    **MT**: Tifsira u deskrizzjoni ta' 'bużżieqa': bubble.
-  - **EN**: balloon
-    **MT**: Tifsira u deskrizzjoni ta' 'bużżieqa': balloon.
-  - **EN**: bladder
-    **MT**: Tifsira u deskrizzjoni ta' 'bużżieqa': bladder.
+  - **EN**: bubble, balloon, bladder
+    **MT**: Oġġett mela bl-arja jew organu fil-ġisem.
 - **Usage Examples**:
-  - MT: Bużżieqa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużżieqa was in its proper place in daily use.
+  - MT: It-tifel sefa' bużżieqa ikkulurita fil-festa.
+    EN: The child blew a colorful balloon at the party.
 
 ---
 
@@ -10389,10 +8322,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: urinary bladder
-    **MT**: Tifsira u deskrizzjoni ta' 'bużżieqa tal-awrina': urinary bladder.
-- **Usage Examples**:
-  - MT: Bużżieqa tal-awrina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużżieqa tal-awrina was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bużżieqa tal-awrina fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10401,10 +8331,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: empty promise
-    **MT**: Tifsira u deskrizzjoni ta' 'bużżieqa tas-sapun': empty promise.
-- **Usage Examples**:
-  - MT: Bużżieqa tas-sapun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużżieqa tas-sapun was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bużżieqa tas-sapun fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10412,11 +8339,8 @@ Total Entries: 856
 - **POS**: adjective
 - **Definitions**:
   - **EN**: querulous, peevish, whining
-    **MT**: Tifsira u deskrizzjoni ta' 'bużżu': querulous, peevish, whining.
+    **MT**: Li għandu x'jaqsam ma' bużżu fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bożżu
-- **Usage Examples**:
-  - MT: Bużżu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużżu was in its proper place in daily use.
 
 ---
 
@@ -10425,11 +8349,8 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: sea cucumber, holothuroid (any echinoderm of the class Holothuroidea)
-    **MT**: Tifsira u deskrizzjoni ta' 'bużżu': sea cucumber, holothuroid (any echinoderm of the class Holothuroidea).
+    **MT**: Li għandu x'jaqsam ma' bużżu fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: bożżu
-- **Usage Examples**:
-  - MT: Bużżu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bużżu was in its proper place in daily use.
 
 ---
 
@@ -10439,10 +8360,7 @@ Total Entries: 856
 - **Root**: b-j-d
 - **Definitions**:
   - **EN**: diminutive of bajda
-    **MT**: Tifsira u deskrizzjoni ta' 'bwajda': diminutive of bajda.
-- **Usage Examples**:
-  - MT: Bwajda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bwajda was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bwajda fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10451,10 +8369,7 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: diminutive of bieb
-    **MT**: Tifsira u deskrizzjoni ta' 'bwejba': diminutive of bieb.
-- **Usage Examples**:
-  - MT: Bwejba kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bwejba was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bwejba fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10463,10 +8378,7 @@ Total Entries: 856
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: diminutive of bieb
-    **MT**: Tifsira u deskrizzjoni ta' 'bwejjeb': diminutive of bieb.
-- **Usage Examples**:
-  - MT: Bwejjeb kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bwejjeb was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bwejjeb fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10476,10 +8388,7 @@ Total Entries: 856
 - **Root**: b-w-t
 - **Definitions**:
   - **EN**: diminutive of but
-    **MT**: Tifsira u deskrizzjoni ta' 'bwejjet': diminutive of but.
-- **Usage Examples**:
-  - MT: Bwejjet kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bwejjet was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bwejjet fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10489,10 +8398,7 @@ Total Entries: 856
 - **Root**: b-w-t
 - **Definitions**:
   - **EN**: diminutive of but
-    **MT**: Tifsira u deskrizzjoni ta' 'bwejta': diminutive of but.
-- **Usage Examples**:
-  - MT: Bwejta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bwejta was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bwejta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10501,11 +8407,11 @@ Total Entries: 856
 - **Gender**: feminine
 - **Root**: b-x-r
 - **Definitions**:
-  - **EN**: announcement, message, especially a positive one
-    **MT**: Tifsira u deskrizzjoni ta' 'bxara': announcement, message, especially a positive one.
+  - **EN**: announcement, positive message
+    **MT**: Aħbar it-tajba u messaġġ ta' ferħ.
 - **Usage Examples**:
-  - MT: Bxara kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bxara was in its proper place in daily use.
+  - MT: Rċevew bxara tajba dwar ir-riżultati nazzjonali.
+    EN: They received a good announcement about the national results.
 
 ---
 
@@ -10514,11 +8420,8 @@ Total Entries: 856
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: placenta
-    **MT**: Tifsira u deskrizzjoni ta' 'bxima': placenta.
+    **MT**: Li għandu x'jaqsam ma' bxima fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: pxima
-- **Usage Examples**:
-  - MT: Bxima kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bxima was in its proper place in daily use.
 
 ---
 
@@ -10526,10 +8429,7 @@ Total Entries: 856
 - **POS**: noun
 - **Definitions**:
   - **EN**: initialism of Bank Ċentrali Ewropew (“ European Central Bank ”)
-    **MT**: Tifsira u deskrizzjoni ta' 'BĊE': initialism of Bank Ċentrali Ewropew (“ European Central Bank ”).
-- **Usage Examples**:
-  - MT: Bċe kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The BĊE was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' BĊE fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10539,10 +8439,7 @@ Total Entries: 856
 - **Root**: b-ċ-ċ
 - **Definitions**:
   - **EN**: diminutive of biċċa
-    **MT**: Tifsira u deskrizzjoni ta' 'bċejċa': diminutive of biċċa.
-- **Usage Examples**:
-  - MT: Bċejċa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bċejċa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bċejċa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10552,10 +8449,7 @@ Total Entries: 856
 - **Root**: b-ċ-n
 - **Definitions**:
   - **EN**: diminutive of beċċun: small pigeon
-    **MT**: Tifsira u deskrizzjoni ta' 'bċejċen': diminutive of beċċun: small pigeon.
-- **Usage Examples**:
-  - MT: Bċejċen kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bċejċen was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bċejċen fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10565,25 +8459,20 @@ Total Entries: 856
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: lake
-    **MT**: Tifsira u deskrizzjoni ta' 'bħajra': lake.
+    **MT**: Li għandu x'jaqsam ma' bħajra fl-użu u t-tifsira uffiċjali.
   - **EN**: melon field
-    **MT**: Tifsira u deskrizzjoni ta' 'bħajra': melon field.
-- **Usage Examples**:
-  - MT: Bħajra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bħajra was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bħajra fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## bħal (prep-bħal)
 - **POS**: preposition
 - **Definitions**:
-  - **EN**: like
-    **MT**: Tifsira u deskrizzjoni ta' 'bħal': like.
-  - **EN**: as
-    **MT**: Tifsira u deskrizzjoni ta' 'bħal': as.
+  - **EN**: like, as
+    **MT**: Prepożizzjoni użata għall-paragun jew xebh.
 - **Usage Examples**:
-  - MT: Bħal kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bħal was in its proper place in daily use.
+  - MT: Ġera bħal ir-riħ fit-triq miftuħa.
+    EN: He ran like the wind on the open road.
 
 ---
 
@@ -10591,23 +8480,21 @@ Total Entries: 856
 - **POS**: preposition
 - **Definitions**:
   - **EN**: as, as an example of
-    **MT**: Tifsira u deskrizzjoni ta' 'bħala': as, as an example of.
+    **MT**: Prepożizzjoni li tispjega r-rwol jew il-pożizzjoni.
 - **Usage Examples**:
-  - MT: Bħala kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bħala was in its proper place in daily use.
+  - MT: Ħadem bħala għalliem għal bosta snin.
+    EN: He worked as a teacher for many years.
 
 ---
 
 ## bħalma (conj-bħalma)
 - **POS**: conjunction
 - **Definitions**:
-  - **EN**: as
-    **MT**: Tifsira u deskrizzjoni ta' 'bħalma': as.
-  - **EN**: in the same way that
-    **MT**: Tifsira u deskrizzjoni ta' 'bħalma': in the same way that.
+  - **EN**: as, in the same way that
+    **MT**: Konġunzjoni li turi xebh ma' azzjoni oħra.
 - **Usage Examples**:
-  - MT: Bħalma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bħalma was in its proper place in daily use.
+  - MT: Bħalma għamlu fil-passat ikomplu issa.
+    EN: As they did in the past they continue now.
 
 ---
 
@@ -10617,10 +8504,7 @@ Total Entries: 856
 - **Root**: b-ħ-t
 - **Definitions**:
   - **EN**: verbal noun of baħat: slandering
-    **MT**: L-att u l-proċess verbali ta' baħat.
-- **Usage Examples**:
-  - MT: Bħit kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bħit was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bħit fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10628,11 +8512,8 @@ Total Entries: 856
 - **POS**: interjection
 - **Definitions**:
   - **EN**: used to express disgust
-    **MT**: Tifsira u deskrizzjoni ta' 'bħu': used to express disgust.
+    **MT**: Li għandu x'jaqsam ma' bħu fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: pħu
-- **Usage Examples**:
-  - MT: Bħu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bħu was in its proper place in daily use.
 
 ---
 
@@ -10642,10 +8523,7 @@ Total Entries: 856
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: incense, olibanum [arkajku]
-    **MT**: Tifsira u deskrizzjoni ta' 'bħur': incense, olibanum.
-- **Usage Examples**:
-  - MT: Bħur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bħur was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bħur fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10654,10 +8532,7 @@ Total Entries: 856
 - **Root**: b-ħ-r
 - **Definitions**:
   - **EN**: plural of baħar
-    **MT**: Forma plurali ta' baħar.
-- **Usage Examples**:
-  - MT: Bħur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bħur was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bħur fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10666,11 +8541,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-ż-r
 - **Definitions**:
-  - **EN**: pepper (spice)
-    **MT**: Tifsira u deskrizzjoni ta' 'bżar': pepper (spice).
+  - **EN**: pepper (spice/vegetable)
+    **MT**: Ħwawar qawwi jew ħaxix użat fit-tisjir.
 - **Usage Examples**:
-  - MT: Bżar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bżar was in its proper place in daily use.
+  - MT: Żied il-bżar u l-melħ fuq l-laħam.
+    EN: He added pepper and salt to the meat.
 
 ---
 
@@ -10680,14 +8555,11 @@ Total Entries: 856
 - **Root**: b-ż-r
 - **Definitions**:
   - **EN**: sweet pepper, bell pepper
-    **MT**: Tifsira u deskrizzjoni ta' 'bżar': sweet pepper, bell pepper.
+    **MT**: Li għandu x'jaqsam ma' bżar fl-użu u t-tifsira uffiċjali.
   - **EN**: sweet pepper, bell peppers (several peppers
-    **MT**: Tifsira u deskrizzjoni ta' 'bżar': sweet pepper, bell peppers (several peppers.
+    **MT**: Li għandu x'jaqsam ma' bżar fl-użu u t-tifsira uffiċjali.
   - **EN**: pepper as a species or mass)
-    **MT**: Tifsira u deskrizzjoni ta' 'bżar': pepper as a species or mass).
-- **Usage Examples**:
-  - MT: Bżar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bżar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bżar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10696,11 +8568,11 @@ Total Entries: 856
 - **Gender**: masculine
 - **Root**: b-ż-q
 - **Definitions**:
-  - **EN**: saliva, spittle, spit
-    **MT**: Tifsira u deskrizzjoni ta' 'bżieq': saliva, spittle, spit.
+  - **EN**: saliva, spittle
+    **MT**: Likwidu naturalment prodott fil-ħalq.
 - **Usage Examples**:
-  - MT: Bżieq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bżieq was in its proper place in daily use.
+  - MT: Naddaf il-bżieq minn madwar ħalqu.
+    EN: He cleaned the saliva from around his mouth.
 
 ---
 
@@ -10710,10 +8582,7 @@ Total Entries: 856
 - **Root**: b-ż-għ
 - **Definitions**:
   - **EN**: verbal noun of beża’: fear
-    **MT**: L-att u l-proċess verbali ta' beża’.
-- **Usage Examples**:
-  - MT: Bżigħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bżigħ was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' bżigħ fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -10721,11 +8590,11 @@ Total Entries: 856
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: need
-    **MT**: Tifsira u deskrizzjoni ta' 'bżonn': need.
+  - **EN**: need, necessity
+    **MT**: Oġġett jew stat meħtieġ biex tgħix jew tlesti xogħol.
 - **Usage Examples**:
-  - MT: Bżonn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bżonn was in its proper place in daily use.
+  - MT: Kien hemm bżonn ta' tagħmir ġdid fil-laboratorju.
+    EN: There was a need for new equipment in the lab.
 
 ---
 
@@ -10735,142 +8604,124 @@ Total Entries: 856
 - **Root**: b-ż-l
 - **Definitions**:
   - **EN**: diligence, hard work
-    **MT**: Tifsira u deskrizzjoni ta' 'bżulija': diligence, hard work.
+    **MT**: L-att li taħdem bil-bieżel u l-impenn.
 - **Usage Examples**:
-  - MT: Bżulija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The bżulija was in its proper place in daily use.
+  - MT: Rebaħ il-premju minħabba l-bżulija tiegħu.
+    EN: He won the award because of his diligence.
 
 ---
 
-## B’Buġa (n-bbuġa) 🌟 *(REVISED TARGET ENTRY)*
+## B’Buġa (n-bbuġa)
 - **POS**: noun
 - **Definitions**:
   - **EN**: Birżebbuġa (town in Malta)
     **MT**: Raħal u kunsill lokali fin-Nofsinhar ta' Malta.
 - **Alternative Forms**: Birżebbuġa
-- **Usage Examples**:
-  - MT: B’buġa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The B’Buġa was in its proper place in daily use.
 
 ---
 
-## ibbumbardja (v-ibbumbardja) 🌟 *(REVISED TARGET ENTRY)*
+## ibbumbardja (v-ibbumbardja)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to bomb, bombard, shell
     **MT**: Attakka bil-bombi jew kanuni.
 - **Alternative Forms**: bbumbardja
 - **Usage Examples**:
-  - MT: Ibbumbardja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ibbumbardja correctly and without delay.
+  - MT: Bbumbardjaw iż-żona kollha mill-għoljiet.
+    EN: They bombarded the whole area from the hills.
 
 ---
 
-## imb (prep-imb) 🌟 *(REVISED TARGET ENTRY)*
+## imb (prep-imb)
 - **POS**: preposition
 - **Definitions**:
   - **EN**: with, by
     **MT**: Prepożizzjoni li tfisser ma' jew bl-għajnuna ta'.
 - **Alternative Forms**: b', b’
-- **Usage Examples**:
-  - MT: Imb kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The imb was in its proper place in daily use.
 
 ---
 
-## imblokka (v-imblokka) 🌟 *(REVISED TARGET ENTRY)*
+## imblokka (v-imblokka)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to block, plug
     **MT**: Għalaq jew żamm milli jgħaddi xi ħaġa.
 - **Alternative Forms**: bblokka
 - **Usage Examples**:
-  - MT: Imblokka l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of imblokka correctly and without delay.
+  - MT: Bblokka l-bieb b'kaxxa kbira biex ma jidħol ħadd.
+    EN: He blocked the door with a large box so no one could enter.
 
 ---
 
-## imbolla (v-imbolla) 🌟 *(REVISED TARGET ENTRY)*
+## imbolla (v-imbolla)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to stamp, brand
     **MT**: Stampja jew għamel marka uffiċjali.
 - **Alternative Forms**: bbolla
 - **Usage Examples**:
-  - MT: Imbolla l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of imbolla correctly and without delay.
+  - MT: Bbolla l-ittra uffiċjali qabel ma bagħatha.
+    EN: He stamped the official letter before sending it.
 
 ---
 
-## paxà (n-paxà) 🌟 *(REVISED TARGET ENTRY)*
+## paxà (n-paxà)
 - **POS**: noun
 - **Definitions**:
   - **EN**: pasha
     **MT**: Titlu onorarju ta' kmandant jew uffiċjal fl-Imperu Ottoman.
 - **Alternative Forms**: baxà
-- **Usage Examples**:
-  - MT: Paxà kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The paxà was in its proper place in daily use.
 
 ---
 
-## ppapoċċa (v-ppapoċċa) 🌟 *(REVISED TARGET ENTRY)*
+## ppapoċċa (v-ppapoċċa)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to act childishly
     **MT**: Aġixxa b'mod bħat-tfal żgħar.
 - **Alternative Forms**: bbamboċċa
-- **Usage Examples**:
-  - MT: Ppapoċċa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ppapoċċa correctly and without delay.
 
 ---
 
-## pxima (n-pxima) 🌟 *(REVISED TARGET ENTRY)*
+## pxima (n-pxima)
 - **POS**: noun
 - **Definitions**:
   - **EN**: placenta
     **MT**: Organu fil-ġuf li jitma' l-fetus.
 - **Alternative Forms**: bxima
-- **Usage Examples**:
-  - MT: Pxima kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The pxima was in its proper place in daily use.
 
 ---
 
-## pħu (intj-pħu) 🌟 *(REVISED TARGET ENTRY)*
+## pħu (intj-pħu)
 - **POS**: interjection
 - **Definitions**:
   - **EN**: used to express disgust
     **MT**: Esclamazzjoni ta' stmerrija u skumdità.
 - **Alternative Forms**: bħu
-- **Usage Examples**:
-  - MT: Pħu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The pħu was in its proper place in daily use.
 
 ---
 
-## sabiex (adv-sabiex) 🌟 *(REVISED TARGET ENTRY)*
+## sabiex (adv-sabiex)
 - **POS**: adverb
 - **Definitions**:
   - **EN**: in order to, so that
     **MT**: B'għan jew bil-għan li iseħħ xi ħaġa.
 - **Alternative Forms**: biex
 - **Usage Examples**:
-  - MT: Sabiex kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The sabiex was in its proper place in daily use.
+  - MT: Studja ħafna biex jgħaddi mill-eżami.
+    EN: He studied hard so that he would pass the exam.
 
 ---
 
-## sabiex (conj-sabiex) 🌟 *(REVISED TARGET ENTRY)*
+## sabiex (conj-sabiex)
 - **POS**: conjunction
 - **Definitions**:
   - **EN**: so that, in order that
     **MT**: Konġunzjoni li tirreferi għar-raġuni jew l-għan.
 - **Alternative Forms**: biex
 - **Usage Examples**:
-  - MT: Sabiex kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The sabiex was in its proper place in daily use.
+  - MT: Studja ħafna biex jgħaddi mill-eżami.
+    EN: He studied hard so that he would pass the exam.
 
 ---
 

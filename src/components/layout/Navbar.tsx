@@ -70,6 +70,7 @@ export function Navbar() {
 
     useEffect(() => {
         let cancelled = false;
+        const controller = new AbortController();
         const trimmed = searchQuery.trim();
 
         if (trimmed.length < 2) {
@@ -79,10 +80,10 @@ export function Navbar() {
         }
 
         setSearchSuggestionsLoading(true);
-        (async () => {
+        const timer = setTimeout(async () => {
             try {
-                const res = await apiSearch(trimmed, { limit: 3, offset: 0 });
-                if (cancelled) return;
+                const res = await apiSearch(trimmed, { limit: 3, offset: 0, signal: controller.signal });
+                if (cancelled || controller.signal.aborted) return;
 
                 setSearchSuggestions(
                     res.results.slice(0, 3).map((entry: any) => ({
@@ -95,17 +96,21 @@ export function Navbar() {
                     })),
                 );
             } catch (error) {
-                if (!cancelled) {
+                if (!cancelled && !controller.signal.aborted) {
                     console.warn('Navbar search suggestions failed:', error);
                     setSearchSuggestions([]);
                 }
             } finally {
-                if (!cancelled) setSearchSuggestionsLoading(false);
+                if (!cancelled && !controller.signal.aborted) {
+                    setSearchSuggestionsLoading(false);
+                }
             }
-        })();
+        }, 250);
 
         return () => {
             cancelled = true;
+            clearTimeout(timer);
+            controller.abort();
         };
     }, [searchQuery]);
 

@@ -133,7 +133,7 @@ export function Root() {
     const rootEntries = apiEntries;
 
     const bgStyle = {
-        background: 'linear-gradient(rgba(244,243,240,0.88), rgba(244,243,240,0.88)), url("/bg-pattern.png") center/cover no-repeat',
+        background: 'linear-gradient(rgba(244,243,240,0.88), rgba(244,243,240,0.88)), url("/bg-pattern.webp") center/cover no-repeat',
         minHeight: '100vh',
     };
 

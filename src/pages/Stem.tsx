@@ -156,7 +156,7 @@ export function Stem() {
     }), [agentive_suffix, class_type, id, is_hybrid, root, stem_string]);
 
     const bgStyle = {
-        background: 'linear-gradient(rgba(244,243,240,0.88), rgba(244,243,240,0.88)), url("/bg-pattern.png") center/cover no-repeat',
+        background: 'linear-gradient(rgba(244,243,240,0.88), rgba(244,243,240,0.88)), url("/bg-pattern.webp") center/cover no-repeat',
         minHeight: '100vh',
     };
 

@@ -5,51 +5,45 @@ Total Entries: 687
 ## -a (n-a)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: Used to form the feminine forms of most nouns and adjectives.
-    **MT**: Tifsira u deskrizzjoni ta' '-a': Used to form the feminine forms of most nouns and adjectives..
-  - **EN**: Used to form the plurals of some nouns and adjectives.
-    **MT**: Tifsira u deskrizzjoni ta' '-a': Used to form the plurals of some nouns and adjectives..
-  - **EN**: Used to form singulatives from collective nouns.
-    **MT**: Tifsira u deskrizzjoni ta' '-a': Used to form singulatives from collective nouns..
+  - **EN**: suffix -a (feminine/plural/singulative)
+    **MT**: Suffiss użat biex jibdel il-ġeneru jew in-numru ta' nom.
 - **Usage Examples**:
-  - MT: -a kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The -a was in its proper place in daily use.
+  - MT: Is-suffiss -a ġie miżjud mal-kelma.
+    EN: The suffix -a was added to the word.
 
 ---
 
 ## -ax (n-ax)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: Used to form the pronominal forms of the cardinal numbers from 11 to 19
-    **MT**: Tifsira u deskrizzjoni ta' '-ax': Used to form the pronominal forms of the cardinal numbers from 11 to 19.
-  - **EN**: -teen.
-    **MT**: Tifsira u deskrizzjoni ta' '-ax': -teen..
+  - **EN**: suffix -ax (-teen)
+    **MT**: Suffiss użat man-numri minn ħdax sa dsatax.
 - **Usage Examples**:
-  - MT: -ax kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The -ax was in its proper place in daily use.
+  - MT: In-numru tmintax użat fil-kitba.
+    EN: The number eighteen used in writing.
 
 ---
 
 ## a la xanxè (adv-a-la-xanxè)
 - **POS**: adverb
 - **Definitions**:
-  - **EN**: nonchalantly, carelessly
-    **MT**: Tifsira u deskrizzjoni ta' 'a la xanxè': nonchalantly, carelessly.
+  - **EN**: casual, offhand, at random
+    **MT**: B'mod każwali u mingħajr pjan jew sforz.
 - **Alternative Forms**: alaxanxè
 - **Usage Examples**:
-  - MT: A la xanxè kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The a la xanxè was in its proper place in daily use.
+  - MT: Ħallihom jaħdmu a la xanxè fl-assenza tagħha.
+    EN: They let them work casually in her absence.
 
 ---
 
 ## a memorja (adv-a-memorja)
 - **POS**: adverb
 - **Definitions**:
-  - **EN**: by heart
-    **MT**: Tifsira u deskrizzjoni ta' 'a memorja': by heart.
+  - **EN**: by heart, from memory
+    **MT**: Kemm tiftakar f'moħħok u bla ebda dubju.
 - **Usage Examples**:
-  - MT: A memorja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The a memorja was in its proper place in daily use.
+  - MT: Qara l-poeżija a memorja quddiem l-udjenza.
+    EN: He recited the poem by heart in front of the audience.
 
 ---
 
@@ -58,11 +52,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: abbess
-    **MT**: Tifsira u deskrizzjoni ta' 'abbatissa': abbess.
-- **Alternative Forms**: abbatissa
+    **MT**: Il-capa u superjura ta' monasteru tar-swar.
 - **Usage Examples**:
-  - MT: Abadissa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abadissa was in its proper place in daily use.
+  - MT: L-abadissa laqgħet il-pellegrini fil-monasteru.
+    EN: The abbess welcomed the pilgrims to the monastery.
 
 ---
 
@@ -71,11 +64,11 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: abacus
-    **MT**: Tifsira u deskrizzjoni ta' 'abaku': abacus.
+    **MT**: Għodda tradizzjonali b'boċċi użata għall-għadd u l-kalkolu.
 - **Alternative Forms**: abbaku
 - **Usage Examples**:
-  - MT: Abaku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abaku was in its proper place in daily use.
+  - MT: Uża l-abaku biex jgħallem it-tfal il-matematika.
+    EN: He used the abacus to teach the children math.
 
 ---
 
@@ -83,16 +76,12 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: abbey
-    **MT**: Tifsira u deskrizzjoni ta' 'abatija': abbey.
-  - **EN**: nunnery
-    **MT**: Tifsira u deskrizzjoni ta' 'abatija': nunnery.
-  - **EN**: orphanage
-    **MT**: Tifsira u deskrizzjoni ta' 'abatija': orphanage.
+  - **EN**: abbey, nunnery
+    **MT**: Bini kbir u knisja ta' ordni reliġjuża.
 - **Alternative Forms**: abbatija
 - **Usage Examples**:
-  - MT: Abatija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abatija was in its proper place in daily use.
+  - MT: Kien hemm abatija antika f'ras l-għolja.
+    EN: There was an ancient abbey at the top of the hill.
 
 ---
 
@@ -100,11 +89,11 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: abbacy, abbey
-    **MT**: Tifsira u deskrizzjoni ta' 'abbazija': abbacy, abbey.
+    **MT**: Id-dinjità jew il-bini tal-abbati.
 - **Alternative Forms**: abbazija
 - **Usage Examples**:
-  - MT: Abazija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abazija was in its proper place in daily use.
+  - MT: L-abazija kellha ġnien kbir mimli weraq.
+    EN: The abbacy had a large garden full of leaves.
 
 ---
 
@@ -112,12 +101,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: abacus
-    **MT**: Tifsira u deskrizzjoni ta' 'abaku': abacus.
-- **Alternative Forms**: abaku
+  - **EN**: abacus (alt)
+    **MT**: Għodda tal-kalkolu bil-boċċi.
 - **Usage Examples**:
-  - MT: Abbaku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbaku was in its proper place in daily use.
+  - MT: Uża l-abbaku biex inaqqas in-numri.
+    EN: He used the abacus to subtract numbers.
 
 ---
 
@@ -125,24 +113,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: abandon, abandonment, neglect
-    **MT**: Tifsira u deskrizzjoni ta' 'abbandun': abandon, abandonment, neglect.
+  - **EN**: abandonment, neglect
+    **MT**: Stat fejn oġġett jew persuna titħalla bla kura.
 - **Usage Examples**:
-  - MT: Abbandun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbandun was in its proper place in daily use.
+  - MT: Id-dar marret fl-abbandun wara li telqu l-ġirien.
+    EN: The house went to neglect after the neighbors left.
 
 ---
 
 ## abbanduna (v-abbanduna)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to abandon
-    **MT**: Tifsira u deskrizzjoni ta' 'abbanduna': to abandon.
-  - **EN**: to neglect, forsake
-    **MT**: Tifsira u deskrizzjoni ta' 'abbanduna': to neglect, forsake.
+  - **EN**: to abandon, neglect, leave
+    **MT**: Ħalla wara dahru u neħħa l-kura minn xi ħaġa.
 - **Usage Examples**:
-  - MT: Abbanduna l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbanduna correctly and without delay.
+  - MT: Abbanduna l-karozza l-qadima mal-ġenb tat-triq.
+    EN: He abandoned the old car on the side of the road.
 
 ---
 
@@ -150,23 +136,23 @@ Total Entries: 687
 - **POS**: interjection
 - **Definitions**:
   - **EN**: down with...!
-    **MT**: Tifsira u deskrizzjoni ta' 'abbassu': down with...!.
+    **MT**: Esklamazzjoni kontra persuna jew sistema.
 - **Alternative Forms**: abbassu
 - **Usage Examples**:
-  - MT: Abbasso kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbasso was in its proper place in daily use.
+  - MT: Għajtu abbasso r-repressjoni fil-pjazza.
+    EN: They shouted 'down with oppression!' in the square.
 
 ---
 
 ## abbassu (intj-abbassu)
 - **POS**: interjection
 - **Definitions**:
-  - **EN**: down with...!
-    **MT**: Tifsira u deskrizzjoni ta' 'abbassu': down with...!.
+  - **EN**: down with...! (alt)
+    **MT**: Esklamazzjoni ta' oppożizzjoni.
 - **Alternative Forms**: abbasso
 - **Usage Examples**:
-  - MT: Abbassu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbassu was in its proper place in daily use.
+  - MT: Shouted abbassu l-inkwiet fis-sala.
+    EN: They shouted 'down with trouble!' in the hall.
 
 ---
 
@@ -175,11 +161,11 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: altar boy
-    **MT**: Tifsira u deskrizzjoni ta' 'abbati': altar boy.
+    **MT**: Tifel li jgħin lill-qassis matul il-quddiesa.
 - **Alternative Forms**: abbatin
 - **Usage Examples**:
-  - MT: Abbati kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbati was in its proper place in daily use.
+  - MT: Il-abbati xgħel ix-xama' fuq l-altar.
+    EN: The altar boy lit the candle on the altar.
 
 ---
 
@@ -188,25 +174,23 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: abbot
-    **MT**: Tifsira u deskrizzjoni ta' 'abbati': abbot.
+    **MT**: Il-capu reliġjuż ta' monasteru tal-patrijiet.
 - **Alternative Forms**: abbatin
 - **Usage Examples**:
-  - MT: Abbati kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbati was in its proper place in daily use.
+  - MT: L-abbati mexxa l-talb kmieni filgħodu.
+    EN: The abbot led the prayer early in the morning.
 
 ---
 
-## abbatija (n-abbatija) 🌟 *(REVISED TARGET ENTRY)*
+## abbatija (n-abbatija)
 - **POS**: noun
 - **Definitions**:
   - **EN**: abbey
-    **MT**: Monasteru jew dar reliġjuża fejn jgħixu l-patrijiet jew is-sorijiet.
-  - **EN**: nunnery
-    **MT**: Kunvent ta' sorijiet.
+    **MT**: Bini ta' monasteru reliġjuż.
 - **Alternative Forms**: abatija
 - **Usage Examples**:
-  - MT: Abbatija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbatija was in its proper place in daily use.
+  - MT: Bisstew l-abbatija l-antika fil-vaganzi.
+    EN: They visited the ancient abbey on holiday.
 
 ---
 
@@ -214,12 +198,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: abbot
-    **MT**: Tifsira u deskrizzjoni ta' 'abbati': abbot.
-- **Alternative Forms**: abbati
+  - **EN**: abbot (alt)
+    **MT**: Kapa reliġjuż fir-raħal.
 - **Usage Examples**:
-  - MT: Abbatin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbatin was in its proper place in daily use.
+  - MT: L-abbatin kiteb l-ittra uffiċjali.
+    EN: The abbot wrote the official letter.
 
 ---
 
@@ -227,12 +210,12 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: abbess
-    **MT**: Tifsira u deskrizzjoni ta' 'abbatissa': abbess.
+  - **EN**: abbess (alt)
+    **MT**: Superjura ta' monasteru.
 - **Alternative Forms**: abadissa
 - **Usage Examples**:
-  - MT: Abbatissa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbatissa was in its proper place in daily use.
+  - MT: L-abbatissa mexxiet il-laqgħa mas-swar.
+    EN: The abbess led the meeting with the nuns.
 
 ---
 
@@ -240,10 +223,10 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: dejected, depressed, run down
-    **MT**: Tifsira u deskrizzjoni ta' 'abbattut': dejected, depressed, run down.
+    **MT**: Li jħossu diżappuntat u bla enerġija fil-qalb.
 - **Usage Examples**:
-  - MT: Abbattut kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbattut was in its proper place in daily use.
+  - MT: Kien jidher abbattut wara li sema' r-riżultat.
+    EN: He looked dejected after hearing the result.
 
 ---
 
@@ -251,24 +234,23 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: abbacy, abbey
-    **MT**: Tifsira u deskrizzjoni ta' 'abbazija': abbacy, abbey.
+  - **EN**: abbacy
+    **MT**: Bini u territorju tal-abbati.
 - **Alternative Forms**: abazija
 - **Usage Examples**:
-  - MT: Abbazija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbazija was in its proper place in daily use.
+  - MT: Kien hemm ftuħ fl-abbazija lokali.
+    EN: There was an opening at the local abbacy.
 
 ---
 
 ## abbella (v-abbella)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to embellish
-    **MT**: Tifsira u deskrizzjoni ta' 'abbellixxa': to embellish.
-- **Alternative Forms**: abbellixxa
+  - **EN**: to embellish, beautify
+    **MT**: Zied id-dekorazzjoni biex jagħmel oġġett aktar sabiħ.
 - **Usage Examples**:
-  - MT: Abbella l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbella correctly and without delay.
+  - MT: Abbella l-faċċata tad-dar b'fieri u dwal.
+    EN: He embellished the house facade with flowers and lights.
 
 ---
 
@@ -277,24 +259,22 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: embellishment, adornment
-    **MT**: Tifsira u deskrizzjoni ta' 'abbelliment': embellishment, adornment.
-  - **EN**: ornament
-    **MT**: Tifsira u deskrizzjoni ta' 'abbelliment': ornament.
+    **MT**: Xogħol jew oġġett użat biex inaddaf u jżomm sabiħ.
 - **Usage Examples**:
-  - MT: Abbelliment kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbelliment was in its proper place in daily use.
+  - MT: Ziedu l-abbelliment fil-pjazza prinċipali.
+    EN: They added embellishments to the main square.
 
 ---
 
 ## abbellixxa (v-abbellixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to embellish
-    **MT**: Tifsira u deskrizzjoni ta' 'abbellixxa': to embellish.
+  - **EN**: to embellish (alt)
+    **MT**: Għamel sbieħ bil-kulur u d-dekorazzjoni.
 - **Alternative Forms**: abbella
 - **Usage Examples**:
-  - MT: Abbellixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbellixxa correctly and without delay.
+  - MT: Abbellixxa l-ġnien b'bosta pjanti friski.
+    EN: He embellished the garden with many fresh plants.
 
 ---
 
@@ -303,24 +283,22 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: ability, skill, aptitude
-    **MT**: Tifsira u deskrizzjoni ta' 'abbiltà': ability, skill, aptitude.
+    **MT**: Kapaċità u talent li permezz tiegħu twettaq xogħol.
 - **Alternative Forms**: abilità
 - **Usage Examples**:
-  - MT: Abbiltà kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbiltà was in its proper place in daily use.
+  - MT: Wera abbiltà kbira fil-pittura u d-disinn.
+    EN: He showed great ability in painting and design.
 
 ---
 
 ## abbina (v-abbina)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to couple
-    **MT**: Tifsira u deskrizzjoni ta' 'abbina': to couple.
-  - **EN**: to combine
-    **MT**: Tifsira u deskrizzjoni ta' 'abbina': to combine.
+  - **EN**: to pair, match
+    **MT**: Qiegħed u għaqqad żewġ affarijiet li jaqblu.
 - **Usage Examples**:
-  - MT: Abbina l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbina correctly and without delay.
+  - MT: Abbina l-kulur tal-ingravata mal-qmis.
+    EN: He matched the color of the tie with the shirt.
 
 ---
 
@@ -328,11 +306,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: verbal noun of abbina
-    **MT**: L-att u l-proċess verbali ta' abbina.
+  - **EN**: matching, pairing
+    **MT**: L-att li tgħaqqad oġġetti li jmorru flimkien.
 - **Usage Examples**:
-  - MT: Abbinar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbinar was in its proper place in daily use.
+  - MT: L-abbinar tal-kuluri fil-kamra kien eċċellenti.
+    EN: The color matching in the room was excellent.
 
 ---
 
@@ -340,48 +318,46 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: abyss
-    **MT**: Tifsira u deskrizzjoni ta' 'abbiss': abyss.
-  - **EN**: wide gap, big difference
-    **MT**: Tifsira u deskrizzjoni ta' 'abbiss': wide gap, big difference.
+  - **EN**: abyss, chasm
+    **MT**: Ksur profonda u toqba bla tmiem fl-art jew baħar.
 - **Alternative Forms**: abiss
 - **Usage Examples**:
-  - MT: Abbiss kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbiss was in its proper place in daily use.
+  - MT: Il-vapur għaraq fl-abbiss tal-oċean.
+    EN: The ship sank into the ocean abyss.
 
 ---
 
 ## abbissa (v-abbissa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to go deep down, to plunge into the abyss
-    **MT**: Tifsira u deskrizzjoni ta' 'abbissa': to go deep down, to plunge into the abyss.
+  - **EN**: to plunge into an abyss
+    **MT**: Niżżel fil-qiegħ profonda.
 - **Usage Examples**:
-  - MT: Abbissa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbissa correctly and without delay.
+  - MT: Abbissa l-oġġett fl-ilma kiesaħ.
+    EN: He plunged the object into the cold water.
 
 ---
 
 ## abbli (adj-abbli)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: skillful
-    **MT**: Tifsira u deskrizzjoni ta' 'abbli': skillful.
+  - **EN**: able, capable, skillful
+    **MT**: Persuna li għandha t-talent li tagħmel azzjoni.
 - **Usage Examples**:
-  - MT: Abbli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbli was in its proper place in daily use.
+  - MT: Ħaddiem abbli li jsolvi kull problema malajr.
+    EN: A capable worker who solves any problem quickly.
 
 ---
 
-## abbolixxa (v-abbolixxa) 🌟 *(REVISED TARGET ENTRY)*
+## abbolixxa (v-abbolixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to abolish, to annul
-    **MT**: Ħassar jew ġieb fi tmiemu b'mod uffiċjali jew bl-liġi.
+  - **EN**: to abolish
+    **MT**: Waqqaf u neħħa liġi jew regola uffiċjalment.
 - **Alternative Forms**: abolixxa
 - **Usage Examples**:
-  - MT: Abbolixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbolixxa correctly and without delay.
+  - MT: Abbolixxew it-taxxa l-qadima fil-parlament.
+    EN: They abolished the old tax in parliament.
 
 ---
 
@@ -390,23 +366,21 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: discount, rebate
-    **MT**: Tifsira u deskrizzjoni ta' 'abbon': discount, rebate.
+    **MT**: Rħis u skont finanzjarju fuq oġġett jew servizz.
 - **Usage Examples**:
-  - MT: Abbon kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbon was in its proper place in daily use.
+  - MT: Ħadu abbon fuq il-biljett tat-teatru.
+    EN: They got a discount on the theater ticket.
 
 ---
 
 ## abbona (v-abbona)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to subscribe (someone) (to something) (to pay for someone's subscription to something)
-    **MT**: Tifsira u deskrizzjoni ta' 'abbona': to subscribe (someone) (to something) (to pay for someone's subscription to something).
-  - **EN**: to make a discount
-    **MT**: Tifsira u deskrizzjoni ta' 'abbona': to make a discount.
+  - **EN**: to subscribe / make a discount
+    **MT**: Ħallas għal abbonament regolari jew għamel skont.
 - **Usage Examples**:
-  - MT: Abbona l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbona correctly and without delay.
+  - MT: Abbona mal-ġurnal nazzjonali għas-sena.
+    EN: He subscribed to the national newspaper for the year.
 
 ---
 
@@ -415,10 +389,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: subscription
-    **MT**: Tifsira u deskrizzjoni ta' 'abbonament': subscription.
+    **MT**: Ħlas regolari biex tirċievi servizz jew gazzetta.
 - **Usage Examples**:
-  - MT: Abbonament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbonament was in its proper place in daily use.
+  - MT: L-abbonament tiegħu ġie mġedded mill-ewwel.
+    EN: His subscription was renewed right away.
 
 ---
 
@@ -427,10 +401,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: subscriber
-    **MT**: Tifsira u deskrizzjoni ta' 'abbonat': subscriber.
+    **MT**: Persuna li għandha abbonament uffiċjali.
 - **Usage Examples**:
-  - MT: Abbonat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbonat was in its proper place in daily use.
+  - MT: L-abbonat rċieva l-kopja filgħodu.
+    EN: The subscriber received the copy in the morning.
 
 ---
 
@@ -438,22 +412,18 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: third-person feminine singular perfect of abbona
-    **MT**: Tifsira u deskrizzjoni ta' 'abbonat': third-person feminine singular perfect of abbona.
-- **Usage Examples**:
-  - MT: Abbonat l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbonat correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' abbonat fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## abborra (v-abborra)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to abhor, to detest
-    **MT**: Tifsira u deskrizzjoni ta' 'abborrixxa': to abhor, to detest.
-- **Alternative Forms**: abborrixxa
+  - **EN**: to abhor, detest
+    **MT**: Wera ksur u mibgħeda kbira lejn xi ħaġa.
 - **Usage Examples**:
-  - MT: Abborra l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abborra correctly and without delay.
+  - MT: Abborra l-vjolenza f'kull forma tagħha.
+    EN: He abhorred violence in all its forms.
 
 ---
 
@@ -462,22 +432,22 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: abhorrence
-    **MT**: Tifsira u deskrizzjoni ta' 'abborriment': abhorrence.
+    **MT**: Mibgħeda u tħossok ta' dwejjaq kontra reat.
 - **Usage Examples**:
-  - MT: Abborriment kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abborriment was in its proper place in daily use.
+  - MT: Kien hemm abborriment ġenerali fil-pajjiż.
+    EN: There was general abhorrence in the country.
 
 ---
 
 ## abborrixxa (v-abborrixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to abhor, to detest
-    **MT**: Tifsira u deskrizzjoni ta' 'abborrixxa': to abhor, to detest.
+  - **EN**: to abhor, detest (alt)
+    **MT**: Wera mibgħeda u stmerrija kbira.
 - **Alternative Forms**: abborra
 - **Usage Examples**:
-  - MT: Abborrixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abborrixxa correctly and without delay.
+  - MT: Abborrixxa l-gideb fil-ħajja personali.
+    EN: He abhorred lying in personal life.
 
 ---
 
@@ -486,21 +456,21 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: sketch, outline, draft
-    **MT**: Tifsira u deskrizzjoni ta' 'abbozz': sketch, outline, draft.
+    **MT**: L-ewwel disinn jew kitba preliminari ta' pjan.
 - **Usage Examples**:
-  - MT: Abbozz kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbozz was in its proper place in daily use.
+  - MT: Kiteb l-abbozz tal-proġett fuq il-karta.
+    EN: He wrote the project draft on paper.
 
 ---
 
 ## abbozza (v-abbozza)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to sketch, to outline
-    **MT**: Tifsira u deskrizzjoni ta' 'abbozza': to sketch, to outline.
+  - **EN**: to sketch, outline
+    **MT**: Għamel l-ewwel tpinġija jew fassal pjan.
 - **Usage Examples**:
-  - MT: Abbozza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbozza correctly and without delay.
+  - MT: Abbozza l-bini l-ġdid bir-reqqa.
+    EN: He sketched the new building carefully.
 
 ---
 
@@ -509,21 +479,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: verbal noun of abbozza
-    **MT**: L-att u l-proċess verbali ta' abbozza.
-- **Usage Examples**:
-  - MT: Abbozzar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbozzar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' verbal noun of abbozza.
 
 ---
 
 ## abbrevja (v-abbrevja)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to abbreviate
-    **MT**: Tifsira u deskrizzjoni ta' 'abbrevja': to abbreviate.
+  - **EN**: to abbreviate, shorten
+    **MT**: Naqqas u għamel iqsar kitba jew kelma.
 - **Usage Examples**:
-  - MT: Abbrevja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbrevja correctly and without delay.
+  - MT: Abbrevja t-titlu uffiċjali fil-fajl.
+    EN: He abbreviated the official title in the file.
 
 ---
 
@@ -532,10 +499,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: verbal noun of abbrevja
-    **MT**: L-att u l-proċess verbali ta' abbrevja.
-- **Usage Examples**:
-  - MT: Abbrevjar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbrevjar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' verbal noun of abbrevja.
 
 ---
 
@@ -544,10 +508,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: abbreviation
-    **MT**: Tifsira u deskrizzjoni ta' 'abbrevjazzjoni': abbreviation.
+    **MT**: Forma meħuda fil-qosor minn kelma.
 - **Usage Examples**:
-  - MT: Abbrevjazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbrevjazzjoni was in its proper place in daily use.
+  - MT: Uża abbrevjazzjoni fir-risposta tiegħu.
+    EN: He used an abbreviation in his answer.
 
 ---
 
@@ -556,10 +520,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: verbal noun of abbozza
-    **MT**: L-att u l-proċess verbali ta' abbozza.
-- **Usage Examples**:
-  - MT: Abbuzzar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbuzzar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' verbal noun of abbozza.
 
 ---
 
@@ -567,26 +528,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: abuse
-    **MT**: Tifsira u deskrizzjoni ta' 'abbuż': abuse.
-  - **EN**: misuse
-    **MT**: Tifsira u deskrizzjoni ta' 'abbuż': misuse.
+  - **EN**: abuse, misuse
+    **MT**: Użu mhux xieraq jew vjolenza kontra persuna jew regola.
 - **Usage Examples**:
-  - MT: Abbuż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbuż was in its proper place in daily use.
+  - MT: L-abbuż tal-poter ma għandux jiġi tollerat.
+    EN: Abuse of power should not be tolerated.
 
 ---
 
 ## abbuża (v-abbuża)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to abuse
-    **MT**: Tifsira u deskrizzjoni ta' 'abbuża': to abuse.
-  - **EN**: to dare
-    **MT**: Tifsira u deskrizzjoni ta' 'abbuża': to dare.
+  - **EN**: to abuse, misuse
+    **MT**: Uża l-poter jew l-awtorità bil-ħażin.
 - **Usage Examples**:
-  - MT: Abbuża l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abbuża correctly and without delay.
+  - MT: Abbuża mill-fiduċja li ngħatatlu fis-servizz.
+    EN: He abused the trust given to him in service.
 
 ---
 
@@ -594,10 +551,10 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: abusive
-    **MT**: Tifsira u deskrizzjoni ta' 'abbużiv': abusive.
+    **MT**: Li jikser ir-regoli jew jagħmel ħsara bil-kliem jew azzjoni.
 - **Usage Examples**:
-  - MT: Abbużiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbużiv was in its proper place in daily use.
+  - MT: Kliem abbużiv li ġab l-inkwiet fil-pjazza.
+    EN: Abusive words that brought trouble to the square.
 
 ---
 
@@ -605,10 +562,10 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: abusively
-    **MT**: Tifsira u deskrizzjoni ta' 'abbużivament': abusively.
+    **MT**: B'mod abbużiv u mingħajr rispett legali.
 - **Usage Examples**:
-  - MT: Abbużivament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abbużivament was in its proper place in daily use.
+  - MT: Għex abbużivament fil-proprjetà tan-nazzjon.
+    EN: He lived abusively in the nation's property.
 
 ---
 
@@ -616,10 +573,10 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to abdicate
-    **MT**: Tifsira u deskrizzjoni ta' 'abdika': to abdicate.
+    **MT**: Ceda u ħalla r-renju jew il-kariga għolja.
 - **Usage Examples**:
-  - MT: Abdika l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abdika correctly and without delay.
+  - MT: Ir-re abdika minn fuq it-tron.
+    EN: The king abdicated from the throne.
 
 ---
 
@@ -628,48 +585,48 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: abdication
-    **MT**: Tifsira u deskrizzjoni ta' 'abdikazzjoni': abdication.
+    **MT**: L-att uffiċjali ta' ċediment tal-kariga.
 - **Usage Examples**:
-  - MT: Abdikazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abdikazzjoni was in its proper place in daily use.
+  - MT: L-abdikazzjoni saret permezz ta' dokument.
+    EN: Abdication was done through a document.
 
 ---
 
 ## Abdilla (n-abdilla)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Abdilla': a surname.
+  - **EN**: Abdilla (surname)
+    **MT**: Kunjom Malti storiku u komuni.
 - **Usage Examples**:
-  - MT: Abdilla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Abdilla was in its proper place in daily use.
+  - MT: Is-sur Abdilla kien il-president.
+    EN: Mr. Abdilla was the president.
 
 ---
 
 ## Abela (n-abela)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: a surname from Spanish
-    **MT**: Tifsira u deskrizzjoni ta' 'Abela': a surname from Spanish.
+  - **EN**: Abela (surname)
+    **MT**: Kunjom Malti storiku.
 - **Usage Examples**:
-  - MT: Abela kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Abela was in its proper place in daily use.
+  - MT: Is-sur Abela mexxa d-dipartiment.
+    EN: Mr. Abela led the department.
 
 ---
 
-## abilità (n-abilità) 🌟 *(REVISED TARGET ENTRY)*
+## abilità (n-abilità)
 - **POS**: noun
 - **Definitions**:
   - **EN**: ability, skill, aptitude
     **MT**: Kapaċità, ħila jew sengħa biex tagħmel xi ħaġa sew.
 - **Alternative Forms**: abbiltà
 - **Usage Examples**:
-  - MT: Abilità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abilità was in its proper place in daily use.
+  - MT: Wera abbiltà kbira fil-pittura u d-disinn.
+    EN: He showed great ability in painting and design.
 
 ---
 
-## abiss (n-abiss) 🌟 *(REVISED TARGET ENTRY)*
+## abiss (n-abiss)
 - **POS**: noun
 - **Definitions**:
   - **EN**: abyss, chasm
@@ -678,30 +635,30 @@ Total Entries: 687
     **MT**: L-infern jew post ta' patiment kbir.
 - **Alternative Forms**: abbiss
 - **Usage Examples**:
-  - MT: Abiss kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abiss was in its proper place in daily use.
+  - MT: Il-vapur għaraq fl-abbiss tal-oċean.
+    EN: The ship sank into the ocean abyss.
 
 ---
 
 ## abita (v-abita)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to inhabit, to reside
-    **MT**: Tifsira u deskrizzjoni ta' 'abita': to inhabit, to reside.
+  - **EN**: to inhabit, reside
+    **MT**: Għex u qagħad f'post jew dar.
 - **Usage Examples**:
-  - MT: Abita l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abita correctly and without delay.
+  - MT: Abita f'dar żgħira qrib il-baħar.
+    EN: He resided in a small house near the sea.
 
 ---
 
 ## abitabbli (adj-abitabbli)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: habitable, inhabitable, livable
-    **MT**: Tifsira u deskrizzjoni ta' 'abitabbli': habitable, inhabitable, livable.
+  - **EN**: habitable, livable
+    **MT**: Li jista' ngħixu fiha dar b'sigurtà.
 - **Usage Examples**:
-  - MT: Abitabbli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abitabbli was in its proper place in daily use.
+  - MT: Dar abitabbli li għandha d-dwal u l-ilma.
+    EN: A habitable house that has lights and water.
 
 ---
 
@@ -709,11 +666,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: inhabitant
-    **MT**: Tifsira u deskrizzjoni ta' 'abitant': inhabitant.
+  - **EN**: inhabitant, resident
+    **MT**: Persuna li tgħix f'belt jew pajjiż.
 - **Usage Examples**:
-  - MT: Abitant kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abitant was in its proper place in daily use.
+  - MT: L-abitant għen lin-nies fit-triq.
+    EN: The inhabitant helped people on the street.
 
 ---
 
@@ -722,10 +679,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: female equivalent of abitant: female inhabitant
-    **MT**: Forma femminili ta' abitant: female inhabitant.
-- **Usage Examples**:
-  - MT: Abitanta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abitanta was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' abitanta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -733,11 +687,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: built-up area
-    **MT**: Tifsira u deskrizzjoni ta' 'abitat': built-up area.
+  - **EN**: habitat, built-up area
+    **MT**: L-ambjent naturali jew il-post fejn tgħix speċi.
 - **Usage Examples**:
-  - MT: Abitat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abitat was in its proper place in daily use.
+  - MT: Protezzjoni tal-abitat naturali tal-għasfur.
+    EN: Protection of the bird's natural habitat.
 
 ---
 
@@ -745,11 +699,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: habitation, dwelling
-    **MT**: Tifsira u deskrizzjoni ta' 'abitazzjoni': habitation, dwelling.
+  - **EN**: dwelling, habitation
+    **MT**: Dar jew post użat għall-għajxien.
 - **Usage Examples**:
-  - MT: Abitazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abitazzjoni was in its proper place in daily use.
+  - MT: Abitazzjoni moderna fil-belt kapitali.
+    EN: A modern dwelling in the capital city.
 
 ---
 
@@ -757,15 +711,11 @@ Total Entries: 687
 - **POS**: adjective
 - **Root**: b-j-d
 - **Definitions**:
-  - **EN**: white
-    **MT**: Tifsira u deskrizzjoni ta' 'abjad': white.
-  - **EN**: pale
-    **MT**: Tifsira u deskrizzjoni ta' 'abjad': pale.
-  - **EN**: calm (of water)
-    **MT**: Tifsira u deskrizzjoni ta' 'abjad': calm (of water).
+  - **EN**: white, pale, calm (water)
+    **MT**: Kulur tal-ħalib jew borra; superfiċje ċara.
 - **Usage Examples**:
-  - MT: Abjad kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abjad was in its proper place in daily use.
+  - MT: Qmis bajda li lbes għall-okkażjoni.
+    EN: A white shirt he wore for the occasion.
 
 ---
 
@@ -773,10 +723,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: as white as snow
-    **MT**: Tifsira u deskrizzjoni ta' 'abjad fiġla': as white as snow.
-- **Usage Examples**:
-  - MT: Abjad fiġla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abjad fiġla was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (simile) as white as snow.
 
 ---
 
@@ -784,11 +731,8 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: as white as snow
-    **MT**: Tifsira u deskrizzjoni ta' 'abjad qotna': as white as snow.
+    **MT**: Għandu x'jaqsam ma' (simile) as white as snow.
 - **Alternative Forms**: abjad qoton
-- **Usage Examples**:
-  - MT: Abjad qotna kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abjad qotna was in its proper place in daily use.
 
 ---
 
@@ -796,22 +740,19 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: as white as snow
-    **MT**: Tifsira u deskrizzjoni ta' 'abjad qoton': as white as snow.
+    **MT**: Għandu x'jaqsam ma' (simile) as white as snow.
 - **Alternative Forms**: abjad qotna
-- **Usage Examples**:
-  - MT: Abjad qoton kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abjad qoton was in its proper place in daily use.
 
 ---
 
 ## abjad silġ (adj-abjad-silġ)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: as white as snow
-    **MT**: Tifsira u deskrizzjoni ta' 'abjad silġ': as white as snow.
+  - **EN**: as white as snow (simile)
+    **MT**: Abjad ħafna u jiddi bħal silġ.
 - **Usage Examples**:
-  - MT: Abjad silġ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abjad silġ was in its proper place in daily use.
+  - MT: Faċċata bajda silġ li tidher mill-bogħod.
+    EN: A snow-white facade visible from afar.
 
 ---
 
@@ -819,10 +760,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: as white as snow
-    **MT**: Tifsira u deskrizzjoni ta' 'abjad ħalib': as white as snow.
-- **Usage Examples**:
-  - MT: Abjad ħalib kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abjad ħalib was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (simile) as white as snow.
 
 ---
 
@@ -831,45 +769,45 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: abjuration
-    **MT**: Tifsira u deskrizzjoni ta' 'abjura': abjuration.
+    **MT**: L-att li tirrinunzja għad-duttrina.
 - **Usage Examples**:
-  - MT: Abjura kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abjura was in its proper place in daily use.
+  - MT: L-abjura saret quddiem it-tribunal.
+    EN: Abjuration was done before the tribunal.
 
 ---
 
 ## abjura (v-abjura)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to abjure, to renounce
-    **MT**: Tifsira u deskrizzjoni ta' 'abjura': to abjure, to renounce.
+  - **EN**: to abjure, renounce
+    **MT**: Ceda u neħħa l-fidi legali.
 - **Usage Examples**:
-  - MT: Abjura l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abjura correctly and without delay.
+  - MT: Abjura l-ideat l-qodma u beda mill-ġdid.
+    EN: He abjured old ideas and started anew.
 
 ---
 
-## abola (v-abola) 🌟 *(REVISED TARGET ENTRY)*
+## abola (v-abola)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to abolish, to annul
     **MT**: Ħassar jew ħassar uffiċjalment (liġi jew drawwa).
 - **Alternative Forms**: abolixxa
 - **Usage Examples**:
-  - MT: Abola l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abola correctly and without delay.
+  - MT: Abolixxew il-liġi l-qadima nazzjonali.
+    EN: They abolished the old national law.
 
 ---
 
 ## abolixxa (v-abolixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to abolish, to annul
-    **MT**: Tifsira u deskrizzjoni ta' 'abolixxa': to abolish, to annul.
+  - **EN**: to abolish, annul
+    **MT**: Waqqaf u neħħa liġi jew regola.
 - **Alternative Forms**: abbolixxa, abola
 - **Usage Examples**:
-  - MT: Abolixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abolixxa correctly and without delay.
+  - MT: Abolixxew il-liġi l-qadima nazzjonali.
+    EN: They abolished the old national law.
 
 ---
 
@@ -878,10 +816,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: abolition
-    **MT**: Tifsira u deskrizzjoni ta' 'abolizzjoni': abolition.
+    **MT**: Cessazzjoni uffiċjali ta' liġi.
 - **Usage Examples**:
-  - MT: Abolizzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abolizzjoni was in its proper place in daily use.
+  - MT: L-abolizzjoni kienet pass kbir 'l quddiem.
+    EN: Abolition was a great step forward.
 
 ---
 
@@ -890,21 +828,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: abolitionism
-    **MT**: Tifsira u deskrizzjoni ta' 'abolizzjoniżmu': abolitionism.
-- **Usage Examples**:
-  - MT: Abolizzjoniżmu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abolizzjoniżmu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' abolitionism.
 
 ---
 
 ## aborta (v-aborta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to abort a pregnancy, to have a miscarriage
-    **MT**: Tifsira u deskrizzjoni ta' 'aborta': to abort a pregnancy, to have a miscarriage.
+  - **EN**: to abort, miscarry
+    **MT**: Waqqaf tqala jew proġett qabel it-tmiem.
 - **Usage Examples**:
-  - MT: Aborta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aborta correctly and without delay.
+  - MT: Abortaw il-pjan minħabba l-għaġla.
+    EN: They aborted the plan due to haste.
 
 ---
 
@@ -912,23 +847,20 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: a male given name, equivalent to English Abraham
-    **MT**: Tifsira u deskrizzjoni ta' 'Abraham': a male given name, equivalent to English Abraham.
+    **MT**: Li għandu x'jaqsam ma' Abraham fl-użu u t-tifsira uffiċjali.
   - **EN**: Abraham
-    **MT**: Tifsira u deskrizzjoni ta' 'Abraham': Abraham.
-- **Usage Examples**:
-  - MT: Abraham kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Abraham was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Abraham fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## abroga (v-abroga)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to revoke, to repeal, to abrogate
-    **MT**: Tifsira u deskrizzjoni ta' 'abroga': to revoke, to repeal, to abrogate.
+  - **EN**: to revoke, repeal
+    **MT**: Neħħa u waqqaf liġi legali.
 - **Usage Examples**:
-  - MT: Abroga l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of abroga correctly and without delay.
+  - MT: Abrogaw ir-regolament fil-parlament.
+    EN: They repealed the regulation in parliament.
 
 ---
 
@@ -937,10 +869,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: armpit
-    **MT**: Tifsira u deskrizzjoni ta' 'abt': armpit.
+    **MT**: Il-parti ta' taħt spalla fil-ġisem.
 - **Usage Examples**:
-  - MT: Abt kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abt was in its proper place in daily use.
+  - MT: Ħass uġigħ taħt abtu wara x-xogħol.
+    EN: He felt pain under his armpit after work.
 
 ---
 
@@ -948,10 +880,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: pertaining to the armpit
-    **MT**: Tifsira u deskrizzjoni ta' 'abti': pertaining to the armpit.
-- **Usage Examples**:
-  - MT: Abti kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The abti was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' pertaining to the armpit.
 
 ---
 
@@ -959,10 +888,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Adam
-    **MT**: Tifsira u deskrizzjoni ta' 'Adam': Adam.
-- **Usage Examples**:
-  - MT: Adam kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Adam was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' adam.
 
 ---
 
@@ -970,46 +896,45 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: suitable, fit
-    **MT**: Tifsira u deskrizzjoni ta' 'adatt': suitable, fit.
+    **MT**: Li jaqbel u huwa tajjeb għas-sitwazzjoni.
 - **Usage Examples**:
-  - MT: Adatt kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The adatt was in its proper place in daily use.
+  - MT: Post adatt għall-familja u t-tfal.
+    EN: A suitable place for the family and children.
 
 ---
 
 ## adatta (v-adatta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to adapt, to fit
-    **MT**: Tifsira u deskrizzjoni ta' 'adatta': to adapt, to fit.
-  - **EN**: to adjust
-    **MT**: Tifsira u deskrizzjoni ta' 'adatta': to adjust.
+  - **EN**: to adapt, fit, adjust
+    **MT**: Rranġa oġġett jew ruħu mar-regoli l-ġodda.
 - **Alternative Forms**: addatta
 - **Usage Examples**:
-  - MT: Adatta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of adatta correctly and without delay.
+  - MT: Adatta ruħu malajr mal-klima friska.
+    EN: He adapted quickly to the cool climate.
 
 ---
 
-## addatta (v-addatta) 🌟 *(REVISED TARGET ENTRY)*
+## addatta (v-addatta)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to adapt, to fit
     **MT**: Biddel jew irranġa biex ikun xieraq għal sitwazzjoni ġdida.
 - **Alternative Forms**: adatta
 - **Usage Examples**:
-  - MT: Addatta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of addatta correctly and without delay.
+  - MT: Adatta ruħu malajr mal-klima friska.
+    EN: He adapted quickly to the cool climate.
 
 ---
 
 ## addebita (v-addebita)
 - **POS**: verb
 - **Definitions**:
-- **Alternative Forms**: ddebita
+  - **EN**: to debit, charge to account
+    **MT**: Naqqas fondi jew rreġistra spejjeż fuq kont.
 - **Usage Examples**:
-  - MT: Addebita l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of addebita correctly and without delay.
+  - MT: Addebitaw il-kont tiegħu mill-bank minnufih.
+    EN: They debited his bank account immediately.
 
 ---
 
@@ -1017,11 +942,10 @@ Total Entries: 687
 - **POS**: interjection
 - **Definitions**:
   - **EN**: goodbye, farewell
-    **MT**: Tifsira u deskrizzjoni ta' 'addiju': goodbye, farewell.
-- **Alternative Forms**: addiju
+    **MT**: Esklamazzjoni ta' tislima fl-aħħar.
 - **Usage Examples**:
-  - MT: Addijo kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The addijo was in its proper place in daily use.
+  - MT: Qal addijo lil sieħbu fil-port.
+    EN: He said goodbye to his friend at the port.
 
 ---
 
@@ -1030,11 +954,8 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: goodbye, farewell
-    **MT**: Tifsira u deskrizzjoni ta' 'addiju': goodbye, farewell.
+    **MT**: Għandu x'jaqsam ma' goodbye, farewell.
 - **Alternative Forms**: addiju
-- **Usage Examples**:
-  - MT: Addijo kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The addijo was in its proper place in daily use.
 
 ---
 
@@ -1042,11 +963,11 @@ Total Entries: 687
 - **POS**: interjection
 - **Definitions**:
   - **EN**: goodbye, farewell
-    **MT**: Tifsira u deskrizzjoni ta' 'addiju': goodbye, farewell.
+    **MT**: Għandu x'jaqsam ma' goodbye, farewell.
 - **Alternative Forms**: addijo
 - **Usage Examples**:
-  - MT: Addiju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The addiju was in its proper place in daily use.
+  - MT: Qal addijo lil sieħbu fil-port.
+    EN: He said goodbye to his friend at the port.
 
 ---
 
@@ -1055,58 +976,58 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: goodbye, farewell
-    **MT**: Tifsira u deskrizzjoni ta' 'addiju': goodbye, farewell.
+    **MT**: Għandu x'jaqsam ma' goodbye, farewell.
 - **Alternative Forms**: addijo
 - **Usage Examples**:
-  - MT: Addiju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The addiju was in its proper place in daily use.
+  - MT: Qal addijo lil sieħbu fil-port.
+    EN: He said goodbye to his friend at the port.
 
 ---
 
 ## addoċċ (adv-addoċċ)
 - **POS**: adverb
 - **Definitions**:
-  - **EN**: randomly, at random, haphazardly
-    **MT**: Tifsira u deskrizzjoni ta' 'addoċċ': randomly, at random, haphazardly.
+  - **EN**: at random, haphazardly
+    **MT**: Bla ebda pjan jew ordni stabbilita.
 - **Usage Examples**:
-  - MT: Addoċċ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The addoċċ was in its proper place in daily use.
+  - MT: Qiegħed il-kotba addoċċ fuq il-mejda.
+    EN: He placed the books at random on the table.
 
 ---
 
-## adera (v-adera) 🌟 *(REVISED TARGET ENTRY)*
+## adera (v-adera)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to adhere to
     **MT**: Inġabar jew ingħaqad f'partit, organizzazzjoni jew idea.
 - **Alternative Forms**: aderixxa
 - **Usage Examples**:
-  - MT: Adera l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of adera correctly and without delay.
+  - MT: Aderixxa mal-partit il-ġdid matul il-kampanja.
+    EN: He adhered to the new party during the campaign.
 
 ---
 
 ## aderixxa (v-aderixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to adhere to
-    **MT**: Tifsira u deskrizzjoni ta' 'aderixxa': to adhere to.
+  - **EN**: to adhere, join
+    **MT**: Dħal u ingħaqad ma' organizzazzjoni jew vjaġġ.
 - **Alternative Forms**: adera
 - **Usage Examples**:
-  - MT: Aderixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aderixxa correctly and without delay.
+  - MT: Aderixxa mal-partit il-ġdid matul il-kampanja.
+    EN: He adhered to the new party during the campaign.
 
 ---
 
 ## adorabbli (adj-adorabbli)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: adorable
-    **MT**: Tifsira u deskrizzjoni ta' 'adorabbli': adorable.
+  - **EN**: adorable, charming
+    **MT**: Li huwa ħelu ħafna u jattira l-imħabba.
 - **Alternative Forms**: adurabbli
 - **Usage Examples**:
-  - MT: Adorabbli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The adorabbli was in its proper place in daily use.
+  - MT: Tarbija adorabbli li kulħadd iħobb fir-raħal.
+    EN: An adorable baby that everyone loves in the village.
 
 ---
 
@@ -1114,25 +1035,23 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: worship (of God)
-    **MT**: Tifsira u deskrizzjoni ta' 'adorazzjoni': worship (of God).
-  - **EN**: adoration
-    **MT**: Tifsira u deskrizzjoni ta' 'adorazzjoni': adoration.
+  - **EN**: worship, adoration
+    **MT**: Att ta' qima profonda u talb quddiem Alla.
 - **Alternative Forms**: adurazzjoni
 - **Usage Examples**:
-  - MT: Adorazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The adorazzjoni was in its proper place in daily use.
+  - MT: Attendew għall-adorazzjoni fil-knisja parrokkjali.
+    EN: They attended adoration at the parish church.
 
 ---
 
 ## adotta (v-adotta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to adopt
-    **MT**: Tifsira u deskrizzjoni ta' 'adotta': to adopt.
+  - **EN**: to adopt (child/plan)
+    **MT**: Ħa tarbija bħala ibnu jew aċċetta pjan nazzjonali.
 - **Usage Examples**:
-  - MT: Adotta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of adotta correctly and without delay.
+  - MT: Adottaw tifel mill-orfanatrofju bil-liġi.
+    EN: They adopted a child from the orphanage legally.
 
 ---
 
@@ -1140,10 +1059,10 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: adopted
-    **MT**: Tifsira u deskrizzjoni ta' 'adottat': adopted.
+    **MT**: Li ġie meħud b'adottazzjoni uffiċjali.
 - **Usage Examples**:
-  - MT: Adottat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The adottat was in its proper place in daily use.
+  - MT: Ibnu l-adottat mar jstudja l-università.
+    EN: His adopted son went to study at the university.
 
 ---
 
@@ -1151,10 +1070,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: third-person feminine singular perfect of adotta
-    **MT**: Tifsira u deskrizzjoni ta' 'adottat': third-person feminine singular perfect of adotta.
-- **Usage Examples**:
-  - MT: Adottat l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of adottat correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' adottat fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1163,55 +1079,55 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: adoption
-    **MT**: Tifsira u deskrizzjoni ta' 'adozzjoni': adoption.
+    **MT**: Il-proċess legali ta' teħid ta' tarbija fil-familja.
 - **Usage Examples**:
-  - MT: Adozzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The adozzjoni was in its proper place in daily use.
+  - MT: L-adozzjoni saret b'suċċess quddiem il-qorti.
+    EN: The adoption was completed successfully in court.
 
 ---
 
 ## adula (v-adula)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to adulate
-    **MT**: Tifsira u deskrizzjoni ta' 'adula': to adulate.
+  - **EN**: to adulate, flatter
+    **MT**: Ppreżenta tifħir żejjed biex jikseb fiduċja.
 - **Usage Examples**:
-  - MT: Adula l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of adula correctly and without delay.
+  - MT: Adula l-uffiċjal biex jikseb il-permess.
+    EN: He adulated the official to get the permit.
 
 ---
 
 ## adultera (v-adultera)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to adulterate
-    **MT**: Tifsira u deskrizzjoni ta' 'adultera': to adulterate.
+  - **EN**: to adulterate, corrupt
+    **MT**: Ħawwad sustanza b'oġġett ieħor irħis.
 - **Usage Examples**:
-  - MT: Adultera l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of adultera correctly and without delay.
+  - MT: Adulteraw l-inbid billi żiedu l-ilma.
+    EN: They adulterated the wine by adding water.
 
 ---
 
 ## adura (v-adura)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to adore, to worship
-    **MT**: Tifsira u deskrizzjoni ta' 'adura': to adore, to worship.
+  - **EN**: to adore, worship
+    **MT**: Ħobb bil-kbir u ta qima profonda.
 - **Usage Examples**:
-  - MT: Adura l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of adura correctly and without delay.
+  - MT: Adura lil Alla b'qalbu kollha.
+    EN: He adored God with all his heart.
 
 ---
 
 ## adurabbli (adj-adurabbli)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: adorable
-    **MT**: Tifsira u deskrizzjoni ta' 'adorabbli': adorable.
+  - **EN**: adorable, charming
+    **MT**: Li huwa ħelu ħafna u jattira l-imħabba.
 - **Alternative Forms**: adorabbli
 - **Usage Examples**:
-  - MT: Adurabbli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The adurabbli was in its proper place in daily use.
+  - MT: Tarbija adorabbli li kulħadd iħobb fir-raħal.
+    EN: An adorable baby that everyone loves in the village.
 
 ---
 
@@ -1219,36 +1135,34 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: worshipper
-    **MT**: Tifsira u deskrizzjoni ta' 'aduratur': worshipper.
-  - **EN**: admirer
-    **MT**: Tifsira u deskrizzjoni ta' 'aduratur': admirer.
+  - **EN**: worshipper, admirer
+    **MT**: Persuna li tagħmel talb jew turi stima kbira.
 - **Usage Examples**:
-  - MT: Aduratur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aduratur was in its proper place in daily use.
+  - MT: Il-aduratur talab bil-kwiet quddiem l-altar.
+    EN: The worshipper prayed quietly before the altar.
 
 ---
 
-## adurazzjoni (n-adurazzjoni) 🌟 *(REVISED TARGET ENTRY)*
+## adurazzjoni (n-adurazzjoni)
 - **POS**: noun
 - **Definitions**:
   - **EN**: worship (of God)
     **MT**: L-att ta' stima kbira u qima lejn Alla.
 - **Alternative Forms**: adorazzjoni
 - **Usage Examples**:
-  - MT: Adurazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The adurazzjoni was in its proper place in daily use.
+  - MT: Attendew għall-adorazzjoni fil-knisja parrokkjali.
+    EN: They attended adoration at the parish church.
 
 ---
 
 ## affaxxina (v-affaxxina)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to charm, to fascinate, to enchant
-    **MT**: Tifsira u deskrizzjoni ta' 'affaxxina': to charm, to fascinate, to enchant.
+  - **EN**: to fascinate, charm, enchant
+    **MT**: Għamel impressjoni kbira uattira l-attenzjoni.
 - **Usage Examples**:
-  - MT: Affaxxina l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of affaxxina correctly and without delay.
+  - MT: Affaxxina l-udjenza bil-vuċi sabiħa tagħha.
+    EN: She fascinated the audience with her beautiful voice.
 
 ---
 
@@ -1256,10 +1170,10 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: fascinating, charming
-    **MT**: Tifsira u deskrizzjoni ta' 'affaxxinanti': fascinating, charming.
+    **MT**: Li għandu bixra ta' seħer u attrazzjoni.
 - **Usage Examples**:
-  - MT: Affaxxinanti kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The affaxxinanti was in its proper place in daily use.
+  - MT: Storja affaxxinanti dwar l-istorja ta' Malta.
+    EN: A fascinating story about the history of Malta.
 
 ---
 
@@ -1268,43 +1182,40 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: verbal noun of affaxxina
-    **MT**: L-att u l-proċess verbali ta' affaxxina.
-- **Usage Examples**:
-  - MT: Affaxxinar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The affaxxinar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' verbal noun of affaxxina.
 
 ---
 
 ## afferma (v-afferma)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to affirm, to state, to confirm, to assert
-    **MT**: Tifsira u deskrizzjoni ta' 'afferma': to affirm, to state, to confirm, to assert.
+  - **EN**: to affirm, state, confirm
+    **MT**: Iddikjara bil-qawwa li azzjoni hija veru.
 - **Usage Examples**:
-  - MT: Afferma l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of afferma correctly and without delay.
+  - MT: Afferma l-fatti kollha quddiem il-ġurnalisti.
+    EN: He affirmed all facts in front of the journalists.
 
 ---
 
 ## affettwa (v-affettwa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to affect
-    **MT**: Tifsira u deskrizzjoni ta' 'affettwa': to affect.
+  - **EN**: to affect, influence
+    **MT**: Ħalla impatt jew bidla dwar oġġett jew persuna.
 - **Usage Examples**:
-  - MT: Affettwa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of affettwa correctly and without delay.
+  - MT: Il-maltemp affettwa t-trasport fil-gżira.
+    EN: The storm affected transport on the island.
 
 ---
 
 ## affezzjona (v-affezzjona)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to be fond of
-    **MT**: Tifsira u deskrizzjoni ta' 'affezzjona': to be fond of.
+  - **EN**: to become fond of
+    **MT**: Rrabat qalbu u wera imħabba lejn xi ħadd.
 - **Usage Examples**:
-  - MT: Affezzjona l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of affezzjona correctly and without delay.
+  - MT: Affezzjona mat-tifel żgħir mill-ewwel jum.
+    EN: He became fond of the young child from day one.
 
 ---
 
@@ -1312,11 +1223,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: affection
-    **MT**: Tifsira u deskrizzjoni ta' 'affezzjoni': affection.
+  - **EN**: affection, fondness
+    **MT**: Tħossok ta' imħabba u ħlewwa lejn xi ħadd.
 - **Usage Examples**:
-  - MT: Affezzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The affezzjoni was in its proper place in daily use.
+  - MT: Wera affezzjoni kbira lejn ommu l-anzjana.
+    EN: He showed great affection toward his elderly mother.
 
 ---
 
@@ -1324,10 +1235,10 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to affiliate
-    **MT**: Tifsira u deskrizzjoni ta' 'affilja': to affiliate.
+    **MT**: Dħal u ingħaqad f'soċjetà jew partit.
 - **Usage Examples**:
-  - MT: Affilja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of affilja correctly and without delay.
+  - MT: Affilja l-għaqda tiegħu mal-federazzjoni.
+    EN: He affiliated his club with the federation.
 
 ---
 
@@ -1336,32 +1247,32 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: affiliation
-    **MT**: Tifsira u deskrizzjoni ta' 'affiljazzjoni': affiliation.
+    **MT**: Sħubija jew rabta uffiċjali ma' għaqda.
 - **Usage Examples**:
-  - MT: Affiljazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The affiljazzjoni was in its proper place in daily use.
+  - MT: L-affiljazzjoni ngħatat wara l-approvazzjoni.
+    EN: The affiliation was granted after approval.
 
 ---
 
 ## affordja (v-affordja)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to afford
-    **MT**: Tifsira u deskrizzjoni ta' 'affordja': to afford.
+  - **EN**: to afford (financially)
+    **MT**: Għandu l-fondi jew l-mezzi biex iħallas.
 - **Usage Examples**:
-  - MT: Affordja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of affordja correctly and without delay.
+  - MT: Ma stax jaffordja jera l-karozza l-ġdida.
+    EN: He couldn't afford to buy the new car.
 
 ---
 
 ## affronta (v-affronta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to face, to tackle
-    **MT**: Tifsira u deskrizzjoni ta' 'affronta': to face, to tackle.
+  - **EN**: to face, tackle, confront
+    **MT**: Għamel wiċċ mas-sitwazzjoni iebsa b'kuraġġ.
 - **Usage Examples**:
-  - MT: Affronta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of affronta correctly and without delay.
+  - MT: Affronta d-diffikultajiet kollha bla biża'.
+    EN: He faced all difficulties fearlessly.
 
 ---
 
@@ -1369,10 +1280,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: Afghan
-    **MT**: Tifsira u deskrizzjoni ta' 'Afgan': Afghan.
-- **Usage Examples**:
-  - MT: Afgan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Afgan was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' afghan.
 
 ---
 
@@ -1381,23 +1289,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Afghan (person)
-    **MT**: Tifsira u deskrizzjoni ta' 'Afgan': Afghan (person).
-- **Usage Examples**:
-  - MT: Afgan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Afgan was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' afghan (person).
 
 ---
 
 ## Afganistan (n-afganistan)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: Afghanistan (a landlocked country between Central Asia and South Asia
-    **MT**: Tifsira u deskrizzjoni ta' 'Afganistan': Afghanistan (a landlocked country between Central Asia and South Asia.
-  - **EN**: official name: Repubblika Iżlamika tal-Afganistan)
-    **MT**: Tifsira u deskrizzjoni ta' 'Afganistan': official name: Repubblika Iżlamika tal-Afganistan).
+  - **EN**: Afghanistan (country)
+    **MT**: Pajjiż fl-Asja Ċentrali.
 - **Usage Examples**:
-  - MT: Afganistan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Afganistan was in its proper place in daily use.
+  - MT: Għix fl-Afganistan għal bosta snin.
+    EN: He lived in Afghanistan for many years.
 
 ---
 
@@ -1406,21 +1309,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: hafnium (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'afnju': hafnium (chemical element).
-- **Usage Examples**:
-  - MT: Afnju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The afnju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' afnju fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## Afrika (n-afrika)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: Africa (the continent south of Europe and between the Atlantic and Indian Oceans)
-    **MT**: Tifsira u deskrizzjoni ta' 'Afrika': Africa (the continent south of Europe and between the Atlantic and Indian Oceans).
+  - **EN**: Africa (continent)
+    **MT**: Kontinent kbir fin-Nofsinhar tal-Ewropa.
 - **Usage Examples**:
-  - MT: Afrika kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Afrika was in its proper place in daily use.
+  - MT: Vvjaġġaw lejn l-Afrika biex jaraw in-natura.
+    EN: They traveled to Africa to see nature.
 
 ---
 
@@ -1428,12 +1328,9 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: South Africa (a country in Southern Africa
-    **MT**: Tifsira u deskrizzjoni ta' 'Afrika t'Isfel': South Africa (a country in Southern Africa.
+    **MT**: Li għandu x'jaqsam ma' Afrika t'Isfel fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Repubblika tal-Afrika t’Isfel)
-    **MT**: Tifsira u deskrizzjoni ta' 'Afrika t'Isfel': official name: Repubblika tal-Afrika t’Isfel).
-- **Usage Examples**:
-  - MT: Afrika t'isfel kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Afrika t'Isfel was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Afrika t'Isfel fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1441,21 +1338,18 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Afrikaans (language)
-    **MT**: Tifsira u deskrizzjoni ta' 'Afrikans': Afrikaans (language).
-- **Usage Examples**:
-  - MT: Afrikans kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Afrikans was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' afrikaans (language).
 
 ---
 
 ## aggrava (v-aggrava)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to aggravate
-    **MT**: Tifsira u deskrizzjoni ta' 'aggrava': to aggravate.
+  - **EN**: to aggravate, worsen
+    **MT**: Zied il-ħżiena jew l-uġigħ f'sitwazzjoni.
 - **Usage Examples**:
-  - MT: Aggrava l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aggrava correctly and without delay.
+  - MT: Is-sħana aggravat il-marda tiegħu.
+    EN: The heat aggravated his illness.
 
 ---
 
@@ -1464,10 +1358,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: aggravation
-    **MT**: Tifsira u deskrizzjoni ta' 'aggravant': aggravation.
-- **Usage Examples**:
-  - MT: Aggravant kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aggravant was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' aggravation.
 
 ---
 
@@ -1475,10 +1366,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: aggravating
-    **MT**: Tifsira u deskrizzjoni ta' 'aggravanti': aggravating.
-- **Usage Examples**:
-  - MT: Aggravanti kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aggravanti was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' aggravating.
 
 ---
 
@@ -1486,10 +1374,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: plural of aggravant
-    **MT**: Forma plurali ta' aggravant.
-- **Usage Examples**:
-  - MT: Aggravanti kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aggravanti was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' plural of aggravant.
 
 ---
 
@@ -1497,35 +1382,35 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: hardship, burden
-    **MT**: Tifsira u deskrizzjoni ta' 'aggravju': hardship, burden.
+  - **EN**: hardship, burden, injury
+    **MT**: Ħsara jew dgħufija mposta fuq persuna.
 - **Usage Examples**:
-  - MT: Aggravju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aggravju was in its proper place in daily use.
+  - MT: Sofra aggravju kbir wara d-deċiżjoni legali.
+    EN: He suffered a great hardship after the legal decision.
 
 ---
 
 ## aggreda (v-aggreda)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to aggress, to attack
-    **MT**: Tifsira u deskrizzjoni ta' 'aggredixxa': to aggress, to attack.
+  - **EN**: to attack, aggress
+    **MT**: Wettaq attakk vjolenti kontra persuna.
 - **Alternative Forms**: aggredixxa
 - **Usage Examples**:
-  - MT: Aggreda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aggreda correctly and without delay.
+  - MT: Aggredixxa l-gwardjan u mar arrestat.
+    EN: He attacked the guard and was arrested.
 
 ---
 
 ## aggredixxa (v-aggredixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to aggress, to attack
-    **MT**: Tifsira u deskrizzjoni ta' 'aggredixxa': to aggress, to attack.
+  - **EN**: to attack, aggress
+    **MT**: Wettaq attakk vjolenti kontra persuna.
 - **Alternative Forms**: aggreda
 - **Usage Examples**:
-  - MT: Aggredixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aggredixxa correctly and without delay.
+  - MT: Aggredixxa l-gwardjan u mar arrestat.
+    EN: He attacked the guard and was arrested.
 
 ---
 
@@ -1533,10 +1418,10 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: aggressive
-    **MT**: Tifsira u deskrizzjoni ta' 'aggressiv': aggressive.
+    **MT**: Li għandu bixra ta' vjolenza u qawwa fl-azzjoni.
 - **Usage Examples**:
-  - MT: Aggressiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aggressiv was in its proper place in daily use.
+  - MT: Kelb aggressiv li kien jbeżża' lin-nies.
+    EN: An aggressive dog that scared people.
 
 ---
 
@@ -1544,10 +1429,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: aggressively
-    **MT**: Tifsira u deskrizzjoni ta' 'aggressivament': aggressively.
-- **Usage Examples**:
-  - MT: Aggressivament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aggressivament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' aggressively.
 
 ---
 
@@ -1556,10 +1438,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: aggressiveness
-    **MT**: Tifsira u deskrizzjoni ta' 'aggressività': aggressiveness.
+    **MT**: Stil u mġiba aggressiva fil-karattru.
 - **Usage Examples**:
-  - MT: Aggressività kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aggressività was in its proper place in daily use.
+  - MT: L-aggressività tiegħu ddejqet lill-komunità.
+    EN: His aggressiveness bothered the community.
 
 ---
 
@@ -1567,11 +1449,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: aggression
-    **MT**: Tifsira u deskrizzjoni ta' 'aggressjoni': aggression.
+  - **EN**: aggression, attack
+    **MT**: Attakk vjolenti u ksur ta' paċi.
 - **Usage Examples**:
-  - MT: Aggressjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aggressjoni was in its proper place in daily use.
+  - MT: Condemned l-aggressjoni kontra il-pajjiż.
+    EN: They condemned the aggression against the country.
 
 ---
 
@@ -1579,22 +1461,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: aggressor
-    **MT**: Tifsira u deskrizzjoni ta' 'aggressur': aggressor.
+  - **EN**: aggressor, attacker
+    **MT**: Persuna li tibda l-attakk jew il-ġlieda.
 - **Usage Examples**:
-  - MT: Aggressur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aggressur was in its proper place in daily use.
+  - MT: Il-aggressur mar arrestat mill-pulizija.
+    EN: The aggressor was arrested by the police.
 
 ---
 
 ## Agius (n-agius)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Agius': a surname.
+  - **EN**: Agius (surname)
+    **MT**: Kunjom Malti storiku u komuni ħafna.
 - **Usage Examples**:
-  - MT: Agius kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Agius was in its proper place in daily use.
+  - MT: Is-sur Agius mexxa l-iskola b'impenn.
+    EN: Mr. Agius managed the school with commitment.
 
 ---
 
@@ -1602,10 +1484,10 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to be in agony
-    **MT**: Tifsira u deskrizzjoni ta' 'agonizza': to be in agony.
+    **MT**: Sofra uġigħ profonda u qagħad fit-tħassib.
 - **Usage Examples**:
-  - MT: Agonizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of agonizza correctly and without delay.
+  - MT: Agonizza fl-isptar sakemm waslet il-mediċina.
+    EN: He was in agony at the hospital until medicine arrived.
 
 ---
 
@@ -1613,12 +1495,12 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: egret
-    **MT**: Tifsira u deskrizzjoni ta' 'agrett': egret.
+  - **EN**: egret (bird)
+    **MT**: Għasfur tal-ilma b'rix abjad jew isfar.
 - **Alternative Forms**: egrett
 - **Usage Examples**:
-  - MT: Agrett kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The agrett was in its proper place in daily use.
+  - MT: Rajna agrett jtir fuq il-wied filgħaxija.
+    EN: We saw an egret flying over the valley in the evening.
 
 ---
 
@@ -1627,10 +1509,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: little egret (Egretta garzetta)
-    **MT**: Tifsira u deskrizzjoni ta' 'agrett abjad': little egret (Egretta garzetta).
-- **Usage Examples**:
-  - MT: Agrett abjad kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The agrett abjad was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' agrett abjad fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1639,10 +1518,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: squacco heron (Ardeola ralloides)
-    **MT**: Tifsira u deskrizzjoni ta' 'agrett isfar': squacco heron (Ardeola ralloides).
-- **Usage Examples**:
-  - MT: Agrett isfar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The agrett isfar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' agrett isfar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1651,10 +1527,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: cattle egret (Bubulcus ibis)
-    **MT**: Tifsira u deskrizzjoni ta' 'agrett tal-bhejjem': cattle egret (Bubulcus ibis).
-- **Usage Examples**:
-  - MT: Agrett tal-bhejjem kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The agrett tal-bhejjem was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' agrett tal-bhejjem fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1663,10 +1536,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: western reef heron (Egretta gularis)
-    **MT**: Tifsira u deskrizzjoni ta' 'agrett tax-xatt': western reef heron (Egretta gularis).
-- **Usage Examples**:
-  - MT: Agrett tax-xatt kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The agrett tax-xatt was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' agrett tax-xatt fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1675,23 +1545,23 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: agriculture
-    **MT**: Tifsira u deskrizzjoni ta' 'agrikoltura': agriculture.
+    **MT**: Għandu x'jaqsam ma' agriculture.
 - **Alternative Forms**: agrikultura
 - **Usage Examples**:
-  - MT: Agrikoltura kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The agrikoltura was in its proper place in daily use.
+  - MT: L-agrikultura hija l-bażi tal-ekonomija fir-raħal.
+    EN: Agriculture is the foundation of the economy in the village.
 
 ---
 
-## agrikultura (n-agrikultura) 🌟 *(REVISED TARGET ENTRY)*
+## agrikultura (n-agrikultura)
 - **POS**: noun
 - **Definitions**:
   - **EN**: agriculture
     **MT**: Ix-xjenza u s-sengħa tal-biedja u t-tħawwil tal-art.
 - **Alternative Forms**: agrikoltura
 - **Usage Examples**:
-  - MT: Agrikultura kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The agrikultura was in its proper place in daily use.
+  - MT: L-agrikultura hija l-bażi tal-ekonomija fir-raħal.
+    EN: Agriculture is the foundation of the economy in the village.
 
 ---
 
@@ -1700,11 +1570,11 @@ Total Entries: 687
 - **Root**: għ-m-j
 - **Definitions**:
   - **EN**: blind
-    **MT**: Tifsira u deskrizzjoni ta' 'agħma': blind.
+    **MT**: Persuna li ma tarax b'għajnejha minħabba nuqqas.
 - **Alternative Forms**: għami
 - **Usage Examples**:
-  - MT: Agħma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The agħma was in its proper place in daily use.
+  - MT: Raġel agħma li kellu kelb biex jiggwidah fit-triq.
+    EN: A blind man who had a dog to guide him on the street.
 
 ---
 
@@ -1713,10 +1583,7 @@ Total Entries: 687
 - **Root**: għ-n-q
 - **Definitions**:
   - **EN**: long-necked
-    **MT**: Tifsira u deskrizzjoni ta' 'agħnaq': long-necked.
-- **Usage Examples**:
-  - MT: Agħnaq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The agħnaq was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' long-necked.
 
 ---
 
@@ -1725,10 +1592,7 @@ Total Entries: 687
 - **Root**: għ-q-r
 - **Definitions**:
   - **EN**: ulcerous
-    **MT**: Tifsira u deskrizzjoni ta' 'agħqar': ulcerous.
-- **Usage Examples**:
-  - MT: Agħqar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The agħqar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' ulcerous.
 
 ---
 
@@ -1736,10 +1600,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to help, to assist
-    **MT**: Tifsira u deskrizzjoni ta' 'ajjuta': to help, to assist.
-- **Usage Examples**:
-  - MT: Ajjuta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ajjuta correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to help, to assist.
 
 ---
 
@@ -1748,10 +1609,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: eagle
-    **MT**: Tifsira u deskrizzjoni ta' 'ajkla': eagle.
+    **MT**: Għasfur kbir tal-priża b'vista qawwija.
 - **Usage Examples**:
-  - MT: Ajkla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajkla was in its proper place in daily use.
+  - MT: L-ajkla taret għoli ma' wċuħ l-għoljiet.
+    EN: The eagle flew high along the cliff faces.
 
 ---
 
@@ -1760,10 +1621,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: short-toed snake eagle (Circaetus gallicus)
-    **MT**: Tifsira u deskrizzjoni ta' 'ajkla bajda': short-toed snake eagle (Circaetus gallicus).
-- **Usage Examples**:
-  - MT: Ajkla bajda kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajkla bajda was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' ajkla bajda fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1772,10 +1630,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: golden eagle (Aquila chrysaetos)
-    **MT**: Tifsira u deskrizzjoni ta' 'ajkla rjali': golden eagle (Aquila chrysaetos).
-- **Usage Examples**:
-  - MT: Ajkla rjali kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajkla rjali was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' ajkla rjali fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1784,10 +1639,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: white-tailed eagle (Haliaeetus albicilla)
-    **MT**: Tifsira u deskrizzjoni ta' 'ajkla tal-baħar': white-tailed eagle (Haliaeetus albicilla).
-- **Usage Examples**:
-  - MT: Ajkla tal-baħar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajkla tal-baħar was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' ajkla tal-baħar fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1796,10 +1648,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: booted eagle (Hieraaetus pennatus)
-    **MT**: Tifsira u deskrizzjoni ta' 'ajkla tal-kalzetti': booted eagle (Hieraaetus pennatus).
-- **Usage Examples**:
-  - MT: Ajkla tal-kalzetti kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajkla tal-kalzetti was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' ajkla tal-kalzetti fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1808,10 +1657,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: lesser spotted eagle (Clanga pomarina)
-    **MT**: Tifsira u deskrizzjoni ta' 'ajkla tat-tikek': lesser spotted eagle (Clanga pomarina).
-- **Usage Examples**:
-  - MT: Ajkla tat-tikek kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajkla tat-tikek was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' ajkla tat-tikek fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1820,10 +1666,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: porcupine [obsolet]
-    **MT**: Tifsira u deskrizzjoni ta' 'ajl': porcupine.
-- **Usage Examples**:
-  - MT: Ajl kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajl was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (obsolete) porcupine.
 
 ---
 
@@ -1831,10 +1674,7 @@ Total Entries: 687
 - **POS**: interjection
 - **Definitions**:
   - **EN**: expressing pain
-    **MT**: Tifsira u deskrizzjoni ta' 'ajma': expressing pain.
-- **Usage Examples**:
-  - MT: Ajma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajma was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' expressing pain.
 
 ---
 
@@ -1843,12 +1683,9 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: weather
-    **MT**: Tifsira u deskrizzjoni ta' 'ajru': weather.
+    **MT**: Għandu x'jaqsam ma' weather.
   - **EN**: air, sky
-    **MT**: Tifsira u deskrizzjoni ta' 'ajru': air, sky.
-- **Usage Examples**:
-  - MT: Ajru kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajru was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' air, sky.
 
 ---
 
@@ -1857,11 +1694,8 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: airplane, aircraft (machine capable of atmospheric flight)
-    **MT**: Tifsira u deskrizzjoni ta' 'ajruplan': airplane, aircraft (machine capable of atmospheric flight).
+    **MT**: Li għandu x'jaqsam ma' ajruplan fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: arjuplan
-- **Usage Examples**:
-  - MT: Ajruplan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajruplan was in its proper place in daily use.
 
 ---
 
@@ -1870,11 +1704,8 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: airport, airfield
-    **MT**: Tifsira u deskrizzjoni ta' 'ajruport': airport, airfield.
+    **MT**: Għandu x'jaqsam ma' airport, airfield.
 - **Alternative Forms**: arjuport
-- **Usage Examples**:
-  - MT: Ajruport kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ajruport was in its proper place in daily use.
 
 ---
 
@@ -1883,10 +1714,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: acacia (tree)
-    **MT**: Tifsira u deskrizzjoni ta' 'akaċja': acacia (tree).
-- **Usage Examples**:
-  - MT: Akaċja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The akaċja was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' acacia (tree).
 
 ---
 
@@ -1895,10 +1723,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: western coastal wattle (Acacia cyclops)
-    **MT**: Tifsira u deskrizzjoni ta' 'akaċja tal-għajn': western coastal wattle (Acacia cyclops).
-- **Usage Examples**:
-  - MT: Akaċja tal-għajn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The akaċja tal-għajn was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' akaċja tal-għajn fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1907,10 +1732,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: sweet acacia (Acacia farnesiana)
-    **MT**: Tifsira u deskrizzjoni ta' 'akaċja tax-xewk żgħir': sweet acacia (Acacia farnesiana).
-- **Usage Examples**:
-  - MT: Akaċja tax-xewk żgħir kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The akaċja tax-xewk żgħir was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' akaċja tax-xewk żgħir fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -1919,10 +1741,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: academy
-    **MT**: Tifsira u deskrizzjoni ta' 'akkademja': academy.
-- **Usage Examples**:
-  - MT: Akkademja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The akkademja was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' academy.
 
 ---
 
@@ -1930,10 +1749,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to acclaim
-    **MT**: Tifsira u deskrizzjoni ta' 'akklama': to acclaim.
-- **Usage Examples**:
-  - MT: Akklama l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of akklama correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to acclaim.
 
 ---
 
@@ -1941,10 +1757,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to charge (someone)
-    **MT**: Tifsira u deskrizzjoni ta' 'akkolla': to charge (someone).
-- **Usage Examples**:
-  - MT: Akkolla l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of akkolla correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to charge (someone).
 
 ---
 
@@ -1952,10 +1765,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to accommodate
-    **MT**: Tifsira u deskrizzjoni ta' 'akkomoda': to accommodate.
-- **Usage Examples**:
-  - MT: Akkomoda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of akkomoda correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to accommodate.
 
 ---
 
@@ -1963,11 +1773,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to accompany, to escort, to go with
-    **MT**: Tifsira u deskrizzjoni ta' 'akkumpanja': to accompany, to escort, to go with.
+    **MT**: Li għandu x'jaqsam ma' akkumpanja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: akkumpanja
-- **Usage Examples**:
-  - MT: Akkompanja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of akkompanja correctly and without delay.
 
 ---
 
@@ -1976,11 +1783,8 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: accompaniment
-    **MT**: Tifsira u deskrizzjoni ta' 'akkompanjament': accompaniment.
+    **MT**: Għandu x'jaqsam ma' accompaniment.
 - **Alternative Forms**: akkumpanjament
-- **Usage Examples**:
-  - MT: Akkompanjament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The akkompanjament was in its proper place in daily use.
 
 ---
 
@@ -1988,10 +1792,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to couple, to pair, to match
-    **MT**: Tifsira u deskrizzjoni ta' 'akkoppja': to couple, to pair, to match.
-- **Usage Examples**:
-  - MT: Akkoppja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of akkoppja correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to couple, to pair, to match.
 
 ---
 
@@ -1999,10 +1800,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to accredit
-    **MT**: Tifsira u deskrizzjoni ta' 'akkredita': to accredit.
-- **Usage Examples**:
-  - MT: Akkredita l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of akkredita correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to accredit.
 
 ---
 
@@ -2010,11 +1808,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to accompany, to escort, to go with
-    **MT**: Tifsira u deskrizzjoni ta' 'akkumpanja': to accompany, to escort, to go with.
+    **MT**: Li għandu x'jaqsam ma' akkumpanja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: akkompanja
-- **Usage Examples**:
-  - MT: Akkumpanja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of akkumpanja correctly and without delay.
 
 ---
 
@@ -2023,11 +1818,8 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: accompaniment
-    **MT**: Tifsira u deskrizzjoni ta' 'akkompanjament': accompaniment.
+    **MT**: Għandu x'jaqsam ma' accompaniment.
 - **Alternative Forms**: akkompanjament
-- **Usage Examples**:
-  - MT: Akkumpanjament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The akkumpanjament was in its proper place in daily use.
 
 ---
 
@@ -2035,10 +1827,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to accumulate
-    **MT**: Tifsira u deskrizzjoni ta' 'akkumula': to accumulate.
-- **Usage Examples**:
-  - MT: Akkumula l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of akkumula correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to accumulate.
 
 ---
 
@@ -2047,10 +1836,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: charge, accusation, indictment
-    **MT**: Tifsira u deskrizzjoni ta' 'akkuża': charge, accusation, indictment.
-- **Usage Examples**:
-  - MT: Akkuża kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The akkuża was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' akkuża fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2058,12 +1844,9 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to accuse (someone of), to charge with
-    **MT**: Tifsira u deskrizzjoni ta' 'akkuża': to accuse (someone of), to charge with.
+    **MT**: Li għandu x'jaqsam ma' akkuża fl-użu u t-tifsira uffiċjali.
   - **EN**: to indict, to prosecute
-    **MT**: Tifsira u deskrizzjoni ta' 'akkuża': to indict, to prosecute.
-- **Usage Examples**:
-  - MT: Akkuża l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of akkuża correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' akkuża fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2071,12 +1854,9 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Aquarius (constellation)
-    **MT**: Tifsira u deskrizzjoni ta' 'Akkwarju': Aquarius (constellation).
+    **MT**: Li għandu x'jaqsam ma' Akkwarju fl-użu u t-tifsira uffiċjali.
   - **EN**: Aquarius (zodiac sign)
-    **MT**: Tifsira u deskrizzjoni ta' 'Akkwarju': Aquarius (zodiac sign).
-- **Usage Examples**:
-  - MT: Akkwarju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Akkwarju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Akkwarju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2084,10 +1864,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to acquire, to obtain
-    **MT**: Tifsira u deskrizzjoni ta' 'akkwista': to acquire, to obtain.
-- **Usage Examples**:
-  - MT: Akkwista l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of akkwista correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to acquire, to obtain.
 
 ---
 
@@ -2096,10 +1873,7 @@ Total Entries: 687
 - **Root**: k-t-r
 - **Definitions**:
   - **EN**: probably
-    **MT**: Tifsira u deskrizzjoni ta' 'aktarx': probably.
-- **Usage Examples**:
-  - MT: Aktarx kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aktarx was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' probably.
 
 ---
 
@@ -2109,10 +1883,7 @@ Total Entries: 687
 - **Root**: ġ-l-d
 - **Definitions**:
   - **EN**: Morroco leather
-    **MT**: Tifsira u deskrizzjoni ta' 'alakka': Morroco leather.
-- **Usage Examples**:
-  - MT: Alakka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alakka was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' morroco leather.
 
 ---
 
@@ -2121,20 +1892,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: italian buckthorn (Rhamnus alaternus)
-    **MT**: Tifsira u deskrizzjoni ta' 'alaternu': italian buckthorn (Rhamnus alaternus).
-- **Usage Examples**:
-  - MT: Alaternu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alaternu was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' alaternu fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## alaxalxè (adv-alaxalxè)
 - **POS**: adverb
 - **Definitions**:
-- **Alternative Forms**: a la xanx
+  - **EN**: casual (alt)
+    **MT**: Forma u tifsira ta' a la xanxè.
 - **Usage Examples**:
-  - MT: Alaxalxè kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alaxalxè was in its proper place in daily use.
+  - MT: A la xanxè fl-użu ta' kuljum.
+    EN: Casually in daily use.
 
 ---
 
@@ -2142,20 +1911,18 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: superseded spelling of a la xanxè: nonchalantly, carelessly
-    **MT**: Tifsira u deskrizzjoni ta' 'alaxanxè': superseded spelling of a la xanxè: nonchalantly, carelessly.
-- **Usage Examples**:
-  - MT: Alaxanxè kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alaxanxè was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' alaxanxè fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## alaxarxè (adv-alaxarxè)
 - **POS**: adverb
 - **Definitions**:
-- **Alternative Forms**: a la xanx
+  - **EN**: casual (alt)
+    **MT**: Forma u tifsira ta' a la xanxè.
 - **Usage Examples**:
-  - MT: Alaxarxè kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alaxarxè was in its proper place in daily use.
+  - MT: A la xanxè fil-mossa kollha.
+    EN: Casually in all actions.
 
 ---
 
@@ -2163,12 +1930,9 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Albania (a country in Southeastern Europe
-    **MT**: Tifsira u deskrizzjoni ta' 'Albanija': Albania (a country in Southeastern Europe.
+    **MT**: Li għandu x'jaqsam ma' Albanija fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Repubblika tal-Albanija)
-    **MT**: Tifsira u deskrizzjoni ta' 'Albanija': official name: Repubblika tal-Albanija).
-- **Usage Examples**:
-  - MT: Albanija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Albanija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Albanija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2176,10 +1940,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: Albanian (of, from or relating to Albania)
-    **MT**: Tifsira u deskrizzjoni ta' 'Albaniż': Albanian (of, from or relating to Albania).
-- **Usage Examples**:
-  - MT: Albaniż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Albaniż was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Albaniż fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2188,10 +1949,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Albanian (native or inhabitant of Albania) (usually male)
-    **MT**: Tifsira u deskrizzjoni ta' 'Albaniż': Albanian (native or inhabitant of Albania) (usually male).
-- **Usage Examples**:
-  - MT: Albaniż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Albaniż was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Albaniż fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2200,10 +1958,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Albanian (language)
-    **MT**: Tifsira u deskrizzjoni ta' 'Albaniż': Albanian (language).
-- **Usage Examples**:
-  - MT: Albaniż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Albaniż was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' albanian (language).
 
 ---
 
@@ -2211,12 +1966,9 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to distract, to divert
-    **MT**: Tifsira u deskrizzjoni ta' 'aljena': to distract, to divert.
+    **MT**: Għandu x'jaqsam ma' to distract, to divert.
   - **EN**: to alienate, to transfer ownership of (property)
-    **MT**: Tifsira u deskrizzjoni ta' 'aljena': to alienate, to transfer ownership of (property).
-- **Usage Examples**:
-  - MT: Aljena l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aljena correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' aljena fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2224,10 +1976,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: alienable
-    **MT**: Tifsira u deskrizzjoni ta' 'aljenabbli': alienable.
-- **Usage Examples**:
-  - MT: Aljenabbli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aljenabbli was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' alienable.
 
 ---
 
@@ -2236,10 +1985,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: alienability
-    **MT**: Tifsira u deskrizzjoni ta' 'aljenabilità': alienability.
-- **Usage Examples**:
-  - MT: Aljenabilità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aljenabilità was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' alienability.
 
 ---
 
@@ -2247,10 +1993,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: distractedly
-    **MT**: Tifsira u deskrizzjoni ta' 'aljenatament': distractedly.
-- **Usage Examples**:
-  - MT: Aljenatament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aljenatament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' distractedly.
 
 ---
 
@@ -2259,12 +2002,9 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: distraction
-    **MT**: Tifsira u deskrizzjoni ta' 'aljenazzjoni': distraction.
+    **MT**: Għandu x'jaqsam ma' distraction.
   - **EN**: alienation
-    **MT**: Tifsira u deskrizzjoni ta' 'aljenazzjoni': alienation.
-- **Usage Examples**:
-  - MT: Aljenazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aljenazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' alienation.
 
 ---
 
@@ -2273,10 +2013,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: psychiatrist, alienist
-    **MT**: Tifsira u deskrizzjoni ta' 'aljenista': psychiatrist, alienist.
-- **Usage Examples**:
-  - MT: Aljenista kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aljenista was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' psychiatrist, alienist.
 
 ---
 
@@ -2285,10 +2022,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: seaweed
-    **MT**: Tifsira u deskrizzjoni ta' 'alka': seaweed.
-- **Usage Examples**:
-  - MT: Alka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alka was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' seaweed.
 
 ---
 
@@ -2297,10 +2031,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: little Neptune grass, Cymodocea nodosa
-    **MT**: Tifsira u deskrizzjoni ta' 'alka rqiqa': little Neptune grass, Cymodocea nodosa.
-- **Usage Examples**:
-  - MT: Alka rqiqa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alka rqiqa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' alka rqiqa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2309,10 +2040,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: dwarf eelgrass, Zostera noltii
-    **MT**: Tifsira u deskrizzjoni ta' 'alka tal-Pwales': dwarf eelgrass, Zostera noltii.
-- **Usage Examples**:
-  - MT: Alka tal-pwales kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alka tal-Pwales was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' alka tal-Pwales fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2321,10 +2049,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: common eelgrass, Zostera marina
-    **MT**: Tifsira u deskrizzjoni ta' 'alka tas-Salini': common eelgrass, Zostera marina.
-- **Usage Examples**:
-  - MT: Alka tas-salini kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alka tas-Salini was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' alka tas-Salini fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2333,10 +2058,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: alcohol
-    **MT**: Tifsira u deskrizzjoni ta' 'alkoħol': alcohol.
-- **Usage Examples**:
-  - MT: Alkoħol kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alkoħol was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' alcohol.
 
 ---
 
@@ -2344,10 +2066,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: alcoholic
-    **MT**: Tifsira u deskrizzjoni ta' 'alkoħoliku': alcoholic.
-- **Usage Examples**:
-  - MT: Alkoħoliku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alkoħoliku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' alcoholic.
 
 ---
 
@@ -2355,10 +2074,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to alcoholize
-    **MT**: Tifsira u deskrizzjoni ta' 'alkoħolizza': to alcoholize.
-- **Usage Examples**:
-  - MT: Alkoħolizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of alkoħolizza correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to alcoholize.
 
 ---
 
@@ -2367,10 +2083,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: alcoholism
-    **MT**: Tifsira u deskrizzjoni ta' 'alkoħoliżmu': alcoholism.
-- **Usage Examples**:
-  - MT: Alkoħoliżmu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alkoħoliżmu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' alcoholism.
 
 ---
 
@@ -2379,10 +2092,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: alcoholometer
-    **MT**: Tifsira u deskrizzjoni ta' 'alkoħolometru': alcoholometer.
-- **Usage Examples**:
-  - MT: Alkoħolometru kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alkoħolometru was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' alcoholometer.
 
 ---
 
@@ -2390,10 +2100,7 @@ Total Entries: 687
 - **POS**: interjection
 - **Definitions**:
   - **EN**: Oh God! (expressing shock, frustration, or anger)
-    **MT**: Tifsira u deskrizzjoni ta' 'alla': Oh God! (expressing shock, frustration, or anger).
-- **Usage Examples**:
-  - MT: Alla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alla was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' alla fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2401,10 +2108,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: God
-    **MT**: Tifsira u deskrizzjoni ta' 'Alla': God.
-- **Usage Examples**:
-  - MT: Alla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Alla was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (religion, monotheism) god.
 
 ---
 
@@ -2412,12 +2116,9 @@ Total Entries: 687
 - **POS**: interjection
 - **Definitions**:
   - **EN**: To express happiness for someone, God bless
-    **MT**: Tifsira u deskrizzjoni ta' 'Alla jbierek': To express happiness for someone, God bless.
+    **MT**: Li għandu x'jaqsam ma' Alla jbierek fl-użu u t-tifsira uffiċjali.
   - **EN**: To express disbelief
-    **MT**: Tifsira u deskrizzjoni ta' 'Alla jbierek': To express disbelief.
-- **Usage Examples**:
-  - MT: Alla jbierek kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Alla jbierek was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' to express disbelief.
 
 ---
 
@@ -2425,10 +2126,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to alarm
-    **MT**: Tifsira u deskrizzjoni ta' 'allarma': to alarm.
-- **Usage Examples**:
-  - MT: Allarma l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of allarma correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to alarm.
 
 ---
 
@@ -2436,10 +2134,7 @@ Total Entries: 687
 - **POS**: interjection
 - **Definitions**:
   - **EN**: God forbid
-    **MT**: Tifsira u deskrizzjoni ta' 'allaħares': God forbid.
-- **Usage Examples**:
-  - MT: Allaħares kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The allaħares was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' god forbid.
 
 ---
 
@@ -2447,12 +2142,9 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to enclose, to attach
-    **MT**: Tifsira u deskrizzjoni ta' 'allega': to enclose, to attach.
+    **MT**: Għandu x'jaqsam ma' to enclose, to attach.
   - **EN**: to allege
-    **MT**: Tifsira u deskrizzjoni ta' 'allega': to allege.
-- **Usage Examples**:
-  - MT: Allega l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of allega correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to allege.
 
 ---
 
@@ -2460,10 +2152,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to gladden, to cheer
-    **MT**: Tifsira u deskrizzjoni ta' 'allegra': to gladden, to cheer.
-- **Usage Examples**:
-  - MT: Allegra l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of allegra correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to gladden, to cheer.
 
 ---
 
@@ -2471,10 +2160,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: cheerfully
-    **MT**: Tifsira u deskrizzjoni ta' 'allegrament': cheerfully.
-- **Usage Examples**:
-  - MT: Allegrament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The allegrament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' cheerfully.
 
 ---
 
@@ -2483,10 +2169,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: allegretto
-    **MT**: Tifsira u deskrizzjoni ta' 'allegretto': allegretto.
-- **Usage Examples**:
-  - MT: Allegretto kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The allegretto was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (music) allegretto.
 
 ---
 
@@ -2495,10 +2178,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: joy, happiness, frolic
-    **MT**: Tifsira u deskrizzjoni ta' 'allegrija': joy, happiness, frolic.
-- **Usage Examples**:
-  - MT: Allegrija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The allegrija was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' joy, happiness, frolic.
 
 ---
 
@@ -2506,10 +2186,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: allergic
-    **MT**: Tifsira u deskrizzjoni ta' 'allerġiku': allergic.
-- **Usage Examples**:
-  - MT: Allerġiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The allerġiku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' allergic.
 
 ---
 
@@ -2517,10 +2194,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to align
-    **MT**: Tifsira u deskrizzjoni ta' 'allinja': to align.
-- **Usage Examples**:
-  - MT: Allinja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of allinja correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to align.
 
 ---
 
@@ -2529,10 +2203,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: alignment
-    **MT**: Tifsira u deskrizzjoni ta' 'allinjament': alignment.
-- **Usage Examples**:
-  - MT: Allinjament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The allinjament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' alignment.
 
 ---
 
@@ -2540,10 +2211,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: alliterative
-    **MT**: Tifsira u deskrizzjoni ta' 'alliterativ': alliterative.
-- **Usage Examples**:
-  - MT: Alliterativ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alliterativ was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' alliterative.
 
 ---
 
@@ -2552,10 +2220,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: alliteration
-    **MT**: Tifsira u deskrizzjoni ta' 'alliterazzjoni': alliteration.
-- **Usage Examples**:
-  - MT: Alliterazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alliterazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' alliteration.
 
 ---
 
@@ -2563,22 +2228,16 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to allocate, to place
-    **MT**: Tifsira u deskrizzjoni ta' 'alloka': to allocate, to place.
-- **Usage Examples**:
-  - MT: Alloka l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of alloka correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to allocate, to place.
 
 ---
 
-## alloġġa (v-alloġġa) 🌟 *(REVISED TARGET ENTRY)*
+## alloġġa (v-alloġġa)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to house, to lodge
     **MT**: Ranja jew ta post fejn wieħed joqgħod jew jorqod.
 - **Alternative Forms**: alloġġja
-- **Usage Examples**:
-  - MT: Alloġġa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of alloġġa correctly and without delay.
 
 ---
 
@@ -2586,11 +2245,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to house, to lodge, to host, to accommodate
-    **MT**: Tifsira u deskrizzjoni ta' 'alloġġja': to house, to lodge, to host, to accommodate.
+    **MT**: Li għandu x'jaqsam ma' alloġġja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: alloġġa
-- **Usage Examples**:
-  - MT: Alloġġja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of alloġġja correctly and without delay.
 
 ---
 
@@ -2598,10 +2254,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to allude
-    **MT**: Tifsira u deskrizzjoni ta' 'alluda': to allude.
-- **Usage Examples**:
-  - MT: Alluda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of alluda correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to allude.
 
 ---
 
@@ -2609,10 +2262,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: so, well then
-    **MT**: Tifsira u deskrizzjoni ta' 'allura': so, well then.
-- **Usage Examples**:
-  - MT: Allura kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The allura was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' so, well then.
 
 ---
 
@@ -2620,10 +2270,7 @@ Total Entries: 687
 - **POS**: interjection
 - **Definitions**:
   - **EN**: so what
-    **MT**: Tifsira u deskrizzjoni ta' 'allura': so what.
-- **Usage Examples**:
-  - MT: Allura kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The allura was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' so what.
 
 ---
 
@@ -2631,10 +2278,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: allusive
-    **MT**: Tifsira u deskrizzjoni ta' 'allusiv': allusive.
-- **Usage Examples**:
-  - MT: Allusiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The allusiv was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' allusive.
 
 ---
 
@@ -2642,10 +2286,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to hallucinate
-    **MT**: Tifsira u deskrizzjoni ta' 'alluċina': to hallucinate.
-- **Usage Examples**:
-  - MT: Alluċina l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of alluċina correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to hallucinate.
 
 ---
 
@@ -2653,10 +2294,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: hallucinating
-    **MT**: Tifsira u deskrizzjoni ta' 'alluċinanti': hallucinating.
-- **Usage Examples**:
-  - MT: Alluċinanti kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alluċinanti was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' hallucinating.
 
 ---
 
@@ -2664,10 +2302,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: hallucinatory
-    **MT**: Tifsira u deskrizzjoni ta' 'alluċinatorju': hallucinatory.
-- **Usage Examples**:
-  - MT: Alluċinatorju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alluċinatorju was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' hallucinatory.
 
 ---
 
@@ -2676,10 +2311,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: hallucination
-    **MT**: Tifsira u deskrizzjoni ta' 'alluċinazzjoni': hallucination.
-- **Usage Examples**:
-  - MT: Alluċinazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alluċinazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' hallucination.
 
 ---
 
@@ -2688,10 +2320,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: allusion
-    **MT**: Tifsira u deskrizzjoni ta' 'allużjoni': allusion.
-- **Usage Examples**:
-  - MT: Allużjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The allużjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' allusion.
 
 ---
 
@@ -2700,10 +2329,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: almanac, calendar
-    **MT**: Tifsira u deskrizzjoni ta' 'almanakk': almanac, calendar.
-- **Usage Examples**:
-  - MT: Almanakk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The almanakk was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' almanac, calendar.
 
 ---
 
@@ -2712,10 +2338,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: common glasswort, Salicornia europaea subsp. europaea
-    **MT**: Tifsira u deskrizzjoni ta' 'almeridja': common glasswort, Salicornia europaea subsp. europaea.
-- **Usage Examples**:
-  - MT: Almeridja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The almeridja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' almeridja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2724,10 +2347,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: shrubby glasswort (Salicornia fruticosa, syn. Sarcocornia fruticosa)
-    **MT**: Tifsira u deskrizzjoni ta' 'almeridja arbuxxell tal-blat': shrubby glasswort (Salicornia fruticosa, syn. Sarcocornia fruticosa).
-- **Usage Examples**:
-  - MT: Almeridja arbuxxell tal-blat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The almeridja arbuxxell tal-blat was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' almeridja arbuxxell tal-blat fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2736,10 +2356,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: glaucous glasswort, Arthrocnemum macrostachyum
-    **MT**: Tifsira u deskrizzjoni ta' 'almeridja tal-blat': glaucous glasswort, Arthrocnemum macrostachyum.
-- **Usage Examples**:
-  - MT: Almeridja tal-blat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The almeridja tal-blat was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' almeridja tal-blat fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2747,10 +2364,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to alter
-    **MT**: Tifsira u deskrizzjoni ta' 'altera': to alter.
-- **Usage Examples**:
-  - MT: Altera l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of altera correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to alter.
 
 ---
 
@@ -2758,10 +2372,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to alternate
-    **MT**: Tifsira u deskrizzjoni ta' 'alterna': to alternate.
-- **Usage Examples**:
-  - MT: Alterna l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of alterna correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to alternate.
 
 ---
 
@@ -2770,23 +2381,17 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: aluminium
-    **MT**: Tifsira u deskrizzjoni ta' 'aluminju': aluminium.
+    **MT**: Għandu x'jaqsam ma' (chemistry) aluminium.
 - **Alternative Forms**: aluminjum
-- **Usage Examples**:
-  - MT: Aluminju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aluminju was in its proper place in daily use.
 
 ---
 
-## aluminjum (n-aluminjum) 🌟 *(REVISED TARGET ENTRY)*
+## aluminjum (n-aluminjum)
 - **POS**: noun
 - **Definitions**:
   - **EN**: aluminium
     **MT**: Metall ħafif u ta' kulur fidda użat fil-kostruzzjoni u l-utensili.
 - **Alternative Forms**: aluminju
-- **Usage Examples**:
-  - MT: Aluminjum kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aluminjum was in its proper place in daily use.
 
 ---
 
@@ -2794,10 +2399,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: alveolar
-    **MT**: Tifsira u deskrizzjoni ta' 'alveolari': alveolar.
-- **Usage Examples**:
-  - MT: Alveolari kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alveolari was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (phonetics) alveolar.
 
 ---
 
@@ -2806,10 +2408,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: alveolus
-    **MT**: Tifsira u deskrizzjoni ta' 'alveolu': alveolus.
-- **Usage Examples**:
-  - MT: Alveolu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alveolu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (anatomy) alveolus.
 
 ---
 
@@ -2818,10 +2417,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: lark (s)
-    **MT**: Tifsira u deskrizzjoni ta' 'alwett': lark (s).
-- **Usage Examples**:
-  - MT: Alwett kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alwett was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' lark (s).
 
 ---
 
@@ -2830,10 +2426,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: algebra
-    **MT**: Tifsira u deskrizzjoni ta' 'alġebra': algebra.
-- **Usage Examples**:
-  - MT: Alġebra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The alġebra was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (mathematics) algebra.
 
 ---
 
@@ -2841,12 +2434,9 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Algeria (a country in North Africa
-    **MT**: Tifsira u deskrizzjoni ta' 'Alġerija': Algeria (a country in North Africa.
+    **MT**: Li għandu x'jaqsam ma' Alġerija fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Repubblika Demokratika tal-Poplu tal-Alġerija)
-    **MT**: Tifsira u deskrizzjoni ta' 'Alġerija': official name: Repubblika Demokratika tal-Poplu tal-Alġerija).
-- **Usage Examples**:
-  - MT: Alġerija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Alġerija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Alġerija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -2854,10 +2444,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: Algerian
-    **MT**: Tifsira u deskrizzjoni ta' 'Alġerin': Algerian.
-- **Usage Examples**:
-  - MT: Alġerin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Alġerin was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' algerian.
 
 ---
 
@@ -2866,10 +2453,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Algerian (person)
-    **MT**: Tifsira u deskrizzjoni ta' 'Alġerin': Algerian (person).
-- **Usage Examples**:
-  - MT: Alġerin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Alġerin was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' algerian (person).
 
 ---
 
@@ -2877,10 +2461,10 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to love, like
-    **MT**: Tifsira u deskrizzjoni ta' 'ama': to love, like.
+    **MT**: Ħobb u wera stima kbira lejn persuna.
 - **Usage Examples**:
-  - MT: Ama l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ama correctly and without delay.
+  - MT: Ama lil pajjiżu bil-mossa kollha.
+    EN: He loved his country with all his actions.
 
 ---
 
@@ -2888,22 +2472,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: amalgam
-    **MT**: Tifsira u deskrizzjoni ta' 'amalgama': amalgam.
+  - **EN**: amalgam, mixture
+    **MT**: Ġabra u taħlita ta' materjali u kulturi differenti.
 - **Usage Examples**:
-  - MT: Amalgama kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amalgama was in its proper place in daily use.
+  - MT: L-amalgama tal-kuluri tagħti dehra sabiħa.
+    EN: The amalgam of colors gives a beautiful appearance.
 
 ---
 
 ## amalgama (v-amalgama)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to amalgamate
-    **MT**: Tifsira u deskrizzjoni ta' 'amalgama': to amalgamate.
+  - **EN**: to amalgamate, merge
+    **MT**: Għaqqad żewġ azjendi jew kulturi flimkien.
 - **Usage Examples**:
-  - MT: Amalgama l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of amalgama correctly and without delay.
+  - MT: Amalgamaw il-kumpaniji biex ikabbru l-proġett.
+    EN: They amalgamated the companies to expand the project.
 
 ---
 
@@ -2911,11 +2495,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: amalgamation
-    **MT**: Tifsira u deskrizzjoni ta' 'amalgamazzjoni': amalgamation.
+  - **EN**: amalgamation, merger
+    **MT**: Il-proċess ta' għaqda u għaqqad ta' entitajiet.
 - **Usage Examples**:
-  - MT: Amalgamazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amalgamazzjoni was in its proper place in daily use.
+  - MT: L-amalgamazzjoni bdiet fix-xahar li għadda.
+    EN: The amalgamation started last month.
 
 ---
 
@@ -2925,10 +2509,10 @@ Total Entries: 687
 - **Root**: '-m-r
 - **Definitions**:
   - **EN**: order, command, decree
-    **MT**: Tifsira u deskrizzjoni ta' 'amar': order, command, decree.
+    **MT**: Uffiċjalment jew b'awtorità mogħtija azzjoni li trid issir.
 - **Usage Examples**:
-  - MT: Amar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amar was in its proper place in daily use.
+  - MT: Rċieva l-amar u mexxa minnufih.
+    EN: He received the command and moved immediately.
 
 ---
 
@@ -2936,15 +2520,11 @@ Total Entries: 687
 - **POS**: verb
 - **Root**: '-m-r
 - **Definitions**:
-  - **EN**: to command
-    **MT**: Tifsira u deskrizzjoni ta' 'amar': to command.
-  - **EN**: to order
-    **MT**: Tifsira u deskrizzjoni ta' 'amar': to order.
-  - **EN**: to decree
-    **MT**: Tifsira u deskrizzjoni ta' 'amar': to decree.
+  - **EN**: to command, order, decree
+    **MT**: Ta ordni uffiċjali biex xi ħaġa tiġi mwettqa.
 - **Usage Examples**:
-  - MT: Amar l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of amar correctly and without delay.
+  - MT: Amar li l-bini jingħalaq għas-sigurtà.
+    EN: He ordered that the building be closed for safety.
 
 ---
 
@@ -2952,11 +2532,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: sour cherry, Prunus cerasus
-    **MT**: Tifsira u deskrizzjoni ta' 'amarena': sour cherry, Prunus cerasus.
+  - **EN**: sour cherry (Prunus cerasus)
+    **MT**: Frott żgħir u qares li jintuża fit-tisjir.
 - **Usage Examples**:
-  - MT: Amarena kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amarena was in its proper place in daily use.
+  - MT: Żied l-amarena mal-ġelat tradizzjonali.
+    EN: He added sour cherry to the traditional ice cream.
 
 ---
 
@@ -2965,10 +2545,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: embassy
-    **MT**: Tifsira u deskrizzjoni ta' 'ambaxxata': embassy.
+    **MT**: Il-post u bini uffiċjali tar-rappreżentant ta' pajjiż.
 - **Usage Examples**:
-  - MT: Ambaxxata kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ambaxxata was in its proper place in daily use.
+  - MT: Marru l-ambaxxata biex jiksbu l-viża.
+    EN: They went to the embassy to obtain the visa.
 
 ---
 
@@ -2976,11 +2556,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: female equivalent of ambaxxatur: ambassadress
-    **MT**: Forma femminili ta' ambaxxatur: ambassadress.
+  - **EN**: ambassadress (female)
+    **MT**: Mara li taħdem bħala rappreżentant uffiċjali ta' pajjiż.
 - **Usage Examples**:
-  - MT: Ambaxxatriċi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ambaxxatriċi was in its proper place in daily use.
+  - MT: L-ambaxxatriċi laqgħet il-mistednin fil-palazz.
+    EN: The ambassadress welcomed the guests at the palace.
 
 ---
 
@@ -2989,10 +2569,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: ambassador
-    **MT**: Tifsira u deskrizzjoni ta' 'ambaxxatur': ambassador.
+    **MT**: Uffiċjal u rappreżentant diplomattiku ta' pajjiż barra.
 - **Usage Examples**:
-  - MT: Ambaxxatur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ambaxxatur was in its proper place in daily use.
+  - MT: L-ambaxxatur iffirma t-trattat legali.
+    EN: The ambassador signed the legal treaty.
 
 ---
 
@@ -3001,10 +2581,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: ambiguity
-    **MT**: Tifsira u deskrizzjoni ta' 'ambigwità': ambiguity.
+    **MT**: Nuqqas ta' ċertezza jew bosta tifsiriet f'messaġġ.
 - **Usage Examples**:
-  - MT: Ambigwità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ambigwità was in its proper place in daily use.
+  - MT: Ma kien hemm ebda ambigwità fid-direttivi.
+    EN: There was no ambiguity in the directives.
 
 ---
 
@@ -3012,21 +2592,21 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: ambiguous
-    **MT**: Tifsira u deskrizzjoni ta' 'ambigwu': ambiguous.
+    **MT**: Li ma għandux tifsira waħda u jista' jinftiehem b'bosta modi.
 - **Usage Examples**:
-  - MT: Ambigwu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ambigwu was in its proper place in daily use.
+  - MT: Kliem ambigwu li ġab il-konfużjoni fis-sala.
+    EN: Ambiguous words that brought confusion in the hall.
 
 ---
 
 ## ambixxa (v-ambixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to aim high
-    **MT**: Tifsira u deskrizzjoni ta' 'ambixxa': to aim high.
+  - **EN**: to aim high, aspire
+    **MT**: Fittex riżultat kbir u għoli fil-ħajja.
 - **Usage Examples**:
-  - MT: Ambixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ambixxa correctly and without delay.
+  - MT: Ambixxa li jikseb pożizzjoni għolja fl-azjenda.
+    EN: He aspired to achieve a high position in the company.
 
 ---
 
@@ -3035,36 +2615,32 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: ambition
-    **MT**: Tifsira u deskrizzjoni ta' 'ambizzjoni': ambition.
+    **MT**: Xewqa kbira li tikseb suċċess u avvanz.
 - **Usage Examples**:
-  - MT: Ambizzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ambizzjoni was in its proper place in daily use.
+  - MT: Kellu ambizzjoni kbira li jaqdi lil pajjiżu.
+    EN: He had great ambition to serve his country.
 
 ---
 
 ## ambizzjuż (adj-ambizzjuż)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: ambitious
-    **MT**: Tifsira u deskrizzjoni ta' 'ambizzjuż': ambitious.
-  - **EN**: aiming high
-    **MT**: Tifsira u deskrizzjoni ta' 'ambizzjuż': aiming high.
+  - **EN**: ambitious, aiming high
+    **MT**: Persuna jew pjan li jfittex għanijiet kbar.
 - **Usage Examples**:
-  - MT: Ambizzjuż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ambizzjuż was in its proper place in daily use.
+  - MT: Pjan ambizzjuż li se jbiddel il-gżira.
+    EN: An ambitious plan that will change the island.
 
 ---
 
 ## ambjenta (v-ambjenta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to place (something) in its proper place
-    **MT**: Tifsira u deskrizzjoni ta' 'ambjenta': to place (something) in its proper place.
-  - **EN**: to be accustomed
-    **MT**: Tifsira u deskrizzjoni ta' 'ambjenta': to be accustomed.
+  - **EN**: to place in context / accustom oneself
+    **MT**: Għamlu mdorri fl-ambjent il-ġdid.
 - **Usage Examples**:
-  - MT: Ambjenta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ambjenta correctly and without delay.
+  - MT: Ambjenta ruħu malajr fl-uffiċċju l-ġdid.
+    EN: He accustomed himself quickly in the new office.
 
 ---
 
@@ -3072,51 +2648,45 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: coastal ragweed, Ambrosia maritima
-    **MT**: Tifsira u deskrizzjoni ta' 'ambrosja': coastal ragweed, Ambrosia maritima.
+  - **EN**: coastal ragweed (plant)
+    **MT**: Speċi ta' pjanta li tikber viċin il-baħar.
 - **Usage Examples**:
-  - MT: Ambrosja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ambrosja was in its proper place in daily use.
+  - MT: Pjanta ta' ambrosja li tikber ma' xatt il-baħar.
+    EN: Coastal ragweed plant growing near the sea.
 
 ---
 
-## amen (intj-amen) 🌟 *(REVISED TARGET ENTRY)*
+## amen (intj-amen)
 - **POS**: interjection
 - **Definitions**:
   - **EN**: amen
     **MT**: Kelma użata fit-tmiem tat-talb li tfisser "hekk ikun".
 - **Alternative Forms**: ammen
 - **Usage Examples**:
-  - MT: Amen kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amen was in its proper place in daily use.
+  - MT: Għalu ammen flimkien fit-tmiem tal-quddiesa.
+    EN: They said amen together at the end of mass.
 
 ---
 
 ## Amerika (n-amerika)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: America, the Americas (a supercontinent consisting of North America, Central America and South America regarded as a whole
-    **MT**: Tifsira u deskrizzjoni ta' 'Amerika': America, the Americas (a supercontinent consisting of North America, Central America and South America regarded as a whole.
-  - **EN**: in full, the Americas)
-    **MT**: Tifsira u deskrizzjoni ta' 'Amerika': in full, the Americas).
-  - **EN**: America, United States of America (a country in North America
-    **MT**: Tifsira u deskrizzjoni ta' 'Amerika': America, United States of America (a country in North America.
-  - **EN**: in full, United States of America)
-    **MT**: Tifsira u deskrizzjoni ta' 'Amerika': in full, United States of America).
+  - **EN**: America, United States
+    **MT**: Il-kontinent jew il-pajjiż tal-Istati Uniti.
 - **Usage Examples**:
-  - MT: Amerika kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Amerika was in its proper place in daily use.
+  - MT: Safar lejn l-Amerika għar-riċerka.
+    EN: He traveled to America for research.
 
 ---
 
 ## Amerikan (adj-amerikan)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: American (of, from or relating to the United States)
-    **MT**: Tifsira u deskrizzjoni ta' 'Amerikan': American (of, from or relating to the United States).
+  - **EN**: American
+    **MT**: Li għandu x'jaqsam mal-Amerika jew l-Istati Uniti.
 - **Usage Examples**:
-  - MT: Amerikan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Amerikan was in its proper place in daily use.
+  - MT: Kultura Amerikana li tinfluwenza d-dinja.
+    EN: American culture that influences the world.
 
 ---
 
@@ -3124,11 +2694,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: American (native or inhabitant of the United States) (usually male)
-    **MT**: Tifsira u deskrizzjoni ta' 'Amerikan': American (native or inhabitant of the United States) (usually male).
+  - **EN**: American (inhabitant)
+    **MT**: Persuna mwielda fl-Istati Uniti.
 - **Usage Examples**:
-  - MT: Amerikan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Amerikan was in its proper place in daily use.
+  - MT: L-Amerikan irrisponda l-mistoqsijiet bil-kwiet.
+    EN: The American answered the questions quietly.
 
 ---
 
@@ -3137,10 +2707,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: feminine singular of Amerikan
-    **MT**: Tifsira u deskrizzjoni ta' 'Amerikana': feminine singular of Amerikan.
-- **Usage Examples**:
-  - MT: Amerikana kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Amerikana was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' feminine singular of amerikan.
 
 ---
 
@@ -3149,12 +2716,9 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: female equivalent of Amerikan
-    **MT**: Forma femminili ta' amerikan.
+    **MT**: Li għandu x'jaqsam ma' Amerikana fl-użu u t-tifsira uffiċjali.
   - **EN**: female American (female native or inhabitant of the United States)
-    **MT**: Tifsira u deskrizzjoni ta' 'Amerikana': female American (female native or inhabitant of the United States).
-- **Usage Examples**:
-  - MT: Amerikana kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Amerikana was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Amerikana fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3163,10 +2727,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: americium (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'ameriċju': americium (chemical element).
+    **MT**: Element kimiku metalliku iebes.
 - **Usage Examples**:
-  - MT: Ameriċju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ameriċju was in its proper place in daily use.
+  - MT: L-ameriċju jintuża fl-apparat xjentifiku.
+    EN: Americium is used in scientific equipment.
 
 ---
 
@@ -3175,48 +2739,46 @@ Total Entries: 687
 - **Gender**: masculine
 - **Root**: '-m-r
 - **Definitions**:
-  - **EN**: commander, prince, emir
-    **MT**: Tifsira u deskrizzjoni ta' 'amir': commander, prince, emir.
+  - **EN**: emir, prince, commander
+    **MT**: Kap jew prinċep li jiggverna pajjiż jew armata.
 - **Alternative Forms**: emir
 - **Usage Examples**:
-  - MT: Amir kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amir was in its proper place in daily use.
+  - MT: L-amir laqa' d-delegazzjoni fil-palazz.
+    EN: The emir welcomed the delegation to the palace.
 
 ---
 
 ## ammen (intj-ammen)
 - **POS**: interjection
 - **Definitions**:
-  - **EN**: amen
-    **MT**: Tifsira u deskrizzjoni ta' 'ammen': amen.
+  - **EN**: amen (alt)
+    **MT**: Esklamazzjoni ta' fidi wara t-talb.
 - **Alternative Forms**: amen
 - **Usage Examples**:
-  - MT: Ammen kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ammen was in its proper place in daily use.
+  - MT: Għalu ammen flimkien fit-tmiem tal-quddiesa.
+    EN: They said amen together at the end of mass.
 
 ---
 
 ## ammetta (v-ammetta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to admit, to acknowledge
-    **MT**: Tifsira u deskrizzjoni ta' 'ammetta': to admit, to acknowledge.
-  - **EN**: to grant, to suppose
-    **MT**: Tifsira u deskrizzjoni ta' 'ammetta': to grant, to suppose.
+  - **EN**: to admit, acknowledge
+    **MT**: Wera u rrikonoxxa l-verità dwar azzjoni jew żball.
 - **Usage Examples**:
-  - MT: Ammetta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ammetta correctly and without delay.
+  - MT: Ammetta ż-żball tiegħu quddiem kulħadd.
+    EN: He admitted his mistake in front of everyone.
 
 ---
 
 ## amministra (v-amministra)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to administer
-    **MT**: Tifsira u deskrizzjoni ta' 'amministra': to administer.
+  - **EN**: to administer, manage
+    **MT**: Mexxa u kkontrolla d-dipartiment jew il-fondi.
 - **Usage Examples**:
-  - MT: Amministra l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of amministra correctly and without delay.
+  - MT: Amministra l-proġett b'suċċess u ordni kbira.
+    EN: He administered the project with success and great order.
 
 ---
 
@@ -3224,10 +2786,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: administrable
-    **MT**: Tifsira u deskrizzjoni ta' 'amministrabbli': administrable.
-- **Usage Examples**:
-  - MT: Amministrabbli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amministrabbli was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' administrable.
 
 ---
 
@@ -3235,10 +2794,10 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: administrative
-    **MT**: Tifsira u deskrizzjoni ta' 'amministrattiv': administrative.
+    **MT**: Li għandu x'jaqsam mat-tmexxija ta' azjenda jew stat.
 - **Usage Examples**:
-  - MT: Amministrattiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amministrattiv was in its proper place in daily use.
+  - MT: Deċiżjoni amministrattiva li ttieħdet mil-bord.
+    EN: An administrative decision made by the board.
 
 ---
 
@@ -3246,10 +2805,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: administratively
-    **MT**: Tifsira u deskrizzjoni ta' 'amministrattivament': administratively.
-- **Usage Examples**:
-  - MT: Amministrattivament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amministrattivament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' administratively.
 
 ---
 
@@ -3258,10 +2814,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: administrator
-    **MT**: Tifsira u deskrizzjoni ta' 'amministratur': administrator.
+    **MT**: Persuna li għandha r-responsabbiltà tat-tmexxija.
 - **Usage Examples**:
-  - MT: Amministratur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amministratur was in its proper place in daily use.
+  - MT: L-amministratur rranġa l-iskeda tax-xogħol.
+    EN: The administrator fixed the work schedule.
 
 ---
 
@@ -3269,11 +2825,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: administration
-    **MT**: Tifsira u deskrizzjoni ta' 'amministrazzjoni': administration.
+  - **EN**: administration, management
+    **MT**: Is-sistema jew il-grupp li jiggverna u jamministra.
 - **Usage Examples**:
-  - MT: Amministrazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The amministrazzjoni was in its proper place in daily use.
+  - MT: L-amministrazzjoni tal-iskola ħabbret ir-regoli.
+    EN: The school administration announced the rules.
 
 ---
 
@@ -3281,34 +2837,32 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to admire
-    **MT**: Tifsira u deskrizzjoni ta' 'ammira': to admire.
+    **MT**: Wera stima kbira u rispett lejn il-kwalitajiet ta' xi ħadd.
 - **Usage Examples**:
-  - MT: Ammira l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ammira correctly and without delay.
+  - MT: Ammira l-xogħol artistiċi fil-mużew.
+    EN: He admired the artwork in the museum.
 
 ---
 
 ## ammonixxa (v-ammonixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to admonish, to caution
-    **MT**: Tifsira u deskrizzjoni ta' 'ammonixxa': to admonish, to caution.
-  - **EN**: to reprimand
-    **MT**: Tifsira u deskrizzjoni ta' 'ammonixxa': to reprimand.
+  - **EN**: to admonish, caution, reprimand
+    **MT**: Avża u widdeb lil xi ħadd b'rabta ma' żball.
 - **Usage Examples**:
-  - MT: Ammonixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ammonixxa correctly and without delay.
+  - MT: Ammonixxa l-istudent li wettaq ir-reat.
+    EN: He admonished the student who committed the offense.
 
 ---
 
 ## ammonta (v-ammonta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to amount to [with għal]
-    **MT**: Tifsira u deskrizzjoni ta' 'ammonta': to amount to [with għal].
+  - **EN**: to amount to (financial sum)
+    **MT**: Wassal fl-ammont jew valur finali.
 - **Usage Examples**:
-  - MT: Ammonta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ammonta correctly and without delay.
+  - MT: L-ispejjeż ammontaw għal eluf ta' ewro.
+    EN: The expenses amounted to thousands of euros.
 
 ---
 
@@ -3316,24 +2870,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: redemption
-    **MT**: Tifsira u deskrizzjoni ta' 'ammortament': redemption.
-  - **EN**: amortization
-    **MT**: Tifsira u deskrizzjoni ta' 'ammortament': amortization.
+  - **EN**: amortization, redemption
+    **MT**: Proċess ta' ħlas lura ta' dejn gradwalment.
 - **Usage Examples**:
-  - MT: Ammortament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ammortament was in its proper place in daily use.
+  - MT: L-ammortament tal-loans beda fis-sena l-ġdida.
+    EN: Amortization of loans began in the new year.
 
 ---
 
 ## ammortizza (v-ammortizza)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to amortize
-    **MT**: Tifsira u deskrizzjoni ta' 'ammortizza': to amortize.
+  - **EN**: to amortize, pay off debt
+    **MT**: Ħallas id-dejn gradwalment b'pagi regolari.
 - **Usage Examples**:
-  - MT: Ammortizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ammortizza correctly and without delay.
+  - MT: Ammortizzaw il-kreditu bankarju bi pjan solidu.
+    EN: They amortized the bank credit with a solid plan.
 
 ---
 
@@ -3341,22 +2893,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: Amharic (language)
-    **MT**: Tifsira u deskrizzjoni ta' 'Amħariku': Amharic (language).
+  - **EN**: Amharic (language of Ethiopia)
+    **MT**: Il-lingwa uffiċjali tal-Etjopja.
 - **Usage Examples**:
-  - MT: Amħariku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Amħariku was in its proper place in daily use.
+  - MT: Studja l-Amħariku biex jifhem il-kultura.
+    EN: He studied Amharic to understand the culture.
 
 ---
 
 ## analizza (v-analizza)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to analyse
-    **MT**: Tifsira u deskrizzjoni ta' 'analizza': to analyse.
+  - **EN**: to analyse, examine
+    **MT**: Fli u eżamina bir-reqqa d-dettalji kollha.
 - **Usage Examples**:
-  - MT: Analizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of analizza correctly and without delay.
+  - MT: Analizza r-riżultati tat-testijiet fil-laboratorju.
+    EN: He analyzed the test results in the laboratory.
 
 ---
 
@@ -3365,23 +2917,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: white anacyclus, Anacyclus clavatus
-    **MT**: Tifsira u deskrizzjoni ta' 'anaċiklus': white anacyclus, Anacyclus clavatus.
-- **Usage Examples**:
-  - MT: Anaċiklus kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anaċiklus was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' anaċiklus fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## Andorra (n-andorra)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: Andorra (a microstate in Southern Europe, between Spain and France
-    **MT**: Tifsira u deskrizzjoni ta' 'Andorra': Andorra (a microstate in Southern Europe, between Spain and France.
-  - **EN**: official name: Prinċipat ta’ Andorra)
-    **MT**: Tifsira u deskrizzjoni ta' 'Andorra': official name: Prinċipat ta’ Andorra).
+  - **EN**: Andorra (country)
+    **MT**: Pajjiż żgħir fl-Ewropa bejn Franza u Spanja.
 - **Usage Examples**:
-  - MT: Andorra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Andorra was in its proper place in daily use.
+  - MT: Vvjaġġaw lejn Andorra fil-vaganzi tagħhom.
+    EN: They traveled to Andorra on their holidays.
 
 ---
 
@@ -3389,10 +2936,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: Andorran
-    **MT**: Tifsira u deskrizzjoni ta' 'Andorran': Andorran.
-- **Usage Examples**:
-  - MT: Andorran kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Andorran was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' andorran.
 
 ---
 
@@ -3401,23 +2945,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Andorran (person)
-    **MT**: Tifsira u deskrizzjoni ta' 'Andorran': Andorran (person).
-- **Usage Examples**:
-  - MT: Andorran kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Andorran was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' andorran (person).
 
 ---
 
 ## Angola (n-angola)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: Angola (a country in Southern Africa
-    **MT**: Tifsira u deskrizzjoni ta' 'Angola': Angola (a country in Southern Africa.
-  - **EN**: official name: Repubblika tal-Angola)
-    **MT**: Tifsira u deskrizzjoni ta' 'Angola': official name: Repubblika tal-Angola).
+  - **EN**: Angola (country)
+    **MT**: Pajjiż fin-Nofsinhar tal-Afrika.
 - **Usage Examples**:
-  - MT: Angola kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Angola was in its proper place in daily use.
+  - MT: Pajjiż l-Angola għandu riżorsi kbar.
+    EN: The country of Angola has vast resources.
 
 ---
 
@@ -3425,10 +2964,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to angulate
-    **MT**: Tifsira u deskrizzjoni ta' 'angola': to angulate.
-- **Usage Examples**:
-  - MT: Angola l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of angola correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to angulate.
 
 ---
 
@@ -3436,10 +2972,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: Angolan (of, from or relating to Angola)
-    **MT**: Tifsira u deskrizzjoni ta' 'Angolan': Angolan (of, from or relating to Angola).
-- **Usage Examples**:
-  - MT: Angolan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Angolan was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Angolan fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3448,10 +2981,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Angolan (native or inhabitant of Angola)
-    **MT**: Tifsira u deskrizzjoni ta' 'Angolan': Angolan (native or inhabitant of Angola).
-- **Usage Examples**:
-  - MT: Angolan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Angolan was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Angolan fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3459,11 +2989,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: angle
-    **MT**: Tifsira u deskrizzjoni ta' 'angolu': angle.
+  - **EN**: angle (geometry/perspective)
+    **MT**: Post jew figura fejn jiltaqgħu żewġ linji.
 - **Usage Examples**:
-  - MT: Angolu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The angolu was in its proper place in daily use.
+  - MT: Għażel angolu tajjeb biex jieħu r-ritratt.
+    EN: He chose a good angle to take the photograph.
 
 ---
 
@@ -3471,10 +3001,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Anguilla (an archipelago and overseas territory of the United Kingdom in the Caribbean Sea)
-    **MT**: Tifsira u deskrizzjoni ta' 'Angulja': Anguilla (an archipelago and overseas territory of the United Kingdom in the Caribbean Sea).
-- **Usage Examples**:
-  - MT: Angulja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Angulja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Angulja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3482,22 +3009,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: The innermost part of something: core
-    **MT**: Tifsira u deskrizzjoni ta' 'anima': The innermost part of something: core.
+  - **EN**: soul, core, innermost part
+    **MT**: Il-parti l-aktar interna u importanti.
 - **Usage Examples**:
-  - MT: Anima kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anima was in its proper place in daily use.
+  - MT: L-anima tal-mużika tiegħu kienet tidher f'kull nota.
+    EN: The soul of his music was apparent in every note.
 
 ---
 
 ## anima (v-anima)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to animate
-    **MT**: Tifsira u deskrizzjoni ta' 'anima': to animate.
+  - **EN**: to animate, bring to life
+    **MT**: Zied il-ħajja u l-moviment f'oġġett jew attività.
 - **Usage Examples**:
-  - MT: Anima l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of anima correctly and without delay.
+  - MT: Anima d-dibattitu bir-riflessjonijiet tiegħu.
+    EN: He animated the debate with his reflections.
 
 ---
 
@@ -3505,15 +3032,15 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: anise, Pimpinella anisum
-    **MT**: Tifsira u deskrizzjoni ta' 'anisi': anise, Pimpinella anisum.
+  - **EN**: anise (Pimpinella anisum)
+    **MT**: Pjanta li tintuża għat-togħma u fit-tisjir.
 - **Usage Examples**:
-  - MT: Anisi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anisi was in its proper place in daily use.
+  - MT: Żied l-anisi fit-te sħun.
+    EN: He added anise to the hot tea.
 
 ---
 
-## anke (adv-anke) 🌟 *(REVISED TARGET ENTRY)*
+## anke (adv-anke)
 - **POS**: adverb
 - **Definitions**:
   - **EN**: also, too
@@ -3522,22 +3049,20 @@ Total Entries: 687
     **MT**: Użat biex tenfasizza xi ħaġa mhux mistennija.
 - **Alternative Forms**: anki
 - **Usage Examples**:
-  - MT: Anke kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anke was in its proper place in daily use.
+  - MT: Anki t-tfal marru l-parti mal-familja.
+    EN: Even the children went to the party with the family.
 
 ---
 
 ## anki (adv-anki)
 - **POS**: adverb
 - **Definitions**:
-  - **EN**: also, too
-    **MT**: Tifsira u deskrizzjoni ta' 'anki': also, too.
-  - **EN**: even
-    **MT**: Tifsira u deskrizzjoni ta' 'anki': even.
+  - **EN**: also, even, too
+    **MT**: Użat biex iżżid enfasi u oġġett addizzjonali.
 - **Alternative Forms**: anke
 - **Usage Examples**:
-  - MT: Anki kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anki was in its proper place in daily use.
+  - MT: Anki t-tfal marru l-parti mal-familja.
+    EN: Even the children went to the party with the family.
 
 ---
 
@@ -3546,10 +3071,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: anchorage
-    **MT**: Tifsira u deskrizzjoni ta' 'ankoraġġ': anchorage.
+    **MT**: Post murni fil-baħar fejn il-vapur jista' jankra.
 - **Usage Examples**:
-  - MT: Ankoraġġ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ankoraġġ was in its proper place in daily use.
+  - MT: Il-vapur sab ankoraġġ tajjeb il-port.
+    EN: The ship found good anchorage in the port.
 
 ---
 
@@ -3558,10 +3083,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: anchor
-    **MT**: Tifsira u deskrizzjoni ta' 'ankra': anchor.
+    **MT**: Għodda iebsa ta' ħadid użata biex iżżomm vapur.
 - **Usage Examples**:
-  - MT: Ankra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ankra was in its proper place in daily use.
+  - MT: Tfgħu l-ankra fil-qiegħ tal-baħar.
+    EN: They dropped the anchor to the seabed.
 
 ---
 
@@ -3569,10 +3094,10 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to anchor
-    **MT**: Tifsira u deskrizzjoni ta' 'ankra': to anchor.
+    **MT**: Qiegħed u żamm il-vapur b'ankra jew stabbilixxa.
 - **Usage Examples**:
-  - MT: Ankra l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ankra correctly and without delay.
+  - MT: Ankraw il-bastiment barra l-port.
+    EN: They anchored the vessel outside the port.
 
 ---
 
@@ -3581,11 +3106,11 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: anchorage
-    **MT**: Tifsira u deskrizzjoni ta' 'ankoraġġ': anchorage.
+    **MT**: Post murni fil-baħar fejn il-vapur jista' jankra.
 - **Alternative Forms**: ankoraġġ
 - **Usage Examples**:
-  - MT: Ankraġġ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ankraġġ was in its proper place in daily use.
+  - MT: Il-vapur sab ankoraġġ tajjeb il-port.
+    EN: The ship found good anchorage in the port.
 
 ---
 
@@ -3594,10 +3119,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: grapnel
-    **MT**: Tifsira u deskrizzjoni ta' 'ankrott': grapnel.
-- **Usage Examples**:
-  - MT: Ankrott kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ankrott was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' grapnel.
 
 ---
 
@@ -3606,10 +3128,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: annex
-    **MT**: Tifsira u deskrizzjoni ta' 'anness': annex.
-- **Usage Examples**:
-  - MT: Anness kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anness was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' annex.
 
 ---
 
@@ -3618,10 +3137,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: annexation
-    **MT**: Tifsira u deskrizzjoni ta' 'annessjoni': annexation.
-- **Usage Examples**:
-  - MT: Annessjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The annessjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' annexation.
 
 ---
 
@@ -3629,10 +3145,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to annex
-    **MT**: Tifsira u deskrizzjoni ta' 'annetta': to annex.
-- **Usage Examples**:
-  - MT: Annetta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of annetta correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to annex.
 
 ---
 
@@ -3641,10 +3154,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: animal
-    **MT**: Tifsira u deskrizzjoni ta' 'annimal': animal.
-- **Usage Examples**:
-  - MT: Annimal kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The annimal was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' animal.
 
 ---
 
@@ -3653,10 +3163,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: female equivalent of annimal
-    **MT**: Forma femminili ta' annimal.
-- **Usage Examples**:
-  - MT: Annimala kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The annimala was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' female equivalent of annimal.
 
 ---
 
@@ -3664,10 +3171,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to annul
-    **MT**: Tifsira u deskrizzjoni ta' 'annulla': to annul.
-- **Usage Examples**:
-  - MT: Annulla l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of annulla correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to annul.
 
 ---
 
@@ -3675,10 +3179,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to announce
-    **MT**: Tifsira u deskrizzjoni ta' 'annunzja': to announce.
-- **Usage Examples**:
-  - MT: Annunzja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of annunzja correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to announce.
 
 ---
 
@@ -3686,10 +3187,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: annual
-    **MT**: Tifsira u deskrizzjoni ta' 'annwali': annual.
-- **Usage Examples**:
-  - MT: Annwali kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The annwali was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' annual.
 
 ---
 
@@ -3698,10 +3196,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: sum of money to be paid annually
-    **MT**: Tifsira u deskrizzjoni ta' 'annwalità': sum of money to be paid annually.
-- **Usage Examples**:
-  - MT: Annwalità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The annwalità was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' annwalità fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3709,10 +3204,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: annually
-    **MT**: Tifsira u deskrizzjoni ta' 'annwalment': annually.
-- **Usage Examples**:
-  - MT: Annwalment kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The annwalment was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' annually.
 
 ---
 
@@ -3721,10 +3213,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: yearbook
-    **MT**: Tifsira u deskrizzjoni ta' 'annwarju': yearbook.
-- **Usage Examples**:
-  - MT: Annwarju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The annwarju was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' yearbook.
 
 ---
 
@@ -3732,10 +3221,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to anonymise
-    **MT**: Tifsira u deskrizzjoni ta' 'anonimizza': to anonymise.
-- **Usage Examples**:
-  - MT: Anonimizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of anonimizza correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to anonymise.
 
 ---
 
@@ -3744,10 +3230,7 @@ Total Entries: 687
 - **Root**: n-q-s
 - **Definitions**:
   - **EN**: comparative degree of ftit: less
-    **MT**: Tifsira u deskrizzjoni ta' 'anqas': comparative degree of ftit: less.
-- **Usage Examples**:
-  - MT: Anqas kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anqas was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' anqas fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3756,10 +3239,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: antagonist
-    **MT**: Tifsira u deskrizzjoni ta' 'antagonista': antagonist.
-- **Usage Examples**:
-  - MT: Antagonista kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antagonista was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' antagonist.
 
 ---
 
@@ -3767,10 +3247,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to antagonize
-    **MT**: Tifsira u deskrizzjoni ta' 'antagonizza': to antagonize.
-- **Usage Examples**:
-  - MT: Antagonizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of antagonizza correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to antagonize.
 
 ---
 
@@ -3779,10 +3256,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: verbal noun of antagonizza
-    **MT**: L-att u l-proċess verbali ta' antagonizza.
-- **Usage Examples**:
-  - MT: Antagonizzar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antagonizzar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' verbal noun of antagonizza.
 
 ---
 
@@ -3791,10 +3265,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: antagonism
-    **MT**: Tifsira u deskrizzjoni ta' 'antagoniżmu': antagonism.
-- **Usage Examples**:
-  - MT: Antagoniżmu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antagoniżmu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' antagonism.
 
 ---
 
@@ -3803,10 +3274,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: forefather, ancestor
-    **MT**: Tifsira u deskrizzjoni ta' 'antenat': forefather, ancestor.
-- **Usage Examples**:
-  - MT: Antenat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antenat was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' forefather, ancestor.
 
 ---
 
@@ -3815,10 +3283,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: antimony (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'antimonju': antimony (chemical element).
-- **Usage Examples**:
-  - MT: Antimonju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antimonju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' antimonju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3826,12 +3291,9 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to anticipate
-    **MT**: Tifsira u deskrizzjoni ta' 'antiċipa': to anticipate.
+    **MT**: Għandu x'jaqsam ma' to anticipate.
   - **EN**: to advance (money)
-    **MT**: Tifsira u deskrizzjoni ta' 'antiċipa': to advance (money).
-- **Usage Examples**:
-  - MT: Antiċipa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of antiċipa correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to advance (money).
 
 ---
 
@@ -3840,10 +3302,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: female equivalent of antropologu: female anthropologist
-    **MT**: Forma femminili ta' antropologu: female anthropologist.
-- **Usage Examples**:
-  - MT: Antropologa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antropologa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' antropologa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3852,10 +3311,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: anthropologist
-    **MT**: Tifsira u deskrizzjoni ta' 'antropologu': anthropologist.
-- **Usage Examples**:
-  - MT: Antropologu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antropologu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' anthropologist.
 
 ---
 
@@ -3864,10 +3320,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: anthropology
-    **MT**: Tifsira u deskrizzjoni ta' 'antropoloġija': anthropology.
-- **Usage Examples**:
-  - MT: Antropoloġija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antropoloġija was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' anthropology.
 
 ---
 
@@ -3875,10 +3328,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: anthropological
-    **MT**: Tifsira u deskrizzjoni ta' 'antropoloġiku': anthropological.
-- **Usage Examples**:
-  - MT: Antropoloġiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antropoloġiku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' anthropological.
 
 ---
 
@@ -3886,10 +3336,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: anthropocentric
-    **MT**: Tifsira u deskrizzjoni ta' 'antropoċentriku': anthropocentric.
-- **Usage Examples**:
-  - MT: Antropoċentriku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antropoċentriku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' anthropocentric.
 
 ---
 
@@ -3898,10 +3345,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: anthropocentrism
-    **MT**: Tifsira u deskrizzjoni ta' 'antropoċentriżmu': anthropocentrism.
-- **Usage Examples**:
-  - MT: Antropoċentriżmu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The antropoċentriżmu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' anthropocentrism.
 
 ---
 
@@ -3909,14 +3353,11 @@ Total Entries: 687
 - **POS**: conjunction
 - **Definitions**:
   - **EN**: on the contrary
-    **MT**: Tifsira u deskrizzjoni ta' 'anzi': on the contrary.
+    **MT**: Għandu x'jaqsam ma' on the contrary.
   - **EN**: at least
-    **MT**: Tifsira u deskrizzjoni ta' 'anzi': at least.
+    **MT**: Għandu x'jaqsam ma' at least.
   - **EN**: or rather
-    **MT**: Tifsira u deskrizzjoni ta' 'anzi': or rather.
-- **Usage Examples**:
-  - MT: Anzi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anzi was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' or rather.
 
 ---
 
@@ -3924,10 +3365,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: old, elderly, senior (as in senior citizen)
-    **MT**: Tifsira u deskrizzjoni ta' 'anzjan': old, elderly, senior (as in senior citizen).
-- **Usage Examples**:
-  - MT: Anzjan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anzjan was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' anzjan fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -3936,10 +3374,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: seniority
-    **MT**: Tifsira u deskrizzjoni ta' 'anzjanità': seniority.
-- **Usage Examples**:
-  - MT: Anzjanità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anzjanità was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' seniority.
 
 ---
 
@@ -3947,10 +3382,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: angelic
-    **MT**: Tifsira u deskrizzjoni ta' 'anġeliku': angelic.
-- **Usage Examples**:
-  - MT: Anġeliku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anġeliku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' angelic.
 
 ---
 
@@ -3959,10 +3391,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: angel
-    **MT**: Tifsira u deskrizzjoni ta' 'anġlu': angel.
-- **Usage Examples**:
-  - MT: Anġlu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The anġlu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' angel.
 
 ---
 
@@ -3970,10 +3399,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Apap': a surname.
-- **Usage Examples**:
-  - MT: Apap kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Apap was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' a surname.
 
 ---
 
@@ -3982,22 +3408,16 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: apex
-    **MT**: Tifsira u deskrizzjoni ta' 'apiċi': apex.
-- **Usage Examples**:
-  - MT: Apiċi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The apiċi was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (geometry) apex.
 
 ---
 
-## aplowdja (v-aplowdja) 🌟 *(REVISED TARGET ENTRY)*
+## aplowdja (v-aplowdja)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to upload
     **MT**: Sent jew ittrasferixxa fajls minn kompjuter għal fuq l-internet.
 - **Alternative Forms**: applowdja
-- **Usage Examples**:
-  - MT: Aplowdja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aplowdja correctly and without delay.
 
 ---
 
@@ -4006,10 +3426,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: apologetics
-    **MT**: Tifsira u deskrizzjoni ta' 'apoloġetika': apologetics.
-- **Usage Examples**:
-  - MT: Apoloġetika kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The apoloġetika was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (theology) apologetics.
 
 ---
 
@@ -4017,10 +3434,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: apologetic
-    **MT**: Tifsira u deskrizzjoni ta' 'apoloġetiku': apologetic.
-- **Usage Examples**:
-  - MT: Apoloġetiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The apoloġetiku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' apologetic.
 
 ---
 
@@ -4029,10 +3443,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: apology
-    **MT**: Tifsira u deskrizzjoni ta' 'apoloġija': apology.
-- **Usage Examples**:
-  - MT: Apoloġija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The apoloġija was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' apology.
 
 ---
 
@@ -4041,10 +3452,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: apologist
-    **MT**: Tifsira u deskrizzjoni ta' 'apoloġista': apologist.
-- **Usage Examples**:
-  - MT: Apoloġista kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The apoloġista was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' apologist.
 
 ---
 
@@ -4052,34 +3460,25 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to apologize
-    **MT**: Tifsira u deskrizzjoni ta' 'apoloġizza': to apologize.
-- **Usage Examples**:
-  - MT: Apoloġizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of apoloġizza correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to apologize.
 
 ---
 
-## apostlu (n-apostlu) 🌟 *(REVISED TARGET ENTRY)*
+## apostlu (n-apostlu)
 - **POS**: noun
 - **Definitions**:
   - **EN**: apostle
     **MT**: Kull wieħed mit-tnax-il dixxiplu magħżula minn Ġesù Kristu.
 - **Alternative Forms**: appostlu
-- **Usage Examples**:
-  - MT: Apostlu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The apostlu was in its proper place in daily use.
 
 ---
 
-## apostolat (n-apostolat) 🌟 *(REVISED TARGET ENTRY)*
+## apostolat (n-apostolat)
 - **POS**: noun
 - **Definitions**:
   - **EN**: apostolate
     **MT**: Il-ħidma u l-missjoni tal-qadi u t-tixrid tal-fidi.
 - **Alternative Forms**: appostolat
-- **Usage Examples**:
-  - MT: Apostolat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The apostolat was in its proper place in daily use.
 
 ---
 
@@ -4087,10 +3486,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to withdraw (oneself)
-    **MT**: Tifsira u deskrizzjoni ta' 'apparta': to withdraw (oneself).
-- **Usage Examples**:
-  - MT: Apparta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of apparta correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' apparta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4098,23 +3494,17 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to belong, to pertain
-    **MT**: Tifsira u deskrizzjoni ta' 'appartena': to belong, to pertain.
+    **MT**: Għandu x'jaqsam ma' to belong, to pertain.
 - **Alternative Forms**: appartiena
-- **Usage Examples**:
-  - MT: Appartena l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of appartena correctly and without delay.
 
 ---
 
-## appartiena (v-appartiena) 🌟 *(REVISED TARGET ENTRY)*
+## appartiena (v-appartiena)
 - **POS**: verb
 - **Definitions**:
   - **EN**: to belong, to pertain
     **MT**: Kien propjetà ta' jew kellu dritt f'xi ħaġa.
 - **Alternative Forms**: appartena
-- **Usage Examples**:
-  - MT: Appartiena l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of appartiena correctly and without delay.
 
 ---
 
@@ -4122,10 +3512,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to grip, move or fascinate
-    **MT**: Tifsira u deskrizzjoni ta' 'appassjona': to grip, move or fascinate.
-- **Usage Examples**:
-  - MT: Appassjona l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of appassjona correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to grip, move or fascinate.
 
 ---
 
@@ -4134,10 +3521,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: appeal
-    **MT**: Tifsira u deskrizzjoni ta' 'appell': appeal.
-- **Usage Examples**:
-  - MT: Appell kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The appell was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' appeal.
 
 ---
 
@@ -4145,10 +3529,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to appeal
-    **MT**: Tifsira u deskrizzjoni ta' 'appella': to appeal.
-- **Usage Examples**:
-  - MT: Appella l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of appella correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to appeal.
 
 ---
 
@@ -4156,10 +3537,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: appealable
-    **MT**: Tifsira u deskrizzjoni ta' 'appellabbli': appealable.
-- **Usage Examples**:
-  - MT: Appellabbli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The appellabbli was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' appealable.
 
 ---
 
@@ -4167,10 +3545,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: appelant
-    **MT**: Tifsira u deskrizzjoni ta' 'appellant': appelant.
-- **Usage Examples**:
-  - MT: Appellant kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The appellant was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (law) appelant.
 
 ---
 
@@ -4179,10 +3554,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: appelant
-    **MT**: Tifsira u deskrizzjoni ta' 'appellant': appelant.
-- **Usage Examples**:
-  - MT: Appellant kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The appellant was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (law) appelant.
 
 ---
 
@@ -4190,10 +3562,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: appellative
-    **MT**: Tifsira u deskrizzjoni ta' 'appellattiv': appellative.
-- **Usage Examples**:
-  - MT: Appellattiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The appellattiv was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (grammar) appellative.
 
 ---
 
@@ -4201,12 +3570,9 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to apply to apply for a position
-    **MT**: Tifsira u deskrizzjoni ta' 'applika': to apply to apply for a position.
+    **MT**: Li għandu x'jaqsam ma' applika fl-użu u t-tifsira uffiċjali.
   - **EN**: to be applicable to
-    **MT**: Tifsira u deskrizzjoni ta' 'applika': to be applicable to.
-- **Usage Examples**:
-  - MT: Applika l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of applika correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to be applicable to.
 
 ---
 
@@ -4214,10 +3580,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: applicable
-    **MT**: Tifsira u deskrizzjoni ta' 'applikabbli': applicable.
-- **Usage Examples**:
-  - MT: Applikabbli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The applikabbli was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' applicable.
 
 ---
 
@@ -4226,10 +3589,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: applicability
-    **MT**: Tifsira u deskrizzjoni ta' 'applikabilità': applicability.
-- **Usage Examples**:
-  - MT: Applikabilità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The applikabilità was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' applicability.
 
 ---
 
@@ -4238,10 +3598,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: applicant
-    **MT**: Tifsira u deskrizzjoni ta' 'applikant': applicant.
-- **Usage Examples**:
-  - MT: Applikant kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The applikant was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' applicant.
 
 ---
 
@@ -4250,10 +3607,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: application
-    **MT**: Tifsira u deskrizzjoni ta' 'applikazzjoni': application.
-- **Usage Examples**:
-  - MT: Applikazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The applikazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' application.
 
 ---
 
@@ -4261,11 +3615,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to upload
-    **MT**: Tifsira u deskrizzjoni ta' 'applowdja': to upload.
+    **MT**: Għandu x'jaqsam ma' (computing) to upload.
 - **Alternative Forms**: aplowdja
-- **Usage Examples**:
-  - MT: Applowdja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of applowdja correctly and without delay.
 
 ---
 
@@ -4273,10 +3624,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: on purpose, intentionally, purposely
-    **MT**: Tifsira u deskrizzjoni ta' 'apposta': on purpose, intentionally, purposely.
-- **Usage Examples**:
-  - MT: Apposta kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The apposta was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' apposta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4285,11 +3633,8 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: apostle (leading disciple of Jesus)
-    **MT**: Tifsira u deskrizzjoni ta' 'appostlu': apostle (leading disciple of Jesus).
+    **MT**: Li għandu x'jaqsam ma' appostlu fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: apostlu
-- **Usage Examples**:
-  - MT: Appostlu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The appostlu was in its proper place in daily use.
 
 ---
 
@@ -4298,11 +3643,8 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: apostolate, apostleship (the position of an apostle)
-    **MT**: Tifsira u deskrizzjoni ta' 'appostolat': apostolate, apostleship (the position of an apostle).
+    **MT**: Li għandu x'jaqsam ma' appostolat fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: apostolat
-- **Usage Examples**:
-  - MT: Appostolat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The appostolat was in its proper place in daily use.
 
 ---
 
@@ -4310,23 +3652,17 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: apostolic
-    **MT**: Tifsira u deskrizzjoni ta' 'appostoliku': apostolic.
+    **MT**: Għandu x'jaqsam ma' (christianity) apostolic.
 - **Alternative Forms**: appostolku
-- **Usage Examples**:
-  - MT: Appostoliku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The appostoliku was in its proper place in daily use.
 
 ---
 
-## appostolku (adj-appostolku) 🌟 *(REVISED TARGET ENTRY)*
+## appostolku (adj-appostolku)
 - **POS**: adjective
 - **Definitions**:
   - **EN**: apostolic
     **MT**: Li għandu x'jaqsam ma' jew ġej mill-Apostli.
 - **Alternative Forms**: appostoliku
-- **Usage Examples**:
-  - MT: Appostolku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The appostolku was in its proper place in daily use.
 
 ---
 
@@ -4334,10 +3670,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to support, to back, to endorse
-    **MT**: Tifsira u deskrizzjoni ta' 'appoġġja': to support, to back, to endorse.
-- **Usage Examples**:
-  - MT: Appoġġja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of appoġġja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' appoġġja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4345,10 +3678,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to appreciate, to esteem
-    **MT**: Tifsira u deskrizzjoni ta' 'apprezza': to appreciate, to esteem.
-- **Usage Examples**:
-  - MT: Apprezza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of apprezza correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to appreciate, to esteem.
 
 ---
 
@@ -4356,10 +3686,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to profit
-    **MT**: Tifsira u deskrizzjoni ta' 'approfitta': to profit.
-- **Usage Examples**:
-  - MT: Approfitta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of approfitta correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to profit.
 
 ---
 
@@ -4367,11 +3694,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to deepen
-    **MT**: Tifsira u deskrizzjoni ta' 'approfondixxa': to deepen.
+    **MT**: Għandu x'jaqsam ma' to deepen.
 - **Alternative Forms**: approfondixxa
-- **Usage Examples**:
-  - MT: Approfonda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of approfonda correctly and without delay.
 
 ---
 
@@ -4379,11 +3703,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to deepen
-    **MT**: Tifsira u deskrizzjoni ta' 'approfondixxa': to deepen.
+    **MT**: Għandu x'jaqsam ma' to deepen.
 - **Alternative Forms**: approfonda
-- **Usage Examples**:
-  - MT: Approfondixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of approfondixxa correctly and without delay.
 
 ---
 
@@ -4391,10 +3712,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to appropriate
-    **MT**: Tifsira u deskrizzjoni ta' 'approprja': to appropriate.
-- **Usage Examples**:
-  - MT: Approprja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of approprja correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to appropriate.
 
 ---
 
@@ -4403,10 +3721,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: appropriation
-    **MT**: Tifsira u deskrizzjoni ta' 'approprjazzjoni': appropriation.
-- **Usage Examples**:
-  - MT: Approprjazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The approprjazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' appropriation.
 
 ---
 
@@ -4414,10 +3729,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to approximate
-    **MT**: Tifsira u deskrizzjoni ta' 'approssima': to approximate.
-- **Usage Examples**:
-  - MT: Approssima l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of approssima correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to approximate.
 
 ---
 
@@ -4425,10 +3737,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: approximate
-    **MT**: Tifsira u deskrizzjoni ta' 'approssimattiv': approximate.
-- **Usage Examples**:
-  - MT: Approssimattiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The approssimattiv was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' approximate.
 
 ---
 
@@ -4436,10 +3745,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: approximately
-    **MT**: Tifsira u deskrizzjoni ta' 'approssimattivament': approximately.
-- **Usage Examples**:
-  - MT: Approssimattivament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The approssimattivament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' approximately.
 
 ---
 
@@ -4448,10 +3754,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: approximation (all senses)
-    **MT**: Tifsira u deskrizzjoni ta' 'approssimazzjoni': approximation (all senses).
-- **Usage Examples**:
-  - MT: Approssimazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The approssimazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' approximation (all senses).
 
 ---
 
@@ -4459,10 +3762,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to approve, to ratify
-    **MT**: Tifsira u deskrizzjoni ta' 'approva': to approve, to ratify.
-- **Usage Examples**:
-  - MT: Approva l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of approva correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to approve, to ratify.
 
 ---
 
@@ -4471,10 +3771,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: approval
-    **MT**: Tifsira u deskrizzjoni ta' 'approvazzjoni': approval.
-- **Usage Examples**:
-  - MT: Approvazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The approvazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' approval.
 
 ---
 
@@ -4482,10 +3779,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to make approaches
-    **MT**: Tifsira u deskrizzjoni ta' 'approwċja': to make approaches.
-- **Usage Examples**:
-  - MT: Approwċja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of approwċja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' approwċja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4494,10 +3788,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: verbal noun of approwċja
-    **MT**: L-att u l-proċess verbali ta' approwċja.
-- **Usage Examples**:
-  - MT: Approwċjar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The approwċjar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' verbal noun of approwċja.
 
 ---
 
@@ -4505,10 +3796,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to appoint
-    **MT**: Tifsira u deskrizzjoni ta' 'appunta': to appoint.
-- **Usage Examples**:
-  - MT: Appunta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of appunta correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to appoint.
 
 ---
 
@@ -4517,10 +3805,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: appointment, meeting, rendezvous
-    **MT**: Tifsira u deskrizzjoni ta' 'appuntament': appointment, meeting, rendezvous.
-- **Usage Examples**:
-  - MT: Appuntament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The appuntament was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' appuntament fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4529,10 +3814,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: April
-    **MT**: Tifsira u deskrizzjoni ta' 'April': April.
-- **Usage Examples**:
-  - MT: April kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The April was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' april.
 
 ---
 
@@ -4540,10 +3822,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Aquilina': a surname.
-- **Usage Examples**:
-  - MT: Aquilina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Aquilina was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' a surname.
 
 ---
 
@@ -4551,10 +3830,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to Arabize
-    **MT**: Tifsira u deskrizzjoni ta' 'arabizza': to Arabize.
-- **Usage Examples**:
-  - MT: Arabizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of arabizza correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to arabize.
 
 ---
 
@@ -4562,25 +3838,19 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Saudi Arabia (a country in West Asia in the Middle East
-    **MT**: Tifsira u deskrizzjoni ta' 'Arabja Sawdija': Saudi Arabia (a country in West Asia in the Middle East.
+    **MT**: Li għandu x'jaqsam ma' Arabja Sawdija fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Renju tal-Arabja Sawdija)
-    **MT**: Tifsira u deskrizzjoni ta' 'Arabja Sawdija': official name: Renju tal-Arabja Sawdija).
+    **MT**: Li għandu x'jaqsam ma' Arabja Sawdija fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: Għarbija Sawdija
-- **Usage Examples**:
-  - MT: Arabja sawdija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Arabja Sawdija was in its proper place in daily use.
 
 ---
 
-## arawkarja (n-arawkarja) 🌟 *(REVISED TARGET ENTRY)*
+## arawkarja (n-arawkarja)
 - **POS**: noun
 - **Definitions**:
   - **EN**: monkey puzzle tree
     **MT**: Tip ta' sigra tal-arżnu b'friegħi u weraq bil-ponta.
 - **Alternative Forms**: awrikarja
-- **Usage Examples**:
-  - MT: Arawkarja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arawkarja was in its proper place in daily use.
 
 ---
 
@@ -4588,22 +3858,16 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to arbitrate
-    **MT**: Tifsira u deskrizzjoni ta' 'arbitra': to arbitrate.
-- **Usage Examples**:
-  - MT: Arbitra l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of arbitra correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to arbitrate.
 
 ---
 
-## arbuxell (n-arbuxell) 🌟 *(REVISED TARGET ENTRY)*
+## arbuxell (n-arbuxell)
 - **POS**: noun
 - **Definitions**:
   - **EN**: shrub, bush
     **MT**: Xjutta jew sigra żgħira li ma tikberx ħafna.
 - **Alternative Forms**: arbuxxell
-- **Usage Examples**:
-  - MT: Arbuxell kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arbuxell was in its proper place in daily use.
 
 ---
 
@@ -4612,15 +3876,12 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: shrub, bush
-    **MT**: Tifsira u deskrizzjoni ta' 'arbuxxell': shrub, bush.
+    **MT**: Għandu x'jaqsam ma' shrub, bush.
 - **Alternative Forms**: arbuxell
-- **Usage Examples**:
-  - MT: Arbuxxell kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arbuxxell was in its proper place in daily use.
 
 ---
 
-## ard (n-ard) 🌟 *(REVISED TARGET ENTRY)*
+## ard (n-ard)
 - **POS**: noun
 - **Definitions**:
   - **EN**: earth, soil
@@ -4631,8 +3892,8 @@ Total Entries: 687
     **MT**: L-art tat-twelid jew il-pajjiż fejn wieħed jgħix.
 - **Alternative Forms**: art
 - **Usage Examples**:
-  - MT: Ard kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ard was in its proper place in daily use.
+  - MT: Ħadmu l-art b'impenn kbir fir-rebbiegħa.
+    EN: They worked the land with great commitment in spring.
 
 ---
 
@@ -4640,21 +3901,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-- **Alternative Forms**: lardu
+  - **EN**: lard, fat
+    **MT**: Xaħam tal-majjol użat fit-tisjir.
 - **Usage Examples**:
-  - MT: Ardu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ardu was in its proper place in daily use.
+  - MT: Żied l-ardu mal-borma biex jagħti togħma.
+    EN: He added lard to the pot to add flavor.
 
 ---
 
 ## aremm (intj-aremm)
 - **POS**: interjection
 - **Definitions**:
-  - **EN**: contraction of ara +‎ hemm, literally “ look out ! ” [kollokwali]
-    **MT**: Tifsira u deskrizzjoni ta' 'aremm': contraction of ara +‎ hemm, literally “ look out ! ”.
+  - **EN**: look out!, watch out!
+    **MT**: Esklamazzjoni u twissija f'daqqa biex tara.
 - **Usage Examples**:
-  - MT: Aremm kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aremm was in its proper place in daily use.
+  - MT: Aremm li se jaqa' l-oġġett minn fuq l-xkaffa!
+    EN: Look out, the object is going to fall off the shelf!
 
 ---
 
@@ -4663,10 +3925,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: greater sea-spurry, Spergularia media
-    **MT**: Tifsira u deskrizzjoni ta' 'arenarja': greater sea-spurry, Spergularia media.
-- **Usage Examples**:
-  - MT: Arenarja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arenarja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' arenarja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4675,10 +3934,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: red sandspurry, Spergularia rubra
-    **MT**: Tifsira u deskrizzjoni ta' 'arenarja roża': red sandspurry, Spergularia rubra.
-- **Usage Examples**:
-  - MT: Arenarja roża kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arenarja roża was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' arenarja roża fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -4686,11 +3942,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: argon
-    **MT**: Tifsira u deskrizzjoni ta' 'argon': argon.
+  - **EN**: argon (chemical element)
+    **MT**: Gass nobbli bla kulur u bla riħa.
 - **Usage Examples**:
-  - MT: Argon kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The argon was in its proper place in daily use.
+  - MT: L-argon jintuża fil-bozoz u l-laboratorji.
+    EN: Argon is used in lightbulbs and laboratories.
 
 ---
 
@@ -4698,24 +3954,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: argument
-    **MT**: Tifsira u deskrizzjoni ta' 'argument': argument.
+  - **EN**: argument, reasoning
+    **MT**: Punt u raġunament ippreżentat f'dibattitu.
 - **Usage Examples**:
-  - MT: Argument kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The argument was in its proper place in daily use.
+  - MT: Ppreżenta argument solidu quddiem il-ġurija.
+    EN: He presented a solid argument in front of the jury.
 
 ---
 
 ## argumenta (v-argumenta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to argue (to make a logical argument)
-    **MT**: Tifsira u deskrizzjoni ta' 'argumenta': to argue (to make a logical argument).
-  - **EN**: to be argumentative
-    **MT**: Tifsira u deskrizzjoni ta' 'argumenta': to be argumentative.
+  - **EN**: to argue, reason
+    **MT**: Wera raġunijiet u punti loġiċi fil-laqgħa.
 - **Usage Examples**:
-  - MT: Argumenta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of argumenta correctly and without delay.
+  - MT: Argumenta dwar il-bżonn ta' bidla fil-liġi.
+    EN: He argued about the need for a change in the law.
 
 ---
 
@@ -4723,10 +3977,10 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: argumentative
-    **MT**: Tifsira u deskrizzjoni ta' 'argumentattiv': argumentative.
+    **MT**: Li jħobb jagħmel argumenti u jiddibatti.
 - **Usage Examples**:
-  - MT: Argumentattiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The argumentattiv was in its proper place in daily use.
+  - MT: Stil argumentattiv fid-diskors tiegħu.
+    EN: An argumentative style in his speech.
 
 ---
 
@@ -4735,10 +3989,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: argumentation
-    **MT**: Tifsira u deskrizzjoni ta' 'argumentazzjoni': argumentation.
+    **MT**: Il-proċess ta' diskussjoni u wera ta' argumenti.
 - **Usage Examples**:
-  - MT: Argumentazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The argumentazzjoni was in its proper place in daily use.
+  - MT: L-argumentazzjoni tiegħu kienet konvinċenti.
+    EN: His argumentation was convincing.
 
 ---
 
@@ -4746,21 +4000,18 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: argumentative
-    **MT**: Tifsira u deskrizzjoni ta' 'argumentuż': argumentative.
-- **Usage Examples**:
-  - MT: Argumentuż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The argumentuż was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' argumentative.
 
 ---
 
 ## Aristotile (n-aristotile)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: Aristotle
-    **MT**: Tifsira u deskrizzjoni ta' 'Aristotile': Aristotle.
+  - **EN**: Aristotle (philosopher)
+    **MT**: Filosofu Grieg famuż mill-antikità.
 - **Usage Examples**:
-  - MT: Aristotile kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Aristotile was in its proper place in daily use.
+  - MT: Qara x-xogħlijiet ta' Aristotile dwar l-etika.
+    EN: He read the works of Aristotle on ethics.
 
 ---
 
@@ -4768,35 +4019,29 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: air
-    **MT**: Tifsira u deskrizzjoni ta' 'arja': air.
+  - **EN**: air, atmosphere
+    **MT**: L-isfera ta' gassijiet li n-nifs nieħdu minnha.
 - **Usage Examples**:
-  - MT: Arja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arja was in its proper place in daily use.
+  - MT: L-arja kienet friska kmieni filgħodu fil-muntanji.
+    EN: The air was fresh early in the morning in the mountains.
 
 ---
 
-## arjuplan (n-arjuplan) 🌟 *(REVISED TARGET ENTRY)*
+## arjuplan (n-arjuplan)
 - **POS**: noun
 - **Definitions**:
   - **EN**: airplane
     **MT**: Vettura li ttir bl-inġini fis-sema.
 - **Alternative Forms**: ajruplan
-- **Usage Examples**:
-  - MT: Arjuplan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arjuplan was in its proper place in daily use.
 
 ---
 
-## arjuport (n-arjuport) 🌟 *(REVISED TARGET ENTRY)*
+## arjuport (n-arjuport)
 - **POS**: noun
 - **Definitions**:
   - **EN**: airport
     **MT**: Post fejn l-ajruplani jitilqu u jinżlu u fejn jaqdu l-passiġġieri.
 - **Alternative Forms**: ajruport
-- **Usage Examples**:
-  - MT: Arjuport kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arjuport was in its proper place in daily use.
 
 ---
 
@@ -4804,12 +4049,12 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: arc
-    **MT**: Tifsira u deskrizzjoni ta' 'ark': arc.
+  - **EN**: arc (curve)
+    **MT**: Linja kurva u parti minn ċirku f'disinn.
 - **Alternative Forms**: arku
 - **Usage Examples**:
-  - MT: Ark kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ark was in its proper place in daily use.
+  - MT: L-ark tal-pont kien magħmul bil-ġebel.
+    EN: The arc of the bridge was made of stone.
 
 ---
 
@@ -4817,13 +4062,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: ark
-    **MT**: Tifsira u deskrizzjoni ta' 'arka': ark.
-  - **EN**: very
-    **MT**: Tifsira u deskrizzjoni ta' 'arka': very.
+  - **EN**: ark (Noah's ark)
+    **MT**: Vapur jew kaxxa kbira storika fil-kitba.
 - **Usage Examples**:
-  - MT: Arka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arka was in its proper place in daily use.
+  - MT: L-arka ta' Noè hija storja magħrufa fil-Bibbja.
+    EN: Noah's ark is a well-known story in the Bible.
 
 ---
 
@@ -4831,23 +4074,23 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: archaeological
-    **MT**: Tifsira u deskrizzjoni ta' 'arkeoloġiku': archaeological.
+    **MT**: Li għandu x'jaqsam ma' l-istudju tal-oġġetti antiki.
 - **Alternative Forms**: arkijoloġiku
 - **Usage Examples**:
-  - MT: Arkeoloġiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arkeoloġiku was in its proper place in daily use.
+  - MT: Sit arkeoloġiku mimli fdalijiet storici.
+    EN: An archaeological site filled with historical remains.
 
 ---
 
-## arkijoloġiku (adj-arkijoloġiku) 🌟 *(REVISED TARGET ENTRY)*
+## arkijoloġiku (adj-arkijoloġiku)
 - **POS**: adjective
 - **Definitions**:
   - **EN**: archaeological
     **MT**: Li jikkonċerna l-istudju tal-oġġetti antiki u l-istorja.
 - **Alternative Forms**: arkeoloġiku
 - **Usage Examples**:
-  - MT: Arkijoloġiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arkijoloġiku was in its proper place in daily use.
+  - MT: Sit arkeoloġiku mimli fdalijiet storici.
+    EN: An archaeological site filled with historical remains.
 
 ---
 
@@ -4856,10 +4099,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: architect
-    **MT**: Tifsira u deskrizzjoni ta' 'arkitett': architect.
+    **MT**: Professjonist li jfassal u jiddisinja l-bini.
 - **Usage Examples**:
-  - MT: Arkitett kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arkitett was in its proper place in daily use.
+  - MT: L-arkitett iddisinja l-bini l-ġdid tal-mużew.
+    EN: The architect designed the museum's new building.
 
 ---
 
@@ -4868,10 +4111,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: archivist
-    **MT**: Tifsira u deskrizzjoni ta' 'arkivista': archivist.
+    **MT**: Persuna responsabbli mill-konservazzjoni tal-dokumenti.
 - **Usage Examples**:
-  - MT: Arkivista kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arkivista was in its proper place in daily use.
+  - MT: L-arkivista naddaf il-manuskritti l-qodma.
+    EN: The archivist cleaned the old manuscripts.
 
 ---
 
@@ -4879,10 +4122,10 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to archive
-    **MT**: Tifsira u deskrizzjoni ta' 'arkivja': to archive.
+    **MT**: Qiegħed u żamm dokumenti f'post sigur.
 - **Usage Examples**:
-  - MT: Arkivja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of arkivja correctly and without delay.
+  - MT: Arkivja l-fajls kollha tas-sena l-mħallsa.
+    EN: He archived all the files of the paid year.
 
 ---
 
@@ -4890,25 +4133,23 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: archive
-    **MT**: Tifsira u deskrizzjoni ta' 'arkivju': archive.
-  - **EN**: file (collection of papers)
-    **MT**: Tifsira u deskrizzjoni ta' 'arkivju': file (collection of papers).
+  - **EN**: archive, file collection
+    **MT**: Ġabra u post fejn jinżammu d-dokumenti storici.
 - **Usage Examples**:
-  - MT: Arkivju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arkivju was in its proper place in daily use.
+  - MT: Fittxu d-dokumenti fl-arkivju nazzjonali.
+    EN: They searched for documents in the national archive.
 
 ---
 
-## arku (n-arku) 🌟 *(REVISED TARGET ENTRY)*
+## arku (n-arku)
 - **POS**: noun
 - **Definitions**:
   - **EN**: arc
     **MT**: Linja kurva jew parti minn ċirku.
 - **Alternative Forms**: ark
 - **Usage Examples**:
-  - MT: Arku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arku was in its proper place in daily use.
+  - MT: L-ark tal-pont kien magħmul bil-ġebel.
+    EN: The arc of the bridge was made of stone.
 
 ---
 
@@ -4916,22 +4157,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: clock
-    **MT**: Tifsira u deskrizzjoni ta' 'arloġġ': clock.
+  - **EN**: clock, watch
+    **MT**: Apparat li juri l-ħin u s-sigħat tal-jum.
 - **Usage Examples**:
-  - MT: Arloġġ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arloġġ was in its proper place in daily use.
+  - MT: L-arloġġ tal-ħajt daqq fit-tnax ta' nofsinhar.
+    EN: The wall clock struck twelve noon.
 
 ---
 
 ## arma (intj-arma)
 - **POS**: interjection
 - **Definitions**:
-  - **EN**: A command to speed up
-    **MT**: Tifsira u deskrizzjoni ta' 'arma': A command to speed up.
+  - **EN**: speed up!, hurry!
+    **MT**: Esklamazzjoni ta' inkuraġġiment biex tgħaġġel.
 - **Usage Examples**:
-  - MT: Arma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arma was in its proper place in daily use.
+  - MT: Arma, biex ma nitilfux ix-xarabank!
+    EN: Hurry, so we don't miss the bus!
 
 ---
 
@@ -4939,27 +4180,23 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: weapon (instrument of attack or defense in combat)
-    **MT**: Tifsira u deskrizzjoni ta' 'arma': weapon (instrument of attack or defense in combat).
-  - **EN**: weapon (means of harming or exerting control)
-    **MT**: Tifsira u deskrizzjoni ta' 'arma': weapon (means of harming or exerting control).
-  - **EN**: coat of arms
-    **MT**: Tifsira u deskrizzjoni ta' 'arma': coat of arms.
+  - **EN**: weapon, coat of arms
+    **MT**: Għodda ta' difiża jew stemma nazzjonali.
 - **Usage Examples**:
-  - MT: Arma kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arma was in its proper place in daily use.
+  - MT: L-arma nazzjonali kienet imnaqqsha fuq il-ġebel.
+    EN: The coat of arms was carved into stone.
 
 ---
 
 ## armajn (adv-armajn)
 - **POS**: adverb
 - **Definitions**:
-  - **EN**: almost
-    **MT**: Tifsira u deskrizzjoni ta' 'armajn': almost.
+  - **EN**: almost, nearly
+    **MT**: Kważi u f'mument minn azzjoni.
 - **Alternative Forms**: ormajn
 - **Usage Examples**:
-  - MT: Armajn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armajn was in its proper place in daily use.
+  - MT: Armajn lestew ix-xogħol kollu qabel il-lejl.
+    EN: They almost finished all the work before night.
 
 ---
 
@@ -4969,34 +4206,32 @@ Total Entries: 687
 - **Root**: r-m-l
 - **Definitions**:
   - **EN**: widower
-    **MT**: Tifsira u deskrizzjoni ta' 'armel': widower.
+    **MT**: Raġel li mietet martu u ma reġax iżżewweġ.
 - **Usage Examples**:
-  - MT: Armel kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armel was in its proper place in daily use.
+  - MT: L-armel mar jimxi fil-ġnien bil-kwiet.
+    EN: The widower went for a quiet walk in the garden.
 
 ---
 
 ## Armenja (n-armenja)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: Armenia (a country in the South Caucasus region of Asia, sometimes considered to belong politically to Europe
-    **MT**: Tifsira u deskrizzjoni ta' 'Armenja': Armenia (a country in the South Caucasus region of Asia, sometimes considered to belong politically to Europe.
-  - **EN**: official name: Repubblika tal-Armenja)
-    **MT**: Tifsira u deskrizzjoni ta' 'Armenja': official name: Repubblika tal-Armenja).
+  - **EN**: Armenia (country)
+    **MT**: Pajjiż fir-reġjun tal-Kawkażu.
 - **Usage Examples**:
-  - MT: Armenja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Armenja was in its proper place in daily use.
+  - MT: Vvjaġġaw lejn l-Armenja matul is-sajf.
+    EN: They traveled to Armenia during summer.
 
 ---
 
 ## Armenjan (adj-armenjan)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: Armenian (of, from or relating to Armenia)
-    **MT**: Tifsira u deskrizzjoni ta' 'Armenjan': Armenian (of, from or relating to Armenia).
+  - **EN**: Armenian
+    **MT**: Li għandu x'jaqsam mal-Armenja.
 - **Usage Examples**:
-  - MT: Armenjan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Armenjan was in its proper place in daily use.
+  - MT: Kultura Armenjana antika u tradizzjonali.
+    EN: An ancient and traditional Armenian culture.
 
 ---
 
@@ -5004,11 +4239,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: Armenian (native or inhabitant of Armenia) (usually male)
-    **MT**: Tifsira u deskrizzjoni ta' 'Armenjan': Armenian (native or inhabitant of Armenia) (usually male).
+  - **EN**: Armenian (inhabitant / language)
+    **MT**: Persuna jew lingwa mill-Armenja.
 - **Usage Examples**:
-  - MT: Armenjan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Armenjan was in its proper place in daily use.
+  - MT: L-Armenjan tkellem dwar l-istorja ta' pajjiżu.
+    EN: The Armenian spoke about his country's history.
 
 ---
 
@@ -5017,10 +4252,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Armenian (language)
-    **MT**: Tifsira u deskrizzjoni ta' 'Armenjan': Armenian (language).
-- **Usage Examples**:
-  - MT: Armenjan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Armenjan was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' armenian (language).
 
 ---
 
@@ -5030,10 +4262,10 @@ Total Entries: 687
 - **Root**: r-m-l
 - **Definitions**:
   - **EN**: widow
-    **MT**: Tifsira u deskrizzjoni ta' 'armla': widow.
+    **MT**: Mara li miet żewġha u ma reġgħatx iżżewġet.
 - **Usage Examples**:
-  - MT: Armla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armla was in its proper place in daily use.
+  - MT: L-armla għexet f'dar żgħira fir-raħal.
+    EN: The widow lived in a small house in the village.
 
 ---
 
@@ -5042,10 +4274,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: harmony
-    **MT**: Tifsira u deskrizzjoni ta' 'armonija': harmony.
+    **MT**: Staq ta' kunsens, paċi u rabta tajba bejn il-ħsejjes jew in-nies.
 - **Usage Examples**:
-  - MT: Armonija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armonija was in its proper place in daily use.
+  - MT: Għexu fl-armonija mal-ġirien kollha.
+    EN: They lived in harmony with all the neighbors.
 
 ---
 
@@ -5053,11 +4285,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: harmonium
-    **MT**: Tifsira u deskrizzjoni ta' 'armoniju': harmonium.
+  - **EN**: harmonium (instrument)
+    **MT**: Strument mużikali b'tasti li jaħdem bl-arja.
 - **Usage Examples**:
-  - MT: Armoniju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armoniju was in its proper place in daily use.
+  - MT: Daqq l-armoniju fil-knisja kwieta.
+    EN: He played the harmonium in the quiet church.
 
 ---
 
@@ -5065,10 +4297,10 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: harmonious, melodious
-    **MT**: Tifsira u deskrizzjoni ta' 'armonijuż': harmonious, melodious.
+    **MT**: Li għandu ħoss jew bixra pjaċevoli u magħquda.
 - **Usage Examples**:
-  - MT: Armonijuż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armonijuż was in its proper place in daily use.
+  - MT: Ħoss armonijuż mill-orkestra nazzjonali.
+    EN: A harmonious sound from the national orchestra.
 
 ---
 
@@ -5076,11 +4308,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: harmonica
-    **MT**: Tifsira u deskrizzjoni ta' 'armonika': harmonica.
+  - **EN**: harmonica, mouth organ
+    **MT**: Strument żgħir tal-arja li jitqiegħed mal-ħalq.
 - **Usage Examples**:
-  - MT: Armonika kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armonika was in its proper place in daily use.
+  - MT: Daqq l-armonika ma' wċuħ il-ħuġġaħa.
+    EN: He played the harmonica around the campfire.
 
 ---
 
@@ -5088,10 +4320,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: harmonically
-    **MT**: Tifsira u deskrizzjoni ta' 'armonikament': harmonically.
-- **Usage Examples**:
-  - MT: Armonikament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armonikament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' harmonically.
 
 ---
 
@@ -5099,10 +4328,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: harmonic
-    **MT**: Tifsira u deskrizzjoni ta' 'armoniku': harmonic.
-- **Usage Examples**:
-  - MT: Armoniku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armoniku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' harmonic.
 
 ---
 
@@ -5110,10 +4336,10 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to harmonize
-    **MT**: Tifsira u deskrizzjoni ta' 'armonizza': to harmonize.
+    **MT**: Għaqqad u rranġa l-ħsejjes jew il-liġijiet flimkien.
 - **Usage Examples**:
-  - MT: Armonizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of armonizza correctly and without delay.
+  - MT: Armonizzaw ir-regoli l-ġodda mal-liġi nazzjonali.
+    EN: They harmonized the new rules with national law.
 
 ---
 
@@ -5122,10 +4348,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: verbal noun of armonizza
-    **MT**: L-att u l-proċess verbali ta' armonizza.
-- **Usage Examples**:
-  - MT: Armonizzar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armonizzar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' verbal noun of armonizza.
 
 ---
 
@@ -5134,10 +4357,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: harmonization
-    **MT**: Tifsira u deskrizzjoni ta' 'armonizzazzjoni': harmonization.
-- **Usage Examples**:
-  - MT: Armonizzazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The armonizzazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' harmonization.
 
 ---
 
@@ -5145,33 +4365,33 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: osprey (Pandion haliaetus)
-    **MT**: Tifsira u deskrizzjoni ta' 'arpa': osprey (Pandion haliaetus).
+  - **EN**: osprey (bird)
+    **MT**: Għasfur tal-priża li jkaċċa l-ħut fil-baħar.
 - **Usage Examples**:
-  - MT: Arpa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arpa was in its proper place in daily use.
+  - MT: Rajna arpa ttir fuq l-ilma tal-port.
+    EN: We saw an osprey flying over the port water.
 
 ---
 
 ## arpeġġja (v-arpeġġja)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to play the harp
-    **MT**: Tifsira u deskrizzjoni ta' 'arpeġġja': to play the harp.
+  - **EN**: to play arpeggios, play harp
+    **MT**: Daqq noti mużikali waħda wara l-oħra fuq l-arpa.
 - **Usage Examples**:
-  - MT: Arpeġġja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of arpeġġja correctly and without delay.
+  - MT: Arpeġġja bil-ħeffa fuq il-korda tal-istrument.
+    EN: She played arpeggios swiftly on the instrument's strings.
 
 ---
 
 ## arra (intj-arra)
 - **POS**: interjection
 - **Definitions**:
-  - **EN**: giddyup
-    **MT**: Tifsira u deskrizzjoni ta' 'arra': giddyup.
+  - **EN**: giddyup! (to horses)
+    **MT**: Għajta tradizzjonali biex iż-żiemel jimxi malajr.
 - **Usage Examples**:
-  - MT: Arra kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arra was in its proper place in daily use.
+  - MT: Għajjat 'arra!' biex iż-żiemel jibda jiġri.
+    EN: He shouted 'giddyup!' to get the horse running.
 
 ---
 
@@ -5180,32 +4400,32 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: arrest, detention
-    **MT**: Tifsira u deskrizzjoni ta' 'arrest': arrest, detention.
+    **MT**: Att u qbid uffiċjali mill-pulizija.
 - **Usage Examples**:
-  - MT: Arrest kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arrest was in its proper place in daily use.
+  - MT: L-arrest saret wara l-investigazzjoni kollha.
+    EN: The arrest was made after the whole investigation.
 
 ---
 
 ## arresta (v-arresta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to arrest, to detain
-    **MT**: Tifsira u deskrizzjoni ta' 'arresta': to arrest, to detain.
+  - **EN**: to arrest, detain
+    **MT**: Qabad u żamm persuna fuq suspett ta' reat.
 - **Usage Examples**:
-  - MT: Arresta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of arresta correctly and without delay.
+  - MT: Il-pulizija arrestat l-akkużat minnufih.
+    EN: The police arrested the accused immediately.
 
 ---
 
 ## arrikkixxa (v-arrikkixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to enrich
-    **MT**: Tifsira u deskrizzjoni ta' 'arrikkixxa': to enrich.
+  - **EN**: to enrich (figurative or material)
+    **MT**: Zied il-valur, il-għarfien jew il-fondi ta' xi ħaġa.
 - **Usage Examples**:
-  - MT: Arrikkixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of arrikkixxa correctly and without delay.
+  - MT: Arrikkixxa l-moħħ tiegħu bil-qari tal-kotba.
+    EN: He enriched his mind by reading books.
 
 ---
 
@@ -5213,11 +4433,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: arsenic (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'arseniku': arsenic (chemical element).
+  - **EN**: arsenic (element/poison)
+    **MT**: Element kimiku tossiku u velenu iebes.
 - **Usage Examples**:
-  - MT: Arseniku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arseniku was in its proper place in daily use.
+  - MT: L-arseniku huwa sustanza perikoluża ħafna.
+    EN: Arsenic is a very dangerous substance.
 
 ---
 
@@ -5225,16 +4445,12 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: earth (our planet)
-    **MT**: Tifsira u deskrizzjoni ta' 'art': earth (our planet).
-  - **EN**: land, ground, soil
-    **MT**: Tifsira u deskrizzjoni ta' 'art': land, ground, soil.
-  - **EN**: homeland
-    **MT**: Tifsira u deskrizzjoni ta' 'art': homeland.
+  - **EN**: earth, land, soil, country
+    **MT**: Il-pjaneta, il-ħamrija jew il-pajjiż fejn ngħixu.
 - **Alternative Forms**: ard
 - **Usage Examples**:
-  - MT: Art kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The art was in its proper place in daily use.
+  - MT: Ħadmu l-art b'impenn kbir fir-rebbiegħa.
+    EN: They worked the land with great commitment in spring.
 
 ---
 
@@ -5242,26 +4458,22 @@ Total Entries: 687
 - **POS**: adjective
 - **Root**: r-t-b
 - **Definitions**:
-  - **EN**: soft (not hard)
-    **MT**: Tifsira u deskrizzjoni ta' 'artab': soft (not hard).
-  - **EN**: slack
-    **MT**: Tifsira u deskrizzjoni ta' 'artab': slack.
-  - **EN**: voiceless, unvoiced
-    **MT**: Tifsira u deskrizzjoni ta' 'artab': voiceless, unvoiced.
+  - **EN**: soft, slack, unvoiced
+    **MT**: Mhux iebes, li jċedi faċilment għall-pressjoni.
 - **Usage Examples**:
-  - MT: Artab kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The artab was in its proper place in daily use.
+  - MT: Drapp artab li jħossu pjaċevoli mal-ġilda.
+    EN: A soft fabric that feels pleasant against the skin.
 
 ---
 
 ## artab ħaxu (adj-artab-ħaxu)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: very soft
-    **MT**: Tifsira u deskrizzjoni ta' 'artab ħaxu': very soft.
+  - **EN**: very soft (simile)
+    **MT**: Artab ħafna bħal ħaxu ta' mħadda.
 - **Usage Examples**:
-  - MT: Artab ħaxu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The artab ħaxu was in its proper place in daily use.
+  - MT: Imħadda artab ħaxu li tagħti mistrieħ sħiħ.
+    EN: A very soft pillow that gives full rest.
 
 ---
 
@@ -5270,10 +4482,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: altar
-    **MT**: Tifsira u deskrizzjoni ta' 'artal': altar.
+    **MT**: Mejda prinċipali fil-knisja użata għall-quddiesa.
 - **Usage Examples**:
-  - MT: Artal kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The artal was in its proper place in daily use.
+  - MT: Qiegħdu l-fieri fuq l-artal tal-knisja.
+    EN: They placed flowers on the church altar.
 
 ---
 
@@ -5282,10 +4494,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: arteritis
-    **MT**: Tifsira u deskrizzjoni ta' 'arterite': arteritis.
-- **Usage Examples**:
-  - MT: Arterite kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arterite was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (medicine) arteritis.
 
 ---
 
@@ -5293,11 +4502,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: artery
-    **MT**: Tifsira u deskrizzjoni ta' 'arterja': artery.
+  - **EN**: artery (blood vessel / main road)
+    **MT**: Pajp tad-demm fil-ġisem jew triq prinċipali.
 - **Usage Examples**:
-  - MT: Arterja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arterja was in its proper place in daily use.
+  - MT: It-triq hija arterja ewlenija għat-traffiku.
+    EN: The road is a main artery for traffic.
 
 ---
 
@@ -5305,10 +4514,10 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: arterial
-    **MT**: Tifsira u deskrizzjoni ta' 'arterjali': arterial.
+    **MT**: Li għandu x'jaqsam mal-arterji jew toroq ewlenin.
 - **Usage Examples**:
-  - MT: Arterjali kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arterjali was in its proper place in daily use.
+  - MT: Pressjoni arterjali li trid tiġi verifikata.
+    EN: Arterial pressure that needs to be checked.
 
 ---
 
@@ -5316,10 +4525,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to arterialize
-    **MT**: Tifsira u deskrizzjoni ta' 'arterjalizza': to arterialize.
-- **Usage Examples**:
-  - MT: Arterjalizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of arterjalizza correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to arterialize.
 
 ---
 
@@ -5328,10 +4534,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: verbal noun of arterjalizza
-    **MT**: L-att u l-proċess verbali ta' arterjalizza.
-- **Usage Examples**:
-  - MT: Arterjalizzar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arterjalizzar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' verbal noun of arterjalizza.
 
 ---
 
@@ -5340,10 +4543,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: arteriosclerosis
-    **MT**: Tifsira u deskrizzjoni ta' 'arterjosklerożi': arteriosclerosis.
-- **Usage Examples**:
-  - MT: Arterjosklerożi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arterjosklerożi was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' arterjosklerożi fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5351,10 +4551,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: arterial
-    **MT**: Tifsira u deskrizzjoni ta' 'arterjuż': arterial.
-- **Usage Examples**:
-  - MT: Arterjuż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arterjuż was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' arterial.
 
 ---
 
@@ -5362,11 +4559,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: Jerusalem artichoke, Helianthus tuberosus
-    **MT**: Tifsira u deskrizzjoni ta' 'artiċokk': Jerusalem artichoke, Helianthus tuberosus.
+  - **EN**: Jerusalem artichoke (plant)
+    **MT**: Pjanta li tagħti għeruq tajbin għat-tisjir.
 - **Usage Examples**:
-  - MT: Artiċokk kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The artiċokk was in its proper place in daily use.
+  - MT: Sajru l-artiċokk fil-broma fit-tisjir.
+    EN: They cooked the artichoke in the pot during cooking.
 
 ---
 
@@ -5375,10 +4572,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: rocket, arugula, Eruca sativa
-    **MT**: Tifsira u deskrizzjoni ta' 'aruka': rocket, arugula, Eruca sativa.
-- **Usage Examples**:
-  - MT: Aruka kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aruka was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' rocket, arugula, eruca sativa.
 
 ---
 
@@ -5387,10 +4581,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: southern rocket, Diplotaxis viminea
-    **MT**: Tifsira u deskrizzjoni ta' 'aruka salvaġġa': southern rocket, Diplotaxis viminea.
-- **Usage Examples**:
-  - MT: Aruka salvaġġa kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aruka salvaġġa was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' aruka salvaġġa fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5399,12 +4590,9 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: cockles
-    **MT**: Tifsira u deskrizzjoni ta' 'arzell': cockles.
+    **MT**: Għandu x'jaqsam ma' cockles; cockleshells.
   - **EN**: cockleshells
-    **MT**: Tifsira u deskrizzjoni ta' 'arzell': cockleshells.
-- **Usage Examples**:
-  - MT: Arzell kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arzell was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' cockles; cockleshells.
 
 ---
 
@@ -5412,10 +4600,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: arch-, archi-
-    **MT**: Tifsira u deskrizzjoni ta' 'arċi-': arch-, archi-.
-- **Usage Examples**:
-  - MT: Arċi- kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arċi- was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' arch-, archi-.
 
 ---
 
@@ -5423,12 +4608,9 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Sagittarius (constellation)
-    **MT**: Tifsira u deskrizzjoni ta' 'Arċier': Sagittarius (constellation).
+    **MT**: Li għandu x'jaqsam ma' Arċier fl-użu u t-tifsira uffiċjali.
   - **EN**: Sagittarius (zodiac sign)
-    **MT**: Tifsira u deskrizzjoni ta' 'Arċier': Sagittarius (zodiac sign).
-- **Usage Examples**:
-  - MT: Arċier kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Arċier was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Arċier fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5437,10 +4619,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: archipelago
-    **MT**: Tifsira u deskrizzjoni ta' 'arċipelagu': archipelago.
-- **Usage Examples**:
-  - MT: Arċipelagu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arċipelagu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' archipelago.
 
 ---
 
@@ -5449,10 +4628,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: archpriest
-    **MT**: Tifsira u deskrizzjoni ta' 'arċipriet': archpriest.
-- **Usage Examples**:
-  - MT: Arċipriet kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arċipriet was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (christianity) archpriest.
 
 ---
 
@@ -5461,10 +4637,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: archbishop
-    **MT**: Tifsira u deskrizzjoni ta' 'arċisqof': archbishop.
-- **Usage Examples**:
-  - MT: Arċisqof kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arċisqof was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (christianity) archbishop.
 
 ---
 
@@ -5472,10 +4645,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to coat with silver
-    **MT**: Tifsira u deskrizzjoni ta' 'arġenta': to coat with silver.
-- **Usage Examples**:
-  - MT: Arġenta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of arġenta correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to coat with silver.
 
 ---
 
@@ -5484,10 +4654,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: silvering
-    **MT**: Tifsira u deskrizzjoni ta' 'arġentatura': silvering.
-- **Usage Examples**:
-  - MT: Arġentatura kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arġentatura was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' silvering.
 
 ---
 
@@ -5496,10 +4663,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: silversmith shop
-    **MT**: Tifsira u deskrizzjoni ta' 'arġenterija': silversmith shop.
-- **Usage Examples**:
-  - MT: Arġenterija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arġenterija was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' silversmith shop.
 
 ---
 
@@ -5508,12 +4672,9 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: goldsmith
-    **MT**: Tifsira u deskrizzjoni ta' 'arġentier': goldsmith.
+    **MT**: Għandu x'jaqsam ma' goldsmith.
   - **EN**: silversmith
-    **MT**: Tifsira u deskrizzjoni ta' 'arġentier': silversmith.
-- **Usage Examples**:
-  - MT: Arġentier kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arġentier was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' silversmith.
 
 ---
 
@@ -5521,10 +4682,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: Argentinian (of, from or relating to Argentina)
-    **MT**: Tifsira u deskrizzjoni ta' 'Arġentin': Argentinian (of, from or relating to Argentina).
-- **Usage Examples**:
-  - MT: Arġentin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Arġentin was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Arġentin fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5533,10 +4691,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Argentinian (native or inhabitant of Argentina) (usually male)
-    **MT**: Tifsira u deskrizzjoni ta' 'Arġentin': Argentinian (native or inhabitant of Argentina) (usually male).
-- **Usage Examples**:
-  - MT: Arġentin kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Arġentin was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Arġentin fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5544,10 +4699,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Argentina (a country in South America)
-    **MT**: Tifsira u deskrizzjoni ta' 'Arġentina': Argentina (a country in South America).
-- **Usage Examples**:
-  - MT: Arġentina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Arġentina was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Arġentina fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5556,10 +4708,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: pine (tree)
-    **MT**: Tifsira u deskrizzjoni ta' 'arżnu': pine (tree).
-- **Usage Examples**:
-  - MT: Arżnu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The arżnu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' pine (tree).
 
 ---
 
@@ -5567,10 +4716,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: asexual
-    **MT**: Tifsira u deskrizzjoni ta' 'asesswali': asexual.
-- **Usage Examples**:
-  - MT: Asesswali kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The asesswali was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' asexual.
 
 ---
 
@@ -5579,10 +4725,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: asexuality
-    **MT**: Tifsira u deskrizzjoni ta' 'asesswalità': asexuality.
-- **Usage Examples**:
-  - MT: Asesswalità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The asesswalità was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' asexuality.
 
 ---
 
@@ -5591,10 +4734,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: asphalt
-    **MT**: Tifsira u deskrizzjoni ta' 'asfalt': asphalt.
-- **Usage Examples**:
-  - MT: Asfalt kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The asfalt was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' asphalt.
 
 ---
 
@@ -5602,10 +4742,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to asphalt
-    **MT**: Tifsira u deskrizzjoni ta' 'asfalta': to asphalt.
-- **Usage Examples**:
-  - MT: Asfalta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of asfalta correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to asphalt.
 
 ---
 
@@ -5614,10 +4751,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: asphalting
-    **MT**: Tifsira u deskrizzjoni ta' 'asfaltatura': asphalting.
-- **Usage Examples**:
-  - MT: Asfaltatura kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The asfaltatura was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' asphalting.
 
 ---
 
@@ -5625,10 +4759,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to asphyxiate
-    **MT**: Tifsira u deskrizzjoni ta' 'asfissja': to asphyxiate.
-- **Usage Examples**:
-  - MT: Asfissja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of asfissja correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to asphyxiate.
 
 ---
 
@@ -5636,10 +4767,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Asia (the largest continent, located between Europe and the Pacific Ocean)
-    **MT**: Tifsira u deskrizzjoni ta' 'Asja': Asia (the largest continent, located between Europe and the Pacific Ocean).
-- **Usage Examples**:
-  - MT: Asja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Asja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Asja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5647,10 +4775,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Asmara (the capital city of Eritrea)
-    **MT**: Tifsira u deskrizzjoni ta' 'Asmara': Asmara (the capital city of Eritrea).
-- **Usage Examples**:
-  - MT: Asmara kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Asmara was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Asmara fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5658,10 +4783,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to aspire
-    **MT**: Tifsira u deskrizzjoni ta' 'aspira': to aspire.
-- **Usage Examples**:
-  - MT: Aspira l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aspira correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to aspire.
 
 ---
 
@@ -5669,11 +4791,8 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: axes
-    **MT**: Tifsira u deskrizzjoni ta' 'assi': axes.
+    **MT**: Għandu x'jaqsam ma' axes.
 - **Alternative Forms**: assi
-- **Usage Examples**:
-  - MT: Ass kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ass was in its proper place in daily use.
 
 ---
 
@@ -5681,11 +4800,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to assassinate
-    **MT**: Tifsira u deskrizzjoni ta' 'assassina': to assassinate.
+    **MT**: Għandu x'jaqsam ma' to assassinate.
 - **Alternative Forms**: assassna
-- **Usage Examples**:
-  - MT: Assassina l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assassina correctly and without delay.
 
 ---
 
@@ -5693,11 +4809,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to assassinate
-    **MT**: Tifsira u deskrizzjoni ta' 'assassina': to assassinate.
+    **MT**: Għandu x'jaqsam ma' to assassinate.
 - **Alternative Forms**: assassina
-- **Usage Examples**:
-  - MT: Assassna l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assassna correctly and without delay.
 
 ---
 
@@ -5705,10 +4818,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to assign, to allocate, to allot
-    **MT**: Tifsira u deskrizzjoni ta' 'assenja': to assign, to allocate, to allot.
-- **Usage Examples**:
-  - MT: Assenja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assenja correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' assenja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5717,10 +4827,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: assignment
-    **MT**: Tifsira u deskrizzjoni ta' 'assenjament': assignment.
-- **Usage Examples**:
-  - MT: Assenjament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The assenjament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' assignment.
 
 ---
 
@@ -5729,10 +4836,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: assignation, allocation
-    **MT**: Tifsira u deskrizzjoni ta' 'assenjazzjoni': assignation, allocation.
-- **Usage Examples**:
-  - MT: Assenjazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The assenjazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' assignation, allocation.
 
 ---
 
@@ -5740,10 +4844,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to absent oneself [with ruħ]
-    **MT**: Tifsira u deskrizzjoni ta' 'assenta': to absent oneself [with ruħ].
-- **Usage Examples**:
-  - MT: Assenta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assenta correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' assenta fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5752,10 +4853,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: wormwood, Artemisia absinthium
-    **MT**: Tifsira u deskrizzjoni ta' 'assenzju': wormwood, Artemisia absinthium.
-- **Usage Examples**:
-  - MT: Assenzju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The assenzju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' assenzju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5763,10 +4861,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to assess
-    **MT**: Tifsira u deskrizzjoni ta' 'assessja': to assess.
-- **Usage Examples**:
-  - MT: Assessja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assessja correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to assess.
 
 ---
 
@@ -5775,11 +4870,8 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: axes
-    **MT**: Tifsira u deskrizzjoni ta' 'assi': axes.
+    **MT**: Għandu x'jaqsam ma' axes.
 - **Alternative Forms**: ass
-- **Usage Examples**:
-  - MT: Assi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The assi was in its proper place in daily use.
 
 ---
 
@@ -5787,12 +4879,9 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to assure
-    **MT**: Tifsira u deskrizzjoni ta' 'assigura': to assure.
+    **MT**: Għandu x'jaqsam ma' to assure.
   - **EN**: to make sure
-    **MT**: Tifsira u deskrizzjoni ta' 'assigura': to make sure.
-- **Usage Examples**:
-  - MT: Assigura l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assigura correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to make sure.
 
 ---
 
@@ -5800,10 +4889,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to assimilate
-    **MT**: Tifsira u deskrizzjoni ta' 'assimila': to assimilate.
-- **Usage Examples**:
-  - MT: Assimila l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assimila correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to assimilate.
 
 ---
 
@@ -5812,10 +4898,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: verbal noun of assimila
-    **MT**: L-att u l-proċess verbali ta' assimila.
-- **Usage Examples**:
-  - MT: Assimilar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The assimilar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' verbal noun of assimila.
 
 ---
 
@@ -5823,10 +4906,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: assimilative
-    **MT**: Tifsira u deskrizzjoni ta' 'assimilattiv': assimilative.
-- **Usage Examples**:
-  - MT: Assimilattiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The assimilattiv was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' assimilative.
 
 ---
 
@@ -5835,10 +4915,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: assimilation
-    **MT**: Tifsira u deskrizzjoni ta' 'assimilazzjoni': assimilation.
-- **Usage Examples**:
-  - MT: Assimilazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The assimilazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' assimilation.
 
 ---
 
@@ -5846,12 +4923,9 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to assist, to help
-    **MT**: Tifsira u deskrizzjoni ta' 'assista': to assist, to help.
+    **MT**: Għandu x'jaqsam ma' to assist, to help.
   - **EN**: to be present [with għal ‘at’]
-    **MT**: Tifsira u deskrizzjoni ta' 'assista': to be present [with għal ‘at’].
-- **Usage Examples**:
-  - MT: Assista l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assista correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' assista fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5860,10 +4934,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: absolution
-    **MT**: Tifsira u deskrizzjoni ta' 'assoluzzjoni': absolution.
-- **Usage Examples**:
-  - MT: Assoluzzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The assoluzzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' absolution.
 
 ---
 
@@ -5871,10 +4942,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to absolve
-    **MT**: Tifsira u deskrizzjoni ta' 'assolva': to absolve.
-- **Usage Examples**:
-  - MT: Assolva l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assolva correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to absolve.
 
 ---
 
@@ -5882,11 +4950,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to absorb
-    **MT**: Tifsira u deskrizzjoni ta' 'assorbixxa': to absorb.
+    **MT**: Għandu x'jaqsam ma' to absorb.
 - **Alternative Forms**: assorbixxa
-- **Usage Examples**:
-  - MT: Assorba l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assorba correctly and without delay.
 
 ---
 
@@ -5895,10 +4960,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: absorption
-    **MT**: Tifsira u deskrizzjoni ta' 'assorbiment': absorption.
-- **Usage Examples**:
-  - MT: Assorbiment kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The assorbiment was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' absorption.
 
 ---
 
@@ -5906,11 +4968,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to absorb
-    **MT**: Tifsira u deskrizzjoni ta' 'assorbixxa': to absorb.
+    **MT**: Għandu x'jaqsam ma' to absorb.
 - **Alternative Forms**: assorba
-- **Usage Examples**:
-  - MT: Assorbixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assorbixxa correctly and without delay.
 
 ---
 
@@ -5918,12 +4977,9 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to associate
-    **MT**: Tifsira u deskrizzjoni ta' 'assoċja': to associate.
+    **MT**: Għandu x'jaqsam ma' to associate.
   - **EN**: to subscribe
-    **MT**: Tifsira u deskrizzjoni ta' 'assoċja': to subscribe.
-- **Usage Examples**:
-  - MT: Assoċja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assoċja correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to subscribe.
 
 ---
 
@@ -5932,20 +4988,18 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: association
-    **MT**: Tifsira u deskrizzjoni ta' 'assoċjazzjoni': association.
-- **Usage Examples**:
-  - MT: Assoċjazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The assoċjazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' association.
 
 ---
 
 ## assoġġetta (v-assoġġetta)
 - **POS**: verb
 - **Definitions**:
-- **Alternative Forms**: ssuġġetta
+  - **EN**: to subject to, expose
+    **MT**: Qiegħed taħt il-forza jew kontroll ta' xi ħaġa.
 - **Usage Examples**:
-  - MT: Assoġġetta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assoġġetta correctly and without delay.
+  - MT: Assoġġetta l-materjal għall-pressjoni fil-forn.
+    EN: He subjected the material to pressure in the oven.
 
 ---
 
@@ -5953,10 +5007,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to assume, to take on, to undertake
-    **MT**: Tifsira u deskrizzjoni ta' 'assuma': to assume, to take on, to undertake.
-- **Usage Examples**:
-  - MT: Assuma l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of assuma correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' assuma fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5965,10 +5016,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: astatine (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'astat': astatine (chemical element).
-- **Usage Examples**:
-  - MT: Astat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astat was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' astat fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -5976,11 +5024,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to abstain
-    **MT**: Tifsira u deskrizzjoni ta' 'astjena': to abstain.
+    **MT**: Għandu x'jaqsam ma' to abstain.
 - **Alternative Forms**: astjena
-- **Usage Examples**:
-  - MT: Astena l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of astena correctly and without delay.
 
 ---
 
@@ -5988,11 +5033,8 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: abstinence
-    **MT**: Tifsira u deskrizzjoni ta' 'astinenza': abstinence.
+    **MT**: Għandu x'jaqsam ma' abstinence.
 - **Alternative Forms**: astinenza
-- **Usage Examples**:
-  - MT: Astenenza kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astenenza was in its proper place in daily use.
 
 ---
 
@@ -6001,11 +5043,8 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: abstinence
-    **MT**: Tifsira u deskrizzjoni ta' 'astinenza': abstinence.
+    **MT**: Għandu x'jaqsam ma' abstinence.
 - **Alternative Forms**: astenenza
-- **Usage Examples**:
-  - MT: Astinenza kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astinenza was in its proper place in daily use.
 
 ---
 
@@ -6013,11 +5052,8 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to abstain
-    **MT**: Tifsira u deskrizzjoni ta' 'astjena': to abstain.
+    **MT**: Għandu x'jaqsam ma' to abstain.
 - **Alternative Forms**: astena
-- **Usage Examples**:
-  - MT: Astjena l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of astjena correctly and without delay.
 
 ---
 
@@ -6025,10 +5061,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: abstract
-    **MT**: Tifsira u deskrizzjoni ta' 'astratt': abstract.
-- **Usage Examples**:
-  - MT: Astratt kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astratt was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' abstract.
 
 ---
 
@@ -6037,10 +5070,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: abstract
-    **MT**: Tifsira u deskrizzjoni ta' 'astratt': abstract.
-- **Usage Examples**:
-  - MT: Astratt kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astratt was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' abstract.
 
 ---
 
@@ -6048,10 +5078,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: abstractly
-    **MT**: Tifsira u deskrizzjoni ta' 'astrattament': abstractly.
-- **Usage Examples**:
-  - MT: Astrattament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astrattament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' abstractly.
 
 ---
 
@@ -6060,12 +5087,9 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: abstractionism
-    **MT**: Tifsira u deskrizzjoni ta' 'astrattiżmu': abstractionism.
+    **MT**: Għandu x'jaqsam ma' (philosophy) abstractionism.
   - **EN**: abstract art
-    **MT**: Tifsira u deskrizzjoni ta' 'astrattiżmu': abstract art.
-- **Usage Examples**:
-  - MT: Astrattiżmu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astrattiżmu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (art) abstract art.
 
 ---
 
@@ -6074,10 +5098,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: abstraction
-    **MT**: Tifsira u deskrizzjoni ta' 'astrazzjoni': abstraction.
-- **Usage Examples**:
-  - MT: Astrazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astrazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' abstraction.
 
 ---
 
@@ -6086,10 +5107,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: astrologer
-    **MT**: Tifsira u deskrizzjoni ta' 'astrologu': astrologer.
-- **Usage Examples**:
-  - MT: Astrologu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astrologu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' astrologer.
 
 ---
 
@@ -6098,10 +5116,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: astrology
-    **MT**: Tifsira u deskrizzjoni ta' 'astroloġija': astrology.
-- **Usage Examples**:
-  - MT: Astroloġija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astroloġija was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' astrology.
 
 ---
 
@@ -6109,10 +5124,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: astrologically
-    **MT**: Tifsira u deskrizzjoni ta' 'astroloġikament': astrologically.
-- **Usage Examples**:
-  - MT: Astroloġikament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astroloġikament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' astrologically.
 
 ---
 
@@ -6120,10 +5132,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: astrologic
-    **MT**: Tifsira u deskrizzjoni ta' 'astroloġiku': astrologic.
-- **Usage Examples**:
-  - MT: Astroloġiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astroloġiku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' astrologic.
 
 ---
 
@@ -6132,10 +5141,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: astronomy
-    **MT**: Tifsira u deskrizzjoni ta' 'astronomija': astronomy.
-- **Usage Examples**:
-  - MT: Astronomija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astronomija was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' astronomy.
 
 ---
 
@@ -6143,10 +5149,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: astronomically
-    **MT**: Tifsira u deskrizzjoni ta' 'astronomikament': astronomically.
-- **Usage Examples**:
-  - MT: Astronomikament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astronomikament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' astronomically.
 
 ---
 
@@ -6154,10 +5157,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: astronomical
-    **MT**: Tifsira u deskrizzjoni ta' 'astronomiku': astronomical.
-- **Usage Examples**:
-  - MT: Astronomiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astronomiku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' astronomical.
 
 ---
 
@@ -6166,10 +5166,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: astronomer
-    **MT**: Tifsira u deskrizzjoni ta' 'astronomu': astronomer.
-- **Usage Examples**:
-  - MT: Astronomu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astronomu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' astronomer.
 
 ---
 
@@ -6178,10 +5175,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: red kite (Milvus milvus)
-    **MT**: Tifsira u deskrizzjoni ta' 'astun': red kite (Milvus milvus).
-- **Usage Examples**:
-  - MT: Astun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astun was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' red kite (milvus milvus).
 
 ---
 
@@ -6190,10 +5184,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: red kite (Milvus milvus)
-    **MT**: Tifsira u deskrizzjoni ta' 'astun aħmar': red kite (Milvus milvus).
-- **Usage Examples**:
-  - MT: Astun aħmar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astun aħmar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' red kite (milvus milvus).
 
 ---
 
@@ -6202,10 +5193,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: black kite (Milvus migrans)
-    **MT**: Tifsira u deskrizzjoni ta' 'astun iswed': black kite (Milvus migrans).
-- **Usage Examples**:
-  - MT: Astun iswed kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The astun iswed was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' black kite (milvus migrans).
 
 ---
 
@@ -6213,10 +5201,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: Asturian (of, from or relating to Asturias)
-    **MT**: Tifsira u deskrizzjoni ta' 'Asturjan': Asturian (of, from or relating to Asturias).
-- **Usage Examples**:
-  - MT: Asturjan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Asturjan was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Asturjan fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6225,10 +5210,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Asturian (native or inhabitant of Asturias) (usually male)
-    **MT**: Tifsira u deskrizzjoni ta' 'Asturjan': Asturian (native or inhabitant of Asturias) (usually male).
-- **Usage Examples**:
-  - MT: Asturjan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Asturjan was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Asturjan fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6237,10 +5219,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Asturian (language)
-    **MT**: Tifsira u deskrizzjoni ta' 'Asturjan': Asturian (language).
-- **Usage Examples**:
-  - MT: Asturjan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Asturjan was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' asturian (language).
 
 ---
 
@@ -6250,12 +5229,9 @@ Total Entries: 687
 - **Root**: '-t-r
 - **Definitions**:
   - **EN**: trace
-    **MT**: Tifsira u deskrizzjoni ta' 'atar': trace.
+    **MT**: Għandu x'jaqsam ma' trace.
   - **EN**: footstep
-    **MT**: Tifsira u deskrizzjoni ta' 'atar': footstep.
-- **Usage Examples**:
-  - MT: Atar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The atar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' footstep.
 
 ---
 
@@ -6263,10 +5239,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Athens (the capital of Greece)
-    **MT**: Tifsira u deskrizzjoni ta' 'Ateni': Athens (the capital of Greece).
-- **Usage Examples**:
-  - MT: Ateni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Ateni was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Ateni fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6274,10 +5247,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: atomic
-    **MT**: Tifsira u deskrizzjoni ta' 'atomiku': atomic.
-- **Usage Examples**:
-  - MT: Atomiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The atomiku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' atomic.
 
 ---
 
@@ -6286,10 +5256,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: atomist
-    **MT**: Tifsira u deskrizzjoni ta' 'atomista': atomist.
-- **Usage Examples**:
-  - MT: Atomista kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The atomista was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' atomist.
 
 ---
 
@@ -6297,10 +5264,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to atomize
-    **MT**: Tifsira u deskrizzjoni ta' 'atomizza': to atomize.
-- **Usage Examples**:
-  - MT: Atomizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of atomizza correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to atomize.
 
 ---
 
@@ -6309,10 +5273,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: atomicity
-    **MT**: Tifsira u deskrizzjoni ta' 'atomiċità': atomicity.
-- **Usage Examples**:
-  - MT: Atomiċità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The atomiċità was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' atomicity.
 
 ---
 
@@ -6321,10 +5282,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: atomism
-    **MT**: Tifsira u deskrizzjoni ta' 'atomiżmu': atomism.
-- **Usage Examples**:
-  - MT: Atomiżmu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The atomiżmu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' atomism.
 
 ---
 
@@ -6333,10 +5291,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: atom
-    **MT**: Tifsira u deskrizzjoni ta' 'atomu': atom.
-- **Usage Examples**:
-  - MT: Atomu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The atomu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' atom.
 
 ---
 
@@ -6345,10 +5300,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: atrophy
-    **MT**: Tifsira u deskrizzjoni ta' 'atrofija': atrophy.
-- **Usage Examples**:
-  - MT: Atrofija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The atrofija was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' atrophy.
 
 ---
 
@@ -6356,10 +5308,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: atrophic
-    **MT**: Tifsira u deskrizzjoni ta' 'atrofiku': atrophic.
-- **Usage Examples**:
-  - MT: Atrofiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The atrofiku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' atrophic.
 
 ---
 
@@ -6367,10 +5316,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to atrophy
-    **MT**: Tifsira u deskrizzjoni ta' 'atrofizza': to atrophy.
-- **Usage Examples**:
-  - MT: Atrofizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of atrofizza correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to atrophy.
 
 ---
 
@@ -6379,10 +5325,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: act
-    **MT**: Tifsira u deskrizzjoni ta' 'att': act.
-- **Usage Examples**:
-  - MT: Att kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The att was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' act.
 
 ---
 
@@ -6390,14 +5333,11 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to attack
-    **MT**: Tifsira u deskrizzjoni ta' 'attakka': to attack.
+    **MT**: Għandu x'jaqsam ma' to attack.
   - **EN**: to run down, to inculpate
-    **MT**: Tifsira u deskrizzjoni ta' 'attakka': to run down, to inculpate.
+    **MT**: Għandu x'jaqsam ma' to run down, to inculpate.
   - **EN**: to attach, to get attached
-    **MT**: Tifsira u deskrizzjoni ta' 'attakka': to attach, to get attached.
-- **Usage Examples**:
-  - MT: Attakka l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of attakka correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' attakka fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6405,10 +5345,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Attard': a surname.
-- **Usage Examples**:
-  - MT: Attard kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Attard was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' a surname.
 
 ---
 
@@ -6417,21 +5354,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: attaché
-    **MT**: Tifsira u deskrizzjoni ta' 'attaxè': attaché.
-- **Usage Examples**:
-  - MT: Attaxè kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attaxè was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' attaché.
 
 ---
 
 ## attenda (v-attenda)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to attend
-    **MT**: Tifsira u deskrizzjoni ta' 'attenda': to attend.
+  - **EN**: to attend, be present
+    **MT**: Mar u kien preżenti f'laqgħa jew ċerimonja.
 - **Usage Examples**:
-  - MT: Attenda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of attenda correctly and without delay.
+  - MT: Attenda l-lezzjonijiet kollha tal-kors.
+    EN: He attended all the lessons of the course.
 
 ---
 
@@ -6439,13 +5373,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: attendant
-    **MT**: Tifsira u deskrizzjoni ta' 'attendent': attendant.
-  - **EN**: batman or orderly (military servant)
-    **MT**: Tifsira u deskrizzjoni ta' 'attendent': batman or orderly (military servant).
+  - **EN**: attendant, orderly
+    **MT**: Ħaddiem jew impjegat li jaqdi u jassisti pjaċevoli.
 - **Usage Examples**:
-  - MT: Attendent kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attendent was in its proper place in daily use.
+  - MT: L-attendent għen lill-pazjenti fl-isptar.
+    EN: The attendant helped patients at the hospital.
 
 ---
 
@@ -6453,39 +5385,33 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: attendance (act of attending
-    **MT**: Tifsira u deskrizzjoni ta' 'attendenza': attendance (act of attending.
-  - **EN**: state of being present)
-    **MT**: Tifsira u deskrizzjoni ta' 'attendenza': state of being present).
-  - **EN**: attendance (persons present
-    **MT**: Tifsira u deskrizzjoni ta' 'attendenza': attendance (persons present.
-  - **EN**: their number)
-    **MT**: Tifsira u deskrizzjoni ta' 'attendenza': their number).
+  - **EN**: attendance, presence
+    **MT**: In-numru ta' nies u s-sehem tagħhom f'avveniment.
 - **Usage Examples**:
-  - MT: Attendenza kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attendenza was in its proper place in daily use.
+  - MT: Kien hemm attendenza kbira fis-sala nazzjonali.
+    EN: There was a large attendance in the national hall.
 
 ---
 
 ## attent (adj-attent)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: attentive
-    **MT**: Tifsira u deskrizzjoni ta' 'attent': attentive.
+  - **EN**: attentive, careful
+    **MT**: Li jsegwi bir-reqqa u jagħti l-attenzjoni kollha.
 - **Usage Examples**:
-  - MT: Attent kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attent was in its proper place in daily use.
+  - MT: Student attent li rċieva l-ogħla marki.
+    EN: An attentive student who received top marks.
 
 ---
 
 ## attentament (adv-attentament)
 - **POS**: adverb
 - **Definitions**:
-  - **EN**: attentively
-    **MT**: Tifsira u deskrizzjoni ta' 'attentament': attentively.
+  - **EN**: attentively, carefully
+    **MT**: B'attenzjoni u reqqa kbira minn moħħok.
 - **Usage Examples**:
-  - MT: Attentament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attentament was in its proper place in daily use.
+  - MT: Semgħu attentament l-istruzzjonijiet tal-għalliem.
+    EN: They listened attentively to the teacher's instructions.
 
 ---
 
@@ -6494,10 +5420,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: attention, caution, carefulness
-    **MT**: Tifsira u deskrizzjoni ta' 'attenzjoni': attention, caution, carefulness.
+    **MT**: L-att li żżomm moħħok fuq oġġett jew sitwazzjoni.
 - **Usage Examples**:
-  - MT: Attenzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attenzjoni was in its proper place in daily use.
+  - MT: Ġibed l-attenzjoni tan-nies kollha fis-sala.
+    EN: He drew everyone's attention in the hall.
 
 ---
 
@@ -6506,32 +5432,29 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: actinium (chemical element)
-    **MT**: Tifsira u deskrizzjoni ta' 'attinju': actinium (chemical element).
-- **Usage Examples**:
-  - MT: Attinju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attinju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' attinju fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## attira (v-attira)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to attract
-    **MT**: Tifsira u deskrizzjoni ta' 'attira': to attract.
+  - **EN**: to attract, draw in
+    **MT**: Għamel lil xi ħadd jew xi ħaġa tressaq viċin.
 - **Usage Examples**:
-  - MT: Attira l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of attira correctly and without delay.
+  - MT: Ir-reklamar attira bosta klijenti ġodda.
+    EN: The advertising attracted many new customers.
 
 ---
 
 ## attiv (adj-attiv)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: active
-    **MT**: Tifsira u deskrizzjoni ta' 'attiv': active.
+  - **EN**: active, energetic
+    **MT**: Li jinsab f'moviment u xogħol kontinwu.
 - **Usage Examples**:
-  - MT: Attiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attiv was in its proper place in daily use.
+  - MT: Membru attiv fil-komunità tar-raħal tiegħu.
+    EN: An active member in his village community.
 
 ---
 
@@ -6540,10 +5463,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: activation
-    **MT**: Tifsira u deskrizzjoni ta' 'attivazzjoni': activation.
+    **MT**: Il-proċess fejn tibda jew tixgħel sistema.
 - **Usage Examples**:
-  - MT: Attivazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attivazzjoni was in its proper place in daily use.
+  - MT: L-attivazzjoni tas-servizz saret online.
+    EN: Activation of the service was done online.
 
 ---
 
@@ -6551,11 +5474,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: activity
-    **MT**: Tifsira u deskrizzjoni ta' 'attività': activity.
+  - **EN**: activity, event
+    **MT**: Xogħol, logħba jew avveniment organizzata.
 - **Usage Examples**:
-  - MT: Attività kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attività was in its proper place in daily use.
+  - MT: Organizzaw attività sportiva fit-tmiem il-ġimgħa.
+    EN: They organized a sports activity over the weekend.
 
 ---
 
@@ -6563,22 +5486,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: attraction
-    **MT**: Tifsira u deskrizzjoni ta' 'attrazzjoni': attraction.
+  - **EN**: attraction, appeal
+    **MT**: Sbuħija jew karatteristika li tattira l-attenzjoni.
 - **Usage Examples**:
-  - MT: Attrazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attrazzjoni was in its proper place in daily use.
+  - MT: Il-mużew huwa attrazzjoni ewlenija għat-turisti.
+    EN: The museum is a major attraction for tourists.
 
 ---
 
 ## attrezza (v-attrezza)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to equip, to fit out
-    **MT**: Tifsira u deskrizzjoni ta' 'attrezza': to equip, to fit out.
+  - **EN**: to equip, fit out
+    **MT**: Qiegħed u pprovda l-apparat u l-għodda kollha.
 - **Usage Examples**:
-  - MT: Attrezza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of attrezza correctly and without delay.
+  - MT: Attrezzaw il-laboratorju bl-aqwa makkinarju.
+    EN: They equipped the lab with top machinery.
 
 ---
 
@@ -6587,23 +5510,21 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: attribute, characteristic
-    **MT**: Tifsira u deskrizzjoni ta' 'attribut': attribute, characteristic.
-  - **EN**: predicative
-    **MT**: Tifsira u deskrizzjoni ta' 'attribut': predicative.
+    **MT**: Kwalità jew proprjetà ewlenija ta' oġġett.
 - **Usage Examples**:
-  - MT: Attribut kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attribut was in its proper place in daily use.
+  - MT: Is-sagrifiċċju huwa attribut ta' mexxej tajjeb.
+    EN: Sacrifice is an attribute of a good leader.
 
 ---
 
 ## attributtiv (adj-attributtiv)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: attributive
-    **MT**: Tifsira u deskrizzjoni ta' 'attributtiv': attributive.
+  - **EN**: attributive (grammar)
+    **MT**: Li jservi bħala deskrizzjoni ma' nom.
 - **Usage Examples**:
-  - MT: Attributtiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attributtiv was in its proper place in daily use.
+  - MT: Aġġettiv attributtiv użat fis-sentenza.
+    EN: An attributive adjective used in the sentence.
 
 ---
 
@@ -6611,23 +5532,23 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: attribution
-    **MT**: Tifsira u deskrizzjoni ta' 'attribuzzjoni': attribution.
+  - **EN**: attribution, assignment
+    **MT**: L-att li tassenja xogħol jew mertu lil persuna.
 - **Usage Examples**:
-  - MT: Attribuzzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attribuzzjoni was in its proper place in daily use.
+  - MT: L-attribuzzjoni tal-kwotazzjoni kienet korretta.
+    EN: Attribution of the quote was correct.
 
 ---
 
 ## attribwa (v-attribwa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to attribute
-    **MT**: Tifsira u deskrizzjoni ta' 'attribwixxa': to attribute.
+  - **EN**: to attribute (alt)
+    **MT**: Forma u tifsira ta' attribwixxa.
 - **Alternative Forms**: attribwixxa
 - **Usage Examples**:
-  - MT: Attribwa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of attribwa correctly and without delay.
+  - MT: Attribwa r-riżultat għad-dixxiplina.
+    EN: He attributed the result to discipline.
 
 ---
 
@@ -6635,22 +5556,22 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: attributable
-    **MT**: Tifsira u deskrizzjoni ta' 'attribwibbli': attributable.
+    **MT**: Li jista' jiġi marbut ma' kawża jew persuna.
 - **Usage Examples**:
-  - MT: Attribwibbli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attribwibbli was in its proper place in daily use.
+  - MT: Il-falliment kien attribwibbli għan-nuqqas ta' pjan.
+    EN: Failure was attributable to lack of a plan.
 
 ---
 
 ## attribwixxa (v-attribwixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to attribute
-    **MT**: Tifsira u deskrizzjoni ta' 'attribwixxa': to attribute.
+  - **EN**: to attribute, assign
+    **MT**: Għaqqad u rrikonoxxa l-mertu jew il-ħsara f'post.
 - **Alternative Forms**: attribwa
 - **Usage Examples**:
-  - MT: Attribwixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of attribwixxa correctly and without delay.
+  - MT: Attribwixxa s-suċċess tiegħu lill-għajnuna tal-ġenituri.
+    EN: He attributed his success to his parents' help.
 
 ---
 
@@ -6658,11 +5579,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: female equivalent of attur: actress, female actor
-    **MT**: Forma femminili ta' attur: actress, female actor.
+  - **EN**: actress
+    **MT**: Mara li taħdem fl-arti teatrali jew fit-televiżjoni.
 - **Usage Examples**:
-  - MT: Attriċi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attriċi was in its proper place in daily use.
+  - MT: L-attriċi rebħet il-premju nazzjonali minħabba r-rwol.
+    EN: The actress won the national award for her role.
 
 ---
 
@@ -6670,48 +5591,44 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: actor
-    **MT**: Tifsira u deskrizzjoni ta' 'attur': actor.
-  - **EN**: plaintiff
-    **MT**: Tifsira u deskrizzjoni ta' 'attur': plaintiff.
+  - **EN**: actor, plaintiff
+    **MT**: Persuna li taġixxi fit-teatru jew li tibda kawża fil-qorti.
 - **Usage Examples**:
-  - MT: Attur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attur was in its proper place in daily use.
+  - MT: L-attur rreċita r-rwol prinċipali bil-bżonn.
+    EN: The actor performed the main role skillfully.
 
 ---
 
 ## attwa (v-attwa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to implement, to carry out
-    **MT**: Tifsira u deskrizzjoni ta' 'attwa': to implement, to carry out.
+  - **EN**: to implement, carry out
+    **MT**: Pjaċa u wettaq il-pjan fir-realtà.
 - **Usage Examples**:
-  - MT: Attwa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of attwa correctly and without delay.
+  - MT: Attwaw il-miżuri l-ġodda biex jipproteġu n-nies.
+    EN: They implemented the new measures to protect people.
 
 ---
 
 ## attwabbli (adj-attwabbli)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: feasible
-    **MT**: Tifsira u deskrizzjoni ta' 'attwabbli': feasible.
+  - **EN**: feasible, practicable
+    **MT**: Li jista' jiġi mwettaq fir-realtà mingħajr diffikultà.
 - **Usage Examples**:
-  - MT: Attwabbli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attwabbli was in its proper place in daily use.
+  - MT: Pjan attwabbli li jista' jara s-suċċess malajr.
+    EN: A feasible plan that can see success quickly.
 
 ---
 
 ## attwali (adj-attwali)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: present, current, modern, existing
-    **MT**: Tifsira u deskrizzjoni ta' 'attwali': present, current, modern, existing.
-  - **EN**: actual
-    **MT**: Tifsira u deskrizzjoni ta' 'attwali': actual.
+  - **EN**: present, current, existing
+    **MT**: Li jinsab u jseħħ f'dan il-mument ta' issa.
 - **Usage Examples**:
-  - MT: Attwali kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attwali was in its proper place in daily use.
+  - MT: Is-sitwazzjoni attwali teħtieġ kawtela kbira.
+    EN: The current situation requires great caution.
 
 ---
 
@@ -6719,24 +5636,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: actuality
-    **MT**: Tifsira u deskrizzjoni ta' 'attwalità': actuality.
+  - **EN**: actuality, current event
+    **MT**: Ir-realtà preżenti u l-aħbarijiet kurrenti.
 - **Usage Examples**:
-  - MT: Attwalità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attwalità was in its proper place in daily use.
+  - MT: Program dwar l-attwalità politiċi tal-pajjiż.
+    EN: A program about current national politics.
 
 ---
 
 ## attwalment (adv-attwalment)
 - **POS**: adverb
 - **Definitions**:
-  - **EN**: currently, now, at present, nowadays, at the moment
-    **MT**: Tifsira u deskrizzjoni ta' 'attwalment': currently, now, at present, nowadays, at the moment.
-  - **EN**: in reality
-    **MT**: Tifsira u deskrizzjoni ta' 'attwalment': in reality.
+  - **EN**: currently, now, at present
+    **MT**: F'dan il-mument preżenti li qegħdin fih.
 - **Usage Examples**:
-  - MT: Attwalment kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attwalment was in its proper place in daily use.
+  - MT: Attwalment jinsab jaħdem fuq proġett ġdid.
+    EN: Currently he is working on a new project.
 
 ---
 
@@ -6745,55 +5660,45 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: actuary
-    **MT**: Tifsira u deskrizzjoni ta' 'attwarju': actuary.
+    **MT**: Professjonist li jikkalkula r-riskji finanzjarji.
 - **Usage Examples**:
-  - MT: Attwarju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The attwarju was in its proper place in daily use.
+  - MT: L-attwarju analizza l-fajls tal-assigurazzjoni.
+    EN: The actuary analyzed insurance files.
 
 ---
 
 ## avanz (n-avanz)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: progress, advance
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanz': progress, advance.
-  - **EN**: benefit
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanz': benefit.
-  - **EN**: advance (amount of money)
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanz': advance (amount of money).
+  - **EN**: advance, progress
+    **MT**: Mossa 'l quddiem jew provviżjoni ta' fondi.
 - **Alternative Forms**: avvanz
 - **Usage Examples**:
-  - MT: Avanz kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avanz was in its proper place in daily use.
+  - MT: Għamlu avanz kbir fix-xjenza medika.
+    EN: They made a great advance in medical science.
 
 ---
 
 ## avanza (v-avanza)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to advance, to move forward
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanza': to advance, to move forward.
-  - **EN**: to advance, to make progress
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanza': to advance, to make progress.
-  - **EN**: to become stouter
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanza': to become stouter.
-  - **EN**: to promote
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanza': to promote.
+  - **EN**: to advance, move forward
+    **MT**: Mexxa 'l quddiem fil-pass jew l-ideat.
 - **Alternative Forms**: avvanza
 - **Usage Examples**:
-  - MT: Avanza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of avanza correctly and without delay.
+  - MT: Avanza lejn l-għan tiegħu b'entużjażmu.
+    EN: He advanced toward his goal with enthusiasm.
 
 ---
 
 ## Ave Marija (n-ave-marija)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: synonym of Sliema (“ Hail Mary ”)
-    **MT**: Tifsira u deskrizzjoni ta' 'Ave Marija': synonym of Sliema (“ Hail Mary ”).
+  - **EN**: Hail Mary (prayer)
+    **MT**: Talba tradizzjonali Kattolika lill-Madonna.
 - **Usage Examples**:
-  - MT: Ave marija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Ave Marija was in its proper place in daily use.
+  - MT: Għalu l-Ave Marija matul il-vitorja.
+    EN: They recited the Hail Mary during the procession.
 
 ---
 
@@ -6801,11 +5706,11 @@ Total Entries: 687
 - **POS**: conjunction
 - **Definitions**:
   - **EN**: even though, in spite of
-    **MT**: Tifsira u deskrizzjoni ta' 'avolja': even though, in spite of.
+    **MT**: Għalkemm u minkejja li kien hemm ostaklu.
 - **Alternative Forms**: avvolja
 - **Usage Examples**:
-  - MT: Avolja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avolja was in its proper place in daily use.
+  - MT: Attenda l-laqgħa avolja kien marid.
+    EN: He attended the meeting even though he was ill.
 
 ---
 
@@ -6813,17 +5718,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: lawyer (professional person authorized to practice law)
-    **MT**: Tifsira u deskrizzjoni ta' 'avukat': lawyer (professional person authorized to practice law).
-  - **EN**: advocate
-    **MT**: Tifsira u deskrizzjoni ta' 'avukat': advocate.
-  - **EN**: solicitor
-    **MT**: Tifsira u deskrizzjoni ta' 'avukat': solicitor.
-  - **EN**: attorney
-    **MT**: Tifsira u deskrizzjoni ta' 'avukat': attorney.
+  - **EN**: lawyer, advocate, attorney
+    **MT**: Professjonist awtorizzat li jiddefendi n-nies fil-qorti.
 - **Usage Examples**:
-  - MT: Avukat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avukat was in its proper place in daily use.
+  - MT: L-avukat spjega l-liġi lill-klijent b'kawtela.
+    EN: The lawyer explained the law to the client carefully.
 
 ---
 
@@ -6832,10 +5731,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: avocado
-    **MT**: Tifsira u deskrizzjoni ta' 'avukat': avocado.
-- **Usage Examples**:
-  - MT: Avukat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avukat was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (australia) avocado.
 
 ---
 
@@ -6843,11 +5739,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: vulture
-    **MT**: Tifsira u deskrizzjoni ta' 'avultun': vulture.
+  - **EN**: vulture (bird)
+    **MT**: Għasfur kbir tal-priża li jiekol il-mejjet.
 - **Usage Examples**:
-  - MT: Avultun kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avultun was in its proper place in daily use.
+  - MT: L-avultun kien jtir fuq il-wied deżert.
+    EN: The vulture was flying over the desert valley.
 
 ---
 
@@ -6856,10 +5752,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Egyptian vulture (Neophron percnopterus)
-    **MT**: Tifsira u deskrizzjoni ta' 'avultun abjad': Egyptian vulture (Neophron percnopterus).
-- **Usage Examples**:
-  - MT: Avultun abjad kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avultun abjad was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' avultun abjad fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -6868,20 +5761,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: griffon vulture (Gyps fulvus)
-    **MT**: Tifsira u deskrizzjoni ta' 'avultun prim': griffon vulture (Gyps fulvus).
-- **Usage Examples**:
-  - MT: Avultun prim kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avultun prim was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' avultun prim fl-użu u t-tifsira uffiċjali.
 
 ---
 
 ## avvalena (v-avvalena)
 - **POS**: verb
 - **Definitions**:
-- **Alternative Forms**: vvelena
+  - **EN**: to poison (alt)
+    **MT**: Forma u tifsira ta' avvelena.
 - **Usage Examples**:
-  - MT: Avvalena l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of avvalena correctly and without delay.
+  - MT: Avvalenaw l-ilma fit-tieni staġun.
+    EN: They poisoned the water in the second season.
 
 ---
 
@@ -6890,55 +5781,46 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: progress, advance
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanz': progress, advance.
-  - **EN**: benefit
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanz': benefit.
-  - **EN**: advance (amount of money)
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanz': advance (amount of money).
+    **MT**: Żvilupp u mossa b'pass solidu 'l quddiem.
 - **Alternative Forms**: avanz
 - **Usage Examples**:
-  - MT: Avvanz kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avvanz was in its proper place in daily use.
+  - MT: L-avvanz fit-teknoloġija jgħin fit-tagħlim.
+    EN: Progress in technology helps learning.
 
 ---
 
 ## avvanza (v-avvanza)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to advance, to move forward
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanza': to advance, to move forward.
-  - **EN**: to advance, to make progress
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanza': to advance, to make progress.
-  - **EN**: to become stouter
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanza': to become stouter.
-  - **EN**: to promote
-    **MT**: Tifsira u deskrizzjoni ta' 'avvanza': to promote.
+  - **EN**: to advance, make progress
+    **MT**: Mexxa u kabbar il-pożizzjoni jew ir-riżultati tiegħu.
 - **Alternative Forms**: avanza
 - **Usage Examples**:
-  - MT: Avvanza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of avvanza correctly and without delay.
+  - MT: Avvanza fix-xogħol tiegħu minħabba l-impenn.
+    EN: He advanced in his work due to commitment.
 
 ---
 
 ## avvela (v-avvela)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to disgrace, to humiliate
-    **MT**: Tifsira u deskrizzjoni ta' 'avvelixxa': to disgrace, to humiliate.
+  - **EN**: to poison (alt)
+    **MT**: Forma u tifsira ta' avvelena.
 - **Alternative Forms**: avvelixxa
 - **Usage Examples**:
-  - MT: Avvela l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of avvela correctly and without delay.
+  - MT: Avvela l-ikel fil-borma b'sustanza.
+    EN: He poisoned the food in the pot with a substance.
 
 ---
 
 ## avvelena (v-avvelena)
 - **POS**: verb
 - **Definitions**:
-- **Alternative Forms**: vvelena
+  - **EN**: to poison
+    **MT**: Qiegħed velenu f'oġġett jew ilma biex jagħmel ħsara.
 - **Usage Examples**:
-  - MT: Avvelena l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of avvelena correctly and without delay.
+  - MT: Avvelenaw l-ilma tal-bir u ġabu l-inkwiet.
+    EN: They poisoned the well water and brought trouble.
 
 ---
 
@@ -6947,22 +5829,22 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: poisoning
-    **MT**: Tifsira u deskrizzjoni ta' 'avvelenament': poisoning.
+    **MT**: Stat fejn il-ġisem ibatu minħabba velenu.
 - **Usage Examples**:
-  - MT: Avvelenament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avvelenament was in its proper place in daily use.
+  - MT: Kas ta' avvelenament li ġie trattat fl-isptar.
+    EN: A case of poisoning that was treated at the hospital.
 
 ---
 
 ## avvelixxa (v-avvelixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to disgrace, to humiliate
-    **MT**: Tifsira u deskrizzjoni ta' 'avvelixxa': to disgrace, to humiliate.
+  - **EN**: to disgrace, humiliate
+    **MT**: Neħħa d-dinjità u l-unur minn persuna.
 - **Alternative Forms**: avvela
 - **Usage Examples**:
-  - MT: Avvelixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of avvelixxa correctly and without delay.
+  - MT: Avvelixxa lill-avversarju b'kliem iebes.
+    EN: He humiliated his opponent with harsh words.
 
 ---
 
@@ -6971,12 +5853,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: adventure, venture
-    **MT**: Tifsira u deskrizzjoni ta' 'avventura': adventure, venture.
-  - **EN**: love affair, affair
-    **MT**: Tifsira u deskrizzjoni ta' 'avventura': love affair, affair.
+    **MT**: Esperjenza ġdida u mimlija emozzjoni u riskji.
 - **Usage Examples**:
-  - MT: Avventura kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avventura was in its proper place in daily use.
+  - MT: Kienet avventura kbira li vvjaġġaw lejn l-Afrika.
+    EN: It was a great adventure traveling to Africa.
 
 ---
 
@@ -6985,10 +5865,10 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: adventurer
-    **MT**: Tifsira u deskrizzjoni ta' 'avventurier': adventurer.
+    **MT**: Persuna li tħobb ir-riskji u l-esperjenzi ġodda.
 - **Usage Examples**:
-  - MT: Avventurier kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avventurier was in its proper place in daily use.
+  - MT: L-avventurier fittex it-triq il-ġdida fil-muntanji.
+    EN: The adventurer looked for the new path in the mountains.
 
 ---
 
@@ -6996,21 +5876,21 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: adventurous
-    **MT**: Tifsira u deskrizzjoni ta' 'avventuruż': adventurous.
+    **MT**: Li jħobb jieħu riskji u jesplora postijiet.
 - **Usage Examples**:
-  - MT: Avventuruż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avventuruż was in its proper place in daily use.
+  - MT: Vjaġġ avventuruż fil-foresta nazzjonali.
+    EN: An adventurous trip in the national forest.
 
 ---
 
 ## avvera (v-avvera)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to come true [with ruħ]
-    **MT**: Tifsira u deskrizzjoni ta' 'avvera': to come true [with ruħ].
+  - **EN**: to come true (realize)
+    **MT**: Bidel f'realtà x-xewqa jew il-ħolma.
 - **Usage Examples**:
-  - MT: Avvera l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of avvera correctly and without delay.
+  - MT: L-ħolma tiegħu avverat ruħha fl-aħħar.
+    EN: His dream came true at last.
 
 ---
 
@@ -7018,22 +5898,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: adverb
-    **MT**: Tifsira u deskrizzjoni ta' 'avverbju': adverb.
+  - **EN**: adverb (grammar)
+    **MT**: Parti mill-diskors li tiddeskrivi brija ta' verba.
 - **Usage Examples**:
-  - MT: Avverbju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avverbju was in its proper place in daily use.
+  - MT: L-avverbju jikkjarifika kif saret l-azzjoni.
+    EN: The adverb clarifies how the action was performed.
 
 ---
 
 ## avverta (v-avverta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to warn, to caution, to advert, to admonish
-    **MT**: Tifsira u deskrizzjoni ta' 'avverta': to warn, to caution, to advert, to admonish.
+  - **EN**: to warn, caution
+    **MT**: Ta avviż u twissija dwar periklu mistenni.
 - **Usage Examples**:
-  - MT: Avverta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of avverta correctly and without delay.
+  - MT: Avverta l-poplu dwar il-maltemp il-qawwi.
+    EN: He warned the people about the severe storm.
 
 ---
 
@@ -7041,34 +5921,34 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: admonishment, caution
-    **MT**: Tifsira u deskrizzjoni ta' 'avvertiment': admonishment, caution.
+  - **EN**: warning, caution
+    **MT**: Taqlima jew avviż dwar xi ħaġa perikoluża.
 - **Usage Examples**:
-  - MT: Avvertiment kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avvertiment was in its proper place in daily use.
+  - MT: Rċevew avvertiment ċar mingħand il-pulizija.
+    EN: They received a clear warning from the police.
 
 ---
 
 ## avviċina (v-avviċina)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to come near, to approach
-    **MT**: Tifsira u deskrizzjoni ta' 'avviċina': to come near, to approach.
+  - **EN**: to approach, come near
+    **MT**: Mexxa u resaq aktar viċin ta' post jew persuna.
 - **Usage Examples**:
-  - MT: Avviċina l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of avviċina correctly and without delay.
+  - MT: Avviċina l-bieb bil-kwiet mingħajr storbju.
+    EN: He approached the door quietly without noise.
 
 ---
 
 ## avvolja (conj-avvolja)
 - **POS**: conjunction
 - **Definitions**:
-  - **EN**: even though, in spite of
-    **MT**: Tifsira u deskrizzjoni ta' 'avolja': even though, in spite of.
+  - **EN**: even though (alt)
+    **MT**: Minkejja li kien hemm impediment.
 - **Alternative Forms**: avolja
 - **Usage Examples**:
-  - MT: Avvolja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The avvolja was in its proper place in daily use.
+  - MT: Attenda l-laqgħa avvolja kien xogħol iebes.
+    EN: He attended the meeting even though it was hard work.
 
 ---
 
@@ -7076,12 +5956,9 @@ Total Entries: 687
 - **POS**: interjection
 - **Definitions**:
   - **EN**: " yes? "
-    **MT**: Tifsira u deskrizzjoni ta' 'aw': " yes? ".
+    **MT**: Għandu x'jaqsam ma' " yes? "; " what is it? ".
   - **EN**: " what is it? "
-    **MT**: Tifsira u deskrizzjoni ta' 'aw': " what is it? ".
-- **Usage Examples**:
-  - MT: Aw kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aw was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' " yes? "; " what is it? ".
 
 ---
 
@@ -7089,34 +5966,28 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to wish, congratulate
-    **MT**: Tifsira u deskrizzjoni ta' 'awgura': to wish, congratulate.
+    **MT**: Wera xewqa tajba u rispett f'okkażjoni.
 - **Usage Examples**:
-  - MT: Awgura l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of awgura correctly and without delay.
+  - MT: Awgura lil sieħbu suċċess fil-karriera tiegħu.
+    EN: He wished his friend success in his career.
 
 ---
 
-## Awissu (n-awissu) 🌟 *(REVISED TARGET ENTRY)*
+## Awissu (n-awissu)
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: August
     **MT**: It-tmien xhar tas-sena fil-kalendarju.
-- **Usage Examples**:
-  - MT: Awissu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Awissu was in its proper place in daily use.
 
 ---
 
-## awista (n-awista) 🌟 *(REVISED TARGET ENTRY)*
+## awista (n-awista)
 - **POS**: noun
 - **Definitions**:
   - **EN**: lobster
     **MT**: Kreatura tal-baħar bil-qoxra u xedaq kbar u tal-ikel.
 - **Alternative Forms**: awwista
-- **Usage Examples**:
-  - MT: Awista kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awista was in its proper place in daily use.
 
 ---
 
@@ -7124,13 +5995,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: lecture hall
-    **MT**: Tifsira u deskrizzjoni ta' 'awla': lecture hall.
-  - **EN**: large representative hall, auditorium
-    **MT**: Tifsira u deskrizzjoni ta' 'awla': large representative hall, auditorium.
+  - **EN**: lecture hall, auditorium
+    **MT**: Kamra kbira f'università jew qorti għas-smigħ.
 - **Usage Examples**:
-  - MT: Awla kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awla was in its proper place in daily use.
+  - MT: L-awla kienet mimlija studenti fis-simposju.
+    EN: The lecture hall was filled with students at the symposium.
 
 ---
 
@@ -7139,21 +6008,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: increase, rise
-    **MT**: Tifsira u deskrizzjoni ta' 'awment': increase, rise.
-- **Usage Examples**:
-  - MT: Awment kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awment was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' increase, rise.
 
 ---
 
 ## awmenta (v-awmenta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to increase, to raise, to augment
-    **MT**: Tifsira u deskrizzjoni ta' 'awmenta': to increase, to raise, to augment.
+  - **EN**: to increase, raise
+    **MT**: Kabbar l-ammont jew il-prezz ta' xi ħaġa.
 - **Usage Examples**:
-  - MT: Awmenta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of awmenta correctly and without delay.
+  - MT: Awmentaw il-pagi tal-ħaddiema minnufih.
+    EN: They raised the workers' wages immediately.
 
 ---
 
@@ -7162,11 +6028,8 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: monkey puzzle (Araucaria araucana)
-    **MT**: Tifsira u deskrizzjoni ta' 'awrikarja': monkey puzzle (Araucaria araucana).
+    **MT**: Li għandu x'jaqsam ma' awrikarja fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: arawkarja
-- **Usage Examples**:
-  - MT: Awrikarja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awrikarja was in its proper place in daily use.
 
 ---
 
@@ -7175,10 +6038,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: Norfolk Island pine, Araucaria heterophylla
-    **MT**: Tifsira u deskrizzjoni ta' 'awrikarja kbira': Norfolk Island pine, Araucaria heterophylla.
-- **Usage Examples**:
-  - MT: Awrikarja kbira kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awrikarja kbira was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' awrikarja kbira fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7187,10 +6047,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: Bunya pine, Araucaria bidwillii
-    **MT**: Tifsira u deskrizzjoni ta' 'awrikarja ta' Bidwill': Bunya pine, Araucaria bidwillii.
-- **Usage Examples**:
-  - MT: Awrikarja ta' bidwill kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awrikarja ta' Bidwill was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' awrikarja ta' Bidwill fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7199,10 +6056,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: urine
-    **MT**: Tifsira u deskrizzjoni ta' 'awrina': urine.
-- **Usage Examples**:
-  - MT: Awrina kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awrina was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (formal) urine.
 
 ---
 
@@ -7210,10 +6064,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to urinate
-    **MT**: Tifsira u deskrizzjoni ta' 'awrina': to urinate.
-- **Usage Examples**:
-  - MT: Awrina l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of awrina correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' (formal, rare) to urinate.
 
 ---
 
@@ -7221,14 +6072,11 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Australia (a country consisting of a main island, the island of Tasmania and other smaller islands, located in Oceania
-    **MT**: Tifsira u deskrizzjoni ta' 'Awstralja': Australia (a country consisting of a main island, the island of Tasmania and other smaller islands, located in Oceania.
+    **MT**: Li għandu x'jaqsam ma' Awstralja fl-użu u t-tifsira uffiċjali.
   - **EN**: historically, a collection of former colonies of the British Empire)
-    **MT**: Tifsira u deskrizzjoni ta' 'Awstralja': historically, a collection of former colonies of the British Empire).
+    **MT**: Li għandu x'jaqsam ma' Awstralja fl-użu u t-tifsira uffiċjali.
   - **EN**: Australia (a continent consisting of the land on the Australian tectonic plate, i.e. Australia, New Guinea and intervening islands)
-    **MT**: Tifsira u deskrizzjoni ta' 'Awstralja': Australia (a continent consisting of the land on the Australian tectonic plate, i.e. Australia, New Guinea and intervening islands).
-- **Usage Examples**:
-  - MT: Awstralja kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Awstralja was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Awstralja fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7236,12 +6084,9 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Austria (a country in Central Europe
-    **MT**: Tifsira u deskrizzjoni ta' 'Awstrija': Austria (a country in Central Europe.
+    **MT**: Li għandu x'jaqsam ma' Awstrija fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Repubblika tal-Awstrija)
-    **MT**: Tifsira u deskrizzjoni ta' 'Awstrija': official name: Repubblika tal-Awstrija).
-- **Usage Examples**:
-  - MT: Awstrija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Awstrija was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' Awstrija fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7249,10 +6094,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to authenticate
-    **MT**: Tifsira u deskrizzjoni ta' 'awtentika': to authenticate.
-- **Usage Examples**:
-  - MT: Awtentika l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of awtentika correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to authenticate.
 
 ---
 
@@ -7260,10 +6102,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: authentically
-    **MT**: Tifsira u deskrizzjoni ta' 'awtentikament': authentically.
-- **Usage Examples**:
-  - MT: Awtentikament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtentikament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' authentically.
 
 ---
 
@@ -7272,10 +6111,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: authentification
-    **MT**: Tifsira u deskrizzjoni ta' 'awtentikazzjoni': authentification.
-- **Usage Examples**:
-  - MT: Awtentikazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtentikazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' authentification.
 
 ---
 
@@ -7283,10 +6119,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: authentic, genuine
-    **MT**: Tifsira u deskrizzjoni ta' 'awtentiku': authentic, genuine.
-- **Usage Examples**:
-  - MT: Awtentiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtentiku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' authentic, genuine.
 
 ---
 
@@ -7295,10 +6128,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: authenticity
-    **MT**: Tifsira u deskrizzjoni ta' 'awtentiċità': authenticity.
-- **Usage Examples**:
-  - MT: Awtentiċità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtentiċità was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' authenticity.
 
 ---
 
@@ -7306,10 +6136,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: automatic
-    **MT**: Tifsira u deskrizzjoni ta' 'awtomatiku': automatic.
-- **Usage Examples**:
-  - MT: Awtomatiku kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtomatiku was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' automatic.
 
 ---
 
@@ -7318,10 +6145,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: autonomy
-    **MT**: Tifsira u deskrizzjoni ta' 'awtonomija': autonomy.
-- **Usage Examples**:
-  - MT: Awtonomija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtonomija was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' autonomy.
 
 ---
 
@@ -7329,10 +6153,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: autonomous
-    **MT**: Tifsira u deskrizzjoni ta' 'awtonomu': autonomous.
-- **Usage Examples**:
-  - MT: Awtonomu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtonomu was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' autonomous.
 
 ---
 
@@ -7340,10 +6161,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: authoritative
-    **MT**: Tifsira u deskrizzjoni ta' 'awtorevoli': authoritative.
-- **Usage Examples**:
-  - MT: Awtorevoli kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtorevoli was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' authoritative.
 
 ---
 
@@ -7351,10 +6169,7 @@ Total Entries: 687
 - **POS**: adverb
 - **Definitions**:
   - **EN**: authoritatively
-    **MT**: Tifsira u deskrizzjoni ta' 'awtorevolment': authoritatively.
-- **Usage Examples**:
-  - MT: Awtorevolment kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtorevolment was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' authoritatively.
 
 ---
 
@@ -7362,10 +6177,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: authoritarian
-    **MT**: Tifsira u deskrizzjoni ta' 'awtoritarju': authoritarian.
-- **Usage Examples**:
-  - MT: Awtoritarju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtoritarju was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' authoritarian.
 
 ---
 
@@ -7374,10 +6186,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: authority
-    **MT**: Tifsira u deskrizzjoni ta' 'awtorità': authority.
-- **Usage Examples**:
-  - MT: Awtorità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtorità was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' authority.
 
 ---
 
@@ -7385,10 +6194,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to authorize
-    **MT**: Tifsira u deskrizzjoni ta' 'awtorizza': to authorize.
-- **Usage Examples**:
-  - MT: Awtorizza l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of awtorizza correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to authorize.
 
 ---
 
@@ -7397,10 +6203,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: verbal noun of awtorizza
-    **MT**: L-att u l-proċess verbali ta' awtorizza.
-- **Usage Examples**:
-  - MT: Awtorizzar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtorizzar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' verbal noun of awtorizza.
 
 ---
 
@@ -7409,10 +6212,7 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: authorization, permission
-    **MT**: Tifsira u deskrizzjoni ta' 'awtorizzazzjoni': authorization, permission.
-- **Usage Examples**:
-  - MT: Awtorizzazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtorizzazzjoni was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' authorization, permission.
 
 ---
 
@@ -7420,10 +6220,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: first-class
-    **MT**: Tifsira u deskrizzjoni ta' 'awtur': first-class.
-- **Usage Examples**:
-  - MT: Awtur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtur was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' first-class.
 
 ---
 
@@ -7432,12 +6229,9 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: author (originator or creator of a work)
-    **MT**: Tifsira u deskrizzjoni ta' 'awtur': author (originator or creator of a work).
+    **MT**: Li għandu x'jaqsam ma' awtur fl-użu u t-tifsira uffiċjali.
   - **EN**: originator, perpetrator, creator
-    **MT**: Tifsira u deskrizzjoni ta' 'awtur': originator, perpetrator, creator.
-- **Usage Examples**:
-  - MT: Awtur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awtur was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' awtur fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7446,11 +6240,8 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: August
-    **MT**: Tifsira u deskrizzjoni ta' 'Awwissu': August.
+    **MT**: Għandu x'jaqsam ma' august.
 - **Alternative Forms**: Awissu, Ewissu
-- **Usage Examples**:
-  - MT: Awwissu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Awwissu was in its proper place in daily use.
 
 ---
 
@@ -7459,11 +6250,8 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: lobster
-    **MT**: Tifsira u deskrizzjoni ta' 'awwista': lobster.
+    **MT**: Għandu x'jaqsam ma' lobster.
 - **Alternative Forms**: awista
-- **Usage Examples**:
-  - MT: Awwista kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The awwista was in its proper place in daily use.
 
 ---
 
@@ -7472,11 +6260,8 @@ Total Entries: 687
 - **Root**: għ-x-q
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Axiak': a surname.
+    **MT**: Għandu x'jaqsam ma' a surname.
 - **Alternative Forms**: Axiaq
-- **Usage Examples**:
-  - MT: Axiak kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Axiak was in its proper place in daily use.
 
 ---
 
@@ -7484,11 +6269,8 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Axiak': a surname.
+    **MT**: Għandu x'jaqsam ma' a surname.
 - **Alternative Forms**: Axiak
-- **Usage Examples**:
-  - MT: Axiaq kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Axiaq was in its proper place in daily use.
 
 ---
 
@@ -7497,11 +6279,8 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: ashtray
-    **MT**: Tifsira u deskrizzjoni ta' 'axtrej': ashtray.
+    **MT**: Għandu x'jaqsam ma' ashtray.
 - **Alternative Forms**: extrej
-- **Usage Examples**:
-  - MT: Axtrej kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The axtrej was in its proper place in daily use.
 
 ---
 
@@ -7510,10 +6289,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: steel (metal)
-    **MT**: Tifsira u deskrizzjoni ta' 'azzar': steel (metal).
-- **Usage Examples**:
-  - MT: Azzar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The azzar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' steel (metal).
 
 ---
 
@@ -7521,22 +6297,19 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to steel plate
-    **MT**: Tifsira u deskrizzjoni ta' 'azzara': to steel plate.
-- **Usage Examples**:
-  - MT: Azzara l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of azzara correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to steel plate.
 
 ---
 
 ## azzarda (v-azzarda)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to dare, to hazard
-    **MT**: Tifsira u deskrizzjoni ta' 'azzarda': to dare, to hazard.
+  - **EN**: to dare, hazard, risk
+    **MT**: Wettaq azzjoni b'riskju u bla biża'.
 - **Alternative Forms**: ażżarda
 - **Usage Examples**:
-  - MT: Azzarda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of azzarda correctly and without delay.
+  - MT: Azzarda jidħol fid-dlam mingħajr dawl.
+    EN: He dared to enter the dark without light.
 
 ---
 
@@ -7544,10 +6317,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: steely
-    **MT**: Tifsira u deskrizzjoni ta' 'azzari': steely.
-- **Usage Examples**:
-  - MT: Azzari kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The azzari was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' steely.
 
 ---
 
@@ -7555,10 +6325,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: stock, share
-    **MT**: Tifsira u deskrizzjoni ta' 'azzjonarju': stock, share.
-- **Usage Examples**:
-  - MT: Azzjonarju kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The azzjonarju was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' azzjonarju fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7566,15 +6333,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: feminine
 - **Definitions**:
-  - **EN**: action
-    **MT**: Tifsira u deskrizzjoni ta' 'azzjoni': action.
-  - **EN**: behaviour towards others
-    **MT**: Tifsira u deskrizzjoni ta' 'azzjoni': behaviour towards others.
-  - **EN**: share
-    **MT**: Tifsira u deskrizzjoni ta' 'azzjoni': share.
+  - **EN**: action, share, behavior
+    **MT**: Mossa jew azzjoni mwettqa u sehem finanzjarju.
 - **Usage Examples**:
-  - MT: Azzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The azzjoni was in its proper place in daily use.
+  - MT: Ħa azzjoni rapida biex isalva l-post.
+    EN: He took quick action to save the place.
 
 ---
 
@@ -7583,21 +6346,21 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: shareholder
-    **MT**: Tifsira u deskrizzjoni ta' 'azzjonista': shareholder.
+    **MT**: Persuna li għandha ishma f'kumpanija.
 - **Usage Examples**:
-  - MT: Azzjonista kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The azzjonista was in its proper place in daily use.
+  - MT: L-azzjonista rċieva l-profitt fl-aħħar tas-sena.
+    EN: The shareholder received the profit at year end.
 
 ---
 
 ## Azzopardi (n-azzopardi)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: a surname
-    **MT**: Tifsira u deskrizzjoni ta' 'Azzopardi': a surname.
+  - **EN**: Azzopardi (surname)
+    **MT**: Kunjom Malti storiku u komuni ħafna.
 - **Usage Examples**:
-  - MT: Azzopardi kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Azzopardi was in its proper place in daily use.
+  - MT: Is-sur Azzopardi kien it-tabib tar-raħal.
+    EN: Mr. Azzopardi was the village doctor.
 
 ---
 
@@ -7606,10 +6369,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: acidity
-    **MT**: Tifsira u deskrizzjoni ta' 'aċidità': acidity.
+    **MT**: Staq ta' qarsu kimiku jew fl-istonku.
 - **Usage Examples**:
-  - MT: Aċidità kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aċidità was in its proper place in daily use.
+  - MT: Ħass aċidità fl-istonku wara l-ikla.
+    EN: He felt acidity in his stomach after the meal.
 
 ---
 
@@ -7618,11 +6381,11 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: acid
-    **MT**: Tifsira u deskrizzjoni ta' 'aċidu': acid.
+    **MT**: Sustanza kimika qarsa u qawwija.
 - **Alternative Forms**: aċtu
 - **Usage Examples**:
-  - MT: Aċidu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aċidu was in its proper place in daily use.
+  - MT: Użaw l-aċidu fil-laboratorju bir-reqqa.
+    EN: They used acid in the lab carefully.
 
 ---
 
@@ -7630,10 +6393,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: acidulated
-    **MT**: Tifsira u deskrizzjoni ta' 'aċidulat': acidulated.
-- **Usage Examples**:
-  - MT: Aċidulat kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aċidulat was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' acidulated.
 
 ---
 
@@ -7641,12 +6401,9 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: acid
-    **MT**: Tifsira u deskrizzjoni ta' 'aċiduż': acid.
+    **MT**: Għandu x'jaqsam ma' (chemistry) acid; sour.
   - **EN**: sour
-    **MT**: Tifsira u deskrizzjoni ta' 'aċiduż': sour.
-- **Usage Examples**:
-  - MT: Aċiduż kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aċiduż was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (chemistry) acid; sour.
 
 ---
 
@@ -7654,22 +6411,22 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: acid
-    **MT**: Tifsira u deskrizzjoni ta' 'aċidu': acid.
+    **MT**: Sustanza kimika qarsa u qawwija.
 - **Alternative Forms**: aċidu
 - **Usage Examples**:
-  - MT: Aċtu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aċtu was in its proper place in daily use.
+  - MT: Użaw l-aċidu fil-laboratorju bir-reqqa.
+    EN: They used acid in the lab carefully.
 
 ---
 
 ## aċċelera (v-aċċelera)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to accelerate
-    **MT**: Tifsira u deskrizzjoni ta' 'aċċelera': to accelerate.
+  - **EN**: to accelerate, speed up
+    **MT**: Zied il-veloċità u l-ħeffa fil-mossa.
 - **Usage Examples**:
-  - MT: Aċċelera l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aċċelera correctly and without delay.
+  - MT: Aċċelera l-vettura fit-triq il-miftuħa.
+    EN: He accelerated the vehicle on the open road.
 
 ---
 
@@ -7678,10 +6435,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: accelerator
-    **MT**: Tifsira u deskrizzjoni ta' 'aċċeleratur': accelerator.
-- **Usage Examples**:
-  - MT: Aċċeleratur kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aċċeleratur was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' accelerator.
 
 ---
 
@@ -7690,10 +6444,10 @@ Total Entries: 687
 - **Gender**: feminine
 - **Definitions**:
   - **EN**: acceleration
-    **MT**: Tifsira u deskrizzjoni ta' 'aċċelerazzjoni': acceleration.
+    **MT**: Żieda fir-ritmu jew il-veloċità.
 - **Usage Examples**:
-  - MT: Aċċelerazzjoni kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aċċelerazzjoni was in its proper place in daily use.
+  - MT: L-aċċelerazzjoni tal-karozza kienet impressjonanti.
+    EN: The car's acceleration was impressive.
 
 ---
 
@@ -7702,21 +6456,18 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: hint
-    **MT**: Tifsira u deskrizzjoni ta' 'aċċenn': hint.
-- **Usage Examples**:
-  - MT: Aċċenn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aċċenn was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' hint.
 
 ---
 
 ## aċċenna (v-aċċenna)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to point to, to hint at, to touch upon
-    **MT**: Tifsira u deskrizzjoni ta' 'aċċenna': to point to, to hint at, to touch upon.
+  - **EN**: to hint at, touch upon
+    **MT**: Għamel mezz u rrefera għal suġġett bil-kwiet.
 - **Usage Examples**:
-  - MT: Aċċenna l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aċċenna correctly and without delay.
+  - MT: Aċċenna għall-pjan il-ġdid fid-diskors tiegħu.
+    EN: He hinted at the new plan in his speech.
 
 ---
 
@@ -7724,10 +6475,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to accentuate
-    **MT**: Tifsira u deskrizzjoni ta' 'aċċentwa': to accentuate.
-- **Usage Examples**:
-  - MT: Aċċentwa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aċċentwa correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to accentuate.
 
 ---
 
@@ -7735,21 +6483,18 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to access
-    **MT**: Tifsira u deskrizzjoni ta' 'aċċessa': to access.
-- **Usage Examples**:
-  - MT: Aċċessa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aċċessa correctly and without delay.
+    **MT**: Għandu x'jaqsam ma' to access.
 
 ---
 
 ## aċċetta (v-aċċetta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to accept
-    **MT**: Tifsira u deskrizzjoni ta' 'aċċetta': to accept.
+  - **EN**: to accept, agree to
+    **MT**: Ħa u rrikonoxxa ponuta jew deċiżjoni uffiċjali.
 - **Usage Examples**:
-  - MT: Aċċetta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aċċetta correctly and without delay.
+  - MT: Aċċetta l-proposta tax-xogħol minnufih.
+    EN: He accepted the job proposal immediately.
 
 ---
 
@@ -7759,14 +6504,11 @@ Total Entries: 687
 - **Root**: '-ġ-r
 - **Definitions**:
   - **EN**: wage, salary, pay, hire
-    **MT**: Tifsira u deskrizzjoni ta' 'aġar': wage, salary, pay, hire.
+    **MT**: Għandu x'jaqsam ma' wage, salary, pay, hire.
   - **EN**: alms, charity
-    **MT**: Tifsira u deskrizzjoni ta' 'aġar': alms, charity.
+    **MT**: Għandu x'jaqsam ma' alms, charity.
   - **EN**: kindness
-    **MT**: Tifsira u deskrizzjoni ta' 'aġar': kindness.
-- **Usage Examples**:
-  - MT: Aġar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aġar was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' kindness.
 
 ---
 
@@ -7774,10 +6516,7 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to make something easy, to facilitate
-    **MT**: Tifsira u deskrizzjoni ta' 'aġevola': to make something easy, to facilitate.
-- **Usage Examples**:
-  - MT: Aġevola l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aġevola correctly and without delay.
+    **MT**: Li għandu x'jaqsam ma' aġevola fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7786,14 +6525,11 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: facilitation
-    **MT**: Tifsira u deskrizzjoni ta' 'aġevolment': facilitation.
-- **Usage Examples**:
-  - MT: Aġevolment kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aġevolment was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' facilitation.
 
 ---
 
-## aġir (n-aġir) 🌟 *(REVISED TARGET ENTRY)*
+## aġir (n-aġir)
 - **POS**: noun
 - **Gender**: masculine
 - **Root**: '-ġ-r
@@ -7802,20 +6538,17 @@ Total Entries: 687
     **MT**: Ħaddiem li jaħdem għall-paga jew fil-biedja.
   - **EN**: behaviour, conduct
     **MT**: Il-mod kif persuna taġixxi jew ġġib ruħha.
-- **Usage Examples**:
-  - MT: Aġir kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aġir was in its proper place in daily use.
 
 ---
 
 ## aġixxa (v-aġixxa)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to act, to behave
-    **MT**: Tifsira u deskrizzjoni ta' 'aġixxa': to act, to behave.
+  - **EN**: to act, behave
+    **MT**: Wettaq azzjoni u ġab ruħu f'sitwazzjoni.
 - **Usage Examples**:
-  - MT: Aġixxa l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aġixxa correctly and without delay.
+  - MT: Aġixxa b'kawtela kbira quddiem il-periklu.
+    EN: He acted with great caution in front of danger.
 
 ---
 
@@ -7823,11 +6556,11 @@ Total Entries: 687
 - **POS**: verb
 - **Definitions**:
   - **EN**: to adjust
-    **MT**: Tifsira u deskrizzjoni ta' 'aġġastja': to adjust.
+    **MT**: Għandu x'jaqsam ma' to adjust.
 - **Alternative Forms**: aġġusta
 - **Usage Examples**:
-  - MT: Aġġastja l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aġġastja correctly and without delay.
+  - MT: Aġġusta l-arloġġ mal-ħin uffiċjali.
+    EN: He adjusted the clock to the official time.
 
 ---
 
@@ -7835,11 +6568,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: adjective
-    **MT**: Tifsira u deskrizzjoni ta' 'aġġettiv': adjective.
+  - **EN**: adjective (grammar)
+    **MT**: Parti mill-diskors li tiddeskrivi nom.
 - **Usage Examples**:
-  - MT: Aġġettiv kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aġġettiv was in its proper place in daily use.
+  - MT: Uża aġġettiv tajjeb fis-sentenza.
+    EN: He used a good adjective in the sentence.
 
 ---
 
@@ -7847,21 +6580,18 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: modern, up-to-date
-    **MT**: Tifsira u deskrizzjoni ta' 'aġġorn': modern, up-to-date.
-- **Usage Examples**:
-  - MT: Aġġorn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aġġorn was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' modern, up-to-date.
 
 ---
 
 ## aġġorna (v-aġġorna)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to update
-    **MT**: Tifsira u deskrizzjoni ta' 'aġġorna': to update.
+  - **EN**: to update, adjourn
+    **MT**: Zied l-informazzjoni l-ġdida u rranġa.
 - **Usage Examples**:
-  - MT: Aġġorna l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aġġorna correctly and without delay.
+  - MT: Aġġorna l-programm fuq il-kompjuter tiegħu.
+    EN: He updated the software on his computer.
 
 ---
 
@@ -7870,24 +6600,22 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: update, updating
-    **MT**: Tifsira u deskrizzjoni ta' 'aġġornament': update, updating.
-  - **EN**: adjournment, recess
-    **MT**: Tifsira u deskrizzjoni ta' 'aġġornament': adjournment, recess.
+    **MT**: Informativa ġdida dwar status jew pjan.
 - **Usage Examples**:
-  - MT: Aġġornament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aġġornament was in its proper place in daily use.
+  - MT: Rċevew aġġornament importanti dwar il-proġett.
+    EN: They received an important update about the project.
 
 ---
 
 ## aġġusta (v-aġġusta)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to adjust
-    **MT**: Tifsira u deskrizzjoni ta' 'aġġastja': to adjust.
+  - **EN**: to adjust, fine-tune
+    **MT**: Rranġa u qiegħed fil-pożizzjoni t-tajba.
 - **Alternative Forms**: aġġastja
 - **Usage Examples**:
-  - MT: Aġġusta l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of aġġusta correctly and without delay.
+  - MT: Aġġusta l-arloġġ mal-ħin uffiċjali.
+    EN: He adjusted the clock to the official time.
 
 ---
 
@@ -7896,10 +6624,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: adjustment
-    **MT**: Tifsira u deskrizzjoni ta' 'aġġustament': adjustment.
-- **Usage Examples**:
-  - MT: Aġġustament kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aġġustament was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' adjustment.
 
 ---
 
@@ -7908,17 +6633,11 @@ Total Entries: 687
 - **Gender**: feminine
 - **Root**: ħ-b-r
 - **Definitions**:
-  - **EN**: a piece of news
-    **MT**: Tifsira u deskrizzjoni ta' 'aħbar': a piece of news.
-  - **EN**: a notice, message, report
-    **MT**: Tifsira u deskrizzjoni ta' 'aħbar': a notice, message, report.
-  - **EN**: news
-    **MT**: Tifsira u deskrizzjoni ta' 'aħbar': news.
-  - **EN**: also in the sense of a broadcast
-    **MT**: Tifsira u deskrizzjoni ta' 'aħbar': also in the sense of a broadcast.
+  - **EN**: news, notice, message
+    **MT**: Informazzjoni ġdida rrapportata nazzjonalment.
 - **Usage Examples**:
-  - MT: Aħbar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħbar was in its proper place in daily use.
+  - MT: Sema' l-aħbar it-tajba fuq ir-radju.
+    EN: He heard the good news on the radio.
 
 ---
 
@@ -7926,45 +6645,35 @@ Total Entries: 687
 - **POS**: adjective
 - **Root**: ħ-d-r
 - **Definitions**:
-  - **EN**: green
-    **MT**: Tifsira u deskrizzjoni ta' 'aħdar': green.
-  - **EN**: pale
-    **MT**: Tifsira u deskrizzjoni ta' 'aħdar': pale.
-  - **EN**: unripe
-    **MT**: Tifsira u deskrizzjoni ta' 'aħdar': unripe.
-  - **EN**: young
-    **MT**: Tifsira u deskrizzjoni ta' 'aħdar': young.
-  - **EN**: envious, jealous
-    **MT**: Tifsira u deskrizzjoni ta' 'aħdar': envious, jealous.
-  - **EN**: cruel, brutal, malicious, vile
-    **MT**: Tifsira u deskrizzjoni ta' 'aħdar': cruel, brutal, malicious, vile.
+  - **EN**: green, unripe, young
+    **MT**: Kulur tan-natura u l-ħaxix fis-sajf.
 - **Usage Examples**:
-  - MT: Aħdar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħdar was in its proper place in daily use.
+  - MT: Weraq aħdar li mela s-siġra fir-rebbiegħa.
+    EN: Green leaves filled the tree in spring.
 
 ---
 
 ## aħdar busbies (adj-aħdar-busbies)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: grass-green
-    **MT**: Tifsira u deskrizzjoni ta' 'aħdar bużbież': grass-green.
+  - **EN**: grass-green (simile)
+    **MT**: Aħdar ħafna bħal bużbież fir-raba'.
 - **Alternative Forms**: aħdar bużbież
 - **Usage Examples**:
-  - MT: Aħdar busbies kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħdar busbies was in its proper place in daily use.
+  - MT: Drapp aħdar bużbież li jiddi.
+    EN: Grass-green fabric that shines.
 
 ---
 
 ## aħdar bużbież (adj-aħdar-bużbież)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: grass-green
-    **MT**: Tifsira u deskrizzjoni ta' 'aħdar bużbież': grass-green.
+  - **EN**: grass-green (simile)
+    **MT**: Aħdar ħafna bħal bużbież fir-raba'.
 - **Alternative Forms**: aħdar busbies
 - **Usage Examples**:
-  - MT: Aħdar bużbież kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħdar bużbież was in its proper place in daily use.
+  - MT: Drapp aħdar bużbież li jiddi.
+    EN: Grass-green fabric that shines.
 
 ---
 
@@ -7972,10 +6681,7 @@ Total Entries: 687
 - **POS**: adjective
 - **Definitions**:
   - **EN**: grass-green
-    **MT**: Tifsira u deskrizzjoni ta' 'aħdar ħaxix': grass-green.
-- **Usage Examples**:
-  - MT: Aħdar ħaxix kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħdar ħaxix was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' (simile) grass-green.
 
 ---
 
@@ -7983,10 +6689,7 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: a bird in the hand is worth two in the bush
-    **MT**: Tifsira u deskrizzjoni ta' 'aħjar għasfur f'idejk minn mija fl-ajru': a bird in the hand is worth two in the bush.
-- **Usage Examples**:
-  - MT: Aħjar għasfur f'idejk minn mija fl-ajru kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħjar għasfur f'idejk minn mija fl-ajru was in its proper place in daily use.
+    **MT**: Li għandu x'jaqsam ma' aħjar għasfur f'idejk minn mija fl-ajru fl-użu u t-tifsira uffiċjali.
 
 ---
 
@@ -7994,56 +6697,44 @@ Total Entries: 687
 - **POS**: adjective
 - **Root**: ħ-m-r
 - **Definitions**:
-  - **EN**: red
-    **MT**: Tifsira u deskrizzjoni ta' 'aħmar': red.
-  - **EN**: flushed
-    **MT**: Tifsira u deskrizzjoni ta' 'aħmar': flushed.
-  - **EN**: inflamed
-    **MT**: Tifsira u deskrizzjoni ta' 'aħmar': inflamed.
+  - **EN**: red, flushed, inflamed
+    **MT**: Kulur in-nar jew d-demm fil-ġisem.
 - **Usage Examples**:
-  - MT: Aħmar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħmar was in its proper place in daily use.
+  - MT: Libset il-frokka l-ħamra għall-festa.
+    EN: She wore the red dress for the feast.
 
 ---
 
 ## aħmar nar (adj-aħmar-nar)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: blood-red
-    **MT**: Tifsira u deskrizzjoni ta' 'aħmar nar': blood-red.
+  - **EN**: blood-red, fire-red
+    **MT**: Aħmar qawwi bħan-nar fil-muntanji.
 - **Usage Examples**:
-  - MT: Aħmar nar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħmar nar was in its proper place in daily use.
+  - MT: Sema aħmar nar waqt l-inżul ix-xemx.
+    EN: A fire-red sky during sunset.
 
 ---
 
 ## aħrax (adj-aħrax)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: rough
-    **MT**: Tifsira u deskrizzjoni ta' 'aħrax': rough.
-  - **EN**: coarse
-    **MT**: Tifsira u deskrizzjoni ta' 'aħrax': coarse.
-  - **EN**: harsh
-    **MT**: Tifsira u deskrizzjoni ta' 'aħrax': harsh.
-  - **EN**: ruthless
-    **MT**: Tifsira u deskrizzjoni ta' 'aħrax': ruthless.
+  - **EN**: rough, coarse, harsh
+    **MT**: Li m'għandux superfiċje lixxa jew iebes fil-karattru.
 - **Usage Examples**:
-  - MT: Aħrax kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħrax was in its proper place in daily use.
+  - MT: Klima aħrax fil-muntanji tas-silġ.
+    EN: A harsh climate in the icy mountains.
 
 ---
 
 ## aħħ (intj-aħħ)
 - **POS**: interjection
 - **Definitions**:
-  - **EN**: expressing pain, ouch, ow
-    **MT**: Tifsira u deskrizzjoni ta' 'aħħ': expressing pain, ouch, ow.
-  - **EN**: expressing surprise
-    **MT**: Tifsira u deskrizzjoni ta' 'aħħ': expressing surprise.
+  - **EN**: ouch!, ow!
+    **MT**: Esklamazzjoni ta' uġigħ f'daqqa.
 - **Usage Examples**:
-  - MT: Aħħ kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħħ was in its proper place in daily use.
+  - MT: Għajjat 'aħħ!' meta ħabat ma' l-injam.
+    EN: He shouted 'ouch!' when he bumped into the wood.
 
 ---
 
@@ -8051,11 +6742,11 @@ Total Entries: 687
 - **POS**: adjective
 - **Root**: w-ħ-r
 - **Definitions**:
-  - **EN**: last
-    **MT**: Tifsira u deskrizzjoni ta' 'aħħar': last.
+  - **EN**: last, final
+    **MT**: Li jinsab fit-tmiem ta' serje jew żmien.
 - **Usage Examples**:
-  - MT: Aħħar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħħar was in its proper place in daily use.
+  - MT: Fl-aħħar jum tal-vaganzi marru l-bajja.
+    EN: On the last day of holiday they went to the beach.
 
 ---
 
@@ -8064,33 +6755,33 @@ Total Entries: 687
 - **Gender**: masculine
 - **Root**: w-ħ-r
 - **Definitions**:
-  - **EN**: end
-    **MT**: Tifsira u deskrizzjoni ta' 'aħħar': end.
+  - **EN**: end, conclusion
+    **MT**: It-tmiem jew il-conclusjoni ta' avveniment.
 - **Usage Examples**:
-  - MT: Aħħar kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħħar was in its proper place in daily use.
+  - MT: Fl-aħħar tal-film kulħadd ċapċap.
+    EN: At the end of the movie everyone applauded.
 
 ---
 
 ## aħħari (adj-aħħari)
 - **POS**: adjective
 - **Definitions**:
-  - **EN**: ultimate, ulterior
-    **MT**: Tifsira u deskrizzjoni ta' 'aħħari': ultimate, ulterior.
+  - **EN**: ultimate, final
+    **MT**: Riżultat jew deċiżjoni li hi finali u bla merja.
 - **Usage Examples**:
-  - MT: Aħħari kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The aħħari was in its proper place in daily use.
+  - MT: Kienet id-deċiżjoni aħħarija tal-qorti.
+    EN: It was the ultimate decision of the court.
 
 ---
 
 ## Ażerbajġan (n-ażerbajġan)
 - **POS**: noun
 - **Definitions**:
-  - **EN**: Azerbaijan (a country in the South Caucasus in Asia and Europe)
-    **MT**: Tifsira u deskrizzjoni ta' 'Ażerbajġan': Azerbaijan (a country in the South Caucasus in Asia and Europe).
+  - **EN**: Azerbaijan (country)
+    **MT**: Pajjiż fir-reġjun tal-Kawkażu.
 - **Usage Examples**:
-  - MT: Ażerbajġan kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Ażerbajġan was in its proper place in daily use.
+  - MT: Vvjaġġaw lejn l-Ażerbajġan fit-tieni staġun.
+    EN: They traveled to Azerbaijan in the second season.
 
 ---
 
@@ -8099,10 +6790,7 @@ Total Entries: 687
 - **Gender**: masculine
 - **Definitions**:
   - **EN**: Azerbaijani (language)
-    **MT**: Tifsira u deskrizzjoni ta' 'Ażerbajġani': Azerbaijani (language).
-- **Usage Examples**:
-  - MT: Ażerbajġani kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Ażerbajġani was in its proper place in daily use.
+    **MT**: Għandu x'jaqsam ma' azerbaijani (language).
 
 ---
 
@@ -8110,13 +6798,11 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: asylum (status granted by a country to foreigners)
-    **MT**: Tifsira u deskrizzjoni ta' 'ażil': asylum (status granted by a country to foreigners).
-  - **EN**: asylum, refuge, shelter (place of safety)
-    **MT**: Tifsira u deskrizzjoni ta' 'ażil': asylum, refuge, shelter (place of safety).
+  - **EN**: asylum, refuge, shelter
+    **MT**: Protezzjoni legali jew post ta' sigurtà għal barranin.
 - **Usage Examples**:
-  - MT: Ażil kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ażil was in its proper place in daily use.
+  - MT: Talbu għall-ażil politiku fir-reġjun.
+    EN: They requested political asylum in the region.
 
 ---
 
@@ -8124,23 +6810,22 @@ Total Entries: 687
 - **POS**: noun
 - **Gender**: masculine
 - **Definitions**:
-  - **EN**: synonym of nitroġenu: nitrogen
-    **MT**: Tifsira u deskrizzjoni ta' 'ażotu': synonym of nitroġenu: nitrogen.
+  - **EN**: nitrogen
+    **MT**: Element kimiku li jinsab fl-arja (nitroġenu).
 - **Usage Examples**:
-  - MT: Ażotu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ażotu was in its proper place in daily use.
+  - MT: L-ażotu huwa l-akbar gass fl-atmosfera.
+    EN: Nitrogen is the largest gas in the atmosphere.
 
 ---
 
 ## ażżarda (v-ażżarda)
 - **POS**: verb
 - **Definitions**:
-  - **EN**: to dare, to hazard
-    **MT**: Tifsira u deskrizzjoni ta' 'azzarda': to dare, to hazard.
-- **Alternative Forms**: azzarda
+  - **EN**: to dare, hazard (alt)
+    **MT**: Forma u tifsira ta' azzarda.
 - **Usage Examples**:
-  - MT: Ażżarda l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ażżarda correctly and without delay.
+  - MT: Ażżarda jipprova mill-ġdid ix-xogħol.
+    EN: He dared to try the work again.
 
 ---
 
@@ -8148,11 +6833,11 @@ Total Entries: 687
 - **POS**: verb
 - **Root**: '-ż-m
 - **Definitions**:
-  - **EN**: to make (something) without yeast
-    **MT**: Tifsira u deskrizzjoni ta' 'ażżem': to make (something) without yeast.
+  - **EN**: to make without yeast
+    **MT**: Ħaka u sajjjar ħobż bla ħmira.
 - **Usage Examples**:
-  - MT: Ażżem l-azzjoni b'mod korrett u bla dewmien.
-    EN: He performed the action of ażżem correctly and without delay.
+  - MT: Ażżem il-ħobż f'ċerimonja tradizzjonali.
+    EN: He made the unleavened bread in a traditional ceremony.
 
 ---
 
@@ -8160,39 +6845,35 @@ Total Entries: 687
 - **POS**: adjective
 - **Root**: '-ż-m
 - **Definitions**:
-  - **EN**: unleavened
-    **MT**: Tifsira u deskrizzjoni ta' 'ażżmu': unleavened.
-  - **EN**: indigestible
-    **MT**: Tifsira u deskrizzjoni ta' 'ażżmu': indigestible.
-  - **EN**: unsociable
-    **MT**: Tifsira u deskrizzjoni ta' 'ażżmu': unsociable.
+  - **EN**: unleavened, indigestible
+    **MT**: Ħobż jew ikel magħmul bla ħmira.
 - **Usage Examples**:
-  - MT: Ażżmu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ażżmu was in its proper place in daily use.
+  - MT: Ħobż ażżmu użat matul il-festa.
+    EN: Unleavened bread used during the feast.
 
 ---
 
-## egrett (n-egrett) 🌟 *(REVISED TARGET ENTRY)*
+## egrett (n-egrett)
 - **POS**: noun
 - **Definitions**:
   - **EN**: egret
     **MT**: Għasfur abjad b'saqajn twal mill-familja tar-raqqas.
 - **Alternative Forms**: agrett
 - **Usage Examples**:
-  - MT: Egrett kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The egrett was in its proper place in daily use.
+  - MT: Rajna agrett jtir fuq il-wied filgħaxija.
+    EN: We saw an egret flying over the valley in the evening.
 
 ---
 
-## emir (n-emir) 🌟 *(REVISED TARGET ENTRY)*
+## emir (n-emir)
 - **POS**: noun
 - **Definitions**:
   - **EN**: commander, prince, emir
     **MT**: Kmandant jew prinċep f'pajjiżi Musulmani.
 - **Alternative Forms**: amir
 - **Usage Examples**:
-  - MT: Emir kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The emir was in its proper place in daily use.
+  - MT: L-amir laqa' d-delegazzjoni fil-palazz.
+    EN: The emir welcomed the delegation to the palace.
 
 ---
 
@@ -8200,35 +6881,29 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: August
-    **MT**: Tifsira u deskrizzjoni ta' 'Awwissu': August.
+    **MT**: Għandu x'jaqsam ma' august.
 - **Alternative Forms**: Awwissu
-- **Usage Examples**:
-  - MT: Ewissu kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Ewissu was in its proper place in daily use.
 
 ---
 
-## extrej (n-extrej) 🌟 *(REVISED TARGET ENTRY)*
+## extrej (n-extrej)
 - **POS**: noun
 - **Definitions**:
   - **EN**: ashtray
     **MT**: Latt jew kontenitur fejn jintremew l-irmied u s-sigħat imqabbda.
 - **Alternative Forms**: axtrej
-- **Usage Examples**:
-  - MT: Extrej kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The extrej was in its proper place in daily use.
 
 ---
 
-## għami (adj-għami) 🌟 *(REVISED TARGET ENTRY)*
+## għami (adj-għami)
 - **POS**: adjective
 - **Definitions**:
   - **EN**: blind
     **MT**: Li ma jarax bl-għajnejn jew li tilef id-dawl.
 - **Alternative Forms**: agħma
 - **Usage Examples**:
-  - MT: Għami kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The għami was in its proper place in daily use.
+  - MT: Raġel agħma li kellu kelb biex jiggwidah fit-triq.
+    EN: A blind man who had a dog to guide him on the street.
 
 ---
 
@@ -8236,25 +6911,22 @@ Total Entries: 687
 - **POS**: noun
 - **Definitions**:
   - **EN**: Saudi Arabia (a country in West Asia in the Middle East
-    **MT**: Tifsira u deskrizzjoni ta' 'Arabja Sawdija': Saudi Arabia (a country in West Asia in the Middle East.
+    **MT**: Li għandu x'jaqsam ma' Arabja Sawdija fl-użu u t-tifsira uffiċjali.
   - **EN**: official name: Renju tal-Arabja Sawdija)
-    **MT**: Tifsira u deskrizzjoni ta' 'Arabja Sawdija': official name: Renju tal-Arabja Sawdija).
+    **MT**: Li għandu x'jaqsam ma' Arabja Sawdija fl-użu u t-tifsira uffiċjali.
 - **Alternative Forms**: Arabja Sawdija
-- **Usage Examples**:
-  - MT: Għarbija sawdija kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The Għarbija Sawdija was in its proper place in daily use.
 
 ---
 
-## ormajn (adv-ormajn) 🌟 *(REVISED TARGET ENTRY)*
+## ormajn (adv-ormajn)
 - **POS**: adverb
 - **Definitions**:
   - **EN**: almost
     **MT**: Kważi jew ftit nieqes biex iseħħ.
 - **Alternative Forms**: armajn
 - **Usage Examples**:
-  - MT: Ormajn kien f'postu fil-bini u fl-użu ta' kuljum.
-    EN: The ormajn was in its proper place in daily use.
+  - MT: Armajn lestew ix-xogħol kollu qabel il-lejl.
+    EN: They almost finished all the work before night.
 
 ---
 

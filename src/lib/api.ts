@@ -53,6 +53,20 @@ export interface SearchResponse {
     query: string;
 }
 
+export interface HomeSummaryResponse {
+    counts: {
+        total: number;
+        semitic: number;
+        romance: number;
+    };
+    semitic: SearchResult[];
+    romance: SearchResult[];
+}
+
+export async function apiGetHomeSummary(): Promise<HomeSummaryResponse> {
+    return apiFetch<HomeSummaryResponse>('/api/home-summary');
+}
+
 export interface StemApiItem {
     id: string;
     stem_string: string;
@@ -115,6 +129,7 @@ export async function apiSearch(
         zokk?: boolean;
         stem_string?: string;
         forms?: string[];
+        signal?: AbortSignal;
     } = {}
 
 ): Promise<SearchResponse> {
@@ -146,6 +161,12 @@ export async function apiSearch(
     if (opts.searchWordForms) params.set('word_forms', 'true');
     if (opts.searchEnglishGloss) params.set('gloss', 'true');
     if (opts.includeSuggested) params.set('suggested', 'true');
+    if (opts.random) params.set('random', opts.random);
+    if (opts.regex) params.set('regex', 'true');
+    if (opts.searchLemma) params.set('lemma', 'true');
+    if (opts.searchWordForms) params.set('word_forms', 'true');
+    if (opts.searchEnglishGloss) params.set('gloss', 'true');
+    if (opts.includeSuggested) params.set('suggested', 'true');
     if (opts.includePending) params.set('pending', 'true');
     if (opts.recent) params.set('recent', 'true');
     if (opts.lp) params.set('lp', opts.lp);
@@ -162,12 +183,15 @@ export async function apiSearch(
     if (opts.zokk) params.set('zokk', 'true');
     if (opts.stem_string) params.set('stem_string', opts.stem_string);
     if (opts.radicals) {
-
         opts.radicals.forEach((r, i) => {
             if (r) params.set(`r${i + 1}`, r);
         });
     }
-    return apiFetch(`/api/search?${params}`);
+    return apiFetch(`/api/search?${params}`, { signal: opts.signal });
+}
+
+export async function apiGetRandomEntry(signal?: AbortSignal): Promise<{ results: SearchResult[] }> {
+    return apiFetch<{ results: SearchResult[] }>('/api/random', { signal });
 }
 
 export async function apiSearchRoots(radicals: string[]): Promise<{ roots: any[] }> {
@@ -270,12 +294,12 @@ export async function apiGetTags(): Promise<string[]> {
 
 // ── Single Entry ─────────────────────────────────────────────────────────────
 
-export async function apiGetEntry(id: string): Promise<{ entry: Entry }> {
-    return apiFetch(`/api/entry/${id}`);
+export async function apiGetEntry(id: string, signal?: AbortSignal): Promise<{ entry: Entry }> {
+    return apiFetch(`/api/entry/${id}`, { signal });
 }
 
-export async function apiGetRoot(id: string): Promise<{ root: any }> {
-    return apiFetch(`/api/root/${encodeURIComponent(id)}`);
+export async function apiGetRoot(id: string, signal?: AbortSignal): Promise<{ root: any }> {
+    return apiFetch(`/api/root/${encodeURIComponent(id)}`, { signal });
 }
 
 export interface PatternDetailEntry {
@@ -313,8 +337,8 @@ export interface PatternDetailResponse {
     };
 }
 
-export async function apiGetPattern(id: string): Promise<PatternDetailResponse> {
-    return apiFetch(`/api/pattern/${encodeURIComponent(id)}`);
+export async function apiGetPattern(id: string, signal?: AbortSignal): Promise<PatternDetailResponse> {
+    return apiFetch(`/api/pattern/${encodeURIComponent(id)}`, { signal });
 }
 
 export interface PatternApiApplicability {
@@ -335,8 +359,8 @@ export interface PatternApiItem {
     applicability?: PatternApiApplicability[];
 }
 
-export async function apiGetStem(id: string): Promise<{ stem: StemApiItem }> {
-    return apiFetch(`/api/stem/${encodeURIComponent(id)}`);
+export async function apiGetStem(id: string, signal?: AbortSignal): Promise<{ stem: StemApiItem }> {
+    return apiFetch(`/api/stem/${encodeURIComponent(id)}`, { signal });
 }
 
 export async function apiSearchStems(q: string, limit = 10): Promise<{ stems: any[] }> {

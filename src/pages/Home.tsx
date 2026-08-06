@@ -10,7 +10,7 @@ import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUser } from '@clerk/clerk-react';
 import { Card } from '@/components/ui/Card';
-import { apiSearch } from '@/lib/api';
+import { apiGetHomeSummary, apiGetRandomEntry } from '@/lib/api';
 import type { Entry } from '@/types';
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
@@ -37,26 +37,23 @@ export function Home() {
     useEffect(() => {
         document.title = "Il-Miġma' | " + term('dictionary-title');
 
-        // Fetch the category-specific entries directly so the cards stay populated
-        apiSearch('', { type: 'semitic', limit: 3 })
-            .then(res => setSemiticEntries(res.results as any))
-            .catch(err => console.error("Failed to fetch semitic entries:", err))
-            .finally(() => setLoadingSemitic(false));
-        apiSearch('', { type: 'romance', limit: 3 })
-            .then(res => setRomanceEntries(res.results as any))
-            .catch(err => console.error("Failed to fetch romance entries:", err))
-            .finally(() => setLoadingRomance(false));
+        let isMounted = true;
+        apiGetHomeSummary()
+            .then(summary => {
+                if (!isMounted) return;
+                setCounts(summary.counts);
+                setSemiticEntries(summary.semitic as any);
+                setRomanceEntries(summary.romance as any);
+            })
+            .catch(err => console.error("Failed to fetch home summary:", err))
+            .finally(() => {
+                if (isMounted) {
+                    setLoadingSemitic(false);
+                    setLoadingRomance(false);
+                }
+            });
 
-        // Fetch counts
-        apiSearch('', { type: 'semitic', limit: 0 })
-            .then(res => setCounts(prev => ({ ...prev, semitic: res.total })))
-            .catch(err => console.error("Failed to fetch semitic count:", err));
-        apiSearch('', { type: 'romance', limit: 0 })
-            .then(res => setCounts(prev => ({ ...prev, romance: res.total })))
-            .catch(err => console.error("Failed to fetch romance count:", err));
-        apiSearch('', { limit: 0 })
-            .then(res => setCounts(prev => ({ ...prev, total: res.total })))
-            .catch(err => console.error("Failed to fetch total count:", err));
+        return () => { isMounted = false; };
     }, [term]);
 
     const handleSearch = (e: React.FormEvent) => {
@@ -89,7 +86,7 @@ export function Home() {
         if (loadingRandom) return;
         setLoadingRandom(true);
         try {
-            const res = await apiSearch('', { random: 'true', limit: 1 });
+            const res = await apiGetRandomEntry();
             if (res.results && res.results.length > 0) {
                 navigate(`/entry/${res.results[0].id}`);
             } else {
@@ -105,7 +102,7 @@ export function Home() {
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}),
-                 url("/bg-pattern.png") center/cover no-repeat`,
+                 url("/bg-pattern.webp") center/cover no-repeat`,
     };
 
     // ── ADMIN HOMEPAGE ──────────────────────────────────────────────────────
@@ -307,7 +304,7 @@ export function Home() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
 
                             {/* Semitic Entries */}
-                            <Card className="lg:col-span-12 xl:col-span-4 border border-black/5 bg-surface-soft rounded-3xl overflow-hidden relative group transition-all duration-300 min-h-[320px]">
+                            <Card className="lg:col-span-12 xl:col-span-4 border border-black/5 bg-surface-soft rounded-3xl overflow-hidden relative group transition-all duration-300 min-h-80">
                                 {/* Watermark */}
                                 <div className="absolute right-0 bottom-0 rotate-12 -mr-8 -mb-10 pointer-events-none select-none">
                                     <span className="font-serif text-[18rem] text-black opacity-[0.03]">ع</span>
@@ -362,7 +359,7 @@ export function Home() {
                             </Card>
 
                             {/* Romance Entries */}
-                            <Card className="lg:col-span-12 xl:col-span-4 border border-black/5 bg-surface-soft rounded-3xl overflow-hidden relative group transition-all duration-300 min-h-[320px]">
+                            <Card className="lg:col-span-12 xl:col-span-4 border border-black/5 bg-surface-soft rounded-3xl overflow-hidden relative group transition-all duration-300 min-h-80">
                                 {/* Watermark */}
                                 <div className="absolute right-0 bottom-0 rotate-12 -mr-6 -mb-8 pointer-events-none select-none">
                                     <span className="font-serif text-[18rem] text-black opacity-[0.03]">R</span>

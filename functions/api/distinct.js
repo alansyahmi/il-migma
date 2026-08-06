@@ -77,6 +77,7 @@ export async function onRequestGet({ request, env }) {
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
+                'Cache-Control': 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800',
             },
         });
     } catch (e) {

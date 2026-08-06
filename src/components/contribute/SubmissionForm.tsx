@@ -77,7 +77,7 @@ export function SubmissionForm({
     }, [term, titleKey]);
 
     const bgStyle = {
-        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.png") center/cover no-repeat`,
+        background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
