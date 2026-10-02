@@ -60,8 +60,8 @@ function MarkedCell({
         return (
             <Fragment key={index}>
                 {index > 0 && <span className="text-black/40 font-sans mx-0.5">, </span>}
-                {data.marker === 'plain' && !noLink ? (
-                    <Link to={`/entry/${data.entryId || displayValue}`} className="text-[#1034A6] hover:underline">
+                {data.marker === 'plain' && data.entryId && !noLink ? (
+                    <Link to={`/entry/${data.entryId}`} className="text-[#1034A6] hover:underline">
                         {displayValue}
                     </Link>
                 ) : (
@@ -83,11 +83,11 @@ function MarkedCell({
                     <button
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit(); }}
                         className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
-                        title={data.marker === 'plain' ? term('edit-entry') : term('add-entry')}
+                        title={data.entryId ? term('edit-entry') : term('add-entry')}
                     >
-                        {data.marker === 'plain' ? <Edit2 size={12} /> : <Plus size={12} />}
+                        {data.entryId ? <Edit2 size={12} /> : <Plus size={12} />}
                     </button>
-                    {data.marker === 'plain' && onDelete && (
+                    {data.entryId && onDelete && (
                         <button
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
                             className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
@@ -546,7 +546,9 @@ export function Root() {
                                         isAdmin={isActualAdmin}
                                         onDelete={() => row.perfect.entryId && handleDeleteEntry(row.perfect.entryId)}
                                         onEdit={() => {
-                                            const existing = rootEntries.find(e => e.headword === row.perfect.value && e.pos === 'verb' && getEntryVerbalForm(e) === row.form);
+                                            const existing = row.perfect.entryId
+                                                ? rootEntries.find(e => e.id === row.perfect.entryId)
+                                                : rootEntries.find(e => e.headword === row.perfect.value && e.pos === 'verb' && getEntryVerbalForm(e) === row.form);
                                             if (existing) {
                                                 setEditEntry({
                                                     ...existing,
@@ -583,11 +585,13 @@ export function Root() {
                                         isAdmin={isActualAdmin}
                                         onDelete={() => row.passiveParticiple.entryId && handleDeleteEntry(row.passiveParticiple.entryId)}
                                         onEdit={() => {
-                                            const existing = rootEntries.find(e => {
-                                                if (e.headword !== row.passiveParticiple.value || e.pos !== 'participle') return false;
-                                                const pt = e.participle_morphology?.type || e.participle_morphology?.participle_type || e.participle_type || (e.verb_morphology as any)?.participle_type || 'active';
-                                                return pt === 'passive' && getEntryVerbalForm(e) === row.form;
-                                            });
+                                            const existing = row.passiveParticiple.entryId
+                                                ? rootEntries.find(e => e.id === row.passiveParticiple.entryId)
+                                                : rootEntries.find(e => {
+                                                    if (e.headword !== row.passiveParticiple.value || (e.pos !== 'participle' && e.pos !== 'adjective')) return false;
+                                                    const pt = e.participle_morphology?.type || e.participle_morphology?.participle_type || e.participle_type || (e.verb_morphology as any)?.participle_type || (e.tags?.includes('passive_participle') ? 'passive' : 'active');
+                                                    return pt === 'passive' && getEntryVerbalForm(e) === row.form;
+                                                });
                                             if (existing) {
                                                 setEditEntry({
                                                     ...existing,
@@ -620,11 +624,13 @@ export function Root() {
                                         isAdmin={isActualAdmin}
                                         onDelete={() => row.activeParticiple.entryId && handleDeleteEntry(row.activeParticiple.entryId)}
                                         onEdit={() => {
-                                            const existing = rootEntries.find(e => {
-                                                if (e.headword !== row.activeParticiple.value || e.pos !== 'participle') return false;
-                                                const pt = e.participle_morphology?.type || e.participle_morphology?.participle_type || e.participle_type || (e.verb_morphology as any)?.participle_type || 'active';
-                                                return pt === 'active' && getEntryVerbalForm(e) === row.form;
-                                            });
+                                            const existing = row.activeParticiple.entryId
+                                                ? rootEntries.find(e => e.id === row.activeParticiple.entryId)
+                                                : rootEntries.find(e => {
+                                                    if (e.headword !== row.activeParticiple.value || (e.pos !== 'participle' && e.pos !== 'adjective')) return false;
+                                                    const pt = e.participle_morphology?.type || e.participle_morphology?.participle_type || e.participle_type || (e.verb_morphology as any)?.participle_type || (e.tags?.includes('passive_participle') ? 'passive' : 'active');
+                                                    return pt === 'active' && getEntryVerbalForm(e) === row.form;
+                                                });
                                             if (existing) {
                                                 setEditEntry({
                                                     ...existing,
@@ -657,10 +663,12 @@ export function Root() {
                                         isAdmin={isActualAdmin}
                                         onDelete={() => row.verbalNoun.entryId && handleDeleteEntry(row.verbalNoun.entryId)}
                                         onEdit={() => {
-                                            const existing = rootEntries.find(e => {
-                                                if (e.headword !== row.verbalNoun.value || (e.pos !== 'noun' && e.pos !== 'verbal_noun')) return false;
-                                                return getEntryVerbalForm(e) === row.form;
-                                            });
+                                            const existing = row.verbalNoun.entryId
+                                                ? rootEntries.find(e => e.id === row.verbalNoun.entryId)
+                                                : rootEntries.find(e => {
+                                                    if (e.headword !== row.verbalNoun.value || (e.pos !== 'noun' && e.pos !== 'verbal_noun')) return false;
+                                                    return getEntryVerbalForm(e) === row.form;
+                                                });
                                             if (existing) {
                                                 setEditEntry({
                                                     ...existing,

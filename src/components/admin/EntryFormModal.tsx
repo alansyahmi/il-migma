@@ -83,7 +83,7 @@ export interface AdminEntry {
 export interface EntryFormModalProps {
     entry: AdminEntry | null;
     onClose: () => void;
-    onSaved: () => void;
+    onSaved: (savedData?: any) => void;
     getToken: () => Promise<string | null>;
     initialForm?: Partial<typeof INITIAL_FORM_STATE>;
 }
@@ -2707,7 +2707,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
             await refresh();
             setSavedSnapshot(buildFormSnapshot({ ...form, pos: currentPos }));
 
-            onSaved();
+            onSaved(formToPayload(form));
         } catch (err: any) {
             let msg = err.message;
             if (msg.includes('ENTRY_NOT_FOUND')) {

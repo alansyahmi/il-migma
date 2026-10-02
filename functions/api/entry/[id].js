@@ -1,6 +1,7 @@
 /**
  * GET /api/entry/:id
  * Fetch a single full entry with all related data.
+ * Optimized with in-memory caching and clean indexed queries (avoiding unindexed OR joins).
  *
  * Cloudflare Pages Function env vars: TURSO_URL, TURSO_AUTH_TOKEN
  */
@@ -13,6 +14,20 @@ import { applyVerbMorphologyCompatibility, ensureVerbMorphologyTable } from '../
 import { getEntryIdFamily, normalizeEntryId, normalizeEntryPos } from '../../../src/lib/entryId.ts';
 import { mergeNumeralFamilyEntries } from '../../../src/lib/numeralMorphology.ts';
 import { ensureRootCompatibilityColumns } from '../../lib/rootSchema.js';
+
+// ── In-Memory Worker Cache (Shared within worker isolate) ─────────────────────
+const entryCache = new Map();
+const ENTRY_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+const MAX_CACHE_ENTRIES = 500;
+
+/** Clear cached representations after an admin write. */
+export function invalidateEntryCache(entryId) {
+    const id = String(entryId || '').trim();
+    if (!id) return;
+    entryCache.delete(id);
+    const normalized = normalizeEntryId(id);
+    if (normalized) entryCache.delete(normalized);
+}
 
 function firstSenseText(value) {
     if (value === undefined || value === null) return '';
@@ -97,7 +112,8 @@ async function fetchNumeralRelationshipRows(db, currentEntryId, direction, relat
               JOIN entries e ON ${joinColumn} = e.id
               ${ENTRY_MORPHOLOGY_JOINS}
               LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
-              LEFT JOIN roots root ON root.id = rpf.root_id OR root.consonants = e.root_consonants
+              LEFT JOIN roots root_rpf ON root_rpf.id = rpf.root_id
+              LEFT JOIN roots root ON root.consonants = e.root_consonants
               LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
               LEFT JOIN patterns pat2 ON pat2.cv_notation = COALESCE(num.form_attributive_short_pattern, e.cv_pattern) AND pat.id IS NULL
               WHERE ${whereColumn} = ?
@@ -127,14 +143,15 @@ async function fetchSameRootNumeralRows(db, rootKey, currentEntryId) {
               FROM entries e
               ${ENTRY_MORPHOLOGY_JOINS}
               LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
-              LEFT JOIN roots root ON root.id = rpf.root_id OR root.consonants = e.root_consonants
+              LEFT JOIN roots root_rpf ON root_rpf.id = rpf.root_id
+              LEFT JOIN roots root ON root.consonants = e.root_consonants
               LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
               LEFT JOIN patterns pat2 ON pat2.cv_notation = COALESCE(num.form_attributive_short_pattern, e.cv_pattern) AND pat.id IS NULL
               WHERE LOWER(TRIM(e.pos)) = 'numeral'
-                AND (LOWER(TRIM(e.root_consonants)) = ? OR LOWER(TRIM(root.consonants)) = ?)
+                AND LOWER(TRIM(e.root_consonants)) = ?
                 AND e.id != ?
               LIMIT 30`,
-        args: [normalizedRoot, normalizedRoot, currentEntryId],
+        args: [normalizedRoot, currentEntryId],
     });
 
     return relRes.rows.map((row) => buildRelationshipEntry(row, 'same_root'));
@@ -181,29 +198,6 @@ export async function resolveNumeralFamilyEntries(db, {
     return familyEntries.filter((entry) => String(entry?.id || '').trim() !== currentId);
 }
 
-async function ensureDiminutivesTableExists(db) {
-    const tableCheck = await db.execute({
-        sql: `SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'entry_diminutives'`,
-        args: [],
-    });
-    if (tableCheck.rows.length > 0) return;
-
-    await db.execute(`
-        CREATE TABLE IF NOT EXISTS entry_diminutives (
-            id TEXT PRIMARY KEY,
-            entry_id TEXT NOT NULL,
-            pos TEXT NOT NULL CHECK(pos IN ('noun', 'adjective', 'participle')),
-            gender TEXT,
-            form TEXT NOT NULL,
-            pattern TEXT,
-            sort_order INTEGER NOT NULL DEFAULT 0,
-            is_preferred INTEGER NOT NULL DEFAULT 1,
-            created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
-            updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
-        )
-    `);
-}
-
 export async function onRequestGet({ params, env }) {
     let { id } = params;
     if (!id) return json({ error: 'Missing id' }, 400);
@@ -216,58 +210,75 @@ export async function onRequestGet({ params, env }) {
     const normalizedId = normalizeEntryId(id);
     const family = getEntryIdFamily(id);
 
+    // Check in-memory isolate cache (0 Turso reads)
+    const now = Date.now();
+    const cached = entryCache.get(id) || entryCache.get(normalizedId);
+    if (cached && (now - cached.timestamp < ENTRY_CACHE_TTL)) {
+        return json({ entry: cached.payload }, 200, 'HIT-MEMORY');
+    }
+
     try {
         const url = env.TURSO_URL || env.VITE_TURSO_URL;
         const token = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
         const db = createClient({ url, authToken: token });
-        // ── Entry core ──────────────────────────────────────────────────────────
-        const conditions = [];
-        const args = [];
-        if (family.exact.length > 0) {
-            conditions.push(`e.id IN (${family.exact.map(() => '?').join(', ')})`);
-            args.push(...family.exact);
-        }
-        if (family.likePatterns.length > 0) {
-            conditions.push(...family.likePatterns.map(() => 'e.id LIKE ?'));
-            args.push(...family.likePatterns);
-        }
-        if (conditions.length === 0 && normalizedId) {
-            conditions.push('e.id = ?');
-            args.push(normalizedId);
-        }
 
-        const entryRes = await db.execute({
-            sql: `SELECT e.*,
+        // ── Helper to build entry core query with clean indexed JOINs ──────────
+        const buildEntrySelectSql = (whereClause) => `
+            SELECT e.*,
                ${ENTRY_MORPHOLOGY_SELECT},
                rpf.derived_form,
-               COALESCE(e.root_consonants, r.consonants) AS resolved_root_consonants,
-               r.id          AS root_id,
-               r.strength    AS root_strength,
-               r.weak_class  AS root_weak_class,
-               r.vowel_set_perf AS root_vowel_set_perf,
-               r.vowel_set_impf AS root_vowel_set_impf,
-               r.vowel_set_imp  AS root_vowel_set_imp,
-               r.is_imala_blocked AS root_is_imala_blocked,
-               r.gloss       AS root_gloss,
-               r.etymology   AS root_etymology,
-               COALESCE(pat.cv_notation, pat2.cv_notation) AS cv_notation,
+               COALESCE(e.root_consonants, r.consonants, r_rpf.consonants) AS resolved_root_consonants,
+               COALESCE(r.id, r_rpf.id)                      AS root_id,
+               COALESCE(r.strength, r_rpf.strength)          AS root_strength,
+               COALESCE(r.weak_class, r_rpf.weak_class)      AS root_weak_class,
+               COALESCE(r.vowel_set_perf, r_rpf.vowel_set_perf) AS root_vowel_set_perf,
+               COALESCE(r.vowel_set_impf, r_rpf.vowel_set_impf) AS root_vowel_set_impf,
+               COALESCE(r.vowel_set_imp, r_rpf.vowel_set_imp)   AS root_vowel_set_imp,
+               COALESCE(r.is_imala_blocked, r_rpf.is_imala_blocked) AS root_is_imala_blocked,
+               COALESCE(r.gloss, r_rpf.gloss)                AS root_gloss,
+               COALESCE(r.etymology, r_rpf.etymology)        AS root_etymology,
+               COALESCE(pat.cv_notation, pat2.cv_notation)   AS cv_notation,
                COALESCE(pat.wizen_notation, pat2.wizen_notation) AS wizen_notation,
-               COALESCE(pat.id, pat2.id) AS pattern_id
+               COALESCE(pat.id, pat2.id)                     AS pattern_id
             FROM entries e
             ${ENTRY_MORPHOLOGY_JOINS}
             LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
-            LEFT JOIN roots r ON r.id = rpf.root_id OR r.consonants = e.root_consonants
+            LEFT JOIN roots r_rpf ON r_rpf.id = rpf.root_id
+            LEFT JOIN roots r ON r.consonants = e.root_consonants
             LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
             LEFT JOIN patterns pat2 ON pat2.cv_notation = COALESCE(nm.morph_pattern, e.cv_pattern) AND pat.id IS NULL
-            WHERE ${conditions.join(' OR ')}`,
-            args,
+            WHERE ${whereClause}
+        `;
+
+        // 1. First try exact Primary Key lookup (fastest O(1) B-tree lookup: 1 row read)
+        let entryRes = await db.execute({
+            sql: buildEntrySelectSql('e.id = ?'),
+            args: [normalizedId || id],
         });
+
+        // 2. If not found, try family pattern fallback
+        if (!entryRes.rows.length && (family.exact.length > 0 || family.likePatterns.length > 0)) {
+            const conditions = [];
+            const args = [];
+            if (family.exact.length > 0) {
+                conditions.push(`e.id IN (${family.exact.map(() => '?').join(', ')})`);
+                args.push(...family.exact);
+            }
+            if (family.likePatterns.length > 0) {
+                conditions.push(...family.likePatterns.map(() => 'e.id LIKE ?'));
+                args.push(...family.likePatterns);
+            }
+            entryRes = await db.execute({
+                sql: buildEntrySelectSql(conditions.join(' OR ')) + ' LIMIT 1',
+                args,
+            });
+        }
 
         if (!entryRes.rows.length) return json({ error: 'Not found' }, 404);
         const entry = entryRes.rows[0];
         const resolvedEntryId = entry.id;
 
-        // ── Secondary Details Queries (Parallelized) ──────────────────────────────
+        // ── Secondary Details Queries (Parallelized by Primary/Indexed Key) ───────
         const [
             diminutiveRes,
             phonRes,
@@ -363,8 +374,6 @@ export async function onRequestGet({ params, env }) {
                 } : null,
                 derived_form: entry.derived_form,
             } : null,
-            // Expose weak_class at top level for easy modal loading
-            // Prefer entry-level verb_weak_class; fall back to root's weak_class
             weak_class: entry.verb_weak_class || entry.root_weak_class || null,
         };
 
@@ -486,15 +495,14 @@ export async function onRequestGet({ params, env }) {
                 explicitRelatedEntries: payload.related_entries,
             });
         } else if (rc) {
+            // Fast indexed lookup on entries(root_consonants)
             const relRes = await db.execute({
                 sql: `SELECT e.id, e.headword,
                         json_extract(e.definitions, '$[0].text_en') AS gloss_en,
                         json_extract(e.definitions, '$[0].text_mt') AS gloss_mt
                       FROM entries e
-                      LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
-                      LEFT JOIN roots r ON r.id = rpf.root_id
-                      WHERE (e.root_consonants = ? OR r.consonants = ?) AND e.id != ? LIMIT 10`,
-                args: [rc, rc, entry.id],
+                      WHERE e.root_consonants = ? AND e.id != ? LIMIT 10`,
+                args: [rc, entry.id],
             });
             related_entries = relRes.rows.map(row => ({
                 ...row,
@@ -580,8 +588,8 @@ export async function onRequestGet({ params, env }) {
                 form_fem: adjectiveMorphology.feminine || adjectiveMorphology.feminine_form || null,
                 pattern: adjectiveMorphology.pattern || entryPayload.cv_pattern || entryPayload.morph_pattern || null,
                 morph_pattern: entryPayload.morph_pattern || entryPayload.cv_pattern || adjectiveMorphology.pattern || null,
-                plural_form: payload.inflections_pl || null, // Mapping to UI's plural_form
-                plural_forms: payload.inflections_pl || null, // Forward compatibility
+                plural_form: payload.inflections_pl || null,
+                plural_forms: payload.inflections_pl || null,
                 has_elative: adjectiveMorphology.has_elative === undefined || adjectiveMorphology.has_elative === null
                     ? null
                     : Boolean(adjectiveMorphology.has_elative),
@@ -593,7 +601,6 @@ export async function onRequestGet({ params, env }) {
                 form_fem_pattern: adjectiveMorphology.form_fem_pattern || null,
                 form_masc_pattern: adjectiveMorphology.form_masc_pattern || null,
                 elative_pattern: adjectiveMorphology.elative_pattern || null,
-                // Optional vowel sets
                 vowel_set_sg: adjectiveMorphology.vowel_set_sg || null,
                 vowel_set_pl: adjectiveMorphology.vowel_set_pl || null,
                 vowel_set_opp: adjectiveMorphology.vowel_set_opp || null,
@@ -617,7 +624,6 @@ export async function onRequestGet({ params, env }) {
                 diminutive_pattern: primaryDiminutive?.pattern || entryPayload.diminutive_pattern || null,
             };
             payload.adj_morphology = payload.adjective_morphology;
-            // Participles use adjective morphology but have a type
             if (normalizedPos === 'participle') {
                 payload.participle_type = entryPayload.participle_type || 'active';
             }
@@ -647,18 +653,30 @@ export async function onRequestGet({ params, env }) {
             };
         }
 
+        // Cache result in worker isolate memory
+        if (entryCache.size >= MAX_CACHE_ENTRIES) {
+            const oldestKey = entryCache.keys().next().value;
+            entryCache.delete(oldestKey);
+        }
+        entryCache.set(id, { payload, timestamp: Date.now() });
+        if (normalizedId && normalizedId !== id) {
+            entryCache.set(normalizedId, { payload, timestamp: Date.now() });
+        }
+
         return json({ entry: payload });
     } catch (e) {
         return json({ error: e.message }, 500);
     }
 }
 
-function json(data, status = 200) {
+function json(data, status = 200, cacheStatus = 'MISS') {
     return new Response(JSON.stringify(data), {
         status,
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'public, max-age=120, s-maxage=3600, stale-while-revalidate=86400',
+            'X-Entry-Cache': cacheStatus
         },
     });
 }

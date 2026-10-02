@@ -35,9 +35,17 @@ const FALLBACKS: Record<string, string[]> = {
     pos: ['verb', 'noun', 'adjective', 'adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'interrogative', 'numeral', 'interjection', 'participle'],
     gender: ['masculine', 'feminine', 'neutral'],
     participle_type: ['active', 'passive'],
+    participle_gender: ['masculine', 'feminine', 'plural', 'both'],
     numeral_type: ['cardinal', 'ordinal', 'adverbial', 'fractional', 'multiplier', 'distributive', 'attributive_short', 'attributive_long'],
     verb_class: ['strong', 'strong-hybrid', 'weak', 'doubled', 'quadriliteral', 'loan'],
+    verb_form: ['I', 'II', 'III', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'Xa', 'Xb', 'Iq', 'IIq'],
     verb_transitivity: ['transitive', 'intransitive', 'both', 'ditransitive'],
+    noun_type: ['concrete', 'abstract', 'verbal_noun', 'collective', 'singulative', 'diminutive'],
+    root_strength: ['strong', 'weak', 'geminated', 'quadriliteral'],
+    root_type: ['Semitic', 'Romance', 'English', 'Mixed'],
+    weak_class: ['defective', 'hollow', 'assimilative', 'none'],
+    source_language: ['Semitic', 'Siculo-Arabic', 'Sicilian', 'Italian', 'English', 'French', 'Other'],
+    root_relationship: ['synonym', 'antonym', 'derived', 'cognate', 'variant', 'sub-root'],
     register: ['formal', 'informal', 'archaic', 'obsolete', 'technical', 'dialectal', 'colloquial'],
     dialect: [
         'Standard',
@@ -117,12 +125,14 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         return { byCategory: catMap, byCategoryAndKey: catKeyMap };
     }, [config]);
 
-    const refresh = useCallback(async () => {
+    const refresh = useCallback(async (options?: { forceBust?: boolean }) => {
         setLoading(true);
         try {
-            invalidateDistinctValuesCache();
+            if (options?.forceBust) {
+                invalidateDistinctValuesCache();
+            }
             const token = await getToken().catch(() => null);
-            const res = await adminListConfig(token || '', undefined, Date.now());
+            const res = await adminListConfig(token || '', undefined, options?.forceBust ? Date.now() : undefined);
             const parsed = res.config.map(item => ({
                 ...item,
                 value: typeof item.value === 'string' ? JSON.parse(item.value) : item.value
@@ -135,7 +145,7 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         }
     }, [getToken]);
 
-    useCatalogRefresh(refresh, { intervalMs: 60_000 });
+    useCatalogRefresh(refresh, { intervalMs: 120_000 });
 
     useEffect(() => {
         refresh();

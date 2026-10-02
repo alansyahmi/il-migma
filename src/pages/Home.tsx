@@ -36,7 +36,9 @@ export function Home() {
 
     useEffect(() => {
         document.title = "Il-Miġma' | " + term('dictionary-title');
+    }, [term]);
 
+    useEffect(() => {
         let isMounted = true;
         apiGetHomeSummary()
             .then(summary => {
@@ -54,7 +56,7 @@ export function Home() {
             });
 
         return () => { isMounted = false; };
-    }, [term]);
+    }, []);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();

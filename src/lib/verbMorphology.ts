@@ -192,7 +192,7 @@ export function resolveVerbGenerationInput(entry: any = {}, morphology: any = en
 }
 
 function normalizeComparableSurface(value: unknown): string {
-    return normalizeTextField(value).toLowerCase().replace(/[’]/g, "'");
+    return normalizeTextField(value).toLowerCase().replace(/[’]/g, "'").replace(/^[*✦]+\s*/, '');
 }
 
 function normalizeZokkClassType(zokk: any = {}): 'ar' | 'ir' | '' {
@@ -339,6 +339,17 @@ function findPreviewAttestation(
 ): AttestedEntry | undefined {
     const surface = normalizeComparableSurface(value);
     const formKey = normalizeComparableSurface(form);
+
+    // Prefer standalone entry with an ID
+    const standaloneMatch = attested.find((candidate) =>
+        candidate.isStandalone &&
+        candidate.id &&
+        normalizeComparableSurface(candidate.word) === surface &&
+        (!formKey || normalizeComparableSurface(candidate.form) === formKey) &&
+        candidate.type === type
+    );
+    if (standaloneMatch) return standaloneMatch;
+
     return attested.find((candidate) =>
         normalizeComparableSurface(candidate.word) === surface &&
         (!formKey || normalizeComparableSurface(candidate.form) === formKey) &&
@@ -361,7 +372,11 @@ function buildSinglePreviewCell(
 
     const attestedMatch = findPreviewAttestation(attested, normalizedValue, form, type);
     if (attestedMatch) {
-        return { value: attestedMatch.word, marker: 'plain', entryId: attestedMatch.id };
+        return {
+            value: attestedMatch.word,
+            marker: 'plain',
+            entryId: attestedMatch.isStandalone ? attestedMatch.id : (type === 'lemma' ? attestedMatch.id : undefined),
+        };
     }
 
     if (
@@ -372,7 +387,11 @@ function buildSinglePreviewCell(
     }
 
     if (storedFallback) {
-        return { value: normalizedValue, marker: 'plain', entryId: entry?.id };
+        return {
+            value: normalizedValue,
+            marker: 'plain',
+            entryId: type === 'lemma' ? entry?.id : undefined,
+        };
     }
 
     return {
@@ -455,22 +474,20 @@ export function buildVerbPreviewFromEngine(
     const storedVerbalNoun = getStoredVerbMorphologyValue(vm, 'verbal_noun');
     const storedActiveParticiple = getStoredVerbMorphologyValue(vm, 'active_participle');
     const storedPassiveParticiple = getStoredVerbMorphologyValue(vm, 'passive_participle');
-    const usedStoredFallback = !conjugation;
-
-    const perfect = normalizeTextField(citationRow?.perfect || (conjugation ? rootRow?.perfect.value : storedPerfect) || rootRow?.perfect.value || storedPerfect);
-    const imperfect = normalizeTextField(citationRow?.imperfect || (conjugation ? rootRow?.imperfect.value : storedImperfect) || rootRow?.imperfect.value || storedImperfect);
-    const imperative = normalizeTextField(conjugation?.imperative_sg || (conjugation ? rootRow?.imperative.value : storedImperative) || rootRow?.imperative.value || storedImperative);
-    const verbalNoun = normalizeTextField(rootRow?.verbalNoun.value || storedVerbalNoun);
-    const activeParticiple = normalizeTextField(rootRow?.activeParticiple.value || storedActiveParticiple);
-    const passiveParticiple = normalizeTextField(rootRow?.passiveParticiple.value || storedPassiveParticiple);
+    const perfect = normalizeTextField(storedPerfect || citationRow?.perfect || rootRow?.perfect.value);
+    const imperfect = normalizeTextField(storedImperfect || citationRow?.imperfect || rootRow?.imperfect.value);
+    const imperative = normalizeTextField(storedImperative || conjugation?.imperative_sg || rootRow?.imperative.value);
+    const verbalNoun = normalizeTextField(storedVerbalNoun || rootRow?.verbalNoun.value);
+    const activeParticiple = normalizeTextField(storedActiveParticiple || rootRow?.activeParticiple.value);
+    const passiveParticiple = normalizeTextField(storedPassiveParticiple || rootRow?.passiveParticiple.value);
 
     const marked = {
-        perfect: buildPreviewCell(perfect, 'lemma', form, entry, attested, rootRow?.perfect, usedStoredFallback && !!storedPerfect),
-        imperfect: buildPreviewCell(imperfect, 'imperfect', form, entry, attested, rootRow?.imperfect, usedStoredFallback && !!storedImperfect),
-        imperative: buildPreviewCell(imperative, 'imperative', form, entry, attested, rootRow?.imperative, usedStoredFallback && !!storedImperative),
-        verbalNoun: buildPreviewCell(verbalNoun, 'noun', form, entry, attested, rootRow?.verbalNoun, !rootRow && !!storedVerbalNoun),
-        activeParticiple: buildPreviewCell(activeParticiple, 'active', form, entry, attested, rootRow?.activeParticiple, !rootRow && !!storedActiveParticiple),
-        passiveParticiple: buildPreviewCell(passiveParticiple, 'passive', form, entry, attested, rootRow?.passiveParticiple, !rootRow && !!storedPassiveParticiple),
+        perfect: buildPreviewCell(perfect, 'lemma', form, entry, attested, rootRow?.perfect, !!storedPerfect),
+        imperfect: buildPreviewCell(imperfect, 'imperfect', form, entry, attested, rootRow?.imperfect, !!storedImperfect),
+        imperative: buildPreviewCell(imperative, 'imperative', form, entry, attested, rootRow?.imperative, !!storedImperative),
+        verbalNoun: buildPreviewCell(verbalNoun, 'noun', form, entry, attested, rootRow?.verbalNoun, !!storedVerbalNoun),
+        activeParticiple: buildPreviewCell(activeParticiple, 'active', form, entry, attested, rootRow?.activeParticiple, !!storedActiveParticiple),
+        passiveParticiple: buildPreviewCell(passiveParticiple, 'passive', form, entry, attested, rootRow?.passiveParticiple, !!storedPassiveParticiple),
     };
 
     const rootForm = rootRow

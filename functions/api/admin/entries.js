@@ -7,7 +7,8 @@ import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
 import { buildSuggestedEntryId, getEntryIdFamily, getEntryIdSuffixRegexes, normalizeEntryId, normalizeEntryPos } from '../../../src/lib/entryId.ts';
 import { isDashMarkedSuffix } from '../../../src/lib/suffixMatching.ts';
 import { buildSourceCitation } from '../../../src/lib/sourceMetadata.ts';
-import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../../src/lib/entryHydration.ts';
+import { logAdminRequest } from '../../lib/adminLogger.js';
+import { invalidateEntryCache } from '../entry/[id].js';
 import { applyVerbMorphologyCompatibility, ensureVerbMorphologyTable, hasVerbMorphologyInput, syncVerbMorphology } from '../../../src/lib/verbMorphology.ts';
 import { applyNounMorphologyCompatibility, ensureNounMorphologyTable, hasNounMorphologyInput, syncNounMorphology } from '../../../src/lib/nounMorphology.ts';
 import { ensureAdjMorphologyTable, syncAdjMorphology } from '../../../src/lib/adjMorphology.ts';
@@ -335,68 +336,285 @@ const ENTRY_WRITE_FIELD_ALLOWLIST = new Set([
 ]);
 
 const ENTRY_BOOLEAN_FIELDS = new Set(['is_loanword', 'is_inflectable']);
-const ENTRY_ADJECTIVE_WRITE_BLOCKLIST = new Set(ADJECTIVE_ENTRY_TOP_LEVEL_STRIP_FIELDS);
+export function buildLetterWhereClause(letter) {
+    if (!letter || letter.toLowerCase() === 'all') return null;
+    const target = letter.toLowerCase();
+    const cleanExpr = "LTRIM(e.headword, '*''\"- ')";
+
+    if (target === 'għ' || target === 'gh') {
+        return {
+            clause: `(${cleanExpr} LIKE 'għ%' OR ${cleanExpr} LIKE 'Għ%' OR ${cleanExpr} LIKE 'GĦ%' OR ${cleanExpr} LIKE 'gh%' OR ${cleanExpr} LIKE 'Gh%' OR ${cleanExpr} LIKE 'GH%')`,
+            args: []
+        };
+    }
+    if (target === 'ie') {
+        return {
+            clause: `(${cleanExpr} LIKE 'ie%' OR ${cleanExpr} LIKE 'Ie%' OR ${cleanExpr} LIKE 'IE%')`,
+            args: []
+        };
+    }
+    if (target === 'g') {
+        return {
+            clause: `((${cleanExpr} LIKE 'g%' OR ${cleanExpr} LIKE 'G%') AND NOT (${cleanExpr} LIKE 'għ%' OR ${cleanExpr} LIKE 'Għ%' OR ${cleanExpr} LIKE 'GĦ%' OR ${cleanExpr} LIKE 'gh%' OR ${cleanExpr} LIKE 'Gh%' OR ${cleanExpr} LIKE 'GH%') AND NOT (${cleanExpr} LIKE 'ġ%' OR ${cleanExpr} LIKE 'Ġ%'))`,
+            args: []
+        };
+    }
+    if (target === 'ġ') {
+        return {
+            clause: `(${cleanExpr} LIKE 'ġ%' OR ${cleanExpr} LIKE 'Ġ%')`,
+            args: []
+        };
+    }
+    if (target === 'i') {
+        return {
+            clause: `((${cleanExpr} LIKE 'i%' OR ${cleanExpr} LIKE 'I%' OR ${cleanExpr} LIKE 'ì%' OR ${cleanExpr} LIKE 'í%' OR ${cleanExpr} LIKE 'î%') AND NOT (${cleanExpr} LIKE 'ie%' OR ${cleanExpr} LIKE 'Ie%' OR ${cleanExpr} LIKE 'IE%'))`,
+            args: []
+        };
+    }
+    if (target === 'h') {
+        return {
+            clause: `((${cleanExpr} LIKE 'h%' OR ${cleanExpr} LIKE 'H%') AND NOT (${cleanExpr} LIKE 'ħ%' OR ${cleanExpr} LIKE 'Ħ%'))`,
+            args: []
+        };
+    }
+    if (target === 'ħ') {
+        return {
+            clause: `(${cleanExpr} LIKE 'ħ%' OR ${cleanExpr} LIKE 'Ħ%')`,
+            args: []
+        };
+    }
+    if (target === 'ż') {
+        return {
+            clause: `(${cleanExpr} LIKE 'ż%' OR ${cleanExpr} LIKE 'Ż%')`,
+            args: []
+        };
+    }
+    if (target === 'z') {
+        return {
+            clause: `((${cleanExpr} LIKE 'z%' OR ${cleanExpr} LIKE 'Z%') AND NOT (${cleanExpr} LIKE 'ż%' OR ${cleanExpr} LIKE 'Ż%'))`,
+            args: []
+        };
+    }
+    if (target === 'ċ' || target === 'c') {
+        return {
+            clause: `(${cleanExpr} LIKE 'ċ%' OR ${cleanExpr} LIKE 'Ċ%' OR ${cleanExpr} LIKE 'c%' OR ${cleanExpr} LIKE 'C%')`,
+            args: []
+        };
+    }
+    if (target === 'a') {
+        return {
+            clause: `(${cleanExpr} LIKE 'a%' OR ${cleanExpr} LIKE 'A%' OR ${cleanExpr} LIKE 'à%' OR ${cleanExpr} LIKE 'á%' OR ${cleanExpr} LIKE 'â%')`,
+            args: []
+        };
+    }
+    if (target === 'e') {
+        return {
+            clause: `(${cleanExpr} LIKE 'e%' OR ${cleanExpr} LIKE 'E%' OR ${cleanExpr} LIKE 'è%' OR ${cleanExpr} LIKE 'é%' OR ${cleanExpr} LIKE 'ê%')`,
+            args: []
+        };
+    }
+    if (target === 'o') {
+        return {
+            clause: `(${cleanExpr} LIKE 'o%' OR ${cleanExpr} LIKE 'O%' OR ${cleanExpr} LIKE 'ò%' OR ${cleanExpr} LIKE 'ó%' OR ${cleanExpr} LIKE 'ô%')`,
+            args: []
+        };
+    }
+    if (target === 'u') {
+        return {
+            clause: `(${cleanExpr} LIKE 'u%' OR ${cleanExpr} LIKE 'U%' OR ${cleanExpr} LIKE 'ù%' OR ${cleanExpr} LIKE 'ú%' OR ${cleanExpr} LIKE 'û%')`,
+            args: []
+        };
+    }
+
+    return {
+        clause: `(${cleanExpr} LIKE ? OR ${cleanExpr} LIKE ?)`,
+        args: [`${target.toLowerCase()}%`, `${target.toUpperCase()}%`]
+    };
+}
+
+export function buildAdminListQuery({ q = '', pos = '', letter = '', limit = 50, offset = 0 } = {}) {
+    let sql = `SELECT 
+        e.id, 
+        e.headword, 
+        e.pos, 
+        e.gender,
+        e.is_loanword, 
+        e.source_language, 
+        e.created_at,
+        e.root_consonants,
+        json_extract(e.definitions, '$[0].text_en') AS text_en,
+        vm.form AS verb_form,
+        vm.class AS verb_class,
+        vm.transitivity AS verb_transitivity,
+        COALESCE((
+            SELECT json_group_array(json_object('id', a.id, 'headword', a.headword, 'type', a.type))
+            FROM alternative_forms a
+            WHERE a.entry_id = e.id
+        ), '[]') AS alternative_forms,
+        COALESCE((
+            SELECT json_group_array(t.name)
+            FROM entry_tags et
+            JOIN tags t ON et.tag_id = t.id
+            WHERE et.entry_id = e.id
+        ), '[]') AS tags
+    FROM entries e
+    LEFT JOIN verb_morphology vm ON vm.entry_id = e.id`;
+
+    const args = [];
+    const whereClauses = [];
+
+    if (q) {
+        whereClauses.push('(e.headword LIKE ? OR e.root_consonants = ?)');
+        args.push(`%${q}%`, q);
+    }
+    if (letter) {
+        const letterClause = buildLetterWhereClause(letter);
+        if (letterClause) {
+            whereClauses.push(letterClause.clause);
+            args.push(...letterClause.args);
+        }
+    }
+    if (pos) {
+        const aliases = resolvePosAliases(pos);
+        if (aliases.length > 0) {
+            const placeholders = aliases.map(() => '?').join(', ');
+            whereClauses.push(`LOWER(TRIM(e.pos)) IN (${placeholders})`);
+            args.push(...aliases);
+        }
+    }
+
+    if (whereClauses.length) {
+        sql += ' WHERE ' + whereClauses.join(' AND ');
+    }
+    sql += ' ORDER BY e.headword ASC LIMIT ? OFFSET ?';
+    args.push(limit, offset);
+
+    return { sql, args };
+}
+
+export function buildAdminCountQuery({ q = '', pos = '', letter = '' } = {}) {
+    let sql = 'SELECT COUNT(*) as total FROM entries e';
+    const args = [];
+    const whereClauses = [];
+
+    if (q) {
+        whereClauses.push('(e.headword LIKE ? OR e.root_consonants = ?)');
+        args.push(`%${q}%`, q);
+    }
+    if (letter) {
+        const letterClause = buildLetterWhereClause(letter);
+        if (letterClause) {
+            whereClauses.push(letterClause.clause);
+            args.push(...letterClause.args);
+        }
+    }
+    if (pos) {
+        const aliases = resolvePosAliases(pos);
+        if (aliases.length > 0) {
+            const placeholders = aliases.map(() => '?').join(', ');
+            whereClauses.push(`LOWER(TRIM(e.pos)) IN (${placeholders})`);
+            args.push(...aliases);
+        }
+    }
+
+    if (whereClauses.length) {
+        sql += ' WHERE ' + whereClauses.join(' AND ');
+    }
+
+    return { sql, args };
+}
 
 // ── GET — list entries ────────────────────────────────────────────────────────
 export async function onRequestGet({ request, env }) {
+    const startTime = performance.now();
     try {
         if (!(await verifyAdmin(request, env))) return json({ error: 'Unauthorized' }, 401);
 
         const url = new URL(request.url);
-        const limit = Math.min(Number(url.searchParams.get('limit') ?? 50), 200);
-        const offset = Number(url.searchParams.get('offset') ?? 0);
+        const limit = Math.min(Math.max(Number(url.searchParams.get('limit') ?? 50), 1), 100);
+        const offset = Math.max(Number(url.searchParams.get('offset') ?? 0), 0);
         const q = url.searchParams.get('q')?.trim() ?? '';
         const pos = url.searchParams.get('pos')?.trim() ?? '';
+        const letter = url.searchParams.get('letter')?.trim() ?? '';
+        const skipCount = url.searchParams.get('skipCount') === 'true' || url.searchParams.get('skip_count') === 'true';
 
         const client = getDbClient(env);
 
-        let sql = `SELECT e.id, e.headword, e.pos, e.is_loanword, e.source_language, e.created_at,
-                         COALESCE(e.root_consonants, r.consonants) AS root_consonants,
-                         json_extract(e.definitions, '$[0].text_en') AS text_en,
-                         ${ENTRY_MORPHOLOGY_SELECT}
-                  FROM entries e
-                  LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
-                  LEFT JOIN roots r ON r.id = rpf.root_id
-                  ${ENTRY_MORPHOLOGY_JOINS}`;
-        const args = [];
-        const whereClauses = [];
+        const listQuery = buildAdminListQuery({ q, pos, letter, limit, offset });
+        const countQuery = buildAdminCountQuery({ q, pos, letter });
 
-        if (q) {
-            whereClauses.push('(e.headword LIKE ? OR e.root_consonants = ? OR r.consonants = ?)');
-            args.push(`%${q}%`, q, q);
+        const queries = [client.execute(listQuery)];
+        if (!skipCount) {
+            queries.push(client.execute(countQuery));
         }
-        if (pos) {
-            const aliases = resolvePosAliases(pos);
-            if (aliases.length > 0) {
-                const placeholders = aliases.map(() => '?').join(', ');
-                whereClauses.push(`LOWER(TRIM(e.pos)) IN (${placeholders})`);
-                args.push(...aliases);
+
+        const [res, countRes] = await Promise.all(queries);
+
+        const entries = res.rows.map((row) => {
+            let tags = [];
+            if (row.tags) {
+                try {
+                    tags = typeof row.tags === 'string' ? JSON.parse(row.tags) : row.tags;
+                } catch {
+                    tags = [];
+                }
             }
-        }
+            let alternative_forms = [];
+            if (row.alternative_forms) {
+                try {
+                    alternative_forms = typeof row.alternative_forms === 'string' ? JSON.parse(row.alternative_forms) : row.alternative_forms;
+                } catch {
+                    alternative_forms = [];
+                }
+            }
+            return {
+                id: row.id,
+                headword: row.headword,
+                pos: row.pos,
+                gender: row.gender || undefined,
+                is_loanword: Boolean(row.is_loanword),
+                source_language: row.source_language || undefined,
+                created_at: row.created_at,
+                root_consonants: row.root_consonants || undefined,
+                text_en: row.text_en || undefined,
+                verb_form: row.verb_form || undefined,
+                verb_class: row.verb_class || undefined,
+                verb_transitivity: row.verb_transitivity || undefined,
+                verb_morphology: (row.verb_class || row.verb_form) ? {
+                    verb_class: row.verb_class,
+                    form: row.verb_form,
+                    transitivity: row.verb_transitivity,
+                } : undefined,
+                tags,
+                alternative_forms,
+            };
+        });
 
-        if (whereClauses.length) sql += ' WHERE ' + whereClauses.join(' AND ');
-        sql += ' ORDER BY e.headword ASC LIMIT ? OFFSET ?';
-        args.push(limit, offset);
+        const total = countRes ? Number(countRes.rows[0]?.total ?? 0) : undefined;
+        const durationMs = performance.now() - startTime;
 
-        const countQuery = `SELECT COUNT(*) as total FROM entries e 
-                           LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
-                           LEFT JOIN roots r ON r.id = rpf.root_id
-                           ${whereClauses.length ? ' WHERE ' + whereClauses.join(' AND ') : ''}`;
-        const countArgs = whereClauses.length ? args.slice(0, -2) : [];
+        logAdminRequest({
+            endpoint: '/api/admin/entries',
+            method: 'GET',
+            params: { q: q || undefined, pos: pos || undefined, letter: letter || undefined, limit, offset },
+            durationMs,
+            rowsCount: entries.length,
+            total: total ?? null,
+        });
 
-        const [res, countRes] = await Promise.all([
-            client.execute({ sql, args }),
-            client.execute({ sql: countQuery, args: countArgs }),
-        ]);
-
-        const entries = res.rows.map((row) => hydrateEntryRow(row));
+        const headers = {
+            'Server-Timing': `db;dur=${durationMs.toFixed(1)}`,
+            'X-Execution-Time-Ms': durationMs.toFixed(1),
+            'X-Rows-Count': String(entries.length),
+        };
 
         return json({
             entries,
-            total: Number(countRes.rows[0]?.total ?? 0),
-            limit, offset,
+            total: total ?? 0,
+            limit,
+            offset,
             _REWIRE_TEST: true
-        });
+        }, 200, headers);
     } catch (e) {
         return json({ error: e.message }, 500);
     }
@@ -456,6 +674,8 @@ export async function onRequestPost({ request, env }) {
             entryPos,
             entryId: id,
         });
+
+        invalidateEntryCache(id);
 
         return json({ id, created: true }, 201);
     } catch (e) {
@@ -525,6 +745,9 @@ export async function onRequestPut({ request, env }) {
             previousId: shouldRename ? id : null,
         });
 
+        invalidateEntryCache(requestedId || id);
+        if (shouldRename) invalidateEntryCache(id);
+
         return json({ id: requestedId || id, updated: true, renamed: shouldRename });
 
     } catch (e) {
@@ -561,12 +784,13 @@ export async function onRequestOptions() {
     });
 }
 
-function json(data, status = 200) {
+function json(data, status = 200, extraHeaders = {}) {
     return new Response(JSON.stringify(data), {
         status,
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
+            ...extraHeaders,
         },
     });
 }

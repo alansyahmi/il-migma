@@ -109,6 +109,12 @@ export async function onRequestGet({ request, env }) {
         const dbToken = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
         const db = createClient({ url: tursoUrl, authToken: dbToken });
 
+        // Older/current databases do not all have the optional entry status
+        // column. Discover it instead of allowing the entire search query to
+        // fail with "no such column: e.status".
+        const entryColumns = await db.execute('PRAGMA table_info(entries)');
+        const hasEntryStatus = entryColumns.rows.some((column) => column.name === 'status');
+
         // Normalize search string for better matches
         const normalizedQ = q.toLowerCase().trim().normalize('NFC');
 
@@ -116,19 +122,14 @@ export async function onRequestGet({ request, env }) {
         const safeQuery = normalizedQ.replace(/"/g, ' ').trim();
         const ftsQuery = `"${safeQuery}"*`;
 
-        let sql = `
+        const baseJoins = `
             FROM entries e
-            -- Prefer the explicit root link; otherwise join the canonical root id
-            -- stored on the entry. This avoids fanning out across homographic
-            -- roots that share the same consonants.
             LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id)
-            LEFT JOIN roots r ON r.id = rpf.root_id OR (rpf.root_id IS NULL AND r.consonants = e.root_consonants)
+            LEFT JOIN roots r ON (r.id = rpf.root_id)
             LEFT JOIN patterns pat ON (rpf.pattern_id = pat.id)
-            LEFT JOIN phonetics p   ON p.entry_id = e.id AND p.dialect = 'Standard'
-            LEFT JOIN attestation_reliability ar ON ar.entry_id = e.id
             ${ENTRY_MORPHOLOGY_JOINS}
-            WHERE 1=1
         `;
+        let sql = ` WHERE 1=1`;
         const args = [];
 
         let globStr = '';
@@ -357,14 +358,14 @@ export async function onRequestGet({ request, env }) {
         }
 
         // Status filtering (approved by default; pending/suggested included when requested)
-        if (!includePending || !includeSuggested) {
+        if (hasEntryStatus && (!includePending || !includeSuggested)) {
             const statusConditions = ["COALESCE(e.status, 'approved') = 'approved'"];
             if (includePending) statusConditions.push("e.status = 'pending'");
             if (includeSuggested) statusConditions.push("e.status = 'suggested'");
             sql += ` AND (${statusConditions.join(' OR ')})`;
         }
 
-        const totalRes = await db.execute({ sql: `SELECT COUNT(*) as total ${sql}`, args });
+        const totalRes = await db.execute({ sql: `SELECT COUNT(*) as total ${baseJoins} ${sql}`, args });
         const total = Number(totalRes.rows[0]?.total ?? 0);
 
         if (limit === 0) {
@@ -386,6 +387,9 @@ export async function onRequestGet({ request, env }) {
                 p.ipa, ar.reliability_index,
                 pat.cv_notation, pat.wizen_notation,
                 ${ENTRY_MORPHOLOGY_SELECT}
+            ${baseJoins}
+            LEFT JOIN phonetics p   ON p.entry_id = e.id AND p.dialect = 'Standard'
+            LEFT JOIN attestation_reliability ar ON ar.entry_id = e.id
             ${sql}
                 `;
 

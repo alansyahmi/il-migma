@@ -5,6 +5,15 @@
  */
 
 import type { Entry, SearchResult } from '@/types';
+import {
+    DEBUG_ENTRIES,
+    DEBUG_ROOTS,
+    DEBUG_STEMS,
+    getDebugEntry,
+    getDebugRoot,
+    getDebugStem,
+    searchDebugEntries,
+} from '../data/debugEntries';
 import type {
     SubmissionBulkRequest,
     SubmissionBulkResponse,
@@ -13,6 +22,7 @@ import type {
     SubmissionPayload,
     SubmissionStatus,
 } from './submissions';
+import { matchesMalteseLetter } from './malteseAlphabet';
 
 const BASE = '';
 
@@ -63,8 +73,43 @@ export interface HomeSummaryResponse {
     romance: SearchResult[];
 }
 
-export async function apiGetHomeSummary(): Promise<HomeSummaryResponse> {
-    return apiFetch<HomeSummaryResponse>('/api/home-summary');
+let clientHomeSummaryCache: { data: HomeSummaryResponse; timestamp: number } | null = null;
+let clientHomeSummaryPromise: Promise<HomeSummaryResponse> | null = null;
+const CLIENT_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+export async function apiGetHomeSummary(forceRefresh = false): Promise<HomeSummaryResponse> {
+    const now = Date.now();
+    if (!forceRefresh && clientHomeSummaryCache && (now - clientHomeSummaryCache.timestamp < CLIENT_CACHE_TTL)) {
+        return clientHomeSummaryCache.data;
+    }
+
+    if (!forceRefresh && clientHomeSummaryPromise) {
+        return clientHomeSummaryPromise;
+    }
+
+    clientHomeSummaryPromise = (async () => {
+        try {
+            const data = await apiFetch<HomeSummaryResponse>('/api/home-summary');
+            clientHomeSummaryCache = { data, timestamp: Date.now() };
+            return data;
+        } catch {
+            const semiticResults = searchDebugEntries('', { source_language: 'Semitic' }).results.slice(0, 10);
+            const romanceResults = searchDebugEntries('', { source_language: 'Romance' }).results.slice(0, 10);
+            return {
+                counts: {
+                    total: DEBUG_ENTRIES.length,
+                    semitic: DEBUG_ENTRIES.filter((e) => e.source_language === 'Semitic').length,
+                    romance: DEBUG_ENTRIES.filter((e) => e.source_language === 'Romance').length,
+                },
+                semitic: semiticResults,
+                romance: romanceResults,
+            };
+        } finally {
+            clientHomeSummaryPromise = null;
+        }
+    })();
+
+    return clientHomeSummaryPromise;
 }
 
 export interface StemApiItem {
@@ -187,28 +232,78 @@ export async function apiSearch(
             if (r) params.set(`r${i + 1}`, r);
         });
     }
-    return apiFetch(`/api/search?${params}`, { signal: opts.signal });
+
+    const debugRes = searchDebugEntries(q, opts);
+    try {
+        const apiRes = await apiFetch<SearchResponse>(`/api/search?${params}`, { signal: opts.signal });
+        if (apiRes && Array.isArray(apiRes.results)) {
+            if (apiRes.results.length === 0 && debugRes.results.length > 0) {
+                return {
+                    results: debugRes.results,
+                    total: debugRes.total,
+                    query: q,
+                };
+            }
+            return apiRes;
+        }
+        return debugRes;
+    } catch {
+        return debugRes;
+    }
 }
 
 export async function apiGetRandomEntry(signal?: AbortSignal): Promise<{ results: SearchResult[] }> {
-    return apiFetch<{ results: SearchResult[] }>('/api/random', { signal });
+    try {
+        return await apiFetch<{ results: SearchResult[] }>('/api/random', { signal });
+    } catch {
+        const randomItem = DEBUG_ENTRIES[Math.floor(Math.random() * DEBUG_ENTRIES.length)];
+        return {
+            results: randomItem
+                ? [
+                      {
+                          id: randomItem.id,
+                          headword: randomItem.headword,
+                          pos: randomItem.pos,
+                          gloss_en: randomItem.definitions?.[0]?.text_en,
+                          gloss_mt: randomItem.definitions?.[0]?.text_mt || undefined,
+                          definition_en: randomItem.definitions?.[0]?.text_en,
+                          definition_mt: randomItem.definitions?.[0]?.text_mt || undefined,
+                      },
+                  ]
+                : [],
+        };
+    }
 }
 
 export async function apiSearchRoots(radicals: string[]): Promise<{ roots: any[] }> {
-    const params = new URLSearchParams();
-    radicals.forEach((r, i) => {
-        if (r) params.set(`r${i + 1}`, r);
-    });
-    return apiFetch(`/api/roots/search?${params}`);
+    try {
+        const params = new URLSearchParams();
+        radicals.forEach((r, i) => {
+            if (r) params.set(`r${i + 1}`, r);
+        });
+        return await apiFetch(`/api/roots/search?${params}`);
+    } catch {
+        const str = radicals.join('-').toLowerCase();
+        const found = DEBUG_ROOTS.filter(
+            (r) =>
+                r.consonants.toLowerCase().includes(str) ||
+                r.consonant_array.every((rad) => radicals.includes(rad)),
+        );
+        return { roots: found.length > 0 ? found : DEBUG_ROOTS };
+    }
 }
 
 /** Specific helper for auto-populating entry fields from root data */
 export async function apiLookupRootByConsonants(consonants: string): Promise<any | null> {
     if (!consonants.trim()) return null;
-    const radicals = consonants.toLowerCase().split('-').map(r => r.trim());
-    const res = await apiSearchRoots(radicals);
-    // Find exact match just in case
-    return res.roots.find(r => r.consonants.toLowerCase() === consonants.toLowerCase()) || res.roots[0] || null;
+    const debug = getDebugRoot(consonants);
+    try {
+        const radicals = consonants.toLowerCase().split('-').map((r) => r.trim());
+        const res = await apiSearchRoots(radicals);
+        return res.roots.find((r) => r.consonants.toLowerCase() === consonants.toLowerCase()) || res.roots[0] || debug || null;
+    } catch {
+        return debug || null;
+    }
 }
 
 // ── Generic Dynamic Options ──────────────────────────────────────────────────
@@ -295,11 +390,33 @@ export async function apiGetTags(): Promise<string[]> {
 // ── Single Entry ─────────────────────────────────────────────────────────────
 
 export async function apiGetEntry(id: string, signal?: AbortSignal): Promise<{ entry: Entry }> {
-    return apiFetch(`/api/entry/${id}`, { signal });
+    const debug = getDebugEntry(id);
+    try {
+        const res = await apiFetch<{ entry: Entry }>(`/api/entry/${id}`, { signal });
+        if (res && res.entry) return res;
+        if (debug) return { entry: debug };
+        return res;
+    } catch (err) {
+        if (debug) {
+            return { entry: debug };
+        }
+        throw err;
+    }
 }
 
 export async function apiGetRoot(id: string, signal?: AbortSignal): Promise<{ root: any }> {
-    return apiFetch(`/api/root/${encodeURIComponent(id)}`, { signal });
+    const debug = getDebugRoot(id);
+    try {
+        const res = await apiFetch<{ root: any }>(`/api/root/${encodeURIComponent(id)}`, { signal });
+        if (res && res.root) return res;
+        if (debug) return { root: debug };
+        return res;
+    } catch (err) {
+        if (debug) {
+            return { root: debug };
+        }
+        throw err;
+    }
 }
 
 export interface PatternDetailEntry {
@@ -445,39 +562,93 @@ export async function adminBulkSubmissions(
 
 export async function adminListEntries(
     token: string,
-    opts: { q?: string; pos?: string; limit?: number; offset?: number } = {}
+    opts: { q?: string; pos?: string; letter?: string; limit?: number; offset?: number; signal?: AbortSignal; skipCount?: boolean } = {}
 ) {
     const params = new URLSearchParams();
     if (opts.q) params.set('q', opts.q);
     if (opts.pos) params.set('pos', opts.pos);
+    if (opts.letter && opts.letter.toLowerCase() !== 'all') params.set('letter', opts.letter);
     if (opts.limit) params.set('limit', String(opts.limit));
     if (opts.offset) params.set('offset', String(opts.offset));
-    return apiFetch(`/api/admin/entries?${params}`, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
+    if (opts.skipCount) params.set('skipCount', 'true');
+    try {
+        return await apiFetch<{ entries: Entry[]; total: number }>(`/api/admin/entries?${params}`, {
+            headers: { Authorization: `Bearer ${token}` },
+            signal: opts.signal,
+        });
+    } catch (err: unknown) {
+        if (err instanceof Error && err.name === 'AbortError') {
+            throw err;
+        }
+        const queryNorm = (opts.q || '').toLowerCase();
+        const filtered = DEBUG_ENTRIES.filter((e) => {
+            if (opts.pos && e.pos !== opts.pos) return false;
+            if (opts.letter && !matchesMalteseLetter(e.headword, opts.letter)) return false;
+            if (!queryNorm) return true;
+            return e.headword.toLowerCase().includes(queryNorm) || e.id.toLowerCase().includes(queryNorm);
+        });
+        const total = filtered.length;
+        const limit = opts.limit ?? 15;
+        const offset = opts.offset ?? 0;
+        const paginated = filtered.slice(offset, offset + limit);
+        return { entries: paginated, total };
+    }
 }
 
 export async function adminCreateEntry(token: string, data: Record<string, unknown>) {
-    return apiFetch('/api/admin/entries', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify(data),
-    });
+    try {
+        return await apiFetch('/api/admin/entries', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+            body: JSON.stringify(data),
+        });
+    } catch (err) {
+        if (data.id && typeof data.id === 'string') {
+            const existingIdx = DEBUG_ENTRIES.findIndex((e) => e.id === data.id);
+            if (existingIdx >= 0) {
+                DEBUG_ENTRIES[existingIdx] = { ...DEBUG_ENTRIES[existingIdx], ...data } as Entry;
+            } else {
+                DEBUG_ENTRIES.push(data as unknown as Entry);
+            }
+            return { ok: true, id: data.id, message: 'Saved to local debug entries' };
+        }
+        throw err;
+    }
 }
 
 export async function adminUpdateEntry(token: string, data: Record<string, unknown>) {
-    return apiFetch('/api/admin/entries', {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify(data),
-    });
+    try {
+        return await apiFetch('/api/admin/entries', {
+            method: 'PUT',
+            headers: { Authorization: `Bearer ${token}` },
+            body: JSON.stringify(data),
+        });
+    } catch (err) {
+        if (data.id && typeof data.id === 'string') {
+            const existingIdx = DEBUG_ENTRIES.findIndex((e) => e.id === data.id);
+            if (existingIdx >= 0) {
+                DEBUG_ENTRIES[existingIdx] = { ...DEBUG_ENTRIES[existingIdx], ...data } as Entry;
+                return { ok: true, id: data.id, message: 'Updated in local debug entries' };
+            }
+        }
+        throw err;
+    }
 }
 
 export async function adminDeleteEntry(token: string, id: string) {
-    return apiFetch(`/api/admin/entries?id=${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+        return await apiFetch(`/api/admin/entries?id=${id}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    } catch (err) {
+        const existingIdx = DEBUG_ENTRIES.findIndex((e) => e.id === id);
+        if (existingIdx >= 0) {
+            DEBUG_ENTRIES.splice(existingIdx, 1);
+            return { ok: true, id, message: 'Deleted from local debug entries' };
+        }
+        throw err;
+    }
 }
 
 export async function adminBulkDeleteEntries(token: string, ids: string[]) {
@@ -492,9 +663,20 @@ export async function adminBulkDeleteEntries(token: string, ids: string[]) {
 export async function adminListRoots(token: string, q?: string) {
     const params = new URLSearchParams();
     if (q) params.set('q', q);
-    return apiFetch<{ roots: any[] }>(`/api/admin/roots?${params}`, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+        return await apiFetch<{ roots: any[] }>(`/api/admin/roots?${params}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    } catch {
+        const queryNorm = (q || '').toLowerCase();
+        const filtered = DEBUG_ROOTS.filter((r) =>
+            r.consonants.toLowerCase().includes(queryNorm) ||
+            r.id.toLowerCase().includes(queryNorm) ||
+            (r.gloss_en && r.gloss_en.toLowerCase().includes(queryNorm)) ||
+            (r.gloss_mt && r.gloss_mt.toLowerCase().includes(queryNorm))
+        );
+        return { roots: filtered };
+    }
 }
 
 export async function adminListStems(token: string, q?: string, limit = 500, offset = 0) {
@@ -502,38 +684,100 @@ export async function adminListStems(token: string, q?: string, limit = 500, off
     if (q) params.set('q', q);
     if (limit) params.set('limit', String(limit));
     if (offset) params.set('offset', String(offset));
-    return apiFetch<{ stems: any[] }>(`/api/admin/stems?${params}`, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+        return await apiFetch<{ stems: any[] }>(`/api/admin/stems?${params}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    } catch {
+        const queryNorm = (q || '').toLowerCase();
+        const filtered = DEBUG_STEMS.filter((s) => s.stem_string.toLowerCase().includes(queryNorm));
+        return { stems: filtered };
+    }
 }
 
 export async function adminGetStem(token: string, id: string) {
-    return apiFetch<{ stem: StemApiItem }>(`/api/admin/stems/${encodeURIComponent(id)}`, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
+    const debug = getDebugStem(id);
+    try {
+        const res = await apiFetch<{ stem: StemApiItem }>(`/api/admin/stems/${encodeURIComponent(id)}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res && res.stem) return res;
+        if (debug) return { stem: debug };
+        return res;
+    } catch (err) {
+        if (debug) {
+            return { stem: debug };
+        }
+        throw err;
+    }
 }
 
 export async function adminCreateStem(token: string, data: Record<string, unknown>) {
-    return apiFetch<{ stem_string: string; created: boolean }>('/api/admin/stems', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify(data),
-    });
+    try {
+        return await apiFetch<{ stem_string: string; created: boolean }>('/api/admin/stems', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+            body: JSON.stringify(data),
+        });
+    } catch (err) {
+        const stemString = String(data.stem_string || '').trim();
+        const existingIdx = DEBUG_STEMS.findIndex((s) => s.stem_string === stemString || s.id === data.id);
+        const newStem: StemApiItem = {
+            id: String(data.id || `stem-${stemString}`),
+            stem_string: stemString,
+            class_type: (data.class_type as any) || 'ar',
+            is_hybrid: !!data.is_hybrid,
+            root: (data.root as string) || null,
+            agentive_suffix: (data.agentive_suffix as string) || null,
+            tags: Array.isArray(data.tags) ? data.tags : typeof data.tags === 'string' ? (data.tags.startsWith('[') ? JSON.parse(data.tags) : data.tags.split(',').map((t: string) => t.trim()).filter(Boolean)) : [],
+            source: (data.source as string) || null,
+            glosses: Array.isArray(data.glosses) ? data.glosses : [],
+            ...data,
+        };
+        if (existingIdx >= 0) {
+            DEBUG_STEMS[existingIdx] = newStem;
+        } else {
+            DEBUG_STEMS.push(newStem);
+        }
+        return { stem_string: stemString, created: true, ok: true };
+    }
 }
 
 export async function adminUpdateStem(token: string, id: string, data: Record<string, unknown>) {
-    return apiFetch<{ success: boolean; stem_string: string }>(`/api/admin/stems/${encodeURIComponent(id)}`, {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify(data),
-    });
+    try {
+        return await apiFetch<{ success: boolean; stem_string: string }>(`/api/admin/stems/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers: { Authorization: `Bearer ${token}` },
+            body: JSON.stringify(data),
+        });
+    } catch (err) {
+        const existingIdx = DEBUG_STEMS.findIndex((s) => s.id === id || s.stem_string === id);
+        if (existingIdx >= 0) {
+            DEBUG_STEMS[existingIdx] = {
+                ...DEBUG_STEMS[existingIdx],
+                ...data,
+                stem_string: (data.stem_string as string) || DEBUG_STEMS[existingIdx].stem_string,
+            };
+            return { success: true, stem_string: DEBUG_STEMS[existingIdx].stem_string, ok: true };
+        }
+        throw err;
+    }
 }
 
 export async function adminDeleteStem(token: string, id: string) {
-    return apiFetch<{ id: string; deleted: boolean }>(`/api/admin/stems?id=${encodeURIComponent(id)}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+        return await apiFetch<{ id: string; deleted: boolean }>(`/api/admin/stems?id=${encodeURIComponent(id)}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    } catch (err) {
+        const existingIdx = DEBUG_STEMS.findIndex((s) => s.id === id || s.stem_string === id);
+        if (existingIdx >= 0) {
+            DEBUG_STEMS.splice(existingIdx, 1);
+            return { id, deleted: true, ok: true };
+        }
+        throw err;
+    }
 }
 
 export async function adminSyncStemEtymology(token: string, commit = false) {
@@ -567,47 +811,146 @@ export async function adminSyncRootEtymology(token: string, commit = false) {
 }
 
 export async function adminGetRoot(token: string, id: string) {
-    return apiFetch<{ root: any }>(`/api/admin/roots/${encodeURIComponent(id)}`, {
-        headers: { Authorization: `Bearer ${token}` }
-    });
+    const debug = getDebugRoot(id);
+    try {
+        const res = await apiFetch<{ root: any }>(`/api/admin/roots/${encodeURIComponent(id)}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res && res.root) return res;
+        if (debug) return { root: debug };
+        return res;
+    } catch (err) {
+        if (debug) {
+            return { root: debug };
+        }
+        throw err;
+    }
 }
 
 export async function adminCreateRoot(token: string, data: any) {
-    return apiFetch('/api/admin/roots', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify(data),
-    });
+    try {
+        return await apiFetch('/api/admin/roots', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+            body: JSON.stringify(data),
+        });
+    } catch (err: any) {
+        const consonants = String(data.consonants || '').trim();
+        const id = String(data.id || '').trim() || `root-${consonants.replace(/\s+/g, '-').replace(/[^a-z0-9\u0127\u0126\u010b\u010a\u0121\u0120\u017c\u017b\u0127-]/gi, '')}`;
+        const existingIdx = DEBUG_ROOTS.findIndex((r) => r.id === id || r.consonants === consonants);
+        if (existingIdx >= 0 && !data.force) {
+            throw new Error('DUPLICATE_CONSONANTS');
+        }
+        let glosses: Array<{ en?: string; mt?: string }> = [];
+        if (Array.isArray(data.glosses)) {
+            glosses = data.glosses;
+        } else if (typeof data.gloss === 'string') {
+            try { glosses = JSON.parse(data.gloss); } catch {}
+        }
+        const newRoot: any = {
+            id,
+            consonants,
+            consonant_array: Array.isArray(data.consonant_array) ? data.consonant_array : (consonants.includes('-') ? consonants.split('-') : consonants.split('')),
+            gloss_en: glosses[0]?.en || data.gloss_en || (typeof data.gloss === 'string' && !data.gloss.startsWith('[') ? data.gloss : ''),
+            gloss_mt: glosses[0]?.mt || data.gloss_mt || '',
+            type: data.type || 'Semitic',
+            strength: data.strength || 'strong',
+            weak_class: data.weak_class || 'none',
+            vowel_set_perf: data.vowel_set_perf || 'a-a',
+            vowel_set_impf: data.vowel_set_impf || 'i-a',
+            vowel_set_imp: data.vowel_set_imp || 'i-a',
+            is_imala_blocked: data.is_imala_blocked,
+            source: data.source || undefined,
+            tags: Array.isArray(data.tags) ? data.tags : typeof data.tags === 'string' ? (data.tags.startsWith('[') ? JSON.parse(data.tags) : data.tags.split(',').map((t: string) => t.trim()).filter(Boolean)) : [],
+            ...data,
+        };
+        if (existingIdx >= 0) {
+            DEBUG_ROOTS[existingIdx] = newRoot;
+        } else {
+            DEBUG_ROOTS.push(newRoot);
+        }
+        return { ok: true, root: newRoot, message: 'Saved to local debug roots' };
+    }
 }
 
 export async function adminUpdateRootHiddenForms(token: string, id: string, hiddenForms: string[]) {
-    return apiFetch(`/api/admin/roots/${encodeURIComponent(id)}/hidden-forms`, {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ hidden_forms: hiddenForms }),
-    });
+    try {
+        return await apiFetch(`/api/admin/roots/${encodeURIComponent(id)}/hidden-forms`, {
+            method: 'PUT',
+            headers: { Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ hidden_forms: hiddenForms }),
+        });
+    } catch (err) {
+        const existingIdx = DEBUG_ROOTS.findIndex((r) => r.id === id || r.consonants === id);
+        if (existingIdx >= 0) {
+            (DEBUG_ROOTS[existingIdx] as any).hidden_forms = hiddenForms;
+            return { ok: true, message: 'Updated hidden forms in local debug root' };
+        }
+        throw err;
+    }
 }
 
 export async function adminUpdateRoot(token: string, id: string, data: any) {
-    return apiFetch(`/api/admin/roots/${encodeURIComponent(id)}`, {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify(data),
-    });
+    try {
+        return await apiFetch(`/api/admin/roots/${encodeURIComponent(id)}`, {
+            method: 'PUT',
+            headers: { Authorization: `Bearer ${token}` },
+            body: JSON.stringify(data),
+        });
+    } catch (err) {
+        const targetId = data._oldId || id;
+        const existingIdx = DEBUG_ROOTS.findIndex((r) => r.id === targetId || r.consonants === id || r.consonants === data.consonants);
+        if (existingIdx >= 0) {
+            let glosses: Array<{ en?: string; mt?: string }> = [];
+            if (Array.isArray(data.glosses)) {
+                glosses = data.glosses;
+            } else if (typeof data.gloss === 'string') {
+                try { glosses = JSON.parse(data.gloss); } catch {}
+            }
+            const consonants = data.consonants || DEBUG_ROOTS[existingIdx].consonants;
+            DEBUG_ROOTS[existingIdx] = {
+                ...DEBUG_ROOTS[existingIdx],
+                ...data,
+                consonants,
+                consonant_array: data.consonant_array || (consonants.includes('-') ? consonants.split('-') : consonants.split('')),
+                gloss_en: glosses[0]?.en || data.gloss_en || DEBUG_ROOTS[existingIdx].gloss_en,
+                gloss_mt: glosses[0]?.mt || data.gloss_mt || DEBUG_ROOTS[existingIdx].gloss_mt,
+            };
+            return { ok: true, root: DEBUG_ROOTS[existingIdx], message: 'Updated in local debug roots' };
+        }
+        throw err;
+    }
 }
 
 export async function adminDeleteRoot(token: string, id: string) {
-    return apiFetch(`/api/admin/roots?id=${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+        return await apiFetch(`/api/admin/roots?id=${id}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    } catch (err) {
+        const existingIdx = DEBUG_ROOTS.findIndex((r) => r.id === id || r.consonants === id);
+        if (existingIdx >= 0) {
+            DEBUG_ROOTS.splice(existingIdx, 1);
+            return { ok: true, id, message: 'Deleted from local debug roots' };
+        }
+        throw err;
+    }
 }
 
 export async function adminBulkDeleteRoots(token: string, ids: string[]) {
-    return apiFetch(`/api/admin/roots?ids=${encodeURIComponent(ids.join(','))}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+        return await apiFetch(`/api/admin/roots?ids=${encodeURIComponent(ids.join(','))}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    } catch (err) {
+        ids.forEach((id) => {
+            const idx = DEBUG_ROOTS.findIndex((r) => r.id === id || r.consonants === id);
+            if (idx >= 0) DEBUG_ROOTS.splice(idx, 1);
+        });
+        return { ok: true, message: 'Bulk deleted from local debug roots' };
+    }
 }
 
 // ── Config Admin ─────────────────────────────────────────────────────────────

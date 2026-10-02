@@ -81,6 +81,8 @@ export async function onRequestPost({ request, env }) {
                 return handleTableInfo(client);
             case 'check-id':
                 return handleCheckId(client, body);
+            case 'ensure-performance-indexes':
+                return handleEnsurePerformanceIndexes(client);
             default:
                 return json({ error: `Unknown action: ${action}` }, 400);
         }
@@ -495,6 +497,32 @@ async function handleCheckId(client, { table, id }) {
     });
 
     return json({ exists: res.rows.length > 0, id: normalizedId, table });
+}
+
+async function handleEnsurePerformanceIndexes(client) {
+    const indexStatements = [
+        'CREATE INDEX IF NOT EXISTS idx_entries_root ON entries(root_consonants)',
+        'CREATE INDEX IF NOT EXISTS idx_entries_created_at ON entries(created_at DESC)',
+        'CREATE INDEX IF NOT EXISTS idx_entries_source_created ON entries(source_language, created_at DESC)',
+        'CREATE INDEX IF NOT EXISTS idx_phonetics_entry ON phonetics(entry_id)',
+        'CREATE INDEX IF NOT EXISTS idx_phonetics_entry_dialect ON phonetics(entry_id, dialect)',
+        'CREATE INDEX IF NOT EXISTS idx_alt_forms_entry ON alternative_forms(entry_id)',
+        'CREATE INDEX IF NOT EXISTS idx_diminutives_entry ON entry_diminutives(entry_id)',
+        'CREATE INDEX IF NOT EXISTS idx_audio_entry ON audio_files(entry_id)',
+        'CREATE INDEX IF NOT EXISTS idx_relationships_entry_type ON entry_relationships(entry_id, relationship_type)',
+        'CREATE INDEX IF NOT EXISTS idx_entry_tags_entry_tag ON entry_tags(entry_id, tag_id)',
+    ];
+
+    const results = [];
+    for (const ddl of indexStatements) {
+        try {
+            await client.execute(ddl);
+            results.push({ ddl, status: 'ok' });
+        } catch (err) {
+            results.push({ ddl, status: 'error', error: err.message });
+        }
+    }
+    return json({ success: true, indexes: results });
 }
 
 // ── Utilities ─────────────────────────────────────────────────────────────────

@@ -42,7 +42,7 @@ export function AdminSettingsToolbar({
     const hasPosFilter = Boolean(activeCategory?.hasPosFilter);
 
     return (
-        <div className="sticky top-2 z-10 bg-[#f7f6f3]/90 backdrop-blur border border-black/5 rounded-2xl p-3 space-y-3 shadow-sm">
+        <div className="sticky top-16 z-30 bg-[#f7f6f3] border border-black/5 rounded-2xl p-3 space-y-3 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="text-lg font-bold text-black">{categoryLabel}</h2>
 

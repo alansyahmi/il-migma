@@ -128,6 +128,9 @@ CREATE TABLE IF NOT EXISTS entries (
 CREATE INDEX IF NOT EXISTS idx_entries_headword ON entries(headword);
 CREATE INDEX IF NOT EXISTS idx_entries_pos ON entries(pos);
 CREATE INDEX IF NOT EXISTS idx_entries_gender ON entries(gender);
+CREATE INDEX IF NOT EXISTS idx_entries_root ON entries(root_consonants);
+CREATE INDEX IF NOT EXISTS idx_entries_created_at ON entries(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_entries_source_created ON entries(source_language, created_at DESC);
 
 -- ─── Tags ────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS tags (
@@ -306,6 +309,9 @@ CREATE TABLE IF NOT EXISTS phonetics (
   CHECK(entry_id IS NOT NULL OR subentry_id IS NOT NULL)
 );
 
+CREATE INDEX IF NOT EXISTS idx_phonetics_entry ON phonetics(entry_id);
+CREATE INDEX IF NOT EXISTS idx_phonetics_entry_dialect ON phonetics(entry_id, dialect);
+
 -- ─── Audio Files ──────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS audio_files (
   id                TEXT PRIMARY KEY,
@@ -318,6 +324,8 @@ CREATE TABLE IF NOT EXISTS audio_files (
   generated_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
   CHECK(entry_id IS NOT NULL OR subentry_id IS NOT NULL)
 );
+
+CREATE INDEX IF NOT EXISTS idx_audio_entry ON audio_files(entry_id);
 
 -- ─── Lexical Sources (Authority Weights) ──────────────────────────────────
 CREATE TABLE IF NOT EXISTS lexical_sources (
