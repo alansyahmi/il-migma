@@ -1,0 +1,2036 @@
+{
+  "category_id": "nouns_built_environment",
+  "category_title": "Nouns: Home, Places & Buildings",
+  "total_entries": 20,
+  "entries": [
+    {
+      "rank": 62,
+      "source_frequency_rank": 62,
+      "id": "n-domiċilju",
+      "headword": "domiċilju",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "home",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-port",
+      "headword": "port",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "port",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: port",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/port",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "portu",
+          "definition": "port"
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "portus",
+          "definition": "harbor, port"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "harbour, port",
+          "text_mt": "Bajja maħsuba u mibnija bir-rimm u l-moll fejn jormaw il-vapuri.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-vapur daħal fil-port il-Kbir kmieni filgħodu.",
+          "en": "The ship entered the Grand Harbour early in the morning."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈpɔrt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "portijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "portijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 65,
+      "source_frequency_rank": 65,
+      "audit_status": "pending",
+      "audit_notes": "ℹ️ **[Loanword]** Valid Maltese loanword (*port* = harbour/seaport; pl. *portijiet*)",
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "rank": 107,
+      "source_frequency_rank": 107,
+      "id": "n-post",
+      "headword": "post",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "place",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #844)*",
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "rank": 209,
+      "source_frequency_rank": 209,
+      "id": "n-iskola",
+      "headword": "iskola",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "school",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-belt",
+      "headword": "belt",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "belt",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: belt",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/belt",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "بَلَد",
+          "definition": "Land, area, city"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "city, town",
+          "text_mt": "Li għandu x'jaqsam ma' belt fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [
+        "n-belt-kapitali",
+        "adj-belti",
+        "n-il-belt"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɛlt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "bliet",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "bliet",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 227,
+      "source_frequency_rank": 227,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #403)*",
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-kamra",
+      "headword": "kamra",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "kamr",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: kamra",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/kamra",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Sicilian",
+          "term": "càmmara",
+          "definition": "chamber, room, interior space"
+        },
+        {
+          "relationship": "Ultimately from",
+          "language": "Latin",
+          "term": "camera",
+          "definition": "kamára"
+        },
+        {
+          "relationship": "From",
+          "language": "Ancient Greek",
+          "term": "καμάρα",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "room",
+          "text_mt": "Spazju jew parti minn bini magħluqa b'ħitan, saqaf u bieb.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "chamber",
+          "text_mt": "Sala jew kamra użata għal laqgħat uffiċjali jew organizzazzjoni ta' assoċjazzjoni.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Dħalt fil-kamra tas-sodda biex nistrieħ wara jum twil xogħol.",
+          "en": "I entered the bedroom to rest after a long day of work."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɐm.rɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "kamrák",
+          "pattern": "1v23ák"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "kamrák",
+          "pattern": "1v23ák"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 256,
+      "source_frequency_rank": 256,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-bieb",
+      "headword": "bieb",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "b-w-b",
+      "stem": null,
+      "cv_pattern": "1â3",
+      "morph_pattern": "C1âC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: bieb",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/bieb",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "بَاب",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "door, gate",
+          "text_mt": "Għodda ta' injam jew ħadid użata biex tagħlaq il-bini.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fetaħ il-bieb tad-dar biex jidħol.",
+          "en": "He opened the house door to enter."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɪːp/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "bibejn",
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "bibien",
+          "pattern": "-ien"
+        },
+        {
+          "form": "bwieb",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "bibien",
+          "pattern": "-ien"
+        },
+        {
+          "form": "bwieb",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "--ie",
+      "vowel_set_pl": "--i",
+      "vowel_set_dual": "--i",
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 324,
+      "source_frequency_rank": 324,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-biċċa",
+      "headword": "biċċa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "b-ċ-ċ",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Late Latin",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: biċċa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/bi%C4%8B%C4%8Ba",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Ultimately from",
+          "language": "Late Latin",
+          "term": "pettia",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Sicilian",
+          "term": "pezza or a variant of it",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "piece, portion",
+          "text_mt": "Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "piece (chess: figure other than pawn",
+          "text_mt": "Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "similar counter in other games)",
+          "text_mt": "Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "piece (artistic creation)",
+          "text_mt": "Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "piece of cloth",
+          "text_mt": "Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "coin",
+          "text_mt": "Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "fact, event",
+          "text_mt": "Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "concern, business",
+          "text_mt": "Li għandu x'jaqsam ma' biċċa fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɪt͡ʃ.t͡ʃɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "biċċtejn",
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "bċejjeċ",
+          "pattern": "12vjjv3"
+        },
+        {
+          "form": "biċċiet",
+          "pattern": "-iet"
+        },
+        {
+          "form": "bċieċ",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "bċejjeċ",
+          "pattern": "12vjjv3"
+        },
+        {
+          "form": "biċċiet",
+          "pattern": "-iet"
+        },
+        {
+          "form": "bċieċ",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 342,
+      "source_frequency_rank": 342,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-pożizzjoni",
+      "headword": "pożizzjoni",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "pożizzjoni",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: pożizzjoni",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/po%C5%BCizzjoni",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "posizione",
+          "definition": "position"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "position, rank, place",
+          "text_mt": "Il-post u r-rwol uffiċjali ta' persuna f'ditta jew fit-triq.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħa pożizzjoni importanti fid-direttorat tal-gvern.",
+          "en": "He took an important position in the government directorate."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "posizzjoni",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/pɔ.zɪtˈt͡sjɔː.nɪ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "pożizzjonijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "pożizzjonijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 546,
+      "source_frequency_rank": 546,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-razza",
+      "headword": "razza",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "razza",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: razza",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/razza",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "razza",
+          "definition": null
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "razza",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "race, breed, ethnicity",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal race, breed, ethnicity.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-użu ta' razza kien prominenti u utli ħafna fil-ħajja.",
+          "en": "The use of race, breed, ethnicity was prominent and very useful in life."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɐt.t͡sɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "razez",
+          "pattern": "1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "razez",
+          "pattern": "1v2v3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 554,
+      "source_frequency_rank": 554,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-maħżen",
+      "headword": "maħżen",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "ħ-ż-n",
+      "stem": null,
+      "cv_pattern": "ma12v3",
+      "morph_pattern": "maC1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: maħżen",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ma%C4%A7%C5%BCen",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَخْزَن",
+          "definition": "warehouse, repository, barn"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "warehouse, storage room",
+          "text_mt": "Bini u post kbir użat biex jaħżnu l-merkanzija u l-prodotti.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Żammew il-kaxxi tal-merkanzija fil-maħżen ewlieni tal-port.",
+          "en": "They kept the cargo boxes in the port's main warehouse."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɐħ.zɛn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "mħażen",
+          "pattern": "m1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "mħażen",
+          "pattern": "m1v2v3"
+        }
+      ],
+      "vowel_set_sg": "--e",
+      "vowel_set_pl": "a-e",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 556,
+      "source_frequency_rank": 556,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-ħajt",
+      "headword": "ħajt",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "wall",
+          "text_mt": null
+        },
+        {
+          "text_en": "thread, threads ( a ball, web, or indefinite number )",
+          "text_mt": null
+        }
+      ],
+      "gender": "masculine",
+      "root_consonants": "ħ-j-t",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A7ajt",
+      "source_citation": "Wiktionary: ħajt",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "حَائِط",
+          "definition": "wall, wall, paries"
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ħitan",
+          "pattern": null
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħitan",
+          "pattern": null
+        }
+      ],
+      "vowel_set_sg": "a--",
+      "vowel_set_pl": "i-a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "rank": 564,
+      "source_frequency_rank": 564,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-bank",
+      "headword": "bank",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "bank",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: bank",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/bank",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "banco",
+          "definition": "desk"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "bank (financial building or institution)",
+          "text_mt": "Li għandu x'jaqsam ma' bank fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "bank (an underwater area of higher elevation, a sandbank)",
+          "text_mt": "Li għandu x'jaqsam ma' bank fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɐnk/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "banek",
+          "pattern": "1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "banek",
+          "pattern": "1v2v3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 646,
+      "source_frequency_rank": 646,
+      "audit_status": "pending",
+      "audit_notes": "ℹ️ **[Loanword]** Valid Maltese loanword (*bank* = financial institution or bench; pl. *banek*)",
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-veloċità",
+      "headword": "veloċità",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "veloċità",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: veloċità",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/velo%C4%8Bit%C3%A0",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "velocità",
+          "definition": "velocity, speed, quickness"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "speed, velocity",
+          "text_mt": "Veloċità u grad ta' ħeffa f'vjaġġ.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-veloċità tal-karozza kienet ta' mitt kilometru fis-siegħa.",
+          "en": "The car speed was one hundred kilometers per hour."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/vɛ.lɔ.t͡ʃɪˈtɐː/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "veloċitajiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "veloċitajiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 671,
+      "source_frequency_rank": 671,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-qiegħ",
+      "headword": "qiegħ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "q-j-għ",
+      "stem": null,
+      "cv_pattern": "1â3",
+      "morph_pattern": "C1âC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: qiegħ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/qieg%C4%A7",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قَاع",
+          "definition": "bed, bedrock, bottom"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "bottom, floor",
+          "text_mt": "Il-parti ta' taħt nett tal-baħar, tal-bir jew tat-tazza.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Sabu l-ankra fil-qiegħ tal-baħar bil-vapur.",
+          "en": "They found the anchor at the bottom of the sea with the ship."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɪːħ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "qigħan",
+          "pattern": "-an"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "qigħan",
+          "pattern": "-an"
+        }
+      ],
+      "vowel_set_sg": "--ie",
+      "vowel_set_pl": "--i",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 689,
+      "source_frequency_rank": 689,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-istazzjon",
+      "headword": "istazzjon",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "istazzjon",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: istazzjon (Alternative spelling of stazzjon)",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/istazzjon",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "stazione",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "statio",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "station",
+          "text_mt": "Post u bini stabbilit fejn jaqdu l-passiġġieri fuq ferrovija jew xarabank.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ferrovija waslet fl-istazzjon ċentrali fuq il-ħin tagħha.",
+          "en": "The train arrived at the central station right on time."
+        }
+      ],
+      "related_entries": [
+        "n-stazzjon"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "stazzjon",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɪsˈtɐt.t͡sjɔn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 867,
+      "source_frequency_rank": 867,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-suq",
+      "headword": "suq",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "suq",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: suq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/suq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سُوق",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "market, marketplace",
+          "text_mt": "Post miftuħ fejn jinbiegħu l-ħaxix u l-merkanzija.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ommna marret is-suq biex tixtri l-ħaxix u l-frott frisk.",
+          "en": "Our mother went to the market to buy fresh vegetables and fruit."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsʊːʔ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "swieq",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "swieq",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 878,
+      "source_frequency_rank": 878,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "rank": 887,
+      "source_frequency_rank": 887,
+      "id": "n-appoġġ",
+      "headword": "appoġġ",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "support",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-blokk",
+      "headword": "blokk",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "blokk",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: blokk",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/blokk",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "blocco",
+          "definition": null
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "English",
+          "term": "block",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "block (buildings), coalition",
+          "text_mt": "Ġabra ta' bini jew għaqda ta' partiti.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Blokk ta' bini ġdid fil-belt nazzjonali.",
+          "en": "A block of new buildings in the national city."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈblɔkk/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "blokok",
+          "pattern": "12â3e4"
+        },
+        {
+          "form": "blokki",
+          "pattern": "-i"
+        },
+        {
+          "form": "blokkijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "blokok",
+          "pattern": "12â3e4"
+        },
+        {
+          "form": "blokki",
+          "pattern": "-i"
+        },
+        {
+          "form": "blokkijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 951,
+      "source_frequency_rank": 951,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    },
+    {
+      "id": "n-ċans",
+      "headword": "ċans",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "ċans",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "English",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ċans",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/%C4%8Bans",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "English",
+          "term": "chance",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "chance, opportunity",
+          "text_mt": "Li għandu x'jaqsam ma' ċans fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈt͡ʃɐns/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 979,
+      "source_frequency_rank": 979,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Home, Places & Buildings",
+      "theme_id": "nouns_built_environment"
+    }
+  ]
+}

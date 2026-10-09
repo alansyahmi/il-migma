@@ -1,0 +1,1643 @@
+{
+  "category_id": "nouns_time_calendar",
+  "category_title": "Nouns: Time, Seasons & Calendar",
+  "total_entries": 16,
+  "entries": [
+    {
+      "rank": 43,
+      "source_frequency_rank": 43,
+      "id": "n-ħin",
+      "headword": "ħin",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "time",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-jum",
+      "headword": "jum",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "day (measure of time: 24 hours)",
+          "text_mt": "Perjodu ta' żmien ta' 24 siegħa.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "day (period when a person is awake and experiences things)",
+          "text_mt": "Il-perjodu tal-ġurnata meta wieħed ikun imqajjem u jagħmel l-attivitajiet tiegħu.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "gender": "masculine",
+      "root_consonants": "j-w-m",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: jum",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/jum",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "يَوْم",
+          "definition": "day",
+          "pronunciation": null
+        }
+      ],
+      "etymology_notes": null,
+      "usage_examples": [
+        {
+          "mt": "Awgurajtilha jum sabiħ f'għeluq sninha.",
+          "en": "I wished her a wonderful day on her birthday."
+        }
+      ],
+      "related_entries": [
+        "n-llum"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈjʊːm/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "stem": null,
+      "cv_pattern": "1u3",
+      "morph_pattern": "C1uC3",
+      "is_imala_blocked": 0,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "rank": 177,
+      "source_frequency_rank": 177,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-medda",
+      "headword": "medda",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "m-d-d",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: medda",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/medda",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "مُدَّة",
+          "definition": "while, length of time"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "stretch, span (space or time)",
+          "text_mt": "Spazju u tul miftuħ ta' art jew perijodu ta' snin.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Medda kbira ta' raba' li kienet koperta bir-raba' aħdar.",
+          "en": "A large stretch of land that was covered with green crops."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɛd.dɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "meded",
+          "pattern": "1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "meded",
+          "pattern": "1v2v3"
+        }
+      ],
+      "vowel_set_sg": "e--",
+      "vowel_set_pl": "e-e",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 241,
+      "source_frequency_rank": 241,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-lejl",
+      "headword": "lejl",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "l-j-l",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: lejl",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/lejl",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "لَيْل",
+          "definition": "nightfall, dark, evening"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "night, nighttime",
+          "text_mt": "Il-perijodu ta' dlam bejn l-inżul u t-tlugħ tax-xemx.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-lejl kien kwieta u mimli bil-kwiekeb fis-sema.",
+          "en": "The night was quiet and full of stars in the sky."
+        }
+      ],
+      "related_entries": [
+        "n-lejla",
+        "n-dal-lejl",
+        "n-farfett-il-lejl",
+        "adj-lejli",
+        "n-nofsillejl"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɛjl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ljieli",
+          "pattern": "12â3i"
+        },
+        {
+          "form": "lejlijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ljieli",
+          "pattern": "12â3i"
+        },
+        {
+          "form": "lejlijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": "e--",
+      "vowel_set_pl": "e--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 246,
+      "source_frequency_rank": 246,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-nofsinhar",
+      "headword": "nofsinhar",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "nofsinhar",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: nofsinhar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/nofsinhar",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "نِصْف النَّهَار",
+          "definition": "midday; meridian"
+        },
+        {
+          "relationship": "Of",
+          "language": "Italian",
+          "term": "mezzogiorno",
+          "definition": "midday, noon"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "midday, south",
+          "text_mt": "Is-siegħa 12.00 ta' nofs il-jum; jew id-direzzjoni tan-Nofsinhar.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kieklu l-ikla ewlenija f'nofsinhar mat-tfal.",
+          "en": "They ate the main meal at noon with the children."
+        }
+      ],
+      "related_entries": [
+        "n-waranofsinhar"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/nɔf.sɪˈnːɐːr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 340,
+      "source_frequency_rank": 340,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #767)*",
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-ġimgħa",
+      "headword": "Ġimgħa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "ġ-m-għ",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: Ġimgħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A0img%C4%A7a",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "الْجُمْعَة",
+          "definition": "Friday, friday, Fri"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "Friday",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'Ġimgħa': Friday.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ġimgħa kien f'postu fil-bini u fl-użu ta' kuljum.",
+          "en": "The Ġimgħa was in its proper place in daily use."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/d͡ʒɪˈmːɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "Ġimgħat",
+          "pattern": "-at"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "Ġimgħat",
+          "pattern": "-at"
+        }
+      ],
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": "i--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 431,
+      "source_frequency_rank": 431,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-minuta",
+      "headword": "minuta",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "minuta",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: minuta",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/minuta",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "minuto",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "minute (unit of time)",
+          "text_mt": "Unità ta' kejl ta' żmien li fiha sittin sekonda.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Baqgħet biss minuta waħda biex ittemm l-eżami nazzjonali.",
+          "en": "Only one minute remained to finish the national exam."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/mɪˈnʊː.tɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "minuti",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "minuti",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 441,
+      "source_frequency_rank": 441,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-siegħa",
+      "headword": "siegħa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "siegħa",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: siegħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/sieg%C4%A7a",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَاعَة",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "hour",
+          "text_mt": "Perjodu ta' sittin minuta ta' ħin.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Naddaf il-kamra kollha f'inqas minn siegħa waħda.",
+          "en": "He cleaned the entire room in less than one hour."
+        }
+      ],
+      "related_entries": [
+        "n-fis",
+        "n-issa",
+        "n-nofsiegħa"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɪː.jɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "sagħtejn",
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "sigħat",
+          "pattern": "-at"
+        },
+        {
+          "form": "swiegħi",
+          "pattern": "12â3i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sigħat",
+          "pattern": "-at"
+        },
+        {
+          "form": "swiegħi",
+          "pattern": "12â3i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 453,
+      "source_frequency_rank": 453,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "adv-filgħodu",
+      "headword": "filgħodu",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": "għ-d-w",
+      "stem": null,
+      "cv_pattern": "fil1v2u",
+      "morph_pattern": "filC1vC2u",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: filgħodu",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/filg%C4%A7odu",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "فِي الْغُدُوِّ",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "in the morning",
+          "text_mt": "Forma użata ta' spiss għal fil-għodu.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ixrob kafè sħun filgħodu qabel ix-xogħol.",
+          "en": "Drink hot coffee in the morning before work."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "fil-għodu",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/fɪˈlːɔː.dʊ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "o--",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 475,
+      "source_frequency_rank": 475,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-sajf",
+      "headword": "sajf",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "sajf",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: sajf",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/sajf",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "صَيْف",
+          "definition": "summer, summertime, summer"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "summer",
+          "text_mt": "L-aktar staġun sħun tas-sena.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tfal iħobbu jmorru l-baħar kuljum matul is-sajf.",
+          "en": "Children love going to the sea every day during the summer."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɐjf/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "sjuf",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sjuf",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 557,
+      "source_frequency_rank": 557,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-xitwa",
+      "headword": "xitwa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "x-t-w",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: xitwa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/xitwa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "شَتْوَة",
+          "definition": "shower, winter, shower"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "winter",
+          "text_mt": "Staġun kiesaħ tal-sena bejn il-ħarifa u r-rebbiegħa.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ix-xitwa f'Malta tkun niedja u bir-riħ.",
+          "en": "Winter in Malta is damp and windy."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɪː.twɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": "xitwiet",
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "xtiewi",
+          "pattern": "12â3i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "xtiewi",
+          "pattern": "12â3i"
+        }
+      ],
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": "--ie",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 571,
+      "source_frequency_rank": 571,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-xahar",
+      "headword": "xahar",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "x-h-r",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: xahar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/xahar",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "شَهْر",
+          "definition": "calendar month, month, month"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "month / monthly pension",
+          "text_mt": "Perjodu ta' madwar tletin jum jew il-paga tax-xahar.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Beda xahar ġdid u kulħadd mar fuq ix-xogħol.",
+          "en": "A new month started and everyone went to work."
+        }
+      ],
+      "related_entries": [
+        "n-xahar-xhurha"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɐː.ɐr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "xahrejn",
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "xhur",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "xhur",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": "--u",
+      "vowel_set_dual": "a--",
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 590,
+      "source_frequency_rank": 590,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "adv-daqqa",
+      "headword": "daqqa",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": "d-q-q",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: daqqa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/daqqa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دَقَّة",
+          "definition": "beat, blow, knock"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sometimes",
+          "text_mt": "Mod jew stil li fih jiġi espress sometimes.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Uża l-espressjoni 'daqqa' b'mod xieraq fid-diskors.",
+          "en": "Used the expression 'sometimes' appropriately in speech."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐʔ.ʔɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "a--",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 625,
+      "source_frequency_rank": 625,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "rank": 782,
+      "source_frequency_rank": 782,
+      "id": "n-perjodu",
+      "headword": "perjodu",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "period",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "n-nixxiegħa",
+      "headword": "nixxiegħa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "n-x-għ",
+      "stem": null,
+      "cv_pattern": "1v22â3a",
+      "morph_pattern": "C1vC2C2âC3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Uncertain",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: nixxiegħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/nixxieg%C4%A7a",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "spring, stream",
+          "text_mt": "Passaġġ u sors ta' ilma ħelu li joħroġ mil-blat.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Nixxiegħa ilma nadif f'nofs il-wied tar-Rabat.",
+          "en": "A spring of clean water in the middle of Rabat valley."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/nɪʃ.ʃɪːˈːɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "nixxigħat",
+          "pattern": "-at"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "nixxigħat",
+          "pattern": "-at"
+        }
+      ],
+      "vowel_set_sg": "i-ie",
+      "vowel_set_pl": "i-i",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 822,
+      "source_frequency_rank": 822,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    },
+    {
+      "id": "adv-filgħaxija",
+      "headword": "filgħaxija",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "filgħaxija",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: filgħaxija",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/filg%C4%A7axija",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "عَشِيّة",
+          "definition": "evening, eve, evening"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "in the evening",
+          "text_mt": "Forma użata ta' spiss għal fil-għaxija.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħarġu jmxu filgħaxija mal-kosta tal-baħar.",
+          "en": "They went for a walk in the evening along the sea coast."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "flgħaxija",
+          "type": "orthographic"
+        },
+        {
+          "headword": "fil-għaxija",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/fɪ.lːɐˈʃɪː.jɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 939,
+      "source_frequency_rank": 939,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Time, Seasons & Calendar",
+      "theme_id": "nouns_time_calendar"
+    }
+  ]
+}

@@ -1,0 +1,1503 @@
+{
+  "category_id": "adj_sensory_colours",
+  "category_title": "Adjectives: Sensory, Texture & Colour",
+  "total_entries": 14,
+  "entries": [
+    {
+      "id": "adj-sħun",
+      "headword": "sħun",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "s-ħ-n",
+      "stem": null,
+      "cv_pattern": "12v3",
+      "morph_pattern": "C1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: sħun",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/s%C4%A7un",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Of",
+          "language": "Arabic",
+          "term": "سُخْن",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "hot, warm",
+          "text_mt": "Li għandu temperatura għolja u m’għandux kesħa.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Xrob te sħun biex jiddefeni mill-kesħa tax-xitwa.",
+          "en": "He drank hot tea to warm up from the winter cold."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsħʊːn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "sħan",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sħan",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "--u",
+      "vowel_set_pl": "--a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 19,
+      "source_frequency_rank": 19,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #387, #439)*",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-abjad",
+      "headword": "abjad",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "b-j-d",
+      "stem": null,
+      "cv_pattern": "a12v3",
+      "morph_pattern": "aC1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: abjad",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/abjad",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَبْيَض",
+          "definition": "Caucasian, a white person, blanc"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "white, pale, calm (water)",
+          "text_mt": "Kulur tal-ħalib jew borra; superfiċje ċara.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Qmis bajda li lbes għall-okkażjoni.",
+          "en": "A white shirt he wore for the occasion."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐː.bjɐt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "bojod",
+          "pattern": "1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "bojod",
+          "pattern": "1v2v3"
+        }
+      ],
+      "vowel_set_sg": "--a",
+      "vowel_set_pl": "o-o",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 278,
+      "source_frequency_rank": 278,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-aħmar",
+      "headword": "aħmar",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "ħ-m-r",
+      "stem": null,
+      "cv_pattern": "a12v3",
+      "morph_pattern": "aC1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: aħmar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/a%C4%A7mar",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَحْمَر",
+          "definition": "fiery, red, red-cheeked"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "red, flushed, inflamed",
+          "text_mt": "Kulur in-nar jew d-demm fil-ġisem.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Libset il-frokka l-ħamra għall-festa.",
+          "en": "She wore the red dress for the feast."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐħ.mɐr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ħomor",
+          "pattern": "1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħomor",
+          "pattern": "1v2v3"
+        }
+      ],
+      "vowel_set_sg": "--a",
+      "vowel_set_pl": "o-o",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 309,
+      "source_frequency_rank": 309,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-iswed",
+      "headword": "iswed",
+      "pos": "adjective",
+      "definitions": [
+        {
+          "text_en": "black",
+          "text_mt": null
+        }
+      ],
+      "gender": null,
+      "root_consonants": "s-w-d",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/iswed",
+      "source_citation": "Wiktionary: iswed",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَسْوَد",
+          "definition": null
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "suwed",
+          "pattern": null
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "suwed",
+          "pattern": null
+        }
+      ],
+      "vowel_set_sg": "i-e",
+      "vowel_set_pl": "u-e",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [
+        "n-swied",
+        "n-toqba-sewda"
+      ],
+      "rank": 326,
+      "source_frequency_rank": 326,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-blu",
+      "headword": "blu",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "blu",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: blu",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/blu",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Italian",
+          "term": "blu",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Old French",
+          "term": "bloe",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "blue (colour)",
+          "text_mt": "Kulur tas-sema jew tal-baħar miftuħ.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Libes qmis blu fil-festa nazzjonali.",
+          "en": "He wore a blue shirt at the national feast."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈblʊ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 359,
+      "source_frequency_rank": 359,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-xott",
+      "headword": "xott",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "xott",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: xott",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/xott",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "sciuttu",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "exsuctus",
+          "definition": "drawn out, extracted"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "dry, arid",
+          "text_mt": "Li m'għandux ilma jew umdità fis-superfiċje.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ħamrija kienet xotta minħabba n-nuqqas ta' xita.",
+          "en": "The soil was dry due to lack of rain."
+        }
+      ],
+      "related_entries": [
+        "n-xuter",
+        "n-xuttjatur",
+        "v-xxottja"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɔtt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "xotti",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "xotti",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 377,
+      "source_frequency_rank": 377,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "n-sħana",
+      "headword": "sħana",
+      "pos": "adjective",
+      "gender": "feminine",
+      "root_consonants": "s-ħ-n",
+      "stem": null,
+      "cv_pattern": "12v3a",
+      "morph_pattern": "C1C2vC3a",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: sħana",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/s%C4%A7ana",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَخَانَة",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "heat, warmth",
+          "text_mt": "Temperatura għolja u l-qagħda sħuna fl-arja.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm sħana kbira matul ix-xahar ta' Lulju.",
+          "en": "There was great heat during the month of July."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsħɐː.nɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "--a",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 390,
+      "source_frequency_rank": 390,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "n-dlam",
+      "headword": "dlam",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "d-l-m",
+      "stem": null,
+      "cv_pattern": "12v3",
+      "morph_pattern": "C1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: dlam",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/dlam",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ظَلَام",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "darkness",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal darkness.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "obscurity, ignorance",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal obscurity, ignorance.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kelma “dlam” dehret f'sentenza li tispjega darkness.",
+          "en": "The word “dlam” appeared in a sentence illustrating darkness."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdlɐm/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "dlamijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "dlamijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": "--a",
+      "vowel_set_pl": "--a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 410,
+      "source_frequency_rank": 410,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-aħdar",
+      "headword": "aħdar",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "ħ-d-r",
+      "stem": null,
+      "cv_pattern": "a12v3",
+      "morph_pattern": "aC1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: aħdar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/a%C4%A7dar",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَخْضَر",
+          "definition": "green, Green, greenfinch"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "green, unripe, young",
+          "text_mt": "Kulur tan-natura u l-ħaxix fis-sajf.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Weraq aħdar li mela s-siġra fir-rebbiegħa.",
+          "en": "Green leaves filled the tree in spring."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐħ.dɐr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ħodor",
+          "pattern": "1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħodor",
+          "pattern": "1v2v3"
+        }
+      ],
+      "vowel_set_sg": "--a",
+      "vowel_set_pl": "o-o",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 434,
+      "source_frequency_rank": 434,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-kiesaħ",
+      "headword": "kiesaħ",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "k-s-ħ",
+      "stem": null,
+      "cv_pattern": "1â2v3",
+      "morph_pattern": "C1âC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: kiesaħ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/kiesa%C4%A7",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "قَاسِح",
+          "definition": "hard"
+        },
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "كاسِح",
+          "definition": "blustering"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "cold",
+          "text_mt": "Li għandu temperatura baxxa ħafna u nuqqas ta' sħana.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "affectatious",
+          "text_mt": "Li jaġixxi b'mod imfassal u b'nuqqas ta' sodezza naturali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "impudent",
+          "text_mt": "Li juri nuqqas ta' rispett u mġiba sfaċċata.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ix-xorb tal-ilma kiesaħ kien jġiegħel serħan fil-ġurnata sħuna.",
+          "en": "Drinking cold water brought relief on a hot day."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/kɪːˈsɐħ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "kiesħa",
+          "pattern": "-a"
+        },
+        {
+          "form": "kesħin",
+          "pattern": "-in"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "kiesħa",
+          "pattern": "-a"
+        },
+        {
+          "form": "kesħin",
+          "pattern": "-in"
+        }
+      ],
+      "vowel_set_sg": "ie-a",
+      "vowel_set_pl": "e--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 498,
+      "source_frequency_rank": 498,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-nadif",
+      "headword": "nadif",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "n-d-f",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: nadif",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/nadif",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "نَظِيف",
+          "definition": "clean, attractive, blameless"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "clean",
+          "text_mt": "Oġġett u post mingħajr ebda trab u li għandu l-indafa.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Libes ilbies nadif u abjad għat-tieġ tiegħu.",
+          "en": "He wore clean white clothes for his wedding."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈnɐ.dɪf/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ndaf",
+          "pattern": "12â3"
+        },
+        {
+          "form": "nodfa",
+          "pattern": "1v23a"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ndaf",
+          "pattern": "12â3"
+        },
+        {
+          "form": "nodfa",
+          "pattern": "1v23a"
+        }
+      ],
+      "vowel_set_sg": "a-i",
+      "vowel_set_pl": "--a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 619,
+      "source_frequency_rank": 619,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-qawwi",
+      "headword": "qawwi",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "q-w-j",
+      "stem": null,
+      "cv_pattern": "1v22i",
+      "morph_pattern": "C1vC2C2i",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: qawwi",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/qawwi",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قَوِيّ",
+          "definition": "strong, powerful, able"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "strong, powerful, loud",
+          "text_mt": "Persuna jew ħoss li għandu saħħa u livell għoli.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħoss qawwi ta' murtal iddaqq mar-raħal kollu.",
+          "en": "A loud petard sound rang out through the whole village."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɐw.wɪ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "qawwijin",
+          "pattern": "-jin"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "qawwijin",
+          "pattern": "-jin"
+        }
+      ],
+      "vowel_set_sg": "a--",
+      "vowel_set_pl": "a-i",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 662,
+      "source_frequency_rank": 662,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "rank": 684,
+      "source_frequency_rank": 684,
+      "id": "n-jibred",
+      "headword": "jibred",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "cool",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-frisk",
+      "headword": "frisk",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "frisk",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: frisk",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/frisk",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "friscu",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "fresh, cool, chilled",
+          "text_mt": "Ikel jew arja li m'għandhiex sħana u li għadha kemm inġabret.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Xrob tazza ilma frisk mill-bir fil-ġnien.",
+          "en": "He drank a glass of fresh water from the well in the garden."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈfrɪsk/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "friski",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "friski",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 836,
+      "source_frequency_rank": 836,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    }
+  ]
+}

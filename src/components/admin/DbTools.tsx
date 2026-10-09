@@ -15,8 +15,9 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import {
     adminDbQuery, adminDbExport, adminDbIntegrityCheck,
     adminDbMergeRoots, adminDbTableInfo, adminDbExportBundle,
-    adminCreateEntry, adminUpdateEntry
+    adminBulkImportEntries
 } from '@/lib/api';
+import { parseEntryImportPayload, type EntryImportParseResult } from '@/lib/entryImportParser';
 
 interface DbToolsProps {
     getToken: () => Promise<string | null>;
@@ -562,22 +563,13 @@ function IntegrityCheck({ getToken }: { getToken: () => Promise<string | null> }
 // ── SUB-COMPONENT: Bulk Operations ──────────────────────────────────────────
 function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; tables: any[] }) {
     const { t } = useLanguage();
-    const [activeWorkflow, setActiveWorkflow] = useState<'merge' | 'bulk-update' | 'import-jsonl' | null>(null);
+    const [activeWorkflow, setActiveWorkflow] = useState<'merge' | 'bulk-update' | 'import-entries' | 'import-jsonl' | null>(null);
 
     // Merge State
     const [mergeSource, setMergeSource] = useState('');
     const [mergeTarget, setMergeTarget] = useState('');
     const [mergePreview, setMergePreview] = useState<any>(null);
     const [loading, setLoading] = useState(false);
-
-    // JSONL Import State
-    const [importMode, setImportMode] = useState<'file' | 'paste'>('file');
-    const [jsonlFile, setJsonlFile] = useState<File | null>(null);
-    const [pastedJsonl, setPastedJsonl] = useState('');
-    const [importing, setImporting] = useState(false);
-    const [importProgress, setImportProgress] = useState(0);
-    const [importStats, setImportStats] = useState({ total: 0, processed: 0, updated: 0, inserted: 0, failed: 0 });
-    const [importLogs, setImportLogs] = useState<string[]>([]);
 
     const handleMergePreview = async () => {
         if (!mergeSource || !mergeTarget) return;
@@ -604,106 +596,154 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
         finally { setLoading(false); }
     };
 
-    const handleJsonlFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files?.[0]) {
-            setJsonlFile(e.target.files[0]);
+    // Entry Import State (.json, .jsonc, .jsonl)
+    const [importMode, setImportMode] = useState<'file' | 'paste'>('file');
+    const [importFile, setImportFile] = useState<File | null>(null);
+    const [pastedText, setPastedText] = useState('');
+    const [skipExisting, setSkipExisting] = useState(false);
+    const [parseResult, setParseResult] = useState<EntryImportParseResult | null>(null);
+    const [parsing, setParsing] = useState(false);
+    const [importing, setImporting] = useState(false);
+    const [importProgress, setImportProgress] = useState(0);
+    const [importStats, setImportStats] = useState({ total: 0, processed: 0, updated: 0, inserted: 0, skipped: 0, failed: 0 });
+    const [importLogs, setImportLogs] = useState<string[]>([]);
+
+    const handleImportFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setImportFile(file);
             setImportProgress(0);
-            setImportStats({ total: 0, processed: 0, updated: 0, inserted: 0, failed: 0 });
+            setImportStats({ total: 0, processed: 0, updated: 0, inserted: 0, skipped: 0, failed: 0 });
             setImportLogs([]);
+            setParsing(true);
+            try {
+                const text = await file.text();
+                const parsed = parseEntryImportPayload(text, { filename: file.name });
+                setParseResult(parsed);
+                setImportStats(prev => ({ ...prev, total: parsed.validCount }));
+            } catch (err: any) {
+                setParseResult({
+                    success: false,
+                    format: file.name.endsWith('.jsonc') ? 'jsonc' : file.name.endsWith('.jsonl') ? 'jsonl' : 'json',
+                    entries: [],
+                    total: 0,
+                    validCount: 0,
+                    invalidCount: 0,
+                    categories: [],
+                    warnings: [],
+                    errors: [`File read error: ${err.message}`],
+                    sample: [],
+                });
+            } finally {
+                setParsing(false);
+            }
         }
     };
 
-    const handleJsonlUpload = async () => {
-        if (importMode === 'file' && !jsonlFile) return;
-        if (importMode === 'paste' && !pastedJsonl.trim()) return;
+    const handlePastedTextChange = (val: string) => {
+        setPastedText(val);
+        setImportProgress(0);
+        setImportStats({ total: 0, processed: 0, updated: 0, inserted: 0, skipped: 0, failed: 0 });
+        setImportLogs([]);
+        if (!val.trim()) {
+            setParseResult(null);
+            return;
+        }
+        try {
+            const parsed = parseEntryImportPayload(val);
+            setParseResult(parsed);
+            setImportStats(prev => ({ ...prev, total: parsed.validCount }));
+        } catch (err: any) {
+            setParseResult({
+                success: false,
+                format: 'json',
+                entries: [],
+                total: 0,
+                validCount: 0,
+                invalidCount: 0,
+                categories: [],
+                warnings: [],
+                errors: [`Parse error: ${err.message}`],
+                sample: [],
+            });
+        }
+    };
+
+    const handleExecuteBatchImport = async () => {
+        if (!parseResult || !parseResult.success || parseResult.entries.length === 0) return;
         const token = await getToken();
         if (!token) return;
 
         setImporting(true);
         setImportProgress(0);
         setImportLogs([]);
-        
+
         const log = (msg: string) => {
             setImportLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
         };
 
-        log(t('Starting import process...', 'Qed tibda l-importazzjoni...'));
+        const totalEntries = parseResult.entries.length;
+        const formatLabel = parseResult.format === 'jsonl' ? 'JSON Lines' : parseResult.format.toUpperCase();
+        log(t(`Starting high-efficiency batch import: ${totalEntries} entries (${formatLabel}). Mode: ${skipExisting ? 'Skip existing duplicates' : 'Upsert / update matching'}`,
+              `Qed tibda l-importazzjoni: ${totalEntries} entrata (${formatLabel}). Mod: ${skipExisting ? 'Aqbeż duplikati' : 'Aġġorna/Daħħal'}`));
+
+        const BATCH_SIZE = 50;
+        const totalBatches = Math.ceil(totalEntries / BATCH_SIZE);
+        let processed = 0;
+        let inserted = 0;
+        let updated = 0;
+        let skipped = 0;
+        let failed = 0;
+        const startTime = Date.now();
 
         try {
-            const text = importMode === 'file' ? await jsonlFile!.text() : pastedJsonl;
-            const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-            const total = lines.length;
-            
-            setImportStats({ total, processed: 0, updated: 0, inserted: 0, failed: 0 });
-            log(t(`Loaded ${total} lines for import.`, `Sibt ${total} linja għall-importazzjoni.`));
-
-            let processed = 0;
-            let updated = 0;
-            let inserted = 0;
-            let failed = 0;
-
-            for (let i = 0; i < total; i++) {
-                const line = lines[i];
-                let item: any;
+            for (let b = 0; b < totalBatches; b++) {
+                const batchEntries = parseResult.entries.slice(b * BATCH_SIZE, (b + 1) * BATCH_SIZE);
                 try {
-                    item = JSON.parse(line);
-                } catch (e: any) {
-                    failed++;
-                    log(t(`Line ${i + 1} is invalid JSON: ${e.message}`, `Linja ${i + 1} mhix JSON valida: ${e.message}`));
-                    setImportStats({ total, processed: ++processed, updated, inserted, failed });
-                    continue;
-                }
+                    const res = await adminBulkImportEntries(token, {
+                        entries: batchEntries,
+                        skipExisting,
+                    });
 
-                let entry: any;
-                if (item && item.entry) {
-                    entry = item.entry;
-                    if (item.tags) {
-                        entry.tags = item.tags.map((t: any) => typeof t === 'object' && t.name ? t.name : t);
+                    inserted += res.inserted || 0;
+                    updated += res.updated || 0;
+                    skipped += res.skipped || 0;
+                    failed += res.failed || 0;
+                    processed += batchEntries.length;
+
+                    log(t(`Batch ${b + 1}/${totalBatches}: +${res.inserted || 0} inserted, +${res.updated || 0} updated, +${res.skipped || 0} skipped, ${res.failed || 0} failed.`,
+                          `Lott ${b + 1}/${totalBatches}: +${res.inserted || 0} ġodda, +${res.updated || 0} aġġornati, +${res.skipped || 0} maqbuża, ${res.failed || 0} naqsu.`));
+
+                    if (res.errors && res.errors.length > 0) {
+                        for (const err of res.errors) {
+                            log(t(`  Failed on '${err.headword}': ${err.error}`, `  Naqas f'${err.headword}': ${err.error}`));
+                        }
                     }
-                } else {
-                    entry = item;
+                } catch (batchErr: any) {
+                    failed += batchEntries.length;
+                    processed += batchEntries.length;
+                    log(t(`Batch ${b + 1} request error: ${batchErr.message}`, `Żball fit-talba tal-lott ${b + 1}: ${batchErr.message}`));
                 }
 
-                if (!entry || !entry.headword || !entry.pos) {
-                    failed++;
-                    log(t(`Line ${i + 1} is missing headword or pos.`, `Linja ${i + 1} nieqsa mill-headword jew pos.`));
-                    setImportStats({ total, processed: ++processed, updated, inserted, failed });
-                    continue;
-                }
+                setImportStats({
+                    total: totalEntries,
+                    processed,
+                    inserted,
+                    updated,
+                    skipped,
+                    failed,
+                });
+                setImportProgress(Math.round((processed / totalEntries) * 100));
 
-                try {
-                    const escapedId = (entry.id || '').replace(/'/g, "''");
-                    const escapedHeadword = (entry.headword || '').replace(/'/g, "''");
-                    const escapedPos = (entry.pos || '').replace(/'/g, "''");
-                    const checkSql = `SELECT id FROM entries WHERE id = '${escapedId}' OR (headword = '${escapedHeadword}' AND pos = '${escapedPos}') LIMIT 1`;
-                    const checkRes = await adminDbQuery(token, checkSql);
-                    const existingId = checkRes.rows?.[0]?.[0];
-
-                    if (existingId) {
-                        await adminUpdateEntry(token, { ...entry, id: existingId });
-                        updated++;
-                        log(t(`Updated: ${entry.headword} (${entry.pos})`, `Aġġornat: ${entry.headword} (${entry.pos})`));
-                    } else {
-                        await adminCreateEntry(token, entry);
-                        inserted++;
-                        log(t(`Inserted: ${entry.headword} (${entry.pos})`, `Daħħal: ${entry.headword} (${entry.pos})`));
-                    }
-                } catch (err: any) {
-                    failed++;
-                    log(t(`Failed to import ${entry.headword} (${entry.pos}): ${err.message}`, `Naqas li jimporta ${entry.headword} (${entry.pos}): ${err.message}`));
-                }
-
-                processed++;
-                setImportStats({ total, processed, updated, inserted, failed });
-                setImportProgress(Math.round((processed / total) * 100));
-
-                // Yield to event loop to keep UI responsive
-                await new Promise(resolve => setTimeout(resolve, 30));
+                // Yield briefly to event loop for fluid UI animations
+                await new Promise(r => setTimeout(r, 15));
             }
 
-            log(t('Import process completed!', 'L-importazzjoni lesta!'));
+            const elapsedSec = ((Date.now() - startTime) / 1000).toFixed(1);
+            log(t(`Import complete in ${elapsedSec}s! Total: ${totalEntries} | Inserted: ${inserted} | Updated: ${updated} | Skipped: ${skipped} | Failed: ${failed}.`,
+                  `L-importazzjoni lesta fi ${elapsedSec}s! Total: ${totalEntries} | Daħlu: ${inserted} | Aġġornati: ${updated} | Maqbuża: ${skipped} | Naqsu: ${failed}.`));
         } catch (e: any) {
-            log(t(`Critical error during import: ${e.message}`, `Żball kritiku fl-importazzjoni: ${e.message}`));
+            log(t(`Critical error during batch import: ${e.message}`, `Żball kritiku fl-importazzjoni: ${e.message}`));
         } finally {
             setImporting(false);
         }
@@ -727,15 +767,15 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
                     </button>
 
                     <button
-                        onClick={() => setActiveWorkflow('import-jsonl')}
+                        onClick={() => setActiveWorkflow('import-entries')}
                         className="p-8 border-2 border-dashed border-[#ede9e1] rounded-3xl hover:border-blue-500 hover:bg-blue-50/[0.02] transition-all group text-left flex flex-col items-start gap-4"
                     >
                         <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl group-hover:scale-110 transition-transform">
                             <Upload size={32} />
                         </div>
                         <div>
-                            <h4 className="font-bold text-lg text-black">{t('Upload JSONL Entries', 'Tella\' Entrati minn JSONL')}</h4>
-                            <p className="text-sm text-black/50 mt-1">{t('Import or update dictionary entries from a wiktionary-scraper JSONL output file.', 'Importa jew aġġorna entrati mid-dizzjunarju minn file JSONL tal-Wiktionary.')}</p>
+                            <h4 className="font-bold text-lg text-black">{t('Upload Entries', 'Tella\' Entrati')}</h4>
+                            <p className="text-sm text-black/50 mt-1">{t('Import or update dictionary entries from .json, .jsonc, or .jsonl files.', 'Importa jew aġġorna entrati mid-dizzjunarju minn fajls .json, .jsonc, jew .jsonl.')}</p>
                         </div>
                     </button>
 
@@ -837,17 +877,23 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
                 </div>
             )}
 
-            {activeWorkflow === 'import-jsonl' && (
-                <div className="space-y-6 animate-in slide-in-from-right-4 duration-500 max-w-3xl">
+            {(activeWorkflow === 'import-entries' || activeWorkflow === 'import-jsonl') && (
+                <div className="space-y-6 animate-in slide-in-from-right-4 duration-500 max-w-4xl">
                     <button onClick={() => setActiveWorkflow(null)} className="text-xs font-bold text-[#1034A6] hover:underline mb-2 flex items-center gap-1">
                         &larr; {t('Back to Workflows', 'Lura għall-għażliet')}
                     </button>
                     
                     <div className="flex items-center justify-between border-b border-black/5 pb-4">
-                        <h3 className="text-lg font-bold text-black flex items-center gap-2">
-                            <Upload size={20} className="text-[#1034A6]" />
-                            {t('Import Wiktionary Scraper Entries (JSONL)', 'Importa Entrati tal-Wiktionary (JSONL)')}
-                        </h3>
+                        <div>
+                            <h3 className="text-lg font-bold text-black flex items-center gap-2">
+                                <Upload size={20} className="text-[#1034A6]" />
+                                {t('Upload Entries (JSON, JSONC, JSONL)', 'Tella\' Entrati (JSON, JSONC, JSONL)')}
+                            </h3>
+                            <p className="text-xs text-black/50 mt-1">
+                                {t('High-efficiency batch ingestion supporting Wiktionary output, thematic category files, and entry lists.',
+                                   'Importazzjoni effiċjenti f\'lottijiet għal files tal-Wiktionary, listi tematiċi, u entrati tad-dizzjunarju.')}
+                            </p>
+                        </div>
                     </div>
 
                     <div className="flex gap-2 p-1 bg-black/5 rounded-xl w-fit">
@@ -876,51 +922,183 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
                     <div className="bg-[#f9f7f3] p-6 rounded-2xl border border-[#ede9e1] space-y-4">
                         {importMode === 'file' ? (
                             <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">{t('Select JSONL File', 'Agħżel File JSONL')}</label>
+                                <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">
+                                    {t('Select .json, .jsonc, or .jsonl File', 'Agħżel Fajl .json, .jsonc, jew .jsonl')}
+                                </label>
                                 <input
                                     type="file"
-                                    accept=".jsonl,.json"
-                                    onChange={handleJsonlFileChange}
+                                    accept=".jsonl,.json,.jsonc"
+                                    onChange={handleImportFileChange}
                                     disabled={importing}
                                     className="w-full p-2.5 bg-white border border-[#ede9e1] rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
                                 />
-                                {jsonlFile && (
-                                    <div className="text-xs text-black/60 flex gap-4 bg-white/50 p-3 rounded-lg border border-black/[0.03] w-fit mt-2">
-                                        <span><strong>Size:</strong> {(jsonlFile.size / 1024).toFixed(2)} KB</span>
-                                        <span><strong>Type:</strong> {jsonlFile.name.endsWith('.jsonl') ? 'JSON Lines' : 'JSON'}</span>
+                                {importFile && (
+                                    <div className="text-xs text-black/60 flex flex-wrap gap-4 bg-white/70 p-3 rounded-lg border border-black/[0.05] w-fit mt-2 items-center">
+                                        <span><strong>{t('File', 'Fajl')}:</strong> {importFile.name}</span>
+                                        <span><strong>{t('Size', 'Daqs')}:</strong> {(importFile.size / 1024).toFixed(2)} KB</span>
+                                        {parseResult && (
+                                            <Badge className="bg-[#1034A6] text-white text-[10px] uppercase font-bold tracking-wider">
+                                                {parseResult.format === 'jsonl' ? 'JSON Lines' : parseResult.format.toUpperCase()}
+                                            </Badge>
+                                        )}
                                     </div>
                                 )}
                             </div>
                         ) : (
                             <div className="space-y-2">
-                                <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">{t('Paste JSONL Lines', 'Waħħal Linji JSONL')}</label>
+                                <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">
+                                    {t('Paste JSON, JSONC, or JSONL Content', 'Waħħal Kontenut JSON, JSONC, jew JSONL')}
+                                </label>
                                 <textarea
-                                    value={pastedJsonl}
-                                    onChange={e => setPastedJsonl(e.target.value)}
+                                    value={pastedText}
+                                    onChange={e => handlePastedTextChange(e.target.value)}
                                     disabled={importing}
-                                    placeholder='{"entry": {"headword": "ċikka", "pos": "noun", "definitions": [{"text_en": "a cigarette butt", "text_mt": "il-fdal ta’ sigarett"}]}}'
-                                    className="w-full h-48 p-4 font-mono text-sm bg-white border border-[#ede9e1] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-y shadow-inner"
+                                    placeholder='// Paste JSON array, object with entries, or JSONL lines&#10;{"headword": "ċikka", "pos": "noun", "definitions": [{"text_en": "a cigarette butt"}]}'
+                                    className="w-full h-44 p-4 font-mono text-xs bg-white border border-[#ede9e1] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-y shadow-inner"
                                     spellCheck={false}
                                 />
                             </div>
                         )}
 
-                        <div className="flex justify-end gap-3 pt-2">
-                            <Button
-                                onClick={handleJsonlUpload}
-                                disabled={importing || (importMode === 'file' ? !jsonlFile : !pastedJsonl.trim())}
-                                leftIcon={importing ? <Spinner size="sm" /> : <Upload size={14} />}
-                            >
-                                {importing ? t('Importing...', 'Qed Jimporta...') : t('Import Entries', 'Importa Entrati')}
-                            </Button>
-                        </div>
+                        {parsing && (
+                            <div className="flex items-center gap-2 text-xs text-black/60 py-2">
+                                <Spinner size="sm" /> {t('Analyzing and validating entries...', 'Qed janalizza u jivvalida l-entrati...')}
+                            </div>
+                        )}
+
+                        {/* Pre-flight Parse & Preview Section */}
+                        {parseResult && !parsing && (
+                            <div className="space-y-4 pt-2">
+                                {!parseResult.success ? (
+                                    <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs space-y-1">
+                                        <div className="font-bold flex items-center gap-1.5">
+                                            <AlertCircle size={14} />
+                                            {t('Parsing Error', 'Żball fl-Ittestjar')}
+                                        </div>
+                                        <p>{parseResult.errors.join(' ')}</p>
+                                    </div>
+                                ) : (
+                                    <div className="bg-white border border-[#ede9e1] rounded-xl p-5 space-y-4 shadow-sm animate-in fade-in duration-300">
+                                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 pb-3">
+                                            <div className="flex items-center gap-3">
+                                                <Badge className="bg-[#1034A6] text-white uppercase text-[10px] tracking-wider px-2.5 py-0.5">
+                                                    {parseResult.format === 'jsonl' ? 'JSON Lines' : parseResult.format.toUpperCase()}
+                                                </Badge>
+                                                <span className="text-sm font-bold text-black">
+                                                    {parseResult.validCount} {t('valid entries detected', 'entrati validi nstabu')}
+                                                </span>
+                                                {parseResult.invalidCount > 0 && (
+                                                    <span className="text-xs text-red-500 font-medium">
+                                                        ({parseResult.invalidCount} {t('skipped/invalid', 'maqbuża/mhux validi')})
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            {parseResult.categories.length > 0 && (
+                                                <div className="text-[11px] text-black/50 font-medium">
+                                                    {parseResult.categories.length} {t('thematic categories detected', 'kategoriji tematiċi')}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Category Badges if any */}
+                                        {parseResult.categories.length > 0 && (
+                                            <div className="flex flex-wrap gap-1.5 max-h-20 overflow-y-auto pr-1">
+                                                {parseResult.categories.map(cat => (
+                                                    <span key={cat} className="px-2 py-0.5 bg-black/[0.04] text-black/60 rounded text-[10px] font-mono">
+                                                        {cat}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* Warnings */}
+                                        {parseResult.warnings.length > 0 && (
+                                            <div className="p-3 bg-amber-50/80 border border-amber-200/80 rounded-lg text-amber-800 text-[11px] space-y-1">
+                                                <span className="font-bold flex items-center gap-1">
+                                                    <AlertTriangle size={12} /> {t('Warnings', 'Twissijiet')}:
+                                                </span>
+                                                <ul className="list-disc pl-4 space-y-0.5">
+                                                    {parseResult.warnings.slice(0, 3).map((w, i) => (
+                                                        <li key={i}>{w}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+
+                                        {/* Sample Preview Table */}
+                                        <div className="border border-[#ede9e1] rounded-lg overflow-hidden">
+                                            <div className="bg-[#f9f7f3] px-3 py-1.5 text-[10px] font-bold text-black/40 uppercase tracking-widest border-b border-[#ede9e1]">
+                                                {t('Sample Preview (First 5 Entries)', 'Kampjun tal-Entrati (L-ewwel 5)')}
+                                            </div>
+                                            <table className="w-full text-xs text-left border-collapse">
+                                                <thead className="bg-[#fcfbf9] border-b border-[#ede9e1] text-[10px] text-black/50 uppercase">
+                                                    <tr>
+                                                        <th className="p-2 border-r border-[#ede9e1]">Headword</th>
+                                                        <th className="p-2 border-r border-[#ede9e1]">POS</th>
+                                                        <th className="p-2 border-r border-[#ede9e1]">English Def</th>
+                                                        <th className="p-2">Maltese Def</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-[#ede9e1]">
+                                                    {parseResult.sample.map((s, idx) => {
+                                                        const defs = s.definitions || [];
+                                                        const textEn = s.text_en || defs[0]?.text_en || '—';
+                                                        const textMt = s.text_mt || defs.find((d: any) => d?.text_mt)?.text_mt || defs[0]?.text_mt || '—';
+                                                        return (
+                                                            <tr key={idx} className="hover:bg-blue-50/20">
+                                                                <td className="p-2 font-bold font-serif border-r border-[#ede9e1] text-black/80">{s.headword}</td>
+                                                                <td className="p-2 border-r border-[#ede9e1] text-black/60"><span className="px-1.5 py-0.5 bg-black/5 rounded text-[10px]">{s.pos}</span></td>
+                                                                <td className="p-2 border-r border-[#ede9e1] text-black/60 max-w-[200px] truncate">{textEn}</td>
+                                                                <td className="p-2 text-black/60 max-w-[200px] truncate">{textMt}</td>
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        {/* Conflict Resolution & Execution Controls */}
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-black/5">
+                                            <label className="flex items-center gap-2 text-xs font-semibold text-black/70 cursor-pointer select-none">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={skipExisting}
+                                                    onChange={e => setSkipExisting(e.target.checked)}
+                                                    disabled={importing}
+                                                    className="w-4 h-4 rounded border-[#ede9e1] text-[#1034A6] focus:ring-[#1034A6]"
+                                                />
+                                                <span>
+                                                    {t('Skip existing entries', 'Aqbeż entrati eżistenti')}
+                                                    <span className="text-black/40 font-normal ml-1">
+                                                        ({t('only insert new entries; do not update matching ones', 'daħħal biss entrati ġodda; la taġġornax dawk eżistenti')})
+                                                    </span>
+                                                </span>
+                                            </label>
+
+                                            <Button
+                                                onClick={handleExecuteBatchImport}
+                                                disabled={importing || parseResult.validCount === 0}
+                                                leftIcon={importing ? <Spinner size="sm" /> : <Upload size={14} />}
+                                                className="shadow-md shadow-[#1034A6]/10 shrink-0"
+                                            >
+                                                {importing
+                                                    ? t('Importing Batches...', 'Qed Jimporta...')
+                                                    : t(`Confirm & Import (${parseResult.validCount} Entries)`, `Ikkonferma u Importa (${parseResult.validCount} Entrati)`)}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
+                    {/* Progress & Real-Time Stats */}
                     {(importing || importStats.processed > 0) && (
                         <div className="bg-white border border-[#ede9e1] rounded-2xl p-6 space-y-6 animate-in zoom-in-95 duration-300 shadow-sm">
                             <div className="space-y-2">
                                 <div className="flex justify-between text-xs font-bold text-black/60">
-                                    <span>{t('Import Progress', 'Progress tal-Importazzjoni')}</span>
+                                    <span>{t('Batch Import Progress', 'Progress tal-Importazzjoni')}</span>
                                     <span>{importProgress}% ({importStats.processed}/{importStats.total})</span>
                                 </div>
                                 <div className="w-full bg-black/5 rounded-full h-2 overflow-hidden">
@@ -931,22 +1109,26 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-4 gap-4">
-                                <div className="bg-blue-50/50 p-4 rounded-xl text-center border border-blue-100">
-                                    <div className="text-2xl font-bold text-blue-700">{importStats.total}</div>
-                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-1">{t('Total', 'Total')}</div>
+                            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                                <div className="bg-blue-50/50 p-3 rounded-xl text-center border border-blue-100">
+                                    <div className="text-xl font-bold text-blue-700">{importStats.total}</div>
+                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-0.5">{t('Total', 'Total')}</div>
                                 </div>
-                                <div className="bg-green-50/50 p-4 rounded-xl text-center border border-green-100">
-                                    <div className="text-2xl font-bold text-green-700">{importStats.inserted}</div>
-                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-1">{t('Inserted', 'Daħlu')}</div>
+                                <div className="bg-green-50/50 p-3 rounded-xl text-center border border-green-100">
+                                    <div className="text-xl font-bold text-green-700">{importStats.inserted}</div>
+                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-0.5">{t('Inserted', 'Daħlu')}</div>
                                 </div>
-                                <div className="bg-indigo-50/50 p-4 rounded-xl text-center border border-indigo-100">
-                                    <div className="text-2xl font-bold text-indigo-700">{importStats.updated}</div>
-                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-1">{t('Updated', 'Aġġornati')}</div>
+                                <div className="bg-indigo-50/50 p-3 rounded-xl text-center border border-indigo-100">
+                                    <div className="text-xl font-bold text-indigo-700">{importStats.updated}</div>
+                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-0.5">{t('Updated', 'Aġġornati')}</div>
                                 </div>
-                                <div className="bg-red-50/50 p-4 rounded-xl text-center border border-red-100">
-                                    <div className="text-2xl font-bold text-red-700">{importStats.failed}</div>
-                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-1">{t('Failed', 'Naqsu')}</div>
+                                <div className="bg-amber-50/50 p-3 rounded-xl text-center border border-amber-100">
+                                    <div className="text-xl font-bold text-amber-700">{importStats.skipped}</div>
+                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-0.5">{t('Skipped', 'Maqbuża')}</div>
+                                </div>
+                                <div className="bg-red-50/50 p-3 rounded-xl text-center border border-red-100 col-span-2 sm:col-span-1">
+                                    <div className="text-xl font-bold text-red-700">{importStats.failed}</div>
+                                    <div className="text-[10px] font-bold text-black/40 uppercase mt-0.5">{t('Failed', 'Naqsu')}</div>
                                 </div>
                             </div>
 
@@ -957,9 +1139,11 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
                                         <div 
                                             key={idx} 
                                             className={cn(
-                                                logLine.includes('Failed') && "text-red-400",
-                                                logLine.includes('Inserted') && "text-green-400",
-                                                logLine.includes('Updated') && "text-indigo-300"
+                                                (logLine.includes('Failed') || logLine.includes('Critical')) && "text-red-400 font-bold",
+                                                logLine.includes('inserted') && "text-emerald-400",
+                                                logLine.includes('updated') && "text-indigo-300",
+                                                logLine.includes('skipped') && "text-amber-300",
+                                                logLine.includes('complete') && "text-green-300 font-bold"
                                             )}
                                         >
                                             {logLine}

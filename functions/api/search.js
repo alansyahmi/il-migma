@@ -124,8 +124,8 @@ export async function onRequestGet({ request, env }) {
 
         const baseJoins = `
             FROM entries e
-            LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id)
-            LEFT JOIN roots r ON (r.id = rpf.root_id)
+            LEFT JOIN roots r ON (r.consonants = e.root_consonants OR r.id = e.root_consonants OR r.id = 'root-' || e.root_consonants OR LOWER(REPLACE(r.consonants, ' ', '')) = LOWER(REPLACE(COALESCE(e.root_consonants, ''), ' ', '')))
+            LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id OR (rpf.root_id = r.id AND rpf.derived_form = e.headword))
             LEFT JOIN patterns pat ON (rpf.pattern_id = pat.id)
             ${ENTRY_MORPHOLOGY_JOINS}
         `;
@@ -150,7 +150,8 @@ export async function onRequestGet({ request, env }) {
 
                 if (searchLemma || !hasFieldFilter) {
                     conditions.push("LOWER(e.headword) GLOB LOWER(?)");
-                    qArgs.push(globStr);
+                    conditions.push("e.id IN (SELECT entry_id FROM alternative_forms WHERE LOWER(headword) GLOB LOWER(?))");
+                    qArgs.push(globStr, globStr);
                 }
                 if (searchEnglishGloss) {
                     conditions.push(`LOWER(COALESCE(json_extract(e.definitions, '$[0].text_en'), '')) GLOB LOWER(?)`);
@@ -159,7 +160,8 @@ export async function onRequestGet({ request, env }) {
                 if (searchWordForms) {
                     conditions.push("LOWER(COALESCE(nm.plural_forms, am.plural_form, '')) GLOB LOWER(?)");
                     conditions.push("LOWER(vm.verbal_noun) GLOB LOWER(?)");
-                    qArgs.push(globStr, globStr);
+                    conditions.push("e.id IN (SELECT entry_id FROM alternative_forms WHERE LOWER(headword) GLOB LOWER(?))");
+                    qArgs.push(globStr, globStr, globStr);
                 }
                 if (!hasFieldFilter) {
                     conditions.push("LOWER(r.consonants) GLOB LOWER(?)");
@@ -167,12 +169,16 @@ export async function onRequestGet({ request, env }) {
                     qArgs.push(globStr, globStr);
                 }
             } else {
+                const safeQuery = q.toLowerCase().replace(/"/g, ' ').trim();
+                const altQueryApos = normalizedQ.includes("'")
+                    ? normalizedQ.replace(/'/g, '’')
+                    : normalizedQ.replace(/’/g, "'");
                 if (searchLemma || !hasFieldFilter) {
                     conditions.push("e.headword = ?");
                     conditions.push("e.rowid IN (SELECT rowid FROM entries_fts WHERE entries_fts MATCH ?)");
-                    const safeQuery = q.toLowerCase().replace(/"/g, ' ').trim();
+                    conditions.push("e.id IN (SELECT entry_id FROM alternative_forms WHERE LOWER(headword) IN (LOWER(?), LOWER(?)) OR headword LIKE ?)");
                     const ftsQuery = `"${safeQuery}"*`;
-                    qArgs.push(normalizedQ, ftsQuery);
+                    qArgs.push(normalizedQ, ftsQuery, normalizedQ, altQueryApos, `${safeQuery}%`);
                 }
                 if (searchEnglishGloss) {
                     conditions.push(`COALESCE(json_extract(e.definitions, '$[0].text_en'), '') LIKE ?`);
@@ -181,7 +187,8 @@ export async function onRequestGet({ request, env }) {
                 if (searchWordForms) {
                     conditions.push("COALESCE(nm.plural_forms, am.plural_form, '') LIKE ?");
                     conditions.push("vm.verbal_noun LIKE ?");
-                    qArgs.push(`%${q}%`, `%${q}%`);
+                    conditions.push("e.id IN (SELECT entry_id FROM alternative_forms WHERE LOWER(headword) IN (LOWER(?), LOWER(?)) OR headword LIKE ?)");
+                    qArgs.push(`%${q}%`, `%${q}%`, normalizedQ, altQueryApos, `${safeQuery}%`);
                 }
                 if (!hasFieldFilter) {
                     conditions.push("r.consonants = ?");
@@ -199,9 +206,9 @@ export async function onRequestGet({ request, env }) {
         // [Existing filters for rootId, pos, rootType, vowelSet, wizen, form, verbType, source, r1-r4]
 
         if (rootId) {
-            const lowerRootId = rootId.toLowerCase();
-            sql += ` AND (r.id = ? OR LOWER(r.consonants) = ? OR LOWER(e.root_consonants) = ?)`;
-            args.push(rootId, lowerRootId, lowerRootId);
+            const cleanRoot = rootId.toLowerCase().replace(/^root-/, '').trim();
+            sql += ` AND (r.id = ? OR r.id = ? OR LOWER(r.consonants) = ? OR LOWER(e.root_consonants) = ? OR LOWER(REPLACE(r.consonants, ' ', '')) = ? OR LOWER(REPLACE(e.root_consonants, ' ', '')) = ?)`;
+            args.push(rootId, `root-${cleanRoot}`, cleanRoot, cleanRoot, cleanRoot, cleanRoot);
         }
         if (pos) {
             sql += ' AND e.pos = ?';
@@ -365,15 +372,47 @@ export async function onRequestGet({ request, env }) {
             sql += ` AND (${statusConditions.join(' OR ')})`;
         }
 
-        const totalRes = await db.execute({ sql: `SELECT COUNT(*) as total ${baseJoins} ${sql}`, args });
-        const total = Number(totalRes.rows[0]?.total ?? 0);
+        const hasCriteria = Boolean(q || rootId || pos || rootType || nounType || vowelSet || wizen || source || sourceLanguage || suffix || gender || r1 || r2 || r3 || r4 || forms.length > 0 || verbType || tag || lp || fp || mp || pp || dp || ep || dmp || vs_sg || vs_opp || vs_pl || isZokk || stemString);
+        let isRandomSearch = (isRandom || !hasCriteria) && !q;
+
+        let total = 0;
+        if (limit === 0 && !hasCriteria) {
+            // Ultra-fast path for browse headers: 1 row read from app_stats or count(rowid)
+            try {
+                const statsRes = await db.execute("SELECT value FROM app_stats WHERE key = 'home_summary' LIMIT 1");
+                if (statsRes.rows.length > 0 && statsRes.rows[0].value) {
+                    const parsed = JSON.parse(String(statsRes.rows[0].value));
+                    if (typeof parsed?.total === 'number') {
+                        total = parsed.total;
+                    }
+                }
+            } catch {}
+            if (!total) {
+                const countRes = await db.execute("SELECT COUNT(rowid) as total FROM entries");
+                total = Number(countRes.rows[0]?.total ?? 0);
+            }
+            return json({ results: [], total, query: q });
+        }
+
+        // Lean joins for COUNT query: only join tables that are actually referenced in WHERE conditions
+        let countJoins = 'FROM entries e';
+        if (sql.includes('r.')) countJoins += ' LEFT JOIN roots r ON (r.consonants = e.root_consonants OR r.id = e.root_consonants OR r.id = \'root-\' || e.root_consonants OR LOWER(REPLACE(r.consonants, \' \', \'\')) = LOWER(REPLACE(COALESCE(e.root_consonants, \'\'), \' \', \'\')))';
+        if (sql.includes('rpf.')) countJoins += ' LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id OR (rpf.derived_form = e.headword))';
+        if (sql.includes('pat.')) countJoins += ' LEFT JOIN patterns pat ON (rpf.pattern_id = pat.id)';
+        if (sql.includes('vm.')) countJoins += ' LEFT JOIN verb_morphology vm ON vm.entry_id = e.id';
+        if (sql.includes('nm.')) countJoins += ' LEFT JOIN noun_morphology nm ON nm.entry_id = e.id';
+        if (sql.includes('am.')) countJoins += ' LEFT JOIN adj_morphology am ON am.entry_id = e.id';
+        if (sql.includes('pm.')) countJoins += ' LEFT JOIN participle_morphology pm ON pm.entry_id = e.id';
+        if (sql.includes('num.')) countJoins += ' LEFT JOIN numeral_morphology num ON num.entry_id = e.id';
+        if (sql.includes('s.')) countJoins += ' LEFT JOIN stems s ON e.stem = s.stem_string';
+        if (sql.includes('ls.')) countJoins += ' LEFT JOIN lexical_sources ls ON e.source_id = ls.id';
+
+        const totalRes = await db.execute({ sql: `SELECT COUNT(*) as total ${countJoins} ${sql}`, args });
+        total = Number(totalRes.rows[0]?.total ?? 0);
 
         if (limit === 0) {
             return json({ results: [], total, query: q });
         }
-        
-        const hasCriteria = q || rootId || pos || rootType || nounType || vowelSet || wizen || source || sourceLanguage || suffix || gender || r1 || r2 || r3 || r4;
-        let isRandomSearch = (isRandom || !hasCriteria) && !q;
 
         let finalSql = `
             SELECT e.*,

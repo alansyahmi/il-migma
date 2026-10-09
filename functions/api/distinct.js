@@ -6,10 +6,29 @@
 import { createClient } from '@libsql/client/web';
 import { listSuffixCatalog } from './_shared/suffixCatalog.js';
 
+// ── In-Memory Worker Cache (Shared within worker isolate) ─────────────────────
+const distinctCache = new Map();
+const DISTINCT_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+
 export async function onRequestGet({ request, env }) {
     try {
         const url = new URL(request.url);
         const type = url.searchParams.get('type');
+        if (!type) return new Response(JSON.stringify({ error: "Missing type parameter" }), { status: 400 });
+
+        const now = Date.now();
+        const cached = distinctCache.get(type);
+        if (cached && (now - cached.timestamp < DISTINCT_CACHE_TTL_MS)) {
+            return new Response(JSON.stringify(cached.values), {
+                status: 200,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800',
+                    'X-Distinct-Cache': 'HIT-MEMORY'
+                },
+            });
+        }
         
         const tursoUrl = env.TURSO_URL || env.VITE_TURSO_URL;
         const dbToken = env.TURSO_AUTH_TOKEN || env.VITE_TURSO_AUTH_TOKEN;
@@ -57,12 +76,15 @@ export async function onRequestGet({ request, env }) {
             `;
         } else if (type === 'suffixes') {
             const values = await listSuffixCatalog(db);
+            distinctCache.set(type, { values, timestamp: Date.now() });
 
             return new Response(JSON.stringify(values), {
                 status: 200,
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800',
+                    'X-Distinct-Cache': 'MISS'
                 },
             });
         } else {
@@ -71,6 +93,7 @@ export async function onRequestGet({ request, env }) {
         
         const result = await db.execute(sql);
         const values = transform(result.rows);
+        distinctCache.set(type, { values, timestamp: Date.now() });
 
         return new Response(JSON.stringify(values), {
             status: 200,
@@ -78,6 +101,7 @@ export async function onRequestGet({ request, env }) {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
                 'Cache-Control': 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800',
+                'X-Distinct-Cache': 'MISS'
             },
         });
     } catch (e) {

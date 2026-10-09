@@ -1,0 +1,1677 @@
+{
+  "category_id": "adj_dimensions_physical",
+  "category_title": "Adjectives: Dimension, Size & Form",
+  "total_entries": 18,
+  "entries": [
+    {
+      "id": "adj-żgħir",
+      "headword": "żgħir",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "ż-għ-r",
+      "stem": null,
+      "cv_pattern": "12v3",
+      "morph_pattern": "C1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: żgħir",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/%C5%BCg%C4%A7ir",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "صَغِير",
+          "definition": "small, little, child"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "small, little, young, minor",
+          "text_mt": "Li ma għandux daqs kbir jew tinsab fl-età ta' tfulija.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Tifel żgħir li kien jilgħab fir-ramel.",
+          "en": "A small child who was playing in the sand."
+        }
+      ],
+      "related_entries": [
+        "n-ħaġa-żgħira-biex"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈzɛjr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "żgħar",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "żgħar",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "--i",
+      "vowel_set_pl": "--a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 59,
+      "source_frequency_rank": 59,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "adj-kbir",
+      "headword": "kbir",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "k-b-r",
+      "stem": null,
+      "cv_pattern": "12v3",
+      "morph_pattern": "C1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: kbir",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/kbir",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "كَبِير",
+          "definition": "big, great, abundant"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "large, big",
+          "text_mt": "Li għandu dimensjonijiet, volum jew daqs konsiderevoli u fuq il-medja.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "old",
+          "text_mt": "Li għandu età avvanzata fl-età u fil-snin.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Bini kbir u majestuż mibni fiċ-ċentru tal-kapitali.",
+          "en": "A large majestic building constructed in the capital center."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkbɪːr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "kbar",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "kbar",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "--i",
+      "vowel_set_pl": "--a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 66,
+      "source_frequency_rank": 66,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "n-dawl",
+      "headword": "dawl",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "d-w-l",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: dawl",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/dawl",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "ضَوْء",
+          "definition": "brightness, brilliance, gleam"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "light",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal light.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "eyesight",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal eyesight.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "information",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal information.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kelma “dawl” dehret f'sentenza li tispjega light.",
+          "en": "The word “dawl” appeared in a sentence illustrating light."
+        }
+      ],
+      "related_entries": [
+        "n-dawl-tal-bambin",
+        "n-dawl-talla",
+        "n-fid-dawl-tax-xemx",
+        "n-sena-dawl"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐwl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "dwal",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "dwal",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "a--",
+      "vowel_set_pl": "--a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 83,
+      "source_frequency_rank": 83,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "rank": 115,
+      "source_frequency_rank": 115,
+      "id": "n-rawnd",
+      "headword": "rawnd",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "round",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "adj-twil",
+      "headword": "twil",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "t-w-l",
+      "stem": null,
+      "cv_pattern": "12v3",
+      "morph_pattern": "C1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: twil",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/twil",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "طَوِيل",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "long, tall",
+          "text_mt": "Li għandu kejl kbir mill-wiċċ fl-tul.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Raġel twil li kellu passaġġ lixx fit-triq.",
+          "en": "A tall man who had a smooth walk on the street."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtwɪːl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "twal",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "twal",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "--i",
+      "vowel_set_pl": "--a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 168,
+      "source_frequency_rank": 168,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "n-dalwaqt",
+      "headword": "dalwaqt",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "dalwaqt",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: dalwaqt",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/dalwaqt",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "ذَا الْوَقْت",
+          "definition": "this time"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "second (short, indeterminate amount of time)",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal second.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kelma “dalwaqt” dehret f'sentenza li tispjega second (short, indeterminate amount of time).",
+          "en": "The word “dalwaqt” appeared in a sentence illustrating second (short, indeterminate amount of time)."
+        }
+      ],
+      "related_entries": [
+        "n-filwaqt",
+        "n-waqt",
+        "n-waqtiet"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐː.lwɐʔt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 315,
+      "source_frequency_rank": 315,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "adj-qasir",
+      "headword": "qasir",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "q-s-r",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: qasir",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/qasir",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قَصِير",
+          "definition": "curt, little, short"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "short, shallow",
+          "text_mt": "Oġġett jew persuna li m'għandhiex tul jew għoli kbir.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien raġel qasir b'leħen qawwi u mimli kuraġġ.",
+          "en": "He was a short man with a strong voice and full of courage."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɐ.sɪr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "qosra",
+          "pattern": "1v23a"
+        },
+        {
+          "form": "qsar",
+          "pattern": "12â3"
+        },
+        {
+          "form": "qosor",
+          "pattern": "1v2v3"
+        },
+        {
+          "form": "qosrien",
+          "pattern": "-ien"
+        },
+        {
+          "form": "iqsar",
+          "pattern": "i12v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "qosra",
+          "pattern": "1v23a"
+        },
+        {
+          "form": "qsar",
+          "pattern": "12â3"
+        },
+        {
+          "form": "qosor",
+          "pattern": "1v2v3"
+        },
+        {
+          "form": "qosrien",
+          "pattern": "-ien"
+        },
+        {
+          "form": "iqsar",
+          "pattern": "i12v3"
+        }
+      ],
+      "vowel_set_sg": "a-i",
+      "vowel_set_pl": "o--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 327,
+      "source_frequency_rank": 327,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "adj-fond",
+      "headword": "fond",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "fond",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: fond",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/fond",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "fondo",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "deep, profound",
+          "text_mt": "Oġġett jew bir li għandu fond kbir mill-wiċċ tas-saqaf.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien bir fond b'ilma kiesaħ fil-fond tar-raba'.",
+          "en": "It was a deep well with cold water deep in the field."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈfɔnt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "fondi",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "fondi",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 363,
+      "source_frequency_rank": 363,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "adv-ilu",
+      "headword": "ilu",
+      "pos": "adjective",
+      "definitions": [
+        {
+          "text_en": "Expresses the time that something has been going on; takes personal suffixes according to subject of the phrase and is followed by a specification of time; (equivalent to English) for; in",
+          "text_mt": null
+        }
+      ],
+      "gender": null,
+      "root_consonants": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/ilu",
+      "source_citation": "Wiktionary: ilu",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Of",
+          "language": "Arabic",
+          "term": "لَ",
+          "definition": "to, for"
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "rank": 381,
+      "source_frequency_rank": 381,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "n-dam",
+      "headword": "dam",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "d-w-m",
+      "stem": null,
+      "cv_pattern": "1v3",
+      "morph_pattern": "C1vC3",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: dam",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/dam",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "إِدَام",
+          "definition": "conserve, eternalize, keep"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "tallow",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal tallow.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kelma “dam” dehret f'sentenza li tispjega tallow.",
+          "en": "The word “dam” appeared in a sentence illustrating tallow."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐm/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "--a",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 382,
+      "source_frequency_rank": 382,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "prep-matul",
+      "headword": "matul",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "t-w-l",
+      "stem": null,
+      "cv_pattern": "ma1v3",
+      "morph_pattern": "maC1vC3",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Uncertain",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: matul",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/matul",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "throughout, during, along",
+          "text_mt": "Prepożizzjoni ta' żmien jew spazju li tfisser matul il-perijodu jew it-triq.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Matul ix-xitwa kollha x-xita baqgħet nieżla bla waqfien.",
+          "en": "Throughout the whole winter rain kept falling relentlessly."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɐ.tʊl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "--u",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 456,
+      "source_frequency_rank": 456,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "adj-tqil",
+      "headword": "tqil",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": "t-q-l",
+      "stem": null,
+      "cv_pattern": "12v3",
+      "morph_pattern": "C1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: tqil",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tqil",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ثَقِيل",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "heavy, burdensome",
+          "text_mt": "Li għandu piż kbir jew iebes biex jiġi mifhum.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ġarr kaxxa tqila fit-telgħa tal-bini.",
+          "en": "He carried a heavy box up the building stairs."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtʔɪːl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "tqal",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "tqal",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "--i",
+      "vowel_set_pl": "--a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 543,
+      "source_frequency_rank": 543,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "rank": 548,
+      "source_frequency_rank": 548,
+      "id": "n-wiesgħa",
+      "headword": "wiesgħa",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "wide",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #993)*",
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "rank": 596,
+      "source_frequency_rank": 596,
+      "id": "n-fjura",
+      "headword": "fjura",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "flower",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "rank": 644,
+      "source_frequency_rank": 644,
+      "id": "n-fluss",
+      "headword": "fluss",
+      "pos": "adjective",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "flow",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "n-raħal",
+      "headword": "raħal",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "r-ħ-l",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: raħal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ra%C4%A7al",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "رَحْل",
+          "definition": "dwelling, campground"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "village, small town",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal village, small town.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-użu ta' raħal kien prominenti u utli ħafna fil-ħajja.",
+          "en": "The use of village, small town was prominent and very useful in life."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɐ.ħɐl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "rħula",
+          "pattern": "12â3a"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "rħula",
+          "pattern": "12â3a"
+        }
+      ],
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": "--u",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 703,
+      "source_frequency_rank": 703,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "n-proxxmu",
+      "headword": "proxxmu",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "proxxmu",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: proxxmu",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/proxxmu",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "pròssimu / pròssumu",
+          "definition": "key"
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "prossimo IPA",
+          "definition": "key"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "neighbour, fellow man",
+          "text_mt": "Il-bniedem l-ieħor fis-soċjetà li teħtieġ tħobbu skond il-fidi.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għin lill-proxxmu tiegħek meta jkun fit-tbatija.",
+          "en": "Help your fellow man when he is in hardship."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈprɔʃʃ.mʊ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "proxxmi",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "proxxmi",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 806,
+      "source_frequency_rank": 806,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    },
+    {
+      "id": "adj-isfar",
+      "headword": "isfar",
+      "pos": "adjective",
+      "definitions": [
+        {
+          "text_en": "yellow",
+          "text_mt": null
+        }
+      ],
+      "gender": null,
+      "root_consonants": "s-f-r",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/isfar",
+      "source_citation": "Wiktionary: isfar",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَصْفَر",
+          "definition": null
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "sofor",
+          "pattern": null
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sofor",
+          "pattern": null
+        }
+      ],
+      "vowel_set_sg": "i-a",
+      "vowel_set_pl": "o-o",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "rank": 839,
+      "source_frequency_rank": 839,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Adjectives: Dimension, Size & Form",
+      "theme_id": "adj_dimensions_physical"
+    }
+  ]
+}

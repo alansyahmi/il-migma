@@ -237,13 +237,6 @@ export async function apiSearch(
     try {
         const apiRes = await apiFetch<SearchResponse>(`/api/search?${params}`, { signal: opts.signal });
         if (apiRes && Array.isArray(apiRes.results)) {
-            if (apiRes.results.length === 0 && debugRes.results.length > 0) {
-                return {
-                    results: debugRes.results,
-                    total: debugRes.total,
-                    query: q,
-                };
-            }
             return apiRes;
         }
         return debugRes;
@@ -590,7 +583,24 @@ export async function adminListEntries(
         const total = filtered.length;
         const limit = opts.limit ?? 15;
         const offset = opts.offset ?? 0;
-        const paginated = filtered.slice(offset, offset + limit);
+        const paginated = filtered.slice(offset, offset + limit).map((e) => {
+            const defs = e.definitions || [];
+            const text_en = (e as any).text_en || defs[0]?.text_en || '';
+            const text_mt = (e as any).text_mt || defs.find((d: any) => d?.text_mt)?.text_mt || defs[0]?.text_mt || '';
+            const etyChain = (e as any).etymology_chain || [];
+            const arabicStep = Array.isArray(etyChain)
+                ? etyChain.find((step: any) => step && (String(step.language || '').trim().toLowerCase() === 'arabic' || /[\u0600-\u06FF]/.test(step.term || '')))
+                : null;
+            const arabic = (e as any).arabic || arabicStep?.term || undefined;
+
+            return {
+                ...e,
+                stem: (e as any).stem || undefined,
+                arabic,
+                text_en,
+                text_mt,
+            };
+        });
         return { entries: paginated, total };
     }
 }
@@ -1131,4 +1141,27 @@ export async function adminDbTableInfo(token: string) {
 
 export async function adminCheckIdExists(token: string, table: string, id: string) {
     return adminDbToolsFetch<{ exists: boolean; id: string; table: string }>(token, 'check-id', { table, id });
+}
+
+export interface AdminBulkImportEntriesPayload {
+    entries: Record<string, any>[];
+    skipExisting?: boolean;
+}
+
+export interface AdminBulkImportEntriesResponse {
+    ok: boolean;
+    total: number;
+    inserted: number;
+    updated: number;
+    skipped: number;
+    failed: number;
+    errors: { index: number; headword: string; error: string }[];
+    details?: { id: string; headword: string; pos: string; action: 'inserted' | 'updated' | 'skipped' }[];
+}
+
+export async function adminBulkImportEntries(
+    token: string,
+    payload: AdminBulkImportEntriesPayload
+): Promise<AdminBulkImportEntriesResponse> {
+    return adminDbToolsFetch<AdminBulkImportEntriesResponse>(token, 'bulk-import-entries', payload);
 }

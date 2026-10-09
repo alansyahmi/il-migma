@@ -6,6 +6,7 @@
 
 import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
 import { getEntryIdFamily, normalizeEntryId } from '../../../src/lib/entryId.ts';
+import { processEntryBatch } from './entries.js';
 
 const MAX_EXPORT_ROWS = 50000;
 const DEFAULT_SINGLE_EXPORT_ROWS = 10000;
@@ -83,6 +84,8 @@ export async function onRequestPost({ request, env }) {
                 return handleCheckId(client, body);
             case 'ensure-performance-indexes':
                 return handleEnsurePerformanceIndexes(client);
+            case 'bulk-import-entries':
+                return handleBulkImportEntries(client, body);
             default:
                 return json({ error: `Unknown action: ${action}` }, 400);
         }
@@ -90,6 +93,12 @@ export async function onRequestPost({ request, env }) {
         const { status, body } = toApiErrorPayload(e);
         return json(body, status);
     }
+}
+
+// ── Bulk Import Entries ───────────────────────────────────────────────────────
+async function handleBulkImportEntries(client, { entries = [], skipExisting = false }) {
+    const result = await processEntryBatch(client, { entries, skipExisting });
+    return json(result);
 }
 
 // ── SQL Console ───────────────────────────────────────────────────────────────
@@ -507,6 +516,8 @@ async function handleEnsurePerformanceIndexes(client) {
         'CREATE INDEX IF NOT EXISTS idx_phonetics_entry ON phonetics(entry_id)',
         'CREATE INDEX IF NOT EXISTS idx_phonetics_entry_dialect ON phonetics(entry_id, dialect)',
         'CREATE INDEX IF NOT EXISTS idx_alt_forms_entry ON alternative_forms(entry_id)',
+        'CREATE INDEX IF NOT EXISTS idx_alt_forms_headword ON alternative_forms(headword COLLATE NOCASE)',
+        'CREATE INDEX IF NOT EXISTS idx_alt_forms_target ON alternative_forms(target_entry_id)',
         'CREATE INDEX IF NOT EXISTS idx_diminutives_entry ON entry_diminutives(entry_id)',
         'CREATE INDEX IF NOT EXISTS idx_audio_entry ON audio_files(entry_id)',
         'CREATE INDEX IF NOT EXISTS idx_relationships_entry_type ON entry_relationships(entry_id, relationship_type)',

@@ -1,0 +1,3640 @@
+{
+  "category_id": "nouns_nature_geography",
+  "category_title": "Nouns: Nature, Weather & Geography",
+  "total_entries": 36,
+  "entries": [
+    {
+      "id": "n-arja",
+      "headword": "arja",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "arja",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: arja",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/arja",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "ària",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "āēr",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Ancient Greek",
+          "term": "ᾱ̓ήρ",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "air, atmosphere",
+          "text_mt": "L-isfera ta' gassijiet li n-nifs nieħdu minnha.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-arja kienet friska kmieni filgħodu fil-muntanji.",
+          "en": "The air was fresh early in the morning in the mountains."
+        }
+      ],
+      "related_entries": [
+        "n-ajruport",
+        "n-malajr"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐː.rjɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "arjiet",
+          "pattern": "-iet"
+        },
+        {
+          "form": "arijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "arjiet",
+          "pattern": "-iet"
+        },
+        {
+          "form": "arijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 55,
+      "source_frequency_rank": 55,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-dinja",
+      "headword": "dinja",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "dinja",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: dinja",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/dinja",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دُنْيَا",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "world",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal world.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kelma “dinja” dehret f'sentenza li tispjega world.",
+          "en": "The word “dinja” appeared in a sentence illustrating world."
+        }
+      ],
+      "related_entries": [
+        "adj-dinji"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɪː.njɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "dinjiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "dinjiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 95,
+      "source_frequency_rank": 95,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-ilma",
+      "headword": "ilma",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "water",
+          "text_mt": null
+        }
+      ],
+      "gender": null,
+      "root_consonants": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/ilma",
+      "source_citation": "Wiktionary: ilma",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "مَاء",
+          "definition": "water, water, wet"
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "rank": 190,
+      "source_frequency_rank": 190,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-xemx",
+      "headword": "xemx",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "x-m-x",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: xemx",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/xemx",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "شَمْس",
+          "definition": "sun, Sun, sol"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sun, Sun",
+          "text_mt": "Il-stilla li tagħti d-dawl u s-sħana fid-dinja.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ix-xemx kienet tiddi b'qawwa sħiħa fis-sajf.",
+          "en": "The sun was shining brightly in summer."
+        }
+      ],
+      "related_entries": [
+        "n-ħarqa-tax-xemx",
+        "n-xemxata",
+        "adj-xemxi"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɛmʃ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "xmux",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "xmux",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "e--",
+      "vowel_set_pl": "--u",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 217,
+      "source_frequency_rank": 217,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-bidu",
+      "headword": "bidu",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "b-d-j",
+      "stem": null,
+      "cv_pattern": "1v2u",
+      "morph_pattern": "C1vC2u",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Uncertain",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: bidu",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/bidu",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "beginning, start",
+          "text_mt": "Il-bidu u l-ewwel mossa ta' azzjoni jew jum.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fl-bidu tal-jum kulħadd beda x-xogħol.",
+          "en": "At the beginning of the day everyone started work."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɪː.dʊ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 232,
+      "source_frequency_rank": 232,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-baħar",
+      "headword": "baħar",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "b-ħ-r",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: baħar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ba%C4%A7ar",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "بَحْر",
+          "definition": "Sea, abundance, course"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sea",
+          "text_mt": "Li għandu x'jaqsam ma' baħar fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "ocean",
+          "text_mt": "Li għandu x'jaqsam ma' baħar fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "abundance, big quantity",
+          "text_mt": "Li għandu x'jaqsam ma' baħar fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [
+        "n-baħar-eġew",
+        "n-baħar-jonju",
+        "n-baħar-l-aħmar",
+        "n-baħar-l-isfar",
+        "n-baħar-mediterran",
+        "n-baħar-tal-irlanda",
+        "n-baqra-tal-baħar",
+        "n-ħanżir-il-baħar",
+        "n-ħmar-il-baħar",
+        "n-kelb-il-baħar",
+        "n-ljun-il-baħar",
+        "n-qattus-il-baħar",
+        "n-tiġieġ-tal-baħar",
+        "n-xatt-il-baħar",
+        "n-żiemel-tal-baħar"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɐ.ħɐr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ibħra",
+          "pattern": "-a"
+        },
+        {
+          "form": "bħur",
+          "pattern": "12â3"
+        },
+        {
+          "form": "bħura",
+          "pattern": "12â3a"
+        },
+        {
+          "form": "bħar",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ibħra",
+          "pattern": "-a"
+        },
+        {
+          "form": "bħur",
+          "pattern": "12â3"
+        },
+        {
+          "form": "bħura",
+          "pattern": "12â3a"
+        },
+        {
+          "form": "bħar",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": "---",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 237,
+      "source_frequency_rank": 237,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "rank": 261,
+      "source_frequency_rank": 261,
+      "id": "n-muntanji",
+      "headword": "muntanji",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "mountain",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-xmara",
+      "headword": "xmara",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "xmara",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: xmara",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/xmara",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "ciumara / sciumara",
+          "definition": "river"
+        },
+        {
+          "relationship": "Ultimately from",
+          "language": "Latin",
+          "term": "flūmen",
+          "definition": "a river"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "river",
+          "text_mt": "Kors u fluss kbir ta' ilma li jgħaddi fl-art.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-xmara kienet mimlija ilma wara x-xita.",
+          "en": "The river was full of water after the rain."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃmɐː.rɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "xmajjar",
+          "pattern": "12vjjv3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "xmajjar",
+          "pattern": "12vjjv3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 296,
+      "source_frequency_rank": 296,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-riħ",
+      "headword": "riħ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "r-w-ħ",
+      "stem": null,
+      "cv_pattern": "1v3",
+      "morph_pattern": "C1vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: riħ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ri%C4%A7",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "رِيح",
+          "definition": "aroma, flatulence, flatus"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "wind",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal wind.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "direction",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal direction.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-użu ta' riħ kien prominenti u utli ħafna fil-ħajja.",
+          "en": "The use of wind was prominent and very useful in life."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɪːħ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "rjieħ",
+          "pattern": "1jâ3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "rjieħ",
+          "pattern": "1jâ3"
+        }
+      ],
+      "vowel_set_sg": "--i",
+      "vowel_set_pl": "--ie",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 330,
+      "source_frequency_rank": 330,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-nar",
+      "headword": "nar",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "n-w-r",
+      "stem": null,
+      "cv_pattern": "1v3",
+      "morph_pattern": "C1vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: nar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/nar",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "نَار",
+          "definition": "bonfire, fire, flame"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "fire",
+          "text_mt": "Il-fjammi u l-ħaraq li joħroġ mis-sħana u l-fuklar.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "fireworks",
+          "text_mt": "Il-murtali u l-lampi li jaħarqu fil-festa tar-raħal.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Xgħalu n-nar fil-fuklar biex jsaħħnu l-kamra.",
+          "en": "They lit the fire in the hearth to warm the room."
+        }
+      ],
+      "related_entries": [
+        "n-aħmar-nar",
+        "n-ġobon-tan-nar",
+        "n-karozza-tan-nar",
+        "n-nar-tat-tiben"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈnɐr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "nirien",
+          "pattern": "-ien"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "nirien",
+          "pattern": "-ien"
+        }
+      ],
+      "vowel_set_sg": "--a",
+      "vowel_set_pl": "--i",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 339,
+      "source_frequency_rank": 339,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-qamar",
+      "headword": "qamar",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "qamar",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: qamar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/qamar",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قَمَر",
+          "definition": "moon, Moon, Qamar"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "moon",
+          "text_mt": "Il-korp ċelesti li jidderi fis-sema skura bil-lejl u jdur madwar l-art.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-qamar kien kwil u jiddi fuq il-baħar kollu bil-lejl.",
+          "en": "The moon was full and shining over the entire sea at night."
+        }
+      ],
+      "related_entries": [
+        "adj-qamri"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ʔɐˈmɐːr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "qmura",
+          "pattern": "12â3a"
+        },
+        {
+          "form": "oqmra",
+          "pattern": "o123a"
+        },
+        {
+          "form": "qomra",
+          "pattern": "1v23a"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "qmura",
+          "pattern": "12â3a"
+        },
+        {
+          "form": "oqmra",
+          "pattern": "o123a"
+        },
+        {
+          "form": "qomra",
+          "pattern": "1v23a"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 364,
+      "source_frequency_rank": 364,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-gżira",
+      "headword": "gżira",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "gżira",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: gżira",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/g%C5%BCira",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "جَزِيرَة",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "island",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'gżira': island.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Gżira kien f'postu fil-bini u fl-użu ta' kuljum.",
+          "en": "The gżira was in its proper place in daily use."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "ġżira",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɡzɪː.rɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "gżejjer",
+          "pattern": "12vjjv3"
+        },
+        {
+          "form": "gżiriet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "gżejjer",
+          "pattern": "12vjjv3"
+        },
+        {
+          "form": "gżiriet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 365,
+      "source_frequency_rank": 365,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-borra",
+      "headword": "borra",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "borra",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: borra",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/borra",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "burra",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "boreas",
+          "definition": "north wind"
+        },
+        {
+          "relationship": "From",
+          "language": "Ancient Greek",
+          "term": "Βορέᾱς",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "snow, sleet",
+          "text_mt": "Li għandu x'jaqsam ma' borra fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɔr.rɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 391,
+      "source_frequency_rank": 391,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-stilla",
+      "headword": "stilla",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "stilla",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: stilla",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/stilla",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "stidda",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "stēlla",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "star",
+          "text_mt": "Korp ċelesti imdawwal mis-sema li jidher matul il-lejl.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm preżenza ċara ta' stilla fit-tfassil tax-xogħol.",
+          "en": "There was a clear presence of star in the design of the work."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "istilla",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈstɪl.lɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "stilel",
+          "pattern": "12â3e4"
+        },
+        {
+          "form": "stilli",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "stilel",
+          "pattern": "12â3e4"
+        },
+        {
+          "form": "stilli",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 416,
+      "source_frequency_rank": 416,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-oċean",
+      "headword": "oċean",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "oċean",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: oċean",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/o%C4%8Bean",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "oceano",
+          "definition": "ocean"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "ocean",
+          "text_mt": "Massa kbira ħafna ta' ilma mielaħ li tissepara l-kontinenti.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-vapur qsam l-oċean fit-tieni ġimgħa tal-vjaġġ.",
+          "en": "The ship crossed the ocean in the second week of voyage."
+        }
+      ],
+      "related_entries": [
+        "adj-oċeaniku",
+        "n-oċeanja",
+        "n-oċeanografija",
+        "n-oċeanografu",
+        "n-oċean-antartiku",
+        "n-oċean-artiku",
+        "n-oċean-atlantiku",
+        "n-oċean-indjan",
+        "n-oċean-paċifiku"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "oċjan",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɔˈt͡ʃɛː.ɐn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "oċeani",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "oċeani",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 438,
+      "source_frequency_rank": 438,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-xita",
+      "headword": "xita",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "x-t-w",
+      "stem": null,
+      "cv_pattern": "1v2a",
+      "morph_pattern": "C1vC2a",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: xita",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/xita",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "شِتَاء",
+          "definition": "winter, rainy season, rain"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "rain",
+          "text_mt": "Ilma li jinżel mill-sħab fuq l-art.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ix-xita bdiet nieżla b'qawwa fit-triq.",
+          "en": "The rain started falling heavily in the street."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɪː.tɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 494,
+      "source_frequency_rank": 494,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "rank": 499,
+      "source_frequency_rank": 499,
+      "id": "n-avviż",
+      "headword": "avviż",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "notice",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-vuċi",
+      "headword": "vuċi",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "vuċi",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: vuċi",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/vu%C4%8Bi",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "vuci",
+          "definition": "Sound uttered by the mouth, especially by human beings in speech or song; sound thus uttered considered as possessing some special quality or character"
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "vōx",
+          "definition": "voice"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "voice",
+          "text_mt": "Ħoss u kapaċità li titkellem jew tkanta maħluqa mill-ħaluta.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kelli vuċi ħelwa u mimlija emozzjoni meta kantat.",
+          "en": "She had a sweet voice filled with emotion when singing."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈvʊː.t͡ʃɪ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "vuċijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "vuċijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 500,
+      "source_frequency_rank": 500,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-silġ",
+      "headword": "silġ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "silġ",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: silġ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/sil%C4%A1",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "ثَلْج",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "snow",
+          "text_mt": "Preċipitazzjoni ta' ilma ffriżat minħabba l-kesħa.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "ice",
+          "text_mt": "Ilma ffriżat solidu.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm ħafna silġ fuq it-toroq matul ix-xitwa u kien kiesaħ.",
+          "en": "There was a lot of ice on the roads during winter and it was cold."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɪlt͡ʃ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "silġa",
+      "dual_form": null,
+      "paucal_form": "silġiet",
+      "feminine_form": "silġa",
+      "masculine_form": "silġ",
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 527,
+      "source_frequency_rank": 527,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-par",
+      "headword": "par",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "par",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: par",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/par",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "paru",
+          "definition": "equal, pair, peer"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "pair, couple",
+          "text_mt": "Tnejn minn oġġett li jaqblu (bħal par żraben jien u int).",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ixtra par żraben ġodda għat-tieġ tiegħu.",
+          "en": "He bought a pair of new shoes for his wedding."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈpɐr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "pari",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "pari",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 530,
+      "source_frequency_rank": 530,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "rank": 538,
+      "source_frequency_rank": 538,
+      "id": "n-mewġa",
+      "headword": "mewġa",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "wave",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-foresta",
+      "headword": "foresta",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "foresta",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: foresta",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/foresta",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "foresta",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "forest, woodland",
+          "text_mt": "Pajsaġġ kbir mimli b'bosta siġar u annimali selvaġġi.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Mxejjen fil-foresta densa taħt id-dell tas-siġar.",
+          "en": "They walked in the dense forest under the shade of the trees."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/fɔˈrɛs.tɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "foresti",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "foresti",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 552,
+      "source_frequency_rank": 552,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-tieqa",
+      "headword": "tieqa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "tieqa",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: tieqa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tieqa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "طاقة",
+          "definition": "window"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "window",
+          "text_mt": "Ftuħ b'ħġieġ fil-ħajt biex jidħol id-dawl u l-arja.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fetaħ it-tieqa biex tidħol l-arja friska tal-għodwa.",
+          "en": "He opened the window to let in the fresh morning air."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtɪː.ʔɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "twieqi",
+          "pattern": "12â3i"
+        },
+        {
+          "form": "tiqan",
+          "pattern": "-an"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "twieqi",
+          "pattern": "12â3i"
+        },
+        {
+          "form": "tiqan",
+          "pattern": "-an"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 555,
+      "source_frequency_rank": 555,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-ferrovija",
+      "headword": "ferrovija",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "ferrovija",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ferrovija",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ferrovija",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "ferrovia",
+          "definition": "railway / railroad"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "railway, train",
+          "text_mt": "Sistema u vettura tal-ħadid użata fil-passat f'Malta għat-trasport.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ferrovija ta' Malta kienet tgħaqqad il-Belt mal-Rabat.",
+          "en": "The Malta railway used to connect Valletta with Rabat."
+        }
+      ],
+      "related_entries": [
+        "n-ferrovjier"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/fɛr.rɔˈvɪː.jɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ferroviji",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ferroviji",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 558,
+      "source_frequency_rank": 558,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #793)*",
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-sema",
+      "headword": "sema",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "s-m-w",
+      "stem": null,
+      "cv_pattern": "1v2a",
+      "morph_pattern": "C1vC2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: sema",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/sema",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَمَاء",
+          "definition": "sky, heaven, firmament"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sky, heaven",
+          "text_mt": "L-ispazju miftuħ 'il fuq mill-art fejn jinsab ix-xemx.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Is-sema kienet ikkulurita bir-roża mal-estinzjoni tax-xemx.",
+          "en": "The sky was colored pink with the sunset."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛː.mɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "smewwiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "smewwiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": "e--",
+      "vowel_set_pl": "--e",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 568,
+      "source_frequency_rank": 568,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-gass",
+      "headword": "gass",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "gass",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "English",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: gass",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/gass",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "English",
+          "term": "gas",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "gas (state of matter)",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'gass': gas (state of matter).",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "gas, wind, flatus",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'gass': gas, wind, flatus.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "accelerator",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'gass': accelerator.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Gass kien f'postu fil-bini u fl-użu ta' kuljum.",
+          "en": "The gass was in its proper place in daily use."
+        }
+      ],
+      "related_entries": [
+        "adj-gassuż",
+        "n-gażoġenu",
+        "n-gażolina",
+        "n-gażometru",
+        "n-gażuż",
+        "v-ggassja"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɡɐss/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "gassijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "gassijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 588,
+      "source_frequency_rank": 588,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "rank": 603,
+      "source_frequency_rank": 603,
+      "id": "n-uffiċċju",
+      "headword": "uffiċċju",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "office",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-rebbiegħa",
+      "headword": "rebbiegħa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "r-b-għ",
+      "stem": null,
+      "cv_pattern": "1v22â3a",
+      "morph_pattern": "C1vC2C2âC3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: rebbiegħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/rebbieg%C4%A7a",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رَبِيع",
+          "definition": "spring, springtide, springtime"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "spring (season)",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal spring.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-użu ta' rebbiegħa kien prominenti u utli ħafna fil-ħajja.",
+          "en": "The use of spring was prominent and very useful in life."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/rɛbˈbɪː.jɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "rebbigħat",
+          "pattern": "-at"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "rebbigħat",
+          "pattern": "-at"
+        }
+      ],
+      "vowel_set_sg": "e-ie",
+      "vowel_set_pl": "e-i",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 663,
+      "source_frequency_rank": 663,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "rank": 678,
+      "source_frequency_rank": 678,
+      "id": "n-sħaba",
+      "headword": "sħaba",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "cloud",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-ġebel",
+      "headword": "ġebel",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "ġ-b-l",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ġebel",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A1ebel",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "جَبَل",
+          "definition": "mountain, rock"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "stones",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'ġebel': stones.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ġebel kien f'postu fil-bini u fl-użu ta' kuljum.",
+          "en": "The ġebel was in its proper place in daily use."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈd͡ʒɛ.bɛl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "ġebla",
+      "dual_form": null,
+      "paucal_form": "ġebliet",
+      "feminine_form": "ġebla",
+      "masculine_form": "ġebel",
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "e-e",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": "e--",
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 681,
+      "source_frequency_rank": 681,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "adv-daqsxejn",
+      "headword": "daqsxejn",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "daqsxejn",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Uncertain",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: daqsxejn",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/daqsxejn",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "somewhat, fairly, rather (to a moderate degree)",
+          "text_mt": "Mod jew stil li fih jiġi espress somewhat, fairly, rather.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Uża l-espressjoni 'daqsxejn' b'mod xieraq fid-diskors.",
+          "en": "Used the expression 'somewhat, fairly, rather' appropriately in speech."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐʔs.ʃɛjn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 731,
+      "source_frequency_rank": 731,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "rank": 732,
+      "source_frequency_rank": 732,
+      "id": "n-kosta",
+      "headword": "kosta",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "coast",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-ramel",
+      "headword": "ramel",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "r-m-l",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ramel",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ramel",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "رَمْل",
+          "definition": "sand"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sand",
+          "text_mt": "Partiċelli żgħar tal-blat jew tal-kosta tal-baħar.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tfal lagħbu bir-ramel fuq ix-xatt ta' Għajn Tuffieħa.",
+          "en": "The children played with the sand on Għajn Tuffieħa beach."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "ramal",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɐ.mɛl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "irmla",
+          "pattern": "-a"
+        },
+        {
+          "form": "rmiel",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "irmla",
+          "pattern": "-a"
+        },
+        {
+          "form": "rmiel",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "a-e",
+      "vowel_set_pl": "---",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 737,
+      "source_frequency_rank": 737,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "rank": 761,
+      "source_frequency_rank": 761,
+      "id": "n-prattika",
+      "headword": "prattika",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "practice",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-istaġun",
+      "headword": "istaġun",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "istaġun",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: istaġun (Alternative spelling of staġun)",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ista%C4%A1un",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "staggiuni",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "statio",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "season",
+          "text_mt": "Wieħed mill-erba' perjodi tat-sena (ir-rebbiegħa, is-sajf, il-ħarifa, ix-xitwa).",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ir-rebbiegħa hija l-isbaħ istaġun tas-sena fejn jinfetħu l-fjuri.",
+          "en": "Spring is the most beautiful season of the year when flowers bloom."
+        }
+      ],
+      "related_entries": [
+        "n-staġun"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "staġun",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɪsˈtɐː.d͡ʒʊn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 907,
+      "source_frequency_rank": 907,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    },
+    {
+      "id": "n-wied",
+      "headword": "wied",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "wied",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: wied",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/wied",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "وادٍ",
+          "definition": "bottleneck, canyon, dale"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "valley, vale, stream",
+          "text_mt": "Spazju bejn tnejn għoljiet fejn jgħaddi l-ilma.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-wied kien mimli ilma wara x-xita l-kbira.",
+          "en": "The valley was full of water after heavy rain."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɪːt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "widien",
+          "pattern": "-ien"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "widien",
+          "pattern": "-ien"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 946,
+      "source_frequency_rank": 946,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Nature, Weather & Geography",
+      "theme_id": "nouns_nature_geography"
+    }
+  ]
+}

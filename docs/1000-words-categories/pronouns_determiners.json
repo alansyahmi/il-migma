@@ -1,0 +1,3049 @@
+{
+  "category_id": "pronouns_determiners",
+  "category_title": "Pronouns & Determiners",
+  "total_entries": 28,
+  "entries": [
+    {
+      "id": "pron-hu",
+      "headword": "hu",
+      "pos": "pronoun",
+      "definitions": [
+        {
+          "text_en": "he, the masculine singular third person",
+          "text_mt": "It-tielet persuna singular maskili.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "source_language": "Arabic",
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/hu",
+      "source_citation": "Wiktionary: hu (Alternative spelling of huwa)",
+      "source_publisher": "Wiktionary",
+      "tags": [
+        "alternative-form"
+      ],
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هُو",
+          "definition": "he, it"
+        }
+      ],
+      "alternative_forms": [
+        {
+          "headword": "huwa",
+          "type": "orthographic"
+        }
+      ],
+      "related_entries": [
+        "pron-huwa"
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "rank": 5,
+      "source_frequency_rank": 5,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "rank": 9,
+      "source_frequency_rank": 9,
+      "id": "pron-huma",
+      "headword": "huma",
+      "pos": "pronoun",
+      "gender": "neutral",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "they, the plural third person",
+          "text_mt": "It-tielet persuna plural.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #11)*",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-dan",
+      "headword": "dan",
+      "pos": "article",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ذَا",
+          "definition": "this (masculine singular demonstrative base with analogical -n)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "ذَا",
+          "definition": "masculine proximal demonstrative root"
+        }
+      ],
+      "etymology_notes": "Inherited from Arabic masculine demonstrative base ذَا (ḏā). While earlier 20th-century philologists (Aquilina 1973: 16) compared final -n to ancient Semitic forms (Biblical Aramaic dēn, Phoenician zn) to refute Barbera's Sicilian borrowing theory, modern comparative Maltese and Arabic linguistics (Borg, Vanhove) refutes any ancient substrate origin. Instead, final -n is analyzed as an internal dialectal Arabic innovation: the plural nasal from dawn (cp. Maghrebi hadun / hadhūna) spread analogically to the singulars (da > dan, di > din), reinforced by the proximal locative hawn ('here'). The bare stem survives in proclitic da, while the Classical/MSA compound with deictic hā- (هٰذَا hāḏā) survives in oratorical hedan via Maltese imāla (hā- > he-).",
+      "definitions": [
+        {
+          "text_en": "this; used as a determiner to identify a specific singular masculine person, object, or entity nearby in space, present in time, or previously mentioned",
+          "text_mt": "Determinant dimostrattiv maskil użat ma' nom definit biex jindika persuna, oġġett jew entità fil-qrib fl-ispazju, preżenti fil-ħin, jew li għadha kif issemmiet.",
+          "register": "standard",
+          "nuance": "determiner (attributive)"
+        },
+        {
+          "text_en": "used as a pronoun to refer to a specific masculine person, thing, fact, or situation close at hand, currently experienced, or just stated",
+          "text_mt": "Pronom dimostrattiv użat bħala suġġett jew oġġett biex jirreferi għal persuna, ħaġa, ġrajja jew sitwazzjoni konkreta jew astratta li tinsab fil-qrib jew li għadha kif ġiet ippreżentata.",
+          "register": "standard",
+          "nuance": "pronoun (substantive)"
+        },
+        {
+          "text_en": "indicating the current, ongoing, or immediately upcoming period of time",
+          "text_mt": "Jindika l-perjodu ta' żmien kurrenti, kontinwu jew li ġej minnufih (eż. dan il-lejl, dan ix-xahar, dan is-sajf, daż-żmien).",
+          "register": "standard",
+          "nuance": "temporal reference"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Dan il-ktieb fih tagħrif siewi ħafna dwar l-istorja ta' Malta.",
+          "en": "This book contains very useful information about the history of Malta."
+        },
+        {
+          "mt": "Dan mhuwiex dak li ftehemna dwaru fil-laqgħa tal-bieraħ.",
+          "en": "This is not what we agreed upon in yesterday's meeting."
+        },
+        {
+          "mt": "Se norganizzaw seminar nazzjonali dan ix-xahar.",
+          "en": "We are organizing a national seminar this month."
+        }
+      ],
+      "related_entries": [
+        "intj-daxkien",
+        "art-din",
+        "art-dawn"
+      ],
+      "alternative_forms": [
+        "art-da",
+        "art-hedan",
+        "art-heda"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "din",
+      "masculine_form": null,
+      "plural_forms": [
+        "dawn"
+      ],
+      "plural_form": "dawn",
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 16,
+      "source_frequency_rank": 16,
+      "audit_status": "approved",
+      "audit_notes": "Lexicographically reviewed; Oxford-aligned senses and authentic Maltese/English usage examples added. Deduplicated against former #25.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-din",
+      "headword": "din",
+      "pos": "article",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ذِي",
+          "definition": "this (feminine singular demonstrative base with analogical -n)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "ذِهِ / هٰذِهِ",
+          "definition": "this (feminine singular Classical Arabic demonstrative)"
+        }
+      ],
+      "etymology_notes": "Inherited from Arabic feminine demonstrative base ذِي (ḏī). Modern comparative linguistics refutes an ancient Semitic substrate for final -n, analyzing it as an internal dialectal analogical extension from plural dawn / hadun to singular di > din, reinforced by the locative hawn ('here'). The bare stem survives in proclitic di, while Classical/MSA feminine هٰذِهِ (hāḏihī) / هٰذِي (hāḏī) survives in oratorical hedin via Maltese imāla.",
+      "definitions": [
+        {
+          "text_en": "this; used as a determiner to identify a specific singular feminine person, object, or entity nearby in space, present in time, or previously mentioned",
+          "text_mt": "Determinant dimostrattiv femminil użat ma' nom definit biex jindika persuna, oġġett jew entità fil-qrib fl-ispazju, preżenti fil-ħin, jew li għadha kif issemmiet.",
+          "register": "standard",
+          "nuance": "determiner (attributive)"
+        },
+        {
+          "text_en": "used as a pronoun to refer to a specific feminine person, thing, fact, or situation close at hand, currently experienced, or just stated",
+          "text_mt": "Pronom dimostrattiv użat bħala suġġett jew oġġett biex jirreferi għal persuna, ħaġa, ġrajja jew sitwazzjoni konkreta jew astratta li tinsab fil-qrib jew li għadha kif ġiet ippreżentata.",
+          "register": "standard",
+          "nuance": "pronoun (substantive)"
+        },
+        {
+          "text_en": "indicating the current, ongoing, or immediately upcoming period or occasion (with feminine temporal nouns)",
+          "text_mt": "Jindika l-perjodu ta' żmien jew l-okkażjoni kurrenti jew immedjata ma' nom femminili ta' żmien (eż. din il-ġimgħa, din is-sena, din id-darba).",
+          "register": "standard",
+          "nuance": "temporal reference"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Din il-belt għandha storja rikka u arkitettura mill-isbaħ.",
+          "en": "This city has a rich history and magnificent architecture."
+        },
+        {
+          "mt": "Din hija l-aqwa deċiżjoni li stajna nieħdu f'dawn iċ-ċirkostanzi.",
+          "en": "This is the best decision we could have made in these circumstances."
+        },
+        {
+          "mt": "Se nlestu r-rapport finali tal-proġett matul din il-ġimgħa.",
+          "en": "We will complete the project's final report during this week."
+        }
+      ],
+      "related_entries": [
+        "art-dan",
+        "art-dawn"
+      ],
+      "alternative_forms": [
+        "art-di",
+        "art-hedin",
+        "art-hedi"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɪn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": "dan",
+      "plural_forms": [
+        "dawn"
+      ],
+      "plural_form": "dawn",
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "approved",
+      "audit_notes": "Added as companion feminine demonstrative entry to primary lemma 'dan'.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-dawn",
+      "headword": "dawn",
+      "pos": "article",
+      "gender": "common",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ذَو / هَدُون",
+          "definition": "these (Maghrebi Arabic plural hadun / ḏaw + -n)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "أُولَاءِ / هٰؤُلَاءِ",
+          "definition": "these (common plural Classical Arabic demonstrative)"
+        }
+      ],
+      "etymology_notes": "Inherited from dialectal Maghrebi Arabic plural demonstratives (cp. Tripoli hadun, Morocco hadun, Tunis hadhuna; Aquilina 1973: 16), rooted in Arabic ذَو (ḏaw) / هٰذُون (hādūn). Modern linguistic consensus identifies this plural nasal ending (-ūn / -un) as the analogical source that spread to singular dan and din. The bare proclitic survives in daw, while the Classical deictic prefix hā- survives in oratorical hedawn.",
+      "definitions": [
+        {
+          "text_en": "these; used as a determiner to identify specific plural people, objects, or entities nearby in space, present in time, or previously mentioned",
+          "text_mt": "Determinant dimostrattiv plural użat ma' nom plural definit biex jindika persuni, oġġetti jew entitajiet fil-qrib fl-ispazju, preżenti fil-ħin, jew li għadhom kif issemmew.",
+          "register": "standard",
+          "nuance": "determiner (attributive)"
+        },
+        {
+          "text_en": "used as a pronoun to refer to specific people, things, facts, or situations in the plural close at hand, currently experienced, or just stated",
+          "text_mt": "Pronom dimostrattiv plural użat bħala suġġett jew oġġett biex jirreferi għal bosta persuni, affarijiet, ġrajjiet jew sitwazzjonijiet fil-qrib jew li għadhom kif ġew ippreżentati.",
+          "register": "standard",
+          "nuance": "pronoun (substantive)"
+        },
+        {
+          "text_en": "indicating the current era, recent times, or days currently unfolding",
+          "text_mt": "Jindika ż-żmien preżenti, l-epoka kurrenti jew perjodu kontinwu fiż-żmien (eż. dawn il-jiem, dawn l-aħħar snin, dawż-żminijiet).",
+          "register": "standard",
+          "nuance": "temporal reference"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Dawn l-istudenti ħadmu bla heda matul is-sena skolastika kollha.",
+          "en": "These students worked tirelessly throughout the whole school year."
+        },
+        {
+          "mt": "Dawn huma r-riżultati ewlenin tal-istudju xjentifiku li wettaqna.",
+          "en": "These are the main results of the scientific study we conducted."
+        },
+        {
+          "mt": "It-temp kien pjuttost xemxi u sabiħ matul dawn il-jiem.",
+          "en": "The weather was rather sunny and pleasant over these past few days."
+        }
+      ],
+      "related_entries": [
+        "art-dan",
+        "art-din"
+      ],
+      "alternative_forms": [
+        "art-daw",
+        "art-hedawn",
+        "art-hedaw"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɔwn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 166,
+      "source_frequency_rank": 166,
+      "audit_status": "approved",
+      "audit_notes": "Lexicographically reviewed; Oxford-aligned senses and authentic Maltese/English usage examples added. Companion plural demonstrative to primary lemma 'dan' (source frequency rank #166).",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-da",
+      "headword": "da",
+      "pos": "article",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ذَا",
+          "definition": "this (masculine singular bare demonstrative base)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "ذَا",
+          "definition": "masculine proximal demonstrative root"
+        }
+      ],
+      "etymology_notes": "Direct continuation of the bare Arabic masculine demonstrative base ذَا (ḏā), preserving the original pre-analogical stem without suffixed -n or prefix hā- (Aquilina 1973: 16). Used as a proclitic attributive before the definite article or in temporal compounds (daż-żmien, dal-lejl).",
+      "definitions": [
+        {
+          "text_en": "this; proclitic and shortened attributive form of dan, prefixed or compounded before masculine nouns, adjectives, or the definite article",
+          "text_mt": "Għamla mqassra u proklitika tad-determinant dimostrattiv maskil 'dan', użata quddiem l-artiklu jew f'komposti temporali (eż. daż-żmien, dal-lejl, dar-raġel).",
+          "register": "standard",
+          "nuance": "proclitic determiner (attributive)"
+        },
+        {
+          "text_en": "used in temporal and adverbial expressions referring to the current time, night, or day (e.g. daż-żmien 'nowadays', dal-lejl 'tonight')",
+          "text_mt": "Użat f'espressjonijiet temporali u avverbjali li jirreferu għaż-żmien kurrenti jew għal-lejl preżenti (eż. daż-żmien, dal-lejl).",
+          "register": "standard",
+          "nuance": "temporal reference"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Daż-żmien in-nies qed iqattgħu aktar ħin fuq l-internet milli jaqraw kotba.",
+          "en": "Nowadays people are spending more time on the internet than reading books."
+        },
+        {
+          "mt": "Dal-lejl se jagħmel il-kesħa f'ħafna partijiet tal-gżejjer.",
+          "en": "Tonight it will be cold across many parts of the islands."
+        }
+      ],
+      "related_entries": [
+        "art-dan",
+        "art-di",
+        "art-daw"
+      ],
+      "alternative_forms": [
+        "art-dan",
+        "art-hedan",
+        "art-heda"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/dɐ/",
+          "notes": "Proclitic, unstressed before definite article"
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "di",
+      "masculine_form": null,
+      "plural_forms": [
+        "daw"
+      ],
+      "plural_form": "daw",
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "approved",
+      "audit_notes": "Proclitic / shortened attributive variant of primary lemma 'dan'.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-di",
+      "headword": "di",
+      "pos": "article",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ذِي",
+          "definition": "this (feminine singular bare demonstrative base)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "ذِهِ / هٰذِهِ",
+          "definition": "this (feminine singular Classical Arabic demonstrative)"
+        }
+      ],
+      "etymology_notes": "Direct continuation of the bare Arabic feminine demonstrative base ذِي (ḏī), preserving the original pre-analogical stem without suffixed -n or prefix hā- (Aquilina 1973: 16). Used as a proclitic attributive before feminine definite nouns (dil-mara, dil-ġimgħa).",
+      "definitions": [
+        {
+          "text_en": "this; proclitic and shortened attributive form of din, prefixed before feminine definite nouns or adjectives (as in dil-mara, dil-ġimgħa)",
+          "text_mt": "Għamla mqassra u proklitika tad-determinant dimostrattiv femminil 'din', użata quddiem l-artiklu ma' nom femminili (eż. dil-mara, dil-ġimgħa).",
+          "register": "standard",
+          "nuance": "proclitic determiner (attributive)"
+        },
+        {
+          "text_en": "used in temporal and situational expressions referring to the current feminine period or occasion (e.g. dil-ġimgħa 'this week', did-darba 'this time')",
+          "text_mt": "Użat f'espressjonijiet temporali u sitwazzjonali ma' nom femminili (eż. dil-ġimgħa, did-darba).",
+          "register": "standard",
+          "nuance": "temporal reference"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Dil-ġimgħa għandna diversi proġetti x'inlestu fuq ix-xogħol.",
+          "en": "This week we have several projects to finish at work."
+        },
+        {
+          "mt": "Did-darba rridu noqogħdu attenti biex ma nirripetux l-istess żball.",
+          "en": "This time we must be careful not to repeat the same mistake."
+        }
+      ],
+      "related_entries": [
+        "art-din",
+        "art-da",
+        "art-daw"
+      ],
+      "alternative_forms": [
+        "art-din",
+        "art-hedin",
+        "art-hedi"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/dɪ/",
+          "notes": "Proclitic, unstressed before definite article"
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": "da",
+      "plural_forms": [
+        "daw"
+      ],
+      "plural_form": "daw",
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "approved",
+      "audit_notes": "Proclitic / shortened attributive variant of companion lemma 'din'.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-daw",
+      "headword": "daw",
+      "pos": "article",
+      "gender": "common",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ذَو",
+          "definition": "these (plural bare proclitic base)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "أُولَاءِ",
+          "definition": "these (plural demonstrative root)"
+        }
+      ],
+      "etymology_notes": "Direct continuation of the bare plural demonstrative base without suffixed -n or prefix hā- (Aquilina 1973: 16). Used as a proclitic attributive before plural nouns (dawl-aħwa, dawl-affarijiet).",
+      "definitions": [
+        {
+          "text_en": "these; proclitic and shortened attributive form of dawn, prefixed before plural definite nouns and adjectives (as in dawl-aħwa, dawl-affarijiet)",
+          "text_mt": "Għamla mqassra u proklitika tad-determinant dimostrattiv plural 'dawn', użata quddiem l-artiklu ma' nom plural (eż. dawl-affarijiet, dawl-aħwa).",
+          "register": "standard",
+          "nuance": "proclitic determiner (attributive)"
+        },
+        {
+          "text_en": "used in plural temporal and situational expressions indicating the present epoch or ongoing days (e.g. dawż-żminijiet 'these times')",
+          "text_mt": "Użat f'espressjonijiet temporali plurali li jindikaw l-epoka kurrenti jew il-jiem preżenti (eż. dawż-żminijiet).",
+          "register": "standard",
+          "nuance": "temporal reference"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Dawl-aħwa dejjem kienu ta' għajnuna kbira għall-komunità.",
+          "en": "These brothers were always of great help to the community."
+        },
+        {
+          "mt": "F'dawż-żminijiet rari ssib min jieħu ħsieb l-ambjent kif suppost.",
+          "en": "In these times you rarely find anyone who looks after the environment properly."
+        }
+      ],
+      "related_entries": [
+        "art-dawn",
+        "art-da",
+        "art-di"
+      ],
+      "alternative_forms": [
+        "art-dawn",
+        "art-hedawn",
+        "art-hedaw"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/dɔw/",
+          "notes": "Proclitic, unstressed before definite article"
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "approved",
+      "audit_notes": "Proclitic / shortened attributive variant of companion lemma 'dawn'.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-hedan",
+      "headword": "hedan",
+      "pos": "article",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هٰذَا",
+          "definition": "this (masculine singular demonstrative with analogical -n)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "هَا + ذَا",
+          "definition": "compound of deictic particle hā- + base ḏā"
+        }
+      ],
+      "etymology_notes": "Directly derives from Classical/MSA هٰذَا (hāḏā), compounding the deictic alerting particle هَا (hā-) + demonstrative base ذَا (ḏā), with analogical -n and regular Maltese imāla (hā- > he-). Aquilina (1973: 16) notes this form survived 'confined to priests' sermons for oratorical effect' because sacred oratory preserved the elevated Classical/MSA compound with the deictic particle.",
+      "definitions": [
+        {
+          "text_en": "this; archaic and oratorical variant of dan, confined chiefly to priests' sermons, traditional preaching, and solemn ecclesiastical discourse for rhetorical effect",
+          "text_mt": "Varjant oratorju u arkajku ta' 'dan', limitat l-aktar għall-priedki tal-qassisin u diskorsi solenni tal-knisja għal effett retoriku.",
+          "register": "archaic (formal)",
+          "nuance": "oratorical (ecclesiastical) demonstrative"
+        },
+        {
+          "text_en": "used as an emphatic demonstrative pronoun to introduce a theological truth, mystery, or solemn pronouncement",
+          "text_mt": "Użat bħala pronom dimostrattiv enfatiku biex jippreżenta verità teoloġika, misteru jew stqarrija solenni.",
+          "register": "archaic (formal)",
+          "nuance": "pronoun (substantive)"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Hedan huwa l-misteru kbir tal-fidi li qegħdin niċċelebraw illum.",
+          "en": "This is the great mystery of faith that we are celebrating today."
+        },
+        {
+          "mt": "Hedan il-jum imqaddes ifakkarna fl-imħabba infinita ta' Alla.",
+          "en": "This holy day reminds us of God's infinite love."
+        }
+      ],
+      "related_entries": [
+        "art-dan",
+        "art-heda",
+        "art-hedin",
+        "art-hedawn"
+      ],
+      "alternative_forms": [
+        "art-dan",
+        "art-heda"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛː.dɐn/",
+          "notes": "Oratorical (liturgical) register"
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "hedin",
+      "masculine_form": null,
+      "plural_forms": [
+        "hedawn"
+      ],
+      "plural_form": "hedawn",
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "approved",
+      "audit_notes": "Confined to priests' sermons for oratorical effect; variant of primary lemma 'dan'.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-heda",
+      "headword": "heda",
+      "pos": "article",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هٰذَا",
+          "definition": "this (masculine singular demonstrative)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "هَا + ذَا",
+          "definition": "compound of deictic particle hā- + base ḏā"
+        }
+      ],
+      "etymology_notes": "Apocopated oratorical variant directly continuing Classical/MSA هٰذَا (hāḏā) without suffixed -n (hā- + ḏā > he- + da via imāla). Confined to sacred preaching and religious rhetoric for oratorical effect (Aquilina 1973: 16).",
+      "definitions": [
+        {
+          "text_en": "this; shortened oratorical variant of hedan, confined to religious oratory, liturgical sermons, and pulpit eloquence for rhetorical effect",
+          "text_mt": "Għamla mqassra ta' 'hedan', użata fil-priedki tal-qassisin u l-oratorija reliġjuża għal effett retoriku.",
+          "register": "archaic (formal)",
+          "nuance": "oratorical (ecclesiastical) demonstrative"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Heda hu l-għemil li bih nuru s-spirtu Nisrani veru.",
+          "en": "This is the deed whereby we display the true Christian spirit."
+        }
+      ],
+      "related_entries": [
+        "art-dan",
+        "art-hedan",
+        "art-hedi",
+        "art-hedaw"
+      ],
+      "alternative_forms": [
+        "art-dan",
+        "art-hedan"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛː.dɐ/",
+          "notes": "Oratorical (liturgical) register"
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "hedi",
+      "masculine_form": null,
+      "plural_forms": [
+        "hedaw"
+      ],
+      "plural_form": "hedaw",
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "approved",
+      "audit_notes": "Confined to priests' sermons for oratorical effect; apocopated variant of 'hedan'.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-hedin",
+      "headword": "hedin",
+      "pos": "article",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هٰذِي",
+          "definition": "this (feminine singular dialectal demonstrative with analogical -n)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "هٰذِهِ",
+          "definition": "this (feminine singular Classical Arabic demonstrative)"
+        }
+      ],
+      "etymology_notes": "Derives from Classical/MSA feminine demonstrative هٰذِهِ (hāḏihī) / هٰذِي (hāḏī) with prefixed deictic particle هَا (hā-) and analogical -n, raised via Maltese imāla (hā- > he-). Confined to priests' sermons and sacred oratory for oratorical effect (Aquilina 1973: 16).",
+      "definitions": [
+        {
+          "text_en": "this; archaic and oratorical feminine variant of din, confined chiefly to priests' sermons and sacred rhetoric for oratorical effect",
+          "text_mt": "Varjant oratorju u arkajku femminil ta' 'din', limitat prinċipalment għall-priedki tal-qassisin u d-diskors reliġjuż għal effett retoriku.",
+          "register": "archaic (formal)",
+          "nuance": "oratorical (ecclesiastical) demonstrative"
+        },
+        {
+          "text_en": "used as an emphatic feminine demonstrative pronoun to introduce a sacred virtue, grace, or teaching",
+          "text_mt": "Użat bħala pronom dimostrattiv enfatiku femminil biex jippreżenta virtù, grazzja jew tagħlima sagra.",
+          "register": "archaic (formal)",
+          "nuance": "pronoun (substantive)"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Hedin hija l-grazzja li Alla ssawwab fuq il-poplu tiegħu.",
+          "en": "This is the grace that God poured upon his people."
+        },
+        {
+          "mt": "Hedin is-siegħa li fiha rridu niftħu qalbna għall-maħfra.",
+          "en": "This is the hour in which we must open our hearts to forgiveness."
+        }
+      ],
+      "related_entries": [
+        "art-din",
+        "art-hedan",
+        "art-hedi",
+        "art-hedawn"
+      ],
+      "alternative_forms": [
+        "art-din",
+        "art-hedi"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛː.dɪn/",
+          "notes": "Oratorical (liturgical) register"
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": "hedan",
+      "plural_forms": [
+        "hedawn"
+      ],
+      "plural_form": "hedawn",
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "approved",
+      "audit_notes": "Confined to priests' sermons for oratorical effect; variant of companion lemma 'din'.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-hedi",
+      "headword": "hedi",
+      "pos": "article",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هٰذِي",
+          "definition": "this (feminine singular dialectal demonstrative)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "هٰذِهِ",
+          "definition": "this (feminine singular Classical Arabic demonstrative)"
+        }
+      ],
+      "etymology_notes": "Apocopated feminine variant directly continuing Classical/MSA هٰذِي (hāḏī) without suffixed -n (hā- + ḏī > he- + di via imāla). Confined to sacred rhetoric and priests' sermons (Aquilina 1973: 16).",
+      "definitions": [
+        {
+          "text_en": "this; shortened oratorical variant of hedin, confined to priests' sermons and liturgical preaching for rhetorical effect",
+          "text_mt": "Għamla mqassra ta' 'hedin', użata fl-oratorija sagra u l-priedki tal-qassisin għal effett retoriku.",
+          "register": "archaic (formal)",
+          "nuance": "oratorical (ecclesiastical) demonstrative"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Hedi hi t-triq tas-sewwa li rridu nimxu fiha.",
+          "en": "This is the path of truth that we must walk in."
+        }
+      ],
+      "related_entries": [
+        "art-din",
+        "art-hedin",
+        "art-heda",
+        "art-hedaw"
+      ],
+      "alternative_forms": [
+        "art-din",
+        "art-hedin"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛː.dɪ/",
+          "notes": "Oratorical (liturgical) register"
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": "heda",
+      "plural_forms": [
+        "hedaw"
+      ],
+      "plural_form": "hedaw",
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "approved",
+      "audit_notes": "Confined to priests' sermons for oratorical effect; apocopated variant of 'hedin'.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-hedawn",
+      "headword": "hedawn",
+      "pos": "article",
+      "gender": "common",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هٰذُون",
+          "definition": "these (plural demonstrative with nasal suffix -ūn)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "هٰؤُلَاءِ",
+          "definition": "these (common plural Classical Arabic demonstrative)"
+        }
+      ],
+      "etymology_notes": "Derives from dialectal Arabic plural demonstrative with deictic prefix هَا (hā-), cognate with Maghrebi hadun / hadhuna and Classical/dialectal hādūn (هٰذُون). Preserved with imāla (hā- > he-) in Maltese pulpit oratory ('confined to priests' sermons for oratorical effect', Aquilina 1973: 16).",
+      "definitions": [
+        {
+          "text_en": "these; archaic and oratorical plural variant of dawn, confined chiefly to priests' sermons and pulpit eloquence for oratorical effect",
+          "text_mt": "Varjant oratorju u arkajku plural ta' 'dawn', limitat prinċipalment għall-priedki tal-kleru u d-diskors reliġjuż għal effett retoriku.",
+          "register": "archaic (formal)",
+          "nuance": "oratorical (ecclesiastical) demonstrative"
+        },
+        {
+          "text_en": "used as an emphatic plural demonstrative pronoun to introduce solemn commandments, sacred words, or witnesses",
+          "text_mt": "Użat bħala pronom dimostrattiv enfatiku plural biex jippreżenta kmandamenti, kliem qaddis jew xhieda solenni.",
+          "register": "archaic (formal)",
+          "nuance": "pronoun (substantive)"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Hedawn huma l-kliem qaddisa li ħallielna l-fundatur f'dan il-ktieb.",
+          "en": "These are the holy words that the founder left us in this book."
+        },
+        {
+          "mt": "Hedawn in-nies tajba huma l-mudell ħaj tal-komunità tagħna.",
+          "en": "These good people are the living model of our community."
+        }
+      ],
+      "related_entries": [
+        "art-dawn",
+        "art-hedan",
+        "art-hedin",
+        "art-hedaw"
+      ],
+      "alternative_forms": [
+        "art-dawn",
+        "art-hedaw"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛː.dɔwn/",
+          "notes": "Oratorical (liturgical) register"
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "approved",
+      "audit_notes": "Confined to priests' sermons for oratorical effect; variant of companion lemma 'dawn'.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "art-hedaw",
+      "headword": "hedaw",
+      "pos": "article",
+      "gender": "common",
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maghrebi Arabic",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "sources": [
+        {
+          "source_id": "src-aquilina-1973",
+          "citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8: 16.",
+          "title": "Maltese Etymological Glossary",
+          "author": "Joseph Aquilina",
+          "year": 1973,
+          "page": "16",
+          "publisher": "Journal of Maltese Studies (University of Malta)",
+          "role": "primary attestation & register documentation"
+        },
+        {
+          "source_id": "src-brincat-2011",
+          "citation": "Brincat, J. M. (2011). Maltese and Other Languages: A Linguistic History of Malta, pp. 41–56.",
+          "title": "Maltese and Other Languages: A Linguistic History of Malta",
+          "author": "Joseph M. Brincat",
+          "year": 2011,
+          "page": "41–56",
+          "publisher": "Midsea Books",
+          "role": "historical linguistics & refutation of Punic substratum"
+        },
+        {
+          "source_id": "src-borg-1978",
+          "citation": "Borg, A. (1978). Historical Aspects of Maltese Phonology, pp. 68–74.",
+          "title": "Historical Aspects of Maltese Phonology",
+          "author": "Alexander Borg",
+          "year": 1978,
+          "page": "68–74",
+          "publisher": "Hebrew University of Jerusalem",
+          "role": "morphophonology & analogical leveling"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هٰذَو",
+          "definition": "these (plural dialectal demonstrative)"
+        },
+        {
+          "relationship": "From",
+          "language": "Classical Arabic",
+          "term": "هٰؤُلَاءِ",
+          "definition": "these (common plural Classical Arabic demonstrative)"
+        }
+      ],
+      "etymology_notes": "Apocopated plural variant reflecting the compound of deictic hā- (he-) + plural base daw without suffixed -n. Confined to priests' sermons and liturgical rhetoric for oratorical effect (Aquilina 1973: 16).",
+      "definitions": [
+        {
+          "text_en": "these; shortened oratorical variant of hedawn, confined to ecclesiastical oratory and priests' sermons for rhetorical effect",
+          "text_mt": "Għamla mqassra ta' 'hedawn', użata fil-priedki reliġjużi għal effett retoriku.",
+          "register": "archaic (formal)",
+          "nuance": "oratorical (ecclesiastical) demonstrative"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Hedaw huma t-tagħlimiet li rridu ngħaddu lil uliedna f'kull żmien.",
+          "en": "These are the teachings that we must pass on to our children in every age."
+        }
+      ],
+      "related_entries": [
+        "art-dawn",
+        "art-hedawn",
+        "art-heda",
+        "art-hedi"
+      ],
+      "alternative_forms": [
+        "art-dawn",
+        "art-hedawn"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛː.dɔw/",
+          "notes": "Oratorical (liturgical) register"
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "approved",
+      "audit_notes": "Confined to priests' sermons for oratorical effect; apocopated variant of 'hedawn'.",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "n-liema",
+      "headword": "liema",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "liema",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Uncertain",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "etymology_chain": [],
+      "etymology_notes": "Aquilina (1973: 16): Oratorical masculine demonstrative with prefixed particle he- (hā-). Aquilina notes: 'all forms still in current use, those with initial he, being confined to priests' sermons for oratorical effect'.",
+      "definitions": [
+        {
+          "text_en": "which, what (interrogative)",
+          "text_mt": "Pronomu interrogattiv użat fil-mistoqsijiet dwar għażla.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Liema ktieb trid taqra mit-tnejn li hemm fuq il-mejda?",
+          "en": "Which book do you want to read of the two on the table?"
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɪː.mɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 22,
+      "source_frequency_rank": 22,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "pron-xi",
+      "headword": "xi",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "xi",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: xi (Alternative spelling of x')",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/xi",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "أَيّ شَيْء",
+          "definition": "what thing"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "some, any",
+          "text_mt": "Pronom li jindika ammont mhux magħruf.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għandek xi mistoqsija dwar il-proġett?",
+          "en": "Do you have any question about the project?"
+        }
+      ],
+      "related_entries": [
+        "pron-x"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "x'",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɪ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 23,
+      "source_frequency_rank": 23,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "pron-huwa",
+      "headword": "huwa",
+      "pos": "pronoun",
+      "definitions": [
+        {
+          "text_en": "he ( third-person masculine singular subject pronoun )",
+          "text_mt": null
+        }
+      ],
+      "gender": null,
+      "root_consonants": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/huwa",
+      "source_citation": "Wiktionary: huwa",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هُوَ",
+          "definition": "be, he, it"
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [
+        {
+          "headword": "hu",
+          "type": "orthographic"
+        }
+      ],
+      "related_entries": [],
+      "rank": 24,
+      "source_frequency_rank": 24,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "rank": 26,
+      "source_frequency_rank": 26,
+      "id": "p-inti",
+      "headword": "inti",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "etymology_chain": [],
+      "etymology_notes": "Aquilina (1973: 16): Apocopated oratorical variant of hedan, used in sacred rhetoric and priests' sermons for oratorical effect (Aquilina 1973: 16).",
+      "definitions": [
+        {
+          "text_en": "you",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "rank": 35,
+      "source_frequency_rank": 35,
+      "id": "p-aħna",
+      "headword": "aħna",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "etymology_chain": [],
+      "etymology_notes": "Aquilina (1973: 16): Oratorical feminine demonstrative (he- + din). Confined to priests' sermons and ecclesiastical rhetoric for oratorical effect (Aquilina 1973: 16).",
+      "definitions": [
+        {
+          "text_en": "we",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "rank": 38,
+      "source_frequency_rank": 38,
+      "id": "n-oħra",
+      "headword": "oħra",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "etymology_chain": [],
+      "etymology_notes": "Aquilina (1973: 16): Apocopated oratorical variant of hedin, confined to religious oratory and priests' sermons (Aquilina 1973: 16).",
+      "definitions": [
+        {
+          "text_en": "other",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "n-kull",
+      "headword": "kull",
+      "pos": "pronoun",
+      "definitions": [
+        {
+          "text_en": "every, each",
+          "text_mt": "Determinant użat biex jindika kull parti u membru minn grupp jew persuni.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "gender": null,
+      "root_consonants": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/kull",
+      "source_citation": "Wiktionary: kull",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "usage_examples": [
+        {
+          "mt": "Kull tifel rċieva rigal sabiħ f'jum il-festa.",
+          "en": "Every child received a nice gift on the day of the feast."
+        }
+      ],
+      "rank": 49,
+      "source_frequency_rank": 49,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #120)*",
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "rank": 101,
+      "source_frequency_rank": 101,
+      "id": "n-kwalunkwe",
+      "headword": "kwalunkwe",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-aquilina-1973",
+      "source_citation": "Aquilina, J. (1973). Maltese Etymological Glossary. Journal of Maltese Studies, 8, p. 16.",
+      "source_title": "Maltese Etymological Glossary",
+      "source_year": 1973,
+      "source_page": "16",
+      "source_publisher": "Journal of Maltese Studies (University of Malta)",
+      "etymology_chain": [],
+      "etymology_notes": "Aquilina (1973: 16): Apocopated oratorical plural variant of hedawn, confined to ecclesiastical rhetoric and priests' sermons (Aquilina 1973: 16).",
+      "definitions": [
+        {
+          "text_en": "any",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "pron-istess",
+      "headword": "istess",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "istess",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: istess (Alternative spelling of stess)",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/istess",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "stesso",
+          "definition": null
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "stessu",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "-self",
+          "text_mt": "Tifsira u deskrizzjoni li tikkorrispondi għal -self.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Uża l-espressjoni 'istess' b'mod korrett u spiss fil-kitba.",
+          "en": "He used the expression 'istess' correctly and often in writing."
+        }
+      ],
+      "related_entries": [
+        "pron-stess"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "stess",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɪs.tɛss/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 149,
+      "source_frequency_rank": 149,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "pron-hi",
+      "headword": "hi",
+      "pos": "pronoun",
+      "definitions": [
+        {
+          "text_en": "she",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "source_language": "Uncertain",
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/hi",
+      "source_citation": "Wiktionary: hi (Alternative spelling of hija)",
+      "source_publisher": "Wiktionary",
+      "tags": [
+        "alternative-form"
+      ],
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هِيَ",
+          "definition": "be, she, it"
+        }
+      ],
+      "alternative_forms": [
+        {
+          "headword": "hija",
+          "type": "orthographic"
+        }
+      ],
+      "related_entries": [
+        "pron-hija"
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "rank": 150,
+      "source_frequency_rank": 150,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "rank": 151,
+      "source_frequency_rank": 151,
+      "id": "n-kollha",
+      "headword": "kollha",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "all",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "pron-stess",
+      "headword": "stess",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "stess",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: stess",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/stess",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "stesso",
+          "definition": null
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "stessu",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "-self",
+          "text_mt": "Tifsira u deskrizzjoni li tikkorrispondi għal -self.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ir-raġel uża l-kelma 'stess' waqt id-diskors.",
+          "en": "The man used the word 'stess' during the speech."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "istess",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈstɛss/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 203,
+      "source_frequency_rank": 203,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "n-dawk",
+      "headword": "dawk",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "dawk",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Uncertain",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: dawk",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/dawk",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "money",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal money.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kelma “dawk” dehret f'sentenza li tispjega money.",
+          "en": "The word “dawk” appeared in a sentence illustrating money."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "dawka",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐwk/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 289,
+      "source_frequency_rank": 289,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    },
+    {
+      "id": "pron-xejn",
+      "headword": "xejn",
+      "pos": "pronoun",
+      "gender": null,
+      "root_consonants": "x-j-n",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: xejn",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/xejn",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "شَيْئًا",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "nothing, not anything",
+          "text_mt": "Ebda oġġett jew valur fil-post.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ma qal xejn dwar it-trattat u żamm il-silezju.",
+          "en": "He said nothing about the treaty and stayed silent."
+        }
+      ],
+      "related_entries": [
+        "pron-xi",
+        "pron-xiex",
+        "n-x"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɛjn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "---",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 353,
+      "source_frequency_rank": 353,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Pronouns & Determiners",
+      "theme_id": "pronouns_determiners"
+    }
+  ]
+}

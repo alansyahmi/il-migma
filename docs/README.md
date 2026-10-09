@@ -15,6 +15,8 @@
 | [conventions.md](./conventions.md) | Naming Conventions — files, functions, DB columns, IDs |
 | [edge-cases.md](./edge-cases.md) | Edge Case Encyclopedia — bugs we fixed, and how to never repeat them |
 | [linguistic-rules.md](./linguistic-rules.md) | Linguistic & Logic Rules — the phonology baked into the conjugation engine |
+| [1000-most-common-maltese-words-audit.md](./1000-most-common-maltese-words-audit.md) | Quality & Lexical Audit Checklist — 1,000 common words frequency audit |
+| [1000-words-categories/](./1000-words-categories/index.json) | Thematic JSON splits — 1,000 common words categorized into individual JSON files |
 
 ## Quick Architecture Overview
 

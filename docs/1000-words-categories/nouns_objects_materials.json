@@ -1,0 +1,1980 @@
+{
+  "category_id": "nouns_objects_materials",
+  "category_title": "Nouns: Objects, Tools & Materials",
+  "total_entries": 20,
+  "entries": [
+    {
+      "id": "n-paġna",
+      "headword": "paġna",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "paġna",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: paġna",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/pa%C4%A1na",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "pagina",
+          "definition": "variant of pàggina"
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "pàgina",
+          "definition": "variant of pàggina"
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "pāgina",
+          "definition": "a written page, leaf, sheet ( transferred ) a piece of writing a ( bronze ) plaque on the pedestal for statues listing the person 's titles, offices and merits ( Medieval Latin ) a legal document ( charter, will )"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "page (book)",
+          "text_mt": "Wiċċ wieħed minn folja tal-karta f'ktieb jew gazzetta.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fetaħ il-paġna għaxra tal-ktieb biex jaqra l-kapitlu.",
+          "en": "He opened page ten of the book to read the chapter."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈpɐd͡ʒ.nɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "paġni",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "paġni",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 204,
+      "source_frequency_rank": 204,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-ktieb",
+      "headword": "ktieb",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "k-t-b",
+      "stem": null,
+      "cv_pattern": "12â3",
+      "morph_pattern": "C1C2âC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ktieb",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ktieb",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "كِتَاب",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "book",
+          "text_mt": "Sett ta' paġni stampati u magħqudin flimkien bil-qoxra li jkun fihom test jew storja.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Qara ktieb interessanti dwar l-istorja tal-gżejjer Maltin.",
+          "en": "He read an interesting book about the history of the Maltese islands."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈktɪːp/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "kotba",
+          "pattern": "1v23a"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "kotba",
+          "pattern": "1v23a"
+        }
+      ],
+      "vowel_set_sg": "--ie",
+      "vowel_set_pl": "o--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 251,
+      "source_frequency_rank": 251,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-karta",
+      "headword": "karta",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "kart",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: karta",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/karta",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "carta",
+          "definition": null
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "carta",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "charta",
+          "definition": "papyrus, paper"
+        },
+        {
+          "relationship": "From",
+          "language": "Ancient Greek",
+          "term": "χάρτης",
+          "definition": "sheet of paper; paper"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "paper",
+          "text_mt": "Materjal irqiq u ċatt magħmul minn fibra tal-injam użat għall-kitba, l-istampar u l-ippakkjar.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "piece of paper, sheet of paper",
+          "text_mt": "Fojl jew werqa singula ta' karta.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "card",
+          "text_mt": "Karta iebsa jew plastik b'informazzjoni stampata.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "documents",
+          "text_mt": "Dokumenti u karti uffiċjali.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kiteb in-noti tiegħu fuq karta bajda b'pinna bajda.",
+          "en": "He wrote his notes on a white sheet of paper with a black pen."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɐr.tɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "karten",
+          "pattern": "1v23en"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "karten",
+          "pattern": "1v23en"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 285,
+      "source_frequency_rank": 285,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #933)*",
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-rota",
+      "headword": "rota",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "rota",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: rota",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/rota",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "rota",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "rota",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "wheel",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal wheel.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "bicycle",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal bicycle.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-użu ta' rota kien prominenti u utli ħafna fil-ħajja.",
+          "en": "The use of wheel was prominent and very useful in life."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɔː.tɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "roti",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "roti",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 356,
+      "source_frequency_rank": 356,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-magna",
+      "headword": "magna",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "magna",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: magna",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/magna",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "màchina",
+          "definition": "automobile, machine"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "machine, engine",
+          "text_mt": "Apparat mekkaniku jew elettriku użat biex jaħdem u jmexxi l-vetturi.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-magna tal-karozza bdiet taħdem bla ebda storbju.",
+          "en": "The car engine started working without any noise."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "makna",
+          "type": "orthographic"
+        },
+        {
+          "headword": "makina",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɐɡ.nɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "magni",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "magni",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 411,
+      "source_frequency_rank": 411,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #545)*",
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-kaxxa",
+      "headword": "kaxxa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "kaxx",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: kaxxa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/kaxxa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "cascia",
+          "definition": "box"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "box, case, chest",
+          "text_mt": "Kontenitur b'forma kwadra jew rettangolari bil-kopertura użat biex jinżammu l-oġġetti.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "pot, kitty",
+          "text_mt": "Ammont ta' flus miġbura flimkien għal għan jew f'logħba.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "plot",
+          "text_mt": "Komplo jew pjan fittizju f'dramm jew film.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ftaħt il-kaxxa tal-injam u sibt ittri antiki fiha.",
+          "en": "I opened the wooden box and found old letters inside it."
+        }
+      ],
+      "related_entries": [
+        "n-kaxxabank",
+        "n-kaxxaforti",
+        "n-kaxxarizz",
+        "n-kaxxettun",
+        "n-kaxxier",
+        "n-kexxun"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɐʃ.ʃɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "kaxxi",
+          "pattern": "-i"
+        },
+        {
+          "form": "kaxex",
+          "pattern": "1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "kaxxi",
+          "pattern": "-i"
+        },
+        {
+          "form": "kaxex",
+          "pattern": "1v2v3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 417,
+      "source_frequency_rank": 417,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-sodda",
+      "headword": "sodda",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "s-d-d",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: sodda",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/sodda",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "سُدّة",
+          "definition": "door, threshold; seat, bed"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "bed",
+          "text_mt": "Għamara maħsuba biex wieħed jorqod u jistrieħ fuqha.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tifel mar jorqod fis-sodda tiegħu f'ħin uffiċjali.",
+          "en": "The boy went to sleep in his bed at an official time."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɔd.dɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "sodod",
+          "pattern": "1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sodod",
+          "pattern": "1v2v3"
+        }
+      ],
+      "vowel_set_sg": "o--",
+      "vowel_set_pl": "o-o",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 504,
+      "source_frequency_rank": 504,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "rank": 550,
+      "source_frequency_rank": 550,
+      "id": "n-materjal",
+      "headword": "materjal",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "material",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-ħġieġ",
+      "headword": "ħġieġ",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "glass",
+          "text_mt": null
+        }
+      ],
+      "gender": "masculine",
+      "root_consonants": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A7%C4%A1ie%C4%A1",
+      "source_citation": "Wiktionary: ħġieġ",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "زُجاج",
+          "definition": "glass"
+        }
+      ],
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "ħġieġa",
+      "dual_form": null,
+      "paucal_form": "ħġiġiet",
+      "feminine_form": "ħġieġa",
+      "masculine_form": "ħġieġ",
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [
+        {
+          "headword": "żġieġ",
+          "type": "orthographic"
+        }
+      ],
+      "related_entries": [],
+      "rank": 577,
+      "source_frequency_rank": 577,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-ċavetta",
+      "headword": "ċavetta",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "ċavetta",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ċavetta",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/%C4%8Bavetta",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "ciavetta",
+          "definition": null
+        },
+        {
+          "relationship": "Of",
+          "language": "Latin",
+          "term": "clavis",
+          "definition": null
+        },
+        {
+          "relationship": "Cognate to",
+          "language": "Italian",
+          "term": "chiavetta",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "key",
+          "text_mt": "Li għandu x'jaqsam ma' ċavetta fl-użu u t-tifsira uffiċjali.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/t͡ʃɐˈvɛt.tɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ċwievet",
+          "pattern": "1wâ2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ċwievet",
+          "pattern": "1wâ2v3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 690,
+      "source_frequency_rank": 690,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-ħadid",
+      "headword": "ħadid",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "( chemistry ) iron ( metal )",
+          "text_mt": null
+        }
+      ],
+      "gender": "masculine",
+      "root_consonants": "ħ-d-d",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A7adid",
+      "source_citation": "Wiktionary: ħadid",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "حَدِيد",
+          "definition": "barbell, iron, iron"
+        }
+      ],
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "ħadida",
+      "dual_form": null,
+      "paucal_form": "ħadidiet",
+      "feminine_form": "ħadida",
+      "masculine_form": "ħadid",
+      "plural_forms": [
+        {
+          "form": "ħdejjed",
+          "pattern": null
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħdejjed",
+          "pattern": null
+        }
+      ],
+      "vowel_set_sg": "a-i",
+      "vowel_set_pl": "e-e",
+      "vowel_set_dual": null,
+      "vowel_set_opp": "a-i-a",
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [
+        "n-ħadida-tal-mogħdija"
+      ],
+      "rank": 691,
+      "source_frequency_rank": 691,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "rank": 709,
+      "source_frequency_rank": 709,
+      "id": "n-metall",
+      "headword": "metall",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "metal",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-arloġġ",
+      "headword": "arloġġ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "arloġġ",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: arloġġ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/arlo%C4%A1%C4%A1",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "raloggiu",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "hōrologium",
+          "definition": null
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "Ancient Greek",
+          "term": "ὡρολόγιον",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "clock, watch",
+          "text_mt": "Apparat li juri l-ħin u s-sigħat tal-jum.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-arloġġ tal-ħajt daqq fit-tnax ta' nofsinhar.",
+          "en": "The wall clock struck twelve noon."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐr.lɔd͡ʒt͡ʃ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "arloġġi",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "arloġġi",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 831,
+      "source_frequency_rank": 831,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "rank": 862,
+      "source_frequency_rank": 862,
+      "id": "n-korda",
+      "headword": "korda",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "chord",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "rank": 871,
+      "source_frequency_rank": 871,
+      "id": "n-xierqa",
+      "headword": "xierqa",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "proper",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-qoxra",
+      "headword": "qoxra",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "q-x-r",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: qoxra",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/qoxra",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قِشْرَة",
+          "definition": "peel, bark, cortex"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "bark, shell, rind, crust, book cover",
+          "text_mt": "Il-parti ta' barra iebsa u niexfa tal-frotta, tas-siġra jew tal-ktieb.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Neħħew il-qoxra tal-larinġa qabel ma kielha.",
+          "en": "They removed the orange peel before he ate it."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "qixra",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɔʃ.rɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": "qoxriet",
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "qxur",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "qxur",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "o--",
+      "vowel_set_pl": "--u",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 899,
+      "source_frequency_rank": 899,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-azzar",
+      "headword": "azzar",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "azzar",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: azzar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/azzar",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "azzaru",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "aciarium",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "steel (metal)",
+          "text_mt": "Għandu x'jaqsam ma' steel (metal).",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [
+        "v-azzara",
+        "adj-azzari"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɐtˈt͡sɐːr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 920,
+      "source_frequency_rank": 920,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-ħabel",
+      "headword": "ħabel",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "rope",
+          "text_mt": null
+        },
+        {
+          "text_en": "enclosure, strip",
+          "text_mt": null
+        },
+        {
+          "text_en": "coil spring",
+          "text_mt": null
+        }
+      ],
+      "gender": "masculine",
+      "root_consonants": "ħ-b-l",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A7abel",
+      "source_citation": "Wiktionary: ħabel",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "حَبْل",
+          "definition": "beam, cable, cord"
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ħbula",
+          "pattern": null
+        },
+        {
+          "form": "eħbiel",
+          "pattern": null
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħbula",
+          "pattern": null
+        },
+        {
+          "form": "eħbiel",
+          "pattern": null
+        }
+      ],
+      "vowel_set_sg": "a-e",
+      "vowel_set_pl": "u-a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "rank": 935,
+      "source_frequency_rank": 935,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-għodda",
+      "headword": "għodda",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "għ-d-d",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: għodda",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/g%C4%A7odda",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عُدَّة",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "tool",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'għodda': tool.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "instrument",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'għodda': instrument.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għodda kien f'postu fil-bini u fl-użu ta' kuljum.",
+          "en": "The għodda was in its proper place in daily use."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɔd.dɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "għodod",
+          "pattern": "1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "għodod",
+          "pattern": "1v2v3"
+        }
+      ],
+      "vowel_set_sg": "o--",
+      "vowel_set_pl": "o-o",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 942,
+      "source_frequency_rank": 942,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    },
+    {
+      "id": "n-proprjetà",
+      "headword": "proprjetà",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "proprjetà",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: proprjetà",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/proprjet%C3%A0",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "proprietà",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "property",
+          "text_mt": "Dar jew bini jew art pussess ta' persuna bir-rekords legali.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Bnew proprjetà ġdida fl-inħawi tar-Rabat.",
+          "en": "They built a new property in the Rabat area."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "propjetà",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/prɔpr.jɛˈtɐː/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "proprjetajiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "proprjetajiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 985,
+      "source_frequency_rank": 985,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Objects, Tools & Materials",
+      "theme_id": "nouns_objects_materials"
+    }
+  ]
+}

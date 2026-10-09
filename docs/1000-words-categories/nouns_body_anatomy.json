@@ -1,0 +1,3185 @@
+{
+  "category_id": "nouns_body_anatomy",
+  "category_title": "Nouns: Body & Anatomy",
+  "total_entries": 33,
+  "entries": [
+    {
+      "rank": 64,
+      "source_frequency_rank": 64,
+      "id": "n-idejn",
+      "headword": "idejn",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "hand",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-art",
+      "headword": "art",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "art",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: art",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/art",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَرْض",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "earth, land, soil, country",
+          "text_mt": "Il-pjaneta, il-ħamrija jew il-pajjiż fejn ngħixu.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħadmu l-art b'impenn kbir fir-rebbiegħa.",
+          "en": "They worked the land with great commitment in spring."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "ard",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐrt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "artijiet",
+          "pattern": "-ijiet"
+        },
+        {
+          "form": "iradi",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "artijiet",
+          "pattern": "-ijiet"
+        },
+        {
+          "form": "iradi",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 70,
+      "source_frequency_rank": 70,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #464, #720)*",
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-sena",
+      "headword": "sena",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "sena",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: sena",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/sena",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَنَة",
+          "definition": "twelvemonth, year, yearlong"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "year",
+          "text_mt": "Perjodu ta' 365 jum jew 12-il xahar.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Din is-sena kellna ħafna xita tajba għar-raba'.",
+          "en": "This year we had a lot of good rain for the crops."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛː.nɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "sentejn",
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "snin",
+          "pattern": "-in"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "snin",
+          "pattern": "-in"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 117,
+      "source_frequency_rank": 117,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-ras",
+      "headword": "ras",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "r-j-s",
+      "stem": null,
+      "cv_pattern": "1v3",
+      "morph_pattern": "C1vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ras",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ras",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "رَأْس",
+          "definition": "head, vertex, acme"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "head",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal head.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "a single animal or person.",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal a single animal or person..",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "beginning",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal beginning.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "front part",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal front part.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "promontory, headland, cape",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal promontory, headland, cape.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "chief, leader",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal chief, leader.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "bulb (of garlic)",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal bulb.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "top",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal top.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "intellect",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal intellect.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "chapters",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal chapters.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-użu ta' ras kien prominenti u utli ħafna fil-ħajja.",
+          "en": "The use of head was prominent and very useful in life."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɐs/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "rasejn",
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "rjus",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "rjus",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "---",
+      "vowel_set_pl": "---",
+      "vowel_set_dual": "--a",
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 201,
+      "source_frequency_rank": 201,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-għajn",
+      "headword": "għajn",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "għ-j-n",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: għajn",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/g%C4%A7ajn",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَيْن",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "eye",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'għajn': eye.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "the evil eye",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'għajn': the evil eye.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għajn kien f'postu fil-bini u fl-użu ta' kuljum.",
+          "en": "The għajn was in its proper place in daily use."
+        }
+      ],
+      "related_entries": [
+        "v-għajjen",
+        "n-għatu-tal-għajn"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐjn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "għajnejn",
+          "pattern": "1v23vj3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "għajnejn",
+          "pattern": "1v23vj3"
+        }
+      ],
+      "vowel_set_sg": "a--",
+      "vowel_set_pl": "a--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 222,
+      "source_frequency_rank": 222,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "intj-ħa",
+      "headword": "ħa",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "Used to mark the completion of giving or handing something to someone; here you go, there.",
+          "text_mt": null
+        },
+        {
+          "text_en": "( by extension ) Used as a discourse marker to interrupt, soften, or redirect an utterance, especially to avoid or mitigate a swear or emotionally charged expression.",
+          "text_mt": null
+        }
+      ],
+      "gender": null,
+      "root_consonants": "'-ħ-d",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A7a",
+      "source_citation": "Wiktionary: ħa",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "أَخَذَ",
+          "definition": "chow, eat, get"
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "a--",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "rank": 253,
+      "source_frequency_rank": 253,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "rank": 265,
+      "source_frequency_rank": 265,
+      "id": "n-tisma",
+      "headword": "tisma",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "hear",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-wiċċ",
+      "headword": "wiċċ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "w-ċ-ċ",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: wiċċ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/wi%C4%8B%C4%8B",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "وَجْه",
+          "definition": "face, facet, persona"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "face, surface",
+          "text_mt": "Il-parti ta' quddiem tar-ras jew il-parti ta' fuq ta' oġġett.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Naddaf wiċċu mill-ilma wara l-mistrieħ.",
+          "en": "He cleaned his face with water after rest."
+        }
+      ],
+      "related_entries": [
+        "n-twiċċeċ",
+        "n-twiċċiċ",
+        "n-weċċa",
+        "n-wiċċeċ",
+        "n-wiċċieni"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɪt͡ʃt͡ʃ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "wċuħ",
+          "pattern": "12uħ"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "wċuħ",
+          "pattern": "12uħ"
+        }
+      ],
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": "---",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 271,
+      "source_frequency_rank": 271,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #362)*",
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "rank": 316,
+      "source_frequency_rank": 316,
+      "id": "n-korp",
+      "headword": "korp",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "body",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-blat",
+      "headword": "blat",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "blat",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: blat",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/blat",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "بَلَاط",
+          "definition": "tiles, paved surface"
+        },
+        {
+          "relationship": "From",
+          "language": "Ancient Greek",
+          "term": "πλατεῖα",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "rock, stone surface",
+          "text_mt": "Massa kbira ta' ġebel iebes magħmul mit-natura.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Bnew id-dar fuq il-blat solidu tar-raħal.",
+          "en": "They built the house on the solid rock of the village."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈblɐt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "blata",
+      "dual_form": null,
+      "paucal_form": "blatiet",
+      "feminine_form": "blata",
+      "masculine_form": "blat",
+      "plural_forms": [
+        {
+          "form": "blajjet",
+          "pattern": "12vjjv3"
+        },
+        {
+          "form": "blejjet",
+          "pattern": "12vjjv3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "blajjet",
+          "pattern": "12vjjv3"
+        },
+        {
+          "form": "blejjet",
+          "pattern": "12vjjv3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 337,
+      "source_frequency_rank": 337,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-sieq",
+      "headword": "sieq",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "sieq",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: sieq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/sieq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَاق",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "leg, foot",
+          "text_mt": "Il-parti t'isfel tal-ġisem użata għall-mixi.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kisser siequ meta waqa' minn fuq is-sellum u mar l-sptar.",
+          "en": "He broke his leg when he fell from the ladder and went to the hospital."
+        }
+      ],
+      "related_entries": [
+        "n-qasba-tas-sieq"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɪːʔ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "saqajn",
+          "pattern": null
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "saqajn",
+          "pattern": null
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 366,
+      "source_frequency_rank": 366,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-lingwa",
+      "headword": "lingwa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "lingwa",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: lingwa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/lingwa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "lingua",
+          "definition": null
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "lingua",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "lingua",
+          "definition": "the tongue"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "language, tongue",
+          "text_mt": "Il-mezz u s-sistema uffiċjali tat-taħdit u l-kitba minn poplu.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-Malti huwa l-lingwa nazzjonali u uffiċjali tal-pajjiż.",
+          "en": "Maltese is the national and official language of the country."
+        }
+      ],
+      "related_entries": [
+        "n-lingwaġġ",
+        "adj-lingwistiku"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɪnɡ.wɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "lingwi",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "lingwi",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 399,
+      "source_frequency_rank": 399,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "rank": 446,
+      "source_frequency_rank": 446,
+      "id": "n-ċara",
+      "headword": "ċara",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "clear",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-qalb",
+      "headword": "qalb",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "qalb",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: qalb",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/qalb",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "قَلْب",
+          "definition": "heart, anagram, inwardness"
+        },
+        {
+          "relationship": "From",
+          "language": "Italian",
+          "term": "cuore ) are masculine",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "heart",
+          "text_mt": "L-organu prinċipali li jmbotta d-demm fil-ġisem; jew is-ċentru ta' l-emozzjoni.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Qalbu bdiet tħabbat malajr mill-emozzjoni kbira.",
+          "en": "His heart started beating fast from great emotion."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɐlp/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "qlub",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "qlub",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 540,
+      "source_frequency_rank": 540,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-driegħ",
+      "headword": "driegħ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "driegħ",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: driegħ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/drieg%C4%A7",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ذِرَاع",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "arm",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal arm.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "power",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal power.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kelma “driegħ” dehret f'sentenza li tispjega arm.",
+          "en": "The word “driegħ” appeared in a sentence illustrating arm."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdrɪːħ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "dirgħajn",
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "dirgħajn",
+          "pattern": "1v23ajn"
+        },
+        {
+          "form": "idirgħa",
+          "pattern": "-a"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "dirgħajn",
+          "pattern": "1v23ajn"
+        },
+        {
+          "form": "idirgħa",
+          "pattern": "-a"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 547,
+      "source_frequency_rank": 547,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-riġel",
+      "headword": "riġel",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "r-ġ-l",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: riġel",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ri%C4%A1el",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رِجْل",
+          "definition": "leg, foot, paw"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "leg, foot",
+          "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal leg, foot.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-użu ta' riġel kien prominenti u utli ħafna fil-ħajja.",
+          "en": "The use of leg, foot was prominent and very useful in life."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɪ.d͡ʒɛl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "riġlejn",
+          "pattern": "1v23ejn"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "riġlejn",
+          "pattern": "1v23ejn"
+        }
+      ],
+      "vowel_set_sg": "i-e",
+      "vowel_set_pl": "i--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 562,
+      "source_frequency_rank": 562,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-qabda",
+      "headword": "qabda",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "q-b-d",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: qabda",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/qabda",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قَبْضَة",
+          "definition": "fist, grasp, authority"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "handful, catch, pack",
+          "text_mt": "Kwantità ta' oġġetti miġbura f'id waħda; jew il-ħut meħud mill-baħar.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Is-sajjieda rritornaw lejn il-port b'qabda kbira ta' ħut frisk.",
+          "en": "The fishermen returned to port with a large catch of fresh fish."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɐb.dɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "qabdtejn",
+      "paucal_form": "qabdiet",
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "qbadi",
+          "pattern": "12â3i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "qbadi",
+          "pattern": "12â3i"
+        }
+      ],
+      "vowel_set_sg": "a--",
+      "vowel_set_pl": "--a",
+      "vowel_set_dual": "a--",
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 565,
+      "source_frequency_rank": 565,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "rank": 592,
+      "source_frequency_rank": 592,
+      "id": "n-iġorru",
+      "headword": "iġorru",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "bear",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-ħalq",
+      "headword": "ħalq",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "( anatomy ) mouth",
+          "text_mt": null
+        },
+        {
+          "text_en": "( figurative ) an eater, a person to be fed",
+          "text_mt": null
+        },
+        {
+          "text_en": "opening",
+          "text_mt": null
+        }
+      ],
+      "gender": "masculine",
+      "root_consonants": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A7alq",
+      "source_citation": "Wiktionary: ħalq",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "حَلْق",
+          "definition": "throat"
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ħluq",
+          "pattern": null
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħluq",
+          "pattern": null
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "rank": 606,
+      "source_frequency_rank": 606,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-demm",
+      "headword": "demm",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "d-m-m",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: demm",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/demm",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دَم",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "blood",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal blood.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "blood relationship",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal blood relationship.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "natural disposition",
+          "text_mt": "Klassifikazzjoni jew oġġett li jikkorrispondi għal natural disposition.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kelma “demm” dehret f'sentenza li tispjega blood.",
+          "en": "The word “demm” appeared in a sentence illustrating blood."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɛmm/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "dmija",
+          "pattern": "12ija"
+        },
+        {
+          "form": "dmum",
+          "pattern": "12â3"
+        },
+        {
+          "form": "dmiem",
+          "pattern": "12â3"
+        },
+        {
+          "form": "dmijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "dmija",
+          "pattern": "12ija"
+        },
+        {
+          "form": "dmum",
+          "pattern": "12â3"
+        },
+        {
+          "form": "dmiem",
+          "pattern": "12â3"
+        },
+        {
+          "form": "dmijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": "e--",
+      "vowel_set_pl": "---",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 627,
+      "source_frequency_rank": 627,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-widna",
+      "headword": "widna",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "'-d-n",
+      "stem": null,
+      "cv_pattern": "wi23a",
+      "morph_pattern": "wiC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: widna",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/widna",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أُذُن",
+          "definition": "ear, handle, ear"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "ear / handle",
+          "text_mt": "Organu tas-smigħ jew il-manku tal-koxxron.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-widna tal-kikkra inkisret waqt il-ħasil.",
+          "en": "The cup's handle broke during washing."
+        }
+      ],
+      "related_entries": [
+        "n-qarquċa-tal-widna"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɪd.nɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "widintejn",
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "widnejn",
+          "pattern": "wi23vj3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "widnejn",
+          "pattern": "wi23vj3"
+        }
+      ],
+      "vowel_set_sg": "i-a",
+      "vowel_set_pl": "i-e",
+      "vowel_set_dual": "i-i",
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 651,
+      "source_frequency_rank": 651,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-libsa",
+      "headword": "libsa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "l-b-s",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: libsa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/libsa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "لِبْسة",
+          "definition": "attire, choice of clothes"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "dress, garment",
+          "text_mt": "Ilbies u roba sħiħa milbusa min-nisa jew mis-rġiel.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kienet tilbes libsa ħamra mill-isbaħ fil-ballu.",
+          "en": "She was wearing a beautiful red dress at the ball."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɪb.sɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "lbiesi",
+          "pattern": "12â3i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "lbiesi",
+          "pattern": "12â3i"
+        }
+      ],
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": "--ie",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 677,
+      "source_frequency_rank": 677,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #846)*",
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-ġilda",
+      "headword": "ġilda",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "ġ-l-d",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ġilda",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A1ilda",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "جِلْدَة",
+          "definition": "skin, lash, stripe"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "skin",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'ġilda': skin.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "hide (skin of an animal)",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'ġilda': hide (skin of an animal).",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "leather",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'ġilda': leather.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ġilda kien f'postu fil-bini u fl-użu ta' kuljum.",
+          "en": "The ġilda was in its proper place in daily use."
+        }
+      ],
+      "related_entries": [
+        "n-alakka"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈd͡ʒɪl.dɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ġlud",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ġlud",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": "--u",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 696,
+      "source_frequency_rank": 696,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-xagħar",
+      "headword": "xagħar",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "x-għ-r",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: xagħar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/xag%C4%A7ar",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "شَعْر",
+          "definition": "bristle, hair, head of hair"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "hair (plural/collective)",
+          "text_mt": "Plural ta' xagħar fuq ir-ras.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Naddfet ix-xagħar tagħha b'xampù tajjeb.",
+          "en": "She cleaned her hair with a good shampoo."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɐːr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "xagħra",
+      "dual_form": null,
+      "paucal_form": "xagħriet",
+      "feminine_form": "xagħra",
+      "masculine_form": "xagħar",
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": "a--",
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 717,
+      "source_frequency_rank": 717,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-ħamrija",
+      "headword": "ħamrija",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "earth; soil ( organic material which covers the land )",
+          "text_mt": null
+        }
+      ],
+      "gender": "feminine",
+      "root_consonants": "ħ-m-r",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A7amrija",
+      "source_citation": "Wiktionary: ħamrija",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Of",
+          "language": "Arabic",
+          "term": "حُمَر",
+          "definition": "asphalt, bitumen, pitch"
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ħamrijiet",
+          "pattern": null
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħamrijiet",
+          "pattern": null
+        }
+      ],
+      "vowel_set_sg": "a-i",
+      "vowel_set_pl": "a-i-ie",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "rank": 738,
+      "source_frequency_rank": 738,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "rank": 753,
+      "source_frequency_rank": 753,
+      "id": "n-president",
+      "headword": "president",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "chair",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-għadam",
+      "headword": "għadam",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "għ-d-m",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: għadam",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/g%C4%A7adam",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَظْم",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "several bones",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'għadam': several bones.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "bone as a material",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'għadam': bone as a material.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għadam kien f'postu fil-bini u fl-użu ta' kuljum.",
+          "en": "The għadam was in its proper place in daily use."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐ.dɐm/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "għadma",
+      "dual_form": null,
+      "paucal_form": "għadmiet",
+      "feminine_form": "għadma",
+      "masculine_form": "għadam",
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": "a--",
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 792,
+      "source_frequency_rank": 792,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "rank": 823,
+      "source_frequency_rank": 823,
+      "id": "n-biża",
+      "headword": "biża",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "fear",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-tfittxija",
+      "headword": "tfittxija",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "f-t-x",
+      "stem": null,
+      "cv_pattern": "t1v223ija",
+      "morph_pattern": "tC1vC2C2C3ija",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Uncertain",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: tfittxija",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tfittxija",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "search, investigation",
+          "text_mt": "Azzjoni fejn tfittex oġġett jew tagħrif mitluf.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tfittxija għas-sodda mitlufa damet bosta sigħat.",
+          "en": "The search for the lost key lasted several hours."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tfɪttˈʃɪː.jɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "tfittxijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "tfittxijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": "i--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 837,
+      "source_frequency_rank": 837,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-xarba",
+      "headword": "xarba",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "x-r-b",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: xarba",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/xarba",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "شَرْبَة",
+          "definition": "draft, drink, mouthful"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "drink, spell, charm",
+          "text_mt": "Likwidu li tixrob jew mediċina maħsuba.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħa xarba ilma kiesaħ wara t-tħassib twil.",
+          "en": "He took a cold drink of water after long effort."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɐr.bɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "xarbiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "xarbiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": "a--",
+      "vowel_set_pl": "a--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 885,
+      "source_frequency_rank": 885,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "rank": 898,
+      "source_frequency_rank": 898,
+      "id": "n-snien",
+      "headword": "snien",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "teeth",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-sedil",
+      "headword": "sedil",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "sedil",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: sedil",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/sedil",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "sedile",
+          "definition": "seat (in a vehicle)"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "seat (that part of a chair on which one sits",
+          "text_mt": "Klassi jew terminu li jfisser seat (that part of a chair on which one sits.",
+          "register": "",
+          "nuance": ""
+        },
+        {
+          "text_en": "a chair-like construction in a car etc.)",
+          "text_mt": "Klassi jew terminu li jfisser a chair-like construction in a car etc.).",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm preżenza ċara ta' sedil fit-tfassil tax-xogħol.",
+          "en": "There was a clear presence of seat ( that part of a chair on which one sits in the design of the work."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛː.dɪl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "sedili",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sedili",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 949,
+      "source_frequency_rank": 949,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    },
+    {
+      "id": "n-ispalla",
+      "headword": "ispalla",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "ispalla",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ispalla (Alternative spelling of spalla)",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ispalla",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "spalla or an older variant of Sicilian spadda",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "spatula",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "shoulder",
+          "text_mt": "Il-parti tal-ġisem li tgħaqqad id-driegħ mal-għonq.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ir-raġel refa' l-xkora tqila fuq ispalltu bil-qawwa.",
+          "en": "The man lifted the heavy sack onto his shoulder with strength."
+        }
+      ],
+      "related_entries": [
+        "n-spalla"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "spalla",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɪsˈpɐl.lɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 966,
+      "source_frequency_rank": 966,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Body & Anatomy",
+      "theme_id": "nouns_body_anatomy"
+    }
+  ]
+}

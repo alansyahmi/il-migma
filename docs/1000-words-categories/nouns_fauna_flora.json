@@ -1,0 +1,1596 @@
+{
+  "category_id": "nouns_fauna_flora",
+  "category_title": "Nouns: Animals & Plants",
+  "total_entries": 19,
+  "entries": [
+    {
+      "id": "n-bidla",
+      "headword": "bidla",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "b-d-l",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: bidla",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/bidla",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "بَدْل",
+          "definition": "changing, exchange"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "change, modification",
+          "text_mt": "Tibdil jew trasformazzjoni f'post jew f'liġi.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm bidla kbira fil-klima nazzjonali.",
+          "en": "There was a big change in the national climate."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɪd.lɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "bidliet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "bidliet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": "i--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 81,
+      "source_frequency_rank": 81,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "rank": 92,
+      "source_frequency_rank": 92,
+      "id": "n-annimali",
+      "headword": "annimali",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "animal",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-sejħa",
+      "headword": "sejħa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "s-j-ħ",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: sejħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/sej%C4%A7a",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "صَيْحَة",
+          "definition": "craze, cry, crying"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "call, vocation",
+          "text_mt": "Għajta jew vokazzjoni għal qadi mqaddes.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm preżenza ċara ta' sejħa fit-tfassil tax-xogħol.",
+          "en": "There was a clear presence of call, vocation in the design of the work."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛj.ħɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "sejħiet",
+          "pattern": "-iet"
+        },
+        {
+          "form": "sejħat",
+          "pattern": "-at"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sejħiet",
+          "pattern": "-iet"
+        },
+        {
+          "form": "sejħat",
+          "pattern": "-at"
+        }
+      ],
+      "vowel_set_sg": "e--",
+      "vowel_set_pl": "e--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 192,
+      "source_frequency_rank": 192,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "rank": 214,
+      "source_frequency_rank": 214,
+      "id": "n-impjant",
+      "headword": "impjant",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "plant",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-siġra",
+      "headword": "siġra",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "s-ġ-r",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: siġra",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/si%C4%A1ra",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "شَجَرَة",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "tree",
+          "text_mt": "Klassi jew terminu li jfisser tree.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm preżenza ċara ta' siġra fit-tfassil tax-xogħol.",
+          "en": "There was a clear presence of tree in the design of the work."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɪd͡ʒ.rɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": "siġriet",
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "siġar",
+          "pattern": "1v2v3"
+        },
+        {
+          "form": "sġar",
+          "pattern": "12â3"
+        },
+        {
+          "form": "sġur",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "siġar",
+          "pattern": "1v2v3"
+        },
+        {
+          "form": "sġar",
+          "pattern": "12â3"
+        },
+        {
+          "form": "sġur",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": "i-a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 228,
+      "source_frequency_rank": 228,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "rank": 260,
+      "source_frequency_rank": 260,
+      "id": "n-ħut",
+      "headword": "ħut",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "fish",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-żiemel",
+      "headword": "żiemel",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "ż-m-l",
+      "stem": null,
+      "cv_pattern": "1â2v3",
+      "morph_pattern": "C1âC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: żiemel",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/%C5%BCiemel",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "زَامِل",
+          "definition": "horse or wild ass"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "horse, knight (chess)",
+          "text_mt": "Annimal kbir użat għar-rikba u fit-tiġrija.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-żiemel ġera b'veloċità kbira fit-triq.",
+          "en": "The horse ran at high speed on the road."
+        }
+      ],
+      "related_entries": [
+        "n-żimlunazz",
+        "n-żiemel-il-baħar",
+        "n-żiemel-tal-apparelli",
+        "n-żiemel-tax-xmara",
+        "v-żżiemel"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈzɪː.mɛl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "debba",
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "żwiemel",
+          "pattern": "1wâ2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "żwiemel",
+          "pattern": "1wâ2v3"
+        }
+      ],
+      "vowel_set_sg": "ie-e",
+      "vowel_set_pl": "ie-e",
+      "vowel_set_dual": null,
+      "vowel_set_opp": "e-a",
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 266,
+      "source_frequency_rank": 266,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-injam",
+      "headword": "injam",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "wood",
+          "text_mt": null
+        }
+      ],
+      "gender": "masculine",
+      "root_consonants": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/injam",
+      "source_citation": "Wiktionary: injam",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "lignami",
+          "definition": "wood"
+        },
+        {
+          "relationship": "Derived from",
+          "language": "Latin",
+          "term": "lignum",
+          "definition": "firewood"
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [
+        {
+          "headword": "njam",
+          "type": "orthographic"
+        }
+      ],
+      "related_entries": [],
+      "rank": 272,
+      "source_frequency_rank": 272,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-għasfur",
+      "headword": "għasfur",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "għ-s-f-r",
+      "stem": null,
+      "cv_pattern": "1v23v4",
+      "morph_pattern": "C1vC2C3vC4",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: għasfur",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/g%C4%A7asfur",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "عَصْفُور",
+          "definition": "small bird, sparrow"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "bird (male)",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'għasfur': bird (male).",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għasfur kien f'postu fil-bini u fl-użu ta' kuljum.",
+          "en": "The għasfur was in its proper place in daily use."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɐsˈfʊːr/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "għasfura",
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "għasafar",
+          "pattern": "1v2v3v4"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "għasafar",
+          "pattern": "1v2v3v4"
+        }
+      ],
+      "vowel_set_sg": "a-u",
+      "vowel_set_pl": "a-a",
+      "vowel_set_dual": null,
+      "vowel_set_opp": "a-u",
+      "verb_form": null,
+      "verb_type": "quadriliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 314,
+      "source_frequency_rank": 314,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "rank": 317,
+      "source_frequency_rank": 317,
+      "id": "n-klieb",
+      "headword": "klieb",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "dog",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "rank": 350,
+      "source_frequency_rank": 350,
+      "id": "n-toroq",
+      "headword": "toroq",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "street",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-triq",
+      "headword": "triq",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "t-r-q",
+      "stem": null,
+      "cv_pattern": "12v3",
+      "morph_pattern": "C1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: triq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/triq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "طَرِيق",
+          "definition": "path, way, road"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "street, road, path",
+          "text_mt": "Passaġġ mifrux u msemmi biex jimxu in-nies u l-karozzi.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Imxew fit-triq prinċipali tar-raħal sas-suq.",
+          "en": "They walked on the main street of the village to the market."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtrɪːʔ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": "triqat",
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "toroq",
+          "pattern": "1v2v3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "toroq",
+          "pattern": "1v2v3"
+        }
+      ],
+      "vowel_set_sg": "--i",
+      "vowel_set_pl": "o-o",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 492,
+      "source_frequency_rank": 492,
+      "audit_status": "pending",
+      "audit_notes": "🔄 *(Duplicate: also at #893)*",
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-ħaxix",
+      "headword": "ħaxix",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "grass",
+          "text_mt": null
+        },
+        {
+          "text_en": "vegetable",
+          "text_mt": null
+        }
+      ],
+      "gender": "masculine",
+      "root_consonants": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A7axix",
+      "source_citation": "Wiktionary: ħaxix",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "حَشِيش",
+          "definition": "grass, hay, chaff"
+        }
+      ],
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "ħaxixa",
+      "dual_form": null,
+      "paucal_form": "ħaxixiet",
+      "feminine_form": "ħaxixa",
+      "masculine_form": "ħaxix",
+      "plural_forms": [
+        {
+          "form": "ħxejjex",
+          "pattern": null
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħxejjex",
+          "pattern": null
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "rank": 578,
+      "source_frequency_rank": 578,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-lok",
+      "headword": "lok",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "lok",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: lok",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/lok",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "locu",
+          "definition": "place, geographic location, ground"
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "locus",
+          "definition": ": place ( referring to a specific location ) a passage of literature opportunity; cause; occasion; grounds"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "place, location, room",
+          "text_mt": "Post u spazju addattat fejn tuża azzjoni.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ma kien hemm l-ebda lok għal dubju fid-deċiżjoni tiegħu.",
+          "en": "There was no room for doubt in his decision."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɔk/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "lokijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "lokijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 623,
+      "source_frequency_rank": 623,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-qattus",
+      "headword": "qattus",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "qattus",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Latin",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: qattus",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/qattus",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "cattus",
+          "definition": "though there are apparently Nubian words for cat that might also explain the -s in qattus"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "cat (domestic)",
+          "text_mt": "Annimal żgħir u mrobbi fid-dar mill-familja Felidae.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-qattus kien qed jorqod sħun fuq is-sufan tas-salott.",
+          "en": "The cat was sleeping warmly on the living room sofa."
+        }
+      ],
+      "related_entries": [
+        "n-ferħ",
+        "n-pejxu",
+        "n-qattus-il-baħar"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "qaddis",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɐt.tʊs/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "qattusa",
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "qtates",
+          "pattern": "-s"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "qtates",
+          "pattern": "-s"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 726,
+      "source_frequency_rank": 726,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "rank": 768,
+      "source_frequency_rank": 768,
+      "id": "n-uċuħ-tar-raba",
+      "headword": "uċuħ tar-raba",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "crop",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": "ℹ️ *(Multi-word expression)*",
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "rank": 777,
+      "source_frequency_rank": 777,
+      "id": "n-lokalizzar",
+      "headword": "lokalizzar",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "locate",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-folja",
+      "headword": "folja",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "folja",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: folja",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/folja",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "foglia",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sheet of paper, leaf",
+          "text_mt": "Biċċa karta miftuħa użata għall-kitba jew stampar.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kiteb in-noti tiegħu fuq folja bajda fil-klassi.",
+          "en": "He wrote his notes on a white sheet of paper in class."
+        }
+      ],
+      "related_entries": [
+        "n-foljam",
+        "n-folju"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈfɔl.jɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "folji",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "folji",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 856,
+      "source_frequency_rank": 856,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    },
+    {
+      "id": "n-għalf",
+      "headword": "għalf",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "għ-l-f",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: għalf",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/g%C4%A7alf",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَلَف",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "fodder (food for animals)",
+          "text_mt": "Tifsira u deskrizzjoni ta' 'għalf': fodder (food for animals).",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għalf kien f'postu fil-bini u fl-użu ta' kuljum.",
+          "en": "The għalf was in its proper place in daily use."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐlf/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "a--",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 941,
+      "source_frequency_rank": 941,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Animals & Plants",
+      "theme_id": "nouns_fauna_flora"
+    }
+  ]
+}

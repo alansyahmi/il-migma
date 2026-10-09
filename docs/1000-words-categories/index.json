@@ -1,0 +1,157 @@
+{
+  "metadata": {
+    "title": "1000 Most Common Maltese Words (Thematic Audit Dataset)",
+    "format": "JSONC",
+    "total_entries": 932,
+    "total_categories": 23,
+    "source_url": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+    "description": "Categorized Maltese frequency list enriched with Wiktionary data and organized into navigable POS and thematic sections."
+  },
+  "categories": [
+    {
+      "category_id": "pronouns_determiners",
+      "category_title": "Pronouns & Determiners",
+      "file": "pronouns_determiners.json",
+      "count": 28
+    },
+    {
+      "category_id": "prepositions",
+      "category_title": "Prepositions & Spatial Relators",
+      "file": "prepositions.json",
+      "count": 23
+    },
+    {
+      "category_id": "conjunctions",
+      "category_title": "Conjunctions & Connectives",
+      "file": "conjunctions.json",
+      "count": 10
+    },
+    {
+      "category_id": "adverbs_particles",
+      "category_title": "Adverbs & Modal Particles",
+      "file": "adverbs_particles.json",
+      "count": 30
+    },
+    {
+      "category_id": "numerals",
+      "category_title": "Numerals & Quantities",
+      "file": "numerals.json",
+      "count": 15
+    },
+    {
+      "category_id": "verbs_state_existence",
+      "category_title": "Verbs: Existence, State & Modals",
+      "file": "verbs_state_existence.json",
+      "count": 10
+    },
+    {
+      "category_id": "verbs_motion_travel",
+      "category_title": "Verbs: Motion & Direction",
+      "file": "verbs_motion_travel.json",
+      "count": 11
+    },
+    {
+      "category_id": "verbs_action_creation",
+      "category_title": "Verbs: Physical Action, Labor & Making",
+      "file": "verbs_action_creation.json",
+      "count": 73
+    },
+    {
+      "category_id": "verbs_communication_speech",
+      "category_title": "Verbs: Communication & Speech",
+      "file": "verbs_communication_speech.json",
+      "count": 10
+    },
+    {
+      "category_id": "verbs_cognition_senses",
+      "category_title": "Verbs: Cognition, Perception & Senses",
+      "file": "verbs_cognition_senses.json",
+      "count": 11
+    },
+    {
+      "category_id": "verbs_daily_social",
+      "category_title": "Verbs: Daily Life & Social Interaction",
+      "file": "verbs_daily_social.json",
+      "count": 12
+    },
+    {
+      "category_id": "nouns_body_anatomy",
+      "category_title": "Nouns: Body & Anatomy",
+      "file": "nouns_body_anatomy.json",
+      "count": 33
+    },
+    {
+      "category_id": "nouns_people_society",
+      "category_title": "Nouns: People, Family & Society",
+      "file": "nouns_people_society.json",
+      "count": 30
+    },
+    {
+      "category_id": "nouns_nature_geography",
+      "category_title": "Nouns: Nature, Weather & Geography",
+      "file": "nouns_nature_geography.json",
+      "count": 36
+    },
+    {
+      "category_id": "nouns_fauna_flora",
+      "category_title": "Nouns: Animals & Plants",
+      "file": "nouns_fauna_flora.json",
+      "count": 19
+    },
+    {
+      "category_id": "nouns_time_calendar",
+      "category_title": "Nouns: Time, Seasons & Calendar",
+      "file": "nouns_time_calendar.json",
+      "count": 16
+    },
+    {
+      "category_id": "nouns_built_environment",
+      "category_title": "Nouns: Home, Places & Buildings",
+      "file": "nouns_built_environment.json",
+      "count": 20
+    },
+    {
+      "category_id": "nouns_objects_materials",
+      "category_title": "Nouns: Objects, Tools & Materials",
+      "file": "nouns_objects_materials.json",
+      "count": 20
+    },
+    {
+      "category_id": "nouns_food_agriculture",
+      "category_title": "Nouns: Food, Sustenance & Agriculture",
+      "file": "nouns_food_agriculture.json",
+      "count": 10
+    },
+    {
+      "category_id": "nouns_abstract_cognition",
+      "category_title": "Nouns: Abstract Concepts, Thought & Measurement",
+      "file": "nouns_abstract_cognition.json",
+      "count": 358
+    },
+    {
+      "category_id": "adj_dimensions_physical",
+      "category_title": "Adjectives: Dimension, Size & Form",
+      "file": "adj_dimensions_physical.json",
+      "count": 18
+    },
+    {
+      "category_id": "adj_quality_evaluation",
+      "category_title": "Adjectives: Quality, State & Evaluation",
+      "file": "adj_quality_evaluation.json",
+      "count": 56
+    },
+    {
+      "category_id": "adj_sensory_colours",
+      "category_title": "Adjectives: Sensory, Texture & Colour",
+      "file": "adj_sensory_colours.json",
+      "count": 14
+    },
+    {
+      "category_id": "artifacts",
+      "category_title": "English Artifacts (Audit Required)",
+      "file": "artifacts.json",
+      "count": 69
+    }
+  ],
+  "total_entries": 937
+}

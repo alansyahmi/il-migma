@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { Trash2, Keyboard } from 'lucide-react';
+import { Trash2, Keyboard, ArrowUp, ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import type { EtymologyBaseStep } from '@/lib/adminUtils';
 import { generateForeignScriptPronunciation } from '@/lib/foreignScriptPronunciation';
@@ -101,6 +101,21 @@ export function EtymologyChainEditor({
         ]);
     };
 
+    const moveStep = (index: number, direction: 'up' | 'down') => {
+        const next = [...items];
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= next.length) return;
+        [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+        if (arabicKbOpenIndex !== null) {
+            if (arabicKbOpenIndex === index) {
+                setArabicKbOpenIndex(targetIndex);
+            } else if (arabicKbOpenIndex === targetIndex) {
+                setArabicKbOpenIndex(index);
+            }
+        }
+        onChange(next);
+    };
+
     const removeStep = (index: number) => {
         onChange(items.length > 1 ? items.filter((_, itemIndex) => itemIndex !== index) : [{
             relationship: defaultRelationship,
@@ -122,15 +137,38 @@ export function EtymologyChainEditor({
 
             <div className="space-y-4 mt-1">
                 {items.map((item, index) => (
-                    <div key={index} className="relative">
-                        <button
-                            type="button"
-                            onClick={() => removeStep(index)}
-                            className="absolute right-0 -top-1 text-slate-400 hover:text-red-500 px-1"
-                            aria-label={`Remove ${title.toLowerCase()} step ${index + 1}`}
-                        >
-                            <Trash2 size={12} />
-                        </button>
+                    <div key={index} className="relative group">
+                        <div className="absolute right-0 -top-1 flex items-center gap-0.5">
+                            <button
+                                type="button"
+                                onClick={() => moveStep(index, 'up')}
+                                disabled={index === 0}
+                                className="p-0.5 text-slate-400 hover:text-[#1034A6] disabled:opacity-0 disabled:pointer-events-none transition-opacity"
+                                aria-label={`Move up ${title.toLowerCase()} step ${index + 1}`}
+                                title="Move up"
+                            >
+                                <ArrowUp size={13} />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => moveStep(index, 'down')}
+                                disabled={index === items.length - 1}
+                                className="p-0.5 text-slate-400 hover:text-[#1034A6] disabled:opacity-0 disabled:pointer-events-none transition-opacity"
+                                aria-label={`Move down ${title.toLowerCase()} step ${index + 1}`}
+                                title="Move down"
+                            >
+                                <ArrowDown size={13} />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => removeStep(index)}
+                                className="p-0.5 text-slate-400 hover:text-red-500 transition-colors"
+                                aria-label={`Remove ${title.toLowerCase()} step ${index + 1}`}
+                                title="Remove step"
+                            >
+                                <Trash2 size={12} />
+                            </button>
+                        </div>
                         <div className={`grid grid-cols-1 sm:grid-cols-2 ${showPronunciation ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-3 mt-1`}>
                             <div>
                                 <label className={labelClassName}>{relationshipLabel}</label>

@@ -747,11 +747,12 @@ function genHollow(
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1 } = parseVset(vsetImpf);
 
-    const longV = pv2 || pv1;
+    const isExplicitO = pv1 === "o" || pv2 === "o" || vsetPerf.startsWith("o");
+    const longV = isExplicitO ? "ie" : (pv2 || pv1);
     const shortV = pv1;
 
     const perfFull = `${C1}${longV}${C3}`;
-    const reducedVowel = longV === "ie" ? "i" : longV === "a" && C2 === "w" ? "o" : shortV;
+    const reducedVowel = isExplicitO || C2 === "w" ? "o" : (longV === "ie" ? "i" : shortV);
     const perfReduced = `${C1}${reducedVowel}${C3}`;
 
     const impfBase = (person: number) => {
@@ -764,7 +765,7 @@ function genHollow(
     const impStem = `${C1}${impV1}${C3}`;
     const impSg = impStem;
     const impPl = `${impStem}u`;
-    const perfectNegStem = longV === "a" ? perfFull : perfReduced;
+    const perfectNegStem = longV === "a" ? perfFull : (longV === "ie" ? `${C1}i${C3}` : perfReduced);
 
     return buildConjugationTable(
         {

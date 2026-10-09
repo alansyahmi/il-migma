@@ -310,14 +310,19 @@ num.plural_forms AS num_plural_forms,
  WHERE r.entry_id = e.id AND r.relationship_type = 'related') AS rel_related,
 (SELECT json_group_array(json_object(
     'id', a.id, 
-    'target_id', a.id,
+    'entry_id', a.entry_id,
     'headword', a.headword, 
     'type', a.type,
+    'notes', a.notes,
+    'target_entry_id', a.target_entry_id,
+    'target_id', a.target_entry_id,
+    'sort_order', a.sort_order,
     'gloss_en', json_extract(e.definitions, '$[0].text_en'),
     'gloss_mt', json_extract(e.definitions, '$[0].text_mt')
  )) 
  FROM alternative_forms a 
- WHERE a.entry_id = e.id) AS rel_alternative_forms,
+ WHERE a.entry_id = e.id
+ ORDER BY a.sort_order ASC, a.created_at ASC) AS rel_alternative_forms,
 (e.usage_examples) AS rel_usage_examples,
  (SELECT json_group_array(t.name) 
   FROM entry_tags et 
@@ -801,6 +806,10 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         const inflectableValue = resolveEntryInflectableValue(full);
         if (inflectableValue !== undefined) {
             form.is_inflectable = parseBooleanLike(inflectableValue);
+            form.has_inflection = form.is_inflectable;
+        } else if (pos === 'preposition') {
+            form.is_inflectable = false;
+            form.has_inflection = false;
         }
     }
 
@@ -895,22 +904,31 @@ export function hydrateEntryRow(row: Record<string, unknown> | undefined | null)
         ...Object.fromEntries(Object.entries(row).filter(([, value]) => value !== null)),
     };
 
+    if (row.is_inflectable !== undefined || row.has_inflection !== undefined) {
+        payload.has_inflection = Boolean(row.has_inflection !== undefined ? row.has_inflection : row.is_inflectable);
+    }
+
     payload.tags = parseJsonArray(row.rel_tags || row.tags);
     payload.definitions = parseJsonArray(row.definitions);
     payload.synonyms = parseJsonArray(row.rel_synonyms || row.synonyms);
     payload.antonyms = parseJsonArray(row.rel_antonyms || row.antonyms);
     payload.related_entries = parseJsonArray(row.rel_related || row.related_entries);
     payload.alternative_forms = parseJsonArray(row.rel_alternative_forms || row.alternative_forms).map((alt: any) => {
-        if (alt && typeof alt === 'object' && alt.id && alt.id.includes('::')) {
-            const parts = alt.id.split('::');
-            const targetId = parts[1];
-            return {
-                ...alt,
-                id: targetId,
-                target_id: targetId
-            };
-        }
-        return alt;
+        if (!alt || typeof alt !== 'object') return alt;
+        const targetEntryId = alt.target_entry_id || null;
+        return {
+            id: alt.id,
+            entry_id: alt.entry_id || row.id,
+            headword: alt.headword || '',
+            type: alt.type || 'orthographic',
+            notes: alt.notes || null,
+            target_entry_id: targetEntryId,
+            target_id: targetEntryId,
+            has_lemma_entry: Boolean(targetEntryId),
+            sort_order: typeof alt.sort_order === 'number' ? alt.sort_order : 0,
+            gloss_en: alt.gloss_en || null,
+            gloss_mt: alt.gloss_mt || null,
+        };
     });
     payload.usage_examples = parseJsonArray(row.usage_examples || row.rel_usage_examples);
     payload.etymology_chain = parseJsonArray(row.etymology_chain);

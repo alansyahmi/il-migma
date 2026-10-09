@@ -111,6 +111,18 @@ export function applyInflectionTableSuffix(
     return isCapitalized ? capitalizeFirst(finalResult) : finalResult;
 }
 
+const IRREGULAR_PREPOSITIONS: Record<string, readonly string[]> = {
+    "ta'": ['tiegħi', 'tiegħek', 'tiegħu', 'tagħha', 'tagħna', 'tagħkom', 'tagħhom'],
+    'ta':  ['tiegħi', 'tiegħek', 'tiegħu', 'tagħha', 'tagħna', 'tagħkom', 'tagħhom'],
+    "ma'": ['miegħi', 'miegħek', 'miegħu', 'magħha', 'magħna', 'magħkom', 'magħhom'],
+    'ma':  ['miegħi', 'miegħek', 'miegħu', 'magħha', 'magħna', 'magħkom', 'magħhom'],
+    'għal': ['għalija', 'għalik', 'għalih', 'għaliha', 'għalina', 'għalikom', 'għalihom'],
+    'lejn': ['lejja', 'lejk', 'lejh', 'lejha', 'lejna', 'lejkom', 'lejhom'],
+    'bejn': ['-', '-', '-', '-', 'bejnietna', 'bejnietkom', 'bejniethom'],
+    'minn': ['minni', 'minnek', 'minnu', 'minnha', 'minna', 'minnkom', 'minnhom'],
+    'wara': ['warajja', 'warajk', 'warajh', 'warajha', 'warajna', 'warajkom', 'warajhom'],
+};
+
 function applyInflectionTableSuffixInternal(
     base: string,
     idx: PossessiveSuffixIdx,
@@ -121,9 +133,18 @@ function applyInflectionTableSuffixInternal(
 ) {
     if (!base || base === '-') return '-';
 
+    const lowerBase = base.toLowerCase().trim();
+    if (IRREGULAR_PREPOSITIONS[lowerBase]) {
+        return IRREGULAR_PREPOSITIONS[lowerBase][idx] ?? '-';
+    }
+
     const GLIDE_A_WORDS = ['wara'];
-    const lowerBase = base.toLowerCase();
     const finalVowel = (base.match(/([aeiouàèìòùâêîôû])(?!.*[aeiouàèìòùâêîôû])/i)?.[1] || '').toLowerCase();
+
+    // Vocalic endings: u/i/o (handled before single-vowel check so words like 'fi' and 'bi' get -ja/-k/-h)
+    if (base.endsWith('u') || base.endsWith('i') || base.endsWith('o')) {
+        return applyPossessiveSuffix(base, idx, gender, pattern, thirdRadical, ipaHint);
+    }
 
     if (hasSingleVowel(base)) {
         const suffix = idx === 1 && finalVowel === 'o'
@@ -147,11 +168,6 @@ function applyInflectionTableSuffixInternal(
         }
     }
 
-    // Vocalic endings: u/i/o
-    if (base.endsWith('u') || base.endsWith('i') || base.endsWith('o')) {
-        return applyPossessiveSuffix(base, idx, gender, pattern, thirdRadical, ipaHint);
-    }
-
     // Handle words ending in 'a'
     if (base.endsWith('a')) {
         if (gender === 'feminine') {
@@ -166,10 +182,7 @@ function applyInflectionTableSuffixInternal(
         // Glide insertion (e.g., wara -> warajja)
         if (GLIDE_A_WORDS.includes(lowerBase) || (!!radical && ['j', 'w'].includes(radical))) {
             const stem = `${base}j`;
-            const suffix = ['i', 'ek', 'u', 'ha', 'na', 'kom', 'hom'][idx];
-            if (idx === 0) return `${stem}i`;
-            if (idx === 1) return `${stem}${suffix}`;
-            if (idx === 2) return `${stem}${suffix}`;
+            const suffix = ['ja', 'k', 'h', 'ha', 'na', 'kom', 'hom'][idx];
             return `${stem}${suffix}`;
         }
 

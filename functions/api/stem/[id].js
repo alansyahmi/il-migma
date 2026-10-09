@@ -11,10 +11,7 @@ async function getStemEntryStats(client, stemString) {
         sql: `
             SELECT id
             FROM entries
-            WHERE is_loanword = 1
-              AND zokk_morphology IS NOT NULL
-              AND json_valid(zokk_morphology) = 1
-              AND json_extract(zokk_morphology, '$.stem_string') = ?
+            WHERE stem = ?
         `,
         args: [stemString],
     });

@@ -34,6 +34,9 @@ export function SourceBlock({
     entry: any;
     term: (key: string) => string;
 }) {
+    const structuredSources = Array.isArray(entry.sources) && entry.sources.length > 0
+        ? entry.sources
+        : null;
     const source = entry.lexical_source;
     const citation = entry.source_citation
         || entry.verb_morphology?.source_citation
@@ -42,7 +45,39 @@ export function SourceBlock({
         || entry.numeral_morphology?.source_citation
         || entry.participle_morphology?.source_citation;
 
-    if (!source && !citation) return null;
+    if (!structuredSources && !source && !citation) return null;
+
+    if (structuredSources) {
+        return (
+            <SideCard title={term('sources')}>
+                <div className="space-y-3">
+                    {structuredSources.map((src: any, idx: number) => (
+                        <div key={src.source_id || idx} className="flex flex-col border-b border-black/5 pb-2.5 last:border-b-0 last:pb-0">
+                            {src.title && (
+                                <span className="text-sm font-semibold text-black">{src.title}</span>
+                            )}
+                            {src.author && (
+                                <span className="text-[11px] text-black/50 italic">{src.author}</span>
+                            )}
+                            {src.role && (
+                                <span className="inline-block mt-0.5 text-[10px] font-medium tracking-wide uppercase px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 w-fit">
+                                    {src.role}
+                                </span>
+                            )}
+                            <span className="text-xs font-medium mt-1" style={{ color: GOLD }}>
+                                {src.citation || `${src.title || ''}${src.year ? ` (${src.year})` : ''}${src.page ? `, p. ${src.page}` : ''}`}
+                            </span>
+                            {src.url && (
+                                <a href={src.url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-500 hover:underline mt-0.5">
+                                    {term('view-online') || 'View Online'}
+                                </a>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </SideCard>
+        );
+    }
 
     return (
         <SideCard title={term('sources')}>

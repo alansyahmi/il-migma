@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState, useMemo, useEffect, useRef, useDeferredValue, useCallback } from 'react';
 import {
-    Plus, RefreshCw, RotateCcw, Keyboard, Sparkles, ArrowUp, ArrowDown, AlertTriangle
+    Plus, RefreshCw, RotateCcw, Keyboard, Sparkles, ArrowUp, ArrowDown, AlertTriangle, CheckCircle2, XCircle
 } from 'lucide-react';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { IPAKeyboard } from '@/components/ui/IPAKeyboard';
@@ -65,11 +65,15 @@ export interface AdminEntry {
     source_language?: string;
     created_at: string;
     text_en?: string;
+    text_mt?: string;
     verb_vowel_perf?: string;
     verb_vowel_impf?: string;
     verb_transitivity?: string;
     verb_morphology?: VerbMorphology;
     root_consonants?: string;
+    stem?: string;
+    arabic?: string;
+    etymology_chain?: any[];
     verb_form?: string;
     tags?: string | string[];
     alternative_forms?: string | { id: string; headword?: string }[];
@@ -86,10 +90,15 @@ export interface EntryFormModalProps {
     onSaved: (savedData?: any) => void;
     getToken: () => Promise<string | null>;
     initialForm?: Partial<typeof INITIAL_FORM_STATE>;
+    isDuplicate?: boolean;
 }
 
 const LazyRelationshipEditor = lazy(() =>
     import('./RelationshipEditor').then(module => ({ default: module.RelationshipEditor }))
+);
+
+const LazyAlternativeFormsEditor = lazy(() =>
+    import('./AlternativeFormsEditor').then(module => ({ default: module.AlternativeFormsEditor }))
 );
 
 const LazyEtymologyChainEditor = lazy(() =>
@@ -1745,7 +1754,7 @@ function StemMorphologyFields({
     );
 }
 
-export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm }: EntryFormModalProps) {
+export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm, isDuplicate = false }: EntryFormModalProps) {
     const { getValues, getOptions, createItem, updateItem, deleteItem, refresh, byCategoryAndKey, getCategoryItems } = useAdminConfig();
     const { mode, term } = useLinguisticMode();
     const { language, t } = useLanguage();
@@ -1819,11 +1828,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         return map;
     }, [VERB_PRESETS_LIST]);
 
-    const isEdit = Boolean(entry);
+    const isEdit = Boolean(entry) && !isDuplicate;
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [isMissingEntry, setIsMissingEntry] = useState(false);
-    const [isLoadingFull, setIsLoadingFull] = useState(isEdit);
+    const [isLoadingFull, setIsLoadingFull] = useState(Boolean(entry));
     const [savedSnapshot, setSavedSnapshot] = useState('');
     const [idExists, setIdExists] = useState<boolean | null>(null);
     const [suggestedId, setSuggestedId] = useState('');
@@ -1831,6 +1840,22 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const autoFilledFieldsRef = useRef<Set<string>>(new Set());
     const manualVerbVowelFieldsRef = useRef<Set<string>>(new Set());
     const [isNotable, setIsNotable] = useState(false);
+
+    interface SaveFeedback {
+        open: boolean;
+        status: 'success' | 'error';
+        title: string;
+        message?: string;
+        reason?: string;
+        technicalDetails?: string;
+        headword?: string;
+        entryId?: string;
+        isRename?: boolean;
+        oldId?: string;
+        newId?: string;
+        onConfirm?: () => void;
+    }
+    const [saveFeedback, setSaveFeedback] = useState<SaveFeedback | null>(null);
 
     const [isManagingRegister, setIsManagingRegister] = useState(false);
     const [newRegisterName, setNewRegisterName] = useState('');
@@ -1908,7 +1933,10 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         }, 0);
     };
 
-    const [form, setForm] = useState(() => entryToForm(entry, initialForm));
+    const [form, setForm] = useState(() => {
+        const initial = entryToForm(entry, initialForm);
+        return isDuplicate ? { ...initial, id: '' } : initial;
+    });
     const [isFindingNumeralDerivedEntries, setIsFindingNumeralDerivedEntries] = useState(false);
     const [numeralDerivedStatus, setNumeralDerivedStatus] = useState('');
     const deferredForm = useDeferredValue(form);
@@ -1986,7 +2014,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     }, [hasRootConsonants, hasZokkStem, isStemMorphology]);
 
     useEffect(() => {
-        if (!isEdit || !entry?.id) return;
+        if (!entry?.id) return;
 
         const requestSeq = ++loadRequestSeqRef.current;
         let active = true;
@@ -2002,14 +2030,19 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     let nextForm: any = null;
 
                     setForm(prev => {
+                        const patch = buildLoadedEntryPatch(full, prev);
+                        if (isDuplicate) {
+                            delete patch.id;
+                        }
                         nextForm = {
                             ...prev,
-                            ...buildLoadedEntryPatch(full, prev),
+                            ...patch,
+                            ...(isDuplicate ? { id: '' } : {}),
                         };
                         return nextForm;
                     });
 
-                    if (nextForm) {
+                    if (nextForm && !isDuplicate) {
                         setSavedSnapshot(buildFormSnapshot(nextForm));
                     }
                 } else {
@@ -2037,7 +2070,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         return () => {
             active = false;
         };
-    }, [isEdit, entry?.id]);
+    }, [isEdit, isDuplicate, entry?.id]);
 
     // ── AUTOMATION: Auto-ID Suggestion ──────────────────────────────────────
     useEffect(() => {
@@ -2643,14 +2676,35 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!form.headword.trim()) {
-            setError(t('Headword is required', 'Mamma meħtieġa'));
+            const reason = t(
+                'Headword (mamma) cannot be empty. Please enter a valid headword before saving.',
+                'Il-mamma ma tistax tkun vojta. Jekk jogħġbok daħħal mamma valida qabel ma ssalva.'
+            );
+            setError(reason);
+            setSaveFeedback({
+                open: true,
+                status: 'error',
+                title: isEdit ? t('Entry Edit Failed', 'L-Editjar tal-Entrata Ma Rnexxiex') : t('Save Entry Failed', 'L-Issejvjar tal-Entrata Ma Rnexxiex'),
+                reason,
+                headword: form.headword || '(empty)',
+                entryId: form.id || entry?.id,
+            });
             return;
         }
         if (isEdit && isMissingEntry) {
-            setError(t(
+            const reason = t(
                 'This entry no longer exists in the database. Use "Duplicate as New" to save your changes as a new entry.',
                 'Din l-entrata m’għadhiex teżisti fid-database. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
-            ));
+            );
+            setError(reason);
+            setSaveFeedback({
+                open: true,
+                status: 'error',
+                title: t('Entry Edit Failed', 'L-Editjar tal-Entrata Ma Rnexxiex'),
+                reason,
+                headword: form.headword,
+                entryId: form.id || entry?.id,
+            });
             return;
         }
 
@@ -2709,21 +2763,40 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
 
             onSaved(formToPayload(form));
         } catch (err: any) {
-            let msg = err.message;
-            if (msg.includes('ENTRY_NOT_FOUND')) {
+            const rawMsg = err?.message || String(err || 'Unknown error');
+            let reason = rawMsg;
+            if (rawMsg.includes('ENTRY_NOT_FOUND')) {
                 setIsMissingEntry(true);
-                msg = t(
-                    'This entry no longer exists in the database. Use "Duplicate as New" to save your changes as a new entry.',
-                    'Din l-entrata m’għadhiex teżisti fid-database. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
+                reason = t(
+                    'This entry was not found in the database. It may have been deleted or modified in another session. Use "Duplicate as New" to save your changes as a new entry.',
+                    'Din l-entrata m’għadhiex teżisti fid-database. Jista\' jkun li ġiet imħassra jew modifikata f\'sessjoni oħra. Uża "Ikkopja bħala Ġdid" biex issalva t-tibdil bħala entrata ġdida.'
+                );
+            } else if (rawMsg.includes('ENTRY_ID_ALREADY_EXISTS') || rawMsg.toLowerCase().includes('already exists')) {
+                reason = t(
+                    `Entry ID "${form.id}" already exists in the database. Please specify a different ID or use "Duplicate as New".`,
+                    `L-ID tal-entrata "${form.id}" diġà teżisti fid-database. Jekk jogħġbok agħżel ID oħra jew uża "Ikkopja bħala Ġdid".`
+                );
+            } else if (rawMsg.includes('FOREIGN KEY constraint failed')) {
+                reason = t(
+                    'Database error: A referenced item (e.g. linked root, pattern, or lexical source) was not found in the database.',
+                    'Żball fid-database: Oġġett referenzjat (bħal għerq, mudell, jew sors) ma nstabx fid-database.'
+                );
+            } else if (rawMsg.includes('Not authenticated') || rawMsg.includes('Unauthorized') || rawMsg.includes('401')) {
+                reason = t(
+                    'Authentication failed or session expired. Please refresh the page and sign in again as administrator.',
+                    'L-awtentikazzjoni ma rnexxietx jew is-sessjoni skadiet. Jekk jogħġbok erġa\' rrifreska l-paġna u dħol mill-ġdid bħala amministratur.'
                 );
             }
-            if (msg.includes('FOREIGN KEY constraint failed')) {
-                msg = t(
-                    'Database error: A referenced item (e.g. the Entry itself) was not found. If this is a mock entry, please use "Duplicate as New" instead of "Save Changes".',
-                    'Żball fid-database: Oġġett referenzjat ma nstabx. Jekk din hija entrata mock, jekk jogħġbok uża "Ikkopja bħala Ġdid" minflok "Issejva l-Bidliet".'
-                );
-            }
-            setError(msg);
+            setError(reason);
+            setSaveFeedback({
+                open: true,
+                status: 'error',
+                title: isEdit ? t('Entry Edit Failed', 'L-Editjar tal-Entrata Ma Rnexxiex') : t('Save Entry Failed', 'L-Issejvjar tal-Entrata Ma Rnexxiex'),
+                reason,
+                technicalDetails: rawMsg !== reason ? rawMsg : undefined,
+                headword: form.headword,
+                entryId: form.id || entry?.id,
+            });
         } finally {
             setSaving(false);
         }
@@ -3029,7 +3102,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
         <Modal
             open={true}
             onClose={handleClose}
-            title={isEdit ? t('Edit Entry', 'Editja l-Entrata') : t('New Entry', 'Entrata Ġdida')}
+            title={isDuplicate ? t('Duplicate Entry', 'Ikkopja Entrata') : isEdit ? t('Edit Entry', 'Editja l-Entrata') : t('New Entry', 'Entrata Ġdida')}
             size="xl"
         >
             <div className="flex flex-col h-full min-h-0 overflow-hidden">
@@ -3573,17 +3646,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     {/* Relationships (Thesaurus & Derived Terms) */}
                     <Suspense fallback={<div className="rounded-xl border border-border-light bg-slate-50 p-4 text-xs text-black/40">{t('Loading relationship editors…', 'Qed jitgħabbu l-editors tar-relazzjonijiet…')}</div>}>
                         <div className="space-y-6">
-                            <LazyRelationshipEditor
-                                type="derived"
-                                title={t('Alternative Forms', 'Forom Alternattivi')}
+                            <LazyAlternativeFormsEditor
+                                title={t('Alternative Forms & Variant Spellings', 'Forom Alternattivi u Varjanti')}
                                 items={(form as any).alternative_forms || []}
                                 onChange={(items) => set('alternative_forms', items)}
-                                enableSuggestions
-                                suggestionScope="entries"
                                 currentEntryId={form.id}
-                                extraActions={[
-                                    { label: t('New Entry', 'Entrata Ġdida'), icon: <Plus size={12} />, onClick: () => window.open('/admin?new=entry', '_blank') }
-                                ]}
                             />
                             {normalizedPos !== 'numeral' && (
                                 <LazyRelationshipEditor
@@ -3759,7 +3826,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         if (entry && payload.id === entry.id) {
                                             delete payload.id;
                                         }
-                                        await adminCreateEntry(token, payload);
+                                        const createRes = await adminCreateEntry(token, payload);
+                                        const newCreatedId = (createRes as any)?.id || payload.id;
 
                                         const syncList = [
                                             { category: 'cv_wizen_pattern', key: form.cv_pattern },
@@ -3785,9 +3853,28 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                         await refresh();
                                         setSavedSnapshot(buildFormSnapshot({ ...form, pos: currentPos }));
 
-                                        onSaved();
+                                        setSaveFeedback({
+                                            open: true,
+                                            status: 'success',
+                                            title: t('Duplicate Created Successfully', 'Id-Duplikat Inħoloq b\'Suċċess'),
+                                            message: t('The new duplicate entry has been successfully created in the database.', 'L-entrata dduplikata l-ġdida nħolqot b\'suċċess fid-database.'),
+                                            headword: form.headword,
+                                            entryId: newCreatedId,
+                                            onConfirm: () => {
+                                                onSaved();
+                                            }
+                                        });
                                     } catch (err: any) {
-                                        setError(err.message);
+                                        const rawMsg = err?.message || String(err || 'Unknown error');
+                                        setError(rawMsg);
+                                        setSaveFeedback({
+                                            open: true,
+                                            status: 'error',
+                                            title: t('Duplicate Creation Failed', 'Il-Ħolqien tad-Duplikat Ma Rnexxiex'),
+                                            reason: rawMsg,
+                                            headword: form.headword,
+                                            entryId: form.id,
+                                        });
                                     } finally {
                                         setSaving(false);
                                     }
@@ -3805,7 +3892,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                     <div className="flex gap-3">
                         <Button type="button" variant="ghost" onClick={handleClose}>{t('Cancel', 'Ikkanċella')}</Button>
                         <Button type="button" onClick={handleSave} loading={saving} disabled={isEdit && isMissingEntry}>
-                            {isEdit ? t('Save Changes', 'Issejva l-Bidliet') : t('Create Entry', 'Oħloq Entrata')}
+                            {isDuplicate ? t('Create Duplicate', 'Oħloq Kopja') : isEdit ? t('Save Changes', 'Issejva l-Bidliet') : t('Create Entry', 'Oħloq Entrata')}
                         </Button>
                     </div>
                 </div>
@@ -3860,6 +3947,110 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm 
                                     </div>
                                 );
                             })}
+                        </div>
+                    </div>
+                </Modal>
+            )}
+            {saveFeedback?.open && (
+                <Modal
+                    open={true}
+                    onClose={() => {
+                        const confirmCb = saveFeedback.onConfirm;
+                        setSaveFeedback(null);
+                        if (confirmCb) confirmCb();
+                    }}
+                    zIndex="z-[60]"
+                    size="md"
+                >
+                    <div className="p-6 text-center space-y-4">
+                        <div className="flex justify-center">
+                            {saveFeedback.status === 'success' ? (
+                                <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                                    <CheckCircle2 size={32} />
+                                </div>
+                            ) : (
+                                <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center text-red-600 shadow-sm">
+                                    <XCircle size={32} />
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="space-y-1">
+                            <h3 className="font-serif text-xl font-bold text-black">
+                                {saveFeedback.title}
+                            </h3>
+                            {saveFeedback.headword && (
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 font-mono mt-1">
+                                    <span className="font-serif font-bold text-sm text-black">{saveFeedback.headword}</span>
+                                    {saveFeedback.entryId && (
+                                        <span className="text-black/50">({saveFeedback.entryId})</span>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        {saveFeedback.isRename && saveFeedback.oldId && saveFeedback.newId && (
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-2.5 text-xs text-blue-900 font-mono text-left">
+                                <span className="font-semibold">{t('ID Renamed:', 'ID Imbiddla:')}</span> {saveFeedback.oldId} &rarr; <span className="font-bold">{saveFeedback.newId}</span>
+                            </div>
+                        )}
+
+                        {saveFeedback.message && (
+                            <p className="text-sm text-black/70">
+                                {saveFeedback.message}
+                            </p>
+                        )}
+
+                        {saveFeedback.reason && (
+                            <div className="text-left bg-red-50/90 border border-red-200 rounded-lg p-3.5 space-y-1.5">
+                                <div className="text-xs font-bold text-red-900 uppercase tracking-wider flex items-center gap-1.5">
+                                    <AlertTriangle size={14} className="text-red-600" />
+                                    {t('Why was this unsuccessful?', 'Għaliex ma rnexxiex?')}
+                                </div>
+                                <p className="text-sm text-red-800 leading-relaxed font-sans">
+                                    {saveFeedback.reason}
+                                </p>
+                            </div>
+                        )}
+
+                        {saveFeedback.technicalDetails && (
+                            <details className="text-left text-xs text-black/50">
+                                <summary className="cursor-pointer hover:text-black transition-colors font-medium">
+                                    {t('Technical Details', 'Dettalji Tekniċi')}
+                                </summary>
+                                <pre className="mt-1 p-2 bg-slate-100 rounded text-[11px] font-mono whitespace-pre-wrap break-all text-black/80 max-h-32 overflow-y-auto">
+                                    {saveFeedback.technicalDetails}
+                                </pre>
+                            </details>
+                        )}
+
+                        <div className="pt-2 flex justify-center gap-3">
+                            {saveFeedback.status === 'success' ? (
+                                <Button
+                                    type="button"
+                                    onClick={() => {
+                                        const confirmCb = saveFeedback.onConfirm;
+                                        setSaveFeedback(null);
+                                        if (confirmCb) confirmCb();
+                                    }}
+                                    className="min-w-[120px] bg-emerald-700 hover:bg-emerald-800 text-white"
+                                >
+                                    {t('OK', 'OK')}
+                                </Button>
+                            ) : (
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    onClick={() => {
+                                        const confirmCb = saveFeedback.onConfirm;
+                                        setSaveFeedback(null);
+                                        if (confirmCb) confirmCb();
+                                    }}
+                                    className="min-w-[120px] border border-black/20 text-black hover:bg-black/5"
+                                >
+                                    {t('Back to Edit', 'Lura għall-Editjar')}
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </Modal>

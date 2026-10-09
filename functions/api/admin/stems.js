@@ -131,10 +131,7 @@ async function getStemEntryStats(client, stemString) {
         sql: `
             SELECT id
             FROM entries
-            WHERE is_loanword = 1
-              AND zokk_morphology IS NOT NULL
-              AND json_valid(zokk_morphology) = 1
-              AND json_extract(zokk_morphology, '$.stem_string') = ?
+            WHERE stem = ?
         `,
         args: [stemString],
     });
@@ -359,11 +356,34 @@ export async function onRequestGet({ request, env }) {
         args.push(limit, offset);
 
         const res = await client.execute({ sql, args });
-        const stems = [];
-        for (const row of res.rows) {
-            const stats = await getStemEntryStats(client, row.stem_string);
-            stems.push(normalizeStemRow(row, stats));
+        const stemStrings = res.rows.map(r => r.stem_string).filter(Boolean);
+        const statsMap = new Map();
+        for (const s of stemStrings) {
+            statsMap.set(s, { entry_count: 0, entry_ids: [] });
         }
+
+        if (stemStrings.length > 0) {
+            for (let i = 0; i < stemStrings.length; i += 100) {
+                const chunk = stemStrings.slice(i, i + 100);
+                const placeholders = chunk.map(() => '?').join(', ');
+                const entriesRes = await client.execute({
+                    sql: `SELECT id, stem FROM entries WHERE stem IN (${placeholders})`,
+                    args: chunk
+                });
+                for (const row of entriesRes.rows) {
+                    const st = statsMap.get(row.stem);
+                    if (st) {
+                        st.entry_count++;
+                        st.entry_ids.push(String(row.id));
+                    }
+                }
+            }
+        }
+
+        const stems = res.rows.map(row => {
+            const stats = statsMap.get(row.stem_string) || { entry_count: 0, entry_ids: [] };
+            return normalizeStemRow(row, stats);
+        });
         return json({ stems });
     } catch (e) {
         return internalError(e);

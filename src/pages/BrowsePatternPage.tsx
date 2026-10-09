@@ -397,7 +397,7 @@ export function BrowsePatternPage() {
         loadPatterns();
     }, [loadPatterns]);
 
-    useCatalogRefresh(() => loadPatterns(), { intervalMs: 60_000 });
+    useCatalogRefresh(() => loadPatterns());
 
     const patternConfigItems = useMemo(() => getCategoryItems('cv_wizen_pattern'), [getCategoryItems]);
 

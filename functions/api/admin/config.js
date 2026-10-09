@@ -39,13 +39,26 @@ async function verifyAdmin(request, env) {
     }
 }
 
-function json(data, status = 200) {
+// ── In-Memory Worker Cache (Shared within worker isolate) ─────────────────────
+const configCache = new Map();
+const CONFIG_CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
+
+export function invalidateConfigCache() {
+    configCache.clear();
+}
+
+function json(data, status = 200, cacheStatus = null) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+    };
+    if (status === 200) {
+        headers['Cache-Control'] = 'public, max-age=60, s-maxage=3600, stale-while-revalidate=86400';
+        if (cacheStatus) headers['X-Config-Cache'] = cacheStatus;
+    }
     return new Response(JSON.stringify(data), {
         status,
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-        },
+        headers,
     });
 }
 
@@ -279,6 +292,13 @@ export async function onRequestGet({ request, env }) {
         const url = new URL(request.url);
         const category = url.searchParams.get('category');
 
+        const cacheKey = category || '__all__';
+        const now = Date.now();
+        const cached = configCache.get(cacheKey);
+        if (cached && (now - cached.timestamp < CONFIG_CACHE_TTL_MS)) {
+            return json({ config: cached.config }, 200, 'HIT-MEMORY');
+        }
+
         const client = getDbClient(env);
 
         await ensurePatternApplicabilityMetadataColumn(client);
@@ -335,7 +355,8 @@ export async function onRequestGet({ request, env }) {
             return (a.sort_order || 0) - (b.sort_order || 0);
         });
 
-        return json({ config });
+        configCache.set(cacheKey, { config, timestamp: Date.now() });
+        return json({ config }, 200, 'MISS');
     } catch (e) {
         return internalError(e);
     }
@@ -343,6 +364,7 @@ export async function onRequestGet({ request, env }) {
 
 // ── POST — create config item ──────────────────────────────────────────────────
 export async function onRequestPost({ request, env }) {
+    invalidateConfigCache();
     try {
         if (!(await verifyAdmin(request, env))) return unauthorized();
 
@@ -392,6 +414,7 @@ export async function onRequestPost({ request, env }) {
 
 // ── PUT — update config item ───────────────────────────────────────────────────
 export async function onRequestPut({ request, env }) {
+    invalidateConfigCache();
     try {
         if (!(await verifyAdmin(request, env))) return unauthorized();
 
@@ -481,6 +504,7 @@ export async function onRequestPut({ request, env }) {
 
 // ── DELETE ─────────────────────────────────────────────────────────────────────
 export async function onRequestDelete({ request, env }) {
+    invalidateConfigCache();
     try {
         if (!(await verifyAdmin(request, env))) return unauthorized();
 

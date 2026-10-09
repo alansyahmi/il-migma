@@ -9,8 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useAdminConfig } from '@/lib/adminConfig';
-import { apiSearch, apiGetDistinctValues, invalidateDistinctValuesCache } from '@/lib/api';
-import { useCatalogRefresh } from '@/hooks/useCatalogRefresh';
+import { apiSearch, apiGetDistinctValues } from '@/lib/api';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { resolveEntryGender } from '@/lib/gender';
 import { getSearchCardLocation } from '@/lib/searchCard';
@@ -327,6 +326,9 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
     const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { hideTheoreticalForms } = useHideTheoreticalForms();
+    const [searchParams] = useSearchParams();
+    const currentQuery = (searchParams.get('q') || '').trim().toLowerCase();
+
     const alternativeForms = parseMaybeArray<any>(result.entry.alternative_forms);
     const headword = hideTheoreticalForms ? stripTheoreticalPrefix(result.headword) : result.headword;
     const visibleInflections = result.inflections.filter(row => !shouldHideSurface(row, hideTheoreticalForms));
@@ -335,6 +337,18 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
             .filter((alt: any) => !shouldHideSurface(alt, hideTheoreticalForms))
             .map((alt: any) => ({ ...alt, headword: stripTheoreticalPrefix(alt.headword || '') }))
         : alternativeForms;
+
+    const matchedAltForm = currentQuery
+        ? displayAlternativeForms.find((alt: any) =>
+            alt.headword && alt.headword.toLowerCase().trim() === currentQuery
+          ) || displayAlternativeForms.find((alt: any) =>
+            alt.headword && (
+                alt.headword.toLowerCase().includes(currentQuery) ||
+                currentQuery.includes(alt.headword.toLowerCase())
+            )
+          )
+        : null;
+
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3 w-full">
             <div className="flex flex-col md:grid md:grid-cols-[12rem_8rem_1fr_16rem] min-h-20">
@@ -347,6 +361,23 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                             className="font-serif font-extrabold text-[1.35rem] leading-tight text-black hover:underline block">
                             {headword}
                         </Link>
+                        {matchedAltForm && (
+                            <div className="mt-1">
+                                <span className="inline-flex items-center gap-1 text-[11px] font-sans font-medium text-[#1034A6] bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                                    <span className="opacity-70 font-normal">
+                                        {term('variant-matched') || 'Varjant'}:
+                                    </span>
+                                    <span className="font-serif font-bold">
+                                        {matchedAltForm.headword}
+                                    </span>
+                                    {matchedAltForm.type && (
+                                        <span className="text-[9px] uppercase opacity-75">
+                                            ({term(matchedAltForm.type) || matchedAltForm.type})
+                                        </span>
+                                    )}
+                                </span>
+                            </div>
+                        )}
                         <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
                             <Link to={result.rootHref}
                                 style={{ color: EGYPTIAN_BLUE }}
@@ -389,16 +420,40 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                                 {term('alternative-forms')}
                             </div>
                             <div className="space-y-1">
-                                {displayAlternativeForms.map((alt: any) => (
-                                    <div key={alt.id || alt.headword} className="flex items-baseline gap-2">
-                                        <Link to={`/entry/${alt.id || alt.headword}`} className="font-serif text-sm font-semibold text-[#1034A6] hover:underline">
-                                            {alt.headword}
-                                        </Link>
-                                        <span className="text-xs text-black/50 italic">
-                                            "{getGloss(alt, language, mode)}"
-                                        </span>
-                                    </div>
-                                ))}
+                                {displayAlternativeForms.map((alt: any) => {
+                                    const isLinked = Boolean(alt.target_entry_id || (alt.has_lemma_entry && alt.id && !String(alt.id).startsWith('alt_')));
+                                    const linkTarget = alt.target_entry_id || alt.id;
+                                    const gloss = getGloss(alt, language, mode);
+
+                                    return (
+                                        <div key={alt.id || alt.headword} className="flex items-baseline gap-2 flex-wrap">
+                                            {isLinked ? (
+                                                <Link to={`/entry/${linkTarget}`} className="font-serif text-sm font-semibold text-[#1034A6] hover:underline">
+                                                    {alt.headword}
+                                                </Link>
+                                            ) : (
+                                                <span className="font-serif text-sm font-semibold text-black">
+                                                    {alt.headword}
+                                                </span>
+                                            )}
+                                            {alt.type && (
+                                                <span className="text-[9px] uppercase font-sans px-1.5 py-0.2 rounded bg-black/5 text-black/60 border border-black/8">
+                                                    {term(alt.type) || alt.type}
+                                                </span>
+                                            )}
+                                            {alt.notes && (
+                                                <span className="text-xs text-black/45 italic">
+                                                    ({alt.notes})
+                                                </span>
+                                            )}
+                                            {isLinked && gloss && (
+                                                <span className="text-xs text-black/50 italic">
+                                                    "{gloss}"
+                                                </span>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}
@@ -614,8 +669,6 @@ export function AdvancedSearch() {
     const [availableSources, setAvailableSources] = useState<{ value: string; label: string }[]>([]);
 
     const loadDynamicOptions = useCallback(async () => {
-        invalidateDistinctValuesCache();
-
         const [tags, vowelSets, sources] = await Promise.all([
             apiGetDistinctValues('tags'),
             apiGetDistinctValues('vowel_sets'),
@@ -633,8 +686,6 @@ export function AdvancedSearch() {
     useEffect(() => {
         loadDynamicOptions().catch((e) => console.error('Dynamic options fetch error:', e));
     }, [loadDynamicOptions]);
-
-    useCatalogRefresh(() => loadDynamicOptions(), { intervalMs: 60_000 });
 
     // Effective results state
     const [results, setResults] = useState<SearchResult[]>([]);

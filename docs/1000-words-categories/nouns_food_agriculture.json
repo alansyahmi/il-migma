@@ -1,0 +1,1035 @@
+{
+  "category_id": "nouns_food_agriculture",
+  "category_title": "Nouns: Food, Sustenance & Agriculture",
+  "total_entries": 10,
+  "entries": [
+    {
+      "id": "n-ikel",
+      "headword": "ikel",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "food",
+          "text_mt": null
+        }
+      ],
+      "gender": "masculine",
+      "root_consonants": "w-k-l",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/ikel",
+      "source_citation": "Wiktionary: ikel",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَكْل",
+          "definition": "provender, viands, commissariat"
+        }
+      ],
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "ikla",
+      "dual_form": null,
+      "paucal_form": "ikliet",
+      "feminine_form": "ikla",
+      "masculine_form": "ikel",
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "i-e",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": "i-a",
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [],
+      "rank": 216,
+      "source_frequency_rank": 216,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Food, Sustenance & Agriculture",
+      "theme_id": "nouns_food_agriculture"
+    },
+    {
+      "id": "n-qasam",
+      "headword": "qasam",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "q-s-m",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: qasam",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/qasam",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قِسْم",
+          "definition": "department, section, share"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "field, sector, domain",
+          "text_mt": "Post jew għalqa; jew fergħa ta' studju u ħidma.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Huwa jaħdem fil-qasam tal-edukazzjoni u l-kultura.",
+          "en": "He works in the education and culture sector."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɐ.sɐm/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "oqsma",
+          "pattern": "o123a"
+        },
+        {
+          "form": "qsam",
+          "pattern": "12â3"
+        },
+        {
+          "form": "qsum",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "oqsma",
+          "pattern": "o123a"
+        },
+        {
+          "form": "qsam",
+          "pattern": "12â3"
+        },
+        {
+          "form": "qsum",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": "---",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 419,
+      "source_frequency_rank": 419,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Food, Sustenance & Agriculture",
+      "theme_id": "nouns_food_agriculture"
+    },
+    {
+      "id": "n-żejt",
+      "headword": "żejt",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "ż-j-t",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: żejt",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/%C5%BCejt",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "زَيْت",
+          "definition": "oil, fat, lipid"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "oil",
+          "text_mt": "Likwidu żejtni użat fit-tisjir jew fil-magni.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Żied iż-żejt mal-insalata fil-kċina.",
+          "en": "He added oil to the salad in the kitchen."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈzɛjt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "żjut",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "żjut",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "e--",
+      "vowel_set_pl": "--u",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 626,
+      "source_frequency_rank": 626,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Food, Sustenance & Agriculture",
+      "theme_id": "nouns_food_agriculture"
+    },
+    {
+      "id": "n-ħalib",
+      "headword": "ħalib",
+      "pos": "noun",
+      "definitions": [
+        {
+          "text_en": "milk",
+          "text_mt": null
+        },
+        {
+          "text_en": "juice",
+          "text_mt": null
+        }
+      ],
+      "gender": "masculine",
+      "root_consonants": "ħ-l-b",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_title": "Wiktionary",
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A7alib",
+      "source_citation": "Wiktionary: ħalib",
+      "source_publisher": "Wiktionary",
+      "tags": null,
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "حَلِيب",
+          "definition": "milk, milk, raw milk"
+        }
+      ],
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ħlejjeb",
+          "pattern": null
+        },
+        {
+          "form": "ħalibijiet",
+          "pattern": null
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħlejjeb",
+          "pattern": null
+        },
+        {
+          "form": "ħalibijiet",
+          "pattern": null
+        }
+      ],
+      "vowel_set_sg": "a-i",
+      "vowel_set_pl": "e-e",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "verb_form": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "alternative_forms": [],
+      "related_entries": [
+        "n-abjad-ħalib",
+        "n-ħalib-magħqud",
+        "n-ħalib-maħlul",
+        "n-tal-ħalib"
+      ],
+      "rank": 670,
+      "source_frequency_rank": 670,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Food, Sustenance & Agriculture",
+      "theme_id": "nouns_food_agriculture"
+    },
+    {
+      "id": "n-frott",
+      "headword": "frott",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "frott",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: frott",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/frott",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "fruttu",
+          "definition": null
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "frutto",
+          "definition": null
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "fructus",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "fruit, produce",
+          "text_mt": "Frott ħelwa prodotta mill-pjanti u s-siġar li tintiekel mir-raħal.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ġabru frott frisk minn fuq is-siġar tal-ġnien fis-sajf.",
+          "en": "They gathered fresh fruit from the garden trees in summer."
+        }
+      ],
+      "related_entries": [
+        "n-fruttata",
+        "n-fruttina",
+        "n-fruttiera"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈfrɔtt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "frotta",
+      "dual_form": null,
+      "paucal_form": "frottiet",
+      "feminine_form": "frotta",
+      "masculine_form": "frott",
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 755,
+      "source_frequency_rank": 755,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Food, Sustenance & Agriculture",
+      "theme_id": "nouns_food_agriculture"
+    },
+    {
+      "id": "n-qamħ",
+      "headword": "qamħ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "qamħ",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: qamħ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/qam%C4%A7",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قَمْح",
+          "definition": "wheat"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "wheat",
+          "text_mt": "Ċereali u pjanta agrikola mrobbija fl-għelieqi użata biex jagħmlu d-dqiq u l-ħobż.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-bdiewa ġabru l-qamħ mis-swieq tar-raba' f'Ġunju.",
+          "en": "The farmers harvested the wheat from the fields in June."
+        }
+      ],
+      "related_entries": [
+        "n-qamħirrum"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɐmħ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "qamħa",
+      "dual_form": "qamħtejn",
+      "paucal_form": "qamħiet",
+      "feminine_form": "qamħa",
+      "masculine_form": "qamħ",
+      "plural_forms": [
+        {
+          "form": "qmuħ",
+          "pattern": "12â3"
+        },
+        {
+          "form": "qmieħ",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "qmuħ",
+          "pattern": "12â3"
+        },
+        {
+          "form": "qmieħ",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 811,
+      "source_frequency_rank": 811,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Food, Sustenance & Agriculture",
+      "theme_id": "nouns_food_agriculture"
+    },
+    {
+      "id": "n-laħam",
+      "headword": "laħam",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "l-ħ-m",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: laħam",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/la%C4%A7am",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "لَحْم",
+          "definition": "meat, burger, flesh"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "meat, flesh",
+          "text_mt": "Il-muskoli u t-tessut tal-annimal użat fil-kċina bħala ikel.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Sajjru l-laħam tal-baqra fit-forn bit-tadam u l-patata.",
+          "en": "They cooked the beef in the oven with tomatoes and potatoes."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɐ.ħɐm/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "laħma",
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "laħma",
+      "masculine_form": "laħam",
+      "plural_forms": [
+        {
+          "form": "laħmijiet",
+          "pattern": "-ijiet"
+        },
+        {
+          "form": "lħum",
+          "pattern": "12â3"
+        },
+        {
+          "form": "lħumijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "laħmijiet",
+          "pattern": "-ijiet"
+        },
+        {
+          "form": "lħum",
+          "pattern": "12â3"
+        },
+        {
+          "form": "lħumijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": "a--",
+      "vowel_set_dual": null,
+      "vowel_set_opp": "a--",
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 817,
+      "source_frequency_rank": 817,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Food, Sustenance & Agriculture",
+      "theme_id": "nouns_food_agriculture"
+    },
+    {
+      "rank": 869,
+      "source_frequency_rank": 869,
+      "id": "n-ħobż",
+      "headword": "ħobż",
+      "pos": "noun",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-1000mcw",
+      "source_citation": "1000 Most Common Maltese Words",
+      "source_title": "1000 Most Common Maltese Words",
+      "source_year": null,
+      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
+      "source_publisher": "1000mostcommonwords.com",
+      "etymology_chain": [],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "bread",
+          "text_mt": null,
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [],
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Food, Sustenance & Agriculture",
+      "theme_id": "nouns_food_agriculture"
+    },
+    {
+      "id": "n-tuffieħ",
+      "headword": "tuffieħ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "tuffieħ",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: tuffieħ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tuffie%C4%A7",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تُفَّاح",
+          "definition": null
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "apples (collective)",
+          "text_mt": "Frott tond u ħelu meħud mis-siġra tat-tuffieħ.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tuffieħ kien mifrux fit-tilar tas-suq filgħodu.",
+          "en": "The apples were spread on the market tray in the morning."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "toffieħ",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tʊfˈfɪːħ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 1,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": "tuffieħa",
+      "dual_form": null,
+      "paucal_form": "tuffiħat",
+      "feminine_form": "tuffieħa",
+      "masculine_form": "tuffieħ",
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 927,
+      "source_frequency_rank": 927,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Food, Sustenance & Agriculture",
+      "theme_id": "nouns_food_agriculture"
+    },
+    {
+      "id": "n-melħ",
+      "headword": "melħ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "m-l-ħ",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: melħ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mel%C4%A7",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مِلْح",
+          "definition": "persister, sal, saline"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "salt",
+          "text_mt": "Sustanza bajda u mellaħ meħuda mil-baħar u użata fit-tisjir tal-ikel.",
+          "register": "",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Roxx il-melħ fuq l-insalata biex jagħti t-togħma.",
+          "en": "He sprinkled salt over the salad to add flavor."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɛlħ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "mlieħ",
+          "pattern": "12â3"
+        },
+        {
+          "form": "mlieħi",
+          "pattern": "12â3i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "mlieħ",
+          "pattern": "12â3"
+        },
+        {
+          "form": "mlieħi",
+          "pattern": "12â3i"
+        }
+      ],
+      "vowel_set_sg": "e--",
+      "vowel_set_pl": "--ie",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": null,
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 995,
+      "source_frequency_rank": 995,
+      "audit_status": "pending",
+      "audit_notes": null,
+      "theme": "Nouns: Food, Sustenance & Agriculture",
+      "theme_id": "nouns_food_agriculture"
+    }
+  ]
+}

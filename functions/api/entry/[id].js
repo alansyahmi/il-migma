@@ -242,9 +242,14 @@ export async function onRequestGet({ params, env }) {
                COALESCE(pat.id, pat2.id)                     AS pattern_id
             FROM entries e
             ${ENTRY_MORPHOLOGY_JOINS}
-            LEFT JOIN root_pattern_forms rpf ON rpf.id = e.id
+            LEFT JOIN root_pattern_forms rpf ON (rpf.id = e.id OR (rpf.derived_form = e.headword))
             LEFT JOIN roots r_rpf ON r_rpf.id = rpf.root_id
-            LEFT JOIN roots r ON r.consonants = e.root_consonants
+            LEFT JOIN roots r ON (
+                r.consonants = e.root_consonants
+                OR r.id = e.root_consonants
+                OR r.id = 'root-' || e.root_consonants
+                OR LOWER(REPLACE(r.consonants, ' ', '')) = LOWER(REPLACE(COALESCE(e.root_consonants, ''), ' ', ''))
+            )
             LEFT JOIN patterns pat ON pat.id = rpf.pattern_id
             LEFT JOIN patterns pat2 ON pat2.cv_notation = COALESCE(nm.morph_pattern, e.cv_pattern) AND pat.id IS NULL
             WHERE ${whereClause}
@@ -272,6 +277,50 @@ export async function onRequestGet({ params, env }) {
                 sql: buildEntrySelectSql(conditions.join(' OR ')) + ' LIMIT 1',
                 args,
             });
+        }
+
+        let redirectedFromAltForm = null;
+
+        // 3. If not found, try headword match
+        if (!entryRes.rows.length && id) {
+            const straightApos = id.replace(/[\u2018\u2019`´]/g, "'");
+            const curlyApos = id.replace(/[\u2018\u2019`´']/g, "’");
+            entryRes = await db.execute({
+                sql: buildEntrySelectSql('LOWER(e.headword) IN (LOWER(?), LOWER(?), LOWER(?))') + ' LIMIT 1',
+                args: [id, straightApos, curlyApos],
+            });
+        }
+
+        // 4. If not found, check alternative forms
+        if (!entryRes.rows.length && id) {
+            const straightApos = id.replace(/[\u2018\u2019`´]/g, "'");
+            const curlyApos = id.replace(/[\u2018\u2019`´']/g, "’");
+            const altRes = await db.execute({
+                sql: `SELECT af.entry_id, af.headword, af.type, af.notes 
+                      FROM alternative_forms af
+                      WHERE LOWER(af.headword) IN (LOWER(?), LOWER(?), LOWER(?)) 
+                      ORDER BY 
+                        CASE WHEN af.headword = ? THEN 0 ELSE 1 END,
+                        CASE WHEN af.notes IS NOT NULL THEN 0 ELSE 1 END,
+                        af.sort_order ASC
+                      LIMIT 1`,
+                args: [id, straightApos, curlyApos, id],
+            });
+            if (altRes.rows.length > 0) {
+                const altRow = altRes.rows[0];
+                entryRes = await db.execute({
+                    sql: buildEntrySelectSql('e.id = ?'),
+                    args: [altRow.entry_id],
+                });
+                if (entryRes.rows.length > 0) {
+                    redirectedFromAltForm = {
+                        original_query: id,
+                        headword: altRow.headword,
+                        type: altRow.type || 'orthographic',
+                        notes: altRow.notes || null,
+                    };
+                }
+            }
         }
 
         if (!entryRes.rows.length) return json({ error: 'Not found' }, 404);
@@ -342,6 +391,10 @@ export async function onRequestGet({ params, env }) {
         const entryPayload = hydrateEntryRow(entry);
         const payload = {
             ...entryPayload,
+            redirected_from_alt_form: redirectedFromAltForm,
+            has_inflection: entry.has_inflection !== undefined
+                ? Boolean(entry.has_inflection)
+                : Boolean(entry.is_inflectable),
             diminutives,
             diminutive_form: primaryDiminutive?.form || entryPayload.noun_morphology?.diminutive || entryPayload.adjective_morphology?.diminutive || null,
             diminutive_pattern: primaryDiminutive?.pattern || entryPayload.diminutive_pattern || null,
@@ -670,12 +723,15 @@ export async function onRequestGet({ params, env }) {
 }
 
 function json(data, status = 200, cacheStatus = 'MISS') {
+    const isSuccess = status >= 200 && status < 300;
     return new Response(JSON.stringify(data), {
         status,
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Cache-Control': 'public, max-age=120, s-maxage=3600, stale-while-revalidate=86400',
+            'Cache-Control': isSuccess
+                ? 'public, max-age=120, s-maxage=3600, stale-while-revalidate=86400'
+                : 'no-store, no-cache, must-revalidate',
             'X-Entry-Cache': cacheStatus
         },
     });

@@ -20,7 +20,7 @@ import { ensureStemsTable, syncStemMorphology } from '../../../src/lib/stemMorph
 import { ADJECTIVE_ENTRY_TOP_LEVEL_STRIP_FIELDS } from '../../../src/lib/adminSchema.ts';
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
-async function verifyAdmin(request, env) {
+export async function verifyAdmin(request, env) {
     const auth = request.headers.get('Authorization') ?? '';
     const token = auth.replace('Bearer ', '').trim();
     if (!token) return false;
@@ -69,27 +69,79 @@ function n(val) {
 async function syncAlternativeForms(client, entryId, body) {
     if (!Array.isArray(body.alternative_forms)) return;
 
+    // ── 1. Remove old forward rows for this entry ──────────────────────────
     await client.execute({
         sql: "DELETE FROM alternative_forms WHERE entry_id = ?",
         args: [entryId]
     });
 
-    for (let i = 0; i < body.alternative_forms.length; i++) {
-        const alt = body.alternative_forms[i];
-        if (!alt.headword) continue;
+    // ── 2. Remove stale reciprocal rows that pointed BACK at entryId ──────
+    await client.execute({
+        sql: "DELETE FROM alternative_forms WHERE target_entry_id = ?",
+        args: [entryId]
+    });
+    // Backward compatibility for legacy reciprocal IDs
+    await client.execute({
+        sql: "DELETE FROM alternative_forms WHERE id LIKE ?",
+        args: [`alt_%::${entryId}`]
+    });
 
-        let rowId = alt.id;
-        if (rowId && !rowId.startsWith('alt_')) {
-            rowId = `alt_${entryId}::${rowId}`;
-        } else if (!rowId) {
-            rowId = `alt_${entryId}::${uid()}`;
+    const currentHeadwordRes = await client.execute({
+        sql: "SELECT headword FROM entries WHERE id = ?",
+        args: [entryId]
+    });
+    const currentHeadword = currentHeadwordRes.rows[0]?.headword || '';
+
+    for (let i = 0; i < body.alternative_forms.length; i++) {
+        const item = body.alternative_forms[i];
+        if (!item) continue;
+
+        const isObj = typeof item === 'object';
+        const headword = String(isObj ? (item.headword || '') : item).trim();
+        if (!headword) continue;
+
+        const type = isObj ? (item.type || 'orthographic') : 'orthographic';
+        const notes = isObj && item.notes ? String(item.notes).trim() : null;
+        let targetEntryId = isObj ? (item.target_entry_id || null) : null;
+
+        // If targetEntryId was not explicitly set, but item.id was a valid entry ID (and not an alt_* ID)
+        if (!targetEntryId && isObj && item.has_lemma_entry && item.id && !item.id.startsWith('alt_')) {
+            targetEntryId = String(item.id).trim();
         }
 
+        // Verify targetEntryId if specified
+        if (targetEntryId) {
+            const check = await client.execute({
+                sql: "SELECT id FROM entries WHERE id = ?",
+                args: [targetEntryId]
+            });
+            if (check.rows.length === 0) {
+                targetEntryId = null;
+            }
+        }
+
+        // ── Forward row (entryId → alt) ──────────────────────────────────
+        let rowId = isObj && item.id && String(item.id).startsWith(`alt_${entryId}::`)
+            ? item.id
+            : `alt_${entryId}::${targetEntryId || uid()}`;
+
         await client.execute({
-            sql: `INSERT INTO alternative_forms (id, entry_id, headword, type, sort_order)
-                  VALUES (?, ?, ?, ?, ?)`,
-            args: [rowId, entryId, alt.headword, alt.type || null, i]
+            sql: `INSERT INTO alternative_forms (id, entry_id, headword, type, notes, target_entry_id, sort_order)
+                  VALUES (?, ?, ?, ?, ?, ?, ?)
+                  ON CONFLICT(id) DO UPDATE SET headword = excluded.headword, type = excluded.type, notes = excluded.notes, target_entry_id = excluded.target_entry_id, sort_order = excluded.sort_order`,
+            args: [rowId, entryId, headword, type, notes, targetEntryId, i]
         });
+
+        // ── Reciprocal row: only if targetEntryId is a distinct real entry ─
+        if (targetEntryId && targetEntryId !== entryId && currentHeadword) {
+            const reciprocalId = `alt_${targetEntryId}::${entryId}`;
+            await client.execute({
+                sql: `INSERT INTO alternative_forms (id, entry_id, headword, type, notes, target_entry_id, sort_order)
+                      VALUES (?, ?, ?, ?, ?, ?, ?)
+                      ON CONFLICT(id) DO UPDATE SET headword = excluded.headword, type = excluded.type, notes = excluded.notes, target_entry_id = excluded.target_entry_id`,
+                args: [reciprocalId, targetEntryId, currentHeadword, type, notes, entryId, 0]
+            });
+        }
     }
 }
 
@@ -218,6 +270,57 @@ async function persistEntryRecord(client, {
     try {
         const normalizedEntryPos = normalizeEntryPos(entryPos || body.pos);
         const writeBody = { ...body, id: entryId, pos: normalizedEntryPos };
+
+        if (body.arabic !== undefined) {
+            const arabicVal = typeof body.arabic === 'string' ? body.arabic.trim() : '';
+            let currentChain = [];
+            if (body.etymology_chain) {
+                try {
+                    currentChain = typeof body.etymology_chain === 'string' ? JSON.parse(body.etymology_chain) : body.etymology_chain;
+                    if (!Array.isArray(currentChain)) currentChain = [];
+                } catch {
+                    currentChain = [];
+                }
+            } else {
+                const existing = await tx.execute({
+                    sql: 'SELECT etymology_chain FROM entries WHERE id = ?',
+                    args: [entryId],
+                });
+                if (existing.rows[0]?.etymology_chain) {
+                    try {
+                        currentChain = JSON.parse(existing.rows[0].etymology_chain);
+                        if (!Array.isArray(currentChain)) currentChain = [];
+                    } catch {
+                        currentChain = [];
+                    }
+                }
+            }
+
+            const arabicIdx = currentChain.findIndex(
+                (step) => step && (String(step.language || '').trim().toLowerCase() === 'arabic' || /[\u0600-\u06FF]/.test(step.term || ''))
+            );
+
+            if (arabicVal) {
+                if (arabicIdx >= 0) {
+                    currentChain[arabicIdx] = {
+                        ...currentChain[arabicIdx],
+                        language: 'Arabic',
+                        term: arabicVal,
+                    };
+                } else {
+                    currentChain.push({
+                        relationship: 'From',
+                        language: 'Arabic',
+                        term: arabicVal,
+                        definition: '',
+                    });
+                }
+            } else if (arabicIdx >= 0) {
+                currentChain.splice(arabicIdx, 1);
+            }
+
+            writeBody.etymology_chain = currentChain;
+        }
 
         await upsertEntryRow(tx, writeBody, entryColumns, entryId);
 
@@ -442,7 +545,15 @@ export function buildAdminListQuery({ q = '', pos = '', letter = '', limit = 50,
         e.source_language, 
         e.created_at,
         e.root_consonants,
+        e.stem,
+        e.etymology_chain,
+        e.definitions,
         json_extract(e.definitions, '$[0].text_en') AS text_en,
+        COALESCE(
+            json_extract(e.definitions, '$[0].text_mt'),
+            json_extract(e.definitions, '$[1].text_mt'),
+            json_extract(e.definitions, '$[2].text_mt')
+        ) AS text_mt,
         vm.form AS verb_form,
         vm.class AS verb_class,
         vm.transitivity AS verb_transitivity,
@@ -567,6 +678,36 @@ export async function onRequestGet({ request, env }) {
                     alternative_forms = [];
                 }
             }
+
+            let etymology_chain = [];
+            if (row.etymology_chain) {
+                try {
+                    etymology_chain = typeof row.etymology_chain === 'string' ? JSON.parse(row.etymology_chain) : row.etymology_chain;
+                    if (!Array.isArray(etymology_chain)) etymology_chain = [];
+                } catch {
+                    etymology_chain = [];
+                }
+            }
+            const arabicStep = Array.isArray(etymology_chain)
+                ? etymology_chain.find((step) => step && (String(step.language || '').trim().toLowerCase() === 'arabic' || /[\u0600-\u06FF]/.test(step.term || '')))
+                : null;
+            const arabic = arabicStep?.term || undefined;
+
+            let text_mt = row.text_mt || undefined;
+            if (!text_mt && row.definitions) {
+                try {
+                    const defs = typeof row.definitions === 'string' ? JSON.parse(row.definitions) : row.definitions;
+                    if (Array.isArray(defs)) {
+                        const firstWithMt = defs.find((d) => d && (d.text_mt || d.definition_mt || d.gloss_mt || d.mt));
+                        if (firstWithMt) {
+                            text_mt = firstWithMt.text_mt || firstWithMt.definition_mt || firstWithMt.gloss_mt || firstWithMt.mt || undefined;
+                        }
+                    }
+                } catch {
+                    // Ignore JSON parse error
+                }
+            }
+
             return {
                 id: row.id,
                 headword: row.headword,
@@ -576,7 +717,11 @@ export async function onRequestGet({ request, env }) {
                 source_language: row.source_language || undefined,
                 created_at: row.created_at,
                 root_consonants: row.root_consonants || undefined,
+                stem: row.stem || undefined,
+                arabic,
+                etymology_chain,
                 text_en: row.text_en || undefined,
+                text_mt,
                 verb_form: row.verb_form || undefined,
                 verb_class: row.verb_class || undefined,
                 verb_transitivity: row.verb_transitivity || undefined,
@@ -793,4 +938,136 @@ function json(data, status = 200, extraHeaders = {}) {
             ...extraHeaders,
         },
     });
+}
+
+// ── Batch Import / Upsert Helper ──────────────────────────────────────────────
+export async function processEntryBatch(client, { entries = [], skipExisting = false } = {}) {
+    if (!Array.isArray(entries) || entries.length === 0) {
+        return { ok: true, total: 0, inserted: 0, updated: 0, skipped: 0, failed: 0, errors: [] };
+    }
+
+    // Ensure dependent tables once per batch
+    await ensureVerbMorphologyTable(client);
+    await ensureNounMorphologyTable(client);
+    await ensureAdjMorphologyTable(client);
+    await ensureParticipleMorphologyTable(client);
+    await ensureNumeralMorphologyTable(client);
+    await ensureRelationshipsTable(client);
+    await ensureTagsTables(client);
+    await ensureStemsTable(client);
+
+    const tableInfo = await client.execute("PRAGMA table_info(entries)");
+    const columns = (tableInfo.rows || []).map(r => r.name);
+
+    // Collect candidate IDs and candidate headwords for single-query prefetch
+    const candidateIds = entries.map(e => normalizeEntryId(e.id)).filter(Boolean);
+    const candidateHeadwords = Array.from(new Set(entries.map(e => e.headword).filter(Boolean)));
+
+    const existingById = new Map();
+    const existingByHeadwordPos = new Map();
+
+    if (candidateIds.length > 0 || candidateHeadwords.length > 0) {
+        const whereClauses = [];
+        const queryArgs = [];
+
+        if (candidateIds.length > 0) {
+            const placeholders = candidateIds.map(() => '?').join(', ');
+            whereClauses.push(`id IN (${placeholders})`);
+            queryArgs.push(...candidateIds);
+        }
+
+        if (candidateHeadwords.length > 0) {
+            const placeholders = candidateHeadwords.map(() => '?').join(', ');
+            whereClauses.push(`headword IN (${placeholders})`);
+            queryArgs.push(...candidateHeadwords);
+        }
+
+        const findSql = `SELECT id, headword, pos FROM entries WHERE ${whereClauses.join(' OR ')}`;
+        const existingRes = await client.execute({ sql: findSql, args: queryArgs });
+
+        for (const row of (existingRes.rows || [])) {
+            if (row.id) {
+                existingById.set(row.id, row.id);
+            }
+            if (row.headword && row.pos) {
+                const key = `${String(row.headword).toLowerCase().trim()}::${normalizeEntryPos(row.pos)}`;
+                existingByHeadwordPos.set(key, row.id);
+            }
+        }
+    }
+
+    let inserted = 0;
+    let updated = 0;
+    let skipped = 0;
+    let failed = 0;
+    const errors = [];
+    const details = [];
+
+    for (let i = 0; i < entries.length; i++) {
+        const body = entries[i];
+        if (!body || !body.headword || !body.pos) {
+            failed++;
+            errors.push({ index: i, headword: body?.headword || '(unknown)', error: 'Missing headword or pos' });
+            continue;
+        }
+
+        const normalizedPos = normalizeEntryPos(body.pos);
+        const headwordKey = `${String(body.headword).toLowerCase().trim()}::${normalizedPos}`;
+        const inputId = normalizeEntryId(body.id);
+
+        const existingId = (inputId && existingById.get(inputId)) || existingByHeadwordPos.get(headwordKey) || null;
+
+        if (existingId) {
+            if (skipExisting) {
+                skipped++;
+                details.push({ id: existingId, headword: body.headword, pos: normalizedPos, action: 'skipped' });
+                continue;
+            }
+
+            try {
+                await persistEntryRecord(client, {
+                    body,
+                    entryColumns: columns,
+                    entryPos: normalizedPos,
+                    entryId: existingId,
+                });
+                invalidateEntryCache(existingId);
+                updated++;
+                details.push({ id: existingId, headword: body.headword, pos: normalizedPos, action: 'updated' });
+            } catch (err) {
+                failed++;
+                errors.push({ index: i, headword: body.headword, error: err.message });
+            }
+        } else {
+            const newId = inputId || buildSuggestedEntryId({ headword: body.headword, pos: normalizedPos });
+            try {
+                await persistEntryRecord(client, {
+                    body,
+                    entryColumns: columns,
+                    entryPos: normalizedPos,
+                    entryId: newId,
+                });
+                invalidateEntryCache(newId);
+                inserted++;
+                // Track newly inserted entry in memory map so duplicate records inside the same batch match properly
+                existingById.set(newId, newId);
+                existingByHeadwordPos.set(headwordKey, newId);
+                details.push({ id: newId, headword: body.headword, pos: normalizedPos, action: 'inserted' });
+            } catch (err) {
+                failed++;
+                errors.push({ index: i, headword: body.headword, error: err.message });
+            }
+        }
+    }
+
+    return {
+        ok: true,
+        total: entries.length,
+        inserted,
+        updated,
+        skipped,
+        failed,
+        errors,
+        details,
+    };
 }

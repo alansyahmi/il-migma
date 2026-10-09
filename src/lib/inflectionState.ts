@@ -39,11 +39,23 @@ function hasExplicitFlag(source: InflectableFlagSource, key: 'has_inflection' | 
 export function resolveEntryInflectableValue(source: InflectableFlagSource): unknown {
     if (hasExplicitFlag(source, 'has_inflection')) return source?.has_inflection;
     if (hasExplicitFlag(source, 'is_inflectable')) return source?.is_inflectable;
+    const morph = (source as any)?.noun_morphology;
+    if (morph && typeof morph === 'object') {
+        if (hasExplicitFlag(morph, 'has_inflection')) return morph.has_inflection;
+        if (hasExplicitFlag(morph, 'is_inflectable')) return morph.is_inflectable;
+    }
     return undefined;
 }
 
 export function canShowFunctionWordInflectionTable(pos?: string | null, ...inflectableValues: unknown[]): boolean {
-    return isFunctionWordInflectionPos(pos) && isInflectableEnabled(...inflectableValues);
+    const normalizedPos = String(pos || '').trim().toLowerCase();
+    if (!isFunctionWordInflectionPos(normalizedPos)) return false;
+
+    if (normalizedPos === 'preposition') {
+        return inflectableValues.some(v => v === true || v === 1 || v === '1' || v === 'true');
+    }
+
+    return isInflectableEnabled(...inflectableValues);
 }
 
 export function canShowFunctionWordInflectionTableForEntry(pos?: string | null, entry?: InflectableFlagSource): boolean {
@@ -71,10 +83,11 @@ export function isInflectionDisabled(
 export function applyInflectableToggle<T extends { is_inflectable?: unknown; has_inflection?: unknown }>(
     form: T,
     checked: boolean,
-): T & { is_inflectable: boolean; has_inflection?: boolean } {
+): T & { is_inflectable: boolean; has_inflection: boolean } {
     return {
         ...form,
         is_inflectable: checked,
-        ...(Object.prototype.hasOwnProperty.call(form, 'has_inflection') ? { has_inflection: checked } : {}),
+        has_inflection: checked,
     };
 }
+

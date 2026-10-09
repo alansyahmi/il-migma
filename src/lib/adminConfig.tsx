@@ -145,7 +145,7 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         }
     }, [getToken]);
 
-    useCatalogRefresh(refresh, { intervalMs: 120_000 });
+    useCatalogRefresh(refresh);
 
     useEffect(() => {
         refresh();

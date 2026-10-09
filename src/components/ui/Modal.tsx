@@ -8,6 +8,8 @@ interface ModalProps {
     title?: string;
     children: React.ReactNode;
     size?: 'sm' | 'md' | 'lg' | 'xl';
+    className?: string;
+    zIndex?: string;
 }
 
 const sizeClasses = {
@@ -17,7 +19,7 @@ const sizeClasses = {
     xl: 'max-w-4xl',
 };
 
-export function Modal({ open, onClose, title, children, size = 'md'}: ModalProps) {
+export function Modal({ open, onClose, title, children, size = 'md', className, zIndex }: ModalProps) {
     const panelRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -37,7 +39,10 @@ export function Modal({ open, onClose, title, children, size = 'md'}: ModalProps
 
     return (
         <div
-            className="fixed inset-0 z-50 flex min-h-screen items-center justify-center p-4 overflow-y-auto"
+            className={cn(
+                "fixed inset-0 flex min-h-screen items-center justify-center p-4 overflow-y-auto",
+                zIndex || "z-50"
+            )}
             role="dialog"
             aria-modal="true"
         >
@@ -53,6 +58,7 @@ export function Modal({ open, onClose, title, children, size = 'md'}: ModalProps
                     'relative w-full bg-white rounded-xl shadow-2xl animate-fade-in flex flex-col max-h-[90vh]',
                     'border border-border',
                     sizeClasses[size],
+                    className,
                 )}
             >
                 {title && (

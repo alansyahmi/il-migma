@@ -47,6 +47,8 @@
     "test:engine-verb-fixtures": "node --experimental-strip-types scripts/engineVerbFixtures.test.mjs",
     "test:entry-form-verb-preview": "node --experimental-strip-types scripts/entryFormModalVerbPreview.test.mjs",
     "test:zokk-flattening": "node --experimental-strip-types scripts/zokkFlattening.test.mjs",
+    "test:entry-import-parser": "node --experimental-strip-types scripts/entryImportParser.test.mjs",
+    "test:batch-import-entries": "node --experimental-strip-types scripts/batchImportEntries.test.mjs",
     "test:admin-performance": "node --test scripts/adminPerformance.test.mjs",
     "import:dry": "node scripts/import-xls.mjs --dry-run",
     "import:all": "node scripts/import-xls.mjs --execute",

@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
-import { Check, CheckSquare, Edit2, ExternalLink, Maximize2, Plus, RefreshCw, RotateCcw, Square, Trash2, X } from 'lucide-react';
+import { AlertTriangle, Check, CheckSquare, Copy, Edit2, ExternalLink, Maximize2, Plus, RefreshCw, RotateCcw, Square, Trash2, X, XCircle } from 'lucide-react';
 import { adminBulkDeleteEntries, adminDeleteEntry, adminListEntries, adminUpdateEntry } from '@/lib/api';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { Modal } from '@/components/ui/Modal';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { Spinner } from '@/components/ui/Spinner';
 import { EntryFormModal, type AdminEntry } from '@/components/admin/EntryFormModal';
@@ -42,6 +43,7 @@ export function EntryManager() {
     const [page, setPage] = useState(1);
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
+    const [isDuplicate, setIsDuplicate] = useState(false);
     const [initialFormData, setInitialFormData] = useState<Record<string, string> | null>(null);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
     const [auditFilter, setAuditFilter] = useState<'all' | 'action-needed' | 'partial' | 'complete'>('all');
@@ -57,17 +59,28 @@ export function EntryManager() {
     const [quickVerbForm, setQuickVerbForm] = useState('');
     const [quickVerbClass, setQuickVerbClass] = useState('');
     const [quickRoot, setQuickRoot] = useState('');
+    const [quickStem, setQuickStem] = useState('');
+    const [quickArabic, setQuickArabic] = useState('');
     const [quickIsLoan, setQuickIsLoan] = useState(false);
     const [quickSourceLang, setQuickSourceLang] = useState('');
     const [quickMeaning, setQuickMeaning] = useState('');
+    const [quickMeaningMt, setQuickMeaningMt] = useState('');
     const [quickTags, setQuickTags] = useState('');
     const [quickAltForms, setQuickAltForms] = useState('');
+
+    const handleDuplicate = useCallback((entry: AdminEntry) => {
+        setEditEntry(entry);
+        setIsDuplicate(true);
+        setShowForm(true);
+    }, []);
 
     const abortControllerRef = useRef<AbortController | null>(null);
     const lastRequestSignatureRef = useRef<string>('');
     const createEntryRequested = searchParams.get('create') === '1';
     const prefillHeadword = searchParams.get('headword') || searchParams.get('q') || '';
     const prefillRoot = searchParams.get('root') || searchParams.get('consonants') || '';
+
+    const [quickEditError, setQuickEditError] = useState<{ headword: string; id: string; reason: string } | null>(null);
 
     const showToast = useCallback((msg: string, ok = true) => {
         setToast({ msg, ok });
@@ -207,10 +220,13 @@ export function EntryManager() {
 
     const handleSaved = useCallback((savedData?: any) => {
         setShowForm(false);
+        const wasDuplicate = isDuplicate;
+        setIsDuplicate(false);
+        setEditEntry(null);
         setInitialFormData(null);
         if (createEntryRequested) clearCreateParams();
 
-        if (savedData && (savedData.id || editEntry?.id)) {
+        if (!wasDuplicate && savedData && (savedData.id || editEntry?.id)) {
             const targetId = savedData.id || editEntry?.id;
             setEntries((prev) => prev.map((item) => {
                 if (item.id === targetId) {
@@ -221,6 +237,7 @@ export function EntryManager() {
                         gender: savedData.gender ?? item.gender,
                         root_consonants: savedData.root_consonants || savedData._rootConsonants || item.root_consonants,
                         text_en: savedData.text_en || savedData.definitions?.[0]?.text_en || item.text_en,
+                        text_mt: savedData.text_mt || savedData.definitions?.[0]?.text_mt || item.text_mt,
                         is_loanword: savedData.is_loanword ?? item.is_loanword,
                         source_language: savedData.source_language ?? item.source_language,
                         verb_form: savedData.verb_form || savedData.form || item.verb_form,
@@ -232,12 +249,15 @@ export function EntryManager() {
                 }
                 return item;
             }));
-            showToast(term('entry-saved') || 'Entry saved');
+            const hw = savedData?.headword || editEntry?.headword;
+            showToast(hw ? `${hw} — ${term('entry-saved') || 'Entry saved'}` : (term('entry-saved') || 'Entry saved'));
             return;
         }
 
+        const hw = savedData?.headword || editEntry?.headword;
+        showToast(hw ? `${hw} — ${term('entry-saved') || 'Entry saved'}` : (term('entry-saved') || 'Entry saved'));
         load({ force: true });
-    }, [createEntryRequested, clearCreateParams, editEntry, showToast, term, load]);
+    }, [createEntryRequested, clearCreateParams, editEntry, isDuplicate, showToast, term, load]);
 
     const handleBulkDelete = async () => {
         const count = selectedIds.size;
@@ -338,9 +358,12 @@ export function EntryManager() {
         setQuickVerbForm(entry.verb_form || '');
         setQuickVerbClass(entry.verb_class || entry.verb_morphology?.verb_class || '');
         setQuickRoot(entry.root_consonants || '');
+        setQuickStem(entry.stem || '');
+        setQuickArabic(entry.arabic || '');
         setQuickIsLoan(Boolean(entry.is_loanword));
         setQuickSourceLang(entry.source_language || '');
         setQuickMeaning(entry.text_en || '');
+        setQuickMeaningMt(entry.text_mt || '');
 
         const tagsArr = parseTags(entry.tags);
         setQuickTags(tagsArr.join(', '));
@@ -383,7 +406,38 @@ export function EntryManager() {
                 }));
 
             const cleanMeaning = quickMeaning.trim();
-            const definitions = cleanMeaning ? [{ id: 'def_1', text_en: cleanMeaning }] : [];
+            const cleanMeaningMt = quickMeaningMt.trim();
+            const definitions = (cleanMeaning || cleanMeaningMt)
+                ? [{ id: 'def_1', text_en: cleanMeaning, text_mt: cleanMeaningMt || null }]
+                : [];
+
+            const trimmedRoot = quickRoot.trim() || null;
+            const trimmedStem = quickStem.trim() || null;
+            const trimmedArabic = quickArabic.trim();
+
+            let currentEtyChain = Array.isArray(entry.etymology_chain) ? [...entry.etymology_chain] : [];
+            const arabicIdx = currentEtyChain.findIndex(
+                (item) => item && (String(item.language || '').trim().toLowerCase() === 'arabic' || /[\u0600-\u06FF]/.test(item.term || ''))
+            );
+
+            if (trimmedArabic) {
+                if (arabicIdx >= 0) {
+                    currentEtyChain[arabicIdx] = {
+                        ...currentEtyChain[arabicIdx],
+                        language: 'Arabic',
+                        term: trimmedArabic,
+                    };
+                } else {
+                    currentEtyChain.push({
+                        relationship: 'From',
+                        language: 'Arabic',
+                        term: trimmedArabic,
+                        definition: '',
+                    });
+                }
+            } else if (arabicIdx >= 0) {
+                currentEtyChain.splice(arabicIdx, 1);
+            }
 
             const isVerb = quickPos.toLowerCase() === 'verb';
             const payload: Record<string, any> = {
@@ -391,10 +445,14 @@ export function EntryManager() {
                 headword: trimmedHeadword,
                 pos: quickPos,
                 gender: quickGender || null,
-                root_consonants: quickIsLoan ? null : (quickRoot.trim() || null),
-                is_loanword: quickIsLoan,
-                source_language: quickIsLoan ? (quickSourceLang.trim() || null) : null,
+                root_consonants: trimmedRoot,
+                stem: trimmedStem,
+                arabic: trimmedArabic || null,
+                etymology_chain: currentEtyChain,
+                is_loanword: Boolean(trimmedStem && !trimmedRoot),
+                source_language: quickSourceLang ? (quickSourceLang.trim() || null) : null,
                 text_en: cleanMeaning || null,
+                text_mt: cleanMeaningMt || null,
                 definitions,
                 tags: tagsList,
                 alternative_forms: altFormsList,
@@ -417,10 +475,14 @@ export function EntryManager() {
                             headword: trimmedHeadword,
                             pos: quickPos,
                             gender: quickGender || undefined,
-                            root_consonants: quickIsLoan ? undefined : (quickRoot.trim() || undefined),
-                            is_loanword: quickIsLoan,
-                            source_language: quickIsLoan ? (quickSourceLang.trim() || undefined) : undefined,
+                            root_consonants: trimmedRoot || undefined,
+                            stem: trimmedStem || undefined,
+                            arabic: trimmedArabic || undefined,
+                            etymology_chain: currentEtyChain,
+                            is_loanword: Boolean(trimmedStem && !trimmedRoot),
+                            source_language: quickSourceLang ? (quickSourceLang.trim() || undefined) : undefined,
                             text_en: cleanMeaning || undefined,
+                            text_mt: cleanMeaningMt || undefined,
                             verb_form: isVerb ? (quickVerbForm || undefined) : item.verb_form,
                             verb_class: isVerb ? (quickVerbClass || undefined) : item.verb_class,
                             tags: tagsList,
@@ -434,7 +496,13 @@ export function EntryManager() {
             showToast(term('entry-saved') || 'Entry saved');
             setQuickEditingId(null);
         } catch (e: unknown) {
-            showToast(e instanceof Error ? e.message : String(e), false);
+            const rawMsg = e instanceof Error ? e.message : String(e);
+            showToast(rawMsg, false);
+            setQuickEditError({
+                headword: trimmedHeadword,
+                id: entry.id,
+                reason: rawMsg,
+            });
         } finally {
             setQuickSavingId(null);
         }
@@ -448,6 +516,7 @@ export function EntryManager() {
         quickIsLoan,
         quickSourceLang,
         quickMeaning,
+        quickMeaningMt,
         quickTags,
         quickAltForms,
         getToken,
@@ -806,7 +875,8 @@ export function EntryManager() {
                                                 <Link to={`/entry/${entry.id}`} target="_blank" rel="noopener noreferrer" className="p-1.5 text-slate-400 hover:text-link hover:bg-link/10 rounded-lg" title={term('view') || 'View entry'}>
                                                     <ExternalLink size={14} />
                                                 </Link>
-                                                <button type="button" onClick={() => { setEditEntry(entry); setShowForm(true); }} className="p-1.5 text-link hover:bg-link/10 rounded-lg"><Edit2 size={14} /></button>
+                                                <button type="button" onClick={() => handleDuplicate(entry)} className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title={term('duplicate') || 'Duplicate entry'}><Copy size={14} /></button>
+                                                <button type="button" onClick={() => { setEditEntry(entry); setIsDuplicate(false); setShowForm(true); }} className="p-1.5 text-link hover:bg-link/10 rounded-lg"><Edit2 size={14} /></button>
                                                 <button type="button" onClick={() => handleDelete(entry.id, entry.headword)} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
                                             </div>
                                         </div>
@@ -876,8 +946,8 @@ export function EntryManager() {
                                     <th className="py-2.5 px-3 w-44 min-w-[150px]">
                                         {term('pos') || 'POS'} & Grammar
                                     </th>
-                                    <th className="py-2.5 px-3 w-40 min-w-[140px]">
-                                        {term('root') || 'Root'} / Etym
+                                    <th className="py-2.5 px-3 w-44 min-w-[150px]">
+                                        {term('root') || 'Root'} / {term('stem') || 'Stem'} / {term('arabic') || 'Arabic'}
                                     </th>
                                     <th className="py-2.5 px-3 min-w-[220px]">
                                         {term('meaning') || 'Meaning'}
@@ -1074,108 +1144,158 @@ export function EntryManager() {
                                                 )}
                                             </td>
 
-                                            {/* Root / Etymology */}
+                                            {/* Root / Stem / Arabic */}
                                             <td className={cn('py-2 px-3', isEditing && 'align-top')}>
                                                 {isEditing ? (
-                                                    <div className="space-y-1.5">
-                                                        <input
-                                                            type="text"
-                                                            value={quickRoot}
-                                                            onChange={(e) => setQuickRoot(e.target.value)}
-                                                            onKeyDown={(e) => handleQuickInputKeyDown(e, entry)}
-                                                            disabled={quickIsLoan}
-                                                            placeholder={quickIsLoan ? '(Loanword)' : 'k-t-b'}
-                                                            className="w-full font-mono text-[11px] px-1.5 py-1 bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-link disabled:bg-slate-100 disabled:text-slate-400"
-                                                        />
-                                                        <div className="flex items-center gap-1.5 pt-0.5">
-                                                            <label className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-700 cursor-pointer select-none">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    checked={quickIsLoan}
-                                                                    onChange={(e) => {
-                                                                        const checked = e.target.checked;
-                                                                        setQuickIsLoan(checked);
-                                                                        if (checked && !quickSourceLang) {
-                                                                            setQuickSourceLang('Italian');
-                                                                        }
-                                                                    }}
-                                                                    className="rounded border-slate-300 text-link focus:ring-link h-3 w-3"
-                                                                />
-                                                                <span>{term('loanword') || 'Loan'}</span>
+                                                    <div className="space-y-1.5 min-w-[130px]">
+                                                        <div>
+                                                            <label className="block text-[9px] font-bold uppercase tracking-wider text-black/40 mb-0.5">
+                                                                {term('root') || 'Root'}
                                                             </label>
-                                                            {quickIsLoan && (
-                                                                <select
-                                                                    value={quickSourceLang}
-                                                                    onChange={(e) => setQuickSourceLang(e.target.value)}
-                                                                    className="flex-1 text-[10px] px-1 py-0.5 bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-link text-slate-700"
-                                                                >
-                                                                    <option value="">Origin...</option>
-                                                                    {['Italian', 'Sicilian', 'English', 'French', 'Siculo-Arabic', 'Semitic', 'Other'].map((lang) => (
-                                                                        <option key={lang} value={lang}>{lang}</option>
-                                                                    ))}
-                                                                </select>
-                                                            )}
+                                                            <input
+                                                                type="text"
+                                                                value={quickRoot}
+                                                                onChange={(e) => setQuickRoot(e.target.value)}
+                                                                onKeyDown={(e) => handleQuickInputKeyDown(e, entry)}
+                                                                placeholder="k-t-b"
+                                                                className="w-full font-mono text-[11px] px-1.5 py-0.5 bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-link text-slate-800"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[9px] font-bold uppercase tracking-wider text-black/40 mb-0.5">
+                                                                {term('stem') || 'Stem'}
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                value={quickStem}
+                                                                onChange={(e) => setQuickStem(e.target.value)}
+                                                                onKeyDown={(e) => handleQuickInputKeyDown(e, entry)}
+                                                                placeholder="żokk..."
+                                                                className="w-full font-serif text-[11px] px-1.5 py-0.5 bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-link text-slate-800"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[9px] font-bold uppercase tracking-wider text-black/40 mb-0.5">
+                                                                {term('arabic') || 'Arabic'}
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                value={quickArabic}
+                                                                onChange={(e) => setQuickArabic(e.target.value)}
+                                                                onKeyDown={(e) => handleQuickInputKeyDown(e, entry)}
+                                                                placeholder="عربي..."
+                                                                dir="auto"
+                                                                className="w-full font-arabic text-xs px-1.5 py-0.5 bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-link text-slate-800"
+                                                            />
                                                         </div>
                                                     </div>
                                                 ) : (
-                                                    entry.root_consonants ? (
-                                                        <Link
-                                                            to={`/root/${entry.root_consonants}`}
-                                                            className="font-mono text-[11px] font-semibold tracking-wider text-slate-700 hover:text-link bg-slate-100 hover:bg-slate-200/70 px-1.5 py-0.5 rounded border border-slate-200/50 inline-block"
-                                                        >
-                                                            {entry.root_consonants}
-                                                        </Link>
-                                                    ) : entry.is_loanword || entry.source_language ? (
-                                                        <span className="inline-block text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200/60 px-1.5 py-0.5 rounded">
-                                                            {entry.source_language ? term(entry.source_language) : term('loanword')}
-                                                        </span>
-                                                    ) : ['verb', 'noun', 'adjective', 'participle'].includes((entry.pos || '').toLowerCase()) ? (
-                                                        <span
-                                                            className="inline-block text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200/70 px-1.5 py-0.5 rounded"
-                                                            title="Missing root consonants for Semitic word"
-                                                        >
-                                                            No Root
-                                                        </span>
-                                                    ) : (
-                                                        <span className="text-black/25 font-mono text-[11px]">—</span>
-                                                    )
+                                                    <div className="flex flex-col gap-1 max-w-[150px]">
+                                                        {entry.root_consonants && (
+                                                            <div className="flex items-center gap-1.5">
+                                                                <span className="text-[9px] font-bold uppercase text-black/35 w-3.5 shrink-0" title="Root">R</span>
+                                                                <Link
+                                                                    to={`/root/${entry.root_consonants}`}
+                                                                    className="font-mono text-[11px] font-semibold text-slate-700 hover:text-link bg-slate-100 hover:bg-slate-200/70 px-1.5 py-0.5 rounded border border-slate-200/50 truncate"
+                                                                    title={`Root: ${entry.root_consonants}`}
+                                                                >
+                                                                    {entry.root_consonants}
+                                                                </Link>
+                                                            </div>
+                                                        )}
+                                                        {entry.stem && (
+                                                            <div className="flex items-center gap-1.5">
+                                                                <span className="text-[9px] font-bold uppercase text-amber-600/80 w-3.5 shrink-0" title="Stem">Ż</span>
+                                                                <Link
+                                                                    to={`/stem/${encodeURIComponent(entry.stem)}`}
+                                                                    className="font-serif text-[11px] text-amber-900 bg-amber-50 hover:bg-amber-100 px-1.5 py-0.5 rounded border border-amber-200/60 truncate"
+                                                                    title={`Stem: ${entry.stem}`}
+                                                                >
+                                                                    {entry.stem}
+                                                                </Link>
+                                                            </div>
+                                                        )}
+                                                        {entry.arabic && (
+                                                            <div className="flex items-center gap-1.5">
+                                                                <span className="text-[9px] font-bold uppercase text-emerald-600/80 w-3.5 shrink-0" title="Arabic">AR</span>
+                                                                <span
+                                                                    className="font-arabic text-xs text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60 truncate leading-tight"
+                                                                    title={`Arabic: ${entry.arabic}`}
+                                                                    dir="auto"
+                                                                >
+                                                                    {entry.arabic}
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                        {!entry.root_consonants && !entry.stem && !entry.arabic && (
+                                                            entry.is_loanword || entry.source_language ? (
+                                                                <span className="inline-block text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200/60 px-1.5 py-0.5 rounded">
+                                                                    {entry.source_language ? term(entry.source_language) : term('loanword')}
+                                                                </span>
+                                                            ) : (
+                                                                <span className="text-black/25 font-mono text-[11px]">—</span>
+                                                            )
+                                                        )}
+                                                    </div>
                                                 )}
                                             </td>
 
                                             {/* Meaning / Gloss */}
                                             <td className={cn('py-2 px-3', isEditing && 'align-top')}>
                                                 {isEditing ? (
-                                                    <div className="space-y-1">
-                                                        <textarea
-                                                            rows={2}
-                                                            value={quickMeaning}
-                                                            onChange={(e) => setQuickMeaning(e.target.value)}
-                                                            onKeyDown={(e) => {
-                                                                if (e.key === 'Enter' && !e.shiftKey) {
-                                                                    e.preventDefault();
-                                                                    handleSaveQuickEdit(entry);
-                                                                } else if (e.key === 'Escape') {
-                                                                    e.preventDefault();
-                                                                    handleCancelQuickEdit();
-                                                                }
-                                                            }}
-                                                            placeholder="English definition..."
-                                                            className="w-full text-xs italic px-2 py-1 bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-link resize-none"
-                                                        />
+                                                    <div className="space-y-1.5 min-w-[200px]">
+                                                        <div>
+                                                            <label className="block text-[9px] font-bold uppercase tracking-wider text-black/40 mb-0.5">
+                                                                {term('meaning') || 'Meaning'} (EN)
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                value={quickMeaning}
+                                                                onChange={(e) => setQuickMeaning(e.target.value)}
+                                                                onKeyDown={(e) => handleQuickInputKeyDown(e, entry)}
+                                                                placeholder="English definition..."
+                                                                className="w-full text-xs italic px-2 py-1 bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-link text-slate-800"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[9px] font-bold uppercase tracking-wider text-black/40 mb-0.5">
+                                                                {term('maltese') || 'Malti'} (MT)
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                value={quickMeaningMt}
+                                                                onChange={(e) => setQuickMeaningMt(e.target.value)}
+                                                                onKeyDown={(e) => handleQuickInputKeyDown(e, entry)}
+                                                                placeholder="Tifsira bil-Malti..."
+                                                                className="w-full text-xs px-2 py-1 bg-white border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-link text-slate-800"
+                                                            />
+                                                        </div>
                                                     </div>
                                                 ) : (
-                                                    entry.text_en ? (
-                                                        <span
-                                                            className="text-black/70 italic line-clamp-1 cursor-default text-xs"
-                                                            title={entry.text_en}
-                                                        >
-                                                            {entry.text_en}
-                                                        </span>
-                                                    ) : (
-                                                        <span className="text-[11px] text-rose-600 font-medium italic">
-                                                            {term('missing')}
-                                                        </span>
-                                                    )
+                                                    <div className="space-y-0.5 max-w-[260px]">
+                                                        {entry.text_en && (
+                                                            <div
+                                                                className="text-black/75 italic line-clamp-1 cursor-default text-xs"
+                                                                title={`EN: ${entry.text_en}`}
+                                                            >
+                                                                {entry.text_en}
+                                                            </div>
+                                                        )}
+                                                        {entry.text_mt && (
+                                                            <div
+                                                                className="text-black/70 line-clamp-1 cursor-default text-[11px] font-sans"
+                                                                title={`MT: ${entry.text_mt}`}
+                                                            >
+                                                                <span className="text-[9px] font-bold uppercase text-black/40 mr-1 not-italic">MT</span>
+                                                                {entry.text_mt}
+                                                            </div>
+                                                        )}
+                                                        {!entry.text_en && !entry.text_mt && (
+                                                            <span className="text-[11px] text-rose-600 font-medium italic">
+                                                                {term('missing')}
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 )}
                                             </td>
 
@@ -1288,7 +1408,15 @@ export function EntryManager() {
                                                         </button>
                                                         <button
                                                             type="button"
-                                                            onClick={() => { setEditEntry(entry); setShowForm(true); }}
+                                                            onClick={() => handleDuplicate(entry)}
+                                                            className="p-1 text-amber-600 hover:bg-amber-50 rounded transition-colors"
+                                                            title={term('duplicate') || 'Duplicate entry'}
+                                                        >
+                                                            <Copy size={13} />
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => { setEditEntry(entry); setIsDuplicate(false); setShowForm(true); }}
                                                             className="p-1 text-blue-600 hover:bg-blue-50 rounded transition-colors"
                                                             title={term('full-edit') || 'Full edit modal'}
                                                         >
@@ -1378,9 +1506,12 @@ export function EntryManager() {
             {showForm && (
                 <EntryFormModal
                     entry={editEntry}
+                    isDuplicate={isDuplicate}
                     initialForm={initialFormData ?? undefined}
                     onClose={() => {
                         setShowForm(false);
+                        setIsDuplicate(false);
+                        setEditEntry(null);
                         setInitialFormData(null);
                         if (createEntryRequested) clearCreateParams();
                     }}
@@ -1398,6 +1529,53 @@ export function EntryManager() {
                     onClear={() => setSelectedIds(new Set())}
                     onDelete={handleBulkDelete}
                 />
+            )}
+
+            {quickEditError && (
+                <Modal
+                    open={true}
+                    onClose={() => setQuickEditError(null)}
+                    size="md"
+                >
+                    <div className="p-6 text-center space-y-4">
+                        <div className="flex justify-center">
+                            <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center text-red-600 shadow-sm">
+                                <XCircle size={32} />
+                            </div>
+                        </div>
+
+                        <div className="space-y-1">
+                            <h3 className="font-serif text-xl font-bold text-black">
+                                {term('entry-edit-failed') || 'Entry Edit Failed'}
+                            </h3>
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 font-mono mt-1">
+                                <span className="font-serif font-bold text-sm text-black">{quickEditError.headword}</span>
+                                <span className="text-black/50">({quickEditError.id})</span>
+                            </div>
+                        </div>
+
+                        <div className="text-left bg-red-50/90 border border-red-200 rounded-lg p-3.5 space-y-1.5">
+                            <div className="text-xs font-bold text-red-900 uppercase tracking-wider flex items-center gap-1.5">
+                                <AlertTriangle size={14} className="text-red-600" />
+                                {term('why-unsuccessful') || 'Why was this unsuccessful?'}
+                            </div>
+                            <p className="text-sm text-red-800 leading-relaxed font-sans">
+                                {quickEditError.reason}
+                            </p>
+                        </div>
+
+                        <div className="pt-2 flex justify-center">
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                onClick={() => setQuickEditError(null)}
+                                className="min-w-[120px] border border-black/20 text-black hover:bg-black/5"
+                            >
+                                {term('dismiss') || 'Dismiss'}
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
             )}
         </div>
     );
@@ -1480,7 +1658,7 @@ export function evaluateEntryAudit(
     const normPos = entry.pos?.trim().toLowerCase() || '';
 
     // Check Definition / Gloss
-    const hasDef = Boolean(entry.text_en?.trim());
+    const hasDef = Boolean(entry.text_en?.trim() || entry.text_mt?.trim());
     if (!hasDef) {
         issues.push(term('missing-definition') || 'Missing definition');
     }

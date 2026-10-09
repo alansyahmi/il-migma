@@ -117,7 +117,9 @@ export interface Entry {
     synonyms?: any[];
     antonyms?: any[];
     related_entries?: any[];
-    alternative_forms?: any[];
+    alternative_forms?: AlternativeForm[];
+    redirected_from_alt_form?: AlternativeFormRedirect | null;
+    pronominal_forms?: Record<string, string> | string[];
     subentries?: Entry[];
     source_language?: string;
     is_loanword?: boolean;
@@ -142,6 +144,7 @@ export interface Entry {
     source_year?: string | null;
     source_page?: string | null;
     source_publisher?: string | null;
+    sources?: SourceReference[];
     zokk_class?: string | null;
     zokk_is_hybrid?: boolean | number | null;
     zokk_agentive_suffix?: string | null;
@@ -438,6 +441,48 @@ export interface LexicalSource {
     full_title: string;
     author?: string;
     published_year?: number;
+}
+
+export interface SourceReference {
+    source_id?: string | null;
+    citation?: string | null;
+    title?: string | null;
+    author?: string | null;
+    year?: string | number | null;
+    page?: string | null;
+    publisher?: string | null;
+    url?: string | null;
+    role?: string | null;
+}
+
+export type AlternativeFormType =
+    | 'orthographic'
+    | 'archaic'
+    | 'pre-reform'
+    | 'phonetic'
+    | 'dialectal'
+    | 'variant'
+    | string;
+
+export interface AlternativeForm {
+    id?: string;
+    entry_id?: string;
+    headword: string;
+    type?: AlternativeFormType | null;
+    notes?: string | null;
+    target_entry_id?: string | null;
+    target_id?: string | null;
+    has_lemma_entry?: boolean;
+    sort_order?: number;
+    gloss_en?: string | null;
+    gloss_mt?: string | null;
+}
+
+export interface AlternativeFormRedirect {
+    original_query: string;
+    headword: string;
+    type?: string | null;
+    notes?: string | null;
 }
 
 export interface EntryDiminutive {
