@@ -177,7 +177,7 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
         ordinal: ['sitt'],
         adverbial: ['sitt darbiet'],
         fractional: ['suds', '*sott', 'sest'],
-        multiplier: ['sestuplu', '*mseddes'],
+        multiplier: ['sestuplu', '*msettes'],
         distributive: ['sitta sitta', 'stiet'],
         attributive_short: ['sitt'],
         attributive_long: ['sitt'],
