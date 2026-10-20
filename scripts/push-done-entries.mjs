@@ -55,7 +55,7 @@ const isVerbose = args.includes('--verbose') || args.includes('-v');
 const CATEGORY_FILES = [
     { id: 'pronouns_determiners', path: 'docs/1000-words-categories/DONE_pronouns_determiners.json' },
     { id: 'prepositions', path: 'docs/1000-words-categories/DONE_prepositions.json' },
-    { id: 'conjunctions', path: 'docs/1000-words-categories/DONE_conjunctions_current.json' },
+    { id: 'conjunctions', path: 'docs/1000-words-categories/DONE_conjunctions.json' },
     { id: 'adverbs_particles', path: 'docs/1000-words-categories/DONE_adverbs_particles.json' },
 ];
 
