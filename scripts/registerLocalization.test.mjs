@@ -288,3 +288,81 @@ test('formatDefinitionGloss: seamlessly formats bilingual object registers', () 
     );
 });
 
+test('formatDefinitionGloss: omits unmarked standard register and localizes grammatical nuances', () => {
+    const termMockEn = (key) => resolveTerm(key, 'standard', 'en');
+    const termMockMtStd = (key) => resolveTerm(key, 'standard', 'mt');
+    const termMockMtAr = (key) => resolveTerm(key, 'arabised', 'mt');
+
+    // 1. Standard register without nuance -> completely unmarked baseline gloss
+    const defStandard = {
+        text_en: 'less, fewer',
+        text_mt: "F'ammont jew livell iżgħar.",
+        register: 'standard',
+    };
+    assert.equal(
+        formatDefinitionGloss(defStandard, 'en', termMockEn),
+        'less, fewer'
+    );
+    assert.equal(
+        formatDefinitionGloss(defStandard, 'mt', termMockMtStd),
+        "F'ammont jew livell iżgħar."
+    );
+
+    // 2. Standard register with comparative adverb nuance -> (Avverbju komparattiv) without (Standard)
+    const defInqas = {
+        text_en: 'less, fewer',
+        text_mt: "F'ammont, fi grad jew f'livell iżgħar; b'mod inferjuri jew bi tnaqqis.",
+        register: { key: 'standard', en: 'Standard', mt: 'Standard', arabised: 'Miqjiesi' },
+        nuance: 'comparative degree adverb',
+    };
+    assert.equal(
+        formatDefinitionGloss(defInqas, 'en', termMockEn),
+        "(Comparative adverb) less, fewer"
+    );
+    assert.equal(
+        formatDefinitionGloss(defInqas, 'mt', termMockMtStd),
+        "(Avverbju komparattiv) F'ammont, fi grad jew f'livell iżgħar; b'mod inferjuri jew bi tnaqqis."
+    );
+    assert.equal(
+        formatDefinitionGloss(defInqas, 'mt', termMockMtAr),
+        "(Għatu komparattiv) F'ammont, fi grad jew f'livell iżgħar; b'mod inferjuri jew bi tnaqqis."
+    );
+
+    // 3. Marked register with nuance -> combines both cleanly
+    const defHawna = {
+        text_en: 'right here',
+        text_mt: 'propju hawnhekk f’dan il-post',
+        register: 'colloquial',
+        nuance: 'emphatic spoken proximal adverb',
+    };
+    assert.equal(
+        formatDefinitionGloss(defHawna, 'en', termMockEn),
+        '(Colloquial, Emphatic proximal adverb) right here'
+    );
+    assert.equal(
+        formatDefinitionGloss(defHawna, 'mt', termMockMtStd),
+        '(Kollokwjali, Avverbju emfatiku fil-qrib) propju hawnhekk f’dan il-post'
+    );
+    assert.equal(
+        formatDefinitionGloss(defHawna, 'mt', termMockMtAr),
+        "(Ta' kotra, Għatu emfatiku fil-qrib) propju hawnhekk f’dan il-post"
+    );
+
+    // 4. Untranslated ad-hoc English nuance is suppressed in Maltese to prevent English leakage
+    const defUntranslated = {
+        text_en: 'some obscure sense',
+        text_mt: 'tifsira oskura',
+        register: 'standard',
+        nuance: 'highly specific uncataloged nuance phrase',
+    };
+    assert.equal(
+        formatDefinitionGloss(defUntranslated, 'en', termMockEn),
+        '(Highly specific uncataloged nuance phrase) some obscure sense'
+    );
+    assert.equal(
+        formatDefinitionGloss(defUntranslated, 'mt', termMockMtStd),
+        'tifsira oskura'
+    );
+});
+
+

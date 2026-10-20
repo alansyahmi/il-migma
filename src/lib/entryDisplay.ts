@@ -107,7 +107,7 @@ export function formatDefinitionGloss(
         if ((regKey.toLowerCase().includes('dialect') || regKey.toLowerCase().includes('dialett')) && dialect) {
             const dialects = dialect.split(',').map(d => d.trim()).filter(Boolean);
             parts.push(dialects.join(', '));
-        } else {
+        } else if (regKey.toLowerCase() !== 'standard') {
             let regLabel = '';
             if (regKey) {
                 const rawReg = translate(`reg-${regKey}`);
@@ -123,16 +123,29 @@ export function formatDefinitionGloss(
             if (!regLabel) {
                 regLabel = explicitLabel || regKey;
             }
-            parts.push(regLabel.charAt(0).toUpperCase() + regLabel.slice(1));
-            if (dialect) {
+            const lowerReg = regLabel.toLowerCase();
+            // In standard lexicography, standard/miqjiesi is the unmarked baseline and omitted
+            if (lowerReg !== 'standard' && lowerReg !== 'miqjiesi') {
+                parts.push(regLabel.charAt(0).toUpperCase() + regLabel.slice(1));
+                if (dialect) {
+                    parts.push(`(${dialect})`);
+                }
+            } else if (dialect) {
                 parts.push(`(${dialect})`);
             }
+        } else if (dialect) {
+            parts.push(`(${dialect})`);
         }
     }
     const nuance = normalizeText(definition?.nuance);
     if (nuance) {
-        const nuanceLabel = normalizeText(translate(nuance)) || nuance;
-        parts.push(nuanceLabel.charAt(0).toUpperCase() + nuanceLabel.slice(1));
+        const rawTranslated = normalizeText(translate(nuance));
+        const hasTranslation = rawTranslated && rawTranslated.toLowerCase() !== nuance.toLowerCase();
+        if (hasTranslation) {
+            parts.push(rawTranslated.charAt(0).toUpperCase() + rawTranslated.slice(1));
+        } else if (language === 'en') {
+            parts.push(nuance.charAt(0).toUpperCase() + nuance.slice(1));
+        }
     }
 
     if (parts.length === 0) return gloss;
