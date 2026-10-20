@@ -57,6 +57,7 @@ const CATEGORY_FILES = [
     { id: 'prepositions', path: 'docs/1000-words-categories/DONE_prepositions.json' },
     { id: 'conjunctions', path: 'docs/1000-words-categories/DONE_conjunctions.json' },
     { id: 'adverbs_particles', path: 'docs/1000-words-categories/DONE_adverbs_particles.json' },
+    { id: 'numerals', path: 'docs/1000-words-categories/DONE_numerals.json' },
 ];
 
 const selectedFiles = categoryArg
@@ -64,7 +65,7 @@ const selectedFiles = categoryArg
     : CATEGORY_FILES;
 
 if (selectedFiles.length === 0) {
-    console.error(`❌ Unknown category: "${categoryArg}". Available: pronouns_determiners, prepositions, conjunctions`);
+    console.error(`❌ Unknown category: "${categoryArg}". Available: ${CATEGORY_FILES.map(c => c.id).join(', ')}`);
     process.exit(1);
 }
 

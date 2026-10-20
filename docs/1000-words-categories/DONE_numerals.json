@@ -1,0 +1,1835 @@
+{
+  "category_id": "numerals",
+  "category_title": "Numerals & Quantities",
+  "total_entries": 15,
+  "entries": [
+    {
+      "id": "num-wieħed",
+      "headword": "wieħed",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "w-ħ-d",
+      "stem": null,
+      "cv_pattern": "1â2v3",
+      "morph_pattern": "C1âC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: wieħed",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/wie%C4%A7ed",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "وَاحِد",
+          "definition": "one, single, unit",
+          "pronunciation": "wâħid"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "one (cardinal numeral 1); single unit or individual",
+          "text_mt": "Numru kardinali u ċifra li tindika unità waħda jew individwu wieħed.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Hemm student wieħed biss fil-klassi dalgħodu.",
+          "en": "There is only one student in the class this morning."
+        }
+      ],
+      "related_entries": [
+        "num-waħda",
+        "adj-ewwel",
+        "pron-uħud"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɪː.ħɛt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "waħda",
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "uħud",
+          "pattern": "u2v3"
+        },
+        {
+          "form": "waħdiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "uħud",
+          "pattern": "u2v3"
+        },
+        {
+          "form": "waħdiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": "ie-e",
+      "vowel_set_pl": "u-u",
+      "vowel_set_dual": null,
+      "vowel_set_opp": "a--",
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": null,
+      "form_attributive_long": null,
+      "numeral_ordinal": "ewwel",
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 14,
+      "source_frequency_rank": 14,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-tnejn",
+      "headword": "tnejn",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-n-j",
+      "stem": null,
+      "cv_pattern": "12v3n",
+      "morph_pattern": "C1C2vC3n",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: tnejn",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tnejn",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "اِثْنَيْن",
+          "definition": "two",
+          "pronunciation": "aθnayn"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "two (cardinal numeral 2); pair of units",
+          "text_mt": "Numru kardinali u ċifra li tindika par jew żewġ unitajiet; jiġi wara l-wieħed u qabel it-tlieta.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għandi tnejn minn dawk il-kotba fuq l-ixkaffa.",
+          "en": "I have two of those books on the shelf."
+        }
+      ],
+      "related_entries": [
+        "num-żewġ",
+        "adj-tieni",
+        "n-tnejn"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtnɛjn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "tnejnijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "tnejnijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": "---",
+      "vowel_set_pl": "--e",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": "żewġ",
+      "form_attributive_long": "tnejn",
+      "numeral_ordinal": "tieni",
+      "numeral_adverbial": null,
+      "numeral_fractional": "nofs",
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 173,
+      "source_frequency_rank": 173,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-tlieta",
+      "headword": "tlieta",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-l-t",
+      "stem": null,
+      "cv_pattern": "12â3a",
+      "morph_pattern": "C1C2âC3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: tlieta",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tlieta",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ثَلَاثَة",
+          "definition": "three",
+          "pronunciation": "θalâθaẗ"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "three (cardinal numeral 3)",
+          "text_mt": "Numru kardinali u ċifra li tindika għadd ta' tliet unitajiet; jiġi wara t-tnejn u qabel l-erbgħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm tlieta min-nies jistennew quddiem il-bieb.",
+          "en": "There were three people waiting in front of the door."
+        }
+      ],
+      "related_entries": [
+        "num-tliet",
+        "adj-tielet",
+        "n-tlieta"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtlɪː.tɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "tletiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "tletiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": "--ie",
+      "vowel_set_pl": "--e",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": "tliet",
+      "form_attributive_long": "tlieta",
+      "numeral_ordinal": "tielet",
+      "numeral_adverbial": null,
+      "numeral_fractional": "terz",
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 53,
+      "source_frequency_rank": 53,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-erbgħa",
+      "headword": "erbgħa",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "r-b-għ",
+      "stem": null,
+      "cv_pattern": "e123a",
+      "morph_pattern": "eC1C2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: erbgħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/erbg%C4%A7a",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَرْبَعَة",
+          "definition": "four",
+          "pronunciation": "arbagħaẗ"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "four (cardinal numeral 4)",
+          "text_mt": "Numru kardinali u ċifra li tindika għadd ta' erba' unitajiet; jiġi wara t-tlieta u qabel il-ħamsa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Xtara erbgħa minnhom biex iqassamhom lil sħabu.",
+          "en": "He bought four of them to distribute to his friends."
+        }
+      ],
+      "related_entries": [
+        "num-erba",
+        "adj-raba",
+        "n-erbgħa"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɛrˈbːɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "erbgħat",
+          "pattern": "-at"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "erbgħat",
+          "pattern": "-at"
+        }
+      ],
+      "vowel_set_sg": "---",
+      "vowel_set_pl": "---",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": "erba'",
+      "form_attributive_long": "erbgħa",
+      "numeral_ordinal": "raba'",
+      "numeral_adverbial": null,
+      "numeral_fractional": "kwart",
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 218,
+      "source_frequency_rank": 218,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-ħamsa",
+      "headword": "ħamsa",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "ħ-m-s",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ħamsa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/%C4%A7amsa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "خَمْسَة",
+          "definition": "five",
+          "pronunciation": "khamsaẗ"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "five (cardinal numeral 5)",
+          "text_mt": "Numru kardinali u ċifra li tindika għadd ta' ħames unitajiet; jiġi wara l-erbgħa u qabel is-sitta.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fadal biss ħamsa minnhom fil-kaxxa.",
+          "en": "Only five of them remain in the box."
+        }
+      ],
+      "related_entries": [
+        "num-ħames",
+        "adj-ħames"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈħɐm.sɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ħamsiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħamsiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": "a-ie",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": "ħames",
+      "form_attributive_long": "ħamsa",
+      "numeral_ordinal": "ħames",
+      "numeral_adverbial": null,
+      "numeral_fractional": "ħums",
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 458,
+      "source_frequency_rank": 458,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-sitta",
+      "headword": "sitta",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "s-t-t",
+      "stem": null,
+      "cv_pattern": "1v22a",
+      "morph_pattern": "C1vC2C2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: sitta",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/sitta",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سِتَّة",
+          "definition": "six",
+          "pronunciation": "sittaẗ"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "six (cardinal numeral 6)",
+          "text_mt": "Numru kardinali u ċifra li tindika għadd ta' sitt unitajiet; jiġi wara l-ħamsa u qabel is-sebgħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tfal kollha kienu sitta b'kollox fil-grupp.",
+          "en": "The children were six in all in the group."
+        }
+      ],
+      "related_entries": [
+        "num-sitt",
+        "adj-sitt"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɪt.tɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "sittiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sittiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": "i-a",
+      "vowel_set_pl": "i-ie",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": "sitt",
+      "form_attributive_long": "sitta",
+      "numeral_ordinal": "sitt",
+      "numeral_adverbial": null,
+      "numeral_fractional": "suds",
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 471,
+      "source_frequency_rank": 471,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-tmienja",
+      "headword": "tmienja",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-m-n",
+      "stem": null,
+      "cv_pattern": "12i3ja",
+      "morph_pattern": "C1C2ieC3ja",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: tmienja",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tmienja",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ثَمَانِيَة",
+          "definition": "eight",
+          "pronunciation": "θamâniyaẗ"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "eight (cardinal numeral 8)",
+          "text_mt": "Numru kardinali u ċifra li tindika għadd ta' tmien unitajiet; jiġi wara s-sebgħa u qabel id-disgħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Waslu tmienja minnhom fil-ħin għal-laqgħa.",
+          "en": "Eight of them arrived on time for the meeting."
+        }
+      ],
+      "related_entries": [
+        "num-tmien",
+        "adj-tmien"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtmɪː.njɐ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "tmienjiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "tmienjiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": "ie-a",
+      "vowel_set_pl": "ie-ie",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": "tmien",
+      "form_attributive_long": "tmienja",
+      "numeral_ordinal": "tmien",
+      "numeral_adverbial": null,
+      "numeral_fractional": "tumn",
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 702,
+      "source_frequency_rank": 702,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-għoxrin",
+      "headword": "għoxrin",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "għ-x-r",
+      "stem": null,
+      "cv_pattern": "1v23în",
+      "morph_pattern": "C1vC2C3în",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: għoxrin",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/g%C4%A7oxrin",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عِشْرِين",
+          "definition": "twenty",
+          "pronunciation": "għishrîn"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "twenty (cardinal numeral 20)",
+          "text_mt": "Numru kardinali u ċifra li tindika żewġ għaxriet jew 20 unità; jiġi wara d-dsatax u qabel il-wieħed u għoxrin.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għalaq għoxrin sena nhar il-Ħadd li għadda.",
+          "en": "He turned twenty years old last Sunday."
+        }
+      ],
+      "related_entries": [
+        "num-għaxra"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɔʃˈrɪːn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "o-i",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": "għoxrin",
+      "form_attributive_long": "għoxrin",
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 695,
+      "source_frequency_rank": 695,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-mitt",
+      "headword": "mitt",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "m-j-t",
+      "stem": null,
+      "cv_pattern": "1v22",
+      "morph_pattern": "C1vC2C2",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: mitt",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mitt",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مِائَة",
+          "definition": "hundred",
+          "pronunciation": "miâ'aẗ"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "hundred (cardinal numeral 100); combining form before nouns",
+          "text_mt": "Numru kardinali u ċifra li tindika għaxar għaxriet jew 100 unità quddiem nom; forma komposta ta' mija.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "attributive cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għex aktar minn mitt sena b'saħħa tajba.",
+          "en": "He lived more than a hundred years in good health."
+        }
+      ],
+      "related_entries": [
+        "num-mija",
+        "num-mitejn",
+        "n-mijiet"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/mɪtː/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "mitejn",
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "mijiet",
+          "pattern": "-iet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "mijiet",
+          "pattern": "-iet"
+        }
+      ],
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": "i-ie",
+      "vowel_set_dual": "i-ej",
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": "mitt",
+      "form_attributive_long": "mija",
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 457,
+      "source_frequency_rank": 457,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-elf",
+      "headword": "elf",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "'-l-f",
+      "stem": null,
+      "cv_pattern": "v12",
+      "morph_pattern": "vC1C2",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: elf",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/elf",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَلْف",
+          "definition": "thousand",
+          "pronunciation": "alf"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "thousand (cardinal numeral 1,000)",
+          "text_mt": "Numru kardinali u ċifra li tindika għaxar mijiet jew 1,000 unità.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kuntratt jiswa aktar minn elf ewro.",
+          "en": "The contract is worth more than a thousand euros."
+        }
+      ],
+      "related_entries": [
+        "num-elfejn",
+        "n-eluf"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛlf/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "elfejn",
+      "paucal_form": "elef",
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "eluf",
+          "pattern": "v12"
+        },
+        {
+          "form": "elufijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "eluf",
+          "pattern": "v12"
+        },
+        {
+          "form": "elufijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "vowel_set_sg": "e--",
+      "vowel_set_pl": "e-u",
+      "vowel_set_dual": "e-ej",
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": "elf",
+      "form_attributive_long": "elf",
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 380,
+      "source_frequency_rank": 380,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-miljun",
+      "headword": "miljun",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "miljun",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: miljun",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/miljun",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "milione",
+          "definition": "million",
+          "pronunciation": "miljone"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "million (cardinal numeral 1,000,000)",
+          "text_mt": "Numru kardinali u ċifra li tindika elf elf jew 1,000,000 unità.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Inġabru aktar minn miljun ewro b'risq dawk fil-bżonn.",
+          "en": "More than a million euros were collected for those in need."
+        }
+      ],
+      "related_entries": [
+        "n-miljuni",
+        "adj-miljunarju"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɪl.jʊn/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "miljuni",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "miljuni",
+          "pattern": "-i"
+        }
+      ],
+      "vowel_set_sg": "i-u",
+      "vowel_set_pl": "i-u-i",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": null,
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "cardinal",
+      "form_attributive_short": "miljun",
+      "form_attributive_long": "miljun",
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 591,
+      "source_frequency_rank": 591,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "adj-ewwel",
+      "headword": "ewwel",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "'-w-l",
+      "stem": null,
+      "cv_pattern": "v122v3",
+      "morph_pattern": "vC1C2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: ewwel",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ewwel",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَوَّل",
+          "definition": "first",
+          "pronunciation": "awwal"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "first (ordinal numeral); initial, foremost in order or series",
+          "text_mt": "Numru ordinali li jindika l-pożizzjoni tal-bidu jew li jiġi qabel kull ħaġa oħra f'ordni, grad jew sekwenza.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "ordinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien l-ewwel student li wasal fl-iskola dalgħodu.",
+          "en": "He was the first student who arrived at school this morning."
+        }
+      ],
+      "related_entries": [
+        "adj-ewlieni",
+        "adj-tieni",
+        "num-wieħed"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛw.wɛl/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "ewwela",
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "ewwelin",
+          "pattern": "-in"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ewwelin",
+          "pattern": "-in"
+        }
+      ],
+      "vowel_set_sg": "e-e",
+      "vowel_set_pl": "e-e-i",
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "ordinal",
+      "form_attributive_short": "ewwel",
+      "form_attributive_long": "ewwel",
+      "numeral_ordinal": "ewwel",
+      "numeral_adverbial": "l-ewwel",
+      "numeral_fractional": null,
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 193,
+      "source_frequency_rank": 193,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "adj-tieni",
+      "headword": "tieni",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-n-j",
+      "stem": null,
+      "cv_pattern": "1â2i",
+      "morph_pattern": "C1âC2i",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: tieni",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tieni",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "الثَّانِي",
+          "definition": "second",
+          "pronunciation": "al-θânî"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "second (ordinal numeral); following the first",
+          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara l-ewwel u qabel it-tielet.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "ordinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fit-tieni kapitlu tal-ktieb jiddiskuti t-tibdil fil-klima.",
+          "en": "In the second chapter of the book he discusses climate change."
+        }
+      ],
+      "related_entries": [
+        "num-tnejn",
+        "adj-ewwel",
+        "adj-tielet"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtɪː.nɪ/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "tieni",
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "ie-i",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "ordinal",
+      "form_attributive_short": "tieni",
+      "form_attributive_long": "tieni",
+      "numeral_ordinal": "tieni",
+      "numeral_adverbial": "it-tieni",
+      "numeral_fractional": "nofs",
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 300,
+      "source_frequency_rank": 300,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "adj-tielet",
+      "headword": "tielet",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-l-t",
+      "stem": null,
+      "cv_pattern": "1â2v3",
+      "morph_pattern": "C1âC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: tielet",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tielet",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ثَالِث",
+          "definition": "third",
+          "pronunciation": "θâliθ"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "third (ordinal numeral); following the second",
+          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara t-tieni u qabel ir-raba'.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "ordinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Daħal fit-tielet post fil-kompetizzjoni nazzjonali.",
+          "en": "He finished in third place in the national competition."
+        }
+      ],
+      "related_entries": [
+        "num-tlieta",
+        "adj-tieni",
+        "adj-raba"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtɪː.lɛt/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": null,
+      "paucal_form": null,
+      "feminine_form": "tielta",
+      "masculine_form": null,
+      "plural_forms": null,
+      "plural_form": null,
+      "vowel_set_sg": "ie-e",
+      "vowel_set_pl": null,
+      "vowel_set_dual": null,
+      "vowel_set_opp": "ie-a",
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "ordinal",
+      "form_attributive_short": "tielet",
+      "form_attributive_long": "tielet",
+      "numeral_ordinal": "tielet",
+      "numeral_adverbial": "it-tielet",
+      "numeral_fractional": "terz",
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 714,
+      "source_frequency_rank": 714,
+      "audit_status": "audited",
+      "audit_notes": null,
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "n-nofs",
+      "headword": "nofs",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "n-f-s",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: nofs",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/nofs",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "نِصْف",
+          "definition": "half, midpoint",
+          "pronunciation": "niṣf"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "half (fraction of one half); equal part of a whole",
+          "text_mt": "Frazzjoni u kwantità li tindika parti waħda minn żewġ partijiet indaqs ta' ħaġa sħiħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "fractional numeral"
+        },
+        {
+          "text_en": "middle, midpoint; central point in space or time",
+          "text_mt": "Il-punt ċentrali jew il-mument tan-nofs bejn żewġ limiti fi spazju jew fi żmien.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "spatial or temporal midpoint"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħa nofs il-ħobża u ħalla l-kumplament għal għada.",
+          "en": "He took half of the loaf of bread and left the rest for tomorrow."
+        }
+      ],
+      "related_entries": [
+        "n-nofsinhar",
+        "n-nofsillejl",
+        "adj-nofsi"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈnɔfs/",
+          "notes": null
+        }
+      ],
+      "source_display": null,
+      "source_tooltip": null,
+      "sound_suffix": null,
+      "zokk_morphology": null,
+      "zokk_class": null,
+      "zokk_is_hybrid": null,
+      "zokk_agentive_suffix": null,
+      "is_collective": 0,
+      "is_singulative": 0,
+      "collective_form": null,
+      "singulative_form": null,
+      "dual_form": "nofsejn",
+      "paucal_form": null,
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [
+        {
+          "form": "nofsijiet",
+          "pattern": "-ijiet"
+        },
+        {
+          "form": "nfas",
+          "pattern": "12â3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "nofsijiet",
+          "pattern": "-ijiet"
+        },
+        {
+          "form": "nfas",
+          "pattern": "12â3"
+        }
+      ],
+      "vowel_set_sg": "o--",
+      "vowel_set_pl": "o-i-ie",
+      "vowel_set_dual": "o-ej",
+      "vowel_set_opp": null,
+      "verb_form": null,
+      "verb_type": "triliteral",
+      "verb_class": null,
+      "verb_weak_class": null,
+      "verb_transitivity": null,
+      "verb_perfective_3sgm": null,
+      "verb_imperfective_3sgm": null,
+      "verb_verbal_noun": null,
+      "verb_active_ptcp": null,
+      "verb_passive_ptcp": null,
+      "verb_vowel_perf": null,
+      "verb_vowel_impf": null,
+      "verb_vowel_impv": null,
+      "elative_form": null,
+      "participle_type": null,
+      "numeral_type": "fractional",
+      "form_attributive_short": "nofs",
+      "form_attributive_long": "nofs",
+      "numeral_ordinal": null,
+      "numeral_adverbial": null,
+      "numeral_fractional": "nofs",
+      "numeral_multiplier": null,
+      "numeral_distributive": null,
+      "rank": 336,
+      "source_frequency_rank": 336,
+      "audit_status": "audited",
+      "audit_notes": "🔄 *(Duplicate: also at #656)*",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    }
+  ]
+}
