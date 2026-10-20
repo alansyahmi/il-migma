@@ -98,7 +98,18 @@ function getEntryEtymologyRecord(entry: Entry) {
     const legacyChain = (entry as any).etymologies?.[0];
     if (legacyChain?.chain?.length) return legacyChain;
 
-    const chain = Array.isArray(entry.etymology_chain) ? entry.etymology_chain : [];
+    const rawChain = (entry as any).etymology_chain;
+    let chain: any[] = [];
+    if (Array.isArray(rawChain)) {
+        chain = rawChain;
+    } else if (typeof rawChain === 'string' && rawChain.trim()) {
+        try {
+            const parsed = JSON.parse(rawChain);
+            if (Array.isArray(parsed)) chain = parsed;
+        } catch {
+            chain = [];
+        }
+    }
     if (chain.length === 0) return null;
 
     return {
@@ -2453,6 +2464,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     }), hideTheoreticalForms);
     const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
     const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
+    const sourceDisplay = (entry as any).source_display || entry.source_citation || (entry as any).source_title || '';
 
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -2862,15 +2874,46 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </SideCard>
                             )}
 
-                            {alternativeForms.length > 0 && (
+                            {displayAlternativeForms.length > 0 && (
                                 <SideCard title={term('alternative-forms')}>
-                                    <LinkedEntryList items={alternativeForms} />
+                                    <LinkedEntryList
+                                        items={displayAlternativeForms}
+                                        renderActions={isActualAdmin ? (alt: any) => (
+                                            <AdminActionButtons
+                                                onEdit={() => handleEditEntry(alt)}
+                                                onDelete={() => handleRemoveRelationship(alt.id)}
+                                            />
+                                        ) : undefined}
+                                    />
                                 </SideCard>
                             )}
 
-                            {nm?.source_citation && (
+                            {displayRelatedEntries.length > 0 && (
+                                <SideCard title={term('related-entries')}>
+                                    <div className="space-y-1">
+                                        {displayRelatedEntries.map((rel: any) => (
+                                            <div key={rel.id} className="flex items-center justify-between group">
+                                                <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                    {rel.headword}{' '}
+                                                    <span className="opacity-55 font-sans text-xs text-black">
+                                                        "{getGloss(rel, language, mode)}"
+                                                    </span>
+                                                </Link>
+                                                {isActualAdmin && (
+                                                    <AdminActionButtons
+                                                        onEdit={() => handleEditEntry(rel)}
+                                                        onDelete={() => handleRemoveRelationship(rel.id)}
+                                                    />
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </SideCard>
+                            )}
+
+                            {sourceDisplay && (
                                 <SideCard title={term('sources')}>
-                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{nm.source_citation}</span>
+                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceDisplay}</span>
                                 </SideCard>
                             )}
                         </div>
@@ -2945,6 +2988,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     }), hideTheoreticalForms);
     const displayAlternativeForms: any[] = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
     const displayRelatedEntries: any[] = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
+    const sourceDisplay = (entry as any).source_display || vm.source_citation || entry.source_citation || (entry as any).source_title || '';
 
     const rootObj = entry.root_pattern_form?.root;
     const rootConsonants = rootObj?.consonant_array?.join('-') || rootObj?.consonants || entry.root_consonants || entry.zokk_morphology?.root;
@@ -3630,15 +3674,46 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 </SideCard>
                             )}
 
-                            {alternativeForms.length > 0 && (
+                            {displayAlternativeForms.length > 0 && (
                                 <SideCard title={term('alternative-forms')}>
-                                    <LinkedEntryList items={alternativeForms} />
+                                    <LinkedEntryList
+                                        items={displayAlternativeForms}
+                                        renderActions={isActualAdmin ? (alt: any) => (
+                                            <AdminActionButtons
+                                                onEdit={() => handleEditEntry(alt)}
+                                                onDelete={() => handleRemoveRelationship(alt.id)}
+                                            />
+                                        ) : undefined}
+                                    />
                                 </SideCard>
                             )}
 
-                            {vm.source_citation && (
+                            {displayRelatedEntries.length > 0 && (
+                                <SideCard title={term('related-entries')}>
+                                    <div className="space-y-1">
+                                        {displayRelatedEntries.map((rel: any) => (
+                                            <div key={rel.id} className="flex items-center justify-between group">
+                                                <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                    {rel.headword}{' '}
+                                                    <span className="opacity-55 font-sans text-xs text-black">
+                                                        "{getGloss(rel, language, mode)}"
+                                                    </span>
+                                                </Link>
+                                                {isActualAdmin && (
+                                                    <AdminActionButtons
+                                                        onEdit={() => handleEditEntry(rel)}
+                                                        onDelete={() => handleRemoveRelationship(rel.id)}
+                                                    />
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </SideCard>
+                            )}
+
+                            {sourceDisplay && (
                                 <SideCard title={term('sources')}>
-                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{vm.source_citation}</span>
+                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceDisplay}</span>
                                 </SideCard>
                             )}
                         </div>
@@ -4054,6 +4129,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     }), hideTheoreticalForms);
     const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
     const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
+    const sourceDisplay = (entry as any).source_display || entry.source_citation || (entry as any).source_title || '';
 
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -4597,9 +4673,17 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                 </SideCard>
                             )}
 
-                            {alternativeForms.length > 0 && (
+                            {displayAlternativeForms.length > 0 && (
                                 <SideCard title={term('alternative-forms')}>
-                                    <LinkedEntryList items={alternativeForms} />
+                                    <LinkedEntryList
+                                        items={displayAlternativeForms}
+                                        renderActions={isActualAdmin ? (alt: any) => (
+                                            <AdminActionButtons
+                                                onEdit={() => handleEditEntry(alt)}
+                                                onDelete={() => handleRemoveRelationship(alt.id)}
+                                            />
+                                        ) : undefined}
+                                    />
                                 </SideCard>
                             )}
 
@@ -4621,9 +4705,9 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                                 </SideCard>
                             )}
 
-                            {nm?.source_citation && (
+                            {sourceDisplay && (
                                 <SideCard title={term('sources')}>
-                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{nm.source_citation}</span>
+                                    <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceDisplay}</span>
                                 </SideCard>
                             )}
                         </div>
@@ -4703,6 +4787,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
     }), hideTheoreticalForms);
     const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
     const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
+    const sourceDisplay = (entry as any).source_display || entry.source_citation || (entry as any).source_title || '';
 
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -4941,15 +5026,46 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                                     </SideCard>
                                 )}
 
-                                {alternativeForms.length > 0 && (
+                                {displayAlternativeForms.length > 0 && (
                                     <SideCard title={term('alternative-forms')}>
-                                        <LinkedEntryList items={alternativeForms} />
+                                        <LinkedEntryList
+                                            items={displayAlternativeForms}
+                                            renderActions={isActualAdmin ? (alt: any) => (
+                                                <AdminActionButtons
+                                                    onEdit={() => handleEditEntry(alt)}
+                                                    onDelete={() => handleRemoveRelationship(alt.id)}
+                                                />
+                                            ) : undefined}
+                                        />
                                     </SideCard>
                                 )}
 
-                                {am.source_citation && (
+                                {displayRelatedEntries.length > 0 && (
+                                    <SideCard title={term('related-entries')}>
+                                        <div className="space-y-1">
+                                            {displayRelatedEntries.map((rel: any) => (
+                                                <div key={rel.id} className="flex items-center justify-between group">
+                                                    <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                        {rel.headword}{' '}
+                                                        <span className="opacity-55 font-sans text-xs text-black">
+                                                            "{getGloss(rel, language, mode)}"
+                                                        </span>
+                                                    </Link>
+                                                    {isActualAdmin && (
+                                                        <AdminActionButtons
+                                                            onEdit={() => handleEditEntry(rel)}
+                                                            onDelete={() => handleRemoveRelationship(rel.id)}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </SideCard>
+                                )}
+
+                                {sourceDisplay && (
                                     <SideCard title={term('sources')}>
-                                        <span className="text-sm font-medium" style={{ color: GOLD }}>{am.source_citation}</span>
+                                        <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceDisplay}</span>
                                     </SideCard>
                                 )}
                             </div>
@@ -5028,6 +5144,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     }), hideTheoreticalForms);
     const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
     const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
+    const sourceDisplay = (entry as any).source_display || entry.source_citation || (entry as any).source_title || '';
 
     const handleRemoveRelationship = async (targetId: string) => {
         if (!confirm(term('confirm-remove-relationship') || 'Are you sure you want to remove this relationship?')) return;
@@ -5513,9 +5630,46 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                                     </SideCard>
                                 )}
 
-                                {alternativeForms.length > 0 && (
+                                {displayAlternativeForms.length > 0 && (
                                     <SideCard title={term('alternative-forms')}>
-                                        <LinkedEntryList items={alternativeForms} />
+                                        <LinkedEntryList
+                                            items={displayAlternativeForms}
+                                            renderActions={isActualAdmin ? (alt: any) => (
+                                                <AdminActionButtons
+                                                    onEdit={() => handleEditEntry(alt)}
+                                                    onDelete={() => handleRemoveRelationship(alt.id)}
+                                                />
+                                            ) : undefined}
+                                        />
+                                    </SideCard>
+                                )}
+
+                                {displayRelatedEntries.length > 0 && (
+                                    <SideCard title={term('related-entries')}>
+                                        <div className="space-y-1">
+                                            {displayRelatedEntries.map((rel: any) => (
+                                                <div key={rel.id} className="flex items-center justify-between group">
+                                                    <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                        {rel.headword}{' '}
+                                                        <span className="opacity-55 font-sans text-xs text-black">
+                                                            "{getGloss(rel, language, mode)}"
+                                                        </span>
+                                                    </Link>
+                                                    {isActualAdmin && (
+                                                        <AdminActionButtons
+                                                            onEdit={() => handleEditEntry(rel)}
+                                                            onDelete={() => handleRemoveRelationship(rel.id)}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </SideCard>
+                                )}
+
+                                {sourceDisplay && (
+                                    <SideCard title={term('sources')}>
+                                        <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceDisplay}</span>
                                     </SideCard>
                                 )}
                             </div>
@@ -5797,6 +5951,13 @@ export function FunctionWordEntryView({
     }), hideTheoreticalForms);
     const displayAlternativeForms = getVisibleEntryForms(alternativeForms, hideTheoreticalForms);
     const displayRelatedEntries = getVisibleEntryForms(relatedEntries, hideTheoreticalForms);
+    const sourceDisplay = (entry as any).source_display
+        || entry.source_citation
+        || (entry as any).source_title
+        || (entry as any).lexical_source?.full_title
+        || (entry as any).lexical_source?.name
+        || '';
+    const sourceTooltip = (entry as any).source_tooltip || (sourceDisplay ? `Title: ${sourceDisplay}` : undefined);
     const synonyms = parseMaybeArray<any>((entry as any).synonyms);
     const antonyms = parseMaybeArray<any>((entry as any).antonyms);
     const inflectionPlurals = parseMaybeArray<string>((entry as any).inflections_pl);
@@ -6034,14 +6195,14 @@ export function FunctionWordEntryView({
                             </SideCard>
                         )}
 
-                        {(entry as any).source_display && (
+                        {sourceDisplay && (
                             <SideCard title={term('sources')}>
                                 <span
                                     className="text-sm font-medium"
                                     style={{ color: GOLD }}
-                                    title={(entry as any).source_tooltip || undefined}
+                                    title={sourceTooltip}
                                 >
-                                    {(entry as any).source_display}
+                                    {sourceDisplay}
                                 </span>
                             </SideCard>
                         )}
@@ -6383,20 +6544,51 @@ export function FunctionWordEntryView({
                                     </SideCard>
                                 )}
 
-                                {alternativeForms.length > 0 && (
+                                {displayAlternativeForms.length > 0 && (
                                     <SideCard title={term('alternative-forms')}>
-                                        <LinkedEntryList items={alternativeForms} />
+                                        <LinkedEntryList
+                                            items={displayAlternativeForms}
+                                            renderActions={isActualAdmin ? (alt: any) => (
+                                                <AdminActionButtons
+                                                    onEdit={() => handleEditEntry(alt)}
+                                                    onDelete={() => handleRemoveRelationship(alt.id)}
+                                                />
+                                            ) : undefined}
+                                        />
                                     </SideCard>
                                 )}
 
-                                {(entry as any).source_display && (
+                                {displayRelatedEntries.length > 0 && (
+                                    <SideCard title={term('related-entries')}>
+                                        <div className="space-y-1">
+                                            {displayRelatedEntries.map((rel: any) => (
+                                                <div key={rel.id} className="flex items-center justify-between group">
+                                                    <Link to={`/entry/${rel.id}`} className="block text-sm font-serif" style={{ color: BLUE }}>
+                                                        {rel.headword}{' '}
+                                                        <span className="opacity-55 font-sans text-xs text-black">
+                                                            "{getGloss(rel, language, mode)}"
+                                                        </span>
+                                                    </Link>
+                                                    {isActualAdmin && (
+                                                        <AdminActionButtons
+                                                            onEdit={() => handleEditEntry(rel)}
+                                                            onDelete={() => handleRemoveRelationship(rel.id)}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </SideCard>
+                                )}
+
+                                {sourceDisplay && (
                                     <SideCard title={term('sources')}>
                                         <span
                                             className="text-sm font-medium"
                                             style={{ color: GOLD }}
-                                            title={(entry as any).source_tooltip || undefined}
+                                            title={sourceTooltip}
                                         >
-                                            {(entry as any).source_display}
+                                            {sourceDisplay}
                                         </span>
                                     </SideCard>
                                 )}

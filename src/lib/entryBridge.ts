@@ -949,6 +949,7 @@ export function hydrateEntryRow(row: Record<string, unknown> | undefined | null)
 
     payload.tags = parseJsonArray(row.rel_tags || row.tags);
     payload.definitions = parseJsonArray(row.definitions);
+    payload.etymology_chain = parseJsonArray(row.etymology_chain);
     const parsedUsageNotes = parseUsageNotes(row.usage_notes);
     if (parsedUsageNotes) {
         payload.usage_notes = parsedUsageNotes;

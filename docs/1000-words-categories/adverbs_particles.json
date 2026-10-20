@@ -1,7 +1,7 @@
 {
   "category_id": "adverbs_particles",
   "category_title": "Adverbs & Modal Particles",
-  "total_entries": 37,
+  "total_entries": 40,
   "entries": [
     {
       "id": "part-se",
@@ -16,7 +16,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary; Borg & Azzopardi-Alexander (1997)",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -43,7 +43,12 @@
         {
           "text_en": "will, shall, going to",
           "text_mt": "Partiċella preverbjali li tindika ż-żmien futur jew intenzjoni immedjata li titwettaq azzjoni.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "preverbal future marker"
         }
       ],
@@ -98,7 +103,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -118,7 +123,12 @@
         {
           "text_en": "also, too, as well",
           "text_mt": "Juri żieda, inklużjoni jew tkomplija ta' persuna, oġġett jew fatt ieħor; barra minn hekk.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "additive focus adverb"
         }
       ],
@@ -168,7 +178,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -195,7 +205,12 @@
         {
           "text_en": "also, too, as well",
           "text_mt": "Għamla ortografika oħra ta' 'ukoll', użata wara kliem li jispiċċa b'vokali biex tindika żieda jew inklużjoni.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "post-vocalic orthographic variant"
         }
       ],
@@ -245,7 +260,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -272,7 +287,12 @@
         {
           "text_en": "plus, with the addition of",
           "text_mt": "Jindika operazzjoni aritmetika ta' żieda fejn numru jew ammont jingħadd ma' ieħor; flimkien ma'.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "arithmetic operator"
         }
       ],
@@ -311,7 +331,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -331,7 +351,12 @@
         {
           "text_en": "here, in this place",
           "text_mt": "F'dan il-post jew f'din il-pożizzjoni fejn jinsab il-kelliem.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "proximal spatial adverb"
         }
       ],
@@ -346,7 +371,8 @@
         "adv-hemm",
         "adv-hawnhekk",
         "adv-hawna",
-        "adv-hawni"
+        "adv-hawni",
+        "adv-hawnfuq"
       ],
       "alternative_forms": [
         {
@@ -401,7 +427,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -421,7 +447,12 @@
         {
           "text_en": "out, outside, outdoors, abroad",
           "text_mt": "Fi spazju miftuħ u mhux ġewwa bini jew post magħluq; f'art barranija jew f'pajjiż ieħor; fil-beraħ.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "locative and directional adverb"
         }
       ],
@@ -460,12 +491,12 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Maltese",
-      "source_id": "src-1000mcw",
-      "source_citation": "Corpus tal-Malti / 1000 MCW",
-      "source_title": "1000 Most Common Maltese Words",
-      "source_year": 2020,
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Serracino-Inglott, Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
       "source_page": null,
-      "source_publisher": "Corpus tal-Malti",
+      "source_publisher": "Midsea Books",
       "etymology_notes": "Adverbial compound formed from darba (time, occasion) and oħra (other, fem.).",
       "etymology_chain": [
         {
@@ -487,7 +518,12 @@
         {
           "text_en": "again, another time, once more",
           "text_mt": "F'okkażjoni oħra jew fi żmien li għad irid jiġi; mill-ġdid.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "iterative temporal adverb"
         }
       ],
@@ -497,11 +533,17 @@
           "en": "I would like to see you again so we can continue talking."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "adv-darba-oħra"
+      ],
       "alternative_forms": [
         {
           "headword": "darba oħra",
-          "type": "analytic"
+          "type": "analytic",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-darba-oħra",
+          "target_id": "adv-darba-oħra",
+          "notes": "Forma analitika sħiħa mingħajr eliżjoni"
         }
       ],
       "phonetics": [
@@ -531,7 +573,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -551,7 +593,12 @@
         {
           "text_en": "a little, slightly, a bit",
           "text_mt": "Fi kwantità żgħira, fi grad limitat jew għal tul ta' ħin qasir; mhux wisq.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "degree and quantity adverb"
         }
       ],
@@ -594,7 +641,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Persian",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -621,13 +668,23 @@
         {
           "text_en": "only, solely, merely",
           "text_mt": "B'mod uniku, esklużivament u mingħajr żieda ta' xejn jew ħadd aktar.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "restrictive focus adverb"
         },
         {
           "text_en": "but, however, on condition that",
           "text_mt": "Madankollu, iżda bil-kundizzjoni li.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "adversative connective"
         }
       ],
@@ -681,7 +738,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -701,7 +758,12 @@
         {
           "text_en": "much, a lot, very, greatly",
           "text_mt": "Fi kwantità jew fi grad kbir; b'mod abbundanti jew b'intensità qawwija.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "degree and quantity adverb"
         }
       ],
@@ -744,7 +806,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -764,7 +826,12 @@
         {
           "text_en": "too, too much, excessively, exceedingly",
           "text_mt": "Fi grad jew f'ammont li jaqbeż il-kejl normali jew il-limitu mixtieq; bil-kbir.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "excessive degree adverb"
         }
       ],
@@ -806,7 +873,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -826,13 +893,23 @@
         {
           "text_en": "there, in that place",
           "text_mt": "F'dak il-post jew f'pożizzjoni 'l bogħod kemm mill-kelliem kif ukoll minn min qed jisma'.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "distal locative adverb"
         },
         {
           "text_en": "there is, there are",
           "text_mt": "Jindika l-preżenza jew l-eżistenza ta' persuna, ħaġa jew sitwazzjoni.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "existential marker"
         }
       ],
@@ -883,7 +960,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -903,7 +980,12 @@
         {
           "text_en": "more, further",
           "text_mt": "F'ammont, fi grad jew f'livell akbar; b'mod superjuri jew b'żieda ma' dak li kien hemm.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "comparative degree adverb"
         }
       ],
@@ -955,7 +1037,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -975,7 +1057,12 @@
         {
           "text_en": "now, at present, immediately",
           "text_mt": "Fil-mument preżenti, fil-ħin attwali; minnufih.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "temporal present adverb"
         }
       ],
@@ -1014,7 +1101,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -1034,7 +1121,12 @@
         {
           "text_en": "never, at no time",
           "text_mt": "F'ebda żmien, f'ebda ħin jew f'ebda okkażjoni; bl-ebda mod fil-passat jew fil-futur.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "negative temporal adverb"
         }
       ],
@@ -1075,7 +1167,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Italian",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -1095,7 +1187,12 @@
         {
           "text_en": "late, at a late hour",
           "text_mt": "Fi żmien li għadda wara l-ħin stabbilit jew mistenni; mhux kmieni.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "temporal adverb"
         }
       ],
@@ -1136,7 +1233,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -1156,7 +1253,12 @@
         {
           "text_en": "together, jointly, mutually",
           "text_mt": "F'kumpanija ta' xulxin, f'għaqda waħda jew b'kooperazzjoni bejn tnejn jew aktar; spalla ma' spalla.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "associative adverb"
         }
       ],
@@ -1197,7 +1299,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -1217,7 +1319,12 @@
         {
           "text_en": "always, constantly, forever",
           "text_mt": "F'kull żmien, b'mod kontinwu u bla waqfien; tul il-ħin kollu.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "continuous temporal adverb"
         }
       ],
@@ -1259,7 +1366,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Sicilian",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -1279,7 +1386,12 @@
         {
           "text_en": "often, frequently",
           "text_mt": "B'ripetizzjoni kontinwa f'intervalli qosra ta' ħin; ħafna drabi.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "frequency adverb"
         }
       ],
@@ -1321,12 +1433,12 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Maltese",
-      "source_id": "src-1000mcw",
-      "source_citation": "Corpus tal-Malti / 1000 MCW",
-      "source_title": "1000 Most Common Maltese Words",
-      "source_year": 2020,
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Serracino-Inglott, Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
       "source_page": null,
-      "source_publisher": "Corpus tal-Malti",
+      "source_publisher": "Midsea Books",
       "etymology_notes": "Compound of the proximal adverb hawn (here) and preposition fuq (above, on top).",
       "etymology_chain": [
         {
@@ -1348,13 +1460,23 @@
         {
           "text_en": "up here, above",
           "text_mt": "F'post jew f'pożizzjoni aktar 'il fuq qrib il-kelliem.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "proximal spatial adverb"
         },
         {
           "text_en": "above, hereinbefore (in text)",
           "text_mt": "F'parti preċedenti ta' kitba, test jew dokument referut.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "textual deictic"
         }
       ],
@@ -1365,12 +1487,17 @@
         }
       ],
       "related_entries": [
-        "adv-hawn"
+        "adv-hawn",
+        "adv-hawnfuq"
       ],
       "alternative_forms": [
         {
           "headword": "hawnfuq",
-          "type": "orthographic"
+          "type": "orthographic",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-hawnfuq",
+          "target_id": "adv-hawnfuq",
+          "notes": "Varjant ortografiku magħqud mingħajr spazju"
         }
       ],
       "phonetics": [
@@ -1400,7 +1527,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -1420,7 +1547,12 @@
         {
           "text_en": "far, far away, at a distance",
           "text_mt": "F'distanza kbira fi spazju jew fi żmien; mhux fil-qrib.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "distance adverb"
         }
       ],
@@ -1459,13 +1591,13 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Sicilian",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
       "source_page": null,
       "source_publisher": "Midsea Books",
-      "etymology_notes": "From preposition ma' (with) and l-ajr (the air, swiftness, from Sicilian aria / Latin aer), meaning literally 'with the speed of the wind'.",
+      "etymology_notes": "From preposition ma' (with) and l-ajr (the air, swiftness, from Sicilian aria or Latin aer), meaning literally 'with the speed of the wind'.",
       "etymology_chain": [
         {
           "relationship": "Compound of",
@@ -1486,7 +1618,12 @@
         {
           "text_en": "fast, quickly, swiftly",
           "text_mt": "B'ħeffa kbira, fi żmien qasir u b'moviment mgħaġġel; f'ħakka t'għajn.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "speed and manner adverb"
         }
       ],
@@ -1527,13 +1664,13 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Latin",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
       "source_page": null,
       "source_publisher": "Midsea Books",
-      "etymology_notes": "From Latin cum mane (in the early morning), through Sicilian camani / cumannani.",
+      "etymology_notes": "From Latin cum mane (in the early morning), through Sicilian camani or cumannani.",
       "etymology_chain": [
         {
           "relationship": "Borrowed from",
@@ -1547,7 +1684,12 @@
         {
           "text_en": "early, in good time",
           "text_mt": "Fil-bidu ta' perjodu jew qabel il-ħin mistenni; mhux tard.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "temporal adverb"
         }
       ],
@@ -1588,7 +1730,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -1608,7 +1750,12 @@
         {
           "text_en": "less, fewer",
           "text_mt": "F'ammont, fi grad jew f'livell iżgħar; b'mod inferjuri jew bi tnaqqis.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "comparative degree adverb"
         }
       ],
@@ -1650,13 +1797,13 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Sicilian",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
       "source_page": null,
       "source_publisher": "Midsea Books",
-      "etymology_notes": "Compound adverb formed from Semitic preposition bi + definite article l- + Romance loan noun mod (manner, way), from Sicilian modu / Latin modus.",
+      "etymology_notes": "Compound adverb formed from Semitic preposition bi + definite article l- + Romance loan noun mod (manner, way), from Sicilian modu or Latin modus.",
       "etymology_chain": [
         {
           "relationship": "Compound of",
@@ -1677,7 +1824,12 @@
         {
           "text_en": "slowly, gently, step by step",
           "text_mt": "Mingħajr għaġla, pass wara pass u b'attenzjoni; bil-ftit il-ftit.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "manner adverb"
         }
       ],
@@ -1718,13 +1870,13 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Sicilian",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
       "source_page": null,
       "source_publisher": "Midsea Books",
-      "etymology_notes": "Borrowed from Sicilian forsi (maybe, perhaps), from Latin forsit / forsitan.",
+      "etymology_notes": "Borrowed from Sicilian forsi (maybe, perhaps), from Latin forsit or forsitan.",
       "etymology_chain": [
         {
           "relationship": "Borrowed from",
@@ -1738,7 +1890,12 @@
         {
           "text_en": "maybe, perhaps, possibly",
           "text_mt": "B'mod probabbli iżda mhux ċert; jista' jkun li.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "epistemic modal adverb"
         }
       ],
@@ -1777,7 +1934,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -1804,13 +1961,23 @@
         {
           "text_en": "suddenly, all of a sudden",
           "text_mt": "B'mod għarrieda u bla mistenni; ħabta u sabta.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "sudden temporal adverb"
         },
         {
           "text_en": "at once, simultaneously, together",
           "text_mt": "F'mument wieħed u fl-istess waqt; f'salt wieħed.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "simultaneous temporal adverb"
         }
       ],
@@ -1826,7 +1993,11 @@
       "alternative_forms": [
         {
           "headword": "f'daqqa",
-          "type": "orthographic"
+          "type": "orthographic",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-f-daqqa",
+          "target_id": "adv-f-daqqa",
+          "notes": "Varjant ortografiku bl-appostrofu dritt tat-tastiera"
         }
       ],
       "phonetics": [
@@ -1856,7 +2027,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Italian",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -1876,7 +2047,12 @@
         {
           "text_en": "rather, quite, fairly, somewhat",
           "text_mt": "Fi grad konsiderevoli iżda mhux estrem; sa ċertu punt jew relattivament.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "degree adverb"
         }
       ],
@@ -1915,7 +2091,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Borg & Azzopardi-Alexander (1997); Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -1942,7 +2118,12 @@
         {
           "text_en": "will not, won't, not going to",
           "text_mt": "Partiċella negattiva tal-futur li tindika ċaħda jew nuqqas ta' twettiq ta' azzjoni fil-ġejjieni.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "negative future marker"
         }
       ],
@@ -1983,7 +2164,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Maltese",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -2010,7 +2191,12 @@
         {
           "text_en": "please, if you please",
           "text_mt": "Formola ta' korteżija użata meta ssir talba, xewqa jew mistoqsija b'mod edukat u ġentili; bil-qalb kollha.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "politeness formula"
         }
       ],
@@ -2049,7 +2235,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Maltese",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary; Serracino-Inglott, Il-Miklem Malti",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -2062,7 +2248,7 @@
       "etymology_notes": "Compound adverb formed by fusing the proximal locative hawn (here) with the deictic particle hekk (thus, so, from Arabic hâkađâ), yielding a reinforced proximal spatial sense ('right here').",
       "etymology_chain": [
         {
-          "relationship": "Compound of",
+          "relationship": "Derived from",
           "language": "Maltese",
           "term": "hawn",
           "pronunciation": "hawn",
@@ -2087,7 +2273,12 @@
         {
           "text_en": "right here, here, just here",
           "text_mt": "Propju f'dan il-post jew f'din il-pożizzjoni eżatta fejn jinsab il-kelliem; f'dan il-punt preċiż.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "reinforced proximal spatial adverb"
         }
       ],
@@ -2111,7 +2302,7 @@
           "has_lemma_entry": true,
           "target_entry_id": "adv-hawn",
           "target_id": "adv-hawn",
-          "notes": "Base proximal spatial adverb"
+          "notes": "Base proximal spatial adverb from which hawnhekk is derived"
         }
       ],
       "phonetics": [
@@ -2141,7 +2332,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -2172,7 +2363,12 @@
         {
           "text_en": "here, over here",
           "text_mt": "Għamla djalettali u mitkellma b'tisħiħ tal-avverbju 'hawn' biex tindika post qrib il-kelliem.",
-          "register": "colloquial",
+          "register": {
+            "key": "colloquial",
+            "en": "Colloquial",
+            "mt": "Kollokwjali",
+            "arabised": "Ta' kotra"
+          },
           "nuance": "emphatic spoken proximal adverb"
         }
       ],
@@ -2224,7 +2420,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -2255,7 +2451,12 @@
         {
           "text_en": "here, over here",
           "text_mt": "Għamla djalettali oħra ta' 'hawn' b'vokali finali miżjuda, komuni f'xi nħawi tal-gżejjer Maltin.",
-          "register": "dialectal",
+          "register": {
+            "key": "dialectal",
+            "en": "Dialectal",
+            "mt": "Djalettali",
+            "arabised": "Lehġi"
+          },
           "nuance": "regional spoken proximal adverb"
         }
       ],
@@ -2307,7 +2508,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Maltese",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary; Serracino-Inglott, Il-Miklem Malti",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -2320,7 +2521,7 @@
       "etymology_notes": "Compound adverb formed by fusing the distal locative hemm (there) with the deictic particle hekk (thus, so, from Arabic hâkađâ), yielding a reinforced distal spatial sense ('right there, over there').",
       "etymology_chain": [
         {
-          "relationship": "Compound of",
+          "relationship": "Derived from",
           "language": "Maltese",
           "term": "hemm",
           "pronunciation": "hemm",
@@ -2345,7 +2546,12 @@
         {
           "text_en": "right there, over there, in that exact place",
           "text_mt": "Propju f'dak il-post jew f'dik il-pożizzjoni determinata 'l bogħod mill-kelliem; f'dak il-punt preċiż.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "reinforced distal spatial adverb"
         }
       ],
@@ -2397,7 +2603,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -2428,7 +2634,12 @@
         {
           "text_en": "more, further",
           "text_mt": "Għamla fonetika oħra ta' 'aktar' użata biex tindika kwantità, grad jew livell superjuri.",
-          "register": "standard",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
           "nuance": "comparative degree adverb"
         }
       ],
@@ -2479,7 +2690,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -2510,7 +2721,12 @@
         {
           "text_en": "will, shall (future marker)",
           "text_mt": "Varjant djalettali jew arkajku tal-partiċella tal-futur 'se' użat qabel verbi fl-imperfett.",
-          "register": "dialectal",
+          "register": {
+            "key": "dialectal",
+            "en": "Dialectal",
+            "mt": "Djalettali",
+            "arabised": "Lehġi"
+          },
           "nuance": "preverbal future particle variant"
         }
       ],
@@ -2560,7 +2776,7 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Persian",
-      "source_id": "src-aquilina",
+      "source_id": "src-aquilina-1987",
       "source_citation": "Aquilina, Maltese-English Dictionary",
       "source_title": "Maltese-English Dictionary",
       "source_year": 1987,
@@ -2591,7 +2807,12 @@
         {
           "text_en": "only, merely",
           "text_mt": "Varjant antik jew djalettali ta' 'biss' li jfisser esklużivament jew mingħajr żieda ta' xejn aktar.",
-          "register": "dialectal",
+          "register": {
+            "key": "dialectal",
+            "en": "Dialectal",
+            "mt": "Djalettali",
+            "arabised": "Lehġi"
+          },
           "nuance": "restrictive focus adverb variant"
         }
       ],
@@ -2625,6 +2846,280 @@
       "source_frequency_rank": 123,
       "audit_status": "verified",
       "audit_notes": "Added as full lemma for dialectal variant bass.",
+      "theme": "Adverbs & Modal Particles",
+      "theme_id": "adverbs_particles"
+    },
+    {
+      "id": "adv-hekk",
+      "headword": "hekk",
+      "pos": "adverb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": "1v22",
+      "morph_pattern": "C1vC2C2",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Serracino-Inglott, Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Deictic manner adverb inherited from Arabic هٰكَذَا (hâkađâ, thus, so, in this manner), composed of the demonstrative proclitic hâ- and kađâ (like this). Base element in the spatial compounds hawnhekk and hemmhekk.",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هٰكَذَا",
+          "pronunciation": "hâkađâ",
+          "definition": "thus, so, in this manner, as such"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "so, thus, in this manner, like this",
+          "text_mt": "B'dan il-mod, b'din il-manjiera jew b'din ix-xbieha li qed tidher jew intqal fuqha.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "deictic manner adverb"
+        },
+        {
+          "text_en": "so, therefore, as a consequence",
+          "text_mt": "B'riżultat ta' dan, għaldaqstant jew għal din ir-raġuni; konsegwentement.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "consequential connector"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Agħmel hekk biex ix-xogħol isir sewwa u bla żbalji.",
+          "en": "Do it like this so the work is done properly and without mistakes."
+        },
+        {
+          "mt": "Kien hekk li sirna nafu l-verità kollha dwar il-każ.",
+          "en": "It was so that we came to know the whole truth about the case."
+        }
+      ],
+      "related_entries": [
+        "adv-hawnhekk",
+        "adv-hemmhekk",
+        "adv-hawn",
+        "adv-hemm"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɛkː/",
+          "notes": null
+        }
+      ],
+      "rank": 165,
+      "source_frequency_rank": 165,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma and Oxford lexicographical standard. Manner deictic adverb cross-referenced with hawnhekk and hemmhekk.",
+      "theme": "Adverbs & Modal Particles",
+      "theme_id": "adverbs_particles"
+    },
+    {
+      "id": "adv-darba-oħra",
+      "headword": "darba oħra",
+      "pos": "adverb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Serracino-Inglott, Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Analytic adverbial locution composed of the feminine noun darba (a time, occasion, once) and the feminine adjective oħra (other, another). Elides into darb'oħra.",
+      "etymology_chain": [
+        {
+          "relationship": "Compound of",
+          "language": "Maltese",
+          "term": "darba",
+          "pronunciation": "darba",
+          "definition": "a time, once"
+        },
+        {
+          "relationship": "Combined with",
+          "language": "Maltese",
+          "term": "oħra",
+          "pronunciation": "oħra",
+          "definition": "other (feminine)"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ضَرْبَة + أُخْرَى",
+          "pronunciation": "ḍarbaẗ + ukhrâ",
+          "definition": "a stroke, instance + other"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "again, another time, once more",
+          "text_mt": "F'okkażjoni oħra jew fi żmien ieħor li għad irid jiġi; mill-ġdid.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "iterative temporal adverbial phrase"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Inkomplu dan ix-xogħol darba oħra meta jkollna aktar ħin.",
+          "en": "We will continue this work another time when we have more time."
+        }
+      ],
+      "related_entries": [
+        "adv-darb-oħra"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "darb’oħra",
+          "type": "contracted",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-darb-oħra",
+          "target_id": "adv-darb-oħra",
+          "notes": "Forma mqassra bl-appostrofu"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˌdɐrbɐ ˈɔːrɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 92,
+      "source_frequency_rank": 92,
+      "audit_status": "verified",
+      "audit_notes": "Analytic lemma form for darb'oħra; Oxford and Miklem compliant.",
+      "theme": "Adverbs & Modal Particles",
+      "theme_id": "adverbs_particles"
+    },
+    {
+      "id": "adv-hawnfuq",
+      "headword": "hawnfuq",
+      "pos": "adverb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Serracino-Inglott, Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Solid orthographic compound merging the proximal adverb hawn (here) with the spatial relator fuq (above, over). Parallel to spaced hawn fuq.",
+      "etymology_chain": [
+        {
+          "relationship": "Compound of",
+          "language": "Maltese",
+          "term": "hawn",
+          "pronunciation": "hawn",
+          "definition": "here"
+        },
+        {
+          "relationship": "Combined with",
+          "language": "Maltese",
+          "term": "fuq",
+          "pronunciation": "fuq",
+          "definition": "above, on top"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هَاهُنَا + فَوْق",
+          "pronunciation": "hâhunâ + fawq",
+          "definition": "here + above"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "up here, above",
+          "text_mt": "F'post jew f'pożizzjoni aktar 'il fuq qrib il-kelliem; f'livell superjuri fl-istess post.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "proximal spatial adverb"
+        },
+        {
+          "text_en": "hereinbefore, above (in text)",
+          "text_mt": "F'parti preċedenti ta' kitba, test jew dokument referut.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "textual deictic"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Id-dettalji li tajna hawnfuq juru biċ-ċar il-passi meħtieġa.",
+          "en": "The details we provided above clearly show the necessary steps."
+        }
+      ],
+      "related_entries": [
+        "adv-hawn-fuq",
+        "adv-hawn"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "hawn fuq",
+          "type": "orthographic",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-hawn-fuq",
+          "target_id": "adv-hawn-fuq",
+          "notes": "Forma ortografika b'żewġ kelmiet maqtugħin"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˌɐwnˈfuːʔ/",
+          "notes": null
+        }
+      ],
+      "rank": 207,
+      "source_frequency_rank": 207,
+      "audit_status": "verified",
+      "audit_notes": "Solid orthographic variant lemma for hawn fuq; reciprocal links verified.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     }

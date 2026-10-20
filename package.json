@@ -58,6 +58,8 @@
     "test:admin-performance": "node --test scripts/adminPerformance.test.mjs",
     "import:dry": "node scripts/import-xls.mjs --dry-run",
     "import:all": "node scripts/import-xls.mjs --execute",
+    "push:done": "node scripts/push-done-entries.mjs",
+    "push:done:execute": "node scripts/push-done-entries.mjs --execute",
     "import:roots": "node scripts/import-xls.mjs --execute --roots-only",
     "import:nouns": "node scripts/import-xls.mjs --execute --nouns-only",
     "import:jsonl": "node scripts/import-jsonl.mjs",
