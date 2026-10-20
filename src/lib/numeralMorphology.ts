@@ -1101,11 +1101,33 @@ function buildNumeralFamilyRoleForms(
     const seen = new Set<string>();
     const forms: Partial<Record<NumeralRole, NumeralSurfaceValue[]>> = {};
 
+    const currentEntry = linkedEntries.find((e) => normalizeNumeralLookupKey(e.headword || '') === currentKey);
+    const currentRoot = currentEntry ? getLinkedNumeralRootKey(currentEntry) : '';
+    const relatedHeadwords = new Set(getNumeralRelatedHeadwords(currentHeadword).map(normalizeNumeralLookupKey));
+
+    const generated = buildNumeralDisplayForms(currentHeadword, currentRoot || '', []);
+    const validSurfaces = new Set<string>();
+    Object.values(generated).forEach((list) => {
+        (list as NumeralSurfaceValue[] | undefined)?.forEach((item) => {
+            const k = normalizeNumeralLookupKey(item.value);
+            if (k) validSurfaces.add(k);
+        });
+    });
+
     linkedEntries.forEach((entry) => {
         if (String(entry.pos || 'numeral').trim().toLowerCase() !== 'numeral') return;
 
         const valueKey = normalizeNumeralLookupKey(String(entry.headword || ''));
         if (!valueKey || valueKey === currentKey) return;
+
+        const entryRoot = getLinkedNumeralRootKey(entry);
+        const matchesRoot = !!(currentRoot && entryRoot && currentRoot === entryRoot);
+        const matchesFamilyHeadword = relatedHeadwords.has(valueKey);
+        const matchesSurface = validSurfaces.has(valueKey);
+
+        if (!matchesRoot && !matchesFamilyHeadword && !matchesSurface) {
+            return;
+        }
 
         const identity = String(entry.id || valueKey).trim().toLowerCase();
         if (!identity || seen.has(identity)) return;
@@ -1311,18 +1333,18 @@ export function buildNumeralDisplayForms(
     };
 
     return {
-        ordinal: toNumeralSurfaceList(resolveDisplayValues('ordinal', mergedAutoForms.ordinal), expandedLinkedEntries, 'auto_generated'),
-        adverbial: toNumeralSurfaceList(resolveDisplayValues('adverbial', mergedAutoForms.adverbial), expandedLinkedEntries, 'auto_generated'),
-        fractional: toNumeralSurfaceList(resolveDisplayValues('fractional', mergedAutoForms.fractional_semitic), expandedLinkedEntries, 'auto_generated'),
+        ordinal: toNumeralSurfaceList(resolveDisplayValues('ordinal', mergedAutoForms.ordinal), expandedLinkedEntries, 'plain'),
+        adverbial: toNumeralSurfaceList(resolveDisplayValues('adverbial', mergedAutoForms.adverbial), expandedLinkedEntries, 'plain'),
+        fractional: toNumeralSurfaceList(resolveDisplayValues('fractional', mergedAutoForms.fractional_semitic), expandedLinkedEntries, 'plain'),
         multiplier: toNumeralSurfaceList(
             resolveDisplayValues(
                 'multiplier',
                 [mergedAutoForms.multiplier_form1, mergedAutoForms.multiplier_form2].filter((value): value is string => Boolean(value)),
             ),
             expandedLinkedEntries,
-            'auto_generated',
+            'plain',
         ),
-        distributive: toNumeralSurfaceList(resolveDisplayValues('distributive', mergedAutoForms.distributive), expandedLinkedEntries, 'auto_generated'),
+        distributive: toNumeralSurfaceList(resolveDisplayValues('distributive', mergedAutoForms.distributive), expandedLinkedEntries, 'plain'),
         attributive_short: toNumeralSurfaceList(resolveDisplayValues('attributive_short', shouldSuppressNumeralAttributiveForms(headword) ? [] : mergedAutoForms.attributive_short), expandedLinkedEntries, 'auto_generated'),
         attributive_long: toNumeralSurfaceList(resolveDisplayValues('attributive_long', shouldSuppressNumeralAttributiveForms(headword) ? [] : mergedAutoForms.attributive_long), expandedLinkedEntries, 'auto_generated'),
     };
@@ -1404,8 +1426,10 @@ export function buildNumeralMorphologyDisplayForms(
         dbKey: string,
         generatedItems: NumeralSurfaceValue[],
         pattern?: unknown,
+        altDbKey?: string,
     ) => {
-        const savedItems = toSavedNumeralSurfaceList(saved[dbKey], expandedLinkedEntries, pattern);
+        const raw = saved[dbKey] ?? (altDbKey ? saved[altDbKey] : undefined);
+        const savedItems = toSavedNumeralSurfaceList(raw, expandedLinkedEntries, pattern);
         return savedItems.length > 0 ? savedItems : generatedItems;
     };
 
@@ -1413,25 +1437,25 @@ export function buildNumeralMorphologyDisplayForms(
         cardinal,
         attributive_short: familyRoleForms.attributive_short?.length
             ? familyRoleForms.attributive_short
-            : pickSaved('form_attributive_short', generated.attributive_short, saved.form_attributive_short_pattern),
+            : pickSaved('form_attributive_short', generated.attributive_short, saved.form_attributive_short_pattern, 'attributive_short_form'),
         attributive_long: familyRoleForms.attributive_long?.length
             ? familyRoleForms.attributive_long
-            : pickSaved('form_attributive_long', generated.attributive_long),
+            : pickSaved('form_attributive_long', generated.attributive_long, undefined, 'attributive_long_form'),
         ordinal: familyRoleForms.ordinal?.length
             ? familyRoleForms.ordinal
-            : pickSaved('ordinal_form', generated.ordinal),
+            : pickSaved('ordinal_form', generated.ordinal, undefined, 'numeral_ordinal'),
         adverbial: familyRoleForms.adverbial?.length
             ? familyRoleForms.adverbial
-            : pickSaved('adverbial_form', generated.adverbial),
+            : pickSaved('adverbial_form', generated.adverbial, undefined, 'numeral_adverbial'),
         fractional: familyRoleForms.fractional?.length
             ? familyRoleForms.fractional
-            : pickSaved('fractional_form', generated.fractional),
+            : pickSaved('fractional_form', generated.fractional, undefined, 'numeral_fractional'),
         multiplier: familyRoleForms.multiplier?.length
             ? familyRoleForms.multiplier
-            : pickSaved('multiplier_form', generated.multiplier),
+            : pickSaved('multiplier_form', generated.multiplier, undefined, 'numeral_multiplier'),
         distributive: familyRoleForms.distributive?.length
             ? familyRoleForms.distributive
-            : pickSaved('distributive_form', generated.distributive),
+            : pickSaved('distributive_form', generated.distributive, undefined, 'numeral_distributive'),
     };
 
     return displayForms;
