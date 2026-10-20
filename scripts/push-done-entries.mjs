@@ -99,6 +99,8 @@ async function run() {
 
     console.log(`\n🔌 Connected to Turso endpoint: ${TURSO_URL.replace(/:[^:]*@/, ':***@').slice(0, 35)}...`);
 
+    const allEntryIds = new Set(allEntries.map(e => e.id));
+
     // ── STEP 1: Verify live schema in 1 query ──────────────────────────────────
     console.log('\n🔎 Step 1: Introspecting live table constraints (1 single query)...');
     const schemaRes = await client.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='entries'");
@@ -334,7 +336,7 @@ async function run() {
                     let relOrder = 0;
                     for (const rel of e.related_entries) {
                         const targetId = typeof rel === 'string' ? rel : (rel?.id || rel?.target_id);
-                        if (targetId && existingById.has(targetId)) {
+                        if (targetId && (existingById.has(targetId) || allEntryIds.has(targetId))) {
                             const relId = `rel_${entryId}_${targetId}_related`;
                             await tx.execute({
                                 sql: `INSERT OR REPLACE INTO entry_relationships (id, entry_id, target_entry_id, relationship_type, sort_order) VALUES (?, ?, ?, ?, ?)`,
@@ -343,6 +345,66 @@ async function run() {
                             totalWriteQueries++;
                         }
                     }
+                }
+
+                // 4. Sync Numeral Morphology (if pos is numeral or numeral fields exist)
+                const isNumeral = item.pos === 'numeral' || e.pos === 'numeral' || !!e.numeral_type;
+                if (isNumeral) {
+                    const nm = e.numeral_morphology || {};
+                    const numType = e.numeral_type || nm.numeral_type || 'cardinal';
+                    const attrShort = e.form_attributive_short ?? nm.form_attributive_short ?? null;
+                    const attrShortPattern = e.form_attributive_short_pattern ?? nm.form_attributive_short_pattern ?? null;
+                    const attrLong = e.form_attributive_long ?? nm.form_attributive_long ?? null;
+                    const ordForm = e.ordinal_form ?? e.numeral_ordinal ?? nm.ordinal_form ?? null;
+                    const advForm = e.adverbial_form ?? e.numeral_adverbial ?? nm.adverbial_form ?? null;
+                    const fracForm = e.fractional_form ?? e.numeral_fractional ?? nm.fractional_form ?? null;
+                    const multForm = e.multiplier_form ?? e.numeral_multiplier ?? nm.multiplier_form ?? null;
+                    const distForm = e.distributive_form ?? e.numeral_distributive ?? nm.distributive_form ?? null;
+                    const formPluralPattern = e.form_plural_pattern ?? nm.form_plural_pattern ?? null;
+                    const vowelSetSg = e.vowel_set_sg ?? nm.vowel_set_sg ?? null;
+                    const vowelSetPl = e.vowel_set_pl ?? nm.vowel_set_pl ?? null;
+                    const vowelSetOpp = e.vowel_set_opp ?? nm.vowel_set_opp ?? null;
+                    const vowelSetDual = e.vowel_set_dual ?? nm.vowel_set_dual ?? null;
+                    const pluralFormsJson = e.plural_forms ? (typeof e.plural_forms === 'object' ? JSON.stringify(e.plural_forms) : String(e.plural_forms)) : null;
+                    const femForm = e.feminine_form ?? nm.feminine_form ?? e.form_fem ?? null;
+                    const mascForm = e.masculine_form ?? nm.masculine_form ?? e.form_masc ?? null;
+
+                    await tx.execute({
+                        sql: `INSERT INTO numeral_morphology (
+                            entry_id, numeral_type, form_attributive_short, form_attributive_short_pattern,
+                            form_attributive_long, ordinal_form, adverbial_form,
+                            fractional_form, multiplier_form, distributive_form,
+                            form_plural_pattern, vowel_set_sg, vowel_set_pl, vowel_set_opp, vowel_set_dual,
+                            plural_forms, feminine_form, masculine_form, updated_at
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+                        ON CONFLICT(entry_id) DO UPDATE SET
+                            numeral_type = excluded.numeral_type,
+                            form_attributive_short = excluded.form_attributive_short,
+                            form_attributive_short_pattern = excluded.form_attributive_short_pattern,
+                            form_attributive_long = excluded.form_attributive_long,
+                            ordinal_form = excluded.ordinal_form,
+                            adverbial_form = excluded.adverbial_form,
+                            fractional_form = excluded.fractional_form,
+                            multiplier_form = excluded.multiplier_form,
+                            distributive_form = excluded.distributive_form,
+                            form_plural_pattern = excluded.form_plural_pattern,
+                            vowel_set_sg = excluded.vowel_set_sg,
+                            vowel_set_pl = excluded.vowel_set_pl,
+                            vowel_set_opp = excluded.vowel_set_opp,
+                            vowel_set_dual = excluded.vowel_set_dual,
+                            plural_forms = excluded.plural_forms,
+                            feminine_form = excluded.feminine_form,
+                            masculine_form = excluded.masculine_form,
+                            updated_at = excluded.updated_at`,
+                        args: [
+                            entryId, numType, attrShort, attrShortPattern,
+                            attrLong, ordForm, advForm,
+                            fracForm, multForm, distForm,
+                            formPluralPattern, vowelSetSg, vowelSetPl, vowelSetOpp, vowelSetDual,
+                            pluralFormsJson, femForm, mascForm
+                        ]
+                    });
+                    totalWriteQueries++;
                 }
 
                 appliedCount++;

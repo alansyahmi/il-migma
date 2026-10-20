@@ -52,8 +52,8 @@
         }
       ],
       "related_entries": [
-        "num-waħda",
         "adj-ewwel",
+        "num-waħda",
         "pron-uħud"
       ],
       "alternative_forms": [],
@@ -122,16 +122,48 @@
       "form_attributive_short": null,
       "form_attributive_long": null,
       "numeral_ordinal": "ewwel",
-      "numeral_adverbial": null,
+      "numeral_adverbial": "darba",
       "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_multiplier": "uniku, fard",
+      "numeral_distributive": "wieħed wieħed, uħud",
       "rank": 14,
       "source_frequency_rank": 14,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": null,
+      "ordinal_form": "ewwel",
+      "adverbial_form": "darba",
+      "fractional_form": null,
+      "multiplier_form": "uniku, fard",
+      "distributive_form": "wieħed wieħed, uħud",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": null,
+        "form_attributive_short_pattern": null,
+        "form_attributive_long": null,
+        "ordinal_form": "ewwel",
+        "adverbial_form": "darba",
+        "fractional_form": null,
+        "multiplier_form": "uniku, fard",
+        "distributive_form": "wieħed wieħed, uħud",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "ie-e",
+        "vowel_set_pl": "u-u",
+        "vowel_set_opp": "a--",
+        "vowel_set_dual": null,
+        "plural_forms": [
+          {
+            "form": "uħud",
+            "pattern": "u2v3"
+          },
+          {
+            "form": "waħdiet",
+            "pattern": "-iet"
+          }
+        ]
+      }
     },
     {
       "id": "num-tnejn",
@@ -182,9 +214,10 @@
         }
       ],
       "related_entries": [
-        "num-żewġ",
         "adj-tieni",
-        "n-tnejn"
+        "n-nofs",
+        "num-wieħed",
+        "num-tlieta"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -242,18 +275,46 @@
       "participle_type": null,
       "numeral_type": "cardinal",
       "form_attributive_short": "żewġ",
-      "form_attributive_long": "tnejn",
+      "form_attributive_long": "żewġt",
       "numeral_ordinal": "tieni",
-      "numeral_adverbial": null,
+      "numeral_adverbial": "darbtejn",
       "numeral_fractional": "nofs",
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_multiplier": "doppju",
+      "numeral_distributive": "tnejn tnejn",
       "rank": 173,
       "source_frequency_rank": 173,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CvCC",
+      "ordinal_form": "tieni",
+      "adverbial_form": "darbtejn",
+      "fractional_form": "nofs",
+      "multiplier_form": "doppju",
+      "distributive_form": "tnejn tnejn",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "żewġ",
+        "form_attributive_short_pattern": "CvCC",
+        "form_attributive_long": "żewġt",
+        "ordinal_form": "tieni",
+        "adverbial_form": "darbtejn",
+        "fractional_form": "nofs",
+        "multiplier_form": "doppju",
+        "distributive_form": "tnejn tnejn",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "---",
+        "vowel_set_pl": "--e",
+        "vowel_set_opp": null,
+        "vowel_set_dual": null,
+        "plural_forms": [
+          {
+            "form": "tnejnijiet",
+            "pattern": "-ijiet"
+          }
+        ]
+      }
     },
     {
       "id": "num-tlieta",
@@ -304,9 +365,9 @@
         }
       ],
       "related_entries": [
-        "num-tliet",
         "adj-tielet",
-        "n-tlieta"
+        "num-tnejn",
+        "num-erbgħa"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -364,18 +425,46 @@
       "participle_type": null,
       "numeral_type": "cardinal",
       "form_attributive_short": "tliet",
-      "form_attributive_long": "tlieta",
+      "form_attributive_long": "tlitt",
       "numeral_ordinal": "tielet",
-      "numeral_adverbial": null,
+      "numeral_adverbial": "tliet darbiet",
       "numeral_fractional": "terz",
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_multiplier": "triplu, tlieċi",
+      "numeral_distributive": "tlieta tlieta, tlieċ",
       "rank": 53,
       "source_frequency_rank": 53,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CvCVC",
+      "ordinal_form": "tielet",
+      "adverbial_form": "tliet darbiet",
+      "fractional_form": "terz",
+      "multiplier_form": "triplu, tlieċi",
+      "distributive_form": "tlieta tlieta, tlieċ",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "tliet",
+        "form_attributive_short_pattern": "CvCVC",
+        "form_attributive_long": "tlitt",
+        "ordinal_form": "tielet",
+        "adverbial_form": "tliet darbiet",
+        "fractional_form": "terz",
+        "multiplier_form": "triplu, tlieċi",
+        "distributive_form": "tlieta tlieta, tlieċ",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "--ie",
+        "vowel_set_pl": "--e",
+        "vowel_set_opp": null,
+        "vowel_set_dual": null,
+        "plural_forms": [
+          {
+            "form": "tletiet",
+            "pattern": "-iet"
+          }
+        ]
+      }
     },
     {
       "id": "num-erbgħa",
@@ -426,9 +515,8 @@
         }
       ],
       "related_entries": [
-        "num-erba",
-        "adj-raba",
-        "n-erbgħa"
+        "num-tlieta",
+        "num-ħamsa"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -486,18 +574,46 @@
       "participle_type": null,
       "numeral_type": "cardinal",
       "form_attributive_short": "erba'",
-      "form_attributive_long": "erbgħa",
+      "form_attributive_long": "erbat",
       "numeral_ordinal": "raba'",
-      "numeral_adverbial": null,
+      "numeral_adverbial": "erba' darbiet",
       "numeral_fractional": "kwart",
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_multiplier": "kwadruplu, rbiegħi, mrabba'",
+      "numeral_distributive": "erbgħa erbgħa, rbiegħ",
       "rank": 218,
       "source_frequency_rank": 218,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "vCCvC",
+      "ordinal_form": "raba'",
+      "adverbial_form": "erba' darbiet",
+      "fractional_form": "kwart",
+      "multiplier_form": "kwadruplu, rbiegħi, mrabba'",
+      "distributive_form": "erbgħa erbgħa, rbiegħ",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "erba'",
+        "form_attributive_short_pattern": "vCCvC",
+        "form_attributive_long": "erbat",
+        "ordinal_form": "raba'",
+        "adverbial_form": "erba' darbiet",
+        "fractional_form": "kwart",
+        "multiplier_form": "kwadruplu, rbiegħi, mrabba'",
+        "distributive_form": "erbgħa erbgħa, rbiegħ",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "---",
+        "vowel_set_pl": "---",
+        "vowel_set_opp": null,
+        "vowel_set_dual": null,
+        "plural_forms": [
+          {
+            "form": "erbgħat",
+            "pattern": "-at"
+          }
+        ]
+      }
     },
     {
       "id": "num-ħamsa",
@@ -548,8 +664,8 @@
         }
       ],
       "related_entries": [
-        "num-ħames",
-        "adj-ħames"
+        "num-erbgħa",
+        "num-sitta"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -607,18 +723,46 @@
       "participle_type": null,
       "numeral_type": "cardinal",
       "form_attributive_short": "ħames",
-      "form_attributive_long": "ħamsa",
+      "form_attributive_long": "ħamest",
       "numeral_ordinal": "ħames",
-      "numeral_adverbial": null,
-      "numeral_fractional": "ħums",
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_adverbial": "ħames darbiet",
+      "numeral_fractional": "ħums, kwint",
+      "numeral_multiplier": "kwintuplu, ħamiesi, mħammes",
+      "numeral_distributive": "ħamsa ħamsa, ħmjes",
       "rank": 458,
       "source_frequency_rank": 458,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CvCvC",
+      "ordinal_form": "ħames",
+      "adverbial_form": "ħames darbiet",
+      "fractional_form": "ħums, kwint",
+      "multiplier_form": "kwintuplu, ħamiesi, mħammes",
+      "distributive_form": "ħamsa ħamsa, ħmjes",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "ħames",
+        "form_attributive_short_pattern": "CvCvC",
+        "form_attributive_long": "ħamest",
+        "ordinal_form": "ħames",
+        "adverbial_form": "ħames darbiet",
+        "fractional_form": "ħums, kwint",
+        "multiplier_form": "kwintuplu, ħamiesi, mħammes",
+        "distributive_form": "ħamsa ħamsa, ħmjes",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "a-a",
+        "vowel_set_pl": "a-ie",
+        "vowel_set_opp": null,
+        "vowel_set_dual": null,
+        "plural_forms": [
+          {
+            "form": "ħamsiet",
+            "pattern": "-iet"
+          }
+        ]
+      }
     },
     {
       "id": "num-sitta",
@@ -669,8 +813,8 @@
         }
       ],
       "related_entries": [
-        "num-sitt",
-        "adj-sitt"
+        "num-ħamsa",
+        "num-tmienja"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -728,18 +872,46 @@
       "participle_type": null,
       "numeral_type": "cardinal",
       "form_attributive_short": "sitt",
-      "form_attributive_long": "sitta",
+      "form_attributive_long": "sitt",
       "numeral_ordinal": "sitt",
-      "numeral_adverbial": null,
-      "numeral_fractional": "suds",
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_adverbial": "sitt darbiet",
+      "numeral_fractional": "suds, sest",
+      "numeral_multiplier": "sestuplu, msettes",
+      "numeral_distributive": "sitta sitta, stiet",
       "rank": 471,
       "source_frequency_rank": 471,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CvCC",
+      "ordinal_form": "sitt",
+      "adverbial_form": "sitt darbiet",
+      "fractional_form": "suds, sest",
+      "multiplier_form": "sestuplu, msettes",
+      "distributive_form": "sitta sitta, stiet",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "sitt",
+        "form_attributive_short_pattern": "CvCC",
+        "form_attributive_long": "sitt",
+        "ordinal_form": "sitt",
+        "adverbial_form": "sitt darbiet",
+        "fractional_form": "suds, sest",
+        "multiplier_form": "sestuplu, msettes",
+        "distributive_form": "sitta sitta, stiet",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "i-a",
+        "vowel_set_pl": "i-ie",
+        "vowel_set_opp": null,
+        "vowel_set_dual": null,
+        "plural_forms": [
+          {
+            "form": "sittiet",
+            "pattern": "-iet"
+          }
+        ]
+      }
     },
     {
       "id": "num-tmienja",
@@ -790,8 +962,8 @@
         }
       ],
       "related_entries": [
-        "num-tmien",
-        "adj-tmien"
+        "num-sitta",
+        "num-għoxrin"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -849,18 +1021,46 @@
       "participle_type": null,
       "numeral_type": "cardinal",
       "form_attributive_short": "tmien",
-      "form_attributive_long": "tmienja",
+      "form_attributive_long": "tmint",
       "numeral_ordinal": "tmien",
-      "numeral_adverbial": null,
-      "numeral_fractional": "tumn",
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_adverbial": "tmien darbiet",
+      "numeral_fractional": "tumn, ottav",
+      "numeral_multiplier": "ottuplu, tmieni, mtemmen",
+      "numeral_distributive": "tmienja tmienja, tmjen",
       "rank": 702,
       "source_frequency_rank": 702,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CCieC",
+      "ordinal_form": "tmien",
+      "adverbial_form": "tmien darbiet",
+      "fractional_form": "tumn, ottav",
+      "multiplier_form": "ottuplu, tmieni, mtemmen",
+      "distributive_form": "tmienja tmienja, tmjen",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "tmien",
+        "form_attributive_short_pattern": "CCieC",
+        "form_attributive_long": "tmint",
+        "ordinal_form": "tmien",
+        "adverbial_form": "tmien darbiet",
+        "fractional_form": "tumn, ottav",
+        "multiplier_form": "ottuplu, tmieni, mtemmen",
+        "distributive_form": "tmienja tmienja, tmjen",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "ie-a",
+        "vowel_set_pl": "ie-ie",
+        "vowel_set_opp": null,
+        "vowel_set_dual": null,
+        "plural_forms": [
+          {
+            "form": "tmienjiet",
+            "pattern": "-iet"
+          }
+        ]
+      }
     },
     {
       "id": "num-għoxrin",
@@ -911,7 +1111,8 @@
         }
       ],
       "related_entries": [
-        "num-għaxra"
+        "num-tmienja",
+        "num-mitt"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -960,17 +1161,40 @@
       "numeral_type": "cardinal",
       "form_attributive_short": "għoxrin",
       "form_attributive_long": "għoxrin",
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_ordinal": "l-għoxrin",
+      "numeral_adverbial": "għoxrin darba",
+      "numeral_fractional": "għoxrin, parti minn għoxrin",
+      "numeral_multiplier": "għoxrin darba daqs",
+      "numeral_distributive": "għoxrin għoxrin",
       "rank": 695,
       "source_frequency_rank": 695,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CvCCvC",
+      "ordinal_form": "l-għoxrin",
+      "adverbial_form": "għoxrin darba",
+      "fractional_form": "għoxrin, parti minn għoxrin",
+      "multiplier_form": "għoxrin darba daqs",
+      "distributive_form": "għoxrin għoxrin",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "għoxrin",
+        "form_attributive_short_pattern": "CvCCvC",
+        "form_attributive_long": "għoxrin",
+        "ordinal_form": "l-għoxrin",
+        "adverbial_form": "għoxrin darba",
+        "fractional_form": "għoxrin, parti minn għoxrin",
+        "multiplier_form": "għoxrin darba daqs",
+        "distributive_form": "għoxrin għoxrin",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "o-i",
+        "vowel_set_pl": null,
+        "vowel_set_opp": null,
+        "vowel_set_dual": null,
+        "plural_forms": null
+      }
     },
     {
       "id": "num-mitt",
@@ -1021,9 +1245,8 @@
         }
       ],
       "related_entries": [
-        "num-mija",
-        "num-mitejn",
-        "n-mijiet"
+        "num-għoxrin",
+        "num-elf"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1082,17 +1305,45 @@
       "numeral_type": "cardinal",
       "form_attributive_short": "mitt",
       "form_attributive_long": "mija",
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_ordinal": "il-mitt",
+      "numeral_adverbial": "mitt darba",
+      "numeral_fractional": "ċenteżmu, parti minn mija",
+      "numeral_multiplier": "mitt darba daqs, ċentuplu",
+      "numeral_distributive": "mitt mitt, mija mija",
       "rank": 457,
       "source_frequency_rank": 457,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CvCC",
+      "ordinal_form": "il-mitt",
+      "adverbial_form": "mitt darba",
+      "fractional_form": "ċenteżmu, parti minn mija",
+      "multiplier_form": "mitt darba daqs, ċentuplu",
+      "distributive_form": "mitt mitt, mija mija",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "mitt",
+        "form_attributive_short_pattern": "CvCC",
+        "form_attributive_long": "mija",
+        "ordinal_form": "il-mitt",
+        "adverbial_form": "mitt darba",
+        "fractional_form": "ċenteżmu, parti minn mija",
+        "multiplier_form": "mitt darba daqs, ċentuplu",
+        "distributive_form": "mitt mitt, mija mija",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "i--",
+        "vowel_set_pl": "i-ie",
+        "vowel_set_opp": null,
+        "vowel_set_dual": "i-ej",
+        "plural_forms": [
+          {
+            "form": "mijiet",
+            "pattern": "-iet"
+          }
+        ]
+      }
     },
     {
       "id": "num-elf",
@@ -1143,8 +1394,8 @@
         }
       ],
       "related_entries": [
-        "num-elfejn",
-        "n-eluf"
+        "num-mitt",
+        "num-miljun"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1211,17 +1462,49 @@
       "numeral_type": "cardinal",
       "form_attributive_short": "elf",
       "form_attributive_long": "elf",
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_ordinal": "l-elf",
+      "numeral_adverbial": "elf darba",
+      "numeral_fractional": "parti minn elf, millil",
+      "numeral_multiplier": "elf darba daqs",
+      "numeral_distributive": "elf elf",
       "rank": 380,
       "source_frequency_rank": 380,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "vCC",
+      "ordinal_form": "l-elf",
+      "adverbial_form": "elf darba",
+      "fractional_form": "parti minn elf, millil",
+      "multiplier_form": "elf darba daqs",
+      "distributive_form": "elf elf",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "elf",
+        "form_attributive_short_pattern": "vCC",
+        "form_attributive_long": "elf",
+        "ordinal_form": "l-elf",
+        "adverbial_form": "elf darba",
+        "fractional_form": "parti minn elf, millil",
+        "multiplier_form": "elf darba daqs",
+        "distributive_form": "elf elf",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "e--",
+        "vowel_set_pl": "e-u",
+        "vowel_set_opp": null,
+        "vowel_set_dual": "e-ej",
+        "plural_forms": [
+          {
+            "form": "eluf",
+            "pattern": "v12"
+          },
+          {
+            "form": "elufijiet",
+            "pattern": "-ijiet"
+          }
+        ]
+      }
     },
     {
       "id": "num-miljun",
@@ -1272,8 +1555,7 @@
         }
       ],
       "related_entries": [
-        "n-miljuni",
-        "adj-miljunarju"
+        "num-elf"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1332,17 +1614,45 @@
       "numeral_type": "cardinal",
       "form_attributive_short": "miljun",
       "form_attributive_long": "miljun",
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_ordinal": "il-miljun",
+      "numeral_adverbial": "miljun darba",
+      "numeral_fractional": "parti minn miljun, miljuneżmu",
+      "numeral_multiplier": "miljun darba daqs",
+      "numeral_distributive": "miljun miljun",
       "rank": 591,
       "source_frequency_rank": 591,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CvCCvC",
+      "ordinal_form": "il-miljun",
+      "adverbial_form": "miljun darba",
+      "fractional_form": "parti minn miljun, miljuneżmu",
+      "multiplier_form": "miljun darba daqs",
+      "distributive_form": "miljun miljun",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "miljun",
+        "form_attributive_short_pattern": "CvCCvC",
+        "form_attributive_long": "miljun",
+        "ordinal_form": "il-miljun",
+        "adverbial_form": "miljun darba",
+        "fractional_form": "parti minn miljun, miljuneżmu",
+        "multiplier_form": "miljun darba daqs",
+        "distributive_form": "miljun miljun",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "i-u",
+        "vowel_set_pl": "i-u-i",
+        "vowel_set_opp": null,
+        "vowel_set_dual": null,
+        "plural_forms": [
+          {
+            "form": "miljuni",
+            "pattern": "-i"
+          }
+        ]
+      }
     },
     {
       "id": "adj-ewwel",
@@ -1393,9 +1703,8 @@
         }
       ],
       "related_entries": [
-        "adj-ewlieni",
-        "adj-tieni",
-        "num-wieħed"
+        "num-wieħed",
+        "adj-tieni"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1457,14 +1766,42 @@
       "numeral_ordinal": "ewwel",
       "numeral_adverbial": "l-ewwel",
       "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_multiplier": "uniku",
+      "numeral_distributive": "wieħed wieħed",
       "rank": 193,
       "source_frequency_rank": 193,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "vCCvC",
+      "ordinal_form": "ewwel",
+      "adverbial_form": "l-ewwel",
+      "fractional_form": null,
+      "multiplier_form": "uniku",
+      "distributive_form": "wieħed wieħed",
+      "numeral_morphology": {
+        "numeral_type": "ordinal",
+        "form_attributive_short": "ewwel",
+        "form_attributive_short_pattern": "vCCvC",
+        "form_attributive_long": "ewwel",
+        "ordinal_form": "ewwel",
+        "adverbial_form": "l-ewwel",
+        "fractional_form": null,
+        "multiplier_form": "uniku",
+        "distributive_form": "wieħed wieħed",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "e-e",
+        "vowel_set_pl": "e-e-i",
+        "vowel_set_opp": null,
+        "vowel_set_dual": null,
+        "plural_forms": [
+          {
+            "form": "ewwelin",
+            "pattern": "-in"
+          }
+        ]
+      }
     },
     {
       "id": "adj-tieni",
@@ -1517,7 +1854,8 @@
       "related_entries": [
         "num-tnejn",
         "adj-ewwel",
-        "adj-tielet"
+        "adj-tielet",
+        "n-nofs"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1569,14 +1907,37 @@
       "numeral_ordinal": "tieni",
       "numeral_adverbial": "it-tieni",
       "numeral_fractional": "nofs",
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_multiplier": "doppju",
+      "numeral_distributive": "tnejn tnejn",
       "rank": 300,
       "source_frequency_rank": 300,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CieCv",
+      "ordinal_form": "tieni",
+      "adverbial_form": "it-tieni",
+      "fractional_form": "nofs",
+      "multiplier_form": "doppju",
+      "distributive_form": "tnejn tnejn",
+      "numeral_morphology": {
+        "numeral_type": "ordinal",
+        "form_attributive_short": "tieni",
+        "form_attributive_short_pattern": "CieCv",
+        "form_attributive_long": "tieni",
+        "ordinal_form": "tieni",
+        "adverbial_form": "it-tieni",
+        "fractional_form": "nofs",
+        "multiplier_form": "doppju",
+        "distributive_form": "tnejn tnejn",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "ie-i",
+        "vowel_set_pl": null,
+        "vowel_set_opp": null,
+        "vowel_set_dual": null,
+        "plural_forms": null
+      }
     },
     {
       "id": "adj-tielet",
@@ -1628,8 +1989,7 @@
       ],
       "related_entries": [
         "num-tlieta",
-        "adj-tieni",
-        "adj-raba"
+        "adj-tieni"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1681,14 +2041,37 @@
       "numeral_ordinal": "tielet",
       "numeral_adverbial": "it-tielet",
       "numeral_fractional": "terz",
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_multiplier": "triplu",
+      "numeral_distributive": "tlieta tlieta",
       "rank": 714,
       "source_frequency_rank": 714,
       "audit_status": "audited",
       "audit_notes": null,
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CieCvC",
+      "ordinal_form": "tielet",
+      "adverbial_form": "it-tielet",
+      "fractional_form": "terz",
+      "multiplier_form": "triplu",
+      "distributive_form": "tlieta tlieta",
+      "numeral_morphology": {
+        "numeral_type": "ordinal",
+        "form_attributive_short": "tielet",
+        "form_attributive_short_pattern": "CieCvC",
+        "form_attributive_long": "tielet",
+        "ordinal_form": "tielet",
+        "adverbial_form": "it-tielet",
+        "fractional_form": "terz",
+        "multiplier_form": "triplu",
+        "distributive_form": "tlieta tlieta",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "ie-e",
+        "vowel_set_pl": null,
+        "vowel_set_opp": "ie-a",
+        "vowel_set_dual": null,
+        "plural_forms": null
+      }
     },
     {
       "id": "n-nofs",
@@ -1750,9 +2133,8 @@
         }
       ],
       "related_entries": [
-        "n-nofsinhar",
-        "n-nofsillejl",
-        "adj-nofsi"
+        "num-tnejn",
+        "adj-tieni"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1819,17 +2201,49 @@
       "numeral_type": "fractional",
       "form_attributive_short": "nofs",
       "form_attributive_long": "nofs",
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
+      "numeral_ordinal": "tieni",
+      "numeral_adverbial": "bin-nofs",
       "numeral_fractional": "nofs",
       "numeral_multiplier": null,
-      "numeral_distributive": null,
+      "numeral_distributive": "nofs nofs",
       "rank": 336,
       "source_frequency_rank": 336,
       "audit_status": "audited",
       "audit_notes": "🔄 *(Duplicate: also at #656)*",
       "theme": "Numerals & Quantities",
-      "theme_id": "numerals"
+      "theme_id": "numerals",
+      "form_attributive_short_pattern": "CvCC",
+      "ordinal_form": "tieni",
+      "adverbial_form": "bin-nofs",
+      "fractional_form": "nofs",
+      "multiplier_form": null,
+      "distributive_form": "nofs nofs",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "form_attributive_short": "nofs",
+        "form_attributive_short_pattern": "CvCC",
+        "form_attributive_long": "nofs",
+        "ordinal_form": "tieni",
+        "adverbial_form": "bin-nofs",
+        "fractional_form": "nofs",
+        "multiplier_form": null,
+        "distributive_form": "nofs nofs",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "o--",
+        "vowel_set_pl": "o-i-ie",
+        "vowel_set_opp": null,
+        "vowel_set_dual": "o-ej",
+        "plural_forms": [
+          {
+            "form": "nofsijiet",
+            "pattern": "-ijiet"
+          },
+          {
+            "form": "nfas",
+            "pattern": "12â3"
+          }
+        ]
+      }
     }
   ]
 }

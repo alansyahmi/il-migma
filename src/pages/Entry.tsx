@@ -4462,7 +4462,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     };
 
     const getNumeralRowLabel = (role: NumeralRole) => {
-        if (role === 'attributive_short') return getNumeralShortAttributiveRowLabel();
+        if (role === 'attributive_short') return term('short-attributive') || getNumeralShortAttributiveRowLabel();
         if (role === 'attributive_long') return term('long-attributive') || NUMERAL_ROLE_META[role].label;
         return term(role) || NUMERAL_ROLE_META[role].label;
     };

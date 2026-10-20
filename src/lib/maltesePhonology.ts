@@ -808,18 +808,195 @@ export interface NumeralAutoForms {
 }
 
 const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
-    // `wieħed` is suppletive: its ordinal is `ewwel`, not a regular root-derived form.
-    'wieħed': { ordinal: 'ewwel' },
+    wieħed: {
+        ordinal: 'ewwel',
+        adverbial: 'darba',
+        multiplier_form1: 'uniku',
+        multiplier_form2: 'fard',
+        distributive: 'wieħed wieħed',
+    },
+    tnejn: {
+        ordinal: 'tieni',
+        adverbial: 'darbtejn',
+        fractional_semitic: 'nofs',
+        multiplier_form1: 'doppju',
+        distributive: 'tnejn tnejn',
+        attributive_short: 'żewġ',
+        attributive_long: 'żewġt',
+    },
+    tlieta: {
+        ordinal: 'tielet',
+        adverbial: 'tliet darbiet',
+        fractional_semitic: 'terz',
+        multiplier_form1: 'triplu',
+        multiplier_form2: 'tlieċi',
+        distributive: 'tlieta tlieta',
+        attributive_short: 'tliet',
+        attributive_long: 'tlitt',
+    },
+    erbgħa: {
+        ordinal: "raba'",
+        adverbial: "erba' darbiet",
+        fractional_semitic: 'kwart',
+        multiplier_form1: 'kwadruplu',
+        multiplier_form2: 'rbiegħi',
+        distributive: "erbgħa erbgħa",
+        attributive_short: "erba'",
+        attributive_long: 'erbat',
+    },
+    ħamsa: {
+        ordinal: 'ħames',
+        adverbial: 'ħames darbiet',
+        fractional_semitic: 'ħums',
+        multiplier_form1: 'kwintuplu',
+        multiplier_form2: 'ħamiesi',
+        distributive: 'ħamsa ħamsa',
+        attributive_short: 'ħames',
+        attributive_long: 'ħamest',
+    },
+    sitta: {
+        ordinal: 'sitt',
+        adverbial: 'sitt darbiet',
+        fractional_semitic: 'suds',
+        multiplier_form1: 'sestuplu',
+        multiplier_form2: 'msettes',
+        distributive: 'sitta sitta',
+        attributive_short: 'sitt',
+        attributive_long: 'sitt',
+    },
+    sebgħa: {
+        ordinal: "seba'",
+        adverbial: "seba' darbiet",
+        fractional_semitic: "subgħa",
+        multiplier_form1: 'settuplu',
+        distributive: "sebgħa sebgħa",
+        attributive_short: "seba'",
+        attributive_long: 'sebat',
+    },
+    tmienja: {
+        ordinal: 'tmien',
+        adverbial: 'tmien darbiet',
+        fractional_semitic: 'tumn',
+        multiplier_form1: 'ottuplu',
+        multiplier_form2: 'tmieni',
+        distributive: 'tmienja tmienja',
+        attributive_short: 'tmien',
+        attributive_long: 'tmint',
+    },
+    disgħa: {
+        ordinal: "disa'",
+        adverbial: "disa' darbiet",
+        fractional_semitic: "tusu'",
+        multiplier_form1: 'nonuplu',
+        distributive: "disgħa disgħa",
+        attributive_short: "disa'",
+        attributive_long: 'disat',
+    },
+    għaxra: {
+        ordinal: 'għaxar',
+        adverbial: 'għaxar darbiet',
+        fractional_semitic: 'għushur',
+        multiplier_form1: 'deċuplu',
+        multiplier_form2: 'għaxari',
+        distributive: 'għaxra għaxra',
+        attributive_short: 'għaxar',
+        attributive_long: 'għaxart',
+    },
+    għoxrin: {
+        ordinal: 'l-għoxrin',
+        adverbial: 'għoxrin darba',
+        fractional_semitic: 'għoxrin',
+        multiplier_form1: 'għoxrin darba daqs',
+        distributive: 'għoxrin għoxrin',
+        attributive_short: 'għoxrin',
+        attributive_long: 'għoxrin',
+    },
+    mitt: {
+        ordinal: 'il-mitt',
+        adverbial: 'mitt darba',
+        fractional_semitic: 'ċenteżmu',
+        multiplier_form1: 'mitt darba daqs',
+        multiplier_form2: 'ċentuplu',
+        distributive: 'mitt mitt',
+        attributive_short: 'mitt',
+        attributive_long: 'mija',
+    },
+    mija: {
+        ordinal: 'il-mitt',
+        adverbial: 'mitt darba',
+        fractional_semitic: 'ċenteżmu',
+        multiplier_form1: 'mitt darba daqs',
+        multiplier_form2: 'ċentuplu',
+        distributive: 'mija mija',
+        attributive_short: 'mitt',
+        attributive_long: 'mija',
+    },
+    elf: {
+        ordinal: 'l-elf',
+        adverbial: 'elf darba',
+        fractional_semitic: 'parti minn elf',
+        multiplier_form1: 'elf darba daqs',
+        distributive: 'elf elf',
+        attributive_short: 'elf',
+        attributive_long: 'elf',
+    },
+    miljun: {
+        ordinal: 'il-miljun',
+        adverbial: 'miljun darba',
+        fractional_semitic: 'parti minn miljun',
+        multiplier_form1: 'miljun darba daqs',
+        distributive: 'miljun miljun',
+        attributive_short: 'miljun',
+        attributive_long: 'miljun',
+    },
+    ewwel: {
+        ordinal: 'ewwel',
+        adverbial: 'l-ewwel',
+        multiplier_form1: 'uniku',
+        distributive: 'wieħed wieħed',
+        attributive_short: 'ewwel',
+        attributive_long: 'ewwel',
+    },
+    tieni: {
+        ordinal: 'tieni',
+        adverbial: 'it-tieni',
+        fractional_semitic: 'nofs',
+        multiplier_form1: 'doppju',
+        distributive: 'tnejn tnejn',
+        attributive_short: 'tieni',
+        attributive_long: 'tieni',
+    },
+    tielet: {
+        ordinal: 'tielet',
+        adverbial: 'it-tielet',
+        fractional_semitic: 'terz',
+        multiplier_form1: 'triplu',
+        distributive: 'tlieta tlieta',
+        attributive_short: 'tielet',
+        attributive_long: 'tielet',
+    },
+    nofs: {
+        ordinal: 'tieni',
+        adverbial: 'bin-nofs',
+        fractional_semitic: 'nofs',
+        distributive: 'nofs nofs',
+        attributive_short: 'nofs',
+        attributive_long: 'nofs',
+    },
 };
 
 /**
  * Generates theoretical numeral-derived forms based on Semitic patterns.
  */
 export function generateNumeralForms(masculine: string, root_consonants: string): NumeralAutoForms {
-    if (!masculine || !root_consonants) return {};
+    if (!masculine) return {};
     const normalizedMasculine = masculine.toLowerCase().normalize('NFC');
-    const roots = root_consonants.toLowerCase().replace(/[-.,\s]+/g, '-').split('-').filter(Boolean);
-    if (roots.length < 3) return {};
+    const suppletiveForms = SUPPLETIVE_NUMERAL_FORMS[normalizedMasculine];
+
+    const roots = (root_consonants || '').toLowerCase().replace(/[-.,\s]+/g, '-').split('-').filter(Boolean);
+    if (roots.length < 3) {
+        return suppletiveForms ? { ...suppletiveForms } : {};
+    }
 
     const c1 = roots[0];
     const c2 = roots[1];
@@ -832,10 +1009,6 @@ export function generateNumeralForms(masculine: string, root_consonants: string)
     forms.ordinal = `${c1}â${c2}e${c3}`;
     if (c3 === 'għ' || c3 === 'ħ' || c3 === 'q') {
         forms.ordinal = `${c1}â${c2}a${c3}`; // Guttural adjustment
-    }
-    const suppletiveForms = SUPPLETIVE_NUMERAL_FORMS[normalizedMasculine];
-    if (suppletiveForms?.ordinal) {
-        forms.ordinal = suppletiveForms.ordinal;
     }
 
     // 2. Adverbial: masc form + darbiet
@@ -857,9 +1030,13 @@ export function generateNumeralForms(masculine: string, root_consonants: string)
 
     // 6. Attributive Forms
     // Short: masculine/lemma itself usually (e.g. tliet)
-    forms.attributive_short = masculine;
     // Long: masculine/lemma + t (e.g. tlitt, erbat)
+    forms.attributive_short = masculine;
     forms.attributive_long = masculine.endsWith("'") ? masculine.slice(0, -1) + 'at' : masculine + 't';
+
+    if (suppletiveForms) {
+        Object.assign(forms, suppletiveForms);
+    }
 
     return forms;
 }
