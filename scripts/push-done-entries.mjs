@@ -222,6 +222,7 @@ async function run() {
     for (let b = 0; b < plan.length; b += BATCH_SIZE) {
         const batch = plan.slice(b, b + BATCH_SIZE);
         const tx = await client.transaction('write');
+        const batchRelationships = [];
 
         try {
             for (const item of batch) {
@@ -328,23 +329,9 @@ async function run() {
                     }
                 }
 
-                // 3. Sync Relationships (if present)
+                // 3. Queue Relationships to sync after all entries in batch are upserted
                 if (Array.isArray(e.related_entries) && e.related_entries.length > 0) {
-                    await tx.execute({ sql: "DELETE FROM entry_relationships WHERE entry_id = ?", args: [entryId] });
-                    totalWriteQueries++;
-
-                    let relOrder = 0;
-                    for (const rel of e.related_entries) {
-                        const targetId = typeof rel === 'string' ? rel : (rel?.id || rel?.target_id);
-                        if (targetId && (existingById.has(targetId) || allEntryIds.has(targetId))) {
-                            const relId = `rel_${entryId}_${targetId}_related`;
-                            await tx.execute({
-                                sql: `INSERT OR REPLACE INTO entry_relationships (id, entry_id, target_entry_id, relationship_type, sort_order) VALUES (?, ?, ?, ?, ?)`,
-                                args: [relId, entryId, targetId, 'related', relOrder++]
-                            });
-                            totalWriteQueries++;
-                        }
-                    }
+                    batchRelationships.push({ entryId, related_entries: e.related_entries });
                 }
 
                 // 4. Sync Numeral Morphology (if pos is numeral or numeral fields exist)
@@ -404,12 +391,47 @@ async function run() {
                             pluralFormsJson, femForm, mascForm
                         ]
                     });
+                    await tx.execute({
+                        sql: `UPDATE entries SET
+                            numeral_type = ?,
+                            form_attributive_short = ?,
+                            form_attributive_long = ?,
+                            numeral_ordinal = ?,
+                            numeral_adverbial = ?,
+                            numeral_fractional = ?,
+                            numeral_multiplier = ?,
+                            numeral_distributive = ?
+                        WHERE id = ?`,
+                        args: [
+                            numType, attrShort, attrLong, ordForm, advForm,
+                            fracForm, multForm, distForm, entryId
+                        ]
+                    });
                     totalWriteQueries++;
                 }
 
                 appliedCount++;
                 if (isVerbose) {
                     console.log(`   ✓ [${item.action}] ${e.headword} (${item.pos}) synced.`);
+                }
+            }
+
+            // Sync queued relationships after all entries in this batch have been upserted
+            for (const { entryId, related_entries } of batchRelationships) {
+                await tx.execute({ sql: "DELETE FROM entry_relationships WHERE entry_id = ?", args: [entryId] });
+                totalWriteQueries++;
+
+                let relOrder = 0;
+                for (const rel of related_entries) {
+                    const targetId = typeof rel === 'string' ? rel : (rel?.id || rel?.target_id);
+                    if (targetId && (existingById.has(targetId) || allEntryIds.has(targetId))) {
+                        const relId = `rel_${entryId}_${targetId}_related`;
+                        await tx.execute({
+                            sql: `INSERT OR REPLACE INTO entry_relationships (id, entry_id, target_entry_id, relationship_type, sort_order) VALUES (?, ?, ?, ?, ?)`,
+                            args: [relId, entryId, targetId, 'related', relOrder++]
+                        });
+                        totalWriteQueries++;
+                    }
                 }
             }
 

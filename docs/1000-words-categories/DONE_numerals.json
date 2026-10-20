@@ -1,7 +1,7 @@
 {
   "category_id": "numerals",
   "category_title": "Numerals & Quantities",
-  "total_entries": 15,
+  "total_entries": 36,
   "entries": [
     {
       "id": "num-wieħed",
@@ -217,7 +217,10 @@
         "adj-tieni",
         "n-nofs",
         "num-wieħed",
-        "num-tlieta"
+        "num-tlieta",
+        "num-żewġ",
+        "num-doppju",
+        "num-mtenna"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -367,7 +370,10 @@
       "related_entries": [
         "adj-tielet",
         "num-tnejn",
-        "num-erbgħa"
+        "num-erbgħa",
+        "num-terz",
+        "num-triplu",
+        "num-mtellet"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -516,7 +522,13 @@
       ],
       "related_entries": [
         "num-tlieta",
-        "num-ħamsa"
+        "num-ħamsa",
+        "num-raba",
+        "num-kwart",
+        "num-robu",
+        "num-kwadruplu",
+        "num-mrabba",
+        "num-rbiegh"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -665,7 +677,8 @@
       ],
       "related_entries": [
         "num-erbgħa",
-        "num-sitta"
+        "num-sitta",
+        "num-ħames"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -814,7 +827,11 @@
       ],
       "related_entries": [
         "num-ħamsa",
-        "num-tmienja"
+        "num-tmienja",
+        "num-sitt",
+        "num-sest",
+        "num-sestuplu",
+        "num-stiet"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -963,7 +980,11 @@
       ],
       "related_entries": [
         "num-sitta",
-        "num-għoxrin"
+        "num-għoxrin",
+        "num-tmien",
+        "num-tomon",
+        "num-ottav",
+        "num-ottuplu"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -2243,6 +2264,1631 @@
             "pattern": "12â3"
           }
         ]
+      }
+    },
+    {
+      "id": "num-żewġ",
+      "headword": "żewġ",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "ż-w-ġ",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Wiktionary: żewġ; Miklem Malti",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "زَوْج",
+          "pronunciation": "zawj",
+          "definition": "pair, couple, two"
+        },
+        {
+          "relationship": "Ancient borrowing from",
+          "language": "Ancient Greek",
+          "term": "ζεῦγος",
+          "pronunciation": "zeûgos",
+          "definition": "yoke, pair"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "two (short attributive form used directly before nouns)",
+          "text_mt": "Forma qasira tal-kardinal tnejn li tintuża direttament qabel nom biex tiddetermina kwantità doppja.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "short attributive numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Qiegħed żewġ kotba fuq il-mejda biex jaqrahom aktar tard.",
+          "en": "He placed two books on the table to read them later."
+        }
+      ],
+      "related_entries": [
+        "num-tnejn",
+        "adj-tieni",
+        "n-nofs"
+      ],
+      "numeral_type": "attributive_short",
+      "form_attributive_short": "żewġ",
+      "form_attributive_long": "żewġt",
+      "numeral_ordinal": "tieni",
+      "numeral_adverbial": "darbtejn",
+      "numeral_fractional": "nofs",
+      "numeral_multiplier": "doppju, mtenna",
+      "numeral_distributive": "tnejn tnejn",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "attributive_short",
+        "form_attributive_short": "żewġ",
+        "form_attributive_long": "żewġt",
+        "ordinal_form": "tieni",
+        "adverbial_form": "darbtejn",
+        "fractional_form": "nofs",
+        "multiplier_form": "doppju, mtenna",
+        "distributive_form": "tnejn tnejn"
+      }
+    },
+    {
+      "id": "num-doppju",
+      "headword": "doppju",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "doppj",
+      "cv_pattern": "CvCCjv",
+      "morph_pattern": "CvCCjv",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "doppja",
+      "plural_forms": [
+        {
+          "form": "doppji",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "doppji",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "doppiu",
+          "pronunciation": "doppiu",
+          "definition": "double, twofold"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "duplus",
+          "pronunciation": "duplus",
+          "definition": "double, twice as large"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "double, twofold; consisting of twice the standard quantity or two matching parts",
+          "text_mt": "Numru multiplikatur li jindika ammont darbtejn akbar minn dak ordinarju jew magħmul minn żewġ partijiet indaqs.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "multiplier numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħallas prezz doppju minħabba d-domanda kbira li kien hemm.",
+          "en": "He paid double the price due to the high demand there was."
+        }
+      ],
+      "related_entries": [
+        "num-tnejn",
+        "adj-tieni",
+        "num-mtenna"
+      ],
+      "numeral_type": "multiplier",
+      "multiplier_form": "doppju",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "doppju"
+      }
+    },
+    {
+      "id": "num-mtenna",
+      "headword": "mtenna",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-n-j",
+      "stem": null,
+      "cv_pattern": "mv122v",
+      "morph_pattern": "mvC1C2C2v",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "mtennija",
+      "plural_forms": [
+        {
+          "form": "mtennijin",
+          "pattern": "-in"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "mtennijin",
+          "pattern": "-in"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُثَنًّى",
+          "pronunciation": "muthannan",
+          "definition": "doubled, twofold, dual"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "doubled, twofold; repeated or consisting of two folded or multiplied parts",
+          "text_mt": "Numru multiplikatur u parteċipju li jindika ammont irduppjat jew magħmul minn żewġ partijiet imtewma.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "Form II multiplier participle"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħa sehem bi sforz mtenna biex jirbaħ il-kompetizzjoni.",
+          "en": "He took part with a redoubled effort to win the competition."
+        }
+      ],
+      "related_entries": [
+        "num-tnejn",
+        "num-doppju"
+      ],
+      "numeral_type": "multiplier",
+      "multiplier_form": "mtenna",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "mtenna"
+      }
+    },
+    {
+      "id": "num-terz",
+      "headword": "terz",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "terz",
+      "cv_pattern": "CvCC",
+      "morph_pattern": "CvCC",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "terza",
+      "plural_forms": [
+        {
+          "form": "terzi",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "terzi",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "terzu",
+          "pronunciation": "terzu",
+          "definition": "third part, third"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "tertius",
+          "pronunciation": "tertius",
+          "definition": "third"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "third (fraction of one third); one of three equal parts of a divided unit",
+          "text_mt": "Frazzjoni li tindika parti waħda minn tliet partijiet indaqs ta' ħaġa sħiħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "fractional numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Terz mill-popolazzjoni attendiet għaċ-ċelebrazzjoni nazzjonali.",
+          "en": "A third of the population attended the national celebration."
+        }
+      ],
+      "related_entries": [
+        "num-tlieta",
+        "adj-tielet"
+      ],
+      "numeral_type": "fractional",
+      "fractional_form": "terz",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "fractional_form": "terz"
+      }
+    },
+    {
+      "id": "num-triplu",
+      "headword": "triplu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "tripl",
+      "cv_pattern": "CCvCCv",
+      "morph_pattern": "CCvCCv",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "tripla",
+      "plural_forms": [
+        {
+          "form": "tripli",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "tripli",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "triplu",
+          "pronunciation": "triplu",
+          "definition": "triple, threefold"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "triplus",
+          "pronunciation": "triplus",
+          "definition": "threefold, triple"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "triple, threefold; three times as great or consisting of three parts",
+          "text_mt": "Numru multiplikatur li jindika ammont tliet darbiet akbar minn dak bażiku jew magħmul minn tliet partijiet.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "multiplier numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħa sehem f'investiment li ġablu qligħ triplu fl-aħħar tas-sena.",
+          "en": "He took part in an investment that brought him triple profit at the end of the year."
+        }
+      ],
+      "related_entries": [
+        "num-tlieta",
+        "adj-tielet",
+        "num-mtellet"
+      ],
+      "numeral_type": "multiplier",
+      "multiplier_form": "triplu",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "triplu"
+      }
+    },
+    {
+      "id": "num-mtellet",
+      "headword": "mtellet",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-l-t",
+      "stem": null,
+      "cv_pattern": "mv122v3",
+      "morph_pattern": "mvC1C2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "mtellta",
+      "plural_forms": [
+        {
+          "form": "mtelltin",
+          "pattern": "-in"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "mtelltin",
+          "pattern": "-in"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُثَلَّث",
+          "pronunciation": "muthallath",
+          "definition": "tripled, threefold, triangular"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "tripled, threefold; multiplied by three or having three parts",
+          "text_mt": "Numru multiplikatur li jindika ammont immultiplikat bi tlieta jew magħmul minn tliet partijiet.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "Form II multiplier participle"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-art kellha qsim mtellet f'diversi biċċiet indaqs.",
+          "en": "The land had a threefold division into several equal pieces."
+        }
+      ],
+      "related_entries": [
+        "num-tlieta",
+        "adj-tielet",
+        "num-triplu"
+      ],
+      "numeral_type": "multiplier",
+      "multiplier_form": "mtellet",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "mtellet"
+      }
+    },
+    {
+      "id": "num-raba",
+      "headword": "raba'",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "r-b-għ",
+      "stem": null,
+      "cv_pattern": "1v23'",
+      "morph_pattern": "C1vC2a'",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "raba'",
+      "plural_forms": [
+        {
+          "form": "rabgħin",
+          "pattern": "-in"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "rabgħin",
+          "pattern": "-in"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رَابِع",
+          "pronunciation": "râbi‘",
+          "definition": "fourth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "fourth (ordinal numeral); coming next after the third in order or rank",
+          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara t-tielet f'ordni, grad jew sekwenza.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "ordinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien ir-raba' wieħed li daħal fil-kamra tal-laqgħat.",
+          "en": "He was the fourth one who entered the meeting room."
+        }
+      ],
+      "related_entries": [
+        "num-erbgħa",
+        "num-kwart",
+        "num-robu",
+        "num-kwadruplu",
+        "num-mrabba",
+        "num-rbiegh"
+      ],
+      "numeral_type": "ordinal",
+      "ordinal_form": "raba'",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "ordinal",
+        "ordinal_form": "raba'"
+      }
+    },
+    {
+      "id": "num-kwart",
+      "headword": "kwart",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "kwart",
+      "cv_pattern": "CCvCC",
+      "morph_pattern": "CCvCC",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "dual_form": "kwartejn",
+      "plural_forms": [
+        {
+          "form": "kwarti",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "kwarti",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "quartu",
+          "pronunciation": "quartu",
+          "definition": "fourth part, quarter"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "quartus",
+          "pronunciation": "quartus",
+          "definition": "fourth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "quarter (fraction of one fourth); fourth part of a whole, of an hour, or of a standard measure",
+          "text_mt": "Frazzjoni li tindika parti waħda minn erba' partijiet indaqs ta' ħaġa sħiħa, jew medda ta' ħmistax-il minuta.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "fractional numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għadda kwart ta' siegħa minn meta telaq il-vapur.",
+          "en": "A quarter of an hour has passed since the ship departed."
+        }
+      ],
+      "related_entries": [
+        "num-erbgħa",
+        "num-raba",
+        "num-robu"
+      ],
+      "numeral_type": "fractional",
+      "fractional_form": "kwart",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "fractional_form": "kwart"
+      }
+    },
+    {
+      "id": "num-robu",
+      "headword": "robu'",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "r-b-għ",
+      "stem": null,
+      "cv_pattern": "1v23'",
+      "morph_pattern": "C1vC2C3'",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Vassalli",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رُبْع",
+          "pronunciation": "rub‘",
+          "definition": "quarter, fourth part"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "quarter (Semitic fractional form of one fourth); traditional fourth measure",
+          "text_mt": "Frazzjoni Semitika li tindika parti waħda minn erba' partijiet indaqs ta' ħaġa sħiħa jew kejl tradizzjonali.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "Semitic fractional numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħalla robu' mill-qamħ merfugħ fil-maħżen għaż-żerriegħa.",
+          "en": "He left a quarter of the grain stored in the warehouse for seed."
+        }
+      ],
+      "related_entries": [
+        "num-erbgħa",
+        "num-raba",
+        "num-kwart"
+      ],
+      "numeral_type": "fractional",
+      "fractional_form": "robu'",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "fractional_form": "robu'"
+      }
+    },
+    {
+      "id": "num-kwadruplu",
+      "headword": "kwadruplu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "kwadrupl",
+      "cv_pattern": "CCvCCvCCv",
+      "morph_pattern": "CCvCCvCCv",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "kwadrupla",
+      "plural_forms": [
+        {
+          "form": "kwadrupli",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "kwadrupli",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "quadruplo",
+          "pronunciation": "quadruplo",
+          "definition": "quadruple, fourfold"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "quadruplus",
+          "pronunciation": "quadruplus",
+          "definition": "fourfold, quadruple"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "quadruple, fourfold; four times as great in quantity or size",
+          "text_mt": "Numru multiplikatur li jindika ammont erba' darbiet akbar minn dak ordinarju.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "multiplier numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Irreġistraw produzzjoni kwadrupla meta mqabbla mas-sena ta' qabel.",
+          "en": "They recorded quadruple production compared to the previous year."
+        }
+      ],
+      "related_entries": [
+        "num-erbgħa",
+        "num-raba",
+        "num-mrabba"
+      ],
+      "numeral_type": "multiplier",
+      "multiplier_form": "kwadruplu",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "kwadruplu"
+      }
+    },
+    {
+      "id": "num-mrabba",
+      "headword": "mrabba'",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "r-b-għ",
+      "stem": null,
+      "cv_pattern": "mv122v3'",
+      "morph_pattern": "mvC1C2C2vC3'",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "mrabba",
+      "plural_forms": [
+        {
+          "form": "mrabbgħin",
+          "pattern": "-in"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "mrabbgħin",
+          "pattern": "-in"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُرَبَّع",
+          "pronunciation": "murabba‘",
+          "definition": "squared, fourfold, quadratic"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "squared, fourfold; multiplied by four or having four equal sides or parts",
+          "text_mt": "Numru multiplikatur li jindika ammont immultiplikat b'erba' jew għamla b'erba' naħat indaqs.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "Form II multiplier participle"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kamra kienet ta' daqs mrabba' perfettament.",
+          "en": "The room was of perfectly squared dimensions."
+        }
+      ],
+      "related_entries": [
+        "num-erbgħa",
+        "num-raba",
+        "num-kwadruplu"
+      ],
+      "numeral_type": "multiplier",
+      "multiplier_form": "mrabba'",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "mrabba'"
+      }
+    },
+    {
+      "id": "num-rbiegh",
+      "headword": "rbiegħ",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "r-b-għ",
+      "stem": null,
+      "cv_pattern": "CCieC",
+      "morph_pattern": "CCieC",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Vassalli",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رُبَاع",
+          "pronunciation": "rubâ‘",
+          "definition": "four each, in fours"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "four each, by fours (distributive numeral)",
+          "text_mt": "Numru distributtiv li jindika tqassim jew għadd ta' erbgħa erbgħa f'daqqa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "distributive numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Qassmu t-tuffieħ rbiegħ lit-tfal fil-klassi.",
+          "en": "They distributed the apples four each to the children in class."
+        }
+      ],
+      "related_entries": [
+        "num-erbgħa",
+        "num-raba"
+      ],
+      "numeral_type": "distributive",
+      "distributive_form": "rbiegħ",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "distributive",
+        "distributive_form": "rbiegħ"
+      }
+    },
+    {
+      "id": "num-ħames",
+      "headword": "ħames",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "ħ-m-s",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "ħamsa",
+      "plural_forms": [
+        {
+          "form": "ħamsin",
+          "pattern": "-in"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ħamsin",
+          "pattern": "-in"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "خَامِس",
+          "pronunciation": "khâmis",
+          "definition": "fifth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "fifth (ordinal numeral); coming next after the fourth in order or series",
+          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara r-raba' f'ordni, grad jew sekwenza.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "ordinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien il-ħames parteċipant li lesta t-tellieqa sal-aħħar.",
+          "en": "He was the fifth participant who completed the race to the end."
+        }
+      ],
+      "related_entries": [
+        "num-ħamsa"
+      ],
+      "numeral_type": "ordinal",
+      "ordinal_form": "ħames",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "ordinal",
+        "ordinal_form": "ħames"
+      }
+    },
+    {
+      "id": "num-sitt",
+      "headword": "sitt",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "s-t-t",
+      "stem": null,
+      "cv_pattern": "1v22",
+      "morph_pattern": "C1vC2C2",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "sitta",
+      "plural_forms": [
+        {
+          "form": "sittin",
+          "pattern": "-in"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sittin",
+          "pattern": "-in"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَادِس",
+          "pronunciation": "sâdis",
+          "definition": "sixth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sixth (ordinal numeral); coming next after the fifth in order or series",
+          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara l-ħames f'ordni, grad jew sekwenza.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "ordinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kapitlu sitt jispjega l-iżvilupp ewlieni tal-ġrajja.",
+          "en": "Chapter six explains the main development of the event."
+        }
+      ],
+      "related_entries": [
+        "num-sitta",
+        "num-sest",
+        "num-sestuplu",
+        "num-stiet"
+      ],
+      "numeral_type": "ordinal",
+      "ordinal_form": "sitt",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "ordinal",
+        "ordinal_form": "sitt"
+      }
+    },
+    {
+      "id": "num-sest",
+      "headword": "sest",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "sest",
+      "cv_pattern": "CvCC",
+      "morph_pattern": "CvCC",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "sesta",
+      "plural_forms": [
+        {
+          "form": "sesti",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sesti",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "sestu",
+          "pronunciation": "sestu",
+          "definition": "sixth part, sixth"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "sextus",
+          "pronunciation": "sextus",
+          "definition": "sixth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sixth (fraction of one sixth); one of six equal parts of a whole",
+          "text_mt": "Frazzjoni li tindika parti waħda minn sitt partijiet indaqs ta' ħaġa sħiħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "fractional numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħa sest biss mill-art li kienet tmiss lilu b'wirt.",
+          "en": "He took only a sixth of the land that belonged to him by inheritance."
+        }
+      ],
+      "related_entries": [
+        "num-sitta",
+        "num-sitt",
+        "num-sestuplu"
+      ],
+      "numeral_type": "fractional",
+      "fractional_form": "sest",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "fractional_form": "sest"
+      }
+    },
+    {
+      "id": "num-sestuplu",
+      "headword": "sestuplu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "sestupl",
+      "cv_pattern": "CvCCvCCv",
+      "morph_pattern": "CvCCvCCv",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "sestupla",
+      "plural_forms": [
+        {
+          "form": "sestupli",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "sestupli",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "sestuplo",
+          "pronunciation": "sestuplo",
+          "definition": "sixfold, sextuple"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "sextuplus",
+          "pronunciation": "sextuplus",
+          "definition": "sixfold"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sixfold, sextuple; six times as great in quantity or number",
+          "text_mt": "Numru multiplikatur li jindika ammont sitt darbiet akbar minn dak ordinarju.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "multiplier numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "In-nefqa kienet sestupla meta mqabbla mal-istima oriġinali.",
+          "en": "The expense was sixfold when compared to the original estimate."
+        }
+      ],
+      "related_entries": [
+        "num-sitta",
+        "num-sitt",
+        "num-sest"
+      ],
+      "numeral_type": "multiplier",
+      "multiplier_form": "sestuplu",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "sestuplu"
+      }
+    },
+    {
+      "id": "num-stiet",
+      "headword": "stiet",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "s-t-t",
+      "stem": null,
+      "cv_pattern": "CCieC",
+      "morph_pattern": "CCieC",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Vassalli",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سُدَاس",
+          "pronunciation": "sudâs",
+          "definition": "six each, in sixes"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "six each, by sixes (distributive numeral)",
+          "text_mt": "Numru distributtiv li jindika tqassim jew għadd ta' sitta sitta f'daqqa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "distributive numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-artisti daħlu stiet fuq il-palk quddiem l-udjenza.",
+          "en": "The performers entered six each onto the stage in front of the audience."
+        }
+      ],
+      "related_entries": [
+        "num-sitta",
+        "num-sitt"
+      ],
+      "numeral_type": "distributive",
+      "distributive_form": "stiet",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "distributive",
+        "distributive_form": "stiet"
+      }
+    },
+    {
+      "id": "num-tmien",
+      "headword": "tmien",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-m-n",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "tmiena",
+      "plural_forms": [
+        {
+          "form": "tmienin",
+          "pattern": "-in"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "tmienin",
+          "pattern": "-in"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ثَامِن",
+          "pronunciation": "thâmin",
+          "definition": "eighth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "eighth (ordinal numeral); coming next after the seventh in order or series",
+          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara s-seba' f'ordni, grad jew sekwenza.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "ordinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fit-tmien jum tal-vjaġġ waslu fl-aħħar port.",
+          "en": "On the eighth day of the voyage they arrived at the final port."
+        }
+      ],
+      "related_entries": [
+        "num-tmienja",
+        "num-tomon",
+        "num-ottav",
+        "num-ottuplu"
+      ],
+      "numeral_type": "ordinal",
+      "ordinal_form": "tmien",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "ordinal",
+        "ordinal_form": "tmien"
+      }
+    },
+    {
+      "id": "num-tomon",
+      "headword": "tomon",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-m-n",
+      "stem": null,
+      "cv_pattern": "1o2o3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Vassalli",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "plural_forms": [
+        {
+          "form": "tmien",
+          "pattern": "1ie3"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "tmien",
+          "pattern": "1ie3"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ثُمْن",
+          "pronunciation": "thumn",
+          "definition": "eighth part, one eighth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "eighth (Semitic fraction of one eighth); traditional eighth measure of capacity or land",
+          "text_mt": "Frazzjoni Semitika li tindika parti waħda minn tmien partijiet indaqs ta' ħaġa sħiħa jew qjies tradizzjonali.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "Semitic fractional numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Biegħ tomon żejt skont il-kejl antik tas-suq.",
+          "en": "He sold an eighth of oil according to the ancient market measure."
+        }
+      ],
+      "related_entries": [
+        "num-tmienja",
+        "num-tmien",
+        "num-ottav"
+      ],
+      "numeral_type": "fractional",
+      "fractional_form": "tomon",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "fractional_form": "tomon"
+      }
+    },
+    {
+      "id": "num-ottav",
+      "headword": "ottav",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "ottav",
+      "cv_pattern": "vCCvC",
+      "morph_pattern": "vCCvC",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "ottava",
+      "plural_forms": [
+        {
+          "form": "ottavi",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ottavi",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "ottavu",
+          "pronunciation": "ottavu",
+          "definition": "eighth part, eighth"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "octavus",
+          "pronunciation": "octavus",
+          "definition": "eighth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "eighth (fraction of one eighth); one of eight equal parts",
+          "text_mt": "Frazzjoni li tindika parti waħda minn tmien partijiet indaqs ta' ħaġa sħiħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "fractional numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-art kienet imqassma f'ottavi ndaqs bejn l-aħwa.",
+          "en": "The land was divided into equal eighths between the siblings."
+        }
+      ],
+      "related_entries": [
+        "num-tmienja",
+        "num-tmien",
+        "num-tomon",
+        "num-ottuplu"
+      ],
+      "numeral_type": "fractional",
+      "fractional_form": "ottav",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "fractional_form": "ottav"
+      }
+    },
+    {
+      "id": "num-ottuplu",
+      "headword": "ottuplu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "ottupl",
+      "cv_pattern": "vCCvCCv",
+      "morph_pattern": "vCCvCCv",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "ottupla",
+      "plural_forms": [
+        {
+          "form": "ottupli",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "ottupli",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "ottuplo",
+          "pronunciation": "ottuplo",
+          "definition": "eightfold, octuple"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "octuplus",
+          "pronunciation": "octuplus",
+          "definition": "eightfold"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "eightfold, octuple; eight times as great in number or quantity",
+          "text_mt": "Numru multiplikatur li jindika ammont tmien darbiet akbar minn dak ordinarju.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "multiplier numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ksibna riżultat ottuplu grazzi għall-effiċjenza tat-teknoloġija ġdida.",
+          "en": "We achieved an eightfold result thanks to the efficiency of the new technology."
+        }
+      ],
+      "related_entries": [
+        "num-tmienja",
+        "num-tmien",
+        "num-ottav"
+      ],
+      "numeral_type": "multiplier",
+      "multiplier_form": "ottuplu",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "ottuplu"
       }
     }
   ]
