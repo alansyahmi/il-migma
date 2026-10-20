@@ -5,7 +5,15 @@
 
 import { buildEntryPayload as buildAdminEntryPayload } from './adminSchema.ts';
 import { compactPluralRows, normalizePluralFormRows, normalizePluralContract, pluralRowsToLegacyForms, pluralRowsToLegacyPatternString, type PluralFormRow } from './pluralForms.ts';
-import { normalizeEntryDefinitions, normalizeEntryEtymologyChain, type EntryEtymology } from './adminUtils.ts';
+import {
+    normalizeEntryDefinitions,
+    normalizeEntryEtymologyChain,
+    parseUsageNotes,
+    getBilingualText,
+    getEntryAllNotes,
+    type EntryEtymology,
+    type EntryDefinition,
+} from './adminUtils.ts';
 import { normalizeEntryPos } from './entryId.ts';
 import { resolveEntryGender } from './gender.ts';
 import { NOUN_MORPHOLOGY_DB_FIELD_KEYS } from './nounMorphology.ts';
@@ -71,11 +79,15 @@ export const INITIAL_FORM_STATE = {
     source_id: '',
     definitions: [
         { text_en: '', text_mt: '', register: '', nuance: '' }
-    ],
+    ] as EntryDefinition[],
+    usage_examples: [
+        { text_mt: '', text_en: '' }
+    ] as Array<{ text_mt: string; text_en: string; mt?: string; en?: string }>,
     usage_example: '',
     usage_example_en: '',
     etymology_chain: [] as EntryEtymology[],
     etymology_notes: '',
+    usage_notes: '' as { en?: string | null; mt?: string | null } | string,
     phonetics: [] as { dialect: string; spelling: string; ipa: string }[],
     tags: '',
     _formLabel: '',
@@ -578,7 +590,7 @@ function buildParticipleSource(row: Record<string, unknown>) {
 }
 
 function deriveInflections(row: Record<string, unknown>, pos: string) {
-    if (pos === 'noun' || pos === 'pronoun' || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') {
+    if (pos === 'noun' || pos === 'pronoun' || pos === 'determiner' || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') {
         return pickPluralRows(
             { forms: row.nm_plural_forms, patterns: row.nm_plural_pattern },
             { forms: row.plural_forms, patterns: row.form_plural_pattern },
@@ -617,6 +629,10 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
             (form as any)[key] = full[key];
         }
     });
+    const parsedEntryNotes = parseUsageNotes(full.usage_notes);
+    if (parsedEntryNotes) {
+        form.usage_notes = parsedEntryNotes;
+    }
     form.pos = pos;
 
     const morphMapEntries: Array<[string, readonly string[]]> = pos === 'adjective'
@@ -819,6 +835,29 @@ export function entryToForm(entry: any, initialFormOverrides: Partial<AdminForm>
         : parseBooleanLike(full.is_loanword);
 
     form.definitions = normalizeEntryDefinitions(parseArray(full.definitions)).map(def => ({ ...def, text_mt: def.text_mt ?? '' }));
+
+    const rawUsageExamples = parseArray(full.usage_examples);
+    const normalizedExamples = rawUsageExamples.map((ex: any) => ({
+        text_mt: String(ex?.text_mt ?? ex?.mt ?? ex?.maltese ?? '').trim(),
+        text_en: String(ex?.text_en ?? ex?.en ?? ex?.english ?? '').trim(),
+        mt: String(ex?.text_mt ?? ex?.mt ?? ex?.maltese ?? '').trim(),
+        en: String(ex?.text_en ?? ex?.en ?? ex?.english ?? '').trim(),
+    })).filter((ex: any) => ex.text_mt || ex.text_en);
+
+    if (normalizedExamples.length === 0 && (full.usage_example || full.usage_example_en)) {
+        const mt = String(full.usage_example ?? '').trim();
+        const en = String(full.usage_example_en ?? '').trim();
+        if (mt || en) {
+            normalizedExamples.push({ text_mt: mt, text_en: en, mt, en });
+        }
+    }
+
+    form.usage_examples = normalizedExamples.length > 0
+        ? normalizedExamples
+        : [{ text_mt: '', text_en: '', mt: '', en: '' }];
+    form.usage_example = form.usage_examples[0]?.text_mt || '';
+    form.usage_example_en = form.usage_examples[0]?.text_en || '';
+
     form.phonetics = parseArray(full.phonetics).map((p: any) => ({ dialect: p.dialect || 'Standard', spelling: p.spelling || '', ipa: p.ipa || '' }));
     form.etymology_chain = parseArray(full.etymology_chain).length ? normalizeEntryEtymologyChain(parseArray(full.etymology_chain)) : [];
     const rawTags = Array.isArray(full.tags)
@@ -867,7 +906,7 @@ export function buildLoadedEntryPatch(full: any, _prev: AdminForm): Partial<Admi
     const patch: Partial<AdminForm> = {};
     (patch as any)._manualFormMasc = false;
 
-    const coreFields = ['id', 'headword', 'pos', 'gender', 'definitions', 'phonetics', 'tags', 'is_loanword', 'is_inflectable_singular', 'is_inflectable_plural', 'is_inflectable'];
+    const coreFields = ['id', 'headword', 'pos', 'gender', 'definitions', 'usage_examples', 'usage_example', 'usage_example_en', 'phonetics', 'tags', 'is_loanword', 'is_inflectable_singular', 'is_inflectable_plural', 'is_inflectable'];
 
     Object.keys(fullForm).forEach(key => {
         const val = (fullForm as any)[key];
@@ -910,6 +949,10 @@ export function hydrateEntryRow(row: Record<string, unknown> | undefined | null)
 
     payload.tags = parseJsonArray(row.rel_tags || row.tags);
     payload.definitions = parseJsonArray(row.definitions);
+    const parsedUsageNotes = parseUsageNotes(row.usage_notes);
+    if (parsedUsageNotes) {
+        payload.usage_notes = parsedUsageNotes;
+    }
     payload.synonyms = parseJsonArray(row.rel_synonyms || row.synonyms);
     payload.antonyms = parseJsonArray(row.rel_antonyms || row.antonyms);
     payload.related_entries = parseJsonArray(row.rel_related || row.related_entries);
@@ -930,11 +973,21 @@ export function hydrateEntryRow(row: Record<string, unknown> | undefined | null)
             gloss_mt: alt.gloss_mt || null,
         };
     });
-    payload.usage_examples = parseJsonArray(row.usage_examples || row.rel_usage_examples);
-    payload.etymology_chain = parseJsonArray(row.etymology_chain);
-    const firstUsageExample = Array.isArray(payload.usage_examples) ? payload.usage_examples[0] as Record<string, unknown> | undefined : undefined;
-    payload.usage_example = firstUsageExample?.text_mt == null ? '' : String(firstUsageExample.text_mt).trim();
-    payload.usage_example_en = firstUsageExample?.text_en == null ? '' : String(firstUsageExample.text_en).trim();
+    const rawUsageExamples = parseJsonArray(row.usage_examples || row.rel_usage_examples);
+    payload.usage_examples = rawUsageExamples.map((ex: any) => {
+        const mt = String(ex?.text_mt ?? ex?.mt ?? ex?.maltese ?? '').trim();
+        const en = String(ex?.text_en ?? ex?.en ?? ex?.english ?? '').trim();
+        return {
+            ...ex,
+            text_mt: mt,
+            text_en: en,
+            mt,
+            en,
+        };
+    });
+    const firstUsageExample = (payload.usage_examples as any[])[0];
+    payload.usage_example = firstUsageExample ? (firstUsageExample.text_mt || firstUsageExample.mt || '') : '';
+    payload.usage_example_en = firstUsageExample ? (firstUsageExample.text_en || firstUsageExample.en || '') : '';
 
     if (row.cv_notation || row.wizen_notation || row.pattern_id || row.derived_form) {
         payload.root_pattern_form = {
@@ -974,7 +1027,7 @@ export function hydrateEntryRow(row: Record<string, unknown> | undefined | null)
 
     if (pos === 'verb') {
         applyVerbMorphologyCompatibility(payload, payload, buildVerbSource(row), payload);
-    } else if (pos === 'noun' || pos === 'pronoun' || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') {
+    } else if (pos === 'noun' || pos === 'pronoun' || pos === 'determiner' || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') {
         applyNounMorphologyCompatibility(payload, payload, buildNounSource(row));
     } else if (pos === 'adjective') {
         applyAdjMorphologyCompatibility(payload, payload, buildAdjSource(row));
@@ -1028,3 +1081,6 @@ function isAlternativeRelation(item: any) {
     ).toLowerCase().trim();
     return kind === 'alternative_form' || kind === 'alternative' || kind === 'alt_form';
 }
+
+export { parseUsageNotes, getBilingualText, getEntryAllNotes };
+

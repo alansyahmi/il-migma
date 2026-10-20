@@ -27,7 +27,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "قَالَ",
-          "definition": "to say"
+          "definition": "to say",
+          "pronunciation": "qâla"
         }
       ],
       "etymology_notes": null,
@@ -289,7 +290,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "اِفْتَكَرَ",
-          "definition": null
+          "definition": null,
+          "pronunciation": "aftakara"
         }
       ],
       "etymology_notes": null,
@@ -471,7 +473,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "تَكَلَّمَ",
-          "definition": null
+          "definition": null,
+          "pronunciation": "takallama"
         }
       ],
       "etymology_notes": null,
@@ -573,7 +576,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "فَسَّرَ",
-          "definition": "to explain"
+          "definition": "to explain",
+          "pronunciation": "fassara"
         }
       ],
       "etymology_notes": null,

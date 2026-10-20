@@ -67,7 +67,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أَرْض",
-          "definition": null
+          "definition": null,
+          "pronunciation": "arḍ"
         }
       ],
       "etymology_notes": null,
@@ -192,7 +193,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سَنَة",
-          "definition": "twelvemonth, year, yearlong"
+          "definition": "twelvemonth, year, yearlong",
+          "pronunciation": "sanaẗ"
         }
       ],
       "etymology_notes": null,
@@ -304,7 +306,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "رَأْس",
-          "definition": "head, vertex, acme"
+          "definition": "head, vertex, acme",
+          "pronunciation": "ra's"
         }
       ],
       "etymology_notes": null,
@@ -470,7 +473,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَيْن",
-          "definition": null
+          "definition": null,
+          "pronunciation": "għayn"
         }
       ],
       "etymology_notes": null,
@@ -596,7 +600,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "أَخَذَ",
-          "definition": "chow, eat, get"
+          "definition": "chow, eat, get",
+          "pronunciation": "akhađa"
         }
       ],
       "is_collective": 0,
@@ -698,7 +703,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "وَجْه",
-          "definition": "face, facet, persona"
+          "definition": "face, facet, persona",
+          "pronunciation": "waġh"
         }
       ],
       "etymology_notes": null,
@@ -856,13 +862,15 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "بَلَاط",
-          "definition": "tiles, paved surface"
+          "definition": "tiles, paved surface",
+          "pronunciation": "balâṭ"
         },
         {
           "relationship": "From",
           "language": "Ancient Greek",
           "term": "πλατεῖα",
-          "definition": null
+          "definition": null,
+          "pronunciation": "platia"
         }
       ],
       "etymology_notes": null,
@@ -982,7 +990,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سَاق",
-          "definition": null
+          "definition": null,
+          "pronunciation": "sâq"
         }
       ],
       "etymology_notes": null,
@@ -1096,13 +1105,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "lingua",
-          "definition": null
+          "definition": null,
+          "pronunciation": "lingua"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "lingua",
-          "definition": null
+          "definition": null,
+          "pronunciation": "lingua"
         },
         {
           "relationship": "From",
@@ -1263,13 +1274,15 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "قَلْب",
-          "definition": "heart, anagram, inwardness"
+          "definition": "heart, anagram, inwardness",
+          "pronunciation": "qalb"
         },
         {
           "relationship": "From",
           "language": "Italian",
           "term": "cuore ) are masculine",
-          "definition": null
+          "definition": null,
+          "pronunciation": "kuore ) are maskuline"
         }
       ],
       "etymology_notes": null,
@@ -1381,7 +1394,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ذِرَاع",
-          "definition": null
+          "definition": null,
+          "pronunciation": "đirâgħ"
         }
       ],
       "etymology_notes": null,
@@ -1507,7 +1521,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "رِجْل",
-          "definition": "leg, foot, paw"
+          "definition": "leg, foot, paw",
+          "pronunciation": "riġl"
         }
       ],
       "etymology_notes": null,
@@ -1619,7 +1634,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قَبْضَة",
-          "definition": "fist, grasp, authority"
+          "definition": "fist, grasp, authority",
+          "pronunciation": "qabḍaẗ"
         }
       ],
       "etymology_notes": null,
@@ -1780,7 +1796,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "حَلْق",
-          "definition": "throat"
+          "definition": "throat",
+          "pronunciation": "ħalq"
         }
       ],
       "is_collective": 0,
@@ -1852,7 +1869,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "دَم",
-          "definition": null
+          "definition": null,
+          "pronunciation": "dam"
         }
       ],
       "etymology_notes": null,
@@ -2000,7 +2018,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أُذُن",
-          "definition": "ear, handle, ear"
+          "definition": "ear, handle, ear",
+          "pronunciation": "uđun"
         }
       ],
       "etymology_notes": null,
@@ -2114,7 +2133,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "لِبْسة",
-          "definition": "attire, choice of clothes"
+          "definition": "attire, choice of clothes",
+          "pronunciation": "libsẗ"
         }
       ],
       "etymology_notes": null,
@@ -2226,7 +2246,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "جِلْدَة",
-          "definition": "skin, lash, stripe"
+          "definition": "skin, lash, stripe",
+          "pronunciation": "ġildaẗ"
         }
       ],
       "etymology_notes": null,
@@ -2352,7 +2373,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شَعْر",
-          "definition": "bristle, hair, head of hair"
+          "definition": "bristle, hair, head of hair",
+          "pronunciation": "shagħr"
         }
       ],
       "etymology_notes": null,
@@ -2455,7 +2477,8 @@
           "relationship": "Of",
           "language": "Arabic",
           "term": "حُمَر",
-          "definition": "asphalt, bitumen, pitch"
+          "definition": "asphalt, bitumen, pitch",
+          "pronunciation": "ħumar"
         }
       ],
       "is_collective": 0,
@@ -2567,7 +2590,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَظْم",
-          "definition": null
+          "definition": null,
+          "pronunciation": "għaẓm"
         }
       ],
       "etymology_notes": null,
@@ -2820,7 +2844,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شَرْبَة",
-          "definition": "draft, drink, mouthful"
+          "definition": "draft, drink, mouthful",
+          "pronunciation": "sharbaẗ"
         }
       ],
       "etymology_notes": null,
@@ -2972,7 +2997,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "sedile",
-          "definition": "seat (in a vehicle)"
+          "definition": "seat (in a vehicle)",
+          "pronunciation": "sedile"
         }
       ],
       "etymology_notes": null,
@@ -3090,7 +3116,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "spalla or an older variant of Sicilian spadda",
-          "definition": null
+          "definition": null,
+          "pronunciation": "spalla or an older variant of siċilian spadda"
         },
         {
           "relationship": "From",

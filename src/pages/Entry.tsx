@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
 import { generateZokkForms } from '@/lib/zokkEngine';
 import { applyInflectionTableSuffix } from '@/lib/inflectionTable';
+import { getPrepositionArticleMatrix } from '@/lib/prepositionArticleMatrix';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { Edit2, ArrowLeft, Search, Plus, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
 import { type AdminEntry } from '@/components/admin/EntryFormModal';
@@ -29,6 +30,7 @@ import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
 import { isSuffixLikeValue } from '@/lib/suffixMatching';
 import { isInflectableEnabled, shouldHideInflectionTableForEntry } from '@/lib/inflectionState';
 import { getEntryAdjectiveMorphology, resolveEntryViewKind, formatDefinitionGloss, hasNounNuanceDefinition } from '@/lib/entryDisplay';
+import { compareEntryPriority } from '@/lib/homographGrouping';
 import { parseImalaBlockedOverride, resolveImalaBlocked } from '@/lib/imala';
 import {
     buildNumeralMorphologyDisplayForms,
@@ -45,6 +47,7 @@ import {
 } from '@/lib/numeralMorphology';
 import { buildVerbConjugationFromEngine, buildVerbPreviewFromEngine, shouldMarkVerbConjugationTheoretical } from '@/lib/verbMorphology';
 import { stripTheoreticalPrefix, shouldHideSurface } from '@/lib/theoreticalForms';
+import { getEntryAllNotes } from '@/lib/adminUtils';
 
 export { BLUE, CREAM_RGBA, GOLD, EntryShell, EtymologySentence, PropRow, SideCard } from '@/components/dictionary/EntryShell';
 
@@ -1156,7 +1159,8 @@ function NounMorphologySection({
         feminine: singular(morphology.form_fem_pattern || entry.form_fem_pattern || morphology.lemma_pattern || entry.lemma_pattern || entry.cv_pattern || null),
     };
 
-    const hasOppositeGender = !!(
+    const isCommonGender = m.gender === 'common';
+    const hasOppositeGender = !isCommonGender && !!(
         explicitVariantForms.masculine &&
         explicitVariantForms.feminine &&
         explicitVariantForms.masculine !== explicitVariantForms.feminine
@@ -1167,6 +1171,9 @@ function NounMorphologySection({
     const morphologyTitle = term('morphology') || 'Morphology';
     const makeSectionRow = (id: string, label: string, depth = 0, defaultOpen = false): SectionRow => ({ kind: 'section', id, label, depth, defaultOpen });
     const renderVariantLabel = (variant: NounGenderVariant) => {
+        if (isCommonGender) {
+            return term('common') || 'Komuni';
+        }
         if (isCollOrSing) {
             const isCollectiveRow = variant === collectiveVariant;
             const genderLabel = term(variant) || (variant === 'masculine' ? 'Masculine' : 'Feminine');
@@ -1555,7 +1562,8 @@ function AdjectiveMorphologySection({
         ),
     };
 
-    const hasOppositeGender = !!(
+    const isCommonGender = m.gender === 'common';
+    const hasOppositeGender = !isCommonGender && !!(
         explicitVariantForms.masculine &&
         explicitVariantForms.feminine &&
         explicitVariantForms.masculine !== explicitVariantForms.feminine
@@ -1567,7 +1575,12 @@ function AdjectiveMorphologySection({
 
     const morphologyTitle = term('morphology') || 'Morphology';
     const makeSectionRow = (id: string, label: string, depth = 0, defaultOpen = false): SectionRow => ({ kind: 'section', id, label, depth, defaultOpen });
-    const renderVariantLabel = (variant: NounGenderVariant) => term(variant) || (variant === 'masculine' ? 'Masculine' : 'Feminine');
+    const renderVariantLabel = (variant: NounGenderVariant) => {
+        if (isCommonGender) {
+            return term('common') || 'Komuni';
+        }
+        return term(variant) || (variant === 'masculine' ? 'Masculine' : 'Feminine');
+    };
 
     const pluralPattern = singular(m.form_plural_pattern || entry.form_plural_pattern || m.morph_pattern || entry.morph_pattern || null);
     const pluralHint = splitMultiValue(m.plural || null)[0] || null;
@@ -1824,37 +1837,153 @@ function VowelSetGrid({ morphology }: { morphology: any }) {
     );
 }
 
+function getEntryAllExamples(e: Entry): { mt: string; en?: string }[] {
+    const list: { mt: string; en?: string }[] = [];
+    if (Array.isArray(e.usage_examples)) {
+        for (const ex of e.usage_examples) {
+            const mt = (ex.mt || ex.text_mt || ex.maltese || '').trim();
+            const en = (ex.en || ex.text_en || ex.english || '').trim();
+            if (mt) list.push({ mt, en: en || undefined });
+        }
+    }
+    if (list.length === 0 && (e.usage_example || (e as any).usage_example_en)) {
+        const mt = (e.usage_example || '').trim();
+        const en = ((e as any).usage_example_en || '').trim();
+        if (mt) list.push({ mt, en: en || undefined });
+    }
+    if (Array.isArray(e.definitions)) {
+        for (const def of e.definitions) {
+            if (Array.isArray(def.example_sentences)) {
+                for (const ex of def.example_sentences) {
+                    const mt = (ex.maltese || ex.mt || ex.text_mt || '').trim();
+                    const en = (ex.english || ex.en || ex.text_en || '').trim();
+                    if (mt && !list.some(item => item.mt === mt)) {
+                        list.push({ mt, en: en || undefined });
+                    }
+                }
+            }
+        }
+    }
+    return list;
+}
+
+function UsageNotesSideCard({ entry, language, term }: { entry: Entry; language: 'en' | 'mt'; term: (key: string) => string }) {
+    const allEntries = useMemo(() => {
+        if (!entry.sibling_entries || entry.sibling_entries.length === 0) return [entry];
+        return [entry, ...entry.sibling_entries].sort(compareEntryPriority);
+    }, [entry]);
+
+    const entriesWithNotes = useMemo(() => {
+        return allEntries
+            .map((e) => ({ entry: e, notes: getEntryAllNotes(e, language) }))
+            .filter((item) => item.notes.length > 0);
+    }, [allEntries, language]);
+
+    if (entriesWithNotes.length === 0) return null;
+
+    const hasMultiplePos = allEntries.length > 1;
+
+    return (
+        <SideCard title={term('usage-notes')}>
+            <div className="space-y-3 text-sm text-black leading-relaxed">
+                {entriesWithNotes.map(({ entry: e, notes }) => {
+                    const posKey = (e.pos || 'pos').toLowerCase();
+                    const posLabel = term(posKey) || e.pos;
+                    const isCurrent = e.id === entry.id;
+
+                    return (
+                        <div key={e.id} className="space-y-1">
+                            {hasMultiplePos && (
+                                isCurrent ? (
+                                    <span className="text-[10px] font-extrabold uppercase tracking-wider block text-blue-900">
+                                        {posLabel}
+                                    </span>
+                                ) : (
+                                    <Link
+                                        to={`/entry/${e.id}`}
+                                        className="text-[10px] font-bold uppercase tracking-wider block text-black/50 hover:text-black hover:underline transition-colors"
+                                    >
+                                        {posLabel}
+                                    </Link>
+                                )
+                            )}
+                            <div className="space-y-1 text-black/85 text-xs">
+                                {notes.map((note, idx) => (
+                                    <p key={idx} className="whitespace-pre-line leading-normal">
+                                        {note}
+                                    </p>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </SideCard>
+    );
+}
+
 function UsageExampleBlock({ entry }: { entry: Entry }) {
     const { term } = useLinguisticMode();
 
-    const usageExamples = Array.isArray(entry.usage_examples) ? entry.usage_examples : [];
-    const firstUsageExample = usageExamples[0] as Record<string, unknown> | undefined;
-    const primaryMaltese = (entry.usage_example || String(firstUsageExample?.text_mt || '')).trim();
-    const primaryEnglish = (entry.usage_example_en || String(firstUsageExample?.text_en || '')).trim();
-    const fallbackExample = entry.definitions?.[0]?.example_sentences?.[0];
-    const fallbackMaltese = (fallbackExample?.maltese || '').trim();
-    const fallbackEnglish = (fallbackExample?.english || '').trim();
+    const allEntries = useMemo(() => {
+        if (!entry.sibling_entries || entry.sibling_entries.length === 0) return [entry];
+        return [entry, ...entry.sibling_entries].sort(compareEntryPriority);
+    }, [entry]);
 
-    const malteseText = primaryMaltese || fallbackMaltese;
-    const englishText = primaryEnglish || fallbackEnglish;
+    const entriesWithExamples = useMemo(() => {
+        return allEntries
+            .map((e) => ({ entry: e, examples: getEntryAllExamples(e) }))
+            .filter((item) => item.examples.length > 0);
+    }, [allEntries]);
 
-    if (!malteseText && !englishText) return null;
+    if (entriesWithExamples.length === 0) return null;
+
+    const hasMultiplePos = allEntries.length > 1;
 
     return (
         <div className="w-full">
             <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 text-center md:text-left">
-                {term('usage-example')}
+                {term('usage-examples') || term('usage-example')}
             </h2>
-            {malteseText && (
-                <p className="font-serif flex flex-col sm:flex-row gap-8 sm:gap-16 text-m mt-3 items-center md:items-start text-center md:text-left">
-                    {malteseText}
-                </p>
-            )}
-            {englishText && (
-                <p className="font-serif italic text-black/55 text-m md:items-start leading-tight text-center md:text-left mt-1">
-                    {englishText}
-                </p>
-            )}
+            <div className="space-y-6">
+                {entriesWithExamples.map(({ entry: e, examples }) => {
+                    const posKey = (e.pos || 'pos').toLowerCase();
+                    const posLabel = term(posKey) || e.pos;
+
+                    return (
+                        <div key={e.id} className="space-y-2">
+                            {hasMultiplePos && (
+                                e.id === entry.id ? (
+                                    <p className="text-xs uppercase tracking-wider text-black/50 font-bold font-sans">
+                                        {posLabel}
+                                    </p>
+                                ) : (
+                                    <Link
+                                        to={`/entry/${e.id}`}
+                                        className="text-xs uppercase tracking-wider text-black/50 font-bold font-sans hover:text-black hover:underline transition-colors block"
+                                    >
+                                        {posLabel}
+                                    </Link>
+                                )
+                            )}
+                            <div className="space-y-4">
+                                {examples.map((ex, idx) => (
+                                    <div key={idx} className="space-y-0.5 text-left">
+                                        <p className="font-serif text-[1.05rem] text-black leading-snug">
+                                            {ex.mt}
+                                        </p>
+                                        {ex.en && (
+                                            <p className="font-serif italic text-black/55 text-sm leading-normal">
+                                                {ex.en}
+                                            </p>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 }
@@ -1968,6 +2097,69 @@ export function TagChips({ entry }: { entry: Entry }) {
                     </span>
                 ))}
         </div>
+    );
+}
+
+export function SidebarGlossCard({ entry }: { entry: Entry }) {
+    const { term } = useLinguisticMode();
+    const { language } = useLanguage();
+
+    const allEntries = useMemo(() => {
+        if (!entry.sibling_entries || entry.sibling_entries.length === 0) return [entry];
+        return [entry, ...entry.sibling_entries].sort(compareEntryPriority);
+    }, [entry]);
+
+    const hasMultiplePos = allEntries.length > 1;
+
+    return (
+        <SideCard title={term('gloss')}>
+            {!hasMultiplePos ? (
+                <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                    {entry.definitions && entry.definitions.length > 0 ? (
+                        entry.definitions.map(def => (
+                            <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
+                        ))
+                    ) : (
+                        <li>{language === 'mt' && (entry as any).definition_mt ? (entry as any).definition_mt : (entry as any).definition_en || '-'}</li>
+                    )}
+                </ol>
+            ) : (
+                <div className="space-y-3.5 text-sm text-black">
+                    {allEntries.map((e) => {
+                        const posKey = (e.pos || 'pos').toLowerCase();
+                        const posLabel = term(posKey) || e.pos;
+                        const isCurrent = e.id === entry.id;
+
+                        return (
+                            <div key={e.id} className="space-y-1">
+                                {isCurrent ? (
+                                    <span className="text-[10px] font-extrabold uppercase tracking-wider block text-blue-900">
+                                        {posLabel}
+                                    </span>
+                                ) : (
+                                    <Link
+                                        to={`/entry/${e.id}`}
+                                        className="text-[10px] font-bold uppercase tracking-wider block text-black/50 hover:text-black hover:underline transition-colors"
+                                    >
+                                        {posLabel}
+                                    </Link>
+                                )}
+                                <ol className="list-decimal list-inside space-y-0.5 text-xs text-black/85 marker:text-black/30">
+                                    {e.definitions && e.definitions.length > 0 ? (
+                                        e.definitions.map(def => (
+                                            <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
+                                        ))
+                                    ) : (
+                                        <li>{language === 'mt' && (e as any).definition_mt ? (e as any).definition_mt : (e as any).definition_en || '-'}</li>
+                                    )}
+                                </ol>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
+            <TagChips entry={entry} />
+        </SideCard>
     );
 }
 
@@ -2389,27 +2581,15 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                 <div className="flex flex-col md:flex-row gap-6 w-full md:items-start">
                     {/* Top Mobile Gloss */}
-                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {(entry.definitions ?? []).map(def => (
-                                    <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
-                                ))}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto space-y-4">
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
                     </div>
 
                     {/* Left Sidebar (Desktop Only) */}
                     <div className="w-full md:w-64 shrink-0 space-y-4 hidden md:block">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {(entry.definitions ?? []).map(def => (
-                                    <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
-                                ))}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
 
                         {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
@@ -2969,27 +3149,15 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
                     {/* Top Mobile Gloss */}
-                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {(entry.definitions ?? []).map(def => (
-                                    <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
-                                ))}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto space-y-4">
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
                     </div>
 
                     {/* Left Sidebar (Desktop Only) */}
                     <div className="w-full md:w-64 shrink-0 space-y-4 hidden md:block">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {(entry.definitions ?? []).map(def => (
-                                    <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
-                                ))}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
 
                         {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
@@ -3051,7 +3219,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                             "md:flex-row md:items-start"
                         )}>
                             {/* Properties */}
-                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:mx-0 mb-12 md:mb-0">
                                 {entry.zokk_morphology ? (
                                     <MorphologyProvenanceRows
                                         source={entry.zokk_morphology}
@@ -3122,12 +3290,13 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                 )}
                             </div>
 
-                            {/* Conjugation Table */}
-                            {conj && (
-                                <div className="flex-1 min-w-0 w-full mx-auto md:mx-0">
-                                    <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
-                                        {term('conjugation-table')}
-                                    </h2>
+                            {/* Conjugation Table & Definitions */}
+                            <div className="flex-1 min-w-0 w-full mx-auto md:mx-0 space-y-12">
+                                {conj && (
+                                    <div>
+                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                                            {term('conjugation-table')}
+                                        </h2>
 
                                     {/* Desktop Table View */}
                                     <div className="hidden md:block overflow-x-auto overflow-y-hidden pb-4">
@@ -3445,8 +3614,9 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                             </div>
                                         )}
                                     </div>
-                                </div>
-                            )}
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
@@ -3647,14 +3817,8 @@ export function ZokkEntryView({
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
                     <div className="w-full md:w-64 shrink-0 space-y-4">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions?.map(def => (
-                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
-                                )) || <li>-</li>}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
 
                         {zokkEtymologyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
@@ -3665,14 +3829,8 @@ export function ZokkEntryView({
                     </div>
 
                     <div className="flex-1 min-w-0 space-y-0 w-full">
-                        <div className={cn(
-                            "flex flex-col gap-8 items-start w-full",
-                            !entry.zokk_morphology && "md:flex-row"
-                        )}>
-                            <div className={cn(
-                                "w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mb-12 md:mb-0",
-                                "mx-0"
-                            )}>
+                        <div className="flex flex-col md:flex-row gap-8 items-start w-full">
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:mx-0 mb-12 md:mb-0">
                                 <MorphologyProvenanceRows
                                     source={entry.zokk_morphology}
                                     rootDisplayValue={entry.root_pattern_form?.root?.consonants || entry.zokk_morphology?.root || (entry.zokk_morphology as any)?.root_consonants || null}
@@ -4299,27 +4457,15 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
                     {/* Top Mobile Gloss */}
-                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions?.map(def => (
-                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
-                                )) || <li>-</li>}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto space-y-4">
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
                     </div>
 
                     {/* Left Sidebar (Desktop Only) */}
                     <div className="hidden md:block w-full md:w-64 shrink-0 space-y-4">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions?.map(def => (
-                                    <li key={def.id}>{language === 'mt' && def.text_mt ? def.text_mt : def.text_en}</li>
-                                )) || <li>-</li>}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
 
                         {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
@@ -4373,7 +4519,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                     <div className="flex-1 min-w-0 space-y-0 w-full">
                         <div className="flex flex-col md:flex-row gap-8 items-start w-full">
                             {/* Properties */}
-                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:mx-0 mb-12 md:mb-0">
                                 {rootConsonants && (
                                     <PropRow label={term('root')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
@@ -4631,27 +4777,15 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
                     {/* Top Mobile Gloss */}
-                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {(entry.definitions ?? []).map(def => (
-                                    <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
-                                ))}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto space-y-4">
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
                     </div>
 
                     {/* Left Sidebar (Desktop Only) */}
                     <div className="hidden md:block w-full md:w-64 shrink-0 space-y-4">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {(entry.definitions ?? []).map(def => (
-                                    <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
-                                ))}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
 
                         {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
@@ -4710,7 +4844,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                     <div className="flex-1 min-w-0 space-y-0 w-full">
                         <div className="flex flex-col md:flex-row gap-8 items-start w-full">
                             {/* Properties */}
-                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto mb-12 md:mb-0">
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:mx-0 mb-12 md:mb-0">
                                 {rootConsonants && (
                                     <PropRow label={term('root')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
@@ -4748,7 +4882,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                             </div>
 
                             {/* Morphology Table */}
-                            <div className="flex-1 min-w-0 w-full">
+                            <div className="flex-1 min-w-0 w-full space-y-12">
                                 <AdjectiveMorphologySection
                                     entry={entry}
                                     morphology={am}
@@ -5088,27 +5222,15 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
                     {/* Top Mobile Gloss */}
-                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {(entry.definitions ?? []).map(def => (
-                                    <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
-                                ))}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto space-y-4">
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
                     </div>
 
                     {/* Left Sidebar (Desktop Only) */}
                     <div className="hidden md:block w-full md:w-64 shrink-0 space-y-4">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {(entry.definitions ?? []).map(def => (
-                                    <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
-                                ))}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
 
                         {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
@@ -5159,7 +5281,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
 
                     <div className="flex-1 min-w-0 space-y-8 w-full">
                         <div className="flex flex-col md:flex-row gap-8 items-start w-full">
-                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:max-w-none mb-12 md:mb-0">
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:mx-0 md:max-w-none mb-12 md:mb-0">
                                 {rootConsonants && (
                                     <PropRow label={term('root')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
@@ -5703,6 +5825,41 @@ export function FunctionWordEntryView({
 
     const isIlArticle = (isArticle || pos === 'particle') && /^il-?/i.test((entry.headword || '').trim());
 
+    const renderEquationRule = (rule: string) => {
+        if (!rule) return null;
+        const parts = rule.split('→');
+        if (parts.length === 2) {
+            return (
+                <span>
+                    <span className="text-black/45">{parts[0].trim()}</span>
+                    <span className="mx-1.5 text-black/25">→</span>
+                    <strong className="font-serif font-bold text-black text-sm">{parts[1].trim()}</strong>
+                </span>
+            );
+        }
+        return <span>{rule}</span>;
+    };
+
+    const prepArticleMatrix = useMemo(() => {
+        return getPrepositionArticleMatrix(entry.headword, pos);
+    }, [entry.headword, pos]);
+
+    const cliticTargetMap = useMemo(() => {
+        const map = new Map<string, string>();
+        const allForms = [...(alternativeForms || []), ...(relatedEntries || [])];
+        for (const f of allForms) {
+            const hw = String(f.headword || '').trim().toLowerCase();
+            const targetId = f.target_entry_id || (f.has_lemma_entry && f.id && !String(f.id).startsWith('alt_') ? f.id : null);
+            if (hw && targetId) {
+                map.set(hw, targetId);
+                const clean = hw.replace(/-+$/, '');
+                map.set(clean, targetId);
+                map.set(`${clean}-`, targetId);
+            }
+        }
+        return map;
+    }, [alternativeForms, relatedEntries]);
+
     const sunTransformations = [
         { letter: 'ċ', rule: 'il- → iċ-', example: 'ċertu', result: 'iċ-ċertu' },
         { letter: 'd', rule: 'il- → id-', example: 'dar', result: 'id-dar' },
@@ -5783,8 +5940,8 @@ export function FunctionWordEntryView({
         return { value: result, theoretical: false };
     };
 
-    const pluralBase = (isPronoun || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') ? (inflectionPlurals[0] || '') : '';
-    const showPluralColumn = (isPronoun || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') && !!pluralBase;
+    const pluralBase = (isPronoun || pos === 'determiner' || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') ? (inflectionPlurals[0] || '') : '';
+    const showPluralColumn = (isPronoun || pos === 'determiner' || pos === 'preposition' || pos === 'conjunction' || pos === 'particle' || pos === 'interjection') && !!pluralBase;
 
     const bgStyle = {
         background: `linear-gradient(${CREAM_RGBA}, ${CREAM_RGBA}), url("/bg-pattern.webp") center/cover no-repeat`,
@@ -5822,34 +5979,14 @@ export function FunctionWordEntryView({
 
                 <div className="flex flex-col md:flex-row gap-6 items-start w-full">
                     {/* Top Mobile Gloss */}
-                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions && entry.definitions.length > 0 ? (
-                                    (entry.definitions ?? []).map(def => (
-                                        <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
-                                    ))
-                                ) : (
-                                    <li>{language === 'mt' && (entry as any).definition_mt ? (entry as any).definition_mt : (entry as any).definition_en || '-'}</li>
-                                )}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                    <div className="w-full block md:hidden mb-2 max-w-[340px] mx-auto space-y-4">
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
                     </div>
 
                     <div className="w-full md:w-64 shrink-0 space-y-4 hidden md:block">
-                        <SideCard title={term('gloss')}>
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {entry.definitions && entry.definitions.length > 0 ? (
-                                    (entry.definitions ?? []).map(def => (
-                                        <li key={def.id}>{formatDefinitionGloss(def, language, term)}</li>
-                                    ))
-                                ) : (
-                                    <li>{language === 'mt' && (entry as any).definition_mt ? (entry as any).definition_mt : (entry as any).definition_en || '-'}</li>
-                                )}
-                            </ol>
-                            <TagChips entry={entry} />
-                        </SideCard>
+                        <SidebarGlossCard entry={entry} />
+                        <UsageNotesSideCard entry={entry} language={language} term={term} />
 
                         {etyItems.length > 0 && (
                             <SideCard title={term('etymology')}>
@@ -5911,11 +6048,8 @@ export function FunctionWordEntryView({
                     </div>
 
                     <div className="flex-1 min-w-0 space-y-8 w-full">
-                        <div className={cn(
-                            "flex flex-col gap-8 items-start w-full",
-                            !entry.zokk_morphology && "md:flex-row"
-                        )}>
-                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:max-w-none mb-8 md:mb-0">
+                        <div className="flex flex-col md:flex-row gap-8 items-start w-full">
+                            <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:mx-0 md:max-w-none mb-8 md:mb-0">
                                 {stemMetadataSource && (
                                     <MorphologyProvenanceRows
                                         source={stemMetadataSource}
@@ -6005,6 +6139,129 @@ export function FunctionWordEntryView({
                                     </div>
                                 )}
 
+                                {prepArticleMatrix && (
+                                    <div className="w-full">
+                                        <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
+                                            {term('fused-article-matrix') || 'L-Artiklu Magħqud'}
+                                        </h2>
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 text-sm">
+                                            <div className="overflow-hidden">
+                                                <h3 className="font-sans font-semibold text-[1.1rem] text-black/70 mb-3 md:text-left text-center">
+                                                    {term('sun-letters')} ({term('assimilated')})
+                                                </h3>
+                                                <div className="overflow-x-auto pb-2">
+                                                    <table className="w-full text-sm border-collapse">
+                                                        <thead>
+                                                            <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                                <th className="text-left font-semibold text-black pb-2 pr-4 w-16">{term('letter')}</th>
+                                                                <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('rule')}</th>
+                                                                <th className="text-left font-semibold text-black pb-2">{term('example')}</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {prepArticleMatrix.sunTransformations.map((t, idx) => {
+                                                                const targetId = cliticTargetMap.get(t.cliticForm.toLowerCase()) || cliticTargetMap.get(t.cliticForm.replace(/-+$/, '').toLowerCase());
+                                                                return (
+                                                                    <tr key={idx} className="border-b border-black/4 whitespace-nowrap">
+                                                                        <td className="py-1.5 pr-4 font-serif font-bold text-lg text-black">{t.letter}</td>
+                                                                        <td className="py-1.5 pr-4 font-mono text-[11px]">{renderEquationRule(t.rule)}</td>
+                                                                        <td className="py-1.5 font-serif text-black leading-tight">
+                                                                            <span className="opacity-40">{t.example}</span>
+                                                                            <span className="mx-2 opacity-20">→</span>
+                                                                            {targetId ? (
+                                                                                <Link
+                                                                                    to={`/entry/${targetId}`}
+                                                                                    className="font-bold underline decoration-black/20 hover:text-[#1034A6] hover:decoration-[#1034A6] underline-offset-4"
+                                                                                    title={`Go to ${t.cliticForm}`}
+                                                                                >
+                                                                                    {t.result}
+                                                                                </Link>
+                                                                            ) : (
+                                                                                <span className="font-bold underline decoration-black/10 underline-offset-4">{t.result}</span>
+                                                                            )}
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            })}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div className="overflow-hidden">
+                                                <h3 className="font-sans font-semibold text-[1.1rem] text-black/70 mb-3 md:text-left text-center">
+                                                    {term('moon-letters')} ({term('unassimilated')})
+                                                </h3>
+                                                <div className="overflow-x-auto pb-2">
+                                                    <table className="w-full text-sm border-collapse">
+                                                        <thead>
+                                                            <tr className="border-b border-black/8 font-sans whitespace-nowrap">
+                                                                <th className="text-left font-semibold text-black pb-2 pr-4 w-16">{term('letter')}</th>
+                                                                <th className="text-left font-semibold text-black pb-2 pr-4 w-32">{term('rule')}</th>
+                                                                <th className="text-left font-semibold text-black pb-2">{term('example')}</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {prepArticleMatrix.moonTransformations.map((t, idx) => {
+                                                                const targetId = cliticTargetMap.get(t.cliticForm.toLowerCase()) || cliticTargetMap.get(t.cliticForm.replace(/-+$/, '').toLowerCase());
+                                                                return (
+                                                                    <tr key={idx} className="border-b border-black/4 whitespace-nowrap">
+                                                                        <td className="py-1.5 pr-4 font-serif font-bold text-lg text-black">{t.letter}</td>
+                                                                        <td className="py-1.5 pr-4 font-mono text-[11px]">{renderEquationRule(t.rule)}</td>
+                                                                        <td className="py-1.5 font-serif text-black leading-tight">
+                                                                            <span className="opacity-40">{t.example}</span>
+                                                                            <span className="mx-2 opacity-20">→</span>
+                                                                            {targetId ? (
+                                                                                <Link
+                                                                                    to={`/entry/${targetId}`}
+                                                                                    className="font-bold underline decoration-black/20 hover:text-[#1034A6] hover:decoration-[#1034A6] underline-offset-4"
+                                                                                    title={`Go to ${t.cliticForm}`}
+                                                                                >
+                                                                                    {t.result}
+                                                                                </Link>
+                                                                            ) : (
+                                                                                <span className="font-bold underline decoration-black/10 underline-offset-4">{t.result}</span>
+                                                                            )}
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            })}
+
+                                                            {prepArticleMatrix.vowelTransformation && (() => {
+                                                                const vt = prepArticleMatrix.vowelTransformation;
+                                                                const targetId = cliticTargetMap.get(vt.cliticForm.toLowerCase()) || cliticTargetMap.get(vt.cliticForm.replace(/-+$/, '').toLowerCase());
+                                                                return (
+                                                                    <tr className="border-b border-black/4 whitespace-nowrap bg-black/[0.015]">
+                                                                        <td className="py-2 pr-4 font-sans font-medium text-xs text-black/70 italic">
+                                                                            {term('vowels-label') || 'Vokali'}
+                                                                        </td>
+                                                                        <td className="py-2 pr-4 font-mono text-[11px]">{renderEquationRule(vt.rule)}</td>
+                                                                        <td className="py-2 font-serif text-black leading-tight">
+                                                                            <span className="opacity-40">{vt.example}</span>
+                                                                            <span className="mx-2 opacity-20">→</span>
+                                                                            {targetId ? (
+                                                                                <Link
+                                                                                    to={`/entry/${targetId}`}
+                                                                                    className="font-bold underline decoration-black/20 hover:text-[#1034A6] hover:decoration-[#1034A6] underline-offset-4"
+                                                                                    title={`Go to ${vt.cliticForm}`}
+                                                                                >
+                                                                                    {vt.result}
+                                                                                </Link>
+                                                                            ) : (
+                                                                                <span className="font-bold underline decoration-black/10 underline-offset-4">{vt.result}</span>
+                                                                            )}
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            })()}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                                 {isIlArticle && (
                                     <div className="w-full">
                                         <h2 className="font-sans font-semibold text-[1.25rem] text-black mb-3 md:text-left text-center">
@@ -6028,7 +6285,7 @@ export function FunctionWordEntryView({
                                                             {sunTransformations.map((t, idx) => (
                                                                 <tr key={idx} className="border-b border-black/4 whitespace-nowrap">
                                                                     <td className="py-1.5 pr-4 font-serif font-bold text-lg text-black">{t.letter}</td>
-                                                                    <td className="py-1.5 pr-4 font-mono text-black/40 text-[11px]">{t.rule}</td>
+                                                                    <td className="py-1.5 pr-4 font-mono text-[11px]">{renderEquationRule(t.rule)}</td>
                                                                     <td className="py-1.5 font-serif text-black leading-tight">
                                                                         <span className="opacity-40">{t.example}</span>
                                                                         <span className="mx-2 opacity-20">→</span>
@@ -6043,7 +6300,7 @@ export function FunctionWordEntryView({
 
                                             <div className="overflow-hidden">
                                                 <h3 className="font-sans font-semibold text-[1.1rem] text-black/70 mb-3 md:text-left text-center">
-                                                    {term('moon-letters')} ({term('standard-label')})
+                                                    {term('moon-letters')} ({term('unassimilated')})
                                                 </h3>
                                                 <div className="overflow-x-auto pb-2">
                                                     <table className="w-full text-sm border-collapse">
@@ -6058,7 +6315,7 @@ export function FunctionWordEntryView({
                                                             {moonTransformations.map((t, idx) => (
                                                                 <tr key={idx} className="border-b border-black/4 whitespace-nowrap">
                                                                     <td className="py-1.5 pr-4 font-serif font-bold text-lg text-black">{t.letter}</td>
-                                                                    <td className="py-1.5 pr-4 font-mono text-black/40 text-[11px]">{t.rule}</td>
+                                                                    <td className="py-1.5 pr-4 font-mono text-[11px]">{renderEquationRule(t.rule)}</td>
                                                                     <td className="py-1.5 font-serif text-black leading-tight">
                                                                         <span className="opacity-40">{t.example}</span>
                                                                         <span className="mx-2 opacity-20">→</span>

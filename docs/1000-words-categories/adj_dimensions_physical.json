@@ -27,7 +27,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "صَغِير",
-          "definition": "small, little, child"
+          "definition": "small, little, child",
+          "pronunciation": "ṣaghîr"
         }
       ],
       "etymology_notes": null,
@@ -141,7 +142,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "كَبِير",
-          "definition": "big, great, abundant"
+          "definition": "big, great, abundant",
+          "pronunciation": "kabîr"
         }
       ],
       "etymology_notes": null,
@@ -259,7 +261,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "ضَوْء",
-          "definition": "brightness, brilliance, gleam"
+          "definition": "brightness, brilliance, gleam",
+          "pronunciation": "ḍaw'"
         }
       ],
       "etymology_notes": null,
@@ -428,7 +431,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "طَوِيل",
-          "definition": null
+          "definition": null,
+          "pronunciation": "ṭawîl"
         }
       ],
       "etymology_notes": null,
@@ -540,7 +544,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "ذَا الْوَقْت",
-          "definition": "this time"
+          "definition": "this time",
+          "pronunciation": "đâ al-waqt"
         }
       ],
       "etymology_notes": null,
@@ -646,7 +651,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قَصِير",
-          "definition": "curt, little, short"
+          "definition": "curt, little, short",
+          "pronunciation": "qaṣîr"
         }
       ],
       "etymology_notes": null,
@@ -790,7 +796,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "fondo",
-          "definition": null
+          "definition": null,
+          "pronunciation": "fondo"
         }
       ],
       "etymology_notes": null,
@@ -903,7 +910,8 @@
           "relationship": "Of",
           "language": "Arabic",
           "term": "لَ",
-          "definition": "to, for"
+          "definition": "to, for",
+          "pronunciation": "la"
         }
       ],
       "is_collective": 0,
@@ -965,7 +973,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "إِدَام",
-          "definition": "conserve, eternalize, keep"
+          "definition": "conserve, eternalize, keep",
+          "pronunciation": "idâm"
         }
       ],
       "etymology_notes": null,
@@ -1162,7 +1171,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثَقِيل",
-          "definition": null
+          "definition": null,
+          "pronunciation": "θaqîl"
         }
       ],
       "etymology_notes": null,
@@ -1394,7 +1404,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "رَحْل",
-          "definition": "dwelling, campground"
+          "definition": "dwelling, campground",
+          "pronunciation": "raħl"
         }
       ],
       "etymology_notes": null,
@@ -1505,14 +1516,16 @@
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
-          "term": "pròssimu / pròssumu",
-          "definition": "key"
+          "term": "pròssimu jew pròssumu",
+          "definition": "key",
+          "pronunciation": "prossimu jew prossumu"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "prossimo IPA",
-          "definition": "key"
+          "definition": "key",
+          "pronunciation": "prossimo ipa"
         }
       ],
       "etymology_notes": null,
@@ -1625,7 +1638,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أَصْفَر",
-          "definition": null
+          "definition": null,
+          "pronunciation": "aṣfar"
         }
       ],
       "is_collective": 0,

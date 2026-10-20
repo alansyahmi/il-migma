@@ -19,7 +19,7 @@ interface AdminConfigContextType {
     byCategory: Map<string, ConfigItem[]>;
     byCategoryAndKey: Map<string, Map<string, ConfigItem>>;
     loading: boolean;
-    refresh: () => Promise<void>;
+    refresh: (options?: { forceBust?: boolean }) => Promise<void>;
     getCategoryItems: (category: string) => ConfigItem[];
     getValues: (category: string) => any[];
     createItem: (item: Partial<ConfigItem>, options?: { refresh?: boolean }) => Promise<void>;
@@ -32,10 +32,10 @@ const AdminConfigContext = createContext<AdminConfigContextType | undefined>(und
 
 // Fallbacks for critical lists
 const FALLBACKS: Record<string, string[]> = {
-    pos: ['verb', 'noun', 'adjective', 'adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'interrogative', 'numeral', 'interjection', 'participle'],
-    gender: ['masculine', 'feminine', 'neutral'],
+    pos: ['verb', 'noun', 'adjective', 'adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'determiner', 'interrogative', 'numeral', 'interjection', 'participle'],
+    gender: ['masculine', 'feminine', 'common'],
     participle_type: ['active', 'passive'],
-    participle_gender: ['masculine', 'feminine', 'plural', 'both'],
+    participle_gender: ['masculine', 'feminine', 'plural', 'common', 'both'],
     numeral_type: ['cardinal', 'ordinal', 'adverbial', 'fractional', 'multiplier', 'distributive', 'attributive_short', 'attributive_long'],
     verb_class: ['strong', 'strong-hybrid', 'weak', 'doubled', 'quadriliteral', 'loan'],
     verb_form: ['I', 'II', 'III', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'Xa', 'Xb', 'Iq', 'IIq'],
@@ -46,7 +46,31 @@ const FALLBACKS: Record<string, string[]> = {
     weak_class: ['defective', 'hollow', 'assimilative', 'none'],
     source_language: ['Semitic', 'Siculo-Arabic', 'Sicilian', 'Italian', 'English', 'French', 'Other'],
     root_relationship: ['synonym', 'antonym', 'derived', 'cognate', 'variant', 'sub-root'],
-    register: ['formal', 'informal', 'archaic', 'obsolete', 'technical', 'dialectal', 'colloquial'],
+    register: [
+        'standard',
+        'formal',
+        'informal',
+        'colloquial',
+        'slang',
+        'figurative',
+        'metaphorical',
+        'idiomatic',
+        'literary',
+        'poetic',
+        'archaic',
+        'obsolete',
+        'technical',
+        'dialectal',
+        'restricted',
+        'vulgar',
+        'taboo',
+        'derogatory',
+        'pejorative',
+        'humorous',
+        'euphemistic',
+        'ecclesiastical',
+        'jargon',
+    ],
     dialect: [
         'Standard',
         // ―― Malta ――
@@ -184,33 +208,46 @@ export const AdminConfigProvider: React.FC<{ children: React.ReactNode }> = ({ c
         return category === 'verb_class' ? ensureVerbClassFallbackValues(fallbacks) : fallbacks;
     }, [getCategoryItems]);
 
+    const getEffectiveToken = async (): Promise<string> => {
+        try {
+            const token = await getToken();
+            if (token) return token;
+        } catch {
+            // ignore
+        }
+        if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+            return 'local-dev-token';
+        }
+        return '';
+    };
+
     const createItem = async (item: Partial<ConfigItem>, options?: { refresh?: boolean }) => {
-        const token = await getToken();
+        const token = await getEffectiveToken();
         if (!token) throw new Error('Not authenticated');
         await adminCreateConfig(token, item);
         emitCatalogRefresh();
         if (options?.refresh !== false) {
-            await refresh();
+            await refresh({ forceBust: true });
         }
     };
 
     const updateItem = async (item: ConfigItem, options?: { refresh?: boolean }) => {
-        const token = await getToken();
+        const token = await getEffectiveToken();
         if (!token) throw new Error('Not authenticated');
         await adminUpdateConfig(token, item);
         emitCatalogRefresh();
         if (options?.refresh !== false) {
-            await refresh();
+            await refresh({ forceBust: true });
         }
     };
 
     const deleteItem = async (id: string, options?: { refresh?: boolean }) => {
-        const token = await getToken();
+        const token = await getEffectiveToken();
         if (!token) throw new Error('Not authenticated');
         await adminDeleteConfig(token, id);
         emitCatalogRefresh();
         if (options?.refresh !== false) {
-            await refresh();
+            await refresh({ forceBust: true });
         }
     };
 

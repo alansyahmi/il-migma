@@ -422,7 +422,7 @@ export function AdminSettings() {
                     <Button
                         variant="ghost"
                         size="sm"
-                        onClick={refresh}
+                        onClick={() => refresh()}
                         disabled={loading || syncLoading}
                         leftIcon={<RotateCcw className={cn((loading || syncLoading) && 'animate-spin')} size={14} />}
                     >

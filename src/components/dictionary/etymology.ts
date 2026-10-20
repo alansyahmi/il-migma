@@ -51,16 +51,33 @@ export function isConjunctiveEtymologyRelationship(relationship?: string) {
     return CONJUNCTIVE_RELATIONSHIPS.has(normalizeRelationshipValue(relationship).toLowerCase());
 }
 
-export function formatEtymologySentenceLeadIn(prefix?: string, relationship?: string) {
+export function formatEtymologySentenceLeadIn(
+    prefix?: string,
+    relationship?: string,
+    translate?: (key: string) => string,
+) {
     const cleanPrefix = normalizeRelationshipValue(prefix);
     const cleanRelationship = normalizeRelationshipValue(relationship);
 
     if (!cleanRelationship) return cleanPrefix || undefined;
-    if (!cleanPrefix) return cleanRelationship;
+    if (!cleanPrefix) {
+        if (translate) {
+            const translated = translate(cleanRelationship);
+            if (translated) return sentenceCase(translated);
+        }
+        return sentenceCase(cleanRelationship);
+    }
     if (isConjunctiveEtymologyRelationship(cleanRelationship)) return cleanPrefix;
 
     const lowerPrefix = cleanPrefix.toLowerCase();
     const lowerRelationship = cleanRelationship.toLowerCase();
+
+    if (translate) {
+        const translatedRel = translate(cleanRelationship);
+        if (translatedRel && translatedRel.toLowerCase() !== lowerRelationship) {
+            return sentenceCase(translatedRel);
+        }
+    }
 
     if (lowerRelationship === lowerPrefix || lowerRelationship.endsWith(` ${lowerPrefix}`)) {
         return sentenceCase(cleanRelationship);
@@ -73,9 +90,13 @@ export function formatEtymologySentenceLeadIn(prefix?: string, relationship?: st
     return `${sentenceCase(cleanRelationship)} ${lowerPrefix}`;
 }
 
-export function formatEtymologyConnector(relationship?: string) {
+export function formatEtymologyConnector(relationship?: string, translate?: (key: string) => string) {
     const cleanRelationship = normalizeRelationshipValue(relationship);
     if (!cleanRelationship) return '';
+    if (translate && isConjunctiveEtymologyRelationship(cleanRelationship)) {
+        const translated = translate(cleanRelationship.toLowerCase());
+        if (translated) return translated;
+    }
     return isConjunctiveEtymologyRelationship(cleanRelationship)
         ? cleanRelationship.toLowerCase()
         : cleanRelationship;

@@ -67,7 +67,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أُمّ",
-          "definition": "mother, mum, mama"
+          "definition": "mother, mum, mama",
+          "pronunciation": "umm"
         }
       ],
       "etymology_notes": null,
@@ -301,7 +302,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شُغْل",
-          "definition": "work, line, chore"
+          "definition": "work, line, chore",
+          "pronunciation": "shughl"
         }
       ],
       "etymology_notes": null,
@@ -413,7 +415,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "اِبْن آدَم",
-          "definition": "man, human"
+          "definition": "man, human",
+          "pronunciation": "abn âdam"
         }
       ],
       "etymology_notes": null,
@@ -529,7 +532,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "طِفْل",
-          "definition": "child"
+          "definition": "child",
+          "pronunciation": "ṭifl"
         }
       ],
       "etymology_notes": null,
@@ -649,13 +653,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "modu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "modu"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "modo",
-          "definition": null
+          "definition": null,
+          "pronunciation": "modo"
         },
         {
           "relationship": "From",
@@ -876,7 +882,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "نَاس",
-          "definition": "people, man, folk"
+          "definition": "people, man, folk",
+          "pronunciation": "nâs"
         }
       ],
       "etymology_notes": null,
@@ -979,7 +986,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "حَبِيب",
-          "definition": "darling, beloved, sweetheart"
+          "definition": "darling, beloved, sweetheart",
+          "pronunciation": "ħabîb"
         }
       ],
       "is_collective": 0,
@@ -1093,7 +1101,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "famiglia",
-          "definition": "family"
+          "definition": "family",
+          "pronunciation": "familja"
         }
       ],
       "etymology_notes": null,
@@ -1212,7 +1221,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "ciummu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "xummu"
         },
         {
           "relationship": "From",
@@ -1315,7 +1325,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "figura",
-          "definition": "figure ( all senses )"
+          "definition": "figure ( all senses )",
+          "pronunciation": "figura"
         },
         {
           "relationship": "From",
@@ -1568,7 +1579,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "زَرِّيعَة",
-          "definition": "seed"
+          "definition": "seed",
+          "pronunciation": "żarrîgħaẗ"
         }
       ],
       "etymology_notes": null,
@@ -1680,7 +1692,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "اِمْرَأة",
-          "definition": "woman; wife"
+          "definition": "woman; wife",
+          "pronunciation": "amra'ẗ"
         }
       ],
       "etymology_notes": null,
@@ -1878,7 +1891,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "جِلاد",
-          "definition": "sword fight"
+          "definition": "sword fight",
+          "pronunciation": "ġilâd"
         }
       ],
       "etymology_notes": null,
@@ -2006,7 +2020,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "طَبِيب",
-          "definition": "doctor, physician, Dr"
+          "definition": "doctor, physician, Dr",
+          "pronunciation": "ṭabîb"
         }
       ],
       "etymology_notes": null,
@@ -2198,7 +2213,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "capitanu",
-          "definition": "captain"
+          "definition": "captain",
+          "pronunciation": "kapitanu"
         }
       ],
       "etymology_notes": null,
@@ -2312,14 +2328,16 @@
         {
           "relationship": "Borrowed from",
           "language": "Italian",
-          "term": "folla and/or from an older",
-          "definition": "perhaps subseded"
+          "term": "folla and jew or from an older",
+          "definition": "perhaps subseded",
+          "pronunciation": "folla and jew or from an older"
         },
         {
           "relationship": "Of",
           "language": "Sicilian",
           "term": "fuḍḍa",
-          "definition": null
+          "definition": null,
+          "pronunciation": "fudda"
         },
         {
           "relationship": "Derived from",
@@ -2437,13 +2455,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "genituri",
-          "definition": null
+          "definition": null,
+          "pronunciation": "ġenituri"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "genitore",
-          "definition": null
+          "definition": null,
+          "pronunciation": "ġenitore"
         },
         {
           "relationship": "From",
@@ -2601,7 +2621,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سُكَّر",
-          "definition": "diabetes, glucose, sugar"
+          "definition": "diabetes, glucose, sugar",
+          "pronunciation": "sukkar"
         }
       ],
       "etymology_notes": null,

@@ -109,10 +109,10 @@ export function applyPossessiveSuffix(
     // ── Feminine t-marbuta buffering ──────────────────────────────────────────
     const isComplexPattern = pattern === 'iCCCa';
     const hasLongIeFeminineStem = base.slice(0, -1).includes('ie');
-    if (hasLongIeFeminineStem && gender === 'feminine' && !isVowelSuffix && idx >= 4 && stem.endsWith('t')) {
+    if (hasLongIeFeminineStem && (gender === 'feminine' || gender === 'common') && !isVowelSuffix && idx >= 4 && stem.endsWith('t')) {
         stem = stem.slice(0, -1);
     }
-    if (!isVowelSuffix && gender === 'feminine' && base.endsWith('a') && base !== 'mara' && !isComplexPattern && !hasLongIeFeminineStem) {
+    if (!isVowelSuffix && (gender === 'feminine' || gender === 'common') && base.endsWith('a') && base !== 'mara' && !isComplexPattern && !hasLongIeFeminineStem) {
         if (stem.endsWith('t') && stem.length > 3) {
             stem = stem.slice(0, -1) + 'it';
         }

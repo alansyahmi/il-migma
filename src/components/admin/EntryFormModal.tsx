@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState, useMemo, useEffect, useRef, useDeferredValue, useCallback } from 'react';
 import {
-    Plus, RefreshCw, RotateCcw, Keyboard, Sparkles, ArrowUp, ArrowDown, AlertTriangle, CheckCircle2, XCircle
+    Plus, RefreshCw, RotateCcw, Keyboard, Sparkles, ArrowUp, ArrowDown, AlertTriangle, CheckCircle2, XCircle, Trash2, Pencil
 } from 'lucide-react';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { IPAKeyboard } from '@/components/ui/IPAKeyboard';
@@ -10,6 +10,7 @@ import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants, apiGetDi
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig } from '@/lib/adminConfig';
+import { resolveRegisterTerm, TERMINOLOGY } from '@/lib/terminology';
 import { buildLoadedEntryPatch, entryToForm, formToPayload, INITIAL_FORM_STATE } from '@/lib/entryAdapter';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
@@ -27,7 +28,7 @@ import {
     selectNumeralRelationshipEntries,
     seedNumeralDerivedFields,
 } from '@/lib/numeralMorphology';
-import { normalizeEntryDefinitions, normalizeRootEtymologyChain } from '@/lib/adminUtils';
+import { normalizeEntryDefinitions, normalizeRootEtymologyChain, parseUsageNotes } from '@/lib/adminUtils';
 import { resolveEntryMorphologyMode } from '@/lib/adminSchema';
 import { applyInflectableToggle } from '@/lib/inflectionState';
 import { resolveTagLabel } from '@/lib/tagLabel';
@@ -1858,21 +1859,58 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
     const [saveFeedback, setSaveFeedback] = useState<SaveFeedback | null>(null);
 
     const [isManagingRegister, setIsManagingRegister] = useState(false);
-    const [newRegisterName, setNewRegisterName] = useState('');
+    const [editingRegisterId, setEditingRegisterId] = useState<string | null>(null);
+    const [registerForm, setRegisterForm] = useState({
+        key: '',
+        en: '',
+        mt_standard: '',
+        mt_arabised: '',
+    });
+    const [registerFormError, setRegisterFormError] = useState<string | null>(null);
 
-    const handleAddRegister = async () => {
-        const name = newRegisterName.trim();
-        if (!name) return;
+    const handleSaveRegister = async () => {
+        const key = registerForm.key.trim().toLowerCase().replace(/[\s_]+/g, '-');
+        const en = registerForm.en.trim();
+        const mt_standard = registerForm.mt_standard.trim();
+        const mt_arabised = registerForm.mt_arabised.trim() || mt_standard;
+
+        if (!key) {
+            setRegisterFormError(t('Register key is required.', 'Iċ-ċavetta tar-reġistru hija meħtieġa.'));
+            return;
+        }
+        if (!en) {
+            setRegisterFormError(t('English label is required.', 'It-tikketta bl-Ingliż hija meħtieġa.'));
+            return;
+        }
+        if (!mt_standard) {
+            setRegisterFormError(t('Maltese label is required.', 'It-tikketta bil-Malti hija meħtieġa.'));
+            return;
+        }
+        setRegisterFormError(null);
+
         try {
-            await createItem({
-                category: 'register',
-                key: name,
-                value: { en: name, mt_standard: name, mt_arabised: name }
-            });
-            setNewRegisterName('');
-            await refresh();
-        } catch (err) {
-            console.error('Failed to add register:', err);
+            const existing = getCategoryItems('register').find(
+                item => (editingRegisterId ? item.id === editingRegisterId : item.key.toLowerCase() === key)
+            );
+            if (existing) {
+                await updateItem({
+                    ...existing,
+                    key,
+                    value: { en, mt_standard, mt_arabised }
+                });
+            } else {
+                await createItem({
+                    category: 'register',
+                    key,
+                    value: { en, mt_standard, mt_arabised }
+                });
+            }
+            setRegisterForm({ key: '', en: '', mt_standard: '', mt_arabised: '' });
+            setEditingRegisterId(null);
+            await refresh({ forceBust: true });
+        } catch (err: any) {
+            console.error('Failed to save register:', err);
+            setRegisterFormError(err.message || String(err));
         }
     };
 
@@ -1880,7 +1918,11 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
         if (!confirm(t(`Are you sure you want to delete register "${key}"?`, `Żgur li trid tħassar ir-reġistru "${key}"?`))) return;
         try {
             await deleteItem(id);
-            await refresh();
+            if (editingRegisterId === id) {
+                setEditingRegisterId(null);
+                setRegisterForm({ key: '', en: '', mt_standard: '', mt_arabised: '' });
+            }
+            await refresh({ forceBust: true });
         } catch (err) {
             console.error('Failed to delete register:', err);
         }
@@ -2507,7 +2549,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
     };
 
     const normalizedPos = useMemo(() => normalizeEntryPos(form.pos) || form.pos?.toLowerCase() || '', [form.pos]);
-    const isInflectedFunctionPos = ['pronoun', 'adverb', 'preposition', 'particle', 'article', 'conjunction', 'interjection'].includes(normalizedPos);
+    const isInflectedFunctionPos = ['pronoun', 'determiner', 'adverb', 'preposition', 'particle', 'article', 'conjunction', 'interjection'].includes(normalizedPos);
 
     useEffect(() => {
         if (normalizedPos !== 'verb') return;
@@ -2604,10 +2646,99 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
         set('definitions', next);
     };
 
-    const updateDefinitionField = (index: number, field: 'text_en' | 'text_mt' | 'register' | 'nuance' | 'dialect', value: string) => {
+    const updateDefinitionField = (index: number, field: 'text_en' | 'text_mt' | 'register' | 'nuance' | 'dialect', value: any) => {
         const next = [...form.definitions];
-        next[index] = { ...next[index], [field]: value };
+        if (field === 'register') {
+            const raw = typeof value === 'string' ? value.trim() : value;
+            if (!raw) {
+                next[index] = { ...next[index], register: '' };
+            } else if (typeof raw === 'string') {
+                const key = raw.toLowerCase();
+                const termObj = TERMINOLOGY[`reg-${key}`] || TERMINOLOGY[key];
+                if (termObj) {
+                    next[index] = {
+                        ...next[index],
+                        register: {
+                            key,
+                            en: termObj.en,
+                            mt: termObj.standard,
+                            arabised: termObj.arabised,
+                        }
+                    };
+                } else {
+                    next[index] = { ...next[index], register: raw };
+                }
+            } else {
+                next[index] = { ...next[index], register: raw };
+            }
+        } else {
+            next[index] = { ...next[index], [field]: value };
+        }
         set('definitions', normalizeEntryDefinitions(next));
+    };
+
+    const usageExamplesList: Array<{ text_mt: string; text_en: string; mt?: string; en?: string }> = useMemo(() => {
+        const raw = Array.isArray(form.usage_examples) && form.usage_examples.length > 0
+            ? form.usage_examples
+            : (form.usage_example || form.usage_example_en)
+                ? [{ text_mt: form.usage_example || '', text_en: form.usage_example_en || '', mt: form.usage_example || '', en: form.usage_example_en || '' }]
+                : [{ text_mt: '', text_en: '', mt: '', en: '' }];
+        return raw.map((ex: any) => ({
+            text_mt: String(ex?.text_mt ?? ex?.mt ?? ex?.maltese ?? ''),
+            text_en: String(ex?.text_en ?? ex?.en ?? ex?.english ?? ''),
+            mt: String(ex?.text_mt ?? ex?.mt ?? ex?.maltese ?? ''),
+            en: String(ex?.text_en ?? ex?.en ?? ex?.english ?? ''),
+        }));
+    }, [form.usage_examples, form.usage_example, form.usage_example_en]);
+
+    const updateUsageExampleField = (index: number, field: 'text_mt' | 'text_en', value: string) => {
+        const next = usageExamplesList.map((ex, idx) => {
+            if (idx !== index) return ex;
+            const updated = { ...ex, [field]: value };
+            if (field === 'text_mt') updated.mt = value;
+            if (field === 'text_en') updated.en = value;
+            return updated;
+        });
+        setForm((prev: any) => ({
+            ...prev,
+            usage_examples: next,
+            usage_example: next[0]?.text_mt || next[0]?.mt || '',
+            usage_example_en: next[0]?.text_en || next[0]?.en || '',
+        }));
+    };
+
+    const addUsageExample = () => {
+        const next = [...usageExamplesList, { text_mt: '', text_en: '', mt: '', en: '' }];
+        setForm((prev: any) => ({
+            ...prev,
+            usage_examples: next,
+            usage_example: next[0]?.text_mt || next[0]?.mt || '',
+            usage_example_en: next[0]?.text_en || next[0]?.en || '',
+        }));
+    };
+
+    const removeUsageExample = (index: number) => {
+        const next = usageExamplesList.filter((_, idx) => idx !== index);
+        const safeNext = next.length > 0 ? next : [{ text_mt: '', text_en: '', mt: '', en: '' }];
+        setForm((prev: any) => ({
+            ...prev,
+            usage_examples: safeNext,
+            usage_example: safeNext[0]?.text_mt || safeNext[0]?.mt || '',
+            usage_example_en: safeNext[0]?.text_en || safeNext[0]?.en || '',
+        }));
+    };
+
+    const moveUsageExample = (index: number, direction: 'up' | 'down') => {
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        if (targetIndex < 0 || targetIndex >= usageExamplesList.length) return;
+        const next = [...usageExamplesList];
+        [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+        setForm((prev: any) => ({
+            ...prev,
+            usage_examples: next,
+            usage_example: next[0]?.text_mt || next[0]?.mt || '',
+            usage_example_en: next[0]?.text_en || next[0]?.en || '',
+        }));
     };
 
     const syncPatternRegistrations = async (
@@ -2983,7 +3114,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
                 />
             )}
 
-            {(normalizedPos === 'pronoun' || normalizedPos === 'preposition' || normalizedPos === 'conjunction' || normalizedPos === 'particle' || normalizedPos === 'interjection') && !!form.is_inflectable && (
+            {(normalizedPos === 'pronoun' || normalizedPos === 'determiner' || normalizedPos === 'preposition' || normalizedPos === 'conjunction' || normalizedPos === 'particle' || normalizedPos === 'interjection') && !!form.is_inflectable && (
                 <PronounFields
                     form={form}
                     set={set}
@@ -3568,41 +3699,50 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
                                                 {t('Manage', 'Immaniġġja')}
                                             </button>
                                         </div>
-                                        <select className={sel} value={def.register} onChange={e => updateDefinitionField(i, 'register', e.target.value)}>
-                                            <option value="">—</option>
-                                            {REGISTER_OPTIONS.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
-                                        </select>
-                                        {def.register && def.register.toLowerCase().includes('dialect') && (
-                                            <div className="mt-2">
-                                                <label className={label}>{t('Dialect(s)', 'Djalett(i)')}</label>
-                                                <div className="flex flex-wrap gap-2 p-2.5 bg-white border border-black/10 rounded-lg min-h-[42px]">
-                                                    {DIALECT_OPTIONS.map(d => {
-                                                        const selected = (def.dialect || '').split(',').map((s: string) => s.trim()).includes(d.value);
-                                                        return (
-                                                            <button
-                                                                key={d.value}
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    const current = (def.dialect || '').split(',').map((s: string) => s.trim()).filter(Boolean);
-                                                                    const next = selected
-                                                                        ? current.filter((v: string) => v !== d.value)
-                                                                        : [...current, d.value];
-                                                                    updateDefinitionField(i, 'dialect', next.join(', '));
-                                                                }}
-                                                                className={cn(
-                                                                    "px-2 py-1 text-[10px] rounded border transition-all",
-                                                                    selected
-                                                                        ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                                                                        : "bg-white text-slate-600 border-slate-200 hover:border-blue-400"
-                                                                )}
-                                                            >
-                                                                {d.label}
-                                                            </button>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </div>
-                                        )}
+                                        {(() => {
+                                            const regKey = typeof def.register === 'object' && def.register !== null
+                                                ? String(def.register.key || def.register.en || '').trim().toLowerCase()
+                                                : String(def.register || '').trim().toLowerCase();
+                                            return (
+                                                <>
+                                                    <select className={sel} value={regKey} onChange={e => updateDefinitionField(i, 'register', e.target.value)}>
+                                                        <option value="">—</option>
+                                                        {REGISTER_OPTIONS.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
+                                                    </select>
+                                                    {regKey && regKey.includes('dialect') && (
+                                                        <div className="mt-2">
+                                                            <label className={label}>{t('Dialect(s)', 'Djalett(i)')}</label>
+                                                            <div className="flex flex-wrap gap-2 p-2.5 bg-white border border-black/10 rounded-lg min-h-[42px]">
+                                                                {DIALECT_OPTIONS.map(d => {
+                                                                    const selected = (def.dialect || '').split(',').map((s: string) => s.trim()).includes(d.value);
+                                                                    return (
+                                                                        <button
+                                                                            key={d.value}
+                                                                            type="button"
+                                                                            onClick={() => {
+                                                                                const current = (def.dialect || '').split(',').map((s: string) => s.trim()).filter(Boolean);
+                                                                                const next = selected
+                                                                                    ? current.filter((v: string) => v !== d.value)
+                                                                                    : [...current, d.value];
+                                                                                updateDefinitionField(i, 'dialect', next.join(', '));
+                                                                            }}
+                                                                            className={cn(
+                                                                                "px-2 py-1 text-[10px] rounded border transition-all",
+                                                                                selected
+                                                                                    ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                                                                                    : "bg-white text-slate-600 border-slate-200 hover:border-blue-400"
+                                                                            )}
+                                                                        >
+                                                                            {d.label}
+                                                                        </button>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </>
+                                            );
+                                        })()}
                                     </div>
                                     {normalizedPos === 'participle' && (
                                         <div>
@@ -3618,26 +3758,121 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
                         ))}
                     </fieldset>
 
-                    {/* Usage Example */}
+                    {/* Usage Examples */}
+                    <fieldset className="border border-border-light rounded-lg p-4 space-y-3">
+                        <div className="flex justify-between items-center px-1">
+                            <legend className="text-xs font-semibold text-black uppercase tracking-tight">
+                                {t('Usage Examples', 'Eżempji tal-Użu')}
+                            </legend>
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 text-xs"
+                                disabled={usageExamplesList.length >= 10}
+                                onClick={addUsageExample}
+                            >
+                                + {t('Add Example', 'Żid Eżempju')}
+                            </Button>
+                        </div>
+                        <p className="px-1 -mt-2 text-[10px] text-black/40">
+                            {t('Sentence examples showing real-world lexical usage in Maltese and English.', 'Eżempji ta’ sentenzi li juru l-użu tal-kelma bil-Malti u bl-Ingliż.')}
+                        </p>
+
+                        {usageExamplesList.map((example, i) => (
+                            <div key={i} className="bg-slate-50 p-3 rounded-md border border-slate-100 space-y-2 relative group">
+                                <div className="absolute top-2 right-2 flex items-center gap-1 group-hover:opacity-100 transition-opacity">
+                                    <button
+                                        type="button"
+                                        onClick={() => moveUsageExample(i, 'up')}
+                                        disabled={i === 0}
+                                        className="p-1 text-slate-400 hover:text-[#1034A6] disabled:opacity-0"
+                                        title={t('Move Up', 'Mexxi ’l Fuq')}
+                                    >
+                                        <ArrowUp size={14} />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => moveUsageExample(i, 'down')}
+                                        disabled={i === usageExamplesList.length - 1}
+                                        className="p-1 text-slate-400 hover:text-[#1034A6] disabled:opacity-0"
+                                        title={t('Move Down', 'Mexxi ’l Isfel')}
+                                    >
+                                        <ArrowDown size={14} />
+                                    </button>
+                                    {usageExamplesList.length > 1 && (
+                                        <button
+                                            type="button"
+                                            onClick={() => removeUsageExample(i)}
+                                            className="p-1 text-slate-400 hover:text-red-500"
+                                            title={t('Delete', 'Ħassar')}
+                                        >
+                                            <Trash2 size={13} />
+                                        </button>
+                                    )}
+                                </div>
+                                <div className="text-[10px] font-bold text-black/40 uppercase tracking-wider mb-1">
+                                    {t('Example', 'Eżempju')} {i + 1}
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label className={label}>{`${term('maltese')} ${term('sentence')}`}</label>
+                                        <input
+                                            className={inp}
+                                            value={example.text_mt}
+                                            onChange={e => updateUsageExampleField(i, 'text_mt', e.target.value)}
+                                            placeholder={t('e.g. Tifel żgħir kien jilgħab...', 'eż. Tifel żgħir kien jilgħab...')}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className={label}>{`${term('english')} ${term('sentence')}`}</label>
+                                        <input
+                                            className={inp}
+                                            value={example.text_en}
+                                            onChange={e => updateUsageExampleField(i, 'text_en', e.target.value)}
+                                            placeholder={t('e.g. A small child was playing...', 'eż. A small child was playing...')}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </fieldset>
+
+                    {/* Usage Notes */}
                     <fieldset className="border border-border-light rounded-lg p-4 space-y-3">
                         <legend className="text-xs font-semibold text-black uppercase tracking-tight px-1">
-                            {term('usage-example')}
+                            {term('usage-notes')}
                         </legend>
+                        <p className="px-1 -mt-2 text-[10px] text-black/40">
+                            {t('Grammar rules, syntactic functions, and article fusion behavior.', 'Regoli tal-grammatika, funzjonijiet sintattiċi u użu mal-artiklu.')}
+                        </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label className={label}>{`${term('maltese')} ${term('sentence')}`}</label>
-                                <input
-                                    className={inp}
-                                    value={form.usage_example || ''}
-                                    onChange={e => set('usage_example', e.target.value)}
+                                <label className={label}>{`${term('english')} ${term('usage-notes')}`}</label>
+                                <textarea
+                                    className={`${inp} min-h-[70px] resize-y`}
+                                    value={parseUsageNotes((form as any).usage_notes)?.en || ''}
+                                    onChange={e => {
+                                        const current = parseUsageNotes((form as any).usage_notes) || { en: '', mt: '' };
+                                        const en = e.target.value;
+                                        const mt = current.mt;
+                                        set('usage_notes', (!en.trim() && !mt.trim()) ? null : { en, mt });
+                                    }}
+                                    placeholder={t('e.g. Comparative preposition expressing resemblance...', 'eż. Prepożizzjoni komparattiva...')}
                                 />
                             </div>
                             <div>
-                                <label className={label}>{`${term('english')} ${term('sentence')}`}</label>
-                                <input
-                                    className={inp}
-                                    value={form.usage_example_en || ''}
-                                    onChange={e => set('usage_example_en', e.target.value)}
+                                <label className={label}>{`${term('maltese')} ${term('usage-notes')}`}</label>
+                                <textarea
+                                    className={`${inp} min-h-[70px] resize-y`}
+                                    value={parseUsageNotes((form as any).usage_notes)?.mt || ''}
+                                    onChange={e => {
+                                        const current = parseUsageNotes((form as any).usage_notes) || { en: '', mt: '' };
+                                        const mt = e.target.value;
+                                        const en = current.en;
+                                        set('usage_notes', (!en.trim() && !mt.trim()) ? null : { en, mt });
+                                    }}
+                                    placeholder={t('e.g. Prepożizzjoni komparattiva ewlenija li tindika xebh...', 'eż. Prepożizzjoni komparattiva...')}
                                 />
                             </div>
                         </div>
@@ -3900,53 +4135,225 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
             {isManagingRegister && (
                 <Modal
                     open={true}
-                    onClose={() => setIsManagingRegister(false)}
+                    onClose={() => {
+                        setIsManagingRegister(false);
+                        setEditingRegisterId(null);
+                        setRegisterForm({ key: '', en: '', mt_standard: '', mt_arabised: '' });
+                        setRegisterFormError(null);
+                    }}
                     title={t('Manage Registers', 'Immaniġġja Reġistri')}
-                    size="md"
+                    size="lg"
+                    zIndex="z-[70]"
                 >
-                    <div className="space-y-4 text-black p-1">
-                        <div className="flex gap-2">
-                            <input
-                                className={inp}
-                                value={newRegisterName}
-                                onChange={e => setNewRegisterName(e.target.value)}
-                                placeholder={t('New register name...', 'Isem ta\' reġistru ġdid...')}
-                                onKeyDown={e => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault();
-                                        handleAddRegister();
-                                    }
-                                }}
-                            />
-                            <Button onClick={handleAddRegister}>
-                                {t('Add', 'Żid')}
-                            </Button>
+                    <div className="space-y-5 text-black p-1">
+                        {/* Form: Add or Edit Register */}
+                        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                            <div className="flex justify-between items-center">
+                                <h3 className="text-xs font-bold uppercase tracking-wider text-[#1034A6]">
+                                    {editingRegisterId
+                                        ? t('Edit Register', 'Editja Reġistru')
+                                        : t('Add / Customize Register', 'Żid / Ippersonalizza Reġistru')}
+                                </h3>
+                                {(editingRegisterId || registerForm.key || registerForm.en || registerForm.mt_standard) && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setEditingRegisterId(null);
+                                            setRegisterForm({ key: '', en: '', mt_standard: '', mt_arabised: '' });
+                                            setRegisterFormError(null);
+                                        }}
+                                        className="text-xs text-black/50 hover:text-black font-medium underline"
+                                    >
+                                        {t('Clear / New', 'Ħassar / Ġdid')}
+                                    </button>
+                                )}
+                            </div>
+
+                            {registerFormError && (
+                                <p className="text-xs text-red-600 bg-red-50 p-2 rounded border border-red-200">
+                                    {registerFormError}
+                                </p>
+                            )}
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label className={label + " mb-1 text-[11px]"}>
+                                        {t('Key / Slug', 'Ċavetta / Slug')} *
+                                    </label>
+                                    <input
+                                        className={inp}
+                                        value={registerForm.key}
+                                        disabled={!!editingRegisterId}
+                                        onChange={e => setRegisterForm(f => ({ ...f, key: e.target.value.toLowerCase().replace(/[\s_]+/g, '-') }))}
+                                        placeholder="e.g. colloquial, slang"
+                                    />
+                                </div>
+                                <div>
+                                    <label className={label + " mb-1 text-[11px]"}>
+                                        {t('English Label', 'Tikketta bl-Ingliż')} *
+                                    </label>
+                                    <input
+                                        className={inp}
+                                        value={registerForm.en}
+                                        onChange={e => setRegisterForm(f => ({ ...f, en: e.target.value }))}
+                                        placeholder="e.g. Colloquial"
+                                    />
+                                </div>
+                                <div>
+                                    <label className={label + " mb-1 text-[11px]"}>
+                                        {t('Maltese Standard Label', 'Tikketta bil-Malti Standard')} *
+                                    </label>
+                                    <input
+                                        className={inp}
+                                        value={registerForm.mt_standard}
+                                        onChange={e => setRegisterForm(f => ({ ...f, mt_standard: e.target.value }))}
+                                        placeholder="e.g. Kollokwjali"
+                                    />
+                                </div>
+                                <div>
+                                    <label className={label + " mb-1 text-[11px]"}>
+                                        {t('Maltese Arabised Label (Optional)', 'Tikketta bil-Malti Arabizzat (Mhux Obbligatorja)')}
+                                    </label>
+                                    <input
+                                        className={inp}
+                                        value={registerForm.mt_arabised}
+                                        onChange={e => setRegisterForm(f => ({ ...f, mt_arabised: e.target.value }))}
+                                        placeholder="e.g. Ta' kuljum"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex justify-end gap-2 pt-1">
+                                <Button type="button" onClick={handleSaveRegister}>
+                                    {editingRegisterId ? t('Update Register', 'Aġġorna Reġistru') : t('Save Register', 'Żid Reġistru')}
+                                </Button>
+                            </div>
                         </div>
-                        
-                        <div className="max-h-60 overflow-y-auto space-y-2 border border-slate-100 rounded-lg p-2 bg-slate-50">
-                            {REGISTER_OPTIONS.filter(o => o.value !== '').map(opt => {
-                                const dbItem = getCategoryItems('register').find(
-                                    item => item.key.toLowerCase() === opt.value.toLowerCase()
-                                );
-                                return (
-                                    <div key={opt.value} className="flex justify-between items-center bg-white p-2 rounded border border-slate-100 text-sm">
-                                        <span className="font-medium">{opt.label}</span>
-                                        {dbItem ? (
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDeleteRegister(dbItem.id, dbItem.key)}
-                                                className="text-red-500 hover:text-red-700 text-xs font-bold px-1"
-                                            >
-                                                {t('Delete', 'Ħassar')}
-                                            </button>
-                                        ) : (
-                                            <span className="text-[10px] text-black/35 italic bg-slate-100 px-1.5 py-0.5 rounded">
-                                                {t('Default', 'Default')}
-                                            </span>
-                                        )}
-                                    </div>
-                                );
-                            })}
+
+                        {/* List of Registers */}
+                        <div>
+                            <div className="flex justify-between items-center mb-2">
+                                <h4 className="text-xs font-bold uppercase tracking-wider text-black/60">
+                                    {t('Configured & Baseline Registers', 'Reġistri Kkonfigurati u Standard')}
+                                </h4>
+                                <span className="text-[11px] text-black/40">
+                                    {REGISTER_OPTIONS.filter(o => o.value !== '').length} {t('registers', 'reġistri')}
+                                </span>
+                            </div>
+
+                            <div className="max-h-72 overflow-y-auto space-y-2 border border-slate-200 rounded-xl p-2.5 bg-slate-50">
+                                {REGISTER_OPTIONS.filter(o => o.value !== '').map(opt => {
+                                    const canonicalKey = opt.value.toLowerCase();
+                                    const dbItem = getCategoryItems('register').find(
+                                        item => item.key.toLowerCase() === canonicalKey
+                                    );
+                                    let rawVal: { en?: string; mt_standard?: string; mt_arabised?: string } | null = null;
+                                    if (dbItem?.value) {
+                                        if (typeof dbItem.value === 'object') {
+                                            rawVal = dbItem.value as any;
+                                        } else if (typeof dbItem.value === 'string') {
+                                            try {
+                                                const parsed = JSON.parse(dbItem.value);
+                                                if (parsed && typeof parsed === 'object') rawVal = parsed;
+                                            } catch {
+                                                // ignore legacy non-json string
+                                            }
+                                        }
+                                    }
+                                    const enLabel = rawVal?.en || resolveRegisterTerm(canonicalKey, 'standard', 'en');
+                                    const mtStdLabel = rawVal?.mt_standard || resolveRegisterTerm(canonicalKey, 'standard', 'mt');
+                                    const mtArabisedLabel = rawVal?.mt_arabised || resolveRegisterTerm(canonicalKey, 'arabised', 'mt');
+
+                                    return (
+                                        <div
+                                            key={opt.value}
+                                            className={cn(
+                                                "flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 rounded-lg border bg-white text-sm transition-colors",
+                                                editingRegisterId === dbItem?.id ? "border-[#1034A6] bg-blue-50/40" : "border-slate-200 hover:border-slate-300"
+                                            )}
+                                        >
+                                            <div className="space-y-1 min-w-0">
+                                                <div className="flex items-center gap-2 flex-wrap">
+                                                    <span className="font-mono text-xs font-bold text-[#1034A6]">
+                                                        {canonicalKey}
+                                                    </span>
+                                                    {dbItem ? (
+                                                        <span className="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded">
+                                                            {t('Custom', 'Personalizzat')}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-[10px] text-black/40 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded font-medium">
+                                                            {t('Default', 'Standard')}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="flex items-center gap-3 text-xs text-black/70 flex-wrap">
+                                                    <span><strong className="text-black/50 font-medium">EN:</strong> {enLabel}</span>
+                                                    <span><strong className="text-black/50 font-medium">MT (Std):</strong> {mtStdLabel}</span>
+                                                    {mtArabisedLabel && mtArabisedLabel !== mtStdLabel && (
+                                                        <span><strong className="text-black/50 font-medium">MT (Ar):</strong> {mtArabisedLabel}</span>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
+                                                {dbItem ? (
+                                                    <>
+                                                        <Button
+                                                            type="button"
+                                                            variant="secondary"
+                                                            size="sm"
+                                                            className="h-7 px-2 text-xs"
+                                                            onClick={() => {
+                                                                setEditingRegisterId(dbItem.id);
+                                                                setRegisterForm({
+                                                                    key: dbItem.key,
+                                                                    en: enLabel,
+                                                                    mt_standard: mtStdLabel,
+                                                                    mt_arabised: mtArabisedLabel,
+                                                                });
+                                                                setRegisterFormError(null);
+                                                            }}
+                                                        >
+                                                            <Pencil size={12} className="mr-1" />
+                                                            {t('Edit', 'Editja')}
+                                                        </Button>
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            className="h-7 px-2 text-xs text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200"
+                                                            onClick={() => handleDeleteRegister(dbItem.id, dbItem.key)}
+                                                        >
+                                                            <Trash2 size={12} className="mr-1" />
+                                                            {t('Delete', 'Ħassar')}
+                                                        </Button>
+                                                    </>
+                                                ) : (
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-7 px-2 text-xs text-[#1034A6] hover:bg-blue-50"
+                                                        onClick={() => {
+                                                            setEditingRegisterId(null);
+                                                            setRegisterForm({
+                                                                key: canonicalKey,
+                                                                en: enLabel,
+                                                                mt_standard: mtStdLabel,
+                                                                mt_arabised: mtArabisedLabel || mtStdLabel,
+                                                            });
+                                                            setRegisterFormError(null);
+                                                        }}
+                                                    >
+                                                        {t('Customize', 'Ippersonalizza')}
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
                 </Modal>

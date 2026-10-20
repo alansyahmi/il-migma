@@ -187,7 +187,7 @@ export function deriveNounAttachmentStems(
         return { stemA: normalized, stemB: normalized };
     }
 
-    if (gender === 'feminine' && normalized.endsWith('a')) {
+    if ((gender === 'feminine' || gender === 'common') && normalized.endsWith('a')) {
         if (normalized === 'mara') {
             return { stemA: 'mart', stemB: 'mart' };
         }

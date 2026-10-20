@@ -27,7 +27,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "آخِر",
-          "definition": "last, end, back"
+          "definition": "last, end, back",
+          "pronunciation": "âkhir"
         }
       ],
       "etymology_notes": null,
@@ -306,13 +307,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "furma",
-          "definition": "would have become forma in older Maltese"
+          "definition": "would have become forma in older Maltese",
+          "pronunciation": "furma"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "fórma",
-          "definition": null
+          "definition": null,
+          "pronunciation": "forma"
         },
         {
           "relationship": "From",
@@ -520,7 +523,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "differente",
-          "definition": null
+          "definition": null,
+          "pronunciation": "differente"
         }
       ],
       "etymology_notes": null,
@@ -631,7 +635,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "drittu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "drittu"
         }
       ],
       "etymology_notes": null,
@@ -801,13 +806,15 @@
           "relationship": "From",
           "language": "Sicilian",
           "term": "difficili",
-          "definition": null
+          "definition": null,
+          "pronunciation": "diffixili"
         },
         {
           "relationship": "From",
           "language": "Italian",
           "term": "difficile",
-          "definition": null
+          "definition": null,
+          "pronunciation": "diffiċile"
         },
         {
           "relationship": "From",
@@ -925,7 +932,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "fermu",
-          "definition": "firm, steadfast, still"
+          "definition": "firm, steadfast, still",
+          "pronunciation": "fermu"
         }
       ],
       "etymology_notes": null,
@@ -1049,7 +1057,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "حَيَاة",
-          "definition": "life, lifestyle, aliveness"
+          "definition": "life, lifestyle, aliveness",
+          "pronunciation": "ħayâẗ"
         }
       ],
       "is_collective": 0,
@@ -1111,7 +1120,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "siguru",
-          "definition": null
+          "definition": null,
+          "pronunciation": "siguru"
         },
         {
           "relationship": "From",
@@ -1237,7 +1247,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "solitu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "solitu"
         },
         {
           "relationship": "From",
@@ -1394,7 +1405,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "diretto",
-          "definition": null
+          "definition": null,
+          "pronunciation": "diretto"
         },
         {
           "relationship": "From",
@@ -1674,7 +1686,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "ذَهَب",
-          "definition": "gold"
+          "definition": "gold",
+          "pronunciation": "đahab"
         }
       ],
       "etymology_notes": null,
@@ -1810,7 +1823,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "possibile",
-          "definition": "possible"
+          "definition": "possible",
+          "pronunciation": "possibile"
         }
       ],
       "etymology_notes": null,
@@ -1923,7 +1937,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "piano",
-          "definition": "plane"
+          "definition": "plane",
+          "pronunciation": "piano"
         }
       ],
       "etymology_notes": null,
@@ -2035,7 +2050,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "multa",
-          "definition": null
+          "definition": null,
+          "pronunciation": "multa"
         }
       ],
       "etymology_notes": null,
@@ -2347,13 +2363,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "veru",
-          "definition": null
+          "definition": null,
+          "pronunciation": "veru"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "vero",
-          "definition": null
+          "definition": null,
+          "pronunciation": "vero"
         },
         {
           "relationship": "From",
@@ -2490,7 +2508,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "tabella",
-          "definition": "table (all senses, except for the furniture element)"
+          "definition": "table (all senses, except for the furniture element)",
+          "pronunciation": "tabella"
         }
       ],
       "etymology_notes": null,
@@ -2608,7 +2627,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "semplice",
-          "definition": "simple"
+          "definition": "simple",
+          "pronunciation": "sempliċe"
         }
       ],
       "etymology_notes": null,
@@ -2811,7 +2831,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "vocale",
-          "definition": "voice; vocal"
+          "definition": "voice; vocal",
+          "pronunciation": "vokale"
         }
       ],
       "etymology_notes": null,
@@ -2958,7 +2979,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "generale",
-          "definition": "general"
+          "definition": "general",
+          "pronunciation": "ġenerale"
         }
       ],
       "etymology_notes": null,
@@ -3066,7 +3088,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "sillaba",
-          "definition": null
+          "definition": null,
+          "pronunciation": "sillaba"
         }
       ],
       "etymology_notes": null,
@@ -3178,13 +3201,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "passatu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "passatu"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "passato",
-          "definition": null
+          "definition": null,
+          "pronunciation": "passato"
         }
       ],
       "etymology_notes": null,
@@ -3336,7 +3361,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "esatto",
-          "definition": null
+          "definition": null,
+          "pronunciation": "esatto"
         }
       ],
       "etymology_notes": null,
@@ -3493,7 +3519,8 @@
           "relationship": "From",
           "language": "Italian",
           "term": "cannella or a Sicilian equivalent",
-          "definition": null
+          "definition": null,
+          "pronunciation": "kannella or a siċilian ekwivalent"
         }
       ],
       "etymology_notes": null,
@@ -3595,7 +3622,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "uguale",
-          "definition": "equal, identical, alike, like, same"
+          "definition": "equal, identical, alike, like, same",
+          "pronunciation": "uguale"
         }
       ],
       "etymology_notes": null,
@@ -3715,13 +3743,15 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "giusto",
-          "definition": null
+          "definition": null,
+          "pronunciation": "ġusto"
         },
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "giustu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "ġustu"
         },
         {
           "relationship": "From",
@@ -3847,7 +3877,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "chiattu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "khiattu"
         },
         {
           "relationship": "From",
@@ -3859,7 +3890,8 @@
           "relationship": "Borrowed from",
           "language": "Ancient Greek",
           "term": "πλατύς",
-          "definition": "wide; broad"
+          "definition": "wide; broad",
+          "pronunciation": "platis"
         }
       ],
       "etymology_notes": null,
@@ -3962,7 +3994,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "naturali",
-          "definition": "natural"
+          "definition": "natural",
+          "pronunciation": "naturali"
         }
       ],
       "etymology_notes": null,
@@ -4074,7 +4107,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "suldatu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "suldatu"
         }
       ],
       "etymology_notes": null,
@@ -4186,7 +4220,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "elettrico",
-          "definition": "electric"
+          "definition": "electric",
+          "pronunciation": "elettriko"
         }
       ],
       "etymology_notes": null,
@@ -4309,7 +4344,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "maggiore",
-          "definition": "bigger, greater"
+          "definition": "bigger, greater",
+          "pronunciation": "magġore"
         }
       ],
       "etymology_notes": null,
@@ -4422,7 +4458,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "attuale",
-          "definition": null
+          "definition": null,
+          "pronunciation": "attuale"
         }
       ],
       "etymology_notes": null,
@@ -4531,7 +4568,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فَرْحَان",
-          "definition": "bright, cheerier, cheeriest"
+          "definition": "bright, cheerier, cheeriest",
+          "pronunciation": "farħân"
         }
       ],
       "etymology_notes": null,
@@ -4651,7 +4689,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَزِيز",
-          "definition": null
+          "definition": null,
+          "pronunciation": "għażîż"
         }
       ],
       "etymology_notes": null,
@@ -4769,7 +4808,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "liquido",
-          "definition": "liquid (all meanings)"
+          "definition": "liquid (all meanings)",
+          "pronunciation": "likwido"
         }
       ],
       "etymology_notes": null,
@@ -4926,7 +4966,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "enorme",
-          "definition": "huge, enormous, immense, great"
+          "definition": "huge, enormous, immense, great",
+          "pronunciation": "enorme"
         }
       ],
       "etymology_notes": null,
@@ -5031,7 +5072,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "basico",
-          "definition": "basic (all senses)"
+          "definition": "basic (all senses)",
+          "pronunciation": "basiko"
         }
       ],
       "etymology_notes": null,
@@ -5151,7 +5193,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "حَزِين",
-          "definition": "sad"
+          "definition": "sad",
+          "pronunciation": "ħażîn"
         },
         {
           "relationship": "From",

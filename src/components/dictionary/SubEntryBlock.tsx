@@ -3,6 +3,8 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { resolveRegisterDisplay } from '@/lib/terminology';
 
 import type { SubEntry } from '@/types';
 
@@ -13,7 +15,8 @@ interface SubEntryBlockProps {
 
 export function SubEntryBlock({ subentry, defaultOpen = false }: SubEntryBlockProps) {
     const [open, setOpen] = useState(defaultOpen);
-    const { term } = useLinguisticMode();
+    const { mode, term } = useLinguisticMode();
+    const { language } = useLanguage();
 
     return (
         <div className="border-l-2 border-[#C9A84C]/40 pl-4 py-1">
@@ -49,16 +52,20 @@ export function SubEntryBlock({ subentry, defaultOpen = false }: SubEntryBlockPr
                                 {def.text_mt && def.text_mt !== def.text_en && (
                                     <span className="text-xs text-text-muted ml-2 italic">— {def.text_mt}</span>
                                 )}
-                                {def.register && (
-                                    <Badge variant="register" className="ml-2">
-                                        {def.register.toLowerCase().includes('dialect') && def.dialect
-                                            ? def.dialect
-                                            : def.register}
-                                        {!def.register.toLowerCase().includes('dialect') && def.dialect && (
-                                            <span className="ml-1 font-normal">({def.dialect})</span>
-                                        )}
-                                    </Badge>
-                                )}
+                                {def.register && (() => {
+                                    const reg = resolveRegisterDisplay(def.register, mode, language);
+                                    if (!reg) return null;
+                                    return (
+                                        <Badge variant="register" className="ml-2">
+                                            {reg.isDialectal && def.dialect
+                                                ? def.dialect
+                                                : (reg.label || (term(`reg-${reg.key}`) !== `reg-${reg.key}` ? term(`reg-${reg.key}`) : term(reg.key)))}
+                                            {!reg.isDialectal && def.dialect && (
+                                                <span className="ml-1 font-normal">({def.dialect})</span>
+                                            )}
+                                        </Badge>
+                                    );
+                                })()}
                                 {def.example_sentences?.map((ex: any) => (
                                     <div key={ex.id} className="mt-1 ml-2 text-xs text-text-muted">
                                         <em>"{ex.maltese}"</em>

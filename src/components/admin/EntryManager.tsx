@@ -346,7 +346,7 @@ export function EntryManager() {
 
     const availablePosList = useMemo(() => {
         return posOptions && posOptions.length > 0 ? posOptions : [
-            'noun', 'verb', 'adjective', 'adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'interrogative', 'numeral', 'interjection', 'participle'
+            'noun', 'verb', 'adjective', 'adverb', 'preposition', 'conjunction', 'particle', 'article', 'pronoun', 'determiner', 'interrogative', 'numeral', 'interjection', 'participle'
         ];
     }, [posOptions]);
 
@@ -1072,7 +1072,7 @@ export function EntryManager() {
                                                             ))}
                                                         </select>
 
-                                                        {['noun', 'adjective', 'pronoun', 'participle'].includes(quickPos.toLowerCase()) && (
+                                                        {['noun', 'adjective', 'pronoun', 'participle', 'determiner', 'numeral'].includes(quickPos.toLowerCase()) && (
                                                             <select
                                                                 value={quickGender}
                                                                 onChange={(e) => setQuickGender(e.target.value)}
@@ -1081,7 +1081,7 @@ export function EntryManager() {
                                                                 <option value="">— {term('gender') || 'Ġens'} —</option>
                                                                 <option value="masculine">{term('masculine') || 'Maskil (m)'}</option>
                                                                 <option value="feminine">{term('feminine') || 'Femminil (f)'}</option>
-                                                                <option value="neutral">{term('neutral') || 'Maskil/Femminil (mf)'}</option>
+                                                                <option value="common">{term('common') || 'Komuni'}</option>
                                                             </select>
                                                         )}
 
@@ -1618,7 +1618,8 @@ const POS_ALIAS_GROUPS: Record<string, string[]> = {
     preposition: ['preposition', 'prep'],
     conjunction: ['conjunction', 'conj'],
     particle: ['particle', 'part'],
-    article: ['article', 'art', 'det'],
+    article: ['article', 'art'],
+    determiner: ['determiner', 'det'],
     pronoun: ['pronoun', 'pron'],
     interrogative: ['interrogative', 'int', 'intg'],
     numeral: ['numeral', 'num'],

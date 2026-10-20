@@ -14,17 +14,30 @@ export interface RelationshipInput {
 }
 
 export async function ensureRelationshipsTable(client: any) {
-    await client.execute(`
-        CREATE TABLE IF NOT EXISTS entry_relationships (
-            id TEXT PRIMARY KEY,
-            entry_id TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
-            target_entry_id TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
-            relationship_type TEXT NOT NULL CHECK(relationship_type IN ('synonym', 'antonym', 'related')),
-            sort_order INTEGER NOT NULL DEFAULT 0,
-            created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
-            UNIQUE(entry_id, target_entry_id, relationship_type)
-        )
-    `);
+    try {
+        await client.execute(`
+            CREATE TABLE IF NOT EXISTS entry_relationships (
+                id TEXT PRIMARY KEY,
+                entry_id TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+                target_entry_id TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+                relationship_type TEXT NOT NULL CHECK(relationship_type IN ('synonym', 'antonym', 'related')),
+                sort_order INTEGER NOT NULL DEFAULT 0,
+                created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+                UNIQUE(entry_id, target_entry_id, relationship_type)
+            )
+        `);
+        const tableInfo = await client.execute("PRAGMA table_info(entry_relationships)");
+        const existing = new Set((tableInfo.rows || []).map((r: any) => r.name));
+        if (!existing.has('id')) {
+            try { await client.execute("ALTER TABLE entry_relationships ADD COLUMN id TEXT"); } catch {}
+        }
+        if (!existing.has('sort_order')) {
+            try { await client.execute("ALTER TABLE entry_relationships ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0"); } catch {}
+        }
+        if (!existing.has('created_at')) {
+            try { await client.execute("ALTER TABLE entry_relationships ADD COLUMN created_at TEXT"); } catch {}
+        }
+    } catch {}
 }
 
 /**

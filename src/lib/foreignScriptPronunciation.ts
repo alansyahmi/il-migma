@@ -1,5 +1,6 @@
 const ARABIC_SCRIPT_RE = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
 const ARABIC_DIACRITIC_RE = /[\u064B-\u065F\u0670\u06D6-\u06ED]/u;
+const ARABIC_ALL_DIACRITICS_RE = /[\u064B-\u065F\u0670\u06D6-\u06ED]/gu;
 const GREEK_SCRIPT_RE = /[\u0370-\u03FF\u1F00-\u1FFF]/;
 const GREEK_DIACRITIC_RE = /[\u0300-\u036f]/u;
 const TIFINAGH_SCRIPT_RE = /[\u2D30-\u2D7F]/;
@@ -84,11 +85,7 @@ function baseLetter(cluster: string) {
 }
 
 function isArabicCarrierLetter(letter: string) {
-    return ['ا', 'أ', 'إ', 'آ', 'ى', 'و', 'ي'].includes(letter);
-}
-
-function isAlifLetter(letter: string) {
-    return ['ا', 'أ', 'إ', 'آ', 'ى'].includes(letter);
+    return ['ا', 'أ', 'إ', 'آ', 'ى', 'و', 'ي', 'ء', 'ئ', 'ؤ'].includes(letter);
 }
 
 function isWawLetter(letter: string) {
@@ -102,6 +99,8 @@ function isYaLetter(letter: string) {
 function mapArabicConsonant(letter: string) {
     switch (letter) {
         case 'ء':
+        case 'ئ':
+        case 'ؤ':
             return "'";
         case 'ب':
             return 'b';
@@ -635,6 +634,7 @@ function transliterateArabicWord(word: string) {
     const output: string[] = [];
     let lastVowelIndex = -1;
     let lastVowelKind: 'a' | 'i' | 'u' | null = null;
+    let hadTanwinF = false;
 
     const push = (segment: string) => {
         output.push(segment);
@@ -664,27 +664,96 @@ function transliterateArabicWord(word: string) {
         const hasTanwinF = hasMark(cluster, '\u064B');
         const hasTanwinD = hasMark(cluster, '\u064C');
         const hasTanwinK = hasMark(cluster, '\u064D');
+        const hasDaggerAlif = hasMark(cluster, '\u0670');
 
         if (!letter) continue;
 
-        if (isAlifLetter(letter)) {
-            if (lengthenLastVowel('a')) continue;
+        if (letter === 'آ') {
+            push('â');
+            lastVowelKind = 'a';
+            lastVowelIndex = output.length - 1;
+            hadTanwinF = false;
+            continue;
+        }
+
+        if (letter === 'إ') {
+            if (index > 0) push("'");
+            emitVowel('i');
+            hadTanwinF = false;
+            continue;
+        }
+
+        if (letter === 'أ') {
+            if (index > 0) push("'");
+            if (hasDamma) {
+                emitVowel('u');
+            } else if (hasKasra) {
+                emitVowel('i');
+            } else if (hasFatha || index === 0) {
+                emitVowel('a');
+            }
+            hadTanwinF = false;
+            continue;
+        }
+
+        if (letter === 'ا' || letter === 'ى') {
+            if (hadTanwinF) {
+                hadTanwinF = false;
+                continue;
+            }
+            if (hasTanwinF) {
+                push('an');
+                lastVowelIndex = output.length - 1;
+                lastVowelKind = 'a';
+                hadTanwinF = false;
+                continue;
+            }
+            if (lengthenLastVowel('a')) {
+                hadTanwinF = false;
+                continue;
+            }
             push(index === 0 ? 'a' : 'â');
             lastVowelKind = 'a';
+            lastVowelIndex = output.length - 1;
+            hadTanwinF = false;
             continue;
         }
 
         if (isWawLetter(letter) && !hasFatha && !hasDamma && !hasKasra && !isSukun) {
-            if (lengthenLastVowel('u')) continue;
+            if (lengthenLastVowel('u')) {
+                hadTanwinF = false;
+                continue;
+            }
+            if (lastVowelKind === 'a') {
+                push('w');
+                lastVowelKind = null;
+                lastVowelIndex = -1;
+                hadTanwinF = false;
+                continue;
+            }
             push(index === 0 ? 'w' : 'û');
             lastVowelKind = 'u';
+            lastVowelIndex = output.length - 1;
+            hadTanwinF = false;
             continue;
         }
 
         if (isYaLetter(letter) && !hasFatha && !hasDamma && !hasKasra && !isSukun) {
-            if (lengthenLastVowel('i')) continue;
+            if (lengthenLastVowel('i')) {
+                hadTanwinF = false;
+                continue;
+            }
+            if (lastVowelKind === 'a') {
+                push('y');
+                lastVowelKind = null;
+                lastVowelIndex = -1;
+                hadTanwinF = false;
+                continue;
+            }
             push(index === 0 ? 'y' : 'î');
             lastVowelKind = 'i';
+            lastVowelIndex = output.length - 1;
+            hadTanwinF = false;
             continue;
         }
 
@@ -697,12 +766,23 @@ function transliterateArabicWord(word: string) {
             push(mapped);
         }
 
+        if (hasDaggerAlif) {
+            push('â');
+            lastVowelKind = 'a';
+            lastVowelIndex = output.length - 1;
+            hadTanwinF = false;
+            continue;
+        }
+
         if (hasTanwinF) {
             push('an');
             lastVowelIndex = output.length - 1;
             lastVowelKind = 'a';
+            hadTanwinF = true;
             continue;
         }
+        hadTanwinF = false;
+
         if (hasTanwinD) {
             push('un');
             lastVowelIndex = output.length - 1;
@@ -832,12 +912,11 @@ function hyphenateLatinPronunciation(text: string) {
 
             if (current) syllables.push(current);
 
-            return syllables.join('-');
+            return syllables.join('');
         })
         .join('')
         .replace(/-+/g, '-')
-        .replace(/\s+-\s+/g, ' ')
-        .replace(/-/g, '');
+        .replace(/\s+-\s+/g, ' ');
 }
 
 export function transliterateArabicToMaltesePronunciation(value: string) {
@@ -853,8 +932,51 @@ export function transliterateArabicToMaltesePronunciation(value: string) {
     return hyphenateLatinPronunciation(transliterated);
 }
 
+function isArabicArticleStandalone(word: string) {
+    const plain = normalizeArabicWord(word).replace(ARABIC_ALL_DIACRITICS_RE, '');
+    return plain === 'ال' || plain === 'ٱل';
+}
+
 function transliterateArabicText(part: string) {
-    return isArabicText(part) ? transliterateArabicWord(part) : part;
+    if (!isArabicText(part)) return part;
+
+    const trimmed = normalizeText(part);
+    if (isArabicArticleStandalone(trimmed)) {
+        return 'al-';
+    }
+
+    if (trimmed === 'الله' || trimmed === 'اللّٰه') {
+        return 'allâh';
+    }
+
+    const normalizedTrimmed = normalizeArabicWord(trimmed);
+    const unvocalized = normalizedTrimmed.replace(ARABIC_ALL_DIACRITICS_RE, '');
+
+    if (unvocalized === 'الذي') {
+        return 'allađî';
+    }
+    if (unvocalized === 'التي') {
+        return 'allatî';
+    }
+    if (unvocalized === 'الذين') {
+        return 'allađîna';
+    }
+
+    const match = trimmed.match(/^(?:اَلْـ?|الْـ?|ٱلْـ?|اَل|ال|ٱل)([\u0600-\u06FF]{2,})$/u);
+    if (match) {
+        let remainder = match[1];
+        const clusters = splitArabicClusters(remainder);
+        if (clusters.length > 0) {
+            clusters[0] = clusters[0].replace(/\u0651/g, '');
+            remainder = clusters.join('');
+        }
+        const pronRemainder = transliterateArabicWord(remainder);
+        if (pronRemainder) {
+            return `al-${pronRemainder}`;
+        }
+    }
+
+    return transliterateArabicWord(part);
 }
 
 function transliterateSupportedLatinWord(part: string, language: string) {

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -28,16 +29,21 @@ export function Modal({ open, onClose, title, children, size = 'md', className, 
             if (e.key === 'Escape') onClose();
         };
         document.addEventListener('keydown', handleKey);
+        const originalOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
         return () => {
             document.removeEventListener('keydown', handleKey);
-            document.body.style.overflow = '';
+            const remainingModals = document.querySelectorAll('[role="dialog"]');
+            if (remainingModals.length <= 1) {
+                document.body.style.overflow = originalOverflow;
+            }
         };
     }, [open, onClose]);
 
     if (!open) return null;
+    if (typeof document === 'undefined') return null;
 
-    return (
+    const modalContent = (
         <div
             className={cn(
                 "fixed inset-0 flex min-h-screen items-center justify-center p-4 overflow-y-auto",
@@ -77,4 +83,6 @@ export function Modal({ open, onClose, title, children, size = 'md', className, 
             </div>
         </div>
     );
+
+    return createPortal(modalContent, document.body);
 }

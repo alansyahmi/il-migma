@@ -27,13 +27,15 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "pagina",
-          "definition": "variant of pàggina"
+          "definition": "variant of pàggina",
+          "pronunciation": "paġina"
         },
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "pàgina",
-          "definition": "variant of pàggina"
+          "definition": "variant of pàggina",
+          "pronunciation": "paġina"
         },
         {
           "relationship": "From",
@@ -151,7 +153,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "كِتَاب",
-          "definition": null
+          "definition": null,
+          "pronunciation": "kitâb"
         }
       ],
       "etymology_notes": null,
@@ -263,13 +266,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "carta",
-          "definition": null
+          "definition": null,
+          "pronunciation": "karta"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "carta",
-          "definition": null
+          "definition": null,
+          "pronunciation": "karta"
         },
         {
           "relationship": "From",
@@ -281,7 +286,8 @@
           "relationship": "From",
           "language": "Ancient Greek",
           "term": "χάρτης",
-          "definition": "sheet of paper; paper"
+          "definition": "sheet of paper; paper",
+          "pronunciation": "ħartis"
         }
       ],
       "etymology_notes": null,
@@ -411,7 +417,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "rota",
-          "definition": null
+          "definition": null,
+          "pronunciation": "rota"
         },
         {
           "relationship": "From",
@@ -535,7 +542,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "màchina",
-          "definition": "automobile, machine"
+          "definition": "automobile, machine",
+          "pronunciation": "makhina"
         }
       ],
       "etymology_notes": null,
@@ -656,7 +664,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "cascia",
-          "definition": "box"
+          "definition": "box",
+          "pronunciation": "kaxa"
         }
       ],
       "etymology_notes": null,
@@ -795,7 +804,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "سُدّة",
-          "definition": "door, threshold; seat, bed"
+          "definition": "door, threshold; seat, bed",
+          "pronunciation": "suddẗ"
         }
       ],
       "etymology_notes": null,
@@ -948,7 +958,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "زُجاج",
-          "definition": "glass"
+          "definition": "glass",
+          "pronunciation": "żuġâġ"
         }
       ],
       "is_collective": 1,
@@ -1015,7 +1026,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "ciavetta",
-          "definition": null
+          "definition": null,
+          "pronunciation": "xavetta"
         },
         {
           "relationship": "Of",
@@ -1027,7 +1039,8 @@
           "relationship": "Cognate to",
           "language": "Italian",
           "term": "chiavetta",
-          "definition": null
+          "definition": null,
+          "pronunciation": "khiavetta"
         }
       ],
       "etymology_notes": null,
@@ -1135,7 +1148,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "حَدِيد",
-          "definition": "barbell, iron, iron"
+          "definition": "barbell, iron, iron",
+          "pronunciation": "ħadîd"
         }
       ],
       "is_collective": 1,
@@ -1249,7 +1263,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "raloggiu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "ralogġu"
         },
         {
           "relationship": "From",
@@ -1261,7 +1276,8 @@
           "relationship": "Borrowed from",
           "language": "Ancient Greek",
           "term": "ὡρολόγιον",
-          "definition": null
+          "definition": null,
+          "pronunciation": "orolójon"
         }
       ],
       "etymology_notes": null,
@@ -1453,7 +1469,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قِشْرَة",
-          "definition": "peel, bark, cortex"
+          "definition": "peel, bark, cortex",
+          "pronunciation": "qishraẗ"
         }
       ],
       "etymology_notes": null,
@@ -1570,7 +1587,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "azzaru",
-          "definition": null
+          "definition": null,
+          "pronunciation": "azzaru"
         },
         {
           "relationship": "From",
@@ -1685,7 +1703,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "حَبْل",
-          "definition": "beam, cable, cord"
+          "definition": "beam, cable, cord",
+          "pronunciation": "ħabl"
         }
       ],
       "is_collective": 0,
@@ -1765,7 +1784,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عُدَّة",
-          "definition": null
+          "definition": null,
+          "pronunciation": "għuddaẗ"
         }
       ],
       "etymology_notes": null,
@@ -1883,7 +1903,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "proprietà",
-          "definition": null
+          "definition": null,
+          "pronunciation": "proprieta"
         }
       ],
       "etymology_notes": null,

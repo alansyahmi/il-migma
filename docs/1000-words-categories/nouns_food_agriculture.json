@@ -28,7 +28,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أَكْل",
-          "definition": "provender, viands, commissariat"
+          "definition": "provender, viands, commissariat",
+          "pronunciation": "akl"
         }
       ],
       "is_collective": 1,
@@ -90,7 +91,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قِسْم",
-          "definition": "department, section, share"
+          "definition": "department, section, share",
+          "pronunciation": "qism"
         }
       ],
       "etymology_notes": null,
@@ -218,7 +220,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "زَيْت",
-          "definition": "oil, fat, lipid"
+          "definition": "oil, fat, lipid",
+          "pronunciation": "żayt"
         }
       ],
       "etymology_notes": null,
@@ -335,7 +338,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "حَلِيب",
-          "definition": "milk, milk, raw milk"
+          "definition": "milk, milk, raw milk",
+          "pronunciation": "ħalîb"
         }
       ],
       "is_collective": 0,
@@ -420,13 +424,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "fruttu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "fruttu"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "frutto",
-          "definition": null
+          "definition": null,
+          "pronunciation": "frutto"
         },
         {
           "relationship": "From",
@@ -538,7 +544,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قَمْح",
-          "definition": "wheat"
+          "definition": "wheat",
+          "pronunciation": "qamħ"
         }
       ],
       "etymology_notes": null,
@@ -660,7 +667,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "لَحْم",
-          "definition": "meat, burger, flesh"
+          "definition": "meat, burger, flesh",
+          "pronunciation": "laħm"
         }
       ],
       "etymology_notes": null,
@@ -828,7 +836,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "تُفَّاح",
-          "definition": null
+          "definition": null,
+          "pronunciation": "tuffâħ"
         }
       ],
       "etymology_notes": null,
@@ -935,7 +944,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مِلْح",
-          "definition": "persister, sal, saline"
+          "definition": "persister, sal, saline",
+          "pronunciation": "milħ"
         }
       ],
       "etymology_notes": null,

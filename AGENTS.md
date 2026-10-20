@@ -41,6 +41,9 @@ Available skills:
 - crosspost — Multi-platform content distribution
 - fal-ai-media — AI image/video/audio generation via fal.ai
 - dmux-workflows — Multi-agent orchestration with dmux
+- il-migma-lexicography — Authoring and refining Il-Migma dictionary entries to Oxford and Miklem standards
+- il-migma-conjugation-engine — Maltese verb morphology and conjugation engine
+- verbmt-fixture-testing — External verb reference validation and fixture testing
 
 ## MCP Servers
 

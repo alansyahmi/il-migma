@@ -27,7 +27,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "وَاحِد",
-          "definition": "one, ace, single"
+          "definition": "one, ace, single",
+          "pronunciation": "wâħid"
         }
       ],
       "etymology_notes": null,
@@ -147,7 +148,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "الثُّلَاثَاء",
-          "definition": null
+          "definition": null,
+          "pronunciation": "al-θulâθâ'"
         }
       ],
       "etymology_notes": null,
@@ -259,7 +261,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "الْاِثْنَيْن",
-          "definition": null
+          "definition": null,
+          "pronunciation": "al-aθnayn"
         }
       ],
       "etymology_notes": null,
@@ -371,7 +374,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أَوَّل",
-          "definition": null
+          "definition": null,
+          "pronunciation": "awwal"
         }
       ],
       "etymology_notes": null,
@@ -479,7 +483,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "الْأَرْبَعَاء",
-          "definition": "Wednesday, Wed, wed"
+          "definition": "Wednesday, Wed, wed",
+          "pronunciation": "al-arbagħâ'"
         }
       ],
       "etymology_notes": null,
@@ -591,7 +596,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثَانِي",
-          "definition": null
+          "definition": null,
+          "pronunciation": "θânî"
         }
       ],
       "etymology_notes": null,
@@ -693,7 +699,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "نُصْف",
-          "definition": "half, half, bisect"
+          "definition": "half, half, bisect",
+          "pronunciation": "nuṣf"
         }
       ],
       "etymology_notes": null,
@@ -827,7 +834,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أَلْف",
-          "definition": "millennium, thousand, thousandfold"
+          "definition": "millennium, thousand, thousandfold",
+          "pronunciation": "alf"
         }
       ],
       "etymology_notes": null,
@@ -996,7 +1004,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "خَمْسَة",
-          "definition": "five, five, hamsa"
+          "definition": "five, five, hamsa",
+          "pronunciation": "khamsaẗ"
         }
       ],
       "is_collective": 0,
@@ -1058,7 +1067,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سِتَّة",
-          "definition": null
+          "definition": null,
+          "pronunciation": "sittaẗ"
         }
       ],
       "etymology_notes": null,
@@ -1160,7 +1170,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "milione",
-          "definition": null
+          "definition": null,
+          "pronunciation": "milione"
         }
       ],
       "etymology_notes": null,
@@ -1272,7 +1283,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "عِشْرِين",
-          "definition": null
+          "definition": null,
+          "pronunciation": "għishrîn"
         }
       ],
       "etymology_notes": null,
@@ -1374,7 +1386,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثَمَانِيَة",
-          "definition": null
+          "definition": null,
+          "pronunciation": "θamâniyaẗ"
         }
       ],
       "etymology_notes": null,

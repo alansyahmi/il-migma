@@ -53,7 +53,7 @@ export function LinguisticModeProvider({ children }: { children: React.ReactNode
         const resolveNested = (nestedKey: string) => resolveTermInternal(nestedKey, params, nextSeen);
 
         return interpolateTerm(
-            resolveHardcodedTerm(lowerKey, mode, isEn ? 'en' : 'mt'),
+            resolveHardcodedTerm(key, mode, isEn ? 'en' : 'mt'),
             params,
             resolveNested,
         );

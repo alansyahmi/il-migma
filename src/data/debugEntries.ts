@@ -1521,7 +1521,7 @@ export const DEBUG_ENTRIES: Entry[] = [
         id: 'adj-agili',
         headword: 'aġili',
         pos: 'adjective',
-        gender: 'both',
+        gender: 'common',
         source_language: 'Romance',
         is_loanword: true,
         definitions: [
@@ -1644,6 +1644,19 @@ export function searchDebugEntries(q: string, opts: Record<string, any> = {}): S
     const filtered = DEBUG_ENTRIES.filter((entry) => {
         if (opts.pos && entry.pos?.toLowerCase() !== opts.pos.toLowerCase()) {
             return false;
+        }
+        if (opts.register) {
+            const regTarget = opts.register.toLowerCase();
+            const hasRegister = entry.definitions?.some(d => {
+                if (!d.register) return false;
+                if (typeof d.register === 'string') return d.register.toLowerCase() === regTarget;
+                return (
+                    d.register.key?.toLowerCase() === regTarget ||
+                    d.register.en?.toLowerCase() === regTarget ||
+                    d.register.mt?.toLowerCase() === regTarget
+                );
+            });
+            if (!hasRegister) return false;
         }
         if (opts.root_id) {
             const normParam = normalizeText(opts.root_id).replace(/^root/, '');

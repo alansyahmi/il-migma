@@ -598,7 +598,7 @@ function getFieldOptions(field: PatternFieldSpec, getValues: (category: string) 
 
     if (mapped.length > 0) return mapped;
     if (field.optionSource === 'gender') {
-        return ['masculine', 'feminine', 'neutral'].map((value) => ({ value, label: value }));
+        return ['masculine', 'feminine', 'common'].map((value) => ({ value, label: value }));
     }
 
     return mapped;

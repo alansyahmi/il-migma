@@ -10,11 +10,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { apiSearch } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { groupEntriesByHeadword } from '@/lib/homographGrouping';
 
 type NavbarSuggestion = {
     id: string;
     headword: string;
     pos: string;
+    all_pos: string[];
     definitions: string[];
 };
 
@@ -82,18 +84,29 @@ export function Navbar() {
         setSearchSuggestionsLoading(true);
         const timer = setTimeout(async () => {
             try {
-                const res = await apiSearch(trimmed, { limit: 3, offset: 0, signal: controller.signal });
+                const res = await apiSearch(trimmed, { limit: 10, offset: 0, signal: controller.signal });
                 if (cancelled || controller.signal.aborted) return;
 
+                const rawItems = (res.results || []).map((entry: any) => ({
+                    id: entry.id,
+                    headword: entry.headword,
+                    pos: entry.pos,
+                    audit_status: entry.audit_status,
+                    rank: entry.source_frequency_rank ?? entry.rank,
+                    definitions: entry.definition_en
+                        ? [entry.definition_en]
+                        : (entry.definitions?.length ? entry.definitions.map((d: any) => d.text_en) : []),
+                }));
+
+                const grouped = groupEntriesByHeadword(rawItems);
                 setSearchSuggestions(
-                    res.results.slice(0, 3).map((entry: any) => ({
-                        id: entry.id,
-                        headword: entry.headword,
-                        pos: entry.pos,
-                        definitions: entry.definition_en
-                            ? [entry.definition_en]
-                            : (entry.definitions?.length ? entry.definitions.map((d: any) => d.text_en) : []),
-                    })),
+                    grouped.slice(0, 4).map((g) => ({
+                        id: g.primary.id,
+                        headword: g.headword,
+                        pos: g.primary.pos,
+                        all_pos: g.allPos,
+                        definitions: g.primary.definitions,
+                    }))
                 );
             } catch (error) {
                 if (!cancelled && !controller.signal.aborted) {
@@ -243,8 +256,15 @@ export function Navbar() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <div className="shrink-0 text-[11px] uppercase tracking-wide text-black/35 pt-0.5">
-                                                    {suggestion.pos}
+                                                <div className="shrink-0 flex items-center gap-1 pt-0.5 flex-wrap justify-end">
+                                                    {suggestion.all_pos.map((pos) => (
+                                                        <span
+                                                            key={pos}
+                                                            className="text-[10px] uppercase font-medium tracking-wide px-1.5 py-0.5 rounded bg-black/5 text-black/60"
+                                                        >
+                                                            {term(pos) || pos}
+                                                        </span>
+                                                    ))}
                                                 </div>
                                             </button>
                                         ))}
@@ -427,8 +447,15 @@ export function Navbar() {
                                                             </div>
                                                         )}
                                                     </div>
-                                                    <div className="shrink-0 text-[11px] uppercase tracking-wide text-black/35 pt-0.5">
-                                                        {suggestion.pos}
+                                                    <div className="shrink-0 flex items-center gap-1 pt-0.5 flex-wrap justify-end">
+                                                        {suggestion.all_pos.map((pos) => (
+                                                            <span
+                                                                key={pos}
+                                                                className="text-[10px] uppercase font-medium tracking-wide px-1.5 py-0.5 rounded bg-black/5 text-black/60"
+                                                            >
+                                                                {term(pos) || pos}
+                                                            </span>
+                                                        ))}
                                                     </div>
                                                 </button>
                                             ))}

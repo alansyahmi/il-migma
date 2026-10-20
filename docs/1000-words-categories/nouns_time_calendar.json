@@ -78,7 +78,7 @@
           "language": "Arabic",
           "term": "يَوْم",
           "definition": "day",
-          "pronunciation": null
+          "pronunciation": "yawm"
         }
       ],
       "etymology_notes": null,
@@ -164,7 +164,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "مُدَّة",
-          "definition": "while, length of time"
+          "definition": "while, length of time",
+          "pronunciation": "muddaẗ"
         }
       ],
       "etymology_notes": null,
@@ -276,7 +277,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "لَيْل",
-          "definition": "nightfall, dark, evening"
+          "definition": "nightfall, dark, evening",
+          "pronunciation": "layl"
         }
       ],
       "etymology_notes": null,
@@ -402,13 +404,15 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "نِصْف النَّهَار",
-          "definition": "midday; meridian"
+          "definition": "midday; meridian",
+          "pronunciation": "niṣf al-nahâr"
         },
         {
           "relationship": "Of",
           "language": "Italian",
           "term": "mezzogiorno",
-          "definition": "midday, noon"
+          "definition": "midday, noon",
+          "pronunciation": "mezzoġorno"
         }
       ],
       "etymology_notes": null,
@@ -512,7 +516,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "الْجُمْعَة",
-          "definition": "Friday, friday, Fri"
+          "definition": "Friday, friday, Fri",
+          "pronunciation": "al-ġumgħaẗ"
         }
       ],
       "etymology_notes": null,
@@ -624,7 +629,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "minuto",
-          "definition": null
+          "definition": null,
+          "pronunciation": "minuto"
         }
       ],
       "etymology_notes": null,
@@ -736,7 +742,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سَاعَة",
-          "definition": null
+          "definition": null,
+          "pronunciation": "sâgħaẗ"
         }
       ],
       "etymology_notes": null,
@@ -860,7 +867,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "فِي الْغُدُوِّ",
-          "definition": null
+          "definition": null,
+          "pronunciation": "fî al-ghuduwwi"
         }
       ],
       "etymology_notes": null,
@@ -967,7 +975,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "صَيْف",
-          "definition": "summer, summertime, summer"
+          "definition": "summer, summertime, summer",
+          "pronunciation": "ṣayf"
         }
       ],
       "etymology_notes": null,
@@ -1079,7 +1088,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شَتْوَة",
-          "definition": "shower, winter, shower"
+          "definition": "shower, winter, shower",
+          "pronunciation": "shatwaẗ"
         }
       ],
       "etymology_notes": null,
@@ -1191,7 +1201,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شَهْر",
-          "definition": "calendar month, month, month"
+          "definition": "calendar month, month, month",
+          "pronunciation": "shahr"
         }
       ],
       "etymology_notes": null,
@@ -1305,7 +1316,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "دَقَّة",
-          "definition": "beat, blow, knock"
+          "definition": "beat, blow, knock",
+          "pronunciation": "daqqaẗ"
         }
       ],
       "etymology_notes": null,
@@ -1552,7 +1564,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "عَشِيّة",
-          "definition": "evening, eve, evening"
+          "definition": "evening, eve, evening",
+          "pronunciation": "għashîẗ"
         }
       ],
       "etymology_notes": null,

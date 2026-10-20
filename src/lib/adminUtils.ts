@@ -26,10 +26,12 @@ export interface EntryEtymology extends EtymologyBaseStep {
 
 export type EtymologyStep = RootEtymology | EntryEtymology;
 
+import type { DefinitionRegister } from '../types';
+
 export interface EntryDefinition {
     text_en: string;
     text_mt: string | null;
-    register: string;
+    register: DefinitionRegister;
     nuance: string;
     example_sentences?: any[];
     dialect?: string;
@@ -265,7 +267,10 @@ function normalizeNullableText(value: any): string | null {
 function normalizeEntryDefinition(def: any): EntryDefinition[] {
     const textEnParts = splitDefinitionText(def?.text_en ?? def?.definition_en ?? def?.gloss_en ?? def?.text ?? def?.en);
     const textMtParts = splitDefinitionText(def?.text_mt ?? def?.definition_mt ?? def?.gloss_mt ?? def?.mt);
-    const register = String(def?.register ?? def?.sense_register ?? '').trim();
+    const rawReg = def?.register ?? def?.sense_register;
+    const register: DefinitionRegister = (typeof rawReg === 'object' && rawReg !== null)
+        ? rawReg
+        : String(rawReg || '').trim();
     const nuance = String(def?.nuance ?? '').trim();
     const dialect = String(def?.dialect ?? '').trim();
     const exampleSentences = Array.isArray(def?.example_sentences) ? def.example_sentences : [];
@@ -413,3 +418,69 @@ export function normalizeEtymologyChain(ety: any, defaultRelationship: string, i
         return [normalizeEtymologyStep(ety, defaultRelationship, includePronunciation)];
     }
 }
+
+export interface UsageNotes {
+    en: string;
+    mt: string;
+}
+
+export function parseUsageNotes(val: unknown): UsageNotes | null {
+    if (!val) return null;
+    let target = val;
+    if (typeof target === 'string') {
+        const trimmed = target.trim();
+        if (!trimmed) return null;
+        if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+            try {
+                target = JSON.parse(trimmed);
+            } catch {
+                return { en: trimmed, mt: '' };
+            }
+        } else {
+            return { en: trimmed, mt: '' };
+        }
+    }
+    if (typeof target === 'object' && target !== null && !Array.isArray(target)) {
+        const obj = target as Record<string, unknown>;
+        const en = typeof obj.en === 'string' ? obj.en.trim() : '';
+        const mt = typeof obj.mt === 'string' ? obj.mt.trim() : '';
+        if (!en && !mt) return null;
+        return { en, mt };
+    }
+    return null;
+}
+
+export function getBilingualText(
+    val: { en?: string | null; mt?: string | null } | string | null | undefined,
+    language: 'en' | 'mt'
+): string {
+    if (!val) return '';
+    const parsed = parseUsageNotes(val);
+    if (parsed) {
+        const preferred = language === 'mt' ? (parsed.mt || parsed.en) : (parsed.en || parsed.mt);
+        return (preferred || '').trim();
+    }
+    if (typeof val === 'string') return val.trim();
+    return '';
+}
+
+export function getEntryAllNotes(
+    e: { usage_notes?: any; definitions?: any[] } | null | undefined,
+    language: 'en' | 'mt'
+): string[] {
+    if (!e) return [];
+    const notes: string[] = [];
+    const entryNote = getBilingualText(e.usage_notes, language);
+    if (entryNote) notes.push(entryNote);
+
+    if (Array.isArray(e.definitions)) {
+        for (const def of e.definitions) {
+            const defNote = getBilingualText(def.usage_notes, language);
+            if (defNote && !notes.includes(defNote)) {
+                notes.push(defNote);
+            }
+        }
+    }
+    return notes;
+}
+

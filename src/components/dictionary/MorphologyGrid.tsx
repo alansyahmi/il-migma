@@ -301,7 +301,7 @@ export function MorphologyGrid({ entry }: MorphologyGridProps) {
                 </div>
                 <div className="border-b border-border-light px-3 py-2 flex flex-wrap gap-2">
                     <Badge variant="pos">{term((entry.participle_morphology?.participle_type) || 'participle')}</Badge>
-                    <Badge variant="pos">{term(entry.participle_morphology?.gender || 'neutral')}</Badge>
+                    <Badge variant="pos">{term(entry.participle_morphology?.gender || 'common')}</Badge>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full border-collapse">

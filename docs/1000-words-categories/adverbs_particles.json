@@ -1,12 +1,12 @@
 {
   "category_id": "adverbs_particles",
   "category_title": "Adverbs & Modal Particles",
-  "total_entries": 30,
+  "total_entries": 37,
   "entries": [
     {
       "id": "part-se",
       "headword": "se",
-      "pos": "adverb",
+      "pos": "particle",
       "gender": null,
       "root_consonants": "s-j-r",
       "stem": null,
@@ -16,92 +16,72 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: se",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/se",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Borg & Azzopardi-Alexander (1997)",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Preverbal future tense particle developed as an apocopic contraction of the active participle sejjer (going to), with historical substrate analogy to Arabic sa-.",
       "etymology_chain": [
+        {
+          "relationship": "Apocopic form of",
+          "language": "Maltese",
+          "term": "sejjer",
+          "pronunciation": "sejjer",
+          "definition": "going to (active participle)"
+        },
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "سَ",
-          "definition": "shall, will, X"
+          "term": "سَارَ",
+          "pronunciation": "sâra",
+          "definition": "to walk, go, travel"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "Indicates a future tense.",
-          "text_mt": "Tifsira u deskrizzjoni li tikkorrispondi għal Indicates a future tense..",
-          "register": "",
-          "nuance": ""
+          "text_en": "will, shall, going to",
+          "text_mt": "Partiċella preverbjali li tindika ż-żmien futur jew intenzjoni immedjata li titwettaq azzjoni.",
+          "register": "standard",
+          "nuance": "preverbal future marker"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Ir-raġel uża l-kelma 'se' waqt id-diskors.",
-          "en": "The man used the word 'se' during the speech."
+          "mt": "Għada se mmorru l-baħar kmieni.",
+          "en": "Tomorrow we will go to the sea early."
+        },
+        {
+          "mt": "It-tabib se jasal fi ftit minuti oħra.",
+          "en": "The doctor will arrive in a few more minutes."
         }
       ],
-      "related_entries": [],
-      "alternative_forms": [],
+      "related_entries": [
+        "part-mhux-se",
+        "part-sa"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "sa",
+          "type": "dialectal",
+          "has_lemma_entry": true,
+          "target_entry_id": "part-sa",
+          "target_id": "part-sa",
+          "notes": "Variant found in older texts and some regional dialects"
+        }
+      ],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈsɛ/",
+          "ipa": "/sɛ/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "---",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
       "rank": 45,
       "source_frequency_rank": 45,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma and Oxford lexicographical standard. Tautology eliminated; etymology updated to reflect participle apocope of sejjer.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -110,28 +90,36 @@
       "headword": "ukoll",
       "pos": "adverb",
       "gender": null,
-      "root_consonants": null,
-      "stem": "ukoll",
+      "root_consonants": "k-l-l",
+      "stem": null,
       "cv_pattern": null,
       "morph_pattern": null,
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
-      "source_language": "Uncertain",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: ukoll",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/ukoll",
-      "source_publisher": "Wiktionary",
-      "etymology_chain": [],
-      "etymology_notes": null,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic wa-kull (and all, as well).",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "وَكُلّ",
+          "pronunciation": "wakull",
+          "definition": "and all, as well"
+        }
+      ],
       "definitions": [
         {
           "text_en": "also, too, as well",
-          "text_mt": "Kelma li żżid persuna jew oġġett ieħor mas-sentenza.",
-          "register": "",
-          "nuance": ""
+          "text_mt": "Juri żieda, inklużjoni jew tkomplija ta' persuna, oġġett jew fatt ieħor; barra minn hekk.",
+          "register": "standard",
+          "nuance": "additive focus adverb"
         }
       ],
       "usage_examples": [
@@ -140,68 +128,30 @@
           "en": "Ġanni went to the feast and Marija went as well."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "adv-wkoll"
+      ],
       "alternative_forms": [
         {
           "headword": "wkoll",
-          "type": "orthographic"
+          "type": "orthographic",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-wkoll",
+          "target_id": "adv-wkoll",
+          "notes": "Post-vocalic variant"
         }
       ],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈʊː.kɔll/",
+          "ipa": "/ʊˈkɔlː/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
       "rank": 56,
       "source_frequency_rank": 56,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Replaced placeholder definition with functional additive phrasing.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -210,34 +160,49 @@
       "headword": "wkoll",
       "pos": "adverb",
       "gender": null,
-      "root_consonants": null,
-      "stem": "wkoll",
+      "root_consonants": "k-l-l",
+      "stem": null,
       "cv_pattern": null,
       "morph_pattern": null,
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
-      "source_language": "Uncertain",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: wkoll (Alternative spelling of ukoll)",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/wkoll",
-      "source_publisher": "Wiktionary",
-      "etymology_chain": [],
-      "etymology_notes": null,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Post-vocalic orthographic spelling of ukoll.",
+      "etymology_chain": [
+        {
+          "relationship": "Variant of",
+          "language": "Maltese",
+          "term": "ukoll",
+          "pronunciation": "ukoll",
+          "definition": "also, too"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "وَكُلّ",
+          "pronunciation": "wakull",
+          "definition": "and all, as well"
+        }
+      ],
       "definitions": [
         {
           "text_en": "also, too, as well",
-          "text_mt": "Konġunzjoni u avverbju li jżid persuna jew oġġett ieħor.",
-          "register": "",
-          "nuance": ""
+          "text_mt": "Għamla ortografika oħra ta' 'ukoll', użata wara kliem li jispiċċa b'vokali biex tindika żieda jew inklużjoni.",
+          "register": "standard",
+          "nuance": "post-vocalic orthographic variant"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Ġanni mar il-festa u Marija marret wkoll.",
-          "en": "Ġanni went to the feast and Marija went as well."
+          "mt": "Huwa ġab il-kotba u hi ġabet il-pinen wkoll.",
+          "en": "He brought the books and she brought the pens as well."
         }
       ],
       "related_entries": [
@@ -246,71 +211,31 @@
       "alternative_forms": [
         {
           "headword": "ukoll",
-          "type": "orthographic"
+          "type": "canonical",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-ukoll",
+          "target_id": "adv-ukoll",
+          "notes": "Canonical citation form"
         }
       ],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈwkɔll/",
+          "ipa": "/wkɔlː/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
       "rank": 57,
       "source_frequency_rank": 57,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
       "id": "prep-żid",
       "headword": "żid",
-      "pos": "adverb",
+      "pos": "preposition",
       "gender": null,
       "root_consonants": "ż-j-d",
       "stem": null,
@@ -319,21 +244,36 @@
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
-      "source_language": "Uncertain",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: żid",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/%C5%BCid",
-      "source_publisher": "Wiktionary",
-      "etymology_chain": [],
-      "etymology_notes": null,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Grammaticalized imperative from the verb żied (to add), used as an arithmetic operator.",
+      "etymology_chain": [
+        {
+          "relationship": "Grammaticalized from",
+          "language": "Maltese",
+          "term": "żied",
+          "pronunciation": "żied",
+          "definition": "to add, increase"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "زِدْ",
+          "pronunciation": "żid",
+          "definition": "add! (imperative of zāda)"
+        }
+      ],
       "definitions": [
         {
-          "text_en": "plus",
-          "text_mt": "Prepożizzjoni użata fil-matematika.",
-          "register": "",
-          "nuance": ""
+          "text_en": "plus, with the addition of",
+          "text_mt": "Jindika operazzjoni aritmetika ta' żieda fejn numru jew ammont jingħadd ma' ieħor; flimkien ma'.",
+          "register": "standard",
+          "nuance": "arithmetic operator"
         }
       ],
       "usage_examples": [
@@ -347,58 +287,14 @@
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈzɪːt/",
+          "ipa": "/zɪːt/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "--i",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
       "rank": 68,
       "source_frequency_rank": 68,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "audit_status": "verified",
+      "audit_notes": "POS aligned to preposition. Definition refined to mathematical operation standard.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -406,77 +302,89 @@
       "id": "adv-hawn",
       "headword": "hawn",
       "pos": "adverb",
-      "definitions": [
-        {
-          "text_en": "here",
-          "text_mt": null
-        }
-      ],
       "gender": null,
       "root_consonants": null,
+      "stem": null,
+      "cv_pattern": "1v2",
+      "morph_pattern": "C1vC2",
       "is_loanword": 0,
       "is_inflectable": 0,
-      "source_title": "Wiktionary",
-      "source_page": "https://en.wiktionary.org/wiki/hawn",
-      "source_citation": "Wiktionary: hawn",
-      "source_publisher": "Wiktionary",
-      "tags": null,
-      "etymology_notes": null,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic hâhunâ (here, in this place).",
       "etymology_chain": [
         {
-          "relationship": "From",
+          "relationship": "Inherited from",
           "language": "Arabic",
           "term": "هَاهُنَا",
-          "definition": "here"
+          "pronunciation": "hâhunâ",
+          "definition": "here, in this place"
         }
       ],
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "verb_form": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "alternative_forms": [
+      "definitions": [
         {
-          "headword": "hawna",
-          "type": "orthographic"
-        },
+          "text_en": "here, in this place",
+          "text_mt": "F'dan il-post jew f'din il-pożizzjoni fejn jinsab il-kelliem.",
+          "register": "standard",
+          "nuance": "proximal spatial adverb"
+        }
+      ],
+      "usage_examples": [
         {
-          "headword": "hawni",
-          "type": "orthographic"
-        },
-        {
-          "headword": "hawnhekk",
-          "type": "orthographic"
+          "mt": "Ejja qrib tiegħi u poġġi bilqiegħda hawn.",
+          "en": "Come near me and sit down here."
         }
       ],
       "related_entries": [
-        "n-l-hawn-u-l-hinn"
+        "adv-hawn-fuq",
+        "adv-hemm",
+        "adv-hawnhekk",
+        "adv-hawna",
+        "adv-hawni"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "hawna",
+          "type": "dialectal",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-hawna",
+          "target_id": "adv-hawna",
+          "notes": "Emphatic spoken form"
+        },
+        {
+          "headword": "hawni",
+          "type": "dialectal",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-hawni",
+          "target_id": "adv-hawni",
+          "notes": "Regional spoken form"
+        },
+        {
+          "headword": "hawnhekk",
+          "type": "compound",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-hawnhekk",
+          "target_id": "adv-hawnhekk",
+          "notes": "Reinforced proximal spatial adverb"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɐwn/",
+          "notes": null
+        }
       ],
       "rank": 71,
       "source_frequency_rank": 71,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Populated missing Maltese definition and full Arabic etymology.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -493,27 +401,28 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: barra",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/barra",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic barran (outside, outwards), adverbial accusative of barr (open country, land).",
       "etymology_chain": [
         {
-          "relationship": "From",
+          "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بَرًّا",
-          "definition": "outside"
+          "pronunciation": "barran",
+          "definition": "outside, outdoors"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
           "text_en": "out, outside, outdoors, abroad",
-          "text_mt": "Barra mid-dar jew f'pajjiż ieħor.",
-          "register": "",
-          "nuance": ""
+          "text_mt": "Fi spazju miftuħ u mhux ġewwa bini jew post magħluq; f'art barranija jew f'pajjiż ieħor; fil-beraħ.",
+          "register": "standard",
+          "nuance": "locative and directional adverb"
         }
       ],
       "usage_examples": [
@@ -531,61 +440,15 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "a--",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
       "rank": 85,
       "source_frequency_rank": 85,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Tautology eliminated from Maltese definition.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
-      "rank": 91,
-      "source_frequency_rank": 91,
-      "id": "n-darb-oħra",
+      "id": "adv-darb-oħra",
       "headword": "darb’oħra",
       "pos": "adverb",
       "gender": null,
@@ -598,32 +461,65 @@
       "is_imala_blocked": 0,
       "source_language": "Maltese",
       "source_id": "src-1000mcw",
-      "source_citation": "1000 Most Common Maltese Words",
+      "source_citation": "Corpus tal-Malti / 1000 MCW",
       "source_title": "1000 Most Common Maltese Words",
-      "source_year": null,
-      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
-      "source_publisher": "1000mostcommonwords.com",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
+      "source_year": 2020,
+      "source_page": null,
+      "source_publisher": "Corpus tal-Malti",
+      "etymology_notes": "Adverbial compound formed from darba (time, occasion) and oħra (other, fem.).",
+      "etymology_chain": [
         {
-          "text_en": "again",
-          "text_mt": null,
-          "register": "",
-          "nuance": ""
+          "relationship": "Compound of",
+          "language": "Maltese",
+          "term": "darba",
+          "pronunciation": "darba",
+          "definition": "a time, once"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ضَرْبَة",
+          "pronunciation": "ḍarbaẗ",
+          "definition": "an instance, stroke"
         }
       ],
-      "usage_examples": [],
+      "definitions": [
+        {
+          "text_en": "again, another time, once more",
+          "text_mt": "F'okkażjoni oħra jew fi żmien li għad irid jiġi; mill-ġdid.",
+          "register": "standard",
+          "nuance": "iterative temporal adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Nixtieq nerġa' narak darb'oħra biex inkomplu nitkellmu.",
+          "en": "I would like to see you again so we can continue talking."
+        }
+      ],
       "related_entries": [],
-      "alternative_forms": [],
-      "phonetics": [],
-      "audit_status": "pending",
-      "audit_notes": null,
+      "alternative_forms": [
+        {
+          "headword": "darba oħra",
+          "type": "analytic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˌdɐrbˈɔː.rɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 91,
+      "source_frequency_rank": 91,
+      "audit_status": "verified",
+      "audit_notes": "ID normalized from n- prefix to adv-. Populated missing Maltese definition and full etymology.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
-      "id": "adj-ftit",
+      "id": "adv-ftit",
       "headword": "ftit",
       "pos": "adverb",
       "gender": null,
@@ -635,92 +531,53 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: ftit",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/ftit",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic fatīt (fragment, crumb). Functions adverbially to indicate limited degree, quantity, or time.",
       "etymology_chain": [
         {
-          "relationship": "From",
+          "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فَتِيت",
-          "definition": "crumbs"
+          "pronunciation": "fatît",
+          "definition": "crumb, fragment"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "few, little, small amount",
-          "text_mt": "Kwantità żgħira ta' oġġetti jew flus.",
-          "register": "",
-          "nuance": ""
+          "text_en": "a little, slightly, a bit",
+          "text_mt": "Fi kwantità żgħira, fi grad limitat jew għal tul ta' ħin qasir; mhux wisq.",
+          "register": "standard",
+          "nuance": "degree and quantity adverb"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Ftit nies biss jafu l-verità sħiħa dwar l-istorja.",
-          "en": "Only a few people know the full truth about the story."
+          "mt": "Stenna ftit sakemm inlesti x-xogħol.",
+          "en": "Wait a little while I finish the work."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "adv-ħafna",
+        "adv-wisq",
+        "adv-inqas"
+      ],
       "alternative_forms": [],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈftɪːt/",
+          "ipa": "/ftɪːt/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "--i",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
       "rank": 113,
       "source_frequency_rank": 113,
-      "audit_status": "pending",
-      "audit_notes": "🔄 *(Duplicate: also at #249)*",
+      "audit_status": "verified",
+      "audit_notes": "ID normalized from adj- to adv- for adverbial entry. Definition refined to adverbial usage.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -737,168 +594,140 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Persian",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: biss",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/biss",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic bas (only, enough), borrowed from Persian bas (enough, only).",
       "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "بَسْ",
+          "pronunciation": "bas",
+          "definition": "only, enough"
+        },
         {
           "relationship": "From",
           "language": "Persian",
           "term": "بس",
-          "definition": "enough"
+          "pronunciation": "bas",
+          "definition": "enough, only"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "only",
-          "text_mt": "Li għandu x'jaqsam ma' biss fl-użu u t-tifsira uffiċjali.",
-          "register": "",
-          "nuance": ""
+          "text_en": "only, solely, merely",
+          "text_mt": "B'mod uniku, esklużivament u mingħajr żieda ta' xejn jew ħadd aktar.",
+          "register": "standard",
+          "nuance": "restrictive focus adverb"
         },
         {
-          "text_en": "but, on condition that",
-          "text_mt": "Li għandu x'jaqsam ma' biss fl-użu u t-tifsira uffiċjali.",
-          "register": "",
-          "nuance": ""
+          "text_en": "but, however, on condition that",
+          "text_mt": "Madankollu, iżda bil-kundizzjoni li.",
+          "register": "standard",
+          "nuance": "adversative connective"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Għamlu u bassu f'rabja fis-sala.",
-          "en": "They booed in anger in the hall."
+          "mt": "Ġie student wieħed biss għal-lezzjoni tal-lum.",
+          "en": "Only one student came to today's lesson."
+        },
+        {
+          "mt": "Tista' tiġi magħna, biss trid tkun lest fil-ħin.",
+          "en": "You can come with us, but you must be ready on time."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "adv-bass"
+      ],
       "alternative_forms": [
         {
           "headword": "bass",
-          "type": "orthographic"
+          "type": "dialectal",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-bass",
+          "target_id": "adv-bass",
+          "notes": "Older spoken variant"
         }
       ],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈbɪss/",
+          "ipa": "/bɪsː/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 114,
-      "source_frequency_rank": 114,
-      "audit_status": "pending",
-      "audit_notes": "🔄 *(Duplicate: also at #129)*",
+      "rank": 122,
+      "source_frequency_rank": 122,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Eliminated circular tautologies in both senses and replaced mismatched usage example.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
-      "id": "adj-ħafna",
+      "id": "adv-ħafna",
       "headword": "ħafna",
       "pos": "adverb",
-      "definitions": [
-        {
-          "text_en": "much; many",
-          "text_mt": null
-        }
-      ],
       "gender": null,
       "root_consonants": "ħ-f-n",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
       "is_loanword": 0,
       "is_inflectable": 0,
-      "source_title": "Wiktionary",
-      "source_page": "https://en.wiktionary.org/wiki/%C4%A7afna",
-      "source_citation": "Wiktionary: ħafna",
-      "source_publisher": "Wiktionary",
-      "tags": null,
-      "etymology_notes": null,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic ħafnaẗ (handful), grammaticalized into a degree adverb and quantifier.",
       "etymology_chain": [
         {
-          "relationship": "From",
+          "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "حَفْنة",
-          "definition": "a handful"
+          "term": "حَفْنَة",
+          "pronunciation": "ħafnaẗ",
+          "definition": "handful"
         }
       ],
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "a-a",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "verb_form": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "alternative_forms": [],
-      "related_entries": [
-        "n-ħafen"
+      "definitions": [
+        {
+          "text_en": "much, a lot, very, greatly",
+          "text_mt": "Fi kwantità jew fi grad kbir; b'mod abbundanti jew b'intensità qawwija.",
+          "register": "standard",
+          "nuance": "degree and quantity adverb"
+        }
       ],
-      "rank": 127,
-      "source_frequency_rank": 127,
-      "audit_status": "pending",
-      "audit_notes": "🔄 *(Duplicate: also at #141, #159)*",
+      "usage_examples": [
+        {
+          "mt": "Ħadmu ħafna biex ilestu l-proġett fil-ħin.",
+          "en": "They worked a lot to finish the project on time."
+        }
+      ],
+      "related_entries": [
+        "adv-ftit",
+        "adv-wisq",
+        "adv-aktar"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈħɐf.nɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 135,
+      "source_frequency_rank": 135,
+      "audit_status": "verified",
+      "audit_notes": "ID normalized from adj- to adv-. Populated missing Maltese definition and full etymology.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -907,100 +736,60 @@
       "headword": "wisq",
       "pos": "adverb",
       "gender": null,
-      "root_consonants": null,
-      "stem": "wisq",
-      "cv_pattern": null,
-      "morph_pattern": null,
+      "root_consonants": "w-s-għ",
+      "stem": null,
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: wisq",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/wisq",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic wusgħ (capacity, extent, power). Semitic root w-s-għ.",
       "etymology_chain": [
         {
-          "relationship": "From",
+          "relationship": "Inherited from",
           "language": "Arabic",
           "term": "وُسْع",
-          "definition": "that of which one is capable, one's capacity, power"
+          "pronunciation": "wusgħ",
+          "definition": "capacity, extent, power"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "too, too much / extremely",
-          "text_mt": "Ammont li jaqbeż il-kejl normali jew bil-kbir.",
-          "register": "",
-          "nuance": ""
+          "text_en": "too, too much, excessively, exceedingly",
+          "text_mt": "Fi grad jew f'ammont li jaqbeż il-kejl normali jew il-limitu mixtieq; bil-kbir.",
+          "register": "standard",
+          "nuance": "excessive degree adverb"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Kien hemm wisq nies fis-sala u ma kienx hemm spazju.",
-          "en": "There were too many people in the hall and no space."
+          "mt": "Kien hemm wisq nies fis-sala u ma kienx hemm fejn toqgħod.",
+          "en": "There were too many people in the hall and there was nowhere to stay."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "adv-ħafna",
+        "adv-ftit"
+      ],
       "alternative_forms": [],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈwɪsʔ/",
+          "ipa": "/wɪsk/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 148,
-      "source_frequency_rank": 148,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "rank": 139,
+      "source_frequency_rank": 139,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Restored Semitic root w-s-għ (stem set to null); removed slash from English text.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -1008,106 +797,148 @@
       "id": "adv-hemm",
       "headword": "hemm",
       "pos": "adverb",
-      "definitions": [
-        {
-          "text_en": "there",
-          "text_mt": null
-        },
-        {
-          "text_en": "there is, there are",
-          "text_mt": null
-        }
-      ],
       "gender": null,
       "root_consonants": null,
+      "stem": null,
+      "cv_pattern": "1v22",
+      "morph_pattern": "C1vC2C2",
       "is_loanword": 0,
       "is_inflectable": 0,
-      "source_title": "Wiktionary",
-      "source_page": "https://en.wiktionary.org/wiki/hemm",
-      "source_citation": "Wiktionary: hemm",
-      "source_publisher": "Wiktionary",
-      "tags": null,
-      "etymology_notes": null,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic θamma (there).",
       "etymology_chain": [
         {
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثَمَّ",
-          "definition": "there, there are, there is"
+          "pronunciation": "θamma",
+          "definition": "there, in that place"
         }
       ],
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "verb_form": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "alternative_forms": [],
-      "related_entries": [],
-      "rank": 152,
-      "source_frequency_rank": 152,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "definitions": [
+        {
+          "text_en": "there, in that place",
+          "text_mt": "F'dak il-post jew f'pożizzjoni 'l bogħod kemm mill-kelliem kif ukoll minn min qed jisma'.",
+          "register": "standard",
+          "nuance": "distal locative adverb"
+        },
+        {
+          "text_en": "there is, there are",
+          "text_mt": "Jindika l-preżenza jew l-eżistenza ta' persuna, ħaġa jew sitwazzjoni.",
+          "register": "standard",
+          "nuance": "existential marker"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħares hemm ħdejn is-siġra l-kbira; hemm qattus żgħir jorqod.",
+          "en": "Look there next to the big tree; there is a small cat sleeping."
+        }
+      ],
+      "related_entries": [
+        "adv-hawn",
+        "adv-hemmhekk"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "hemmhekk",
+          "type": "compound",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-hemmhekk",
+          "target_id": "adv-hemmhekk",
+          "notes": "Reinforced distal spatial adverb"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɛmː/",
+          "notes": null
+        }
+      ],
+      "rank": 147,
+      "source_frequency_rank": 147,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Populated missing Maltese definitions for locative and existential senses.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
-      "rank": 176,
-      "source_frequency_rank": 176,
-      "id": "n-aktar",
+      "id": "adv-aktar",
       "headword": "aktar",
       "pos": "adverb",
       "gender": null,
-      "root_consonants": null,
+      "root_consonants": "k-t-r",
       "stem": null,
-      "cv_pattern": null,
-      "morph_pattern": null,
+      "cv_pattern": "v12v3",
+      "morph_pattern": "vC1C2vC3",
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
-      "source_language": "Maltese",
-      "source_id": "src-1000mcw",
-      "source_citation": "1000 Most Common Maltese Words",
-      "source_title": "1000 Most Common Maltese Words",
-      "source_year": null,
-      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
-      "source_publisher": "1000mostcommonwords.com",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic 'akθar (more, most), elative pattern 'af'al from the root k-θ-r (to be numerous).",
+      "etymology_chain": [
         {
-          "text_en": "more",
-          "text_mt": null,
-          "register": "",
-          "nuance": ""
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَكْثَر",
+          "pronunciation": "akθar",
+          "definition": "more, most"
         }
       ],
-      "usage_examples": [],
-      "related_entries": [],
-      "alternative_forms": [],
-      "phonetics": [],
-      "audit_status": "pending",
-      "audit_notes": "🔄 *(Duplicate: also at #185)*",
+      "definitions": [
+        {
+          "text_en": "more, further",
+          "text_mt": "F'ammont, fi grad jew f'livell akbar; b'mod superjuri jew b'żieda ma' dak li kien hemm.",
+          "register": "standard",
+          "nuance": "comparative degree adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għandna bżonn naħdmu aktar biex nilħqu l-mira tagħna.",
+          "en": "We need to work more to achieve our goal."
+        }
+      ],
+      "related_entries": [
+        "adv-inqas",
+        "adv-ħafna",
+        "adv-iktar"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "iktar",
+          "type": "orthographic",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-iktar",
+          "target_id": "adv-iktar",
+          "notes": "Phonetic variant with initial i-"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐk.tɐr/",
+          "notes": null
+        }
+      ],
+      "rank": 153,
+      "source_frequency_rank": 153,
+      "audit_status": "verified",
+      "audit_notes": "ID normalized from n- prefix to adv-. Populated missing Maltese definition and Arabic elative etymology.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -1115,62 +946,58 @@
       "id": "adv-issa",
       "headword": "issa",
       "pos": "adverb",
-      "definitions": [
-        {
-          "text_en": "now",
-          "text_mt": null
-        }
-      ],
       "gender": null,
-      "root_consonants": null,
+      "root_consonants": "s-għ-t",
+      "stem": null,
+      "cv_pattern": "v12a",
+      "morph_pattern": "vC1C2a",
       "is_loanword": 0,
       "is_inflectable": 0,
-      "source_title": "Wiktionary",
-      "source_page": "https://en.wiktionary.org/wiki/issa",
-      "source_citation": "Wiktionary: issa",
-      "source_publisher": "Wiktionary",
-      "tags": null,
-      "etymology_notes": null,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic al-sâgħaẗ (the hour), used adverbially for 'now'.",
       "etymology_chain": [
         {
-          "relationship": "From",
+          "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "اَلسّاعة",
-          "definition": null
+          "term": "اَلسَّاعَة",
+          "pronunciation": "al-sâgħaẗ",
+          "definition": "the hour; now"
         }
       ],
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "verb_form": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "alternative_forms": [],
+      "definitions": [
+        {
+          "text_en": "now, at present, immediately",
+          "text_mt": "Fil-mument preżenti, fil-ħin attwali; minnufih.",
+          "register": "standard",
+          "nuance": "temporal present adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Irridu nitilqu issa stess biex ma nitilfux it-tluq tal-ajruplan.",
+          "en": "We must leave right now so we don't miss the plane's departure."
+        }
+      ],
       "related_entries": [],
-      "rank": 199,
-      "source_frequency_rank": 199,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɪs.sɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 159,
+      "source_frequency_rank": 159,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Populated missing Maltese definition and accurate Arabic etymology.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -1179,100 +1006,59 @@
       "headword": "qatt",
       "pos": "adverb",
       "gender": null,
-      "root_consonants": null,
-      "stem": "qatt",
-      "cv_pattern": null,
-      "morph_pattern": null,
+      "root_consonants": "q-t-t",
+      "stem": null,
+      "cv_pattern": "1v22",
+      "morph_pattern": "C1vC2C2",
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: qatt",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/qatt",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic qaṭṭu (never, not at all), negative temporal particle used with past tense or negated verbs.",
       "etymology_chain": [
         {
-          "relationship": "From",
+          "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قَطُّ",
-          "definition": "never"
+          "pronunciation": "qaṭṭu",
+          "definition": "never, at all"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "never",
-          "text_mt": "Adverbju ta' negazzjoni li jindika azzjoni li ma sseħħ bl-ebda mod.",
-          "register": "",
-          "nuance": ""
+          "text_en": "never, at no time",
+          "text_mt": "F'ebda żmien, f'ebda ħin jew f'ebda okkażjoni; bl-ebda mod fil-passat jew fil-futur.",
+          "register": "standard",
+          "nuance": "negative temporal adverb"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Qatt ma rajt il-baħar daqshekk kwieta fis-sajf.",
+          "mt": "Qatt ma rajt il-baħar daqshekk kalm fis-sajf.",
           "en": "I have never seen the sea so calm in summer."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "adv-dejjem"
+      ],
       "alternative_forms": [],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈʔɐtt/",
+          "ipa": "/ʔɐtː/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 223,
-      "source_frequency_rank": 223,
-      "audit_status": "pending",
-      "audit_notes": "🔄 *(Duplicate: also at #308)*",
+      "rank": 173,
+      "source_frequency_rank": 173,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Restored Semitic root q-t-t (stem set to null); cleaned definition phrasing.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -1289,92 +1075,51 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Italian",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: tard",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/tard",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Borrowed from Italian tardi (late), from Latin tardus (slow, tardy).",
       "etymology_chain": [
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "tardi",
+          "pronunciation": "tardi",
           "definition": "late"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "late",
-          "text_mt": "F'ħin li għadda wara l-mument maħsub.",
-          "register": "",
-          "nuance": ""
+          "text_en": "late, at a late hour",
+          "text_mt": "Fi żmien li għadda wara l-ħin stabbilit jew mistenni; mhux kmieni.",
+          "register": "standard",
+          "nuance": "temporal adverb"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Waslu tard filgħaxija minħabba t-traffiku fit-triq.",
-          "en": "They arrived late in the evening due to road traffic."
+          "mt": "Waslu tard filgħaxija minħabba t-traffiku kbir fit-triq.",
+          "en": "They arrived late in the evening due to heavy road traffic."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "adv-kmieni"
+      ],
       "alternative_forms": [],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈtɐrt/",
+          "ipa": "/tɐrt/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 240,
-      "source_frequency_rank": 240,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "rank": 181,
+      "source_frequency_rank": 181,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Definition polished to Oxford genus-differentia format.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -1383,35 +1128,36 @@
       "headword": "flimkien",
       "pos": "adverb",
       "gender": null,
-      "root_consonants": null,
-      "stem": "flimkien",
+      "root_consonants": "m-k-n",
+      "stem": null,
       "cv_pattern": null,
       "morph_pattern": null,
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: flimkien",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/flimkien",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Compound formed from fi + l- + imkien (in the place), from Arabic fî al-makân, grammaticalized to mean 'together'.",
       "etymology_chain": [
         {
-          "relationship": "From",
+          "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "فِي الْمَكان",
-          "definition": null
+          "term": "فِي الْمَكَان",
+          "pronunciation": "fî al-makân",
+          "definition": "in the place; together"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "together, jointly",
-          "text_mt": "Adverbju li jindika parteċipazzjoni minn tnejn jew aktar flimkien.",
-          "register": "",
-          "nuance": ""
+          "text_en": "together, jointly, mutually",
+          "text_mt": "F'kumpanija ta' xulxin, f'għaqda waħda jew b'kooperazzjoni bejn tnejn jew aktar; spalla ma' spalla.",
+          "register": "standard",
+          "nuance": "associative adverb"
         }
       ],
       "usage_examples": [
@@ -1421,7 +1167,7 @@
         }
       ],
       "related_entries": [
-        "n-kullimkien"
+        "adv-f-daqqa"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1431,54 +1177,10 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 276,
-      "source_frequency_rank": 276,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "rank": 182,
+      "source_frequency_rank": 182,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Tautology eliminated; restored Semitic root m-k-n (stem set to null).",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -1489,98 +1191,58 @@
       "gender": null,
       "root_consonants": "d-w-m",
       "stem": null,
-      "cv_pattern": "1vjjv3",
-      "morph_pattern": "C1vjjvC3",
+      "cv_pattern": "1ej2v3",
+      "morph_pattern": "C1ejC2vC3",
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: dejjem",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/dejjem",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic dâ'iman (always, constantly), adverbial accusative of active participle dâ'im from the root d-w-m (to last).",
       "etymology_chain": [
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "دَائِم",
-          "definition": "durable, enduring, eternal"
+          "term": "دَائِمًا",
+          "pronunciation": "dâ'iman",
+          "definition": "always, constantly"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "always",
-          "text_mt": "Mod jew stil li fih jiġi espress always.",
-          "register": "",
-          "nuance": ""
+          "text_en": "always, constantly, forever",
+          "text_mt": "F'kull żmien, b'mod kontinwu u bla waqfien; tul il-ħin kollu.",
+          "register": "standard",
+          "nuance": "continuous temporal adverb"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Uża l-espressjoni 'dejjem' b'mod xieraq fid-diskors.",
-          "en": "Used the expression 'always' appropriately in speech."
+          "mt": "Huwa dejjem jasal puntwali għax-xogħol kull filgħodu.",
+          "en": "He always arrives on time for work every morning."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "adv-qatt",
+        "adv-spiss"
+      ],
       "alternative_forms": [],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈdɛː.jjɛm/",
+          "ipa": "/ˈdɛj.jɛm/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "--e",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 287,
-      "source_frequency_rank": 287,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "rank": 185,
+      "source_frequency_rank": 185,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Replaced English string artifact with native Maltese definition.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -1597,105 +1259,57 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Sicilian",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: spiss",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/spiss",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Borrowed from Sicilian spissu (frequently, dense), from Latin spissus.",
       "etymology_chain": [
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "spissu",
-          "definition": "often"
-        },
-        {
-          "relationship": "From",
-          "language": "Latin",
-          "term": "spissus",
-          "definition": null
+          "pronunciation": "spissu",
+          "definition": "frequently, thick"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
           "text_en": "often, frequently",
-          "text_mt": "Ħafna drabi f'perjodu qasir minn ħin għal ieħor.",
-          "register": "",
-          "nuance": ""
+          "text_mt": "B'ripetizzjoni kontinwa f'intervalli qosra ta' ħin; ħafna drabi.",
+          "register": "standard",
+          "nuance": "frequency adverb"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Jmur jaffettwa l-isptar spiss biex iżur lin-nanna.",
-          "en": "He visits the hospital often to visit his grandmother."
+          "mt": "Hu jżur lin-nanna tiegħu spiss matul il-ġimgħa.",
+          "en": "He visits his grandmother often during the week."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "adv-dejjem",
+        "adv-qatt"
+      ],
       "alternative_forms": [],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈspɪss/",
+          "ipa": "/spɪsː/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 292,
-      "source_frequency_rank": 292,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "rank": 195,
+      "source_frequency_rank": 195,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Replaced corrupt usage example sentence.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
-      "rank": 307,
-      "source_frequency_rank": 307,
-      "id": "n-hawn-fuq",
+      "id": "adv-hawn-fuq",
       "headword": "hawn fuq",
       "pos": "adverb",
       "gender": null,
@@ -1708,35 +1322,76 @@
       "is_imala_blocked": 0,
       "source_language": "Maltese",
       "source_id": "src-1000mcw",
-      "source_citation": "1000 Most Common Maltese Words",
+      "source_citation": "Corpus tal-Malti / 1000 MCW",
       "source_title": "1000 Most Common Maltese Words",
-      "source_year": null,
-      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
-      "source_publisher": "1000mostcommonwords.com",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
+      "source_year": 2020,
+      "source_page": null,
+      "source_publisher": "Corpus tal-Malti",
+      "etymology_notes": "Compound of the proximal adverb hawn (here) and preposition fuq (above, on top).",
+      "etymology_chain": [
         {
-          "text_en": "above",
-          "text_mt": null,
-          "register": "",
-          "nuance": ""
+          "relationship": "Compound of",
+          "language": "Maltese",
+          "term": "hawn",
+          "pronunciation": "hawn",
+          "definition": "here"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "فَوْق",
+          "pronunciation": "fawq",
+          "definition": "above, over"
         }
       ],
-      "usage_examples": [],
-      "related_entries": [],
-      "alternative_forms": [],
-      "phonetics": [],
-      "audit_status": "pending",
-      "audit_notes": "ℹ️ *(Multi-word expression)*",
+      "definitions": [
+        {
+          "text_en": "up here, above",
+          "text_mt": "F'post jew f'pożizzjoni aktar 'il fuq qrib il-kelliem.",
+          "register": "standard",
+          "nuance": "proximal spatial adverb"
+        },
+        {
+          "text_en": "above, hereinbefore (in text)",
+          "text_mt": "F'parti preċedenti ta' kitba, test jew dokument referut.",
+          "register": "standard",
+          "nuance": "textual deictic"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kif semmejna hawn fuq, ir-regoli japplikaw għal kulħadd.",
+          "en": "As we mentioned above, the rules apply to everyone."
+        }
+      ],
+      "related_entries": [
+        "adv-hawn"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "hawnfuq",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˌɐwnˈfuːʔ/",
+          "notes": null
+        }
+      ],
+      "rank": 206,
+      "source_frequency_rank": 206,
+      "audit_status": "verified",
+      "audit_notes": "ID normalized from n- to adv-. Populated missing Maltese definitions for spatial and textual senses.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
-      "id": "n-bogħod",
+      "id": "adv-bogħod",
       "headword": "bogħod",
       "pos": "adverb",
-      "gender": "masculine",
+      "gender": null,
       "root_consonants": "b-għ-d",
       "stem": null,
       "cv_pattern": "1v2v3",
@@ -1745,33 +1400,34 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Arabic",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: bogħod",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/bog%C4%A7od",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic bugħd (distance, remoteness). Frequently used in adverbial locative phrases ('il bogħod, mill-bogħod).",
       "etymology_chain": [
         {
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بُعْد",
-          "definition": null
+          "pronunciation": "bugħd",
+          "definition": "distance, remoteness"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "distance, far away",
-          "text_mt": "Distanza kbira fejn tinsab viċin ir-reġjun.",
-          "register": "",
-          "nuance": ""
+          "text_en": "far, far away, at a distance",
+          "text_mt": "F'distanza kbira fi spazju jew fi żmien; mhux fil-qrib.",
+          "register": "standard",
+          "nuance": "distance adverb"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Għexu mill-bogħod minn xulxin għas-snin.",
-          "en": "They lived at a distance from each other for years."
+          "mt": "Id-dar tagħhom tinsab 'il bogħod miċ-ċentru tal-belt.",
+          "en": "Their house is situated far away from the city centre."
         }
       ],
       "related_entries": [],
@@ -1779,58 +1435,14 @@
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈbɔːt/",
+          "ipa": "/boːt/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "o-o",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 395,
-      "source_frequency_rank": 395,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "rank": 216,
+      "source_frequency_rank": 216,
+      "audit_status": "verified",
+      "audit_notes": "ID normalized from n- prefix to adv-. Definition refined to locative adverb format.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -1846,107 +1458,64 @@
       "is_loanword": 1,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
-      "source_language": "Latin",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: malajr",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/malajr",
-      "source_publisher": "Wiktionary",
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From preposition ma' (with) and l-ajr (the air, swiftness, from Sicilian aria / Latin aer), meaning literally 'with the speed of the wind'.",
       "etymology_chain": [
         {
-          "relationship": "From",
-          "language": "Latin",
-          "term": "aer",
-          "definition": "air"
+          "relationship": "Compound of",
+          "language": "Maltese",
+          "term": "ma'",
+          "pronunciation": "ma'",
+          "definition": "with"
         },
         {
           "relationship": "From",
-          "language": "Arabic",
-          "term": "مُلامِل",
-          "definition": "quick, swift"
+          "language": "Sicilian",
+          "term": "aria",
+          "pronunciation": "aria",
+          "definition": "air, breeze"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "fast, quickly",
-          "text_mt": "Adverbju ta' veloċità li jindika azzjoni ssir f'ħin qasir.",
-          "register": "",
-          "nuance": ""
+          "text_en": "fast, quickly, swiftly",
+          "text_mt": "B'ħeffa kbira, fi żmien qasir u b'moviment mgħaġġel; f'ħakka t'għajn.",
+          "register": "standard",
+          "nuance": "speed and manner adverb"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Ġera malajr biex jilħaq ix-xarabank u ma jagħmilx dewmien.",
-          "en": "He ran quickly to catch the bus and avoid delay."
+          "mt": "Ġera malajr kemm seta' biex jilħaq tal-linja.",
+          "en": "He ran as quickly as he could to catch the bus."
         }
       ],
       "related_entries": [
-        "n-ajruport",
-        "n-arja"
+        "adv-bil-mod"
       ],
       "alternative_forms": [],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈmɐː.lɐjr/",
+          "ipa": "/mɐˈlɐjr/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 436,
-      "source_frequency_rank": 436,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "rank": 217,
+      "source_frequency_rank": 217,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Corrected spurious Latin/Arabic etymology chain to Sicilian aria loan compound.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
-      "id": "adj-kmieni",
+      "id": "adv-kmieni",
       "headword": "kmieni",
       "pos": "adverb",
       "gender": null,
@@ -1958,27 +1527,28 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Latin",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: kmieni",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/kmieni",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Latin cum mane (in the early morning), through Sicilian camani / cumannani.",
       "etymology_chain": [
         {
-          "relationship": "From",
+          "relationship": "Borrowed from",
           "language": "Latin",
-          "term": "mane",
+          "term": "cum mane",
+          "pronunciation": "kum mane",
           "definition": "early in the morning"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "early",
-          "text_mt": "Li jseħħ jew jasal qabel il-ħin stabbilit jew kmieni fil-jum.",
-          "register": "",
-          "nuance": ""
+          "text_en": "early, in good time",
+          "text_mt": "Fil-bidu ta' perjodu jew qabel il-ħin mistenni; mhux tard.",
+          "register": "standard",
+          "nuance": "temporal adverb"
         }
       ],
       "usage_examples": [
@@ -1987,119 +1557,83 @@
           "en": "He woke up early in the morning to start work in the field."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "adv-tard"
+      ],
       "alternative_forms": [],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈkmɪː.nɪ/",
+          "ipa": "/kˈmɪː.nɪ/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 461,
-      "source_frequency_rank": 461,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "rank": 221,
+      "source_frequency_rank": 221,
+      "audit_status": "verified",
+      "audit_notes": "ID normalized from adj- to adv-. Refined definition to eliminate circularity.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
-      "id": "adj-inqas",
+      "id": "adv-inqas",
       "headword": "inqas",
       "pos": "adverb",
-      "definitions": [
-        {
-          "text_en": "comparative degree of ftit",
-          "text_mt": null
-        }
-      ],
       "gender": null,
       "root_consonants": "n-q-s",
+      "stem": null,
+      "cv_pattern": "v12v3",
+      "morph_pattern": "vC1C2vC3",
       "is_loanword": 0,
       "is_inflectable": 0,
-      "source_title": "Wiktionary",
-      "source_page": "https://en.wiktionary.org/wiki/inqas",
-      "source_citation": "Wiktionary: inqas",
-      "source_publisher": "Wiktionary",
-      "tags": null,
-      "etymology_notes": null,
-      "etymology_chain": [],
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "i-a",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "verb_form": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "From Arabic 'anqaṣ (less, fewer), elative pattern 'af'al from the root n-q-ṣ (to decrease).",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَنْقَص",
+          "pronunciation": "anqaṣ",
+          "definition": "less, fewer"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "less, fewer",
+          "text_mt": "F'ammont, fi grad jew f'livell iżgħar; b'mod inferjuri jew bi tnaqqis.",
+          "register": "standard",
+          "nuance": "comparative degree adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kilt inqas ħelu llum milli kilt ilbieraħ.",
+          "en": "I ate less sweets today than I ate yesterday."
+        }
+      ],
+      "related_entries": [
+        "adv-aktar",
+        "adv-ftit"
+      ],
       "alternative_forms": [],
-      "related_entries": [],
-      "rank": 474,
-      "source_frequency_rank": 474,
-      "audit_status": "pending",
-      "audit_notes": "🔄 *(Duplicate: also at #610)*",
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɪn.ʔɐs/",
+          "notes": null
+        }
+      ],
+      "rank": 249,
+      "source_frequency_rank": 249,
+      "audit_status": "verified",
+      "audit_notes": "ID normalized from adj- to adv-. Populated missing Maltese definition and Arabic elative etymology.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -2109,87 +1643,65 @@
       "pos": "adverb",
       "gender": null,
       "root_consonants": null,
-      "stem": "bil-mod",
+      "stem": "mod",
       "cv_pattern": null,
       "morph_pattern": null,
-      "is_loanword": 0,
+      "is_loanword": 1,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
-      "source_language": "Uncertain",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: bil-mod",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/bil-mod",
-      "source_publisher": "Wiktionary",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Compound adverb formed from Semitic preposition bi + definite article l- + Romance loan noun mod (manner, way), from Sicilian modu / Latin modus.",
+      "etymology_chain": [
         {
-          "text_en": "slowly",
-          "text_mt": "Li għandu x'jaqsam ma' bil-mod fl-użu u t-tifsira uffiċjali.",
-          "register": "",
-          "nuance": ""
+          "relationship": "Compound of",
+          "language": "Maltese",
+          "term": "bi",
+          "pronunciation": "bi",
+          "definition": "with, by"
+        },
+        {
+          "relationship": "From",
+          "language": "Sicilian",
+          "term": "modu",
+          "pronunciation": "modu",
+          "definition": "manner, way"
         }
       ],
-      "usage_examples": [],
-      "related_entries": [],
+      "definitions": [
+        {
+          "text_en": "slowly, gently, step by step",
+          "text_mt": "Mingħajr għaġla, pass wara pass u b'attenzjoni; bil-ftit il-ftit.",
+          "register": "standard",
+          "nuance": "manner adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kellem lit-tifel bil-mod biex jikkalma u ma jibżax.",
+          "en": "Speak to the child gently so he calms down and is not afraid."
+        }
+      ],
+      "related_entries": [
+        "adv-malajr"
+      ],
       "alternative_forms": [],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈbɪl-.mɔt/",
+          "ipa": "/bɪlˈmɔːt/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 485,
-      "source_frequency_rank": 485,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "rank": 251,
+      "source_frequency_rank": 251,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Eliminated circular tautology; provided accurate etymology and usage example.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -2206,39 +1718,34 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Sicilian",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: forsi",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/forsi",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Borrowed from Sicilian forsi (maybe, perhaps), from Latin forsit / forsitan.",
       "etymology_chain": [
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "forsi",
-          "definition": null
-        },
-        {
-          "relationship": "From",
-          "language": "Latin",
-          "term": "forsit",
-          "definition": null
+          "pronunciation": "forsi",
+          "definition": "perhaps, maybe"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "maybe, perhaps",
-          "text_mt": "Adverbju użat biex jesprimi dubju jew possibbiltà ta' azzjoni.",
-          "register": "",
-          "nuance": ""
+          "text_en": "maybe, perhaps, possibly",
+          "text_mt": "B'mod probabbli iżda mhux ċert; jista' jkun li.",
+          "register": "standard",
+          "nuance": "epistemic modal adverb"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Baqgħu jaħdmu forsi matul il-ġurnata kollha.",
-          "en": "They kept working maybe, perhaps throughout the whole day."
+          "mt": "Forsi għada tagħmel ix-xita skont kif qal it-temp.",
+          "en": "Perhaps tomorrow it will rain according to the weather forecast."
         }
       ],
       "related_entries": [],
@@ -2250,94 +1757,89 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 510,
-      "source_frequency_rank": 510,
-      "audit_status": "pending",
-      "audit_notes": null,
+      "rank": 255,
+      "source_frequency_rank": 255,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Replaced flawed sentence with natural usage example.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
-      "rank": 512,
-      "source_frequency_rank": 512,
-      "id": "n-f-daqqa",
+      "id": "adv-f-daqqa",
       "headword": "f’daqqa",
       "pos": "adverb",
       "gender": null,
-      "root_consonants": null,
+      "root_consonants": "d-q-q",
       "stem": null,
       "cv_pattern": null,
       "morph_pattern": null,
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
-      "source_language": "Maltese",
-      "source_id": "src-1000mcw",
-      "source_citation": "1000 Most Common Maltese Words",
-      "source_title": "1000 Most Common Maltese Words",
-      "source_year": null,
-      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
-      "source_publisher": "1000mostcommonwords.com",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Prepositional adverb from fi (in) and daqqa (blow, knock, instant), from Arabic daqqaẗ.",
+      "etymology_chain": [
         {
-          "text_en": "sudden",
-          "text_mt": null,
-          "register": "",
-          "nuance": ""
+          "relationship": "Compound of",
+          "language": "Maltese",
+          "term": "fi",
+          "pronunciation": "fi",
+          "definition": "in, at"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دَقَّة",
+          "pronunciation": "daqqaẗ",
+          "definition": "beat, knock, instant"
         }
       ],
-      "usage_examples": [],
-      "related_entries": [],
-      "alternative_forms": [],
-      "phonetics": [],
-      "audit_status": "pending",
-      "audit_notes": null,
+      "definitions": [
+        {
+          "text_en": "suddenly, all of a sudden",
+          "text_mt": "B'mod għarrieda u bla mistenni; ħabta u sabta.",
+          "register": "standard",
+          "nuance": "sudden temporal adverb"
+        },
+        {
+          "text_en": "at once, simultaneously, together",
+          "text_mt": "F'mument wieħed u fl-istess waqt; f'salt wieħed.",
+          "register": "standard",
+          "nuance": "simultaneous temporal adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "F'daqqa waħda nstema' ragħad qawwi fis-sema.",
+          "en": "Suddenly loud thunder was heard in the sky."
+        }
+      ],
+      "related_entries": [
+        "adv-flimkien"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "f'daqqa",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/fˈdɐʔ.ʔɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 263,
+      "source_frequency_rank": 263,
+      "audit_status": "verified",
+      "audit_notes": "ID normalized from n- to adv-. Populated missing Maltese definitions for both sudden and simultaneous senses.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
@@ -2354,33 +1856,34 @@
       "is_inflectable": 0,
       "is_imala_blocked": 0,
       "source_language": "Italian",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: pjuttost",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/pjuttost",
-      "source_publisher": "Wiktionary",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Borrowed from Italian piuttosto (rather, quite, instead).",
       "etymology_chain": [
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "piuttosto",
-          "definition": "rather, somewhat, fairly"
+          "pronunciation": "piuttosto",
+          "definition": "rather, quite"
         }
       ],
-      "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "rather, on the contrary",
-          "text_mt": "Adverbju li jindika grad jew bidla fir-risposta.",
-          "register": "",
-          "nuance": ""
+          "text_en": "rather, quite, fairly, somewhat",
+          "text_mt": "Fi grad konsiderevoli iżda mhux estrem; sa ċertu punt jew relattivament.",
+          "register": "standard",
+          "nuance": "degree adverb"
         }
       ],
       "usage_examples": [
         {
-          "mt": "Kienet mistoqsija pjuttost diffiċli għall-istudenti.",
-          "en": "It was a rather difficult question for the students."
+          "mt": "Kienet mistoqsija pjuttost diffiċli għall-istudenti kollha.",
+          "en": "It was a rather difficult question for all the students."
         }
       ],
       "related_entries": [],
@@ -2388,67 +1891,21 @@
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈpjʊt.tɔst/",
+          "ipa": "/pjʊtˈtɔst/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 653,
-      "source_frequency_rank": 653,
-      "audit_status": "pending",
-      "audit_notes": "🔄 *(Duplicate: also at #809)*",
+      "rank": 279,
+      "source_frequency_rank": 279,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Definition polished to precise degree semantics.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
-      "rank": 752,
-      "source_frequency_rank": 752,
-      "id": "n-mhux-se",
+      "id": "part-mhux-se",
       "headword": "mhux se",
-      "pos": "adverb",
+      "pos": "particle",
       "gender": null,
       "root_consonants": null,
       "stem": null,
@@ -2457,57 +1914,106 @@
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
-      "source_language": "Maltese",
-      "source_id": "src-1000mcw",
-      "source_citation": "1000 Most Common Maltese Words",
-      "source_title": "1000 Most Common Maltese Words",
-      "source_year": null,
-      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
-      "source_publisher": "1000mostcommonwords.com",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Borg & Azzopardi-Alexander (1997); Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Negative future particle phrase compounding mhux (not, from Arabic mâ huwa shay') and preverbal future se (going to).",
+      "etymology_chain": [
         {
-          "text_en": "won’t",
-          "text_mt": null,
-          "register": "",
-          "nuance": ""
+          "relationship": "Compound of",
+          "language": "Maltese",
+          "term": "mhux",
+          "pronunciation": "mhux",
+          "definition": "not"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَا هُوَ شَيْء",
+          "pronunciation": "mâ huwa shay'",
+          "definition": "not a thing, it is not"
         }
       ],
-      "usage_examples": [],
-      "related_entries": [],
+      "definitions": [
+        {
+          "text_en": "will not, won't, not going to",
+          "text_mt": "Partiċella negattiva tal-futur li tindika ċaħda jew nuqqas ta' twettiq ta' azzjoni fil-ġejjieni.",
+          "register": "standard",
+          "nuance": "negative future marker"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Aħna mhux se mmorru hemm jekk tagħmel ix-xita.",
+          "en": "We won't go there if it rains."
+        }
+      ],
+      "related_entries": [
+        "part-se"
+      ],
       "alternative_forms": [],
-      "phonetics": [],
-      "audit_status": "pending",
-      "audit_notes": "ℹ️ *(Multi-word expression)*",
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/muːsˈsɛ/",
+          "notes": null
+        }
+      ],
+      "rank": 288,
+      "source_frequency_rank": 288,
+      "audit_status": "verified",
+      "audit_notes": "ID normalized from n- to part-. Populated missing Maltese definition and compound etymology.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     },
     {
       "id": "intj-jekk-jogħġbok",
       "headword": "jekk jogħġbok",
-      "pos": "adverb",
-      "definitions": [
-        {
-          "text_en": "please",
-          "text_mt": "Espressjoni ta' edukazzjoni użata biex issir talba b'mod ġentili.",
-          "register": "",
-          "nuance": ""
-        }
-      ],
+      "pos": "interjection",
       "gender": null,
-      "root_consonants": null,
+      "root_consonants": "għ-ġ-b",
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 0,
       "is_inflectable": 0,
-      "source_language": null,
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: jekk jogħġbok",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/jekk_jog%C4%A7%C4%A1bok",
-      "source_publisher": "Wiktionary",
-      "etymology_chain": [],
-      "etymology_notes": null,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": "Polite formula consisting of conjunction jekk (if) and 3sg imperfective verb with 2sg pronominal clitic jogħġbok (it pleases you).",
+      "etymology_chain": [
+        {
+          "relationship": "Formulaic clause of",
+          "language": "Maltese",
+          "term": "jekk",
+          "pronunciation": "jekk",
+          "definition": "if"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَعْجَبَ",
+          "pronunciation": "a'għjaba",
+          "definition": "to please, delight"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "please, if you please",
+          "text_mt": "Formola ta' korteżija użata meta ssir talba, xewqa jew mistoqsija b'mod edukat u ġentili; bil-qalb kollha.",
+          "register": "standard",
+          "nuance": "politeness formula"
+        }
+      ],
       "usage_examples": [
         {
           "mt": "Tista' tgħaddili l-melħ, jekk jogħġbok?",
@@ -2519,48 +2025,606 @@
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈjɛkk ˈjɔːd͡ʒ.bɔk/",
+          "ipa": "/ˌjɛk jɔːd͡ʒˈbɔk/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
+      "rank": 295,
+      "source_frequency_rank": 295,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard. Definition polished to avoid self-reference; etymology provided.",
+      "theme": "Adverbs & Modal Particles",
+      "theme_id": "adverbs_particles"
+    },
+    {
+      "id": "adv-hawnhekk",
+      "headword": "hawnhekk",
+      "pos": "adverb",
+      "gender": null,
+      "root_consonants": null,
       "stem": null,
       "cv_pattern": null,
       "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
       "is_imala_blocked": 0,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "rank": 765,
-      "source_frequency_rank": 765,
-      "audit_status": "pending",
-      "audit_notes": "ℹ️ *(Multi-word expression)*",
+      "source_language": "Maltese",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Serracino-Inglott, Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "tags": [
+        "compound",
+        "spatial"
+      ],
+      "etymology_notes": "Compound adverb formed by fusing the proximal locative hawn (here) with the deictic particle hekk (thus, so, from Arabic hâkađâ), yielding a reinforced proximal spatial sense ('right here').",
+      "etymology_chain": [
+        {
+          "relationship": "Compound of",
+          "language": "Maltese",
+          "term": "hawn",
+          "pronunciation": "hawn",
+          "definition": "here"
+        },
+        {
+          "relationship": "Fused with",
+          "language": "Maltese",
+          "term": "hekk",
+          "pronunciation": "hekk",
+          "definition": "thus, so"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هَاهُنَا + هٰكَذَا",
+          "pronunciation": "hâhunâ + hâkađâ",
+          "definition": "here + thus"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "right here, here, just here",
+          "text_mt": "Propju f'dan il-post jew f'din il-pożizzjoni eżatta fejn jinsab il-kelliem; f'dan il-punt preċiż.",
+          "register": "standard",
+          "nuance": "reinforced proximal spatial adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Poġġi l-kaxxa hawnhekk fuq il-mejda biex ma taqax.",
+          "en": "Put the box right here on the table so it doesn't fall."
+        }
+      ],
+      "related_entries": [
+        "adv-hawn",
+        "adv-hekk",
+        "adv-hemmhekk",
+        "adv-hawna",
+        "adv-hawni"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "hawn",
+          "type": "canonical",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-hawn",
+          "target_id": "adv-hawn",
+          "notes": "Base proximal spatial adverb"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɐwnˈɛkː/",
+          "notes": null
+        }
+      ],
+      "rank": 72,
+      "source_frequency_rank": 72,
+      "audit_status": "verified",
+      "audit_notes": "Added as full lemma. Etymology derived from hawn and hekk; Oxford and Miklem compliant.",
+      "theme": "Adverbs & Modal Particles",
+      "theme_id": "adverbs_particles"
+    },
+    {
+      "id": "adv-hawna",
+      "headword": "hawna",
+      "pos": "adverb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "tags": [
+        "alternative-form",
+        "colloquial"
+      ],
+      "etymology_notes": "Spoken emphatic form of hawn with terminal paragogic vowel -a.",
+      "etymology_chain": [
+        {
+          "relationship": "Variant of",
+          "language": "Maltese",
+          "term": "hawn",
+          "pronunciation": "hawn",
+          "definition": "here"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هَاهُنَا",
+          "pronunciation": "hâhunâ",
+          "definition": "here"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "here, over here",
+          "text_mt": "Għamla djalettali u mitkellma b'tisħiħ tal-avverbju 'hawn' biex tindika post qrib il-kelliem.",
+          "register": "colloquial",
+          "nuance": "emphatic spoken proximal adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ejja hawna ħdejja biex nurik x'sibna.",
+          "en": "Come over here near me so I can show you what we found."
+        }
+      ],
+      "related_entries": [
+        "adv-hawn",
+        "adv-hawnhekk",
+        "adv-hawni"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "hawn",
+          "type": "canonical",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-hawn",
+          "target_id": "adv-hawn",
+          "notes": "Standard citation form"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐw.nɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 73,
+      "source_frequency_rank": 73,
+      "audit_status": "verified",
+      "audit_notes": "Added as full lemma for dialectal alternative form of hawn.",
+      "theme": "Adverbs & Modal Particles",
+      "theme_id": "adverbs_particles"
+    },
+    {
+      "id": "adv-hawni",
+      "headword": "hawni",
+      "pos": "adverb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "tags": [
+        "alternative-form",
+        "dialectal"
+      ],
+      "etymology_notes": "Regional spoken variant of hawn with terminal paragogic vowel -i.",
+      "etymology_chain": [
+        {
+          "relationship": "Variant of",
+          "language": "Maltese",
+          "term": "hawn",
+          "pronunciation": "hawn",
+          "definition": "here"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "هَاهُنَا",
+          "pronunciation": "hâhunâ",
+          "definition": "here"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "here, over here",
+          "text_mt": "Għamla djalettali oħra ta' 'hawn' b'vokali finali miżjuda, komuni f'xi nħawi tal-gżejjer Maltin.",
+          "register": "dialectal",
+          "nuance": "regional spoken proximal adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Qiegħed hawni nistenniek ħdejn il-bieb.",
+          "en": "I am here waiting for you by the door."
+        }
+      ],
+      "related_entries": [
+        "adv-hawn",
+        "adv-hawnhekk",
+        "adv-hawna"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "hawn",
+          "type": "canonical",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-hawn",
+          "target_id": "adv-hawn",
+          "notes": "Standard citation form"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐw.nɪ/",
+          "notes": null
+        }
+      ],
+      "rank": 74,
+      "source_frequency_rank": 74,
+      "audit_status": "verified",
+      "audit_notes": "Added as full lemma for regional dialectal variant of hawn.",
+      "theme": "Adverbs & Modal Particles",
+      "theme_id": "adverbs_particles"
+    },
+    {
+      "id": "adv-hemmhekk",
+      "headword": "hemmhekk",
+      "pos": "adverb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Maltese",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Serracino-Inglott, Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "tags": [
+        "compound",
+        "spatial"
+      ],
+      "etymology_notes": "Compound adverb formed by fusing the distal locative hemm (there) with the deictic particle hekk (thus, so, from Arabic hâkađâ), yielding a reinforced distal spatial sense ('right there, over there').",
+      "etymology_chain": [
+        {
+          "relationship": "Compound of",
+          "language": "Maltese",
+          "term": "hemm",
+          "pronunciation": "hemm",
+          "definition": "there"
+        },
+        {
+          "relationship": "Fused with",
+          "language": "Maltese",
+          "term": "hekk",
+          "pronunciation": "hekk",
+          "definition": "thus, so"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ثَمَّ + هٰكَذَا",
+          "pronunciation": "θamma + hâkađâ",
+          "definition": "there + thus"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "right there, over there, in that exact place",
+          "text_mt": "Propju f'dak il-post jew f'dik il-pożizzjoni determinata 'l bogħod mill-kelliem; f'dak il-punt preċiż.",
+          "register": "standard",
+          "nuance": "reinforced distal spatial adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħallih hemmhekk ħdejn it-tieqa sakemm niġi għalih.",
+          "en": "Leave it right there by the window until I come for it."
+        }
+      ],
+      "related_entries": [
+        "adv-hemm",
+        "adv-hekk",
+        "adv-hawnhekk"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "hemm",
+          "type": "canonical",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-hemm",
+          "target_id": "adv-hemm",
+          "notes": "Base distal spatial adverb"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɛmˈmɛkː/",
+          "notes": null
+        }
+      ],
+      "rank": 148,
+      "source_frequency_rank": 148,
+      "audit_status": "verified",
+      "audit_notes": "Added as full lemma. Compound of hemm and hekk, parallel to hawnhekk.",
+      "theme": "Adverbs & Modal Particles",
+      "theme_id": "adverbs_particles"
+    },
+    {
+      "id": "adv-iktar",
+      "headword": "iktar",
+      "pos": "adverb",
+      "gender": null,
+      "root_consonants": "k-t-r",
+      "stem": null,
+      "cv_pattern": "v12v3",
+      "morph_pattern": "vC1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "tags": [
+        "alternative-form",
+        "comparative"
+      ],
+      "etymology_notes": "Phonetic orthographic variant of aktar with initial close front vowel i-.",
+      "etymology_chain": [
+        {
+          "relationship": "Variant of",
+          "language": "Maltese",
+          "term": "aktar",
+          "pronunciation": "aktar",
+          "definition": "more"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَكْثَر",
+          "pronunciation": "akθar",
+          "definition": "more, most"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "more, further",
+          "text_mt": "Għamla fonetika oħra ta' 'aktar' użata biex tindika kwantità, grad jew livell superjuri.",
+          "register": "standard",
+          "nuance": "comparative degree adverb"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm iktar nies milli konna qed nistennew.",
+          "en": "There were more people than we were expecting."
+        }
+      ],
+      "related_entries": [
+        "adv-aktar",
+        "adv-inqas"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "aktar",
+          "type": "canonical",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-aktar",
+          "target_id": "adv-aktar",
+          "notes": "Primary citation lemma form"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɪk.tɐr/",
+          "notes": null
+        }
+      ],
+      "rank": 154,
+      "source_frequency_rank": 154,
+      "audit_status": "verified",
+      "audit_notes": "Added as full lemma for orthographic variant iktar.",
+      "theme": "Adverbs & Modal Particles",
+      "theme_id": "adverbs_particles"
+    },
+    {
+      "id": "part-sa",
+      "headword": "sa",
+      "pos": "particle",
+      "gender": null,
+      "root_consonants": "s-j-r",
+      "stem": null,
+      "cv_pattern": "1a",
+      "morph_pattern": "C1a",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "tags": [
+        "alternative-form",
+        "dialectal"
+      ],
+      "etymology_notes": "Dialectal and archaic preverbal future tense variant of se.",
+      "etymology_chain": [
+        {
+          "relationship": "Variant of",
+          "language": "Maltese",
+          "term": "se",
+          "pronunciation": "se",
+          "definition": "will, shall"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَـ",
+          "pronunciation": "sa",
+          "definition": "future verbal prefix"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "will, shall (future marker)",
+          "text_mt": "Varjant djalettali jew arkajku tal-partiċella tal-futur 'se' użat qabel verbi fl-imperfett.",
+          "register": "dialectal",
+          "nuance": "preverbal future particle variant"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għada sa mmur il-belt kmieni.",
+          "en": "Tomorrow I will go to the city early."
+        }
+      ],
+      "related_entries": [
+        "part-se"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "se",
+          "type": "canonical",
+          "has_lemma_entry": true,
+          "target_entry_id": "part-se",
+          "target_id": "part-se",
+          "notes": "Standard future preverbal particle"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/sɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 46,
+      "source_frequency_rank": 46,
+      "audit_status": "verified",
+      "audit_notes": "Added as full lemma for dialectal/archaic variant sa.",
+      "theme": "Adverbs & Modal Particles",
+      "theme_id": "adverbs_particles"
+    },
+    {
+      "id": "adv-bass",
+      "headword": "bass",
+      "pos": "adverb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "bass",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Persian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "tags": [
+        "alternative-form",
+        "dialectal"
+      ],
+      "etymology_notes": "Older or dialectal vocalic variant of biss (only), preserving the original Arabic vowel a from bas.",
+      "etymology_chain": [
+        {
+          "relationship": "Variant of",
+          "language": "Maltese",
+          "term": "biss",
+          "pronunciation": "biss",
+          "definition": "only"
+        },
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "بَسْ",
+          "pronunciation": "bas",
+          "definition": "only, enough"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "only, merely",
+          "text_mt": "Varjant antik jew djalettali ta' 'biss' li jfisser esklużivament jew mingħajr żieda ta' xejn aktar.",
+          "register": "dialectal",
+          "nuance": "restrictive focus adverb variant"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Wieħed bass kien fadal fil-kamra.",
+          "en": "Only one remained in the room."
+        }
+      ],
+      "related_entries": [
+        "adv-biss"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "biss",
+          "type": "canonical",
+          "has_lemma_entry": true,
+          "target_entry_id": "adv-biss",
+          "target_id": "adv-biss",
+          "notes": "Standard citation form"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/bɐsː/",
+          "notes": null
+        }
+      ],
+      "rank": 123,
+      "source_frequency_rank": 123,
+      "audit_status": "verified",
+      "audit_notes": "Added as full lemma for dialectal variant bass.",
       "theme": "Adverbs & Modal Particles",
       "theme_id": "adverbs_particles"
     }

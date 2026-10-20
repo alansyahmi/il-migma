@@ -326,9 +326,6 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
     const { language } = useLanguage();
     const { term, mode } = useLinguisticMode();
     const { hideTheoreticalForms } = useHideTheoreticalForms();
-    const [searchParams] = useSearchParams();
-    const currentQuery = (searchParams.get('q') || '').trim().toLowerCase();
-
     const alternativeForms = parseMaybeArray<any>(result.entry.alternative_forms);
     const headword = hideTheoreticalForms ? stripTheoreticalPrefix(result.headword) : result.headword;
     const visibleInflections = result.inflections.filter(row => !shouldHideSurface(row, hideTheoreticalForms));
@@ -337,17 +334,6 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
             .filter((alt: any) => !shouldHideSurface(alt, hideTheoreticalForms))
             .map((alt: any) => ({ ...alt, headword: stripTheoreticalPrefix(alt.headword || '') }))
         : alternativeForms;
-
-    const matchedAltForm = currentQuery
-        ? displayAlternativeForms.find((alt: any) =>
-            alt.headword && alt.headword.toLowerCase().trim() === currentQuery
-          ) || displayAlternativeForms.find((alt: any) =>
-            alt.headword && (
-                alt.headword.toLowerCase().includes(currentQuery) ||
-                currentQuery.includes(alt.headword.toLowerCase())
-            )
-          )
-        : null;
 
     return (
         <div className="bg-white rounded-xl border border-black/8 shadow-sm overflow-hidden mb-3 w-full">
@@ -361,23 +347,6 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                             className="font-serif font-extrabold text-[1.35rem] leading-tight text-black hover:underline block">
                             {headword}
                         </Link>
-                        {matchedAltForm && (
-                            <div className="mt-1">
-                                <span className="inline-flex items-center gap-1 text-[11px] font-sans font-medium text-[#1034A6] bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
-                                    <span className="opacity-70 font-normal">
-                                        {term('variant-matched') || 'Varjant'}:
-                                    </span>
-                                    <span className="font-serif font-bold">
-                                        {matchedAltForm.headword}
-                                    </span>
-                                    {matchedAltForm.type && (
-                                        <span className="text-[9px] uppercase opacity-75">
-                                            ({term(matchedAltForm.type) || matchedAltForm.type})
-                                        </span>
-                                    )}
-                                </span>
-                            </div>
-                        )}
                         <div className="flex flex-wrap items-center gap-x-2 mt-0.5">
                             <Link to={result.rootHref}
                                 style={{ color: EGYPTIAN_BLUE }}
@@ -529,6 +498,7 @@ interface AdvancedFilters {
     includePending: boolean;
     isRegex: boolean;
     tag: string;
+    register: string;
 
     // Legacy fields for initial state mapping from URL
     dualPattern?: string;
@@ -549,6 +519,7 @@ const DEFAULT_FILTERS: AdvancedFilters = {
     rootType: '',
     weakClass: '',
     source: '',
+    register: '',
     rootRadicals: ['', '', '', ''],
     wizenPattern: '',
     vowelSet: '',
@@ -578,6 +549,11 @@ export function AdvancedSearch() {
     const POS_FILTER_OPTIONS = useMemo(() => [
         { value: '', label: term('all') },
         ...getOptions('pos', mode, language)
+    ], [getOptions, mode, language, term]);
+
+    const REGISTER_FILTER_OPTIONS = useMemo(() => [
+        { value: '', label: term('all') },
+        ...getOptions('register', mode, language)
     ], [getOptions, mode, language, term]);
 
     const ROOT_TYPE_FILTER_OPTIONS = useMemo(() => {
@@ -659,6 +635,7 @@ export function AdvancedSearch() {
         if (searchParams.has('suggested')) f.includeSuggested = searchParams.get('suggested') === 'true';
         if (searchParams.has('pending')) f.includePending = searchParams.get('pending') !== 'false';
         if (searchParams.has('tag')) f.tag = searchParams.get('tag')!;
+        if (searchParams.has('register')) f.register = searchParams.get('register')!;
         if (searchParams.has('limit')) f.maxResults = searchParams.get('limit')!;
         return f;
     });
@@ -712,6 +689,7 @@ export function AdvancedSearch() {
         searchParams.has('ep') ||
         searchParams.has('dmp') ||
         searchParams.has('tag') ||
+        searchParams.has('register') ||
         searchParams.has('r1');
 
     useEffect(() => {
@@ -740,6 +718,7 @@ export function AdvancedSearch() {
         const vowelSetOppFilter = searchParams.get('vs_opp') || '';
         const vowelSetPlFilter = searchParams.get('vs_pl') || '';
         const tagFilter = searchParams.get('tag') || '';
+        const registerFilter = searchParams.get('register') || '';
         const radicals = [
             searchParams.get('r1') || '',
             searchParams.get('r2') || '',
@@ -776,6 +755,7 @@ export function AdvancedSearch() {
             ep: elativePatternFilter || undefined,
             dmp: diminutivePatternFilter || undefined,
             tag: tagFilter || undefined,
+            register: registerFilter || undefined,
             vs_sg: vowelSetSgFilter || undefined,
             vs_opp: vowelSetOppFilter || undefined,
             vs_pl: vowelSetPlFilter || undefined,
@@ -949,6 +929,7 @@ export function AdvancedSearch() {
         if (filters.includeSuggested) params.suggested = 'true';
         if (!filters.includePending) params.pending = 'false';
         if (filters.tag) params.tag = filters.tag;
+        if (filters.register) params.register = filters.register;
         if (filters.maxResults && filters.maxResults !== DEFAULT_FILTERS.maxResults) params.limit = filters.maxResults;
         setSearchParams(params);
         setShowFiltersMobile(false);
@@ -1194,6 +1175,13 @@ export function AdvancedSearch() {
                                         { value: 'borg1997', label: 'Borg & Azzopardi-Alexander (1997)' },
                                         { value: 'maltese-academy', label: term('maltese-academy') },
                                     ]}
+                                />
+
+                                <FilterSelect
+                                    label={term("register")}
+                                    value={filters.register}
+                                    onChange={v => setFilter('register', v)}
+                                    options={REGISTER_FILTER_OPTIONS}
                                 />
                             </CollapsibleSection>
 

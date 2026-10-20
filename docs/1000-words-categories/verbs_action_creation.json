@@ -67,7 +67,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "stampa",
-          "definition": null
+          "definition": null,
+          "pronunciation": "stampa"
         }
       ],
       "etymology_notes": null,
@@ -505,7 +506,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "nummru",
-          "definition": "number"
+          "definition": "number",
+          "pronunciation": "nummru"
         }
       ],
       "etymology_notes": null,
@@ -1137,7 +1139,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "*اِسْتَأَنَّى",
-          "definition": null
+          "definition": null,
+          "pronunciation": "*âsta'annâ"
         }
       ],
       "etymology_notes": null,
@@ -1724,7 +1727,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "كَتَبَ",
-          "definition": "compile, compose, draft"
+          "definition": "compile, compose, draft",
+          "pronunciation": "kataba"
         }
       ],
       "etymology_notes": null,

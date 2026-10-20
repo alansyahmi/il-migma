@@ -687,7 +687,7 @@ function BulkOperations({ getToken }: { getToken: () => Promise<string | null>; 
         log(t(`Starting high-efficiency batch import: ${totalEntries} entries (${formatLabel}). Mode: ${skipExisting ? 'Skip existing duplicates' : 'Upsert / update matching'}`,
               `Qed tibda l-importazzjoni: ${totalEntries} entrata (${formatLabel}). Mod: ${skipExisting ? 'Aqbeż duplikati' : 'Aġġorna/Daħħal'}`));
 
-        const BATCH_SIZE = 50;
+        const BATCH_SIZE = 10;
         const totalBatches = Math.ceil(totalEntries / BATCH_SIZE);
         let processed = 0;
         let inserted = 0;

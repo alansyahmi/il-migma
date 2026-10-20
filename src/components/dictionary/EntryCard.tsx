@@ -13,8 +13,10 @@ import { SubEntryBlock } from './SubEntryBlock';
 import { LinkedEntryList } from './LinkedEntryList';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 import type { Entry } from '@/types';
+import { resolveRegisterDisplay } from '@/lib/terminology';
 import { isHiddenTag, resolveTagLabel, stripTagPrefixes } from '@/lib/tagLabel';
 import { shouldHideSurface, stripTheoreticalPrefix } from '@/lib/theoreticalForms';
 
@@ -31,7 +33,8 @@ const getEntryTabs = (term: (key: string) => string) => [
 ];
 
 export function EntryCard({ entry, compact = false, linkToFull = false }: EntryCardProps) {
-    const { term } = useLinguisticMode();
+    const { mode, term } = useLinguisticMode();
+    const { language } = useLanguage();
     const { hideTheoreticalForms } = useHideTheoreticalForms();
     const [activeTab, setActiveTab] = useState('definitions');
     const [saved, setSaved] = useState(false);
@@ -163,7 +166,7 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                 <Badge variant="tag">{term(entry.noun_morphology.gender)}</Badge>
                             )}
                             {entry.is_loanword && entry.source_language && (
-                                <Badge variant="source">← {entry.source_language}</Badge>
+                                <Badge variant="source">← {term(entry.source_language) || entry.source_language}</Badge>
                             )}
                             <RootPatternBadge form={entry.root_pattern_form} />
                             {entry.tags?.filter(t => !t.startsWith('\\') && !isHiddenTag(t)).map(t => {
@@ -248,13 +251,20 @@ export function EntryCard({ entry, compact = false, linkToFull = false }: EntryC
                                         <p className="text-sm text-text-muted italic">{def.text_mt}</p>
                                     )}
                                     <div className="flex items-center gap-2 flex-wrap">
-                                        {def.register && (
-                                            <Badge variant="register">
-                                                {def.register.toLowerCase().includes('dialect') && def.dialect
-                                                    ? def.dialect
-                                                    : def.register}
-                                            </Badge>
-                                        )}
+                                        {def.register && (() => {
+                                            const reg = resolveRegisterDisplay(def.register, mode, language);
+                                            if (!reg) return null;
+                                            return (
+                                                <Badge variant="register">
+                                                    {reg.isDialectal && def.dialect
+                                                        ? def.dialect
+                                                        : (reg.label || (term(`reg-${reg.key}`) !== `reg-${reg.key}` ? term(`reg-${reg.key}`) : term(reg.key)))}
+                                                    {!reg.isDialectal && def.dialect && (
+                                                        <span className="ml-1 font-normal">({def.dialect})</span>
+                                                    )}
+                                                </Badge>
+                                            );
+                                        })()}
                                         {def.field && <Badge variant="tag">{def.field}</Badge>}
                                     </div>
                                     {def.example_sentences?.map(ex => (

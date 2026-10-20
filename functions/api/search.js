@@ -11,7 +11,7 @@ import { resolveSuffixEntryMatch } from '../../src/lib/suffixMatching.ts';
 import { normalizeSourceMetadata } from '../../src/lib/sourceMetadata.ts';
 import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../src/lib/entryHydration.ts';
 
-const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'neutral']);
+const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'common', 'neutral']);
 const VERB_STRENGTH_FILTERS = new Set(['strong', 'strong-hybrid', 'weak', 'geminated', 'doubled']);
 const VERB_WEAK_CLASS_FILTERS = new Set(['assimilative', 'hollow', 'defective']);
 
@@ -64,7 +64,8 @@ export async function onRequestGet({ request, env }) {
     const sourceLanguage = url.searchParams.get('source_language')?.trim() ?? '';
     const suffix = url.searchParams.get('suffix')?.trim() ?? '';
     const suffixKind = url.searchParams.get('suffix_kind')?.trim().toLowerCase() ?? '';
-    const requestedGender = url.searchParams.get('gender')?.trim().toLowerCase() ?? '';
+    const rawGender = url.searchParams.get('gender')?.trim().toLowerCase() ?? '';
+    const requestedGender = ['common', 'comm', 'c', 'mf', 'both'].includes(rawGender) ? 'common' : rawGender;
     const gender = CANONICAL_GENDERS.has(requestedGender) ? requestedGender : '';
     const rootId = url.searchParams.get('root_id')?.trim().normalize('NFC') ?? '';
 
@@ -75,6 +76,7 @@ export async function onRequestGet({ request, env }) {
     const r4 = url.searchParams.get('r4') ?? '';
 
     const tag = url.searchParams.get('tag')?.trim() ?? '';
+    const register = url.searchParams.get('register')?.trim().toLowerCase() ?? '';
 
 
     const limit = Math.min(Number(url.searchParams.get('limit') ?? 20), 100);
@@ -326,10 +328,16 @@ export async function onRequestGet({ request, env }) {
             args.push(...suffixArgs);
         }
         if (gender) {
-            sql += ` AND (
-                LOWER(COALESCE(nm.gender, am.gender, pm.gender, '')) = ?
-            )`;
-            args.push(gender);
+            if (gender === 'common') {
+                sql += ` AND (
+                    LOWER(COALESCE(nm.gender, am.gender, pm.gender, e.gender, '')) IN ('common', 'neutral')
+                )`;
+            } else {
+                sql += ` AND (
+                    LOWER(COALESCE(nm.gender, am.gender, pm.gender, e.gender, '')) = ?
+                )`;
+                args.push(gender);
+            }
         }
         if (r1) { sql += " AND (json_extract(r.consonant_array, '$[0]') = ? OR e.root_consonants LIKE ?)"; args.push(r1.toLowerCase(), r1.toLowerCase() + '-%'); }
         if (r2) { sql += " AND (json_extract(r.consonant_array, '$[1]') = ? OR e.root_consonants LIKE ?)"; args.push(r2.toLowerCase(), '%-' + r2.toLowerCase() + '-%'); }
@@ -339,6 +347,20 @@ export async function onRequestGet({ request, env }) {
             // Support searching for base tag name while matching tags in normalized entry_tags table
             sql += ` AND EXISTS (SELECT 1 FROM entry_tags et JOIN tags t ON et.tag_id = t.id WHERE et.entry_id = e.id AND LOWER(t.name) = ?)`;
             args.push(tag.toLowerCase());
+        }
+        if (register) {
+            sql += ` AND (
+                (json_valid(e.definitions) AND EXISTS (
+                    SELECT 1 FROM json_each(e.definitions)
+                    WHERE LOWER(COALESCE(json_extract(value, '$.register'), '')) = ?
+                       OR LOWER(COALESCE(json_extract(value, '$.register.key'), '')) = ?
+                       OR LOWER(COALESCE(json_extract(value, '$.register.en'), '')) = ?
+                       OR LOWER(COALESCE(json_extract(value, '$.register.mt'), '')) = ?
+                       OR LOWER(COALESCE(json_extract(value, '$.register.arabised'), '')) = ?
+                ))
+                OR LOWER(COALESCE(e.definitions, '')) LIKE ?
+            )`;
+            args.push(register, register, register, register, register, `%"${register}"%`);
         }
         // Pattern filters
         if (lp) { sql += ' AND LOWER(COALESCE(pat.cv_notation, \'\')) LIKE ?'; args.push(`%${lp.toLowerCase()}%`); }

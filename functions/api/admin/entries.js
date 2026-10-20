@@ -19,6 +19,8 @@ import { ensureTagsTables, syncEntryTags } from '../../../src/lib/entryTags.ts';
 import { ensureStemsTable, syncStemMorphology } from '../../../src/lib/stemMorphology.ts';
 import { ADJECTIVE_ENTRY_TOP_LEVEL_STRIP_FIELDS } from '../../../src/lib/adminSchema.ts';
 
+const ENTRY_ADJECTIVE_WRITE_BLOCKLIST = ADJECTIVE_ENTRY_TOP_LEVEL_STRIP_FIELDS;
+
 // ── Auth guard ────────────────────────────────────────────────────────────────
 export async function verifyAdmin(request, env) {
     const auth = request.headers.get('Authorization') ?? '';
@@ -201,7 +203,229 @@ function readInflectableFlag(body) {
     return body.is_inflectable;
 }
 
-function buildEntryWriteRecord(body, entryColumns, entryPos) {
+export async function getEntryTableColumns(client) {
+    const tableInfo = await client.execute("PRAGMA table_info(entries)");
+    const columns = (tableInfo.rows || []).map((r) => r.name);
+    const existing = new Set(columns);
+
+    if (!existing.has('usage_notes')) {
+        try {
+            await client.execute("ALTER TABLE entries ADD COLUMN usage_notes TEXT");
+            columns.push('usage_notes');
+        } catch (error) {
+            const message = String(error?.message || error || '').toLowerCase();
+            if (!message.includes('duplicate column name') && !message.includes('already exists')) {
+                console.warn('Could not self-heal entries.usage_notes column:', error?.message || error);
+            } else {
+                columns.push('usage_notes');
+            }
+        }
+    }
+
+    return columns;
+}
+
+let cachedAllowsCommonGender = null;
+
+export async function detectAllowsCommonGender(client) {
+    if (cachedAllowsCommonGender !== null) return cachedAllowsCommonGender;
+    try {
+        const res = await client.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='entries'");
+        const sql = String(res?.rows?.[0]?.sql || '');
+        if (sql) {
+            cachedAllowsCommonGender = sql.includes("'common'") || !sql.includes("gender IN");
+            return cachedAllowsCommonGender;
+        }
+    } catch {
+        // Mock or restricted query environment
+    }
+    return false;
+}
+
+export async function ensureAlternativeFormsTable(client) {
+    try {
+        await client.execute(`
+            CREATE TABLE IF NOT EXISTS alternative_forms (
+              id              TEXT PRIMARY KEY,
+              entry_id        TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+              headword        TEXT NOT NULL,
+              type            TEXT,
+              notes           TEXT,
+              target_entry_id TEXT REFERENCES entries(id),
+              sort_order      INTEGER NOT NULL DEFAULT 0,
+              created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+            )
+        `);
+        const tableInfo = await client.execute("PRAGMA table_info(alternative_forms)");
+        const existing = new Set((tableInfo.rows || []).map((r) => r.name));
+        if (!existing.has('notes')) {
+            try { await client.execute("ALTER TABLE alternative_forms ADD COLUMN notes TEXT"); } catch {}
+        }
+        if (!existing.has('target_entry_id')) {
+            try { await client.execute("ALTER TABLE alternative_forms ADD COLUMN target_entry_id TEXT"); } catch {}
+        }
+        if (!existing.has('sort_order')) {
+            try { await client.execute("ALTER TABLE alternative_forms ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0"); } catch {}
+        }
+    } catch {
+        // Best effort
+    }
+}
+
+export const KNOWN_LEXICAL_SOURCES = [
+    {
+        id: 'src-aquilina',
+        name: 'Aquilina',
+        full_title: 'Maltese-English Dictionary (2 vols)',
+        author: 'J. Aquilina',
+        year: 1987,
+        publisher: null,
+        reliability_weight: 0.92,
+        source_type: 'academic',
+        url: null,
+    },
+    {
+        id: 'src-aquilina-1973',
+        name: 'Aquilina 1973',
+        full_title: 'Maltese Etymological Glossary (Journal of Maltese Studies 8)',
+        author: 'Joseph Aquilina',
+        year: 1973,
+        publisher: 'Journal of Maltese Studies (University of Malta)',
+        reliability_weight: 0.90,
+        source_type: 'academic',
+        url: null,
+    },
+    {
+        id: 'src-1000mcw',
+        name: '1000 MCW',
+        full_title: '1000 Most Common Maltese Words',
+        author: null,
+        year: 2020,
+        publisher: 'Corpus tal-Malti',
+        reliability_weight: 0.70,
+        source_type: 'academic',
+        url: null,
+    },
+    {
+        id: 'src-borg-1978',
+        name: 'Borg 1978',
+        full_title: 'Historical Aspects of Maltese Phonology',
+        author: 'Alexander Borg',
+        year: 1978,
+        publisher: 'Hebrew University of Jerusalem',
+        reliability_weight: 0.88,
+        source_type: 'academic',
+        url: null,
+    },
+    {
+        id: 'src-borg-1997',
+        name: 'Borg & AA 1997',
+        full_title: 'Maltese: A Functional Grammar for Students',
+        author: 'Albert Borg & Marie Azzopardi-Alexander',
+        year: 1997,
+        publisher: 'Routledge',
+        reliability_weight: 0.88,
+        source_type: 'academic',
+        url: null,
+    },
+    {
+        id: 'src-brincat-2011',
+        name: 'Brincat 2011',
+        full_title: 'Maltese and Other Languages: A Linguistic History of Malta',
+        author: 'Joseph M. Brincat',
+        year: 2011,
+        publisher: 'Midsea Books',
+        reliability_weight: 0.90,
+        source_type: 'academic',
+        url: null,
+    },
+    {
+        id: 'src-kunsill',
+        name: 'Kunsill tal-Malti',
+        full_title: 'Official decisions of the Kunsill tal-Malti',
+        author: 'Kunsill tal-Malti',
+        year: null,
+        publisher: null,
+        reliability_weight: 0.88,
+        source_type: 'official',
+        url: 'https://kunsilltalmalti.gov.mt',
+    },
+    {
+        id: 'src-bartoli',
+        name: 'Bartoli',
+        full_title: 'Etymological studies on Maltese',
+        author: 'M. G. Bartoli',
+        year: 1902,
+        publisher: null,
+        reliability_weight: 0.80,
+        source_type: 'historical',
+        url: null,
+    },
+    {
+        id: 'src-borg',
+        name: 'Borg & AA',
+        full_title: 'Maltese: A Functional Grammar for Students',
+        author: 'A. Borg, M. Azzopardi-Alexander',
+        year: 1997,
+        publisher: null,
+        reliability_weight: 0.78,
+        source_type: 'academic',
+        url: null,
+    },
+    {
+        id: 'src-peer',
+        name: 'Peer-Reviewed',
+        full_title: 'Journal of Maltese Linguistics and related journals',
+        author: null,
+        year: null,
+        publisher: null,
+        reliability_weight: 0.70,
+        source_type: 'peer_reviewed',
+        url: null,
+    },
+    {
+        id: 'src-crowd',
+        name: 'Crowdsourced',
+        full_title: 'Community-submitted entries (unverified)',
+        author: null,
+        year: null,
+        publisher: null,
+        reliability_weight: 0.25,
+        source_type: 'crowdsourced',
+        url: null,
+    },
+];
+
+export async function ensureLexicalSources(client) {
+    try {
+        await client.execute(`
+            CREATE TABLE IF NOT EXISTS lexical_sources (
+              id                 TEXT PRIMARY KEY,
+              name               TEXT NOT NULL UNIQUE,
+              full_title         TEXT NOT NULL,
+              author             TEXT,
+              year               INTEGER,
+              publisher          TEXT,
+              reliability_weight REAL NOT NULL CHECK(reliability_weight >= 0 AND reliability_weight <= 1),
+              source_type        TEXT NOT NULL,
+              url                TEXT
+            )
+        `);
+
+        for (const s of KNOWN_LEXICAL_SOURCES) {
+            await client.execute({
+                sql: `INSERT OR IGNORE INTO lexical_sources
+                      (id, name, full_title, author, year, publisher, reliability_weight, source_type, url)
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                args: [s.id, s.name, s.full_title, s.author, s.year, s.publisher, s.reliability_weight, s.source_type, s.url],
+            });
+        }
+    } catch {
+        // Best effort schema and seeding
+    }
+}
+
+function buildEntryWriteRecord(body, entryColumns, entryPos, allowsCommonGender = false) {
     const normalizedPos = normalizeEntryPos(entryPos || body.pos);
     const record = {};
     const blocklist = (normalizedPos === 'adjective' || normalizedPos === 'participle')
@@ -228,6 +452,13 @@ function buildEntryWriteRecord(body, entryColumns, entryPos) {
 
         if (!includeCol) continue;
 
+        if (col === 'gender') {
+            const rawGender = typeof val === 'string' ? val.trim().toLowerCase() : '';
+            if (rawGender === 'common' && !allowsCommonGender) {
+                val = 'neutral';
+            }
+        }
+
         if (val && typeof val === 'object') {
             val = JSON.stringify(val);
         }
@@ -238,8 +469,8 @@ function buildEntryWriteRecord(body, entryColumns, entryPos) {
     return record;
 }
 
-async function upsertEntryRow(tx, body, entryColumns, entryId) {
-    const record = buildEntryWriteRecord(body, entryColumns, body.pos);
+async function upsertEntryRow(tx, body, entryColumns, entryId, allowsCommonGender = false) {
+    const record = buildEntryWriteRecord(body, entryColumns, body.pos, allowsCommonGender);
     const writeColumns = Object.keys(record);
     const insertColumns = ['id', 'created_at', 'updated_at', ...writeColumns];
     const insertPlaceholders = insertColumns.map(() => '?').join(', ');
@@ -249,14 +480,31 @@ async function upsertEntryRow(tx, body, entryColumns, entryId) {
         ? `${updateAssignments.join(', ')}, updated_at = excluded.updated_at`
         : 'updated_at = excluded.updated_at';
 
-    await tx.execute({
-        sql: `
-            INSERT INTO entries (${insertColumns.join(', ')})
-            VALUES (${insertPlaceholders})
-            ON CONFLICT(id) DO UPDATE SET ${updateSql}
-        `,
-        args: [entryId, now(), now(), ...writeColumns.map((col) => record[col])]
-    });
+    try {
+        await tx.execute({
+            sql: `
+                INSERT INTO entries (${insertColumns.join(', ')})
+                VALUES (${insertPlaceholders})
+                ON CONFLICT(id) DO UPDATE SET ${updateSql}
+            `,
+            args: [entryId, now(), now(), ...writeColumns.map((col) => record[col])]
+        });
+    } catch (err) {
+        const errMsg = String(err?.message || '');
+        if (errMsg.includes('CHECK constraint failed: gender') && (record.gender === 'common' || body.gender === 'common')) {
+            record.gender = 'neutral';
+            await tx.execute({
+                sql: `
+                    INSERT INTO entries (${insertColumns.join(', ')})
+                    VALUES (${insertPlaceholders})
+                    ON CONFLICT(id) DO UPDATE SET ${updateSql}
+                `,
+                args: [entryId, now(), now(), ...writeColumns.map((col) => record[col])]
+            });
+            return;
+        }
+        throw err;
+    }
 }
 
 async function persistEntryRecord(client, {
@@ -265,6 +513,7 @@ async function persistEntryRecord(client, {
     entryPos,
     entryId,
     previousId = null,
+    allowsCommonGender = false,
 }) {
     const tx = await client.transaction('write');
     try {
@@ -322,7 +571,50 @@ async function persistEntryRecord(client, {
             writeBody.etymology_chain = currentChain;
         }
 
-        await upsertEntryRow(tx, writeBody, entryColumns, entryId);
+        if (writeBody.source_id) {
+            let validSource = false;
+            try {
+                const sourceCheck = await tx.execute({
+                    sql: 'SELECT 1 FROM lexical_sources WHERE id = ? LIMIT 1',
+                    args: [writeBody.source_id],
+                });
+                if (sourceCheck.rows && sourceCheck.rows.length > 0) {
+                    validSource = true;
+                } else {
+                    const fallbackName = writeBody.source_title || writeBody.source_citation || writeBody.source_id;
+                    await tx.execute({
+                        sql: `INSERT OR IGNORE INTO lexical_sources
+                              (id, name, full_title, author, year, publisher, reliability_weight, source_type, url)
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                        args: [
+                            writeBody.source_id,
+                            `${fallbackName} (${writeBody.source_id})`,
+                            writeBody.source_title || fallbackName,
+                            null,
+                            writeBody.source_year ? Number(writeBody.source_year) : null,
+                            writeBody.source_publisher || null,
+                            0.70,
+                            'academic',
+                            null,
+                        ],
+                    });
+                    const recheck = await tx.execute({
+                        sql: 'SELECT 1 FROM lexical_sources WHERE id = ? LIMIT 1',
+                        args: [writeBody.source_id],
+                    });
+                    if (recheck.rows && recheck.rows.length > 0) {
+                        validSource = true;
+                    }
+                }
+            } catch {
+                validSource = false;
+            }
+            if (!validSource) {
+                writeBody.source_id = null;
+            }
+        }
+
+        await upsertEntryRow(tx, writeBody, entryColumns, entryId, allowsCommonGender);
 
         if (normalizedEntryPos === 'verb') await syncVerbMorphology(tx, entryId, writeBody);
         if (normalizedEntryPos === 'noun' || normalizedEntryPos === 'pronoun' || normalizedEntryPos === 'preposition') await syncNounMorphology(tx, entryId, writeBody);
@@ -374,7 +666,8 @@ const POS_ALIAS_GROUPS = {
     preposition: ['preposition', 'prep'],
     conjunction: ['conjunction', 'conj'],
     particle: ['particle', 'part'],
-    article: ['article', 'art', 'det'],
+    article: ['article', 'art'],
+    determiner: ['determiner', 'det'],
     pronoun: ['pronoun', 'pron'],
     interrogative: ['interrogative', 'int', 'intg'],
     numeral: ['numeral', 'num'],
@@ -416,6 +709,7 @@ const ENTRY_WRITE_FIELD_ALLOWLIST = new Set([
     'source_tooltip',
     'etymology_chain',
     'etymology_notes',
+    'usage_notes',
     'definitions',
     'usage_examples',
     'elative_form',
@@ -810,14 +1104,17 @@ export async function onRequestPost({ request, env }) {
         await ensureRelationshipsTable(client);
         await ensureTagsTables(client);
         await ensureStemsTable(client);
+        await ensureLexicalSources(client);
+        await ensureAlternativeFormsTable(client);
 
-        const tableInfo = await client.execute("PRAGMA table_info(entries)");
-        const columns = (tableInfo.rows || []).map(r => r.name);
+        const columns = await getEntryTableColumns(client);
+        const allowsCommonGender = await detectAllowsCommonGender(client);
         await persistEntryRecord(client, {
             body,
             entryColumns: columns,
             entryPos,
             entryId: id,
+            allowsCommonGender,
         });
 
         invalidateEntryCache(id);
@@ -843,8 +1140,8 @@ export async function onRequestPut({ request, env }) {
         const client = getDbClient(env);
         const shouldRename = !!requestedId && requestedId !== id;
         const entryPos = normalizeEntryPos(body.pos);
-        const tableInfo = await client.execute("PRAGMA table_info(entries)");
-        const columns = (tableInfo.rows || []).map(r => r.name);
+        const columns = await getEntryTableColumns(client);
+        const allowsCommonGender = await detectAllowsCommonGender(client);
 
         if (shouldRename) {
             const existing = await client.execute({
@@ -881,6 +1178,8 @@ export async function onRequestPut({ request, env }) {
         await ensureRelationshipsTable(client);
         await ensureTagsTables(client);
         await ensureStemsTable(client);
+        await ensureLexicalSources(client);
+        await ensureAlternativeFormsTable(client);
 
         await persistEntryRecord(client, {
             body,
@@ -888,6 +1187,7 @@ export async function onRequestPut({ request, env }) {
             entryPos,
             entryId: requestedId || id,
             previousId: shouldRename ? id : null,
+            allowsCommonGender,
         });
 
         invalidateEntryCache(requestedId || id);
@@ -955,9 +1255,11 @@ export async function processEntryBatch(client, { entries = [], skipExisting = f
     await ensureRelationshipsTable(client);
     await ensureTagsTables(client);
     await ensureStemsTable(client);
+    await ensureLexicalSources(client);
+    await ensureAlternativeFormsTable(client);
 
-    const tableInfo = await client.execute("PRAGMA table_info(entries)");
-    const columns = (tableInfo.rows || []).map(r => r.name);
+    const columns = await getEntryTableColumns(client);
+    const allowsCommonGender = await detectAllowsCommonGender(client);
 
     // Collect candidate IDs and candidate headwords for single-query prefetch
     const candidateIds = entries.map(e => normalizeEntryId(e.id)).filter(Boolean);
@@ -1030,6 +1332,7 @@ export async function processEntryBatch(client, { entries = [], skipExisting = f
                     entryColumns: columns,
                     entryPos: normalizedPos,
                     entryId: existingId,
+                    allowsCommonGender,
                 });
                 invalidateEntryCache(existingId);
                 updated++;
@@ -1046,6 +1349,7 @@ export async function processEntryBatch(client, { entries = [], skipExisting = f
                     entryColumns: columns,
                     entryPos: normalizedPos,
                     entryId: newId,
+                    allowsCommonGender,
                 });
                 invalidateEntryCache(newId);
                 inserted++;

@@ -27,7 +27,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "بَدْل",
-          "definition": "changing, exchange"
+          "definition": "changing, exchange",
+          "pronunciation": "badl"
         }
       ],
       "etymology_notes": null,
@@ -179,7 +180,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "صَيْحَة",
-          "definition": "craze, cry, crying"
+          "definition": "craze, cry, crying",
+          "pronunciation": "ṣayħaẗ"
         }
       ],
       "etymology_notes": null,
@@ -339,7 +341,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "شَجَرَة",
-          "definition": null
+          "definition": null,
+          "pronunciation": "shaġaraẗ"
         }
       ],
       "etymology_notes": null,
@@ -507,7 +510,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "زَامِل",
-          "definition": "horse or wild ass"
+          "definition": "horse or wild ass",
+          "pronunciation": "żâmil"
         }
       ],
       "etymology_notes": null,
@@ -626,7 +630,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "lignami",
-          "definition": "wood"
+          "definition": "wood",
+          "pronunciation": "linjami"
         },
         {
           "relationship": "Derived from",
@@ -699,7 +704,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "عَصْفُور",
-          "definition": "small bird, sparrow"
+          "definition": "small bird, sparrow",
+          "pronunciation": "għaṣfûr"
         }
       ],
       "etymology_notes": null,
@@ -891,7 +897,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "طَرِيق",
-          "definition": "path, way, road"
+          "definition": "path, way, road",
+          "pronunciation": "ṭarîq"
         }
       ],
       "etymology_notes": null,
@@ -1008,7 +1015,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "حَشِيش",
-          "definition": "grass, hay, chaff"
+          "definition": "grass, hay, chaff",
+          "pronunciation": "ħashîsh"
         }
       ],
       "is_collective": 1,
@@ -1080,7 +1088,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "locu",
-          "definition": "place, geographic location, ground"
+          "definition": "place, geographic location, ground",
+          "pronunciation": "loku"
         },
         {
           "relationship": "From",
@@ -1399,7 +1408,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "foglia",
-          "definition": null
+          "definition": null,
+          "pronunciation": "folja"
         }
       ],
       "etymology_notes": null,
@@ -1514,7 +1524,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَلَف",
-          "definition": null
+          "definition": null,
+          "pronunciation": "għalaf"
         }
       ],
       "etymology_notes": null,

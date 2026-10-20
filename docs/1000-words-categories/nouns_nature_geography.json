@@ -27,7 +27,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "ària",
-          "definition": null
+          "definition": null,
+          "pronunciation": "aria"
         },
         {
           "relationship": "From",
@@ -39,7 +40,8 @@
           "relationship": "From",
           "language": "Ancient Greek",
           "term": "ᾱ̓ήρ",
-          "definition": null
+          "definition": null,
+          "pronunciation": "a̓ír"
         }
       ],
       "etymology_notes": null,
@@ -162,7 +164,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "دُنْيَا",
-          "definition": null
+          "definition": null,
+          "pronunciation": "dunyâ"
         }
       ],
       "etymology_notes": null,
@@ -277,7 +280,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "مَاء",
-          "definition": "water, water, wet"
+          "definition": "water, water, wet",
+          "pronunciation": "mâ'"
         }
       ],
       "is_collective": 0,
@@ -339,7 +343,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شَمْس",
-          "definition": "sun, Sun, sol"
+          "definition": "sun, Sun, sol",
+          "pronunciation": "shams"
         }
       ],
       "etymology_notes": null,
@@ -550,7 +555,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بَحْر",
-          "definition": "Sea, abundance, course"
+          "definition": "Sea, abundance, course",
+          "pronunciation": "baħr"
         }
       ],
       "etymology_notes": null,
@@ -748,8 +754,9 @@
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
-          "term": "ciumara / sciumara",
-          "definition": "river"
+          "term": "ciumara jew sciumara",
+          "definition": "river",
+          "pronunciation": "xumara jew xumara"
         },
         {
           "relationship": "Ultimately from",
@@ -867,7 +874,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "رِيح",
-          "definition": "aroma, flatulence, flatus"
+          "definition": "aroma, flatulence, flatus",
+          "pronunciation": "rîħ"
         }
       ],
       "etymology_notes": null,
@@ -985,7 +993,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "نَار",
-          "definition": "bonfire, fire, flame"
+          "definition": "bonfire, fire, flame",
+          "pronunciation": "nâr"
         }
       ],
       "etymology_notes": null,
@@ -1108,7 +1117,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قَمَر",
-          "definition": "moon, Moon, Qamar"
+          "definition": "moon, Moon, Qamar",
+          "pronunciation": "qamar"
         }
       ],
       "etymology_notes": null,
@@ -1238,7 +1248,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "جَزِيرَة",
-          "definition": null
+          "definition": null,
+          "pronunciation": "ġażîraẗ"
         }
       ],
       "etymology_notes": null,
@@ -1363,7 +1374,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "burra",
-          "definition": null
+          "definition": null,
+          "pronunciation": "burra"
         },
         {
           "relationship": "From",
@@ -1375,7 +1387,8 @@
           "relationship": "From",
           "language": "Ancient Greek",
           "term": "Βορέᾱς",
-          "definition": null
+          "definition": null,
+          "pronunciation": "voreās"
         }
       ],
       "etymology_notes": null,
@@ -1472,7 +1485,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "stidda",
-          "definition": null
+          "definition": null,
+          "pronunciation": "stidda"
         },
         {
           "relationship": "From",
@@ -1603,7 +1617,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "oceano",
-          "definition": "ocean"
+          "definition": "ocean",
+          "pronunciation": "oċeano"
         }
       ],
       "etymology_notes": null,
@@ -1730,7 +1745,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "شِتَاء",
-          "definition": "winter, rainy season, rain"
+          "definition": "winter, rainy season, rain",
+          "pronunciation": "shitâ'"
         }
       ],
       "etymology_notes": null,
@@ -1872,7 +1888,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "vuci",
-          "definition": "Sound uttered by the mouth, especially by human beings in speech or song; sound thus uttered considered as possessing some special quality or character"
+          "definition": "Sound uttered by the mouth, especially by human beings in speech or song; sound thus uttered considered as possessing some special quality or character",
+          "pronunciation": "vuxi"
         },
         {
           "relationship": "From",
@@ -1990,7 +2007,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "ثَلْج",
-          "definition": null
+          "definition": null,
+          "pronunciation": "θalġ"
         }
       ],
       "etymology_notes": null,
@@ -2098,7 +2116,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "paru",
-          "definition": "equal, pair, peer"
+          "definition": "equal, pair, peer",
+          "pronunciation": "paru"
         }
       ],
       "etymology_notes": null,
@@ -2250,7 +2269,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "foresta",
-          "definition": null
+          "definition": null,
+          "pronunciation": "foresta"
         }
       ],
       "etymology_notes": null,
@@ -2362,7 +2382,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "طاقة",
-          "definition": "window"
+          "definition": "window",
+          "pronunciation": "ṭâqẗ"
         }
       ],
       "etymology_notes": null,
@@ -2482,7 +2503,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "ferrovia",
-          "definition": "railway / railroad"
+          "definition": "railway / railroad",
+          "pronunciation": "ferrovia"
         }
       ],
       "etymology_notes": null,
@@ -2596,7 +2618,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سَمَاء",
-          "definition": "sky, heaven, firmament"
+          "definition": "sky, heaven, firmament",
+          "pronunciation": "samâ'"
         }
       ],
       "etymology_notes": null,
@@ -2879,7 +2902,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "رَبِيع",
-          "definition": "spring, springtide, springtime"
+          "definition": "spring, springtide, springtime",
+          "pronunciation": "rabîgħ"
         }
       ],
       "etymology_notes": null,
@@ -3031,7 +3055,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "جَبَل",
-          "definition": "mountain, rock"
+          "definition": "mountain, rock",
+          "pronunciation": "ġabal"
         }
       ],
       "etymology_notes": null,
@@ -3268,7 +3293,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "رَمْل",
-          "definition": "sand"
+          "definition": "sand",
+          "pronunciation": "raml"
         }
       ],
       "etymology_notes": null,
@@ -3433,7 +3459,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "staggiuni",
-          "definition": null
+          "definition": null,
+          "pronunciation": "stagġuni"
         },
         {
           "relationship": "From",
@@ -3548,7 +3575,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "وادٍ",
-          "definition": "bottleneck, canyon, dale"
+          "definition": "bottleneck, canyon, dale",
+          "pronunciation": "wâdin"
         }
       ],
       "etymology_notes": null,

@@ -14,9 +14,10 @@ interface SubPartsProps {
     showTransitivity?: boolean;
     layout?: 'dots' | 'lines';
     showGender?: boolean;
+    hidePos?: boolean;
 }
 
-export function SubParts({ entry, showTransitivity = false, layout = 'dots', showGender = false }: SubPartsProps) {
+export function SubParts({ entry, showTransitivity = false, layout = 'dots', showGender = false, hidePos = false }: SubPartsProps) {
     const { term } = useLinguisticMode();
     const location = useLocation();
 
@@ -74,7 +75,7 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
             : '';
 
         const parts = [
-            <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">{term(entry.pos || 'noun').toUpperCase()}</Link>,
+            hidePos ? null : <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">{term(entry.pos || 'noun').toUpperCase()}</Link>,
             vm.form ? (
                 <Link key="form" to={`${basePath}?form=${vm.form}`} className="hover:underline">
                     {`${term('form-label')} ${vm.form}`.toUpperCase()}
@@ -105,14 +106,16 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
         const participleType = resolveEntryParticipleType(entry);
 
         const parts = [
-            participleType ? (
+            hidePos ? null : (participleType ? (
                 <Link key="type" to={`${basePath}?pos=${entry.pos}&participle_type=${encodeURIComponent(participleType)}`} className="hover:underline">
                     {term(participleType).toUpperCase()}
                 </Link>
-            ) : null,
-            <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">
-                {term('participle').toUpperCase()}
-            </Link>,
+            ) : null),
+            hidePos ? null : (
+                <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">
+                    {term('participle').toUpperCase()}
+                </Link>
+            ),
             ...titleTags,
         ].filter(Boolean) as ReactNode[];
 
@@ -131,21 +134,22 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
     const nounLabel = nounType
         ? `${term(nounType).toUpperCase()} ${term(entry.pos || 'noun').toUpperCase()}`
         : term(entry.pos || 'noun').toUpperCase();
+    const posElement = nounType ? (
+        <Link
+            key="pos"
+            to={`${basePath}?pos=${entry.pos}&noun_type=${encodeURIComponent(nounType)}`}
+            className="hover:underline"
+        >
+            {nounLabel}
+        </Link>
+    ) : (
+        <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">
+            {nounLabel}
+        </Link>
+    );
 
     const parts = [
-        nounType ? (
-            <Link
-                key="pos"
-                to={`${basePath}?pos=${entry.pos}&noun_type=${encodeURIComponent(nounType)}`}
-                className="hover:underline"
-            >
-                {nounLabel}
-            </Link>
-        ) : (
-            <Link key="pos" to={`${basePath}?pos=${entry.pos}`} className="hover:underline">
-                {nounLabel}
-            </Link>
-        ),
+        hidePos ? null : posElement,
         gender ? (
             <Link key="gender" to={`${basePath}?gender=${gender}`} className="hover:underline">
                 {term(gender).toUpperCase()}
@@ -158,6 +162,7 @@ export function SubParts({ entry, showTransitivity = false, layout = 'dots', sho
 }
 
 function SubPartsRenderer({ parts, layout }: { parts: ReactNode[], layout: 'dots' | 'lines' }) {
+    if (!parts || parts.length === 0) return null;
     if (layout === 'lines') {
         return (
             <>

@@ -9,16 +9,16 @@ import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
 
 // ── Auth guard ────────────────────────────────────────────────────────────────
 async function verifyAdmin(request, env) {
-    const auth = request.headers.get('Authorization') ?? '';
-    const token = auth.replace('Bearer ', '').trim();
-    if (!token) return false;
-
     // LOCAL DEV OVERRIDE
     const isLocal = request.url.includes('localhost') || request.url.includes('127.0.0.1');
 
     if (isLocal || !env.CLERK_SECRET_KEY || env.CLERK_SECRET_KEY === 'dummy') {
         return true;
     }
+
+    const auth = request.headers.get('Authorization') ?? '';
+    const token = auth.replace('Bearer ', '').trim();
+    if (!token) return false;
 
     try {
         const res = await fetch('https://api.clerk.com/v1/tokens/verify', {
@@ -402,7 +402,11 @@ export async function onRequestPost({ request, env }) {
 
         await client.execute({
             sql: `INSERT INTO admin_config (id, category, key, value, sort_order, created_at, updated_at)
-                  VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+                  VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))
+                  ON CONFLICT(category, key) DO UPDATE SET
+                      value = excluded.value,
+                      sort_order = excluded.sort_order,
+                      updated_at = datetime('now')`,
             args: [id, category, key, JSON.stringify(value), sort_order],
         });
 

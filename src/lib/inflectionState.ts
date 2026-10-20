@@ -7,6 +7,7 @@ type InflectableFlagSource = Record<string, unknown> | Pick<Entry, 'is_inflectab
 
 const FUNCTION_WORD_INFLECTION_POS = new Set([
     'pronoun',
+    'determiner',
     'adverb',
     'preposition',
     'particle',

@@ -13,7 +13,7 @@ export function normalizeGender(value: unknown): NormalizedGender {
 
     if (['masculine', 'masc', 'm'].includes(normalized)) return 'masculine';
     if (['feminine', 'fem', 'f'].includes(normalized)) return 'feminine';
-    if (['neutral', 'neut', 'n'].includes(normalized)) return 'neutral';
+    if (['common', 'comm', 'c', 'neutral', 'neut', 'n', 'both', 'mf', 'm/f', 'm.f.', 'm./f.'].includes(normalized)) return 'common';
 
     return null;
 }
@@ -131,6 +131,7 @@ function resolveMainPatternByGenderLegacy(entry: any): string | null {
     switch (gender) {
         case 'feminine':
             return femininePattern;
+        case 'common':
         case 'neutral':
             return neutralPattern || masculinePattern || femininePattern;
         case 'masculine':
@@ -209,6 +210,7 @@ export function resolveMainPatternByGenderForPos(entry: any, pos?: unknown): str
     switch (gender) {
         case 'feminine':
             return femininePattern;
+        case 'common':
         case 'neutral':
             return neutralPattern || masculinePattern || femininePattern;
         case 'masculine':

@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS entries (
   id                    TEXT PRIMARY KEY,
   headword              TEXT NOT NULL,
   pos                   TEXT NOT NULL,
-  gender                TEXT CHECK(gender IN ('masculine','feminine','neutral')),
+  gender                TEXT CHECK(gender IN ('masculine','feminine','common','neutral')),
   root_consonants       TEXT,
   stem                  TEXT,
   is_loanword           BOOLEAN NOT NULL DEFAULT false,
@@ -119,6 +119,7 @@ CREATE TABLE IF NOT EXISTS entries (
   source_publisher      TEXT,
   etymology_chain       TEXT, -- JSON array of EtymologyNode objects
   etymology_notes       TEXT,
+  usage_notes           TEXT, -- JSON object { en, mt } or string
   definitions           TEXT NOT NULL DEFAULT '[]', -- JSON array of sense objects
   usage_examples        TEXT NOT NULL DEFAULT '[]', -- JSON array of entry-level examples
   created_at            TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
@@ -167,15 +168,18 @@ CREATE INDEX IF NOT EXISTS idx_relationships_target ON entry_relationships(targe
 
 -- ─── Alternative Forms ────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS alternative_forms (
-  id            TEXT PRIMARY KEY,
-  entry_id      TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
-  headword      TEXT NOT NULL,
-  type          TEXT, -- e.g. 'orthographic', 'dialectal', 'archaic'
-  sort_order    INTEGER NOT NULL DEFAULT 0,
-  created_at    TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+  id              TEXT PRIMARY KEY,
+  entry_id        TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+  headword        TEXT NOT NULL,
+  type            TEXT, -- e.g. 'orthographic', 'dialectal', 'archaic'
+  notes           TEXT,
+  target_entry_id TEXT REFERENCES entries(id),
+  sort_order      INTEGER NOT NULL DEFAULT 0,
+  created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
 );
 
 CREATE INDEX IF NOT EXISTS idx_alt_forms_entry ON alternative_forms(entry_id);
+CREATE INDEX IF NOT EXISTS idx_alt_forms_target ON alternative_forms(target_entry_id);
 
 -- ─── Verb Morphology ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS verb_morphology (
@@ -341,13 +345,18 @@ CREATE TABLE IF NOT EXISTS lexical_sources (
 );
 
 -- Seed authoritative sources
-INSERT OR IGNORE INTO lexical_sources VALUES
-  ('src-aquilina',   'Aquilina',           'Maltese-English Dictionary (2 vols)',                    'J. Aquilina',             1987, 0.92, 'academic',      NULL),
-  ('src-kunsill',    'Kunsill tal-Malti',  'Official decisions of the Kunsill tal-Malti',            'Kunsill tal-Malti',       NULL, 0.88, 'official',      'https://kunsilltalmalti.gov.mt'),
-  ('src-bartoli',    'Bartoli',            'Etymological studies on Maltese',                        'M. G. Bartoli',           1902, 0.80, 'historical',    NULL),
-  ('src-borg',       'Borg & AA',          'Maltese: A Functional Grammar for Students',             'A. Borg, M. Azzopardi-Alexander', 1997, 0.78, 'academic', NULL),
-  ('src-peer',       'Peer-Reviewed',      'Journal of Maltese Linguistics and related journals',   NULL,                      NULL, 0.70, 'peer_reviewed', NULL),
-  ('src-crowd',      'Crowdsourced',       'Community-submitted entries (unverified)',               NULL,                      NULL, 0.25, 'crowdsourced',  NULL);
+INSERT OR IGNORE INTO lexical_sources (id, name, full_title, author, year, publisher, reliability_weight, source_type, url) VALUES
+  ('src-aquilina',      'Aquilina',           'Maltese-English Dictionary (2 vols)',                    'J. Aquilina',                      1987, NULL,                                             0.92, 'academic',      NULL),
+  ('src-aquilina-1973', 'Aquilina 1973',      'Maltese Etymological Glossary (Journal of Maltese Studies 8)', 'Joseph Aquilina',            1973, 'Journal of Maltese Studies (University of Malta)', 0.90, 'academic',      NULL),
+  ('src-1000mcw',       '1000 MCW',           '1000 Most Common Maltese Words',                         NULL,                               2020, 'Corpus tal-Malti',                               0.70, 'academic',      NULL),
+  ('src-borg-1978',     'Borg 1978',          'Historical Aspects of Maltese Phonology',                'Alexander Borg',                   1978, 'Hebrew University of Jerusalem',                 0.88, 'academic',      NULL),
+  ('src-borg-1997',     'Borg & AA 1997',     'Maltese: A Functional Grammar for Students',             'Albert Borg & Marie Azzopardi-Alexander', 1997, 'Routledge',                               0.88, 'academic',      NULL),
+  ('src-brincat-2011',  'Brincat 2011',       'Maltese and Other Languages: A Linguistic History of Malta', 'Joseph M. Brincat',           2011, 'Midsea Books',                                   0.90, 'academic',      NULL),
+  ('src-kunsill',       'Kunsill tal-Malti',  'Official decisions of the Kunsill tal-Malti',            'Kunsill tal-Malti',                NULL, NULL,                                             0.88, 'official',      'https://kunsilltalmalti.gov.mt'),
+  ('src-bartoli',       'Bartoli',            'Etymological studies on Maltese',                        'M. G. Bartoli',                    1902, NULL,                                             0.80, 'historical',    NULL),
+  ('src-borg',          'Borg & AA',          'Maltese: A Functional Grammar for Students',             'A. Borg, M. Azzopardi-Alexander', 1997, NULL,                                             0.78, 'academic',      NULL),
+  ('src-peer',          'Peer-Reviewed',      'Journal of Maltese Linguistics and related journals',    NULL,                               NULL, NULL,                                             0.70, 'peer_reviewed', NULL),
+  ('src-crowd',         'Crowdsourced',       'Community-submitted entries (unverified)',               NULL,                               NULL, NULL,                                             0.25, 'crowdsourced',  NULL);
 
 -- ─── Attestation Reliability ─────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS attestation_reliability (

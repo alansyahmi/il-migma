@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import {
     formatEtymologyConnector,
     formatEtymologySentenceLeadIn,
@@ -126,12 +127,16 @@ function splitGlossText(value?: string) {
 export function EtymologySentence({
     prefix,
     items,
+    translate,
 }: {
     prefix?: string;
     items: EtymologySentenceItem[];
+    translate?: (key: string) => string;
 }) {
+    const linguisticModeContext = useLinguisticMode();
+    const effectiveTranslate = translate || linguisticModeContext?.term || ((s: string) => s);
     if (!items?.length) return null;
-    const displayPrefix = formatEtymologySentenceLeadIn(prefix, items[0]?.relationship);
+    const displayPrefix = formatEtymologySentenceLeadIn(prefix, items[0]?.relationship, effectiveTranslate);
 
     return (
         <p className="text-sm text-black leading-relaxed">
@@ -141,14 +146,14 @@ export function EtymologySentence({
                     {i > 0 && (
                         isConjunctiveEtymologyRelationship(item.relationship) ? (
                             <span className="mx-1 font-sans text-black/70">
-                                {formatEtymologyConnector(item.relationship)}
+                                {formatEtymologyConnector(item.relationship, effectiveTranslate)}
                             </span>
                         ) : (
                             <span className="mx-1 opacity-50 font-sans">{' < '}</span>
                         )
                     )}
                     <span style={{ color: BLUE }} className="font-medium">
-                        {item.language}
+                        {effectiveTranslate(item.language)}
                     </span>
                     {item.term && <span className="ml-1 font-serif font-medium" dir="auto">{item.term}</span>}
                     {!item.term && item.form && <span className="ml-1 font-serif font-medium" dir="auto">{item.form}</span>}

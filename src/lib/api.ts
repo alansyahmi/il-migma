@@ -168,6 +168,7 @@ export async function apiSearch(
         ep?: string;
         dmp?: string;
         tag?: string;
+        register?: string;
         vs_sg?: string;
         vs_opp?: string;
         vs_pl?: string;
@@ -222,6 +223,7 @@ export async function apiSearch(
     if (opts.ep) params.set('ep', opts.ep);
     if (opts.dmp) params.set('dmp', opts.dmp);
     if (opts.tag) params.set('tag', opts.tag);
+    if (opts.register) params.set('register', opts.register);
     if (opts.vs_sg) params.set('vs_sg', opts.vs_sg);
     if (opts.vs_opp) params.set('vs_opp', opts.vs_opp);
     if (opts.vs_pl) params.set('vs_pl', opts.vs_pl);

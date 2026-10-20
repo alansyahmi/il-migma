@@ -67,7 +67,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "portu",
-          "definition": "port"
+          "definition": "port",
+          "pronunciation": "portu"
         },
         {
           "relationship": "From",
@@ -265,7 +266,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بَلَد",
-          "definition": "Land, area, city"
+          "definition": "Land, area, city",
+          "pronunciation": "balad"
         }
       ],
       "etymology_notes": null,
@@ -376,7 +378,8 @@
           "relationship": "From",
           "language": "Sicilian",
           "term": "càmmara",
-          "definition": "chamber, room, interior space"
+          "definition": "chamber, room, interior space",
+          "pronunciation": "kammara"
         },
         {
           "relationship": "Ultimately from",
@@ -388,7 +391,8 @@
           "relationship": "From",
           "language": "Ancient Greek",
           "term": "καμάρα",
-          "definition": null
+          "definition": null,
+          "pronunciation": "kamara"
         }
       ],
       "etymology_notes": null,
@@ -506,7 +510,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بَاب",
-          "definition": null
+          "definition": null,
+          "pronunciation": "bâb"
         }
       ],
       "etymology_notes": null,
@@ -632,7 +637,8 @@
           "relationship": "From",
           "language": "Sicilian",
           "term": "pezza or a variant of it",
-          "definition": null
+          "definition": null,
+          "pronunciation": "pezza or a variant of it"
         }
       ],
       "etymology_notes": null,
@@ -797,7 +803,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "posizione",
-          "definition": "position"
+          "definition": "position",
+          "pronunciation": "posizione"
         }
       ],
       "etymology_notes": null,
@@ -914,13 +921,15 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "razza",
-          "definition": null
+          "definition": null,
+          "pronunciation": "razza"
         },
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "razza",
-          "definition": null
+          "definition": null,
+          "pronunciation": "razza"
         }
       ],
       "etymology_notes": null,
@@ -1032,7 +1041,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مَخْزَن",
-          "definition": "warehouse, repository, barn"
+          "definition": "warehouse, repository, barn",
+          "pronunciation": "makhżan"
         }
       ],
       "etymology_notes": null,
@@ -1149,7 +1159,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "حَائِط",
-          "definition": "wall, wall, paries"
+          "definition": "wall, wall, paries",
+          "pronunciation": "ħâ'iṭ"
         }
       ],
       "is_collective": 0,
@@ -1221,7 +1232,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "banco",
-          "definition": "desk"
+          "definition": "desk",
+          "pronunciation": "banko"
         }
       ],
       "etymology_notes": null,
@@ -1334,7 +1346,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "velocità",
-          "definition": "velocity, speed, quickness"
+          "definition": "velocity, speed, quickness",
+          "pronunciation": "veloċita"
         }
       ],
       "etymology_notes": null,
@@ -1446,7 +1459,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قَاع",
-          "definition": "bed, bedrock, bottom"
+          "definition": "bed, bedrock, bottom",
+          "pronunciation": "qâgħ"
         }
       ],
       "etymology_notes": null,
@@ -1558,7 +1572,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "stazione",
-          "definition": null
+          "definition": null,
+          "pronunciation": "stazione"
         },
         {
           "relationship": "From",
@@ -1673,7 +1688,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سُوق",
-          "definition": null
+          "definition": null,
+          "pronunciation": "sûq"
         }
       ],
       "etymology_notes": null,
@@ -1825,7 +1841,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "blocco",
-          "definition": null
+          "definition": null,
+          "pronunciation": "blokko"
         },
         {
           "relationship": "Borrowed from",

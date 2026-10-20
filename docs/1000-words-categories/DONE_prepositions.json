@@ -33,34 +33,51 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "تَاع",
-          "definition": "of, belonging to (analytic genitive exponent)"
+          "definition": "of, belonging to (analytic genitive exponent)",
+          "pronunciation": "tâgħ"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "مَتَاع",
-          "definition": "goods, property, belongings, utility"
+          "definition": "goods, property, belongings, utility",
+          "pronunciation": "matâgħ"
         }
       ],
       "etymology_notes": "Inherited from Arabic analytic genitive marker تَاع (tā‘), formed through apheresis of initial m- from Classical and Maghrebi Arabic مَتَاع (matā‘, 'goods, property, belonging to'; Aquilina 1973: 53). Cognate with Maghrebi Arabic mtā‘ (Tunisian and Moroccan) and Egyptian bitā‘. In Maltese, ta' functions both as an analytic preposition introducing genitive noun phrases and as a base that combines with pronominal clitics to form independent possessive pronouns. The paradigm displays phonologically conditioned imāla: the historical root vowel ā raises to ie before vowel-initial suffixes (1sg tiegħi, 2sg tiegħek, 3sg.m tiegħu), but remains a before consonant-initial suffixes (3sg.f tagħha, 1pl tagħna, 2pl tagħkom, 3pl tagħhom).",
       "definitions": [
         {
-          "text_en": "of, belonging to; used as a genitive and possessive marker linking a possessed noun to its possessor or owner",
-          "text_mt": "Prepożizzjoni ewlenija u partikella tal-ġenittiv użata biex tindika pussess, sjieda, jew rabta bejn żewġ ismijiet (eż. il-ktieb ta' Pawlu, il-belt ta' Valletta).",
-          "register": "standard",
-          "nuance": "genitive (possessive marker)"
+          "text_en": "of, belonging to",
+          "text_mt": "Juri relazzjoni ta' pussess, appartenenza, proprjetà jew oriġini",
+          "nuance": "genitive possession",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "used with pronominal suffix clitics as an inflected possessive pronoun base expressing 'mine', 'yours', 'his', 'hers', 'ours', 'theirs'",
-          "text_mt": "Għamla bażika li tintuża bi pronomi mehmuża (milħuqa) biex tifforma pronomi possessivi indipendenti: tiegħi, tiegħek, tiegħu, tagħha, tagħna, tagħkom, tagħhom.",
-          "register": "standard",
-          "nuance": "pronominal possessive base"
+          "text_en": "mine, yours, his, hers, ours, theirs",
+          "text_mt": "Juri sjieda pussessiva marbuta mal-persuna grammatikali meta jingħaqad ma' pronomi mehmuża",
+          "nuance": "pronominal possessive base",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "indicating material, substance, composition, origin, type, or occupation (e.g. ċurkett tad-deheb, għalliem tal-Malti, raġel ta' kelma)",
-          "text_mt": "Tindika materjal, għamla, oriġini, professjoni jew kwalità ta' persuna jew ħaġa (eż. kaxxa tal-injam, tabib tat-tfal, bniedem ta' rispett).",
-          "register": "standard",
-          "nuance": "composition (qualitative reference)"
+          "text_en": "made of, consisting of, characterized by",
+          "text_mt": "Juri l-materjal li minnu hi magħmula ħaġa, jew karatteristika, kwalità jew xogħol partikolari",
+          "nuance": "composition or characteristic",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -174,6 +191,10 @@
         "1pl": "tagħna",
         "2pl": "tagħkom",
         "3pl": "tagħhom"
+      },
+      "usage_notes": {
+        "en": "Fundamental genitive and possessive marker linking a possessed noun to its possessor. Shortens to proclitic t' before vowel-initial words or silent għ. Fuses with the definite article as tal-, tat-, tad-, tas-, etc. Takes independent possessive pronominal suffix clitics: tiegħi, tiegħek, tiegħu, tagħha, tagħna, tagħkom, tagħhom.",
+        "mt": "Prepożizzjoni ġenitiva u pussessiva ewlenija li torbot l-oġġett mal-possessur tiegħu. Titqassar f'forma proklitika t' quddiem vokali jew konsonanti muti. Tingħaqad mal-artiklu bħala tal-, tat-, tad-, tas-, eċċ. Tittieħed bil-pronomi mehmuża indipendenti: tiegħi, tiegħek, tiegħu, tagħha, tagħna, tagħkom, tagħhom."
       }
     },
     {
@@ -206,22 +227,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بِـ + حَال",
-          "definition": "in + state, manner"
+          "definition": "in + state, manner",
+          "pronunciation": "bi + ħâl"
         }
       ],
       "etymology_notes": "Formed from the comparative base bħal with the suffix -a, functioning as a role and capacity marker ('in the role of, serving as'). Does not take pronominal suffix clitics directly; personal reference is expressed via personal pronouns (eż. bħala jien) or via bħal with clitics (eż. bħali).",
       "definitions": [
         {
-          "text_en": "as, in the capacity of, serving as (preposition introducing a function, role, title, or profession; e.g. ħadem bħala għalliem, tkellem bħala avukat)",
-          "text_mt": "Prepożizzjoni li tispjega r-rwol, il-kariga, il-funzjoni jew il-pożizzjoni uffiċjali ta' persuna jew ħaġa (eż. ħadem bħala għalliem, tkellem bħala rappreżentant).",
-          "register": "",
-          "nuance": "role, capacity"
+          "text_en": "as, in the capacity of, serving as",
+          "text_mt": "Fil-kariga, fir-rwol jew fil-kapaċità uffiċjali ta' persuna jew ħaġa",
+          "nuance": "capacity, function, or role",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "as for, regarding, in terms of (introducing a topic, qualification, or standpoint; e.g. bħala eżempju, bħala regola ġenerali)",
-          "text_mt": "Tintroduċi kunsiderazzjoni, eżempju jew punt di vista (eż. bħala eżempju, bħala regola ġenerali, bħala prinċipju).",
-          "register": "",
-          "nuance": "qualification, standpoint"
+          "text_en": "as for, regarding, in terms of",
+          "text_mt": "F'dak li għandu x'jaqsam ma' punt partikolari jew minn lat ta' konsiderazzjoni speċifika",
+          "nuance": "standpoint or qualification",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -296,7 +328,11 @@
       "audit_notes": "Refined lemma entry for capacity, role, and qualification relator bħala with distinct semantic senses and etymological documentation.",
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Equative and functional preposition derived from bħal + -a. Does not fuse with the definite article or take pronominal suffix clitics.",
+        "mt": "Prepożizzjoni ekwattiva u funzjonali mibnija minn bħal u s-suffiss -a. Ma tingħaqadx mal-artiklu ddeterminat u ma tiħux pronomi mehmuża."
+      }
     },
     {
       "id": "prep-għal",
@@ -322,46 +358,77 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَلَى",
-          "definition": "on, upon, for"
+          "definition": "on, upon, for",
+          "pronunciation": "għalâ"
         }
       ],
       "etymology_notes": "Inherited from Arabic preposition عَلَى (ʻalā, 'on, upon, against, for'). In Maltese, through semantic shift and merger with benefactive senses, għal functions primarily as 'for' and 'to', while fuq took over the core locative sense 'on, upon'. When inflected with pronominal suffixes, the historical weak glide reappears giving stem għali-: 1sg għalija, 2sg għalik, 3sg.m għalih, 3sg.f għaliha, 1pl għalina, 2pl għalikom, 3pl għalihom.",
       "definitions": [
         {
-          "text_en": "for, to (benefactive or recipient)",
-          "text_mt": "għall-benefiċċju jew għall-użu ta' xi ħadd; jindika l-persuna jew il-ħaġa li tirċievi",
-          "register": "",
-          "nuance": ""
+          "text_en": "for, to",
+          "text_mt": "Juri l-persuna, l-oġġett jew l-entità li lejha hi maħsuba ħaġa jew li tibbenefika minnha",
+          "nuance": "benefactive or recipient",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "for, in order to (purpose, intent, or reason)",
-          "text_mt": "jindika l-għan, il-mira, jew ir-raġuni ta' azzjoni",
-          "register": "",
-          "nuance": ""
+          "text_en": "for, in order to",
+          "text_mt": "Jindika l-iskop, ir-raġuni jew il-mira li lejha jwassal għemil jew azzjoni",
+          "nuance": "purpose, intent, or reason",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "towards, bound for, to (direction or destination)",
-          "text_mt": "fid-direzzjoni ta'; fi triqtu lejn post partikolari",
-          "register": "",
-          "nuance": ""
+          "text_en": "towards, bound for, to",
+          "text_mt": "B'moviment, rotta jew vjaġġ li jimmira lejn destinazzjoni partikolari",
+          "nuance": "direction or destination",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "for (duration of time or appointed time)",
-          "text_mt": "jindika medda ta' żmien jew ħin stabbilit",
-          "register": "",
-          "nuance": ""
+          "text_en": "for, during",
+          "text_mt": "Jindika tul ta' ħin, medda determinata jew appuntament fi żmien stabbilit",
+          "nuance": "duration or appointed time",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "for, at the price of (exchange, trade, or cost)",
-          "text_mt": "bi skambju għal; bil-prezz ta'",
-          "register": "",
-          "nuance": ""
+          "text_en": "for, at the price of",
+          "text_mt": "Juri l-prezz, il-valur jew il-kumpens mogħti bi skambju ta' oġġett jew servizz",
+          "nuance": "exchange or cost",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "in favour of, for (supporting; contrasting with kontra)",
-          "text_mt": "favur; bi qbil ma' xi ħadd jew xi ħaġa",
-          "register": "",
-          "nuance": ""
+          "text_en": "in favour of, for",
+          "text_mt": "B'appoġġ, bi qbil jew b'għajnuna lejn persuna, kawża jew proposta",
+          "nuance": "support or allegiance",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -465,6 +532,10 @@
         "1pl": "għalina",
         "2pl": "għalikom",
         "3pl": "għalihom"
+      },
+      "usage_notes": {
+        "en": "Primary dative, purposive, and benefactive preposition. Fuses with the definite article as għall-. Takes pronominal suffix clitics with glide or stem lengthening: għalija, għalik, għalih, għaliha, għalina, għalikom, għalihom. Also appears in the interrogative compound għala ('why').",
+        "mt": "Prepożizzjoni ewlenija ta' skop, benefiċċju jew destinazzjoni. Tingħaqad mal-artiklu bħala għall-. Tiħu l-pronomi mehmuża: għalija, għalik, għalih, għaliha, għalina, għalikom, għalihom. Tintuża wkoll fil-forma interrogattiva għala."
       }
     },
     {
@@ -491,28 +562,44 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "فَوْقَ",
-          "definition": "fawqa, preposition"
+          "definition": "fawqa, preposition",
+          "pronunciation": "fawqa"
         }
       ],
       "etymology_notes": "Inherited from Arabic preposition and adverb فَوْقَ (fawqa, 'above, over, upon'). In Maltese, fuq became the primary preposition for 'on, upon, on top of', while also maintaining its adverbial sense ('upwards, above') and topical sense ('about, concerning').",
       "definitions": [
         {
-          "text_en": "on, upon, on top of (spatial preposition indicating location on a surface or upper contact; e.g. fuq il-mejda, fuq il-bejt)",
-          "text_mt": "Prepożizzjoni spazjali ewlenija li tindika kuntatt ma' wiċċ jew pożizzjoni fuq nett (eż. fuq il-mejda, fuq il-bejt).",
-          "register": "",
-          "nuance": ""
+          "text_en": "on, upon, on top of",
+          "text_mt": "F'post jew f'pożizzjoni ogħla minn, b'kuntatt ma' wiċċ jew f'livell superjuri",
+          "nuance": "spatial locative or contact",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "about, concerning, regarding (topical preposition, synonymous with dwar; e.g. ktieb fuq l-istorja, tkellimna fuq ix-xogħol)",
-          "text_mt": "Prepożizzjoni topika li tindika suġġett jew materja; dwar (eż. ktieb fuq l-istorja, iddiskutejna fuq il-pjanijiet).",
-          "register": "",
-          "nuance": ""
+          "text_en": "about, concerning, regarding",
+          "text_mt": "Jittratta jew jikkonċerna suġġett, materja jew tema partikolari",
+          "nuance": "topic or subject matter",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "up, upwards, above, upstairs (adverb of place indicating higher position or elevation; e.g. tela' fuq)",
-          "text_mt": "Adverbju ta' post li jindika moviment jew pożizzjoni 'l fuq (eż. tela' fuq).",
-          "register": "",
-          "nuance": ""
+          "text_en": "up, upwards, above, upstairs",
+          "text_mt": "F'direzzjoni lejn l-għoli, lejn sular ogħla jew f'post elevat",
+          "nuance": "spatial adverb of elevation",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -616,6 +703,10 @@
         "1pl": "fuqna",
         "2pl": "fuqkom",
         "3pl": "fuqhom"
+      },
+      "usage_notes": {
+        "en": "Can function either as a preposition governing a noun phrase (e.g. fuq il-mejda) or as an independent adverb of place (e.g. tela' fuq). Does not fuse with the article. Takes standard pronominal suffix clitics: fuqi, fuqek, fuqu, fuqha, fuqna, fuqkom, fuqhom. Also forms directional phrase 'l fuq and interrogative fuqiex.",
+        "mt": "Tiffunzjona kemm bħala prepożizzjoni kif ukoll bħala avverbju ta' post. Ma tingħaqadx mal-artiklu ddeterminat. Tiħu l-pronomi mehmuża: fuqi, fuqek, fuqu, fuqha, fuqna, fuqkom, fuqhom. Tifforma wkoll il-frażi direzzjonali 'l fuq u l-forma interrogattiva fuqiex."
       }
     },
     {
@@ -642,28 +733,44 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مَعَ",
-          "definition": "with, together with"
+          "definition": "with, together with",
+          "pronunciation": "magħa"
         }
       ],
       "etymology_notes": "Inherited from Arabic comitative preposition مَعَ (maʻa, 'with'). In Maltese, citation ma' ends orthographically with an apostrophe representing the historical pharyngeal ʻayn. When taking pronominal suffixes, the root għ reappears and the stem exhibits syllable-conditioned imāla: miegħ- before vowel-initial suffixes (1sg miegħi, 2sg miegħek, 3sg.m miegħu) vs. magħ- before consonant-initial suffixes (3sg.f magħha, 1pl magħna, 2pl magħkom, 3pl magħhom). Distinct from the preverbal negative particle ma ('not').",
       "definitions": [
         {
-          "text_en": "with, accompanied by, in the company of, together with (comitative preposition, e.g. mar ma' ħuh, tkellimt ma' Pawlu)",
-          "text_mt": "Prepożizzjoni ewlenija li tindika kumpanija, akkumpanjament jew rabta bejn persuni jew oġġetti (eż. ħareġ ma' ħbiebu, tkellimt ma' Marija).",
-          "register": "standard",
-          "nuance": "comitative (accompaniment)"
+          "text_en": "with, accompanied by, in the company of, together with",
+          "text_mt": "Fl-istess post jew kumpanija ta' ħaddieħor, f'azzjoni jew qagħda miftiehma flimkien",
+          "nuance": "comitative accompaniment",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "at the same time as, upon, at (temporal co-occurrence, e.g. mas-sebħ, ma' nżul ix-xemx, ma' kull pass)",
-          "text_mt": "F'ħin wieħed ma' jew mal-bidu ta' ġrajja (relazzjoni temporali; eż. mas-sebħ, ma' tlugħ ix-xemx).",
-          "register": "standard",
-          "nuance": "co-occurrence (temporal point)"
+          "text_en": "at the same time as, upon, at",
+          "text_mt": "F'daqqa u f'waqt wieħed ma' ġrajja jew mument partikolari ta' żmien",
+          "nuance": "temporal co-occurrence",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "inflected with pronominal suffix clitics as an independent pronoun base (miegħi, miegħek, miegħu, magħha, magħna, magħkom, magħhom)",
-          "text_mt": "Għamla bażika li tieħu pronomi mehmuża: miegħi, miegħek, miegħu, magħha, magħna, magħkom, magħhom.",
-          "register": "standard",
-          "nuance": "pronominal comitative base"
+          "text_en": "with me, with you, with him, with her, with us, with you, with them",
+          "text_mt": "Juri kumpanija jew rabta diretta mal-persuna grammatikali meta jingħaqad ma' pronomi mehmuża",
+          "nuance": "pronominal inflected base",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -770,6 +877,10 @@
         "1pl": "magħna",
         "2pl": "magħkom",
         "3pl": "magħhom"
+      },
+      "usage_notes": {
+        "en": "Comitative preposition indicating accompaniment, conjunction, or temporal simultaneity. Shortens to proclitic m' before vowel-initial words or silent għ. Fuses with the definite article as mal-, mas-, mar-, etc. Inflects irregularly with the root glide stem: miegħi, miegħek, miegħu, magħha, magħna, magħkom, magħhom.",
+        "mt": "Prepożizzjoni komitattiva ewlenija ta' kumpanija, akkumpanjament jew simultanjetà. Titqassar fi m' quddiem vokali jew konsonanti muti. Tingħaqad mal-artiklu bħala mal-, mas-, mar-, eċċ. Tisref bil-forma irregolari miegħ-: miegħi, miegħek, miegħu, magħha, magħna, magħkom, magħhom."
       }
     },
     {
@@ -796,28 +907,44 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي",
-          "definition": "in, inside, at"
+          "definition": "in, inside, at",
+          "pronunciation": "fî"
         }
       ],
       "etymology_notes": "Inherited from Arabic preposition فِي (fī, 'in, inside, at'). Forms the proclitic f' before vowel-initial words and silent letters, and fuses with the definite article as fil- (with regular coronal assimilations fit-, fid-, fin-, fir-, fis-, fix-, fiż-, fiz-, fiċ-). Takes pronominal suffix clitics on the lengthened stem fi-: 1sg fija, 2sg fik, 3sg.m fih, 3sg.f fiha, 1pl fina, 2pl fikom, 3pl fihom.",
       "definitions": [
         {
-          "text_en": "in, inside, within, at (spatial preposition indicating location, containment, or presence within an area, boundary, or container; e.g. fi darna, fi pjazza, fi flixkun)",
-          "text_mt": "Prepożizzjoni spazjali ewlenija li tindika qagħda, pożizzjoni jew konteniment ġewwa post, bini, kontenitur jew limitu (eż. fid-dar, fi pjazza, f'kamra).",
-          "register": "",
-          "nuance": "spatial location, containment"
+          "text_en": "in, inside, within, at",
+          "text_mt": "Fuq ġewwa jew fil-limiti ta' spazju, post jew reċipjent",
+          "nuance": "spatial containment or location",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "in, during, at (temporal preposition indicating a period of time, season, month, or point in time; e.g. f'April, fis-sajf, filgħodu)",
-          "text_mt": "Prepożizzjoni ta' żmien li tindika medda jew punt fiż-żmien, staġun jew xahar (eż. f'Awwissu, fis-sajf, f'ħakka t'għajn).",
-          "register": "",
-          "nuance": "temporal period"
+          "text_en": "in, during, at",
+          "text_mt": "Jindika żmien partikolari, perijodu jew waqt determinat",
+          "nuance": "temporal period or moment",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "in, into, under (indicating a state, condition, mood, or circumstance; e.g. fis-sakra, fil-paċi, f'inkwiet kbir)",
-          "text_mt": "Tindika stat, kundizzjoni, qagħda tal-moħħ jew ċirkostanza li fiha tinsab persuna jew ħaġa (eż. fil-paċi, fis-skiet, f'inkwiet kbir).",
-          "register": "",
-          "nuance": "state, condition"
+          "text_en": "in, into, under",
+          "text_mt": "Juri stat emozzjonali, qagħda fiżika jew kundizzjoni partikolari",
+          "nuance": "state, circumstance, or mood",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -922,6 +1049,10 @@
         "1pl": "fina",
         "2pl": "fikom",
         "3pl": "fihom"
+      },
+      "usage_notes": {
+        "en": "Primary inessive locative and temporal preposition. Shortens to proclitic f' before vowel-initial words or silent għ. Fuses with the definite article as fil-, fit-, fid-, fis-, etc. Takes pronominal suffix clitics: fija, fik, fih, fiha, fina, fikom, fihom.",
+        "mt": "Prepożizzjoni inessiva ewlenija ta' post, żmien jew kundizzjoni. Titqassar fi f' quddiem vokali jew konsonanti muti. Tingħaqad mal-artiklu bħala fil-, fit-, fid-, fis-, eċċ. Tisref bil-pronomi mehmuża: fija, fik, fih, fiha, fina, fikom, fihom."
       }
     },
     {
@@ -948,34 +1079,55 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مِنْ",
-          "definition": "from, of, out of"
+          "definition": "from, of, out of",
+          "pronunciation": "min"
         }
       ],
       "etymology_notes": "Inherited from Arabic preposition مِنْ (min, 'from, out of, of'). Fuses with the definite article as mill- (assimilating before coronals to mit-, mid-, min-, mir-, mis-, mix-, miż-, miz-, miċ-). Takes pronominal suffix clitics with doubled n: 1sg minni, 2sg minnek, 3sg.m minnu, 3sg.f minnha, 1pl minna, 2pl minnkom, 3pl minnhom.",
       "definitions": [
         {
-          "text_en": "from, away from, out of (ablative preposition indicating starting point, point of departure, origin, or source in space; e.g. minn Malta, minn fuq il-bejt)",
-          "text_mt": "Prepożizzjoni ewlenija li tindika sors, punt tat-tluq, oriġini jew provenjenza spazjali (eż. minn Malta, minn raħal għal ieħor, minn ġewwa).",
-          "register": "",
-          "nuance": "spatial origin, departure"
+          "text_en": "from, away from, out of",
+          "text_mt": "Juri l-punt tat-tluq, il-bidu ta' moviment jew l-oriġini spazjali",
+          "nuance": "spatial point of origin",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "from, since, starting at (temporal preposition indicating the beginning of a duration or period; e.g. minn kmieni, min-nhar ta' Tnejn)",
-          "text_mt": "Prepożizzjoni ta' żmien li tindika bidu ta' medda jew perijodu (eż. minn kmieni, minn sbieħ il-jum).",
-          "register": "",
-          "nuance": "temporal origin"
+          "text_en": "from, since, starting at",
+          "text_mt": "Jindika l-bidu ta' perijodu jew il-mument li minnu bdiet azzjoni",
+          "nuance": "temporal origin or duration",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "out of, of, from among (indicating material, substance, composition, or partitive selection; e.g. magħmul mill-injam, wieħed minnhom)",
-          "text_mt": "Tindika materjal jew sustanza li minnha hija magħmula xi ħaġa, jew għażla partittiva minn grupp (eż. magħmul mill-injam, wieħed minnhom).",
-          "register": "",
-          "nuance": "material, partitive"
+          "text_en": "out of, of, from among",
+          "text_mt": "Juri l-materjal kostitwenti ta' oġġett, jew membru meħud minn fost grupp",
+          "nuance": "partitive or substance",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "from, because of, through, by (indicating cause, reason, or channel; e.g. miet bil-ġuħ jew minn xi marda, minn rajh)",
-          "text_mt": "Tindika kawża, raġuni jew mezz li permezz tiegħu sseħħ ġrajja (eż. minn kawża ta' marda, minn jeddu).",
-          "register": "",
-          "nuance": "cause, reason"
+          "text_en": "from, because of, through, by",
+          "text_mt": "Jindika r-raġuni, il-kawża ewlenija jew il-mezz li bih seħħet ġrajja",
+          "nuance": "cause, reason, or means",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -1079,6 +1231,10 @@
         "1pl": "minna",
         "2pl": "minnkom",
         "3pl": "minnhom"
+      },
+      "usage_notes": {
+        "en": "Primary ablative, source, and partitive preposition. Fuses with the definite article as mill-, mit-, mid-, mis-, etc. Takes pronominal suffix clitics with geminated nasal stem: minni, minnek, minnu, minnha, minna, minnkom, minnhom.",
+        "mt": "Prepożizzjoni ablattiva ewlenija ta' oriġini, sors, direzzjoni jew kawża. Tingħaqad mal-artiklu bħala mill-, mit-, mid-, mis-, eċċ. Tisref bil-pronomi mehmuża: minni, minnek, minnu, minnha, minna, minnkom, minnhom."
       }
     },
     {
@@ -1087,10 +1243,15 @@
       "pos": "article",
       "definitions": [
         {
-          "text_en": "the (definite article; proclitic form used before vowel-initial words or following a vowel)",
-          "text_mt": "l-artiklu definit fil-forma mqassra, użat quddiem kliem li jibda b'vokali jew wara kelma li tispiċċa b'vokali (eż. l-omm, marru l-belt)",
-          "register": "",
-          "nuance": ""
+          "text_en": "the",
+          "text_mt": "Forma mqassra proklitika tal-artiklu ddeterminat użata quddiem vokali jew konsonanti vokaliċi",
+          "nuance": "definite article proclitic form",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "is_loanword": 0,
@@ -1108,8 +1269,9 @@
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "اَلْ",
-          "definition": "the (definite article)"
+          "term": "اَلْـ",
+          "definition": "the (definite article)",
+          "pronunciation": "al-"
         }
       ],
       "alternative_forms": [
@@ -1162,7 +1324,11 @@
           "notes": "Proclitic cliticized to the following noun or adjective"
         }
       ],
-      "source_id": "src-crowd"
+      "source_id": "src-crowd",
+      "usage_notes": {
+        "en": "Proclitic form of the definite article il-. Used directly before words beginning with a vowel or silent għ or h, and after a preceding word ending in a vowel.",
+        "mt": "Forma proklitika tal-artiklu definit 'il-'. Tintuża quddiem kliem li jibda b'vokali jew għ u h muti, jew wara kelma li tispiċċa b'vokali."
+      }
     },
     {
       "id": "prep-tal",
@@ -1194,10 +1360,15 @@
       "etymology_notes": "Contraction of the genitive preposition ta' fused with the definite article il- ('the'). Assimilates phonologically before coronal consonants (sun letters): tat-, tad-, tan-, tar-, tas-, tax-, taż-, taz-, taċ-.",
       "definitions": [
         {
-          "text_en": "of the (contracted fused form of preposition ta' and the definite article il-)",
-          "text_mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'ta'' mal-artiklu ddeterminat 'il-' (tindika pussess, speċifikazzjoni, oriġini jew materjal; eż. il-bieb tad-dar, l-għalliem tal-Malti).",
-          "register": "standard",
-          "nuance": "articulated preposition (of the)"
+          "text_en": "of the",
+          "text_mt": "Forma magħquda tal-prepożizzjoni ta' mal-artiklu ddeterminat, li turi pussess jew relazzjoni",
+          "nuance": "contracted articulated genitive",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -1309,7 +1480,11 @@
       "audit_notes": "Corrected from erroneous hollow verb 'to last' to the articulated preposition tal- ('of the').",
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "sources": null
+      "sources": null,
+      "usage_notes": {
+        "en": "Contracted fused form of the preposition ta' and the definite article il-. The liquid l assimilates before coronal (sun) consonants as tat-, tad-, tas-, tar-, taz-, taż-, tax-, tan-, taċ-.",
+        "mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'ta'' u l-artiklu 'il-'. Il-konsonanti l tassimila quddiem konsonanti xemxin bħala tat-, tad-, tas-, tar-, eċċ."
+      }
     },
     {
       "id": "prep-fil",
@@ -1341,10 +1516,15 @@
       "etymology_notes": "Contraction of the locative preposition fi ('in, inside') fused with the definite article il- ('the'). Assimilates phonologically before coronal consonants (sun letters): fit-, fid-, fin-, fir-, fis-, fix-, fiż-, fiz-, fiċ-.",
       "definitions": [
         {
-          "text_en": "in the, inside the, at the (contracted fused form of preposition fi and the definite article il-)",
-          "text_mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'fi' mal-artiklu ddeterminat 'il-' (tindika post, ħin jew stat; eż. fil-belt, fil-ħin, fil-verità).",
-          "register": "standard",
-          "nuance": "articulated preposition (in the)"
+          "text_en": "in the, inside the, at the",
+          "text_mt": "Forma magħquda tal-prepożizzjoni fi mal-artiklu ddeterminat, li tindika post jew żmien",
+          "nuance": "contracted articulated inessive",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -1467,7 +1647,11 @@
       "audit_notes": "Corrected from erroneous crowd entry 'elephant' to the articulated preposition fil- ('in the').",
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "sources": null
+      "sources": null,
+      "usage_notes": {
+        "en": "Contracted fused form of the preposition fi and the definite article il-. The liquid l assimilates before coronal consonants as fit-, fid-, fis-, fir-, fiz-, fiż-, fix-, fin-, fiċ-.",
+        "mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'fi' u l-artiklu 'il-'. Il-konsonanti l tassimila quddiem konsonanti xemxin bħala fit-, fid-, fis-, fir-, eċċ."
+      }
     },
     {
       "id": "prep-bħal",
@@ -1493,28 +1677,44 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بِـ + حَال",
-          "definition": "in + state, manner"
+          "definition": "in, with + state, manner",
+          "pronunciation": "bi + ħâl"
         }
       ],
       "etymology_notes": "Inherited from Arabic compound prepositional phrase بِحَال (bi-ħāl, 'in the state of, in the manner of, like'). Fuses with the definite article as bħall- (e.g. bħall-bieraħ, bħall-ilma). Takes standard possessive clitics: 1sg bħali, 2sg bħalek, 3sg.m bħalu, 3sg.f bħalha, 1pl bħalna, 2pl bħalkom, 3pl bħalhom.",
       "definitions": [
         {
-          "text_en": "like, similar to, resembling (comparative preposition expressing resemblance, equality, or manner; e.g. abjad bħas-silġ, ħafif bħar-riħ)",
-          "text_mt": "Prepożizzjoni komparattiva ewlenija li tindika xebh, paragun jew mod (eż. abjad bħas-silġ, jaħdem bħal żiemel).",
-          "register": "",
-          "nuance": "comparative similarity"
+          "text_en": "like, similar to, resembling",
+          "text_mt": "Li jixbah jew li għandu kwalitajiet simili għal ħaġa oħra",
+          "nuance": "comparative similarity",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "such as, like, for instance (introducing examples or representative items in an enumeration; e.g. frott bħal tuffieħ u larinġ)",
-          "text_mt": "Użata biex tintroduċi eżempji jew xhieda f'enumerazzjoni (eż. frott bħal tuffieħ, lanġas u larinġ).",
-          "register": "",
-          "nuance": "exemplification"
+          "text_en": "such as, like, for instance",
+          "text_mt": "Użat biex jintroduċi eżempju jew każ partikolari bħala xhieda",
+          "nuance": "exemplification",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "at about the same time as, around (e.g. bħal dan iż-żmien, bħall-bieraħ)",
-          "text_mt": "Tindika punt jew żmien simili għal ieħor fil-passat jew fil-ġejjieni (eż. bħal dan iż-żmien sena, bħall-bieraħ).",
-          "register": "",
-          "nuance": "temporal recurrence"
+          "text_en": "at about the same time as, around",
+          "text_mt": "F'madwar l-istess waqt jew fl-istess perijodu rikorrenti ta' żmien",
+          "nuance": "temporal recurrence",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -1610,6 +1810,10 @@
         "1pl": "bħalna",
         "2pl": "bħalkom",
         "3pl": "bħalhom"
+      },
+      "usage_notes": {
+        "en": "Primary comparative and equative preposition expressing similarity, resemblance, or exemplification. Fuses with the definite article as bħall- (and assimilates before coronals, e.g. bħas-silġ, bħar-riħ). Takes standard possessive clitics: bħali, bħalek, bħalu, bħalha, bħalna, bħalkom, bħalhom.",
+        "mt": "Prepożizzjoni komparattiva u ekwattiva ewlenija li tindika xebh, mod, jew eżempju. Tingħaqad mal-artiklu bħala bħall- (u tassimila quddiem konsonanti xemxin, eż. bħas-silġ, bħar-riħ). Tiħu l-pronomi mehmuża: bħali, bħalek, bħalu, bħalha, bħalna, bħalkom, bħalhom."
       }
     },
     {
@@ -1636,28 +1840,44 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قَرِيب",
-          "definition": "near, close, adjacent"
+          "definition": "near, close, adjacent",
+          "pronunciation": "qarîb"
         }
       ],
       "etymology_notes": "Inherited from Arabic adjective قَرِيب (qarīb, 'near, close, relative'), from root q-r-b ('to be near'). In Maltese, functions both as a spatial and temporal adjective of proximity ('near, close by') and prepositionally as a relator followed directly by a noun phrase or prepositional complement (eż. qrib il-knisja, qrib nofsinhar). Forms the lexicalized adverbial phrases fil-qrib ('nearby') and mill-qrib ('closely').",
       "definitions": [
         {
-          "text_en": "near, close, nearby, adjacent to (spatial adjective and relator indicating short physical distance to a location, person, or landmark; e.g. qrib il-baħar, qrib il-pjazza)",
-          "text_mt": "Aġġettiv u relatur spazjali li jindika distanza qasira ħafna minn post, bini jew persuna (eż. qrib il-baħar, qrib il-knisja, qrib id-dar).",
-          "register": "",
-          "nuance": "spatial proximity"
+          "text_en": "near, close to, nearby",
+          "text_mt": "F'distanza qasira jew mhux 'il bogħod minn post; viċin",
+          "nuance": "spatial proximity",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "close to, near, approaching (temporal relator indicating a point in time close to an hour, event, or season; e.g. qrib nofsinhar, qrib il-festa)",
-          "text_mt": "Relatur temporali li jindika ħin jew data qrib ħafna ta' ġrajja jew siegħa (eż. qrib nofsinhar, qrib tmiem ix-xahar).",
-          "register": "",
-          "nuance": "temporal proximity"
+          "text_en": "close to, near",
+          "text_mt": "F'distanza qasira ta' żmien minn ġrajja li waslet biex isseħħ; fil-qrib",
+          "nuance": "temporal proximity",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "close, intimate, related (expressing intimate friendship, strong personal bond, or family relation)",
-          "text_mt": "Tindika rabta personali mill-qrib, familjarità jew rabta ta' demm (eż. ħabib qrib ħafna tiegħi).",
-          "register": "",
-          "nuance": "relational closeness, kinship"
+          "text_en": "close, intimate",
+          "text_mt": "Marbut b'affezzjoni, fiduċja jew intimità kbira ma' persuna; tal-qalb",
+          "nuance": "relational proximity",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -1753,7 +1973,11 @@
       "audit_notes": "Refined lemma entry for spatial, temporal, and relational adjective and relator qrib with cross-links to derived adverbial phrases fil-qrib and mill-qrib.",
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Functions primarily as an adjective or adverb of proximity (e.g. qrib ħafna). Frequently functions as an improper preposition governing a noun phrase directly or via preposition ta' (qrib il-baħar, qrib il-knisja). Forms fixed prepositional phrases fil-qrib and mill-qrib.",
+        "mt": "Tiffunzjona bħala aġġettiv, avverbju jew prepożizzjoni mhux proprja li tindika qrubija spazjali jew temporali (eż. qrib il-baħar). Tifforma l-frażijiet avverbjali fissi fil-qrib u mill-qrib."
+      }
     },
     {
       "id": "prep-wara",
@@ -1779,22 +2003,44 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "وَرَاء",
-          "definition": "behind, beyond, after"
+          "definition": "behind, beyond, after",
+          "pronunciation": "warâ'"
         }
       ],
       "etymology_notes": "Inherited from Arabic preposition and adverb وَرَاء (warāʾ, 'behind, beyond, after'). In Maltese, wara behaves morphophonologically as a weak glide stem with final radical -j (root w-r-j), inserting an intervocalic glide -j- before pronominal suffix clitics: 1sg warajja, 2sg warajk, 3sg.m warajh, 3sg.f warajha, 1pl warajna, 2pl warajkom, 3pl warajhom.",
       "definitions": [
         {
-          "text_en": "behind, at the back of, in the rear of (spatial relation indicating location to the rear of someone or something)",
-          "text_mt": "Fin-naħa jew fil-parti ta' wara ta' persuna, oġġett jew post (relazzjoni spazjali).",
-          "register": "standard",
-          "nuance": "spatial location (behind)"
+          "text_en": "behind, at the back of",
+          "text_mt": "Fuq in-naħa ta' wara ta' persuna jew oġġett, f'pożizzjoni posterjuri",
+          "nuance": "spatial rear position",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "after, subsequent to, later than; following in time, order, or sequence (e.g. wara l-ikel, wara xulxin)",
-          "text_mt": "F'ħin ta' wara (aktar tard minn) jew f'sekwenza (eż. wara l-ikel, wara xulxin).",
-          "register": "standard",
-          "nuance": "temporal sequence (after)"
+          "text_en": "after, following, subsequently to",
+          "text_mt": "Fi żmien suċċessiv jew f'mument li jsegwi ġrajja partikolari",
+          "nuance": "temporal succession",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "after, in pursuit of",
+          "text_mt": "F'insegwiment, bi tfittxija jew wara l-passi ta' ħaddieħor",
+          "nuance": "pursuit or seeking",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -1890,6 +2136,10 @@
         "1pl": "warajna",
         "2pl": "warajkom",
         "3pl": "warajhom"
+      },
+      "usage_notes": {
+        "en": "Spatial and temporal preposition indicating location behind or time after. Does not fuse with the definite article. Inflects irregularly with the weak glide root w-r-j: 1sg warajja, 2sg warajk, 3sg.m warajh, 3sg.f warajha, 1pl warajna, 2pl warajkom, 3pl warajhom. Also forms directional phrase minn wara.",
+        "mt": "Prepożizzjoni spazjali u temporali li tindika pożizzjoni wara oġġett jew wara ġrajja. Ma tingħaqadx mal-artiklu ddeterminat. Tisref bl-għerq dgħajjef w-r-j: warajja, warajk, warajh, warajha, warajna, warajkom, warajhom. Tifforma wkoll il-frażi spazjali minn wara."
       }
     },
     {
@@ -1916,28 +2166,44 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "تَحْتُ",
-          "definition": "below, down, down below"
+          "definition": "below, down, down below",
+          "pronunciation": "taħtu"
         }
       ],
       "etymology_notes": "Inherited from Arabic preposition and adverb تَحْتَ (taḥta, 'under, below, beneath'). Functions both as a primary spatial preposition and as a condition relator ('under control, under age').",
       "definitions": [
         {
-          "text_en": "under, beneath, underneath, below (spatial preposition indicating location underneath or covered by something; e.g. taħt il-mejda, taħt is-siġra)",
-          "text_mt": "Prepożizzjoni spazjali ewlenija li tindika post jew livell aktar baxx minn xi ħaġa, jew taħt il-qiegħ ta' oġġett (eż. taħt il-mejda, taħt is-siġra).",
-          "register": "",
-          "nuance": ""
+          "text_en": "under, underneath, below, beneath",
+          "text_mt": "F'post jew f'livell aktar baxx minn, mgħotti minn xi ħaġa oħra jew fil-qiegħ tagħha",
+          "nuance": "spatial locative or lower level",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "under, subjected to, subordinate to, in the condition of (indicating governance, supervision, or state; e.g. taħt il-kontroll, taħt il-ħakma, taħt l-età)",
-          "text_mt": "Tindika stat, tmexxija, kundizzjoni jew dipendenza (eż. taħt kontroll, taħt l-età, taħt pressjoni).",
-          "register": "",
-          "nuance": ""
+          "text_en": "under, subject to, governed by",
+          "text_mt": "Ikkontrollat jew immexxi mill-awtorità, mill-kmand jew mill-ordnijiet ta' ħaddieħor",
+          "nuance": "authority or governance",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "below, down, downstairs (adverb of place indicating lower position)",
-          "text_mt": "Adverbju ta' post li jindika pożizzjoni 'l isfel jew f'livell inferjuri.",
-          "register": "",
-          "nuance": ""
+          "text_en": "under, during, beneath",
+          "text_mt": "Soġġett għal kundizzjoni partikolari, effett, tensjoni jew ċirkostanza speċifika",
+          "nuance": "state, influence, or condition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -2037,6 +2303,10 @@
         "1pl": "taħtna",
         "2pl": "taħtkom",
         "3pl": "taħthom"
+      },
+      "usage_notes": {
+        "en": "Primary spatial, conditional, and subordinate preposition. Does not fuse with the definite article. Takes standard pronominal suffix clitics: taħti, taħtek, taħtu, taħtha, taħtna, taħtkom, taħthom. Also forms directional minn taħt and interrogative taħtiex.",
+        "mt": "Prepożizzjoni spazjali u figurattiva ewlenija. Ma tingħaqadx mal-artiklu ddeterminat. Tiħu l-pronomi mehmuża: taħti, taħtek, taħtu, taħtha, taħtna, taħtkom, taħthom. Tifforma wkoll il-frażi minn taħt u l-forma interrogattiva taħtiex."
       }
     },
     {
@@ -2065,16 +2335,22 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "per mezzo (di)",
-          "definition": "by means of, through"
+          "definition": "by means of, through",
+          "pronunciation": "per mezzo (di)"
         }
       ],
       "etymology_notes": "Borrowed from Italian per mezzo (di) ('by means of'). In Maltese, permezz combines with the genitive preposition ta' to function as a compound preposition meaning 'by means of, through, via'.",
       "definitions": [
         {
-          "text_en": "by means of, through, via (used with ta' as a compound preposition)",
-          "text_mt": "b'mezz ta'; bl-għajnuna jew bl-intermedju ta' (fil-frażi 'permezz ta'')",
-          "register": "",
-          "nuance": "compound preposition with ta'"
+          "text_en": "means, medium, channel, instrument",
+          "text_mt": "Strument, intermedjarju jew mod li bih tintlaħaq mira jew titwettaq azzjoni; mezz",
+          "nuance": "instrument or agency",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -2111,7 +2387,11 @@
       "audit_status": "pending",
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
-      "theme_id": "prepositions"
+      "theme_id": "prepositions",
+      "usage_notes": {
+        "en": "Noun of Romance origin ('per mezzo') functioning predominantly in the compound prepositional phrase permezz ta' ('by means of, through'). Takes stem 'permezz'.",
+        "mt": "Nom ta' nisel Rumanz użat l-aktar fil-frażi prepożizzjonali komposta permezz ta' biex jindika l-istrument jew il-mezz ta' azzjoni."
+      }
     },
     {
       "id": "prep-qabel",
@@ -2137,22 +2417,44 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قَبْلَ",
-          "definition": "before, prior to"
+          "definition": "before, prior to",
+          "pronunciation": "qabla"
         }
       ],
       "etymology_notes": "Inherited from Arabic temporal preposition and adverb قَبْلَ (qabla, 'before, prior to'). In Maltese, functions as the primary preposition of anterior time ('before a point in time or event') and combines with the relative marker ma as the subordinating conjunction qabel ma ('before'). Takes pronominal suffix clitics with epenthetic vowel breaking consonant clusters: 1sg qabli, 2sg qablek, 3sg.m qablu, 3sg.f qabilha, 1pl qabilna, 2pl qabilkom, 3pl qabilhom.",
       "definitions": [
         {
-          "text_en": "before, prior to, earlier than (temporal preposition indicating an earlier point in time, preceding an event, date, or hour; e.g. qabel l-ikel, qabel nofsinhar, qabel il-festa)",
-          "text_mt": "Prepożizzjoni temporali ewlenija li tindika ħin jew mument aktar kmieni minn ġrajja, data jew siegħa stabbilita (eż. qabel l-ikel, qabel nofsinhar, qabel il-laqgħa).",
-          "register": "",
-          "nuance": "temporal anteriority"
+          "text_en": "before, prior to, earlier than",
+          "text_mt": "Fi żmien preċedenti jew f'mument li jiġi qabel ġrajja jew data stabbilita",
+          "nuance": "temporal anteriority",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "before, previously, beforehand, earlier (adverb indicating a prior occasion or earlier state; e.g. kif għedtilkom qabel, kont naf bih qabel)",
-          "text_mt": "Adverbju ta' żmien li jfisser qatt qabel, aktar kmieni jew f'okkażjoni preċedenti (eż. kif għedtilkom qabel, ma rajtu qatt qabel).",
-          "register": "",
-          "nuance": "temporal adverb (beforehand)"
+          "text_en": "before, in front of, facing",
+          "text_mt": "Faċċata ta' ħaddieħor jew f'pożizzjoni aktar 'il quddiem fi spazju",
+          "nuance": "spatial priority or presence",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "before, in preference to, ahead of",
+          "text_mt": "B'aktar importanza, stima jew prijorità fuq ħaġa oħra",
+          "nuance": "order of preference or priority",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -2247,6 +2549,10 @@
         "1pl": "qabilna",
         "2pl": "qabilkom",
         "3pl": "qabilhom"
+      },
+      "usage_notes": {
+        "en": "Primary temporal preposition of anteriority. Does not fuse with the definite article. Inflects with pronominal suffix clitics: qabli, qablek, qablu, qabilha, qabilna, qabilkom, qabilhom. Frequently pairs with ma to form the subordinating conjunction qabel ma ('before').",
+        "mt": "Prepożizzjoni temporali ewlenija li tindika anteriorità. Ma tingħaqadx mal-artiklu ddeterminat. Tisref bil-pronomi mehmuża: qabli, qablek, qablu, qabilha, qabilna, qabilkom, qabilhom. Tingħaqad ma' ma biex tifforma l-konġunzjoni subordinata qabel ma."
       }
     },
     {
@@ -2273,22 +2579,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "دَوَار",
-          "definition": "circuit, circling, around"
+          "definition": "circuit, circling, around",
+          "pronunciation": "dawâr"
         }
       ],
       "etymology_notes": "Inherited from Arabic root d-w-r (د-و-ر, 'to turn, circle'), related to دَوَار (dawār, 'circuit, rotation, around') and cognate with Maltese noun dawra ('turn, circuit') and compound preposition madwar ('around'). Functions primarily as an abstract topical preposition ('about, regarding') and secondarily in locative (circumferential) contexts.",
       "definitions": [
         {
-          "text_en": "about, concerning, regarding, on the subject of (e.g. ktieb dwar l-istorja, tkellimna dwar il-proġett)",
-          "text_mt": "Prepożizzjoni topika li tindika s-suġġett jew il-materja li qed titqies jew tiġi diskussa (eż. ktieb dwar l-istorja, diskursata dwar ix-xogħol).",
-          "register": "standard",
-          "nuance": "topical relation (about)"
-        },
-        {
-          "text_en": "around, round about, on all sides of (locative, often in dawra dwar)",
-          "text_mt": "Fin-naħat kollha ta' oġġett jew post (relazzjoni spazjali u ċirkonferenzjali).",
-          "register": "literary",
-          "nuance": "circumferential location (around)"
+          "text_en": "about, concerning, regarding",
+          "text_mt": "Jittratta jew jikkonċerna suġġett, kwistjoni jew tema partikolari",
+          "nuance": "topic, theme, or subject matter",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -2384,6 +2690,10 @@
         "1pl": "dwarna",
         "2pl": "dwarkom",
         "3pl": "dwarhom"
+      },
+      "usage_notes": {
+        "en": "Topical and thematic preposition derived from the root d-w-r. Does not fuse with the definite article. Takes standard pronominal suffix clitics: dwari, dwarek, dwaru, dwarha, dwarna, dwarkom, dwarhom.",
+        "mt": "Prepożizzjoni tematika ewlenija li tindika suġġett jew tema. Ma tingħaqadx mal-artiklu ddeterminat. Tisref bil-pronomi mehmuża: dwari, dwarek, dwaru, dwarha, dwarna, dwarkom, dwarhom."
       }
     },
     {
@@ -2410,28 +2720,44 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بَيْنَ",
-          "definition": "between, in the midst of"
+          "definition": "between, in the midst of",
+          "pronunciation": "bayna"
         }
       ],
       "etymology_notes": "Inherited from Arabic preposition بَيْنَ (bayna, 'between, among'). Functions as a spatial, temporal, and relational relator connecting two or more entities. In Maltese morphology, personal clitics attach exclusively to the pluralized construct base bejniet-: 1pl bejnietna ('between us'), 2pl bejnietkom ('between you'), 3pl bejniethom ('between them'). Singular personal relations are expressed analytically as bejni u bejn... ('between me and...').",
       "definitions": [
         {
-          "text_en": "between (spatial preposition indicating an intermediate position separating two points, places, objects, or boundaries; e.g. bejn il-knisja u l-isptar, bejn żewġ siġriet)",
-          "text_mt": "Prepożizzjoni spazjali li tindika qagħda intermedja jew spazju fin-nofs li jifred żewġ postijiet, oġġetti jew persuni (eż. bejn il-knisja u l-iskola, bejn żewġ ħitan).",
-          "register": "",
-          "nuance": "spatial intermediate position"
+          "text_en": "between",
+          "text_mt": "Fl-ispazju intermedjarju li jifred żewġ punti, oġġetti jew postijiet",
+          "nuance": "spatial or intermediate location",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "between (temporal preposition indicating an intermediate interval of time, age, or quantity; e.g. bejn it-tlieta u l-erbgħa, bejn l-għaxar u t-tnax-il sena)",
-          "text_mt": "Prepożizzjoni temporali jew kwantitattiva li tindika medda jew intervall bejn żewġ punti (eż. bejn id-disgħa u l-għaxra, bejn għoxrin u tletin ewro).",
-          "register": "",
-          "nuance": "temporal or quantitative interval"
+          "text_en": "between",
+          "text_mt": "Fil-perijodu intermedjarju li jifred żewġ ħinijiet, dati jew ġrajjiet",
+          "nuance": "temporal interval",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "between, among (indicating mutual interaction, comparison, distinction, agreement, or dispute between parties; e.g. qbil bejnietna, id-differenza bejn it-tnejn)",
-          "text_mt": "Tindika relazzjoni reċiproka, ftehim, qasma jew distinzjoni bejn partijiet (eż. ftehim bejnietna, id-differenza bejn il-verità u l-gideb).",
-          "register": "",
-          "nuance": "mutual relation, distinction"
+          "text_en": "between, among",
+          "text_mt": "F'relazzjoni reċiproka, ftehim jew tqabbil li jgħaqqad żewġ partijiet jew aktar",
+          "nuance": "mutual relation or distinction",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -2522,6 +2848,10 @@
         "1pl": "bejnietna",
         "2pl": "bejnietkom",
         "3pl": "bejniethom"
+      },
+      "usage_notes": {
+        "en": "Spatial, temporal, and reciprocal preposition. Does not fuse with the definite article. When inflected with pronominal suffix clitics, uses the plural construct base bejniet-: bejnietna, bejnietkom, bejniethom (and rarely 1sg bejni, 3sg bejnu).",
+        "mt": "Prepożizzjoni spazjali, temporali u reċiproka. Ma tingħaqadx mal-artiklu ddeterminat. Bil-pronomi mehmuża tintuża l-għamla plurali bejniet-: bejnietna, bejnietkom, bejniethom."
       }
     },
     {
@@ -2548,22 +2878,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي وَسْطِ",
-          "definition": "in the middle of, amid"
+          "definition": "in the middle of, amid",
+          "pronunciation": "fî wasṭi"
         }
       ],
       "etymology_notes": "Inherited from the Arabic phrase فِي وَسْطِ (fī wasṭi, 'in the middle of, in the midst of'). In Maltese, functions as a collective spatial and partitive preposition indicating inclusion within a group, crowd, or collection of multiple entities. Takes plural pronominal suffix clitics: 1pl fostna, 2pl fostkom, 3pl fosthom.",
       "definitions": [
         {
-          "text_en": "among, amidst, in the midst of, surrounded by (spatial preposition indicating location in the middle of a crowd, group, or collection; e.g. fost il-folla, fost is-siġar)",
-          "text_mt": "Prepożizzjoni spazjali li tindika qagħda f'nofs folla, grupp ta' nies jew għadd ta' oġġetti (eż. fost il-folla, fost is-siġar fil-masġar).",
-          "register": "",
-          "nuance": "collective location, amidst"
+          "text_en": "among, amidst, in the midst of, surrounded by",
+          "text_mt": "F'nofs folla, grupp jew ġemgħa ta' nies jew oġġetti miġbura flimkien",
+          "nuance": "collective location amidst",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "among, out of (partitive preposition indicating inclusion, membership, or selection within a community or set; e.g. fost l-aqwa studenti, qbil fost il-membri)",
-          "text_mt": "Tindika sħubija, inklużjoni jew relazzjoni fi ħdan grupp, soċjetà jew komunità (eż. qbil fost il-membri kollha, fost l-aqwa atleti ta' pajjiżna).",
-          "register": "",
-          "nuance": "group membership, partitive"
+          "text_en": "among, out of",
+          "text_mt": "Bħala parti integrali minn sħubija jew b'għażla minn komunità partikolari",
+          "nuance": "group membership or partitive",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -2654,6 +2995,10 @@
         "1pl": "fostna",
         "2pl": "fostkom",
         "3pl": "fosthom"
+      },
+      "usage_notes": {
+        "en": "Collective locative and partitive preposition. Does not fuse with the definite article. Takes standard pronominal suffix clitics: fosti, fostek, fostu, fostha, fostna, fostkom, fosthom. Also forms directional partitive phrase minn fost.",
+        "mt": "Prepożizzjoni kollettiva u partittiva li tindika qagħda f'nofs grupp jew selezzjoni minn fost ħafna. Ma tingħaqadx mal-artiklu ddeterminat. Tisref bil-pronomi mehmuża: fosti, fostek, fostu, fostha, fostna, fostkom, fosthom."
       }
     },
     {
@@ -2680,28 +3025,44 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قُدَّامَ",
-          "definition": "before, front, before"
+          "definition": "before, front, before",
+          "pronunciation": "quddâma"
         }
       ],
       "etymology_notes": "Inherited from Arabic preposition and adverb قُدَّامَ (quddāma, 'in front of, ahead, before'). Maltese exhibits imāla raising ā to ie (quddām > quddiem). Functions as a primary spatial preposition and temporal prospective relator.",
       "definitions": [
         {
-          "text_en": "in front of, before, facing (spatial preposition indicating location ahead of or directly facing someone or something; e.g. quddiem il-knisja, quddiem il-bieb)",
-          "text_mt": "Prepożizzjoni spazjali ewlenija li tindika pożizzjoni faċċata jew fuq in-naħa ta' quddiem ta' persuna, oġġett jew bini (eż. quddiem il-knisja, quddiem il-bieb).",
-          "register": "",
-          "nuance": ""
+          "text_en": "in front of, before, facing",
+          "text_mt": "Faċċata ta' persuna jew oġġett, fuq in-naħa ta' barra li tħares 'il quddiem",
+          "nuance": "spatial front location",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "before, in the presence of (in front of a person, authority, or gathering; e.g. quddiem l-imħallef, quddiem kulħadd)",
-          "text_mt": "Fil-preżenza jew quddiem għajnejn xi ħadd, partikolarment awtorità jew udjenza (eż. quddiem il-qorti, quddiem kulħadd).",
-          "register": "",
-          "nuance": ""
+          "text_en": "before, in the presence of",
+          "text_mt": "Fil-preżenza diretta, fid-dawl jew quddiem xhieda ta' nies jew awtorità",
+          "nuance": "presence or witness",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "ahead, forward, before (adverb of place and prospective time; e.g. 'l quddiem)",
-          "text_mt": "Adverbju ta' post ('il quddiem) jew ta' żmien prospettiv li jħares lejn il-ġejjieni.",
-          "register": "",
-          "nuance": ""
+          "text_en": "ahead, forward, before",
+          "text_mt": "F'direzzjoni lejn il-quddiem jew lejn żmien fil-futur",
+          "nuance": "forward or prospective direction",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -2805,6 +3166,10 @@
         "1pl": "quddiemna",
         "2pl": "quddiemkom",
         "3pl": "quddiemhom"
+      },
+      "usage_notes": {
+        "en": "Spatial and presence preposition derived from root q-d-m. Does not fuse with the definite article. Takes standard pronominal suffix clitics: quddiemi, quddiemek, quddiemu, quddiemha, quddiemna, quddiemkom, quddiemhom. Also forms directional phrases 'l quddiem and minn quddiem.",
+        "mt": "Prepożizzjoni spazjali ta' quddiem u preżenza. Ma tingħaqadx mal-artiklu ddeterminat. Tisref bil-pronomi mehmuża: quddiemi, quddiemek, quddiemu, quddiemha, quddiemna, quddiemkom, quddiemhom. Tifforma wkoll il-frażijiet 'l quddiem u minn quddiem."
       }
     },
     {
@@ -2831,28 +3196,44 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "إِلَى أَيْنَ",
-          "definition": "to where, toward"
+          "definition": "to where, toward",
+          "pronunciation": "ilâ ayna"
         }
       ],
       "etymology_notes": "Inherited from Arabic compound phrase إِلَى أَيْنَ (ʾilā ʾayna, 'to where, toward'). In Maltese, the final nasal assimilates with the initial palatal glide of the pronominal suffix to form geminate -jj-: 1sg lejja, 2sg lejk, 3sg.m lejh, 3sg.f lejha, 1pl lejna, 2pl lejkom, 3pl lejhom.",
       "definitions": [
         {
-          "text_en": "towards, toward, in the direction of (spatial preposition indicating movement, heading, or orientation toward a location or person; e.g. mexa lejn il-port, ħares lejn is-sema)",
-          "text_mt": "Prepożizzjoni spazjali ta' moviment u direzzjoni li tindika orjentazzjoni jew passaġġ lejn post, persuna jew oġġett (eż. mexa lejn il-baħar, ħares lejn it-tieqa).",
-          "register": "",
-          "nuance": "spatial direction, heading"
+          "text_en": "towards, toward, in the direction of",
+          "text_mt": "B'orjentazzjoni, direzzjoni jew moviment lejn mira jew post partikolari",
+          "nuance": "spatial direction or heading",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "towards, toward (expressing attitude, disposition, sentiment, or duty toward someone; e.g. rispett lejn l-anzjani, mħabba lejn il-proxxmu)",
-          "text_mt": "Tindika attitudni, sentiment, rispett jew dmir lejn persuna jew kawża (eż. rispett lejn il-ġenituri, ġenerożità lejn min hu fil-bżonn).",
-          "register": "",
-          "nuance": "attitude, disposition"
+          "text_en": "towards, toward",
+          "text_mt": "B'attitudni morali, rispett jew sentiment lejn persuna jew entità",
+          "nuance": "attitude or disposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "towards, around, close to (temporal preposition indicating an approximate time or period; e.g. lejn l-aħħar tax-xahar, lejn nofsinhar)",
-          "text_mt": "Prepożizzjoni temporali li tindika ħin jew perijodu approssimattiv (eż. lejn inżul ix-xemx, lejn tmiem is-sena).",
-          "register": "",
-          "nuance": "temporal approximation"
+          "text_en": "towards, around, close to",
+          "text_mt": "F'ħin jew perijodu approssimattiv li jqarreb lejn mument stabbilit",
+          "nuance": "temporal approximation",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -2939,6 +3320,10 @@
         "1pl": "lejna",
         "2pl": "lejkom",
         "3pl": "lejhom"
+      },
+      "usage_notes": {
+        "en": "Directional and attitudinal preposition. Does not fuse with the definite article. Takes standard pronominal suffix clitics: lejni, lejnek, lejnu, lejnha, lejna, lejnkom, lejnhom.",
+        "mt": "Prepożizzjoni direzzjonali u ta' attitudni li tindika orjentazzjoni jew moviment lejn mira. Ma tingħaqadx mal-artiklu ddeterminat. Tisref bil-pronomi mehmuża: lejni, lejnek, lejnu, lejnha, lejna, lejnkom, lejnhom."
       }
     },
     {
@@ -2965,13 +3350,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "contra",
-          "definition": "against, opposite"
+          "definition": "against, opposite",
+          "pronunciation": "kontra"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "contra",
-          "definition": "against"
+          "definition": "against",
+          "pronunciation": "kontra"
         },
         {
           "relationship": "Inherited from",
@@ -2983,22 +3370,37 @@
       "etymology_notes": "Borrowed from Sicilian and Italian contra (from Latin contrā, 'against, opposite'). Integrated into Maltese prepositional morphology as a loanword taking the standard vocalic pronominal suffix paradigm on the lengthened stem kontri-: 1sg kontrija, 2sg kontrik, 3sg.m kontrih, 3sg.f kontriha, 1pl kontrina, 2pl kontrikom, 3pl kontrihom.",
       "definitions": [
         {
-          "text_en": "against, opposed to, in conflict with (preposition expressing opposition, disagreement, adversary relation, or conflict; e.g. kontra l-gwerra, ivvota kontra l-proposta)",
-          "text_mt": "Prepożizzjoni ewlenija li tindika oppożizzjoni, nuqqas ta' qbil jew kompetizzjoni (eż. ivvutaw kontra l-mozzjoni, lagħbu kontra tim b'saħħtu).",
-          "register": "",
-          "nuance": "opposition, adversary relation"
+          "text_en": "against, opposed to, in conflict with",
+          "text_mt": "F'oppożizzjoni, f'reżistenza jew f'kunflitt dirett ma' persuna jew fehma",
+          "nuance": "opposition or adversary relation",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "against, contrary to, in violation of (indicating violation or breach of rules, law, conscience, or nature; e.g. kontra l-liġi, kontra r-regoli)",
-          "text_mt": "Tindika ksur ta' liġi, kodiċi, regola jew prinċipju morali (eż. kontra l-liġi, kontra l-ordni pubbliku, kontra r-regolamenti).",
-          "register": "",
-          "nuance": "violation of rules or law"
+          "text_en": "against, contrary to, in violation of",
+          "text_mt": "B'nuqqas ta' qbil jew bi ksur ta' liġi, regola jew prinċipju stabbilit",
+          "nuance": "violation of rules or law",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "against, upon (indicating physical contact, pressure, or impact against a surface; e.g. laqat rasu kontra l-ħajt, imbotta kontra l-bieb)",
-          "text_mt": "Tindika kuntatt jew impatt fiżiku ma' wiċċ jew oġġett ieħor (eż. ħabat kontra l-ħajt, imbotta kontra l-bieb magħluq).",
-          "register": "",
-          "nuance": "physical impact or pressure"
+          "text_en": "against, upon",
+          "text_mt": "F'ħabta, f'urugħ jew f'kuntatt fiżiku b'forza ma' wiċċ ieħor",
+          "nuance": "physical impact or pressure",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -3082,6 +3484,10 @@
         "1pl": "kontrina",
         "2pl": "kontrikom",
         "3pl": "kontrihom"
+      },
+      "usage_notes": {
+        "en": "Preposition of opposition and physical impact of Sicilian or Italian origin. Does not fuse with the definite article. Takes standard pronominal suffix clitics: kontrija, kontrik, kontrih, kontriha, kontrina, kontrikom, kontrihom.",
+        "mt": "Prepożizzjoni ta' oppożizzjoni, kunflitt jew impatt ta' nisel Rumanz. Ma tingħaqadx mal-artiklu ddeterminat. Tisref bil-pronomi mehmuża: kontrija, kontrik, kontrih, kontriha, kontrina, kontrikom, kontrihom."
       }
     },
     {
@@ -3108,22 +3514,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "طُول",
-          "definition": "length, duration"
+          "definition": "length, duration",
+          "pronunciation": "ṭûl"
         }
       ],
       "etymology_notes": "Inherited from Arabic طُول (ṭūl, 'length, duration'). In Maltese, the nominal base tul is grammaticalized as an improper (nominal) preposition denoting spatial path ('along') and temporal duration ('throughout, during'). Related to matul ('during, throughout').",
       "definitions": [
         {
-          "text_en": "along, following the length of (spatial path, e.g. tul it-triq, tul il-kosta)",
-          "text_mt": "Matul it-tul ta' post, triq jew medda (relazzjoni spazjali; eż. tul it-triq, tul ix-xatt).",
-          "register": "standard",
-          "nuance": "spatial path (along)"
+          "text_en": "along, following the length of",
+          "text_mt": "Wara l-linja kontinwa jew il-medda spazjali sħiħa ta' triq jew xmara",
+          "nuance": "spatial path along",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "throughout, during, all through, for the entire duration of (temporal duration, e.g. tul il-jum, tul is-snin, tul ħajtu)",
-          "text_mt": "Tul il-ħin kollu jew matul iż-żmien kollu ta' ġrajja (relazzjoni temporali; eż. tul il-jum kollu, tul is-snin, tul ħajtu).",
-          "register": "standard",
-          "nuance": "temporal duration (throughout)"
+          "text_en": "throughout, during, all through",
+          "text_mt": "Matul il-kors kollu jew il-perijodu sħiħ li fih isseħħ ġrajja",
+          "nuance": "temporal duration throughout",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -3220,6 +3637,10 @@
       "pronominal_forms": {
         "3sg_m": "tulu",
         "3sg_f": "tulha"
+      },
+      "usage_notes": {
+        "en": "Spatial and temporal preposition derived from Semitic noun tul ('length'). Does not fuse with the definite article. Inflects with pronominal suffix clitics: tuli, tulek, tulu, tulha, tulna, tulkom, tulhom. Also forms compound preposition matul.",
+        "mt": "Prepożizzjoni spazjali u temporali mibnija min-nom Semitiku 'tul'. Ma tingħaqadx mal-artiklu ddeterminat. Tisref bil-pronomi mehmuża: tuli, tulek, tulu, tulha, tulna, tulkom, tulhom. Tifforma wkoll il-prepożizzjoni komposta matul."
       }
     },
     {
@@ -3247,22 +3668,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "لِـ",
-          "definition": "to, for (preposition li- with reduplication)"
+          "definition": "to, for (preposition li- with reduplication)",
+          "pronunciation": "li"
         }
       ],
       "etymology_notes": "Inherited from Arabic preposition لِـ (li-, 'to, for'), historically reinforced or reduplicated in Maltese as lil. Functions as the primary differential object marker before definite human or specific noun phrases and takes pronominal suffix clitics: lili, lilek, lilu, lilha, lilna, lilkom, lilhom.",
       "definitions": [
         {
-          "text_en": "to, toward, for; accusative and dative preposition marking direct definite objects (differential object marker) and indirect objects",
-          "text_mt": "Prepożizzjoni ewlenija li tintuża biex tindika l-oġġett dirett definit (markatur tal-oġġett) jew l-oġġett indirett; lil persuna jew ħaġa (eż. rajtu lil Pawlu, għidtilha lil Marija).",
-          "register": "",
-          "nuance": "differential object marker and dative preposition"
+          "text_en": "to, toward, for",
+          "text_mt": "Juri l-oġġett dirett definit jew ir-riċevitur indirett ta' azzjoni",
+          "nuance": "differential object marker and dative preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "towards, in the direction of (spatial movement, synonymous with lejn in fixed phrases)",
-          "text_mt": "Fid-direzzjoni ta'; lejn (fil-frażijiet bħal 'l hawn, 'l hemm, 'l fuq).",
-          "register": "",
-          "nuance": "directional in proclitic 'l"
+          "text_en": "towards, in the direction of",
+          "text_mt": "B'orjentazzjoni jew moviment lejn post jew direzzjoni",
+          "nuance": "directional in proclitic 'l",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -3355,6 +3787,10 @@
         "1pl": "lilna",
         "2pl": "lilkom",
         "3pl": "lilhom"
+      },
+      "usage_notes": {
+        "en": "Differential object marker introducing definite direct objects, and dative preposition marking indirect objects. Shortens to proclitic 'l in fixed spatial phrases ('l fuq, 'l isfel, 'l hemm, 'l quddiem). Takes standard pronominal suffix clitics: lili, lilek, lilu, lilha, lilna, lilkom, lilhom.",
+        "mt": "Prepożizzjoni ewlenija li tintuża bħala markatur tal-oġġett dirett definit jew l-oġġett indirett. Titqassar fi 'l fi frażijiet direzzjonali fissi ('l fuq, 'l isfel, 'l quddiem). Tisref bil-pronomi mehmuża: lili, lilek, lilu, lilha, lilna, lilkom, lilhom."
       }
     },
     {
@@ -3382,16 +3818,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "لِـ",
-          "definition": "to, for"
+          "definition": "to, for",
+          "pronunciation": "li"
         }
       ],
       "etymology_notes": "Proclitic reduction of preposition lil ('to, towards').",
       "definitions": [
         {
-          "text_en": "to, towards (proclitic directional and object preposition, shortened variant of lil)",
-          "text_mt": "Għamla mqassra tal-prepożizzjoni 'lil' li tintrabat ma' kliem direzzjonali jew ismijiet (eż. 'l fuq, 'l isfel, 'l hemm, 'l quddiem).",
-          "register": "",
-          "nuance": "proclitic form of lil"
+          "text_en": "to, towards",
+          "text_mt": "B'orjentazzjoni jew direzzjoni lejn punt, post jew mira",
+          "nuance": "proclitic form of lil",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -3476,7 +3918,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Proclitic shortened form of preposition lil, used predominantly in directional fixed adverbs ('l hawn, 'l hemm, 'l fuq, 'l isfel, 'l quddiem, 'l bogħod).",
+        "mt": "Għamla mqassra proklitika tal-prepożizzjoni 'lil' użata fi frażijiet avverbjali direzzjonali ('l hawn, 'l hemm, 'l fuq, 'l isfel, 'l quddiem)."
+      }
     },
     {
       "id": "art-il",
@@ -3502,17 +3948,23 @@
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "اَلْ",
-          "definition": "the (definite article)"
+          "term": "اَلْـ",
+          "definition": "the (definite article)",
+          "pronunciation": "al-"
         }
       ],
       "etymology_notes": "Inherited from Arabic definite article prefix اَلْ (al-). In Maltese, il- represents the full form used before consonant-initial words.",
       "definitions": [
         {
-          "text_en": "the (definite article; full form used before consonant-initial words and consonant clusters)",
-          "text_mt": "L-artiklu definit fil-forma sħiħa tiegħu, użat quddiem kliem li jibda b'konsonanti (minbarra l-konsonanti xemxin) jew grupp ta' konsonanti (eż. il-ktieb, il-belt, il-skola).",
-          "register": "",
-          "nuance": "definite article full form"
+          "text_en": "the",
+          "text_mt": "L-artiklu ddeterminat sħiħ fil-Malti, użat biex jagħmel l-isem jew l-aġġettiv magħruf u speċifiku",
+          "nuance": "definite article full form",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -3601,7 +4053,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Full standard form of the definite article. Used before words beginning with a consonant (except coronal sun consonants, where the liquid l assimilates as it-, id-, is-, ir-, iz-, iż-, ix-, in-, iċ-).",
+        "mt": "Il-forma sħiħa standard tal-artiklu definit. Tintuża quddiem konsonanti qamrin (għall-konsonanti xemxin il-konsonanti l tassimila bħala it-, id-, is-, ir-, eċċ.)."
+      }
     },
     {
       "id": "prep-t",
@@ -3634,22 +4090,29 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "تَاع",
-          "definition": "of, belonging to (analytic genitive exponent)"
+          "definition": "of, belonging to (analytic genitive exponent)",
+          "pronunciation": "tâgħ"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "مَتَاع",
-          "definition": "goods, property, belongings, utility"
+          "definition": "goods, property, belongings, utility",
+          "pronunciation": "matâgħ"
         }
       ],
       "etymology_notes": "Proclitic reduction of preposition ta' before vowel-initial words and silent letters.",
       "definitions": [
         {
-          "text_en": "of (proclitic genitive marker shortened from ta' before vowel-initial words or silent għ or h)",
-          "text_mt": "Għamla mqassra tal-prepożizzjoni 'ta'', użata quddiem kliem li jibda b'vokali jew b'għ (eż. t'Alla, t'għada, t'issa).",
-          "register": "",
-          "nuance": "proclitic genitive"
+          "text_en": "of",
+          "text_mt": "Forma mqassra proklitika tal-prepożizzjoni ta' użata quddiem kliem li jibda b'vokali jew għ muta",
+          "nuance": "proclitic genitive",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -3732,7 +4195,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Proclitic reduced variant of genitive preposition ta'. Used directly before words beginning with a vowel or silent għ or h (e.g. t'Alla, t'għada, t'issa).",
+        "mt": "Forma mqassra proklitika tal-prepożizzjoni 'ta'', użata quddiem kliem li jibda b'vokali jew b'għ u h muti (eż. t'Alla, t'għada, t'issa)."
+      }
     },
     {
       "id": "prep-m",
@@ -3759,16 +4226,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مَعَ",
-          "definition": "with"
+          "definition": "with",
+          "pronunciation": "magħa"
         }
       ],
       "etymology_notes": "Proclitic reduction of preposition ma' before vowel-initial words.",
       "definitions": [
         {
-          "text_en": "with (proclitic comitative preposition shortened from ma' before vowel-initial words or silent għ or h)",
-          "text_mt": "Għamla mqassra tal-prepożizzjoni 'ma'', użata quddiem kliem li jibda b'vokali jew b'għ (eż. m'Alla, m'ommu).",
-          "register": "",
-          "nuance": "proclitic comitative"
+          "text_en": "with",
+          "text_mt": "Forma mqassra proklitika tal-prepożizzjoni ma' użata quddiem kliem li jibda b'vokali jew għ muta",
+          "nuance": "proclitic comitative",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -3847,7 +4320,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Proclitic reduced variant of comitative preposition ma'. Used directly before words beginning with a vowel or silent għ or h (e.g. m'Alla, m'ommu).",
+        "mt": "Forma mqassra proklitika tal-prepożizzjoni 'ma'', użata quddiem kliem li jibda b'vokali jew b'għ u h muti (eż. m'Alla, m'ommu)."
+      }
     },
     {
       "id": "prep-f",
@@ -3874,16 +4351,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي",
-          "definition": "in, inside"
+          "definition": "in, inside",
+          "pronunciation": "fî"
         }
       ],
       "etymology_notes": "Proclitic reduction of preposition fi before vowel-initial words.",
       "definitions": [
         {
-          "text_en": "in, inside, at (proclitic locative preposition shortened from fi before vowel-initial words or silent għ or h)",
-          "text_mt": "Għamla mqassra tal-prepożizzjoni 'fi', użata quddiem kliem li jibda b'vokali jew b'għ (eż. f'għajnejh, f'idejh, f'April).",
-          "register": "",
-          "nuance": "proclitic locative"
+          "text_en": "in, inside, at",
+          "text_mt": "Forma mqassra proklitika tal-prepożizzjoni fi użata quddiem kliem li jibda b'vokali waħda",
+          "nuance": "proclitic locative",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -3966,7 +4449,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Proclitic reduced variant of inessive preposition fi. Used directly before words beginning with a vowel or silent għ or h (e.g. f'April, f'idejh, f'għajnejh).",
+        "mt": "Forma mqassra proklitika tal-prepożizzjoni 'fi', użata quddiem kliem li jibda b'vokali jew b'għ u h muti (eż. f'April, f'idejh, f'għajnejh)."
+      }
     },
     {
       "id": "prep-għall",
@@ -3992,17 +4479,23 @@
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "عَلَى + اَلْ",
-          "definition": "for, upon + the"
+          "term": "عَلَى + اَلْـ",
+          "definition": "for, upon + the",
+          "pronunciation": "għalâ + al-"
         }
       ],
       "etymology_notes": "Fusion of preposition għal ('for, to') and the definite article il- ('the').",
       "definitions": [
         {
-          "text_en": "for the, to the (contracted fused form of preposition għal and the definite article il-)",
-          "text_mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'għal' mal-artiklu ddeterminat 'il-' (eż. għall-gost, għall-iskola, għall-aħjar).",
-          "register": "",
-          "nuance": "articulated preposition"
+          "text_en": "for the, to the",
+          "text_mt": "Forma magħquda tal-prepożizzjoni għal mal-artiklu ddeterminat, li tindika skop jew riċevitur",
+          "nuance": "articulated preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -4087,7 +4580,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Contracted fused form of preposition għal and the definite article il-. The liquid l assimilates before coronal consonants as għat-, għad-, għas-, għar-, għaz-, għaż-, għax-, għan-, għaċ-.",
+        "mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'għal' mal-artiklu ddeterminat 'il-'. Il-konsonanti l tassimila quddiem konsonanti xemxin."
+      }
     },
     {
       "id": "prep-għala",
@@ -4114,16 +4611,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَلَى",
-          "definition": "upon, for, why"
+          "definition": "upon, for, why",
+          "pronunciation": "għalâ"
         }
       ],
       "etymology_notes": "Variant form of għal preserving final vowel in interrogative and fixed contexts.",
       "definitions": [
         {
-          "text_en": "why, wherefore; variant and interrogative form of preposition għal (e.g. għala le? - why not?)",
-          "text_mt": "Għamla varjanti u interrogattiva tal-prepożizzjoni 'għal' użata biex tistaqsi r-raġuni jew l-iskop (eż. għala le?, għala għamilt hekk?).",
-          "register": "",
-          "nuance": "interrogative and variant form"
+          "text_en": "why, wherefore",
+          "text_mt": "Għal liema raġuni, motiv jew skop; għalfejn",
+          "nuance": "interrogative and variant form",
+          "register": {
+            "key": "formal",
+            "en": "Formal",
+            "mt": "Formali",
+            "arabised": "Formali"
+          }
         }
       ],
       "usage_examples": [
@@ -4202,7 +4705,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Interrogative and prospective variant form of preposition għal, used to inquire about reasons or causes (e.g. għala le? 'why not?').",
+        "mt": "Għamla interrogattiva u varjanti tal-prepożizzjoni 'għal' użata biex tistaqsi r-raġuni jew l-iskop (eż. għala le?)."
+      }
     },
     {
       "id": "prep-mal",
@@ -4228,17 +4735,23 @@
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "مَعَ + اَلْ",
-          "definition": "with + the"
+          "term": "مَعَ + اَلْـ",
+          "definition": "with + the",
+          "pronunciation": "magħa + al-"
         }
       ],
       "etymology_notes": "Fusion of comitative preposition ma' ('with') and definite article il- ('the'). Assimilates before coronal consonants (sun letters).",
       "definitions": [
         {
-          "text_en": "with the, alongside the, upon the (contracted fused form of preposition ma' and the definite article il-)",
-          "text_mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'ma'' mal-artiklu ddeterminat 'il-' (tindika kumpanija jew ħin; eż. mal-ħbieb, mas-sebħ).",
-          "register": "",
-          "nuance": "articulated preposition"
+          "text_en": "with the, alongside the, upon the",
+          "text_mt": "Forma magħquda tal-prepożizzjoni ma' mal-artiklu ddeterminat, li tindika kumpanija jew ħin",
+          "nuance": "articulated preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -4323,7 +4836,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Contracted fused form of comitative preposition ma' and the definite article il-. The liquid l assimilates before coronal consonants as mat-, mad-, mas-, mar-, maz-, maż-, max-, man-, maċ-.",
+        "mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'ma'' mal-artiklu ddeterminat 'il-'. Il-konsonanti l tassimila quddiem konsonanti xemxin bħala mas-, mar-, eċċ."
+      }
     },
     {
       "id": "prep-mill",
@@ -4349,17 +4866,23 @@
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "مِنْ + اَلْ",
-          "definition": "from + the"
+          "term": "مِنْ + اَلْـ",
+          "definition": "from + the",
+          "pronunciation": "min + al-"
         }
       ],
       "etymology_notes": "Fusion of ablative preposition minn ('from') and definite article il- ('the'). Assimilates before coronal consonants (sun letters).",
       "definitions": [
         {
-          "text_en": "from the, out of the, through the (contracted fused form of preposition minn and the definite article il-)",
-          "text_mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'minn' mal-artiklu ddeterminat 'il-' (tindika oriġini, sors jew mogħdija; eż. mill-belt, mill-bidu, mit-triq).",
-          "register": "",
-          "nuance": "articulated preposition"
+          "text_en": "from the, out of the, through the",
+          "text_mt": "Forma magħquda tal-prepożizzjoni minn mal-artiklu ddeterminat, li tindika oriġini jew sors",
+          "nuance": "articulated preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -4444,7 +4967,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Contracted fused form of ablative preposition minn and the definite article il-. The liquid l assimilates before coronal consonants as mit-, mid-, mis-, mir-, miz-, miż-, mix-, min-, miċ-.",
+        "mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'minn' mal-artiklu ddeterminat 'il-'. Il-konsonanti l tassimila quddiem konsonanti xemxin bħala mit-, mid-, mis-, eċċ."
+      }
     },
     {
       "id": "prep-bħall",
@@ -4470,17 +4997,23 @@
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "بِـ + حَال + اَلْ",
-          "definition": "in the state of + the"
+          "term": "بِـ + حَال + اَلْـ",
+          "definition": "in the state of + the",
+          "pronunciation": "bi + ħâl + al-"
         }
       ],
       "etymology_notes": "Fusion of comparative preposition bħal ('like, as') and definite article il- ('the').",
       "definitions": [
         {
-          "text_en": "like the, as the (contracted fused form of preposition bħal and the definite article il-)",
-          "text_mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'bħal' mal-artiklu ddeterminat 'il-' użata għax-xebh u l-paragun (eż. bħall-ilma, bħar-riħ).",
-          "register": "",
-          "nuance": "articulated preposition"
+          "text_en": "like the, as the",
+          "text_mt": "Forma magħquda tal-prepożizzjoni bħal mal-artiklu ddeterminat, li tindika tqabbil jew xebh",
+          "nuance": "articulated preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -4565,7 +5098,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Contracted fused form of comparative preposition bħal and the definite article il-. The liquid l assimilates before coronal consonants as bħat-, bħad-, bħas-, bħar-, bħaz-, bħaż-, bħax-, bħan-, bħaċ-.",
+        "mt": "Prepożizzjoni artikolata magħquda tal-prepożizzjoni 'bħal' mal-artiklu ddeterminat 'il-'. Il-konsonanti l tassimila quddiem konsonanti xemxin bħala bħas-, bħar-, eċċ."
+      }
     },
     {
       "id": "prep-madwar",
@@ -4592,22 +5129,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مَعَ + دَوَار",
-          "definition": "with + turn, circuit"
+          "definition": "with + turn, circuit",
+          "pronunciation": "magħa + dawâr"
         }
       ],
       "etymology_notes": "Compound formed from preposition ma' ('with') and nominal or prepositional base dwar ('circuit, around'). Functions as a spatial and approximative relator.",
       "definitions": [
         {
-          "text_en": "around, round about, on all sides of (spatial preposition indicating circumference or perimeter)",
-          "text_mt": "Prepożizzjoni komposta li tindika ċirkonferenza jew post mad-dawra kollha ta' oġġett jew żona (eż. madwar il-mejda, madwar il-gżira).",
-          "register": "",
-          "nuance": "spatial locative"
+          "text_en": "around, round about, on all sides of",
+          "text_mt": "F'kull naħa jew mad-dawra periferali kollha ta' spazju jew oġġett",
+          "nuance": "spatial locative",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "around, approximately, roughly (approximative marker with numerals and quantities)",
-          "text_mt": "Jindika approssimazzjoni ta' numru, ħin jew kwantità; bejn wieħed u ieħor (eż. madwar mitt ruħ, madwar nofsinhar).",
-          "register": "",
-          "nuance": "approximative quantifier"
+          "text_en": "around, approximately, roughly",
+          "text_mt": "B'kalkolu approssimattiv jew qrib ta' numru, kwantità jew ħin; bejn wieħed u ieħor",
+          "nuance": "approximative quantifier",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -4691,7 +5239,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Compound preposition and approximative adverb composed of comitative ma' + noun dwar. Does not fuse with the definite article.",
+        "mt": "Prepożizzjoni komposta u avverbju approssimattiv mibni minn ma' u dwar. Ma tingħaqadx mal-artiklu ddeterminat."
+      }
     },
     {
       "id": "prep-matul",
@@ -4718,22 +5270,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مَعَ + طُول",
-          "definition": "with + length"
+          "definition": "with + length",
+          "pronunciation": "magħa + ṭûl"
         }
       ],
       "etymology_notes": "Compound formed from preposition ma' ('with') and base tul ('length'). Denotes temporal duration and spatial trajectory.",
       "definitions": [
         {
-          "text_en": "during, throughout, for the entire course of (temporal compound preposition from ma' + tul)",
-          "text_mt": "Prepożizzjoni komposta li tindika medda sħiħa ta' żmien li matulha sseħħ ġrajja; tul (eż. matul il-jum, matul is-sena, matul il-vaganzi).",
-          "register": "",
-          "nuance": "temporal duration"
+          "text_en": "during, throughout, for the entire course of",
+          "text_mt": "Tul il-perijodu kollu jew il-kors sħiħ ta' żmien li fih issir ħaġa",
+          "nuance": "temporal duration",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "along, following the length of (spatial trajectory)",
-          "text_mt": "Tul il-medda spazjali ta' post jew triq (eż. matul ix-xatt).",
-          "register": "",
-          "nuance": "spatial path"
+          "text_en": "along, following the length of",
+          "text_mt": "Tul il-medda fiżika jew il-linja spazjali sħiħa ta' post",
+          "nuance": "spatial path",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -4817,7 +5380,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Compound temporal and path preposition formed from comitative ma' + noun tul. Does not fuse with the definite article.",
+        "mt": "Prepożizzjoni komposta temporali u spazjali mibnija minn ma' u tul. Ma tingħaqadx mal-artiklu ddeterminat."
+      }
     },
     {
       "id": "prep-permezz-ta",
@@ -4844,16 +5411,22 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "per mezzo di",
-          "definition": "by means of"
+          "definition": "by means of",
+          "pronunciation": "per mezzo di"
         }
       ],
       "etymology_notes": "Calqued from Italian per mezzo di ('by means of'). Combines noun permezz with the genitive preposition ta'.",
       "definitions": [
         {
-          "text_en": "by means of, through, via, by virtue of (compound preposition phrase composed of permezz and ta')",
-          "text_mt": "Frażi prepożizzjonali komposta użata biex tindika l-mezz, l-istrument, jew l-intermedju li permezz tiegħu sseħħ xi ħaġa (eż. permezz ta' ittra, permezz tal-internet).",
-          "register": "",
-          "nuance": "compound preposition phrase"
+          "text_en": "by means of, through, via, by virtue of",
+          "text_mt": "Bl-għajnuna, bl-intervent jew bil-mezz strumentali ta' ħaġa jew persuna",
+          "nuance": "compound preposition phrase",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -4937,7 +5510,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Compound preposition phrase formed by noun permezz and genitive preposition ta'. When followed by the definite article, ta' fuses as tal-, tat-, tad-, etc. (e.g. permezz tal-internet).",
+        "mt": "Frażi prepożizzjonali komposta mibnija min-nom permezz u l-prepożizzjoni ta'. Quddiem l-artiklu ddeterminat, ta' tingħaqad bħala tal-, tat-, eċċ."
+      }
     },
     {
       "id": "adv-l-fuq",
@@ -4964,22 +5541,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "لِـ + فَوْقَ",
-          "definition": "to, towards + above"
+          "definition": "to, towards + above",
+          "pronunciation": "li + fawqa"
         }
       ],
       "etymology_notes": "Compound phrase formed from directional preposition lil ('to, towards') and spatial relator fuq ('above, on').",
       "definitions": [
         {
-          "text_en": "upwards, up, above; directional adverbial phrase composed of preposition lil and spatial relator fuq",
-          "text_mt": "Frażi avverbjali direzzjonali li tindika moviment jew pożizzjoni lejn l-għoli (eż. tela' 'l fuq, ħares 'l fuq).",
-          "register": "",
-          "nuance": "directional adverbial phrase (lil + fuq)"
+          "text_en": "upwards, up, above",
+          "text_mt": "F'direzzjoni lejn l-għoli jew lejn post aktar elevat",
+          "nuance": "directional adverbial phrase",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "upwards of, and above (quantifier indicating more than a given number or age; e.g. minn tmintax-il sena 'l fuq)",
-          "text_mt": "Tindika kwantità jew età ogħla minn limitu stabbilit (eż. minn tmintax-il sena 'l fuq).",
-          "register": "",
-          "nuance": "limit quantifier"
+          "text_en": "upwards of, and above",
+          "text_mt": "F'ammont, grad jew età li taqbeż livell jew limitu speċifikat",
+          "nuance": "limit quantifier",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -5064,7 +5652,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Fixed directional adverbial and quantifier phrase composed of proclitic preposition 'l and spatial relator fuq.",
+        "mt": "Frażi avverbjali direzzjonali u kwantifikatur fissa mibnija mill-prepożizzjoni 'l u r-relatur spazjali fuq."
+      }
     },
     {
       "id": "pron-fuqiex",
@@ -5097,16 +5689,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فَوْقَ + أَيّ شَيْء",
-          "definition": "upon + which thing"
+          "definition": "upon + which thing",
+          "pronunciation": "fawqa + ay shay'"
         }
       ],
       "etymology_notes": "Interrogative fusion of fuq with the interrogative enclitic -x (from ayy shayʾ).",
       "definitions": [
         {
-          "text_en": "on what? about what? (interrogative prepositional form combining fuq with the enclitic question marker -x, -ie-x)",
-          "text_mt": "Għamla interrogattiva magħquda tal-prepożizzjoni 'fuq' mal-partiċella interrogattiva mehmuża '-x' (eż. fuqiex qed titkellmu?, fuqiex poġġejtu?).",
-          "register": "",
-          "nuance": "interrogative enclitic form"
+          "text_en": "on what? about what?",
+          "text_mt": "Fuq liema ħaġa, suġġett jew materja; mistoqsija dwar il-bażi ta' diskussjoni jew azzjoni",
+          "nuance": "interrogative enclitic form",
+          "register": {
+            "key": "colloquial",
+            "en": "Colloquial",
+            "mt": "Kollokwjali",
+            "arabised": "Ta' kotra"
+          }
         }
       ],
       "usage_examples": [
@@ -5185,7 +5783,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Fused interrogative prepositional form combining spatial preposition fuq with the interrogative enclitic suffix -x (with glide epenthesis -ie-). Used in direct and indirect questions.",
+        "mt": "Għamla interrogattiva magħquda tal-prepożizzjoni 'fuq' mal-partiċella interrogattiva mehmuża '-x'. Tintuża f'mistoqsijiet diretti u indiretti."
+      }
     },
     {
       "id": "adv-minn-taħt",
@@ -5212,22 +5814,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مِنْ + تَحْتِ",
-          "definition": "from + underneath"
+          "definition": "from + underneath",
+          "pronunciation": "min + taħti"
         }
       ],
       "etymology_notes": "Compound phrase formed from preposition minn ('from') and spatial relator taħt ('under, beneath').",
       "definitions": [
         {
-          "text_en": "from underneath, from below (spatial locative phrase composed of minn and taħt)",
-          "text_mt": "Frażi spazjali li tindika moviment jew provenjenza min-naħa t'isfel ta' oġġett (eż. għadda minn taħt il-pont).",
-          "register": "",
-          "nuance": "spatial locative"
+          "text_en": "from underneath, from below",
+          "text_mt": "Minn pożizzjoni jew parti li tinsab fil-qiegħ jew f'livell inferjuri",
+          "nuance": "spatial locative",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "underhand, surreptitiously, secretly, under the table (idiomatic adverbial)",
-          "text_mt": "B'mod moħbi jew b'qerq, minn wara dahar ħaddieħor (eż. għamlu l-ftehim minn taħt).",
-          "register": "figurative",
-          "nuance": "secretly, underhand"
+          "text_en": "underhand, surreptitiously, secretly, under the table",
+          "text_mt": "B'mod sigriet, bil-moħbi jew b'intenzjoni qarrieqa mingħajr ma jinduna ħadd",
+          "nuance": "secretly, underhand",
+          "register": {
+            "key": "figurative",
+            "en": "Figurative",
+            "mt": "Figurattiv",
+            "arabised": "Suri"
+          }
         }
       ],
       "usage_examples": [
@@ -5311,7 +5924,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Compound locative and idiomatic adverbial phrase composed of ablative minn and spatial relator taħt.",
+        "mt": "Frażi avverbjali spazjali u idjomatika mibnija mill-prepożizzjoni ablattiva minn u r-relatur taħt."
+      }
     },
     {
       "id": "pron-taħtiex",
@@ -5344,16 +5961,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "تَحْتَ + أَيّ شَيْء",
-          "definition": "under + which thing"
+          "definition": "under + which thing",
+          "pronunciation": "taħta + ay shay'"
         }
       ],
       "etymology_notes": "Interrogative fusion of taħt with the interrogative enclitic -x.",
       "definitions": [
         {
-          "text_en": "under what? beneath what? (interrogative prepositional form combining taħt with the enclitic question marker -x, -ie-x)",
-          "text_mt": "Għamla interrogattiva tal-prepożizzjoni 'taħt' mal-partiċella interrogattiva mehmuża '-x' (eż. taħtiex waqa' l-ballun?).",
-          "register": "",
-          "nuance": "interrogative enclitic form"
+          "text_en": "under what? beneath what?",
+          "text_mt": "Taħt liema oġġett, livell jew kundizzjoni; mistoqsija dwar il-post inferjuri jew il-qiegħ",
+          "nuance": "interrogative enclitic form",
+          "register": {
+            "key": "colloquial",
+            "en": "Colloquial",
+            "mt": "Kollokwjali",
+            "arabised": "Ta' kotra"
+          }
         }
       ],
       "usage_examples": [
@@ -5432,7 +6055,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Fused interrogative prepositional form combining spatial preposition taħt with the interrogative enclitic suffix -x (with glide epenthesis -ie-). Used in direct and indirect questions.",
+        "mt": "Għamla interrogattiva tal-prepożizzjoni 'taħt' mal-partiċella interrogattiva mehmuża '-x'. Tintuża f'mistoqsijiet diretti u indiretti."
+      }
     },
     {
       "id": "adv-l-quddiem",
@@ -5459,22 +6086,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "لِـ + قُدَّامَ",
-          "definition": "to + in front"
+          "definition": "to + in front",
+          "pronunciation": "li + quddâma"
         }
       ],
       "etymology_notes": "Compound phrase formed from directional preposition lil ('to, towards') and spatial relator quddiem ('in front').",
       "definitions": [
         {
-          "text_en": "forward, ahead, in front; directional adverbial phrase composed of preposition lil and spatial relator quddiem",
-          "text_mt": "Frażi avverbjali direzzjonali li tindika moviment 'il quddiem (eż. agħmel pass 'l quddiem).",
-          "register": "",
-          "nuance": "spatial forward"
+          "text_en": "forward, ahead, in front",
+          "text_mt": "F'direzzjoni lejn il-quddiem fi spazju fiżiku",
+          "nuance": "spatial forward",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "in the future, ahead, later on (temporal prospective phrase)",
-          "text_mt": "F'relazzjoni temporali li tħares lejn iż-żmien ġejjieni; fil-futur (eż. se naraw 'l quddiem x'jiġri).",
-          "register": "",
-          "nuance": "temporal prospective"
+          "text_en": "in the future, ahead, later on",
+          "text_mt": "Fi żmien li għad irid jiġi; fil-futur jew fil-ġejjieni",
+          "nuance": "temporal prospective",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -5559,7 +6197,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Fixed directional and prospective temporal adverbial phrase composed of proclitic 'l and spatial relator quddiem.",
+        "mt": "Frażi avverbjali direzzjonali u temporali mibnija mill-prepożizzjoni 'l u r-relatur spazjali quddiem."
+      }
     },
     {
       "id": "adv-minn-quddiem",
@@ -5586,16 +6228,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مِنْ + قُدَّامِ",
-          "definition": "from + in front"
+          "definition": "from + in front",
+          "pronunciation": "min + quddâmi"
         }
       ],
       "etymology_notes": "Locative phrase formed from preposition minn ('from') and spatial relator quddiem ('in front').",
       "definitions": [
         {
-          "text_en": "from the front, in front, past the front (locative and trajectory phrase composed of minn and quddiem)",
-          "text_mt": "Frażi spazjali li tindika moviment jew pożizzjoni min-naħa ta' quddiem (eż. għadda minn quddiem il-ħanut).",
-          "register": "",
-          "nuance": "locative path"
+          "text_en": "from the front, in front, past the front",
+          "text_mt": "Minn quddiem il-faċċata jew min-naħa anterjuri ta' persuna jew bini",
+          "nuance": "locative path",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -5675,7 +6323,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Compound locative trajectory phrase composed of ablative minn and spatial relator quddiem.",
+        "mt": "Frażi spazjali u ta' trajettorja mibnija mill-prepożizzjoni minn u r-relatur quddiem."
+      }
     },
     {
       "id": "adv-minn-wara",
@@ -5702,22 +6354,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مِنْ + وَرَاءِ",
-          "definition": "from + behind"
+          "definition": "from + behind",
+          "pronunciation": "min + warâ'i"
         }
       ],
       "etymology_notes": "Compound phrase formed from preposition minn ('from') and spatial relator wara ('behind').",
       "definitions": [
         {
-          "text_en": "from behind, in the rear, from the back (spatial locative phrase composed of minn and wara)",
-          "text_mt": "Frażi spazjali li tindika provenjenza jew pożizzjoni min-naħa ta' wara (eż. daħal minn wara).",
-          "register": "",
-          "nuance": "spatial locative"
+          "text_en": "from behind, in the rear, from the back",
+          "text_mt": "Min-naħa posterjuri jew minn wara d-dahar ta' persuna jew oġġett",
+          "nuance": "spatial locative",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         },
         {
-          "text_en": "behind someone's back, in secret, deceitfully (idiomatic phrase)",
-          "text_mt": "B'mod sigriet jew bla ma jaf ħadd; minn wara dahar (eż. ħadu d-deċiżjoni minn wara dahru).",
-          "register": "figurative",
-          "nuance": "deceitfully, behind one's back"
+          "text_en": "behind someone's back, in secret, deceitfully",
+          "text_mt": "Mingħajr ma jkun jaf xi ħadd, b'għemil moħbi jew b'tradiment; minn wara dahar",
+          "nuance": "deceitfully, behind one's back",
+          "register": {
+            "key": "figurative",
+            "en": "Figurative",
+            "mt": "Figurattiv",
+            "arabised": "Suri"
+          }
         }
       ],
       "usage_examples": [
@@ -5801,7 +6464,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Compound locative and idiomatic phrase composed of ablative minn and spatial relator wara.",
+        "mt": "Frażi spazjali u idjomatika mibnija mill-prepożizzjoni minn u r-relatur wara."
+      }
     },
     {
       "id": "adv-minn-fost",
@@ -5828,16 +6495,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مِنْ + وَسَطِ",
-          "definition": "from + middle, among"
+          "definition": "from + middle, among",
+          "pronunciation": "min + wasaṭi"
         }
       ],
       "etymology_notes": "Compound partitive phrase formed from preposition minn ('from') and relator fost ('among').",
       "definitions": [
         {
-          "text_en": "from among, out of, from amidst (partitive preposition phrase composed of minn and fost)",
-          "text_mt": "Frażi prepożizzjonali partittiva li tindika selezzjoni jew ħruġ minn nofs folla jew grupp (eż. għażlu tifel minn fost l-istudenti).",
-          "register": "",
-          "nuance": "partitive phrase"
+          "text_en": "from among, out of, from amidst",
+          "text_mt": "Minn nofs folla, għażla jew ġemgħa ta' nies jew affarijiet miġbura flimkien",
+          "nuance": "partitive phrase",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -5917,7 +6590,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Compound partitive phrase composed of ablative minn and collective relator fost.",
+        "mt": "Frażi partittiva komposta mibnija mill-prepożizzjoni minn u r-relatur fost."
+      }
     },
     {
       "id": "prep-bejniet",
@@ -5944,16 +6621,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بَيْنَ",
-          "definition": "between"
+          "definition": "between",
+          "pronunciation": "bayna"
         }
       ],
       "etymology_notes": "Pluralized construct base of bejn taking plural pronominal clitics.",
       "definitions": [
         {
-          "text_en": "between (construct plural base form of bejn used before pronominal suffix clitics)",
-          "text_mt": "Għamla bażika plurali tal-prepożizzjoni 'bejn' li tintuża bil-pronomi mehmuża (bejnietna, bejnietkom, bejniethom; eż. din il-ħaġa tibqa' bejnietna).",
-          "register": "",
-          "nuance": "construct plural base"
+          "text_en": "between",
+          "text_mt": "Juri relazzjoni spazjali, temporali jew reċiproka bejn żewġ partijiet jew aktar meta jingħaqad ma' pronomi mehmuża",
+          "nuance": "construct plural base",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -6040,6 +6723,10 @@
         "1pl": "bejnietna",
         "2pl": "bejnietkom",
         "3pl": "bejniethom"
+      },
+      "usage_notes": {
+        "en": "Construct plural base form of preposition bejn, exclusively used when attaching plural pronominal suffix clitics: bejnietna, bejnietkom, bejniethom.",
+        "mt": "Għamla bażika plurali tal-prepożizzjoni 'bejn' li tintuża esklussivament mal-pronomi mehmuża plurali: bejnietna, bejnietkom, bejniethom."
       }
     },
     {
@@ -6067,16 +6754,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قَبْلَ مَا",
-          "definition": "before that"
+          "definition": "before that",
+          "pronunciation": "qabla mâ"
         }
       ],
       "etymology_notes": "Subordinating temporal phrase formed from qabel ('before') and relative particle ma.",
       "definitions": [
         {
-          "text_en": "before (subordinating temporal conjunction phrase composed of qabel and particle ma)",
-          "text_mt": "Frażi konġuntiva temporali li tintuża biex tintroduċi klawżola subordinata (eż. aħsel idejk qabel ma tiekol).",
-          "register": "",
-          "nuance": "subordinating temporal conjunction"
+          "text_en": "before",
+          "text_mt": "Jintroduċi klawżola subordinata li turi azzjoni li sseħħ aktar tard minn oħra",
+          "nuance": "subordinating temporal conjunction",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -6160,7 +6853,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Subordinating temporal conjunction phrase composed of preposition qabel and subordinating particle ma. Typically governs finite verb clauses.",
+        "mt": "Frażi konġuntiva subordinata temporali mibnija mill-prepożizzjoni qabel u l-partiċella ma. Tintroduċi klawżoli verbali finiti."
+      }
     },
     {
       "id": "adv-fil-qrib",
@@ -6187,16 +6884,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي + اَلْـ + قَرِيب",
-          "definition": "in + the + near"
+          "definition": "in + the + near",
+          "pronunciation": "fî + al- + qarîb"
         }
       ],
       "etymology_notes": "Locative phrase formed from articulated preposition fil- ('in the') and base qrib ('near').",
       "definitions": [
         {
-          "text_en": "nearby, in the vicinity, close by (locative adverbial phrase composed of fil- and qrib)",
-          "text_mt": "Frażi spazjali u avverbjali li tindika post viċin jew fil-madwar (eż. noqogħdu fil-qrib, hemm spiżerija fil-qrib).",
-          "register": "",
-          "nuance": "locative adverbial phrase"
+          "text_en": "nearby, in the vicinity, close by",
+          "text_mt": "F'distanza qasira, fil-viċinanzi jew fl-inħawi tal-madwar; mhux 'il bogħod",
+          "nuance": "locative adverbial phrase",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -6280,7 +6983,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Fixed locative adverbial phrase composed of articulated preposition fil- and noun qrib.",
+        "mt": "Frażi avverbjali spazjali fissa mibnija mill-prepożizzjoni artikolata fil- u n-nom qrib."
+      }
     },
     {
       "id": "adv-mill-qrib",
@@ -6307,16 +7014,22 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مِنْ + اَلْـ + قَرِيب",
-          "definition": "from + the + near"
+          "definition": "from + the + near",
+          "pronunciation": "min + al- + qarîb"
         }
       ],
       "etymology_notes": "Adverbial phrase formed from articulated preposition mill- ('from the') and base qrib ('near').",
       "definitions": [
         {
-          "text_en": "closely, at close quarters, intimately (adverbial phrase composed of mill- and qrib)",
-          "text_mt": "Frażi avverbjali li tindika attenzjoni kbira jew distanza qasira ħafna (eż. segwa l-iżviluppi mill-qrib).",
-          "register": "",
-          "nuance": "adverbial phrase"
+          "text_en": "closely, at close quarters, intimately",
+          "text_mt": "B'osservazzjoni diretta, b'attenzjoni partikolari jew f'kuntatt mill-viċin ħafna",
+          "nuance": "adverbial phrase",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -6396,7 +7109,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Fixed adverbial phrase of attention or close quarters composed of articulated preposition mill- and noun qrib.",
+        "mt": "Frażi avverbjali ta' attenzjoni jew distanza qasira mibnija mill-prepożizzjoni artikolata mill- u n-nom qrib."
+      }
     },
     {
       "id": "prep-tat",
@@ -6422,10 +7139,15 @@
       "etymology_notes": "Coronal assimilation of tal- before initial t.",
       "definitions": [
         {
-          "text_en": "of the (assimilated variant of tal- before coronal consonant t)",
-          "text_mt": "Għamla assimilata tal-prepożizzjoni artikolata 'tal-' quddiem il-konsonanti xemxija t (eż. tat-tuffieħ, tat-tieni, tat-tfal).",
-          "register": "",
-          "nuance": "assimilated articulated preposition"
+          "text_en": "of the",
+          "text_mt": "Varjant fonetiku assimilat ta' tal- quddiem konsonanti koronali t",
+          "nuance": "assimilated articulated preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -6509,7 +7231,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Assimilated variant of articulated preposition tal- occurring before coronal consonant t (e.g. tat-tfal, tat-tuffieħ).",
+        "mt": "Għamla assimilata tal-prepożizzjoni artikolata 'tal-' quddiem il-konsonanti xemxija t (eż. tat-tfal, tat-tuffieħ)."
+      }
     },
     {
       "id": "prep-tad",
@@ -6535,10 +7261,15 @@
       "etymology_notes": "Coronal assimilation of tal- before initial d.",
       "definitions": [
         {
-          "text_en": "of the (assimilated variant of tal- before coronal consonant d)",
-          "text_mt": "Għamla assimilata tal-prepożizzjoni artikolata 'tal-' quddiem il-konsonanti xemxija d (eż. tad-deheb, tad-dar).",
-          "register": "",
-          "nuance": "assimilated articulated preposition"
+          "text_en": "of the",
+          "text_mt": "Varjant fonetiku assimilat ta' tal- quddiem konsonanti koronali d",
+          "nuance": "assimilated articulated preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -6618,7 +7349,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Assimilated variant of articulated preposition tal- occurring before coronal consonant d (e.g. tad-dar, tad-deheb).",
+        "mt": "Għamla assimilata tal-prepożizzjoni artikolata 'tal-' quddiem il-konsonanti xemxija d (eż. tad-dar, tad-deheb)."
+      }
     },
     {
       "id": "prep-tas",
@@ -6644,10 +7379,15 @@
       "etymology_notes": "Coronal assimilation of tal- before initial s.",
       "definitions": [
         {
-          "text_en": "of the (assimilated variant of tal- before coronal consonant s)",
-          "text_mt": "Għamla assimilata tal-prepożizzjoni artikolata 'tal-' quddiem il-konsonanti xemxija s (eż. tas-sodda, tas-suq, tas-sena).",
-          "register": "",
-          "nuance": "assimilated articulated preposition"
+          "text_en": "of the",
+          "text_mt": "Varjant fonetiku assimilat ta' tal- quddiem konsonanti koronali s",
+          "nuance": "assimilated articulated preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -6727,7 +7467,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Assimilated variant of articulated preposition tal- occurring before coronal consonant s (e.g. tas-sodda, tas-suq).",
+        "mt": "Għamla assimilata tal-prepożizzjoni artikolata 'tal-' quddiem il-konsonanti xemxija s (eż. tas-sodda, tas-suq)."
+      }
     },
     {
       "id": "prep-fit",
@@ -6753,10 +7497,15 @@
       "etymology_notes": "Coronal assimilation of fil- before initial t.",
       "definitions": [
         {
-          "text_en": "in the (assimilated variant of fil- before coronal consonant t)",
-          "text_mt": "Għamla assimilata tal-prepożizzjoni artikolata 'fil-' quddiem il-konsonanti xemxija t (eż. fit-triq, fit-tmienja).",
-          "register": "",
-          "nuance": "assimilated articulated preposition"
+          "text_en": "in the",
+          "text_mt": "Varjant fonetiku assimilat ta' fil- quddiem konsonanti koronali t",
+          "nuance": "assimilated articulated preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -6836,7 +7585,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Assimilated variant of articulated preposition fil- occurring before coronal consonant t (e.g. fit-triq, fit-tmienja).",
+        "mt": "Għamla assimilata tal-prepożizzjoni artikolata 'fil-' quddiem il-konsonanti xemxija t (eż. fit-triq, fit-tmienja)."
+      }
     },
     {
       "id": "prep-fid",
@@ -6862,10 +7615,15 @@
       "etymology_notes": "Coronal assimilation of fil- before initial d.",
       "definitions": [
         {
-          "text_en": "in the (assimilated variant of fil- before coronal consonant d)",
-          "text_mt": "Għamla assimilata tal-prepożizzjoni artikolata 'fil-' quddiem il-konsonanti xemxija d (eż. fid-dar, fid-dlam).",
-          "register": "",
-          "nuance": "assimilated articulated preposition"
+          "text_en": "in the",
+          "text_mt": "Varjant fonetiku assimilat ta' fil- quddiem konsonanti koronali d",
+          "nuance": "assimilated articulated preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -6945,7 +7703,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Assimilated variant of articulated preposition fil- occurring before coronal consonant d (e.g. fid-dar, fid-dlam).",
+        "mt": "Għamla assimilata tal-prepożizzjoni artikolata 'fil-' quddiem il-konsonanti xemxija d (eż. fid-dar, fid-dlam)."
+      }
     },
     {
       "id": "prep-fis",
@@ -6971,10 +7733,15 @@
       "etymology_notes": "Coronal assimilation of fil- before initial s.",
       "definitions": [
         {
-          "text_en": "in the (assimilated variant of fil- before coronal consonant s)",
-          "text_mt": "Għamla assimilata tal-prepożizzjoni artikolata 'fil-' quddiem il-konsonanti xemxija s (eż. fis-sodda, fis-sajf, fis-sema).",
-          "register": "",
-          "nuance": "assimilated articulated preposition"
+          "text_en": "in the",
+          "text_mt": "Varjant fonetiku assimilat ta' fil- quddiem konsonanti koronali s",
+          "nuance": "assimilated articulated preposition",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
         }
       ],
       "usage_examples": [
@@ -7054,7 +7821,11 @@
       "audit_notes": null,
       "theme": "Prepositions & Spatial Relators",
       "theme_id": "prepositions",
-      "pronominal_forms": null
+      "pronominal_forms": null,
+      "usage_notes": {
+        "en": "Assimilated variant of articulated preposition fil- occurring before coronal consonant s (e.g. fis-sajf, fis-sodda, fis-sema).",
+        "mt": "Għamla assimilata tal-prepożizzjoni artikolata 'fil-' quddiem il-konsonanti xemxija s (eż. fis-sajf, fis-sodda, fis-sema)."
+      }
     }
   ]
 }

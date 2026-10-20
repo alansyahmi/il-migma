@@ -122,6 +122,7 @@ export function BrowseHome() {
             configs = [
                 { label: term('masculine'), filter: { pos: 'noun', gender: 'masculine' } },
                 { label: term('feminine'), filter: { pos: 'noun', gender: 'feminine' } },
+                { label: term('common'), filter: { pos: 'noun', gender: 'common' } },
                 { label: term('semitic'), filter: { pos: 'noun', type: 'semitic' } },
                 { label: term('romance'), filter: { pos: 'noun', type: 'romance' } },
             ];

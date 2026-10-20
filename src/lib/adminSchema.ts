@@ -8,6 +8,7 @@ import {
     normalizeEntryEtymologyChain,
     normalizeRootEtymologyChain,
     normalizeStemEtymologyChain,
+    parseUsageNotes,
     type RootFormData,
     type StemFormData
 } from './adminUtils.ts';
@@ -120,7 +121,7 @@ export const ENTRY_HANDLED_FIELDS = [
     'id', 'headword', 'pos', 'gender', 'is_loanword', 'is_inflectable', 'has_inflection',
     'source_language',
     'source_display', 'source_tooltip',
-    'definitions', 'usage_examples', 'etymology_chain', 'etymology_notes',
+    'definitions', 'usage_examples', 'etymology_chain', 'etymology_notes', 'usage_notes',
     'phonetics', 'tags', 'cv_pattern',
     'synonyms', 'antonyms', 'related_entries', 'alternative_forms', 'created_at', 'updated_at',
     'root_consonants', 'source_id',
@@ -141,7 +142,7 @@ export const ENTRY_PRIVATE_FIELDS = [
 
 export const COMMON_FIELDS = [
     'id', 'headword', 'pos', 'is_loanword', 'source_language',
-    'definitions', 'usage_examples', 'etymology_chain', 'etymology_notes', 'phonetics', 'tags', 'cv_pattern',
+    'definitions', 'usage_examples', 'etymology_chain', 'etymology_notes', 'usage_notes', 'phonetics', 'tags', 'cv_pattern',
     'synonyms', 'antonyms', 'related_entries', 'alternative_forms',
     'root_consonants', 'source_id',
     'source_citation', 'source_title', 'source_year', 'source_page', 'source_publisher'
@@ -203,6 +204,9 @@ export const POS_FEATURES: Record<string, string[]> = {
     ],
     'article': [
         ...COMMON_FIELDS
+    ],
+    'determiner': [
+        ...COMMON_FIELDS, 'gender', 'is_inflectable', 'plural_forms', 'inflections_pl', 'form_plural_pattern'
     ],
     'interjection': [
         ...COMMON_FIELDS, 'is_inflectable', 'plural_forms', 'inflections_pl', 'form_plural_pattern'
@@ -338,20 +342,45 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
     payload.source_citation = buildSourceCitation(sourceMetadata);
     // form_plural_pattern is already in payload from handled fields
 
-    const usageExamples = Array.isArray(form.usage_examples) ? form.usage_examples : [];
+    const rawUsageExamples = Array.isArray(form.usage_examples) ? form.usage_examples : [];
     const usageExampleEn = String(form.usage_example_en ?? '').trim();
     const usageExampleMt = String(form.usage_example ?? '').trim();
-    if (usageExamples.length > 0 || Object.prototype.hasOwnProperty.call(form, 'usage_example') || Object.prototype.hasOwnProperty.call(form, 'usage_example_en')) {
-        const normalizedUsageExamples = usageExamples.length > 0 ? usageExamples.map((example) => ({ ...example })) : [{}];
-        const first = {
-            ...(normalizedUsageExamples[0] || {}),
-            text_en: usageExampleEn,
+
+    const normalizedUsageExamples: Array<{ text_mt: string | null; text_en: string; mt: string | null; en: string }> = [];
+    rawUsageExamples.forEach((example: any, index: number) => {
+        let mt = String(example?.text_mt ?? example?.mt ?? example?.maltese ?? '').trim();
+        let en = String(example?.text_en ?? example?.en ?? example?.english ?? '').trim();
+        if (index === 0) {
+            if (usageExampleMt && !mt) mt = usageExampleMt;
+            if (usageExampleEn && !en) en = usageExampleEn;
+        }
+        if (mt || en) {
+            normalizedUsageExamples.push({
+                text_mt: mt || null,
+                text_en: en,
+                mt: mt || null,
+                en: en,
+            });
+        }
+    });
+
+    if (normalizedUsageExamples.length === 0 && (usageExampleMt || usageExampleEn)) {
+        normalizedUsageExamples.push({
             text_mt: usageExampleMt || null,
-        };
-        normalizedUsageExamples[0] = first;
-        payload.usage_examples = normalizedUsageExamples.filter((example, index) => (
-            index > 0 || String(example.text_en ?? '').trim() || String(example.text_mt ?? '').trim()
-        ));
+            text_en: usageExampleEn,
+            mt: usageExampleMt || null,
+            en: usageExampleEn,
+        });
+    }
+
+    if (normalizedUsageExamples.length > 0 || Object.prototype.hasOwnProperty.call(form, 'usage_example') || Object.prototype.hasOwnProperty.call(form, 'usage_example_en') || Object.prototype.hasOwnProperty.call(form, 'usage_examples')) {
+        payload.usage_examples = normalizedUsageExamples;
+        payload.usage_example = normalizedUsageExamples[0]?.text_mt || normalizedUsageExamples[0]?.mt || '';
+        payload.usage_example_en = normalizedUsageExamples[0]?.text_en || normalizedUsageExamples[0]?.en || '';
+    }
+
+    if (Object.prototype.hasOwnProperty.call(form, 'usage_notes') || form.usage_notes !== undefined) {
+        payload.usage_notes = parseUsageNotes(form.usage_notes);
     }
 
     if (pos === 'verb') {
@@ -540,7 +569,9 @@ export function buildEntryPayload(form: Record<string, unknown> & { extraFields?
                     const normalized = {
                         text_en: String(def.text_en || '').trim(),
                         text_mt: def.text_mt == null ? null : String(def.text_mt).trim() || null,
-                        register: String(def.register || '').trim(),
+                        register: typeof def.register === 'object' && def.register !== null
+                            ? def.register
+                            : String(def.register || '').trim(),
                         nuance: String(def.nuance || '').trim(),
                     } as Record<string, unknown>;
                     if (Array.isArray(def.example_sentences) && def.example_sentences.length > 0) {

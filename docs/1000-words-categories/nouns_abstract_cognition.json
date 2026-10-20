@@ -1,7 +1,7 @@
 {
   "category_id": "nouns_abstract_cognition",
   "category_title": "Nouns: Abstract Concepts, Thought & Measurement",
-  "total_entries": 358,
+  "total_entries": 356,
   "entries": [
     {
       "id": "n-kelma",
@@ -27,7 +27,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "كَلِمَة",
-          "definition": "word"
+          "definition": "word",
+          "pronunciation": "kalimaẗ"
         }
       ],
       "etymology_notes": null,
@@ -185,7 +186,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "كَيْفَ",
-          "definition": "how, whereby, how"
+          "definition": "how, whereby, how",
+          "pronunciation": "kayfa"
         }
       ],
       "etymology_notes": null,
@@ -419,7 +421,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "anchi",
-          "definition": null
+          "definition": null,
+          "pronunciation": "ankhi"
         },
         {
           "relationship": "From",
@@ -580,7 +583,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "atto",
-          "definition": null
+          "definition": null,
+          "pronunciation": "atto"
         }
       ],
       "etymology_notes": null,
@@ -735,7 +739,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "bisognu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "bisonju"
         },
         {
           "relationship": "From",
@@ -863,13 +868,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "puntu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "puntu"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "punto",
-          "definition": null
+          "definition": null,
+          "pronunciation": "punto"
         },
         {
           "relationship": "From",
@@ -1113,7 +1120,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي أَيْنَ",
-          "definition": null
+          "definition": null,
+          "pronunciation": "fî ayna"
         }
       ],
       "etymology_notes": null,
@@ -1219,7 +1227,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "اِسْم",
-          "definition": null
+          "definition": null,
+          "pronunciation": "asm"
         }
       ],
       "is_collective": 0,
@@ -1281,7 +1290,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "sentenza",
-          "definition": "verdict, judgment, ruling"
+          "definition": "verdict, judgment, ruling",
+          "pronunciation": "sentenza"
         }
       ],
       "etymology_notes": null,
@@ -1442,7 +1452,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "دَوَرَان",
-          "definition": "turning, circling, circuit"
+          "definition": "turning, circling, circuit",
+          "pronunciation": "dawarân"
         }
       ],
       "etymology_notes": null,
@@ -1629,7 +1640,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مَتَى",
-          "definition": "when, till, whenever"
+          "definition": "when, till, whenever",
+          "pronunciation": "matâ"
         }
       ],
       "etymology_notes": null,
@@ -1731,7 +1743,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "uso",
-          "definition": "used, accustomed"
+          "definition": "used, accustomed",
+          "pronunciation": "uso"
         }
       ],
       "etymology_notes": null,
@@ -1851,7 +1864,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "مِنْ بَعْدِ",
-          "definition": "min baʕdi"
+          "definition": "min baʕdi",
+          "pronunciation": "min bagħdi"
         }
       ],
       "etymology_notes": null,
@@ -2113,7 +2127,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "هٰكَذَا",
-          "definition": "thus, such as, as such"
+          "definition": "thus, such as, as such",
+          "pronunciation": "hâkađâ"
         }
       ],
       "is_collective": 0,
@@ -2181,7 +2196,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "حاجة",
-          "definition": "need, necessity"
+          "definition": "need, necessity",
+          "pronunciation": "ħâġẗ"
         }
       ],
       "is_collective": 0,
@@ -2456,101 +2472,6 @@
       "theme_id": "nouns_abstract_cognition"
     },
     {
-      "id": "n-ebda",
-      "headword": "ebda",
-      "pos": "noun",
-      "gender": null,
-      "root_consonants": null,
-      "stem": "ebda",
-      "cv_pattern": null,
-      "morph_pattern": null,
-      "is_loanword": 0,
-      "is_inflectable": 0,
-      "is_imala_blocked": 0,
-      "source_language": "Uncertain",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: ebda",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/ebda",
-      "source_publisher": "Wiktionary",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
-        {
-          "text_en": "no, not any",
-          "text_mt": "Dinjittiv użat f'sens negattiv biex jikkanċella kwalunkwe preżenza jew għażla.",
-          "register": "",
-          "nuance": ""
-        }
-      ],
-      "usage_examples": [
-        {
-          "mt": "Ma sabu ebda traċċa ta' ħsara fid-dokument ewlieni.",
-          "en": "They found no trace of damage in the main document."
-        }
-      ],
-      "related_entries": [],
-      "alternative_forms": [],
-      "phonetics": [
-        {
-          "dialect": "Standard",
-          "ipa": "/ˈɛb.dɐ/",
-          "notes": null
-        }
-      ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 184,
-      "source_frequency_rank": 184,
-      "audit_status": "pending",
-      "audit_notes": null,
-      "theme": "Nouns: Abstract Concepts, Thought & Measurement",
-      "theme_id": "nouns_abstract_cognition"
-    },
-    {
       "rank": 189,
       "source_frequency_rank": 189,
       "id": "n-taf",
@@ -2619,7 +2540,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أَسْفَل",
-          "definition": null
+          "definition": null,
+          "pronunciation": "asfal"
         }
       ],
       "is_collective": 0,
@@ -2683,7 +2605,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "جَنْب",
-          "definition": "side, locality, neighborhood"
+          "definition": "side, locality, neighborhood",
+          "pronunciation": "ġanb"
         }
       ],
       "etymology_notes": null,
@@ -2851,7 +2774,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "pajisi",
-          "definition": "town"
+          "definition": "town",
+          "pronunciation": "pajisi"
         },
         {
           "relationship": "From",
@@ -3228,7 +3152,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "copertura",
-          "definition": null
+          "definition": null,
+          "pronunciation": "kopertura"
         }
       ],
       "etymology_notes": null,
@@ -3468,13 +3393,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "storia",
-          "definition": null
+          "definition": null,
+          "pronunciation": "storia"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "storia",
-          "definition": null
+          "definition": null,
+          "pronunciation": "storia"
         },
         {
           "relationship": "From",
@@ -3486,7 +3413,8 @@
           "relationship": "From",
           "language": "Ancient Greek",
           "term": "ἱστορία",
-          "definition": null
+          "definition": null,
+          "pronunciation": "istoría"
         }
       ],
       "etymology_notes": null,
@@ -3595,7 +3523,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "سَرّاق",
-          "definition": "stealer, thief"
+          "definition": "stealer, thief",
+          "pronunciation": "sarrâq"
         },
         {
           "relationship": "Of",
@@ -3713,7 +3642,8 @@
           "relationship": "From",
           "language": "Maghrebi Arabic",
           "term": "شَلُوق",
-          "definition": "southeastern wind, scirocco"
+          "definition": "southeastern wind, scirocco",
+          "pronunciation": "shalûq"
         },
         {
           "relationship": "Of",
@@ -3863,7 +3793,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "tramuntana",
-          "definition": "north wind; north"
+          "definition": "north wind; north",
+          "pronunciation": "tramuntana"
         },
         {
           "relationship": "From",
@@ -3971,7 +3902,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "scienza",
-          "definition": "science"
+          "definition": "science",
+          "pronunciation": "xenza"
         }
       ],
       "etymology_notes": null,
@@ -4087,7 +4019,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "idea",
-          "definition": "idea"
+          "definition": "idea",
+          "pronunciation": "idea"
         }
       ],
       "is_collective": 0,
@@ -4144,106 +4077,6 @@
       "theme_id": "nouns_abstract_cognition"
     },
     {
-      "id": "conj-ladarba",
-      "headword": "ladarba",
-      "pos": "noun",
-      "gender": null,
-      "root_consonants": null,
-      "stem": "ladarba",
-      "cv_pattern": null,
-      "morph_pattern": null,
-      "is_loanword": 0,
-      "is_inflectable": 0,
-      "is_imala_blocked": 0,
-      "source_language": "Uncertain",
-      "source_id": "src-crowd",
-      "source_citation": "Wiktionary: ladarba",
-      "source_title": "Wiktionary",
-      "source_year": null,
-      "source_page": "https://en.wiktionary.org/wiki/ladarba",
-      "source_publisher": "Wiktionary",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
-        {
-          "text_en": "since, seeing that",
-          "text_mt": "Konġunzjoni li tispjega r-raġuni għal azzjoni.",
-          "register": "",
-          "nuance": ""
-        }
-      ],
-      "usage_examples": [
-        {
-          "mt": "Ladarba l-maltempata għaddiet, nistgħu toħorġu bil-mixi.",
-          "en": "Since the storm has passed, we can go out for a walk."
-        }
-      ],
-      "related_entries": [],
-      "alternative_forms": [
-        {
-          "headword": "la darba",
-          "type": "orthographic"
-        }
-      ],
-      "phonetics": [
-        {
-          "dialect": "Standard",
-          "ipa": "/lɐˈdɐr.bɐ/",
-          "notes": null
-        }
-      ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": null,
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": null,
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": null,
-      "numeral_adverbial": null,
-      "numeral_fractional": null,
-      "numeral_multiplier": null,
-      "numeral_distributive": null,
-      "rank": 263,
-      "source_frequency_rank": 263,
-      "audit_status": "pending",
-      "audit_notes": null,
-      "theme": "Nouns: Abstract Concepts, Thought & Measurement",
-      "theme_id": "nouns_abstract_cognition"
-    },
-    {
       "id": "n-bażi",
       "headword": "bażi",
       "pos": "noun",
@@ -4267,7 +4100,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "base",
-          "definition": "base, alkaline"
+          "definition": "base, alkaline",
+          "pronunciation": "base"
         }
       ],
       "etymology_notes": null,
@@ -4395,7 +4229,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "قِطْعة",
-          "definition": "cut; piece; portion"
+          "definition": "cut; piece; portion",
+          "pronunciation": "qiṭgħẗ"
         }
       ],
       "etymology_notes": null,
@@ -4507,7 +4342,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "culuri",
-          "definition": null
+          "definition": null,
+          "pronunciation": "kuluri"
         }
       ],
       "etymology_notes": null,
@@ -4774,7 +4610,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "esempio",
-          "definition": null
+          "definition": null,
+          "pronunciation": "esempio"
         },
         {
           "relationship": "From",
@@ -4894,7 +4731,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "facilità",
-          "definition": "inflection of facilitare: third-person singular present indicative second-person singular imperative"
+          "definition": "inflection of facilitare: third-person singular present indicative second-person singular imperative",
+          "pronunciation": "faċilita"
         }
       ],
       "etymology_notes": null,
@@ -5098,7 +4936,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "musica",
-          "definition": null
+          "definition": null,
+          "pronunciation": "musika"
         }
       ],
       "etymology_notes": null,
@@ -5215,7 +5054,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "كَمّ",
-          "definition": "amount, cloak, conceal"
+          "definition": "amount, cloak, conceal",
+          "pronunciation": "kamm"
         }
       ],
       "etymology_notes": null,
@@ -5376,7 +5216,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "littra",
-          "definition": null
+          "definition": null,
+          "pronunciation": "littra"
         },
         {
           "relationship": "From",
@@ -5388,7 +5229,8 @@
           "relationship": "From",
           "language": "Sicilian",
           "term": "l’ ) and hence deleted",
-          "definition": null
+          "definition": null,
+          "pronunciation": "l’ ) and henxe deleted"
         }
       ],
       "is_collective": 0,
@@ -5467,7 +5309,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "carrozza",
-          "definition": "carriage ( horse-drawn, or railway/railroad )"
+          "definition": "carriage ( horse-drawn, or railway/railroad )",
+          "pronunciation": "karrozza"
         }
       ],
       "etymology_notes": null,
@@ -5891,7 +5734,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "canzonetta",
-          "definition": "a simple or popular song"
+          "definition": "a simple or popular song",
+          "pronunciation": "kanzonetta"
         }
       ],
       "etymology_notes": null,
@@ -6043,7 +5887,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "prodotto",
-          "definition": null
+          "definition": null,
+          "pronunciation": "prodotto"
         }
       ],
       "etymology_notes": null,
@@ -6206,7 +6051,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "classe",
-          "definition": "class (all senses)"
+          "definition": "class (all senses)",
+          "pronunciation": "klasse"
         }
       ],
       "etymology_notes": null,
@@ -6354,7 +6200,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "quistioni",
-          "definition": null
+          "definition": null,
+          "pronunciation": "kwistioni"
         }
       ],
       "etymology_notes": null,
@@ -6522,7 +6369,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "vapuri",
-          "definition": "steam; steamship"
+          "definition": "steam; steamship",
+          "pronunciation": "vapuri"
         },
         {
           "relationship": "From",
@@ -6720,7 +6568,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "problema",
-          "definition": null
+          "definition": null,
+          "pronunciation": "problema"
         }
       ],
       "etymology_notes": null,
@@ -6927,7 +6776,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "كُلُّهُ",
-          "definition": "all of it"
+          "definition": "all of it",
+          "pronunciation": "kulluhu"
         }
       ],
       "etymology_notes": null,
@@ -7151,7 +7001,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "corso",
-          "definition": null
+          "definition": null,
+          "pronunciation": "korso"
         }
       ],
       "etymology_notes": null,
@@ -7266,7 +7117,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "وَقْفَة",
-          "definition": "stop, position, bearing"
+          "definition": "stop, position, bearing",
+          "pronunciation": "waqfaẗ"
         }
       ],
       "etymology_notes": null,
@@ -7458,7 +7310,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "oggetto",
-          "definition": "object"
+          "definition": "object",
+          "pronunciation": "ogġetto"
         }
       ],
       "etymology_notes": null,
@@ -7588,7 +7441,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "sistema",
-          "definition": null
+          "definition": null,
+          "pronunciation": "sistema"
         },
         {
           "relationship": "From",
@@ -7600,7 +7454,8 @@
           "relationship": "From",
           "language": "Ancient Greek",
           "term": "σύστημα",
-          "definition": null
+          "definition": null,
+          "pronunciation": "sistima"
         }
       ],
       "etymology_notes": null,
@@ -8060,7 +7915,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "إِي وَ",
-          "definition": "yes, by"
+          "definition": "yes, by",
+          "pronunciation": "î wa"
         }
       ],
       "is_collective": 0,
@@ -8167,7 +8023,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "livanti",
-          "definition": "east, orient"
+          "definition": "east, orient",
+          "pronunciation": "livanti"
         },
         {
           "relationship": "From",
@@ -8286,7 +8143,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "صِبْغَة",
-          "definition": "air, bit, cast"
+          "definition": "air, bit, cast",
+          "pronunciation": "ṣibghaẗ"
         }
       ],
       "etymology_notes": null,
@@ -8398,7 +8256,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "unità",
-          "definition": "feminine singular of unito"
+          "definition": "feminine singular of unito",
+          "pronunciation": "unita"
         }
       ],
       "etymology_notes": null,
@@ -8510,7 +8369,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قُوّة",
-          "definition": "power, force, Vis"
+          "definition": "power, force, Vis",
+          "pronunciation": "qûẗ"
         }
       ],
       "etymology_notes": null,
@@ -8702,7 +8562,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "nome",
-          "definition": "name"
+          "definition": "name",
+          "pronunciation": "nome"
         }
       ],
       "etymology_notes": null,
@@ -8814,7 +8675,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بَقِيَّة",
-          "definition": null
+          "definition": null,
+          "pronunciation": "baqiyyaẗ"
         }
       ],
       "etymology_notes": null,
@@ -9258,7 +9120,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ذَنَب",
-          "definition": null
+          "definition": null,
+          "pronunciation": "đanab"
         }
       ],
       "etymology_notes": null,
@@ -9525,7 +9388,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "punenti",
-          "definition": null
+          "definition": null,
+          "pronunciation": "punenti"
         },
         {
           "relationship": "From",
@@ -9758,13 +9622,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "guerra",
-          "definition": null
+          "definition": null,
+          "pronunciation": "guerra"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "guerra",
-          "definition": null
+          "definition": null,
+          "pronunciation": "guerra"
         }
       ],
       "etymology_notes": null,
@@ -9920,7 +9786,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "centro",
-          "definition": null
+          "definition": null,
+          "pronunciation": "ċentro"
         }
       ],
       "etymology_notes": null,
@@ -10022,7 +9889,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مَحَبَّة",
-          "definition": "affection, affectionateness, attachment"
+          "definition": "affection, affectionateness, attachment",
+          "pronunciation": "maħabbaẗ"
         }
       ],
       "etymology_notes": null,
@@ -10131,7 +9999,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "فُلُوس",
-          "definition": null
+          "definition": null,
+          "pronunciation": "fulûs"
         }
       ],
       "etymology_notes": null,
@@ -10243,7 +10112,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "mappa",
-          "definition": "tablecloth, napkin, cloth"
+          "definition": "tablecloth, napkin, cloth",
+          "pronunciation": "mappa"
         }
       ],
       "etymology_notes": null,
@@ -10355,7 +10225,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "regola",
-          "definition": "rule, norm, code, principle, order"
+          "definition": "rule, norm, code, principle, order",
+          "pronunciation": "regola"
         }
       ],
       "etymology_notes": null,
@@ -10472,7 +10343,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "energia",
-          "definition": "energy"
+          "definition": "energy",
+          "pronunciation": "enerġa"
         }
       ],
       "etymology_notes": null,
@@ -10591,7 +10463,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "caccia",
-          "definition": "hunting; shooting"
+          "definition": "hunting; shooting",
+          "pronunciation": "kakċa"
         }
       ],
       "etymology_notes": null,
@@ -10746,7 +10619,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بَيْض",
-          "definition": "egg, eggs, essence"
+          "definition": "egg, eggs, essence",
+          "pronunciation": "bayḍ"
         }
       ],
       "etymology_notes": null,
@@ -11010,7 +10884,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَدّ",
-          "definition": null
+          "definition": null,
+          "pronunciation": "għadd"
         }
       ],
       "etymology_notes": null,
@@ -11135,7 +11010,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "quadro",
-          "definition": null
+          "definition": null,
+          "pronunciation": "kwadro"
         }
       ],
       "etymology_notes": null,
@@ -11257,8 +11133,9 @@
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
-          "term": "ragiuni / raggiuni",
-          "definition": null
+          "term": "ragiuni jew raggiuni",
+          "definition": null,
+          "pronunciation": "raġuni jew ragġuni"
         }
       ],
       "etymology_notes": null,
@@ -11420,7 +11297,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "soggetto",
-          "definition": null
+          "definition": null,
+          "pronunciation": "sogġetto"
         }
       ],
       "etymology_notes": null,
@@ -11543,7 +11421,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "regione",
-          "definition": "region, area, zone, district"
+          "definition": "region, area, zone, district",
+          "pronunciation": "reġone"
         }
       ],
       "etymology_notes": null,
@@ -11658,7 +11537,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "قَيْس",
-          "definition": "measurement, be measured, gauge"
+          "definition": "measurement, be measured, gauge",
+          "pronunciation": "qays"
         }
       ],
       "etymology_notes": null,
@@ -11820,7 +11700,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "pisu",
-          "definition": "burden, load, responsibility"
+          "definition": "burden, load, responsibility",
+          "pronunciation": "pisu"
         },
         {
           "relationship": "From",
@@ -11938,7 +11819,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "circu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "xirku"
         }
       ],
       "etymology_notes": null,
@@ -12112,13 +11994,15 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "حَسَّ",
-          "definition": "feel, perceive, to feel"
+          "definition": "feel, perceive, to feel",
+          "pronunciation": "ħassa"
         },
         {
           "relationship": "Of",
           "language": "Sicilian",
           "term": "si sèntiri",
-          "definition": null
+          "definition": null,
+          "pronunciation": "si sentiri"
         },
         {
           "relationship": "From",
@@ -12321,7 +12205,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قَطْرَة",
-          "definition": "drop, driblet, drip"
+          "definition": "drop, driblet, drip",
+          "pronunciation": "qaṭraẗ"
         }
       ],
       "etymology_notes": null,
@@ -12714,7 +12599,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "رُقاد",
-          "definition": null
+          "definition": null,
+          "pronunciation": "ruqâd"
         }
       ],
       "etymology_notes": null,
@@ -12903,7 +12789,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "esercizio",
-          "definition": null
+          "definition": null,
+          "pronunciation": "eserċizio"
         }
       ],
       "etymology_notes": null,
@@ -13137,7 +13024,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فَرَح",
-          "definition": "joy, Farah, bliss"
+          "definition": "joy, Farah, bliss",
+          "pronunciation": "faraħ"
         }
       ],
       "etymology_notes": null,
@@ -13279,7 +13167,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بَقَرة",
-          "definition": "cow, bovines, cattle"
+          "definition": "cow, bovines, cattle",
+          "pronunciation": "baqarẗ"
         }
       ],
       "etymology_notes": null,
@@ -13396,7 +13285,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "طَرَف",
-          "definition": "apex, appendage, area"
+          "definition": "apex, appendage, area",
+          "pronunciation": "ṭaraf"
         }
       ],
       "etymology_notes": null,
@@ -13540,7 +13430,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "signali",
-          "definition": null
+          "definition": null,
+          "pronunciation": "sinjali"
         },
         {
           "relationship": "From",
@@ -13658,7 +13549,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "زِيَارَة",
-          "definition": "visit, call, coming"
+          "definition": "visit, call, coming",
+          "pronunciation": "żiyâraẗ"
         }
       ],
       "etymology_notes": null,
@@ -13810,13 +13702,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "tempu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "tempu"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "tempo",
-          "definition": null
+          "definition": null,
+          "pronunciation": "tempo"
         },
         {
           "relationship": "From",
@@ -14026,7 +13920,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "طَمَع",
-          "definition": "greed, wish"
+          "definition": "greed, wish",
+          "pronunciation": "ṭamagħ"
         }
       ],
       "etymology_notes": null,
@@ -14258,7 +14153,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "melodia",
-          "definition": "melody, tune"
+          "definition": "melody, tune",
+          "pronunciation": "melodia"
         }
       ],
       "etymology_notes": null,
@@ -14370,13 +14266,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "viaggiu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "viagġu"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "viaggio",
-          "definition": null
+          "definition": null,
+          "pronunciation": "viagġo"
         },
         {
           "relationship": "From",
@@ -14538,7 +14436,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "simbolo",
-          "definition": null
+          "definition": null,
+          "pronunciation": "simbolo"
         }
       ],
       "etymology_notes": null,
@@ -14743,13 +14642,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "dàrsina",
-          "definition": null
+          "definition": null,
+          "pronunciation": "darsina"
         },
         {
           "relationship": "From",
           "language": "Arabic",
           "term": "دَار اَلصِّنَاعَة",
-          "definition": "industry house"
+          "definition": "industry house",
+          "pronunciation": "dâr al-ṣinâgħaẗ"
         }
       ],
       "etymology_notes": null,
@@ -15114,7 +15015,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "جِنَان",
-          "definition": "Janan, heart, soul"
+          "definition": "Janan, heart, soul",
+          "pronunciation": "ġinân"
         }
       ],
       "etymology_notes": null,
@@ -15347,7 +15249,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "informazione",
-          "definition": "information"
+          "definition": "information",
+          "pronunciation": "informazione"
         }
       ],
       "is_collective": 0,
@@ -15565,7 +15468,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "اِبْن",
-          "definition": "son, ben, boy"
+          "definition": "son, ben, boy",
+          "pronunciation": "abn"
         }
       ],
       "is_collective": 0,
@@ -15639,7 +15543,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "lagu",
-          "definition": "alternative form of lacu ( “ lake ” )"
+          "definition": "alternative form of lacu ( “ lake ” )",
+          "pronunciation": "lagu"
         },
         {
           "relationship": "From",
@@ -15877,7 +15782,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "nazione",
-          "definition": "nation"
+          "definition": "nation",
+          "pronunciation": "nazione"
         }
       ],
       "etymology_notes": null,
@@ -16478,7 +16384,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "disegno",
-          "definition": null
+          "definition": null,
+          "pronunciation": "disenjo"
         }
       ],
       "etymology_notes": null,
@@ -16773,7 +16680,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثُقْبَة",
-          "definition": null
+          "definition": null,
+          "pronunciation": "θuqbaẗ"
         }
       ],
       "etymology_notes": null,
@@ -16889,7 +16797,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عِرْق",
-          "definition": null
+          "definition": null,
+          "pronunciation": "għirq"
         }
       ],
       "etymology_notes": null,
@@ -17179,7 +17088,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "cocu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "koku"
         },
         {
           "relationship": "From",
@@ -17367,7 +17277,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "sèculu",
-          "definition": "century, century"
+          "definition": "century, century",
+          "pronunciation": "sekulu"
         }
       ],
       "etymology_notes": null,
@@ -17479,7 +17390,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "ligi",
-          "definition": null
+          "definition": null,
+          "pronunciation": "liġi"
         },
         {
           "relationship": "From",
@@ -17644,7 +17556,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "frase",
-          "definition": null
+          "definition": null,
+          "pronunciation": "frase"
         }
       ],
       "etymology_notes": null,
@@ -17799,7 +17712,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "rummulu",
-          "definition": null
+          "definition": null,
+          "pronunciation": "rummulu"
         }
       ],
       "etymology_notes": null,
@@ -17926,7 +17840,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "temperatura",
-          "definition": "temperature (a measure of cold or hot, of a body or environment)"
+          "definition": "temperature (a measure of cold or hot, of a body or environment)",
+          "pronunciation": "temperatura"
         }
       ],
       "etymology_notes": null,
@@ -18039,7 +17954,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "industria",
-          "definition": "industry"
+          "definition": "industry",
+          "pronunciation": "industria"
         }
       ],
       "is_collective": 0,
@@ -18107,13 +18023,15 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "valore",
-          "definition": null
+          "definition": null,
+          "pronunciation": "valore"
         },
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "valuri",
-          "definition": null
+          "definition": null,
+          "pronunciation": "valuri"
         }
       ],
       "etymology_notes": null,
@@ -18308,7 +18226,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "فَهْم",
-          "definition": "understanding"
+          "definition": "understanding",
+          "pronunciation": "fahm"
         }
       ],
       "etymology_notes": null,
@@ -18500,7 +18419,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "periculu",
-          "definition": "danger, distress, hazard"
+          "definition": "danger, distress, hazard",
+          "pronunciation": "perikulu"
         }
       ],
       "etymology_notes": null,
@@ -18895,7 +18815,8 @@
           "relationship": "From",
           "language": "Sicilian",
           "term": "caràttari",
-          "definition": null
+          "definition": null,
+          "pronunciation": "karattari"
         }
       ],
       "etymology_notes": null,
@@ -19111,7 +19032,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "radio",
-          "definition": "radius"
+          "definition": "radius",
+          "pronunciation": "radio"
         },
         {
           "relationship": "From",
@@ -19229,7 +19151,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "atomo",
-          "definition": null
+          "definition": null,
+          "pronunciation": "atomo"
         }
       ],
       "etymology_notes": null,
@@ -19342,7 +19265,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "effetto",
-          "definition": "effect ( in all senses )"
+          "definition": "effect ( in all senses )",
+          "pronunciation": "effetto"
         }
       ],
       "etymology_notes": null,
@@ -19546,7 +19470,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "رَدَن",
-          "definition": "sleeve"
+          "definition": "sleeve",
+          "pronunciation": "radan"
         }
       ],
       "etymology_notes": null,
@@ -19554,7 +19479,7 @@
         {
           "text_en": "thread",
           "text_mt": "Oġġett, kwalità jew kunċett li jikkorrispondi għal thread.",
-          "register": "obsolet",
+          "register": "obsolete",
           "nuance": ""
         }
       ],
@@ -19848,7 +19773,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "poesia",
-          "definition": "poetry"
+          "definition": "poetry",
+          "pronunciation": "poesia"
         }
       ],
       "etymology_notes": null,
@@ -19963,7 +19889,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "sequenza",
-          "definition": "sequence"
+          "definition": "sequence",
+          "pronunciation": "sekwenza"
         }
       ],
       "etymology_notes": null,
@@ -20078,7 +20005,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "campana",
-          "definition": "bell, Campana, bell"
+          "definition": "bell, Campana, bell",
+          "pronunciation": "kampana"
         },
         {
           "relationship": "From",
@@ -20324,7 +20252,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "pianeta",
-          "definition": "planet"
+          "definition": "planet",
+          "pronunciation": "pianeta"
         }
       ],
       "etymology_notes": null,
@@ -20476,7 +20405,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "colonia",
-          "definition": null
+          "definition": null,
+          "pronunciation": "kolonia"
         }
       ],
       "etymology_notes": null,
@@ -20597,7 +20527,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "miniera",
-          "definition": null
+          "definition": null,
+          "pronunciation": "miniera"
         }
       ],
       "etymology_notes": null,
@@ -20872,7 +20803,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "deserto",
-          "definition": null
+          "definition": null,
+          "pronunciation": "deserto"
         }
       ],
       "etymology_notes": null,
@@ -21150,7 +21082,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شَحْم",
-          "definition": "grease, adipose, blubber"
+          "definition": "grease, adipose, blubber",
+          "pronunciation": "shaħm"
         }
       ],
       "etymology_notes": null,
@@ -21304,7 +21237,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سَهْم",
-          "definition": "arrow, bolt, dart"
+          "definition": "arrow, bolt, dart",
+          "pronunciation": "sahm"
         }
       ],
       "etymology_notes": null,
@@ -21496,13 +21430,15 @@
           "relationship": "From",
           "language": "Sicilian",
           "term": "papira",
-          "definition": null
+          "definition": null,
+          "pronunciation": "papira"
         },
         {
           "relationship": "From",
           "language": "Italian",
           "term": "papera",
-          "definition": null
+          "definition": null,
+          "pronunciation": "papera"
         }
       ],
       "etymology_notes": null,
@@ -21614,7 +21550,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "grado",
-          "definition": null
+          "definition": null,
+          "pronunciation": "grado"
         }
       ],
       "etymology_notes": null,
@@ -21852,7 +21789,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "risposta",
-          "definition": "answer, reply, response, feedback"
+          "definition": "answer, reply, response, feedback",
+          "pronunciation": "risposta"
         }
       ],
       "etymology_notes": null,
@@ -22016,7 +21954,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "natura",
-          "definition": "nature"
+          "definition": "nature",
+          "pronunciation": "natura"
         }
       ],
       "etymology_notes": null,
@@ -22349,7 +22288,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عُنْق",
-          "definition": null
+          "definition": null,
+          "pronunciation": "għunq"
         }
       ],
       "etymology_notes": null,
@@ -22570,13 +22510,15 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "مَوْت",
-          "definition": "death, expiry, deadness"
+          "definition": "death, expiry, deadness",
+          "pronunciation": "mawt"
         },
         {
           "relationship": "From",
           "language": "Italian",
           "term": "morte",
-          "definition": "death"
+          "definition": "death",
+          "pronunciation": "morte"
         },
         {
           "relationship": "From",
@@ -22734,7 +22676,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "soluzione",
-          "definition": null
+          "definition": null,
+          "pronunciation": "soluzione"
         }
       ],
       "etymology_notes": null,
@@ -22856,7 +22799,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "calamita",
-          "definition": "magnet; fridge magnet"
+          "definition": "magnet; fridge magnet",
+          "pronunciation": "kalamita"
         }
       ],
       "etymology_notes": null,
@@ -22982,7 +22926,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِضَّة",
-          "definition": "silver, argent, Ag"
+          "definition": "silver, argent, Ag",
+          "pronunciation": "fiḍḍaẗ"
         }
       ],
       "etymology_notes": null,
@@ -23134,7 +23079,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "فَرْع",
-          "definition": "branch, sprig, twig"
+          "definition": "branch, sprig, twig",
+          "pronunciation": "fargħ"
         }
       ],
       "etymology_notes": null,
@@ -23411,7 +23357,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "esperienza",
-          "definition": null
+          "definition": null,
+          "pronunciation": "esperienza"
         }
       ],
       "etymology_notes": null,
@@ -23603,7 +23550,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "زِفْت",
-          "definition": "bitumen, asphalt, pitch"
+          "definition": "bitumen, asphalt, pitch",
+          "pronunciation": "żift"
         }
       ],
       "etymology_notes": null,
@@ -23897,7 +23845,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "cundizzioni",
-          "definition": null
+          "definition": null,
+          "pronunciation": "kundizzioni"
         }
       ],
       "etymology_notes": null,
@@ -24052,7 +24001,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "رَائِحَة",
-          "definition": "smell, odour, scent"
+          "definition": "smell, odour, scent",
+          "pronunciation": "râ'iħaẗ"
         }
       ],
       "etymology_notes": null,
@@ -24375,7 +24325,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "successo",
-          "definition": null
+          "definition": null,
+          "pronunciation": "sukċesso"
         }
       ],
       "etymology_notes": null,
@@ -24533,7 +24484,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "نَقَّصَ",
-          "definition": "deduct, detract, diminish"
+          "definition": "deduct, detract, diminish",
+          "pronunciation": "naqqaṣa"
         }
       ],
       "etymology_notes": null,
@@ -24795,7 +24747,8 @@
           "relationship": "From",
           "language": "Ancient Greek",
           "term": "σέρβουλα",
-          "definition": "shoe, buskin"
+          "definition": "shoe, buskin",
+          "pronunciation": "servula"
         },
         {
           "relationship": "From",
@@ -25033,7 +24986,8 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "قُطْن",
-          "definition": "cotton, cotton plant, yarn"
+          "definition": "cotton, cotton plant, yarn",
+          "pronunciation": "quṭn"
         }
       ],
       "etymology_notes": null,
@@ -25369,7 +25323,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "livello",
-          "definition": "level"
+          "definition": "level",
+          "pronunciation": "livello"
         }
       ],
       "etymology_notes": null,
@@ -25683,7 +25638,8 @@
           "relationship": "From",
           "language": "Arabic",
           "term": "مَناخِير",
-          "definition": null
+          "definition": null,
+          "pronunciation": "manâkhîr"
         }
       ],
       "etymology_notes": null,

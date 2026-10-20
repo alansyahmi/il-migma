@@ -2,7 +2,7 @@
   "metadata": {
     "title": "1000 Most Common Maltese Words (Thematic Audit Dataset)",
     "format": "JSONC",
-    "total_entries": 932,
+    "total_entries": 990,
     "total_categories": 23,
     "source_url": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
     "description": "Categorized Maltese frequency list enriched with Wiktionary data and organized into navigable POS and thematic sections."
@@ -12,7 +12,7 @@
       "category_id": "pronouns_determiners",
       "category_title": "Pronouns & Determiners",
       "file": "pronouns_determiners.json",
-      "count": 28
+      "count": 35
     },
     {
       "category_id": "prepositions",
@@ -24,13 +24,13 @@
       "category_id": "conjunctions",
       "category_title": "Conjunctions & Connectives",
       "file": "conjunctions.json",
-      "count": 10
+      "count": 54
     },
     {
       "category_id": "adverbs_particles",
       "category_title": "Adverbs & Modal Particles",
       "file": "adverbs_particles.json",
-      "count": 30
+      "count": 37
     },
     {
       "category_id": "numerals",
@@ -153,5 +153,5 @@
       "count": 69
     }
   ],
-  "total_entries": 937
+  "total_entries": 990
 }

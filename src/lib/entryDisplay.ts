@@ -1,4 +1,4 @@
-import type { Entry } from '@/types';
+import type { Entry, DefinitionRegister } from '@/types';
 import { normalizeEntryPos } from './entryId.ts';
 
 export type EntryViewKind =
@@ -13,6 +13,7 @@ export type EntryViewKind =
 
 const FUNCTION_WORD_ENTRY_POS = new Set([
     'pronoun',
+    'determiner',
     'particle',
     'adverb',
     'preposition',
@@ -67,7 +68,7 @@ export function hasNounNuanceDefinition(entry: Pick<Entry, 'definitions'> | null
 }
 
 export function formatDefinitionGloss(
-    definition: { text_en?: string | null; text_mt?: string | null; nuance?: string | null; register?: string | null; dialect?: string | null } | null | undefined,
+    definition: { text_en?: string | null; text_mt?: string | null; nuance?: string | null; register?: DefinitionRegister | null; dialect?: string | null } | null | undefined,
     language: 'en' | 'mt',
     translate: (key: string) => string,
 ): string {
@@ -76,16 +77,52 @@ export function formatDefinitionGloss(
         : normalizeText(definition?.text_en);
 
     const parts: string[] = [];
-    const register = normalizeText(definition?.register) || '';
     const dialect = normalizeText(definition?.dialect);
-    if (register) {
+
+    let regKey = '';
+    let explicitLabel = '';
+    const rawRegister = definition?.register;
+
+    if (typeof rawRegister === 'string') {
+        const trimmed = rawRegister.trim();
+        if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+            try {
+                const parsed = JSON.parse(trimmed);
+                regKey = String(parsed.key || parsed.en || '').trim().toLowerCase();
+                explicitLabel = String((language === 'en' ? parsed.en : parsed.mt) || '').trim();
+            } catch {
+                regKey = trimmed;
+            }
+        } else {
+            regKey = trimmed;
+        }
+    } else if (typeof rawRegister === 'object' && rawRegister !== null) {
+        regKey = String(rawRegister.key || rawRegister.en || '').trim().toLowerCase();
+        explicitLabel = String((language === 'en' ? rawRegister.en : rawRegister.mt) || '').trim();
+    }
+
+    if (regKey || explicitLabel) {
         // When register is dialectal and a specific dialect is set, show
         // the dialect name directly instead of "Dialectal (Żejtun)".
-        if ((register.toLowerCase().includes('dialect') || register.toLowerCase().includes('dialett')) && dialect) {
+        if ((regKey.toLowerCase().includes('dialect') || regKey.toLowerCase().includes('dialett')) && dialect) {
             const dialects = dialect.split(',').map(d => d.trim()).filter(Boolean);
             parts.push(dialects.join(', '));
         } else {
-            const regLabel = normalizeText(translate(register)) || register;
+            let regLabel = '';
+            if (regKey) {
+                const rawReg = translate(`reg-${regKey}`);
+                if (rawReg && rawReg !== `reg-${regKey}`) {
+                    regLabel = rawReg;
+                } else {
+                    const fallbackReg = normalizeText(translate(regKey));
+                    if (fallbackReg && fallbackReg !== regKey) {
+                        regLabel = fallbackReg;
+                    }
+                }
+            }
+            if (!regLabel) {
+                regLabel = explicitLabel || regKey;
+            }
             parts.push(regLabel.charAt(0).toUpperCase() + regLabel.slice(1));
             if (dialect) {
                 parts.push(`(${dialect})`);

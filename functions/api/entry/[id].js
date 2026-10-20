@@ -14,6 +14,7 @@ import { applyVerbMorphologyCompatibility, ensureVerbMorphologyTable } from '../
 import { getEntryIdFamily, normalizeEntryId, normalizeEntryPos } from '../../../src/lib/entryId.ts';
 import { mergeNumeralFamilyEntries } from '../../../src/lib/numeralMorphology.ts';
 import { ensureRootCompatibilityColumns } from '../../lib/rootSchema.js';
+import { compareEntryPriority } from '../../../src/lib/homographGrouping.ts';
 
 // ── In-Memory Worker Cache (Shared within worker isolate) ─────────────────────
 const entryCache = new Map();
@@ -43,11 +44,41 @@ function normalizeDefinitionList(definitions) {
         sense_number: Number(def?.sense_number ?? index + 1),
         text_en: String(def?.text_en || '').trim(),
         text_mt: def?.text_mt == null ? null : String(def.text_mt).trim() || null,
-        register: String(def?.register || '').trim(),
+        register: (() => {
+            if (!def?.register) return '';
+            if (typeof def.register === 'object') return def.register;
+            if (typeof def.register === 'string') {
+                const trimmed = def.register.trim();
+                if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+                    try {
+                        return JSON.parse(trimmed);
+                    } catch {
+                        return trimmed;
+                    }
+                }
+                return trimmed;
+            }
+            return String(def.register);
+        })(),
         nuance: String(def?.nuance || '').trim(),
         dialect: def?.dialect ? String(def.dialect).trim() : undefined,
         field: String(def?.field || '').trim(),
         example_sentences: Array.isArray(def?.example_sentences) ? def.example_sentences : [],
+        usage_notes: (() => {
+            if (!def?.usage_notes) return undefined;
+            if (typeof def.usage_notes === 'string') {
+                const trimmed = def.usage_notes.trim();
+                if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+                    try {
+                        return JSON.parse(trimmed);
+                    } catch {
+                        return trimmed;
+                    }
+                }
+                return trimmed;
+            }
+            return def.usage_notes;
+        })(),
     }));
 }
 
@@ -334,7 +365,8 @@ export async function onRequestGet({ params, env }) {
             attnRes,
             audioRes,
             subRes,
-            dialRes
+            dialRes,
+            siblingRes
         ] = await Promise.all([
             db.execute({
                 sql: `SELECT * FROM entry_diminutives
@@ -366,6 +398,10 @@ export async function onRequestGet({ params, env }) {
             db.execute({
                 sql: `SELECT * FROM dialect_variants WHERE entry_id = ?`,
                 args: [resolvedEntryId],
+            }),
+            db.execute({
+                sql: buildEntrySelectSql('LOWER(e.headword) = LOWER(?) AND e.id != ?'),
+                args: [entry.headword, resolvedEntryId],
             }),
         ]);
         const diminutives = (diminutiveRes.rows || []).map((row) => ({
@@ -433,6 +469,16 @@ export async function onRequestGet({ params, env }) {
         const sourceMeta = normalizeSourceMetadata(entry);
         payload.source_display = sourceMeta.display || '';
         payload.source_tooltip = sourceMeta.tooltip || '';
+
+        payload.sibling_entries = (siblingRes?.rows || [])
+            .map((sRow) => {
+                const sHydrated = hydrateEntryRow(sRow);
+                return {
+                    ...sHydrated,
+                    definitions: normalizeDefinitionList(sHydrated.definitions),
+                };
+            })
+            .sort(compareEntryPriority);
 
         // ── Enrich Relationship Helpers ──────────────────────────────────────────
         async function enrichRelationships(relArray) {

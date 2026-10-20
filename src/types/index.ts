@@ -9,6 +9,7 @@ export type POS =
   | 'adjective' 
   | 'adverb' 
   | 'pronoun' 
+  | 'determiner'
   | 'preposition' 
   | 'conjunction' 
   | 'interjection' 
@@ -34,8 +35,18 @@ export interface StemVariantSet {
     perfectSyncopated?: string;
 }
 
-export type NounGender = 'masculine' | 'feminine' | 'both' | 'none' | 'plural' | 'neutral';
+export type CanonicalGender = 'masculine' | 'feminine' | 'common';
+export type NounGender = 'masculine' | 'feminine' | 'common' | 'both' | 'none' | 'plural' | 'neutral';
 export type Gender = NounGender;
+
+export interface BilingualRegister {
+    key?: string | null;
+    en?: string | null;
+    mt?: string | null;
+    arabised?: string | null;
+}
+
+export type DefinitionRegister = string | BilingualRegister;
 
 export interface Definition {
     id: string;
@@ -43,12 +54,13 @@ export interface Definition {
     text_mt?: string | null;
     sense_number?: number;
     usage_context?: string;
-    register?: string;
+    register?: DefinitionRegister | null;
     nuance?: string;
     dialect?: string;
     examples?: string[];
     example_sentences?: any[];
     field?: string;
+    usage_notes?: { en?: string | null; mt?: string | null } | string | null;
 }
 
 export interface ConjugationRow {
@@ -111,6 +123,7 @@ export interface Entry {
     etymology_chain?: EntryEtymology[];
     etymologies?: EntryEtymologyChain[];
     etymology_notes?: string | null;
+    usage_notes?: { en?: string | null; mt?: string | null } | string | null;
     phonetics?: Phonetic[];
     audio_files?: AudioFile[];
     tags?: string[];
@@ -121,6 +134,7 @@ export interface Entry {
     redirected_from_alt_form?: AlternativeFormRedirect | null;
     pronominal_forms?: Record<string, string> | string[];
     subentries?: Entry[];
+    sibling_entries?: Entry[];
     source_language?: string;
     is_loanword?: boolean;
     is_inflectable?: boolean;
@@ -128,6 +142,10 @@ export interface Entry {
     created_at?: string;
     updated_at?: string;
     sort_order?: number;
+    audit_status?: string | null;
+    audit_notes?: string | null;
+    rank?: number | null;
+    source_frequency_rank?: number | null;
     verb_class?: string | null;
     verb_weak_class?: string | null;
     verb_vowel_perf?: string | null;

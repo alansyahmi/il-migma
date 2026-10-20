@@ -1,4 +1,4 @@
-import type { LinguisticMode } from '@/types';
+import type { LinguisticMode, DefinitionRegister } from '@/types';
 
 // ─── Terminology Map ───────────────────────────────────────────────────────
 // Maps a term key to its English, Standard and Arabised Maltese equivalents.
@@ -61,6 +61,9 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'active-participle': { en: 'Active Participle', standard: 'Partiċipju Attiv', arabised: 'Fiegħel' },
     'no-elative': { en: 'No Elative', standard: 'L-ebda Elattiv', arabised: 'L-ebda Elattiv' },
     'usage-example': { en: 'Usage Example', standard: "Eżempju ta' Użu", arabised: "Xbieha ta' Użu" },
+    'usage-examples': { en: 'Usage Examples', standard: "Eżempji tal-Użu", arabised: "Xbihat tal-Użu" },
+    'usage-notes': { en: 'Usage Notes', standard: "Noti tal-Użu", arabised: "Noti tal-Użu" },
+    'usage-note': { en: 'Usage Note', standard: "Nota tal-Użu", arabised: "Nota tal-Użu" },
     'thesaurus': { en: 'Thesaurus', standard: 'Teżawru', arabised: 'Mifles' },
     'synonyms': { en: 'Synonyms', standard: 'Sinonimi', arabised: 'Mixxibhin' },
     'antonyms': { en: 'Antonyms', standard: 'Antonimi', arabised: 'Mitfirqin' },
@@ -72,11 +75,14 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'letter': { en: 'Letter', standard: 'Ittra', arabised: 'Ittra' },
     'rule': { en: 'Rule', standard: 'Regola', arabised: 'Qies' },
     'example': { en: 'Example', standard: 'Eżempju', arabised: 'Xbieha' },
-    'assimilated': { en: 'Assimilated', standard: 'Assimilat', arabised: 'Imxebbah' },
+    'assimilated': { en: 'Assimilated', standard: 'Assimilati', arabised: 'Imxebbhin' },
+    'unassimilated': { en: 'Unassimilated', standard: 'Mhux Assimilati', arabised: 'Għajr Imxebbhin' },
     'standard-label': { en: 'Standard', standard: 'Standard', arabised: 'Standard' },
     'sun-moon-letters': { en: 'Sun & Moon Letters', standard: 'Ittri tax-Xemx u tal-Qamar', arabised: 'Ittri tax-Xemx u tal-Qamar' },
     'sun-letters': { en: 'Sun Letters', standard: 'Ittri tax-Xemx', arabised: 'Ittri tax-Xemx' },
     'moon-letters': { en: 'Moon Letters', standard: 'Ittri tal-Qamar', arabised: 'Ittri tal-Qamar' },
+    'fused-article-matrix': { en: 'Fused Article Forms', standard: 'L-Artiklu Magħqud', arabised: 'L-Artiklu Magħqud' },
+    'vowels-label': { en: 'Vowels', standard: 'Vokali', arabised: 'Vokali' },
 
     // Parts of Speech
     'verb': { en: 'Verb', standard: 'Verb', arabised: 'Fagħal' },
@@ -88,6 +94,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'preposition': { en: 'Preposition', standard: 'Prepożizzjoni', arabised: 'Ntejfa Ġarrari' },
     'conjunction': { en: 'Conjunction', standard: 'Konġunzjoni', arabised: 'Ntejfa Għaqqadi' },
     'article': { en: 'Article', standard: 'Artiklu', arabised: 'Għodda tat-Tagħrif' },
+    'determiner': { en: 'Determiner', standard: 'Determinant', arabised: 'Determinant' },
     'interrogative': { en: 'Interrogative', standard: 'Interrogattiv', arabised: 'Għodda Saqsejja' },
     'pronoun': { en: 'Pronoun', standard: 'Pronom', arabised: 'Dmir' },
     'participle': { en: 'Participle', standard: 'Partiċipju', arabised: 'Xerriek' },
@@ -97,13 +104,14 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'suffix': { en: 'Suffix', standard: 'Suffiss', arabised: 'Qagħda Warranija' },
     'masculine': { en: 'Masculine', standard: 'Maskili', arabised: 'Imdakkar' },
     'feminine': { en: 'Feminine', standard: 'Femminil', arabised: 'Immarri' },
+    'common': { en: 'Common', standard: 'Komuni', arabised: 'Komuni' },
     'neutral': { en: 'Neutral', standard: 'Newtrali', arabised: 'Newtrali' },
     'transitive': { en: 'Transitive', standard: 'Tranżittiv', arabised: 'Mitgħaddi' },
     'intransitive': { en: 'Intransitive', standard: 'Intranżittiv', arabised: 'Lieżem' },
     'ditransitive': { en: 'Ditransitive', standard: 'Ditranżittiv', arabised: 'Mitgħaddi lil Mifgħulejn' },
     'both': { en: 'Both', standard: 'It-Tnejn', arabised: 'It-Tnejn' },
-    'loan': { en: 'Loan', standard: 'Selfa', arabised: 'Selfa' },
-    'loanword': { en: 'Loanword', standard: 'Selfa', arabised: 'Selfa' },
+    'loan': { en: 'Loan', standard: 'Selfa', arabised: 'Mindaħla' },
+    'loanword': { en: 'Loanword', standard: 'Selfa', arabised: 'Mindaħla' },
     'source-citation': { en: 'Source Citation', standard: "Ċitazzjoni tas-Sors", arabised: "Stexhid tal-Merġa'" },
     'primary-source-language': { en: 'Primary Source Language', standard: 'Lingwa Sors Prinċipali', arabised: "Ilsien il-Merġa' Ewlieni" },
 
@@ -135,7 +143,7 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
 
     // UI labels
     'search': { en: 'Search', standard: 'Fittex', arabised: 'Fittex' },
-    'filters': { en: 'Filters', standard: 'Filtri', arabised: 'Saffajjiet' },
+    'filters': { en: 'Filters', standard: 'Filtri', arabised: 'Saffajja' },
     'show-more': { en: 'Show More', standard: 'Uri Aktar', arabised: 'Idher Iżjed' },
     'definitions': { en: 'Definitions', standard: 'Tifsiriet', arabised: 'Tifsiriet' },
     'etymology': { en: 'Etymology', standard: 'Etimoloġija', arabised: 'Tnissil' },
@@ -143,16 +151,68 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'reliability': { en: 'Reliability', standard: 'Affidabilità', arabised: 'Affidabilità' },
     'source': { en: 'Source', standard: 'Sors', arabised: "Mirġgħa" },
     'sources': { en: 'Sources', standard: 'Sorsi', arabised: "Imrieġa'" },
+    // Languages & Historical Varieties
     'arabic': { en: 'Arabic', standard: 'Għarbi', arabised: 'Għarbi' },
-    'sicilian': { en: 'Sicilian', standard: 'Sqalli', arabised: 'Sqalli' },
+    'classical-arabic': { en: 'Classical Arabic', standard: 'Għarbi Klassiku', arabised: 'Għarbi Klassiku' },
+    'maghrebi-arabic': { en: 'Maghrebi Arabic', standard: 'Għarbi Magrebi', arabised: 'Għarbi Magħrbi' },
+    'siculo-arabic': { en: 'Siculo-Arabic', standard: 'Għarbi Sqalli', arabised: 'Għarbi Sqalli' },
+    'andalusian-arabic': { en: 'Andalusian Arabic', standard: 'Għarbi Andalusjan', arabised: 'Għarbi Andalusi' },
+    'tunisian-arabic': { en: 'Tunisian Arabic', standard: 'Għarbi Tuneżin', arabised: 'Għarbi Tunżi' },
+    'moroccan-arabic': { en: 'Moroccan Arabic', standard: 'Għarbi Marokkin', arabised: 'Għarbi Marokkin' },
+    'egyptian-arabic': { en: 'Egyptian Arabic', standard: 'Għarbi Eġizzjan', arabised: 'Għarbi Masri' },
+    'levantine-arabic': { en: 'Levantine Arabic', standard: 'Għarbi Levantin', arabised: 'Għarbi Xerqi' },
+
+    'sicilian': { en: 'Sicilian', standard: 'Siċiljan', arabised: 'Sqalli' },
     'italian': { en: 'Italian', standard: 'Taljan', arabised: 'Taljan' },
+    'old-italian': { en: 'Old Italian', standard: 'Taljan Qadim', arabised: 'Taljan Qadim' },
     'latin': { en: 'Latin', standard: 'Latin', arabised: 'Latini' },
+    'classical-latin': { en: 'Classical Latin', standard: 'Latin Klassiku', arabised: 'Latini Klassiku' },
+    'late-latin': { en: 'Late Latin', standard: 'Latin Tardiv', arabised: 'Latini Tardiv' },
+    'vulgar-latin': { en: 'Vulgar Latin', standard: 'Latin Volgari', arabised: 'Latini Volgari' },
+    'medieval-latin': { en: 'Medieval Latin', standard: 'Latin Medjevali', arabised: 'Latini Medjevali' },
+
     'french': { en: 'French', standard: 'Franċiż', arabised: 'Franċiż' },
-    'english': { en: 'English', standard: 'Ingliż', arabised: 'Ingliż' },
-    'feminine-singular': { en: 'Feminine singular', standard: 'Femminil singulari', arabised: 'Femminil singulari' },
+    'old-french': { en: 'Old French', standard: 'Franċiż Qadim', arabised: 'Franċiż Qadim' },
+    'anglo-norman': { en: 'Anglo-Norman', standard: 'Anglo-Normann', arabised: 'Anglo-Normann' },
     'spanish': { en: 'Spanish', standard: 'Spanjol', arabised: 'Spanjol' },
-    'berber': { en: 'Berber', standard: 'Berberu', arabised: 'Berberi' },
+    'portuguese': { en: 'Portuguese', standard: 'Portugiż', arabised: 'Portugiż' },
+    'catalan': { en: 'Catalan', standard: 'Katalan', arabised: 'Katalan' },
+
     'greek': { en: 'Greek', standard: 'Grieg', arabised: 'Grieg' },
+    'ancient-greek': { en: 'Ancient Greek', standard: 'Grieg Antik', arabised: 'Grieg Qadim' },
+    'byzantine-greek': { en: 'Byzantine Greek', standard: 'Grieg Biżantin', arabised: 'Grieg Biżantin' },
+
+    'english': { en: 'English', standard: 'Ingliż', arabised: 'Ingliż' },
+    'old-english': { en: 'Old English', standard: 'Ingliż Qadim', arabised: 'Ingliż Qadim' },
+    'german': { en: 'German', standard: 'Ġermaniż', arabised: 'Ġermaniż' },
+
+    'hebrew': { en: 'Hebrew', standard: 'Ebrajk', arabised: 'Għibri' },
+    'biblical-hebrew': { en: 'Biblical Hebrew', standard: 'Ebrajk Bibliku', arabised: 'Għebri Bibliku' },
+    'aramaic': { en: 'Aramaic', standard: 'Aramajk', arabised: 'Għarmi' },
+    'syriac': { en: 'Syriac', standard: 'Sirjak', arabised: 'Sirjani' },
+    'phoenician': { en: 'Phoenician', standard: 'Feniċju', arabised: 'Feniċi' },
+    'punic': { en: 'Punic', standard: 'Puniku', arabised: 'Puniċi' },
+    'neo-punic': { en: 'Neo-Punic', standard: 'Neo-Puniku', arabised: 'Neo-Puniċi' },
+    'berber': { en: 'Berber', standard: 'Berberu', arabised: 'Berbri' },
+
+    'turkish': { en: 'Turkish', standard: 'Tork', arabised: 'Tork' },
+    'ottoman-turkish': { en: 'Ottoman Turkish', standard: 'Tork Ottoman', arabised: 'Tork Għotmieni' },
+    'persian': { en: 'Persian', standard: 'Persjan', arabised: 'Farsi' },
+    'unknown': { en: 'Unknown', standard: 'Mhux magħruf', arabised: 'Għajr magħruf' },
+
+    // Etymology Relationships & Connectors
+    'inherited-from': { en: 'Inherited from', standard: 'Imnissel minn', arabised: 'Miret minn' },
+    'borrowed-from': { en: 'Borrowed from', standard: 'Misluf minn', arabised: 'Mindaħal minn' },
+    'derived-from': { en: 'Derived from', standard: 'Derivat minn', arabised: 'Imħarreġ minn' },
+    'contraction-of': { en: 'Contraction of', standard: 'Għaqda ta’', arabised: 'Tqassira ta’' },
+    'cognate-with': { en: 'Cognate with', standard: 'Qarib ta’', arabised: 'Qarib ta’' },
+    'calque-of': { en: 'Calque of', standard: 'Kalku ta’', arabised: 'Tislif ta’' },
+    'adapted-from': { en: 'Adapted from', standard: 'Adattat minn', arabised: 'Adattat minn' },
+    'and': { en: 'and', standard: 'u', arabised: 'u' },
+    'or': { en: 'or', standard: 'jew', arabised: 'jew' },
+    'nor': { en: 'nor', standard: 'lanqas', arabised: 'lanqas' },
+
+    'feminine-singular': { en: 'Feminine singular', standard: 'Femminil singulari', arabised: 'Femminil singulari' },
 
     // Dictionary UI components
     "semitic": { en: 'Semitic', standard: 'Semitiku', arabised: 'Siemi' },
@@ -166,6 +226,13 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'surface-form': { en: 'Surface Form', standard: 'Forma Miktuba', arabised: 'Sura Setħija' },
     'form-label': { en: 'FORM', standard: 'FORMA', arabised: 'SURA' },
     'alternative-forms': { en: 'Alternative Forms', standard: 'Forom Alternattivi', arabised: 'Suriet Newwibija' },
+    'variant': { en: 'Variant', standard: 'Varjant', arabised: 'Varjant' },
+    'variant-matched': { en: 'Variant', standard: 'Varjant', arabised: 'Varjant' },
+    'orthographic': { en: 'Orthographic', standard: 'Ortografika', arabised: 'Ortografika' },
+    'archaic': { en: 'Archaic', standard: 'Arkajka', arabised: 'Arkajka' },
+    'pre-reform': { en: 'Pre-reform', standard: 'Qabel ir-riforma', arabised: 'Qabel ir-riforma' },
+    'phonetic': { en: 'Phonetic', standard: 'Fonetika', arabised: 'Fonetika' },
+    'dialectal': { en: 'Dialectal', standard: 'Djalettali', arabised: 'Djalettali' },
     'inflected': { en: 'Inflected', standard: 'Infletta', arabised: 'Imsarrfa' },
     'term': { en: 'Term', standard: 'Terminu', arabised: 'Magħlqa' },
     'class': { en: 'Class', standard: 'Klassi', arabised: 'Taqsima' },
@@ -512,7 +579,6 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'collective': { en: 'Collective', standard: 'Kollettiv', arabised: 'Ġemmiegħi' },
     'singulative': { en: 'Singulative', standard: 'Singulattiv', arabised: 'Farradi' },
     'unit': { en: 'Unit', standard: 'Unità', arabised: 'Unità' },
-    'common': { en: 'Common', standard: 'Komuni', arabised: 'Komuni' },
     'proper': { en: 'Proper', standard: 'Propju', arabised: 'Propju' },
     'verbal': { en: 'Verbal', standard: 'Verbali', arabised: 'Fagħli' },
     'form-title': { en: 'Form', standard: 'Forma', arabised: 'Forma' },
@@ -753,6 +819,53 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'reanalysed-root': { en: 'Reanalysed Root', standard: 'Għerq Rianalizzat', arabised: 'Ġidra rianalizzata' },
     'register': { en: 'Register', standard: 'Reġistru', arabised: 'Reġistru' },
     'registers': { en: 'Registers', standard: 'Reġistri', arabised: 'Reġistri' },
+    'manage-registers': { en: 'Manage Registers', standard: 'Immaniġġja Reġistri', arabised: 'Immaniġġja Reġistri' },
+
+    // Registers (Bilingual English / Maltese Standard / Maltese Arabised)
+    'reg-standard': { en: 'Standard', standard: 'Standard', arabised: 'Miqjiesi' },
+    'standard': { en: 'Standard', standard: 'Standard', arabised: 'Miqjiesi' },
+    'reg-formal': { en: 'Formal', standard: 'Formali', arabised: 'Formali' },
+    'formal': { en: 'Formal', standard: 'Formali', arabised: 'Formali' },
+    'reg-informal': { en: 'Informal', standard: 'Informali', arabised: 'Informali' },
+    'informal': { en: 'Informal', standard: 'Informali', arabised: 'Informali' },
+    'reg-colloquial': { en: 'Colloquial', standard: 'Kollokwjali', arabised: "Ta' kotra" },
+    'colloquial': { en: 'Colloquial', standard: 'Kollokwjali', arabised: "Ta' kotra" },
+    'reg-slang': { en: 'Slang', standard: 'Slang', arabised: 'Slang' },
+    'slang': { en: 'Slang', standard: 'Slang', arabised: 'Slang' },
+    'reg-figurative': { en: 'Figurative', standard: 'Figurattiv', arabised: 'Suri' },
+    'figurative': { en: 'Figurative', standard: 'Figurattiv', arabised: 'Suri' },
+    'reg-metaphorical': { en: 'Metaphorical', standard: 'Metaforiku', arabised: 'Metaforiku' },
+    'metaphorical': { en: 'Metaphorical', standard: 'Metaforiku', arabised: 'Metaforiku' },
+    'reg-idiomatic': { en: 'Idiomatic', standard: 'Idjomatiku', arabised: 'Idjomatiku' },
+    'idiomatic': { en: 'Idiomatic', standard: 'Idjomatiku', arabised: 'Idjomatiku' },
+    'reg-literary': { en: 'Literary', standard: 'Letterarju', arabised: 'Ittrari' },
+    'literary': { en: 'Literary', standard: 'Letterarju', arabised: 'Ittrari' },
+    'reg-poetic': { en: 'Poetic', standard: 'Poetiku', arabised: 'Poetiku' },
+    'poetic': { en: 'Poetic', standard: 'Poetiku', arabised: 'Poetiku' },
+    'reg-archaic': { en: 'Archaic', standard: 'Arkajku', arabised: 'Qadim' },
+    'reg-obsolete': { en: 'Obsolete', standard: 'Obsolet', arabised: 'Batal' },
+    'obsolete': { en: 'Obsolete', standard: 'Obsolet', arabised: 'Batal' },
+    'reg-technical': { en: 'Technical', standard: 'Tekniku', arabised: 'Sengħi' },
+    'technical': { en: 'Technical', standard: 'Tekniku', arabised: 'Sengħi' },
+    'reg-dialectal': { en: 'Dialectal', standard: 'Djalettali', arabised: 'Lehġi' },
+    'reg-restricted': { en: 'Restricted', standard: 'Ristrett', arabised: 'Ristrett' },
+    'restricted': { en: 'Restricted', standard: 'Ristrett', arabised: 'Ristrett' },
+    'reg-vulgar': { en: 'Vulgar', standard: 'Volgari', arabised: 'Faħxi' },
+    'vulgar': { en: 'Vulgar', standard: 'Volgari', arabised: 'Faħxi' },
+    'reg-taboo': { en: 'Taboo', standard: 'Tabù', arabised: 'Maħrum' },
+    'taboo': { en: 'Taboo', standard: 'Tabù', arabised: 'Maħrum' },
+    'reg-derogatory': { en: 'Derogatory', standard: 'Dispreġjattiv', arabised: 'Imżeblaħ' },
+    'derogatory': { en: 'Derogatory', standard: 'Dispreġjattiv', arabised: 'Imżeblaħ' },
+    'reg-pejorative': { en: 'Pejorative', standard: 'Peggjorattiv', arabised: 'Ħaqqari' },
+    'pejorative': { en: 'Pejorative', standard: 'Peggjorattiv', arabised: 'Ħaqqari' },
+    'reg-humorous': { en: 'Humorous', standard: 'Umoristiku', arabised: 'Daħħieki' },
+    'humorous': { en: 'Humorous', standard: 'Umoristiku', arabised: 'Daħħieki' },
+    'reg-euphemistic': { en: 'Euphemistic', standard: 'Ewfemistiku', arabised: 'Sattari' },
+    'euphemistic': { en: 'Euphemistic', standard: 'Ewfemistiku', arabised: 'Sattari' },
+    'reg-ecclesiastical': { en: 'Ecclesiastical', standard: 'Ekkleżjastiku', arabised: 'Knisi' },
+    'ecclesiastical': { en: 'Ecclesiastical', standard: 'Ekkleżjastiku', arabised: 'Knisi' },
+    'reg-jargon': { en: 'Jargon', standard: 'Ġargon', arabised: 'Ġargon' },
+    'jargon': { en: 'Jargon', standard: 'Ġargon', arabised: 'Ġargon' },
     'remove-relationship': { en: 'Remove Relationship', standard: 'Neħħi r-Relazzjoni', arabised: 'Neħħi r-Relazzjoni' },
     'root-deleted': { en: 'Root deleted', standard: 'Għerq imħassar', arabised: 'Ġidra mħassra' },
     'root-strengths': { en: 'Root Strengths', standard: 'Saħħiet tal-Għeruq', arabised: 'Saħħiet tal-Ġidriet' },
@@ -805,26 +918,121 @@ const TERM_ALIASES: Record<string, string> = {
 };
 
 function normalizeTermKey(key: string) {
-    const lower = key.toLowerCase();
-    return TERM_ALIASES[lower] || lower;
+    const trimmed = (key || '').trim().toLowerCase();
+    const hyphenated = trimmed.replace(/[\s_]+/g, '-');
+    return TERM_ALIASES[trimmed] || TERM_ALIASES[hyphenated] || hyphenated;
+}
+
+/** Pre-made controlled registers defined in Il-Miġma */
+export const PREMADE_REGISTERS = [
+    'standard',
+    'formal',
+    'informal',
+    'colloquial',
+    'slang',
+    'figurative',
+    'metaphorical',
+    'idiomatic',
+    'literary',
+    'poetic',
+    'archaic',
+    'obsolete',
+    'technical',
+    'dialectal',
+    'restricted',
+    'vulgar',
+    'taboo',
+    'derogatory',
+    'pejorative',
+    'humorous',
+    'euphemistic',
+    'ecclesiastical',
+    'jargon',
+] as const;
+
+export type PremadeRegisterKey = (typeof PREMADE_REGISTERS)[number];
+
+export function isPremadeRegister(key: string): key is PremadeRegisterKey {
+    return PREMADE_REGISTERS.includes((key || '').trim().toLowerCase() as PremadeRegisterKey);
+}
+
+/** Resolve a register term key against the current linguistic mode and interface language */
+export function resolveRegisterTerm(key: string, mode: LinguisticMode, lang: 'en' | 'mt' = 'mt'): string {
+    const normalized = normalizeTermKey(key);
+    const regEntry = TERMINOLOGY[`reg-${normalized}`] || TERMINOLOGY[normalized] || TERMINOLOGY[normalized.replace(/-/g, ' ')];
+    if (!regEntry) return key;
+    if (lang === 'en') return regEntry.en || key.charAt(0).toUpperCase() + key.slice(1);
+    return mode === 'arabised' ? regEntry.arabised : regEntry.standard;
+}
+
+/**
+ * Resolves a definition register value (whether string canonical key or bilingual object)
+ * into a structured display object containing its canonical key, localized label,
+ * and dialectal flag.
+ */
+export function resolveRegisterDisplay(
+    reg: DefinitionRegister | null | undefined,
+    mode: LinguisticMode = 'standard',
+    lang: 'en' | 'mt' = 'mt'
+): { key: string; label: string; isDialectal: boolean } | null {
+    if (!reg) return null;
+    let key = '';
+    let explicitLabel = '';
+
+    if (typeof reg === 'string') {
+        const trimmed = reg.trim();
+        if (!trimmed) return null;
+        if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+            try {
+                const parsed = JSON.parse(trimmed);
+                return resolveRegisterDisplay(parsed, mode, lang);
+            } catch {
+                key = trimmed.toLowerCase();
+            }
+        } else {
+            key = trimmed.toLowerCase();
+        }
+    } else if (typeof reg === 'object' && reg !== null) {
+        key = String(reg.key || reg.en || '').trim().toLowerCase();
+        if (lang === 'en' && reg.en) explicitLabel = reg.en.trim();
+        if (lang === 'mt') {
+            if (mode === 'arabised' && reg.arabised) {
+                explicitLabel = reg.arabised.trim();
+            } else if (reg.mt) {
+                explicitLabel = reg.mt.trim();
+            }
+        }
+    }
+
+    if (!key && !explicitLabel) return null;
+
+    const isDialectal = key.includes('dialect') || key.includes('dialett');
+    const label = explicitLabel || resolveRegisterTerm(key, mode, lang);
+    return { key, label, isDialectal };
 }
 
 /** Resolve a term key against the current linguistic mode and interface language */
 export function resolveTerm(key: string, mode: LinguisticMode, lang: 'en' | 'mt' = 'mt'): string {
-    const entry = TERMINOLOGY[normalizeTermKey(key)];
+    const normalized = normalizeTermKey(key);
+    const entry = TERMINOLOGY[normalized] || TERMINOLOGY[`reg-${normalized}`] || TERMINOLOGY[normalized.replace(/-/g, ' ')];
     if (!entry) return key;
     if (lang === 'en') return entry.en || key.charAt(0).toUpperCase() + key.slice(1);
     return mode === 'arabised' ? entry.arabised : entry.standard;
 }
 
-const ENGLISH_TERM_LOOKUP = new Map(
+const ENGLISH_TERM_LOOKUP = new Map<string, string>(
     Object.entries(TERMINOLOGY)
         .filter(([, entry]) => !!entry.en)
-        .map(([key, entry]) => [entry.en as string, key] as const)
+        .flatMap(([key, entry]) => [
+            [entry.en!.toLowerCase(), key] as const,
+            [key.toLowerCase(), key] as const,
+            [key.toLowerCase().replace(/-/g, ' '), key] as const,
+        ])
 );
 
 export function resolveTermByEnglish(english: string): string | undefined {
-    const key = ENGLISH_TERM_LOOKUP.get(english);
+    const clean = (english || '').trim().toLowerCase();
+    const key = ENGLISH_TERM_LOOKUP.get(clean) || ENGLISH_TERM_LOOKUP.get(clean.replace(/[\s_]+/g, '-'));
     if (!key) return undefined;
     return TERMINOLOGY[key]?.standard;
 }
