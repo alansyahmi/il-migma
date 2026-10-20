@@ -860,7 +860,7 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
         adverbial: 'sitt darbiet',
         fractional_semitic: '*sott',
         multiplier_form1: 'sestuplu',
-        multiplier_form2: '*msettes',
+        multiplier_form2: '*msettet',
         distributive: 'sitta sitta',
         attributive_short: 'sitt',
         attributive_long: 'sitt',
