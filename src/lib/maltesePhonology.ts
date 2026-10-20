@@ -812,7 +812,7 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
         ordinal: 'ewwel',
         adverbial: 'darba',
         multiplier_form1: 'uniku',
-        multiplier_form2: 'fard',
+        multiplier_form2: 'mwaħħad',
         distributive: 'wieħed wieħed',
     },
     tnejn: {
@@ -820,6 +820,7 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
         adverbial: 'darbtejn',
         fractional_semitic: 'nofs',
         multiplier_form1: 'doppju',
+        multiplier_form2: 'mtenna',
         distributive: 'tnejn tnejn',
         attributive_short: 'żewġ',
         attributive_long: 'żewġt',
@@ -827,9 +828,9 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
     tlieta: {
         ordinal: 'tielet',
         adverbial: 'tliet darbiet',
-        fractional_semitic: 'terz',
-        multiplier_form1: 'triplu',
-        multiplier_form2: 'tlieċi',
+        fractional_semitic: '*tolt',
+        multiplier_form1: 'tlieti',
+        multiplier_form2: 'mtellet',
         distributive: 'tlieta tlieta',
         attributive_short: 'tliet',
         attributive_long: 'tlitt',
@@ -837,9 +838,9 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
     erbgħa: {
         ordinal: "raba'",
         adverbial: "erba' darbiet",
-        fractional_semitic: 'kwart',
-        multiplier_form1: 'kwadruplu',
-        multiplier_form2: 'rbiegħi',
+        fractional_semitic: "robu'",
+        multiplier_form1: 'rbiegħi',
+        multiplier_form2: "mrabba'",
         distributive: "erbgħa erbgħa",
         attributive_short: "erba'",
         attributive_long: 'erbat',
@@ -847,9 +848,9 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
     ħamsa: {
         ordinal: 'ħames',
         adverbial: 'ħames darbiet',
-        fractional_semitic: 'ħums',
-        multiplier_form1: 'kwintuplu',
-        multiplier_form2: 'ħamiesi',
+        fractional_semitic: '*ħoms',
+        multiplier_form1: 'ħamiesi',
+        multiplier_form2: '*mħammes',
         distributive: 'ħamsa ħamsa',
         attributive_short: 'ħames',
         attributive_long: 'ħamest',
@@ -857,9 +858,9 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
     sitta: {
         ordinal: 'sitt',
         adverbial: 'sitt darbiet',
-        fractional_semitic: 'suds',
+        fractional_semitic: '*sott',
         multiplier_form1: 'sestuplu',
-        multiplier_form2: 'msettes',
+        multiplier_form2: '*mseddes',
         distributive: 'sitta sitta',
         attributive_short: 'sitt',
         attributive_long: 'sitt',
@@ -867,8 +868,9 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
     sebgħa: {
         ordinal: "seba'",
         adverbial: "seba' darbiet",
-        fractional_semitic: "subgħa",
+        fractional_semitic: "*sobu'",
         multiplier_form1: 'settuplu',
+        multiplier_form2: "*msabba'",
         distributive: "sebgħa sebgħa",
         attributive_short: "seba'",
         attributive_long: 'sebat',
@@ -876,9 +878,9 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
     tmienja: {
         ordinal: 'tmien',
         adverbial: 'tmien darbiet',
-        fractional_semitic: 'tumn',
-        multiplier_form1: 'ottuplu',
-        multiplier_form2: 'tmieni',
+        fractional_semitic: '*tomon',
+        multiplier_form1: 'tmieni',
+        multiplier_form2: '*mtemmen',
         distributive: 'tmienja tmienja',
         attributive_short: 'tmien',
         attributive_long: 'tmint',
@@ -886,8 +888,9 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
     disgħa: {
         ordinal: "disa'",
         adverbial: "disa' darbiet",
-        fractional_semitic: "tusu'",
+        fractional_semitic: "*dosu'",
         multiplier_form1: 'nonuplu',
+        multiplier_form2: "*mtassa'",
         distributive: "disgħa disgħa",
         attributive_short: "disa'",
         attributive_long: 'disat',
@@ -895,9 +898,9 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
     għaxra: {
         ordinal: 'għaxar',
         adverbial: 'għaxar darbiet',
-        fractional_semitic: 'għushur',
-        multiplier_form1: 'deċuplu',
-        multiplier_form2: 'għaxari',
+        fractional_semitic: '*għoxor',
+        multiplier_form1: 'għaxari',
+        multiplier_form2: '*mgħaxxer',
         distributive: 'għaxra għaxra',
         attributive_short: 'għaxar',
         attributive_long: 'għaxart',
@@ -1014,10 +1017,22 @@ export function generateNumeralForms(masculine: string, root_consonants: string)
     // 2. Adverbial: masc form + darbiet
     forms.adverbial = `${masculine} darbiet`;
 
-    // 3. Fractional (Semitic): CoCuC
-    forms.fractional_semitic = `${c1}o${c2}u${c3}`;
+    // 3. Fractional (Semitic): CoCuC / 1o23
+    // Non-guttural roots follow 1o23 (e.g. *tolt, *ħoms, *sott)
+    // Stems ending in -mn (t-m-n) avoid unpronounceable -mn cluster as tomon (*tomon)
+    // Gutturals end in -u' (robu', *sobu', *dosu')
+    // Initial pharyngeal għ-x-r -> *għoxor
     if (c3 === 'għ' || c3 === 'ħ' || c3 === 'q') {
-        forms.fractional_semitic = `${c1}o${c2}u'`; // e.g. robu'
+        const c1Harmonized = (c1 === 't' && c2 === 's') ? 'd' : c1;
+        forms.fractional_semitic = `${c1Harmonized}o${c2}u'`;
+    } else if (c2 === 'm' && c3 === 'n') {
+        forms.fractional_semitic = `${c1}o${c2}o${c3}`;
+    } else if (c1 === 'għ') {
+        forms.fractional_semitic = `${c1}o${c2}o${c3}`;
+    } else if (c2 === 'd' && c3 === 's') {
+        forms.fractional_semitic = `${c1}ott`;
+    } else {
+        forms.fractional_semitic = `${c1}o${c2}${c3}`;
     }
 
     // 4. Multiplier: CCieCi or passive ptcp of Form II (mCeCCeC)
