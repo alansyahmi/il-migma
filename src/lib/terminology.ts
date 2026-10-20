@@ -970,6 +970,44 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'demonstrative-determiner': { en: 'Demonstrative determiner', standard: 'Determinant dimostrattiv', arabised: 'Determinant dimostrattiv' },
     'universal-collective-determiner': { en: 'Universal collective determiner', standard: 'Determinant universali kollettiv', arabised: 'Determinant universali kollettiv' },
     'universal-distributive-determiner': { en: 'Universal distributive determiner', standard: 'Determinant universali distributtiv', arabised: 'Determinant universali distributtiv' },
+    'pronoun-substantive': { en: 'Substantive pronoun', standard: 'Pronom sostantiv', arabised: 'Dmir sostantiv' },
+    'copular-marker': { en: 'Copular marker', standard: 'Markatur kopulattiv', arabised: 'Markatur kopulattiv' },
+    'determiner-attributive': { en: 'Attributive determiner', standard: 'Determinant attributtiv', arabised: 'Determinant attributtiv' },
+    'proclitic-determiner-attributive': { en: 'Proclitic determiner', standard: 'Determinant proklitiku', arabised: 'Determinant proklitiku' },
+    'temporal-reference': { en: 'Temporal reference', standard: 'Referenza temporali', arabised: 'Referenza temporali' },
+    'spatial-locative': { en: 'Spatial locative', standard: 'Lokattiv spazjali', arabised: 'Lokattiv spazjali' },
+    'consecutive-connective': { en: 'Consecutive connective', standard: 'Konnettiv konsekuttiv', arabised: 'Konnettiv konsekuttiv' },
+    'genitive-possession': { en: 'Genitive possession', standard: 'Pussess ġenittiv', arabised: 'Pussess ġenittiv' },
+    'pronominal-possessive-base': { en: 'Pronominal possessive base', standard: 'Bażi pussessiva pronominali', arabised: 'Bażi pussessiva pronominali' },
+    'benefactive-or-recipient': { en: 'Benefactive / recipient', standard: 'Benefiċjarju jew riċevitur', arabised: 'Benefiċjarju jew riċevitur' },
+    'direction-or-destination': { en: 'Direction / destination', standard: 'Direzzjoni jew mira', arabised: 'Direzzjoni jew mira' },
+    'composition-or-characteristic': { en: 'Composition / characteristic', standard: 'Għamla jew karatteristika', arabised: 'Għamla jew karatteristika' },
+    'capacity-function-or-role': { en: 'Capacity / role', standard: 'Kariga, rwol jew kapaċità', arabised: 'Kariga, rwol jew kapaċità' },
+    'temporal-duration': { en: 'Temporal duration', standard: 'Tul ta\' żmien', arabised: 'Tul ta\' żmien' },
+    'comitative-accompaniment': { en: 'Comitative accompaniment', standard: 'Kumpanija jew qbil', arabised: 'Kumpanija jew qbil' },
+    'subject-pronoun-or-copula': { en: 'Subject pronoun / copula', standard: 'Pronom suġġett jew kopula', arabised: 'Dmir tal-fiegħel jew kopula' },
+    'emphatic-intensifier': { en: 'Emphatic intensifier', standard: 'Intensifikatur emfatiku', arabised: 'Intensifikatur emfatiku' },
+    'colloquial-apocope': { en: 'Colloquial apocope', standard: 'Apokopi kollokwjali', arabised: 'Apokopi ta\' kotra' },
+    'adversative-correction': { en: 'Adversative correction', standard: 'Korrezzjoni avversattiva', arabised: 'Korrezzjoni avversattiva' },
+    'oratorical-ecclesiastical-demonstrative': { en: 'Oratorical demonstrative', standard: 'Dimostrattiv oratorju', arabised: 'Dimostrattiv oratorju' },
+    'standpoint-or-qualification': { en: 'Standpoint / qualification', standard: 'Punt di vista jew kwalifika', arabised: 'Punt di vista jew kwalifika' },
+    'purpose-intent-or-reason': { en: 'Purpose / reason', standard: 'Għan jew raġuni', arabised: 'Għan jew raġuni' },
+    'duration-or-appointed-time': { en: 'Duration / appointed time', standard: 'Tul jew appuntament fi żmien', arabised: 'Tul jew appuntament fi żmien' },
+    'exchange-or-cost': { en: 'Exchange / cost', standard: 'Skambju jew prezz', arabised: 'Skambju jew prezz' },
+    'support-or-allegiance': { en: 'Support / allegiance', standard: 'Appoġġ jew lealtà', arabised: 'Appoġġ jew lealtà' },
+    'spatial-locative-or-contact': { en: 'Spatial contact', standard: 'Kuntatt spazjali', arabised: 'Kuntatt spazjali' },
+    'topic-or-subject-matter': { en: 'Topic / subject matter', standard: 'Suġġett jew tema', arabised: 'Suġġett jew tema' },
+    'spatial-adverb-of-elevation': { en: 'Spatial elevation', standard: 'Elevazzjoni spazjali', arabised: 'Għatu spazjali ta\' elevazzjoni' },
+    'pronominal-inflected-base': { en: 'Pronominal inflected base', standard: 'Bażi pronominali mflessa', arabised: 'Bażi pronominali mflessa' },
+    'spatial-containment-or-location': { en: 'Spatial containment', standard: 'Lokalità jew spazju magħluq', arabised: 'Lokalità jew spazju magħluq' },
+    'cause-reason-or-means': { en: 'Cause / means', standard: 'Kawża jew mezz', arabised: 'Kawża jew mezz' },
+    'partitive-or-substance': { en: 'Partitive / substance', standard: 'Partittiv jew sustanza', arabised: 'Partittiv jew sustanza' },
+    'instrument-or-agency': { en: 'Instrument / agency', standard: 'Għodda jew aġenzija', arabised: 'Għodda jew aġenzija' },
+    'differential-object-marker-and-dative-preposition': { en: 'Differential object marker / dative', standard: 'Markatur tal-oġġett dirett u dattiv', arabised: 'Markatur tal-oġġett dirett u dattiv' },
+    'definite-article-proclitic-form': { en: 'Proclitic article', standard: 'Artiklu proklitiku', arabised: 'Artiklu proklitiku' },
+    'definite-article-full-form': { en: 'Full article', standard: 'Artiklu sħiħ', arabised: 'Artiklu sħiħ' },
+    'contracted-articulated-genitive': { en: 'Contracted genitive article', standard: 'Artiklu ġenittiv imqassar', arabised: 'Artiklu ġenittiv imqassar' },
+    'contracted-articulated-inessive': { en: 'Contracted inessive article', standard: 'Artiklu inessiv imqassar', arabised: 'Artiklu inessiv imqassar' },
 };
 
 const TERM_ALIASES: Record<string, string> = {
@@ -981,8 +1019,9 @@ const TERM_ALIASES: Record<string, string> = {
 
 function normalizeTermKey(key: string) {
     const trimmed = (key || '').trim().toLowerCase();
+    const clean = trimmed.replace(/[^a-z0-9\u00C0-\u024F-]+/g, '-').replace(/^-+|-+$/g, '');
     const hyphenated = trimmed.replace(/[\s_]+/g, '-');
-    return TERM_ALIASES[trimmed] || TERM_ALIASES[hyphenated] || hyphenated;
+    return TERM_ALIASES[trimmed] || TERM_ALIASES[hyphenated] || TERM_ALIASES[clean] || clean || hyphenated;
 }
 
 /** Pre-made controlled registers defined in Il-Miġma */
