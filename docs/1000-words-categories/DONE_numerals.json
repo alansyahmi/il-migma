@@ -323,7 +323,7 @@
       "id": "num-tlieta",
       "headword": "tlieta",
       "pos": "numeral",
-      "gender": "masculine",
+      "gender": "feminine",
       "root_consonants": "t-l-t",
       "stem": null,
       "cv_pattern": "12â3a",
@@ -397,23 +397,13 @@
       "dual_form": null,
       "paucal_form": null,
       "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": [
-        {
-          "form": "tletiet",
-          "pattern": "-iet"
-        }
-      ],
-      "plural_form": [
-        {
-          "form": "tletiet",
-          "pattern": "-iet"
-        }
-      ],
+      "masculine_form": "tliet",
+      "plural_forms": [],
+      "plural_form": [],
       "vowel_set_sg": "--ie",
-      "vowel_set_pl": "--e",
+      "vowel_set_pl": null,
       "vowel_set_dual": null,
-      "vowel_set_opp": null,
+      "vowel_set_opp": "--ie",
       "verb_form": null,
       "verb_type": "triliteral",
       "verb_class": null,
@@ -461,22 +451,23 @@
         "distributive_form": "tlieta tlieta, tlieċ",
         "form_plural_pattern": null,
         "vowel_set_sg": "--ie",
-        "vowel_set_pl": "--e",
-        "vowel_set_opp": null,
+        "vowel_set_pl": null,
+        "vowel_set_opp": "--ie",
         "vowel_set_dual": null,
-        "plural_forms": [
-          {
-            "form": "tletiet",
-            "pattern": "-iet"
-          }
-        ]
+        "plural_forms": [],
+        "gender": "feminine",
+        "masculine_form": "tliet"
+      },
+      "usage_notes": {
+        "en": "Grammatically, the cardinal numeral tlieta is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form tliet serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
+        "mt": "Grammatikalment, in-numru kardinali tlieta huwa ta' forma femminili (bil-morfema femminili -a), filwaqt li l-għamla attributtiva mqassra tliet tiffunzjona bħala l-kontroparti maskili tiegħu. Madankollu, fl-użu sintattiku u bħala numru astratt fl-għadd, jaġixxi bħala kelma ta' ġeneru komuni."
       }
     },
     {
       "id": "num-erbgħa",
       "headword": "erbgħa",
       "pos": "numeral",
-      "gender": "masculine",
+      "gender": "feminine",
       "root_consonants": "r-b-għ",
       "stem": null,
       "cv_pattern": "e123a",
@@ -552,23 +543,13 @@
       "dual_form": null,
       "paucal_form": null,
       "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": [
-        {
-          "form": "erbgħat",
-          "pattern": "-at"
-        }
-      ],
-      "plural_form": [
-        {
-          "form": "erbgħat",
-          "pattern": "-at"
-        }
-      ],
-      "vowel_set_sg": "---",
-      "vowel_set_pl": "---",
+      "masculine_form": "erba'",
+      "plural_forms": [],
+      "plural_form": [],
+      "vowel_set_sg": "e--",
+      "vowel_set_pl": null,
       "vowel_set_dual": null,
-      "vowel_set_opp": null,
+      "vowel_set_opp": "e-a",
       "verb_form": null,
       "verb_type": "triliteral",
       "verb_class": null,
@@ -615,23 +596,24 @@
         "multiplier_form": "kwadruplu, rbiegħi, mrabba'",
         "distributive_form": "erbgħa erbgħa, rbiegħ",
         "form_plural_pattern": null,
-        "vowel_set_sg": "---",
-        "vowel_set_pl": "---",
-        "vowel_set_opp": null,
+        "vowel_set_sg": "e--",
+        "vowel_set_pl": null,
+        "vowel_set_opp": "e-a",
         "vowel_set_dual": null,
-        "plural_forms": [
-          {
-            "form": "erbgħat",
-            "pattern": "-at"
-          }
-        ]
+        "plural_forms": [],
+        "gender": "feminine",
+        "masculine_form": "erba'"
+      },
+      "usage_notes": {
+        "en": "Grammatically, the cardinal numeral erbgħa is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form erba' serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
+        "mt": "Grammatikalment, in-numru kardinali erbgħa huwa ta' forma femminili (bil-morfema femminili -a), filwaqt li l-għamla attributtiva mqassra erba' tiffunzjona bħala l-kontroparti maskili tagħha. Madankollu, fl-użu sintattiku u bħala numru astratt fl-għadd, jaġixxi bħala kelma ta' ġeneru komuni."
       }
     },
     {
       "id": "num-ħamsa",
       "headword": "ħamsa",
       "pos": "numeral",
-      "gender": "masculine",
+      "gender": "feminine",
       "root_consonants": "ħ-m-s",
       "stem": null,
       "cv_pattern": "1v23a",
@@ -702,23 +684,13 @@
       "dual_form": null,
       "paucal_form": null,
       "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": [
-        {
-          "form": "ħamsiet",
-          "pattern": "-iet"
-        }
-      ],
-      "plural_form": [
-        {
-          "form": "ħamsiet",
-          "pattern": "-iet"
-        }
-      ],
-      "vowel_set_sg": "a-a",
-      "vowel_set_pl": "a-ie",
+      "masculine_form": "ħames",
+      "plural_forms": [],
+      "plural_form": [],
+      "vowel_set_sg": "a--",
+      "vowel_set_pl": null,
       "vowel_set_dual": null,
-      "vowel_set_opp": null,
+      "vowel_set_opp": "a-e",
       "verb_form": null,
       "verb_type": "triliteral",
       "verb_class": null,
@@ -765,23 +737,24 @@
         "multiplier_form": "kwintuplu, *ħmies, *mħammes",
         "distributive_form": "ħamsa ħamsa, *ħmies",
         "form_plural_pattern": null,
-        "vowel_set_sg": "a-a",
-        "vowel_set_pl": "a-ie",
-        "vowel_set_opp": null,
+        "vowel_set_sg": "a--",
+        "vowel_set_pl": null,
+        "vowel_set_opp": "a-e",
         "vowel_set_dual": null,
-        "plural_forms": [
-          {
-            "form": "ħamsiet",
-            "pattern": "-iet"
-          }
-        ]
+        "plural_forms": [],
+        "gender": "feminine",
+        "masculine_form": "ħames"
+      },
+      "usage_notes": {
+        "en": "Grammatically, the cardinal numeral ħamsa is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form ħames serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
+        "mt": "Grammatikalment, in-numru kardinali ħamsa huwa ta' forma femminili (bil-morfema femminili -a), filwaqt li l-għamla attributtiva mqassra ħames tiffunzjona bħala l-kontroparti maskili tiegħu. Madankollu, fl-użu sintattiku u bħala numru astratt fl-għadd, jaġixxi bħala kelma ta' ġeneru komuni."
       }
     },
     {
       "id": "num-sitta",
       "headword": "sitta",
       "pos": "numeral",
-      "gender": "masculine",
+      "gender": "feminine",
       "root_consonants": "s-t-t",
       "stem": null,
       "cv_pattern": "1v22a",
@@ -855,23 +828,13 @@
       "dual_form": null,
       "paucal_form": null,
       "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": [
-        {
-          "form": "sittiet",
-          "pattern": "-iet"
-        }
-      ],
-      "plural_form": [
-        {
-          "form": "sittiet",
-          "pattern": "-iet"
-        }
-      ],
-      "vowel_set_sg": "i-a",
-      "vowel_set_pl": "i-ie",
+      "masculine_form": "sitt",
+      "plural_forms": [],
+      "plural_form": [],
+      "vowel_set_sg": "i--",
+      "vowel_set_pl": null,
       "vowel_set_dual": null,
-      "vowel_set_opp": null,
+      "vowel_set_opp": "i--",
       "verb_form": null,
       "verb_type": "triliteral",
       "verb_class": null,
@@ -918,23 +881,24 @@
         "multiplier_form": "sestuplu, *msettet",
         "distributive_form": "sitta sitta, stiet",
         "form_plural_pattern": null,
-        "vowel_set_sg": "i-a",
-        "vowel_set_pl": "i-ie",
-        "vowel_set_opp": null,
+        "vowel_set_sg": "i--",
+        "vowel_set_pl": null,
+        "vowel_set_opp": "i--",
         "vowel_set_dual": null,
-        "plural_forms": [
-          {
-            "form": "sittiet",
-            "pattern": "-iet"
-          }
-        ]
+        "plural_forms": [],
+        "gender": "feminine",
+        "masculine_form": "sitt"
+      },
+      "usage_notes": {
+        "en": "Grammatically, the cardinal numeral sitta is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form sitt serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
+        "mt": "Grammatikalment, in-numru kardinali sitta huwa ta' forma femminili (bil-morfema femminili -a), filwaqt li l-għamla attributtiva mqassra sitt tiffunzjona bħala l-kontroparti maskili tagħha. Madankollu, fl-użu sintattiku u bħala numru astratt fl-għadd, jaġixxi bħala kelma ta' ġeneru komuni."
       }
     },
     {
       "id": "num-tmienja",
       "headword": "tmienja",
       "pos": "numeral",
-      "gender": "masculine",
+      "gender": "feminine",
       "root_consonants": "t-m-n",
       "stem": null,
       "cv_pattern": "12i3ja",
@@ -1008,23 +972,13 @@
       "dual_form": null,
       "paucal_form": null,
       "feminine_form": null,
-      "masculine_form": null,
-      "plural_forms": [
-        {
-          "form": "tmienjiet",
-          "pattern": "-iet"
-        }
-      ],
-      "plural_form": [
-        {
-          "form": "tmienjiet",
-          "pattern": "-iet"
-        }
-      ],
-      "vowel_set_sg": "ie-a",
-      "vowel_set_pl": "ie-ie",
+      "masculine_form": "tmien",
+      "plural_forms": [],
+      "plural_form": [],
+      "vowel_set_sg": "ie--",
+      "vowel_set_pl": null,
       "vowel_set_dual": null,
-      "vowel_set_opp": null,
+      "vowel_set_opp": "ie--",
       "verb_form": null,
       "verb_type": "triliteral",
       "verb_class": null,
@@ -1071,16 +1025,17 @@
         "multiplier_form": "ottuplu, tmieni, *mtemmen",
         "distributive_form": "tmienja tmienja, tmjen",
         "form_plural_pattern": null,
-        "vowel_set_sg": "ie-a",
-        "vowel_set_pl": "ie-ie",
-        "vowel_set_opp": null,
+        "vowel_set_sg": "ie--",
+        "vowel_set_pl": null,
+        "vowel_set_opp": "ie--",
         "vowel_set_dual": null,
-        "plural_forms": [
-          {
-            "form": "tmienjiet",
-            "pattern": "-iet"
-          }
-        ]
+        "plural_forms": [],
+        "gender": "feminine",
+        "masculine_form": "tmien"
+      },
+      "usage_notes": {
+        "en": "Grammatically, the cardinal numeral tmienja is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form tmien serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
+        "mt": "Grammatikalment, in-numru kardinali tmienja huwa ta' forma femminili (bil-morfema femminili -a), filwaqt li l-għamla attributtiva mqassra tmien tiffunzjona bħala l-kontroparti maskili tagħha. Madankollu, fl-użu sintattiku u bħala numru astratt fl-għadd, jaġixxi bħala kelma ta' ġeneru komuni."
       }
     },
     {
@@ -3264,8 +3219,14 @@
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "ordinal",
-        "ordinal_form": "ħames"
-      }
+        "ordinal_form": "ħames",
+        "gender": "masculine",
+        "feminine_form": "ħamsa",
+        "vowel_set_sg": "a-e",
+        "vowel_set_opp": "a--"
+      },
+      "vowel_set_sg": "a-e",
+      "vowel_set_opp": "a--"
     },
     {
       "id": "num-sitt",
@@ -3341,8 +3302,14 @@
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "ordinal",
-        "ordinal_form": "sitt"
-      }
+        "ordinal_form": "sitt",
+        "gender": "masculine",
+        "feminine_form": "sitta",
+        "vowel_set_sg": "i--",
+        "vowel_set_opp": "i--"
+      },
+      "vowel_set_sg": "i--",
+      "vowel_set_opp": "i--"
     },
     {
       "id": "num-sest",
@@ -3591,7 +3558,7 @@
       "source_year": null,
       "source_page": null,
       "source_publisher": "Klabb Kotba Maltin",
-      "feminine_form": "tmiena",
+      "feminine_form": "tmienja",
       "plural_forms": [
         {
           "form": "tmienin",
@@ -3646,8 +3613,14 @@
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "ordinal",
-        "ordinal_form": "tmien"
-      }
+        "ordinal_form": "tmien",
+        "gender": "masculine",
+        "feminine_form": "tmienja",
+        "vowel_set_sg": "ie--",
+        "vowel_set_opp": "ie--"
+      },
+      "vowel_set_sg": "ie--",
+      "vowel_set_opp": "ie--"
     },
     {
       "id": "num-tomon",
