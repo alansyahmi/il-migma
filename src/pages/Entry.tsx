@@ -37,6 +37,7 @@ import {
     getNumeralShortAttributiveRowLabel,
     getNumeralRoleLabel,
     hasVisibleNumeralSurface,
+    isCompatibleNumeralFamilyEntry,
     normalizeNumeralLookupKey,
     normalizeNumeralRole,
     NUMERAL_ROLE_ORDER,
@@ -4183,8 +4184,8 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
         ? `/pattern/${pattern.id}`
         : patternHrefForProp((entry as any).cv_pattern || pattern?.cv_notation || patternValue);
     const numeralFamilyEntries = useMemo(
-        () => [...relatedEntries],
-        [relatedEntries]
+        () => relatedEntries.filter((item) => isCompatibleNumeralFamilyEntry(entry.headword, rootConsonants || '', item)),
+        [relatedEntries, entry.headword, rootConsonants]
     );
 
     const numeralFamilySeedKey = useMemo(() => {
@@ -4246,6 +4247,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
             const key = id || headword;
             if (!key) return;
             if (String(source.pos || 'numeral').trim().toLowerCase() !== 'numeral') return;
+            if (!isCompatibleNumeralFamilyEntry(entry.headword, rootConsonants || '', source)) return;
 
             const existingIndex = familyEntryIndexes.get(key) ?? (headword ? familyEntryIndexes.get(headword) : undefined);
             if (existingIndex !== undefined) {

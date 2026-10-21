@@ -52,9 +52,7 @@
         }
       ],
       "related_entries": [
-        "adj-ewwel",
-        "num-waħda",
-        "pron-uħud"
+        "adj-ewwel"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -216,8 +214,6 @@
       "related_entries": [
         "adj-tieni",
         "n-nofs",
-        "num-wieħed",
-        "num-tlieta",
         "num-żewġ",
         "num-doppju",
         "num-mtenna"
@@ -369,8 +365,6 @@
       ],
       "related_entries": [
         "adj-tielet",
-        "num-tnejn",
-        "num-erbgħa",
         "num-terz",
         "num-triplu",
         "num-mtellet"
@@ -512,8 +506,6 @@
         }
       ],
       "related_entries": [
-        "num-tlieta",
-        "num-ħamsa",
         "num-raba",
         "num-kwart",
         "num-robu",
@@ -658,8 +650,6 @@
         }
       ],
       "related_entries": [
-        "num-erbgħa",
-        "num-sitta",
         "num-ħames"
       ],
       "alternative_forms": [],
@@ -799,8 +789,6 @@
         }
       ],
       "related_entries": [
-        "num-ħamsa",
-        "num-tmienja",
         "num-sitt",
         "num-sest",
         "num-sestuplu",
@@ -943,8 +931,6 @@
         }
       ],
       "related_entries": [
-        "num-sitta",
-        "num-għoxrin",
         "num-tmien",
         "num-tomon",
         "num-ottav",
@@ -1086,10 +1072,7 @@
           "en": "He turned twenty years old last Sunday."
         }
       ],
-      "related_entries": [
-        "num-tmienja",
-        "num-mitt"
-      ],
+      "related_entries": [],
       "alternative_forms": [],
       "phonetics": [
         {
@@ -1220,10 +1203,7 @@
           "en": "He lived more than a hundred years in good health."
         }
       ],
-      "related_entries": [
-        "num-għoxrin",
-        "num-elf"
-      ],
+      "related_entries": [],
       "alternative_forms": [],
       "phonetics": [
         {
@@ -1369,10 +1349,7 @@
           "en": "The contract is worth more than a thousand euros."
         }
       ],
-      "related_entries": [
-        "num-mitt",
-        "num-miljun"
-      ],
+      "related_entries": [],
       "alternative_forms": [],
       "phonetics": [
         {
@@ -1530,9 +1507,7 @@
           "en": "More than a million euros were collected for those in need."
         }
       ],
-      "related_entries": [
-        "num-elf"
-      ],
+      "related_entries": [],
       "alternative_forms": [],
       "phonetics": [
         {
@@ -1679,8 +1654,7 @@
         }
       ],
       "related_entries": [
-        "num-wieħed",
-        "adj-tieni"
+        "num-wieħed"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1829,9 +1803,10 @@
       ],
       "related_entries": [
         "num-tnejn",
-        "adj-ewwel",
-        "adj-tielet",
-        "n-nofs"
+        "n-nofs",
+        "num-żewġ",
+        "num-doppju",
+        "num-mtenna"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1965,7 +1940,9 @@
       ],
       "related_entries": [
         "num-tlieta",
-        "adj-tieni"
+        "num-terz",
+        "num-triplu",
+        "num-mtellet"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -2110,7 +2087,10 @@
       ],
       "related_entries": [
         "num-tnejn",
-        "adj-tieni"
+        "adj-tieni",
+        "num-żewġ",
+        "num-doppju",
+        "num-mtenna"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -2279,7 +2259,9 @@
       "related_entries": [
         "num-tnejn",
         "adj-tieni",
-        "n-nofs"
+        "n-nofs",
+        "num-doppju",
+        "num-mtenna"
       ],
       "numeral_type": "attributive_short",
       "form_attributive_short": "żewġ",
@@ -2374,6 +2356,8 @@
       "related_entries": [
         "num-tnejn",
         "adj-tieni",
+        "n-nofs",
+        "num-żewġ",
         "num-mtenna"
       ],
       "numeral_type": "multiplier",
@@ -2449,6 +2433,9 @@
       ],
       "related_entries": [
         "num-tnejn",
+        "adj-tieni",
+        "n-nofs",
+        "num-żewġ",
         "num-doppju"
       ],
       "numeral_type": "multiplier",
@@ -2531,7 +2518,9 @@
       ],
       "related_entries": [
         "num-tlieta",
-        "adj-tielet"
+        "adj-tielet",
+        "num-triplu",
+        "num-mtellet"
       ],
       "numeral_type": "fractional",
       "fractional_form": "terz",
@@ -2614,6 +2603,7 @@
       "related_entries": [
         "num-tlieta",
         "adj-tielet",
+        "num-terz",
         "num-mtellet"
       ],
       "numeral_type": "multiplier",
@@ -2690,6 +2680,7 @@
       "related_entries": [
         "num-tlieta",
         "adj-tielet",
+        "num-terz",
         "num-triplu"
       ],
       "numeral_type": "multiplier",
@@ -2852,7 +2843,10 @@
       "related_entries": [
         "num-erbgħa",
         "num-raba",
-        "num-robu"
+        "num-robu",
+        "num-kwadruplu",
+        "num-mrabba",
+        "num-rbiegh"
       ],
       "numeral_type": "fractional",
       "fractional_form": "kwart",
@@ -2915,7 +2909,10 @@
       "related_entries": [
         "num-erbgħa",
         "num-raba",
-        "num-kwart"
+        "num-kwart",
+        "num-kwadruplu",
+        "num-mrabba",
+        "num-rbiegh"
       ],
       "numeral_type": "fractional",
       "fractional_form": "robu'",
@@ -2998,7 +2995,10 @@
       "related_entries": [
         "num-erbgħa",
         "num-raba",
-        "num-mrabba"
+        "num-kwart",
+        "num-robu",
+        "num-mrabba",
+        "num-rbiegh"
       ],
       "numeral_type": "multiplier",
       "multiplier_form": "kwadruplu",
@@ -3074,7 +3074,10 @@
       "related_entries": [
         "num-erbgħa",
         "num-raba",
-        "num-kwadruplu"
+        "num-kwart",
+        "num-robu",
+        "num-kwadruplu",
+        "num-rbiegh"
       ],
       "numeral_type": "multiplier",
       "multiplier_form": "mrabba'",
@@ -3136,7 +3139,11 @@
       ],
       "related_entries": [
         "num-erbgħa",
-        "num-raba"
+        "num-raba",
+        "num-kwart",
+        "num-robu",
+        "num-kwadruplu",
+        "num-mrabba"
       ],
       "numeral_type": "distributive",
       "distributive_form": "rbiegħ",
@@ -3382,7 +3389,8 @@
       "related_entries": [
         "num-sitta",
         "num-sitt",
-        "num-sestuplu"
+        "num-sestuplu",
+        "num-stiet"
       ],
       "numeral_type": "fractional",
       "fractional_form": "sest",
@@ -3465,7 +3473,8 @@
       "related_entries": [
         "num-sitta",
         "num-sitt",
-        "num-sest"
+        "num-sest",
+        "num-stiet"
       ],
       "numeral_type": "multiplier",
       "multiplier_form": "sestuplu",
@@ -3527,7 +3536,9 @@
       ],
       "related_entries": [
         "num-sitta",
-        "num-sitt"
+        "num-sitt",
+        "num-sest",
+        "num-sestuplu"
       ],
       "numeral_type": "distributive",
       "distributive_form": "stiet",
@@ -3685,7 +3696,8 @@
       "related_entries": [
         "num-tmienja",
         "num-tmien",
-        "num-ottav"
+        "num-ottav",
+        "num-ottuplu"
       ],
       "numeral_type": "fractional",
       "fractional_form": "tomon",
@@ -3852,6 +3864,7 @@
       "related_entries": [
         "num-tmienja",
         "num-tmien",
+        "num-tomon",
         "num-ottav"
       ],
       "numeral_type": "multiplier",

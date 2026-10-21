@@ -116,17 +116,40 @@ type CanonicalNumeralOverrides = {
 
 const NUMERAL_RELATED_HEADWORDS: Record<string, string[]> = {
     wieħed: ['ewwel', 'waħda'],
-    ewwel: ['wieħed', 'tieni'],
-    tnejn: ['tieni', 'nofs', 'żewġ'],
-    tieni: ['tnejn', 'ewwel', 'tielet', 'nofs'],
-    nofs: ['tnejn', 'tieni'],
-    tlieta: ['tielet'],
-    tielet: ['tlieta', 'tieni'],
-    erbgħa: ["raba'"],
-    "raba'": ['erbgħa'],
+    waħda: ['wieħed', 'ewwel'],
+    ewwel: ['wieħed', 'waħda'],
+    tnejn: ['tieni', 'nofs', 'żewġ', 'doppju', 'mtenna'],
+    tieni: ['tnejn', 'nofs', 'żewġ', 'doppju', 'mtenna'],
+    nofs: ['tnejn', 'tieni', 'żewġ', 'doppju', 'mtenna'],
+    żewġ: ['tnejn', 'tieni', 'nofs', 'doppju', 'mtenna'],
+    doppju: ['tnejn', 'tieni', 'nofs', 'żewġ', 'mtenna'],
+    mtenna: ['tnejn', 'tieni', 'nofs', 'żewġ', 'doppju'],
+    tlieta: ['tliet', 'tielet', 'terz', 'triplu', 'mtellet'],
+    tliet: ['tlieta', 'tielet', 'terz', 'triplu', 'mtellet'],
+    tielet: ['tlieta', 'tliet', 'terz', 'triplu', 'mtellet'],
+    terz: ['tlieta', 'tliet', 'tielet', 'triplu', 'mtellet'],
+    triplu: ['tlieta', 'tliet', 'tielet', 'terz', 'mtellet'],
+    mtellet: ['tlieta', 'tliet', 'tielet', 'terz', 'triplu'],
+    erbgħa: ["erba'", "raba'", 'kwart', "robu'", 'kwadruplu', "mrabba'", 'rbiegħ'],
+    "erba'": ['erbgħa', "raba'", 'kwart', "robu'", 'kwadruplu', "mrabba'", 'rbiegħ'],
+    "raba'": ['erbgħa', "erba'", 'kwart', "robu'", 'kwadruplu', "mrabba'", 'rbiegħ'],
+    kwart: ['erbgħa', "erba'", "raba'", "robu'", 'kwadruplu', "mrabba'", 'rbiegħ'],
+    "robu'": ['erbgħa', "erba'", "raba'", 'kwart', 'kwadruplu', "mrabba'", 'rbiegħ'],
+    kwadruplu: ['erbgħa', "erba'", "raba'", 'kwart', "robu'", "mrabba'", 'rbiegħ'],
+    "mrabba'": ['erbgħa', "erba'", "raba'", 'kwart', "robu'", 'kwadruplu', 'rbiegħ'],
+    rbiegħ: ['erbgħa', "erba'", "raba'", 'kwart', "robu'", 'kwadruplu', "mrabba'"],
     ħamsa: ['ħames'],
-    sitta: ['sitt'],
-    tmienja: ['tmien'],
+    ħames: ['ħamsa'],
+    sitta: ['sitt', 'sest', 'sestuplu', 'stiet'],
+    sitt: ['sitta', 'sest', 'sestuplu', 'stiet'],
+    sest: ['sitta', 'sitt', 'sestuplu', 'stiet'],
+    sestuplu: ['sitta', 'sitt', 'sest', 'stiet'],
+    stiet: ['sitta', 'sitt', 'sest', 'sestuplu'],
+    tmienja: ['tmien', 'tomon', 'ottav', 'ottuplu'],
+    tmien: ['tmienja', 'tomon', 'ottav', 'ottuplu'],
+    tomon: ['tmienja', 'tmien', 'ottav', 'ottuplu'],
+    ottav: ['tmienja', 'tmien', 'tomon', 'ottuplu'],
+    ottuplu: ['tmienja', 'tmien', 'tomon', 'ottav'],
 };
 
 const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayForms, string[]>>> = {
@@ -1093,6 +1116,40 @@ function toLinkedNumeralSurface(entry: LinkedNumeralEntry): NumeralSurfaceValue 
     };
 }
 
+export function isCompatibleNumeralFamilyEntry(
+    currentHeadword: string,
+    currentRoot: string,
+    candidateEntry: any,
+): boolean {
+    if (!currentHeadword || !candidateEntry) return false;
+    const currentKey = normalizeNumeralLookupKey(currentHeadword);
+    const candidateHeadword = normalizeNumeralLookupKey(String(candidateEntry.headword || candidateEntry.lemma || ''));
+    if (!candidateHeadword) return false;
+    if (candidateHeadword === currentKey) return true;
+
+    const candidatePos = String(candidateEntry.pos || 'numeral').trim().toLowerCase();
+    if (candidatePos !== 'numeral') return false;
+
+    const normCurrentRoot = normalizeNumeralLookupKey(currentRoot);
+    const candidateRoot = normalizeNumeralLookupKey(getLinkedNumeralRootKey(candidateEntry) || candidateEntry.root_consonants || '');
+    const matchesRoot = !!(normCurrentRoot && candidateRoot && normCurrentRoot === candidateRoot);
+
+    const relatedHeadwords = new Set(getNumeralRelatedHeadwords(currentHeadword).map(normalizeNumeralLookupKey));
+    const matchesFamilyHeadword = relatedHeadwords.has(candidateHeadword);
+
+    const generated = buildNumeralDisplayForms(currentHeadword, normCurrentRoot || '', []);
+    const validSurfaces = new Set<string>();
+    Object.values(generated).forEach((list) => {
+        (list as NumeralSurfaceValue[] | undefined)?.forEach((item) => {
+            const k = normalizeNumeralLookupKey(item.value);
+            if (k) validSurfaces.add(k);
+        });
+    });
+    const matchesSurface = validSurfaces.has(candidateHeadword);
+
+    return matchesRoot || matchesFamilyHeadword || matchesSurface;
+}
+
 function buildNumeralFamilyRoleForms(
     linkedEntries: LinkedNumeralEntry[],
     currentHeadword: string,
@@ -1103,16 +1160,6 @@ function buildNumeralFamilyRoleForms(
 
     const currentEntry = linkedEntries.find((e) => normalizeNumeralLookupKey(e.headword || '') === currentKey);
     const currentRoot = currentEntry ? getLinkedNumeralRootKey(currentEntry) : '';
-    const relatedHeadwords = new Set(getNumeralRelatedHeadwords(currentHeadword).map(normalizeNumeralLookupKey));
-
-    const generated = buildNumeralDisplayForms(currentHeadword, currentRoot || '', []);
-    const validSurfaces = new Set<string>();
-    Object.values(generated).forEach((list) => {
-        (list as NumeralSurfaceValue[] | undefined)?.forEach((item) => {
-            const k = normalizeNumeralLookupKey(item.value);
-            if (k) validSurfaces.add(k);
-        });
-    });
 
     linkedEntries.forEach((entry) => {
         if (String(entry.pos || 'numeral').trim().toLowerCase() !== 'numeral') return;
@@ -1120,12 +1167,7 @@ function buildNumeralFamilyRoleForms(
         const valueKey = normalizeNumeralLookupKey(String(entry.headword || ''));
         if (!valueKey || valueKey === currentKey) return;
 
-        const entryRoot = getLinkedNumeralRootKey(entry);
-        const matchesRoot = !!(currentRoot && entryRoot && currentRoot === entryRoot);
-        const matchesFamilyHeadword = relatedHeadwords.has(valueKey);
-        const matchesSurface = validSurfaces.has(valueKey);
-
-        if (!matchesRoot && !matchesFamilyHeadword && !matchesSurface) {
+        if (!isCompatibleNumeralFamilyEntry(currentHeadword, currentRoot, entry)) {
             return;
         }
 
