@@ -849,7 +849,7 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
         ordinal: 'ħames',
         adverbial: 'ħames darbiet',
         fractional_semitic: '*ħoms',
-        multiplier_form1: 'ħamiesi',
+        multiplier_form1: '*ħmies',
         multiplier_form2: '*mħammes',
         distributive: 'ħamsa ħamsa',
         attributive_short: 'ħames',

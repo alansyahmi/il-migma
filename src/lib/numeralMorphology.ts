@@ -167,9 +167,9 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
     ħamsa: {
         ordinal: ['ħames'],
         adverbial: ['ħames darbiet'],
-        fractional: ['ħums', '*ħoms', 'kwint'],
-        multiplier: ['kwintuplu', 'ħamiesi', '*mħammes'],
-        distributive: ['ħamsa ħamsa', 'ħmjes'],
+        fractional: ['*ħoms', 'kwint'],
+        multiplier: ['kwintuplu', '*ħmies', '*mħammes'],
+        distributive: ['ħamsa ħamsa', '*ħmies'],
         attributive_short: ['ħames'],
         attributive_long: ['ħamest'],
     },
@@ -194,7 +194,7 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
     tmienja: {
         ordinal: ['tmien'],
         adverbial: ['tmien darbiet'],
-        fractional: ['tumn', '*tomon', 'ottav'],
+        fractional: ['tomon', 'ottav'],
         multiplier: ['ottuplu', 'tmieni', '*mtemmen'],
         distributive: ['tmienja tmienja', 'tmjen'],
         attributive_short: ['tmien'],
@@ -203,7 +203,7 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
     disgħa: {
         ordinal: ["disa'"],
         adverbial: ["disa' darbiet"],
-        fractional: ["tusu'", "*dosu'", 'nonu'],
+        fractional: ["*dosu'", 'nonu'],
         multiplier: ['nonuplu', "*mtassa'"],
         distributive: ["disgħa disgħa"],
         attributive_short: ["disa'"],
@@ -212,7 +212,7 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
     għaxra: {
         ordinal: ['għaxar'],
         adverbial: ['għaxar darbiet'],
-        fractional: ['għushur', '*għoxor', 'deċmu'],
+        fractional: ['*għoxor', 'deċmu'],
         multiplier: ['deċuplu', 'għaxari', '*mgħaxxer'],
         distributive: ['għaxra għaxra'],
         attributive_short: ['għaxar'],
@@ -384,9 +384,9 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
         auto: {
             ordinal: 'ħames',
             adverbial: 'ħames darbiet',
-            fractional_semitic: 'ħums',
+            fractional_semitic: '*ħoms',
             multiplier_form1: 'kwintuplu',
-            multiplier_form2: 'ħamiesi',
+            multiplier_form2: '*ħmies',
             distributive: 'ħamsa ħamsa',
             attributive_short: 'ħames',
             attributive_long: 'ħamest',
@@ -394,9 +394,9 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
         display: {
             ordinal: ['ħames'],
             adverbial: ['ħames darbiet'],
-            fractional: ['ħums', '*ħoms', 'kwint'],
-            multiplier: ['kwintuplu', 'ħamiesi', '*mħammes'],
-            distributive: ['ħamsa ħamsa', 'ħmjes'],
+            fractional: ['*ħoms', 'kwint'],
+            multiplier: ['kwintuplu', '*ħmies', '*mħammes'],
+            distributive: ['ħamsa ħamsa', '*ħmies'],
             attributive_short: ['ħames'],
             attributive_long: ['ħamest'],
         },
@@ -446,7 +446,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
         auto: {
             ordinal: 'tmien',
             adverbial: 'tmien darbiet',
-            fractional_semitic: 'tumn',
+            fractional_semitic: 'tomon',
             multiplier_form1: 'ottuplu',
             multiplier_form2: 'tmieni',
             distributive: 'tmienja tmienja',
@@ -456,8 +456,8 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
         display: {
             ordinal: ['tmien'],
             adverbial: ['tmien darbiet'],
-            fractional: ['tumn', 'ottav'],
-            multiplier: ['ottuplu', 'tmieni', 'mtemmen'],
+            fractional: ['tomon', 'ottav'],
+            multiplier: ['ottuplu', 'tmieni', '*mtemmen'],
             distributive: ['tmienja tmienja', 'tmjen'],
             attributive_short: ['tmien'],
             attributive_long: ['tmint'],
@@ -467,7 +467,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
         auto: {
             ordinal: "disa'",
             adverbial: "disa' darbiet",
-            fractional_semitic: "tusu'",
+            fractional_semitic: "*dosu'",
             multiplier_form1: 'nonuplu',
             distributive: "disgħa disgħa",
             attributive_short: "disa'",
@@ -476,7 +476,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
         display: {
             ordinal: ["disa'"],
             adverbial: ["disa' darbiet"],
-            fractional: ["tusu'", 'nonu'],
+            fractional: ["*dosu'", 'nonu'],
             multiplier: ['nonuplu'],
             distributive: ["disgħa disgħa"],
             attributive_short: ["disa'"],
@@ -487,7 +487,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
         auto: {
             ordinal: 'għaxar',
             adverbial: 'għaxar darbiet',
-            fractional_semitic: 'għushur',
+            fractional_semitic: '*għoxor',
             multiplier_form1: 'deċuplu',
             multiplier_form2: 'għaxari',
             distributive: 'għaxra għaxra',
@@ -497,8 +497,8 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
         display: {
             ordinal: ['għaxar'],
             adverbial: ['għaxar darbiet'],
-            fractional: ['għushur', 'deċmu'],
-            multiplier: ['deċuplu', 'għaxari', 'mgħaxxer'],
+            fractional: ['*għoxor', 'deċmu'],
+            multiplier: ['deċuplu', 'għaxari', '*mgħaxxer'],
             distributive: ['għaxra għaxra'],
             attributive_short: ['għaxar'],
             attributive_long: ['għaxart'],

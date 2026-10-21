@@ -409,6 +409,13 @@ const run = () => {
     const tmienjaDisplay = buildNumeralDisplayForms('tmienja', 't-m-n-j', []);
     assertEq(tmienjaDisplay.ordinal[0]?.value, 'tmien', 'tmienja should use the canonical ordinal');
     assertEq(tmienjaDisplay.adverbial[0]?.value, 'tmien darbiet', 'tmienja should use the canonical adverbial');
+    assertEq(tmienjaDisplay.fractional.map(f => f.value).join(', '), 'tomon, ottav', 'tmienja fractional should be tomon, ottav');
+
+    const hamsaDisplay = buildNumeralDisplayForms('ħamsa', 'ħ-m-s', []);
+    const toRenderedString = (surfaces) => surfaces.map(f => (f.marker === 'theoretical' ? '*' : '') + f.value).join(', ');
+    assertEq(toRenderedString(hamsaDisplay.fractional), '*ħoms, kwint', 'ħamsa fractional must not contain ħums');
+    assertEq(toRenderedString(hamsaDisplay.multiplier), 'kwintuplu, *ħmies, *mħammes', 'ħamsa multiplier must have *ħmies');
+    assertEq(toRenderedString(hamsaDisplay.distributive), 'ħamsa ħamsa, *ħmies', 'ħamsa distributive must be *ħmies');
 
     // Test Noun updates
     const nounSource = {
