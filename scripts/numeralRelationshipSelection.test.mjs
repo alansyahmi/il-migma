@@ -194,4 +194,25 @@ assert.equal(
     );
 }
 
+{
+    const hamsa = { id: 'num-hamsa', headword: 'ħamsa', pos: 'numeral', numeral_type: 'cardinal' };
+    const hames = { id: 'num-hames', headword: 'ħames', pos: 'numeral', numeral_type: 'ordinal' };
+    const kwint = { id: 'num-kwint', headword: 'kwint', pos: 'numeral', numeral_type: 'fractional' };
+    const kwintuplu = { id: 'num-kwintuplu', headword: 'kwintuplu', pos: 'numeral', numeral_type: 'multiplier' };
+
+    const matches = selectNumeralRelationshipEntries({
+        currentEntryId: 'num-hamsa',
+        currentNumeralType: 'cardinal',
+        existingRelatedEntries: [{ id: 'num-hames' }],
+        candidateHeadwords: ['ħames', 'kwint', 'kwintuplu'],
+        entries: [hamsa, hames, kwint, kwintuplu, erbgħa],
+    });
+
+    assert.deepEqual(
+        matches.map((entry) => entry.id),
+        ['num-kwint', 'num-kwintuplu'],
+        'ħamsa should select kwint and kwintuplu from candidates and exclude existing ħames and cross-number erbgħa'
+    );
+}
+
 console.log('numeralRelationshipSelection tests passed');

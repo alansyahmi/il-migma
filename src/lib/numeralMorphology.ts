@@ -138,18 +138,35 @@ const NUMERAL_RELATED_HEADWORDS: Record<string, string[]> = {
     kwadruplu: ['erbgħa', "erba'", "raba'", 'kwart', "robu'", "mrabba'", 'rbiegħ'],
     "mrabba'": ['erbgħa', "erba'", "raba'", 'kwart', "robu'", 'kwadruplu', 'rbiegħ'],
     rbiegħ: ['erbgħa', "erba'", "raba'", 'kwart', "robu'", 'kwadruplu', "mrabba'"],
-    ħamsa: ['ħames'],
-    ħames: ['ħamsa'],
+    ħamsa: ['ħames', 'kwint', 'kwintuplu'],
+    ħames: ['ħamsa', 'kwint', 'kwintuplu'],
+    kwint: ['ħamsa', 'ħames', 'kwintuplu'],
+    kwintuplu: ['ħamsa', 'ħames', 'kwint'],
     sitta: ['sitt', 'sest', 'sestuplu', 'stiet'],
     sitt: ['sitta', 'sest', 'sestuplu', 'stiet'],
     sest: ['sitta', 'sitt', 'sestuplu', 'stiet'],
     sestuplu: ['sitta', 'sitt', 'sest', 'stiet'],
     stiet: ['sitta', 'sitt', 'sest', 'sestuplu'],
-    tmienja: ['tmien', 'tomon', 'ottav', 'ottuplu'],
-    tmien: ['tmienja', 'tomon', 'ottav', 'ottuplu'],
-    tomon: ['tmienja', 'tmien', 'ottav', 'ottuplu'],
-    ottav: ['tmienja', 'tmien', 'tomon', 'ottuplu'],
-    ottuplu: ['tmienja', 'tmien', 'tomon', 'ottav'],
+    sebgħa: ["seba'", 'sebat', 'settimu', 'settuplu'],
+    "seba'": ['sebgħa', 'sebat', 'settimu', 'settuplu'],
+    sebat: ['sebgħa', "seba'", 'settimu', 'settuplu'],
+    settimu: ['sebgħa', "seba'", 'sebat', 'settuplu'],
+    settuplu: ['sebgħa', "seba'", 'sebat', 'settimu'],
+    tmienja: ['tmien', 'tomon', 'ottav', 'ottuplu', 'tmint', 'tmjen'],
+    tmien: ['tmienja', 'tomon', 'ottav', 'ottuplu', 'tmint', 'tmjen'],
+    tomon: ['tmienja', 'tmien', 'ottav', 'ottuplu', 'tmint', 'tmjen'],
+    ottav: ['tmienja', 'tmien', 'tomon', 'ottuplu', 'tmint', 'tmjen'],
+    ottuplu: ['tmienja', 'tmien', 'tomon', 'ottav', 'tmint', 'tmjen'],
+    disgħa: ["disa'", 'disat', 'nonu', 'nonuplu'],
+    "disa'": ['disgħa', 'disat', 'nonu', 'nonuplu'],
+    disat: ['disgħa', "disa'", 'nonu', 'nonuplu'],
+    nonu: ['disgħa', "disa'", 'disat', 'nonuplu'],
+    nonuplu: ['disgħa', "disa'", 'disat', 'nonu'],
+    għaxra: ['għaxar', 'għaxart', 'deċmu', 'deċuplu'],
+    għaxar: ['għaxra', 'għaxart', 'deċmu', 'deċuplu'],
+    għaxart: ['għaxra', 'għaxar', 'deċmu', 'deċuplu'],
+    deċmu: ['għaxra', 'għaxar', 'għaxart', 'deċuplu'],
+    deċuplu: ['għaxra', 'għaxar', 'għaxart', 'deċmu'],
 };
 
 const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayForms, string[]>>> = {
@@ -711,13 +728,48 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
 
 const SUPPLETIVE_NUMERAL_FAMILY_ALIASES: Record<string, string> = {
     ewwel: 'wieħed',
+    waħda: 'wieħed',
     tieni: 'tnejn',
-    tielet: 'tlieta',
     nofs: 'tnejn',
+    żewġ: 'tnejn',
+    doppju: 'tnejn',
+    mtenna: 'tnejn',
+    tliet: 'tlieta',
+    tielet: 'tlieta',
+    terz: 'tlieta',
+    triplu: 'tlieta',
+    mtellet: 'tlieta',
+    "erba'": 'erbgħa',
     "raba'": 'erbgħa',
+    kwart: 'erbgħa',
+    "robu'": 'erbgħa',
+    kwadruplu: 'erbgħa',
+    "mrabba'": 'erbgħa',
+    rbiegħ: 'erbgħa',
     ħames: 'ħamsa',
+    kwint: 'ħamsa',
+    kwintuplu: 'ħamsa',
     sitt: 'sitta',
+    sest: 'sitta',
+    sestuplu: 'sitta',
+    stiet: 'sitta',
+    "seba'": 'sebgħa',
+    sebat: 'sebgħa',
+    settimu: 'sebgħa',
+    settuplu: 'sebgħa',
     tmien: 'tmienja',
+    tmint: 'tmienja',
+    tomon: 'tmienja',
+    ottav: 'tmienja',
+    ottuplu: 'tmienja',
+    "disa'": 'disgħa',
+    disat: 'disgħa',
+    nonu: 'disgħa',
+    nonuplu: 'disgħa',
+    għaxar: 'għaxra',
+    għaxart: 'għaxra',
+    deċmu: 'għaxra',
+    deċuplu: 'għaxra',
 };
 
 const NUMERAL_MASC_SHORT_ATTRIBUTIVE_EXCEPTIONS = new Set([
@@ -914,8 +966,7 @@ function splitNumeralStoredValues(value: unknown): string[] {
                 if (item && typeof item === 'object') return String((item as any).value || (item as any).form || '').trim();
                 return '';
             })
-            .map((item) => item.trim())
-            .filter(Boolean);
+            .flatMap((item) => splitNumeralStoredValues(item));
     }
 
     if (typeof value !== 'string') return [];
@@ -926,8 +977,15 @@ function splitNumeralStoredValues(value: unknown): string[] {
         try {
             return splitNumeralStoredValues(JSON.parse(trimmed));
         } catch {
-            return [trimmed];
+            // fallthrough
         }
+    }
+
+    if (trimmed.includes(',')) {
+        return trimmed
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean);
     }
 
     return [trimmed];
@@ -1135,7 +1193,8 @@ export function isCompatibleNumeralFamilyEntry(
     const matchesRoot = !!(normCurrentRoot && candidateRoot && normCurrentRoot === candidateRoot);
 
     const relatedHeadwords = new Set(getNumeralRelatedHeadwords(currentHeadword).map(normalizeNumeralLookupKey));
-    const matchesFamilyHeadword = relatedHeadwords.has(candidateHeadword);
+    const candidateRelatedHeadwords = new Set(getNumeralRelatedHeadwords(candidateHeadword).map(normalizeNumeralLookupKey));
+    const matchesFamilyHeadword = relatedHeadwords.has(candidateHeadword) || candidateRelatedHeadwords.has(currentKey);
 
     const generated = buildNumeralDisplayForms(currentHeadword, normCurrentRoot || '', []);
     const validSurfaces = new Set<string>();
@@ -1422,6 +1481,24 @@ export function buildNumeralMorphologyDisplayForms(
             ? [toNumeralSurfaceValue(linkedCardinal.headword || '', expandedLinkedEntries, 'plain')].filter((item): item is NumeralSurfaceValue => Boolean(item))
             : [];
 
+    const mergeRoleForms = (
+        familyValues: NumeralSurfaceValue[] | undefined,
+        savedValues: NumeralSurfaceValue[],
+    ): NumeralSurfaceValue[] => {
+        if (!familyValues?.length) return savedValues;
+        const result: NumeralSurfaceValue[] = [...familyValues];
+        const seen = new Set(result.map((r) => normalizeNumeralLookupKey(r.value)));
+
+        savedValues.forEach((sv) => {
+            const svKey = normalizeNumeralLookupKey(sv.value);
+            if (!seen.has(svKey)) {
+                result.push(sv);
+                seen.add(svKey);
+            }
+        });
+        return result;
+    };
+
     if (role !== 'cardinal') {
         const emptyForms: NumeralMorphologyDisplayForms = {
             cardinal,
@@ -1456,7 +1533,8 @@ export function buildNumeralMorphologyDisplayForms(
             if (familyRole === role) return;
             const familyValues = familyRoleForms[familyRole];
             if (familyValues?.length) {
-                (displayForms[NUMERAL_ROLE_META[familyRole].displayKey] as NumeralSurfaceValue[]) = familyValues;
+                const baseForms = (displayForms[NUMERAL_ROLE_META[familyRole].displayKey] as NumeralSurfaceValue[]) || [];
+                (displayForms[NUMERAL_ROLE_META[familyRole].displayKey] as NumeralSurfaceValue[]) = mergeRoleForms(familyValues, baseForms);
             }
         });
         (displayForms[roleMeta.displayKey] as NumeralSurfaceValue[]) = currentRoleSurface;
@@ -1477,27 +1555,34 @@ export function buildNumeralMorphologyDisplayForms(
 
     const displayForms: NumeralMorphologyDisplayForms = {
         cardinal,
-        attributive_short: familyRoleForms.attributive_short?.length
-            ? familyRoleForms.attributive_short
-            : pickSaved('form_attributive_short', generated.attributive_short, saved.form_attributive_short_pattern, 'attributive_short_form'),
-        attributive_long: familyRoleForms.attributive_long?.length
-            ? familyRoleForms.attributive_long
-            : pickSaved('form_attributive_long', generated.attributive_long, undefined, 'attributive_long_form'),
-        ordinal: familyRoleForms.ordinal?.length
-            ? familyRoleForms.ordinal
-            : pickSaved('ordinal_form', generated.ordinal, undefined, 'numeral_ordinal'),
-        adverbial: familyRoleForms.adverbial?.length
-            ? familyRoleForms.adverbial
-            : pickSaved('adverbial_form', generated.adverbial, undefined, 'numeral_adverbial'),
-        fractional: familyRoleForms.fractional?.length
-            ? familyRoleForms.fractional
-            : pickSaved('fractional_form', generated.fractional, undefined, 'numeral_fractional'),
-        multiplier: familyRoleForms.multiplier?.length
-            ? familyRoleForms.multiplier
-            : pickSaved('multiplier_form', generated.multiplier, undefined, 'numeral_multiplier'),
-        distributive: familyRoleForms.distributive?.length
-            ? familyRoleForms.distributive
-            : pickSaved('distributive_form', generated.distributive, undefined, 'numeral_distributive'),
+        attributive_short: mergeRoleForms(
+            familyRoleForms.attributive_short,
+            pickSaved('form_attributive_short', generated.attributive_short, saved.form_attributive_short_pattern, 'attributive_short_form')
+        ),
+        attributive_long: mergeRoleForms(
+            familyRoleForms.attributive_long,
+            pickSaved('form_attributive_long', generated.attributive_long, undefined, 'attributive_long_form')
+        ),
+        ordinal: mergeRoleForms(
+            familyRoleForms.ordinal,
+            pickSaved('ordinal_form', generated.ordinal, undefined, 'numeral_ordinal')
+        ),
+        adverbial: mergeRoleForms(
+            familyRoleForms.adverbial,
+            pickSaved('adverbial_form', generated.adverbial, undefined, 'numeral_adverbial')
+        ),
+        fractional: mergeRoleForms(
+            familyRoleForms.fractional,
+            pickSaved('fractional_form', generated.fractional, undefined, 'numeral_fractional')
+        ),
+        multiplier: mergeRoleForms(
+            familyRoleForms.multiplier,
+            pickSaved('multiplier_form', generated.multiplier, undefined, 'numeral_multiplier')
+        ),
+        distributive: mergeRoleForms(
+            familyRoleForms.distributive,
+            pickSaved('distributive_form', generated.distributive, undefined, 'numeral_distributive')
+        ),
     };
 
     return displayForms;

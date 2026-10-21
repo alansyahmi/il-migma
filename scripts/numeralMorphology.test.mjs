@@ -6,6 +6,7 @@ import {
     getNumeralDerivedCandidateHeadwords,
     getNumeralRoleLabel,
     hasVisibleNumeralSurface,
+    isCompatibleNumeralFamilyEntry,
     getNumeralShortAttributiveRowLabel,
     mergeNumeralFamilyEntries,
     NUMERAL_MORPHOLOGY_DB_FIELD_KEYS,
@@ -416,6 +417,58 @@ const run = () => {
     assertEq(toRenderedString(hamsaDisplay.fractional), '*ħoms, kwint', 'ħamsa fractional must not contain ħums');
     assertEq(toRenderedString(hamsaDisplay.multiplier), 'kwintuplu, *ħmies, *mħammes', 'ħamsa multiplier must have *ħmies');
     assertEq(toRenderedString(hamsaDisplay.distributive), 'ħamsa ħamsa, *ħmies', 'ħamsa distributive must be *ħmies');
+
+    // Verify kwint and kwintuplu as part of family of ħamsa
+    assert(
+        isCompatibleNumeralFamilyEntry('ħamsa', 'ħ-m-s', { headword: 'kwint', pos: 'numeral' }),
+        'kwint must be compatible with ħamsa numeral family',
+    );
+    assert(
+        isCompatibleNumeralFamilyEntry('ħamsa', 'ħ-m-s', { headword: 'kwintuplu', pos: 'numeral' }),
+        'kwintuplu must be compatible with ħamsa numeral family',
+    );
+    assert(
+        isCompatibleNumeralFamilyEntry('kwint', '', { headword: 'ħamsa', pos: 'numeral' }),
+        'ħamsa must be compatible with kwint numeral family (bidirectional)',
+    );
+    assert(
+        isCompatibleNumeralFamilyEntry('ħames', 'ħ-m-s', { headword: 'kwint', pos: 'numeral' }),
+        'kwint must be compatible with ħames numeral family',
+    );
+    assert(
+        !isCompatibleNumeralFamilyEntry('ħamsa', 'ħ-m-s', { headword: 'erbgħa', pos: 'numeral' }),
+        'adjacent number 4 must NOT be compatible with ħamsa',
+    );
+    assert(
+        !isCompatibleNumeralFamilyEntry('ħamsa', 'ħ-m-s', { headword: 'sitta', pos: 'numeral' }),
+        'adjacent number 6 must NOT be compatible with ħamsa',
+    );
+
+    const hamsaWithKwintDisplay = buildNumeralMorphologyDisplayForms('ħamsa', 'ħ-m-s', {
+        numeral_type: 'cardinal',
+        fractional_form: '*ħoms, kwint',
+        multiplier_form: 'kwintuplu, *ħmies, *mħammes',
+    }, [
+        { id: 'num-kwint', headword: 'kwint', pos: 'numeral', numeral_type: 'fractional', cv_pattern: 'CCvCC' },
+        { id: 'num-kwintuplu', headword: 'kwintuplu', pos: 'numeral', numeral_type: 'multiplier', cv_pattern: 'CCvCCvCCv' },
+    ]);
+    const fractionalKwint = hamsaWithKwintDisplay.fractional.find(f => f.value === 'kwint');
+    assertEq(fractionalKwint?.entryId, 'num-kwint', 'kwint should link to num-kwint in ħamsa display');
+    assertEq(fractionalKwint?.pattern, 'CCvCC', 'kwint should have pattern CCvCC in ħamsa display');
+    const fractionalHoms = hamsaWithKwintDisplay.fractional.find(f => f.value === 'ħoms');
+    assertEq(fractionalHoms?.marker, 'theoretical', '*ħoms should be retained as theoretical alongside kwint');
+
+    const kwintDisplay = buildNumeralMorphologyDisplayForms('kwint', '', {
+        numeral_type: 'fractional',
+        cv_pattern: 'CCvCC',
+    }, [
+        { id: 'num-ħamsa', headword: 'ħamsa', pos: 'numeral', numeral_type: 'cardinal', root_consonants: 'ħ-m-s' },
+        { id: 'num-kwintuplu', headword: 'kwintuplu', pos: 'numeral', numeral_type: 'multiplier', cv_pattern: 'CCvCCvCCv' },
+    ]);
+    assertEq(kwintDisplay.cardinal[0]?.value, 'ħamsa', 'kwint should show its ħamsa family cardinal');
+    assertEq(kwintDisplay.cardinal[0]?.entryId, 'num-ħamsa', 'kwint should link to num-ħamsa');
+    assertEq(kwintDisplay.multiplier[0]?.value, 'kwintuplu', 'kwint should show sibling multiplier kwintuplu');
+    assertEq(kwintDisplay.multiplier[0]?.entryId, 'num-kwintuplu', 'kwintuplu sibling should be linked');
 
     // Test Noun updates
     const nounSource = {

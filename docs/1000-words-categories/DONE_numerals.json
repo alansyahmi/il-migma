@@ -1,7 +1,7 @@
 {
   "category_id": "numerals",
   "category_title": "Numerals & Quantities",
-  "total_entries": 36,
+  "total_entries": 38,
   "entries": [
     {
       "id": "num-wieħed",
@@ -650,7 +650,9 @@
         }
       ],
       "related_entries": [
-        "num-ħames"
+        "num-ħames",
+        "num-kwint",
+        "num-kwintuplu"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -3217,7 +3219,9 @@
         }
       ],
       "related_entries": [
-        "num-ħamsa"
+        "num-ħamsa",
+        "num-kwint",
+        "num-kwintuplu"
       ],
       "numeral_type": "ordinal",
       "ordinal_form": "ħames",
@@ -3234,6 +3238,172 @@
       },
       "vowel_set_sg": "a-e",
       "vowel_set_opp": "a--"
+    },
+    {
+      "id": "num-kwint",
+      "headword": "kwint",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "kwint",
+      "cv_pattern": "CCvCC",
+      "morph_pattern": "CCvCC",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "kwinta",
+      "plural_forms": [
+        {
+          "form": "kwinti",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "kwinti",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "quintu",
+          "pronunciation": "quintu",
+          "definition": "fifth part, fifth"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "quintus",
+          "pronunciation": "quintus",
+          "definition": "fifth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "fifth (fraction of one fifth); one of five equal parts of a divided whole",
+          "text_mt": "Frazzjoni li tindika parti waħda minn ħames partijiet indaqs ta' ħaġa sħiħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "fractional numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħallas biss kwint mill-ammont totali tad-dejn.",
+          "en": "He paid only a fifth of the total amount of the debt."
+        }
+      ],
+      "related_entries": [
+        "num-ħamsa",
+        "num-ħames",
+        "num-kwintuplu"
+      ],
+      "numeral_type": "fractional",
+      "fractional_form": "kwint",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "fractional_form": "kwint"
+      }
+    },
+    {
+      "id": "num-kwintuplu",
+      "headword": "kwintuplu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "kwintupl",
+      "cv_pattern": "CCvCCvCCv",
+      "morph_pattern": "CCvCCvCCv",
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "kwintupla",
+      "plural_forms": [
+        {
+          "form": "kwintupli",
+          "pattern": "-i"
+        }
+      ],
+      "plural_form": [
+        {
+          "form": "kwintupli",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "quintuplo",
+          "pronunciation": "quintuplo",
+          "definition": "fivefold, quintuple"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "quintuplus",
+          "pronunciation": "quintuplus",
+          "definition": "fivefold"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "fivefold, quintuple; five times as great in quantity or number",
+          "text_mt": "Numru multiplikatur li jindika ammont ħames darbiet akbar minn dak ordinarju.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "multiplier numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-produzzjoni kienet kwintupla meta mqabbla mas-sena l-oħra.",
+          "en": "The production was fivefold compared to last year."
+        }
+      ],
+      "related_entries": [
+        "num-ħamsa",
+        "num-ħames",
+        "num-kwint"
+      ],
+      "numeral_type": "multiplier",
+      "multiplier_form": "kwintuplu",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "kwintuplu"
+      }
     },
     {
       "id": "num-sitt",
