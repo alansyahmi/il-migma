@@ -120,7 +120,7 @@ export async function onRequestGet({ request, env }) {
       const limit = Math.min(Math.max(Number(url.searchParams.get('limit') || 50), 1), 100);
       const result = status === 'all'
         ? await client.execute({
-            sql: 'SELECT id, entry_id, status, issue_type, rationale, proposed_changes, created_at, reviewed_at, reviewed_by, rejection_reason FROM editorial_proposals ORDER BY created_at DESC LIMIT ?',
+            sql: 'SELECT id, entry_id, status, issue_type, rationale, original_snapshot, proposed_changes, created_at, reviewed_at, reviewed_by, rejection_reason FROM editorial_proposals ORDER BY created_at DESC LIMIT ?',
             args: [limit],
           })
         : await client.execute({
@@ -130,6 +130,7 @@ export async function onRequestGet({ request, env }) {
       return json({
         proposals: result.rows.map((row) => ({
           ...row,
+          original_snapshot: parseJsonColumn(row.original_snapshot, {}),
           proposed_changes: parseJsonColumn(row.proposed_changes, {}),
         })),
       });
