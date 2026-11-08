@@ -5,7 +5,6 @@
  * suggested changes, but it cannot write to the published entries table.
  */
 import { getDbClient } from '../../lib/dbClient.js';
-import { verifyAdmin } from './entries.js';
 
 const EDITABLE_FIELDS = new Set([
   'headword',
@@ -45,10 +44,25 @@ async function requireEditorialAdmin(request, env) {
   const isLocal = ['localhost', '127.0.0.1', '::1', '0.0.0.0'].includes(host);
   if (isLocal && env.EDITORIAL_ALLOW_LOCAL_AUTH === 'true') return true;
 
-  // Do not inherit the existing admin API's fail-open behaviour when the
-  // Clerk secret is absent or set to its development placeholder.
-  if (!env.CLERK_SECRET_KEY || env.CLERK_SECRET_KEY === 'dummy') return false;
-  return verifyAdmin(request, env);
+  const auth = request.headers.get('Authorization') || '';
+  const token = auth.replace(/^Bearer\\s+/i, '').trim();
+  if (!token || !env.CLERK_SECRET_KEY || env.CLERK_SECRET_KEY === 'dummy') return false;
+
+  try {
+    const response = await fetch('https://api.clerk.com/v1/tokens/verify', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.CLERK_SECRET_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }),
+    });
+    if (!response.ok) return false;
+    const data = await response.json();
+    return data?.object === 'token' && data?.session?.public_metadata?.role === 'admin';
+  } catch {
+    return false;
+  }
 }
 
 async function ensureProposalTable(client) {
@@ -124,7 +138,7 @@ export async function onRequestGet({ request, env }) {
             args: [limit],
           })
         : await client.execute({
-            sql: 'SELECT id, entry_id, status, issue_type, rationale, proposed_changes, created_at, reviewed_at, reviewed_by, rejection_reason FROM editorial_proposals WHERE status = ? ORDER BY created_at DESC LIMIT ?',
+            sql: 'SELECT id, entry_id, status, issue_type, rationale, original_snapshot, proposed_changes, created_at, reviewed_at, reviewed_by, rejection_reason FROM editorial_proposals WHERE status = ? ORDER BY created_at DESC LIMIT ?',
             args: [status, limit],
           });
       return json({
