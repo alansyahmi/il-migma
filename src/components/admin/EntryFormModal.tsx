@@ -10,7 +10,7 @@ import { adminCreateEntry, adminUpdateEntry, apiLookupRootByConsonants, apiGetDi
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig } from '@/lib/adminConfig';
-import { resolveRegisterTerm, TERMINOLOGY } from '@/lib/terminology';
+import { normalizeRegisterTranslations, resolveRegisterTerm, TERMINOLOGY } from '@/lib/terminology';
 import { buildLoadedEntryPatch, entryToForm, formToPayload, INITIAL_FORM_STATE } from '@/lib/entryAdapter';
 import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/lib/utils';
@@ -1870,9 +1870,10 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
 
     const handleSaveRegister = async () => {
         const key = registerForm.key.trim().toLowerCase().replace(/[\s_]+/g, '-');
-        const en = registerForm.en.trim();
-        const mt_standard = registerForm.mt_standard.trim();
-        const mt_arabised = registerForm.mt_arabised.trim() || mt_standard;
+        const normalizedTranslations = normalizeRegisterTranslations(registerForm);
+        const en = normalizedTranslations.en || '';
+        const mt_standard = normalizedTranslations.mt || '';
+        const mt_arabised = normalizedTranslations.arabised || mt_standard;
 
         if (!key) {
             setRegisterFormError(t('Register key is required.', 'Iċ-ċavetta tar-reġistru hija meħtieġa.'));
@@ -4247,22 +4248,22 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
                                     const dbItem = getCategoryItems('register').find(
                                         item => item.key.toLowerCase() === canonicalKey
                                     );
-                                    let rawVal: { en?: string; mt_standard?: string; mt_arabised?: string } | null = null;
+                                    let rawVal: ReturnType<typeof normalizeRegisterTranslations> | null = null;
                                     if (dbItem?.value) {
                                         if (typeof dbItem.value === 'object') {
-                                            rawVal = dbItem.value as any;
+                                            rawVal = normalizeRegisterTranslations(dbItem.value);
                                         } else if (typeof dbItem.value === 'string') {
                                             try {
                                                 const parsed = JSON.parse(dbItem.value);
-                                                if (parsed && typeof parsed === 'object') rawVal = parsed;
+                                                rawVal = normalizeRegisterTranslations(parsed);
                                             } catch {
                                                 // ignore legacy non-json string
                                             }
                                         }
                                     }
                                     const enLabel = rawVal?.en || resolveRegisterTerm(canonicalKey, 'standard', 'en');
-                                    const mtStdLabel = rawVal?.mt_standard || resolveRegisterTerm(canonicalKey, 'standard', 'mt');
-                                    const mtArabisedLabel = rawVal?.mt_arabised || resolveRegisterTerm(canonicalKey, 'arabised', 'mt');
+                                    const mtStdLabel = rawVal?.mt || resolveRegisterTerm(canonicalKey, 'standard', 'mt');
+                                    const mtArabisedLabel = rawVal?.arabised || resolveRegisterTerm(canonicalKey, 'arabised', 'mt');
 
                                     return (
                                         <div

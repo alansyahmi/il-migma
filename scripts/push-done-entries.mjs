@@ -218,11 +218,11 @@ async function run() {
     const startTime = Date.now();
     let appliedCount = 0;
     const BATCH_SIZE = 50;
+    const allRelationships = [];
 
     for (let b = 0; b < plan.length; b += BATCH_SIZE) {
         const batch = plan.slice(b, b + BATCH_SIZE);
         const tx = await client.transaction('write');
-        const batchRelationships = [];
 
         try {
             for (const item of batch) {
@@ -329,9 +329,9 @@ async function run() {
                     }
                 }
 
-                // 3. Queue Relationships to sync after all entries in batch are upserted
+                // 3. Queue Relationships to sync after all entry batches are upserted
                 if (Array.isArray(e.related_entries) && e.related_entries.length > 0) {
-                    batchRelationships.push({ entryId, related_entries: e.related_entries });
+                    allRelationships.push({ entryId, related_entries: e.related_entries });
                 }
 
                 // 4. Sync Numeral Morphology (if pos is numeral or numeral fields exist)
@@ -352,7 +352,8 @@ async function run() {
                     const vowelSetPl = e.vowel_set_pl ?? nm.vowel_set_pl ?? null;
                     const vowelSetOpp = e.vowel_set_opp ?? nm.vowel_set_opp ?? null;
                     const vowelSetDual = e.vowel_set_dual ?? nm.vowel_set_dual ?? null;
-                    const pluralFormsJson = e.plural_forms ? (typeof e.plural_forms === 'object' ? JSON.stringify(e.plural_forms) : String(e.plural_forms)) : null;
+                    const pluralForms = e.plural_forms ?? nm.plural_forms ?? null;
+                    const pluralFormsJson = pluralForms ? (typeof pluralForms === 'object' ? JSON.stringify(pluralForms) : String(pluralForms)) : null;
                     const femForm = e.feminine_form ?? nm.feminine_form ?? e.form_fem ?? null;
                     const mascForm = e.masculine_form ?? nm.masculine_form ?? e.form_masc ?? null;
 
@@ -416,9 +417,21 @@ async function run() {
                 }
             }
 
-            // Sync queued relationships after all entries in this batch have been upserted
-            for (const { entryId, related_entries } of batchRelationships) {
-                await tx.execute({ sql: "DELETE FROM entry_relationships WHERE entry_id = ?", args: [entryId] });
+            await tx.commit();
+            console.log(`   Batch ${Math.floor(b / BATCH_SIZE) + 1}/${Math.ceil(plan.length / BATCH_SIZE)} committed: ${batch.length} entries.`);
+        } catch (err) {
+            await tx.rollback();
+            console.error(`❌ Batch failed at index ${b}:`, err.message);
+            throw err;
+        }
+    }
+
+    // Sync all queued relationships after all entries across all batches exist
+    if (allRelationships.length > 0) {
+        const relTx = await client.transaction('write');
+        try {
+            for (const { entryId, related_entries } of allRelationships) {
+                await relTx.execute({ sql: "DELETE FROM entry_relationships WHERE entry_id = ?", args: [entryId] });
                 totalWriteQueries++;
 
                 let relOrder = 0;
@@ -426,7 +439,7 @@ async function run() {
                     const targetId = typeof rel === 'string' ? rel : (rel?.id || rel?.target_id);
                     if (targetId && (existingById.has(targetId) || allEntryIds.has(targetId))) {
                         const relId = `rel_${entryId}_${targetId}_related`;
-                        await tx.execute({
+                        await relTx.execute({
                             sql: `INSERT OR REPLACE INTO entry_relationships (id, entry_id, target_entry_id, relationship_type, sort_order) VALUES (?, ?, ?, ?, ?)`,
                             args: [relId, entryId, targetId, 'related', relOrder++]
                         });
@@ -434,12 +447,11 @@ async function run() {
                     }
                 }
             }
-
-            await tx.commit();
-            console.log(`   Batch ${Math.floor(b / BATCH_SIZE) + 1}/${Math.ceil(plan.length / BATCH_SIZE)} committed: ${batch.length} entries.`);
+            await relTx.commit();
+            console.log(`   ✓ Synced relationships for ${allRelationships.length} entries.`);
         } catch (err) {
-            await tx.rollback();
-            console.error(`❌ Batch failed at index ${b}:`, err.message);
+            await relTx.rollback();
+            console.error(`❌ Relationship sync failed:`, err.message);
             throw err;
         }
     }

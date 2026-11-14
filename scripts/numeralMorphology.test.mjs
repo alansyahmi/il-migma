@@ -13,6 +13,11 @@ import {
     normalizeNumeralMorphologyInput,
     shouldCombineMasculineAndShortAttributive,
     shouldSuppressNumeralAttributiveForms,
+    isRomanceNumeral,
+    getRomanceNumeralStem,
+    isDistributivePattern12ie3,
+    isMultiplierPattern12ie3i,
+    isTheoreticalNumeralSurface,
 } from '../src/lib/numeralMorphology.ts';
 
 const assertEq = (actual, expected, message) => {
@@ -469,6 +474,78 @@ const run = () => {
     assertEq(kwintDisplay.cardinal[0]?.entryId, 'num-ħamsa', 'kwint should link to num-ħamsa');
     assertEq(kwintDisplay.multiplier[0]?.value, 'kwintuplu', 'kwint should show sibling multiplier kwintuplu');
     assertEq(kwintDisplay.multiplier[0]?.entryId, 'num-kwintuplu', 'kwintuplu sibling should be linked');
+
+    // Test Romance numerals have stems, not roots
+    const romanceWords = ['triplu', 'kwadruplu', 'doppju', 'uniku', 'kwart', 'terz', 'kwint', 'sest', 'settimu', 'ottav', 'nonu', 'deċmu', 'miljun', 'biljun', 'żero'];
+    for (const rw of romanceWords) {
+        assert(isRomanceNumeral(rw), `${rw} should be recognized as a Romance numeral`);
+    }
+    assert(!isRomanceNumeral('tlieta'), 'tlieta should not be a Romance numeral');
+    assert(!isRomanceNumeral('erbgħa'), 'erbgħa should not be a Romance numeral');
+    assert(!isRomanceNumeral('ħamsa'), 'ħamsa should not be a Romance numeral');
+
+    assertEq(getRomanceNumeralStem('triplu'), 'tri', 'triplu stem should be tri (-plu is affix)');
+    assertEq(getRomanceNumeralStem('kwadruplu'), 'kwadr', 'kwadruplu stem should be kwadr (-uplu is affix)');
+    assertEq(getRomanceNumeralStem('settuplu'), 'sett', 'settuplu stem should be sett (-uplu is affix)');
+    assertEq(getRomanceNumeralStem('doppju'), 'doppj', 'doppju stem should be doppj');
+    assertEq(getRomanceNumeralStem('uniku'), 'unik', 'uniku stem should be unik');
+    assertEq(getRomanceNumeralStem('kwart'), 'kwart', 'kwart stem should be kwart');
+    assertEq(getRomanceNumeralStem('settimu'), 'sett', 'settimu stem should be sett (-imu is affix)');
+    assertEq(getRomanceNumeralStem('ottav'), 'ott', 'ottav stem should be ott (-av is affix)');
+    assertEq(getRomanceNumeralStem('deċmu'), 'deċ', 'deċmu stem should be deċ (-mu is affix)');
+    assertEq(getRomanceNumeralStem('ċenteżmu'), 'ċent', 'ċenteżmu stem should be ċent (-eżmu is affix)');
+    assertEq(getRomanceNumeralStem('miljun'), 'miljun', 'miljun stem should be miljun');
+
+    // Test distributive 12ie3 forms and multiplier 12ie3i forms
+    // Distributives 12ie3: only rbiegħ and tmien are plain; others are theoretical
+    assertEq(isTheoreticalNumeralSurface('rbiegħ'), false, 'distributive rbiegħ must NOT be theoretical');
+    assertEq(isTheoreticalNumeralSurface('tmien'), false, 'distributive tmien must NOT be theoretical');
+    assertEq(isTheoreticalNumeralSurface('uħied'), true, 'distributive uħied must be theoretical');
+    assertEq(isTheoreticalNumeralSurface('tliet'), true, 'distributive tliet must be theoretical');
+    assertEq(isTheoreticalNumeralSurface('ħmies'), true, 'distributive ħmies must be theoretical');
+    assertEq(isTheoreticalNumeralSurface('stiet'), true, 'distributive stiet must be theoretical');
+    assertEq(isTheoreticalNumeralSurface('sbiegħ'), true, 'distributive sbiegħ must be theoretical');
+    assertEq(isTheoreticalNumeralSurface('dsiegħ'), true, 'distributive dsiegħ must be theoretical');
+    assertEq(isTheoreticalNumeralSurface('għexier'), false, 'distributive għexier is attested and not theoretical');
+    assertEq(isTheoreticalNumeralSurface('għxier'), false, 'distributive għxier is attested and not theoretical');
+
+    // Multipliers 12ie3i: ALL are theoretical except għexieri
+    const multForms = ['tlieti', 'rbiegħi', 'ħmiesi', 'stieti', 'sbiegħi', 'tmieni', 'dsiegħi', 'għxari', 'għaxari'];
+    for (const mf of multForms) {
+        assert(isMultiplierPattern12ie3i(mf), `${mf} must match 12ie3i multiplier pattern`);
+        assert(isTheoreticalNumeralSurface(mf), `multiplier ${mf} must be theoretical`);
+    }
+    assert(isMultiplierPattern12ie3i('għexieri'), 'għexieri must match 12ie3i multiplier pattern');
+    assertEq(isTheoreticalNumeralSurface('għexieri'), false, 'multiplier għexieri is attested and not theoretical');
+
+    // Test tlieta canonical display
+    const tlietaDisplay = buildNumeralDisplayForms('tlieta', 't-l-t', []);
+    assertEq(toRenderedString(tlietaDisplay.multiplier), 'triplu, *tlieti, mtellet', 'tlieta multipliers must render *tlieti as theoretical');
+    assertEq(toRenderedString(tlietaDisplay.distributive), 'tlieta tlieta, *tliet', 'tlieta distributives must render *tliet as theoretical');
+
+    // Test erbgħa canonical display
+    const erbghaCanonicalDisplay = buildNumeralDisplayForms('erbgħa', 'r-b-għ', []);
+    assertEq(toRenderedString(erbghaCanonicalDisplay.multiplier), 'kwadruplu, *rbiegħi, mrabba\'', 'erbgħa multipliers must render *rbiegħi as theoretical');
+    assertEq(toRenderedString(erbghaCanonicalDisplay.distributive), 'erbgħa erbgħa, rbiegħ', 'erbgħa distributive rbiegħ must remain plain');
+
+    // Test sitta canonical display
+    const sittaDisplay = buildNumeralDisplayForms('sitta', 's-t-t', []);
+    assertEq(toRenderedString(sittaDisplay.distributive), 'sitta sitta, *stiet', 'sitta distributive must render *stiet as theoretical');
+
+    // Test tmienja canonical display
+    const tmienjaFullDisplay = buildNumeralDisplayForms('tmienja', 't-m-n-j', []);
+    assertEq(toRenderedString(tmienjaFullDisplay.distributive), 'tmienja tmienja, tmien', 'tmienja distributive tmien must remain plain');
+    assertEq(toRenderedString(tmienjaFullDisplay.multiplier), 'ottuplu, *tmieni, *mtemmen', 'tmienja multiplier must render *tmieni as theoretical');
+
+    // Test disgħa canonical display
+    const disghaDisplay = buildNumeralDisplayForms('disgħa', 'd-s-għ', []);
+    assertEq(toRenderedString(disghaDisplay.distributive), 'disgħa disgħa, *dsiegħ', 'disgħa distributive must render *dsiegħ as theoretical');
+    assertEq(toRenderedString(disghaDisplay.multiplier), 'nonuplu, *mdissa\'', 'disgħa multiplier must render *mdissa\' as theoretical');
+
+    // Test għaxra canonical display
+    const ghaxraDisplay = buildNumeralDisplayForms('għaxra', 'għ-x-r', []);
+    assertEq(toRenderedString(ghaxraDisplay.distributive), 'għaxra għaxra, għexier', 'għaxra distributive must render għexier as plain');
+    assertEq(toRenderedString(ghaxraDisplay.multiplier), 'deċuplu, għexieri, *mgħaxxer', 'għaxra multiplier must render għexieri as plain');
 
     // Test Noun updates
     const nounSource = {

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
     compareEntryPriority,
     groupEntriesByHeadword,
+    isProperNounEntry,
     POS_PRIORITY,
     AUDIT_STATUS_PRIORITY,
 } from '../src/lib/homographGrouping.ts';
@@ -86,4 +87,110 @@ test('homographGrouping: groups multi-POS entries under single canonical headwor
     assert.equal(alluraGroup.primary.id, 'conj-allura', 'conj-allura is primary due to approved audit_status');
     assert.equal(alluraGroup.siblings.length, 2, 'Has 2 siblings');
     assert.deepEqual(alluraGroup.allPos, ['conjunction', 'adverb', 'interjection']);
+});
+
+test('homographGrouping: isProperNounEntry detects various proper noun markers', () => {
+    assert.equal(isProperNounEntry({ pos: 'proper noun' }), true);
+    assert.equal(isProperNounEntry({ pos: 'proper_noun' }), true);
+    assert.equal(isProperNounEntry({ pos: 'noun', noun_type: 'proper' }), true);
+    assert.equal(isProperNounEntry({ pos: 'noun', noun_morphology: { noun_type: 'proper' } }), true);
+    assert.equal(isProperNounEntry({ pos: 'noun', tags: ['proper'] }), true);
+    assert.equal(isProperNounEntry({ pos: 'noun', tags: [{ name: 'proper' }] }), true);
+
+    // Capitalized noun headwords (Maltese days of the week, constellations, names)
+    assert.equal(isProperNounEntry({ id: 'n-erbgħa', headword: 'Erbgħa', pos: 'noun' }), true);
+    assert.equal(isProperNounEntry({ id: 'n-tnejn', headword: 'Tnejn', pos: 'noun' }), true);
+    assert.equal(isProperNounEntry({ id: 'n-tlieta', headword: 'Tlieta', pos: 'noun' }), true);
+    assert.equal(isProperNounEntry({ id: 'n-ħamis', headword: 'Ħamis', pos: 'noun' }), true);
+
+    // Common noun & numerals
+    assert.equal(isProperNounEntry({ pos: 'noun', headword: 'ktieb' }), false);
+    assert.equal(isProperNounEntry({ pos: 'numeral', headword: 'erbgħa' }), false);
+    assert.equal(isProperNounEntry({ pos: 'numeral', headword: 'tnejn' }), false);
+    assert.equal(isProperNounEntry({ pos: 'noun' }), false);
+    assert.equal(isProperNounEntry({ pos: 'noun', noun_type: 'concrete' }), false);
+    assert.equal(isProperNounEntry({ pos: 'verb' }), false);
+});
+
+test('homographGrouping: prioritizes common noun over proper noun', () => {
+    // Typical scenario where proper noun was scraped first (n-wott) and common noun got suffix (n-wott-2)
+    const properNoun = {
+        id: 'n-wott',
+        headword: 'Wott',
+        pos: 'noun',
+        noun_type: 'proper',
+        audit_status: 'pending',
+        rank: null,
+    };
+
+    const commonNoun = {
+        id: 'n-wott-2',
+        headword: 'wott',
+        pos: 'noun',
+        audit_status: 'pending',
+        rank: null,
+    };
+
+    const comparison = compareEntryPriority(commonNoun, properNoun);
+    assert.ok(comparison < 0, 'Common noun should beat proper noun even if proper noun has shorter id');
+
+    const reverseComparison = compareEntryPriority(properNoun, commonNoun);
+    assert.ok(reverseComparison > 0, 'Proper noun should yield to common noun');
+});
+
+test('homographGrouping: groupEntriesByHeadword selects common noun as primary over proper noun', () => {
+    const entries = [
+        {
+            id: 'n-qabru',
+            headword: 'Qabru',
+            pos: 'noun',
+            noun_type: 'proper',
+            audit_status: 'approved',
+            definitions: [{ text_en: 'Cancer (constellation)' }],
+        },
+        {
+            id: 'n-qabru-2',
+            headword: 'qabru',
+            pos: 'noun',
+            audit_status: 'pending',
+            definitions: [{ text_en: 'crab' }],
+        },
+    ];
+
+    const grouped = groupEntriesByHeadword(entries);
+    assert.equal(grouped.length, 1, 'Should group into single headword');
+    assert.equal(grouped[0].primary.id, 'n-qabru-2', 'Common noun must be primary entry');
+    assert.equal(grouped[0].siblings.length, 1, 'Proper noun becomes sibling');
+    assert.equal(grouped[0].siblings[0].id, 'n-qabru');
+});
+
+test('homographGrouping: prioritizes numerals over proper nouns', () => {
+    // erbgħa (four, numeral) vs Erbgħa (Wednesday, proper noun)
+    const properNounWednesday = {
+        id: 'n-erbgħa',
+        headword: 'Erbgħa',
+        pos: 'noun',
+        audit_status: 'approved',
+        definitions: [{ text_en: 'Wednesday' }],
+    };
+
+    const numeralFour = {
+        id: 'num-erbgħa',
+        headword: 'erbgħa',
+        pos: 'numeral',
+        audit_status: 'pending',
+        definitions: [{ text_en: 'four' }],
+    };
+
+    const comparison = compareEntryPriority(numeralFour, properNounWednesday);
+    assert.ok(comparison < 0, 'Numeral four should beat proper noun Wednesday');
+
+    const reverse = compareEntryPriority(properNounWednesday, numeralFour);
+    assert.ok(reverse > 0, 'Proper noun Wednesday should yield to numeral four');
+
+    const grouped = groupEntriesByHeadword([properNounWednesday, numeralFour]);
+    assert.equal(grouped.length, 1);
+    assert.equal(grouped[0].primary.id, 'num-erbgħa', 'Numeral must be primary canonical entry');
+    assert.equal(grouped[0].siblings.length, 1);
+    assert.equal(grouped[0].siblings[0].id, 'n-erbgħa');
 });

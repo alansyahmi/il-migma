@@ -474,7 +474,14 @@ export async function onRequestGet({ request, env }) {
                     ELSE 3 END)`;
                 args.push(normalizedQ, normalizedQ + '%', normalizedQ, normalizedQ);
             }
-            finalSql += ` ORDER BY ${prioritySql && prioritySql !== '0' ? prioritySql + ',' : ''} e.headword ASC LIMIT ? OFFSET ?`;
+            finalSql += ` ORDER BY 
+                ${prioritySql && prioritySql !== '0' ? prioritySql + ',' : ''}
+                CASE WHEN LOWER(TRIM(COALESCE(e.pos, ''))) IN ('proper noun', 'proper_noun', 'proper', 'propn')
+                          OR LOWER(TRIM(COALESCE(nm.noun_type, ''))) IN ('proper', 'proper noun', 'proper_noun')
+                          OR (e.headword GLOB '[A-ZÀĊĠĦŻ]*' AND LOWER(TRIM(COALESCE(e.pos, 'noun'))) IN ('noun', 'n'))
+                     THEN 1 ELSE 0 END ASC,
+                e.headword ASC
+                LIMIT ? OFFSET ?`;
         }
         args.push(limit, offset);
 

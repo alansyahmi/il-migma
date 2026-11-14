@@ -829,7 +829,7 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
         ordinal: 'tielet',
         adverbial: 'tliet darbiet',
         fractional_semitic: '*tolt',
-        multiplier_form1: 'tlieti',
+        multiplier_form1: '*tlieti',
         multiplier_form2: 'mtellet',
         distributive: 'tlieta tlieta',
         attributive_short: 'tliet',
@@ -839,7 +839,7 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
         ordinal: "raba'",
         adverbial: "erba' darbiet",
         fractional_semitic: "robu'",
-        multiplier_form1: 'rbiegħi',
+        multiplier_form1: '*rbiegħi',
         multiplier_form2: "mrabba'",
         distributive: "erbgħa erbgħa",
         attributive_short: "erba'",
@@ -879,7 +879,7 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
         ordinal: 'tmien',
         adverbial: 'tmien darbiet',
         fractional_semitic: '*tomon',
-        multiplier_form1: 'tmieni',
+        multiplier_form1: '*tmieni',
         multiplier_form2: '*mtemmen',
         distributive: 'tmienja tmienja',
         attributive_short: 'tmien',
@@ -890,7 +890,7 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
         adverbial: "disa' darbiet",
         fractional_semitic: "*dosu'",
         multiplier_form1: 'nonuplu',
-        multiplier_form2: "*mtassa'",
+        multiplier_form2: "*mdissa'",
         distributive: "disgħa disgħa",
         attributive_short: "disa'",
         attributive_long: 'disat',
@@ -899,7 +899,7 @@ const SUPPLETIVE_NUMERAL_FORMS: Record<string, Partial<NumeralAutoForms>> = {
         ordinal: 'għaxar',
         adverbial: 'għaxar darbiet',
         fractional_semitic: '*għoxor',
-        multiplier_form1: 'għaxari',
+        multiplier_form1: '*għexieri',
         multiplier_form2: '*mgħaxxer',
         distributive: 'għaxra għaxra',
         attributive_short: 'għaxar',
@@ -1036,12 +1036,24 @@ export function generateNumeralForms(masculine: string, root_consonants: string)
     }
 
     // 4. Multiplier: CCieCi or passive ptcp of Form II (mCeCCeC)
-    forms.multiplier_form1 = `${c1}${c2}ie${c3}i`;
-    forms.multiplier_form2 = `m${c1}e${c2}${c2}e${c3}`; // simplified Form II passive ptcp logic
-    if (c3 === 'għ') forms.multiplier_form2 = `m${c1}e${c2}${c2}a'`; // e.g. mrabba'
+    // Multiplier form CCieCi is always theoretical
+    const multStem = c1 === 'għ' ? `${c1}e${c2}` : `${c1}${c2}`;
+    forms.multiplier_form1 = `*${multStem}ie${c3}i`;
+    if (c1 === 'd' && c2 === 's' && c3 === 'għ') {
+        forms.multiplier_form2 = "*mdissa'";
+    } else if (c3 === 'għ') {
+        forms.multiplier_form2 = `*m${c1}e${c2}${c2}a'`; // e.g. mrabba'
+    } else {
+        forms.multiplier_form2 = `*m${c1}e${c2}${c2}e${c3}`; // simplified Form II passive ptcp logic
+    }
 
     // 5. Distributive: CCieC
-    forms.distributive = `${c1}${c2}ie${c3}`;
+    // Distributive forms 12ie3 are theoretical, except for rbiegħ and tmien
+    const distStem = c1 === 'għ' ? `${c1}e${c2}` : `${c1}${c2}`;
+    const rawDistributive = `${distStem}ie${c3}`;
+    forms.distributive = (rawDistributive === 'rbiegħ' || rawDistributive === 'tmien')
+        ? rawDistributive
+        : `*${rawDistributive}`;
 
     // 6. Attributive Forms
     // Short: masculine/lemma itself usually (e.g. tliet)

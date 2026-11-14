@@ -286,6 +286,18 @@ export async function onRequestGet({ params, env }) {
             WHERE ${whereClause}
         `;
 
+        // ── Priority order clause: common nouns / numerals / non-proper entries beat proper nouns ──
+        const ENTRY_PRIORITY_ORDER_SQL = `
+            ORDER BY
+                CASE WHEN LOWER(TRIM(COALESCE(e.pos, ''))) IN ('proper noun', 'proper_noun', 'proper', 'propn')
+                          OR LOWER(TRIM(COALESCE(nm.noun_type, ''))) IN ('proper', 'proper noun', 'proper_noun')
+                          OR (e.headword GLOB '[A-ZÀĊĠĦŻ]*' AND LOWER(TRIM(COALESCE(e.pos, 'noun'))) IN ('noun', 'n'))
+                     THEN 1 ELSE 0 END ASC,
+                CASE WHEN e.audit_status = 'approved' THEN 0 WHEN e.audit_status = 'reviewed' THEN 1 ELSE 2 END ASC,
+                COALESCE(e.source_frequency_rank, e.rank, 999999) ASC,
+                e.id ASC
+        `;
+
         // 1. First try exact Primary Key lookup (fastest O(1) B-tree lookup: 1 row read)
         let entryRes = await db.execute({
             sql: buildEntrySelectSql('e.id = ?'),
@@ -305,7 +317,7 @@ export async function onRequestGet({ params, env }) {
                 args.push(...family.likePatterns);
             }
             entryRes = await db.execute({
-                sql: buildEntrySelectSql(conditions.join(' OR ')) + ' LIMIT 1',
+                sql: buildEntrySelectSql(conditions.join(' OR ')) + ENTRY_PRIORITY_ORDER_SQL + ' LIMIT 1',
                 args,
             });
         }
@@ -317,7 +329,7 @@ export async function onRequestGet({ params, env }) {
             const straightApos = id.replace(/[\u2018\u2019`´]/g, "'");
             const curlyApos = id.replace(/[\u2018\u2019`´']/g, "’");
             entryRes = await db.execute({
-                sql: buildEntrySelectSql('LOWER(e.headword) IN (LOWER(?), LOWER(?), LOWER(?))') + ' LIMIT 1',
+                sql: buildEntrySelectSql('LOWER(e.headword) IN (LOWER(?), LOWER(?), LOWER(?))') + ENTRY_PRIORITY_ORDER_SQL + ' LIMIT 1',
                 args: [id, straightApos, curlyApos],
             });
         }
@@ -519,7 +531,13 @@ export async function onRequestGet({ params, env }) {
                         json_extract(e.definitions, '$[0].text_mt') AS text_mt
                       FROM entries e
                       ${ENTRY_MORPHOLOGY_JOINS}
-                      WHERE ${clauses.join(' OR ')}`,
+                      WHERE ${clauses.join(' OR ')}
+                      ORDER BY
+                        CASE WHEN LOWER(TRIM(COALESCE(e.pos, ''))) IN ('proper noun', 'proper_noun', 'proper', 'propn')
+                                  OR LOWER(TRIM(COALESCE(nm.noun_type, ''))) IN ('proper', 'proper noun', 'proper_noun')
+                                  OR (e.headword GLOB '[A-ZÀĊĠĦŻ]*' AND LOWER(TRIM(COALESCE(e.pos, 'noun'))) IN ('noun', 'n'))
+                             THEN 1 ELSE 0 END ASC,
+                        e.id ASC`,
                 args: queryArgs,
             });
 

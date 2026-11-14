@@ -190,7 +190,7 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
         ordinal: ['tielet'],
         adverbial: ['tliet darbiet'],
         fractional: ['terz', '*tolt'],
-        multiplier: ['triplu', 'tlieti', 'mtellet'],
+        multiplier: ['triplu', '*tlieti', 'mtellet'],
         distributive: ['tlieta tlieta', '*tliet'],
         attributive_short: ['tliet'],
         attributive_long: ['tlitt'],
@@ -199,7 +199,7 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
         ordinal: ["raba'"],
         adverbial: ["erba' darbiet"],
         fractional: ['kwart', "robu'"],
-        multiplier: ['kwadruplu', 'rbiegħi', "mrabba'"],
+        multiplier: ['kwadruplu', '*rbiegħi', "mrabba'"],
         distributive: ["erbgħa erbgħa", 'rbiegħ'],
         attributive_short: ["erba'"],
         attributive_long: ['erbat'],
@@ -218,7 +218,7 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
         adverbial: ['sitt darbiet'],
         fractional: ['*sott', 'sest'],
         multiplier: ['sestuplu', '*msettet'],
-        distributive: ['sitta sitta', 'stiet'],
+        distributive: ['sitta sitta', '*stiet'],
         attributive_short: ['sitt'],
         attributive_long: ['sitt'],
     },
@@ -227,7 +227,7 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
         adverbial: ["seba' darbiet"],
         fractional: ["*sobu'", 'settimu'],
         multiplier: ['settuplu', "*msabba'"],
-        distributive: ["sebgħa sebgħa"],
+        distributive: ["sebgħa sebgħa", '*sbiegħ'],
         attributive_short: ["seba'"],
         attributive_long: ['sebat'],
     },
@@ -235,8 +235,8 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
         ordinal: ['tmien'],
         adverbial: ['tmien darbiet'],
         fractional: ['tomon', 'ottav'],
-        multiplier: ['ottuplu', 'tmieni', '*mtemmen'],
-        distributive: ['tmienja tmienja', 'tmjen'],
+        multiplier: ['ottuplu', '*tmieni', '*mtemmen'],
+        distributive: ['tmienja tmienja', 'tmien'],
         attributive_short: ['tmien'],
         attributive_long: ['tmint'],
     },
@@ -244,8 +244,8 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
         ordinal: ["disa'"],
         adverbial: ["disa' darbiet"],
         fractional: ["*dosu'", 'nonu'],
-        multiplier: ['nonuplu', "*mtassa'"],
-        distributive: ["disgħa disgħa"],
+        multiplier: ['nonuplu', "*mdissa'"],
+        distributive: ["disgħa disgħa", '*dsiegħ'],
         attributive_short: ["disa'"],
         attributive_long: ['disat'],
     },
@@ -253,8 +253,8 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
         ordinal: ['għaxar'],
         adverbial: ['għaxar darbiet'],
         fractional: ['*għoxor', 'deċmu'],
-        multiplier: ['deċuplu', 'għaxari', '*mgħaxxer'],
-        distributive: ['għaxra għaxra'],
+        multiplier: ['deċuplu', 'għexieri', '*mgħaxxer'],
+        distributive: ['għaxra għaxra', 'għexier'],
         attributive_short: ['għaxar'],
         attributive_long: ['għaxart'],
     },
@@ -274,7 +274,7 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
         multiplier: ['mitt darba daqs', 'ċentuplu'],
         distributive: ['mitt mitt', 'mija mija'],
         attributive_short: ['mitt'],
-        attributive_long: ['mija'],
+        attributive_long: ['mitt'],
     },
     mija: {
         ordinal: ['il-mitt'],
@@ -283,7 +283,7 @@ const NUMERAL_DISPLAY_FORMS: Record<string, Partial<Record<keyof NumeralDisplayF
         multiplier: ['mitt darba daqs', 'ċentuplu'],
         distributive: ['mija mija', 'mitt mitt'],
         attributive_short: ['mitt'],
-        attributive_long: ['mija'],
+        attributive_long: ['mitt'],
     },
     elf: {
         ordinal: ['l-elf'],
@@ -393,7 +393,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             ordinal: ['tielet'],
             adverbial: ['tliet darbiet'],
             fractional: ['terz', '*tolt'],
-            multiplier: ['triplu', 'tlieti', 'mtellet'],
+            multiplier: ['triplu', '*tlieti', 'mtellet'],
             distributive: ['tlieta tlieta', '*tliet'],
             attributive_short: ['tliet'],
             attributive_long: ['tlitt'],
@@ -405,7 +405,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             adverbial: "erba' darbiet",
             fractional_semitic: 'kwart',
             multiplier_form1: 'kwadruplu',
-            multiplier_form2: 'rbiegħi',
+            multiplier_form2: '*rbiegħi',
             distributive: "erbgħa erbgħa",
             attributive_short: "erba'",
             attributive_long: 'erbat',
@@ -414,7 +414,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             ordinal: ["raba'"],
             adverbial: ["erba' darbiet"],
             fractional: ['kwart', "robu'"],
-            multiplier: ['kwadruplu', 'rbiegħi', "mrabba'"],
+            multiplier: ['kwadruplu', '*rbiegħi', "mrabba'"],
             distributive: ["erbgħa erbgħa", 'rbiegħ'],
             attributive_short: ["erba'"],
             attributive_long: ['erbat'],
@@ -457,7 +457,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             adverbial: ['sitt darbiet'],
             fractional: ['*sott', 'sest'],
             multiplier: ['sestuplu', '*msettet'],
-            distributive: ['sitta sitta', 'stiet'],
+            distributive: ['sitta sitta', '*stiet'],
             attributive_short: ['sitt'],
             attributive_long: ['sitt'],
         },
@@ -478,7 +478,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             adverbial: ["seba' darbiet"],
             fractional: ["*sobu'", 'settimu'],
             multiplier: ['settuplu', "*msabba'"],
-            distributive: ["sebgħa sebgħa"],
+            distributive: ["sebgħa sebgħa", '*sbiegħ'],
             attributive_short: ["seba'"],
             attributive_long: ['sebat'],
         },
@@ -489,7 +489,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             adverbial: 'tmien darbiet',
             fractional_semitic: 'tomon',
             multiplier_form1: 'ottuplu',
-            multiplier_form2: 'tmieni',
+            multiplier_form2: '*tmieni',
             distributive: 'tmienja tmienja',
             attributive_short: 'tmien',
             attributive_long: 'tmint',
@@ -498,8 +498,8 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             ordinal: ['tmien'],
             adverbial: ['tmien darbiet'],
             fractional: ['tomon', 'ottav'],
-            multiplier: ['ottuplu', 'tmieni', '*mtemmen'],
-            distributive: ['tmienja tmienja', 'tmjen'],
+            multiplier: ['ottuplu', '*tmieni', '*mtemmen'],
+            distributive: ['tmienja tmienja', 'tmien'],
             attributive_short: ['tmien'],
             attributive_long: ['tmint'],
         },
@@ -510,7 +510,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             adverbial: "disa' darbiet",
             fractional_semitic: "*dosu'",
             multiplier_form1: 'nonuplu',
-            multiplier_form2: "*mtassa'",
+            multiplier_form2: "*mdissa'",
             distributive: "disgħa disgħa",
             attributive_short: "disa'",
             attributive_long: 'disat',
@@ -519,8 +519,8 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             ordinal: ["disa'"],
             adverbial: ["disa' darbiet"],
             fractional: ["*dosu'", 'nonu'],
-            multiplier: ['nonuplu', "*mtassa'"],
-            distributive: ["disgħa disgħa"],
+            multiplier: ['nonuplu', "*mdissa'"],
+            distributive: ["disgħa disgħa", '*dsiegħ'],
             attributive_short: ["disa'"],
             attributive_long: ['disat'],
         },
@@ -531,7 +531,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             adverbial: 'għaxar darbiet',
             fractional_semitic: '*għoxor',
             multiplier_form1: 'deċuplu',
-            multiplier_form2: 'għaxari',
+            multiplier_form2: 'għexieri',
             distributive: 'għaxra għaxra',
             attributive_short: 'għaxar',
             attributive_long: 'għaxart',
@@ -540,8 +540,8 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             ordinal: ['għaxar'],
             adverbial: ['għaxar darbiet'],
             fractional: ['*għoxor', 'deċmu'],
-            multiplier: ['deċuplu', 'għaxari', '*mgħaxxer'],
-            distributive: ['għaxra għaxra'],
+            multiplier: ['deċuplu', 'għexieri', '*mgħaxxer'],
+            distributive: ['għaxra għaxra', 'għexier'],
             attributive_short: ['għaxar'],
             attributive_long: ['għaxart'],
         },
@@ -575,7 +575,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             multiplier_form2: 'ċentuplu',
             distributive: 'mitt mitt',
             attributive_short: 'mitt',
-            attributive_long: 'mija',
+            attributive_long: 'mitt',
         },
         display: {
             ordinal: ['il-mitt'],
@@ -584,7 +584,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             multiplier: ['mitt darba daqs', 'ċentuplu'],
             distributive: ['mitt mitt', 'mija mija'],
             attributive_short: ['mitt'],
-            attributive_long: ['mija'],
+            attributive_long: ['mitt'],
         },
     },
     mija: {
@@ -596,7 +596,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             multiplier_form2: 'ċentuplu',
             distributive: 'mija mija',
             attributive_short: 'mitt',
-            attributive_long: 'mija',
+            attributive_long: 'mitt',
         },
         display: {
             ordinal: ['il-mitt'],
@@ -605,7 +605,7 @@ const NUMERAL_CANONICAL_OVERRIDES: Record<string, CanonicalNumeralOverrides> = {
             multiplier: ['mitt darba daqs', 'ċentuplu'],
             distributive: ['mija mija', 'mitt mitt'],
             attributive_short: ['mitt'],
-            attributive_long: ['mija'],
+            attributive_long: ['mitt'],
         },
     },
     elf: {
@@ -853,7 +853,176 @@ function extractLinkedEntryPattern(entry: LinkedNumeralEntry): string | null {
     );
 }
 
+export const ROMANCE_NUMERAL_STEMS: Record<string, string> = {
+    // Multipliers (-uplu / -plu is an affix)
+    triplu: 'tri',
+    tripla: 'tri',
+    tripli: 'tri',
+    kwadruplu: 'kwadr',
+    kwadrupla: 'kwadr',
+    kwadrupli: 'kwadr',
+    kwintuplu: 'kwint',
+    kwintupla: 'kwint',
+    kwintupli: 'kwint',
+    sestuplu: 'sest',
+    sestupla: 'sest',
+    sestupli: 'sest',
+    settuplu: 'sett',
+    settupla: 'sett',
+    settupli: 'sett',
+    ottuplu: 'ott',
+    ottupla: 'ott',
+    ottupli: 'ott',
+    nonuplu: 'non',
+    nonupla: 'non',
+    nonupli: 'non',
+    deċuplu: 'deċ',
+    deċupla: 'deċ',
+    deċupli: 'deċ',
+    ċentuplu: 'ċent',
+    ċentupla: 'ċent',
+    ċentupli: 'ċent',
+    doppju: 'doppj',
+    doppja: 'doppj',
+    doppji: 'doppj',
+    uniku: 'unik',
+    unika: 'unik',
+    uniċi: 'unik',
+
+    // Ordinals & Fractionals
+    prim: 'prim',
+    prima: 'prim',
+    primi: 'prim',
+    sekond: 'sekond',
+    sekonda: 'sekond',
+    sekondi: 'sekond',
+    terz: 'terz',
+    terza: 'terz',
+    terzi: 'terz',
+    kwart: 'kwart',
+    kwarta: 'kwart',
+    kwarti: 'kwart',
+    kwint: 'kwint',
+    kwinta: 'kwint',
+    kwinti: 'kwint',
+    sest: 'sest',
+    sesta: 'sest',
+    sesti: 'sest',
+    settimu: 'sett',
+    settima: 'sett',
+    settimi: 'sett',
+    ottav: 'ott',
+    ottava: 'ott',
+    ottavi: 'ott',
+    nonu: 'non',
+    nona: 'non',
+    noni: 'non',
+    deċmu: 'deċ',
+    deċma: 'deċ',
+    deċmi: 'deċ',
+    ċenteżmu: 'ċent',
+    ċenteżmi: 'ċent',
+
+    // Large numbers & Zero
+    miljun: 'miljun',
+    miljuni: 'miljun',
+    biljun: 'biljun',
+    biljuni: 'biljun',
+    triljun: 'triljun',
+    triljuni: 'triljun',
+    żero: 'żer',
+    żeri: 'żer',
+};
+
+export function isRomanceNumeral(entryOrHeadword: any, extra?: any): boolean {
+    if (!entryOrHeadword) return false;
+    if (typeof entryOrHeadword === 'string') {
+        const norm = normalizeNumeralLookupKey(stripTheoreticalPrefix(entryOrHeadword));
+        if (ROMANCE_NUMERAL_STEMS[norm]) return true;
+        if (extra && typeof extra === 'object') {
+            if (extra.is_loanword === 1 || extra.is_loanword === true) return true;
+            const src = String(extra.source_language || '').toLowerCase();
+            if (src.includes('sicil') || src.includes('ital') || src.includes('roman') || src.includes('latin')) return true;
+        }
+        return false;
+    }
+    const headwordNorm = normalizeNumeralLookupKey(stripTheoreticalPrefix(entryOrHeadword.headword || entryOrHeadword.lemma || ''));
+    if (ROMANCE_NUMERAL_STEMS[headwordNorm]) return true;
+    if (entryOrHeadword.is_loanword === 1 || entryOrHeadword.is_loanword === true) return true;
+    const sourceLang = String(entryOrHeadword.source_language || '').toLowerCase();
+    if (sourceLang.includes('sicil') || sourceLang.includes('ital') || sourceLang.includes('roman') || sourceLang.includes('latin')) {
+        return true;
+    }
+    return false;
+}
+
+export function getRomanceNumeralStem(entryOrHeadword: any): string {
+    if (!entryOrHeadword) return '';
+    if (typeof entryOrHeadword === 'object' && entryOrHeadword !== null) {
+        const directStem = entryOrHeadword.stem || entryOrHeadword.zokk_morphology?.stem_string || entryOrHeadword.numeral_morphology?.stem;
+        if (directStem) return String(directStem).replace(/^-+|-+$/g, '').trim();
+    }
+    const headword = typeof entryOrHeadword === 'string'
+        ? entryOrHeadword
+        : String(entryOrHeadword.headword || entryOrHeadword.lemma || '');
+    const norm = normalizeNumeralLookupKey(stripTheoreticalPrefix(headword));
+    if (ROMANCE_NUMERAL_STEMS[norm]) {
+        return ROMANCE_NUMERAL_STEMS[norm];
+    }
+    return norm.replace(/[uai]$/i, '');
+}
+
+const DISTRIBUTIVE_12IE3_FORMS = new Set([
+    'uħied',
+    'tliet',
+    'rbiegħ',
+    'ħmies',
+    'stiet',
+    'sbiegħ',
+    'tmien',
+    'dsiegħ',
+    'għexier',
+    'għxier',
+]);
+
+const MULTIPLIER_12IE3I_FORMS = new Set([
+    'tlieti',
+    'rbiegħi',
+    'ħmiesi',
+    'stieti',
+    'sbiegħi',
+    'tmieni',
+    'dsiegħi',
+    'għexieri',
+    'għxari',
+    'għaxari',
+]);
+
+export function isDistributivePattern12ie3(value: string): boolean {
+    const norm = normalizeNumeralLookupKey(stripTheoreticalPrefix(value));
+    return DISTRIBUTIVE_12IE3_FORMS.has(norm);
+}
+
+export function isMultiplierPattern12ie3i(value: string): boolean {
+    const norm = normalizeNumeralLookupKey(stripTheoreticalPrefix(value));
+    return MULTIPLIER_12IE3I_FORMS.has(norm);
+}
+
+export function isTheoreticalNumeralSurface(value: string): boolean {
+    const clean = stripTheoreticalPrefix(value).trim();
+    if (!clean) return false;
+    const norm = normalizeNumeralLookupKey(clean);
+    // Multiplier forms 12ie3i: għexieri is attested/plain exception; all others are theoretical
+    if (norm === 'għexieri') return false;
+    if (MULTIPLIER_12IE3I_FORMS.has(norm)) return true;
+    // Distributive forms 12ie3: rbiegħ, tmien, and għexier are attested/plain exceptions; all others are theoretical
+    if (norm === 'rbiegħ' || norm === 'tmien' || norm === 'għexier' || norm === 'għxier') return false;
+    if (DISTRIBUTIVE_12IE3_FORMS.has(norm)) return true;
+    return false;
+}
+
 function getLinkedNumeralRootKey(entry: LinkedNumeralEntry): string {
+    if (isRomanceNumeral(entry)) return '';
     return String(
         entry.root_consonants
         || (entry as any).root_pattern_form?.root?.consonants
@@ -1256,14 +1425,22 @@ function toNumeralSurfaceValue(
     if (!rawValue || rawValue === '-') return null;
 
     const normalizedValue = rawValue.trim();
-    const isTheoretical = normalizedValue.startsWith('*');
+    const isTheoreticalExplicit = normalizedValue.startsWith('*');
     const isAutoGenerated = normalizedValue.startsWith('✦');
     const value = stripTheoreticalPrefix(normalizedValue);
     if (!value) return null;
 
+    const isTheoreticalPattern = isTheoreticalNumeralSurface(value);
+    const isTheoretical = isTheoreticalExplicit || isTheoreticalPattern;
+
     const existing = linkedEntries.find((entry) => normalizeNumeralLookupKey(entry.headword || '') === normalizeNumeralLookupKey(value));
     if (existing) {
-        return { value, marker: 'plain', entryId: existing.id, pattern: extractLinkedEntryPattern(existing) };
+        return {
+            value,
+            marker: isTheoretical ? 'theoretical' : 'plain',
+            entryId: existing.id,
+            pattern: extractLinkedEntryPattern(existing),
+        };
     }
 
     if (isTheoretical) {
@@ -1393,6 +1570,8 @@ export function buildNumeralDisplayForms(
     rootConsonants: string,
     linkedEntries: LinkedNumeralEntry[] = [],
 ): NumeralDisplayForms {
+    const isRomance = isRomanceNumeral(headword);
+    const effectiveRootConsonants = isRomance ? '' : rootConsonants;
     const expandedLinkedEntries = expandLinkedNumeralEntries(linkedEntries);
     const emptyForms: NumeralDisplayForms = {
         ordinal: [],
@@ -1415,7 +1594,7 @@ export function buildNumeralDisplayForms(
         || NUMERAL_DISPLAY_FORMS[normalizedHeadword]
         || NUMERAL_DISPLAY_FORMS[familyHeadword]
     );
-    if (!rootConsonants && !hasCanonical) {
+    if (!effectiveRootConsonants && !hasCanonical) {
         return emptyForms;
     }
     const displayOverride = NUMERAL_CANONICAL_OVERRIDES[normalizedHeadword]?.display;
@@ -1424,7 +1603,7 @@ export function buildNumeralDisplayForms(
         ...(displayOverride || {}),
     };
 
-    const autoForms = generateNumeralForms(headword, rootConsonants);
+    const autoForms = generateNumeralForms(headword, effectiveRootConsonants);
     const canonicalAutoOverride = NUMERAL_CANONICAL_OVERRIDES[normalizedHeadword]?.auto;
     const mergedAutoForms = canonicalAutoOverride ? { ...autoForms, ...canonicalAutoOverride } : autoForms;
 
@@ -1459,6 +1638,8 @@ export function buildNumeralMorphologyDisplayForms(
     morphology: any = {},
     linkedEntries: LinkedNumeralEntry[] = [],
 ): NumeralMorphologyDisplayForms {
+    const isRomance = isRomanceNumeral(headword, morphology);
+    const effectiveRootConsonants = isRomance ? '' : (morphology?.root_consonants || morphology?.numeral_morphology?.root_consonants || rootConsonants || '');
     const expandedLinkedEntries = expandLinkedNumeralEntries(linkedEntries);
     const saved = morphology?.numeral_morphology
         ? { ...morphology, ...morphology.numeral_morphology }
@@ -1466,7 +1647,7 @@ export function buildNumeralMorphologyDisplayForms(
     const currentEntryForRole = {
         ...saved,
         headword,
-        root_consonants: saved.root_consonants || rootConsonants,
+        root_consonants: effectiveRootConsonants,
     };
     const role = normalizeNumeralRole(saved.numeral_type)
         || inferNumeralRoleFromCardinalSurfaces(currentEntryForRole, expandedLinkedEntries)
@@ -1516,7 +1697,7 @@ export function buildNumeralMorphologyDisplayForms(
         const cardinalForms = linkedCardinal
             ? buildNumeralMorphologyDisplayForms(
                 linkedCardinal.headword || '',
-                linkedCardinal.root_consonants || rootConsonants,
+                isRomanceNumeral(linkedCardinal) ? '' : (linkedCardinal.root_consonants || (isRomance ? '' : rootConsonants)),
                 {
                     ...(linkedCardinal.numeral_morphology || {}),
                     numeral_type: 'cardinal',

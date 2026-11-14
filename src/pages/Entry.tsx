@@ -30,7 +30,7 @@ import { compactPluralRows, normalizePluralFormRows } from '@/lib/pluralForms';
 import { isSuffixLikeValue } from '@/lib/suffixMatching';
 import { isInflectableEnabled, shouldHideInflectionTableForEntry } from '@/lib/inflectionState';
 import { getEntryAdjectiveMorphology, resolveEntryViewKind, formatDefinitionGloss, hasNounNuanceDefinition } from '@/lib/entryDisplay';
-import { compareEntryPriority } from '@/lib/homographGrouping';
+import { compareEntryPriority, isProperNounEntry } from '@/lib/homographGrouping';
 import { parseImalaBlockedOverride, resolveImalaBlocked } from '@/lib/imala';
 import {
     buildNumeralMorphologyDisplayForms,
@@ -43,6 +43,8 @@ import {
     NUMERAL_ROLE_ORDER,
     NUMERAL_ROLE_META,
     shouldCombineMasculineAndShortAttributive,
+    isRomanceNumeral,
+    getRomanceNumeralStem,
     type NumeralRole,
     type NumeralSurfaceValue,
 } from '@/lib/numeralMorphology';
@@ -1286,7 +1288,7 @@ function NounMorphologySection({
 
         const singularValue = isOppositeVariant && typeof baseForm === 'string' && baseForm.trim() !== '-' ? (
             <div className="group flex items-center gap-1.5 justify-center md:justify-start">
-                <Link to={`/entry/n-${encodeURIComponent(baseForm.trim())}`} className="hover:underline text-link transition-colors font-serif font-medium">
+                <Link to={`/entry/${encodeURIComponent(existingRel?.id || baseForm.trim())}`} className="hover:underline text-link transition-colors font-serif font-medium">
                     {baseForm}
                 </Link>
                 {isActualAdmin && (
@@ -1626,7 +1628,7 @@ function AdjectiveMorphologySection({
 
         const singularValue = isOppositeVariant && typeof baseForm === 'string' && baseForm.trim() !== '-' ? (
             <div className="group flex items-center gap-1.5 justify-center md:justify-start">
-                <Link to={`/entry/n-${encodeURIComponent(baseForm.trim())}`} className="hover:underline text-link transition-colors font-serif font-medium">
+                <Link to={`/entry/${encodeURIComponent(existingRel?.id || baseForm.trim())}`} className="hover:underline text-link transition-colors font-serif font-medium">
                     {baseForm}
                 </Link>
                 {isActualAdmin && (
@@ -1899,8 +1901,11 @@ function UsageNotesSideCard({ entry, language, term }: { entry: Entry; language:
         <SideCard title={term('usage-notes')}>
             <div className="space-y-3 text-sm text-black leading-relaxed">
                 {entriesWithNotes.map(({ entry: e, notes }) => {
-                    const posKey = (e.pos || 'pos').toLowerCase();
-                    const posLabel = term(posKey) || e.pos;
+                    const isProper = isProperNounEntry(e);
+                    const posKey = isProper ? 'proper-noun' : (e.pos || 'pos').toLowerCase();
+                    const posLabel = isProper
+                        ? (term('proper-noun') || `${term('proper') || 'Propju'} ${term('noun') || 'Nom'}`)
+                        : (term(posKey) || e.pos);
                     const isCurrent = e.id === entry.id;
 
                     return (
@@ -2138,8 +2143,11 @@ export function SidebarGlossCard({ entry }: { entry: Entry }) {
             ) : (
                 <div className="space-y-3.5 text-sm text-black">
                     {allEntries.map((e) => {
-                        const posKey = (e.pos || 'pos').toLowerCase();
-                        const posLabel = term(posKey) || e.pos;
+                        const isProper = isProperNounEntry(e);
+                        const posKey = isProper ? 'proper-noun' : (e.pos || 'pos').toLowerCase();
+                        const posLabel = isProper
+                            ? (term('proper-noun') || `${term('proper') || 'Propju'} ${term('noun') || 'Nom'}`)
+                            : (term(posKey) || e.pos);
                         const isCurrent = e.id === entry.id;
 
                         return (
@@ -4173,7 +4181,13 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
         );
     };
 
-    const rootConsonants = entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants;
+    const isRomance = isRomanceNumeral(entry);
+    const rootConsonants = isRomance
+        ? null
+        : (entry.root_pattern_form?.root?.consonant_array?.join('-') || entry.root_pattern_form?.root?.consonants || (entry as any).root_consonants);
+    const stemValue = isRomance
+        ? getRomanceNumeralStem(entry)
+        : ((entry as any).stem || entry.zokk_morphology?.stem_string || (entry as any).numeral_morphology?.stem || '');
     const pattern = entry.root_pattern_form?.pattern;
     const [hydratedNumeralFamilyEntries, setHydratedNumeralFamilyEntries] = useState<any[]>([]);
 
@@ -4370,10 +4384,12 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     );
 
     const handleEditNumeralForm = (data: NumeralSurfaceValue, type: string) => {
+        const isTargetRomance = isRomanceNumeral(data.value);
         if (data.marker === 'plain' && data.entryId) {
             const existing = linkedNumeralEntries?.find(e => e.id === data.entryId);
             if (existing) {
                 const gender = getInitialNumeralFormGender(type, existing);
+                const isExistingRomance = isRomanceNumeral(existing);
                 setEditEntry({
                     ...existing,
                     gender,
@@ -4381,7 +4397,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                         ...(existing as any).numeral_morphology,
                         gender,
                     },
-                    _rootConsonants: (existing as any).root_consonants || existing.root_pattern_form?.root?.consonants || rootConsonants || ''
+                    _rootConsonants: isExistingRomance ? '' : ((existing as any).root_consonants || existing.root_pattern_form?.root?.consonants || rootConsonants || '')
                 } as any);
                 setInitialFormData(null);
             }
@@ -4393,7 +4409,9 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                 pos: 'numeral',
                 gender,
                 numeral_type: type,
-                _rootConsonants: rootConsonants || ''
+                is_loanword: isTargetRomance ? 1 : 0,
+                stem: isTargetRomance ? getRomanceNumeralStem(data.value) : undefined,
+                _rootConsonants: isTargetRomance ? '' : (rootConsonants || '')
             });
         }
         setShowForm(true);
@@ -4402,10 +4420,11 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
     const renderNumeralValue = (data: NumeralSurfaceValue, type: string) => {
         if (data.value === '-') return <span className="opacity-40">-</span>;
 
-        const hasLinkedEntry = data.marker === 'plain' && !!data.entryId;
+        const hasLinkedEntry = !!data.entryId;
         const linkedEntryId = data.entryId;
         const canRemoveLinkedEntry = !!linkedEntryId && explicitNumeralRelationshipIds.has(linkedEntryId);
-        const displayValue = <MarkedValue val={{ value: data.value, theoretical: data.marker !== 'plain' }} />;
+        const isTheoretical = data.marker === 'theoretical' || (typeof data.value === 'string' && data.value.startsWith('*'));
+        const displayValue = <MarkedValue val={{ value: data.value, theoretical: isTheoretical }} />;
         const content = hasLinkedEntry ? (
             <Link to={`/entry/${linkedEntryId}`} style={{ color: BLUE }} className="hover:underline">
                 {displayValue}
@@ -4598,13 +4617,25 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                         <div className="flex flex-col md:flex-row gap-8 items-start w-full">
                             {/* Properties */}
                             <div className="w-full md:w-52 shrink-0 grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-1 gap-y-4 gap-x-8 max-w-[340px] mx-auto md:mx-0 mb-12 md:mb-0">
-                                {rootConsonants && (
+                                {entry.zokk_morphology ? (
+                                    <MorphologyProvenanceRows
+                                        source={entry.zokk_morphology}
+                                        rootDisplayValue={isRomance ? null : (rootConsonants || null)}
+                                        rootHref={!isRomance && rootConsonants ? `/root/${rootConsonants}` : undefined}
+                                    />
+                                ) : (isRomance || stemValue) ? (
+                                    <PropRow label={term('stem')}>
+                                        <Link to={`/stem/${encodeURIComponent(stemValue)}`} className="font-serif font-medium text-link hover:underline">
+                                            {stemValue.startsWith('-') ? stemValue : `-${stemValue}-`}
+                                        </Link>
+                                    </PropRow>
+                                ) : rootConsonants ? (
                                     <PropRow label={term('root')}>
                                         <Link to={`/root/${rootConsonants}`} style={{ color: BLUE }} className="font-sans font-regular hover:underline">
                                             {rootConsonants}
                                         </Link>
                                     </PropRow>
-                                )}
+                                ) : null}
 
                                 {entry.phonetics && entry.phonetics.length > 0 && (
                                     <PropRow label={term('pronunciation')}>

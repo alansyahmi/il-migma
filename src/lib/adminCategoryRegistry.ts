@@ -1,7 +1,7 @@
 import { Tag, Users, Globe, Zap, ClipboardList, Package, Library, Settings, Puzzle, Palette, HelpCircle, Sparkles, type LucideIcon } from 'lucide-react';
 import { normalizeGender } from './gender.ts';
 import { normalizeEntryPos } from './entryId.ts';
-import { resolveTerm as resolveHardcodedTerm, resolveRegisterTerm } from './terminology.ts';
+import { normalizeRegisterTranslations, resolveTerm as resolveHardcodedTerm, resolveRegisterTerm } from './terminology.ts';
 
 export type EditorType = 'simple_label' | 'pattern' | 'verb_preset';
 export type ListStrategy = 'label_only' | 'pattern' | 'complex_object';
@@ -131,14 +131,12 @@ export const ADMIN_REGISTRY: Record<string, AdminCategory> = {
         transformOption: (item, mode, lang) => {
             const source = item as { key: string; value?: unknown };
             const canonicalKey = (source.key || '').toLowerCase();
-            const v = source.value as Record<string, string> | null;
-            if (v && typeof v === 'object') {
-                if (lang === 'en' && v.en) return { value: canonicalKey, label: v.en };
-                if (lang === 'mt') {
-                    if (mode === 'arabised' && v.mt_arabised) return { value: canonicalKey, label: v.mt_arabised };
-                    if (v.mt_standard) return { value: canonicalKey, label: v.mt_standard };
-                    if (v.en) return { value: canonicalKey, label: v.en };
-                }
+            const v = normalizeRegisterTranslations(source.value);
+            if (lang === 'en' && v.en) return { value: canonicalKey, label: v.en };
+            if (lang === 'mt') {
+                if (mode === 'arabised' && v.arabised) return { value: canonicalKey, label: v.arabised };
+                if (v.mt) return { value: canonicalKey, label: v.mt };
+                if (v.en) return { value: canonicalKey, label: v.en };
             }
             const label = resolveRegisterTerm(canonicalKey, mode, lang);
             return { value: canonicalKey, label };

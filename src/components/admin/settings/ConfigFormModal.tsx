@@ -6,6 +6,7 @@ import { MalteseCharPicker } from '@/components/ui/MalteseCharPicker';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig, type ConfigItem } from '@/lib/adminConfig';
 import { getCategoryById } from '@/lib/adminCategoryRegistry';
+import { normalizeRegisterTranslations } from '@/lib/terminology';
 import {
     getPatternApplicabilitySummary,
     getPatternMetadataSummary,
@@ -54,6 +55,14 @@ export function ConfigFormModal({ item, category, onClose, onSave }: ConfigFormM
         const baseValue = item
             ? item.value
             : (getCategoryById(category)?.defaultValueFactory() || { en: '', mt_standard: '', mt_arabised: '' });
+        if (category === 'register') {
+            const normalized = normalizeRegisterTranslations(baseValue);
+            return attachApplicabilityClientIds({
+                en: normalized.en || '',
+                mt_standard: normalized.mt || '',
+                mt_arabised: normalized.arabised || '',
+            });
+        }
         return attachApplicabilityClientIds(baseValue as FormValue);
     });
     const [saving, setSaving] = useState(false);

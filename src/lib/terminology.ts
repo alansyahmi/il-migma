@@ -1,4 +1,4 @@
-import type { LinguisticMode, DefinitionRegister } from '@/types';
+import type { BilingualRegister, LinguisticMode, DefinitionRegister } from '@/types';
 
 // ─── Terminology Map ───────────────────────────────────────────────────────
 // Maps a term key to its English, Standard and Arabised Maltese equivalents.
@@ -580,6 +580,8 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'singulative': { en: 'Singulative', standard: 'Singulattiv', arabised: 'Farradi' },
     'unit': { en: 'Unit', standard: 'Unità', arabised: 'Unità' },
     'proper': { en: 'Proper', standard: 'Propju', arabised: 'Propju' },
+    'proper-noun': { en: 'Proper Noun', standard: 'Isem Propju', arabised: 'Isem Propju' },
+    'proper_noun': { en: 'Proper Noun', standard: 'Isem Propju', arabised: 'Isem Propju' },
     'verbal': { en: 'Verbal', standard: 'Verbali', arabised: 'Fagħli' },
     'form-title': { en: 'Form', standard: 'Forma', arabised: 'Forma' },
     'strength-title': { en: 'Strength', standard: 'Saħħa', arabised: 'Saħħa' },
@@ -1066,6 +1068,42 @@ export function resolveRegisterTerm(key: string, mode: LinguisticMode, lang: 'en
     return mode === 'arabised' ? regEntry.arabised : regEntry.standard;
 }
 
+/** Normalize supported register translation aliases into the definition register shape. */
+export function normalizeRegisterTranslations(value: unknown): BilingualRegister {
+    let source: Record<string, unknown>;
+    if (typeof value === 'string') {
+        const serialized = value.trim();
+        if (!serialized.startsWith('{') || !serialized.endsWith('}')) return {};
+        try {
+            const parsed: unknown = JSON.parse(serialized);
+            if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+            source = parsed as Record<string, unknown>;
+        } catch {
+            return {};
+        }
+    } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+        source = value as Record<string, unknown>;
+    } else {
+        return {};
+    }
+
+    const firstText = (...candidates: unknown[]): string | undefined => {
+        for (const candidate of candidates) {
+            if (typeof candidate !== 'string') continue;
+            const text = candidate.trim();
+            if (text) return text;
+        }
+        return undefined;
+    };
+
+    return {
+        key: firstText(source.key),
+        en: firstText(source.en),
+        mt: firstText(source.mt_standard, source.mt),
+        arabised: firstText(source.mt_arabised, source.arabised),
+    };
+}
+
 /**
  * Resolves a definition register value (whether string canonical key or bilingual object)
  * into a structured display object containing its canonical key, localized label,
@@ -1094,13 +1132,14 @@ export function resolveRegisterDisplay(
             key = trimmed.toLowerCase();
         }
     } else if (typeof reg === 'object' && reg !== null) {
-        key = String(reg.key || reg.en || '').trim().toLowerCase();
-        if (lang === 'en' && reg.en) explicitLabel = reg.en.trim();
+        const normalized = normalizeRegisterTranslations(reg);
+        key = String(normalized.key || normalized.en || '').trim().toLowerCase();
+        if (lang === 'en' && normalized.en) explicitLabel = normalized.en;
         if (lang === 'mt') {
-            if (mode === 'arabised' && reg.arabised) {
-                explicitLabel = reg.arabised.trim();
-            } else if (reg.mt) {
-                explicitLabel = reg.mt.trim();
+            if (mode === 'arabised' && normalized.arabised) {
+                explicitLabel = normalized.arabised;
+            } else if (normalized.mt) {
+                explicitLabel = normalized.mt;
             }
         }
     }

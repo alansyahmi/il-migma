@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/Card';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import type { ConfigItem } from '@/lib/adminConfig';
 import type { AdminCategory } from '@/lib/adminCategoryRegistry';
+import { normalizeRegisterTranslations } from '@/lib/terminology';
 import { getPatternMetadataSummary } from '@/lib/patternMetadata';
 import { cn } from '@/lib/utils';
 
@@ -178,12 +179,13 @@ function renderPreview(value: unknown) {
     if (!value || typeof value !== 'object') return null;
     const v = value as Record<string, unknown>;
 
-    if ('mt_standard' in v || 'mt_arabised' in v) {
+    if ('mt_standard' in v || 'mt_arabised' in v || 'mt' in v || 'arabised' in v) {
+        const labels = normalizeRegisterTranslations(v);
         return (
             <>
-                <span>{String(v.mt_standard || '-')}</span>
+                <span>{String(labels.mt || '-')}</span>
                 <span className="opacity-30">/</span>
-                <span>{String(v.mt_arabised || '-')}</span>
+                <span>{String(labels.arabised || '-')}</span>
             </>
         );
     }
@@ -223,11 +225,9 @@ function renderMeta(value: unknown) {
 
 function getDisplayLabelPair(value: unknown): { en: string; mt: string } | null {
     if (!value || typeof value !== 'object') return null;
-    const v = value as Record<string, unknown>;
-    const en = typeof v.en === 'string' ? v.en.trim() : '';
-    const mtStandard = typeof v.mt_standard === 'string' ? v.mt_standard.trim() : '';
-    const mtArabised = typeof v.mt_arabised === 'string' ? v.mt_arabised.trim() : '';
-    const mt = mtStandard || mtArabised;
+    const normalized = normalizeRegisterTranslations(value);
+    const en = normalized.en || '';
+    const mt = normalized.mt || normalized.arabised || '';
     if (!en && !mt) return null;
     return { en, mt };
 }

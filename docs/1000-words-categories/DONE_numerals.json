@@ -1,7 +1,7 @@
 {
   "category_id": "numerals",
   "category_title": "Numerals & Quantities",
-  "total_entries": 38,
+  "total_entries": 62,
   "entries": [
     {
       "id": "num-wieħed",
@@ -34,15 +34,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "one (cardinal numeral 1); single unit or individual",
-          "text_mt": "Numru kardinali u ċifra li tindika unità waħda jew individwu wieħed.",
+          "text_en": "one (1); a single unit or individual",
+          "text_mt": "Kwantità li tikkorrispondi ma' unità waħda jew ma' individwu wieħed, 1.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "cardinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -62,80 +61,24 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
       "feminine_form": "waħda",
       "masculine_form": null,
       "plural_forms": [
         {
           "form": "uħud",
-          "pattern": "u2v3"
+          "pattern": "1o2o3"
         },
         {
           "form": "waħdiet",
           "pattern": "-iet"
         }
       ],
-      "plural_form": [
-        {
-          "form": "uħud",
-          "pattern": "u2v3"
-        },
-        {
-          "form": "waħdiet",
-          "pattern": "-iet"
-        }
-      ],
-      "vowel_set_sg": "ie-e",
-      "vowel_set_pl": "u-u",
-      "vowel_set_dual": null,
-      "vowel_set_opp": "a--",
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "cardinal",
-      "form_attributive_short": null,
-      "form_attributive_long": null,
-      "numeral_ordinal": "ewwel",
-      "numeral_adverbial": "darba",
-      "numeral_fractional": null,
-      "numeral_multiplier": "uniku, fard, mwaħħad",
-      "numeral_distributive": "wieħed wieħed, *uħied, uħud",
       "rank": 14,
       "source_frequency_rank": 14,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": null,
-      "ordinal_form": "ewwel",
-      "adverbial_form": "darba",
-      "fractional_form": null,
-      "multiplier_form": "uniku, fard, mwaħħad",
-      "distributive_form": "wieħed wieħed, *uħied, uħud",
       "numeral_morphology": {
         "numeral_type": "cardinal",
         "form_attributive_short": null,
@@ -154,13 +97,15 @@
         "plural_forms": [
           {
             "form": "uħud",
-            "pattern": "u2v3"
+            "pattern": "1o2o3"
           },
           {
             "form": "waħdiet",
             "pattern": "-iet"
           }
-        ]
+        ],
+        "feminine_form": "waħda",
+        "masculine_form": null
       }
     },
     {
@@ -188,21 +133,20 @@
           "language": "Arabic",
           "term": "اِثْنَيْن",
           "definition": "two",
-          "pronunciation": "aθnayn"
+          "pronunciation": "iθnajn"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "two (cardinal numeral 2); pair of units",
-          "text_mt": "Numru kardinali u ċifra li tindika par jew żewġ unitajiet; jiġi wara l-wieħed u qabel it-tlieta.",
+          "text_en": "two (2)",
+          "text_mt": "Kwantità li tikkorrispondi ma' żewġ unitajiet, 2.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "cardinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -216,7 +160,8 @@
         "n-nofs",
         "num-żewġ",
         "num-doppju",
-        "num-mtenna"
+        "num-mtenna",
+        "num-żewġt"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -226,72 +171,15 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
       "feminine_form": null,
       "masculine_form": null,
-      "plural_forms": [
-        {
-          "form": "tnejnijiet",
-          "pattern": "-ijiet"
-        }
-      ],
-      "plural_form": [
-        {
-          "form": "tnejnijiet",
-          "pattern": "-ijiet"
-        }
-      ],
-      "vowel_set_sg": "---",
-      "vowel_set_pl": "--e",
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
+      "plural_forms": null,
       "numeral_type": "cardinal",
-      "form_attributive_short": "żewġ",
-      "form_attributive_long": "żewġt",
-      "numeral_ordinal": "tieni",
-      "numeral_adverbial": "darbtejn",
-      "numeral_fractional": "nofs",
-      "numeral_multiplier": "doppju, mtenna",
-      "numeral_distributive": "tnejn tnejn",
       "rank": 173,
       "source_frequency_rank": 173,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CvCC",
-      "ordinal_form": "tieni",
-      "adverbial_form": "darbtejn",
-      "fractional_form": "nofs",
-      "multiplier_form": "doppju, mtenna",
-      "distributive_form": "tnejn tnejn",
       "numeral_morphology": {
         "numeral_type": "cardinal",
         "form_attributive_short": "żewġ",
@@ -301,18 +189,15 @@
         "adverbial_form": "darbtejn",
         "fractional_form": "nofs",
         "multiplier_form": "doppju, mtenna",
-        "distributive_form": "tnejn tnejn",
+        "distributive_form": "tnejn tnejn, *tna",
         "form_plural_pattern": null,
-        "vowel_set_sg": "---",
+        "vowel_set_sg": "--e",
         "vowel_set_pl": "--e",
         "vowel_set_opp": null,
         "vowel_set_dual": null,
-        "plural_forms": [
-          {
-            "form": "tnejnijiet",
-            "pattern": "-ijiet"
-          }
-        ]
+        "plural_forms": null,
+        "feminine_form": null,
+        "masculine_form": null
       }
     },
     {
@@ -346,15 +231,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "three (cardinal numeral 3)",
-          "text_mt": "Numru kardinali u ċifra li tindika għadd ta' tliet unitajiet; jiġi wara t-tnejn u qabel l-erbgħa.",
+          "text_en": "three (3)",
+          "text_mt": "Kwantità li tikkorrispondi ma' tliet unitajiet, 3.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "cardinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -367,7 +251,9 @@
         "adj-tielet",
         "num-terz",
         "num-triplu",
-        "num-mtellet"
+        "num-mtellet",
+        "num-tliet",
+        "num-tlitt"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -377,71 +263,24 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
       "feminine_form": null,
       "masculine_form": "tliet",
       "plural_forms": [],
-      "plural_form": [],
-      "vowel_set_sg": "-ie",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": "-ie",
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "cardinal",
-      "form_attributive_short": "tliet",
-      "form_attributive_long": "tlitt",
-      "numeral_ordinal": "tielet",
-      "numeral_adverbial": "tliet darbiet",
-      "numeral_fractional": "terz, *tolt",
-      "numeral_multiplier": "triplu, tlieti, mtellet",
-      "numeral_distributive": "tlieta tlieta, *tliet",
       "rank": 53,
       "source_frequency_rank": 53,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CvCVC",
-      "ordinal_form": "tielet",
-      "adverbial_form": "tliet darbiet",
-      "fractional_form": "terz, *tolt",
-      "multiplier_form": "triplu, tlieti, mtellet",
-      "distributive_form": "tlieta tlieta, *tliet",
       "numeral_morphology": {
         "numeral_type": "cardinal",
         "form_attributive_short": "tliet",
-        "form_attributive_short_pattern": "CvCVC",
+        "form_attributive_short_pattern": "CCâC",
         "form_attributive_long": "tlitt",
         "ordinal_form": "tielet",
         "adverbial_form": "tliet darbiet",
         "fractional_form": "terz, *tolt",
-        "multiplier_form": "triplu, tlieti, mtellet",
+        "multiplier_form": "triplu, *tlieti, mtellet",
         "distributive_form": "tlieta tlieta, *tliet",
         "form_plural_pattern": null,
         "vowel_set_sg": "--ie",
@@ -450,7 +289,8 @@
         "vowel_set_dual": null,
         "plural_forms": [],
         "gender": "feminine",
-        "masculine_form": "tliet"
+        "masculine_form": "tliet",
+        "feminine_form": null
       },
       "usage_notes": {
         "en": "Grammatically, the cardinal numeral tlieta is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form tliet serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
@@ -488,15 +328,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "four (cardinal numeral 4)",
-          "text_mt": "Numru kardinali u ċifra li tindika għadd ta' erba' unitajiet; jiġi wara t-tlieta u qabel il-ħamsa.",
+          "text_en": "four (4)",
+          "text_mt": "Kwantità li tikkorrispondi ma' erba' unitajiet, 4.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "cardinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -511,72 +350,27 @@
         "num-robu",
         "num-kwadruplu",
         "num-mrabba",
-        "num-rbiegh"
+        "num-rbiegh",
+        "num-erba",
+        "num-erbat"
       ],
       "alternative_forms": [],
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ɛrˈbːɐ/",
+          "ipa": "/ɛrˈbɐː/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
       "feminine_form": null,
       "masculine_form": "erba'",
       "plural_forms": [],
-      "plural_form": [],
-      "vowel_set_sg": "e--",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": "e-a",
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "cardinal",
-      "form_attributive_short": "erba'",
-      "form_attributive_long": "erbat",
-      "numeral_ordinal": "raba'",
-      "numeral_adverbial": "erba' darbiet",
-      "numeral_fractional": "kwart, robu'",
-      "numeral_multiplier": "kwadruplu, rbiegħi, mrabba'",
-      "numeral_distributive": "erbgħa erbgħa, rbiegħ",
       "rank": 218,
       "source_frequency_rank": 218,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "vCCvC",
-      "ordinal_form": "raba'",
-      "adverbial_form": "erba' darbiet",
-      "fractional_form": "kwart, robu'",
-      "multiplier_form": "kwadruplu, rbiegħi, mrabba'",
-      "distributive_form": "erbgħa erbgħa, rbiegħ",
       "numeral_morphology": {
         "numeral_type": "cardinal",
         "form_attributive_short": "erba'",
@@ -585,7 +379,7 @@
         "ordinal_form": "raba'",
         "adverbial_form": "erba' darbiet",
         "fractional_form": "kwart, robu'",
-        "multiplier_form": "kwadruplu, rbiegħi, mrabba'",
+        "multiplier_form": "kwadruplu, *rbiegħi, mrabba'",
         "distributive_form": "erbgħa erbgħa, rbiegħ",
         "form_plural_pattern": null,
         "vowel_set_sg": "e--",
@@ -594,7 +388,8 @@
         "vowel_set_dual": null,
         "plural_forms": [],
         "gender": "feminine",
-        "masculine_form": "erba'"
+        "masculine_form": "erba'",
+        "feminine_form": null
       },
       "usage_notes": {
         "en": "Grammatically, the cardinal numeral erbgħa is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form erba' serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
@@ -632,27 +427,27 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "five (cardinal numeral 5)",
-          "text_mt": "Numru kardinali u ċifra li tindika għadd ta' ħames unitajiet; jiġi wara l-erbgħa u qabel is-sitta.",
+          "text_en": "five (5)",
+          "text_mt": "Kwantità li tikkorrispondi ma' ħames unitajiet, 5.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "cardinal numeral"
+          }
         }
       ],
       "usage_examples": [
         {
-          "mt": "Fadal biss ħamsa minnhom fil-kaxxa.",
+          "mt": "Fadal ħamsa minnhom biss fil-kaxxa.",
           "en": "Only five of them remain in the box."
         }
       ],
       "related_entries": [
         "num-ħames",
         "num-kwint",
-        "num-kwintuplu"
+        "num-kwintuplu",
+        "num-ħamest"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -662,62 +457,15 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
       "feminine_form": null,
       "masculine_form": "ħames",
       "plural_forms": [],
-      "plural_form": [],
-      "vowel_set_sg": "a--",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": "a-e",
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "cardinal",
-      "form_attributive_short": "ħames",
-      "form_attributive_long": "ħamest",
-      "numeral_ordinal": "ħames",
-      "numeral_adverbial": "ħames darbiet",
-      "numeral_fractional": "*ħoms, kwint",
-      "numeral_multiplier": "kwintuplu, *ħmies, *mħammes",
-      "numeral_distributive": "ħamsa ħamsa, *ħmies",
       "rank": 458,
       "source_frequency_rank": 458,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CvCvC",
-      "ordinal_form": "ħames",
-      "adverbial_form": "ħames darbiet",
-      "fractional_form": "*ħoms, kwint",
-      "multiplier_form": "kwintuplu, *ħmies, *mħammes",
-      "distributive_form": "ħamsa ħamsa, *ħmies",
       "numeral_morphology": {
         "numeral_type": "cardinal",
         "form_attributive_short": "ħames",
@@ -735,7 +483,8 @@
         "vowel_set_dual": null,
         "plural_forms": [],
         "gender": "feminine",
-        "masculine_form": "ħames"
+        "masculine_form": "ħames",
+        "feminine_form": null
       },
       "usage_notes": {
         "en": "Grammatically, the cardinal numeral ħamsa is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form ħames serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
@@ -749,8 +498,8 @@
       "gender": "feminine",
       "root_consonants": "s-t-t",
       "stem": null,
-      "cv_pattern": "1v22a",
-      "morph_pattern": "C1vC2C2a",
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -773,15 +522,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "six (cardinal numeral 6)",
-          "text_mt": "Numru kardinali u ċifra li tindika għadd ta' sitt unitajiet; jiġi wara l-ħamsa u qabel is-sebgħa.",
+          "text_en": "six (6)",
+          "text_mt": "Kwantità li tikkorrispondi ma' sitt unitajiet, 6.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "cardinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -804,62 +552,15 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
       "feminine_form": null,
       "masculine_form": "sitt",
       "plural_forms": [],
-      "plural_form": [],
-      "vowel_set_sg": "i--",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": "i--",
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "cardinal",
-      "form_attributive_short": "sitt",
-      "form_attributive_long": "sitt",
-      "numeral_ordinal": "sitt",
-      "numeral_adverbial": "sitt darbiet",
-      "numeral_fractional": "*sott, sest",
-      "numeral_multiplier": "sestuplu, *msettet",
-      "numeral_distributive": "sitta sitta, stiet",
       "rank": 471,
       "source_frequency_rank": 471,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CvCC",
-      "ordinal_form": "sitt",
-      "adverbial_form": "sitt darbiet",
-      "fractional_form": "*sott, sest",
-      "multiplier_form": "sestuplu, *msettet",
-      "distributive_form": "sitta sitta, stiet",
       "numeral_morphology": {
         "numeral_type": "cardinal",
         "form_attributive_short": "sitt",
@@ -867,9 +568,9 @@
         "form_attributive_long": "sitt",
         "ordinal_form": "sitt",
         "adverbial_form": "sitt darbiet",
-        "fractional_form": "*sott, sest",
+        "fractional_form": "sest, *sott",
         "multiplier_form": "sestuplu, *msettet",
-        "distributive_form": "sitta sitta, stiet",
+        "distributive_form": "sitta sitta, *stiet",
         "form_plural_pattern": null,
         "vowel_set_sg": "i--",
         "vowel_set_pl": null,
@@ -877,7 +578,8 @@
         "vowel_set_dual": null,
         "plural_forms": [],
         "gender": "feminine",
-        "masculine_form": "sitt"
+        "masculine_form": "sitt",
+        "feminine_form": null
       },
       "usage_notes": {
         "en": "Grammatically, the cardinal numeral sitta is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form sitt serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
@@ -891,7 +593,7 @@
       "gender": "feminine",
       "root_consonants": "t-m-n",
       "stem": null,
-      "cv_pattern": "12i3ja",
+      "cv_pattern": "12â3ja",
       "morph_pattern": "C1C2ieC3ja",
       "is_loanword": 0,
       "is_inflectable": 1,
@@ -909,21 +611,20 @@
           "language": "Arabic",
           "term": "ثَمَانِيَة",
           "definition": "eight",
-          "pronunciation": "θamâniyaẗ"
+          "pronunciation": "θamânijaẗ"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "eight (cardinal numeral 8)",
-          "text_mt": "Numru kardinali u ċifra li tindika għadd ta' tmien unitajiet; jiġi wara s-sebgħa u qabel id-disgħa.",
+          "text_en": "eight (8)",
+          "text_mt": "Kwantità li tikkorrispondi ma' tmien unitajiet, 8.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "cardinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -936,7 +637,9 @@
         "num-tmien",
         "num-tomon",
         "num-ottav",
-        "num-ottuplu"
+        "num-ottuplu",
+        "n-tomna",
+        "num-tmint"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -946,62 +649,15 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
       "feminine_form": null,
       "masculine_form": "tmien",
       "plural_forms": [],
-      "plural_form": [],
-      "vowel_set_sg": "-ie",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": "-ie",
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "cardinal",
-      "form_attributive_short": "tmien",
-      "form_attributive_long": "tmint",
-      "numeral_ordinal": "tmien",
-      "numeral_adverbial": "tmien darbiet",
-      "numeral_fractional": "tomon, ottav",
-      "numeral_multiplier": "ottuplu, tmieni, *mtemmen",
-      "numeral_distributive": "tmienja tmienja, tmjen",
       "rank": 702,
       "source_frequency_rank": 702,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CCieC",
-      "ordinal_form": "tmien",
-      "adverbial_form": "tmien darbiet",
-      "fractional_form": "tomon, ottav",
-      "multiplier_form": "ottuplu, tmieni, *mtemmen",
-      "distributive_form": "tmienja tmienja, tmjen",
       "numeral_morphology": {
         "numeral_type": "cardinal",
         "form_attributive_short": "tmien",
@@ -1009,17 +665,18 @@
         "form_attributive_long": "tmint",
         "ordinal_form": "tmien",
         "adverbial_form": "tmien darbiet",
-        "fractional_form": "tomon, ottav",
-        "multiplier_form": "ottuplu, tmieni, *mtemmen",
-        "distributive_form": "tmienja tmienja, tmjen",
+        "fractional_form": "ottav, *tomon",
+        "multiplier_form": "ottuplu, *tmieni, *mtemmen",
+        "distributive_form": "tmienja tmienja, tmien",
         "form_plural_pattern": null,
-        "vowel_set_sg": "ie--",
+        "vowel_set_sg": "-ie",
         "vowel_set_pl": null,
-        "vowel_set_opp": "ie--",
+        "vowel_set_opp": "-ie",
         "vowel_set_dual": null,
         "plural_forms": [],
         "gender": "feminine",
-        "masculine_form": "tmien"
+        "masculine_form": "tmien",
+        "feminine_form": null
       },
       "usage_notes": {
         "en": "Grammatically, the cardinal numeral tmienja is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form tmien serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
@@ -1051,21 +708,20 @@
           "language": "Arabic",
           "term": "عِشْرِين",
           "definition": "twenty",
-          "pronunciation": "għishrîn"
+          "pronunciation": "għixrîn"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "twenty (cardinal numeral 20)",
-          "text_mt": "Numru kardinali u ċifra li tindika żewġ għaxriet jew 20 unità; jiġi wara d-dsatax u qabel il-wieħed u għoxrin.",
+          "text_en": "twenty (20)",
+          "text_mt": "Kwantità li tikkorrispondi ma' żewġ għaxriet, 20.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "cardinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -1083,78 +739,33 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
       "feminine_form": null,
       "masculine_form": null,
       "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "o-i",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "cardinal",
-      "form_attributive_short": "għoxrin",
-      "form_attributive_long": "għoxrin",
-      "numeral_ordinal": "l-għoxrin",
-      "numeral_adverbial": "għoxrin darba",
-      "numeral_fractional": "għoxrin, parti minn għoxrin",
-      "numeral_multiplier": "għoxrin darba daqs",
-      "numeral_distributive": "għoxrin għoxrin",
       "rank": 695,
       "source_frequency_rank": 695,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CvCCvC",
-      "ordinal_form": "l-għoxrin",
-      "adverbial_form": "għoxrin darba",
-      "fractional_form": "għoxrin, parti minn għoxrin",
-      "multiplier_form": "għoxrin darba daqs",
-      "distributive_form": "għoxrin għoxrin",
       "numeral_morphology": {
         "numeral_type": "cardinal",
         "form_attributive_short": "għoxrin",
-        "form_attributive_short_pattern": "CvCCvC",
+        "form_attributive_short_pattern": "CvCCîn",
         "form_attributive_long": "għoxrin",
-        "ordinal_form": "l-għoxrin",
+        "ordinal_form": "għoxrin",
         "adverbial_form": "għoxrin darba",
-        "fractional_form": "għoxrin, parti minn għoxrin",
-        "multiplier_form": "għoxrin darba daqs",
+        "fractional_form": null,
+        "multiplier_form": null,
         "distributive_form": "għoxrin għoxrin",
         "form_plural_pattern": null,
-        "vowel_set_sg": "o-i",
+        "vowel_set_sg": "o--",
         "vowel_set_pl": null,
         "vowel_set_opp": null,
         "vowel_set_dual": null,
-        "plural_forms": null
+        "plural_forms": null,
+        "feminine_form": null,
+        "masculine_form": null
       }
     },
     {
@@ -1162,10 +773,10 @@
       "headword": "mitt",
       "pos": "numeral",
       "gender": "masculine",
-      "root_consonants": "m-j-t",
+      "root_consonants": "m-j-w",
       "stem": null,
-      "cv_pattern": "1v22",
-      "morph_pattern": "C1vC2C2",
+      "cv_pattern": "1vtt",
+      "morph_pattern": "C1vtt",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -1178,6 +789,12 @@
       "source_publisher": "Wiktionary",
       "etymology_chain": [
         {
+          "relationship": "Derived from",
+          "language": "Maltese",
+          "term": "mija",
+          "definition": "hundred"
+        },
+        {
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مِائَة",
@@ -1185,27 +802,37 @@
           "pronunciation": "miâ'aẗ"
         }
       ],
-      "etymology_notes": null,
+      "etymology_notes": [
+        {
+          "text_en": "Mitt is the t marbuta (tied t) form of mija.",
+          "text_mt": "Mitt hija l-forma bit-t marbuta ta' mija."
+        }
+      ],
       "definitions": [
         {
-          "text_en": "hundred (cardinal numeral 100); combining form before nouns",
-          "text_mt": "Numru kardinali u ċifra li tindika għaxar għaxriet jew 100 unità quddiem nom; forma komposta ta' mija.",
+          "text_en": "hundred (100)",
+          "text_mt": "Għadd li jikkorrispondi għal mitt unità, 100.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "attributive cardinal numeral"
+          }
         }
       ],
+      "usage_notes": {
+        "en": "Used before the noun it quantifies, as in \"mitt sena\" (a hundred years).",
+        "mt": "Tintuża qabel in-nom li tikkwantifika, bħal f'\"mitt sena\"."
+      },
       "usage_examples": [
         {
           "mt": "Għex aktar minn mitt sena b'saħħa tajba.",
           "en": "He lived more than a hundred years in good health."
         }
       ],
-      "related_entries": [],
+      "related_entries": [
+        "num-mija"
+      ],
       "alternative_forms": [],
       "phonetics": [
         {
@@ -1214,19 +841,7 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
       "dual_form": "mitejn",
-      "paucal_form": null,
       "feminine_form": null,
       "masculine_form": null,
       "plural_forms": [
@@ -1235,72 +850,35 @@
           "pattern": "-iet"
         }
       ],
-      "plural_form": [
-        {
-          "form": "mijiet",
-          "pattern": "-iet"
-        }
-      ],
-      "vowel_set_sg": "i--",
-      "vowel_set_pl": "i-ie",
-      "vowel_set_dual": "i-ej",
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
-      "numeral_type": "cardinal",
-      "form_attributive_short": "mitt",
-      "form_attributive_long": "mija",
-      "numeral_ordinal": "il-mitt",
-      "numeral_adverbial": "mitt darba",
-      "numeral_fractional": "ċenteżmu, parti minn mija",
-      "numeral_multiplier": "mitt darba daqs, ċentuplu",
-      "numeral_distributive": "mitt mitt, mija mija",
+      "numeral_type": "attributive_short",
       "rank": 457,
       "source_frequency_rank": 457,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CvCC",
-      "ordinal_form": "il-mitt",
-      "adverbial_form": "mitt darba",
-      "fractional_form": "ċenteżmu, parti minn mija",
-      "multiplier_form": "mitt darba daqs, ċentuplu",
-      "distributive_form": "mitt mitt, mija mija",
       "numeral_morphology": {
-        "numeral_type": "cardinal",
+        "numeral_type": "attributive_short",
         "form_attributive_short": "mitt",
-        "form_attributive_short_pattern": "CvCC",
-        "form_attributive_long": "mija",
+        "form_attributive_short_pattern": "Cvtt",
+        "form_attributive_long": "mitt",
         "ordinal_form": "il-mitt",
         "adverbial_form": "mitt darba",
-        "fractional_form": "ċenteżmu, parti minn mija",
-        "multiplier_form": "mitt darba daqs, ċentuplu",
+        "fractional_form": "ċenteżmu",
+        "multiplier_form": "ċentuplu",
         "distributive_form": "mitt mitt, mija mija",
         "form_plural_pattern": null,
         "vowel_set_sg": "i--",
-        "vowel_set_pl": "i-ie",
+        "vowel_set_pl": null,
         "vowel_set_opp": null,
-        "vowel_set_dual": "i-ej",
+        "vowel_set_dual": null,
         "plural_forms": [
           {
             "form": "mijiet",
             "pattern": "-iet"
           }
-        ]
+        ],
+        "feminine_form": null,
+        "masculine_form": null
       }
     },
     {
@@ -1310,8 +888,8 @@
       "gender": "masculine",
       "root_consonants": "'-l-f",
       "stem": null,
-      "cv_pattern": "v12",
-      "morph_pattern": "vC1C2",
+      "cv_pattern": "v23",
+      "morph_pattern": "vC2C3",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -1334,15 +912,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "thousand (cardinal numeral 1,000)",
-          "text_mt": "Numru kardinali u ċifra li tindika għaxar mijiet jew 1,000 unità.",
+          "text_en": "thousand (1,000)",
+          "text_mt": "Għadd li jikkorrispondi għal elf unità, 1,000.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "cardinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -1360,17 +937,6 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
       "dual_form": "elfejn",
       "paucal_form": "elef",
       "feminine_form": null,
@@ -1378,87 +944,46 @@
       "plural_forms": [
         {
           "form": "eluf",
-          "pattern": "v12"
+          "pattern": "1o2o3"
         },
         {
           "form": "elufijiet",
           "pattern": "-ijiet"
         }
       ],
-      "plural_form": [
-        {
-          "form": "eluf",
-          "pattern": "v12"
-        },
-        {
-          "form": "elufijiet",
-          "pattern": "-ijiet"
-        }
-      ],
-      "vowel_set_sg": "e--",
-      "vowel_set_pl": "e-u",
-      "vowel_set_dual": "e-ej",
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "cardinal",
-      "form_attributive_short": "elf",
-      "form_attributive_long": "elf",
-      "numeral_ordinal": "l-elf",
-      "numeral_adverbial": "elf darba",
-      "numeral_fractional": "parti minn elf, millil",
-      "numeral_multiplier": "elf darba daqs",
-      "numeral_distributive": "elf elf",
       "rank": 380,
       "source_frequency_rank": 380,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "vCC",
-      "ordinal_form": "l-elf",
-      "adverbial_form": "elf darba",
-      "fractional_form": "parti minn elf, millil",
-      "multiplier_form": "elf darba daqs",
-      "distributive_form": "elf elf",
       "numeral_morphology": {
         "numeral_type": "cardinal",
         "form_attributive_short": "elf",
         "form_attributive_short_pattern": "vCC",
         "form_attributive_long": "elf",
-        "ordinal_form": "l-elf",
+        "ordinal_form": "elf",
         "adverbial_form": "elf darba",
-        "fractional_form": "parti minn elf, millil",
-        "multiplier_form": "elf darba daqs",
+        "fractional_form": null,
+        "multiplier_form": null,
         "distributive_form": "elf elf",
         "form_plural_pattern": null,
         "vowel_set_sg": "e--",
         "vowel_set_pl": "e-u",
         "vowel_set_opp": null,
-        "vowel_set_dual": "e-ej",
+        "vowel_set_dual": "e--",
         "plural_forms": [
           {
             "form": "eluf",
-            "pattern": "v12"
+            "pattern": "1o2o3"
           },
           {
             "form": "elufijiet",
             "pattern": "-ijiet"
           }
-        ]
+        ],
+        "feminine_form": null,
+        "masculine_form": null
       }
     },
     {
@@ -1467,7 +992,7 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "miljun",
+      "stem": "-miljun-",
       "cv_pattern": null,
       "morph_pattern": null,
       "is_loanword": 1,
@@ -1492,15 +1017,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "million (cardinal numeral 1,000,000)",
-          "text_mt": "Numru kardinali u ċifra li tindika elf elf jew 1,000,000 unità.",
+          "text_en": "million (1,000,000)",
+          "text_mt": "Għadd li jikkorrispondi għal elf elf unità, 1,000,000.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "cardinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -1514,23 +1038,10 @@
       "phonetics": [
         {
           "dialect": "Standard",
-          "ipa": "/ˈmɪl.jʊn/",
+          "ipa": "/mɪlˈjʊːn/",
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
       "feminine_form": null,
       "masculine_form": null,
       "plural_forms": [
@@ -1539,64 +1050,25 @@
           "pattern": "-i"
         }
       ],
-      "plural_form": [
-        {
-          "form": "miljuni",
-          "pattern": "-i"
-        }
-      ],
-      "vowel_set_sg": "i-u",
-      "vowel_set_pl": "i-u-i",
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": null,
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "cardinal",
-      "form_attributive_short": "miljun",
-      "form_attributive_long": "miljun",
-      "numeral_ordinal": "il-miljun",
-      "numeral_adverbial": "miljun darba",
-      "numeral_fractional": "parti minn miljun, miljuneżmu",
-      "numeral_multiplier": "miljun darba daqs",
-      "numeral_distributive": "miljun miljun",
       "rank": 591,
       "source_frequency_rank": 591,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CvCCvC",
-      "ordinal_form": "il-miljun",
-      "adverbial_form": "miljun darba",
-      "fractional_form": "parti minn miljun, miljuneżmu",
-      "multiplier_form": "miljun darba daqs",
-      "distributive_form": "miljun miljun",
       "numeral_morphology": {
         "numeral_type": "cardinal",
         "form_attributive_short": "miljun",
-        "form_attributive_short_pattern": "CvCCvC",
+        "form_attributive_short_pattern": null,
         "form_attributive_long": "miljun",
-        "ordinal_form": "il-miljun",
+        "ordinal_form": null,
         "adverbial_form": "miljun darba",
-        "fractional_form": "parti minn miljun, miljuneżmu",
-        "multiplier_form": "miljun darba daqs",
+        "fractional_form": "miljuneżmu",
+        "multiplier_form": null,
         "distributive_form": "miljun miljun",
         "form_plural_pattern": null,
         "vowel_set_sg": "i-u",
-        "vowel_set_pl": "i-u-i",
+        "vowel_set_pl": "i-u",
         "vowel_set_opp": null,
         "vowel_set_dual": null,
         "plural_forms": [
@@ -1604,7 +1076,9 @@
             "form": "miljuni",
             "pattern": "-i"
           }
-        ]
+        ],
+        "feminine_form": null,
+        "masculine_form": null
       }
     },
     {
@@ -1614,8 +1088,8 @@
       "gender": "masculine",
       "root_consonants": "'-w-l",
       "stem": null,
-      "cv_pattern": "v122v3",
-      "morph_pattern": "vC1C2C2vC3",
+      "cv_pattern": "1v22v3",
+      "morph_pattern": "C1vC2C2vC3",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -1638,15 +1112,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "first (ordinal numeral); initial, foremost in order or series",
-          "text_mt": "Numru ordinali li jindika l-pożizzjoni tal-bidu jew li jiġi qabel kull ħaġa oħra f'ordni, grad jew sekwenza.",
+          "text_en": "first",
+          "text_mt": "Pożizzjoni li tibda ordni jew sekwenza.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "ordinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -1666,82 +1139,34 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": "ewwela",
+      "feminine_form": "ula",
       "masculine_form": null,
       "plural_forms": [
         {
-          "form": "ewwelin",
+          "form": "*ewlin",
           "pattern": "-in"
-        }
-      ],
-      "plural_form": [
+        },
         {
-          "form": "ewwelin",
-          "pattern": "-in"
+          "form": "ewejjel",
+          "pattern": "v2vjjv3"
         }
       ],
-      "vowel_set_sg": "e-e",
-      "vowel_set_pl": "e-e-i",
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "ordinal",
-      "form_attributive_short": "ewwel",
-      "form_attributive_long": "ewwel",
-      "numeral_ordinal": "ewwel",
-      "numeral_adverbial": "l-ewwel",
-      "numeral_fractional": null,
-      "numeral_multiplier": "uniku",
-      "numeral_distributive": "wieħed wieħed",
       "rank": 193,
       "source_frequency_rank": 193,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "vCCvC",
-      "ordinal_form": "ewwel",
-      "adverbial_form": "l-ewwel",
-      "fractional_form": null,
-      "multiplier_form": "uniku",
-      "distributive_form": "wieħed wieħed",
       "numeral_morphology": {
         "numeral_type": "ordinal",
         "form_attributive_short": "ewwel",
-        "form_attributive_short_pattern": "vCCvC",
+        "form_attributive_short_pattern": "CvCCvC",
         "form_attributive_long": "ewwel",
         "ordinal_form": "ewwel",
-        "adverbial_form": "l-ewwel",
+        "adverbial_form": "darba",
         "fractional_form": null,
-        "multiplier_form": "uniku",
-        "distributive_form": "wieħed wieħed",
+        "multiplier_form": "uniku, fard, mwaħħad",
+        "distributive_form": "wieħed wieħed, *uħied, uħud",
         "form_plural_pattern": null,
         "vowel_set_sg": "e-e",
         "vowel_set_pl": "e-e-i",
@@ -1749,10 +1174,16 @@
         "vowel_set_dual": null,
         "plural_forms": [
           {
-            "form": "ewwelin",
+            "form": "*ewlin",
             "pattern": "-in"
+          },
+          {
+            "form": "ewejjel",
+            "pattern": "v2vjjv3"
           }
-        ]
+        ],
+        "feminine_form": "ula",
+        "masculine_form": null
       }
     },
     {
@@ -1778,23 +1209,22 @@
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "الثَّانِي",
+          "term": "ثَّانِي",
           "definition": "second",
-          "pronunciation": "al-θânî"
+          "pronunciation": "θânî"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "second (ordinal numeral); following the first",
-          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara l-ewwel u qabel it-tielet.",
+          "text_en": "second",
+          "text_mt": "Pożizzjoni immedjatament wara l-ewwel f'ordni jew sekwenza.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "ordinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -1808,7 +1238,8 @@
         "n-nofs",
         "num-żewġ",
         "num-doppju",
-        "num-mtenna"
+        "num-mtenna",
+        "num-żewġt"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1818,78 +1249,33 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
-      "feminine_form": "tieni",
-      "masculine_form": null,
+      "feminine_form": "tienja",
+      "masculine_form": "tieni",
       "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "ie-i",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "ordinal",
-      "form_attributive_short": "tieni",
-      "form_attributive_long": "tieni",
-      "numeral_ordinal": "tieni",
-      "numeral_adverbial": "it-tieni",
-      "numeral_fractional": "nofs",
-      "numeral_multiplier": "doppju",
-      "numeral_distributive": "tnejn tnejn",
       "rank": 300,
       "source_frequency_rank": 300,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CieCv",
-      "ordinal_form": "tieni",
-      "adverbial_form": "it-tieni",
-      "fractional_form": "nofs",
-      "multiplier_form": "doppju",
-      "distributive_form": "tnejn tnejn",
       "numeral_morphology": {
         "numeral_type": "ordinal",
         "form_attributive_short": "tieni",
-        "form_attributive_short_pattern": "CieCv",
+        "form_attributive_short_pattern": "1â2i",
         "form_attributive_long": "tieni",
         "ordinal_form": "tieni",
-        "adverbial_form": "it-tieni",
+        "adverbial_form": "darbtejn",
         "fractional_form": "nofs",
-        "multiplier_form": "doppju",
-        "distributive_form": "tnejn tnejn",
+        "multiplier_form": "doppju, mtenna",
+        "distributive_form": "tnejn tnejn, *tna",
         "form_plural_pattern": null,
         "vowel_set_sg": "ie-i",
         "vowel_set_pl": null,
         "vowel_set_opp": null,
         "vowel_set_dual": null,
-        "plural_forms": null
+        "plural_forms": null,
+        "feminine_form": "tienja",
+        "masculine_form": "tieni"
       }
     },
     {
@@ -1923,15 +1309,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "third (ordinal numeral); following the second",
-          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara t-tieni u qabel ir-raba'.",
+          "text_en": "third",
+          "text_mt": "Pożizzjoni immedjatament wara t-tieni f'ordni jew sekwenza.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "ordinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -1944,7 +1329,9 @@
         "num-tlieta",
         "num-terz",
         "num-triplu",
-        "num-mtellet"
+        "num-mtellet",
+        "num-tliet",
+        "num-tlitt"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -1954,78 +1341,33 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
-      "dual_form": null,
-      "paucal_form": null,
       "feminine_form": "tielta",
-      "masculine_form": null,
+      "masculine_form": "tielet",
       "plural_forms": null,
-      "plural_form": null,
-      "vowel_set_sg": "ie-e",
-      "vowel_set_pl": null,
-      "vowel_set_dual": null,
-      "vowel_set_opp": "ie-a",
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "ordinal",
-      "form_attributive_short": "tielet",
-      "form_attributive_long": "tielet",
-      "numeral_ordinal": "tielet",
-      "numeral_adverbial": "it-tielet",
-      "numeral_fractional": "terz",
-      "numeral_multiplier": "triplu",
-      "numeral_distributive": "tlieta tlieta",
       "rank": 714,
       "source_frequency_rank": 714,
       "audit_status": "audited",
-      "audit_notes": null,
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CieCvC",
-      "ordinal_form": "tielet",
-      "adverbial_form": "it-tielet",
-      "fractional_form": "terz",
-      "multiplier_form": "triplu",
-      "distributive_form": "tlieta tlieta",
       "numeral_morphology": {
         "numeral_type": "ordinal",
         "form_attributive_short": "tielet",
-        "form_attributive_short_pattern": "CieCvC",
+        "form_attributive_short_pattern": "1â2v3",
         "form_attributive_long": "tielet",
         "ordinal_form": "tielet",
-        "adverbial_form": "it-tielet",
-        "fractional_form": "terz",
-        "multiplier_form": "triplu",
-        "distributive_form": "tlieta tlieta",
+        "adverbial_form": "tliet darbiet",
+        "fractional_form": "terz, *tolt",
+        "multiplier_form": "triplu, *tlieti, mtellet",
+        "distributive_form": "tlieta tlieta, *tliet",
         "form_plural_pattern": null,
         "vowel_set_sg": "ie-e",
         "vowel_set_pl": null,
-        "vowel_set_opp": "ie-a",
+        "vowel_set_opp": "ie--",
         "vowel_set_dual": null,
-        "plural_forms": null
+        "plural_forms": null,
+        "feminine_form": "tielta",
+        "masculine_form": "tielet"
       }
     },
     {
@@ -2059,26 +1401,26 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "half (fraction of one half); equal part of a whole",
-          "text_mt": "Frazzjoni u kwantità li tindika parti waħda minn żewġ partijiet indaqs ta' ħaġa sħiħa.",
+          "text_en": "half; one of two equal parts (½, 0.5, or 50%)",
+          "text_mt": "Waħda minn żewġ partijiet indaqs li flimkien jagħmlu ħaġa sħiħa.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
           },
-          "nuance": "fractional numeral"
+          "nuance": "numeral"
         },
         {
-          "text_en": "middle, midpoint; central point in space or time",
-          "text_mt": "Il-punt ċentrali jew il-mument tan-nofs bejn żewġ limiti fi spazju jew fi żmien.",
+          "text_en": "middle; central point or moment",
+          "text_mt": "Il-punt jew il-mument ċentrali ta' medda ta' spazju jew żmien.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
           },
-          "nuance": "spatial or temporal midpoint"
+          "nuance": "spatial/temporal"
         }
       ],
       "usage_examples": [
@@ -2092,7 +1434,8 @@
         "adj-tieni",
         "num-żewġ",
         "num-doppju",
-        "num-mtenna"
+        "num-mtenna",
+        "num-żewġt"
       ],
       "alternative_forms": [],
       "phonetics": [
@@ -2102,19 +1445,7 @@
           "notes": null
         }
       ],
-      "source_display": null,
-      "source_tooltip": null,
-      "sound_suffix": null,
-      "zokk_morphology": null,
-      "zokk_class": null,
-      "zokk_is_hybrid": null,
-      "zokk_agentive_suffix": null,
-      "is_collective": 0,
-      "is_singulative": 0,
-      "collective_form": null,
-      "singulative_form": null,
       "dual_form": "nofsejn",
-      "paucal_form": null,
       "feminine_form": null,
       "masculine_form": null,
       "plural_forms": [
@@ -2127,70 +1458,28 @@
           "pattern": "12â3"
         }
       ],
-      "plural_form": [
-        {
-          "form": "nofsijiet",
-          "pattern": "-ijiet"
-        },
-        {
-          "form": "nfas",
-          "pattern": "12â3"
-        }
-      ],
-      "vowel_set_sg": "o--",
-      "vowel_set_pl": "o-i-ie",
-      "vowel_set_dual": "o-ej",
-      "vowel_set_opp": null,
-      "verb_form": null,
-      "verb_type": "triliteral",
-      "verb_class": null,
-      "verb_weak_class": null,
-      "verb_transitivity": null,
-      "verb_perfective_3sgm": null,
-      "verb_imperfective_3sgm": null,
-      "verb_verbal_noun": null,
-      "verb_active_ptcp": null,
-      "verb_passive_ptcp": null,
-      "verb_vowel_perf": null,
-      "verb_vowel_impf": null,
-      "verb_vowel_impv": null,
-      "elative_form": null,
-      "participle_type": null,
       "numeral_type": "fractional",
-      "form_attributive_short": "nofs",
-      "form_attributive_long": "nofs",
-      "numeral_ordinal": "tieni",
-      "numeral_adverbial": "bin-nofs",
-      "numeral_fractional": "nofs",
-      "numeral_multiplier": null,
-      "numeral_distributive": "nofs nofs",
       "rank": 336,
       "source_frequency_rank": 336,
       "audit_status": "audited",
       "audit_notes": "🔄 *(Duplicate: also at #656)*",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
-      "form_attributive_short_pattern": "CvCC",
-      "ordinal_form": "tieni",
-      "adverbial_form": "bin-nofs",
-      "fractional_form": "nofs",
-      "multiplier_form": null,
-      "distributive_form": "nofs nofs",
       "numeral_morphology": {
         "numeral_type": "fractional",
         "form_attributive_short": "nofs",
         "form_attributive_short_pattern": "CvCC",
         "form_attributive_long": "nofs",
         "ordinal_form": "tieni",
-        "adverbial_form": "bin-nofs",
+        "adverbial_form": "darbtejn",
         "fractional_form": "nofs",
-        "multiplier_form": null,
-        "distributive_form": "nofs nofs",
+        "multiplier_form": "doppju, mtenna",
+        "distributive_form": "tnejn tnejn, *tna",
         "form_plural_pattern": null,
         "vowel_set_sg": "o--",
-        "vowel_set_pl": "o-i-ie",
+        "vowel_set_pl": "o--",
         "vowel_set_opp": null,
-        "vowel_set_dual": "o-ej",
+        "vowel_set_dual": "o--",
         "plural_forms": [
           {
             "form": "nofsijiet",
@@ -2200,7 +1489,9 @@
             "form": "nfas",
             "pattern": "12â3"
           }
-        ]
+        ],
+        "feminine_form": null,
+        "masculine_form": null
       }
     },
     {
@@ -2227,31 +1518,41 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "زَوْج",
-          "pronunciation": "zawj",
+          "pronunciation": "żawġ",
           "definition": "pair, couple, two"
         },
         {
-          "relationship": "Ancient borrowing from",
+          "relationship": "Borrowed from",
+          "language": "Aramaic",
+          "term": "זוגא",
+          "pronunciation": "żawgā",
+          "definition": "yoke, pair"
+        },
+        {
+          "relationship": "Borrowed from",
           "language": "Ancient Greek",
           "term": "ζεῦγος",
           "pronunciation": "zeûgos",
-          "definition": "yoke, pair"
+          "definition": "pair (two things, persons or animals considered as pair); yoke (two animals joined together)"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "two (short attributive form used directly before nouns)",
-          "text_mt": "Forma qasira tal-kardinal tnejn li tintuża direttament qabel nom biex tiddetermina kwantità doppja.",
+          "text_en": "two; attributive form",
+          "text_mt": "Forma attributtiva ta' tnejn li tindika żewġ elementi.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "short attributive numeral"
+          }
         }
       ],
+      "usage_notes": {
+        "en": "Żewġ is used directly before a noun; the extended form żewġt also occurs before certain nouns.",
+        "mt": "Żewġ tintuża direttament qabel nom; il-forma twila żewġt tidher ukoll quddiem ċerti nomi."
+      },
       "usage_examples": [
         {
           "mt": "Qiegħed żewġ kotba fuq il-mejda biex jaqrahom aktar tard.",
@@ -2263,16 +1564,10 @@
         "adj-tieni",
         "n-nofs",
         "num-doppju",
-        "num-mtenna"
+        "num-mtenna",
+        "num-żewġt"
       ],
       "numeral_type": "attributive_short",
-      "form_attributive_short": "żewġ",
-      "form_attributive_long": "żewġt",
-      "numeral_ordinal": "tieni",
-      "numeral_adverbial": "darbtejn",
-      "numeral_fractional": "nofs",
-      "numeral_multiplier": "doppju, mtenna",
-      "numeral_distributive": "tnejn tnejn",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
@@ -2284,8 +1579,16 @@
         "adverbial_form": "darbtejn",
         "fractional_form": "nofs",
         "multiplier_form": "doppju, mtenna",
-        "distributive_form": "tnejn tnejn"
-      }
+        "distributive_form": "tnejn tnejn, *tna",
+        "vowel_set_sg": "e--"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/zɛwt͡ʃ/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-doppju",
@@ -2293,9 +1596,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "doppj",
-      "cv_pattern": "CvCCjv",
-      "morph_pattern": "CvCCjv",
+      "stem": "-doppj-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -2313,18 +1616,12 @@
           "pattern": "-i"
         }
       ],
-      "plural_form": [
-        {
-          "form": "doppji",
-          "pattern": "-i"
-        }
-      ],
       "etymology_chain": [
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "doppiu",
-          "pronunciation": "doppiu",
+          "pronunciation": "doppju",
           "definition": "double, twofold"
         },
         {
@@ -2338,15 +1635,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "double, twofold; consisting of twice the standard quantity or two matching parts",
-          "text_mt": "Numru multiplikatur li jindika ammont darbtejn akbar minn dak ordinarju jew magħmul minn żewġ partijiet indaqs.",
+          "text_en": "double; twofold",
+          "text_mt": "Ammont darbtejn daqs il-kwantità oriġinali, jew magħmul minn żewġ partijiet indaqs.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "multiplier numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -2360,17 +1656,35 @@
         "adj-tieni",
         "n-nofs",
         "num-żewġ",
-        "num-mtenna"
+        "num-mtenna",
+        "num-żewġt"
       ],
       "numeral_type": "multiplier",
-      "multiplier_form": "doppju",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "multiplier",
-        "multiplier_form": "doppju"
-      }
+        "multiplier_form": "doppju, mtenna",
+        "plural_forms": [
+          {
+            "form": "doppji",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "doppja",
+        "ordinal_form": "tieni",
+        "adverbial_form": "darbtejn",
+        "fractional_form": "nofs",
+        "distributive_form": "tnejn tnejn, *tna"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɔp.pjʊ/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-mtenna",
@@ -2379,8 +1693,8 @@
       "gender": "masculine",
       "root_consonants": "t-n-j",
       "stem": null,
-      "cv_pattern": "mv122v",
-      "morph_pattern": "mvC1C2C2v",
+      "cv_pattern": "m1v22a",
+      "morph_pattern": "mC1vC2C2a",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -2398,33 +1712,26 @@
           "pattern": "-in"
         }
       ],
-      "plural_form": [
-        {
-          "form": "mtennijin",
-          "pattern": "-in"
-        }
-      ],
       "etymology_chain": [
         {
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مُثَنًّى",
-          "pronunciation": "muthannan",
+          "pronunciation": "muθannâ",
           "definition": "doubled, twofold, dual"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "doubled, twofold; repeated or consisting of two folded or multiplied parts",
-          "text_mt": "Numru multiplikatur u parteċipju li jindika ammont irduppjat jew magħmul minn żewġ partijiet imtewma.",
+          "text_en": "doubled; repeated",
+          "text_mt": "Ammont jew ħaġa li ġiet irduppjata jew magħmula darbtejn.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "Form II multiplier participle"
+          }
         }
       ],
       "usage_examples": [
@@ -2438,17 +1745,36 @@
         "adj-tieni",
         "n-nofs",
         "num-żewġ",
-        "num-doppju"
+        "num-doppju",
+        "num-żewġt"
       ],
       "numeral_type": "multiplier",
-      "multiplier_form": "mtenna",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "multiplier",
-        "multiplier_form": "mtenna"
-      }
+        "multiplier_form": "doppju, mtenna",
+        "plural_forms": [
+          {
+            "form": "mtennijin",
+            "pattern": "-in"
+          }
+        ],
+        "feminine_form": "mtennija",
+        "ordinal_form": "tieni",
+        "adverbial_form": "darbtejn",
+        "fractional_form": "nofs",
+        "distributive_form": "tnejn tnejn, *tna",
+        "vowel_set_sg": "e-a"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/mˈtɛn.nɐ/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-terz",
@@ -2456,9 +1782,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "terz",
-      "cv_pattern": "CvCC",
-      "morph_pattern": "CvCC",
+      "stem": "-terz-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -2471,12 +1797,6 @@
       "source_publisher": "Klabb Kotba Maltin",
       "feminine_form": "terza",
       "plural_forms": [
-        {
-          "form": "terzi",
-          "pattern": "-i"
-        }
-      ],
-      "plural_form": [
         {
           "form": "terzi",
           "pattern": "-i"
@@ -2501,15 +1821,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "third (fraction of one third); one of three equal parts of a divided unit",
-          "text_mt": "Frazzjoni li tindika parti waħda minn tliet partijiet indaqs ta' ħaġa sħiħa.",
+          "text_en": "third; one of three equal parts",
+          "text_mt": "Waħda minn tliet partijiet indaqs li flimkien jagħmlu ħaġa sħiħa.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "fractional numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -2522,17 +1841,36 @@
         "num-tlieta",
         "adj-tielet",
         "num-triplu",
-        "num-mtellet"
+        "num-mtellet",
+        "num-tliet",
+        "num-tlitt"
       ],
       "numeral_type": "fractional",
-      "fractional_form": "terz",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "fractional",
-        "fractional_form": "terz"
-      }
+        "fractional_form": "terz, *tolt",
+        "plural_forms": [
+          {
+            "form": "terzi",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "terza",
+        "ordinal_form": "tielet",
+        "adverbial_form": "tliet darbiet",
+        "multiplier_form": "triplu, *tlieti, mtellet",
+        "distributive_form": "tlieta tlieta, *tliet"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tɛrts/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-triplu",
@@ -2540,9 +1878,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "tripl",
-      "cv_pattern": "CCvCCv",
-      "morph_pattern": "CCvCCv",
+      "stem": "-tri-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -2555,12 +1893,6 @@
       "source_publisher": "Klabb Kotba Maltin",
       "feminine_form": "tripla",
       "plural_forms": [
-        {
-          "form": "tripli",
-          "pattern": "-i"
-        }
-      ],
-      "plural_form": [
         {
           "form": "tripli",
           "pattern": "-i"
@@ -2585,15 +1917,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "triple, threefold; three times as great or consisting of three parts",
-          "text_mt": "Numru multiplikatur li jindika ammont tliet darbiet akbar minn dak bażiku jew magħmul minn tliet partijiet.",
+          "text_en": "triple; threefold",
+          "text_mt": "Ammont tliet darbiet daqs il-kwantità oriġinali, jew magħmul minn tliet partijiet.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "multiplier numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -2606,17 +1937,36 @@
         "num-tlieta",
         "adj-tielet",
         "num-terz",
-        "num-mtellet"
+        "num-mtellet",
+        "num-tliet",
+        "num-tlitt"
       ],
       "numeral_type": "multiplier",
-      "multiplier_form": "triplu",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "multiplier",
-        "multiplier_form": "triplu"
-      }
+        "multiplier_form": "triplu, *tlieti, mtellet",
+        "plural_forms": [
+          {
+            "form": "tripli",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "tripla",
+        "ordinal_form": "tielet",
+        "adverbial_form": "tliet darbiet",
+        "fractional_form": "terz, *tolt",
+        "distributive_form": "tlieta tlieta, *tliet"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtrɪp.lʊ/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-mtellet",
@@ -2644,33 +1994,26 @@
           "pattern": "-in"
         }
       ],
-      "plural_form": [
-        {
-          "form": "mtelltin",
-          "pattern": "-in"
-        }
-      ],
       "etymology_chain": [
         {
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مُثَلَّث",
-          "pronunciation": "muthallath",
+          "pronunciation": "muθallaθ",
           "definition": "tripled, threefold, triangular"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "tripled, threefold; multiplied by three or having three parts",
-          "text_mt": "Numru multiplikatur li jindika ammont immultiplikat bi tlieta jew magħmul minn tliet partijiet.",
+          "text_en": "tripled; threefold",
+          "text_mt": "Ammont li ġie mmultiplikat bi tlieta jew magħmul minn tliet partijiet.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "Form II multiplier participle"
+          }
         }
       ],
       "usage_examples": [
@@ -2683,17 +2026,37 @@
         "num-tlieta",
         "adj-tielet",
         "num-terz",
-        "num-triplu"
+        "num-triplu",
+        "num-tliet",
+        "num-tlitt"
       ],
       "numeral_type": "multiplier",
-      "multiplier_form": "mtellet",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "multiplier",
-        "multiplier_form": "mtellet"
-      }
+        "multiplier_form": "triplu, *tlieti, mtellet",
+        "plural_forms": [
+          {
+            "form": "mtelltin",
+            "pattern": "-in"
+          }
+        ],
+        "feminine_form": "mtellta",
+        "ordinal_form": "tielet",
+        "adverbial_form": "tliet darbiet",
+        "fractional_form": "terz, *tolt",
+        "distributive_form": "tlieta tlieta, *tliet",
+        "vowel_set_sg": "e-e"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/mˈtɛl.lɛt/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-raba",
@@ -2702,8 +2065,8 @@
       "gender": "masculine",
       "root_consonants": "r-b-għ",
       "stem": null,
-      "cv_pattern": "1v23'",
-      "morph_pattern": "C1vC2a'",
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -2714,16 +2077,10 @@
       "source_year": null,
       "source_page": null,
       "source_publisher": "Klabb Kotba Maltin",
-      "feminine_form": "raba'",
+      "feminine_form": "*rabgħa",
       "plural_forms": [
         {
-          "form": "rabgħin",
-          "pattern": "-in"
-        }
-      ],
-      "plural_form": [
-        {
-          "form": "rabgħin",
+          "form": "*rabgħin",
           "pattern": "-in"
         }
       ],
@@ -2732,22 +2089,21 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "رَابِع",
-          "pronunciation": "râbi‘",
+          "pronunciation": "râbigħ",
           "definition": "fourth"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "fourth (ordinal numeral); coming next after the third in order or rank",
-          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara t-tielet f'ordni, grad jew sekwenza.",
+          "text_en": "fourth",
+          "text_mt": "Pożizzjoni immedjatament wara t-tielet f'ordni jew sekwenza.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "ordinal numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -2762,17 +2118,37 @@
         "num-robu",
         "num-kwadruplu",
         "num-mrabba",
-        "num-rbiegh"
+        "num-rbiegh",
+        "num-erba",
+        "num-erbat"
       ],
       "numeral_type": "ordinal",
-      "ordinal_form": "raba'",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "ordinal",
-        "ordinal_form": "raba'"
-      }
+        "ordinal_form": "raba'",
+        "adverbial_form": "erba' darbiet",
+        "fractional_form": "kwart, robu'",
+        "multiplier_form": "kwadruplu, *rbiegħi, mrabba'",
+        "distributive_form": "erbgħa erbgħa, rbiegħ",
+        "plural_forms": [
+          {
+            "form": "rabgħin",
+            "pattern": "-in"
+          }
+        ],
+        "feminine_form": "raba'",
+        "vowel_set_sg": "a-a"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɐ.bɐ/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-kwart",
@@ -2780,9 +2156,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "kwart",
-      "cv_pattern": "CCvCC",
-      "morph_pattern": "CCvCC",
+      "stem": "-kwart-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -2795,12 +2171,6 @@
       "source_publisher": "Klabb Kotba Maltin",
       "dual_form": "kwartejn",
       "plural_forms": [
-        {
-          "form": "kwarti",
-          "pattern": "-i"
-        }
-      ],
-      "plural_form": [
         {
           "form": "kwarti",
           "pattern": "-i"
@@ -2825,15 +2195,26 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "quarter (fraction of one fourth); fourth part of a whole, of an hour, or of a standard measure",
-          "text_mt": "Frazzjoni li tindika parti waħda minn erba' partijiet indaqs ta' ħaġa sħiħa, jew medda ta' ħmistax-il minuta.",
+          "text_en": "quarter; one of four equal parts",
+          "text_mt": "Waħda minn erba' partijiet indaqs li flimkien jagħmlu ħaġa sħiħa.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
           },
-          "nuance": "fractional numeral"
+          "nuance": "numeral"
+        },
+        {
+          "text_en": "quarter of an hour; fifteen minutes",
+          "text_mt": "Medda ta' ħmistax-il minuta.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "temporal"
         }
       ],
       "usage_examples": [
@@ -2848,17 +2229,35 @@
         "num-robu",
         "num-kwadruplu",
         "num-mrabba",
-        "num-rbiegh"
+        "num-rbiegh",
+        "num-erba",
+        "num-erbat"
       ],
       "numeral_type": "fractional",
-      "fractional_form": "kwart",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "fractional",
-        "fractional_form": "kwart"
-      }
+        "fractional_form": "kwart, robu'",
+        "plural_forms": [
+          {
+            "form": "kwarti",
+            "pattern": "-i"
+          }
+        ],
+        "ordinal_form": "raba'",
+        "adverbial_form": "erba' darbiet",
+        "multiplier_form": "kwadruplu, *rbiegħi, mrabba'",
+        "distributive_form": "erbgħa erbgħa, rbiegħ"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/kwɐrt/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-robu",
@@ -2867,8 +2266,8 @@
       "gender": "masculine",
       "root_consonants": "r-b-għ",
       "stem": null,
-      "cv_pattern": "1v23'",
-      "morph_pattern": "C1vC2C3'",
+      "cv_pattern": "1o2o3",
+      "morph_pattern": "C1oC2oC3",
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
@@ -2884,22 +2283,33 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "رُبْع",
-          "pronunciation": "rub‘",
+          "pronunciation": "rubgħ",
           "definition": "quarter, fourth part"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "quarter (Semitic fractional form of one fourth); traditional fourth measure",
-          "text_mt": "Frazzjoni Semitika li tindika parti waħda minn erba' partijiet indaqs ta' ħaġa sħiħa jew kejl tradizzjonali.",
+          "text_en": "quarter; one of four equal parts",
+          "text_mt": "Waħda minn erba' partijiet indaqs li flimkien jagħmlu ħaġa sħiħa.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
           },
-          "nuance": "Semitic fractional numeral"
+          "nuance": "obsolete, numeral"
+        },
+        {
+          "text_en": "quarter",
+          "text_mt": "Waħda minn erba' partijiet ta' laħam.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "cuts of meat"
         }
       ],
       "usage_examples": [
@@ -2914,17 +2324,38 @@
         "num-kwart",
         "num-kwadruplu",
         "num-mrabba",
-        "num-rbiegh"
+        "num-rbiegh",
+        "num-erba",
+        "n-robbu",
+        "num-erbat"
       ],
       "numeral_type": "fractional",
-      "fractional_form": "robu'",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "fractional",
-        "fractional_form": "robu'"
-      }
+        "fractional_form": "kwart, robu'",
+        "ordinal_form": "raba'",
+        "adverbial_form": "erba' darbiet",
+        "multiplier_form": "kwadruplu, *rbiegħi, mrabba'",
+        "distributive_form": "erbgħa erbgħa, rbiegħ",
+        "vowel_set_sg": "o-u"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɔ.bʊ/",
+          "notes": null
+        }
+      ],
+      "alternative_forms": [
+        {
+          "headword": "robbu",
+          "type": "orthographic",
+          "target_entry_id": "n-robbu"
+        }
+      ]
     },
     {
       "id": "num-kwadruplu",
@@ -2932,9 +2363,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "kwadrupl",
-      "cv_pattern": "CCvCCvCCv",
-      "morph_pattern": "CCvCCvCCv",
+      "stem": "-kwadr-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -2947,12 +2378,6 @@
       "source_publisher": "Klabb Kotba Maltin",
       "feminine_form": "kwadrupla",
       "plural_forms": [
-        {
-          "form": "kwadrupli",
-          "pattern": "-i"
-        }
-      ],
-      "plural_form": [
         {
           "form": "kwadrupli",
           "pattern": "-i"
@@ -2977,15 +2402,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "quadruple, fourfold; four times as great in quantity or size",
-          "text_mt": "Numru multiplikatur li jindika ammont erba' darbiet akbar minn dak ordinarju.",
+          "text_en": "quadruple; fourfold",
+          "text_mt": "Ammont erba' darbiet daqs il-kwantità oriġinali.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "multiplier numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -3000,17 +2424,36 @@
         "num-kwart",
         "num-robu",
         "num-mrabba",
-        "num-rbiegh"
+        "num-rbiegh",
+        "num-erba",
+        "num-erbat"
       ],
       "numeral_type": "multiplier",
-      "multiplier_form": "kwadruplu",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "multiplier",
-        "multiplier_form": "kwadruplu"
-      }
+        "multiplier_form": "kwadruplu, *rbiegħi, mrabba'",
+        "plural_forms": [
+          {
+            "form": "kwadrupli",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "kwadrupla",
+        "ordinal_form": "raba'",
+        "adverbial_form": "erba' darbiet",
+        "fractional_form": "kwart, robu'",
+        "distributive_form": "erbgħa erbgħa, rbiegħ"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/kwɐˈdrʊp.lʊ/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-mrabba",
@@ -3019,8 +2462,8 @@
       "gender": "masculine",
       "root_consonants": "r-b-għ",
       "stem": null,
-      "cv_pattern": "mv122v3'",
-      "morph_pattern": "mvC1C2C2vC3'",
+      "cv_pattern": "m1v22v3",
+      "morph_pattern": "mC1vC2C2vC3",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -3034,13 +2477,7 @@
       "feminine_form": "mrabba",
       "plural_forms": [
         {
-          "form": "mrabbgħin",
-          "pattern": "-in"
-        }
-      ],
-      "plural_form": [
-        {
-          "form": "mrabbgħin",
+          "form": "*mrabbgħin",
           "pattern": "-in"
         }
       ],
@@ -3063,8 +2500,7 @@
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "Form II multiplier participle"
+          }
         }
       ],
       "usage_examples": [
@@ -3079,17 +2515,37 @@
         "num-kwart",
         "num-robu",
         "num-kwadruplu",
-        "num-rbiegh"
+        "num-rbiegh",
+        "num-erba",
+        "num-erbat"
       ],
       "numeral_type": "multiplier",
-      "multiplier_form": "mrabba'",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "multiplier",
-        "multiplier_form": "mrabba'"
-      }
+        "multiplier_form": "kwadruplu, *rbiegħi, mrabba'",
+        "plural_forms": [
+          {
+            "form": "mrabbgħin",
+            "pattern": "-in"
+          }
+        ],
+        "feminine_form": "mrabba",
+        "ordinal_form": "raba'",
+        "adverbial_form": "erba' darbiet",
+        "fractional_form": "kwart, robu'",
+        "distributive_form": "erbgħa erbgħa, rbiegħ",
+        "vowel_set_sg": "a-a"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/mˈrɐb.bɐ/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-rbiegh",
@@ -3098,8 +2554,8 @@
       "gender": "masculine",
       "root_consonants": "r-b-għ",
       "stem": null,
-      "cv_pattern": "CCieC",
-      "morph_pattern": "CCieC",
+      "cv_pattern": "CCâC",
+      "morph_pattern": "C1C2âC3",
       "is_loanword": 0,
       "is_inflectable": 0,
       "is_imala_blocked": 0,
@@ -3115,22 +2571,21 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "رُبَاع",
-          "pronunciation": "rubâ‘",
+          "pronunciation": "rubâgħ",
           "definition": "four each, in fours"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "four each, by fours (distributive numeral)",
-          "text_mt": "Numru distributtiv li jindika tqassim jew għadd ta' erbgħa erbgħa f'daqqa.",
+          "text_en": "four at a time; in groups of four; in fours",
+          "text_mt": "Għadd jew tqassim f'gruppi ta' erbgħa kull darba.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "distributive numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -3145,17 +2600,30 @@
         "num-kwart",
         "num-robu",
         "num-kwadruplu",
-        "num-mrabba"
+        "num-mrabba",
+        "num-erba",
+        "num-erbat"
       ],
       "numeral_type": "distributive",
-      "distributive_form": "rbiegħ",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "distributive",
-        "distributive_form": "rbiegħ"
-      }
+        "distributive_form": "erbgħa erbgħa, rbiegħ",
+        "ordinal_form": "raba'",
+        "adverbial_form": "erba' darbiet",
+        "fractional_form": "kwart, robu'",
+        "multiplier_form": "kwadruplu, *rbiegħi, mrabba'",
+        "vowel_set_sg": "-ie"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/(ɪ)rˈbɪːħ/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-ħames",
@@ -3183,12 +2651,6 @@
           "pattern": "-in"
         }
       ],
-      "plural_form": [
-        {
-          "form": "ħamsin",
-          "pattern": "-in"
-        }
-      ],
       "etymology_chain": [
         {
           "relationship": "Inherited from",
@@ -3201,8 +2663,8 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "fifth (ordinal numeral); coming next after the fourth in order or series",
-          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara r-raba' f'ordni, grad jew sekwenza.",
+          "text_en": "fifth",
+          "text_mt": "Pożizzjoni immedjatament wara r-raba' f'ordni jew sekwenza.",
           "register": {
             "key": "standard",
             "en": "Standard",
@@ -3210,6 +2672,17 @@
             "arabised": "Miqjiesi"
           },
           "nuance": "ordinal numeral"
+        },
+        {
+          "text_en": "five (5)",
+          "text_mt": "Kwantità li tikkorrispondi ma' ħames unitajiet, 5.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "attributive cardinal numeral"
         }
       ],
       "usage_examples": [
@@ -3221,23 +2694,38 @@
       "related_entries": [
         "num-ħamsa",
         "num-kwint",
-        "num-kwintuplu"
+        "num-kwintuplu",
+        "num-ħamest"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈħɐ.mɛs/",
+          "notes": null
+        }
       ],
       "numeral_type": "ordinal",
-      "ordinal_form": "ħames",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "ordinal",
         "ordinal_form": "ħames",
+        "adverbial_form": "ħames darbiet",
+        "fractional_form": "*ħoms, kwint",
+        "multiplier_form": "kwintuplu, *ħmies, *mħammes",
+        "distributive_form": "ħamsa ħamsa, *ħmies",
         "gender": "masculine",
         "feminine_form": "ħamsa",
         "vowel_set_sg": "a-e",
-        "vowel_set_opp": "a--"
-      },
-      "vowel_set_sg": "a-e",
-      "vowel_set_opp": "a--"
+        "vowel_set_opp": "a--",
+        "plural_forms": [
+          {
+            "form": "ħamsin",
+            "pattern": "-in"
+          }
+        ]
+      }
     },
     {
       "id": "num-kwint",
@@ -3245,9 +2733,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "kwint",
-      "cv_pattern": "CCvCC",
-      "morph_pattern": "CCvCC",
+      "stem": "-kwint-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -3265,18 +2753,12 @@
           "pattern": "-i"
         }
       ],
-      "plural_form": [
-        {
-          "form": "kwinti",
-          "pattern": "-i"
-        }
-      ],
       "etymology_chain": [
         {
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "quintu",
-          "pronunciation": "quintu",
+          "pronunciation": "kwintu",
           "definition": "fifth part, fifth"
         },
         {
@@ -3290,15 +2772,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "fifth (fraction of one fifth); one of five equal parts of a divided whole",
-          "text_mt": "Frazzjoni li tindika parti waħda minn ħames partijiet indaqs ta' ħaġa sħiħa.",
+          "text_en": "fifth; one of five equal parts",
+          "text_mt": "Waħda minn ħames partijiet indaqs li flimkien jagħmlu ħaġa sħiħa.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "fractional numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -3310,17 +2791,35 @@
       "related_entries": [
         "num-ħamsa",
         "num-ħames",
-        "num-kwintuplu"
+        "num-kwintuplu",
+        "num-ħamest"
       ],
       "numeral_type": "fractional",
-      "fractional_form": "kwint",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "fractional",
-        "fractional_form": "kwint"
-      }
+        "fractional_form": "*ħoms, kwint",
+        "plural_forms": [
+          {
+            "form": "kwinti",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "kwinta",
+        "ordinal_form": "ħames",
+        "adverbial_form": "ħames darbiet",
+        "multiplier_form": "kwintuplu, *ħmies, *mħammes",
+        "distributive_form": "ħamsa ħamsa, *ħmies"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/kwɪnt/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-kwintuplu",
@@ -3328,9 +2827,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "kwintupl",
-      "cv_pattern": "CCvCCvCCv",
-      "morph_pattern": "CCvCCvCCv",
+      "stem": "-kwint-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -3343,12 +2842,6 @@
       "source_publisher": "Klabb Kotba Maltin",
       "feminine_form": "kwintupla",
       "plural_forms": [
-        {
-          "form": "kwintupli",
-          "pattern": "-i"
-        }
-      ],
-      "plural_form": [
         {
           "form": "kwintupli",
           "pattern": "-i"
@@ -3373,15 +2866,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "fivefold, quintuple; five times as great in quantity or number",
-          "text_mt": "Numru multiplikatur li jindika ammont ħames darbiet akbar minn dak ordinarju.",
+          "text_en": "fivefold; quintuple",
+          "text_mt": "Ammont ħames darbiet daqs il-kwantità oriġinali.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "multiplier numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -3393,17 +2885,35 @@
       "related_entries": [
         "num-ħamsa",
         "num-ħames",
-        "num-kwint"
+        "num-kwint",
+        "num-ħamest"
       ],
       "numeral_type": "multiplier",
-      "multiplier_form": "kwintuplu",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "multiplier",
-        "multiplier_form": "kwintuplu"
-      }
+        "multiplier_form": "kwintuplu, *ħmies, *mħammes",
+        "plural_forms": [
+          {
+            "form": "kwintupli",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "kwintupla",
+        "ordinal_form": "ħames",
+        "adverbial_form": "ħames darbiet",
+        "fractional_form": "*ħoms, kwint",
+        "distributive_form": "ħamsa ħamsa, *ħmies"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/kwɪnˈtʊp.lʊ/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-sitt",
@@ -3412,8 +2922,8 @@
       "gender": "masculine",
       "root_consonants": "s-t-t",
       "stem": null,
-      "cv_pattern": "1v22",
-      "morph_pattern": "C1vC2C2",
+      "cv_pattern": "1v23",
+      "morph_pattern": "C1vC2C3",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -3431,26 +2941,19 @@
           "pattern": "-in"
         }
       ],
-      "plural_form": [
-        {
-          "form": "sittin",
-          "pattern": "-in"
-        }
-      ],
       "etymology_chain": [
         {
-          "relationship": "Inherited from",
-          "language": "Arabic",
-          "term": "سَادِس",
-          "pronunciation": "sâdis",
-          "definition": "sixth"
+          "relationship": "Derived from",
+          "language": "Maltese",
+          "term": "sitta",
+          "definition": "six"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "sixth (ordinal numeral); coming next after the fifth in order or series",
-          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara l-ħames f'ordni, grad jew sekwenza.",
+          "text_en": "sixth",
+          "text_mt": "Pożizzjoni immedjatament wara l-ħames f'ordni jew sekwenza.",
           "register": {
             "key": "standard",
             "en": "Standard",
@@ -3458,6 +2961,17 @@
             "arabised": "Miqjiesi"
           },
           "nuance": "ordinal numeral"
+        },
+        {
+          "text_en": "six (6)",
+          "text_mt": "Kwantità li tikkorrispondi ma' sitt unitajiet, 6.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "attributive cardinal numeral"
         }
       ],
       "usage_examples": [
@@ -3473,20 +2987,34 @@
         "num-stiet"
       ],
       "numeral_type": "ordinal",
-      "ordinal_form": "sitt",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "ordinal",
         "ordinal_form": "sitt",
+        "adverbial_form": "sitt darbiet",
+        "fractional_form": "sest, *sott",
+        "multiplier_form": "sestuplu, *msettet",
+        "distributive_form": "sitta sitta, *stiet",
         "gender": "masculine",
         "feminine_form": "sitta",
         "vowel_set_sg": "i--",
-        "vowel_set_opp": "i--"
+        "vowel_set_opp": "i--",
+        "plural_forms": [
+          {
+            "form": "sittin",
+            "pattern": "-in"
+          }
+        ]
       },
-      "vowel_set_sg": "i--",
-      "vowel_set_opp": "i--"
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/sɪt/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-sest",
@@ -3494,9 +3022,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "sest",
-      "cv_pattern": "CvCC",
-      "morph_pattern": "CvCC",
+      "stem": "-sest-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -3509,12 +3037,6 @@
       "source_publisher": "Klabb Kotba Maltin",
       "feminine_form": "sesta",
       "plural_forms": [
-        {
-          "form": "sesti",
-          "pattern": "-i"
-        }
-      ],
-      "plural_form": [
         {
           "form": "sesti",
           "pattern": "-i"
@@ -3539,15 +3061,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "sixth (fraction of one sixth); one of six equal parts of a whole",
-          "text_mt": "Frazzjoni li tindika parti waħda minn sitt partijiet indaqs ta' ħaġa sħiħa.",
+          "text_en": "sixth; one of six equal parts",
+          "text_mt": "Waħda minn sitt partijiet indaqs li flimkien jagħmlu ħaġa sħiħa.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "fractional numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -3563,14 +3084,31 @@
         "num-stiet"
       ],
       "numeral_type": "fractional",
-      "fractional_form": "sest",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "fractional",
-        "fractional_form": "sest"
-      }
+        "fractional_form": "sest, *sott",
+        "plural_forms": [
+          {
+            "form": "sesti",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "sesta",
+        "ordinal_form": "sitt",
+        "adverbial_form": "sitt darbiet",
+        "multiplier_form": "sestuplu, *msettet",
+        "distributive_form": "sitta sitta, *stiet"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/sɛst/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-sestuplu",
@@ -3578,9 +3116,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "sestupl",
-      "cv_pattern": "CvCCvCCv",
-      "morph_pattern": "CvCCvCCv",
+      "stem": "-sest-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -3593,12 +3131,6 @@
       "source_publisher": "Klabb Kotba Maltin",
       "feminine_form": "sestupla",
       "plural_forms": [
-        {
-          "form": "sestupli",
-          "pattern": "-i"
-        }
-      ],
-      "plural_form": [
         {
           "form": "sestupli",
           "pattern": "-i"
@@ -3623,15 +3155,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "sixfold, sextuple; six times as great in quantity or number",
-          "text_mt": "Numru multiplikatur li jindika ammont sitt darbiet akbar minn dak ordinarju.",
+          "text_en": "sixfold; sextuple",
+          "text_mt": "Ammont sitt darbiet daqs il-kwantità oriġinali.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "multiplier numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -3647,14 +3178,31 @@
         "num-stiet"
       ],
       "numeral_type": "multiplier",
-      "multiplier_form": "sestuplu",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "multiplier",
-        "multiplier_form": "sestuplu"
-      }
+        "multiplier_form": "sestuplu, *msettet",
+        "plural_forms": [
+          {
+            "form": "sestupli",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "sestupla",
+        "ordinal_form": "sitt",
+        "adverbial_form": "sitt darbiet",
+        "fractional_form": "sest, *sott",
+        "distributive_form": "sitta sitta, *stiet"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/sɛsˈtʊp.lʊ/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-stiet",
@@ -3687,15 +3235,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "six each, by sixes (distributive numeral)",
-          "text_mt": "Numru distributtiv li jindika tqassim jew għadd ta' sitta sitta f'daqqa.",
+          "text_en": "six at a time; in groups of six",
+          "text_mt": "Għadd jew tqassim fi gruppi ta' sitta kull darba.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "distributive numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -3711,14 +3258,25 @@
         "num-sestuplu"
       ],
       "numeral_type": "distributive",
-      "distributive_form": "stiet",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "distributive",
-        "distributive_form": "stiet"
-      }
+        "distributive_form": "sitta sitta, *stiet",
+        "ordinal_form": "sitt",
+        "adverbial_form": "sitt darbiet",
+        "fractional_form": "sest, *sott",
+        "multiplier_form": "sestuplu, *msettet",
+        "vowel_set_sg": "-ie"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/stɪːt/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-tmien",
@@ -3727,8 +3285,8 @@
       "gender": "masculine",
       "root_consonants": "t-m-n",
       "stem": null,
-      "cv_pattern": "12v3",
-      "morph_pattern": "C1C2vC3",
+      "cv_pattern": "CCâC",
+      "morph_pattern": "C1C2âC3",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -3746,26 +3304,20 @@
           "pattern": "-in"
         }
       ],
-      "plural_form": [
-        {
-          "form": "tmienin",
-          "pattern": "-in"
-        }
-      ],
       "etymology_chain": [
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "ثَامِن",
-          "pronunciation": "thâmin",
-          "definition": "eighth"
+          "term": "ثَمَانٍ",
+          "pronunciation": "θamân",
+          "definition": "eight (masculine)"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "eighth (ordinal numeral); coming next after the seventh in order or series",
-          "text_mt": "Numru ordinali li jindika l-pożizzjoni li tiġi minnufih wara s-seba' f'ordni, grad jew sekwenza.",
+          "text_en": "eighth",
+          "text_mt": "Pożizzjoni immedjatament wara s-seba' f'ordni jew sekwenza.",
           "register": {
             "key": "standard",
             "en": "Standard",
@@ -3773,6 +3325,17 @@
             "arabised": "Miqjiesi"
           },
           "nuance": "ordinal numeral"
+        },
+        {
+          "text_en": "eight (8)",
+          "text_mt": "Kwantità li tikkorrispondi ma' tmien unitajiet, 8.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "attributive cardinal numeral"
         }
       ],
       "usage_examples": [
@@ -3785,23 +3348,38 @@
         "num-tmienja",
         "num-tomon",
         "num-ottav",
-        "num-ottuplu"
+        "num-ottuplu",
+        "num-tmint"
       ],
       "numeral_type": "ordinal",
-      "ordinal_form": "tmien",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "ordinal",
         "ordinal_form": "tmien",
+        "adverbial_form": "tmien darbiet",
+        "fractional_form": "ottav, *tomon",
+        "multiplier_form": "ottuplu, *tmieni, *mtemmen",
+        "distributive_form": "tmienja tmienja, tmien",
         "gender": "masculine",
         "feminine_form": "tmienja",
         "vowel_set_sg": "-ie",
-        "vowel_set_opp": "-ie"
+        "vowel_set_opp": "-ie",
+        "plural_forms": [
+          {
+            "form": "tmienin",
+            "pattern": "-in"
+          }
+        ]
       },
-      "vowel_set_sg": "-ie",
-      "vowel_set_opp": "-ie"
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tmɪːn/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-tomon",
@@ -3825,36 +3403,29 @@
       "plural_forms": [
         {
           "form": "tmien",
-          "pattern": "1ie3"
-        }
-      ],
-      "plural_form": [
-        {
-          "form": "tmien",
-          "pattern": "1ie3"
+          "pattern": "CCâC"
         }
       ],
       "etymology_chain": [
         {
           "relationship": "Inherited from",
           "language": "Arabic",
-          "term": "ثُمْن",
-          "pronunciation": "thumn",
+          "term": "ثُمُن",
+          "pronunciation": "θumun",
           "definition": "eighth part, one eighth"
         }
       ],
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "eighth (Semitic fraction of one eighth); traditional eighth measure of capacity or land",
-          "text_mt": "Frazzjoni Semitika li tindika parti waħda minn tmien partijiet indaqs ta' ħaġa sħiħa jew qjies tradizzjonali.",
+          "text_en": "eighth; one of eight equal parts",
+          "text_mt": "Waħda minn tmien partijiet indaqs li flimkien jagħmlu ħaġa sħiħa.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "Semitic fractional numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -3867,17 +3438,35 @@
         "num-tmienja",
         "num-tmien",
         "num-ottav",
-        "num-ottuplu"
+        "num-ottuplu",
+        "num-tmint"
       ],
       "numeral_type": "fractional",
-      "fractional_form": "tomon",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "fractional",
-        "fractional_form": "tomon"
-      }
+        "fractional_form": "ottav, *tomon",
+        "plural_forms": [
+          {
+            "form": "tmien",
+            "pattern": "CCâC"
+          }
+        ],
+        "ordinal_form": "tmien",
+        "adverbial_form": "tmien darbiet",
+        "multiplier_form": "ottuplu, *tmieni, *mtemmen",
+        "distributive_form": "tmienja tmienja, tmien",
+        "vowel_set_sg": "o-o"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtɔ.mɔn/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-ottav",
@@ -3885,9 +3474,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "ottav",
-      "cv_pattern": "vCCvC",
-      "morph_pattern": "vCCvC",
+      "stem": "-ott-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -3900,12 +3489,6 @@
       "source_publisher": "Klabb Kotba Maltin",
       "feminine_form": "ottava",
       "plural_forms": [
-        {
-          "form": "ottavi",
-          "pattern": "-i"
-        }
-      ],
-      "plural_form": [
         {
           "form": "ottavi",
           "pattern": "-i"
@@ -3930,15 +3513,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "eighth (fraction of one eighth); one of eight equal parts",
-          "text_mt": "Frazzjoni li tindika parti waħda minn tmien partijiet indaqs ta' ħaġa sħiħa.",
+          "text_en": "eighth; one of eight equal parts",
+          "text_mt": "Waħda minn tmien partijiet indaqs li flimkien jagħmlu ħaġa sħiħa.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "fractional numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -3951,17 +3533,35 @@
         "num-tmienja",
         "num-tmien",
         "num-tomon",
-        "num-ottuplu"
+        "num-ottuplu",
+        "num-tmint"
       ],
       "numeral_type": "fractional",
-      "fractional_form": "ottav",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "fractional",
-        "fractional_form": "ottav"
-      }
+        "fractional_form": "ottav, *tomon",
+        "plural_forms": [
+          {
+            "form": "ottavi",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "ottava",
+        "ordinal_form": "tmien",
+        "adverbial_form": "tmien darbiet",
+        "multiplier_form": "ottuplu, *tmieni, *mtemmen",
+        "distributive_form": "tmienja tmienja, tmien"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɔtˈtɐːf/",
+          "notes": null
+        }
+      ]
     },
     {
       "id": "num-ottuplu",
@@ -3969,9 +3569,9 @@
       "pos": "numeral",
       "gender": "masculine",
       "root_consonants": null,
-      "stem": "ottupl",
-      "cv_pattern": "vCCvCCv",
-      "morph_pattern": "vCCvCCv",
+      "stem": "-ott-",
+      "cv_pattern": null,
+      "morph_pattern": null,
       "is_loanword": 1,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -3984,12 +3584,6 @@
       "source_publisher": "Klabb Kotba Maltin",
       "feminine_form": "ottupla",
       "plural_forms": [
-        {
-          "form": "ottupli",
-          "pattern": "-i"
-        }
-      ],
-      "plural_form": [
         {
           "form": "ottupli",
           "pattern": "-i"
@@ -4014,15 +3608,14 @@
       "etymology_notes": null,
       "definitions": [
         {
-          "text_en": "eightfold, octuple; eight times as great in number or quantity",
-          "text_mt": "Numru multiplikatur li jindika ammont tmien darbiet akbar minn dak ordinarju.",
+          "text_en": "eightfold; octuple",
+          "text_mt": "Ammont tmien darbiet daqs il-kwantità oriġinali.",
           "register": {
             "key": "standard",
             "en": "Standard",
             "mt": "Standard",
             "arabised": "Miqjiesi"
-          },
-          "nuance": "multiplier numeral"
+          }
         }
       ],
       "usage_examples": [
@@ -4035,16 +3628,2245 @@
         "num-tmienja",
         "num-tmien",
         "num-tomon",
-        "num-ottav"
+        "num-ottav",
+        "num-tmint"
       ],
       "numeral_type": "multiplier",
-      "multiplier_form": "ottuplu",
       "theme": "Numerals & Quantities",
       "theme_id": "numerals",
       "audit_status": "audited",
       "numeral_morphology": {
         "numeral_type": "multiplier",
-        "multiplier_form": "ottuplu"
+        "multiplier_form": "ottuplu, *tmieni, *mtemmen",
+        "plural_forms": [
+          {
+            "form": "ottupli",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "ottupla",
+        "ordinal_form": "tmien",
+        "adverbial_form": "tmien darbiet",
+        "fractional_form": "ottav, *tomon",
+        "distributive_form": "tmienja tmienja, tmien"
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɔtˈtʊp.lʊ/",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "id": "num-sebgħa",
+      "headword": "sebgħa",
+      "pos": "numeral",
+      "gender": "feminine",
+      "root_consonants": "s-b-għ",
+      "stem": null,
+      "cv_pattern": "CvCCv",
+      "morph_pattern": "CvCCv",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: sebgħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَبْعَة",
+          "pronunciation": "sabʿa",
+          "definition": "seven"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "seven (7)",
+          "text_mt": "Kwantità li tikkorrispondi ma' seba' unitajiet, 7.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm sebgħa min-nies bilqiegħda madwar il-mejda.",
+          "en": "There were seven people sitting around the table."
+        }
+      ],
+      "related_entries": [
+        "num-seba",
+        "num-settimu",
+        "num-settuplu",
+        "num-sebat"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛb.bɐ/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": "seba'",
+      "plural_forms": [],
+      "numeral_type": "cardinal",
+      "rank": 712,
+      "source_frequency_rank": 712,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "seba'",
+        "form_attributive_short_pattern": "CvCv",
+        "form_attributive_long": "sebat",
+        "ordinal_form": "seba'",
+        "adverbial_form": "seba' darbiet",
+        "fractional_form": "*sobu', settimu",
+        "multiplier_form": "settuplu, *msabba'",
+        "distributive_form": "sebgħa sebgħa, *sbiegħ",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "e--",
+        "vowel_set_pl": null,
+        "vowel_set_opp": "e-a",
+        "vowel_set_dual": null,
+        "plural_forms": [],
+        "gender": "feminine",
+        "masculine_form": "seba'",
+        "feminine_form": null
+      },
+      "usage_notes": {
+        "en": "Grammatically, the cardinal numeral sebgħa is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form seba' serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
+        "mt": "Grammatikalment, in-numru kardinali sebgħa huwa ta' forma femminili (bil-morfema femminili -a), filwaqt li l-għamla attributtiva mqassra seba' tiffunzjona bħala l-kontroparti maskili tiegħu. Madankollu, fl-użu sintattiku u bħala numru astratt fl-għadd, jaġixxi bħala kelma ta' ġeneru komuni."
+      }
+    },
+    {
+      "id": "num-seba",
+      "headword": "seba'",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "s-b-għ",
+      "stem": null,
+      "cv_pattern": "CvCv",
+      "morph_pattern": "CvCv",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: seba'",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "feminine_form": "sebgħa",
+      "plural_forms": [
+        {
+          "form": "sebgħin",
+          "pattern": "-in"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَابِع",
+          "pronunciation": "sâbiʿ",
+          "definition": "seventh"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "seventh",
+          "text_mt": "Pożizzjoni immedjatament wara s-sitt f'ordni jew sekwenza.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "ordinal numeral"
+        },
+        {
+          "text_en": "seven (7)",
+          "text_mt": "Kwantità li tikkorrispondi ma' seba' unitajiet, 7.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "attributive cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien is-seba' wieħed li wasal fil-quċċata tal-għolja.",
+          "en": "He was the seventh one who arrived at the top of the hill."
+        },
+        {
+          "mt": "Għandna seba' ijiem biex inlestu x-xogħol.",
+          "en": "We have seven days to finish the work."
+        }
+      ],
+      "related_entries": [
+        "num-sebgħa",
+        "num-settimu",
+        "num-settuplu",
+        "num-sebat"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛ.bɐ/",
+          "notes": null
+        }
+      ],
+      "numeral_type": "ordinal",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "ordinal",
+        "ordinal_form": "seba'",
+        "adverbial_form": "seba' darbiet",
+        "fractional_form": "*sobu', settimu",
+        "multiplier_form": "settuplu, *msabba'",
+        "distributive_form": "sebgħa sebgħa, *sbiegħ",
+        "gender": "masculine",
+        "feminine_form": "sebgħa",
+        "vowel_set_sg": "e-a",
+        "vowel_set_opp": "e--",
+        "plural_forms": [
+          {
+            "form": "sebgħin",
+            "pattern": "-in"
+          }
+        ]
+      }
+    },
+    {
+      "id": "num-disgħa",
+      "headword": "disgħa",
+      "pos": "numeral",
+      "gender": "feminine",
+      "root_consonants": "d-s-għ",
+      "stem": null,
+      "cv_pattern": "CvCCv",
+      "morph_pattern": "CvCCv",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: disgħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تِسْعَة",
+          "pronunciation": "tisʿa",
+          "definition": "nine"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "nine (9)",
+          "text_mt": "Kwantità li tikkorrispondi ma' disa' unitajiet, 9.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-grupp kien magħmul minn disgħa b'kollox.",
+          "en": "The group was made up of nine in total."
+        }
+      ],
+      "related_entries": [
+        "num-disa",
+        "num-nonu",
+        "num-nonuplu",
+        "num-disat"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɪs.sɐ/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": "disa'",
+      "plural_forms": [],
+      "numeral_type": "cardinal",
+      "rank": 975,
+      "source_frequency_rank": 975,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "disa'",
+        "form_attributive_short_pattern": "CvCv",
+        "form_attributive_long": "disat",
+        "ordinal_form": "disa'",
+        "adverbial_form": "disa' darbiet",
+        "fractional_form": "*dosu', nonu",
+        "multiplier_form": "nonuplu, *mdissa'",
+        "distributive_form": "disgħa disgħa, *dsiegħ",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "i--",
+        "vowel_set_pl": null,
+        "vowel_set_opp": "i-a",
+        "vowel_set_dual": null,
+        "plural_forms": [],
+        "gender": "feminine",
+        "masculine_form": "disa'",
+        "feminine_form": null
+      },
+      "usage_notes": {
+        "en": "Grammatically, the cardinal numeral disgħa is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form disa' serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
+        "mt": "Grammatikalment, in-numru kardinali disgħa huwa ta' forma femminili (bil-morfema femminili -a), filwaqt li l-għamla attributtiva mqassra disa' tiffunzjona bħala l-kontroparti maskili tiegħu. Madankollu, fl-użu sintattiku u bħala numru astratt fl-għadd, jaġixxi bħala kelma ta' ġeneru komuni."
+      }
+    },
+    {
+      "id": "num-disa",
+      "headword": "disa'",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "d-s-għ",
+      "stem": null,
+      "cv_pattern": "CvCv",
+      "morph_pattern": "CvCv",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: disa'",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "feminine_form": "disgħa",
+      "plural_forms": [
+        {
+          "form": "disgħin",
+          "pattern": "-in"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَاسِع",
+          "pronunciation": "tâsiʿ",
+          "definition": "ninth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "ninth",
+          "text_mt": "Pożizzjoni immedjatament wara t-tmien f'ordni jew sekwenza.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "ordinal numeral"
+        },
+        {
+          "text_en": "nine (9)",
+          "text_mt": "Kwantità li tikkorrispondi ma' disa' unitajiet, 9.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "attributive cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien id-disa' xahar tas-sena meta seħħet il-bidla.",
+          "en": "It was the ninth month of the year when the change occurred."
+        },
+        {
+          "mt": "Ixtara disa' kotba ġodda għal-librerija.",
+          "en": "He bought nine new books for the library."
+        }
+      ],
+      "related_entries": [
+        "num-disgħa",
+        "num-nonu",
+        "num-nonuplu",
+        "num-disat"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɪ.sɐ/",
+          "notes": null
+        }
+      ],
+      "numeral_type": "ordinal",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "ordinal",
+        "ordinal_form": "disa'",
+        "adverbial_form": "disa' darbiet",
+        "fractional_form": "*dosu', nonu",
+        "multiplier_form": "nonuplu, *mdissa'",
+        "distributive_form": "disgħa disgħa, *dsiegħ",
+        "gender": "masculine",
+        "feminine_form": "disgħa",
+        "vowel_set_sg": "i-a",
+        "vowel_set_opp": "i--",
+        "plural_forms": [
+          {
+            "form": "disgħin",
+            "pattern": "-in"
+          }
+        ]
+      }
+    },
+    {
+      "id": "num-għaxra",
+      "headword": "għaxra",
+      "pos": "numeral",
+      "gender": "feminine",
+      "root_consonants": "għ-x-r",
+      "stem": null,
+      "cv_pattern": "CvCCv",
+      "morph_pattern": "CvCCv",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: għaxra",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَشَرَة",
+          "pronunciation": "ʿashara",
+          "definition": "ten"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "ten (10)",
+          "text_mt": "Kwantità li tikkorrispondi ma' għaxar unitajiet, 10.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm għaxra min-nies jistennew fil-kju.",
+          "en": "There were ten people waiting in the queue."
+        }
+      ],
+      "related_entries": [
+        "num-għaxar",
+        "num-deċmu",
+        "num-deċuplu",
+        "num-għaxart"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐːʃ.rɐ/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": "għaxar",
+      "plural_forms": [],
+      "numeral_type": "cardinal",
+      "rank": 476,
+      "source_frequency_rank": 476,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "għaxar",
+        "form_attributive_short_pattern": "CvCvC",
+        "form_attributive_long": "għaxart",
+        "ordinal_form": "għaxar",
+        "adverbial_form": "għaxar darbiet",
+        "fractional_form": "*għoxor, deċmu",
+        "multiplier_form": "deċuplu, għexieri, *mgħaxxer",
+        "distributive_form": "għaxra għaxra, għexier",
+        "form_plural_pattern": null,
+        "vowel_set_sg": "a--",
+        "vowel_set_pl": null,
+        "vowel_set_opp": "a-a",
+        "vowel_set_dual": null,
+        "plural_forms": [],
+        "gender": "feminine",
+        "masculine_form": "għaxar",
+        "feminine_form": null
+      },
+      "usage_notes": {
+        "en": "Grammatically, the cardinal numeral għaxra is feminine in morphological form (bearing the feminine suffix -a), with the short attributive form għaxar serving as its masculine counterpart. In syntactic usage and as an abstract counting number, however, it functions as a common-gender word.",
+        "mt": "Grammatikalment, in-numru kardinali għaxra huwa ta' forma femminili (bil-morfema femminili -a), filwaqt li l-għamla attributtiva mqassra għaxar tiffunzjona bħala l-kontroparti maskili tiegħu. Madankollu, fl-użu sintattiku u bħala numru astratt fl-għadd, jaġixxi bħala kelma ta' ġeneru komuni."
+      }
+    },
+    {
+      "id": "num-għaxar",
+      "headword": "għaxar",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "għ-x-r",
+      "stem": null,
+      "cv_pattern": "CvCvC",
+      "morph_pattern": "CvCvC",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: għaxar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "feminine_form": "għaxra",
+      "plural_forms": [],
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَاشِر",
+          "pronunciation": "ʿâshir",
+          "definition": "tenth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "tenth",
+          "text_mt": "Pożizzjoni immedjatament wara d-disa' f'ordni jew sekwenza.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "ordinal numeral"
+        },
+        {
+          "text_en": "ten (10)",
+          "text_mt": "Kwantità li tikkorrispondi ma' għaxar unitajiet, 10.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          },
+          "nuance": "attributive cardinal numeral"
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Wasal fl-għaxar post fost il-kompetituri kollha.",
+          "en": "He arrived in tenth place among all the competitors."
+        },
+        {
+          "mt": "Għandna għaxar minuti biex nilħqu tal-linja.",
+          "en": "We have ten minutes to catch the bus."
+        }
+      ],
+      "related_entries": [
+        "num-għaxra",
+        "num-deċmu",
+        "num-deċuplu",
+        "num-għaxart"
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐː.ʃɐr/",
+          "notes": null
+        }
+      ],
+      "numeral_type": "ordinal",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "audit_status": "audited",
+      "numeral_morphology": {
+        "numeral_type": "ordinal",
+        "ordinal_form": "għaxar",
+        "adverbial_form": "għaxar darbiet",
+        "fractional_form": "*għoxor, deċmu",
+        "multiplier_form": "deċuplu, għexieri, *mgħaxxer",
+        "distributive_form": "għaxra għaxra, għexier",
+        "gender": "masculine",
+        "feminine_form": "għaxra",
+        "vowel_set_sg": "a-a",
+        "vowel_set_opp": "a--",
+        "plural_forms": []
+      }
+    },
+    {
+      "id": "num-settimu",
+      "headword": "settimu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "-sett-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "settima",
+      "plural_forms": [
+        {
+          "form": "settimi",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "sèttimu",
+          "pronunciation": "settimu",
+          "definition": "seventh part, seventh"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "septimus",
+          "pronunciation": "septimus",
+          "definition": "seventh"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "seventh; one of seven equal parts",
+          "text_mt": "Waħda minn seba' partijiet indaqs li flimkien jagħmlu ħaġa sħiħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Huwa wiret biss is-settimu tal-wirt kollu.",
+          "en": "He inherited only a seventh of the entire estate."
+        }
+      ],
+      "related_entries": [
+        "num-sebgħa",
+        "num-seba",
+        "num-settuplu",
+        "num-sebat"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛt.tɪ.mʊ/",
+          "notes": null
+        }
+      ],
+      "masculine_form": null,
+      "numeral_type": "fractional",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "fractional_form": "*sobu', settimu",
+        "plural_forms": [
+          {
+            "form": "settimi",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "settima",
+        "ordinal_form": "seba'",
+        "adverbial_form": "seba' darbiet",
+        "multiplier_form": "settuplu, *msabba'",
+        "distributive_form": "sebgħa sebgħa, *sbiegħ"
+      }
+    },
+    {
+      "id": "num-settuplu",
+      "headword": "settuplu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "-sett-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "settupla",
+      "plural_forms": [
+        {
+          "form": "settupli",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "settuplo",
+          "pronunciation": "settuplo",
+          "definition": "sevenfold, septuple"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Late Latin",
+          "term": "septuplus",
+          "pronunciation": "septuplus",
+          "definition": "sevenfold"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sevenfold; septuple",
+          "text_mt": "Ammont seba' darbiet daqs il-kwantità oriġinali.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-profitti żdiedu b'mod settuplu f'dawn l-aħħar snin.",
+          "en": "Profits increased sevenfold in recent years."
+        }
+      ],
+      "related_entries": [
+        "num-sebgħa",
+        "num-seba",
+        "num-settimu",
+        "num-sebat"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/sɛtˈtʊp.lʊ/",
+          "notes": null
+        }
+      ],
+      "masculine_form": null,
+      "numeral_type": "multiplier",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "settuplu, *msabba'",
+        "plural_forms": [
+          {
+            "form": "settupli",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "settupla",
+        "ordinal_form": "seba'",
+        "adverbial_form": "seba' darbiet",
+        "fractional_form": "*sobu', settimu",
+        "distributive_form": "sebgħa sebgħa, *sbiegħ"
+      }
+    },
+    {
+      "id": "num-nonu",
+      "headword": "nonu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "-non-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "nona",
+      "plural_forms": [
+        {
+          "form": "noni",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "nonu",
+          "pronunciation": "nonu",
+          "definition": "ninth part, ninth"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "nonus",
+          "pronunciation": "nonus",
+          "definition": "ninth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "ninth; one of nine equal parts",
+          "text_mt": "Waħda minn disa' partijiet indaqs li flimkien jagħmlu ħaġa sħiħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħa biss nonu mis-somma li kienet dovuta.",
+          "en": "He took only a ninth of the sum that was due."
+        }
+      ],
+      "related_entries": [
+        "num-disgħa",
+        "num-disa",
+        "num-nonuplu",
+        "num-disat"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈnɔː.nʊ/",
+          "notes": null
+        }
+      ],
+      "masculine_form": null,
+      "numeral_type": "fractional",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "fractional_form": "*dosu', nonu",
+        "plural_forms": [
+          {
+            "form": "noni",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "nona",
+        "ordinal_form": "disa'",
+        "adverbial_form": "disa' darbiet",
+        "multiplier_form": "nonuplu, *mdissa'",
+        "distributive_form": "disgħa disgħa, *dsiegħ"
+      }
+    },
+    {
+      "id": "num-nonuplu",
+      "headword": "nonuplu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "-non-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "nonupla",
+      "plural_forms": [
+        {
+          "form": "nonupli",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "nonuplo",
+          "pronunciation": "nonuplo",
+          "definition": "ninefold, nonuple"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Late Latin",
+          "term": "nonuplus",
+          "pronunciation": "nonuplus",
+          "definition": "ninefold"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "ninefold; nonuple",
+          "text_mt": "Ammont disa' darbiet daqs il-kwantità oriġinali.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm qabża nonupla fl-għadd ta' viżitaturi din is-sena.",
+          "en": "There was a ninefold leap in the number of visitors this year."
+        }
+      ],
+      "related_entries": [
+        "num-disgħa",
+        "num-disa",
+        "num-nonu",
+        "num-disat"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/nɔˈnʊp.lʊ/",
+          "notes": null
+        }
+      ],
+      "masculine_form": null,
+      "numeral_type": "multiplier",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "nonuplu, *mdissa'",
+        "plural_forms": [
+          {
+            "form": "nonupli",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "nonupla",
+        "ordinal_form": "disa'",
+        "adverbial_form": "disa' darbiet",
+        "fractional_form": "*dosu', nonu",
+        "distributive_form": "disgħa disgħa, *dsiegħ"
+      }
+    },
+    {
+      "id": "num-deċmu",
+      "headword": "deċmu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "-deċ-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "deċma",
+      "plural_forms": [
+        {
+          "form": "deċmi",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "dècimu",
+          "pronunciation": "decimu",
+          "definition": "tenth part, tenth, tithe"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "decimus",
+          "pronunciation": "decimus",
+          "definition": "tenth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "tenth; one of ten equal parts (tithe)",
+          "text_mt": "Waħda minn għaxar partijiet indaqs li flimkien jagħmlu ħaġa sħiħa; l-għexur.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien jagħti d-deċmu mid-dħul tiegħu għall-karità.",
+          "en": "He used to give a tenth of his income to charity."
+        }
+      ],
+      "related_entries": [
+        "num-għaxra",
+        "num-għaxar",
+        "num-deċuplu",
+        "num-għaxart"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɛt͡ʃ.mʊ/",
+          "notes": null
+        }
+      ],
+      "masculine_form": null,
+      "numeral_type": "fractional",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "fractional",
+        "fractional_form": "*għoxor, deċmu",
+        "plural_forms": [
+          {
+            "form": "deċmi",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "deċma",
+        "ordinal_form": "għaxar",
+        "adverbial_form": "għaxar darbiet",
+        "multiplier_form": "deċuplu, għexieri, *mgħaxxer",
+        "distributive_form": "għaxra għaxra, għexier"
+      }
+    },
+    {
+      "id": "num-deċuplu",
+      "headword": "deċuplu",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "-deċ-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "feminine_form": "deċupla",
+      "plural_forms": [
+        {
+          "form": "deċupli",
+          "pattern": "-i"
+        }
+      ],
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "decuplo",
+          "pronunciation": "decuplo",
+          "definition": "tenfold, decuple"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "decuplus",
+          "pronunciation": "decuplus",
+          "definition": "tenfold"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "tenfold; decuple",
+          "text_mt": "Ammont għaxar darbiet daqs il-kwantità oriġinali.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Irċieva kumpens deċuplu għat-telf li ġarrab.",
+          "en": "He received tenfold compensation for the loss he suffered."
+        }
+      ],
+      "related_entries": [
+        "num-għaxra",
+        "num-għaxar",
+        "num-deċmu",
+        "num-għaxart"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɛt͡ʃ.ʊp.lʊ/",
+          "notes": null
+        }
+      ],
+      "masculine_form": null,
+      "numeral_type": "multiplier",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "multiplier",
+        "multiplier_form": "deċuplu, għexieri, *mgħaxxer",
+        "plural_forms": [
+          {
+            "form": "deċupli",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": "deċupla",
+        "ordinal_form": "għaxar",
+        "adverbial_form": "għaxar darbiet",
+        "fractional_form": "*għoxor, deċmu",
+        "distributive_form": "għaxra għaxra, għexier"
+      }
+    },
+    {
+      "id": "num-tliet",
+      "headword": "tliet",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-l-t",
+      "stem": null,
+      "cv_pattern": "CCâC",
+      "morph_pattern": "12ie3",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ثَلَاث",
+          "pronunciation": "θalāθ",
+          "definition": "three (masculine/construct)"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "three; short attributive form used before nouns",
+          "text_mt": "Forma attributtiva qasira ta' tlieta li tintuża direttament qabel nom.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_notes": {
+        "en": "Tliet is used before consonant-initial plural nouns (e.g. tliet kotba); the long attributive form tlitt is used before vowel-initial or i-prothetic nouns (e.g. tlitt itfal).",
+        "mt": "Tliet tintuża qabel nomi plurali li jibdew b’konsonanti (eż. tliet kotba); il-forma twila tlitt tintuża qabel nomi li jibdew b’vokali jew i-protetika (eż. tlitt itfal)."
+      },
+      "usage_examples": [
+        {
+          "mt": "Dam tliet ijiem jistrieħ id-dar wara l-vjaġġ twil.",
+          "en": "He spent three days resting at home after the long trip."
+        }
+      ],
+      "related_entries": [
+        "num-tlieta",
+        "adj-tielet",
+        "num-terz",
+        "num-triplu",
+        "num-mtellet",
+        "num-tlitt"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tlɪːt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [],
+      "numeral_type": "attributive_short",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "attributive_short",
+        "form_attributive_short": "tliet",
+        "form_attributive_short_pattern": "CCâC",
+        "form_attributive_long": "tlitt",
+        "ordinal_form": "tielet",
+        "adverbial_form": "tliet darbiet",
+        "fractional_form": "terz, *tolt",
+        "multiplier_form": "triplu, *tlieti, mtellet",
+        "distributive_form": "tlieta tlieta, *tliet",
+        "vowel_set_sg": "--ie"
+      }
+    },
+    {
+      "id": "num-erba",
+      "headword": "erba'",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "r-b-għ",
+      "stem": null,
+      "cv_pattern": "vCCvC",
+      "morph_pattern": "e12a3",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَرْبَع",
+          "pronunciation": "arba'",
+          "definition": "four (masculine/construct)"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "four; short attributive form used before nouns",
+          "text_mt": "Forma attributtiva qasira ta' erbgħa li tintuża direttament qabel nom.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_notes": {
+        "en": "Erba' is used before consonant-initial plural nouns (e.g. erba' kaxxi); the long attributive form erbat is used before vowel-initial or i-prothetic nouns (e.g. erbat itfal).",
+        "mt": "Erba' tintuża qabel nomi plurali li jibdew b’konsonanti (eż. erba' kaxxi); il-forma twila erbat tintuża qabel nomi li jibdew b’vokali jew i-protetika (eż. erbat itfal)."
+      },
+      "usage_examples": [
+        {
+          "mt": "Għaddew erba' snin minn mindu mar joqgħod barra.",
+          "en": "Four years have passed since he went to live abroad."
+        }
+      ],
+      "related_entries": [
+        "num-erbgħa",
+        "num-raba",
+        "num-kwart",
+        "num-robu",
+        "num-kwadruplu",
+        "num-mrabba",
+        "num-rbiegh",
+        "num-erbat"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛr.bɐ/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [],
+      "numeral_type": "attributive_short",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "attributive_short",
+        "form_attributive_short": "erba'",
+        "form_attributive_short_pattern": "vCCvC",
+        "form_attributive_long": "erbat",
+        "ordinal_form": "raba'",
+        "adverbial_form": "erba' darbiet",
+        "fractional_form": "kwart, robu'",
+        "multiplier_form": "kwadruplu, *rbiegħi, mrabba'",
+        "distributive_form": "erbgħa erbgħa, rbiegħ",
+        "vowel_set_sg": "e-a"
+      }
+    },
+    {
+      "id": "n-robbu",
+      "headword": "robbu",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "r-b-għ",
+      "stem": null,
+      "cv_pattern": "1o22o3",
+      "morph_pattern": "C1oC2C2oC3",
+      "vowel_set_sg": "o-u",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Il-Miklem (Għand tal-Laħam); Vassalli",
+      "source_title": "Il-Miklem",
+      "source_year": null,
+      "source_page": "https://www.ilmiklem.com/ghand-tal-laham/",
+      "source_publisher": "Il-Miklem",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رُبْع",
+          "pronunciation": "rubgħ",
+          "definition": "quarter, fourth part"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "quarter (cut of meat)",
+          "text_mt": "Waħda minn erba' partijiet ta' laħam.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kelma li tintuża meta Tal-Laħam ineħħi l-għadam minn xi parti tar-robbu hi TISPOLPJA.",
+          "en": "The word used when the butcher removes the bone from a part of the quarter of meat is 'tispolpja'."
+        }
+      ],
+      "related_entries": [
+        "num-robu"
+      ],
+      "alternative_forms": [
+        {
+          "headword": "robu'",
+          "type": "orthographic",
+          "target_entry_id": "num-robu"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɔb.bʊ/",
+          "notes": null
+        }
+      ],
+      "plural_forms": [],
+      "feminine_form": null,
+      "masculine_form": null,
+      "numeral_type": null,
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals"
+    },
+    {
+      "id": "num-żewġt",
+      "headword": "żewġt",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "ż-w-ġ",
+      "stem": null,
+      "cv_pattern": "1v23t",
+      "morph_pattern": "C1vC2C3t",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "زَوْج",
+          "pronunciation": "żawġ",
+          "definition": "pair, couple, two"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "two; long attributive form used before vowel-initial or i-prothetic nouns",
+          "text_mt": "Forma attributtiva twila ta' tnejn li tintuża qabel nomi li jibdew b'vokali jew i-protetika.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għandhom żewġt itfal li jmorru fl-istess skola.",
+          "en": "They have two children who go to the same school."
+        }
+      ],
+      "related_entries": [
+        "num-tnejn",
+        "adj-tieni",
+        "n-nofs",
+        "num-żewġ",
+        "num-doppju",
+        "num-mtenna"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈzɛwt͡ʃt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [],
+      "numeral_type": "attributive_long",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "attributive_long",
+        "form_attributive_short": "żewġ",
+        "form_attributive_short_pattern": "CvCC",
+        "form_attributive_long": "żewġt",
+        "ordinal_form": "tieni",
+        "adverbial_form": "darbtejn",
+        "fractional_form": "nofs",
+        "multiplier_form": "doppju, mtenna",
+        "distributive_form": "tnejn tnejn, *tna",
+        "vowel_set_sg": "e--"
+      }
+    },
+    {
+      "id": "num-tlitt",
+      "headword": "tlitt",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-l-t",
+      "stem": null,
+      "cv_pattern": "CCvCC",
+      "morph_pattern": "C1C2vC3t",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ثَلَاثَة",
+          "pronunciation": "θalâθaẗ",
+          "definition": "three"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "three; long attributive form used before vowel-initial or i-prothetic nouns",
+          "text_mt": "Forma attributtiva twila ta' tlieta li tintuża qabel nomi li jibdew b'vokali jew i-protetika.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Stenna tlitt ijiem qabel ma rċieva t-tweġiba uffiċjali.",
+          "en": "He waited three days before receiving the official reply."
+        }
+      ],
+      "related_entries": [
+        "num-tlieta",
+        "adj-tielet",
+        "num-terz",
+        "num-triplu",
+        "num-mtellet",
+        "num-tliet"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tlɪtː/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [],
+      "numeral_type": "attributive_long",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "attributive_long",
+        "form_attributive_short": "tliet",
+        "form_attributive_short_pattern": "CCâC",
+        "form_attributive_long": "tlitt",
+        "ordinal_form": "tielet",
+        "adverbial_form": "tliet darbiet",
+        "fractional_form": "terz, *tolt",
+        "multiplier_form": "triplu, *tlieti, mtellet",
+        "distributive_form": "tlieta tlieta, *tliet",
+        "vowel_set_sg": "i--"
+      }
+    },
+    {
+      "id": "num-erbat",
+      "headword": "erbat",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "r-b-għ",
+      "stem": null,
+      "cv_pattern": "vCCvC",
+      "morph_pattern": "e12a3t",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَرْبَعَة",
+          "pronunciation": "arbagħaẗ",
+          "definition": "four"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "four; long attributive form used before vowel-initial or i-prothetic nouns",
+          "text_mt": "Forma attributtiva twila ta' erbgħa li tintuża qabel nomi li jibdew b'vokali jew i-protetika.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Erbat irġiel għenu biex iġorru l-għamara tqila.",
+          "en": "Four men helped carry the heavy furniture."
+        }
+      ],
+      "related_entries": [
+        "num-erbgħa",
+        "num-raba",
+        "num-kwart",
+        "num-robu",
+        "num-kwadruplu",
+        "num-mrabba",
+        "num-rbiegh",
+        "num-erba"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛr.bɐt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [],
+      "numeral_type": "attributive_long",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "attributive_long",
+        "form_attributive_short": "erba'",
+        "form_attributive_short_pattern": "vCCvC",
+        "form_attributive_long": "erbat",
+        "ordinal_form": "raba'",
+        "adverbial_form": "erba' darbiet",
+        "fractional_form": "kwart, robu'",
+        "multiplier_form": "kwadruplu, *rbiegħi, mrabba'",
+        "distributive_form": "erbgħa erbgħa, rbiegħ",
+        "vowel_set_sg": "e-a"
+      }
+    },
+    {
+      "id": "num-ħamest",
+      "headword": "ħamest",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "ħ-m-s",
+      "stem": null,
+      "cv_pattern": "CvCvCC",
+      "morph_pattern": "1a2e3t",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "خَمْسَة",
+          "pronunciation": "ḵamsaẗ",
+          "definition": "five"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "five; long attributive form used before vowel-initial or i-prothetic nouns",
+          "text_mt": "Forma attributtiva twila ta' ħamsa li tintuża qabel nomi li jibdew b'vokali jew i-protetika.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għamel ħamest ijiem jaħdem fuq il-proġett il-ġdid.",
+          "en": "He spent five days working on the new project."
+        }
+      ],
+      "related_entries": [
+        "num-ħamsa",
+        "num-ħames",
+        "num-kwint",
+        "num-kwintuplu"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈħɐ.mɛst/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [],
+      "numeral_type": "attributive_long",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "attributive_long",
+        "form_attributive_short": "ħames",
+        "form_attributive_short_pattern": "CvCvC",
+        "form_attributive_long": "ħamest",
+        "ordinal_form": "ħames",
+        "adverbial_form": "ħames darbiet",
+        "fractional_form": "*ħoms, kwint",
+        "multiplier_form": "kwintuplu, *ħmies, *mħammes",
+        "distributive_form": "ħamsa ħamsa, *ħmies",
+        "vowel_set_sg": "a-e"
+      }
+    },
+    {
+      "id": "num-sebat",
+      "headword": "sebat",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "s-b-għ",
+      "stem": null,
+      "cv_pattern": "CvCvC",
+      "morph_pattern": "1e2a3t",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَبْعَة",
+          "pronunciation": "sab'aẗ",
+          "definition": "seven"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "seven; long attributive form used before vowel-initial or i-prothetic nouns",
+          "text_mt": "Forma attributtiva twila ta' sebgħa li tintuża qabel nomi li jibdew b'vokali jew i-protetika.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ġimgħa għandha sebat ijiem.",
+          "en": "The week has seven days."
+        }
+      ],
+      "related_entries": [
+        "num-sebgħa",
+        "num-seba",
+        "num-settimu",
+        "num-settuplu"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛ.bɐt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [],
+      "numeral_type": "attributive_long",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "attributive_long",
+        "form_attributive_short": "seba'",
+        "form_attributive_short_pattern": "CvCv",
+        "form_attributive_long": "sebat",
+        "ordinal_form": "seba'",
+        "adverbial_form": "seba' darbiet",
+        "fractional_form": "*sobu', settimu",
+        "multiplier_form": "settuplu, *msabba'",
+        "distributive_form": "sebgħa sebgħa, *sbiegħ",
+        "vowel_set_sg": "e-a"
+      }
+    },
+    {
+      "id": "num-tmint",
+      "headword": "tmint",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "t-m-n",
+      "stem": null,
+      "cv_pattern": "CCvCC",
+      "morph_pattern": "12i3t",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ثَمَانِيَة",
+          "pronunciation": "θamâniyaẗ",
+          "definition": "eight"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "eight; long attributive form used before vowel-initial or i-prothetic nouns",
+          "text_mt": "Forma attributtiva twila ta' tmienja li tintuża qabel nomi li jibdew b'vokali jew i-protetika.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Baqgħu Għawdex għal tmint ijiem fis-sajf.",
+          "en": "They stayed in Gozo for eight days in the summer."
+        }
+      ],
+      "related_entries": [
+        "num-tmienja",
+        "num-tmien",
+        "num-tomon",
+        "num-ottav",
+        "num-ottuplu"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tmɪnt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [],
+      "numeral_type": "attributive_long",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "attributive_long",
+        "form_attributive_short": "tmien",
+        "form_attributive_short_pattern": "CCieC",
+        "form_attributive_long": "tmint",
+        "ordinal_form": "tmien",
+        "adverbial_form": "tmien darbiet",
+        "fractional_form": "ottav, *tomon",
+        "multiplier_form": "ottuplu, *tmieni, *mtemmen",
+        "distributive_form": "tmienja tmienja, tmien",
+        "vowel_set_sg": "i--"
+      }
+    },
+    {
+      "id": "num-disat",
+      "headword": "disat",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "d-s-għ",
+      "stem": null,
+      "cv_pattern": "CvCvC",
+      "morph_pattern": "1i2a3t",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تِسْعَة",
+          "pronunciation": "tis'aẗ",
+          "definition": "nine"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "nine; long attributive form used before vowel-initial or i-prothetic nouns",
+          "text_mt": "Forma attributtiva twila ta' disgħa li tintuża qabel nomi li jibdew b'vokali jew i-protetika.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Disat itfal ħadu sehem fil-kompetizzjoni tal-ġiri.",
+          "en": "Nine children took part in the running competition."
+        }
+      ],
+      "related_entries": [
+        "num-disgħa",
+        "num-disa",
+        "num-nonu",
+        "num-nonuplu"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɪ.sɐt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [],
+      "numeral_type": "attributive_long",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "attributive_long",
+        "form_attributive_short": "disa'",
+        "form_attributive_short_pattern": "CvCv",
+        "form_attributive_long": "disat",
+        "ordinal_form": "disa'",
+        "adverbial_form": "disa' darbiet",
+        "fractional_form": "*dosu', nonu",
+        "multiplier_form": "nonuplu, *mdissa'",
+        "distributive_form": "disgħa disgħa, *dsiegħ",
+        "vowel_set_sg": "i-a"
+      }
+    },
+    {
+      "id": "num-għaxart",
+      "headword": "għaxart",
+      "pos": "numeral",
+      "gender": "masculine",
+      "root_consonants": "għ-x-r",
+      "stem": null,
+      "cv_pattern": "CvCvCC",
+      "morph_pattern": "1a2a3t",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَشَرَة",
+          "pronunciation": "'ašaraẗ",
+          "definition": "ten"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "ten; long attributive form used before vowel-initial or i-prothetic nouns",
+          "text_mt": "Forma attributtiva twila ta' għaxra li tintuża qabel nomi li jibdew b'vokali jew i-protetika.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għaddew għaxart ijiem minn meta bgħatna l-ittra.",
+          "en": "Ten days have passed since we sent the letter."
+        }
+      ],
+      "related_entries": [
+        "num-għaxra",
+        "num-għaxar",
+        "num-deċmu",
+        "num-deċuplu"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɐːˈʃɐrt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": null,
+      "plural_forms": [],
+      "numeral_type": "attributive_long",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "attributive_long",
+        "form_attributive_short": "għaxar",
+        "form_attributive_short_pattern": "CvCvC",
+        "form_attributive_long": "għaxart",
+        "ordinal_form": "għaxar",
+        "adverbial_form": "għaxar darbiet",
+        "fractional_form": "*għoxor, deċmu",
+        "multiplier_form": "deċuplu, għexieri, *mgħaxxer",
+        "distributive_form": "għaxra għaxra, għexier",
+        "vowel_set_sg": "a-a"
+      }
+    },
+    {
+      "id": "num-mija",
+      "headword": "mija",
+      "pos": "numeral",
+      "gender": "feminine",
+      "root_consonants": "m-j-w",
+      "stem": null,
+      "cv_pattern": "CvCv",
+      "morph_pattern": "1i2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-crowd",
+      "source_citation": "Miklem Malti; Aquilina",
+      "source_title": "Il-Miklem Malti",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Klabb Kotba Maltin",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مِائَة",
+          "pronunciation": "miâ'aẗ",
+          "definition": "hundred"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "hundred (100)",
+          "text_mt": "Għadd li jikkorrispondi għal mitt unità, 100.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_notes": {
+        "en": "Mija is the independent cardinal form used when counting or standing alone; before a noun, mitt is used (e.g. mitt sena). Dual: mitejn (200); plural: mijiet (hundreds).",
+        "mt": "Mija hija l-forma kardinali indipendenti meta tgħodd jew meta tkun waħedha; qabel nom tintuża mitt (eż. mitt sena). Dual: mitejn (200); plural: mijiet."
+      },
+      "usage_examples": [
+        {
+          "mt": "Għodd sa mija qabel ma tibda tfittex.",
+          "en": "Count to a hundred before you start looking."
+        }
+      ],
+      "related_entries": [
+        "num-mitt"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɪ.jɐ/",
+          "notes": null
+        }
+      ],
+      "dual_form": "mitejn",
+      "feminine_form": null,
+      "masculine_form": "mitt",
+      "plural_forms": [
+        {
+          "form": "mijiet",
+          "pattern": "-iet"
+        }
+      ],
+      "numeral_type": "cardinal",
+      "rank": null,
+      "source_frequency_rank": null,
+      "audit_status": "audited",
+      "theme": "Numerals & Quantities",
+      "theme_id": "numerals",
+      "numeral_morphology": {
+        "numeral_type": "cardinal",
+        "form_attributive_short": "mitt",
+        "form_attributive_short_pattern": "Cvtt",
+        "form_attributive_long": "mitt",
+        "ordinal_form": "il-mitt",
+        "adverbial_form": "mitt darba",
+        "fractional_form": "ċenteżmu",
+        "multiplier_form": "ċentuplu",
+        "distributive_form": "mija mija, mitt mitt",
+        "form_plural_pattern": "-iet",
+        "vowel_set_sg": "i-a",
+        "vowel_set_pl": "i-ie",
+        "vowel_set_opp": "i--",
+        "vowel_set_dual": "i-ej",
+        "plural_forms": [
+          {
+            "form": "mijiet",
+            "pattern": "-iet"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": "mitt"
       }
     }
   ]

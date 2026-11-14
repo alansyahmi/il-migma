@@ -1,7 +1,7 @@
 {
   "category_id": "nouns_abstract_cognition",
   "category_title": "Nouns: Abstract Concepts, Thought & Measurement",
-  "total_entries": 355,
+  "total_entries": 352,
   "entries": [
     {
       "id": "n-kelma",
@@ -9490,46 +9490,6 @@
       "theme_id": "nouns_abstract_cognition"
     },
     {
-      "rank": 476,
-      "source_frequency_rank": 476,
-      "id": "n-għaxar",
-      "headword": "għaxar",
-      "pos": "noun",
-      "gender": null,
-      "root_consonants": null,
-      "stem": null,
-      "cv_pattern": null,
-      "morph_pattern": null,
-      "is_loanword": 0,
-      "is_inflectable": 0,
-      "is_imala_blocked": 0,
-      "source_language": "Maltese",
-      "source_id": "src-1000mcw",
-      "source_citation": "1000 Most Common Maltese Words",
-      "source_title": "1000 Most Common Maltese Words",
-      "source_year": null,
-      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
-      "source_publisher": "1000mostcommonwords.com",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
-        {
-          "text_en": "ten",
-          "text_mt": null,
-          "register": "",
-          "nuance": ""
-        }
-      ],
-      "usage_examples": [],
-      "related_entries": [],
-      "alternative_forms": [],
-      "phonetics": [],
-      "audit_status": "pending",
-      "audit_notes": null,
-      "theme": "Nouns: Abstract Concepts, Thought & Measurement",
-      "theme_id": "nouns_abstract_cognition"
-    },
-    {
       "id": "n-gwerra",
       "headword": "gwerra",
       "pos": "noun",
@@ -16901,46 +16861,6 @@
       "definitions": [
         {
           "text_en": "push",
-          "text_mt": null,
-          "register": "",
-          "nuance": ""
-        }
-      ],
-      "usage_examples": [],
-      "related_entries": [],
-      "alternative_forms": [],
-      "phonetics": [],
-      "audit_status": "pending",
-      "audit_notes": null,
-      "theme": "Nouns: Abstract Concepts, Thought & Measurement",
-      "theme_id": "nouns_abstract_cognition"
-    },
-    {
-      "rank": 712,
-      "source_frequency_rank": 712,
-      "id": "n-seba",
-      "headword": "seba",
-      "pos": "noun",
-      "gender": null,
-      "root_consonants": null,
-      "stem": null,
-      "cv_pattern": null,
-      "morph_pattern": null,
-      "is_loanword": 0,
-      "is_inflectable": 0,
-      "is_imala_blocked": 0,
-      "source_language": "Maltese",
-      "source_id": "src-1000mcw",
-      "source_citation": "1000 Most Common Maltese Words",
-      "source_title": "1000 Most Common Maltese Words",
-      "source_year": null,
-      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
-      "source_publisher": "1000mostcommonwords.com",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
-        {
-          "text_en": "seven",
           "text_mt": null,
           "register": "",
           "nuance": ""
@@ -25024,46 +24944,6 @@
       "definitions": [
         {
           "text_en": "born",
-          "text_mt": null,
-          "register": "",
-          "nuance": ""
-        }
-      ],
-      "usage_examples": [],
-      "related_entries": [],
-      "alternative_forms": [],
-      "phonetics": [],
-      "audit_status": "pending",
-      "audit_notes": null,
-      "theme": "Nouns: Abstract Concepts, Thought & Measurement",
-      "theme_id": "nouns_abstract_cognition"
-    },
-    {
-      "rank": 975,
-      "source_frequency_rank": 975,
-      "id": "n-disa",
-      "headword": "disa",
-      "pos": "noun",
-      "gender": null,
-      "root_consonants": null,
-      "stem": null,
-      "cv_pattern": null,
-      "morph_pattern": null,
-      "is_loanword": 0,
-      "is_inflectable": 0,
-      "is_imala_blocked": 0,
-      "source_language": "Maltese",
-      "source_id": "src-1000mcw",
-      "source_citation": "1000 Most Common Maltese Words",
-      "source_title": "1000 Most Common Maltese Words",
-      "source_year": null,
-      "source_page": "https://1000mostcommonwords.com/1000-most-common-maltese-words/",
-      "source_publisher": "1000mostcommonwords.com",
-      "etymology_chain": [],
-      "etymology_notes": null,
-      "definitions": [
-        {
-          "text_en": "nine",
           "text_mt": null,
           "register": "",
           "nuance": ""
