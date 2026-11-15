@@ -57,6 +57,13 @@ function startsWithVowel(value: string) {
     return /^[aeiouàèìòùâêîôû]/i.test(value);
 }
 
+function startsWithConsonantCluster(value: string): boolean {
+    if (!value || startsWithVowel(value)) return false;
+    // Treat the digraph 'għ' as a single consonant phoneme.
+    const normalized = value.toLowerCase().replace(/^għ/, 'G');
+    return normalized.length >= 2 && !startsWithVowel(normalized.charAt(1));
+}
+
 function extractConsonants(s: string): string[] {
     // We treat standard vowels as things to strip for root reanalysis
     const res = s.split('').filter(c => !['a','e','i','o','u','â','ê','î','ô','û'].includes(c.toLowerCase()));
@@ -65,9 +72,7 @@ function extractConsonants(s: string): string[] {
 
 function buildCitationPerfectStem(base: string): string {
     if (!base) return 'a';
-    if (startsWithVowel(base)) return `${base}a`;
-    const initial = base.charAt(0);
-    return `${initial}${base}a`;
+    return `${base}a`;
 }
 
 function buildHybridCitationPerfectStem(base: string): string {
@@ -95,7 +100,7 @@ function buildHybridFormII(base: string, classType: 'ar' | 'ir') {
 }
 
 function buildCitationImperfectStem(classType: 'ar' | 'ir', perfectStem: string): string {
-    const prefix = startsWithVowel(perfectStem) ? 'j' : 'ji';
+    const prefix = startsWithConsonantCluster(perfectStem) ? 'ji' : 'j';
     if (classType === 'ir') {
         return `${prefix}${perfectStem.replace(/a$/, 'i')}`;
     }
@@ -131,11 +136,13 @@ export function generateZokkForms(zokkInput: any): ZokkResult {
         { id: "3p", mt: "huma", en: "they" },
     ];
 
-    // Consonant-initial stems retain the initial i- of the prefix, while
-    // vowel-initial stems use the bare n-/t-/j- variants.
-    const prefixes = startsWithVowel(base)
-        ? ["n", "t", "j", "t", "n", "t", "j"]
-        : ["ni", "ti", "ji", "ti", "ni", "ti", "ji"];
+    // Stems starting with a consonant cluster (e.g. ċċaffront, pparkj) retain
+    // the prosthetic i- in the prefix, while vowel-initial and single-consonant
+    // CV stems (e.g. osserv, serv, kant) use bare n-/t-/j-.
+    const usesProstheticI = startsWithConsonantCluster(base);
+    const prefixes = usesProstheticI
+        ? ["ni", "ti", "ji", "ti", "ni", "ti", "ji"]
+        : ["n", "t", "j", "t", "n", "t", "j"];
     const citationPerfectStem = zokk_is_hybrid
         ? buildHybridCitationPerfectStem(base)
         : buildCitationPerfectStem(base);
@@ -165,7 +172,7 @@ export function generateZokkForms(zokkInput: any): ZokkResult {
         if (i < 4) { // Sg
             if (i === 2) {
                 imperfect = zokk_is_hybrid
-                    ? `${startsWithVowel(base) ? 'j' : 'ji'}${base}a`
+                    ? `${usesProstheticI ? 'ji' : 'j'}${base}a`
                     : buildCitationImperfectStem(zokk_class as 'ar' | 'ir', citationPerfectStem);
             } else {
                 imperfect = pfx + base + (isAr ? 'a' : 'i');
@@ -191,7 +198,8 @@ export function generateZokkForms(zokkInput: any): ZokkResult {
     const conjugation: VerbConjugationTable = {
         rows,
         imperative_sg: base + (isAr ? 'a' : 'i'),
-        imperative_pl: base + (isAr ? 'aw' : 'u')
+        imperative_pl: base + (isAr ? 'aw' : 'u'),
+        blocksImala: isAr,
     };
 
     // 2. Passive Participle

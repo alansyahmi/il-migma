@@ -59,6 +59,8 @@ const CATEGORY_FILES = [
     { id: 'adverbs_particles', path: 'docs/1000-words-categories/DONE_adverbs_particles.json' },
     { id: 'numerals', path: 'docs/1000-words-categories/DONE_numerals.json' },
     { id: 'artifacts', path: 'docs/1000-words-categories/DONE_artifacts.json' },
+    { id: 'adj_sensory_colours', path: 'docs/1000-words-categories/DONE_adj_sensory_colours.json' },
+    { id: 'verbs_daily_social', path: 'docs/1000-words-categories/DONE_verbs_daily_social.json' },
 ];
 
 const selectedFiles = categoryArg
@@ -102,14 +104,44 @@ async function run() {
 
     const allEntryIds = new Set(allEntries.map(e => e.id));
 
-    // ── STEP 1: Verify live schema in 1 query ──────────────────────────────────
-    console.log('\n🔎 Step 1: Introspecting live table constraints (1 single query)...');
+    // ── STEP 1: Verify live schema & column sets ─────────────────────────────
+    console.log('\n🔎 Step 1: Introspecting live table constraints & columns...');
     const schemaRes = await client.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='entries'");
     totalReadQueries++;
     totalRowsRead += schemaRes.rows.length;
     const tableSql = String(schemaRes.rows[0]?.sql || '');
     const allowsCommonGender = tableSql.includes('common');
-    console.log(`   ✓ entries table schema verified. Common gender supported: ${allowsCommonGender ? 'YES' : 'NO (auto-mapping to neutral)'}`);
+
+    async function getTableColumns(tableName) {
+        const res = await client.execute(`PRAGMA table_info(${tableName})`);
+        totalReadQueries++;
+        totalRowsRead += res.rows.length;
+        return new Set(res.rows.map(r => String(r.name || r[1])));
+    }
+
+    const entryCols = await getTableColumns('entries');
+    const verbCols = await getTableColumns('verb_morphology');
+    const nounCols = await getTableColumns('noun_morphology');
+    const adjCols = await getTableColumns('adj_morphology');
+    const phoneticsCols = await getTableColumns('phonetics');
+    let stemsCols = await getTableColumns('stems');
+    if (!isDryRun && stemsCols.size === 0) {
+        await client.execute(`
+            CREATE TABLE IF NOT EXISTS stems (
+                stem_string      TEXT PRIMARY KEY,
+                class_type       TEXT NOT NULL,
+                is_hybrid        INTEGER NOT NULL DEFAULT 0,
+                root             TEXT,
+                agentive_suffix  TEXT,
+                created_at       TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+                updated_at       TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+            )
+        `);
+        totalWriteQueries++;
+        stemsCols = await getTableColumns('stems');
+    }
+
+    console.log(`   ✓ entries (${entryCols.size} cols), verb_morphology (${verbCols.size} cols), adj_morphology (${adjCols.size} cols), phonetics (${phoneticsCols.size} cols), stems (${stemsCols.size} cols). Common gender: ${allowsCommonGender ? 'YES' : 'NO (auto-mapping to neutral)'}`);
 
     // Verify existing lexical sources in 1 query
     const sourcesRes = await client.execute("SELECT id FROM lexical_sources");
@@ -258,50 +290,102 @@ async function run() {
                 const etymJson = e.etymology_chain ? JSON.stringify(e.etymology_chain) : null;
                 const exJson = JSON.stringify(e.usage_examples || []);
                 const usageNotesJson = e.usage_notes ? (typeof e.usage_notes === 'object' ? JSON.stringify(e.usage_notes) : String(e.usage_notes)) : null;
+                const zokkMorphJson = e.zokk_morphology ? (typeof e.zokk_morphology === 'object' ? JSON.stringify(e.zokk_morphology) : String(e.zokk_morphology)) : null;
+                const zokkClass = e.zokk_class || e.zokk_morphology?.class_type || e.zokk_morphology?.zokk_class || null;
+                const rawZokkHybrid = e.zokk_is_hybrid !== undefined ? e.zokk_is_hybrid : e.zokk_morphology?.is_hybrid;
+                const zokkIsHybrid = rawZokkHybrid === null || rawZokkHybrid === undefined ? null : (rawZokkHybrid ? 1 : 0);
+                const zokkAgentiveSuffix = e.zokk_agentive_suffix || e.zokk_morphology?.agentive_suffix || e.zokk_morphology?.zokk_agentive_suffix || null;
+
+                const filterByCols = (record, tableCols) => {
+                    if (!tableCols || tableCols.size === 0) return record;
+                    const out = {};
+                    for (const [k, v] of Object.entries(record)) {
+                        if (tableCols.has(k)) out[k] = v;
+                    }
+                    return out;
+                };
+
+                const runUpsert = async (tableName, conflictCol, record, tableCols, withUpdatedAt = false) => {
+                    const filtered = filterByCols(record, tableCols);
+                    const cols = Object.keys(filtered);
+                    const vals = cols.map(c => filtered[c]);
+                    const hasUpdatedAt = withUpdatedAt && (!tableCols || tableCols.size === 0 || tableCols.has('updated_at'));
+                    const insertCols = hasUpdatedAt ? [...cols, 'updated_at'] : cols;
+                    const insertPlaceholders = hasUpdatedAt
+                        ? [...cols.map(() => '?'), "strftime('%Y-%m-%dT%H:%M:%SZ', 'now')"]
+                        : cols.map(() => '?');
+                    const updateAssignments = cols
+                        .filter(c => c !== conflictCol)
+                        .map(c => `${c} = excluded.${c}`);
+                    if (hasUpdatedAt) updateAssignments.push('updated_at = excluded.updated_at');
+
+                    await tx.execute({
+                        sql: `INSERT INTO ${tableName} (${insertCols.join(', ')})
+                              VALUES (${insertPlaceholders.join(', ')})
+                              ON CONFLICT(${conflictCol}) DO UPDATE SET ${updateAssignments.join(', ')}`,
+                        args: vals,
+                    });
+                    totalWriteQueries++;
+                };
 
                 // 1. Upsert entries table
-                await tx.execute({
-                    sql: `INSERT INTO entries (
-                        id, headword, pos, gender, root_consonants, stem,
-                        is_loanword, is_inflectable, source_language, source_id,
-                        source_citation, source_title, source_year, source_page, source_publisher,
-                        etymology_chain, etymology_notes, usage_notes, definitions, usage_examples,
-                        updated_at
-                    ) VALUES (
-                        ?, ?, ?, ?, ?, ?,
-                        ?, ?, ?, ?,
-                        ?, ?, ?, ?, ?,
-                        ?, ?, ?, ?, ?,
-                        strftime('%Y-%m-%dT%H:%M:%SZ', 'now')
-                    ) ON CONFLICT(id) DO UPDATE SET
-                        headword = excluded.headword,
-                        pos = excluded.pos,
-                        gender = excluded.gender,
-                        root_consonants = excluded.root_consonants,
-                        stem = excluded.stem,
-                        is_loanword = excluded.is_loanword,
-                        is_inflectable = excluded.is_inflectable,
-                        source_language = excluded.source_language,
-                        source_id = excluded.source_id,
-                        source_citation = excluded.source_citation,
-                        source_title = excluded.source_title,
-                        source_year = excluded.source_year,
-                        source_page = excluded.source_page,
-                        source_publisher = excluded.source_publisher,
-                        etymology_chain = excluded.etymology_chain,
-                        etymology_notes = excluded.etymology_notes,
-                        usage_notes = excluded.usage_notes,
-                        definitions = excluded.definitions,
-                        usage_examples = excluded.usage_examples,
-                        updated_at = excluded.updated_at`,
-                    args: [
-                        entryId, e.headword, item.pos, gender, e.root_consonants || null, e.stem || null,
-                        e.is_loanword ? 1 : 0, e.is_inflectable ? 1 : 0, e.source_language || null, sourceId,
-                        e.source_citation || null, e.source_title || null, e.source_year ? String(e.source_year) : null, e.source_page || null, e.source_publisher || null,
-                        etymJson, e.etymology_notes || null, usageNotesJson, defsJson, exJson
-                    ]
-                });
-                totalWriteQueries++;
+                await runUpsert('entries', 'id', {
+                    id: entryId,
+                    headword: e.headword,
+                    pos: item.pos,
+                    gender,
+                    root_consonants: e.root_consonants || null,
+                    stem: e.stem || null,
+                    cv_pattern: e.cv_pattern || null,
+                    morph_pattern: e.morph_pattern || null,
+                    zokk_morphology: zokkMorphJson,
+                    zokk_class: zokkClass,
+                    zokk_is_hybrid: zokkIsHybrid,
+                    zokk_agentive_suffix: zokkAgentiveSuffix,
+                    is_loanword: e.is_loanword ? 1 : 0,
+                    is_inflectable: e.is_inflectable ? 1 : 0,
+                    source_language: e.source_language || null,
+                    source_id: sourceId,
+                    source_citation: e.source_citation || null,
+                    source_title: e.source_title || null,
+                    source_year: e.source_year ? String(e.source_year) : null,
+                    source_page: e.source_page || null,
+                    source_publisher: e.source_publisher || null,
+                    etymology_chain: etymJson,
+                    etymology_notes: e.etymology_notes || null,
+                    usage_notes: usageNotesJson,
+                    definitions: defsJson,
+                    usage_examples: exJson,
+                }, entryCols, true);
+
+                // 1b. Sync Phonetics (if present)
+                if (phoneticsCols.size > 0 && Array.isArray(e.phonetics)) {
+                    await tx.execute({ sql: "DELETE FROM phonetics WHERE entry_id = ?", args: [entryId] });
+                    totalWriteQueries++;
+
+                    for (let idx = 0; idx < e.phonetics.length; idx++) {
+                        const ph = e.phonetics[idx];
+                        if (!ph?.ipa) continue;
+                        const phId = `ph_${entryId}::${idx}`;
+                        await tx.execute({
+                            sql: `INSERT INTO phonetics (id, entry_id, ipa, dialect, notes) VALUES (?, ?, ?, ?, ?)`,
+                            args: [phId, entryId, ph.ipa, ph.dialect || 'Standard', ph.notes || null]
+                        });
+                        totalWriteQueries++;
+                    }
+                }
+
+                // 1c. Sync Stems table (for Romance/Hybrid zokk entries)
+                const stemString = String(e.stem || e.zokk_morphology?.stem_string || '').trim();
+                if (stemsCols.size > 0 && stemString && zokkClass) {
+                    await runUpsert('stems', 'stem_string', {
+                        stem_string: stemString,
+                        class_type: zokkClass,
+                        is_hybrid: zokkIsHybrid ? 1 : 0,
+                        root: e.root_consonants || e.zokk_morphology?.root || null,
+                        agentive_suffix: zokkAgentiveSuffix,
+                    }, stemsCols, true);
+                }
 
                 // 2. Sync Alternative Forms (if present)
                 if (Array.isArray(e.alternative_forms) && e.alternative_forms.length > 0) {
@@ -415,116 +499,85 @@ async function run() {
                 // 5. Sync Verb Morphology (if pos is verb and verb_morphology exists)
                 if ((item.pos === 'verb' || e.pos === 'verb') && e.verb_morphology) {
                     const vm = e.verb_morphology;
-                    await tx.execute({
-                        sql: `INSERT INTO verb_morphology (
-                            entry_id, form, class, weak_class, transitivity,
-                            perfective_3sgm, imperfective_3sgm,
-                            passive_participle, verbal_noun,
-                            vowel_set_perf, vowel_set_impf, vowel_set_impv, is_imala_blocked
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                        ON CONFLICT(entry_id) DO UPDATE SET
-                            form = excluded.form,
-                            class = excluded.class,
-                            weak_class = excluded.weak_class,
-                            transitivity = excluded.transitivity,
-                            perfective_3sgm = excluded.perfective_3sgm,
-                            imperfective_3sgm = excluded.imperfective_3sgm,
-                            passive_participle = excluded.passive_participle,
-                            verbal_noun = excluded.verbal_noun,
-                            vowel_set_perf = excluded.vowel_set_perf,
-                            vowel_set_impf = excluded.vowel_set_impf,
-                            vowel_set_impv = excluded.vowel_set_impv,
-                            is_imala_blocked = excluded.is_imala_blocked`,
-                        args: [
-                            entryId,
-                            vm.form || 'I',
-                            vm.class || vm.strength || 'strong',
-                            vm.weak_class || null,
-                            vm.transitivity || null,
-                            vm.perfective_3sgm || vm.perfective_3sg_m || e.headword,
-                            vm.imperfective_3sgm || vm.imperfective_3sg_m || null,
-                            vm.passive_participle || null,
-                            vm.verbal_noun || null,
-                            vm.vowel_set_perf || null,
-                            vm.vowel_set_impf || null,
-                            vm.vowel_set_impv || null,
-                            vm.is_imala_blocked ? 1 : (e.is_imala_blocked ? 1 : 0)
-                        ]
-                    });
-                    totalWriteQueries++;
+                    await runUpsert('verb_morphology', 'entry_id', {
+                        entry_id: entryId,
+                        form: vm.form || 'I',
+                        class: vm.class || vm.strength || 'strong',
+                        weak_class: vm.weak_class || null,
+                        transitivity: vm.transitivity || null,
+                        perfective_3sgm: vm.perfective_3sgm || vm.perfective_3sg_m || e.headword,
+                        imperfective_3sgm: vm.imperfective_3sgm || vm.imperfective_3sg_m || null,
+                        active_participle: vm.active_participle || null,
+                        passive_participle: vm.passive_participle || null,
+                        verbal_noun: vm.verbal_noun || null,
+                        vowel_set_perf: vm.vowel_set_perf || null,
+                        vowel_set_impf: vm.vowel_set_impf || null,
+                        vowel_set_impv: vm.vowel_set_impv || null,
+                        is_imala_blocked: vm.is_imala_blocked ? 1 : (e.is_imala_blocked ? 1 : 0),
+                    }, verbCols, true);
                 }
 
                 // 6. Sync Noun Morphology (if pos is noun and noun_morphology exists)
                 if ((item.pos === 'noun' || e.pos === 'noun') && e.noun_morphology) {
                     const nm = e.noun_morphology;
                     const pluralFormsJson = nm.plural_forms ? (typeof nm.plural_forms === 'object' ? JSON.stringify(nm.plural_forms) : String(nm.plural_forms)) : null;
-                    await tx.execute({
-                        sql: `INSERT INTO noun_morphology (
-                            entry_id, gender, singular_form, plural_forms,
-                            feminine_form, masculine_form, is_singulative,
-                            vowel_set_sg, vowel_set_pl, form_plural_pattern, morph_pattern
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                        ON CONFLICT(entry_id) DO UPDATE SET
-                            gender = excluded.gender,
-                            singular_form = excluded.singular_form,
-                            plural_forms = excluded.plural_forms,
-                            feminine_form = excluded.feminine_form,
-                            masculine_form = excluded.masculine_form,
-                            is_singulative = excluded.is_singulative,
-                            vowel_set_sg = excluded.vowel_set_sg,
-                            vowel_set_pl = excluded.vowel_set_pl,
-                            form_plural_pattern = excluded.form_plural_pattern,
-                            morph_pattern = excluded.morph_pattern`,
-                        args: [
-                            entryId,
-                            nm.gender || gender,
-                            nm.singular_form || e.headword,
-                            pluralFormsJson,
-                            nm.feminine_form || null,
-                            nm.masculine_form || null,
-                            nm.is_singulative ? 1 : 0,
-                            nm.vowel_set_sg || null,
-                            nm.vowel_set_pl || null,
-                            nm.form_plural_pattern || null,
-                            nm.morph_pattern || null
-                        ]
-                    });
-                    totalWriteQueries++;
+                    await runUpsert('noun_morphology', 'entry_id', {
+                        entry_id: entryId,
+                        gender: nm.gender || gender,
+                        singular_form: nm.singular_form || e.headword,
+                        plural_forms: pluralFormsJson,
+                        feminine_form: nm.feminine_form || null,
+                        masculine_form: nm.masculine_form || null,
+                        is_singulative: nm.is_singulative ? 1 : 0,
+                        vowel_set_sg: nm.vowel_set_sg || null,
+                        vowel_set_pl: nm.vowel_set_pl || null,
+                        form_plural_pattern: nm.form_plural_pattern || null,
+                        morph_pattern: nm.morph_pattern || null,
+                    }, nounCols, true);
                 }
 
                 // 7. Sync Adjective Morphology (if pos is adjective and adjective_morphology exists)
                 if ((item.pos === 'adjective' || e.pos === 'adjective') && e.adjective_morphology) {
                     const am = e.adjective_morphology;
-                    await tx.execute({
-                        sql: `INSERT INTO adj_morphology (
-                            entry_id, gender, masculine_form, feminine_form, plural_form,
-                            form_plural_pattern, elative_form,
-                            vowel_set_sg, vowel_set_pl, pattern
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                        ON CONFLICT(entry_id) DO UPDATE SET
-                            gender = excluded.gender,
-                            masculine_form = excluded.masculine_form,
-                            feminine_form = excluded.feminine_form,
-                            plural_form = excluded.plural_form,
-                            form_plural_pattern = excluded.form_plural_pattern,
-                            elative_form = excluded.elative_form,
-                            vowel_set_sg = excluded.vowel_set_sg,
-                            vowel_set_pl = excluded.vowel_set_pl,
-                            pattern = excluded.pattern`,
-                        args: [
-                            entryId,
-                            am.gender || gender,
-                            am.masculine_form || e.headword,
-                            am.feminine_form || null,
-                            am.plural_form || am.plural || null,
-                            am.form_plural_pattern || null,
-                            am.elative_form || null,
-                            am.vowel_set_sg || null,
-                            am.vowel_set_pl || null,
-                            am.pattern || am.morph_pattern || null
-                        ]
-                    });
-                    totalWriteQueries++;
+                    const rawPlural = am.plural_form ?? e.plural_forms ?? am.plural ?? null;
+                    let pluralFormStr = null;
+                    if (Array.isArray(rawPlural)) {
+                        const normalizedRows = rawPlural.map(row =>
+                            typeof row === 'object' && row !== null
+                                ? { form: row.form, pattern: row.pattern ?? am.form_plural_pattern ?? null }
+                                : { form: String(row), pattern: am.form_plural_pattern ?? null }
+                        );
+                        pluralFormStr = JSON.stringify(normalizedRows);
+                    } else if (rawPlural && typeof rawPlural === 'object') {
+                        pluralFormStr = JSON.stringify(rawPlural);
+                    } else if (rawPlural) {
+                        pluralFormStr = String(rawPlural);
+                    }
+
+                    const hasElativeVal = am.has_elative !== undefined
+                        ? (am.has_elative ? 1 : 0)
+                        : (am.elative_form ? 1 : 0);
+                    const isInflectableVal = am.is_inflectable !== undefined
+                        ? (am.is_inflectable ? 1 : 0)
+                        : (e.is_inflectable ? 1 : 0);
+
+                    await runUpsert('adj_morphology', 'entry_id', {
+                        entry_id: entryId,
+                        gender: am.gender || gender,
+                        masculine_form: am.masculine_form || e.headword,
+                        feminine_form: am.feminine_form || null,
+                        plural_form: pluralFormStr,
+                        form_masc_pattern: am.form_masc_pattern || null,
+                        form_fem_pattern: am.form_fem_pattern || null,
+                        form_plural_pattern: am.form_plural_pattern || null,
+                        elative_form: am.elative_form || null,
+                        elative_pattern: am.elative_pattern || null,
+                        has_elative: hasElativeVal,
+                        is_inflectable: isInflectableVal,
+                        vowel_set_sg: am.vowel_set_sg || null,
+                        vowel_set_pl: am.vowel_set_pl || null,
+                        pattern: am.pattern || am.morph_pattern || null,
+                    }, adjCols, true);
                 }
 
                 appliedCount++;

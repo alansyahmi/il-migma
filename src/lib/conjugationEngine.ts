@@ -601,7 +601,7 @@ function genStrong(
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
-    const { v2: iv2 } = parseVset(vsetImpf);
+    const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
 
     const isSonorant = (c: string) => ["l", "m", "n", "r"].includes(c);
     const usesImperfectV2InPlural = (c: string) => c === "għ" || isSonorant(c);
@@ -615,10 +615,18 @@ function genStrong(
     const impfT1 = (pfx: string) =>
         `${pfx}${C1}${C2}${applyAttachedShiftUnlessBlocked(iv2 || "", C3, isImalaBlocked)}${C3}`;
     const impfT2 = (pfx: string) => {
-        const theme = iv2 || "i";
         if (isPharyngeal(C1)) return `${pfx}${C1}${C2}${C3}`;
-        if (usesImperfectV2InPlural(C2))
+        if (usesImperfectV2InPlural(C2)) {
+            const theme =
+                C2 === "għ"
+                    ? iv2 || "i"
+                    : iv2 === "o"
+                      ? "o"
+                      : iv2 === "a" && iv1 === "a"
+                        ? "a"
+                        : "i";
             return `${pfx}${C1}${theme}${C2}${C3}`;
+        }
         return `${pfx}${C1}${C2}${C3}`;
     };
 
@@ -748,11 +756,14 @@ function genHollow(
     const { v1: iv1 } = parseVset(vsetImpf);
 
     const isExplicitO = pv1 === "o" || pv2 === "o" || vsetPerf.startsWith("o");
+    const hasExplicitIeGrade = (pv1 === "i" || pv1 === "e") && pv2 === "ie";
     const longV = isExplicitO ? "ie" : (pv2 || pv1);
     const shortV = pv1;
 
     const perfFull = `${C1}${longV}${C3}`;
-    const reducedVowel = isExplicitO || C2 === "w" ? "o" : (longV === "ie" ? "i" : shortV);
+    const reducedVowel = hasExplicitIeGrade
+        ? pv1
+        : (isExplicitO || C2 === "w" ? "o" : (longV === "ie" ? "i" : shortV));
     const perfReduced = `${C1}${reducedVowel}${C3}`;
 
     const impfBase = (person: number) => {
@@ -765,7 +776,9 @@ function genHollow(
     const impStem = `${C1}${impV1}${C3}`;
     const impSg = impStem;
     const impPl = `${impStem}u`;
-    const perfectNegStem = longV === "a" ? perfFull : (longV === "ie" ? `${C1}i${C3}` : perfReduced);
+    const perfectNegStem = longV === "a"
+        ? perfFull
+        : (longV === "ie" ? `${C1}${hasExplicitIeGrade ? pv1 : "i"}${C3}` : perfReduced);
 
     return buildConjugationTable(
         {
@@ -801,6 +814,41 @@ function genHollow(
                 C3 === "għ" && (vsetImpf.endsWith("a") || vsetPerf.endsWith("a")),
         },
         C3,
+        verbForm,
+    );
+}
+
+function genKiel(verbForm: string): VerbConjugationTable {
+    return buildConjugationTable(
+        {
+            perfFull: "kiel",
+            perfSync: "kiel",
+            perfReduced: "kil",
+            perf3f: "kielet",
+            perfectNegBuilder: (perfRow, pIdx) => {
+                if (pIdx === 2) return "kiel";
+                if (pIdx === 3) return "kilit";
+                if (pIdx === 4) return "kilnie";
+                if (pIdx === 6) return "kilu";
+                return perfRow;
+            },
+            impfBase: (i) => `${IMPERFECT_PERSON_PREFIXES[i] ?? "j"}iekol`,
+            impfType1: (i) => `${IMPERFECT_PERSON_PREFIXES[i] ?? "j"}iekol`,
+            impfType2: (i) => `${IMPERFECT_PERSON_PREFIXES[i] ?? "j"}iekl`,
+            impfPlural: (i) => `${IMPERFECT_PERSON_PREFIXES[i] ?? "j"}ieklu`,
+            impSg: "kul",
+            impPl: "kulu",
+            impSgStems: {
+                impfType1: "kul",
+                impfType2: "kul",
+            },
+            impPlStems: {
+                impfType1: "kulu",
+                impfType2: "kulu",
+            },
+            blocksImala: false,
+        },
+        "l",
         verbForm,
     );
 }
@@ -3713,6 +3761,10 @@ export function generateConjugation(
     }
 
     if (form === "I") {
+        const citation = (input.headword || input.citationForm || "").trim().toLowerCase();
+        if (citation === "kiel" || (consonants[0] === "'" && consonants[1] === "k" && consonants[2] === "l")) {
+            return genKiel(form);
+        }
         if (strength === "geminated") {
             return genGeminated(
                 consonants,
@@ -5515,7 +5567,19 @@ export function generateRootForms(
     if (strength === "geminated") {
         return generateTriliteralGeminated(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
     }
-    return generateTriliteralStrong(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
+    const forms = generateTriliteralStrong(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
+    if (C1 === "'" && C2 === "k" && C3 === "l" && forms.length > 0) {
+        forms[0] = {
+            ...forms[0],
+            perfect: "kiel",
+            imperfect: "jiekol",
+            imperative: "kul",
+            passiveParticiple: "mikul",
+            activeParticiple: "iekel",
+            verbalNoun: "ikel",
+        };
+    }
+    return forms;
 }
 
 export type FormMarker = "plain" | "theoretical" | "auto_generated";

@@ -1,0 +1,1444 @@
+{
+  "category_id": "adj_sensory_colours",
+  "category_title": "Adjectives: Sensory, Texture & Colour",
+  "total_entries": 14,
+  "entries": [
+    {
+      "id": "adj-sħun",
+      "headword": "sħun",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "s-ħ-n",
+      "stem": null,
+      "cv_pattern": "12u3",
+      "morph_pattern": "C1C2uC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سُخْن",
+          "pronunciation": "sukhn",
+          "definition": "hot, warm"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "hot, warm",
+          "text_mt": "Li għandu temperatura għolja jew li jġorr sħana qawwija; imsaħħan.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Xorob kikkra te sħun biex jissaħħan fil-kesħa tax-xitwa.",
+          "en": "He drank a cup of hot tea to warm up in the winter cold."
+        },
+        {
+          "mt": "Ix-xemx ta’ Lulju tagħmel il-blat sħun ħafna.",
+          "en": "The July sun makes the rock very hot."
+        }
+      ],
+      "related_entries": [
+        "n-sħana"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsħuːn/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "sħuna",
+      "masculine_form": "sħun",
+      "plural_forms": [
+        {
+          "form": "sħan",
+          "pattern": "12a3"
+        }
+      ],
+      "elative_form": "isħan",
+      "vowel_set_sg": "u",
+      "vowel_set_pl": "a",
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "sħun",
+        "feminine_form": "sħuna",
+        "plural_form": [
+          {
+            "form": "sħan",
+            "pattern": "12a3"
+          }
+        ],
+        "plural": "sħan",
+        "form_masc_pattern": "C1C2uC3",
+        "form_fem_pattern": "12u3a",
+        "form_plural_pattern": "12a3",
+        "elative_form": "isħan",
+        "elative_pattern": "i12a3",
+        "has_elative": 1,
+        "is_inflectable": 1,
+        "vowel_set_sg": "u",
+        "vowel_set_pl": "a",
+        "pattern": "C1C2uC3"
+      },
+      "rank": 19,
+      "source_frequency_rank": 19,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma lexicographical standard: fixed etymology relationship and missing definition, added feminine, elative, adjective_morphology, controlled register, and corrected example typo (Xorob).",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-abjad",
+      "headword": "abjad",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "b-j-d",
+      "stem": null,
+      "cv_pattern": "a12a3",
+      "morph_pattern": "aC1C2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَبْيَض",
+          "pronunciation": "abyaḍ",
+          "definition": "white, bright"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "white, pale, clear",
+          "text_mt": "Li għandu l-kulur tal-ħalib jew tal-borra; ċar u bla ebda tebgħa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Libes qmis bajda nadifa għall-okkażjoni speċjali.",
+          "en": "He wore a clean white shirt for the special occasion."
+        },
+        {
+          "mt": "Il-ħitan bojod tad-djar jirriflettu d-dawl tax-xemx.",
+          "en": "The white walls of the houses reflect the sunlight."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐb.jɐt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "bajda",
+      "masculine_form": "abjad",
+      "plural_forms": [
+        {
+          "form": "bojod",
+          "pattern": "1o2o3"
+        }
+      ],
+      "elative_form": null,
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": "o-o",
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "abjad",
+        "feminine_form": "bajda",
+        "plural_form": [
+          {
+            "form": "bojod",
+            "pattern": "1o2o3"
+          }
+        ],
+        "plural": "bojod",
+        "form_masc_pattern": "aC1C2aC3",
+        "form_fem_pattern": "1a23a",
+        "form_plural_pattern": "1o2o3",
+        "elative_form": null,
+        "elative_pattern": null,
+        "has_elative": 0,
+        "is_inflectable": 1,
+        "vowel_set_sg": "a-a",
+        "vowel_set_pl": "o-o",
+        "pattern": "aC1C2aC3"
+      },
+      "rank": 278,
+      "source_frequency_rank": 278,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard: applied adjective definitional formula, cleaned Wiktionary etymology gloss, added feminine form bajda and plural pattern 1o2o3, and corrected IPA vowel length.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-aħmar",
+      "headword": "aħmar",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "ħ-m-r",
+      "stem": null,
+      "cv_pattern": "a12a3",
+      "morph_pattern": "aC1C2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَحْمَر",
+          "pronunciation": "aħmar",
+          "definition": "red, ruddy"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "red, crimson, flushed",
+          "text_mt": "Li għandu l-kulur tan-nar jew tad-demm; ħamrani.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Libset il-libsa l-ħamra għall-festa tar-raħal.",
+          "en": "She wore the red dress for the village feast."
+        },
+        {
+          "mt": "Ix-xemx nieżla żebgħet is-sema b’lewn aħmar skur.",
+          "en": "The setting sun painted the sky in a deep red hue."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐħ.mɐr/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "ħamra",
+      "masculine_form": "aħmar",
+      "plural_forms": [
+        {
+          "form": "ħomor",
+          "pattern": "1o2o3"
+        }
+      ],
+      "elative_form": null,
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": "o-o",
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "aħmar",
+        "feminine_form": "ħamra",
+        "plural_form": [
+          {
+            "form": "ħomor",
+            "pattern": "1o2o3"
+          }
+        ],
+        "plural": "ħomor",
+        "form_masc_pattern": "aC1C2aC3",
+        "form_fem_pattern": "1a23a",
+        "form_plural_pattern": "1o2o3",
+        "elative_form": null,
+        "elative_pattern": null,
+        "has_elative": 0,
+        "is_inflectable": 1,
+        "vowel_set_sg": "a-a",
+        "vowel_set_pl": "o-o",
+        "pattern": "aC1C2aC3"
+      },
+      "rank": 309,
+      "source_frequency_rank": 309,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard: fixed d-demm typo to tad-demm, applied adjective formula, added feminine form ħamra and plural pattern 1o2o3, and replaced dialectal frokka with standard libsa.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-iswed",
+      "headword": "iswed",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "s-w-d",
+      "stem": null,
+      "cv_pattern": "i12e3",
+      "morph_pattern": "iC1C2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَسْوَد",
+          "pronunciation": "aswad",
+          "definition": "black, dark"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "black, dark",
+          "text_mt": "Li għandu l-aktar kulur skur, bħall-faħam jew bħal-lejl bla dawl; skur ħafna.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-qattus iswed qabeż minn fuq il-ħajt tas-sejjieħ.",
+          "en": "The black cat jumped off the rubble wall."
+        },
+        {
+          "mt": "Hija xtrat libsa sewda eleganti għall-kunċert.",
+          "en": "She bought an elegant black dress for the concert."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɪs.wɛt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "sewda",
+      "masculine_form": "iswed",
+      "plural_forms": [
+        {
+          "form": "suwed",
+          "pattern": "1u2e3"
+        }
+      ],
+      "elative_form": null,
+      "vowel_set_sg": "i-e",
+      "vowel_set_pl": "u-e",
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "iswed",
+        "feminine_form": "sewda",
+        "plural_form": [
+          {
+            "form": "suwed",
+            "pattern": "1u2e3"
+          }
+        ],
+        "plural": "suwed",
+        "form_masc_pattern": "iC1C2eC3",
+        "form_fem_pattern": "1e23a",
+        "form_plural_pattern": "1u2e3",
+        "elative_form": null,
+        "elative_pattern": null,
+        "has_elative": 0,
+        "is_inflectable": 1,
+        "vowel_set_sg": "i-e",
+        "vowel_set_pl": "u-e",
+        "pattern": "iC1C2eC3"
+      },
+      "rank": 326,
+      "source_frequency_rank": 326,
+      "audit_status": "verified",
+      "audit_notes": "Completed missing Maltese definition, usage examples, IPA phonetics, etymology definition, feminine form sewda, plural pattern 1u2e3, and removed dangling non-existent related_entries.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-blu",
+      "headword": "blu",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "blu",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "blu",
+          "pronunciation": "blu",
+          "definition": "blue"
+        },
+        {
+          "relationship": "From",
+          "language": "Old French",
+          "term": "bloe",
+          "pronunciation": "bloe",
+          "definition": "blue"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "blue",
+          "text_mt": "Li għandu l-kulur tas-sema ċar jew tal-baħar fond; ikħal skur.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Libes qmis blu ċara għall-festa nazzjonali.",
+          "en": "He wore a light blue shirt for the national feast."
+        },
+        {
+          "mt": "Is-sema kien blu u bla ebda sħaba fuq il-port.",
+          "en": "The sky was blue and cloudless over the harbour."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbluː/",
+          "notes": null
+        }
+      ],
+      "feminine_form": null,
+      "masculine_form": "blu",
+      "plural_forms": [],
+      "elative_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "blu",
+        "feminine_form": null,
+        "plural_form": [],
+        "plural": null,
+        "form_masc_pattern": null,
+        "form_fem_pattern": null,
+        "form_plural_pattern": null,
+        "elative_form": null,
+        "elative_pattern": null,
+        "has_elative": 0,
+        "is_inflectable": 0,
+        "vowel_set_sg": null,
+        "vowel_set_pl": null,
+        "pattern": null
+      },
+      "rank": 359,
+      "source_frequency_rank": 359,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard: applied adjective formula, marked invariable (is_inflectable: 0, has_elative: 0), and added Old French pronunciation and etymology glosses.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-xott",
+      "headword": "xott",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "xott",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "sciuttu",
+          "pronunciation": "xuttu",
+          "definition": "dry"
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "exsuctus",
+          "pronunciation": "ekssuktus",
+          "definition": "drawn out, drained, dry"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "dry, arid, parched",
+          "text_mt": "Li m’għandux ilma, xita jew umdità; niexef għalkollox.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ħamrija kienet xotta minħabba n-nuqqas ta’ xita.",
+          "en": "The soil was dry due to the lack of rain."
+        },
+        {
+          "mt": "Il-ħwejjeġ imdendlin fix-xemx saru xotti malajr.",
+          "en": "The clothes hung in the sun became dry quickly."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɔtt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "xotta",
+      "masculine_form": "xott",
+      "plural_forms": [
+        {
+          "form": "xotti",
+          "pattern": "-i"
+        }
+      ],
+      "elative_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "xott",
+        "feminine_form": "xotta",
+        "plural_form": [
+          {
+            "form": "xotti",
+            "pattern": "-i"
+          }
+        ],
+        "plural": "xotti",
+        "form_masc_pattern": null,
+        "form_fem_pattern": "-a",
+        "form_plural_pattern": "-i",
+        "elative_form": null,
+        "elative_pattern": null,
+        "has_elative": 0,
+        "is_inflectable": 1,
+        "vowel_set_sg": null,
+        "vowel_set_pl": null,
+        "pattern": null
+      },
+      "rank": 377,
+      "source_frequency_rank": 377,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard: added feminine form xotta, completed Sicilian, Latin etymology fields, added adjective_morphology, and removed dangling non-existent related_entries.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "n-sħana",
+      "headword": "sħana",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "s-ħ-n",
+      "stem": null,
+      "cv_pattern": "12a3a",
+      "morph_pattern": "C1C2aC3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَخَانَة",
+          "pronunciation": "sakhânaẗ",
+          "definition": "heat, warmth"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "heat, warmth",
+          "text_mt": "Stat jew sensazzjoni ta’ temperatura għolja fl-arja, fix-xemx jew f’oġġett; sħunija.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kien hemm sħana kbira matul ix-xahar ta’ Lulju.",
+          "en": "There was intense heat during the month of July."
+        },
+        {
+          "mt": "Is-sħana tal-forn tinħass mal-kċina kollha.",
+          "en": "The heat of the oven can be felt throughout the kitchen."
+        }
+      ],
+      "related_entries": [
+        "adj-sħun"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsħɐː.nɐ/",
+          "notes": null
+        }
+      ],
+      "plural_forms": [],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "sħana",
+        "plural_forms": [],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-a",
+        "vowel_set_pl": null,
+        "form_plural_pattern": null,
+        "morph_pattern": "C1C2aC3a"
+      },
+      "rank": 390,
+      "source_frequency_rank": 390,
+      "audit_status": "verified",
+      "audit_notes": "Corrected POS from adjective to feminine noun, added noun_morphology, completed Arabic etymology definition, and applied Semitic genus-differentia noun formula.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "n-dlam",
+      "headword": "dlam",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "d-l-m",
+      "stem": null,
+      "cv_pattern": "12a3",
+      "morph_pattern": "C1C2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ظَلَام",
+          "pronunciation": "ẓalâm",
+          "definition": "darkness, gloom"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "darkness, gloom",
+          "text_mt": "Stat ta’ nuqqas sħiħ jew parzjali ta’ dawl, speċjalment bil-lejl jew f’post magħluq.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "obscurity, ignorance",
+          "text_mt": "Qagħda ta’ nuqqas ta’ għarfien, ta’ ċarezza jew ta’ fehim dwar il-verità.",
+          "register": {
+            "key": "figurative",
+            "en": "Figurative",
+            "mt": "Figurattiv",
+            "arabised": "Suri"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Meta ntfew id-dwal, il-kamra waqgħet fi dlam kbir.",
+          "en": "When the lights went out, the room fell into deep darkness."
+        },
+        {
+          "mt": "Fix-xitwa d-dlam jaqa’ kmieni wara nofsinhar.",
+          "en": "In winter darkness falls early in the afternoon."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdlɐːm/",
+          "notes": null
+        }
+      ],
+      "plural_forms": [
+        {
+          "form": "dlamijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "dlam",
+        "plural_forms": [
+          {
+            "form": "dlamijiet",
+            "pattern": "-ijiet"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a",
+        "vowel_set_pl": "a-i-ie",
+        "form_plural_pattern": "-ijiet",
+        "morph_pattern": "C1C2aC3"
+      },
+      "rank": 410,
+      "source_frequency_rank": 410,
+      "audit_status": "verified",
+      "audit_notes": "Corrected POS from adjective to masculine noun, replaced calqued English template definitions and placeholder example with native Maltese definitions and examples, and added noun_morphology.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-aħdar",
+      "headword": "aħdar",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "ħ-d-r",
+      "stem": null,
+      "cv_pattern": "a12a3",
+      "morph_pattern": "aC1C2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَخْضَر",
+          "pronunciation": "akhḍar",
+          "definition": "green, fresh"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "green; unripe, fresh",
+          "text_mt": "Li għandu l-kulur tal-ħaxix u tal-weraq tar-rebbiegħa; li għadu mhux misjur għalkollox.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Weraq aħdar frisk mela s-siġra fir-rebbiegħa.",
+          "en": "Fresh green leaves filled the tree in spring."
+        },
+        {
+          "mt": "Il-bieba l-ħadra tal-ġnien tidher mill-bogħod.",
+          "en": "The green garden door can be seen from afar."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐħ.dɐr/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "ħadra",
+      "masculine_form": "aħdar",
+      "plural_forms": [
+        {
+          "form": "ħodor",
+          "pattern": "1o2o3"
+        }
+      ],
+      "elative_form": null,
+      "vowel_set_sg": "a-a",
+      "vowel_set_pl": "o-o",
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "aħdar",
+        "feminine_form": "ħadra",
+        "plural_form": [
+          {
+            "form": "ħodor",
+            "pattern": "1o2o3"
+          }
+        ],
+        "plural": "ħodor",
+        "form_masc_pattern": "aC1C2aC3",
+        "form_fem_pattern": "1a23a",
+        "form_plural_pattern": "1o2o3",
+        "elative_form": null,
+        "elative_pattern": null,
+        "has_elative": 0,
+        "is_inflectable": 1,
+        "vowel_set_sg": "a-a",
+        "vowel_set_pl": "o-o",
+        "pattern": "aC1C2aC3"
+      },
+      "rank": 434,
+      "source_frequency_rank": 434,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard: applied adjective formula, added feminine form ħadra, plural pattern 1o2o3, and adjective_morphology.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-kiesaħ",
+      "headword": "kiesaħ",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "k-s-ħ",
+      "stem": null,
+      "cv_pattern": "1ie2a3",
+      "morph_pattern": "C1ieC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قَاسِح",
+          "pronunciation": "qâsiħ",
+          "definition": "hard, severe"
+        },
+        {
+          "relationship": "Compare",
+          "language": "Arabic",
+          "term": "كَاسِح",
+          "pronunciation": "kâsiħ",
+          "definition": "piercing, biting cold"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "cold, chilly",
+          "text_mt": "Li għandu temperatura baxxa ħafna u nuqqas ta’ sħana; frisk.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "aloof, stiff, affectatious",
+          "text_mt": "Li juri nuqqas ta’ ħeġġa jew ta’ affezzjoni; li jaġixxi b’mod artifiċjali.",
+          "register": {
+            "key": "figurative",
+            "en": "Figurative",
+            "mt": "Figurattiv",
+            "arabised": "Suri"
+          }
+        },
+        {
+          "text_en": "impudent, cheeky",
+          "text_mt": "Li juri nuqqas ta’ rispett jew mġiba sfaċċata.",
+          "register": {
+            "key": "colloquial",
+            "en": "Colloquial",
+            "mt": "Kollokwjali",
+            "arabised": "Ta' kotra"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ix-xorb tal-ilma kiesaħ jagħti serħan kbir f’ġurnata sħuna.",
+          "en": "Drinking cold water brings great relief on a hot day."
+        },
+        {
+          "mt": "F’Jannar ir-riħ mit-tramuntana jkun kiesaħ ħafna.",
+          "en": "In January the north wind is very cold."
+        }
+      ],
+      "related_entries": [
+        "adj-biered"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɪː.sɐħ/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "kiesħa",
+      "masculine_form": "kiesaħ",
+      "plural_forms": [
+        {
+          "form": "kesħin",
+          "pattern": "-in"
+        }
+      ],
+      "elative_form": "iksaħ",
+      "vowel_set_sg": "ie-a",
+      "vowel_set_pl": "e-i",
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "kiesaħ",
+        "feminine_form": "kiesħa",
+        "plural_form": [
+          {
+            "form": "kesħin",
+            "pattern": "-in"
+          }
+        ],
+        "plural": "kesħin",
+        "form_masc_pattern": "C1ieC2aC3",
+        "form_fem_pattern": "1ie23a",
+        "form_plural_pattern": "-in",
+        "elative_form": "iksaħ",
+        "elative_pattern": "i12a3",
+        "has_elative": 1,
+        "is_inflectable": 1,
+        "vowel_set_sg": "ie-a",
+        "vowel_set_pl": "e-i",
+        "pattern": "C1ieC2aC3"
+      },
+      "rank": 498,
+      "source_frequency_rank": 498,
+      "audit_status": "verified",
+      "audit_notes": "Removed feminine singular kiesħa from plural_forms, fixed IPA stress placement, corrected unidiomatic verb phrase in example, added elative iksaħ, and applied controlled registers.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-nadif",
+      "headword": "nadif",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "n-d-f",
+      "stem": null,
+      "cv_pattern": "1a2i3",
+      "morph_pattern": "C1aC2iC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "نَظِيف",
+          "pronunciation": "naẓîf",
+          "definition": "clean, pure, neat"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "clean, pure, neat",
+          "text_mt": "Li hu ħieles mill-ħmieġ, mit-trab jew mit-tbajja’; miżmum fl-indafa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Libes libsa nadifa u bajda għat-tieġ ta’ ħuh.",
+          "en": "He wore clean white clothes for his brother’s wedding."
+        },
+        {
+          "mt": "Il-kċina dejjem tinżamm nadifa wara t-tisjir.",
+          "en": "The kitchen is always kept clean after cooking."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/nɐˈdiːf/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "nadifa",
+      "masculine_form": "nadif",
+      "plural_forms": [
+        {
+          "form": "ndaf",
+          "pattern": "12a3"
+        },
+        {
+          "form": "nodfa",
+          "pattern": "1o23a"
+        }
+      ],
+      "elative_form": "indaf",
+      "vowel_set_sg": "a-i",
+      "vowel_set_pl": "a",
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "nadif",
+        "feminine_form": "nadifa",
+        "plural_form": [
+          {
+            "form": "ndaf",
+            "pattern": "12a3"
+          },
+          {
+            "form": "nodfa",
+            "pattern": "1o23a"
+          }
+        ],
+        "plural": "ndaf, nodfa",
+        "form_masc_pattern": "C1aC2iC3",
+        "form_fem_pattern": "1a2i3a",
+        "form_plural_pattern": "12a3",
+        "elative_form": "indaf",
+        "elative_pattern": "i12a3",
+        "has_elative": 1,
+        "is_inflectable": 1,
+        "vowel_set_sg": "a-i",
+        "vowel_set_pl": "a",
+        "pattern": "C1aC2iC3"
+      },
+      "rank": 619,
+      "source_frequency_rank": 619,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard: applied adjective formula, added feminine nadifa, elative indaf, corrected IPA stress on long second syllable, and normalized plural patterns.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-qawwi",
+      "headword": "qawwi",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "q-w-j",
+      "stem": null,
+      "cv_pattern": "1a22i",
+      "morph_pattern": "C1aC2C2i",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قَوِيّ",
+          "pronunciation": "qawî",
+          "definition": "strong, powerful, forceful"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "strong, powerful, loud",
+          "text_mt": "Li għandu saħħa fiżika jew qawwa kbira; li jinstema’ b’leħen jew ħoss għoli.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħoss qawwi ta’ ragħad instema’ mar-raħal kollu.",
+          "en": "A loud sound of thunder was heard throughout the whole village."
+        },
+        {
+          "mt": "Hija mara b’saħħitha u b’karattru qawwi ħafna.",
+          "en": "She is a healthy woman with a very strong character."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɐw.wɪ/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "qawwija",
+      "masculine_form": "qawwi",
+      "plural_forms": [
+        {
+          "form": "qawwijin",
+          "pattern": "-in"
+        }
+      ],
+      "elative_form": "aqwa",
+      "vowel_set_sg": "a-i",
+      "vowel_set_pl": "a-i",
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "qawwi",
+        "feminine_form": "qawwija",
+        "plural_form": [
+          {
+            "form": "qawwijin",
+            "pattern": "-in"
+          }
+        ],
+        "plural": "qawwijin",
+        "form_masc_pattern": "C1aC2C2i",
+        "form_fem_pattern": "-a",
+        "form_plural_pattern": "-in",
+        "elative_form": "aqwa",
+        "elative_pattern": "a12a",
+        "has_elative": 1,
+        "is_inflectable": 1,
+        "vowel_set_sg": "a-i",
+        "vowel_set_pl": "a-i",
+        "pattern": "C1aC2C2i"
+      },
+      "rank": 662,
+      "source_frequency_rank": 662,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard: applied adjective formula, added feminine qawwija, elative aqwa, and adjective_morphology.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-biered",
+      "headword": "biered",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "b-r-d",
+      "stem": null,
+      "cv_pattern": "1ie2e3",
+      "morph_pattern": "C1ieC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "بَارِد",
+          "pronunciation": "bârid",
+          "definition": "cold, cool, tepid"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "cool, chilly",
+          "text_mt": "Li għandu temperatura moderatament baxxa, bejn sħun u kiesaħ; frisk ħafif.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "apathetic, unenthusiastic",
+          "text_mt": "Li juri nuqqas ta’ ħeġġa, interess jew emozzjoni.",
+          "register": {
+            "key": "figurative",
+            "en": "Figurative",
+            "mt": "Figurattiv",
+            "arabised": "Suri"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Filgħaxija jonfoħ riħ biered mill-baħar.",
+          "en": "In the evening a cool wind blows from the sea."
+        },
+        {
+          "mt": "Il-kafè sar biered għax ħallejtu fuq il-mejda.",
+          "en": "The coffee went cold because I left it on the table."
+        }
+      ],
+      "related_entries": [
+        "adj-kiesaħ"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɪː.rɛt/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "bierda",
+      "masculine_form": "biered",
+      "plural_forms": [
+        {
+          "form": "berdin",
+          "pattern": "-in"
+        }
+      ],
+      "elative_form": "ibred",
+      "vowel_set_sg": "ie-e",
+      "vowel_set_pl": "e-i",
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "biered",
+        "feminine_form": "bierda",
+        "plural_form": [
+          {
+            "form": "berdin",
+            "pattern": "-in"
+          }
+        ],
+        "plural": "berdin",
+        "form_masc_pattern": "C1ieC2eC3",
+        "form_fem_pattern": "1ie23a",
+        "form_plural_pattern": "-in",
+        "elative_form": "ibred",
+        "elative_pattern": "i12e3",
+        "has_elative": 1,
+        "is_inflectable": 1,
+        "vowel_set_sg": "ie-e",
+        "vowel_set_pl": "e-i",
+        "pattern": "C1ieC2eC3"
+      },
+      "rank": 684,
+      "source_frequency_rank": 684,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected verb placeholder n-jibred (\"cool\") to canonical Maltese adjective lemma adj-biered (b-r-d), with full definitions, examples, phonetics, etymology, and adjective_morphology.",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    },
+    {
+      "id": "adj-frisk",
+      "headword": "frisk",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "frisk",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "friscu",
+          "pronunciation": "frisku",
+          "definition": "fresh, cool"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "fresh, cool, newly made",
+          "text_mt": "Li għadu ġdid, reċenti jew li għandu freskezza naturali mingħajr sħana żejda.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Xorob tazza ilma frisk mill-bir tal-ġnien.",
+          "en": "He drank a glass of cool water from the garden well."
+        },
+        {
+          "mt": "Il-ħobż frisk tal-forn għandu riħa li tiftaħ l-aptit.",
+          "en": "Fresh bread from the bakery has an appetizing aroma."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈfrɪsk/",
+          "notes": null
+        }
+      ],
+      "feminine_form": "friska",
+      "masculine_form": "frisk",
+      "plural_forms": [
+        {
+          "form": "friski",
+          "pattern": "-i"
+        }
+      ],
+      "elative_form": null,
+      "vowel_set_sg": null,
+      "vowel_set_pl": null,
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "frisk",
+        "feminine_form": "friska",
+        "plural_form": [
+          {
+            "form": "friski",
+            "pattern": "-i"
+          }
+        ],
+        "plural": "friski",
+        "form_masc_pattern": null,
+        "form_fem_pattern": "-a",
+        "form_plural_pattern": "-i",
+        "elative_form": null,
+        "elative_pattern": null,
+        "has_elative": 0,
+        "is_inflectable": 1,
+        "vowel_set_sg": null,
+        "vowel_set_pl": null,
+        "pattern": null
+      },
+      "rank": 836,
+      "source_frequency_rank": 836,
+      "audit_status": "verified",
+      "audit_notes": "Refined to Il-Miġma standard: applied adjective formula, added feminine friska and adjective_morphology, added Sicilian etymology gloss, and fixed example typo (Xorob).",
+      "theme": "Adjectives: Sensory, Texture & Colour",
+      "theme_id": "adj_sensory_colours"
+    }
+  ]
+}

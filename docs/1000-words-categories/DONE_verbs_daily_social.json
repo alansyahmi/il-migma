@@ -1,0 +1,1158 @@
+{
+  "category_id": "verbs_daily_social",
+  "category_title": "Verbs: Daily Life & Social Interaction",
+  "total_entries": 12,
+  "entries": [
+    {
+      "id": "v-għex",
+      "headword": "għex",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-j-x",
+      "stem": null,
+      "cv_pattern": "1e3",
+      "morph_pattern": "C1eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَاشَ",
+          "pronunciation": "għâsha",
+          "definition": "to live, subsist"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to live, be alive, reside",
+          "text_mt": "Ikollu l-ħajja u jibqa’ ħaj; igħaddi ħajtu jew joqgħod f’post partikolari.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to subsist, earn a living",
+          "text_mt": "Imantni lilu nnifsu u jibqa’ jgħaddi ħajtu permezz ta’ xogħol jew riżorsi.",
+          "register": {
+            "key": "figurative",
+            "en": "Figurative",
+            "mt": "Figurattiv",
+            "arabised": "Suri"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Nannuh għex ħajja twila u kwieta fir-raħal twelidu.",
+          "en": "His grandfather lived a long and quiet life in his native village."
+        },
+        {
+          "mt": "Il-familja tagħhom ilha tgħix f’Għawdex għal ħafna snin.",
+          "en": "Their family has been living in Gozo for many years."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛːʃ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "strength": "weak",
+        "weak_class": "hollow",
+        "transitivity": "intransitive",
+        "perfective_3sgm": "għex",
+        "imperfective_3sgm": "jgħix",
+        "imperative_sg": "għix",
+        "passive_participle": null,
+        "active_participle": "għajjex",
+        "verbal_noun": "għixien",
+        "vowel_set_perf": "e-e",
+        "vowel_set_impf": "i-i",
+        "vowel_set_impv": "i-i",
+        "is_imala_blocked": 0
+      },
+      "rank": 109,
+      "source_frequency_rank": 109,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jgħixu to canonical Form I hollow lemma v-għex (għ-j-x), with Il-Miġma definitions, usage examples, IPA phonetics, and full verb_morphology.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-għen",
+      "headword": "għen",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-j-n",
+      "stem": null,
+      "cv_pattern": "1e3",
+      "morph_pattern": "C1eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَعَانَ",
+          "pronunciation": "agħâna",
+          "definition": "to help, aid, assist"
+        },
+        {
+          "relationship": "Cognate with",
+          "language": "Arabic",
+          "term": "عَانَ",
+          "pronunciation": "għâna",
+          "definition": "to assist, help"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to help, assist, aid",
+          "text_mt": "Jagħti l-appoġġ, is-sostenn jew is-sehem tiegħu lil ħaddieħor biex iwettaq ħaġa jew jegħleb diffikultà.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għen lil oħtu ż-żgħira biex tlesti l-kompitu tal-iskola.",
+          "en": "He helped his younger sister finish her schoolwork."
+        },
+        {
+          "mt": "Il-ġirien jgħinu lil xulxin kull meta jinqala’ xi bżonn.",
+          "en": "The neighbours help each other whenever a need arises."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɛːn/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "strength": "weak",
+        "weak_class": "hollow",
+        "transitivity": "transitive",
+        "perfective_3sgm": "għen",
+        "imperfective_3sgm": "jgħin",
+        "imperative_sg": "għin",
+        "passive_participle": "megħjun",
+        "active_participle": null,
+        "verbal_noun": "għajnuna",
+        "vowel_set_perf": "e-e",
+        "vowel_set_impf": "i-i",
+        "vowel_set_impv": "i-i",
+        "is_imala_blocked": 0
+      },
+      "rank": 135,
+      "source_frequency_rank": 135,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jgħinu to canonical Form I hollow lemma v-għen (għ-j-n), with Il-Miġma definitions, examples, IPA phonetics, and full verb_morphology.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-kiber",
+      "headword": "kiber",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "k-b-r",
+      "stem": null,
+      "cv_pattern": "1i2e3",
+      "morph_pattern": "C1iC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "كَبُرَ",
+          "pronunciation": "kabura",
+          "definition": "to grow large, grow up, increase"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to grow, grow up, increase in size or age",
+          "text_mt": "Jiżdied fid-daqs, fil-kobor, fl-età jew fl-importanza maż-żmien.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tifel kiber malajr u issa sar itwal minn missieru.",
+          "en": "The boy grew quickly and has now become taller than his father."
+        },
+        {
+          "mt": "Is-siġar taż-żebbuġ jikbru bil-mod iżda jgħixu sekli sħaħ.",
+          "en": "Olive trees grow slowly but live for whole centuries."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɪ.bɛr/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "strength": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "kiber",
+        "imperfective_3sgm": "jikber",
+        "imperative_sg": "ikber",
+        "passive_participle": null,
+        "active_participle": "kieber",
+        "verbal_noun": "kobor",
+        "vowel_set_perf": "i-e",
+        "vowel_set_impf": "i-e",
+        "vowel_set_impv": "i-e",
+        "is_imala_blocked": 0
+      },
+      "rank": 210,
+      "source_frequency_rank": 210,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jikbru to canonical Form I strong lemma v-kiber (k-b-r), with complete vowel sets i-e, Il-Miġma definition, and examples.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-kiel",
+      "headword": "kiel",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "'-k-l",
+      "stem": null,
+      "cv_pattern": "2ie3",
+      "morph_pattern": "C2ieC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَكَلَ",
+          "pronunciation": "akala",
+          "definition": "to eat, consume"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to eat, consume food",
+          "text_mt": "Idaħħal l-ikel f’ħalqu, jomogħdu u jibilgħu biex jieħu n-nutriment.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to erode, wear away, corrode",
+          "text_mt": "Iħassar jew inaqqar wiċċ iebes bil-mod il-mod, bħas-sadid jew l-ilma baħar.",
+          "register": {
+            "key": "figurative",
+            "en": "Figurative",
+            "mt": "Figurattiv",
+            "arabised": "Suri"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kiel platt għaġin sħun wara ġurnata twila ta’ xogħol.",
+          "en": "He ate a plate of hot pasta after a long day of work."
+        },
+        {
+          "mt": "Filgħaxija l-familja kollha tiltaqa’ biex tiekol flimkien.",
+          "en": "In the evening the whole family gathers to eat together."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɪːl/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "strength": "weak",
+        "weak_class": "assimilative",
+        "transitivity": "transitive",
+        "perfective_3sgm": "kiel",
+        "imperfective_3sgm": "jiekol",
+        "imperative_sg": "kul",
+        "passive_participle": "mikul",
+        "active_participle": "iekel",
+        "verbal_noun": "ikel",
+        "vowel_set_perf": "ie-e",
+        "vowel_set_impf": "ie-o",
+        "vowel_set_impv": "u",
+        "is_imala_blocked": 0
+      },
+      "rank": 255,
+      "source_frequency_rank": 255,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jieklu to canonical irregular Form I lemma v-kiel ('-k-l), paired with genKiel conjugation engine support.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-serva",
+      "headword": "serva",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "serv",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "zokk_class": "ir",
+      "zokk_is_hybrid": 0,
+      "zokk_agentive_suffix": "itur",
+      "zokk_morphology": {
+        "stem_string": "serv",
+        "class_type": "ir",
+        "is_hybrid": false,
+        "agentive_suffix": "itur"
+      },
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "sirviri",
+          "pronunciation": "sirviri",
+          "definition": "to serve"
+        },
+        {
+          "relationship": "Compare",
+          "language": "Italian",
+          "term": "servire",
+          "pronunciation": "servire",
+          "definition": "to serve"
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "servīre",
+          "pronunciation": "serwire",
+          "definition": "to serve, attend upon"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to serve, wait upon, attend to",
+          "text_mt": "Jaħdem għal ħaddieħor, iwassal l-ikel u x-xorb lill-klijenti, jew jaqdi dmir f’kariga.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to be useful for, fulfill a purpose",
+          "text_mt": "Ikun utli jew tajjeb biex jilħaq għan jew bżonn partikolari.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-wejters jservu l-ikel frisk u sħun lill-mistednin kollha.",
+          "en": "The waiters serve the fresh hot food to all the guests."
+        },
+        {
+          "mt": "Serva lil pajjiżu b’lealtà u b’impenn għal erbgħin sena.",
+          "en": "He served his country with loyalty and dedication for forty years."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛr.vɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "romance",
+        "class": "ir",
+        "strength": "ir",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "serva",
+        "imperfective_3sgm": "jservi",
+        "imperative_sg": "servi",
+        "passive_participle": "servit",
+        "active_participle": null,
+        "verbal_noun": "servir",
+        "vowel_set_perf": null,
+        "vowel_set_impf": null,
+        "vowel_set_impv": null,
+        "is_imala_blocked": 0
+      },
+      "rank": 490,
+      "source_frequency_rank": 490,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jservu to canonical Romance -ir lemma v-serva (stem: serv), with zokk_morphology, Sicilian, Latin etymology, and Il-Miġma definitions.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-miet",
+      "headword": "miet",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "m-w-t",
+      "stem": null,
+      "cv_pattern": "1ie3",
+      "morph_pattern": "C1ieC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَاتَ",
+          "pronunciation": "mâta",
+          "definition": "to die, perish"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to die, pass away, perish",
+          "text_mt": "Jitlef ħajtu u jieqaf jgħix; jintemmlu n-nifs u l-eżistenza fiżika.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to die down, fade away, cease",
+          "text_mt": "Jintefa, jonqos bil-mod jew jisparixxi għalkollox, bħan-nar jew bħal drawwa antika.",
+          "register": {
+            "key": "figurative",
+            "en": "Figurative",
+            "mt": "Figurattiv",
+            "arabised": "Suri"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Is-siġra l-qadima mietet wara s-sajf niexef u sħun.",
+          "en": "The old tree died after the dry and hot summer."
+        },
+        {
+          "mt": "Mingħajr ilma regolari, il-fjuri tal-qsari jmutu malajr.",
+          "en": "Without regular water, potted flowers die quickly."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɪːt/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "strength": "weak",
+        "weak_class": "hollow",
+        "transitivity": "intransitive",
+        "perfective_3sgm": "miet",
+        "imperfective_3sgm": "jmut",
+        "imperative_sg": "mut",
+        "passive_participle": null,
+        "active_participle": null,
+        "verbal_noun": "mewt",
+        "vowel_set_perf": "i-ie",
+        "vowel_set_impf": "u-u",
+        "vowel_set_impv": "u-u",
+        "is_imala_blocked": 0
+      },
+      "rank": 609,
+      "source_frequency_rank": 609,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jmutu to canonical Form I hollow lemma v-miet (m-w-t) with explicit i-ie ,  u-u vowel sets.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-tilef",
+      "headword": "tilef",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "t-l-f",
+      "stem": null,
+      "cv_pattern": "1i2e3",
+      "morph_pattern": "C1iC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَلِفَ",
+          "pronunciation": "talifa",
+          "definition": "to perish, be lost, be ruined"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to lose, misplace, forfeit",
+          "text_mt": "Jibqa’ mingħajr ħaġa li kellu qabel, billi titwarrab minn idejh jew ma jsibhiex aktar.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to lose (a match, contest, or opportunity)",
+          "text_mt": "Joħroġ tellief f’logħba, f’kompetizzjoni jew f’kawża, jew jaħli opportunità.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Tilef iċ-ċwievet tad-dar waqt li kien miexi lura mix-xogħol.",
+          "en": "He lost the house keys while walking back from work."
+        },
+        {
+          "mt": "It-tim tagħhom jitlef rarament meta jilgħab fil-grawnd tiegħu.",
+          "en": "Their team rarely loses when it plays at its home ground."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtɪ.lɛf/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "strength": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "tilef",
+        "imperfective_3sgm": "jitlef",
+        "imperative_sg": "itlef",
+        "passive_participle": "mitluf",
+        "active_participle": null,
+        "verbal_noun": "telf",
+        "vowel_set_perf": "i-e",
+        "vowel_set_impf": "i-e",
+        "vowel_set_impv": "i-e",
+        "is_imala_blocked": 0
+      },
+      "rank": 635,
+      "source_frequency_rank": 635,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected feminine passive participle placeholder mitlufa to canonical Form I strong verb lemma v-tilef (t-l-f), with passive participle mitluf and verbal noun telf.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-libes",
+      "headword": "libes",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "l-b-s",
+      "stem": null,
+      "cv_pattern": "1i2e3",
+      "morph_pattern": "C1iC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "لَبِسَ",
+          "pronunciation": "labisa",
+          "definition": "to put on, wear, dress"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to put on, wear (clothing or accessories)",
+          "text_mt": "Iqiegħed ħwejjeġ, żraben jew aċċessorji fuq ġismu biex jgħatti ruħu jew iżejjen lilu nnifsu.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Libes ġakketta sħuna qabel ma ħareġ fil-kesħa ta’ filgħodu.",
+          "en": "He put on a warm jacket before going out into the morning cold."
+        },
+        {
+          "mt": "Fl-okkażjoni tat-tieġ il-mistednin jilbsu l-isbaħ ħwejjeġ tagħhom.",
+          "en": "On the occasion of the wedding the guests wear their finest clothes."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɪ.bɛs/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "strength": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "libes",
+        "imperfective_3sgm": "jilbes",
+        "imperative_sg": "ilbes",
+        "passive_participle": "milbus",
+        "active_participle": "liebes",
+        "verbal_noun": "lbies",
+        "vowel_set_perf": "i-e",
+        "vowel_set_impf": "i-e",
+        "vowel_set_impv": "i-e",
+        "is_imala_blocked": 0
+      },
+      "rank": 637,
+      "source_frequency_rank": 637,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jilbsu to canonical Form I strong verb lemma v-libes (l-b-s), with full verb_morphology, IPA, and examples.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-osserva",
+      "headword": "osserva",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "osserv",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 1,
+      "zokk_class": "ar",
+      "zokk_is_hybrid": 0,
+      "zokk_agentive_suffix": "atur",
+      "zokk_morphology": {
+        "stem_string": "osserv",
+        "class_type": "ar",
+        "is_hybrid": false,
+        "agentive_suffix": "atur"
+      },
+      "source_language": "Italian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "osservare",
+          "pronunciation": "osservare",
+          "definition": "to observe, watch, obey"
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "observāre",
+          "pronunciation": "obserware",
+          "definition": "to watch, heed, guard"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to observe, watch closely, notice",
+          "text_mt": "Iħares u jsegwi b’attenzjoni kbira dak li jkun qed jiġri madwaru; jinnota b’reqqa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to observe, obey, abide by (a rule or custom)",
+          "text_mt": "Iħares u jżomm liġi, regola jew drawwa mingħajr ma jiksirha.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ix-xjenzati josservaw l-istilel bit-teleskopju matul il-lejl.",
+          "en": "The scientists observe the stars through the telescope during the night."
+        },
+        {
+          "mt": "Matul il-vjaġġ osserva s-sbuħija naturali tal-kosta Għawdxija.",
+          "en": "During the journey he observed the natural beauty of the Gozitan coast."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɔsˈsɛr.vɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "romance",
+        "class": "ar",
+        "strength": "ar",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "osserva",
+        "imperfective_3sgm": "josserva",
+        "imperative_sg": "osserva",
+        "passive_participle": "osservat",
+        "active_participle": null,
+        "verbal_noun": "osservar",
+        "vowel_set_perf": null,
+        "vowel_set_impf": null,
+        "vowel_set_impv": null,
+        "is_imala_blocked": 1
+      },
+      "rank": 664,
+      "source_frequency_rank": 664,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder josservaw to canonical Romance -ar lemma v-osserva (stem: osserv), with zokk_morphology, Italian, Latin etymology, and Il-Miġma definitions.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-issodisfa",
+      "headword": "issodisfa",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "issodisf",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 1,
+      "zokk_class": "ar",
+      "zokk_is_hybrid": 0,
+      "zokk_agentive_suffix": "atur",
+      "zokk_morphology": {
+        "stem_string": "issodisf",
+        "class_type": "ar",
+        "is_hybrid": false,
+        "agentive_suffix": "atur"
+      },
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "suddisfari",
+          "pronunciation": "suddisfari",
+          "definition": "to satisfy"
+        },
+        {
+          "relationship": "Compare",
+          "language": "Italian",
+          "term": "soddisfare",
+          "pronunciation": "soddisfare",
+          "definition": "to satisfy, fulfill"
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "satisfacere",
+          "pronunciation": "satisfakere",
+          "definition": "to satisfy, do enough"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to satisfy, meet (a requirement, standard, or need)",
+          "text_mt": "Iwettaq jew ilaqqa’ l-kundizzjonijiet, il-ħtiġijiet jew ix-xewqat meħtieġa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to please, content",
+          "text_mt": "Iħalli persuna kuntenta u sodisfatta bir-riżultat jew bil-ħidma.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-prodott il-ġdid jissodisfa l-istandards kollha tas-sigurtà.",
+          "en": "The new product meets all the safety standards."
+        },
+        {
+          "mt": "Ir-risposta tiegħu issodisfat il-mistoqsijiet tal-udjenza kollha.",
+          "en": "His answer satisfied the questions of the entire audience."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɪs.sɔˈdɪs.fɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "romance",
+        "class": "ar",
+        "strength": "ar",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "issodisfa",
+        "imperfective_3sgm": "jissodisfa",
+        "imperative_sg": "issodisfa",
+        "passive_participle": "issodisfat",
+        "active_participle": null,
+        "verbal_noun": "issodisfar",
+        "vowel_set_perf": null,
+        "vowel_set_impf": null,
+        "vowel_set_impv": null,
+        "is_imala_blocked": 1
+      },
+      "rank": 704,
+      "source_frequency_rank": 704,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jissodisfaw to canonical Romance -ar lemma v-issodisfa (stem: issodisf), with zokk_morphology, Sicilian, Italian, Latin etymology, and Il-Miġma definitions.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-xtara",
+      "headword": "xtara",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "x-r-j",
+      "stem": null,
+      "cv_pattern": "1tV2a",
+      "morph_pattern": "C1tVC2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "إِشْتَرَى",
+          "pronunciation": "ishtarâ",
+          "definition": "to buy, purchase"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to buy, purchase",
+          "text_mt": "Jikseb oġġett jew servizz billi jħallas il-prezz tiegħu bi flus.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Xtara ħobż frisk u ġbejniet mis-suq ta’ filgħodu.",
+          "en": "He bought fresh bread and cheeselets from the morning market."
+        },
+        {
+          "mt": "Kull nhar ta’ Sibt jixtru l-ħaxix u l-frott mingħand il-bidwi.",
+          "en": "Every Saturday they buy vegetables and fruit from the farmer."
+        }
+      ],
+      "related_entries": [
+        "v-biegħ"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃtɐ.rɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "VIII",
+        "class": "weak",
+        "strength": "weak",
+        "weak_class": "defective",
+        "transitivity": "transitive",
+        "perfective_3sgm": "xtara",
+        "imperfective_3sgm": "jixtri",
+        "imperative_sg": "ixtri",
+        "passive_participle": "mixtri",
+        "active_participle": null,
+        "verbal_noun": "xiri",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "i-i",
+        "vowel_set_impv": "i-i",
+        "is_imala_blocked": 0
+      },
+      "rank": 706,
+      "source_frequency_rank": 706,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jixtru to canonical Form VIII defective lemma v-xtara (x-r-j), linked with v-biegħ.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    },
+    {
+      "id": "v-biegħ",
+      "headword": "biegħ",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "b-j-għ",
+      "stem": null,
+      "cv_pattern": "1ie3",
+      "morph_pattern": "C1ieC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_title": "Maltese-English Dictionary",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "بَاعَ",
+          "pronunciation": "bâgħa",
+          "definition": "to sell"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to sell, vend",
+          "text_mt": "Jagħti oġġett jew proprjetà lil ħaddieħor bi ħlas ta’ flus.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Biegħ il-karozza l-qadima tiegħu biex jixtri waħda iżgħar.",
+          "en": "He sold his old car in order to buy a smaller one."
+        },
+        {
+          "mt": "Fil-ħanut tar-raħal jbigħu ħobż u ħelu tradizzjonali Malti.",
+          "en": "In the village shop they sell bread and traditional Maltese sweets."
+        }
+      ],
+      "related_entries": [
+        "v-xtara"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɪː/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "strength": "weak",
+        "weak_class": "hollow",
+        "transitivity": "transitive",
+        "perfective_3sgm": "biegħ",
+        "imperfective_3sgm": "jbigħ",
+        "imperative_sg": "bigħ",
+        "passive_participle": "mibjugħ",
+        "active_participle": null,
+        "verbal_noun": "bejgħ",
+        "vowel_set_perf": "e-ie",
+        "vowel_set_impf": "i-i",
+        "vowel_set_impv": "i-i",
+        "is_imala_blocked": 0
+      },
+      "rank": 954,
+      "source_frequency_rank": 954,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jbiegħu to canonical Form I hollow lemma v-biegħ (b-j-għ) with explicit e-ie ,  i-i vowel sets, linked with v-xtara.",
+      "theme": "Verbs: Daily Life & Social Interaction",
+      "theme_id": "verbs_daily_social"
+    }
+  ]
+}

@@ -856,4 +856,142 @@ assertEq(buildPerfectForm(refaTable.rows[2].perfect, refaTable.rows[2].perfect_n
 assertEq(buildPerfectForm(refaTable.rows[2].perfect, refaTable.rows[2].perfect_neg ?? refaTable.rows[2].perfect, false, 2, null, 'e-a', refaTable.rows[2].stems, refaTable.blocksImala, 'I'), 'refgħu', "refa' 3ms + -u");
 assertEq(buildVerbForm(refaTable.rows[0].imperfect, true, null, null, 'e-a', refaTable.rows[0].stems, refaTable.blocksImala, 'I'), 'ma nerfax', "refa' 1s negative imperfect");
 
+// kiel ('-k-l)
+const kielTable = generateConjugation({
+    headword: 'kiel',
+    root: "'-k-l",
+    form: 'I',
+    strength: 'strong',
+    vowelSetPerfect: 'ie-e',
+    vowelSetImperfect: 'ie-o',
+    vowelSetImperative: 'u',
+});
+assertEq(kielTable.rows[0].perfect, 'kilt', 'kiel 1s perfect');
+assertEq(kielTable.rows[2].perfect, 'kiel', 'kiel 3ms perfect');
+assertEq(kielTable.rows[3].perfect, 'kielet', 'kiel 3fs perfect');
+assertEq(kielTable.rows[4].perfect, 'kilna', 'kiel 1p perfect');
+assertEq(kielTable.rows[6].perfect, 'kielu', 'kiel 3p perfect');
+assertEq(kielTable.rows[0].imperfect, 'niekol', 'kiel 1s imperfect');
+assertEq(kielTable.rows[2].imperfect, 'jiekol', 'kiel 3ms imperfect');
+assertEq(kielTable.rows[4].imperfect, 'nieklu', 'kiel 1p imperfect');
+assertEq(kielTable.rows[6].imperfect, 'jieklu', 'kiel 3p imperfect');
+assertEq(kielTable.imperative_sg, 'kul', 'kiel imperative sg');
+assertEq(kielTable.imperative_pl, 'kulu', 'kiel imperative pl');
+assertEq(buildPerfectForm(kielTable.rows[2].perfect, kielTable.rows[2].perfect_neg ?? kielTable.rows[2].perfect, true, null, null, 'ie-e', kielTable.rows[2].stems, kielTable.blocksImala, 'I'), 'ma kielx', 'kiel 3ms negative perfect');
+assertEq(buildPerfectForm(kielTable.rows[3].perfect, kielTable.rows[3].perfect_neg ?? kielTable.rows[3].perfect, true, null, null, 'ie-e', kielTable.rows[3].stems, kielTable.blocksImala, 'I'), 'ma kilitx', 'kiel 3fs negative perfect');
+assertEq(buildPerfectForm(kielTable.rows[2].perfect, kielTable.rows[2].perfect_neg ?? kielTable.rows[2].perfect, false, 2, null, 'ie-e', kielTable.rows[2].stems, kielTable.blocksImala, 'I'), 'kielu', 'kiel 3ms perfect + -u');
+assertEq(buildVerbForm(kielTable.rows[2].imperfect, false, 2, null, 'ie-o', kielTable.rows[2].stems, kielTable.blocksImala, 'I'), 'jieklu', 'kiel 3ms imperfect + -u');
+assertEq(buildVerbForm(kielTable.rows[2].imperfect, false, 3, null, 'ie-o', kielTable.rows[2].stems, kielTable.blocksImala, 'I'), 'jiekolha', 'kiel 3ms imperfect + -ha');
+const kielRootForms = generateRootForms("'-k-l", 'ie-e', 'ie-o', 'strong');
+assertEq(kielRootForms[0].perfect, 'kiel', "'-k-l root Form I perfect");
+assertEq(kielRootForms[0].imperfect, 'jiekol', "'-k-l root Form I imperfect");
+assertEq(kielRootForms[0].imperative, 'kul', "'-k-l root Form I imperative");
+
+// miet (m-w-t, i-ie hollow)
+const mietTable = generateConjugation({
+    headword: 'miet',
+    root: 'm-w-t',
+    form: 'I',
+    strength: 'weak',
+    weakClass: 'hollow',
+    vowelSetPerfect: 'i-ie',
+    vowelSetImperfect: 'u-u',
+    vowelSetImperative: 'u-u',
+});
+assertEq(mietTable.rows[0].perfect, 'mitt', 'miet 1s perfect');
+assertEq(mietTable.rows[2].perfect, 'miet', 'miet 3ms perfect');
+assertEq(mietTable.rows[3].perfect, 'mietet', 'miet 3fs perfect');
+assertEq(mietTable.rows[4].perfect, 'mitna', 'miet 1p perfect');
+assertEq(mietTable.rows[6].perfect, 'mietu', 'miet 3p perfect');
+assertEq(mietTable.rows[2].imperfect, 'jmut', 'miet 3ms imperfect');
+assertEq(mietTable.rows[6].imperfect, 'jmutu', 'miet 3p imperfect');
+assertEq(mietTable.imperative_sg, 'mut', 'miet imperative sg');
+assertEq(buildPerfectForm(mietTable.rows[3].perfect, mietTable.rows[3].perfect_neg ?? mietTable.rows[3].perfect, true, null, null, 'i-ie', mietTable.rows[3].stems, mietTable.blocksImala, 'I'), 'ma mititx', 'miet 3fs negative perfect');
+
+// biegħ (b-j-għ, e-ie hollow)
+const bieghTable = generateConjugation({
+    headword: 'biegħ',
+    root: 'b-j-għ',
+    form: 'I',
+    strength: 'weak',
+    weakClass: 'hollow',
+    vowelSetPerfect: 'e-ie',
+    vowelSetImperfect: 'i-i',
+    vowelSetImperative: 'i-i',
+});
+assertEq(bieghTable.rows[0].perfect, 'begħt', 'biegħ 1s perfect');
+assertEq(bieghTable.rows[2].perfect, 'biegħ', 'biegħ 3ms perfect');
+assertEq(bieghTable.rows[3].perfect, 'biegħet', 'biegħ 3fs perfect');
+assertEq(bieghTable.rows[4].perfect, 'begħna', 'biegħ 1p perfect');
+assertEq(bieghTable.rows[6].perfect, 'biegħu', 'biegħ 3p perfect');
+assertEq(bieghTable.rows[2].imperfect, 'jbiegħ'.replace('iegħ', 'igħ'), 'biegħ 3ms imperfect');
+assertEq(bieghTable.rows[6].imperfect, 'jbigħu', 'biegħ 3p imperfect');
+assertEq(bieghTable.imperative_sg, 'bigħ', 'biegħ imperative sg');
+assertEq(buildPerfectForm(bieghTable.rows[3].perfect, bieghTable.rows[3].perfect_neg ?? bieghTable.rows[3].perfect, true, null, null, 'e-ie', bieghTable.rows[3].stems, bieghTable.blocksImala, 'I'), 'ma begħitx', 'biegħ 3fs negative perfect');
+
+// għen & xtara
+const ghenTable = generateConjugation({
+    headword: 'għen',
+    root: 'għ-j-n',
+    form: 'I',
+    strength: 'weak',
+    weakClass: 'hollow',
+    vowelSetPerfect: 'e-e',
+    vowelSetImperfect: 'i-i',
+    vowelSetImperative: 'i-i',
+});
+assertEq(ghenTable.rows[0].perfect, 'għent', 'għen 1s perfect');
+assertEq(ghenTable.rows[6].imperfect, 'jgħinu', 'għen 3p imperfect');
+
+const xtaraTable = generateConjugation({
+    headword: 'xtara',
+    root: 'x-r-j',
+    form: 'VIII',
+    strength: 'weak',
+    weakClass: 'defective',
+    vowelSetPerfect: 'a-a',
+    vowelSetImperfect: 'i-i',
+    vowelSetImperative: 'i-i',
+});
+assertEq(xtaraTable.rows[0].perfect, 'xtrajt', 'xtara 1s perfect');
+assertEq(xtaraTable.rows[2].perfect, 'xtara', 'xtara 3ms perfect');
+assertEq(xtaraTable.rows[6].imperfect, 'jixtru', 'xtara 3p imperfect');
+
+// Zokk loan verbs: serva, osserva, issodisfa
+const servaZokk = generateZokkForms({ stem_string: 'serv', class_type: 'ir', is_hybrid: false });
+assertEq(servaZokk.conjugation?.rows[0].perfect, 'servejt', 'serva 1s perfect');
+assertEq(servaZokk.conjugation?.rows[2].perfect, 'serva', 'serva 3ms perfect');
+assertEq(servaZokk.conjugation?.rows[3].perfect, 'serviet', 'serva 3fs perfect');
+assertEq(servaZokk.conjugation?.rows[0].imperfect, 'nservi', 'serva 1s imperfect');
+assertEq(servaZokk.conjugation?.rows[2].imperfect, 'jservi', 'serva 3ms imperfect');
+assertEq(servaZokk.conjugation?.rows[6].imperfect, 'jservu', 'serva 3p imperfect');
+assertEq(servaZokk.conjugation?.imperative_sg, 'servi', 'serva imperative sg');
+assertEq(servaZokk.conjugation?.imperative_pl, 'servu', 'serva imperative pl');
+
+const osservaZokk = generateZokkForms({ stem_string: 'osserv', class_type: 'ar', is_hybrid: false });
+assertEq(osservaZokk.conjugation?.rows[2].perfect, 'osserva', 'osserva 3ms perfect');
+assertEq(osservaZokk.conjugation?.rows[6].imperfect, 'josservaw', 'osserva 3p imperfect');
+assertEq(buildPerfectForm(osservaZokk.conjugation!.rows[2].perfect, osservaZokk.conjugation!.rows[2].perfect, true, null, null, '', osservaZokk.conjugation!.rows[2].stems, osservaZokk.conjugation!.blocksImala || false), 'ma osservax', 'osserva 3ms negative perfect');
+
+const issodisfaZokk = generateZokkForms({ stem_string: 'issodisf', class_type: 'ar', is_hybrid: false });
+assertEq(issodisfaZokk.conjugation?.rows[2].perfect, 'issodisfa', 'issodisfa 3ms perfect');
+assertEq(issodisfaZokk.conjugation?.rows[6].imperfect, 'jissodisfaw', 'issodisfa 3p imperfect');
+
+// Form I strong with sonorant C2 and e/a theme vowels (tilef -> jitilfu)
+const tilefTable = generateConjugation({
+    headword: 'tilef',
+    root: 't-l-f',
+    form: 'I',
+    strength: 'strong',
+    vowelSetPerfect: 'i-e',
+    vowelSetImperfect: 'i-e',
+    vowelSetImperative: 'i-e',
+});
+assertEq(tilefTable.rows[2].perfect, 'tilef', 'tilef 3ms perfect');
+assertEq(tilefTable.rows[3].perfect, 'tilfet', 'tilef 3fs perfect');
+assertEq(tilefTable.rows[6].perfect, 'tilfu', 'tilef 3p perfect');
+assertEq(tilefTable.rows[2].imperfect, 'jitlef', 'tilef 3ms imperfect');
+assertEq(tilefTable.rows[6].imperfect, 'jitilfu', 'tilef 3p imperfect should raise epenthetic e to i before sonorant C2');
+assertEq(tilefTable.imperative_pl, 'itilfu', 'tilef imperative pl');
+
 console.log('quadriliteral root-form tests passed');
