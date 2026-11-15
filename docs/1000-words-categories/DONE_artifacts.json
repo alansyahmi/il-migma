@@ -1540,7 +1540,24 @@
           "form": "djar",
           "pattern": "12a3"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "dar",
+        "plural_forms": [
+          {
+            "form": "djar",
+            "pattern": "12a3"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a",
+        "vowel_set_pl": "a",
+        "form_plural_pattern": "12a3",
+        "morph_pattern": "C1aC3"
+      }
     },
     {
       "id": "n-dahar",
@@ -1613,7 +1630,24 @@
           "form": "dhor",
           "pattern": "12o3"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "dahar",
+        "plural_forms": [
+          {
+            "form": "dhor",
+            "pattern": "12o3"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-a",
+        "vowel_set_pl": "o",
+        "form_plural_pattern": "12o3",
+        "morph_pattern": "C1aC2aC3"
+      }
     },
     {
       "id": "n-linja",
@@ -1693,7 +1727,24 @@
           "form": "linji",
           "pattern": "-i"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "linja",
+        "plural_forms": [
+          {
+            "form": "linji",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "i-a",
+        "vowel_set_pl": "i-i",
+        "form_plural_pattern": "-i",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-razzett",
@@ -1766,7 +1817,24 @@
           "form": "rziezet",
           "pattern": "12ie3e4"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "razzett",
+        "plural_forms": [
+          {
+            "form": "rziezet",
+            "pattern": "12ie3e4"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-e",
+        "vowel_set_pl": "ie-e",
+        "form_plural_pattern": "12ie3e4",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-mil",
@@ -1846,7 +1914,24 @@
           "form": "mili",
           "pattern": "-i"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "mil",
+        "plural_forms": [
+          {
+            "form": "mili",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "i",
+        "vowel_set_pl": "i-i",
+        "form_plural_pattern": "-i",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-tifla",
@@ -1923,7 +2008,28 @@
           "form": "bniet",
           "pattern": "suppletive"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "tifla",
+        "plural_forms": [
+          {
+            "form": "tfal",
+            "pattern": "12a3"
+          },
+          {
+            "form": "bniet",
+            "pattern": "suppletive"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "i-a",
+        "vowel_set_pl": "a",
+        "form_plural_pattern": "12a3",
+        "morph_pattern": "C1iC2C3a"
+      }
     },
     {
       "id": "n-quċċata",
@@ -1996,7 +2102,24 @@
           "form": "quċċati",
           "pattern": "-i"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "quċċata",
+        "plural_forms": [
+          {
+            "form": "quċċati",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "u-a-a",
+        "vowel_set_pl": "u-a-i",
+        "form_plural_pattern": "-i",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-re",
@@ -2076,7 +2199,24 @@
           "form": "rejiet",
           "pattern": "-iet"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "re",
+        "plural_forms": [
+          {
+            "form": "rejiet",
+            "pattern": "-iet"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "e",
+        "vowel_set_pl": "e-ie",
+        "form_plural_pattern": "-iet",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-għaġeb",
@@ -2143,7 +2283,19 @@
       "audit_status": "verified",
       "audit_notes": "Resolved from English artifact n-wonder in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
       "theme": "English Artifacts (Resolved)",
-      "theme_id": "artifacts"
+      "theme_id": "artifacts",
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "għaġeb",
+        "plural_forms": [],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-e",
+        "vowel_set_pl": null,
+        "form_plural_pattern": null,
+        "morph_pattern": "C1aC2eC3"
+      }
     },
     {
       "id": "n-moħħ",
@@ -2216,7 +2368,24 @@
           "form": "mħuħ",
           "pattern": "12u3"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "moħħ",
+        "plural_forms": [
+          {
+            "form": "mħuħ",
+            "pattern": "12u3"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "o",
+        "vowel_set_pl": "u",
+        "form_plural_pattern": "12u3",
+        "morph_pattern": "C1oC2C2"
+      }
     },
     {
       "id": "n-bastun",
@@ -2289,7 +2458,24 @@
           "form": "bsaten",
           "pattern": "12a3e4"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "bastun",
+        "plural_forms": [
+          {
+            "form": "bsaten",
+            "pattern": "12a3e4"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-u",
+        "vowel_set_pl": "a-e",
+        "form_plural_pattern": "12a3e4",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-tarbija",
@@ -2362,7 +2548,24 @@
           "form": "trabi",
           "pattern": "12a3i"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "tarbija",
+        "plural_forms": [
+          {
+            "form": "trabi",
+            "pattern": "12a3i"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-i-a",
+        "vowel_set_pl": "a-i",
+        "form_plural_pattern": "12a3i",
+        "morph_pattern": "taC1C2iC3a"
+      }
     },
     {
       "id": "n-għolja",
@@ -2438,7 +2641,24 @@
           "form": "għoljiet",
           "pattern": "-iet"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "għolja",
+        "plural_forms": [
+          {
+            "form": "għoljiet",
+            "pattern": "-iet"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "o-a",
+        "vowel_set_pl": "o-ie",
+        "form_plural_pattern": "-iet",
+        "morph_pattern": "C1oC2C3a"
+      }
     },
     {
       "id": "n-saba'",
@@ -2511,7 +2731,24 @@
           "form": "swaba'",
           "pattern": "12a3a4"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "saba'",
+        "plural_forms": [
+          {
+            "form": "swaba'",
+            "pattern": "12a3a4"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-a",
+        "vowel_set_pl": "a-a",
+        "form_plural_pattern": "12a3a4",
+        "morph_pattern": "C1aC2aC3"
+      }
     },
     {
       "id": "n-ċurkett",
@@ -2584,7 +2821,24 @@
           "form": "ċrieket",
           "pattern": "12ie3e4"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "ċurkett",
+        "plural_forms": [
+          {
+            "form": "ċrieket",
+            "pattern": "12ie3e4"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "u-e",
+        "vowel_set_pl": "ie-e",
+        "form_plural_pattern": "12ie3e4",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-għaġla",
@@ -2653,7 +2907,19 @@
       "audit_status": "verified",
       "audit_notes": "Resolved from English artifact n-hurry in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
       "theme": "English Artifacts (Resolved)",
-      "theme_id": "artifacts"
+      "theme_id": "artifacts",
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "għaġla",
+        "plural_forms": [],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-a",
+        "vowel_set_pl": null,
+        "form_plural_pattern": null,
+        "morph_pattern": "C1aC2C3a"
+      }
     },
     {
       "id": "n-xkubetta",
@@ -2726,7 +2992,24 @@
           "form": "xkubetti",
           "pattern": "-i"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "xkubetta",
+        "plural_forms": [
+          {
+            "form": "xkubetti",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "u-e-a",
+        "vowel_set_pl": "u-e-i",
+        "form_plural_pattern": "-i",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-xatt",
@@ -2799,7 +3082,24 @@
           "form": "xtut",
           "pattern": "12u3"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "xatt",
+        "plural_forms": [
+          {
+            "form": "xtut",
+            "pattern": "12u3"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a",
+        "vowel_set_pl": "u",
+        "form_plural_pattern": "12u3",
+        "morph_pattern": "C1aC2C2"
+      }
     },
     {
       "id": "n-ilsir",
@@ -2873,7 +3173,24 @@
           "form": "ilsiera",
           "pattern": "12ie3a"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "ilsir",
+        "plural_forms": [
+          {
+            "form": "ilsiera",
+            "pattern": "12ie3a"
+          }
+        ],
+        "feminine_form": "ilsira",
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "i-i",
+        "vowel_set_pl": "i-ie-a",
+        "form_plural_pattern": "12ie3a",
+        "morph_pattern": "iC1C2iC3"
+      }
     },
     {
       "id": "n-istant",
@@ -2953,7 +3270,24 @@
           "form": "istanti",
           "pattern": "-i"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "istant",
+        "plural_forms": [
+          {
+            "form": "istanti",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "i-a",
+        "vowel_set_pl": "i-a-i",
+        "form_plural_pattern": "-i",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-zokk",
@@ -3026,7 +3360,24 @@
           "form": "zkuk",
           "pattern": "12u3"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "zokk",
+        "plural_forms": [
+          {
+            "form": "zkuk",
+            "pattern": "12u3"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "o",
+        "vowel_set_pl": "u",
+        "form_plural_pattern": "12u3",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-tina",
@@ -3103,7 +3454,28 @@
           "form": "tiniet",
           "pattern": "-iet"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "tina",
+        "plural_forms": [
+          {
+            "form": "tin",
+            "pattern": "collective"
+          },
+          {
+            "form": "tiniet",
+            "pattern": "-iet"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 1,
+        "vowel_set_sg": "i-a",
+        "vowel_set_pl": "i",
+        "form_plural_pattern": "collective",
+        "morph_pattern": "C1iC2a"
+      }
     },
     {
       "id": "n-oħt",
@@ -3176,7 +3548,24 @@
           "form": "aħwa",
           "pattern": "a12a"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "oħt",
+        "plural_forms": [
+          {
+            "form": "aħwa",
+            "pattern": "a12a"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "o",
+        "vowel_set_pl": "a-a",
+        "form_plural_pattern": "a12a",
+        "morph_pattern": "oC2C3"
+      }
     },
     {
       "id": "n-banda",
@@ -3253,7 +3642,28 @@
           "form": "bandi",
           "pattern": "-i"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "banda",
+        "plural_forms": [
+          {
+            "form": "baned",
+            "pattern": "1a2e3"
+          },
+          {
+            "form": "bandi",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-a",
+        "vowel_set_pl": "a-e",
+        "form_plural_pattern": "1a2e3",
+        "morph_pattern": null
+      }
     },
     {
       "id": "n-ħanut",
@@ -3326,7 +3736,24 @@
           "form": "ħwienet",
           "pattern": "12ie3e4"
         }
-      ]
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "ħanut",
+        "plural_forms": [
+          {
+            "form": "ħwienet",
+            "pattern": "12ie3e4"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-u",
+        "vowel_set_pl": "ie-e",
+        "form_plural_pattern": "12ie3e4",
+        "morph_pattern": "C1aC2uC3"
+      }
     },
     {
       "id": "adj-mgħaġġel",
@@ -3403,7 +3830,19 @@
           "form": "mgħaġġlin",
           "pattern": "-in"
         }
-      ]
+      ],
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "mgħaġġel",
+        "feminine_form": "mgħaġġla",
+        "plural": "mgħaġġlin",
+        "form_plural_pattern": "-in",
+        "elative_form": null,
+        "vowel_set_sg": "a-e",
+        "vowel_set_fem": "a-a",
+        "vowel_set_pl": "a-i",
+        "morph_pattern": "mC1aC2C2eC3"
+      }
     },
     {
       "id": "adj-artab",
@@ -3477,7 +3916,19 @@
           "form": "rotob",
           "pattern": "1o2o3"
         }
-      ]
+      ],
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "artab",
+        "feminine_form": "ratba",
+        "plural": "rotob",
+        "form_plural_pattern": "1o2o3",
+        "elative_form": "artab",
+        "vowel_set_sg": "a-a",
+        "vowel_set_fem": "a-a",
+        "vowel_set_pl": "o-o",
+        "morph_pattern": "aC1C2aC3"
+      }
     },
     {
       "id": "adj-imdawwal",
@@ -3551,7 +4002,19 @@
           "form": "imdawwlin",
           "pattern": "-in"
         }
-      ]
+      ],
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "imdawwal",
+        "feminine_form": "imdawwla",
+        "plural": "imdawwlin",
+        "form_plural_pattern": "-in",
+        "elative_form": null,
+        "vowel_set_sg": "a-a",
+        "vowel_set_fem": "a-a",
+        "vowel_set_pl": "a-i",
+        "morph_pattern": "imC1aC2C2aC3"
+      }
     },
     {
       "id": "adj-sabiħ",
@@ -3625,7 +4088,19 @@
           "form": "sbieħ",
           "pattern": "12ie3"
         }
-      ]
+      ],
+      "adjective_morphology": {
+        "gender": "masculine",
+        "masculine_form": "sabiħ",
+        "feminine_form": "sabiħa",
+        "plural": "sbieħ",
+        "form_plural_pattern": "12ie3",
+        "elative_form": "isbaħ",
+        "vowel_set_sg": "a-i",
+        "vowel_set_fem": "a-i-a",
+        "vowel_set_pl": "ie",
+        "morph_pattern": "C1aC2iC3"
+      }
     },
     {
       "id": "intj-jaħasra",

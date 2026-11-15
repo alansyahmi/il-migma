@@ -412,6 +412,125 @@ async function run() {
                     totalWriteQueries++;
                 }
 
+                // 5. Sync Verb Morphology (if pos is verb and verb_morphology exists)
+                if ((item.pos === 'verb' || e.pos === 'verb') && e.verb_morphology) {
+                    const vm = e.verb_morphology;
+                    await tx.execute({
+                        sql: `INSERT INTO verb_morphology (
+                            entry_id, form, strength, weak_class, transitivity,
+                            perfective_3sg_m, imperfective_3sg_m, imperative_sg,
+                            passive_participle, verbal_noun,
+                            vowel_set_perf, vowel_set_impf, vowel_set_impv, is_imala_blocked
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(entry_id) DO UPDATE SET
+                            form = excluded.form,
+                            strength = excluded.strength,
+                            weak_class = excluded.weak_class,
+                            transitivity = excluded.transitivity,
+                            perfective_3sg_m = excluded.perfective_3sg_m,
+                            imperfective_3sg_m = excluded.imperfective_3sg_m,
+                            imperative_sg = excluded.imperative_sg,
+                            passive_participle = excluded.passive_participle,
+                            verbal_noun = excluded.verbal_noun,
+                            vowel_set_perf = excluded.vowel_set_perf,
+                            vowel_set_impf = excluded.vowel_set_impf,
+                            vowel_set_impv = excluded.vowel_set_impv,
+                            is_imala_blocked = excluded.is_imala_blocked`,
+                        args: [
+                            entryId,
+                            vm.form || 'I',
+                            vm.strength || 'strong',
+                            vm.weak_class || null,
+                            vm.transitivity || null,
+                            vm.perfective_3sg_m || e.headword,
+                            vm.imperfective_3sg_m || null,
+                            vm.imperative_sg || null,
+                            vm.passive_participle || null,
+                            vm.verbal_noun || null,
+                            vm.vowel_set_perf || null,
+                            vm.vowel_set_impf || null,
+                            vm.vowel_set_impv || null,
+                            vm.is_imala_blocked ? 1 : (e.is_imala_blocked ? 1 : 0)
+                        ]
+                    });
+                    totalWriteQueries++;
+                }
+
+                // 6. Sync Noun Morphology (if pos is noun and noun_morphology exists)
+                if ((item.pos === 'noun' || e.pos === 'noun') && e.noun_morphology) {
+                    const nm = e.noun_morphology;
+                    const pluralFormsJson = nm.plural_forms ? (typeof nm.plural_forms === 'object' ? JSON.stringify(nm.plural_forms) : String(nm.plural_forms)) : null;
+                    await tx.execute({
+                        sql: `INSERT INTO noun_morphology (
+                            entry_id, gender, singular_form, plural_forms,
+                            feminine_form, masculine_form, is_singulative,
+                            vowel_set_sg, vowel_set_pl, form_plural_pattern, morph_pattern
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(entry_id) DO UPDATE SET
+                            gender = excluded.gender,
+                            singular_form = excluded.singular_form,
+                            plural_forms = excluded.plural_forms,
+                            feminine_form = excluded.feminine_form,
+                            masculine_form = excluded.masculine_form,
+                            is_singulative = excluded.is_singulative,
+                            vowel_set_sg = excluded.vowel_set_sg,
+                            vowel_set_pl = excluded.vowel_set_pl,
+                            form_plural_pattern = excluded.form_plural_pattern,
+                            morph_pattern = excluded.morph_pattern`,
+                        args: [
+                            entryId,
+                            nm.gender || gender,
+                            nm.singular_form || e.headword,
+                            pluralFormsJson,
+                            nm.feminine_form || null,
+                            nm.masculine_form || null,
+                            nm.is_singulative ? 1 : 0,
+                            nm.vowel_set_sg || null,
+                            nm.vowel_set_pl || null,
+                            nm.form_plural_pattern || null,
+                            nm.morph_pattern || null
+                        ]
+                    });
+                    totalWriteQueries++;
+                }
+
+                // 7. Sync Adjective Morphology (if pos is adjective and adjective_morphology exists)
+                if ((item.pos === 'adjective' || e.pos === 'adjective') && e.adjective_morphology) {
+                    const am = e.adjective_morphology;
+                    await tx.execute({
+                        sql: `INSERT INTO adj_morphology (
+                            entry_id, gender, masculine_form, feminine_form, plural,
+                            form_plural_pattern, elative_form,
+                            vowel_set_sg, vowel_set_fem, vowel_set_pl, morph_pattern
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(entry_id) DO UPDATE SET
+                            gender = excluded.gender,
+                            masculine_form = excluded.masculine_form,
+                            feminine_form = excluded.feminine_form,
+                            plural = excluded.plural,
+                            form_plural_pattern = excluded.form_plural_pattern,
+                            elative_form = excluded.elative_form,
+                            vowel_set_sg = excluded.vowel_set_sg,
+                            vowel_set_fem = excluded.vowel_set_fem,
+                            vowel_set_pl = excluded.vowel_set_pl,
+                            morph_pattern = excluded.morph_pattern`,
+                        args: [
+                            entryId,
+                            am.gender || gender,
+                            am.masculine_form || e.headword,
+                            am.feminine_form || null,
+                            am.plural || null,
+                            am.form_plural_pattern || null,
+                            am.elative_form || null,
+                            am.vowel_set_sg || null,
+                            am.vowel_set_fem || null,
+                            am.vowel_set_pl || null,
+                            am.morph_pattern || null
+                        ]
+                    });
+                    totalWriteQueries++;
+                }
+
                 appliedCount++;
                 if (isVerbose) {
                     console.log(`   ✓ [${item.action}] ${e.headword} (${item.pos}) synced.`);
