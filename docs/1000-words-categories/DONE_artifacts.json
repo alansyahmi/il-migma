@@ -106,7 +106,12 @@
         "imperfective_3sg_m": "jagħmel",
         "imperative_sg": "agħmel",
         "passive_participle": "magħmul",
-        "verbal_noun": "għamil"
+        "verbal_noun": "għamil",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "a-e",
+        "vowel_set_impf": "a-e",
+        "vowel_set_impv": "a-e"
       }
     },
     {
@@ -180,7 +185,12 @@
         "transitivity": "ambitransitive",
         "imperfective_3sg_m": "jilgħab",
         "imperative_sg": "ilgħab",
-        "verbal_noun": "logħob"
+        "verbal_noun": "logħob",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "i-a",
+        "vowel_set_impv": "i-a"
       }
     },
     {
@@ -256,7 +266,12 @@
         "transitivity": "intransitive",
         "imperfective_3sg_m": "jmur",
         "imperative_sg": "mur",
-        "verbal_noun": "morija"
+        "verbal_noun": "morija",
+        "strength": "weak",
+        "weak_class": "hollow",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "u-u",
+        "vowel_set_impv": "u-u"
       }
     },
     {
@@ -332,7 +347,12 @@
         "transitivity": "intransitive",
         "imperfective_3sg_m": "jiġi",
         "imperative_sg": "ejja",
-        "verbal_noun": "miġja"
+        "verbal_noun": "miġja",
+        "strength": "weak",
+        "weak_class": "defective",
+        "vowel_set_perf": "ie-e",
+        "vowel_set_impf": "i-i",
+        "vowel_set_impv": "e-a"
       }
     },
     {
@@ -406,7 +426,12 @@
         "transitivity": "transitive",
         "imperfective_3sg_m": "jħalli",
         "imperative_sg": "ħalli",
-        "passive_participle": "imħolli"
+        "passive_participle": "imħolli",
+        "strength": "weak",
+        "weak_class": "defective",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-i",
+        "vowel_set_impv": "a-i"
       }
     },
     {
@@ -481,7 +506,12 @@
         "imperfective_3sg_m": "jsuq",
         "imperative_sg": "suq",
         "passive_participle": "misjuq",
-        "verbal_noun": "sewqan"
+        "verbal_noun": "sewqan",
+        "strength": "weak",
+        "weak_class": "hollow",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "u-u",
+        "vowel_set_impv": "u-u"
       }
     },
     {
@@ -556,7 +586,12 @@
         "imperfective_3sg_m": "jagħżel",
         "imperative_sg": "agħżel",
         "passive_participle": "magħżul",
-        "verbal_noun": "għażla"
+        "verbal_noun": "għażla",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "a-e",
+        "vowel_set_impf": "a-e",
+        "vowel_set_impv": "a-e"
       }
     },
     {
@@ -630,7 +665,12 @@
         "transitivity": "ambitransitive",
         "imperfective_3sg_m": "jgħajjat",
         "imperative_sg": "għajjat",
-        "verbal_noun": "għajta"
+        "verbal_noun": "għajta",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
       }
     },
     {
@@ -705,7 +745,12 @@
         "imperfective_3sg_m": "jolqot",
         "imperative_sg": "olqot",
         "passive_participle": "milqut",
-        "verbal_noun": "laqta"
+        "verbal_noun": "laqta",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "o-o",
+        "vowel_set_impv": "o-o"
       }
     },
     {
@@ -780,7 +825,12 @@
         "imperfective_3sg_m": "jaħraq",
         "imperative_sg": "aħraq",
         "passive_participle": "maħruq",
-        "verbal_noun": "ħruq"
+        "verbal_noun": "ħruq",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
       }
     },
     {
@@ -855,7 +905,12 @@
         "imperfective_3sg_m": "jerfa'",
         "imperative_sg": "erfa'",
         "passive_participle": "merfugħ",
-        "verbal_noun": "rfigħ"
+        "verbal_noun": "rfigħ",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "e-a",
+        "vowel_set_impv": "e-a"
       }
     },
     {
@@ -930,7 +985,12 @@
         "imperfective_3sg_m": "jorbot",
         "imperative_sg": "orbot",
         "passive_participle": "marbut",
-        "verbal_noun": "rbit"
+        "verbal_noun": "rbit",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "o-o",
+        "vowel_set_impv": "o-o"
       }
     },
     {
@@ -1004,7 +1064,12 @@
         "transitivity": "intransitive",
         "imperfective_3sg_m": "jtir",
         "imperative_sg": "tir",
-        "verbal_noun": "titjir"
+        "verbal_noun": "titjir",
+        "strength": "weak",
+        "weak_class": "hollow",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "i-i",
+        "vowel_set_impv": "i-i"
       }
     },
     {
@@ -1078,7 +1143,12 @@
         "transitivity": "intransitive",
         "imperfective_3sg_m": "jibki",
         "imperative_sg": "ibki",
-        "verbal_noun": "biki"
+        "verbal_noun": "biki",
+        "strength": "weak",
+        "weak_class": "defective",
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "i-i",
+        "vowel_set_impv": "i-i"
       }
     },
     {
@@ -1152,7 +1222,12 @@
         "transitivity": "intransitive",
         "imperfective_3sg_m": "jiżloq",
         "imperative_sg": "iżloq",
-        "verbal_noun": "żliq"
+        "verbal_noun": "żliq",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "i-o",
+        "vowel_set_impv": "i-o"
       }
     },
     {
@@ -1227,7 +1302,12 @@
         "imperfective_3sg_m": "jirbaħ",
         "imperative_sg": "irbaħ",
         "passive_participle": "mirbuħ",
-        "verbal_noun": "rebħ"
+        "verbal_noun": "rebħ",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "i-a",
+        "vowel_set_impv": "i-a"
       }
     },
     {
@@ -1302,7 +1382,12 @@
         "imperfective_3sg_m": "jiġbed",
         "imperative_sg": "iġbed",
         "passive_participle": "miġbud",
-        "verbal_noun": "ġbid"
+        "verbal_noun": "ġbid",
+        "strength": "strong",
+        "weak_class": null,
+        "vowel_set_perf": "i-e",
+        "vowel_set_impf": "i-e",
+        "vowel_set_impv": "i-e"
       }
     },
     {
@@ -1376,7 +1461,12 @@
         "transitivity": "intransitive",
         "imperfective_3sg_m": "jileqq",
         "imperative_sg": "ileqq",
-        "verbal_noun": "leqqa"
+        "verbal_noun": "leqqa",
+        "strength": "geminated",
+        "weak_class": null,
+        "vowel_set_perf": "e-e",
+        "vowel_set_impf": "e-e",
+        "vowel_set_impv": "e-e"
       }
     },
     {
