@@ -58,6 +58,7 @@ const CATEGORY_FILES = [
     { id: 'conjunctions', path: 'docs/1000-words-categories/DONE_conjunctions.json' },
     { id: 'adverbs_particles', path: 'docs/1000-words-categories/DONE_adverbs_particles.json' },
     { id: 'numerals', path: 'docs/1000-words-categories/DONE_numerals.json' },
+    { id: 'artifacts', path: 'docs/1000-words-categories/DONE_artifacts.json' },
 ];
 
 const selectedFiles = categoryArg

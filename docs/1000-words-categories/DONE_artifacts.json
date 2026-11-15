@@ -1,0 +1,3608 @@
+{
+  "category_id": "artifacts",
+  "category_title": "English Artifacts (Resolved)",
+  "total_entries": 48,
+  "resolution_summary": {
+    "source_total": 69,
+    "resolved_new_entries": 48,
+    "already_in_done_categories": [
+      "p-i -> DONE_pronouns_determiners.json:pron-jien",
+      "p-us -> DONE_pronouns_determiners.json:pron-aħna",
+      "p-me -> DONE_pronouns_determiners.json:pron-jien + DONE_prepositions.json:prep-lil",
+      "v-am -> DONE_pronouns_determiners.json:pron-jien",
+      "n-out -> DONE_adverbs_particles.json:adv-barra",
+      "n-up -> DONE_prepositions.json:adv-fuq",
+      "n-double -> DONE_numerals.json:num-doppju",
+      "n-quart -> DONE_numerals.json:num-kwart"
+    ],
+    "already_in_other_categories": [
+      "v-tell -> verbs_communication_speech.json:v-qal",
+      "n-told -> verbs_communication_speech.json:v-qal",
+      "v-talk -> verbs_communication_speech.json:v-tkellem",
+      "a-big -> adj_dimensions_physical.json:adj-kbir",
+      "a-grand -> adj_dimensions_physical.json:adj-kbir",
+      "a-tall -> adj_dimensions_physical.json:adj-twil",
+      "a-sharp -> adj_sensory_colours.json:adj-qawwi",
+      "n-plain -> adj_quality_evaluation.json:adj-sempliċi",
+      "n-earth -> nouns_body_anatomy.json:n-art / nouns_nature_geography.json:n-dinja",
+      "n-watch -> nouns_objects_materials.json:n-arloġġ",
+      "n-trouble -> nouns_abstract_cognition.json:n-problema",
+      "n-dad -> nouns_people_society.json:n-missier"
+    ],
+    "non_applicable_artifacts": [
+      "a-a (English indefinite article; Maltese has no indefinite article)"
+    ]
+  },
+  "entries": [
+    {
+      "id": "v-għamel",
+      "headword": "għamel",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-m-l",
+      "stem": null,
+      "cv_pattern": "1a2e3",
+      "morph_pattern": "C1aC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَمِلَ",
+          "pronunciation": "għamila",
+          "definition": "to do, work, make"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to do, make, perform, put",
+          "text_mt": "Iwettaq azzjoni, xogħol jew ħidma; joħloq jew jipproduċi xi ħaġa; iqiegħed f’post.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "X’se tagħmel illum wara nofsinhar?",
+          "en": "What are you going to do this afternoon?"
+        },
+        {
+          "mt": "Ommu għamlet kejk tajjeb ħafna għall-festa.",
+          "en": "His mother made a very good cake for the feast."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐː.mɛl/",
+          "notes": null
+        }
+      ],
+      "rank": 65,
+      "source_frequency_rank": 65,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-do in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "transitive",
+        "imperfective_3sg_m": "jagħmel",
+        "imperative_sg": "agħmel",
+        "passive_participle": "magħmul",
+        "verbal_noun": "għamil"
+      }
+    },
+    {
+      "id": "v-lagħab",
+      "headword": "lagħab",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "l-għ-b",
+      "stem": null,
+      "cv_pattern": "1a2a3",
+      "morph_pattern": "C1aC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "لَعِبَ",
+          "pronunciation": "lagħiba",
+          "definition": "to play, sport"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to play, gamble, act",
+          "text_mt": "Jieħu sehem f’logħba jew f’attività ta’ divertiment; jilgħab strument mużikali jew rwol.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tfal jilagħbu fil-ġnien kull filgħaxija.",
+          "en": "The children play in the garden every evening."
+        },
+        {
+          "mt": "Il-banda lagħbet marċ sabiħ fil-pjazza.",
+          "en": "The band played a lovely march in the square."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɐːp/",
+          "notes": null
+        }
+      ],
+      "rank": 96,
+      "source_frequency_rank": 96,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-play in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "ambitransitive",
+        "imperfective_3sg_m": "jilgħab",
+        "imperative_sg": "ilgħab",
+        "verbal_noun": "logħob"
+      }
+    },
+    {
+      "id": "v-mar",
+      "headword": "mar",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "m-w-r",
+      "stem": null,
+      "cv_pattern": "1a3",
+      "morph_pattern": "C1aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَرَّ",
+          "pronunciation": "marra",
+          "definition": "to pass, go by"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to go, depart, proceed",
+          "text_mt": "Jimxi jew jivvjaġġa minn post għal ieħor; jitlaq lejn destinazzjoni.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għada mmur il-Belt Valletta kmieni filgħodu.",
+          "en": "Tomorrow I am going to Valletta early in the morning."
+        },
+        {
+          "mt": "Marru l-baħar għax kienet ġurnata sħuna.",
+          "en": "They went to the sea because it was a hot day."
+        }
+      ],
+      "related_entries": [
+        "v-ġie"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɐːr/",
+          "notes": null
+        }
+      ],
+      "rank": 205,
+      "source_frequency_rank": 205,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-go in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "intransitive",
+        "imperfective_3sg_m": "jmur",
+        "imperative_sg": "mur",
+        "verbal_noun": "morija"
+      }
+    },
+    {
+      "id": "v-ġie",
+      "headword": "ġie",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "ġ-j-'",
+      "stem": null,
+      "cv_pattern": "1ie",
+      "morph_pattern": "C1ie",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "جَاءَ",
+          "pronunciation": "ġâ'a",
+          "definition": "to come, arrive"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to come, arrive",
+          "text_mt": "Jersaq jew jasal minn post ieħor lejn il-post fejn jinsab min qed jitkellem.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Meta ġejt lura mid-dar tal-kuġin?",
+          "en": "When did you come back from your cousin’s house?"
+        },
+        {
+          "mt": "Ejja hawn ħalli nurik xi ħaġa sabiħa.",
+          "en": "Come here so I can show you something nice."
+        }
+      ],
+      "related_entries": [
+        "v-mar"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈd͡ʒɪː/",
+          "notes": null
+        }
+      ],
+      "rank": 206,
+      "source_frequency_rank": 206,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-come in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "intransitive",
+        "imperfective_3sg_m": "jiġi",
+        "imperative_sg": "ejja",
+        "verbal_noun": "miġja"
+      }
+    },
+    {
+      "id": "v-ħalla",
+      "headword": "ħalla",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "ħ-l-j",
+      "stem": null,
+      "cv_pattern": "1a22a",
+      "morph_pattern": "C1aC2C2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "خَلَّى",
+          "pronunciation": "khallâ",
+          "definition": "to leave, let, abandon"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to let, allow, leave behind",
+          "text_mt": "Jippermetti lil ħaddieħor jagħmel xi ħaġa; jitlaq u jħalli oġġett jew persuna warajh.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħalli l-ktieb fuq il-mejda tal-kċina.",
+          "en": "Leave the book on the kitchen table."
+        },
+        {
+          "mt": "Il-ġenituri ħallewh joħroġ mal-ħbieb tiegħu.",
+          "en": "His parents let him go out with his friends."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈħɐl.lɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 221,
+      "source_frequency_rank": 221,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-let in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "II",
+        "transitivity": "transitive",
+        "imperfective_3sg_m": "jħalli",
+        "imperative_sg": "ħalli",
+        "passive_participle": "imħolli"
+      }
+    },
+    {
+      "id": "v-saq",
+      "headword": "saq",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "s-w-q",
+      "stem": null,
+      "cv_pattern": "1a3",
+      "morph_pattern": "C1aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "سَاقَ",
+          "pronunciation": "sâqa",
+          "definition": "to drive, urge on"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to drive, steer a vehicle",
+          "text_mt": "Jikkontrolla u jmexxi vettura bħal karozza jew xarabank fit-triq.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Missieri jsuq bil-mod meta jkun hemm ix-xita.",
+          "en": "My father drives slowly when there is rain."
+        },
+        {
+          "mt": "Saq sa Għawdex f’nofs siegħa biss.",
+          "en": "He drove all the way to Gozo in just half an hour."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɐːʔ/",
+          "notes": null
+        }
+      ],
+      "rank": 472,
+      "source_frequency_rank": 472,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-drive in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "ambitransitive",
+        "imperfective_3sg_m": "jsuq",
+        "imperative_sg": "suq",
+        "passive_participle": "misjuq",
+        "verbal_noun": "sewqan"
+      }
+    },
+    {
+      "id": "v-għażel",
+      "headword": "għażel",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-ż-l",
+      "stem": null,
+      "cv_pattern": "1a2e3",
+      "morph_pattern": "C1aC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَزَلَ",
+          "pronunciation": "għazala",
+          "definition": "to set aside, separate, choose"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to choose, pick, select",
+          "text_mt": "Jiddetermina u jieħu ħaġa waħda minn fost diversi alternattivi skont il-gost jew il-ħtieġa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għażel l-isbaħ tuffieħa mis-suq.",
+          "en": "He picked the nicest apple from the market."
+        },
+        {
+          "mt": "Trid tagħżel liema triq se taqbad.",
+          "en": "You have to choose which road you will take."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐː.zɛl/",
+          "notes": null
+        }
+      ],
+      "rank": 499,
+      "source_frequency_rank": 499,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-pick in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "transitive",
+        "imperfective_3sg_m": "jagħżel",
+        "imperative_sg": "agħżel",
+        "passive_participle": "magħżul",
+        "verbal_noun": "għażla"
+      }
+    },
+    {
+      "id": "v-għajjat",
+      "headword": "għajjat",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-j-t",
+      "stem": null,
+      "cv_pattern": "1a22a3",
+      "morph_pattern": "C1aC2C2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَيَّطَ",
+          "pronunciation": "għayyaṭa",
+          "definition": "to shout, scream, cry out"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to shout, yell, call out",
+          "text_mt": "Jgħolli leħnu b’qawwa kbira biex jinstema’ mill-bogħod jew biex jesprimi rabja jew twissija.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għajjat ismu darbtejn imma ma semgħux.",
+          "en": "He shouted his name twice but he did not hear him."
+        },
+        {
+          "mt": "Tgħajjatx ġewwa l-librerija.",
+          "en": "Do not shout inside the library."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐj.jɐt/",
+          "notes": null
+        }
+      ],
+      "rank": 616,
+      "source_frequency_rank": 616,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-shout in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "II",
+        "transitivity": "ambitransitive",
+        "imperfective_3sg_m": "jgħajjat",
+        "imperative_sg": "għajjat",
+        "verbal_noun": "għajta"
+      }
+    },
+    {
+      "id": "v-laqat",
+      "headword": "laqat",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "l-q-t",
+      "stem": null,
+      "cv_pattern": "1a2a3",
+      "morph_pattern": "C1aC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "لَقَطَ",
+          "pronunciation": "laqaṭa",
+          "definition": "to catch, pick up, strike"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to hit, strike, affect",
+          "text_mt": "Jilħaq oġġett jew persuna b’daqqa; jolqot il-mira jew iħalli effett fuq xi ħadd.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ballun laqat it-tieqa tal-ġirien.",
+          "en": "The ball hit the neighbours’ window."
+        },
+        {
+          "mt": "Dak il-kliem laqtu ħafna f’qalbu.",
+          "en": "Those words affected him deeply in his heart."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɐ.ʔɐt/",
+          "notes": null
+        }
+      ],
+      "rank": 678,
+      "source_frequency_rank": 678,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-hit in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "transitive",
+        "imperfective_3sg_m": "jolqot",
+        "imperative_sg": "olqot",
+        "passive_participle": "milqut",
+        "verbal_noun": "laqta"
+      }
+    },
+    {
+      "id": "v-ħaraq",
+      "headword": "ħaraq",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "ħ-r-q",
+      "stem": null,
+      "cv_pattern": "1a2a3",
+      "morph_pattern": "C1aC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "حَرَقَ",
+          "pronunciation": "ħaraqa",
+          "definition": "to burn, scorch"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to burn, scorch, set on fire",
+          "text_mt": "Jikxef għan-nar jew għas-sħana qawwija sakemm jinqered jew jisħon iżżejjed.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ix-xemx qawwija ħarqet il-weraq tal-pjanti.",
+          "en": "The strong sun burned the leaves of the plants."
+        },
+        {
+          "mt": "Attent li ma taħraqx idek mal-forn.",
+          "en": "Be careful not to burn your hand on the oven."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈħɐ.rɐʔ/",
+          "notes": null
+        }
+      ],
+      "rank": 653,
+      "source_frequency_rank": 653,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-burn in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "transitive",
+        "imperfective_3sg_m": "jaħraq",
+        "imperative_sg": "aħraq",
+        "passive_participle": "maħruq",
+        "verbal_noun": "ħruq"
+      }
+    },
+    {
+      "id": "v-refa'",
+      "headword": "refa'",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "r-f-għ",
+      "stem": null,
+      "cv_pattern": "1e2a3",
+      "morph_pattern": "C1eC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رَفَعَ",
+          "pronunciation": "rafagħa",
+          "definition": "to lift, raise, elevate"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to lift, raise, pick up",
+          "text_mt": "Jgħolli oġġett ’il fuq minn livell baxx għal wieħed ogħla bl-idejn jew b’mezzi mekkaniċi.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għinni nerfa’ din il-kaxxa tqila.",
+          "en": "Help me lift this heavy box."
+        },
+        {
+          "mt": "Refa’ idu biex jistaqsi mistoqsija.",
+          "en": "He raised his hand to ask a question."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɛ.fɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 734,
+      "source_frequency_rank": 734,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-lift in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "transitive",
+        "imperfective_3sg_m": "jerfa'",
+        "imperative_sg": "erfa'",
+        "passive_participle": "merfugħ",
+        "verbal_noun": "rfigħ"
+      }
+    },
+    {
+      "id": "v-rabat",
+      "headword": "rabat",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "r-b-t",
+      "stem": null,
+      "cv_pattern": "1a2a3",
+      "morph_pattern": "C1aC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رَبَطَ",
+          "pronunciation": "rabaṭa",
+          "definition": "to tie, bind, fasten"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to tie, bind, fasten",
+          "text_mt": "Jgħaqqad jew jissikka żewġt itruf flimkien permezz ta’ ħabel, qafla jew għoqda.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Rabat il-lazzijiet taż-żarbun qabel ma ħareġ.",
+          "en": "He tied his shoelaces before going out."
+        },
+        {
+          "mt": "Orbot id-dgħajsa sew mal-moll.",
+          "en": "Tie the boat securely to the quay."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɐ.bɐt/",
+          "notes": null
+        }
+      ],
+      "rank": 720,
+      "source_frequency_rank": 720,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-tie in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "transitive",
+        "imperfective_3sg_m": "jorbot",
+        "imperative_sg": "orbot",
+        "passive_participle": "marbut",
+        "verbal_noun": "rbit"
+      }
+    },
+    {
+      "id": "v-tar",
+      "headword": "tar",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "t-j-r",
+      "stem": null,
+      "cv_pattern": "1a3",
+      "morph_pattern": "C1aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "طَارَ",
+          "pronunciation": "ṭâra",
+          "definition": "to fly"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to fly, soar",
+          "text_mt": "Jiċċaqlaq fl-arja permezz tal-ġwienaħ jew ta’ magna bħall-ajruplan.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-għasfur tar minn fuq is-siġra.",
+          "en": "The bird flew from the top of the tree."
+        },
+        {
+          "mt": "Iż-żmien jirġa’ jtir meta tkun ferħan.",
+          "en": "Time flies when you are happy."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtɐːr/",
+          "notes": null
+        }
+      ],
+      "rank": 454,
+      "source_frequency_rank": 454,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-fly in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "intransitive",
+        "imperfective_3sg_m": "jtir",
+        "imperative_sg": "tir",
+        "verbal_noun": "titjir"
+      }
+    },
+    {
+      "id": "v-beka",
+      "headword": "beka",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "b-k-j",
+      "stem": null,
+      "cv_pattern": "1e2a",
+      "morph_pattern": "C1eC2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "بَكَى",
+          "pronunciation": "bakâ",
+          "definition": "to weep, cry"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to cry, weep, shed tears",
+          "text_mt": "Ixerred id-dmugħ bħala espressjoni ta’ niket, uġigħ jew emozzjoni qawwija.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tarbija bdiet tibki għax kienet bil-ġuħ.",
+          "en": "The baby started to cry because she was hungry."
+        },
+        {
+          "mt": "Bekiet bil-ferħ meta rat lil oħtha.",
+          "en": "She cried with joy when she saw her sister."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɛ.kɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 461,
+      "source_frequency_rank": 461,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-cry in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "intransitive",
+        "imperfective_3sg_m": "jibki",
+        "imperative_sg": "ibki",
+        "verbal_noun": "biki"
+      }
+    },
+    {
+      "id": "v-żelaq",
+      "headword": "żelaq",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "ż-l-q",
+      "stem": null,
+      "cv_pattern": "1e2a3",
+      "morph_pattern": "C1eC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "زَلَقَ",
+          "pronunciation": "zalaqa",
+          "definition": "to slip, slide"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to slip, slide, skid",
+          "text_mt": "Jitlef il-bilanċ u jiżżerżaq fuq wiċċ lixx jew imxarrab bla ma jkun irid.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Żelaq fuq l-art imxarrba u waqa’.",
+          "en": "He slipped on the wet floor and fell."
+        },
+        {
+          "mt": "Oqgħod attent li ma tiżloqx fuq it-taraġ.",
+          "en": "Be careful not to slip on the stairs."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈzɛ.lɐʔ/",
+          "notes": null
+        }
+      ],
+      "rank": 896,
+      "source_frequency_rank": 896,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-slip in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "intransitive",
+        "imperfective_3sg_m": "jiżloq",
+        "imperative_sg": "iżloq",
+        "verbal_noun": "żliq"
+      }
+    },
+    {
+      "id": "v-rebaħ",
+      "headword": "rebaħ",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "r-b-ħ",
+      "stem": null,
+      "cv_pattern": "1e2a3",
+      "morph_pattern": "C1eC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رَبِحَ",
+          "pronunciation": "rabiħa",
+          "definition": "to win, gain, profit"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to win, triumph, gain",
+          "text_mt": "Jikseb ir-rebħa f’kompetizzjoni, logħba jew battalja; jaqla’ profitt jew premju.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tim tagħna rebaħ il-partita b’żewġ gowls.",
+          "en": "Our team won the match by two goals."
+        },
+        {
+          "mt": "Min jaħdem bil-qalb jirbaħ il-fiduċja ta’ kulħadd.",
+          "en": "Whoever works sincerely wins everyone’s trust."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɛ.bɐħ/",
+          "notes": null
+        }
+      ],
+      "rank": 907,
+      "source_frequency_rank": 907,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-win in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "ambitransitive",
+        "imperfective_3sg_m": "jirbaħ",
+        "imperative_sg": "irbaħ",
+        "passive_participle": "mirbuħ",
+        "verbal_noun": "rebħ"
+      }
+    },
+    {
+      "id": "v-ġibed",
+      "headword": "ġibed",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "ġ-b-d",
+      "stem": null,
+      "cv_pattern": "1i2e3",
+      "morph_pattern": "C1iC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "جَبَذَ",
+          "pronunciation": "ġabađa",
+          "definition": "to pull, draw, stretch"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to pull, draw, stretch",
+          "text_mt": "Jersaq oġġett lejh b’saħħa jew itawwal materjal elastiku; jiġbor l-attenzjoni.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ġibed il-bieb ħalli jidħol ġewwa.",
+          "en": "He pulled the door to come inside."
+        },
+        {
+          "mt": "Il-qattus ġibed ġismu fuq it-tapit.",
+          "en": "The cat stretched its body on the carpet."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈd͡ʒɪ.bɛt/",
+          "notes": null
+        }
+      ],
+      "rank": 970,
+      "source_frequency_rank": 970,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-stretch in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "transitive",
+        "imperfective_3sg_m": "jiġbed",
+        "imperative_sg": "iġbed",
+        "passive_participle": "miġbud",
+        "verbal_noun": "ġbid"
+      }
+    },
+    {
+      "id": "v-leqq",
+      "headword": "leqq",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "l-q-q",
+      "stem": null,
+      "cv_pattern": "1e22",
+      "morph_pattern": "C1eC2C2",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "لَقَّ",
+          "pronunciation": "laqqa",
+          "definition": "to shine, flash, gleam"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to shine, gleam, glitter",
+          "text_mt": "Jirrifletti d-dawl b’mod ċar u jiddi; jidher nadif u jleqq.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Id-deheb jileqq ħafna taħt id-dawl tax-xemx.",
+          "en": "Gold shines brightly under the sunlight."
+        },
+        {
+          "mt": "L-art kienet tleqq wara li ħasluha.",
+          "en": "The floor was shining after they washed it."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɛʔʔ/",
+          "notes": null
+        }
+      ],
+      "rank": 975,
+      "source_frequency_rank": 975,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact v-shine in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "verb_morphology": {
+        "form": "I",
+        "transitivity": "intransitive",
+        "imperfective_3sg_m": "jileqq",
+        "imperative_sg": "ileqq",
+        "verbal_noun": "leqqa"
+      }
+    },
+    {
+      "id": "n-dar",
+      "headword": "dar",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "d-w-r",
+      "stem": null,
+      "cv_pattern": "1a3",
+      "morph_pattern": "C1aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دَار",
+          "pronunciation": "dâr",
+          "definition": "house, dwelling, abode"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "house, home, dwelling",
+          "text_mt": "Bini mibni biex jgħixu fih il-persuni jew il-familji; post ta’ residenza.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Id-dar tagħna tinsab qrib il-knisja tar-raħal.",
+          "en": "Our house is located near the village church."
+        },
+        {
+          "mt": "Wara x-xogħol immur dritt id-dar.",
+          "en": "After work I go straight home."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐːr/",
+          "notes": null
+        }
+      ],
+      "rank": 111,
+      "source_frequency_rank": 111,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-house in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "djar",
+          "pattern": "12a3"
+        }
+      ]
+    },
+    {
+      "id": "n-dahar",
+      "headword": "dahar",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "d-h-r",
+      "stem": null,
+      "cv_pattern": "1a2a3",
+      "morph_pattern": "C1aC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ظَهْر",
+          "pronunciation": "ẓahr",
+          "definition": "back, rear"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "back (anatomy); rear part",
+          "text_mt": "Il-parti ta’ wara tal-ġisem tal-bniedem jew tal-annimal, mill-għonq sal-qadd.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ġuvni weġġa’ dahru waqt li kien qed jerfa’ l-piż.",
+          "en": "The young man hurt his back while lifting the weight."
+        },
+        {
+          "mt": "Il-ġnien jinsab fuq wara tad-dar.",
+          "en": "The garden is at the back of the house."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐːr/",
+          "notes": null
+        }
+      ],
+      "rank": 136,
+      "source_frequency_rank": 136,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-back in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "dhor",
+          "pattern": "12o3"
+        }
+      ]
+    },
+    {
+      "id": "n-linja",
+      "headword": "linja",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "linj",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "linea",
+          "pronunciation": "linea",
+          "definition": "line"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "līnea",
+          "pronunciation": "lînea",
+          "definition": "linen thread, line"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "line, row, route",
+          "text_mt": "Sinjal twil u rqiq imfassal fuq wiċċ; ringiela ta’ ħwejjeġ jew nies; rotta ta’ trasport.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Pinġi linja dritta b’riga fuq il-karta.",
+          "en": "Draw a straight line with a ruler on the paper."
+        },
+        {
+          "mt": "Il-karozza tal-linja tasal kull għoxrin minuta.",
+          "en": "The bus arrives every twenty minutes."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɪn.jɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 158,
+      "source_frequency_rank": 158,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-line in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "linji",
+          "pattern": "-i"
+        }
+      ]
+    },
+    {
+      "id": "n-razzett",
+      "headword": "razzett",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "razzett",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "rizzettu",
+          "pronunciation": "rizzettu",
+          "definition": "shelter, rural dwelling"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "farm, farmhouse",
+          "text_mt": "Bini rurali b’raba’ madwaru fejn jitkabbru l-uċuħ tar-raba’ u jitrabbew l-annimali.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "In-nannu għandu razzett żgħir fil-kampanja.",
+          "en": "Grandfather has a small farm in the countryside."
+        },
+        {
+          "mt": "Fir-razzett trabbew ħafna tiġieġ u nagħaġ.",
+          "en": "Many chickens and sheep were raised on the farm."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/rɐtˈtsɛt/",
+          "notes": null
+        }
+      ],
+      "rank": 277,
+      "source_frequency_rank": 277,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-farm in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "rziezet",
+          "pattern": "12ie3e4"
+        }
+      ]
+    },
+    {
+      "id": "n-mil",
+      "headword": "mil",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "mil",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "miglio",
+          "pronunciation": "miglio",
+          "definition": "mile"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "mīlia",
+          "pronunciation": "mîlia",
+          "definition": "thousand (paces)"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "mile (unit of distance)",
+          "text_mt": "Unità tradizzjonali ta’ kejl tad-distanza li tikkorrispondi għal elf u sitt mija u disgħa metri.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-port jinsab madwar żewġ mili ’l bogħod minn hawn.",
+          "en": "The port is about two miles away from here."
+        },
+        {
+          "mt": "Mexa ħames mili tul il-kosta.",
+          "en": "He walked five miles along the coast."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɪːl/",
+          "notes": null
+        }
+      ],
+      "rank": 344,
+      "source_frequency_rank": 344,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-mile in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "mili",
+          "pattern": "-i"
+        }
+      ]
+    },
+    {
+      "id": "n-tifla",
+      "headword": "tifla",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "t-f-l",
+      "stem": null,
+      "cv_pattern": "1i23a",
+      "morph_pattern": "C1iC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "طِفْلَة",
+          "pronunciation": "ṭiflaẗ",
+          "definition": "female child, young girl"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "girl, daughter",
+          "text_mt": "Persuna żgħira ta’ sess femminili; bint il-ġenituri.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tifla ż-żgħira marret l-iskola ma’ oħtha.",
+          "en": "The little girl went to school with her sister."
+        },
+        {
+          "mt": "Għandhom żewġ subien u tifla waħda.",
+          "en": "They have two boys and one girl."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtɪf.lɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 363,
+      "source_frequency_rank": 363,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-girl in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "tfal",
+          "pattern": "12a3"
+        },
+        {
+          "form": "bniet",
+          "pattern": "suppletive"
+        }
+      ]
+    },
+    {
+      "id": "n-quċċata",
+      "headword": "quċċata",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "quċċat",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "cucchiata",
+          "pronunciation": "cucchiata",
+          "definition": "summit, crest, crown"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "top, summit, peak",
+          "text_mt": "L-ogħla punt jew tarf ta’ muntanja, għolja, bini jew siġra.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Telgħu sal-quċċata tal-għolja biex jaraw ix-xemx tinżel.",
+          "en": "They climbed to the top of the hill to watch the sun set."
+        },
+        {
+          "mt": "Kien hemm bandiera fuq il-quċċata tat-torri.",
+          "en": "There was a flag on the top of the tower."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ʔʊtˈtʃɐː.tɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 423,
+      "source_frequency_rank": 423,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-top in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "quċċati",
+          "pattern": "-i"
+        }
+      ]
+    },
+    {
+      "id": "n-re",
+      "headword": "re",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "re",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "re",
+          "pronunciation": "re",
+          "definition": "king"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "rēx",
+          "pronunciation": "rêx",
+          "definition": "king, monarch"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "king, monarch",
+          "text_mt": "Mexxej suprem ta’ renju jew stat monarkiku li jiret il-kuruna.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ir-re kien jgħix f’palazz kbir fil-kapitali.",
+          "en": "The king lived in a grand palace in the capital."
+        },
+        {
+          "mt": "Fl-istorja antika ħafna pajjiżi kellhom ir-rejiet tagħhom.",
+          "en": "In ancient history many countries had their own kings."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɛː/",
+          "notes": null
+        }
+      ],
+      "rank": 429,
+      "source_frequency_rank": 429,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-king in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "rejiet",
+          "pattern": "-iet"
+        }
+      ]
+    },
+    {
+      "id": "n-għaġeb",
+      "headword": "għaġeb",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "għ-ġ-b",
+      "stem": null,
+      "cv_pattern": "1a2e3",
+      "morph_pattern": "C1aC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَجَب",
+          "pronunciation": "għaġab",
+          "definition": "wonder, marvel, astonishment"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "wonder, marvel, astonishment",
+          "text_mt": "Sentiment ta’ sorpriża kbira u ammirazzjoni quddiem ħaġa straordinarja jew mhux mistennija.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Baqa’ b’ħalqu miftuħ bl-għaġeb meta ra l-kastell.",
+          "en": "He stood open-mouthed in wonder when he saw the castle."
+        },
+        {
+          "mt": "Mhuwiex ta’ b’xejn li kulħadd jiskanta b’dak l-għaġeb.",
+          "en": "It is no surprise that everyone marvels at that wonder."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐː.d͡ʒɛp/",
+          "notes": null
+        }
+      ],
+      "rank": 438,
+      "source_frequency_rank": 438,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-wonder in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts"
+    },
+    {
+      "id": "n-moħħ",
+      "headword": "moħħ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "m-ħ-ħ",
+      "stem": null,
+      "cv_pattern": "1o22",
+      "morph_pattern": "C1oC2C2",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُخّ",
+          "pronunciation": "mukhkh",
+          "definition": "brain, marrow, mind"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "mind, brain, intellect",
+          "text_mt": "L-organu prinċipali tas-sistema nervuża fir-ras; is-sede tal-ħsieb, tal-memorja u tal-intelliġenza.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għandu moħħ ħafif ħafna għall-matematika.",
+          "en": "He has a very sharp mind for mathematics."
+        },
+        {
+          "mt": "Żomm f’moħħok li l-laqgħa tibda fid-disgħa.",
+          "en": "Keep in mind that the meeting starts at nine."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɔħħ/",
+          "notes": null
+        }
+      ],
+      "rank": 493,
+      "source_frequency_rank": 493,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-mind in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "mħuħ",
+          "pattern": "12u3"
+        }
+      ]
+    },
+    {
+      "id": "n-bastun",
+      "headword": "bastun",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "bastun",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "bastuni",
+          "pronunciation": "bastuni",
+          "definition": "stick, cane, staff"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "stick, walking cane, staff",
+          "text_mt": "Biċċa injam twila u rqiqa użata bħala appoġġ fil-mixi jew bħala għodda.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ix-xiħ jimxi bil-bastun fit-triq.",
+          "en": "The old man walks with a cane in the street."
+        },
+        {
+          "mt": "Qabad bastun tal-injam biex jilħaq il-frotta.",
+          "en": "He took a wooden stick to reach the fruit."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/bɐsˈtuːn/",
+          "notes": null
+        }
+      ],
+      "rank": 632,
+      "source_frequency_rank": 632,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-stick in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "bsaten",
+          "pattern": "12a3e4"
+        }
+      ]
+    },
+    {
+      "id": "n-tarbija",
+      "headword": "tarbija",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "r-b-j",
+      "stem": null,
+      "cv_pattern": "ta12i3a",
+      "morph_pattern": "taC1C2iC3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَرْبِيَة",
+          "pronunciation": "tarbiyaẗ",
+          "definition": "upbringing, child, infant"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "baby, infant",
+          "text_mt": "Tifel jew tifla żgħira ħafna fl-ewwel xhur jew snin tal-ħajja.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tarbija rieqda fil-benniena.",
+          "en": "The baby is sleeping in the cradle."
+        },
+        {
+          "mt": "Meta twieldet it-tarbija, il-familja kollha ferħet.",
+          "en": "When the baby was born, the whole family rejoiced."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tɐrˈbiː.jɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 650,
+      "source_frequency_rank": 650,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-baby in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "trabi",
+          "pattern": "12a3i"
+        }
+      ]
+    },
+    {
+      "id": "n-għolja",
+      "headword": "għolja",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "għ-l-j",
+      "stem": null,
+      "cv_pattern": "1o23a",
+      "morph_pattern": "C1oC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عُلْيَا",
+          "pronunciation": "għulyâ",
+          "definition": "height, high place, hill"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "hill, rise, elevation",
+          "text_mt": "Elevazzjoni naturali tal-art li hija iżgħar minn muntanja.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ir-raħal mibni fuq għolja għolja ħdejn il-wied.",
+          "en": "The village is built on a high hill near the valley."
+        },
+        {
+          "mt": "Telgħu l-għolja bil-mixi f’għoxrin minuta.",
+          "en": "They walked up the hill in twenty minutes."
+        }
+      ],
+      "related_entries": [
+        "adj-għolja",
+        "n-quċċata"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɔːl.jɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 655,
+      "source_frequency_rank": 655,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-hill in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "għoljiet",
+          "pattern": "-iet"
+        }
+      ]
+    },
+    {
+      "id": "n-saba'",
+      "headword": "saba'",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "s-b-għ",
+      "stem": null,
+      "cv_pattern": "1a2a3",
+      "morph_pattern": "C1aC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "إِصْبَع",
+          "pronunciation": "iṣbagħ",
+          "definition": "finger, toe"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "finger, toe",
+          "text_mt": "Waħda mill-ħames partijiet twal u mobbli li bihom tispiċċa l-id jew is-sieq.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Qata’ subgħu waqt li kien qed iqatta’ l-ħobż.",
+          "en": "He cut his finger while slicing the bread."
+        },
+        {
+          "mt": "Il-bniedem għandu għaxar swaba’ f’idejh.",
+          "en": "A human being has ten fingers on their hands."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɐ.bɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 667,
+      "source_frequency_rank": 667,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-finger in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "swaba'",
+          "pattern": "12a3a4"
+        }
+      ]
+    },
+    {
+      "id": "n-ċurkett",
+      "headword": "ċurkett",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "ċurkett",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "circu",
+          "pronunciation": "circu",
+          "definition": "circle, ring"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "ring (worn on finger); circle",
+          "text_mt": "Faxxa żgħira tonda ta’ metall prezzjuż li tintlibes fuq is-saba’ bħala ġojjell jew simbolu.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Żewġha taha ċurkett tad-deheb għall-anniversarju.",
+          "en": "Her husband gave her a gold ring for their anniversary."
+        },
+        {
+          "mt": "It-tfal għamlu ċurkett kbir fil-bitħa.",
+          "en": "The children formed a big circle in the yard."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/t͡ʃʊrˈkɛt/",
+          "notes": null
+        }
+      ],
+      "rank": 682,
+      "source_frequency_rank": 682,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-ring in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "ċrieket",
+          "pattern": "12ie3e4"
+        }
+      ]
+    },
+    {
+      "id": "n-għaġla",
+      "headword": "għaġla",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "għ-ġ-l",
+      "stem": null,
+      "cv_pattern": "1a23a",
+      "morph_pattern": "C1aC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَجَلَة",
+          "pronunciation": "għaġalaẗ",
+          "definition": "haste, hurry, speed"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "hurry, haste, rush",
+          "text_mt": "Ħtieġa jew moviment mgħaġġel biex wieħed jasal jew ilesti xi ħaġa fi żmien qasir.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ħidma bl-għaġla spiss ġġib magħha żbalji.",
+          "en": "Working in a hurry often brings mistakes."
+        },
+        {
+          "mt": "Ma hemmx għalfejn għaġla, għandna ħin biżżejjed.",
+          "en": "There is no need to rush, we have enough time."
+        }
+      ],
+      "related_entries": [
+        "adj-mgħaġġel"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐːd͡ʒ.lɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 713,
+      "source_frequency_rank": 713,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-hurry in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts"
+    },
+    {
+      "id": "n-xkubetta",
+      "headword": "xkubetta",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "xkubett",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "scupetta",
+          "pronunciation": "scupetta",
+          "definition": "shotgun, musket"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "gun, shotgun, rifle",
+          "text_mt": "Arma tan-nar b’kanna twila użata għall-kaċċa jew għall-isparar.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kaċċatur naddaf l-xkubetta tiegħu qabel l-istaġun.",
+          "en": "The hunter cleaned his shotgun before the season."
+        },
+        {
+          "mt": "Instema’ ħoss ta’ xkubetta mill-bogħod.",
+          "en": "The sound of a gun was heard from afar."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ʃkʊˈbɛt.tɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 730,
+      "source_frequency_rank": 730,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-gun in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "xkubetti",
+          "pattern": "-i"
+        }
+      ]
+    },
+    {
+      "id": "n-xatt",
+      "headword": "xatt",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "x-t-t",
+      "stem": null,
+      "cv_pattern": "1a22",
+      "morph_pattern": "C1aC2C2",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "شَطّ",
+          "pronunciation": "shaṭṭ",
+          "definition": "shore, bank, coast"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "shore, coast, beach, waterfront",
+          "text_mt": "Ix-xifer tal-art fejn tiltaqa’ mal-baħar jew ma’ xmara.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Imxejna tul ix-xatt ta’ Tas-Sliema filgħaxija.",
+          "en": "We walked along the Sliema waterfront in the evening."
+        },
+        {
+          "mt": "Il-mewġ kien qed iħabbat ma’ xatt il-baħar.",
+          "en": "The waves were beating against the seashore."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʃɐtt/",
+          "notes": null
+        }
+      ],
+      "rank": 739,
+      "source_frequency_rank": 739,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-shore in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "xtut",
+          "pattern": "12u3"
+        }
+      ]
+    },
+    {
+      "id": "n-ilsir",
+      "headword": "ilsir",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "'-s-r",
+      "stem": null,
+      "cv_pattern": "i12i3",
+      "morph_pattern": "iC1C2iC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَسِير",
+          "pronunciation": "asîr",
+          "definition": "captive, prisoner, slave"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "slave, captive",
+          "text_mt": "Persuna li tkun proprjetà legali ta’ ħaddieħor u mċaħħda mil-libertà tagħha.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fl-imgħoddi ħafna nies kienu jinbiegħu bħala ilsiera.",
+          "en": "In the past many people were sold as slaves."
+        },
+        {
+          "mt": "L-ilsir ħeles lilu nnifsu wara ħafna snin.",
+          "en": "The slave freed himself after many years."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɪlˈsiːr/",
+          "notes": null
+        }
+      ],
+      "rank": 777,
+      "source_frequency_rank": 777,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-slave in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "feminine_form": "ilsira",
+      "plural_forms": [
+        {
+          "form": "ilsiera",
+          "pattern": "12ie3a"
+        }
+      ]
+    },
+    {
+      "id": "n-istant",
+      "headword": "istant",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "istant",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "istante",
+          "pronunciation": "istante",
+          "definition": "instant, moment"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "īnstāns",
+          "pronunciation": "înstâns",
+          "definition": "present, pressing"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "instant, moment, second",
+          "text_mt": "Tul ta’ żmien qasir ħafna, bħal teptipa t’għajn.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Stenna istant wieħed sakemm niġbor il-baskett.",
+          "en": "Wait one instant while I pick up the bag."
+        },
+        {
+          "mt": "F’dak l-istant stess daqqet il-qanpiena.",
+          "en": "At that very instant the bell rang."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɪsˈtɐnt/",
+          "notes": null
+        }
+      ],
+      "rank": 787,
+      "source_frequency_rank": 787,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-instant in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "istanti",
+          "pattern": "-i"
+        }
+      ]
+    },
+    {
+      "id": "n-zokk",
+      "headword": "zokk",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "zokk",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Sicilian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "zuccu",
+          "pronunciation": "zuccu",
+          "definition": "tree trunk, stump, block"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "tree trunk, log, stem",
+          "text_mt": "Il-parti ewlenija u ħoxna ta’ siġra jew biċċa injam maqtugħa; bażi ta’ kelma.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Poġġew bilqiegħda fuq zokk kbir ta’ siġra.",
+          "en": "They sat down on a large tree trunk."
+        },
+        {
+          "mt": "Il-mastrudaxxa qasam iz-zokk f’żewġ biċċiet.",
+          "en": "The carpenter split the log into two pieces."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈt͡sɔkk/",
+          "notes": null
+        }
+      ],
+      "rank": 793,
+      "source_frequency_rank": 793,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-log in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "zkuk",
+          "pattern": "12u3"
+        }
+      ]
+    },
+    {
+      "id": "n-tina",
+      "headword": "tina",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "t-j-n",
+      "stem": null,
+      "cv_pattern": "1i2a",
+      "morph_pattern": "C1iC2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تِينَة",
+          "pronunciation": "tînaẗ",
+          "definition": "a fig (singulative)"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "fig (fruit)",
+          "text_mt": "Frott ħelu u artab ta’ siġra Mediterranja, b’ġilda ħadra jew vjola u b’ħafna żerriegħa żgħira ġewwa.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kiel tina friska mis-siġra tal-ġnien.",
+          "en": "He ate a fresh fig from the garden tree."
+        },
+        {
+          "mt": "Is-siġra tat-tin tagħti ħafna frott fis-sajf.",
+          "en": "The fig tree yields a lot of fruit in summer."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtiː.nɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 830,
+      "source_frequency_rank": 830,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-fig in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "tin",
+          "pattern": "collective"
+        },
+        {
+          "form": "tiniet",
+          "pattern": "-iet"
+        }
+      ]
+    },
+    {
+      "id": "n-oħt",
+      "headword": "oħt",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "'-ħ-w",
+      "stem": null,
+      "cv_pattern": "o23",
+      "morph_pattern": "oC2C3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أُخْت",
+          "pronunciation": "ukht",
+          "definition": "sister"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "sister",
+          "text_mt": "Tifla jew mara li għandha l-istess ġenituri bħal persuna oħra.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Oħti l-kbira tgħallem fl-iskola primarja.",
+          "en": "My older sister teaches in a primary school."
+        },
+        {
+          "mt": "Huma żewġ aħwa li jgħinu ħafna lil xulxin.",
+          "en": "They are two sisters who help each other a lot."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɔħt/",
+          "notes": null
+        }
+      ],
+      "rank": 850,
+      "source_frequency_rank": 850,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-sister in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "aħwa",
+          "pattern": "a12a"
+        }
+      ]
+    },
+    {
+      "id": "n-banda",
+      "headword": "banda",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "band",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "banda",
+          "pronunciation": "banda",
+          "definition": "musical band, side, strip"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "musical band; side",
+          "text_mt": "Grupp ta’ mużiċisti li jdoqqu strumenti tan-nifs u tal-perkussjoni flimkien; naħa jew ġenb.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-banda tar-raħal daqqet matul il-purċissjoni.",
+          "en": "The village band played during the procession."
+        },
+        {
+          "mt": "Qiegħed il-ktieb fuq il-banda l-oħra tal-mejda.",
+          "en": "Put the book on the other side of the table."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɐn.dɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 866,
+      "source_frequency_rank": 866,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-band in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "baned",
+          "pattern": "1a2e3"
+        },
+        {
+          "form": "bandi",
+          "pattern": "-i"
+        }
+      ]
+    },
+    {
+      "id": "n-ħanut",
+      "headword": "ħanut",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "ħ-n-t",
+      "stem": null,
+      "cv_pattern": "1a2u3",
+      "morph_pattern": "C1aC2uC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "حَانُوت",
+          "pronunciation": "ħânût",
+          "definition": "shop, tavern, booth"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "shop, store",
+          "text_mt": "Post kummerċjali fejn jinbiegħu oġġetti jew merkanzija lill-pubbliku.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ħanut tal-ħobż jiftaħ fis-sitta ta’ filgħodu.",
+          "en": "The bread shop opens at six in the morning."
+        },
+        {
+          "mt": "Xtrat il-ħaxix frisk minn ħanut żgħir fil-qrib.",
+          "en": "She bought fresh vegetables from a small nearby shop."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ħɐˈnuːt/",
+          "notes": null
+        }
+      ],
+      "rank": 963,
+      "source_frequency_rank": 963,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-shop in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "plural_forms": [
+        {
+          "form": "ħwienet",
+          "pattern": "12ie3e4"
+        }
+      ]
+    },
+    {
+      "id": "adj-mgħaġġel",
+      "headword": "mgħaġġel",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "għ-ġ-l",
+      "stem": null,
+      "cv_pattern": "m1a22e3",
+      "morph_pattern": "mC1aC2C2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُعَجَّل",
+          "pronunciation": "mugħaġġal",
+          "definition": "hastened, quick, fast"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "fast, quick, hasty, hurried",
+          "text_mt": "Li jimxi jew iseħħ b’rata għolja ta’ veloċità jew fi żmien qasir ħafna.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Dan huwa ferrovija mgħaġġla ħafna.",
+          "en": "This is a very fast train."
+        },
+        {
+          "mt": "Ħa deċiżjoni mgħaġġla mingħajr ma ħaseb sew.",
+          "en": "He made a hasty decision without thinking carefully."
+        }
+      ],
+      "related_entries": [
+        "n-għaġla",
+        "adv-malajr"
+      ],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɐd͡ʒ.d͡ʒɛl/",
+          "notes": null
+        }
+      ],
+      "rank": 495,
+      "source_frequency_rank": 495,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-fast in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "feminine_form": "mgħaġġla",
+      "plural_forms": [
+        {
+          "form": "mgħaġġlin",
+          "pattern": "-in"
+        }
+      ]
+    },
+    {
+      "id": "adj-artab",
+      "headword": "artab",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "r-t-b",
+      "stem": null,
+      "cv_pattern": "a12a3",
+      "morph_pattern": "aC1C2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رَطْب",
+          "pronunciation": "raṭb",
+          "definition": "soft, tender, moist"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "soft, tender, gentle",
+          "text_mt": "Li jċedi faċilment meta jintmess jew jingħafas; mhux iebes jew aħrax.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Dan l-imħadda hija ratba u komda ħafna.",
+          "en": "This pillow is very soft and comfortable."
+        },
+        {
+          "mt": "Il-ħobż frisk ikun artab minn ġewwa.",
+          "en": "Fresh bread is soft on the inside."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐr.tɐp/",
+          "notes": null
+        }
+      ],
+      "rank": 583,
+      "source_frequency_rank": 583,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact a-soft in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "feminine_form": "ratba",
+      "plural_forms": [
+        {
+          "form": "rotob",
+          "pattern": "1o2o3"
+        }
+      ]
+    },
+    {
+      "id": "adj-imdawwal",
+      "headword": "imdawwal",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "d-w-l",
+      "stem": null,
+      "cv_pattern": "im1a22a3",
+      "morph_pattern": "imC1aC2C2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ضَوْء",
+          "pronunciation": "ḍaw'",
+          "definition": "light, brightness"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "bright, lit, illuminated",
+          "text_mt": "Li għandu ħafna dawl u jidher ċar; mimli dija jew luminożità.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kamra kienet imdawwla sew bix-xemx ta’ filgħodu.",
+          "en": "The room was brightly lit by the morning sun."
+        },
+        {
+          "mt": "Fit-toroq imdawwlin il-mixi bil-lejl ikun aktar sigur.",
+          "en": "In well-lit streets walking at night is safer."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɪmˈdɐw.wɐl/",
+          "notes": null
+        }
+      ],
+      "rank": 590,
+      "source_frequency_rank": 590,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact a-bright in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "feminine_form": "imdawwla",
+      "plural_forms": [
+        {
+          "form": "imdawwlin",
+          "pattern": "-in"
+        }
+      ]
+    },
+    {
+      "id": "adj-sabiħ",
+      "headword": "sabiħ",
+      "pos": "adjective",
+      "gender": "masculine",
+      "root_consonants": "s-b-ħ",
+      "stem": null,
+      "cv_pattern": "1a2i3",
+      "morph_pattern": "C1aC2iC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "صَبِيح",
+          "pronunciation": "ṣabîħ",
+          "definition": "handsome, comely, bright"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "pretty, beautiful, handsome, pleasant",
+          "text_mt": "Li jqanqal pjaċir u ammirazzjoni fl-għajn jew fil-widna; attraenti u grazzjuż.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "X’ġurnata sabiħa llum biex toħroġ timxi!",
+          "en": "What a beautiful day today to go out for a walk!"
+        },
+        {
+          "mt": "Ix-xemx nieżla fuq il-baħar hija xena sabiħa ħafna.",
+          "en": "The sun setting over the sea is a very pretty sight."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/sɐˈbiːħ/",
+          "notes": null
+        }
+      ],
+      "rank": 817,
+      "source_frequency_rank": 817,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact a-pretty in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts",
+      "feminine_form": "sabiħa",
+      "plural_forms": [
+        {
+          "form": "sbieħ",
+          "pattern": "12ie3"
+        }
+      ]
+    },
+    {
+      "id": "intj-jaħasra",
+      "headword": "jaħasra",
+      "pos": "interjection",
+      "gender": null,
+      "root_consonants": "ħ-s-r",
+      "stem": null,
+      "cv_pattern": "ja1a23a",
+      "morph_pattern": "jaC1aC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina-1987",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "يَا حَسْرَة",
+          "pronunciation": "yâ ħasraẗ",
+          "definition": "oh what a pity, alas"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "oh!, alas!, what a pity!",
+          "text_mt": "Esclamazzjoni ta’ dispjaċir, ħasra jew sorpriża quddiem ġrajja sfortunata.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Jaħasra, nsejt l-umbrellun id-dar u bdiet nieżla x-xita!",
+          "en": "Oh no, I forgot the umbrella at home and it started raining!"
+        },
+        {
+          "mt": "Jaħasra li ma stajtx tiġi magħna l-bieraħ.",
+          "en": "What a pity that you could not come with us yesterday."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/jɐˈħɐs.rɐ/",
+          "notes": null
+        }
+      ],
+      "rank": 478,
+      "source_frequency_rank": 478,
+      "audit_status": "verified",
+      "audit_notes": "Resolved from English artifact n-oh in artifacts.json to Il-Miġma and Oxford/Miklem lexicographical standards.",
+      "theme": "English Artifacts (Resolved)",
+      "theme_id": "artifacts"
+    }
+  ]
+}

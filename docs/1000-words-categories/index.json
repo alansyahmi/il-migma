@@ -148,9 +148,9 @@
     },
     {
       "category_id": "artifacts",
-      "category_title": "English Artifacts (Audit Required)",
-      "file": "artifacts.json",
-      "count": 69
+      "category_title": "English Artifacts (Resolved)",
+      "file": "DONE_artifacts.json",
+      "count": 48
     }
   ],
   "total_entries": 990
