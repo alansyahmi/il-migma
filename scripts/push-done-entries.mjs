@@ -417,19 +417,18 @@ async function run() {
                     const vm = e.verb_morphology;
                     await tx.execute({
                         sql: `INSERT INTO verb_morphology (
-                            entry_id, form, strength, weak_class, transitivity,
-                            perfective_3sg_m, imperfective_3sg_m, imperative_sg,
+                            entry_id, form, class, weak_class, transitivity,
+                            perfective_3sgm, imperfective_3sgm,
                             passive_participle, verbal_noun,
                             vowel_set_perf, vowel_set_impf, vowel_set_impv, is_imala_blocked
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ON CONFLICT(entry_id) DO UPDATE SET
                             form = excluded.form,
-                            strength = excluded.strength,
+                            class = excluded.class,
                             weak_class = excluded.weak_class,
                             transitivity = excluded.transitivity,
-                            perfective_3sg_m = excluded.perfective_3sg_m,
-                            imperfective_3sg_m = excluded.imperfective_3sg_m,
-                            imperative_sg = excluded.imperative_sg,
+                            perfective_3sgm = excluded.perfective_3sgm,
+                            imperfective_3sgm = excluded.imperfective_3sgm,
                             passive_participle = excluded.passive_participle,
                             verbal_noun = excluded.verbal_noun,
                             vowel_set_perf = excluded.vowel_set_perf,
@@ -439,12 +438,11 @@ async function run() {
                         args: [
                             entryId,
                             vm.form || 'I',
-                            vm.strength || 'strong',
+                            vm.class || vm.strength || 'strong',
                             vm.weak_class || null,
                             vm.transitivity || null,
-                            vm.perfective_3sg_m || e.headword,
-                            vm.imperfective_3sg_m || null,
-                            vm.imperative_sg || null,
+                            vm.perfective_3sgm || vm.perfective_3sg_m || e.headword,
+                            vm.imperfective_3sgm || vm.imperfective_3sg_m || null,
                             vm.passive_participle || null,
                             vm.verbal_noun || null,
                             vm.vowel_set_perf || null,
@@ -499,33 +497,31 @@ async function run() {
                     const am = e.adjective_morphology;
                     await tx.execute({
                         sql: `INSERT INTO adj_morphology (
-                            entry_id, gender, masculine_form, feminine_form, plural,
+                            entry_id, gender, masculine_form, feminine_form, plural_form,
                             form_plural_pattern, elative_form,
-                            vowel_set_sg, vowel_set_fem, vowel_set_pl, morph_pattern
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            vowel_set_sg, vowel_set_pl, pattern
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ON CONFLICT(entry_id) DO UPDATE SET
                             gender = excluded.gender,
                             masculine_form = excluded.masculine_form,
                             feminine_form = excluded.feminine_form,
-                            plural = excluded.plural,
+                            plural_form = excluded.plural_form,
                             form_plural_pattern = excluded.form_plural_pattern,
                             elative_form = excluded.elative_form,
                             vowel_set_sg = excluded.vowel_set_sg,
-                            vowel_set_fem = excluded.vowel_set_fem,
                             vowel_set_pl = excluded.vowel_set_pl,
-                            morph_pattern = excluded.morph_pattern`,
+                            pattern = excluded.pattern`,
                         args: [
                             entryId,
                             am.gender || gender,
                             am.masculine_form || e.headword,
                             am.feminine_form || null,
-                            am.plural || null,
+                            am.plural_form || am.plural || null,
                             am.form_plural_pattern || null,
                             am.elative_form || null,
                             am.vowel_set_sg || null,
-                            am.vowel_set_fem || null,
                             am.vowel_set_pl || null,
-                            am.morph_pattern || null
+                            am.pattern || am.morph_pattern || null
                         ]
                     });
                     totalWriteQueries++;
