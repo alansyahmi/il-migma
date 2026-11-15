@@ -906,11 +906,12 @@
         "imperative_sg": "erfa'",
         "passive_participle": "merfugħ",
         "verbal_noun": "rfigħ",
-        "strength": "strong",
+        "strength": "strong-hybrid",
         "weak_class": null,
         "vowel_set_perf": "e-a",
         "vowel_set_impf": "e-a",
-        "vowel_set_impv": "e-a"
+        "vowel_set_impv": "e-a",
+        "class": "strong-hybrid"
       }
     },
     {

@@ -1014,6 +1014,20 @@ function buildFormIDefectiveStemProfile(
         };
     }
 
+    if (citation === "ġie" || (C1 === "ġ" && C2 === "j")) {
+        return {
+            perfFull: "ġie",
+            perfSync: "ġe",
+            perfReduced: "ġej",
+            perf3f: "ġiet",
+            impfSingularStem: "iġi",
+            impfPluralStem: "iġu",
+            impSg: "ejja",
+            impPl: "ejjew",
+            blocksImala: false,
+        };
+    }
+
     if (citation === "xela" || (C1 === "x" && C2 === "l")) {
         return {
             perfFull: "xela",
@@ -1058,7 +1072,9 @@ function genDefective(
     isImalaBlocked: boolean = false,
     citationForm: string = "",
 ): VerbConjugationTable {
-    const [, , C3] = C;
+    const [C1, C2, C3] = C;
+    const citation = citationForm.trim().toLowerCase();
+    const effectiveC3 = citation === "ġie" || (C1 === "ġ" && C2 === "j") ? "j" : C3;
     const profile = buildFormIDefectiveStemProfile(
         C,
         vsetPerf,
@@ -1070,7 +1086,7 @@ function genDefective(
 
     const imalaBlocked = profile.blocksImala;
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
-    const attV = applyAttachedShiftUnlessBlocked(iv2 || "a", C3, imalaBlocked, true);
+    const attV = applyAttachedShiftUnlessBlocked(iv2 || "a", effectiveC3, imalaBlocked, true);
     const attVj = attV === "ie" ? "iej" : imalaBlocked ? "aj" : "ij";
 
     const impfBase = (person: number) => {
@@ -1129,7 +1145,7 @@ function genDefective(
             },
             blocksImala: imalaBlocked,
         },
-        C3,
+        effectiveC3,
         verbForm,
     );
 }

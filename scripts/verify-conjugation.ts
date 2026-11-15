@@ -806,4 +806,54 @@ const consonantInitialStem = generateZokkForms({
 assertEq(consonantInitialStem.conjugation?.rows[0].imperfect, 'niċċaffronta', 'consonant-initial stem 1s imperfect should retain ni-');
 assertEq(consonantInitialStem.conjugation?.rows[2].imperfect, 'jiċċaffronta', 'consonant-initial stem 3ms imperfect should retain ji-');
 
+const gieTable = generateConjugation({
+    headword: 'ġie',
+    root: "ġ-j-'",
+    form: 'I',
+    strength: 'weak',
+    weakClass: 'defective',
+    vowelSetPerfect: 'ie-e',
+    vowelSetImperfect: 'i-i',
+    vowelSetImperative: 'e-a',
+});
+assertEq(gieTable.rows[0].perfect, 'ġejt', 'ġie 1s perfect');
+assertEq(gieTable.rows[2].perfect, 'ġie', 'ġie 3ms perfect');
+assertEq(gieTable.rows[3].perfect, 'ġiet', 'ġie 3fs perfect');
+assertEq(gieTable.rows[6].perfect, 'ġew', 'ġie 3p perfect');
+assertEq(gieTable.rows[0].imperfect, 'niġi', 'ġie 1s imperfect');
+assertEq(gieTable.rows[2].imperfect, 'jiġi', 'ġie 3ms imperfect');
+assertEq(gieTable.rows[6].imperfect, 'jiġu', 'ġie 3p imperfect');
+assertEq(gieTable.imperative_sg, 'ejja', 'ġie imperative sg');
+assertEq(gieTable.imperative_pl, 'ejjew', 'ġie imperative pl');
+assertEq(buildPerfectForm(gieTable.rows[2].perfect, gieTable.rows[2].perfect_neg ?? gieTable.rows[2].perfect, true, null, null, 'ie-e', gieTable.rows[2].stems, gieTable.blocksImala, 'I'), 'ma ġiex', 'ġie 3ms negative perfect');
+assertEq(buildPerfectForm(gieTable.rows[2].perfect, gieTable.rows[2].perfect_neg ?? gieTable.rows[2].perfect, false, 0, null, 'ie-e', gieTable.rows[2].stems, gieTable.blocksImala, 'I'), 'ġieni', 'ġie 3ms + -ni');
+assertEq(buildVerbForm(gieTable.rows[2].imperfect, true, null, null, 'i-i', gieTable.rows[2].stems, gieTable.blocksImala, 'I'), 'ma jiġix', 'ġie 3ms negative imperfect');
+assertEq(buildVerbForm(gieTable.rows[2].imperfect, false, 0, null, 'i-i', gieTable.rows[2].stems, gieTable.blocksImala, 'I'), 'jiġini', 'ġie 3ms imperfect + -ni');
+const gieRootForms = generateRootForms("ġ-j-'", 'ie-e', 'i-i', 'weak', 'defective');
+assertEq(gieRootForms[0].perfect, 'ġie', 'ġ-j-\' root Form I perfect');
+assertEq(gieRootForms[0].imperfect, 'jiġi', 'ġ-j-\' root Form I imperfect');
+assertEq(gieRootForms[0].imperative, 'ejja', 'ġ-j-\' root Form I imperative');
+
+const refaTable = generateConjugation({
+    headword: "refa'",
+    root: 'r-f-għ',
+    form: 'I',
+    strength: 'strong-hybrid',
+    vowelSetPerfect: 'e-a',
+    vowelSetImperfect: 'e-a',
+    vowelSetImperative: 'e-a',
+});
+assertEq(refaTable.rows[0].perfect, 'rfajt', "refa' 1s perfect");
+assertEq(refaTable.rows[2].perfect, "refa'", "refa' 3ms perfect");
+assertEq(refaTable.rows[3].perfect, 'refgħet', "refa' 3fs perfect");
+assertEq(refaTable.rows[6].perfect, 'refgħu', "refa' 3p perfect");
+assertEq(refaTable.rows[0].imperfect, "nerfa'", "refa' 1s imperfect");
+assertEq(refaTable.rows[2].imperfect, "jerfa'", "refa' 3ms imperfect");
+assertEq(refaTable.rows[6].imperfect, 'jerfgħu', "refa' 3p imperfect");
+assertEq(refaTable.imperative_sg, "erfa'", "refa' imperative sg");
+assertEq(refaTable.imperative_pl, 'erfgħu', "refa' imperative pl");
+assertEq(buildPerfectForm(refaTable.rows[2].perfect, refaTable.rows[2].perfect_neg ?? refaTable.rows[2].perfect, true, null, null, 'e-a', refaTable.rows[2].stems, refaTable.blocksImala, 'I'), 'ma refax', "refa' 3ms negative perfect");
+assertEq(buildPerfectForm(refaTable.rows[2].perfect, refaTable.rows[2].perfect_neg ?? refaTable.rows[2].perfect, false, 2, null, 'e-a', refaTable.rows[2].stems, refaTable.blocksImala, 'I'), 'refgħu', "refa' 3ms + -u");
+assertEq(buildVerbForm(refaTable.rows[0].imperfect, true, null, null, 'e-a', refaTable.rows[0].stems, refaTable.blocksImala, 'I'), 'ma nerfax', "refa' 1s negative imperfect");
+
 console.log('quadriliteral root-form tests passed');
