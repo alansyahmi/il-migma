@@ -11,11 +11,41 @@ import { WorkspaceViewToggle } from '@/components/admin/workspace/WorkspaceViewT
 import { WorkspaceEmptyState } from '@/components/admin/workspace/WorkspaceEmptyState';
 import { WorkspaceFeedbackBanner } from '@/components/admin/workspace/WorkspaceFeedbackBanner';
 import { WorkspaceToolbar } from '@/components/admin/workspace/WorkspaceToolbar';
+import { SortableTableHeader } from '@/components/admin/workspace/SortableTableHeader';
 import { Button } from '@/components/ui/Button';
+import { readPersistedAdminState, writePersistedAdminState } from '@/lib/adminPersistence';
+import { sortByAccessor, toggleSortState, type SortDirection, type SortState } from '@/lib/adminTableSort';
 import { cn } from '@/lib/utils';
 import { StemFormModal } from '@/components/admin/StemFormModal';
 import { formatStemDisplay } from '@/lib/stemDefaults';
 import type { StemFormData } from '@/lib/adminUtils';
+
+type StemSortKey = 'stem_string' | 'meaning' | 'class' | 'suffix' | 'root' | 'hybrid' | 'entries' | 'date';
+const STEMS_VIEW_STORAGE_KEY = 'admin-stems-view-v1';
+const VALID_STEM_SORT_KEYS: readonly StemSortKey[] = [
+    'stem_string',
+    'meaning',
+    'class',
+    'suffix',
+    'root',
+    'hybrid',
+    'entries',
+    'date',
+];
+
+interface PersistedStemsView extends Record<string, unknown> {
+    query: string;
+    viewMode: 'grid' | 'list';
+    sortBy: StemSortKey;
+    sortDir: SortDirection;
+}
+
+const DEFAULT_STEMS_VIEW: PersistedStemsView = {
+    query: '',
+    viewMode: 'list',
+    sortBy: 'stem_string',
+    sortDir: 'asc',
+};
 
 interface AdminStemItem {
     id: string;
@@ -42,10 +72,23 @@ export function StemManager() {
     const { term } = useLinguisticMode();
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const [initialView] = useState<PersistedStemsView>(() =>
+        readPersistedAdminState(STEMS_VIEW_STORAGE_KEY, DEFAULT_STEMS_VIEW, (raw, defaults) => ({
+            query: typeof raw.query === 'string' ? raw.query : defaults.query,
+            viewMode: raw.viewMode === 'grid' || raw.viewMode === 'list' ? raw.viewMode : defaults.viewMode,
+            sortBy: typeof raw.sortBy === 'string' && (VALID_STEM_SORT_KEYS as readonly string[]).includes(raw.sortBy)
+                ? (raw.sortBy as StemSortKey)
+                : defaults.sortBy,
+            sortDir: raw.sortDir === 'desc' ? 'desc' : raw.sortDir === 'asc' ? 'asc' : defaults.sortDir,
+        })),
+    );
+
     const [stems, setStems] = useState<AdminStemItem[]>([]);
     const [loading, setLoading] = useState(false);
-    const [query, setQuery] = useState('');
-    const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+    const [query, setQuery] = useState(initialView.query);
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>(initialView.viewMode);
+    const [sortBy, setSortBy] = useState<StemSortKey>(initialView.sortBy);
+    const [sortDir, setSortDir] = useState<SortDirection>(initialView.sortDir);
     const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
     const [editStem, setEditStem] = useState<AdminStemItem | null>(null);
     const [showAddStem, setShowAddStem] = useState(false);
@@ -53,6 +96,26 @@ export function StemManager() {
     const [syncing, setSyncing] = useState(false);
     const createStemRequested = searchParams.get('create') === '1';
     const prefillStemString = searchParams.get('stem_string') || searchParams.get('q') || '';
+
+    useEffect(() => {
+        writePersistedAdminState(STEMS_VIEW_STORAGE_KEY, {
+            query,
+            viewMode,
+            sortBy,
+            sortDir,
+        });
+    }, [query, viewMode, sortBy, sortDir]);
+
+    const sortState: SortState<StemSortKey> = useMemo(
+        () => ({ key: sortBy, dir: sortDir }),
+        [sortBy, sortDir],
+    );
+
+    const handleColumnSort = useCallback((key: StemSortKey, defaultDir: SortDirection = 'asc') => {
+        const next = toggleSortState(sortState, key, defaultDir);
+        setSortBy(next.key);
+        setSortDir(next.dir);
+    }, [sortState]);
 
     const showToast = useCallback((msg: string, ok = true) => {
         setToast({ msg, ok });
@@ -94,9 +157,37 @@ export function StemManager() {
         });
     }, [setSearchParams]);
 
-    const noResults = !loading && stems.length === 0;
+    const sortedStems = useMemo(() => {
+        return sortByAccessor(
+            stems,
+            sortDir,
+            (stem) => {
+                switch (sortBy) {
+                    case 'stem_string':
+                        return stem.stem_string;
+                    case 'meaning':
+                        return getStemMeaningSortValue(stem);
+                    case 'class':
+                        return `${stem.class_type || 'ar'} ${stem.is_hybrid ? 'hybrid' : ''}`.trim();
+                    case 'suffix':
+                        return stem.agentive_suffix || '';
+                    case 'root':
+                        return stem.root || '';
+                    case 'hybrid':
+                        return stem.is_hybrid ? 1 : 0;
+                    case 'entries':
+                        return stem.entry_count ?? 0;
+                    case 'date':
+                        return stem.created_at || '';
+                }
+            },
+            (stem) => stem.stem_string,
+        );
+    }, [stems, sortBy, sortDir]);
 
-    const toolbarCount = useMemo(() => `${stems.length} ${term('found')}`, [stems.length, term]);
+    const noResults = !loading && sortedStems.length === 0;
+
+    const toolbarCount = useMemo(() => `${sortedStems.length} ${term('found')}`, [sortedStems.length, term]);
     const handleDelete = useCallback(async (stem: AdminStemItem) => {
         if (!confirm(`Delete stem "${stem.stem_string}"? This removes the canonical stem record.`)) return;
 
@@ -176,19 +267,75 @@ export function StemManager() {
                     <table className="w-full text-sm">
                         <thead className="bg-surface-soft border-b border-border-light">
                             <tr>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('consonants')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('meaning')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('class')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('vowels')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('source')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Tags</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('thesaurus')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('date')}</th>
+                                <SortableTableHeader
+                                    label={term('consonants')}
+                                    sortKey="stem_string"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="asc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('meaning')}
+                                    sortKey="meaning"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="asc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('class')}
+                                    sortKey="class"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="asc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('vowels')}
+                                    sortKey="suffix"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="asc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('source')}
+                                    sortKey="root"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="asc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label="Tags"
+                                    sortKey="hybrid"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="desc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('thesaurus')}
+                                    sortKey="entries"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="desc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('date')}
+                                    sortKey="date"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="desc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
                                 <th className="text-right p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {stems.map((stem) => (
+                            {sortedStems.map((stem) => (
                                 <tr key={stem.id} className="border-b border-border-light last:border-0 hover:bg-surface-soft transition-colors">
                                     <td className="p-4 font-serif font-bold text-link text-lg">
                                         <Link to={`/stem/${stem.stem_string}`} className="hover:underline">{formatStemDisplay(stem.stem_string)}</Link>
@@ -236,7 +383,7 @@ export function StemManager() {
                 </Card>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {stems.map((stem) => (
+                    {sortedStems.map((stem) => (
                         <article
                             key={stem.id}
                             className="group bg-white border border-border-light rounded-2xl p-5 hover:shadow-xl hover:shadow-link/5 transition-all duration-300 relative flex flex-col justify-between h-full"
@@ -325,6 +472,17 @@ export function StemManager() {
             )}
         </div>
     );
+}
+
+function getStemMeaningSortValue(stem: AdminStemItem): string {
+    const glosses = Array.isArray(stem.glosses)
+        ? stem.glosses
+        : typeof stem.glosses === 'string'
+            ? safeParseJson<Array<Record<string, unknown>>>(stem.glosses, [])
+            : [];
+
+    const firstGloss = glosses.find((g): g is Record<string, unknown> => Boolean(g && typeof g === 'object' && (g.en || g.mt)));
+    return String(firstGloss?.en || firstGloss?.mt || stem.root || '');
 }
 
 function renderStemMeaning(stem: AdminStemItem, term: (key: string) => string) {

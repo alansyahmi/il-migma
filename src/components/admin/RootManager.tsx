@@ -15,8 +15,38 @@ import { WorkspaceBulkActionsBar } from '@/components/admin/workspace/WorkspaceB
 import { WorkspaceEmptyState } from '@/components/admin/workspace/WorkspaceEmptyState';
 import { WorkspaceFeedbackBanner } from '@/components/admin/workspace/WorkspaceFeedbackBanner';
 import { WorkspaceToolbar } from '@/components/admin/workspace/WorkspaceToolbar';
+import { SortableTableHeader } from '@/components/admin/workspace/SortableTableHeader';
+import { readPersistedAdminState, writePersistedAdminState } from '@/lib/adminPersistence';
+import { sortByAccessor, toggleSortState, type SortDirection, type SortState } from '@/lib/adminTableSort';
 import { cn } from '@/lib/utils';
 import { resolveTagLabel } from '@/lib/tagLabel';
+
+type RootSortKey = 'consonants' | 'meaning' | 'class' | 'vowels' | 'source' | 'tags' | 'thesaurus' | 'date';
+const ROOTS_VIEW_STORAGE_KEY = 'admin-roots-view-v1';
+const VALID_ROOT_SORT_KEYS: readonly RootSortKey[] = [
+    'consonants',
+    'meaning',
+    'class',
+    'vowels',
+    'source',
+    'tags',
+    'thesaurus',
+    'date',
+];
+
+interface PersistedRootsView extends Record<string, unknown> {
+    query: string;
+    viewMode: 'grid' | 'list';
+    sortBy: RootSortKey;
+    sortDir: SortDirection;
+}
+
+const DEFAULT_ROOTS_VIEW: PersistedRootsView = {
+    query: '',
+    viewMode: 'list',
+    sortBy: 'consonants',
+    sortDir: 'asc',
+};
 
 interface AdminRootItem {
     id: string;
@@ -40,17 +70,50 @@ export function RootManager() {
     const { term } = useLinguisticMode();
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const [initialView] = useState<PersistedRootsView>(() =>
+        readPersistedAdminState(ROOTS_VIEW_STORAGE_KEY, DEFAULT_ROOTS_VIEW, (raw, defaults) => ({
+            query: typeof raw.query === 'string' ? raw.query : defaults.query,
+            viewMode: raw.viewMode === 'grid' || raw.viewMode === 'list' ? raw.viewMode : defaults.viewMode,
+            sortBy: typeof raw.sortBy === 'string' && (VALID_ROOT_SORT_KEYS as readonly string[]).includes(raw.sortBy)
+                ? (raw.sortBy as RootSortKey)
+                : defaults.sortBy,
+            sortDir: raw.sortDir === 'desc' ? 'desc' : raw.sortDir === 'asc' ? 'asc' : defaults.sortDir,
+        })),
+    );
+
     const [roots, setRoots] = useState<AdminRootItem[]>([]);
     const [loading, setLoading] = useState(false);
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState(initialView.query);
     const [showAdd, setShowAdd] = useState(false);
     const [editRoot, setEditRoot] = useState<AdminRootItem | null>(null);
-    const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>(initialView.viewMode);
+    const [sortBy, setSortBy] = useState<RootSortKey>(initialView.sortBy);
+    const [sortDir, setSortDir] = useState<SortDirection>(initialView.sortDir);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
     const [syncing, setSyncing] = useState(false);
     const createRootRequested = searchParams.get('create') === '1';
     const prefillConsonants = searchParams.get('consonants') || searchParams.get('q') || '';
+
+    useEffect(() => {
+        writePersistedAdminState(ROOTS_VIEW_STORAGE_KEY, {
+            query,
+            viewMode,
+            sortBy,
+            sortDir,
+        });
+    }, [query, viewMode, sortBy, sortDir]);
+
+    const sortState: SortState<RootSortKey> = useMemo(
+        () => ({ key: sortBy, dir: sortDir }),
+        [sortBy, sortDir],
+    );
+
+    const handleColumnSort = useCallback((key: RootSortKey, defaultDir: SortDirection = 'asc') => {
+        const next = toggleSortState(sortState, key, defaultDir);
+        setSortBy(next.key);
+        setSortDir(next.dir);
+    }, [sortState]);
 
     const showToast = useCallback((msg: string, ok = true) => {
         setToast({ msg, ok });
@@ -154,9 +217,39 @@ export function RootManager() {
         }
     }, [getToken, load, showToast]);
 
-    const noResults = !loading && roots.length === 0;
+    const sortedRoots = useMemo(() => {
+        return sortByAccessor(
+            roots,
+            sortDir,
+            (root) => {
+                switch (sortBy) {
+                    case 'consonants':
+                        return root.consonants;
+                    case 'meaning':
+                        return getRootMeaningSortValue(root);
+                    case 'class':
+                        return `${root.strength || 'strong'} ${root.weak_class || ''}`.trim();
+                    case 'vowels':
+                        return `${root.vowel_set_perf || 'a-a'} ${root.vowel_set_impf || 'i-a'} ${root.vowel_set_imp || 'o-o'}`;
+                    case 'source':
+                        return root.source || '';
+                    case 'tags':
+                        return parseStringArray(root.tags).length;
+                    case 'thesaurus': {
+                        const { synonymCount, antonymCount } = getThesaurusCounts(root);
+                        return synonymCount + antonymCount;
+                    }
+                    case 'date':
+                        return root.created_at || '';
+                }
+            },
+            (root) => root.consonants,
+        );
+    }, [roots, sortBy, sortDir]);
 
-    const toolbarCount = useMemo(() => `${roots.length} ${term('found')}`, [roots.length, term]);
+    const noResults = !loading && sortedRoots.length === 0;
+
+    const toolbarCount = useMemo(() => `${sortedRoots.length} ${term('found')}`, [sortedRoots.length, term]);
 
     return (
         <div className="space-y-4">
@@ -200,19 +293,75 @@ export function RootManager() {
                                         {selectedIds.size === roots.length && roots.length > 0 ? <CheckSquare size={16} className="text-link" /> : <Square size={16} />}
                                     </button>
                                 </th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('consonants')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('meaning')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('class')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('vowels')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('source')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">Tags</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('thesaurus')}</th>
-                                <th className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('date')}</th>
+                                <SortableTableHeader
+                                    label={term('consonants')}
+                                    sortKey="consonants"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="asc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('meaning')}
+                                    sortKey="meaning"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="asc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('class')}
+                                    sortKey="class"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="asc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('vowels')}
+                                    sortKey="vowels"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="asc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('source')}
+                                    sortKey="source"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="asc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label="Tags"
+                                    sortKey="tags"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="desc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('thesaurus')}
+                                    sortKey="thesaurus"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="desc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
+                                <SortableTableHeader
+                                    label={term('date')}
+                                    sortKey="date"
+                                    activeSort={sortState}
+                                    onSort={handleColumnSort}
+                                    defaultDir="desc"
+                                    className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
+                                />
                                 <th className="text-right p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {roots.map((root) => (
+                            {sortedRoots.map((root) => (
                                 <tr key={root.id} className={cn('border-b border-border-light last:border-0 transition-colors', selectedIds.has(root.id) ? 'bg-link/3' : 'hover:bg-surface-soft')}>
                                     <td className="p-4">
                                         <button type="button" onClick={() => toggleSelect(root.id)} className={cn('transition-colors', selectedIds.has(root.id) ? 'text-link' : 'text-black/10 hover:text-black/20')}>
@@ -262,7 +411,7 @@ export function RootManager() {
                 </Card>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {roots.map((root) => {
+                    {sortedRoots.map((root) => {
                         const { synonymCount, antonymCount } = getThesaurusCounts(root);
                         return (
                             <article
@@ -351,6 +500,26 @@ export function RootManager() {
             )}
         </div>
     );
+}
+
+function getRootMeaningSortValue(root: AdminRootItem): string {
+    if (!root.gloss || (typeof root.gloss === 'string' && root.gloss.includes('[object Object]'))) {
+        return '';
+    }
+    try {
+        const parsed = JSON.parse(root.gloss) as unknown;
+        if (Array.isArray(parsed) && parsed[0]) {
+            const first = parsed[0] as unknown;
+            if (typeof first === 'object' && first !== null) {
+                const gloss = first as Record<string, string>;
+                return gloss.en || gloss.mt || '';
+            }
+            return String(first);
+        }
+    } catch {
+        return root.gloss;
+    }
+    return root.gloss;
 }
 
 function renderGloss(root: AdminRootItem, term: (key: string) => string) {

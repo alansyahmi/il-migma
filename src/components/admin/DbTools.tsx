@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
     Database, Table, CheckCircle2, AlertCircle, Info, Download,
@@ -10,6 +10,14 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Spinner } from '@/components/ui/Spinner';
+import { SortableTableHeader } from '@/components/admin/workspace/SortableTableHeader';
+import {
+    readPersistedAdminState,
+    readPersistedAdminString,
+    writePersistedAdminState,
+    writePersistedAdminString,
+} from '@/lib/adminPersistence';
+import { sortByAccessor, toggleSortState, type SortDirection, type SortState } from '@/lib/adminTableSort';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
@@ -26,19 +34,40 @@ interface DbToolsProps {
 type DbToolsTab = 'console' | 'export' | 'integrity' | 'bulk';
 
 const DEFAULT_DB_TOOLS_TAB: DbToolsTab = 'console';
+const DB_TOOLS_TAB_STORAGE_KEY = 'admin-db-tools-tab-v1';
+const DB_SQL_CONSOLE_STORAGE_KEY = 'admin-db-sql-console-v1';
 
 function isDbToolsTab(value: string | null): value is DbToolsTab {
     return value === 'console' || value === 'export' || value === 'integrity' || value === 'bulk';
+}
+
+function getDynamicTableCell(row: unknown, colName: string, colIndex: number): unknown {
+    if (!row || typeof row !== 'object') return null;
+    if (Array.isArray(row)) return row[colIndex];
+    const record = row as Record<string, unknown>;
+    return record[colName] !== undefined ? record[colName] : record[String(colIndex)];
 }
 
 export function DbTools({ getToken }: DbToolsProps) {
     const { t } = useLanguage();
     const [searchParams, setSearchParams] = useSearchParams();
     const rawTab = searchParams.get('dbtab');
-    const activeTab = isDbToolsTab(rawTab)
+    const activeTab: DbToolsTab = isDbToolsTab(rawTab)
         ? rawTab
-        : DEFAULT_DB_TOOLS_TAB;
+        : (readPersistedAdminString(DB_TOOLS_TAB_STORAGE_KEY, DEFAULT_DB_TOOLS_TAB, isDbToolsTab) as DbToolsTab);
     const [tables, setTables] = useState<any[]>([]);
+
+    useEffect(() => {
+        writePersistedAdminString(DB_TOOLS_TAB_STORAGE_KEY, activeTab);
+    }, [activeTab]);
+
+    useEffect(() => {
+        if (!isDbToolsTab(rawTab)) {
+            const nextParams = new URLSearchParams(searchParams);
+            nextParams.set('dbtab', activeTab);
+            setSearchParams(nextParams, { replace: true });
+        }
+    }, [rawTab, activeTab, searchParams, setSearchParams]);
 
     const loadTableInfo = useCallback(async () => {
         try {
@@ -63,6 +92,7 @@ export function DbTools({ getToken }: DbToolsProps) {
     ];
 
     const setActiveTab = (nextTab: DbToolsTab) => {
+        writePersistedAdminString(DB_TOOLS_TAB_STORAGE_KEY, nextTab);
         const nextParams = new URLSearchParams(searchParams);
         nextParams.set('dbtab', nextTab);
         setSearchParams(nextParams);
@@ -101,11 +131,45 @@ export function DbTools({ getToken }: DbToolsProps) {
 // ── SUB-COMPONENT: SQL Console ────────────────────────────────────────────────
 function SqlConsole({ getToken }: { getToken: () => Promise<string | null> }) {
     const { t } = useLanguage();
-    const [sql, setSql] = useState('SELECT * FROM roots LIMIT 10;');
-    const [allowWrite, setAllowWrite] = useState(false);
+    const [initialConsole] = useState(() =>
+        readPersistedAdminState(
+            DB_SQL_CONSOLE_STORAGE_KEY,
+            { sql: 'SELECT * FROM roots LIMIT 10;', allowWrite: false },
+            (raw, defaults) => ({
+                sql: typeof raw.sql === 'string' ? raw.sql : defaults.sql,
+                allowWrite: typeof raw.allowWrite === 'boolean' ? raw.allowWrite : defaults.allowWrite,
+            }),
+        ),
+    );
+    const [sql, setSql] = useState(initialConsole.sql);
+    const [allowWrite, setAllowWrite] = useState(initialConsole.allowWrite);
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+    const [sortState, setSortState] = useState<SortState<string> | null>(null);
+
+    useEffect(() => {
+        writePersistedAdminState(DB_SQL_CONSOLE_STORAGE_KEY, { sql, allowWrite });
+    }, [sql, allowWrite]);
+
+    const handleSort = useCallback((col: string, defaultDir: SortDirection = 'asc') => {
+        setSortState((prev) => toggleSortState(prev, col, defaultDir));
+    }, []);
+
+    const sortedRows = useMemo(() => {
+        const rows = result?.rows;
+        const columns: string[] = result?.columns ?? [];
+        if (!Array.isArray(rows) || !sortState) return rows ?? [];
+        const colIndex = columns.indexOf(sortState.key);
+        if (colIndex === -1) return rows;
+        return sortByAccessor(
+            rows,
+            sortState.dir,
+            (row) => getDynamicTableCell(row, sortState.key, colIndex),
+            undefined,
+            { numericStrings: true },
+        );
+    }, [result, sortState]);
 
     const handleRun = async () => {
         setLoading(true);
@@ -114,6 +178,7 @@ function SqlConsole({ getToken }: { getToken: () => Promise<string | null> }) {
             const token = await getToken();
             const res = await adminDbQuery(token!, sql, allowWrite);
             setResult(res);
+            setSortState(null);
         } catch (e: any) {
             setError(e.message);
         } finally {
@@ -197,12 +262,20 @@ function SqlConsole({ getToken }: { getToken: () => Promise<string | null> }) {
                                     <thead className="bg-[#f9f7f3] border-b border-[#ede9e1]">
                                         <tr>
                                             {result.columns.map((colName: string) => (
-                                                <th key={colName} className="p-3 font-bold text-black/50 border-r last:border-0 border-[#ede9e1]">{colName}</th>
+                                                <SortableTableHeader
+                                                    key={colName}
+                                                    label={colName}
+                                                    sortKey={colName}
+                                                    activeSort={sortState}
+                                                    onSort={handleSort}
+                                                    className="p-3 font-bold text-black/50 border-r last:border-0 border-[#ede9e1]"
+                                                    buttonClassName="normal-case tracking-normal"
+                                                />
                                             ))}
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-[#ede9e1]">
-                                        {result.rows.map((row: any, i: number) => (
+                                        {sortedRows.map((row: any, i: number) => (
                                             <tr key={i} className="hover:bg-blue-50/30 transition-colors">
                                                 {result.columns.map((colName: string, j: number) => {
                                                     const cell = row && typeof row === 'object'
@@ -253,6 +326,31 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
     const [loading, setLoading] = useState(false);
     const [bundleLoading, setBundleLoading] = useState(false);
     const [preview, setPreview] = useState<any>(null);
+    const [previewSort, setPreviewSort] = useState<SortState<string> | null>(null);
+
+    const handlePreviewSort = useCallback((col: string, defaultDir: SortDirection = 'asc') => {
+        setPreviewSort((prev) => toggleSortState(prev, col, defaultDir));
+    }, []);
+
+    const sortedPreviewRows = useMemo(() => {
+        const rows = preview?.rows;
+        const columns: string[] = preview?.columns ?? [];
+        if (!Array.isArray(rows)) return [];
+        const base = !previewSort
+            ? rows
+            : (() => {
+                const colIndex = columns.indexOf(previewSort.key);
+                if (colIndex === -1) return rows;
+                return sortByAccessor(
+                    rows,
+                    previewSort.dir,
+                    (row) => getDynamicTableCell(row, previewSort.key, colIndex),
+                    undefined,
+                    { numericStrings: true },
+                );
+            })();
+        return base.slice(0, 100);
+    }, [preview, previewSort]);
 
     const downloadBlob = (content: string, filename: string, type: string) => {
         const blob = new Blob([content], { type });
@@ -335,6 +433,7 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
             const token = await getToken();
             const res = await adminDbExport(token!, table);
             setPreview(res);
+            setPreviewSort(null);
         } catch (e) {
             console.error(e);
         } finally {
@@ -400,12 +499,20 @@ function DataExport({ getToken, tables }: { getToken: () => Promise<string | nul
                             <thead className="bg-[#f9f7f3] border-b border-[#ede9e1] sticky top-0 z-10">
                                 <tr>
                                     {preview.columns.map((col: string) => (
-                                        <th key={col} className="p-3 font-bold text-black/50 border-r border-b border-[#ede9e1]">{col}</th>
+                                        <SortableTableHeader
+                                            key={col}
+                                            label={col}
+                                            sortKey={col}
+                                            activeSort={previewSort}
+                                            onSort={handlePreviewSort}
+                                            className="p-3 font-bold text-black/50 border-r border-b border-[#ede9e1]"
+                                            buttonClassName="normal-case tracking-normal"
+                                        />
                                     ))}
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[#ede9e1]">
-                                {preview.rows.slice(0, 100).map((row: any, i: number) => (
+                                {sortedPreviewRows.map((row: any, i: number) => (
                                     <tr key={i} className="hover:bg-blue-50/20">
                                         {preview.columns.map((col: string, j: number) => {
                                             const cell = row && typeof row === 'object'

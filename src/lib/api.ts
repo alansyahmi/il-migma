@@ -563,15 +563,30 @@ export async function adminBulkSubmissions(
 
 // ── Admin ─────────────────────────────────────────────────────────────────────
 
+export type AdminEntrySortKey = 'headword' | 'status' | 'pos' | 'root' | 'meaning' | 'tags' | 'date';
+
 export async function adminListEntries(
     token: string,
-    opts: { q?: string; pos?: string; letter?: string; sort?: 'alphabetical' | 'recent'; limit?: number; offset?: number; signal?: AbortSignal; skipCount?: boolean } = {}
+    opts: {
+        q?: string;
+        pos?: string;
+        letter?: string;
+        sort?: 'alphabetical' | 'recent';
+        sortBy?: AdminEntrySortKey;
+        sortDir?: 'asc' | 'desc';
+        limit?: number;
+        offset?: number;
+        signal?: AbortSignal;
+        skipCount?: boolean;
+    } = {}
 ) {
     const params = new URLSearchParams();
     if (opts.q) params.set('q', opts.q);
     if (opts.pos) params.set('pos', opts.pos);
     if (opts.letter && opts.letter.toLowerCase() !== 'all') params.set('letter', opts.letter);
     if (opts.sort) params.set('sort', opts.sort);
+    if (opts.sortBy) params.set('sortBy', opts.sortBy);
+    if (opts.sortDir) params.set('sortDir', opts.sortDir);
     if (opts.limit) params.set('limit', String(opts.limit));
     if (opts.offset) params.set('offset', String(opts.offset));
     if (opts.skipCount) params.set('skipCount', 'true');
@@ -585,16 +600,44 @@ export async function adminListEntries(
             throw err;
         }
         const queryNorm = (opts.q || '').toLowerCase();
+        const sortBy = opts.sortBy || (opts.sort === 'recent' ? 'date' : 'headword');
+        const sortDir = opts.sortDir || (opts.sort === 'recent' ? 'desc' : 'asc');
+        const factor = sortDir === 'desc' ? -1 : 1;
+
         const filtered = DEBUG_ENTRIES.filter((e) => {
             if (opts.pos && e.pos !== opts.pos) return false;
             if (opts.letter && !matchesMalteseLetter(e.headword, opts.letter)) return false;
             if (!queryNorm) return true;
             return e.headword.toLowerCase().includes(queryNorm) || e.id.toLowerCase().includes(queryNorm);
         }).sort((a, b) => {
-            if (opts.sort === 'recent') {
-                return (b.created_at || '').localeCompare(a.created_at || '');
+            const extraA = a as unknown as Record<string, unknown>;
+            const extraB = b as unknown as Record<string, unknown>;
+            switch (sortBy) {
+                case 'date':
+                    return factor * (a.created_at || '').localeCompare(b.created_at || '');
+                case 'pos':
+                    return factor * (a.pos || '').localeCompare(b.pos || '');
+                case 'root': {
+                    const rA = a.root_consonants || String(extraA.stem || '');
+                    const rB = b.root_consonants || String(extraB.stem || '');
+                    return factor * rA.localeCompare(rB);
+                }
+                case 'meaning': {
+                    const mA = String(extraA.text_en || a.definitions?.[0]?.text_en || '');
+                    const mB = String(extraB.text_en || b.definitions?.[0]?.text_en || '');
+                    return factor * mA.localeCompare(mB);
+                }
+                case 'tags': {
+                    const altA = Array.isArray(extraA.alternative_forms) ? extraA.alternative_forms.length : 0;
+                    const altB = Array.isArray(extraB.alternative_forms) ? extraB.alternative_forms.length : 0;
+                    const tA = (a.tags?.length || 0) + altA;
+                    const tB = (b.tags?.length || 0) + altB;
+                    return factor * (tA - tB);
+                }
+                case 'headword':
+                default:
+                    return factor * a.headword.localeCompare(b.headword);
             }
-            return a.headword.localeCompare(b.headword);
         });
         const total = filtered.length;
         const limit = opts.limit ?? 15;

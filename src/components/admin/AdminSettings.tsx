@@ -23,8 +23,24 @@ import { AdminSettingsItemList } from './settings/AdminSettingsItemList';
 import { AdminSettingsSyncBanner } from './settings/AdminSettingsSyncBanner';
 import { ConfigFormModal } from './settings/ConfigFormModal';
 import { filterSettingsItems } from './settings/selectors';
+import { readPersistedAdminState, writePersistedAdminState } from '@/lib/adminPersistence';
 
 const GROUP_STORAGE_KEY = 'admin-settings-expanded-groups-v1';
+const SETTINGS_VIEW_STORAGE_KEY = 'admin-settings-view-v1';
+
+interface PersistedAdminSettingsView extends Record<string, unknown> {
+    activeTab: string;
+    posFilter: string;
+    roleFilter: string;
+    searchTerm: string;
+}
+
+const DEFAULT_SETTINGS_VIEW: PersistedAdminSettingsView = {
+    activeTab: 'pos',
+    posFilter: 'all',
+    roleFilter: 'all',
+    searchTerm: '',
+};
 
 const PATTERN_BUCKET_LABEL_KEYS: Record<string, string> = {
     cv_wizen_pattern: 'canonical-patterns',
@@ -74,12 +90,30 @@ export function AdminSettings() {
     const { mode, setMode, term } = useLinguisticMode();
     const { user } = useUser();
 
-    const [activeTab, setActiveTab] = useState('pos');
+    const [initialView] = useState<PersistedAdminSettingsView>(() =>
+        readPersistedAdminState(SETTINGS_VIEW_STORAGE_KEY, DEFAULT_SETTINGS_VIEW, (raw, defaults) => ({
+            activeTab: typeof raw.activeTab === 'string' && getCategoryById(raw.activeTab) ? raw.activeTab : defaults.activeTab,
+            posFilter: typeof raw.posFilter === 'string' && raw.posFilter ? raw.posFilter : defaults.posFilter,
+            roleFilter: typeof raw.roleFilter === 'string' && raw.roleFilter ? raw.roleFilter : defaults.roleFilter,
+            searchTerm: typeof raw.searchTerm === 'string' ? raw.searchTerm : defaults.searchTerm,
+        })),
+    );
+
+    const [activeTab, setActiveTab] = useState(initialView.activeTab);
     const [editItem, setEditItem] = useState<ConfigItem | null>(null);
     const [showAdd, setShowAdd] = useState(false);
-    const [posFilter, setPosFilter] = useState<string>('all');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [roleFilter, setRoleFilter] = useState<string>('all');
+    const [posFilter, setPosFilter] = useState<string>(initialView.posFilter);
+    const [searchTerm, setSearchTerm] = useState(initialView.searchTerm);
+    const [roleFilter, setRoleFilter] = useState<string>(initialView.roleFilter);
+
+    useEffect(() => {
+        writePersistedAdminState(SETTINGS_VIEW_STORAGE_KEY, {
+            activeTab,
+            posFilter,
+            roleFilter,
+            searchTerm,
+        });
+    }, [activeTab, posFilter, roleFilter, searchTerm]);
     const [syncLoading, setSyncLoading] = useState(false);
     const [syncResult, setSyncResult] = useState<SyncResult>(null);
 

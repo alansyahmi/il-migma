@@ -10,15 +10,41 @@ import { EntryManager } from '@/components/admin/EntryManager';
 import { RootManager } from '@/components/admin/RootManager';
 import { StemManager } from '@/components/admin/StemManager';
 import { SubmissionInbox } from '@/components/admin/SubmissionInbox';
+import { readPersistedAdminString, writePersistedAdminString } from '@/lib/adminPersistence';
 import { cn } from '@/lib/utils';
+
+type AdminTab = 'entries' | 'roots' | 'stems' | 'inbox' | 'settings' | 'db';
+
+const ADMIN_TAB_STORAGE_KEY = 'admin-dashboard-tab-v1';
+const ADMIN_TABS: readonly AdminTab[] = ['entries', 'roots', 'stems', 'inbox', 'settings', 'db'];
+
+function isAdminTab(value: string | null): value is AdminTab {
+    return Boolean(value && (ADMIN_TABS as readonly string[]).includes(value));
+}
 
 export function Admin() {
     const { tier, isTrueAdmin } = useAuth();
     const { getToken } = useClerkAuth();
     const [searchParams, setSearchParams] = useSearchParams();
-    const tab = (searchParams.get('tab') as 'entries' | 'roots' | 'stems' | 'inbox' | 'settings' | 'db') || 'entries';
+    const urlTab = searchParams.get('tab');
+    const tab: AdminTab = isAdminTab(urlTab)
+        ? urlTab
+        : (readPersistedAdminString(ADMIN_TAB_STORAGE_KEY, 'entries', isAdminTab) as AdminTab);
 
-    const setTab = (nextTab: 'entries' | 'roots' | 'stems' | 'inbox' | 'settings' | 'db') => {
+    useEffect(() => {
+        writePersistedAdminString(ADMIN_TAB_STORAGE_KEY, tab);
+    }, [tab]);
+
+    useEffect(() => {
+        if (!isAdminTab(urlTab)) {
+            const nextParams = new URLSearchParams(searchParams);
+            nextParams.set('tab', tab);
+            setSearchParams(nextParams, { replace: true });
+        }
+    }, [urlTab, tab, searchParams, setSearchParams]);
+
+    const setTab = (nextTab: AdminTab) => {
+        writePersistedAdminString(ADMIN_TAB_STORAGE_KEY, nextTab);
         const nextParams = new URLSearchParams(searchParams);
         nextParams.set('tab', nextTab);
         setSearchParams(nextParams);

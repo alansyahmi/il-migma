@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { AlertTriangle, ArrowDownAZ, Check, CheckSquare, ChevronDown, ChevronUp, Clock, Copy, Download, Edit2, ExternalLink, Maximize2, Pin, PinOff, Plus, RefreshCw, RotateCcw, Square, Trash2, X, XCircle } from 'lucide-react';
-import { adminBulkDeleteEntries, adminDeleteEntry, adminExportFilteredEntries, adminListEntries, adminUpdateEntry, type AdminExportFilteredEntriesPayload } from '@/lib/api';
+import { adminBulkDeleteEntries, adminDeleteEntry, adminExportFilteredEntries, adminListEntries, adminUpdateEntry, type AdminEntrySortKey, type AdminExportFilteredEntriesPayload } from '@/lib/api';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { Badge } from '@/components/ui/Badge';
@@ -17,11 +17,54 @@ import { WorkspaceBulkActionsBar } from '@/components/admin/workspace/WorkspaceB
 import { WorkspaceEmptyState } from '@/components/admin/workspace/WorkspaceEmptyState';
 import { WorkspaceErrorBanner, WorkspaceFeedbackBanner } from '@/components/admin/workspace/WorkspaceFeedbackBanner';
 import { WorkspaceToolbar } from '@/components/admin/workspace/WorkspaceToolbar';
+import { SortableTableHeader } from '@/components/admin/workspace/SortableTableHeader';
+import { readPersistedAdminState, writePersistedAdminState } from '@/lib/adminPersistence';
+import { toggleSortState, type SortDirection, type SortState } from '@/lib/adminTableSort';
 import { cn } from '@/lib/utils';
 import { resolveTagLabel } from '@/lib/tagLabel';
 import { MALTESE_ALPHABET, matchesMalteseLetter } from '@/lib/malteseAlphabet';
 
 const PAGE_SIZE = 15;
+const ENTRIES_VIEW_STORAGE_KEY = 'admin-entries-view-v1';
+
+const VALID_ENTRY_SORT_KEYS: readonly AdminEntrySortKey[] = [
+    'headword',
+    'status',
+    'pos',
+    'root',
+    'meaning',
+    'tags',
+    'date',
+];
+
+const VALID_AUDIT_FILTERS = ['all', 'action-needed', 'partial', 'complete'] as const;
+type AuditFilter = typeof VALID_AUDIT_FILTERS[number];
+
+interface PersistedEntriesView extends Record<string, unknown> {
+    searchInput: string;
+    selectedPos: string;
+    selectedLetter: string;
+    page: number;
+    viewMode: 'grid' | 'list';
+    showExtraFilters: boolean;
+    isToolbarSticky: boolean;
+    sortBy: AdminEntrySortKey;
+    sortDir: SortDirection;
+    auditFilter: AuditFilter;
+}
+
+const DEFAULT_ENTRIES_VIEW: PersistedEntriesView = {
+    searchInput: '',
+    selectedPos: 'all',
+    selectedLetter: 'all',
+    page: 1,
+    viewMode: 'list',
+    showExtraFilters: true,
+    isToolbarSticky: true,
+    sortBy: 'headword',
+    sortDir: 'asc',
+    auditFilter: 'all',
+};
 
 export function EntryManager() {
     const { getToken: clerkGetToken } = useClerkAuth();
@@ -32,24 +75,53 @@ export function EntryManager() {
     const { getValues } = useAdminConfig();
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const [initialView] = useState<PersistedEntriesView>(() =>
+        readPersistedAdminState(ENTRIES_VIEW_STORAGE_KEY, DEFAULT_ENTRIES_VIEW, (raw, defaults) => {
+            const pageNum = typeof raw.page === 'number' && Number.isFinite(raw.page) && raw.page >= 1
+                ? Math.floor(raw.page)
+                : defaults.page;
+            const sortBy = typeof raw.sortBy === 'string' && (VALID_ENTRY_SORT_KEYS as readonly string[]).includes(raw.sortBy)
+                ? (raw.sortBy as AdminEntrySortKey)
+                : defaults.sortBy;
+            const sortDir: SortDirection = raw.sortDir === 'desc' ? 'desc' : raw.sortDir === 'asc' ? 'asc' : defaults.sortDir;
+            const auditFilter = typeof raw.auditFilter === 'string' && (VALID_AUDIT_FILTERS as readonly string[]).includes(raw.auditFilter)
+                ? (raw.auditFilter as AuditFilter)
+                : defaults.auditFilter;
+
+            return {
+                searchInput: typeof raw.searchInput === 'string' ? raw.searchInput : defaults.searchInput,
+                selectedPos: typeof raw.selectedPos === 'string' && raw.selectedPos ? raw.selectedPos : defaults.selectedPos,
+                selectedLetter: typeof raw.selectedLetter === 'string' && raw.selectedLetter ? raw.selectedLetter : defaults.selectedLetter,
+                page: pageNum,
+                viewMode: raw.viewMode === 'grid' || raw.viewMode === 'list' ? raw.viewMode : defaults.viewMode,
+                showExtraFilters: typeof raw.showExtraFilters === 'boolean' ? raw.showExtraFilters : defaults.showExtraFilters,
+                isToolbarSticky: typeof raw.isToolbarSticky === 'boolean' ? raw.isToolbarSticky : defaults.isToolbarSticky,
+                sortBy,
+                sortDir,
+                auditFilter,
+            };
+        }),
+    );
+
     const [entries, setEntries] = useState<AdminEntry[]>([]);
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [searchInput, setSearchInput] = useState('');
-    const [debouncedQuery, setDebouncedQuery] = useState('');
-    const [selectedPos, setSelectedPos] = useState<string>('all');
-    const [selectedLetter, setSelectedLetter] = useState<string>('all');
-    const [page, setPage] = useState(1);
+    const [searchInput, setSearchInput] = useState(initialView.searchInput);
+    const [debouncedQuery, setDebouncedQuery] = useState(() => initialView.searchInput.trim());
+    const [selectedPos, setSelectedPos] = useState<string>(initialView.selectedPos);
+    const [selectedLetter, setSelectedLetter] = useState<string>(initialView.selectedLetter);
+    const [page, setPage] = useState(initialView.page);
     const [showForm, setShowForm] = useState(false);
     const [editEntry, setEditEntry] = useState<AdminEntry | null>(null);
     const [isDuplicate, setIsDuplicate] = useState(false);
     const [initialFormData, setInitialFormData] = useState<Record<string, string> | null>(null);
-    const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
-    const [showExtraFilters, setShowExtraFilters] = useState(true);
-    const [isToolbarSticky, setIsToolbarSticky] = useState(true);
-    const [sortOrder, setSortOrder] = useState<'alphabetical' | 'recent'>('alphabetical');
-    const [auditFilter, setAuditFilter] = useState<'all' | 'action-needed' | 'partial' | 'complete'>('all');
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>(initialView.viewMode);
+    const [showExtraFilters, setShowExtraFilters] = useState(initialView.showExtraFilters);
+    const [isToolbarSticky, setIsToolbarSticky] = useState(initialView.isToolbarSticky);
+    const [sortBy, setSortBy] = useState<AdminEntrySortKey>(initialView.sortBy);
+    const [sortDir, setSortDir] = useState<SortDirection>(initialView.sortDir);
+    const [auditFilter, setAuditFilter] = useState<AuditFilter>(initialView.auditFilter);
     const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [exportingOffset, setExportingOffset] = useState<number | null>(null);
@@ -86,28 +158,56 @@ export function EntryManager() {
 
     const abortControllerRef = useRef<AbortController | null>(null);
     const lastRequestSignatureRef = useRef<string>('');
+    const prevSearchQueryRef = useRef<string>(initialView.searchInput.trim());
     const createEntryRequested = searchParams.get('create') === '1';
     const prefillHeadword = searchParams.get('headword') || searchParams.get('q') || '';
     const prefillRoot = searchParams.get('root') || searchParams.get('consonants') || '';
 
     const [quickEditError, setQuickEditError] = useState<{ headword: string; id: string; reason: string } | null>(null);
 
+    const sortState: SortState<AdminEntrySortKey> = useMemo(
+        () => ({ key: sortBy, dir: sortDir }),
+        [sortBy, sortDir],
+    );
+    const isRecentSort = sortBy === 'date' && sortDir === 'desc';
+
+    useEffect(() => {
+        writePersistedAdminState(ENTRIES_VIEW_STORAGE_KEY, {
+            searchInput,
+            selectedPos,
+            selectedLetter,
+            page,
+            viewMode,
+            showExtraFilters,
+            isToolbarSticky,
+            sortBy,
+            sortDir,
+            auditFilter,
+        });
+    }, [searchInput, selectedPos, selectedLetter, page, viewMode, showExtraFilters, isToolbarSticky, sortBy, sortDir, auditFilter]);
+
     const showToast = useCallback((msg: string, ok = true) => {
         setToast({ msg, ok });
         window.setTimeout(() => setToast(null), 3500);
     }, []);
 
-    // Debounce search input by 300ms
+    // Debounce search input by 300ms (skip initial mount so restored page isn't reset)
     useEffect(() => {
+        const trimmed = searchInput.trim();
+        if (trimmed === prevSearchQueryRef.current) return;
+
         const timer = setTimeout(() => {
-            setDebouncedQuery(searchInput.trim());
+            prevSearchQueryRef.current = trimmed;
+            setDebouncedQuery(trimmed);
             setPage(1);
         }, 300);
         return () => clearTimeout(timer);
     }, [searchInput]);
 
     const handleSearchSubmit = useCallback(() => {
-        setDebouncedQuery(searchInput.trim());
+        const trimmed = searchInput.trim();
+        prevSearchQueryRef.current = trimmed;
+        setDebouncedQuery(trimmed);
         setPage(1);
     }, [searchInput]);
 
@@ -122,15 +222,29 @@ export function EntryManager() {
     }, []);
 
     const handleSortToggle = useCallback(() => {
-        setSortOrder((prev) => (prev === 'alphabetical' ? 'recent' : 'alphabetical'));
+        if (sortBy === 'date' && sortDir === 'desc') {
+            setSortBy('headword');
+            setSortDir('asc');
+        } else {
+            setSortBy('date');
+            setSortDir('desc');
+        }
         setPage(1);
-    }, []);
+    }, [sortBy, sortDir]);
+
+    const handleColumnSort = useCallback((key: AdminEntrySortKey, defaultDir: SortDirection = 'asc') => {
+        const next = toggleSortState(sortState, key, defaultDir);
+        setSortBy(next.key);
+        setSortDir(next.dir);
+        setPage(1);
+    }, [sortState]);
 
     const load = useCallback(async (options?: { force?: boolean; skipCount?: boolean }) => {
         const currentPosFilter = selectedPos === 'all' ? '' : selectedPos;
         const currentLetterFilter = selectedLetter === 'all' ? '' : selectedLetter;
         const currentOffset = (page - 1) * PAGE_SIZE;
-        const requestSig = `${debouncedQuery}::${currentPosFilter}::${currentLetterFilter}::${sortOrder}::${currentOffset}::${page}`;
+        const legacySort: 'alphabetical' | 'recent' = isRecentSort ? 'recent' : 'alphabetical';
+        const requestSig = `${debouncedQuery}::${currentPosFilter}::${currentLetterFilter}::${sortBy}:${sortDir}::${currentOffset}::${page}`;
 
         if (!options?.force && requestSig === lastRequestSignatureRef.current) {
             return;
@@ -153,7 +267,9 @@ export function EntryManager() {
                 q: debouncedQuery,
                 pos: currentPosFilter,
                 letter: currentLetterFilter,
-                sort: sortOrder,
+                sort: legacySort,
+                sortBy,
+                sortDir,
                 limit: PAGE_SIZE,
                 offset: currentOffset,
                 signal: controller.signal,
@@ -172,11 +288,20 @@ export function EntryManager() {
                 setLoading(false);
             }
         }
-    }, [getToken, debouncedQuery, selectedPos, selectedLetter, sortOrder, page, total]);
+    }, [getToken, debouncedQuery, selectedPos, selectedLetter, isRecentSort, sortBy, sortDir, page, total]);
 
     useEffect(() => {
         load();
-    }, [debouncedQuery, selectedPos, selectedLetter, sortOrder, page]);
+    }, [debouncedQuery, selectedPos, selectedLetter, sortBy, sortDir, page]);
+
+    useEffect(() => {
+        if (!loading && total > 0) {
+            const maxPage = Math.max(1, Math.ceil(total / PAGE_SIZE));
+            if (page > maxPage) {
+                setPage(maxPage);
+            }
+        }
+    }, [loading, total, page]);
 
     useEffect(() => {
         return () => {
@@ -352,6 +477,7 @@ export function EntryManager() {
     }, [selectedPos, selectedLetter, debouncedQuery, auditFilter]);
 
     const handleClearAllFilters = useCallback(() => {
+        prevSearchQueryRef.current = '';
         setSearchInput('');
         setDebouncedQuery('');
         setSelectedPos('all');
@@ -674,7 +800,7 @@ export function EntryManager() {
     // Clear editing row when navigating or filtering
     useEffect(() => {
         setQuickEditingId(null);
-    }, [page, debouncedQuery, selectedPos, selectedLetter, auditFilter, sortOrder]);
+    }, [page, debouncedQuery, selectedPos, selectedLetter, auditFilter, sortBy, sortDir]);
 
     return (
         <div className="space-y-3">
@@ -968,18 +1094,18 @@ export function EntryManager() {
                             </button>
                             <button
                                 type="button"
-                                aria-pressed={sortOrder === 'recent'}
-                                title={term(sortOrder === 'recent' ? 'sort-recent-hint' : 'sort-alphabetical-hint')}
+                                aria-pressed={isRecentSort}
+                                title={term(isRecentSort ? 'sort-recent-hint' : 'sort-alphabetical-hint')}
                                 onClick={handleSortToggle}
                                 className={cn(
                                     'inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] font-medium transition-colors hover:bg-black/5',
-                                    sortOrder === 'recent'
+                                    isRecentSort
                                         ? 'border-link/20 bg-link/5 text-link'
                                         : 'border-black/10 text-slate-500 hover:text-slate-800',
                                 )}
                             >
-                                {sortOrder === 'recent' ? <Clock size={11} /> : <ArrowDownAZ size={11} />}
-                                <span>{term(sortOrder === 'recent' ? 'sort-recent' : 'sort-alphabetical')}</span>
+                                {isRecentSort ? <Clock size={11} /> : <ArrowDownAZ size={11} />}
+                                <span>{term(isRecentSort ? 'sort-recent' : 'sort-alphabetical')}</span>
                             </button>
                         </div>
                         {(filteredEntries.length > 0 || isFilterActive) && (
@@ -1141,27 +1267,64 @@ export function EntryManager() {
                                             )}
                                         </button>
                                     </th>
-                                    <th className="py-2.5 px-2 w-12 text-center" title="Health / Audit Status">
-                                        {term('status') || 'Status'}
-                                    </th>
-                                    <th className="py-2.5 px-3 min-w-[170px]">
-                                        {term('word') || 'Word'} & ID
-                                    </th>
-                                    <th className="py-2.5 px-3 w-44 min-w-[150px]">
-                                        {term('pos') || 'POS'} & Grammar
-                                    </th>
-                                    <th className="py-2.5 px-3 w-44 min-w-[150px]">
-                                        {term('root') || 'Root'} / {term('stem') || 'Stem'} / {term('arabic') || 'Arabic'}
-                                    </th>
-                                    <th className="py-2.5 px-3 min-w-[220px]">
-                                        {term('meaning') || 'Meaning'}
-                                    </th>
-                                    <th className="py-2.5 px-3 w-40 min-w-[140px]">
-                                        Tags & Alt
-                                    </th>
-                                    <th className="py-2.5 px-3 w-24">
-                                        {term('date') || 'Date'}
-                                    </th>
+                                    <SortableTableHeader
+                                        label={term('status') || 'Status'}
+                                        sortKey="status"
+                                        activeSort={sortState}
+                                        onSort={handleColumnSort}
+                                        defaultDir="asc"
+                                        align="center"
+                                        className="py-2.5 px-2 w-12 text-center"
+                                        title="Health / Audit Status"
+                                    />
+                                    <SortableTableHeader
+                                        label={`${term('word') || 'Word'} & ID`}
+                                        sortKey="headword"
+                                        activeSort={sortState}
+                                        onSort={handleColumnSort}
+                                        defaultDir="asc"
+                                        className="py-2.5 px-3 min-w-[170px]"
+                                    />
+                                    <SortableTableHeader
+                                        label={`${term('pos') || 'POS'} & Grammar`}
+                                        sortKey="pos"
+                                        activeSort={sortState}
+                                        onSort={handleColumnSort}
+                                        defaultDir="asc"
+                                        className="py-2.5 px-3 w-44 min-w-[150px]"
+                                    />
+                                    <SortableTableHeader
+                                        label={`${term('root') || 'Root'} / ${term('stem') || 'Stem'} / ${term('arabic') || 'Arabic'}`}
+                                        sortKey="root"
+                                        activeSort={sortState}
+                                        onSort={handleColumnSort}
+                                        defaultDir="asc"
+                                        className="py-2.5 px-3 w-44 min-w-[150px]"
+                                    />
+                                    <SortableTableHeader
+                                        label={term('meaning') || 'Meaning'}
+                                        sortKey="meaning"
+                                        activeSort={sortState}
+                                        onSort={handleColumnSort}
+                                        defaultDir="asc"
+                                        className="py-2.5 px-3 min-w-[220px]"
+                                    />
+                                    <SortableTableHeader
+                                        label="Tags & Alt"
+                                        sortKey="tags"
+                                        activeSort={sortState}
+                                        onSort={handleColumnSort}
+                                        defaultDir="desc"
+                                        className="py-2.5 px-3 w-40 min-w-[140px]"
+                                    />
+                                    <SortableTableHeader
+                                        label={term('date') || 'Date'}
+                                        sortKey="date"
+                                        activeSort={sortState}
+                                        onSort={handleColumnSort}
+                                        defaultDir="desc"
+                                        className="py-2.5 px-3 w-24"
+                                    />
                                     <th className="py-2.5 px-3 w-24 text-right">
                                         {term('actions') || 'Actions'}
                                     </th>

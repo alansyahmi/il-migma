@@ -11,8 +11,25 @@ import { WorkspaceEmptyState } from '@/components/admin/workspace/WorkspaceEmpty
 import { WorkspaceFeedbackBanner } from '@/components/admin/workspace/WorkspaceFeedbackBanner';
 import { WorkspaceToolbar } from '@/components/admin/workspace/WorkspaceToolbar';
 import { SubmissionBulkActionsBar } from '@/components/admin/workspace/SubmissionBulkActionsBar';
+import { readPersistedAdminState, writePersistedAdminState } from '@/lib/adminPersistence';
 import { cn } from '@/lib/utils';
 import type { SubmissionKind, SubmissionRecord, SubmissionStatus } from '@/lib/submissions';
+
+const INBOX_VIEW_STORAGE_KEY = 'admin-inbox-view-v1';
+
+interface PersistedInboxView extends Record<string, unknown> {
+    query: string;
+    kindFilter: 'all' | SubmissionKind;
+    statusFilter: 'all' | SubmissionStatus;
+    selectedId: string | null;
+}
+
+const DEFAULT_INBOX_VIEW: PersistedInboxView = {
+    query: '',
+    kindFilter: 'all',
+    statusFilter: 'all',
+    selectedId: null,
+};
 
 const KIND_FILTERS: Array<{ value: 'all' | SubmissionKind; label: string }> = [
     { value: 'all', label: 'All' },
@@ -60,12 +77,34 @@ interface SubmissionInboxProps {
 export function SubmissionInbox({ onSelectionChange }: SubmissionInboxProps) {
     const { getToken } = useClerkAuth();
 
+    const [initialView] = useState<PersistedInboxView>(() =>
+        readPersistedAdminState(INBOX_VIEW_STORAGE_KEY, DEFAULT_INBOX_VIEW, (raw, defaults) => ({
+            query: typeof raw.query === 'string' ? raw.query : defaults.query,
+            kindFilter: raw.kindFilter === 'all' || raw.kindFilter === 'feedback' || raw.kindFilter === 'suggestion'
+                ? raw.kindFilter
+                : defaults.kindFilter,
+            statusFilter: raw.statusFilter === 'all' || raw.statusFilter === 'new' || raw.statusFilter === 'reviewed' || raw.statusFilter === 'closed' || raw.statusFilter === 'spam'
+                ? raw.statusFilter
+                : defaults.statusFilter,
+            selectedId: typeof raw.selectedId === 'string' ? raw.selectedId : null,
+        })),
+    );
+
     const [submissions, setSubmissions] = useState<SubmissionRecord[]>([]);
     const [loading, setLoading] = useState(false);
-    const [query, setQuery] = useState('');
-    const [kindFilter, setKindFilter] = useState<'all' | SubmissionKind>('all');
-    const [statusFilter, setStatusFilter] = useState<'all' | SubmissionStatus>('all');
-    const [selectedId, setSelectedId] = useState<string | null>(null);
+    const [query, setQuery] = useState(initialView.query);
+    const [kindFilter, setKindFilter] = useState<'all' | SubmissionKind>(initialView.kindFilter);
+    const [statusFilter, setStatusFilter] = useState<'all' | SubmissionStatus>(initialView.statusFilter);
+    const [selectedId, setSelectedId] = useState<string | null>(initialView.selectedId);
+
+    useEffect(() => {
+        writePersistedAdminState(INBOX_VIEW_STORAGE_KEY, {
+            query,
+            kindFilter,
+            statusFilter,
+            selectedId,
+        });
+    }, [query, kindFilter, statusFilter, selectedId]);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
     const [busyId, setBusyId] = useState<string | null>(null);

@@ -915,7 +915,33 @@ export function buildAdminWhereClause({ ids = [], q = '', pos = '', letter = '',
     };
 }
 
-export function buildAdminListQuery({ q = '', pos = '', letter = '', auditStatus = '', sort = 'alphabetical', limit = 50, offset = 0 } = {}) {
+export function resolveAdminEntriesOrderBy({ sort = 'alphabetical', sortBy = '', sortDir = '' } = {}) {
+    const normalizedSort = String(sort || '').trim().toLowerCase() === 'recent' ? 'recent' : 'alphabetical';
+    const normalizedKey = String(sortBy || '').trim().toLowerCase();
+    const rawDir = String(sortDir || '').trim().toLowerCase();
+    const dir = rawDir === 'desc' ? 'DESC' : 'ASC';
+
+    switch (normalizedKey) {
+        case 'headword':
+            return dir === 'DESC' ? 'e.headword DESC' : 'e.headword ASC';
+        case 'date':
+            return rawDir === 'asc' ? 'e.created_at ASC' : 'e.created_at DESC';
+        case 'pos':
+            return `CASE WHEN TRIM(COALESCE(e.pos, '')) = '' THEN 1 ELSE 0 END ASC, LOWER(TRIM(COALESCE(e.pos, ''))) ${dir}, e.headword ASC`;
+        case 'root':
+            return `CASE WHEN TRIM(COALESCE(NULLIF(TRIM(e.root_consonants), ''), NULLIF(TRIM(e.stem), ''), '')) = '' THEN 1 ELSE 0 END ASC, LOWER(TRIM(COALESCE(NULLIF(TRIM(e.root_consonants), ''), NULLIF(TRIM(e.stem), ''), ''))) ${dir}, e.headword ASC`;
+        case 'meaning':
+            return `CASE WHEN TRIM(COALESCE(NULLIF(TRIM(text_en), ''), NULLIF(TRIM(text_mt), ''), '')) = '' THEN 1 ELSE 0 END ASC, LOWER(TRIM(COALESCE(NULLIF(TRIM(text_en), ''), NULLIF(TRIM(text_mt), ''), ''))) ${dir}, e.headword ASC`;
+        case 'status':
+            return `(CASE WHEN ${AUDIT_CRITICAL_SQL} THEN 0 WHEN ${AUDIT_PARTIAL_SQL} THEN 1 ELSE 2 END) ${dir}, e.headword ASC`;
+        case 'tags':
+            return `((SELECT COUNT(*) FROM entry_tags et_sort WHERE et_sort.entry_id = e.id) + (SELECT COUNT(*) FROM alternative_forms a_sort WHERE a_sort.entry_id = e.id)) ${dir}, e.headword ASC`;
+        default:
+            return normalizedSort === 'recent' ? 'e.created_at DESC' : 'e.headword ASC';
+    }
+}
+
+export function buildAdminListQuery({ q = '', pos = '', letter = '', auditStatus = '', sort = 'alphabetical', sortBy = '', sortDir = '', limit = 50, offset = 0 } = {}) {
     let sql = `SELECT 
         e.id, 
         e.headword, 
@@ -952,8 +978,7 @@ export function buildAdminListQuery({ q = '', pos = '', letter = '', auditStatus
     LEFT JOIN verb_morphology vm ON vm.entry_id = e.id`;
 
     const { whereSql, args } = buildAdminWhereClause({ q, pos, letter, auditStatus });
-    const normalizedSort = String(sort || '').trim().toLowerCase() === 'recent' ? 'recent' : 'alphabetical';
-    const orderBySql = normalizedSort === 'recent' ? 'e.created_at DESC' : 'e.headword ASC';
+    const orderBySql = resolveAdminEntriesOrderBy({ sort, sortBy, sortDir });
     sql += `${whereSql} ORDER BY ${orderBySql} LIMIT ? OFFSET ?`;
 
     return { sql, args: [...args, limit, offset] };
@@ -1098,11 +1123,13 @@ export async function onRequestGet({ request, env }) {
         const pos = url.searchParams.get('pos')?.trim() ?? '';
         const letter = url.searchParams.get('letter')?.trim() ?? '';
         const sort = url.searchParams.get('sort')?.trim().toLowerCase() === 'recent' ? 'recent' : 'alphabetical';
+        const sortBy = url.searchParams.get('sortBy')?.trim().toLowerCase() ?? '';
+        const sortDir = url.searchParams.get('sortDir')?.trim().toLowerCase() ?? '';
         const skipCount = url.searchParams.get('skipCount') === 'true' || url.searchParams.get('skip_count') === 'true';
 
         const client = getDbClient(env);
 
-        const listQuery = buildAdminListQuery({ q, pos, letter, sort, limit, offset });
+        const listQuery = buildAdminListQuery({ q, pos, letter, sort, sortBy, sortDir, limit, offset });
         const countQuery = buildAdminCountQuery({ q, pos, letter });
 
         const queries = [client.execute(listQuery)];
@@ -1192,7 +1219,7 @@ export async function onRequestGet({ request, env }) {
         logAdminRequest({
             endpoint: '/api/admin/entries',
             method: 'GET',
-            params: { q: q || undefined, pos: pos || undefined, letter: letter || undefined, sort, limit, offset },
+            params: { q: q || undefined, pos: pos || undefined, letter: letter || undefined, sort, sortBy: sortBy || undefined, sortDir: sortDir || undefined, limit, offset },
             durationMs,
             rowsCount: entries.length,
             total: total ?? null,

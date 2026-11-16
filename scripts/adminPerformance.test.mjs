@@ -96,3 +96,20 @@ test('Admin Performance: buildAdminListQuery supports alphabetical and recent so
     assert.match(fallbackRes.sql, /ORDER BY e\.headword ASC LIMIT \? OFFSET \?/i);
 });
 
+test('Admin Performance: buildAdminListQuery supports allowlisted column sortBy and sortDir', () => {
+    const posDesc = buildAdminListQuery({ sortBy: 'pos', sortDir: 'desc' });
+    assert.match(posDesc.sql, /ORDER BY CASE WHEN TRIM\(COALESCE\(e\.pos, ''\)\) = '' THEN 1 ELSE 0 END ASC, LOWER\(TRIM\(COALESCE\(e\.pos, ''\)\)\) DESC, e\.headword ASC/i);
+
+    const dateAsc = buildAdminListQuery({ sortBy: 'date', sortDir: 'asc' });
+    assert.match(dateAsc.sql, /ORDER BY e\.created_at ASC LIMIT \? OFFSET \?/i);
+
+    const statusAsc = buildAdminListQuery({ sortBy: 'status', sortDir: 'asc' });
+    assert.match(statusAsc.sql, /ORDER BY \(CASE WHEN [\s\S]* THEN 0 WHEN [\s\S]* THEN 1 ELSE 2 END\) ASC, e\.headword ASC/i);
+
+    const tagsDesc = buildAdminListQuery({ sortBy: 'tags', sortDir: 'desc' });
+    assert.match(tagsDesc.sql, /entry_tags et_sort .* alternative_forms a_sort .* DESC, e\.headword ASC/i);
+
+    const injected = buildAdminListQuery({ sortBy: 'headword; DROP TABLE entries', sortDir: 'desc' });
+    assert.match(injected.sql, /ORDER BY e\.headword ASC LIMIT \? OFFSET \?/i);
+});
+
