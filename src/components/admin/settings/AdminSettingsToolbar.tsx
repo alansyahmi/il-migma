@@ -42,11 +42,11 @@ export function AdminSettingsToolbar({
     const hasPosFilter = Boolean(activeCategory?.hasPosFilter);
 
     return (
-        <div className="sticky top-16 z-30 bg-[#f7f6f3] border border-black/5 rounded-2xl p-3 space-y-3 shadow-sm">
+        <div className="sm:sticky sm:top-16 sm:z-30 bg-[#f7f6f3] border border-black/5 rounded-2xl p-3 space-y-3 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="text-lg font-bold text-black">{categoryLabel}</h2>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                     {isPattern && (
                         <Button
                             variant="secondary"
@@ -73,12 +73,12 @@ export function AdminSettingsToolbar({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-                <div className="flex items-center gap-2 bg-white border border-black/10 rounded-lg px-2 py-1 shadow-sm">
-                    <Search size={14} className="text-black/30" />
+                <div className="flex items-center gap-2 bg-white border border-black/10 rounded-lg px-2 py-1 shadow-sm w-full sm:w-auto">
+                    <Search size={14} className="text-black/30 shrink-0" />
                     <input
                         type="text"
                         placeholder={term('search-items')}
-                        className="bg-transparent border-none text-xs focus:outline-none w-36 focus:w-56 transition-all"
+                        className="bg-transparent border-none text-xs focus:outline-none w-full sm:w-36 sm:focus:w-56 transition-all"
                         value={searchTerm}
                         onChange={(e) => onSearchTermChange(e.target.value)}
                     />

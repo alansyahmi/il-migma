@@ -220,7 +220,7 @@ export function StemFormModal({ data, onClose, onSaved, isNew = false, getToken 
                                 <div key={i} className="flex flex-col gap-2 p-3 bg-black/5 rounded-xl relative group">
                                     <div className="flex items-center justify-between mb-1">
                                         <span className="text-[10px] font-bold text-black/30 uppercase tracking-widest">{i === 0 ? 'Primary Sense' : `Sense ${i + 1}`}</span>
-                                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button type="button" onClick={() => moveGloss(i, 'up')} disabled={i === 0} className="p-1 text-black/20 hover:text-[#1034A6] disabled:opacity-0">
                                                 <ArrowUp size={12} />
                                             </button>
@@ -318,8 +318,8 @@ export function StemFormModal({ data, onClose, onSaved, isNew = false, getToken 
                     )}
                 </div>
 
-                <div className="flex justify-between items-center pt-4 mt-4 border-t border-black/10 shrink-0">
-                    <div>
+                <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-3 pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-black/10 shrink-0">
+                    <div className="flex items-center">
                         {!isNew && (
                             <Button
                                 type="button"
@@ -346,11 +346,11 @@ export function StemFormModal({ data, onClose, onSaved, isNew = false, getToken 
                             </Button>
                         )}
                     </div>
-                    <div className="flex gap-3">
-                        <Button type="button" variant="ghost" onClick={onClose}>
+                    <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
+                        <Button type="button" variant="ghost" onClick={onClose} className="flex-1 sm:flex-initial">
                             {t('Cancel', 'Ikkanċella')}
                         </Button>
-                        <Button type="submit" loading={saving}>
+                        <Button type="submit" loading={saving} className="flex-1 sm:flex-initial">
                             {t('Save Changes', 'Issejva l-Bidliet')}
                         </Button>
                     </div>

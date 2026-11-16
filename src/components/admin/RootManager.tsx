@@ -357,7 +357,7 @@ export function RootManager() {
                                     defaultDir="desc"
                                     className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
                                 />
-                                <th className="text-right p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('actions')}</th>
+                                <th className="text-right p-4 text-xs font-bold text-black/40 uppercase tracking-tighter sticky right-0 z-10 bg-surface-soft shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.06)]">{term('actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -398,7 +398,7 @@ export function RootManager() {
                                         {renderThesaurusCounts(root, term)}
                                     </td>
                                     <td className="p-4 text-black/40 text-xs">{root.created_at?.slice(0, 10)}</td>
-                                    <td className="p-4 text-right">
+                                    <td className="p-4 text-right sticky right-0 z-10 bg-white/95 backdrop-blur-xs shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.06)]">
                                         <div className="flex justify-end gap-2">
                                             <button type="button" onClick={() => setEditRoot(root)} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><Edit2 size={14} /></button>
                                             <button type="button" onClick={() => handleDelete(root.id, root.consonants)} className="p-1.5 text-red-600 hover:bg-red-50 rounded"><Trash2 size={14} /></button>
@@ -410,7 +410,35 @@ export function RootManager() {
                     </table>
                 </Card>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 bg-white border border-border-light rounded-xl px-3 py-2 text-xs">
+                        <span className="font-bold uppercase tracking-wider text-black/40 text-[10px]">Sort</span>
+                        <div className="flex items-center gap-2">
+                            <select
+                                aria-label="Sort roots by"
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value as RootSortKey)}
+                                className="bg-surface-soft border border-black/10 rounded-lg px-2 py-1 text-xs font-semibold text-black focus:outline-none focus:ring-1 focus:ring-link"
+                            >
+                                <option value="consonants">{term('consonants')}</option>
+                                <option value="meaning">{term('meaning')}</option>
+                                <option value="class">{term('class')}</option>
+                                <option value="vowels">{term('vowels')}</option>
+                                <option value="source">{term('source')}</option>
+                                <option value="tags">Tags</option>
+                                <option value="thesaurus">{term('thesaurus')}</option>
+                                <option value="date">{term('date')}</option>
+                            </select>
+                            <button
+                                type="button"
+                                onClick={() => setSortDir((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+                                className="px-2.5 py-1 rounded-lg border border-black/10 bg-surface-soft text-xs font-bold uppercase text-link hover:bg-link/5"
+                            >
+                                {sortDir === 'asc' ? 'ASC ↑' : 'DESC ↓'}
+                            </button>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {sortedRoots.map((root) => {
                         const { synonymCount, antonymCount } = getThesaurusCounts(root);
                         return (
@@ -426,16 +454,16 @@ export function RootManager() {
                                     onClick={() => toggleSelect(root.id)}
                                     className={cn(
                                         'absolute top-3 left-3 z-10 p-1 rounded-md transition-all',
-                                        selectedIds.has(root.id) ? 'text-link bg-white shadow-sm' : 'opacity-0 group-hover:opacity-100 text-black/20 hover:text-black/40 bg-black/5',
+                                        selectedIds.has(root.id) ? 'text-link bg-white shadow-sm' : 'opacity-100 sm:opacity-0 group-hover:opacity-100 text-black/25 hover:text-black/40 bg-black/5',
                                     )}
                                 >
                                     {selectedIds.has(root.id) ? <CheckSquare size={16} /> : <Square size={16} />}
                                 </button>
-                                <div className="flex justify-between items-start mb-3 ml-6 group-hover:ml-0 transition-all">
+                                <div className="flex justify-between items-start mb-3 ml-6 sm:ml-6 sm:group-hover:ml-0 transition-all">
                                     <Link to={`/root/${root.consonants}`} className="ml-1">
                                         <h4 className="font-serif text-2xl font-bold text-link group-hover:underline">{root.consonants}</h4>
                                     </Link>
-                                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button type="button" onClick={() => setEditRoot(root)} className="p-1.5 text-link hover:bg-link/10 rounded-lg"><Edit2 size={14} /></button>
                                         <button type="button" onClick={() => handleDelete(root.id, root.consonants)} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
                                     </div>
@@ -456,6 +484,7 @@ export function RootManager() {
                             </article>
                         );
                     })}
+                    </div>
                 </div>
             )}
 

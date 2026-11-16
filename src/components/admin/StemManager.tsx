@@ -331,7 +331,7 @@ export function StemManager() {
                                     defaultDir="desc"
                                     className="text-left p-4 text-xs font-bold text-black/40 uppercase tracking-tighter"
                                 />
-                                <th className="text-right p-4 text-xs font-bold text-black/40 uppercase tracking-tighter">{term('actions')}</th>
+                                <th className="text-right p-4 text-xs font-bold text-black/40 uppercase tracking-tighter sticky right-0 z-10 bg-surface-soft shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.06)]">{term('actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -370,7 +370,7 @@ export function StemManager() {
                                         </span>
                                     </td>
                                     <td className="p-4 text-black/40 text-xs">{stem.created_at?.slice(0, 10)}</td>
-                                    <td className="p-4 text-right">
+                                    <td className="p-4 text-right sticky right-0 z-10 bg-white/95 backdrop-blur-xs shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.06)]">
                                         <div className="flex justify-end gap-2">
                                             <button type="button" onClick={() => openEdit(stem.stem_string)} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded"><Edit2 size={14} /></button>
                                             <button type="button" onClick={() => handleDelete(stem)} className="p-1.5 text-red-600 hover:bg-red-50 rounded"><Trash2 size={14} /></button>
@@ -382,7 +382,35 @@ export function StemManager() {
                     </table>
                 </Card>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 bg-white border border-border-light rounded-xl px-3 py-2 text-xs">
+                        <span className="font-bold uppercase tracking-wider text-black/40 text-[10px]">Sort</span>
+                        <div className="flex items-center gap-2">
+                            <select
+                                aria-label="Sort stems by"
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value as StemSortKey)}
+                                className="bg-surface-soft border border-black/10 rounded-lg px-2 py-1 text-xs font-semibold text-black focus:outline-none focus:ring-1 focus:ring-link"
+                            >
+                                <option value="stem_string">{term('consonants')}</option>
+                                <option value="meaning">{term('meaning')}</option>
+                                <option value="class">{term('class')}</option>
+                                <option value="suffix">{term('vowels')}</option>
+                                <option value="root">{term('source')}</option>
+                                <option value="hybrid">Tags</option>
+                                <option value="entries">{term('thesaurus')}</option>
+                                <option value="date">{term('date')}</option>
+                            </select>
+                            <button
+                                type="button"
+                                onClick={() => setSortDir((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+                                className="px-2.5 py-1 rounded-lg border border-black/10 bg-surface-soft text-xs font-bold uppercase text-link hover:bg-link/5"
+                            >
+                                {sortDir === 'asc' ? 'ASC ↑' : 'DESC ↓'}
+                            </button>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {sortedStems.map((stem) => (
                         <article
                             key={stem.id}
@@ -396,7 +424,7 @@ export function StemManager() {
                                     <span className="text-[10px] bg-link/10 text-link px-1.5 py-0.5 rounded-md font-bold uppercase">
                                         {stem.entry_count} E
                                     </span>
-                                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button type="button" onClick={() => openEdit(stem.stem_string)} className="p-1.5 text-link hover:bg-link/10 rounded-lg"><Edit2 size={14} /></button>
                                         <button type="button" onClick={() => handleDelete(stem)} className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 size={14} /></button>
                                     </div>
@@ -438,6 +466,7 @@ export function StemManager() {
                             </div>
                         </article>
                     ))}
+                    </div>
                 </div>
             )}
 

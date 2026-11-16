@@ -1713,7 +1713,7 @@ function StemMorphologyFields({
                 <span className="text-lg">⚙</span>
                 {t('Stem Morphology', 'Morfoloġija taż-Żokk')}
             </h4>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label className={styles.label}>{t('Class', 'Klassi')}</label>
                     <select className={styles.sel} value={form.zokk_class} onChange={e => set('zokk_class', e.target.value)}>
@@ -1736,7 +1736,7 @@ function StemMorphologyFields({
                     {t('Reanalysed root mirrors the main root consonants.', 'L-għerq reanalizzat jirrifletti l-konsonanti tal-għerq prinċipali.')}
                 </div>
             )}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label className={styles.label}>{t('Agentive Suffix', 'Suffiss Aġentiv')}</label>
                     <input className={styles.inp} value={form.zokk_agentive_suffix}
@@ -4017,7 +4017,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
                     {Object.keys(form.extraFields || {}).length > 0 && (
                         <fieldset className="border border-amber-100 bg-amber-50/20 rounded-lg p-4 space-y-3">
                             <legend className="text-[10px] font-bold text-amber-600 uppercase tracking-widest px-2">{t('Additional Fields', 'Ghelta Oħra')}</legend>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {Object.keys(form.extraFields).map(key => (
                                     <div key={key}>
                                         <label className={label}>{key}</label>
@@ -4039,8 +4039,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
                     )}
                 </div>
 
-                <div className="flex justify-between items-center pt-4 mt-4 border-t border-black/10 bg-white px-1 shrink-0">
-                    <div className="flex items-center gap-3">
+                <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-3 pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-black/10 bg-white px-1 shrink-0">
+                    <div className="flex flex-wrap items-center justify-between sm:justify-start gap-2 sm:gap-3">
                         {isEdit && (
                             <Button
                                 type="button"
@@ -4125,9 +4125,9 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
                             </Badge>
                         )}
                     </div>
-                    <div className="flex gap-3">
-                        <Button type="button" variant="ghost" onClick={handleClose}>{t('Cancel', 'Ikkanċella')}</Button>
-                        <Button type="button" onClick={handleSave} loading={saving} disabled={isEdit && isMissingEntry}>
+                    <div className="flex justify-end gap-2 sm:gap-3 w-full sm:w-auto">
+                        <Button type="button" variant="ghost" onClick={handleClose} className="flex-1 sm:flex-initial">{t('Cancel', 'Ikkanċella')}</Button>
+                        <Button type="button" onClick={handleSave} loading={saving} disabled={isEdit && isMissingEntry} className="flex-1 sm:flex-initial">
                             {isDuplicate ? t('Create Duplicate', 'Oħloq Kopja') : isEdit ? t('Save Changes', 'Issejva l-Bidliet') : t('Create Entry', 'Oħloq Entrata')}
                         </Button>
                     </div>

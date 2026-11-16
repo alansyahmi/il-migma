@@ -11,7 +11,7 @@ interface WorkspaceToolbarProps {
 
 export function WorkspaceToolbar({ heading, countText, controls, filters, sticky = true }: WorkspaceToolbarProps) {
     return (
-        <div className={cn('bg-[#f7f6f3] border border-black/5 rounded-2xl p-3 space-y-3 shadow-sm', sticky && 'sticky top-16 z-30')}>
+        <div className={cn('bg-[#f7f6f3] border border-black/5 rounded-2xl p-2.5 sm:p-3 space-y-2.5 sm:space-y-3 shadow-sm', sticky && 'sm:sticky sm:top-16 sm:z-30')}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                     <h2 className="text-lg font-bold text-black">{heading}</h2>

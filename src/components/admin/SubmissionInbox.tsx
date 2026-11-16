@@ -5,6 +5,7 @@ import { adminBulkSubmissions, adminDeleteSubmission, adminListSubmissions, admi
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
+import { Modal } from '@/components/ui/Modal';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { Spinner } from '@/components/ui/Spinner';
 import { WorkspaceEmptyState } from '@/components/admin/workspace/WorkspaceEmptyState';
@@ -110,6 +111,7 @@ export function SubmissionInbox({ onSelectionChange }: SubmissionInboxProps) {
     const [busyId, setBusyId] = useState<string | null>(null);
     const [bulkBusy, setBulkBusy] = useState(false);
     const [total, setTotal] = useState(0);
+    const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
 
     const showToast = useCallback((msg: string, ok = true) => {
         setToast({ msg, ok });
@@ -271,14 +273,14 @@ export function SubmissionInbox({ onSelectionChange }: SubmissionInboxProps) {
                             onSubmit={load}
                             placeholder="Search subject, message, email, or page..."
                         />
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex overflow-x-auto sm:flex-wrap gap-2 pb-1 sm:pb-0">
                             {KIND_FILTERS.map(option => (
                                 <button
                                     key={option.value}
                                     type="button"
                                     onClick={() => setKindFilter(option.value)}
                                     className={cn(
-                                        'px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all',
+                                        'px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all shrink-0',
                                         kindFilter === option.value
                                             ? 'bg-white text-link border-link/20 shadow-sm'
                                             : 'bg-black/5 text-black/45 border-transparent hover:bg-black/10',
@@ -288,14 +290,14 @@ export function SubmissionInbox({ onSelectionChange }: SubmissionInboxProps) {
                                 </button>
                             ))}
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex overflow-x-auto sm:flex-wrap gap-2 pb-1 sm:pb-0">
                             {STATUS_FILTERS.map(option => (
                                 <button
                                     key={option.value}
                                     type="button"
                                     onClick={() => setStatusFilter(option.value)}
                                     className={cn(
-                                        'px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all',
+                                        'px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest border transition-all shrink-0',
                                         statusFilter === option.value
                                             ? 'bg-white text-link border-link/20 shadow-sm'
                                             : 'bg-black/5 text-black/45 border-transparent hover:bg-black/10',
@@ -355,11 +357,15 @@ export function SubmissionInbox({ onSelectionChange }: SubmissionInboxProps) {
                                         key={submission.id}
                                         role="button"
                                         tabIndex={0}
-                                        onClick={() => setSelectedId(submission.id)}
+                                        onClick={() => {
+                                            setSelectedId(submission.id);
+                                            setMobileDetailOpen(true);
+                                        }}
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter' || e.key === ' ') {
                                                 e.preventDefault();
                                                 setSelectedId(submission.id);
+                                                setMobileDetailOpen(true);
                                             }
                                         }}
                                         className={cn(
@@ -411,82 +417,44 @@ export function SubmissionInbox({ onSelectionChange }: SubmissionInboxProps) {
                         </div>
                     </Card>
 
-                    <Card className="overflow-hidden border-border-light sticky top-4">
+                    <Card className="hidden lg:block overflow-hidden border-border-light sticky top-4">
                         {detail ? (
-                            <div className="p-5 space-y-5">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div className="min-w-0">
-                                        <div className="flex flex-wrap items-center gap-2 mb-3">
-                                            <Badge className={KIND_STYLES[detail.kind]}>
-                                                {formatKindLabel(detail.kind)}
-                                            </Badge>
-                                            <Badge className={STATUS_STYLES[detail.status]}>
-                                                {formatStatusLabel(detail.status)}
-                                            </Badge>
-                                            <Badge variant="tag">
-                                                {CATEGORY_LABELS[detail.kind][detail.category] || detail.category}
-                                            </Badge>
-                                        </div>
-                                        <h2 className="font-serif text-2xl leading-tight text-black font-bold">
-                                            {detail.subject}
-                                        </h2>
-                                        <p className="text-sm text-black/40 mt-2">
-                                            Submitted {formatLongDate(detail.created_at)}
-                                        </p>
-                                    </div>
-                                    {detail.page_url ? (
-                                        <a
-                                            href={detail.page_url}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="text-black/35 hover:text-black/70 transition-colors shrink-0"
-                                            aria-label="Open source page"
-                                        >
-                                            <ExternalLink size={16} />
-                                        </a>
-                                    ) : null}
-                                </div>
-
-                                <div className="space-y-4">
-                                    <Section label="Message" value={detail.message || 'No message provided.'} multiline />
-                                    <Section label="Email" value={detail.email || 'No email provided.'} />
-                                    <Section label="Page" value={detail.page_path || 'Unknown'} code />
-                                    <Section label="Page URL" value={detail.page_url || 'Unavailable'} />
-                                    <Section label="Referer" value={detail.referer || 'Unavailable'} />
-                                    <Section label="User agent" value={detail.user_agent || 'Unavailable'} />
-                                    <Section label="Updated" value={formatLongDate(detail.updated_at)} />
-                                </div>
-
-                                <div className="flex flex-wrap gap-2 border-t border-black/5 pt-4">
-                                    <Button variant="secondary" size="sm" onClick={() => updateStatus(detail, 'new')} loading={busyId === detail.id}>
-                                        Mark new
-                                    </Button>
-                                    <Button variant="secondary" size="sm" onClick={() => updateStatus(detail, 'reviewed')} loading={busyId === detail.id}>
-                                        Mark reviewed
-                                    </Button>
-                                    <Button variant="secondary" size="sm" onClick={() => updateStatus(detail, 'closed')} loading={busyId === detail.id}>
-                                        Mark closed
-                                    </Button>
-                                    <Button variant="secondary" size="sm" onClick={() => updateStatus(detail, 'spam')} loading={busyId === detail.id}>
-                                        Mark spam
-                                    </Button>
-                                    <Button
-                                        variant="danger"
-                                        size="sm"
-                                        onClick={() => deleteSubmission(detail)}
-                                        loading={busyId === detail.id}
-                                        leftIcon={<Trash2 size={14} />}
-                                    >
-                                        Delete
-                                    </Button>
-                                </div>
-                            </div>
+                            <SubmissionDetailContent
+                                detail={detail}
+                                busy={busyId === detail.id}
+                                onUpdateStatus={(status) => updateStatus(detail, status)}
+                                onDelete={() => deleteSubmission(detail)}
+                            />
                         ) : (
                             <div className="p-6 text-black/40 italic">
                                 Select a submission to review it.
                             </div>
                         )}
                     </Card>
+                </div>
+            )}
+
+            {mobileDetailOpen && detail && (
+                <div className="lg:hidden">
+                    <Modal
+                        open={true}
+                        onClose={() => setMobileDetailOpen(false)}
+                        title={detail.subject}
+                        size="lg"
+                    >
+                        <div className="overflow-y-auto flex-1 pr-1">
+                            <SubmissionDetailContent
+                                detail={detail}
+                                busy={busyId === detail.id}
+                                onUpdateStatus={(status) => updateStatus(detail, status)}
+                                onDelete={async () => {
+                                    await deleteSubmission(detail);
+                                    setMobileDetailOpen(false);
+                                }}
+                                compact
+                            />
+                        </div>
+                    </Modal>
                 </div>
             )}
 
@@ -502,6 +470,93 @@ export function SubmissionInbox({ onSelectionChange }: SubmissionInboxProps) {
                     busy={bulkBusy}
                 />
             )}
+        </div>
+    );
+}
+
+function SubmissionDetailContent({
+    detail,
+    busy,
+    onUpdateStatus,
+    onDelete,
+    compact = false,
+}: {
+    detail: SubmissionRecord;
+    busy: boolean;
+    onUpdateStatus: (status: SubmissionStatus) => void;
+    onDelete: () => void;
+    compact?: boolean;
+}) {
+    return (
+        <div className={cn(compact ? 'space-y-4' : 'p-5 space-y-5')}>
+            <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-2 sm:mb-3">
+                        <Badge className={KIND_STYLES[detail.kind]}>
+                            {formatKindLabel(detail.kind)}
+                        </Badge>
+                        <Badge className={STATUS_STYLES[detail.status]}>
+                            {formatStatusLabel(detail.status)}
+                        </Badge>
+                        <Badge variant="tag">
+                            {CATEGORY_LABELS[detail.kind][detail.category] || detail.category}
+                        </Badge>
+                    </div>
+                    {!compact && (
+                        <h2 className="font-serif text-2xl leading-tight text-black font-bold">
+                            {detail.subject}
+                        </h2>
+                    )}
+                    <p className="text-sm text-black/40 mt-1 sm:mt-2">
+                        Submitted {formatLongDate(detail.created_at)}
+                    </p>
+                </div>
+                {detail.page_url ? (
+                    <a
+                        href={detail.page_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-black/35 hover:text-black/70 transition-colors shrink-0 p-1"
+                        aria-label="Open source page"
+                    >
+                        <ExternalLink size={16} />
+                    </a>
+                ) : null}
+            </div>
+
+            <div className="space-y-3 sm:space-y-4">
+                <Section label="Message" value={detail.message || 'No message provided.'} multiline />
+                <Section label="Email" value={detail.email || 'No email provided.'} />
+                <Section label="Page" value={detail.page_path || 'Unknown'} code />
+                <Section label="Page URL" value={detail.page_url || 'Unavailable'} />
+                <Section label="Referer" value={detail.referer || 'Unavailable'} />
+                <Section label="User agent" value={detail.user_agent || 'Unavailable'} />
+                <Section label="Updated" value={formatLongDate(detail.updated_at)} />
+            </div>
+
+            <div className="flex flex-wrap gap-2 border-t border-black/5 pt-4">
+                <Button variant="secondary" size="sm" onClick={() => onUpdateStatus('new')} loading={busy}>
+                    Mark new
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => onUpdateStatus('reviewed')} loading={busy}>
+                    Mark reviewed
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => onUpdateStatus('closed')} loading={busy}>
+                    Mark closed
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => onUpdateStatus('spam')} loading={busy}>
+                    Mark spam
+                </Button>
+                <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={onDelete}
+                    loading={busy}
+                    leftIcon={<Trash2 size={14} />}
+                >
+                    Delete
+                </Button>
+            </div>
         </div>
     );
 }

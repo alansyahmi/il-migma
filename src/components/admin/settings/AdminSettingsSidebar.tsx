@@ -53,6 +53,7 @@ export function AdminSettingsSidebar({
     term,
 }: AdminSettingsSidebarProps) {
     const [canonicalOpen, setCanonicalOpen] = useState(activeTab === 'cv_wizen_pattern' || activePosFilter !== 'all' || activeRoleFilter !== 'all');
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     useEffect(() => {
         if (activeTab === 'cv_wizen_pattern' || activePosFilter !== 'all' || activeRoleFilter !== 'all') {
@@ -60,8 +61,45 @@ export function AdminSettingsSidebar({
         }
     }, [activePosFilter, activeRoleFilter, activeTab]);
 
+    const activeCategoryObj = groupedCategories
+        .flatMap((group) => group.categories)
+        .find((cat) => cat.id === activeTab);
+    const activeCategoryName = activeCategoryObj
+        ? (activeCategoryObj.id === 'root_relationship'
+            ? t(activeCategoryObj.label, term('etymological-relationships'))
+            : t(activeCategoryObj.label, term(activeCategoryObj.label)))
+        : activeTab;
+
+    const handleSelectCategory = (categoryId: string) => {
+        onSelectCategory(categoryId);
+        setMobileOpen(false);
+    };
+
+    const handleSelectCanonical = (filters?: { pos?: string; role?: string }) => {
+        onSelectCanonicalPattern(filters);
+        setMobileOpen(false);
+    };
+
     return (
-        <aside className="md:col-span-1 space-y-4">
+        <aside className="md:col-span-1 space-y-3 md:space-y-4">
+            <button
+                type="button"
+                onClick={() => setMobileOpen((prev) => !prev)}
+                aria-expanded={mobileOpen}
+                className="md:hidden w-full bg-white rounded-2xl border border-black/10 px-4 py-3 shadow-sm flex items-center justify-between text-left"
+            >
+                <div className="min-w-0">
+                    <span className="block text-[10px] font-bold text-black/40 uppercase tracking-widest">
+                        {term('categories')}
+                    </span>
+                    <span className="block text-sm font-bold text-[#1034A6] truncate">
+                        {activeCategoryName} ({getItemCount(activeTab)})
+                    </span>
+                </div>
+                <ChevronDown size={18} className={cn('text-black/50 shrink-0 transition-transform', mobileOpen && 'rotate-180')} />
+            </button>
+
+            <div className={cn('space-y-4', mobileOpen ? 'block' : 'hidden md:block')}>
             <div className="bg-white rounded-2xl border border-black/5 p-3 shadow-sm">
                 <h3 className="text-[10px] font-bold text-black/40 uppercase tracking-widest px-2 mb-3">{term('categories')}</h3>
 
@@ -98,9 +136,9 @@ export function AdminSettingsSidebar({
                                                             draggedCatId === cat.id ? 'opacity-50 border-dashed border-2 bg-transparent' : '',
                                                             draggedCatId && draggedCatId !== cat.id ? 'border-t-2 border-t-transparent hover:border-t-[#1034A6]/20' : '',
                                                         )}
-                                                        onClick={() => onSelectCanonicalPattern()}
+                                                        onClick={() => handleSelectCanonical()}
                                                     >
-                                                        <GripVertical size={14} className="opacity-0 group-hover:opacity-50 transition-opacity cursor-grab active:cursor-grabbing text-black" />
+                                                        <GripVertical size={14} className="hidden md:block opacity-0 group-hover:opacity-50 transition-opacity cursor-grab active:cursor-grabbing text-black" />
                                                         <span className="flex items-center gap-2 flex-1 min-w-0">
                                                             <cat.icon size={16} className={cn('shrink-0 transition-colors', activeTab === cat.id ? 'text-[#1034A6]' : 'text-black/25 group-hover:text-black/40')} />
                                                             <span className="truncate">{t(cat.label, term(cat.label))}</span>
@@ -127,7 +165,7 @@ export function AdminSettingsSidebar({
                                                                 <div className="px-1 text-[9px] font-bold uppercase tracking-[0.22em] text-black/25">{term('part-of-speech')}</div>
                                                                 <button
                                                                     type="button"
-                                                                    onClick={() => onSelectCanonicalPattern()}
+                                                                    onClick={() => handleSelectCanonical()}
                                                                     className={cn(
                                                                         'w-full flex items-center justify-between rounded-lg border px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-all',
                                                                         activeTab === 'cv_wizen_pattern' && activePosFilter === 'all' && activeRoleFilter === 'all'
@@ -145,7 +183,7 @@ export function AdminSettingsSidebar({
                                                                         <button
                                                                             key={shortcut.pos}
                                                                             type="button"
-                                                                            onClick={() => onSelectCanonicalPattern({ pos: shortcut.pos, role: 'all' })}
+                                                                            onClick={() => handleSelectCanonical({ pos: shortcut.pos, role: 'all' })}
                                                                             className={cn(
                                                                                 'w-full flex items-center justify-between rounded-lg border px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-all',
                                                                                 isActive
@@ -164,7 +202,7 @@ export function AdminSettingsSidebar({
                                                                 <div className="px-1 text-[9px] font-bold uppercase tracking-[0.22em] text-black/25">{term('roles')}</div>
                                                                 <button
                                                                     type="button"
-                                                                    onClick={() => onSelectCanonicalPattern({ pos: 'all', role: 'all' })}
+                                                                    onClick={() => handleSelectCanonical({ pos: 'all', role: 'all' })}
                                                                     className={cn(
                                                                         'w-full flex items-center justify-between rounded-lg border px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-all',
                                                                         activeTab === 'cv_wizen_pattern' && activePosFilter === 'all' && activeRoleFilter === 'all'
@@ -182,7 +220,7 @@ export function AdminSettingsSidebar({
                                                                         <button
                                                                             key={shortcut.role}
                                                                             type="button"
-                                                                            onClick={() => onSelectCanonicalPattern({ pos: 'all', role: shortcut.role })}
+                                                                            onClick={() => handleSelectCanonical({ pos: 'all', role: shortcut.role })}
                                                                             className={cn(
                                                                                 'w-full flex items-center justify-between rounded-lg border px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-all',
                                                                                 isActive
@@ -215,9 +253,9 @@ export function AdminSettingsSidebar({
                                                         draggedCatId === cat.id ? 'opacity-50 border-dashed border-2 bg-transparent' : '',
                                                         draggedCatId && draggedCatId !== cat.id ? 'border-t-2 border-t-transparent hover:border-t-[#1034A6]/20' : '',
                                                     )}
-                                                    onClick={() => onSelectCategory(cat.id)}
+                                                    onClick={() => handleSelectCategory(cat.id)}
                                                 >
-                                                    <GripVertical size={14} className="opacity-0 group-hover:opacity-50 transition-opacity cursor-grab active:cursor-grabbing text-black" />
+                                                    <GripVertical size={14} className="hidden md:block opacity-0 group-hover:opacity-50 transition-opacity cursor-grab active:cursor-grabbing text-black" />
                                                     <span className="flex items-center gap-2 flex-1 min-w-0">
                                                         <cat.icon size={16} className={cn('shrink-0 transition-colors', activeTab === cat.id ? 'text-[#1034A6]' : 'text-black/25 group-hover:text-black/40')} />
                                                         <span className="truncate">
@@ -286,6 +324,7 @@ export function AdminSettingsSidebar({
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </aside>
     );

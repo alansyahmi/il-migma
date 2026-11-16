@@ -24,8 +24,8 @@ export function WorkspaceBulkActionsBar({
     onDelete,
 }: WorkspaceBulkActionsBarProps) {
     return (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500 w-[92%] sm:w-auto max-w-xl">
-            <div className="bg-black text-white px-6 sm:px-8 py-3 rounded-2xl shadow-2xl flex flex-col sm:flex-row items-center gap-4 sm:gap-6 border border-white/10 backdrop-blur-md">
+        <div className="fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 duration-500 w-[94%] sm:w-auto max-w-xl pb-[env(safe-area-inset-bottom)]">
+            <div className="bg-black text-white px-4 sm:px-8 py-3 rounded-2xl shadow-2xl flex flex-col sm:flex-row items-center gap-3 sm:gap-6 border border-white/10 backdrop-blur-md">
                 <div className="flex items-center gap-3">
                     <div className="bg-link text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold">
                         {count}
@@ -33,7 +33,7 @@ export function WorkspaceBulkActionsBar({
                     <span className="text-sm font-bold tracking-tight">{selectedLabel}</span>
                 </div>
                 <div className="h-4 w-px bg-white/10 hidden sm:block" />
-                <div className="flex gap-2">
+                <div className="flex flex-wrap justify-center gap-2">
                     <button
                         type="button"
                         onClick={onClear}

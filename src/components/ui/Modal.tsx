@@ -46,7 +46,7 @@ export function Modal({ open, onClose, title, children, size = 'md', className, 
     const modalContent = (
         <div
             className={cn(
-                "fixed inset-0 flex min-h-screen items-center justify-center p-4 overflow-y-auto",
+                "fixed inset-0 flex min-h-screen items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto",
                 zIndex || "z-50"
             )}
             role="dialog"
@@ -61,25 +61,25 @@ export function Modal({ open, onClose, title, children, size = 'md', className, 
             <div
                 ref={panelRef}
                 className={cn(
-                    'relative w-full bg-white rounded-xl shadow-2xl animate-fade-in flex flex-col max-h-[90vh]',
+                    'relative w-full bg-white rounded-t-2xl sm:rounded-xl shadow-2xl animate-fade-in flex flex-col max-h-[95dvh] sm:max-h-[90vh]',
                     'border border-border',
                     sizeClasses[size],
                     className,
                 )}
             >
                 {title && (
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-border-light shrink-0">
-                        <h2 className="font-serif text-lg font-semibold text-black">{title}</h2>
+                    <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 border-b border-border-light shrink-0">
+                        <h2 className="font-serif text-base sm:text-lg font-semibold text-black pr-2">{title}</h2>
                         <button
                             onClick={onClose}
-                            className="text-gray-400 hover:text-gray-600 transition-colors rounded-md p-1 hover:bg-gray-100"
+                            className="text-gray-400 hover:text-gray-600 transition-colors rounded-md p-1.5 sm:p-1 hover:bg-gray-100 shrink-0"
                             aria-label="Close"
                         >
                             <X size={18} />
                         </button>
                     </div>
                 )}
-                <div className="p-6 overflow-hidden flex-1 flex flex-col">{children}</div>
+                <div className="p-4 sm:p-6 overflow-hidden flex-1 flex flex-col min-h-0">{children}</div>
             </div>
         </div>
     );

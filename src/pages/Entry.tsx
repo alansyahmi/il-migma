@@ -1312,7 +1312,7 @@ function NounMorphologySection({
                     {baseForm}
                 </Link>
                 {isActualAdmin && (
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
                             onClick={(e) => {
                                 e.preventDefault();
@@ -1665,7 +1665,7 @@ function AdjectiveMorphologySection({
                     {baseForm}
                 </Link>
                 {isActualAdmin && (
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
                             onClick={(e) => {
                                 e.preventDefault();
@@ -2396,7 +2396,7 @@ function DerivedTermLink({
 function AdminActionButtons({ onEdit, onDelete, isAdd = false }: { onEdit?: () => void, onDelete?: () => void, isAdd?: boolean }) {
     const { term } = useLinguisticMode();
     return (
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
             {onEdit && (
                 <button
                     onClick={(e) => { e.preventDefault(); onEdit(); }}

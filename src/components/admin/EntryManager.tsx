@@ -59,7 +59,7 @@ const DEFAULT_ENTRIES_VIEW: PersistedEntriesView = {
     selectedLetter: 'all',
     page: 1,
     viewMode: 'list',
-    showExtraFilters: true,
+    showExtraFilters: typeof window === 'undefined' ? true : window.innerWidth >= 640,
     isToolbarSticky: true,
     sortBy: 'headword',
     sortDir: 'asc',
@@ -854,12 +854,12 @@ export function EntryManager() {
                             id="entry-extra-filters"
                             className={cn('space-y-2.5', !showExtraFilters && 'hidden')}
                         >
-                            <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap sm:overflow-visible pt-1">
                                 <button
                                     type="button"
                                     onClick={() => handlePosChange('all')}
                                     className={cn(
-                                        'px-2.5 py-1 rounded-full text-xs font-bold transition-all border',
+                                        'px-2.5 py-1 rounded-full text-xs font-bold transition-all border shrink-0',
                                         selectedPos === 'all'
                                             ? 'bg-link text-white border-link shadow-xs'
                                             : 'bg-white text-black/60 border-black/10 hover:border-black/20 hover:bg-black/5',
@@ -873,7 +873,7 @@ export function EntryManager() {
                                         type="button"
                                         onClick={() => handlePosChange(pos)}
                                         className={cn(
-                                            'px-2.5 py-1 rounded-full text-xs font-bold transition-all border uppercase tracking-wider',
+                                            'px-2.5 py-1 rounded-full text-xs font-bold transition-all border uppercase tracking-wider shrink-0',
                                             selectedPos === pos
                                                 ? 'bg-link text-white border-link shadow-xs'
                                                 : 'bg-white text-black/60 border-black/10 hover:border-black/20 hover:bg-black/5',
@@ -883,7 +883,7 @@ export function EntryManager() {
                                     </button>
                                 ))}
                                 {secondaryPosOptions.length > 0 && (
-                                    <div className="relative inline-block">
+                                    <div className="relative inline-block shrink-0">
                                         <select
                                             value={isSecondaryPosSelected ? selectedPos : ''}
                                             onChange={(e) => handlePosChange(e.target.value || 'all')}
@@ -915,7 +915,7 @@ export function EntryManager() {
                             </div>
 
                             {/* Row 2: Maltese Alphabetical Filter (abċ order) */}
-                            <div className="flex items-center gap-1 flex-wrap pt-2 border-t border-black/5">
+                            <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap sm:overflow-visible pt-2 border-t border-black/5">
                                 <span className="text-[10px] font-bold text-black/40 uppercase tracking-wider mr-1 shrink-0">
                                     ABĊ:
                                 </span>
@@ -954,9 +954,9 @@ export function EntryManager() {
 
                         {/* Row 3: Audit Health Chips & Filter Reset */}
                         {(filteredEntries.length > 0 || isFilterActive) && (
-                            <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-black/5 text-xs">
-                                <div className="flex flex-wrap items-center gap-1.5">
-                                    <span className="text-[10px] font-bold text-black/40 uppercase tracking-wider mr-1">
+                            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap sm:overflow-visible pt-2 border-t border-black/5 text-xs">
+                                <div className="flex items-center gap-1.5 shrink-0 sm:flex-wrap">
+                                    <span className="text-[10px] font-bold text-black/40 uppercase tracking-wider mr-1 shrink-0">
                                         {term('audit-health') || 'Audit Health'}:
                                     </span>
 
@@ -965,7 +965,7 @@ export function EntryManager() {
                                         type="button"
                                         onClick={() => setAuditFilter('all')}
                                         className={cn(
-                                            'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all border',
+                                            'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all border shrink-0',
                                             auditFilter === 'all'
                                                 ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                                                 : 'bg-white text-slate-600 border-black/10 hover:border-black/20 hover:bg-black/5'
@@ -985,7 +985,7 @@ export function EntryManager() {
                                         type="button"
                                         onClick={() => setAuditFilter('action-needed')}
                                         className={cn(
-                                            'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all border',
+                                            'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all border shrink-0',
                                             auditFilter === 'action-needed'
                                                 ? 'bg-rose-600 text-white border-rose-600 shadow-xs'
                                                 : 'bg-white text-rose-700 border-rose-200 hover:bg-rose-50'
@@ -1012,7 +1012,7 @@ export function EntryManager() {
                                         type="button"
                                         onClick={() => setAuditFilter('partial')}
                                         className={cn(
-                                            'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all border',
+                                            'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all border shrink-0',
                                             auditFilter === 'partial'
                                                 ? 'bg-amber-600 text-white border-amber-600 shadow-xs'
                                                 : 'bg-white text-amber-800 border-amber-200 hover:bg-amber-50'
@@ -1034,7 +1034,7 @@ export function EntryManager() {
                                         type="button"
                                         onClick={() => setAuditFilter('complete')}
                                         className={cn(
-                                            'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all border',
+                                            'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold transition-all border shrink-0',
                                             auditFilter === 'complete'
                                                 ? 'bg-emerald-700 text-white border-emerald-700 shadow-xs'
                                                 : 'bg-white text-emerald-800 border-emerald-200 hover:bg-emerald-50'
@@ -1153,7 +1153,42 @@ export function EntryManager() {
                     </Button>
                 </div>
             ) : viewMode === 'grid' ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 bg-white border border-border-light rounded-xl px-3 py-2 text-xs">
+                        <span className="font-bold uppercase tracking-wider text-black/40 text-[10px]">
+                            Sort
+                        </span>
+                        <div className="flex items-center gap-2">
+                            <select
+                                aria-label="Sort entries by"
+                                value={sortBy}
+                                onChange={(e) => {
+                                    setSortBy(e.target.value as AdminEntrySortKey);
+                                    setPage(1);
+                                }}
+                                className="bg-surface-soft border border-black/10 rounded-lg px-2 py-1 text-xs font-semibold text-black focus:outline-none focus:ring-1 focus:ring-link"
+                            >
+                                <option value="headword">{term('word') || 'Word'}</option>
+                                <option value="status">{term('status') || 'Status'}</option>
+                                <option value="pos">{term('pos') || 'POS'}</option>
+                                <option value="root">{term('root') || 'Root'}</option>
+                                <option value="meaning">{term('meaning') || 'Meaning'}</option>
+                                <option value="tags">Tags &amp; Alt</option>
+                                <option value="date">{term('date') || 'Date'}</option>
+                            </select>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setSortDir((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+                                    setPage(1);
+                                }}
+                                className="px-2.5 py-1 rounded-lg border border-black/10 bg-surface-soft text-xs font-bold uppercase text-link hover:bg-link/5"
+                            >
+                                {sortDir === 'asc' ? 'ASC ↑' : 'DESC ↓'}
+                            </button>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {displayedEntries.map((entry) => {
                         const audit = evaluateEntryAudit(entry, term);
                         const verbClass = entry.verb_class || entry.verb_morphology?.verb_class;
@@ -1170,7 +1205,7 @@ export function EntryManager() {
                                     onClick={() => toggleSelect(entry.id)}
                                     className={cn(
                                         'absolute top-3 left-3 z-10 p-1 rounded-md transition-all',
-                                        selectedIds.has(entry.id) ? 'text-link bg-white shadow-sm' : 'opacity-0 group-hover:opacity-100 text-black/20 hover:text-black/40 bg-black/5',
+                                        selectedIds.has(entry.id) ? 'text-link bg-white shadow-sm' : 'opacity-100 sm:opacity-0 group-hover:opacity-100 text-black/25 hover:text-black/40 bg-black/5',
                                     )}
                                 >
                                     {selectedIds.has(entry.id) ? <CheckSquare size={16} /> : <Square size={16} />}
@@ -1201,7 +1236,7 @@ export function EntryManager() {
                                             >
                                                 {audit.label}
                                             </span>
-                                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="flex gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <Link to={`/entry/${entry.id}`} target="_blank" rel="noopener noreferrer" className="p-1.5 text-slate-400 hover:text-link hover:bg-link/10 rounded-lg" title={term('view') || 'View entry'}>
                                                     <ExternalLink size={14} />
                                                 </Link>
@@ -1245,6 +1280,7 @@ export function EntryManager() {
                             </article>
                         );
                     })}
+                    </div>
                 </div>
             ) : (
                 /* HIGH DENSITY DATA GRID */
@@ -1325,7 +1361,7 @@ export function EntryManager() {
                                         defaultDir="desc"
                                         className="py-2.5 px-3 w-24"
                                     />
-                                    <th className="py-2.5 px-3 w-24 text-right">
+                                    <th className="py-2.5 px-3 w-24 text-right sticky right-0 z-10 bg-surface-soft/95 backdrop-blur-sm shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.06)]">
                                         {term('actions') || 'Actions'}
                                     </th>
                                 </tr>
@@ -1728,7 +1764,7 @@ export function EntryManager() {
                                             </td>
 
                                             {/* Actions */}
-                                            <td className={cn('py-2 px-3 text-right', isEditing && 'align-top pt-2.5')}>
+                                            <td className={cn('py-2 px-3 text-right sticky right-0 z-10 bg-white/95 backdrop-blur-xs shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.06)]', isEditing && 'align-top pt-2.5')}>
                                                 {isEditing ? (
                                                     <div className="flex items-center justify-end gap-1.5">
                                                         <button

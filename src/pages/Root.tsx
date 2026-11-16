@@ -738,7 +738,7 @@ export function Root() {
                                                             {termObj.gloss}
                                                         </span>
                                                         {isActualAdmin && (
-                                                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                                                                 <button
                                                                     onClick={(e) => {
                                                                         e.preventDefault();
@@ -821,7 +821,7 @@ export function Root() {
                                                 {isActualAdmin && !vm?.synonyms?.some((v: any) => v.id === s.id) && (
                                                     <button
                                                         onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('synonyms', s.id); }}
-                                                        className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                        className="opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 sm:p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
                                                         title={term('unlink-synonym')}
                                                     >
                                                         <Trash2 size={10} />
@@ -849,7 +849,7 @@ export function Root() {
                                                 {isActualAdmin && !vm?.antonyms?.some((v: any) => v.id === a.id) && (
                                                     <button
                                                         onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('antonyms', a.id); }}
-                                                        className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                        className="opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 sm:p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
                                                         title={term('unlink-antonym')}
                                                     >
                                                         <Trash2 size={10} />

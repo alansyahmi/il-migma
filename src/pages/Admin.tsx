@@ -67,7 +67,7 @@ export function Admin() {
     }, [tab, term]);
 
     return (
-        <div className="w-full max-w-6xl mx-auto px-7 sm:px-8 py-8 space-y-6">
+        <div className="w-full max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-4 sm:space-y-6">
             {!hasAdminRights && (
                 <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-3 text-amber-900 shadow-sm animate-in fade-in slide-in-from-top-4 duration-500">
                     <ShieldAlert className="shrink-0" size={20} />
@@ -77,13 +77,13 @@ export function Admin() {
                 </div>
             )}
 
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-black/5 pb-4">
-                <h1 className="font-serif text-3xl font-bold text-black">{term('admin-dashboard')}</h1>
-                <div className="flex flex-wrap gap-1 bg-black/5 p-1 rounded-xl">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-black/5 pb-3 sm:pb-4">
+                <h1 className="font-serif text-2xl sm:text-3xl font-bold text-black">{term('admin-dashboard')}</h1>
+                <div className="flex overflow-x-auto sm:flex-wrap gap-1 bg-black/5 p-1 rounded-xl w-full md:w-auto">
                     <button
                         onClick={() => setTab('entries')}
                         className={cn(
-                            'px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2',
+                            'px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap',
                             tab === 'entries' ? 'bg-white text-link shadow-sm' : 'text-black/40 hover:text-black/60',
                         )}
                     >
@@ -92,7 +92,7 @@ export function Admin() {
                     <button
                         onClick={() => setTab('roots')}
                         className={cn(
-                            'px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2',
+                            'px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap',
                             tab === 'roots' ? 'bg-white text-link shadow-sm' : 'text-black/40 hover:text-black/60',
                         )}
                     >
@@ -101,7 +101,7 @@ export function Admin() {
                     <button
                         onClick={() => setTab('stems')}
                         className={cn(
-                            'px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2',
+                            'px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap',
                             tab === 'stems' ? 'bg-white text-link shadow-sm' : 'text-black/40 hover:text-black/60',
                         )}
                     >
@@ -110,7 +110,7 @@ export function Admin() {
                     <button
                         onClick={() => setTab('inbox')}
                         className={cn(
-                            'px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2',
+                            'px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap',
                             tab === 'inbox' ? 'bg-white text-link shadow-sm' : 'text-black/40 hover:text-black/60',
                         )}
                     >
@@ -119,7 +119,7 @@ export function Admin() {
                     <button
                         onClick={() => setTab('settings')}
                         className={cn(
-                            'px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2',
+                            'px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap',
                             tab === 'settings' ? 'bg-white text-link shadow-sm' : 'text-black/40 hover:text-black/60',
                         )}
                     >
@@ -128,7 +128,7 @@ export function Admin() {
                     <button
                         onClick={() => setTab('db')}
                         className={cn(
-                            'px-4 py-1.5 rounded-lg text-sm font-semibold transition-all flex items-center gap-2',
+                            'px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap',
                             tab === 'db' ? 'bg-white text-link shadow-sm' : 'text-black/40 hover:text-black/60',
                         )}
                     >
