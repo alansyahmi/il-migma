@@ -823,6 +823,19 @@ export const TERMINOLOGY: Record<string, { en?: string; standard: string; arabis
     'registers': { en: 'Registers', standard: 'Reġistri', arabised: 'Reġistri' },
     'manage-registers': { en: 'Manage Registers', standard: 'Immaniġġja Reġistri', arabised: 'Immaniġġja Reġistri' },
 
+    // Admin entry toolbar controls
+    'hide-extra-filters': { en: 'Hide extra filters', standard: 'Aħbi l-filtri addizzjonali', arabised: 'Aħbi l-filtri addizzjonali' },
+    'non-sticky-toolbar': { en: 'Not sticky', standard: 'Mhux fiss', arabised: 'Mhux fiss' },
+    'non-sticky-toolbar-hint': { en: 'Let the Entries toolbar scroll with the page', standard: 'Ħalli l-bar tal-għodda tal-entrati jimxi mal-paġna', arabised: 'Ħalli l-bar tal-għodda tal-entrati jimxi mal-paġna' },
+    'reset-filters': { en: 'Reset filters', standard: 'Irrisettja l-filtri', arabised: 'Irrisettja l-filtri' },
+    'show-extra-filters': { en: 'Show extra filters', standard: 'Uri l-filtri addizzjonali', arabised: 'Uri l-filtri addizzjonali' },
+    'sort-alphabetical': { en: 'Alphabetical', standard: 'Alfabetiku', arabised: 'Alfabetiku' },
+    'sort-alphabetical-hint': { en: 'Sorted alphabetically (A–Ż); click to sort by most recent', standard: 'Irranġat alfabetikament; ikklikkja għall-aktar reċenti', arabised: 'Irranġat alfabetikament; ikklikkja għall-aktar reċenti' },
+    'sort-recent': { en: 'Recent', standard: 'Reċenti', arabised: 'Dal-aħħar' },
+    'sort-recent-hint': { en: 'Sorted by most recently added; click to sort alphabetically', standard: 'Irranġat mill-aktar reċenti; ikklikkja għal ordni alfabetika', arabised: 'Irranġat mill-aktar reċenti; ikklikkja għal ordni alfabetika' },
+    'sticky-toolbar': { en: 'Sticky', standard: 'Fiss', arabised: 'Fiss' },
+    'sticky-toolbar-hint': { en: 'Keep the Entries toolbar visible while scrolling', standard: 'Żomm il-bar tal-għodda tal-entrati viżibbli waqt l-iskrolljar', arabised: 'Żomm il-bar tal-għodda tal-entrati viżibbli waqt l-iskrolljar' },
+
     // Registers (Bilingual English / Maltese Standard / Maltese Arabised)
     'reg-standard': { en: 'Standard', standard: 'Standard', arabised: 'Miqjiesi' },
     'standard': { en: 'Standard', standard: 'Standard', arabised: 'Miqjiesi' },

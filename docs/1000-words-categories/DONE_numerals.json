@@ -802,16 +802,11 @@
           "pronunciation": "miâ'aẗ"
         }
       ],
-      "etymology_notes": [
-        {
-          "text_en": "Mitt is the t marbuta (tied t) form of mija.",
-          "text_mt": "Mitt hija l-forma bit-t marbuta ta' mija."
-        }
-      ],
+      "etymology_notes": "Il-forma bit-t marbuta ( construct form ) tal-kelma mija; tintuża bħala determinattiv quddiem in-nom.",
       "definitions": [
         {
           "text_en": "hundred (100)",
-          "text_mt": "Għadd li jikkorrispondi għal mitt unità, 100.",
+          "text_mt": "Għadd kardinali li jikkorrispondi għal mija (100) quddiem nom.",
           "register": {
             "key": "standard",
             "en": "Standard",

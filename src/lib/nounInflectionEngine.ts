@@ -24,6 +24,20 @@ const SUFFIXES = ['i', 'ek', 'u', 'ha', 'na', 'kom', 'hom'] as const;
 
 // ── CORE ENGINE ────────────────────────────────────────────────────────────
 
+const CONSONANT_DIGRAPH_RE = /għ/gi;
+const DOUBLE_CONSONANT_END_RE = /[bcdfghjklmnpqrstvwxyzċġħżG]{2,}$/i;
+
+/**
+ * Epenthetic `-i-` before feminine t-marbuta (`-t` -> `-it`) is triggered when
+ * consonant-initial possessive suffixes follow a consonant cluster (CCt, counting
+ * `għ` as one consonant) or a stem already ending in `t` (e.g. `festa`, `minuta`).
+ */
+function needsEpentheticTMarbuta(stem: string): boolean {
+    if (!stem.endsWith('t')) return false;
+    const preT = stem.slice(0, -1).replace(CONSONANT_DIGRAPH_RE, 'G');
+    return DOUBLE_CONSONANT_END_RE.test(preT) || /t$/i.test(preT);
+}
+
 export interface NounStems {
     stemA: string; // Full/Standard
     stemB: string; // Syncopated/Construct
@@ -108,12 +122,12 @@ export function applyPossessiveSuffix(
 
     // ── Feminine t-marbuta buffering ──────────────────────────────────────────
     const isComplexPattern = pattern === 'iCCCa';
-    const hasLongIeFeminineStem = base.slice(0, -1).includes('ie');
+    const hasLongIeFeminineStem = base.slice(0, -1).includes('ie') && !/iegħa$/i.test(base);
     if (hasLongIeFeminineStem && (gender === 'feminine' || gender === 'common') && !isVowelSuffix && idx >= 4 && stem.endsWith('t')) {
         stem = stem.slice(0, -1);
     }
     if (!isVowelSuffix && (gender === 'feminine' || gender === 'common') && base.endsWith('a') && base !== 'mara' && !isComplexPattern && !hasLongIeFeminineStem) {
-        if (stem.endsWith('t') && stem.length > 3) {
+        if (needsEpentheticTMarbuta(stem)) {
             stem = stem.slice(0, -1) + 'it';
         }
     }

@@ -4,7 +4,8 @@
  * Linguistic engine for Standard Maltese phonology, orthography, and morphology.
  */
 
-import { prepareSuffixAttachmentStem, hasStressedOrLongFinalSyllable } from './nounAttachment.ts';
+import type { Gender } from '../types';
+import { deriveNounAttachmentStems, prepareSuffixAttachmentStem, hasStressedOrLongFinalSyllable } from './nounAttachment.ts';
 
 function capitalizeFirst(s: string): string {
     if (!s) return s;
@@ -472,11 +473,26 @@ export function detectPluralType(headword: string, _soundSuffixes: string[]): Pl
  * - syncopates a final short vowel when the word has a multi-vowel stem
  * This keeps forms like għomor -> għomrejn instead of għomorejn.
  */
-export function generateTheoreticalDual(word: string, pluralHint?: string | null, ipaHint?: string | null, pattern?: string | null, rootConsonants?: string | null): string {
+export function generateTheoreticalDual(
+    word: string,
+    pluralHint?: string | null,
+    ipaHint?: string | null,
+    pattern?: string | null,
+    rootConsonants?: string | null,
+    gender?: Gender | null,
+): string {
     const cleanWord = word.replace(/^[*✦\s]+/, '');
     const isCapitalized = cleanWord.length > 0 && cleanWord[0] === cleanWord[0].toUpperCase() && cleanWord[0] !== cleanWord[0].toLowerCase();
     const norm = word.replace(/^[*✦\s]+/, '').toLowerCase().trim().normalize('NFC');
     const roots = rootConsonants ? rootConsonants.toLowerCase().replace(/[-.,\s]+/g, '-').split('-').filter(Boolean) : [];
+
+    // Feminine/common nouns ending in -a use the t-marbuta construct/vowel-attachment stem (stemB) + -ejn (-tejn),
+    // covering both -Cgħa anaptyxis (ġimgħa -> ġimagħtejn) and obstruent+sonorant R-licensing (wiżna -> wiżintejn).
+    if ((gender === 'feminine' || gender === 'common') && norm.endsWith('a')) {
+        const { stemB } = deriveNounAttachmentStems(norm, gender, undefined, pattern || undefined, ipaHint || undefined);
+        const result = `${stemB}ejn`;
+        return isCapitalized ? capitalizeFirst(result) : result;
+    }
 
     // Weak radical duals: ħelu (ħ-l-w) -> ħelwejn, ziju (z-j-w) -> zijuwejn
     if (norm.endsWith('u') && roots.length >= 3) {

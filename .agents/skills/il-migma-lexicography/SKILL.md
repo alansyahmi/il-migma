@@ -47,8 +47,9 @@ Il-Miġma adopts an **Asymmetrical Monolingual–Bilingual Architecture**:
 5. **Full Maltese Orthography in IDs**:
    * IDs must use full Maltese orthography (e.g. `prep-taħt`, `prep-għall`, `prep-bħall`, `adv-minn-taħt`, `pron-taħtiex`). Never strip ħ, għ, or diacritics in IDs.
 
-6. **Semitic Stems Constraint**:
-   * Semitic words must keep `stem: null` (they use `root_consonants`). Non-Semitic loanwords use `stem`.
+6. **Semitic Stems vs Canonical Zokk Stems Constraint**:
+   * Semitic words must keep `stem: null` (they use `root_consonants`).
+   * Non-Semitic loanwords use hyphen-delimited `stem` (`-base-`) with **all productive affixes stripped** (`-iljun`/`-ljun`, `-uplu`/`-plu`, `-imu`, `-ier`, `-ali`, `-iku`, `-abbli`, `-iż`, `-a`/`-u`/`-o`/`-i`/`-e`, separable prefixes `arċi-`, `anti-`, etc.) so cognate formations share one canonical stem (e.g. `kwadriljun` & `kwadruplu` → `-kwadr-`). See `docs/stem-stripping-rules.md` and `src/lib/stemStripping.ts`.
 
 7. **Mandatory Foreign Script Pronunciation in Etymology Chains**:
    * Whenever an etymology step contains foreign script terms (especially Arabic and Classical Arabic, as well as Greek, Berber/Tifinagh, Sicilian, or Italian), the `pronunciation` field must be populated.

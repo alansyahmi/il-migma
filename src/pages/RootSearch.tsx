@@ -8,8 +8,9 @@ import { overlayVerbPreviewRowsFromEngine } from '@/lib/verbMorphology';
 import { apiSearch, apiSearchRoots } from '@/lib/api';
 import { Spinner } from '@/components/ui/Spinner';
 import type { SearchResult } from '@/types';
-import { Search } from 'lucide-react';
+import { BookOpen, ChevronDown, Search } from 'lucide-react';
 import { formatStemDisplay } from '@/lib/stemDefaults';
+import { STEM_STRIPPING_AFFIX_GROUPS } from '@/lib/stemStripping';
 import { shouldHideSurface, stripTheoreticalPrefix } from '@/lib/theoreticalForms';
 
 const MAX_RADICALS = 4;
@@ -374,6 +375,7 @@ function StemSearchPanelContent() {
     const [results, setResults] = useState<SearchResult[]>([]);
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
+    const [showAffixGuide, setShowAffixGuide] = useState(false);
 
     useEffect(() => {
         const query = searchParams.get('q') || '';
@@ -424,7 +426,7 @@ function StemSearchPanelContent() {
                 {term('stem-search-desc')}
             </p>
 
-            <div className="max-w-2xl mx-auto mb-12">
+            <div className="max-w-2xl mx-auto mb-6">
                 <form onSubmit={handleSearch} className="relative group">
                     <input
                         type="text"
@@ -441,7 +443,78 @@ function StemSearchPanelContent() {
                         {term('search')}
                     </button>
                 </form>
+                <div className="mt-3 flex justify-center">
+                    <button
+                        type="button"
+                        onClick={() => setShowAffixGuide((prev) => !prev)}
+                        aria-expanded={showAffixGuide}
+                        className="inline-flex items-center gap-1.5 text-xs font-medium text-[#1034A6] hover:underline"
+                    >
+                        <BookOpen size={14} />
+                        <span>
+                            {language === 'mt'
+                                ? 'Gwida għat-Tneħħija tal-Affissi miż-Zokk'
+                                : 'Stem Stripping & Affix Guide'}
+                        </span>
+                        <ChevronDown
+                            size={14}
+                            className={`transition-transform duration-200 ${showAffixGuide ? 'rotate-180' : ''}`}
+                        />
+                    </button>
+                </div>
             </div>
+
+            {showAffixGuide && (
+                <section
+                    aria-label={language === 'mt' ? 'Gwida tal-Affissi taż-Zokk' : 'Stem Stripping & Affix Guide'}
+                    className="max-w-4xl mx-auto mb-10 rounded-2xl border border-black/8 bg-white/85 backdrop-blur-sm p-6 shadow-sm"
+                >
+                    <p className="text-xs text-black/65 leading-relaxed mb-4">
+                        {language === 'mt'
+                            ? "Kull kelma mhux Semitika tinżamm b'zokk kanoniku (-zokk-) wara li jitneħħew l-affissi flessivi u derivattivi ħalli forom relatati jinġabru flimkien."
+                            : "Non-Semitic loanwords store a canonical hyphen-delimited stem (-stem-) after stripping inflectional and derivational affixes so cognate words group together."}
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {STEM_STRIPPING_AFFIX_GROUPS.map((group) => (
+                            <div key={group.id} className="rounded-xl border border-black/6 bg-[#faf8f4] p-4">
+                                <h2 className="text-xs font-bold uppercase tracking-wider text-[#1034A6] mb-1">
+                                    {language === 'mt' ? group.titleMt : group.titleEn}
+                                </h2>
+                                <p className="text-[11px] text-black/60 mb-3 leading-relaxed">
+                                    {language === 'mt' ? group.summaryMt : group.summaryEn}
+                                </p>
+                                <div className="space-y-2">
+                                    {group.rules.map((rule) => (
+                                        <div key={rule.affix} className="text-xs border-t border-black/5 pt-2 first:border-t-0 first:pt-0">
+                                            <div className="flex flex-wrap items-baseline justify-between gap-2">
+                                                <code className="font-mono font-semibold text-black bg-black/5 px-1.5 py-0.5 rounded">
+                                                    {rule.affix}
+                                                </code>
+                                                <span className="text-[11px] text-black/55">
+                                                    {language === 'mt' ? rule.descriptionMt : rule.descriptionEn}
+                                                </span>
+                                            </div>
+                                            <div className="mt-1.5 flex flex-wrap gap-1.5">
+                                                {rule.examples.slice(0, 4).map((ex) => (
+                                                    <Link
+                                                        key={`${ex.headword}-${ex.stem}`}
+                                                        to={`/stem/${encodeURIComponent(ex.stem)}`}
+                                                        className="inline-flex items-center gap-1 rounded-full bg-white border border-black/8 px-2 py-0.5 text-[11px] text-black/75 hover:border-[#1034A6]/40 hover:text-[#1034A6]"
+                                                    >
+                                                        <span>{ex.headword}</span>
+                                                        <span className="opacity-45">→</span>
+                                                        <span className="font-mono font-medium">{ex.stem}</span>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
 
             {loading ? (
                 <div className="flex justify-center py-12">

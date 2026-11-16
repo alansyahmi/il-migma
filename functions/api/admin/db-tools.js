@@ -6,7 +6,7 @@
 
 import { getDbClient, toApiErrorPayload } from '../../lib/dbClient.js';
 import { getEntryIdFamily, normalizeEntryId } from '../../../src/lib/entryId.ts';
-import { processEntryBatch } from './entries.js';
+import { exportFilteredEntries, processEntryBatch } from './entries.js';
 
 const MAX_EXPORT_ROWS = 50000;
 const DEFAULT_SINGLE_EXPORT_ROWS = 10000;
@@ -86,6 +86,8 @@ export async function onRequestPost({ request, env }) {
                 return handleEnsurePerformanceIndexes(client);
             case 'bulk-import-entries':
                 return handleBulkImportEntries(client, body);
+            case 'export-filtered-entries':
+                return handleExportFilteredEntries(client, body);
             default:
                 return json({ error: `Unknown action: ${action}` }, 400);
         }
@@ -506,6 +508,26 @@ async function handleCheckId(client, { table, id }) {
     });
 
     return json({ exists: res.rows.length > 0, id: normalizedId, table });
+}
+
+async function handleExportFilteredEntries(client, body = {}) {
+    try {
+        const result = await exportFilteredEntries(client, {
+            ids: body.ids,
+            q: body.q,
+            pos: body.pos,
+            letter: body.letter,
+            auditStatus: body.auditStatus,
+            limit: body.limit,
+            offset: body.offset,
+        });
+        return json(result);
+    } catch (err) {
+        return json(
+            { error: err?.message || 'Failed to export filtered entries' },
+            err?.status || 500
+        );
+    }
 }
 
 async function handleEnsurePerformanceIndexes(client) {

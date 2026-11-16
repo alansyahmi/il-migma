@@ -1,3 +1,4 @@
+import type { Gender } from '../types';
 import { applyPossessiveSuffix, type PossessiveSuffixIdx } from './nounInflectionEngine.ts';
 import { deriveAjPluralStem, hasStressedOrLongFinalSyllable, isAjPluralPattern } from './nounAttachment.ts';
 
@@ -91,7 +92,7 @@ function capitalizeFirst(s: string): string {
 export function applyInflectionTableSuffix(
     base: string,
     idx: PossessiveSuffixIdx,
-    gender: 'masculine' | 'feminine' = 'masculine',
+    gender: Gender = 'masculine',
     pattern?: string,
     thirdRadical?: string,
     ipaHint?: string,
@@ -126,7 +127,7 @@ const IRREGULAR_PREPOSITIONS: Record<string, readonly string[]> = {
 function applyInflectionTableSuffixInternal(
     base: string,
     idx: PossessiveSuffixIdx,
-    gender: 'masculine' | 'feminine' = 'masculine',
+    gender: Gender = 'masculine',
     pattern?: string,
     thirdRadical?: string,
     ipaHint?: string,
@@ -160,8 +161,8 @@ function applyInflectionTableSuffixInternal(
     const radical = normalizeRadical(thirdRadical) || normalizeRadical(inferFinalRadicalFromBase(base));
 
     // The first three attached forms normally collapse the final syllable vowel before suffixation.
-    // Keep the full stem when the IPA shows a stressed or long final syllable.
-    if (idx <= 2 && gender !== 'feminine' && !hasStressedOrLongFinalSyllable(ipaHint, base, pattern)) {
+    // Keep the full stem when the IPA shows a stressed or long final syllable, or for -a t-marbuta stems.
+    if (idx <= 2 && gender !== 'feminine' && !(gender === 'common' && base.endsWith('a')) && !hasStressedOrLongFinalSyllable(ipaHint, base, pattern)) {
         const collapsedBase = collapseFinalSyllableVowel(base);
         if (collapsedBase !== base) {
             return applyPossessiveSuffix(collapsedBase, idx, gender, pattern, thirdRadical, ipaHint);
@@ -170,7 +171,7 @@ function applyInflectionTableSuffixInternal(
 
     // Handle words ending in 'a'
     if (base.endsWith('a')) {
-        if (gender === 'feminine') {
+        if (gender === 'feminine' || gender === 'common') {
             return applyPossessiveSuffix(base, idx, gender, pattern, thirdRadical, ipaHint);
         }
 

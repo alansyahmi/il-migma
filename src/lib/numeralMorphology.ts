@@ -1995,6 +1995,9 @@ export async function syncNumeralMorphology(client: any, entryId: string, body: 
     if (!hasNumeralMorphologyInput(body)) return;
 
     const record = buildNumeralMorphologyRecord({ id: entryId }, body);
+    if (record.plural_forms !== undefined && record.plural_forms !== null && typeof record.plural_forms !== 'string') {
+        record.plural_forms = JSON.stringify(record.plural_forms);
+    }
     const cols = Object.keys(record);
     const vals = Object.values(record);
     const placeholders = cols.map(() => '?').join(', ');

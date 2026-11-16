@@ -2,6 +2,20 @@ import type { Gender } from '@/types';
 
 const VOWEL_CLUSTER_RE = /[aeiouàèìòùâêîôû]/gi;
 const GEMINATE_BEFORE_FINAL_VOWEL_RE = /([bcdfghjklmnpqrstvwxyzċġħż])\1(ie|[aeiouàèìòùâêîôû])[^aeiouàèìòùâêîôû]*$/i;
+const OBSTRUENT_SONORANT_CLUSTER_RE = /([aeiouàèìòùâêîôû])([bpdtgkġċvfzżsxħq])([lmnr])$/i;
+
+/**
+ * R-Licensing anaptyxis before t-marbuta when a feminine -a stem ends in
+ * V + obstruent + sonorant (l, m, n, r), e.g. wiżn -> wiżin, widn -> widin,
+ * qoxr -> qoxor (copying stem `o` by vowel harmony).
+ */
+function applySonorantRAnaptyxis(stemRoot: string): string {
+    return stemRoot.replace(OBSTRUENT_SONORANT_CLUSTER_RE, (_match, vowel: string, obstruent: string, sonorant: string) => {
+        const normalizedVowel = vowel.toLowerCase().normalize('NFC');
+        const epentheticVowel = normalizedVowel === 'o' || normalizedVowel === 'ò' || normalizedVowel === 'ô' ? 'o' : 'i';
+        return `${vowel}${obstruent}${epentheticVowel}${sonorant}`;
+    });
+}
 
 function normalizeWord(word: string): string {
     return String(word || '').trim().toLowerCase().normalize('NFC');
@@ -34,19 +48,21 @@ export function hasStressedOrLongFinalSyllable(ipaHint?: string, word?: string, 
         }
     }
 
-    // Heuristic 1: Pattern-based (e.g. CaCiC, vCCiC)
+    // Heuristic 1: Pattern-based (e.g. CaCiC, vCCiC).
+    // Include `v` in the trailing non-vowel guard so prefix vowels in patterns like
+    // `mi12v3` (minkeb, minfes) or `i2v3` (isem) do not bleed across the stem vowel slot.
     if (pattern) {
         const p = pattern.toLowerCase();
-        if (/(i|u|ie)[^aeiouàèìòùâêîôû]*$/i.test(p)) return true;
+        if (/(i|u|ie)[^aeiouàèìòùâêîôûv]*$/i.test(p)) return true;
     }
 
-    // Heuristic 2: Word-based (e.g. ħabib, sabiħ, qadim)
+    // Heuristic 2: Word-based (e.g. ħabib, sabiħ, qadim, uġigħ)
     const normalizedWord = String(word || '').toLowerCase().trim();
     if (normalizedWord) {
         const vowels = normalizedWord.match(VOWEL_CLUSTER_RE);
         if (vowels && vowels.length >= 2) {
-            // Check for long vowels in the final closed syllable
-            if (/(i|u|ie)[^aeiouàèìòùâêîôû]$/i.test(normalizedWord)) return true;
+            // Check for long vowels in the final closed syllable (counting `għ` as a single consonant)
+            if (/(i|u|ie)(?:għ|[^aeiouàèìòùâêîôû])$/i.test(normalizedWord)) return true;
         }
 
         if (hasOrthographicGeminateBeforeFinalVowel(normalizedWord)) return true;
@@ -80,7 +96,7 @@ function deriveMasculineLongStem(base: string): string {
         return normalized.replace(/ie([^aeiouàèìòùâêîôû]+)$/i, 'i$1');
     }
 
-    if (/^ġi[^aeiouàèìòùâêîôû]*em$/i.test(normalized)) {
+    if (/^ġ?i[^aeiouàèìòùâêîôû]em$/i.test(normalized)) {
         return normalized.replace(/e([^aeiouàèìòùâêîôû]+)$/i, 'i$1');
     }
 
@@ -193,6 +209,10 @@ export function deriveNounAttachmentStems(
         }
 
         const rootRaw = normalized.slice(0, -1);
+        if (/iegħ$/i.test(rootRaw)) {
+            const vocalicGħStem = `${rootRaw}t`;
+            return { stemA: vocalicGħStem, stemB: vocalicGħStem };
+        }
         if (rootRaw.includes('ie')) {
             const shortStem = `${rootRaw.replace(/ie([^aeiouàèìòùâêîôû]+)$/i, 'i$1')}t`;
             return { stemA: shortStem, stemB: shortStem };
@@ -208,11 +228,15 @@ export function deriveNounAttachmentStems(
         }
 
         const collapsedRoot = prepareSuffixAttachmentStem(rootRaw, stemIpaHint, pattern);
-        const feminineStem = collapsedRoot.endsWith('j') || collapsedRoot.endsWith('w')
-            ? `${collapsedRoot.slice(0, -1)}t`
-            : `${collapsedRoot}t`;
+        // Consonant + għ before feminine -a (e.g. ġimgħa, fergħa, xemgħa) triggers
+        // anaptyctic -a- before għ when t-marbuta attaches: ġimgħa -> ġimagħt-.
+        const resolvedRoot = collapsedRoot.replace(/([^aeiouàèìòùâêîôû])għ$/i, '$1agħ');
+        const isGlideDropped = /(?:i|l)j$/i.test(resolvedRoot);
+        const stemA = isGlideDropped ? `${resolvedRoot.slice(0, -1)}t` : `${resolvedRoot}t`;
+        const anaptycticRoot = isGlideDropped ? resolvedRoot : applySonorantRAnaptyxis(resolvedRoot);
+        const stemB = isGlideDropped ? `${anaptycticRoot.slice(0, -1)}t` : `${anaptycticRoot}t`;
 
-        return { stemA: feminineStem, stemB: feminineStem };
+        return { stemA, stemB };
     }
 
     if (normalized.endsWith('u') || normalized.endsWith('i') || normalized.endsWith('o')) {
@@ -223,7 +247,7 @@ export function deriveNounAttachmentStems(
         return { stemA: `${normalized}j`, stemB: `${normalized}j` };
     }
 
-    const shortStem = prepareSuffixAttachmentStem(normalized, ipaHint);
+    const shortStem = prepareSuffixAttachmentStem(normalized, ipaHint, pattern);
     const longStem = deriveMasculineLongStem(normalized);
     return { stemA: longStem, stemB: shortStem };
 }

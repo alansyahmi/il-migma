@@ -15,6 +15,8 @@
 | [conventions.md](./conventions.md) | Naming Conventions — files, functions, DB columns, IDs |
 | [edge-cases.md](./edge-cases.md) | Edge Case Encyclopedia — bugs we fixed, and how to never repeat them |
 | [linguistic-rules.md](./linguistic-rules.md) | Linguistic & Logic Rules — the phonology baked into the conjugation engine |
+| [maltese-anaptyxis-and-epenthesis.md](./maltese-anaptyxis-and-epenthesis.md) | Maltese Anaptyxis, Epenthesis & *T Marbuta* — nominal/clitic vowel insertion, R-licensing & academic citations |
+| [stem-stripping-rules.md](./stem-stripping-rules.md) | Stem Stripping & Affix Rules — Zokk affixes stripped to form canonical `-stem-` entries |
 | [1000-most-common-maltese-words-audit.md](./1000-most-common-maltese-words-audit.md) | Quality & Lexical Audit Checklist — 1,000 common words frequency audit |
 | [1000-words-categories/](./1000-words-categories/index.json) | Thematic JSON splits — 1,000 common words categorized into individual JSON files |
 

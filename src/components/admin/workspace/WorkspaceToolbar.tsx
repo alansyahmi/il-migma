@@ -1,15 +1,17 @@
 import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 interface WorkspaceToolbarProps {
     heading: string;
     countText: string;
     controls: ReactNode;
     filters: ReactNode;
+    sticky?: boolean;
 }
 
-export function WorkspaceToolbar({ heading, countText, controls, filters }: WorkspaceToolbarProps) {
+export function WorkspaceToolbar({ heading, countText, controls, filters, sticky = true }: WorkspaceToolbarProps) {
     return (
-        <div className="sticky top-16 z-30 bg-[#f7f6f3] border border-black/5 rounded-2xl p-3 space-y-3 shadow-sm">
+        <div className={cn('bg-[#f7f6f3] border border-black/5 rounded-2xl p-3 space-y-3 shadow-sm', sticky && 'sticky top-16 z-30')}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                     <h2 className="text-lg font-bold text-black">{heading}</h2>

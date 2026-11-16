@@ -236,6 +236,8 @@ The `negWrap()` function handles this wrapping, including ie-collapse at the bou
 
 **needsIl rule:** When the stem ends in a consonant cluster, IO suffixes 3–6 get an epenthetic `-il-` inserted: `-lha → -ilha`, `-lna → -ilna`.
 
+> For full nominal anaptyxis, R-licensing, `(ġ)iCem` raising, and *t marbuta* (`-t` / `-it` / `-agħt-`) morphophonology with scholarly citations, see [Maltese Anaptyxis, Epenthesis, and *T Marbuta* Morphophonology](./maltese-anaptyxis-and-epenthesis.md).
+
 ---
 
 ## Root Form Generation

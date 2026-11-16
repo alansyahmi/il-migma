@@ -18,6 +18,7 @@ import { ensureRelationshipsTable, syncEntryRelationships, syncReciprocalNumeral
 import { ensureTagsTables, syncEntryTags } from '../../../src/lib/entryTags.ts';
 import { ensureStemsTable, syncStemMorphology } from '../../../src/lib/stemMorphology.ts';
 import { ADJECTIVE_ENTRY_TOP_LEVEL_STRIP_FIELDS } from '../../../src/lib/adminSchema.ts';
+import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../../src/lib/entryHydration.ts';
 
 const ENTRY_ADJECTIVE_WRITE_BLOCKLIST = ADJECTIVE_ENTRY_TOP_LEVEL_STRIP_FIELDS;
 
@@ -829,7 +830,92 @@ export function buildLetterWhereClause(letter) {
     };
 }
 
-export function buildAdminListQuery({ q = '', pos = '', letter = '', limit = 50, offset = 0 } = {}) {
+export const MAX_FILTERED_EXPORT_LIMIT = 250;
+
+const AUDIT_HAS_DEF_SQL = `(
+    TRIM(COALESCE(json_extract(e.definitions, '$[0].text_en'), '')) != ''
+    OR TRIM(COALESCE(
+        json_extract(e.definitions, '$[0].text_mt'),
+        json_extract(e.definitions, '$[1].text_mt'),
+        json_extract(e.definitions, '$[2].text_mt'),
+        ''
+    )) != ''
+)`;
+const AUDIT_NORM_POS_SQL = `LOWER(TRIM(COALESCE(e.pos, '')))`;
+const AUDIT_HAS_POS_SQL = `(${AUDIT_NORM_POS_SQL} != '')`;
+const AUDIT_IS_MAJOR_POS_SQL = `(${AUDIT_NORM_POS_SQL} IN ('verb', 'noun', 'adjective', 'participle'))`;
+const AUDIT_HAS_ROOT_SQL = `(TRIM(COALESCE(e.root_consonants, '')) != '')`;
+const AUDIT_IS_LOAN_SQL = `(COALESCE(e.is_loanword, 0) != 0 OR TRIM(COALESCE(e.source_language, '')) != '')`;
+const AUDIT_CRITICAL_SQL = `(NOT ${AUDIT_HAS_DEF_SQL} OR (${AUDIT_IS_MAJOR_POS_SQL} AND NOT ${AUDIT_HAS_ROOT_SQL} AND NOT ${AUDIT_IS_LOAN_SQL}) OR NOT ${AUDIT_HAS_POS_SQL})`;
+const AUDIT_PARTIAL_SQL = `(NOT ${AUDIT_CRITICAL_SQL} AND (
+    (${AUDIT_NORM_POS_SQL} = 'verb' AND NOT EXISTS (
+        SELECT 1 FROM verb_morphology vm_audit
+        WHERE vm_audit.entry_id = e.id
+          AND (TRIM(COALESCE(vm_audit.form, '')) != '' OR TRIM(COALESCE(vm_audit.class, '')) != '')
+    ))
+    OR (${AUDIT_NORM_POS_SQL} = 'noun' AND TRIM(COALESCE(e.gender, '')) = '')
+))`;
+
+export function buildAdminWhereClause({ ids = [], q = '', pos = '', letter = '', auditStatus = '' } = {}) {
+    const args = [];
+    const whereClauses = [];
+
+    const cleanIds = Array.isArray(ids)
+        ? Array.from(new Set(ids.map((id) => String(id || '').trim()).filter(Boolean)))
+        : [];
+    if (cleanIds.length > 0) {
+        const placeholders = cleanIds.map(() => '?').join(', ');
+        whereClauses.push(`e.id IN (${placeholders})`);
+        args.push(...cleanIds);
+    }
+
+    const cleanQ = String(q || '').trim();
+    if (cleanQ) {
+        whereClauses.push('(e.headword LIKE ? OR e.root_consonants = ?)');
+        args.push(`%${cleanQ}%`, cleanQ);
+    }
+
+    const cleanLetter = String(letter || '').trim();
+    if (cleanLetter && cleanLetter.toLowerCase() !== 'all') {
+        const letterClause = buildLetterWhereClause(cleanLetter);
+        if (letterClause) {
+            whereClauses.push(letterClause.clause);
+            args.push(...letterClause.args);
+        }
+    }
+
+    const cleanPos = String(pos || '').trim();
+    if (cleanPos && cleanPos.toLowerCase() !== 'all') {
+        const aliases = resolvePosAliases(cleanPos);
+        if (aliases.length > 0) {
+            const placeholders = aliases.map(() => '?').join(', ');
+            whereClauses.push(`LOWER(TRIM(e.pos)) IN (${placeholders})`);
+            args.push(...aliases);
+        }
+    }
+
+    const cleanAuditStatus = String(auditStatus || '').trim().toLowerCase();
+    if (cleanAuditStatus === 'action-needed') {
+        whereClauses.push(AUDIT_CRITICAL_SQL);
+    } else if (cleanAuditStatus === 'partial') {
+        whereClauses.push(AUDIT_PARTIAL_SQL);
+    } else if (cleanAuditStatus === 'complete') {
+        whereClauses.push(`(NOT ${AUDIT_CRITICAL_SQL} AND NOT ${AUDIT_PARTIAL_SQL})`);
+    }
+
+    return {
+        whereSql: whereClauses.length ? ` WHERE ${whereClauses.join(' AND ')}` : '',
+        args,
+        hasFilter: whereClauses.length > 0,
+        cleanIds,
+        cleanQ,
+        cleanPos,
+        cleanLetter,
+        cleanAuditStatus,
+    };
+}
+
+export function buildAdminListQuery({ q = '', pos = '', letter = '', auditStatus = '', sort = 'alphabetical', limit = 50, offset = 0 } = {}) {
     let sql = `SELECT 
         e.id, 
         e.headword, 
@@ -865,68 +951,138 @@ export function buildAdminListQuery({ q = '', pos = '', letter = '', limit = 50,
     FROM entries e
     LEFT JOIN verb_morphology vm ON vm.entry_id = e.id`;
 
-    const args = [];
-    const whereClauses = [];
+    const { whereSql, args } = buildAdminWhereClause({ q, pos, letter, auditStatus });
+    const normalizedSort = String(sort || '').trim().toLowerCase() === 'recent' ? 'recent' : 'alphabetical';
+    const orderBySql = normalizedSort === 'recent' ? 'e.created_at DESC' : 'e.headword ASC';
+    sql += `${whereSql} ORDER BY ${orderBySql} LIMIT ? OFFSET ?`;
 
-    if (q) {
-        whereClauses.push('(e.headword LIKE ? OR e.root_consonants = ?)');
-        args.push(`%${q}%`, q);
-    }
-    if (letter) {
-        const letterClause = buildLetterWhereClause(letter);
-        if (letterClause) {
-            whereClauses.push(letterClause.clause);
-            args.push(...letterClause.args);
-        }
-    }
-    if (pos) {
-        const aliases = resolvePosAliases(pos);
-        if (aliases.length > 0) {
-            const placeholders = aliases.map(() => '?').join(', ');
-            whereClauses.push(`LOWER(TRIM(e.pos)) IN (${placeholders})`);
-            args.push(...aliases);
-        }
-    }
-
-    if (whereClauses.length) {
-        sql += ' WHERE ' + whereClauses.join(' AND ');
-    }
-    sql += ' ORDER BY e.headword ASC LIMIT ? OFFSET ?';
-    args.push(limit, offset);
-
-    return { sql, args };
+    return { sql, args: [...args, limit, offset] };
 }
 
-export function buildAdminCountQuery({ q = '', pos = '', letter = '' } = {}) {
-    let sql = 'SELECT COUNT(*) as total FROM entries e';
-    const args = [];
-    const whereClauses = [];
+export function buildAdminCountQuery({ q = '', pos = '', letter = '', auditStatus = '' } = {}) {
+    const { whereSql, args } = buildAdminWhereClause({ q, pos, letter, auditStatus });
+    return {
+        sql: `SELECT COUNT(*) as total FROM entries e${whereSql}`,
+        args,
+    };
+}
 
-    if (q) {
-        whereClauses.push('(e.headword LIKE ? OR e.root_consonants = ?)');
-        args.push(`%${q}%`, q);
+export function buildFilteredExportQueries({
+    ids = [],
+    q = '',
+    pos = '',
+    letter = '',
+    auditStatus = '',
+    limit = MAX_FILTERED_EXPORT_LIMIT,
+    offset = 0,
+} = {}) {
+    const resolvedLimit = Math.min(Math.max(Number(limit) || MAX_FILTERED_EXPORT_LIMIT, 1), MAX_FILTERED_EXPORT_LIMIT);
+    const resolvedOffset = Math.max(Number(offset) || 0, 0);
+    const whereState = buildAdminWhereClause({ ids, q, pos, letter, auditStatus });
+
+    if (!whereState.hasFilter) {
+        const err = new Error('At least one filter (search, POS, letter, audit health) or selected entries is required before exporting.');
+        err.status = 400;
+        throw err;
     }
-    if (letter) {
-        const letterClause = buildLetterWhereClause(letter);
-        if (letterClause) {
-            whereClauses.push(letterClause.clause);
-            args.push(...letterClause.args);
+
+    const listQuery = {
+        sql: `SELECT e.*, ${ENTRY_MORPHOLOGY_SELECT}
+FROM entries e
+${ENTRY_MORPHOLOGY_JOINS}${whereState.whereSql}
+ORDER BY e.headword ASC
+LIMIT ? OFFSET ?`,
+        args: [...whereState.args, resolvedLimit, resolvedOffset],
+    };
+
+    const countQuery = {
+        sql: `SELECT COUNT(*) as total FROM entries e${whereState.whereSql}`,
+        args: [...whereState.args],
+    };
+
+    return {
+        listQuery,
+        countQuery,
+        limit: resolvedLimit,
+        offset: resolvedOffset,
+        whereState,
+    };
+}
+
+const RAW_EXPORT_ALIAS_PREFIXES = ['rel_', 'vm_', 'nm_', 'am_', 'pm_', 'num_'];
+const RAW_EXPORT_ALIAS_KEYS = new Set([
+    's_class',
+    's_hybrid',
+    's_suffix',
+    'source_name',
+    'source_full_title',
+    'source_author',
+    'source_url',
+]);
+
+function sanitizeExportedEntry(hydrated, phonetics) {
+    const clean = {};
+    for (const [key, value] of Object.entries(hydrated)) {
+        if (RAW_EXPORT_ALIAS_KEYS.has(key)) continue;
+        if (RAW_EXPORT_ALIAS_PREFIXES.some((prefix) => key.startsWith(prefix))) continue;
+        clean[key] = value;
+    }
+    clean.phonetics = phonetics;
+    return clean;
+}
+
+export async function exportFilteredEntries(client, params = {}) {
+    const { listQuery, countQuery, limit, offset, whereState } = buildFilteredExportQueries(params);
+
+    const [rowsRes, countRes] = await Promise.all([
+        client.execute(listQuery),
+        client.execute(countQuery),
+    ]);
+
+    const rows = rowsRes.rows || [];
+    const totalMatching = Number(countRes.rows?.[0]?.total ?? rows.length);
+    const entryIds = rows.map((row) => row.id).filter(Boolean);
+
+    const phoneticsByEntryId = new Map();
+    if (entryIds.length > 0) {
+        const placeholders = entryIds.map(() => '?').join(', ');
+        const phonRes = await client.execute({
+            sql: `SELECT entry_id, ipa, dialect, notes FROM phonetics WHERE entry_id IN (${placeholders})`,
+            args: entryIds,
+        });
+        for (const ph of (phonRes.rows || [])) {
+            const list = phoneticsByEntryId.get(ph.entry_id) || [];
+            list.push({
+                ipa: ph.ipa,
+                dialect: ph.dialect || 'Standard',
+                notes: ph.notes || null,
+            });
+            phoneticsByEntryId.set(ph.entry_id, list);
         }
     }
-    if (pos) {
-        const aliases = resolvePosAliases(pos);
-        if (aliases.length > 0) {
-            const placeholders = aliases.map(() => '?').join(', ');
-            whereClauses.push(`LOWER(TRIM(e.pos)) IN (${placeholders})`);
-            args.push(...aliases);
-        }
-    }
 
-    if (whereClauses.length) {
-        sql += ' WHERE ' + whereClauses.join(' AND ');
-    }
+    const entries = rows.map((row) => {
+        const hydrated = hydrateEntryRow(row);
+        return sanitizeExportedEntry(hydrated, phoneticsByEntryId.get(row.id) || []);
+    });
 
-    return { sql, args };
+    const filters = {};
+    if (whereState.cleanIds.length > 0) filters.ids = whereState.cleanIds;
+    if (whereState.cleanQ) filters.q = whereState.cleanQ;
+    if (whereState.cleanPos && whereState.cleanPos.toLowerCase() !== 'all') filters.pos = whereState.cleanPos;
+    if (whereState.cleanLetter && whereState.cleanLetter.toLowerCase() !== 'all') filters.letter = whereState.cleanLetter;
+    if (whereState.cleanAuditStatus && whereState.cleanAuditStatus !== 'all') filters.auditStatus = whereState.cleanAuditStatus;
+
+    return {
+        total_matching: totalMatching,
+        total_entries: entries.length,
+        limit,
+        offset,
+        has_more: offset + entries.length < totalMatching,
+        exported_at: new Date().toISOString(),
+        filters,
+        entries,
+    };
 }
 
 // ── GET — list entries ────────────────────────────────────────────────────────
@@ -941,11 +1097,12 @@ export async function onRequestGet({ request, env }) {
         const q = url.searchParams.get('q')?.trim() ?? '';
         const pos = url.searchParams.get('pos')?.trim() ?? '';
         const letter = url.searchParams.get('letter')?.trim() ?? '';
+        const sort = url.searchParams.get('sort')?.trim().toLowerCase() === 'recent' ? 'recent' : 'alphabetical';
         const skipCount = url.searchParams.get('skipCount') === 'true' || url.searchParams.get('skip_count') === 'true';
 
         const client = getDbClient(env);
 
-        const listQuery = buildAdminListQuery({ q, pos, letter, limit, offset });
+        const listQuery = buildAdminListQuery({ q, pos, letter, sort, limit, offset });
         const countQuery = buildAdminCountQuery({ q, pos, letter });
 
         const queries = [client.execute(listQuery)];
@@ -1035,7 +1192,7 @@ export async function onRequestGet({ request, env }) {
         logAdminRequest({
             endpoint: '/api/admin/entries',
             method: 'GET',
-            params: { q: q || undefined, pos: pos || undefined, letter: letter || undefined, limit, offset },
+            params: { q: q || undefined, pos: pos || undefined, letter: letter || undefined, sort, limit, offset },
             durationMs,
             rowsCount: entries.length,
             total: total ?? null,
@@ -1079,7 +1236,12 @@ export async function onRequestPost({ request, env }) {
         if (!headword || !pos) return json({ error: 'headword and pos are required' }, 400);
 
         if (body.etymology_notes && typeof body.etymology_notes !== 'string') {
-            body.etymology_notes = String(body.etymology_notes);
+            body.etymology_notes = Array.isArray(body.etymology_notes)
+                ? body.etymology_notes
+                    .map((item) => (typeof item === 'string' ? item : (item?.text_mt || item?.text_en || JSON.stringify(item))))
+                    .filter(Boolean)
+                    .join(' ')
+                : (body.etymology_notes.text_mt || body.etymology_notes.text_en || JSON.stringify(body.etymology_notes));
         }
 
         const entryPos = normalizeEntryPos(body.pos);

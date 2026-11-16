@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth as useClerkAuth } from '@clerk/clerk-react';
-import { AlertTriangle, Check, CheckSquare, Copy, Edit2, ExternalLink, Maximize2, Plus, RefreshCw, RotateCcw, Square, Trash2, X, XCircle } from 'lucide-react';
-import { adminBulkDeleteEntries, adminDeleteEntry, adminListEntries, adminUpdateEntry } from '@/lib/api';
+import { AlertTriangle, ArrowDownAZ, Check, CheckSquare, ChevronDown, ChevronUp, Clock, Copy, Download, Edit2, ExternalLink, Maximize2, Pin, PinOff, Plus, RefreshCw, RotateCcw, Square, Trash2, X, XCircle } from 'lucide-react';
+import { adminBulkDeleteEntries, adminDeleteEntry, adminExportFilteredEntries, adminListEntries, adminUpdateEntry, type AdminExportFilteredEntriesPayload } from '@/lib/api';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { Badge } from '@/components/ui/Badge';
@@ -46,9 +46,19 @@ export function EntryManager() {
     const [isDuplicate, setIsDuplicate] = useState(false);
     const [initialFormData, setInitialFormData] = useState<Record<string, string> | null>(null);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+    const [showExtraFilters, setShowExtraFilters] = useState(true);
+    const [isToolbarSticky, setIsToolbarSticky] = useState(true);
+    const [sortOrder, setSortOrder] = useState<'alphabetical' | 'recent'>('alphabetical');
     const [auditFilter, setAuditFilter] = useState<'all' | 'action-needed' | 'partial' | 'complete'>('all');
     const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+    const [exportingOffset, setExportingOffset] = useState<number | null>(null);
+    const [exportChunkModal, setExportChunkModal] = useState<{
+        total: number;
+        scopeLabel: string;
+        filters: AdminExportFilteredEntriesPayload;
+        downloadedOffsets: number[];
+    } | null>(null);
 
     // Inline row quick-editing state
     const [quickEditingId, setQuickEditingId] = useState<string | null>(null);
@@ -111,11 +121,16 @@ export function EntryManager() {
         setPage(1);
     }, []);
 
+    const handleSortToggle = useCallback(() => {
+        setSortOrder((prev) => (prev === 'alphabetical' ? 'recent' : 'alphabetical'));
+        setPage(1);
+    }, []);
+
     const load = useCallback(async (options?: { force?: boolean; skipCount?: boolean }) => {
         const currentPosFilter = selectedPos === 'all' ? '' : selectedPos;
         const currentLetterFilter = selectedLetter === 'all' ? '' : selectedLetter;
         const currentOffset = (page - 1) * PAGE_SIZE;
-        const requestSig = `${debouncedQuery}::${currentPosFilter}::${currentLetterFilter}::${currentOffset}::${page}`;
+        const requestSig = `${debouncedQuery}::${currentPosFilter}::${currentLetterFilter}::${sortOrder}::${currentOffset}::${page}`;
 
         if (!options?.force && requestSig === lastRequestSignatureRef.current) {
             return;
@@ -138,6 +153,7 @@ export function EntryManager() {
                 q: debouncedQuery,
                 pos: currentPosFilter,
                 letter: currentLetterFilter,
+                sort: sortOrder,
                 limit: PAGE_SIZE,
                 offset: currentOffset,
                 signal: controller.signal,
@@ -156,11 +172,11 @@ export function EntryManager() {
                 setLoading(false);
             }
         }
-    }, [getToken, debouncedQuery, selectedPos, selectedLetter, page, total]);
+    }, [getToken, debouncedQuery, selectedPos, selectedLetter, sortOrder, page, total]);
 
     useEffect(() => {
         load();
-    }, [debouncedQuery, selectedPos, selectedLetter, page]);
+    }, [debouncedQuery, selectedPos, selectedLetter, sortOrder, page]);
 
     useEffect(() => {
         return () => {
@@ -343,6 +359,127 @@ export function EntryManager() {
         setAuditFilter('all');
         setPage(1);
     }, []);
+
+    const canExport = isFilterActive || selectedIds.size > 0;
+
+    const buildExportScope = useCallback((forceSelected = false) => {
+        const useSelection = forceSelected || selectedIds.size > 0;
+        if (useSelection) {
+            const ids = Array.from(selectedIds);
+            return {
+                filters: { ids } as AdminExportFilteredEntriesPayload,
+                scopeLabel: `selected-${ids.length}`,
+                knownTotal: ids.length,
+            };
+        }
+
+        const parts: string[] = [];
+        const filters: AdminExportFilteredEntriesPayload = {};
+        if (selectedPos !== 'all') {
+            filters.pos = selectedPos;
+            parts.push(selectedPos);
+        }
+        if (selectedLetter !== 'all') {
+            filters.letter = selectedLetter;
+            parts.push(selectedLetter);
+        }
+        if (auditFilter !== 'all') {
+            filters.auditStatus = auditFilter;
+            parts.push(auditFilter);
+        }
+        if (debouncedQuery) {
+            filters.q = debouncedQuery;
+            parts.push(debouncedQuery);
+        }
+
+        const rawSlug = parts.join('-').toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '') || 'filtered';
+        return {
+            filters,
+            scopeLabel: rawSlug.slice(0, 48),
+            knownTotal: auditFilter === 'all' ? total : null,
+        };
+    }, [selectedIds, selectedPos, selectedLetter, auditFilter, debouncedQuery, total]);
+
+    const triggerJsonDownload = useCallback((payload: unknown, scopeLabel: string, chunkNumber?: number) => {
+        const exportedAt = (
+            payload
+            && typeof payload === 'object'
+            && 'exported_at' in payload
+            && typeof (payload as { exported_at?: unknown }).exported_at === 'string'
+        ) ? (payload as { exported_at: string }).exported_at.slice(0, 10) : '';
+        const dateStr = /^\d{4}-\d{2}-\d{2}$/.test(exportedAt)
+            ? exportedAt
+            : new Date().toISOString().slice(0, 10);
+        const suffix = chunkNumber ? `_chunk${chunkNumber}` : '';
+        const filename = `il-migma_${scopeLabel}_${dateStr}${suffix}.json`;
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, []);
+
+    const handleExportChunk = useCallback(async (
+        filters: AdminExportFilteredEntriesPayload,
+        scopeLabel: string,
+        offset = 0,
+        openChunksIfMore = false,
+    ) => {
+        setExportingOffset(offset);
+        try {
+            const token = await getToken();
+            const res = await adminExportFilteredEntries(token, {
+                ...filters,
+                limit: 250,
+                offset,
+            });
+            const isChunked = res.total_matching > 250;
+            const chunkNumber = isChunked ? Math.floor(offset / 250) + 1 : undefined;
+            triggerJsonDownload(res, scopeLabel, chunkNumber);
+            showToast(
+                isChunked
+                    ? `Exported chunk ${chunkNumber} (${res.total_entries} of ${res.total_matching} entries)`
+                    : `Exported ${res.total_entries} ${res.total_entries === 1 ? 'entry' : 'entries'}`,
+            );
+
+            if (openChunksIfMore && isChunked) {
+                setExportChunkModal({
+                    total: res.total_matching,
+                    scopeLabel,
+                    filters,
+                    downloadedOffsets: [offset],
+                });
+            } else {
+                setExportChunkModal((prev) =>
+                    prev && !prev.downloadedOffsets.includes(offset)
+                        ? { ...prev, downloadedOffsets: [...prev.downloadedOffsets, offset] }
+                        : prev
+                );
+            }
+        } catch (e: unknown) {
+            showToast(e instanceof Error ? e.message : String(e), false);
+        } finally {
+            setExportingOffset(null);
+        }
+    }, [getToken, triggerJsonDownload, showToast]);
+
+    const handleExportClick = useCallback((forceSelected = false) => {
+        const { filters, scopeLabel, knownTotal } = buildExportScope(forceSelected);
+        if (knownTotal !== null && knownTotal > 250) {
+            setExportChunkModal({
+                total: knownTotal,
+                scopeLabel,
+                filters,
+                downloadedOffsets: [],
+            });
+            return;
+        }
+        void handleExportChunk(filters, scopeLabel, 0, true);
+    }, [buildExportScope, handleExportChunk]);
 
     const availablePosList = useMemo(() => {
         return posOptions && posOptions.length > 0 ? posOptions : [
@@ -537,18 +674,39 @@ export function EntryManager() {
     // Clear editing row when navigating or filtering
     useEffect(() => {
         setQuickEditingId(null);
-    }, [page, debouncedQuery, selectedPos, selectedLetter, auditFilter]);
+    }, [page, debouncedQuery, selectedPos, selectedLetter, auditFilter, sortOrder]);
 
     return (
         <div className="space-y-3">
             <WorkspaceToolbar
                 heading={term('entries')}
                 countText={`${total.toLocaleString()} ${term('found')}`}
+                sticky={isToolbarSticky}
                 controls={(
                     <>
                         <WorkspaceViewToggle viewMode={viewMode} onChange={setViewMode} />
                         <Button variant="ghost" size="sm" onClick={() => load({ force: true })} leftIcon={<RefreshCw size={14} className={cn(loading && 'animate-spin')} />}>
                             {term('refresh')}
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            disabled={!canExport || exportingOffset !== null}
+                            onClick={() => handleExportClick(false)}
+                            leftIcon={<Download size={14} />}
+                            title={
+                                canExport
+                                    ? selectedIds.size > 0
+                                        ? `Export ${selectedIds.size} selected entries as JSON`
+                                        : 'Export matching filtered entries as JSON (max 250 per chunk)'
+                                    : 'Apply a filter (Search, POS, Letter, Audit Health) or select entries to export'
+                            }
+                        >
+                            {exportingOffset !== null
+                                ? 'Exporting...'
+                                : selectedIds.size > 0
+                                    ? `Export (${selectedIds.size})`
+                                    : 'Export'}
                         </Button>
                         <Button size="sm" onClick={() => { setEditEntry(null); setInitialFormData(null); setShowForm(true); }} leftIcon={<Plus size={14} />}>
                             {term('new-entry')}
@@ -557,18 +715,20 @@ export function EntryManager() {
                 )}
                 filters={(
                     <div className="space-y-2.5">
-                        {/* Row 1: Search & Streamlined POS Filters */}
-                        <div className="flex flex-col md:flex-row md:items-center gap-2">
-                            <div className="flex-1 min-w-[200px]">
-                                <SearchInput
-                                    value={searchInput}
-                                    onChange={setSearchInput}
-                                    onSubmit={handleSearchSubmit}
-                                    placeholder={`${term('search-entry')}...`}
-                                />
-                            </div>
+                        <div className="w-full">
+                            <SearchInput
+                                value={searchInput}
+                                onChange={setSearchInput}
+                                onSubmit={handleSearchSubmit}
+                                placeholder={`${term('search-entry')}...`}
+                            />
+                        </div>
 
-                            <div className="flex items-center gap-1.5 flex-wrap">
+                        <div
+                            id="entry-extra-filters"
+                            className={cn('space-y-2.5', !showExtraFilters && 'hidden')}
+                        >
+                            <div className="flex items-center gap-1.5 flex-wrap pt-1">
                                 <button
                                     type="button"
                                     onClick={() => handlePosChange('all')}
@@ -627,49 +787,48 @@ export function EntryManager() {
                                     </div>
                                 )}
                             </div>
-                        </div>
 
-                        {/* Row 2: Maltese Alphabetical Filter (abċ order) */}
-                        <div className="flex items-center gap-1 flex-wrap pt-2 border-t border-black/5">
-                            <span className="text-[10px] font-bold text-black/40 uppercase tracking-wider mr-1 shrink-0">
-                                ABĊ:
-                            </span>
-                            <button
-                                type="button"
-                                onClick={() => handleLetterChange('all')}
-                                className={cn(
-                                    'px-2.5 py-1 rounded text-xs font-bold transition-all border shrink-0 uppercase tracking-wider',
-                                    selectedLetter === 'all'
-                                        ? 'bg-link text-white border-link shadow-xs'
-                                        : 'bg-white text-black/60 border-black/10 hover:border-black/20 hover:bg-black/5',
-                                )}
-                            >
-                                {term('all').toUpperCase()}
-                            </button>
-                            {MALTESE_ALPHABET.map((letter) => {
-                                const isSelected = selectedLetter.toLowerCase() === letter.toLowerCase();
-                                return (
-                                    <button
-                                        key={letter}
-                                        type="button"
-                                        onClick={() => handleLetterChange(isSelected ? 'all' : letter)}
-                                        className={cn(
-                                            'h-7 min-w-[28px] px-1.5 rounded text-xs font-semibold transition-all border flex items-center justify-center font-serif shrink-0',
-                                            isSelected
-                                                ? 'bg-link text-white border-link shadow-xs font-bold'
-                                                : 'bg-white text-black/75 border-black/10 hover:border-black/25 hover:bg-black/5',
-                                        )}
-                                        title={`Filter entries starting with ${letter}`}
-                                    >
-                                        {letter}
-                                    </button>
-                                );
-                            })}
-                        </div>
+                            {/* Row 2: Maltese Alphabetical Filter (abċ order) */}
+                            <div className="flex items-center gap-1 flex-wrap pt-2 border-t border-black/5">
+                                <span className="text-[10px] font-bold text-black/40 uppercase tracking-wider mr-1 shrink-0">
+                                    ABĊ:
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={() => handleLetterChange('all')}
+                                    className={cn(
+                                        'px-2.5 py-1 rounded text-xs font-bold transition-all border shrink-0 uppercase tracking-wider',
+                                        selectedLetter === 'all'
+                                            ? 'bg-link text-white border-link shadow-xs'
+                                            : 'bg-white text-black/60 border-black/10 hover:border-black/20 hover:bg-black/5',
+                                    )}
+                                >
+                                    {term('all').toUpperCase()}
+                                </button>
+                                {MALTESE_ALPHABET.map((letter) => {
+                                    const isSelected = selectedLetter.toLowerCase() === letter.toLowerCase();
+                                    return (
+                                        <button
+                                            key={letter}
+                                            type="button"
+                                            onClick={() => handleLetterChange(isSelected ? 'all' : letter)}
+                                            className={cn(
+                                                'h-7 min-w-[28px] px-1.5 rounded text-xs font-semibold transition-all border flex items-center justify-center font-serif shrink-0',
+                                                isSelected
+                                                    ? 'bg-link text-white border-link shadow-xs font-bold'
+                                                    : 'bg-white text-black/75 border-black/10 hover:border-black/25 hover:bg-black/5',
+                                            )}
+                                            title={`Filter entries starting with ${letter}`}
+                                        >
+                                            {letter}
+                                        </button>
+                                    );
+                                })}
+                            </div>
 
                         {/* Row 3: Audit Health Chips & Filter Reset */}
                         {(filteredEntries.length > 0 || isFilterActive) && (
-                            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-black/5 text-xs">
+                            <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-black/5 text-xs">
                                 <div className="flex flex-wrap items-center gap-1.5">
                                     <span className="text-[10px] font-bold text-black/40 uppercase tracking-wider mr-1">
                                         {term('audit-health') || 'Audit Health'}:
@@ -767,24 +926,69 @@ export function EntryManager() {
                                     </button>
                                 </div>
 
-                                <div className="flex items-center gap-3 text-xs">
-                                    {isFilterActive && (
-                                        <button
-                                            type="button"
-                                            onClick={handleClearAllFilters}
-                                            className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 hover:text-slate-800 hover:underline"
-                                        >
-                                            <RotateCcw size={11} />
-                                            <span>{term('reset-filters') || 'Reset filters'}</span>
-                                        </button>
-                                    )}
-                                    <span className="text-[11px] text-black/40 font-medium font-mono">
-                                        {displayedEntries.length} {term('entries') || 'entries'}
-                                    </span>
-                                </div>
                             </div>
                         )}
                     </div>
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-black/5 text-xs">
+                        <div className="flex items-center gap-3">
+                            <button
+                                type="button"
+                                aria-expanded={showExtraFilters}
+                                aria-controls="entry-extra-filters"
+                                onClick={() => setShowExtraFilters((visible) => !visible)}
+                                className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium text-slate-500 transition-colors hover:bg-black/5 hover:text-slate-800"
+                            >
+                                {showExtraFilters ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                                <span>{term(showExtraFilters ? 'hide-extra-filters' : 'show-extra-filters')}</span>
+                            </button>
+                            {isFilterActive && (
+                                <button
+                                    type="button"
+                                    onClick={handleClearAllFilters}
+                                    className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 hover:text-slate-800 hover:underline"
+                                >
+                                    <RotateCcw size={11} />
+                                    <span>{term('reset-filters')}</span>
+                                </button>
+                            )}
+                            <button
+                                type="button"
+                                aria-pressed={isToolbarSticky}
+                                title={term(isToolbarSticky ? 'sticky-toolbar-hint' : 'non-sticky-toolbar-hint')}
+                                onClick={() => setIsToolbarSticky((sticky) => !sticky)}
+                                className={cn(
+                                    'inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] font-medium transition-colors hover:bg-black/5',
+                                    isToolbarSticky
+                                        ? 'border-link/20 bg-link/5 text-link'
+                                        : 'border-black/10 text-slate-500 hover:text-slate-800',
+                                )}
+                            >
+                                {isToolbarSticky ? <Pin size={11} /> : <PinOff size={11} />}
+                                <span>{term(isToolbarSticky ? 'sticky-toolbar' : 'non-sticky-toolbar')}</span>
+                            </button>
+                            <button
+                                type="button"
+                                aria-pressed={sortOrder === 'recent'}
+                                title={term(sortOrder === 'recent' ? 'sort-recent-hint' : 'sort-alphabetical-hint')}
+                                onClick={handleSortToggle}
+                                className={cn(
+                                    'inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] font-medium transition-colors hover:bg-black/5',
+                                    sortOrder === 'recent'
+                                        ? 'border-link/20 bg-link/5 text-link'
+                                        : 'border-black/10 text-slate-500 hover:text-slate-800',
+                                )}
+                            >
+                                {sortOrder === 'recent' ? <Clock size={11} /> : <ArrowDownAZ size={11} />}
+                                <span>{term(sortOrder === 'recent' ? 'sort-recent' : 'sort-alphabetical')}</span>
+                            </button>
+                        </div>
+                        {(filteredEntries.length > 0 || isFilterActive) && (
+                            <span className="text-[11px] text-black/40 font-medium font-mono">
+                                {displayedEntries.length} {term('entries') || 'entries'}
+                            </span>
+                        )}
+                    </div>
+                </div>
                 )}
             />
 
@@ -804,7 +1008,7 @@ export function EntryManager() {
                     }
                     actionLabel={
                         isFilterActive
-                            ? (term('reset-filters') || 'Reset filters')
+                            ? term('reset-filters')
                             : term('new-entry')
                     }
                     onAction={
@@ -919,9 +1123,9 @@ export function EntryManager() {
             ) : (
                 /* HIGH DENSITY DATA GRID */
                 <Card className="relative z-0 overflow-hidden border border-border-light shadow-sm bg-white rounded-xl">
-                    <div className="overflow-x-auto max-h-[calc(100vh-270px)] overflow-y-auto">
+                    <div className="overflow-x-auto">
                         <table className="w-full text-xs text-left border-collapse">
-                            <thead className="sticky top-0 z-10 bg-surface-soft/95 backdrop-blur-sm border-b border-border-light shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+                            <thead className="bg-surface-soft/95 backdrop-blur-sm border-b border-border-light shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
                                 <tr className="text-black/50 uppercase tracking-wider font-semibold text-[11px]">
                                     <th className="py-2.5 px-3 w-10 text-center">
                                         <button
@@ -1526,7 +1730,10 @@ export function EntryManager() {
                     selectedLabel={term('selected-entries')}
                     clearLabel={term('clear-selection')}
                     deleteLabel={term('delete-all')}
+                    exportLabel={`Export (${selectedIds.size})`}
+                    exporting={exportingOffset !== null}
                     onClear={() => setSelectedIds(new Set())}
+                    onExport={() => handleExportClick(true)}
                     onDelete={handleBulkDelete}
                 />
             )}
@@ -1572,6 +1779,79 @@ export function EntryManager() {
                                 className="min-w-[120px] border border-black/20 text-black hover:bg-black/5"
                             >
                                 {term('dismiss') || 'Dismiss'}
+                            </Button>
+                        </div>
+                    </div>
+                </Modal>
+            )}
+
+            {exportChunkModal && (
+                <Modal
+                    open={true}
+                    onClose={() => { if (exportingOffset === null) setExportChunkModal(null); }}
+                    title="Export Entries in Chunks"
+                    size="md"
+                >
+                    <div className="space-y-4">
+                        <p className="text-sm text-black/70 leading-relaxed">
+                            Found <span className="font-semibold text-black">{exportChunkModal.total.toLocaleString()}</span> matching entries.
+                            To minimize database reads and keep files easy to edit, download up to 250 entries per JSON chunk.
+                        </p>
+
+                        <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+                            {Array.from({ length: Math.ceil(exportChunkModal.total / 250) }, (_, idx) => {
+                                const offset = idx * 250;
+                                const start = offset + 1;
+                                const end = Math.min((idx + 1) * 250, exportChunkModal.total);
+                                const isDownloading = exportingOffset === offset;
+                                const isDownloaded = exportChunkModal.downloadedOffsets.includes(offset);
+
+                                return (
+                                    <div
+                                        key={offset}
+                                        className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border border-black/10 bg-[#faf9f6]"
+                                    >
+                                        <div className="min-w-0">
+                                            <div className="text-sm font-semibold text-black flex items-center gap-2">
+                                                <span>Chunk {idx + 1}</span>
+                                                <span className="text-xs font-mono text-black/55">
+                                                    ({start}–{end})
+                                                </span>
+                                                {isDownloaded && (
+                                                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">
+                                                        <Check size={11} /> Downloaded
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant={isDownloaded ? 'secondary' : 'primary'}
+                                            disabled={exportingOffset !== null}
+                                            onClick={() => handleExportChunk(
+                                                exportChunkModal.filters,
+                                                exportChunkModal.scopeLabel,
+                                                offset,
+                                                false,
+                                            )}
+                                            leftIcon={<Download size={13} />}
+                                        >
+                                            {isDownloading ? 'Exporting...' : isDownloaded ? 'Re-download' : 'Download'}
+                                        </Button>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="flex justify-end pt-2 border-t border-black/10">
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                disabled={exportingOffset !== null}
+                                onClick={() => setExportChunkModal(null)}
+                            >
+                                Close
                             </Button>
                         </div>
                     </div>

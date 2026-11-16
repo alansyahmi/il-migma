@@ -82,3 +82,17 @@ test('Admin Performance: buildAdminListQuery and buildAdminCountQuery support le
     assert.match(gRes.sql, /NOT/i); // excludes għ and ġ
 });
 
+test('Admin Performance: buildAdminListQuery supports alphabetical and recent sort modes', () => {
+    const defaultRes = buildAdminListQuery({});
+    assert.match(defaultRes.sql, /ORDER BY e\.headword ASC LIMIT \? OFFSET \?/i);
+
+    const alphaRes = buildAdminListQuery({ sort: 'alphabetical' });
+    assert.match(alphaRes.sql, /ORDER BY e\.headword ASC LIMIT \? OFFSET \?/i);
+
+    const recentRes = buildAdminListQuery({ sort: 'recent' });
+    assert.match(recentRes.sql, /ORDER BY e\.created_at DESC LIMIT \? OFFSET \?/i);
+
+    const fallbackRes = buildAdminListQuery({ sort: 'unknown; DROP TABLE entries' });
+    assert.match(fallbackRes.sql, /ORDER BY e\.headword ASC LIMIT \? OFFSET \?/i);
+});
+

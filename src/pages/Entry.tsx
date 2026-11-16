@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
-import { type Entry, type LinguisticMode, type VerbConjugationTable, type NounMorphology, type AdjectiveMorphology } from '@/types';
+import { type Entry, type Gender, type LinguisticMode, type VerbConjugationTable, type NounMorphology, type AdjectiveMorphology } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { buildVerbForm, buildPerfectForm, getDoLabels, getIoLabels } from '@/lib/suffixEngine';
 import { generateZokkForms } from '@/lib/zokkEngine';
@@ -588,10 +588,21 @@ function prepareDiminutiveStemForAttachment(word: string) {
     return String(word || '').replace(/jj/g, 'j').replace(/ww/g, 'w');
 }
 
-function getTheoreticalDualPattern(baseForm: string | null | undefined, pluralHint?: string | null, isFeminine = false, ipaHint?: string | null) {
+function getTheoreticalDualPattern(
+    baseForm: string | null | undefined,
+    pluralHint?: string | null,
+    isFeminine = false,
+    ipaHint?: string | null,
+    pattern?: string | null,
+    gender?: Gender | null,
+) {
     if (!baseForm) return '-';
-    if (isFeminine) return '-tejn';
-    return generateTheoreticalDual(baseForm, pluralHint, ipaHint).endsWith('ajn') ? '-ajn' : '-ejn';
+    const effectiveGender: Gender = gender || (isFeminine ? 'feminine' : 'masculine');
+    const generated = generateTheoreticalDual(baseForm, pluralHint, ipaHint, pattern, null, effectiveGender);
+    if (generated.endsWith('tejn')) return '-tejn';
+    if (generated.endsWith('tajn')) return '-tajn';
+    if (generated.endsWith('ajn')) return '-ajn';
+    return '-ejn';
 }
 
 function getDualSurfaceForVariant(
@@ -603,6 +614,8 @@ function getDualSurfaceForVariant(
     masculineSource: string | null | undefined,
     explicitDual: string | null | undefined,
     ipaHint?: string | null,
+    pattern?: string | null,
+    gender?: Gender | null,
 ) {
     if (!baseForm) return null;
 
@@ -614,7 +627,7 @@ function getDualSurfaceForVariant(
         return generateFeminineDualFromMasculineWithHint(masculineSource, pluralHint, ipaHint);
     }
 
-    return generateTheoreticalDual(baseForm, pluralHint, ipaHint);
+    return generateTheoreticalDual(baseForm, pluralHint, ipaHint, pattern, null, gender || variant);
 }
 
 function getDualPatternForVariant(
@@ -625,14 +638,21 @@ function getDualPatternForVariant(
     explicitPattern: string | null | undefined,
     explicitDual: string | null | undefined,
     ipaHint?: string | null,
+    hasOppositeGender = false,
+    pattern?: string | null,
+    gender?: Gender | null,
 ) {
     if (!baseForm) return '-';
 
     if (explicitDual && variant === primaryVariant) {
-        return explicitPattern || getTheoreticalDualPattern(baseForm, pluralHint, variant === 'feminine', ipaHint);
+        return explicitPattern || getTheoreticalDualPattern(baseForm, pluralHint, variant === 'feminine', ipaHint, pattern, gender);
     }
 
-    return getTheoreticalDualPattern(baseForm, pluralHint, variant === 'feminine', ipaHint);
+    if (!explicitDual && variant === 'feminine' && hasOppositeGender) {
+        return '-tejn';
+    }
+
+    return getTheoreticalDualPattern(baseForm, pluralHint, variant === 'feminine', ipaHint, pattern, gender);
 }
 
 function buildDiminutivePlural(word: string) {
@@ -1383,13 +1403,26 @@ function NounMorphologySection({
                             masculineSource,
                             dual,
                             ipaHint,
+                            basePattern,
+                            isCommonGender ? 'common' : variant,
                         );
                     })(),
                     pattern: (() => {
                         if (isCollOrSing && !isSingulativeRow) return null;
                         if (isSingulativeRow && dualPattern) return dualPattern;
                         const ipaHint = entry.phonetics?.find((ph: any) => ph.dialect === 'Standard')?.ipa || entry.phonetics?.[0]?.ipa;
-                        return getDualPatternForVariant(baseForm, pluralHint, variant, primaryVariant, dualPattern, dual, ipaHint);
+                        return getDualPatternForVariant(
+                            baseForm,
+                            pluralHint,
+                            variant,
+                            primaryVariant,
+                            dualPattern,
+                            dual,
+                            ipaHint,
+                            hasOppositeGender,
+                            basePattern,
+                            isCommonGender ? 'common' : variant,
+                        );
                     })(),
                     theoretical: isCollOrSing
                         ? !isSingulativeRow // for singulative, actual dual is not theoretical; for collective it's null anyway
@@ -1718,10 +1751,24 @@ function AdjectiveMorphologySection({
                             hasOppositeGender,
                             explicitVariantForms.masculine,
                             singular(entry.dual_form || null),
+                            undefined,
+                            basePattern(variant),
+                            variant,
                         );
                     })(),
                     theoretical: !(variant === primaryVariant && !!singular(entry.dual_form || null)),
-                    pattern: getDualPatternForVariant(baseForm, pluralHint, variant, primaryVariant, dualPattern, singular(entry.dual_form || null)),
+                    pattern: getDualPatternForVariant(
+                        baseForm,
+                        pluralHint,
+                        variant,
+                        primaryVariant,
+                        dualPattern,
+                        singular(entry.dual_form || null),
+                        undefined,
+                        hasOppositeGender,
+                        basePattern(variant),
+                        variant,
+                    ),
                 },
                 plural: {
                     ...buildStackedCell(morphology.plural || null, pluralPattern),
@@ -2509,7 +2556,9 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     const singularBase = trimOrNull(nm.singular || entry.headword || null) || entry.headword;
     const POSSESSIVE_SUFFIX_KEYS = ['pos-1s', 'pos-2s', 'pos-3ms', 'pos-3fs', 'pos-1p', 'pos-2p', 'pos-3p'];
 
-    const applySuffix = (base: string, idx: number, theoreticalOverride?: boolean, customPattern?: string) => {
+    const resolvedNounGender: Gender = nm.gender === 'feminine' ? 'feminine' : nm.gender === 'common' ? 'common' : 'masculine';
+
+    const applySuffix = (base: string, idx: number, theoreticalOverride?: boolean, customPattern?: string, genderOverride?: Gender) => {
         const isT = theoreticalOverride ?? isTheoretical;
         // Use the passed customPattern (for plurals) or the entry's cv_pattern
         const activePattern = customPattern || (entry as any).cv_pattern || (entry.root_pattern_form?.pattern?.cv_notation);
@@ -2517,7 +2566,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
         const result = applyInflectionTableSuffix(
             base,
             idx as any,
-            nm.gender === 'feminine' ? 'feminine' : 'masculine',
+            genderOverride ?? resolvedNounGender,
             activePattern,
             thirdRadical,
             ipaHint,
@@ -2551,6 +2600,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
             idx,
             isTheoretical,
             row.pattern || pluralPattern || soundPluralPattern || undefined,
+            'masculine',
         ));
         const pluralVisible = pluralResolvedCells.length > 0 && pluralResolvedCells.some(cell => !(hideTheoreticalForms && (cell.theoretical || isDashLikeValue(cell.value))));
 
@@ -5284,14 +5334,20 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
     const POSSESSIVE_SUFFIX_KEYS = ['pos-1s', 'pos-2s', 'pos-3ms', 'pos-3fs', 'pos-1p', 'pos-2p', 'pos-3p'];
     const thirdRadical = rootConsonants?.split('-')?.[2] || rootConsonants?.[2] || '';
 
-    const applySuffix = (base: string, idx: number, theoreticalOverride?: boolean, customPattern?: string) => {
+    const resolvedVirtualGender: Gender = virtualNounMorphology.gender === 'feminine'
+        ? 'feminine'
+        : virtualNounMorphology.gender === 'common'
+            ? 'common'
+            : 'masculine';
+
+    const applySuffix = (base: string, idx: number, theoreticalOverride?: boolean, customPattern?: string, genderOverride?: Gender) => {
         const isT = theoreticalOverride ?? isTheoretical;
         const activePattern = customPattern || (entry as any).cv_pattern || (entry.root_pattern_form?.pattern?.cv_notation);
         const ipaHint = entry.phonetics?.find((ph: any) => ph.dialect === 'Standard')?.ipa || entry.phonetics?.[0]?.ipa;
         const result = applyInflectionTableSuffix(
             base,
             idx as any,
-            virtualNounMorphology.gender === 'feminine' ? 'feminine' : 'masculine',
+            genderOverride ?? resolvedVirtualGender,
             activePattern,
             thirdRadical,
             ipaHint,
@@ -5320,6 +5376,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                 idx,
                 isTheoretical,
                 row.pattern || pluralPattern || soundPluralPattern || undefined,
+                'masculine',
             ));
             const pluralVisible = pluralResolvedCells.length > 0 && pluralResolvedCells.some(cell => !(hideTheoreticalForms && (cell.theoretical || isDashLikeValue(cell.value))));
 
@@ -6660,7 +6717,7 @@ export function EntryPage() {
         return () => {
             if (id) {
                 setLoading(true);
-                apiGetEntry(id)
+                apiGetEntry(id, undefined, { fresh: true })
                     .then(res => setEntry(res.entry))
                     .catch(() => {
                         setEntry(null);

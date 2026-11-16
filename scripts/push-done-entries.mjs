@@ -61,6 +61,7 @@ const CATEGORY_FILES = [
     { id: 'artifacts', path: 'docs/1000-words-categories/DONE_artifacts.json' },
     { id: 'adj_sensory_colours', path: 'docs/1000-words-categories/DONE_adj_sensory_colours.json' },
     { id: 'verbs_daily_social', path: 'docs/1000-words-categories/DONE_verbs_daily_social.json' },
+    { id: 'time_calendar', path: 'docs/1000-words-categories/DONE_time_calendar.json' },
 ];
 
 const selectedFiles = categoryArg
@@ -169,7 +170,7 @@ async function run() {
         }
         if (Array.isArray(e.related_entries)) {
             for (const r of e.related_entries) {
-                const targetId = typeof r === 'string' ? r : (r?.id || r?.target_id);
+                const targetId = typeof r === 'string' ? r : (r?.target_entry_id || r?.id || r?.target_id);
                 if (targetId) allTargetIds.add(String(targetId).trim());
             }
         }
@@ -387,8 +388,8 @@ async function run() {
                     }, stemsCols, true);
                 }
 
-                // 2. Sync Alternative Forms (if present)
-                if (Array.isArray(e.alternative_forms) && e.alternative_forms.length > 0) {
+                // 2. Sync Alternative Forms (if present, or full replace for time_calendar)
+                if (Array.isArray(e.alternative_forms) && (e.alternative_forms.length > 0 || e._sourceCategory === 'time_calendar')) {
                     await tx.execute({ sql: "DELETE FROM alternative_forms WHERE entry_id = ?", args: [entryId] });
                     totalWriteQueries++;
 
@@ -399,7 +400,7 @@ async function run() {
                         const altNotes = typeof alt === 'object' ? (alt.notes || null) : null;
                         let targetEntryId = typeof alt === 'object' ? (alt.target_entry_id || (alt.has_lemma_entry && alt.id && !alt.id.startsWith('alt_') ? alt.id : null)) : null;
 
-                        if (targetEntryId && !existingById.has(targetEntryId)) {
+                        if (targetEntryId && !existingById.has(targetEntryId) && !allEntryIds.has(targetEntryId)) {
                             targetEntryId = null;
                         }
 
@@ -414,8 +415,31 @@ async function run() {
                     }
                 }
 
+                // 2b. Sync Tags (tags + entry_tags)
+                if (Array.isArray(e.tags)) {
+                    await tx.execute({ sql: "DELETE FROM entry_tags WHERE entry_id = ?", args: [entryId] });
+                    totalWriteQueries++;
+
+                    for (const rawTag of e.tags) {
+                        const tagName = String(rawTag || '').trim();
+                        if (!tagName) continue;
+                        const tagId = tagName.toLowerCase().replace(/[\s_]+/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
+                        if (!tagId) continue;
+
+                        await tx.execute({
+                            sql: "INSERT OR IGNORE INTO tags (id, name) VALUES (?, ?)",
+                            args: [tagId, tagName]
+                        });
+                        await tx.execute({
+                            sql: "INSERT OR IGNORE INTO entry_tags (entry_id, tag_id) VALUES (?, ?)",
+                            args: [entryId, tagId]
+                        });
+                        totalWriteQueries += 2;
+                    }
+                }
+
                 // 3. Queue Relationships to sync after all entry batches are upserted
-                if (Array.isArray(e.related_entries) && e.related_entries.length > 0) {
+                if (Array.isArray(e.related_entries) && (e.related_entries.length > 0 || e._sourceCategory === 'time_calendar')) {
                     allRelationships.push({ entryId, related_entries: e.related_entries });
                 }
 
@@ -524,10 +548,13 @@ async function run() {
                     await runUpsert('noun_morphology', 'entry_id', {
                         entry_id: entryId,
                         gender: nm.gender || gender,
+                        noun_type: nm.noun_type || null,
                         singular_form: nm.singular_form || e.headword,
+                        dual_form: nm.dual_form || null,
                         plural_forms: pluralFormsJson,
                         feminine_form: nm.feminine_form || null,
                         masculine_form: nm.masculine_form || null,
+                        is_collective: nm.is_collective ? 1 : 0,
                         is_singulative: nm.is_singulative ? 1 : 0,
                         vowel_set_sg: nm.vowel_set_sg || null,
                         vowel_set_pl: nm.vowel_set_pl || null,
@@ -605,12 +632,14 @@ async function run() {
 
                 let relOrder = 0;
                 for (const rel of related_entries) {
-                    const targetId = typeof rel === 'string' ? rel : (rel?.id || rel?.target_id);
+                    const targetId = typeof rel === 'string' ? rel : (rel?.target_entry_id || rel?.id || rel?.target_id);
+                    const relTypeRaw = typeof rel === 'object' ? (rel?.relationship_type || rel?.type || 'related') : 'related';
+                    const relType = ['synonym', 'antonym', 'related'].includes(relTypeRaw) ? relTypeRaw : 'related';
                     if (targetId && (existingById.has(targetId) || allEntryIds.has(targetId))) {
-                        const relId = `rel_${entryId}_${targetId}_related`;
+                        const relId = `rel_${entryId}_${targetId}_${relType}`;
                         await relTx.execute({
                             sql: `INSERT OR REPLACE INTO entry_relationships (id, entry_id, target_entry_id, relationship_type, sort_order) VALUES (?, ?, ?, ?, ?)`,
-                            args: [relId, entryId, targetId, 'related', relOrder++]
+                            args: [relId, entryId, targetId, relType, relOrder++]
                         });
                         totalWriteQueries++;
                     }

@@ -2063,7 +2063,7 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
         let active = true;
         setIsLoadingFull(true);
 
-        apiGetEntry(entry.id)
+        apiGetEntry(entry.id, undefined, { fresh: true })
             .then(res => {
                 if (!active || requestSeq !== loadRequestSeqRef.current) return;
 

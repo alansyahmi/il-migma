@@ -10,6 +10,7 @@ import { createClient } from '@libsql/client/web';
 import { resolveSuffixEntryMatch } from '../../src/lib/suffixMatching.ts';
 import { normalizeSourceMetadata } from '../../src/lib/sourceMetadata.ts';
 import { hydrateEntryRow, ENTRY_MORPHOLOGY_JOINS, ENTRY_MORPHOLOGY_SELECT } from '../../src/lib/entryHydration.ts';
+import { malteseLower, malteseLowerSql } from '../lib/malteseSql.js';
 
 const CANONICAL_GENDERS = new Set(['masculine', 'feminine', 'common', 'neutral']);
 const VERB_STRENGTH_FILTERS = new Set(['strong', 'strong-hybrid', 'weak', 'geminated', 'doubled']);
@@ -149,38 +150,41 @@ export async function onRequestGet({ request, env }) {
                 globStr = globStr.replace(/\.\*/g, '*').replace(/\./g, '?');
                 if (!hasStartAnchor) globStr = '*' + globStr;
                 if (!hasEndAnchor) globStr = globStr + '*';
+                const lowerGlobStr = malteseLower(globStr);
 
                 if (searchLemma || !hasFieldFilter) {
-                    conditions.push("LOWER(e.headword) GLOB LOWER(?)");
-                    conditions.push("e.id IN (SELECT entry_id FROM alternative_forms WHERE LOWER(headword) GLOB LOWER(?))");
-                    qArgs.push(globStr, globStr);
+                    conditions.push(`${malteseLowerSql('e.headword')} GLOB ?`);
+                    conditions.push(`e.id IN (SELECT entry_id FROM alternative_forms WHERE ${malteseLowerSql('headword')} GLOB ?)`);
+                    qArgs.push(lowerGlobStr, lowerGlobStr);
                 }
                 if (searchEnglishGloss) {
-                    conditions.push(`LOWER(COALESCE(json_extract(e.definitions, '$[0].text_en'), '')) GLOB LOWER(?)`);
-                    qArgs.push(globStr);
+                    conditions.push(`LOWER(COALESCE(json_extract(e.definitions, '$[0].text_en'), '')) GLOB ?`);
+                    qArgs.push(lowerGlobStr);
                 }
                 if (searchWordForms) {
-                    conditions.push("LOWER(COALESCE(nm.plural_forms, am.plural_form, '')) GLOB LOWER(?)");
-                    conditions.push("LOWER(vm.verbal_noun) GLOB LOWER(?)");
-                    conditions.push("e.id IN (SELECT entry_id FROM alternative_forms WHERE LOWER(headword) GLOB LOWER(?))");
-                    qArgs.push(globStr, globStr, globStr);
+                    conditions.push(`${malteseLowerSql("COALESCE(nm.plural_forms, am.plural_form, '')")} GLOB ?`);
+                    conditions.push(`${malteseLowerSql('vm.verbal_noun')} GLOB ?`);
+                    conditions.push(`e.id IN (SELECT entry_id FROM alternative_forms WHERE ${malteseLowerSql('headword')} GLOB ?)`);
+                    qArgs.push(lowerGlobStr, lowerGlobStr, lowerGlobStr);
                 }
                 if (!hasFieldFilter) {
-                    conditions.push("LOWER(r.consonants) GLOB LOWER(?)");
-                    conditions.push("LOWER(e.root_consonants) GLOB LOWER(?)");
-                    qArgs.push(globStr, globStr);
+                    conditions.push(`${malteseLowerSql('r.consonants')} GLOB ?`);
+                    conditions.push(`${malteseLowerSql('e.root_consonants')} GLOB ?`);
+                    qArgs.push(lowerGlobStr, lowerGlobStr);
                 }
             } else {
                 const safeQuery = q.toLowerCase().replace(/"/g, ' ').trim();
                 const altQueryApos = normalizedQ.includes("'")
                     ? normalizedQ.replace(/'/g, '’')
                     : normalizedQ.replace(/’/g, "'");
+                const lowerNormQ = malteseLower(normalizedQ);
+                const lowerAltQ = malteseLower(altQueryApos);
                 if (searchLemma || !hasFieldFilter) {
                     conditions.push("e.headword = ?");
                     conditions.push("e.rowid IN (SELECT rowid FROM entries_fts WHERE entries_fts MATCH ?)");
-                    conditions.push("e.id IN (SELECT entry_id FROM alternative_forms WHERE LOWER(headword) IN (LOWER(?), LOWER(?)) OR headword LIKE ?)");
+                    conditions.push(`e.id IN (SELECT entry_id FROM alternative_forms WHERE ${malteseLowerSql('headword')} IN (?, ?) OR ${malteseLowerSql('headword')} LIKE ?)`);
                     const ftsQuery = `"${safeQuery}"*`;
-                    qArgs.push(normalizedQ, ftsQuery, normalizedQ, altQueryApos, `${safeQuery}%`);
+                    qArgs.push(normalizedQ, ftsQuery, lowerNormQ, lowerAltQ, `${safeQuery}%`);
                 }
                 if (searchEnglishGloss) {
                     conditions.push(`COALESCE(json_extract(e.definitions, '$[0].text_en'), '') LIKE ?`);
@@ -189,8 +193,8 @@ export async function onRequestGet({ request, env }) {
                 if (searchWordForms) {
                     conditions.push("COALESCE(nm.plural_forms, am.plural_form, '') LIKE ?");
                     conditions.push("vm.verbal_noun LIKE ?");
-                    conditions.push("e.id IN (SELECT entry_id FROM alternative_forms WHERE LOWER(headword) IN (LOWER(?), LOWER(?)) OR headword LIKE ?)");
-                    qArgs.push(`%${q}%`, `%${q}%`, normalizedQ, altQueryApos, `${safeQuery}%`);
+                    conditions.push(`e.id IN (SELECT entry_id FROM alternative_forms WHERE ${malteseLowerSql('headword')} IN (?, ?) OR ${malteseLowerSql('headword')} LIKE ?)`);
+                    qArgs.push(`%${q}%`, `%${q}%`, lowerNormQ, lowerAltQ, `${safeQuery}%`);
                 }
                 if (!hasFieldFilter) {
                     conditions.push("r.consonants = ?");
@@ -461,11 +465,12 @@ export async function onRequestGet({ request, env }) {
         } else {
             let prioritySql = '0';
             if (isRegex && globStr) {
+                const lowerGlobStr = malteseLower(globStr);
                 prioritySql = `(CASE 
-                    WHEN LOWER(e.headword) GLOB LOWER(?) THEN 0 
-                    WHEN (LOWER(r.consonants) GLOB LOWER(?) OR LOWER(e.root_consonants) GLOB LOWER(?)) THEN 1
+                    WHEN ${malteseLowerSql('e.headword')} GLOB ? THEN 0 
+                    WHEN (${malteseLowerSql('r.consonants')} GLOB ? OR ${malteseLowerSql('e.root_consonants')} GLOB ?) THEN 1
                     ELSE 2 END)`;
-                args.push(globStr, globStr, globStr);
+                args.push(lowerGlobStr, lowerGlobStr, lowerGlobStr);
             } else if (q) {
                 prioritySql = `(CASE 
                     WHEN e.headword = ? THEN 0 

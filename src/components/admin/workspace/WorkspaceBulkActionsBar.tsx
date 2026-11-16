@@ -1,11 +1,14 @@
-import { Trash2, X } from 'lucide-react';
+import { Download, Trash2, X } from 'lucide-react';
 
 interface WorkspaceBulkActionsBarProps {
     count: number;
     selectedLabel: string;
     clearLabel: string;
     deleteLabel: string;
+    exportLabel?: string;
+    exporting?: boolean;
     onClear: () => void;
+    onExport?: () => void;
     onDelete: () => void;
 }
 
@@ -14,7 +17,10 @@ export function WorkspaceBulkActionsBar({
     selectedLabel,
     clearLabel,
     deleteLabel,
+    exportLabel = 'Export JSON',
+    exporting = false,
     onClear,
+    onExport,
     onDelete,
 }: WorkspaceBulkActionsBarProps) {
     return (
@@ -35,6 +41,16 @@ export function WorkspaceBulkActionsBar({
                     >
                         <X size={14} /> {clearLabel}
                     </button>
+                    {onExport && (
+                        <button
+                            type="button"
+                            onClick={onExport}
+                            disabled={exporting}
+                            className="bg-white/15 hover:bg-white/25 disabled:opacity-50 text-white px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all active:scale-95"
+                        >
+                            <Download size={14} /> {exporting ? 'Exporting...' : exportLabel}
+                        </button>
+                    )}
                     <button
                         type="button"
                         onClick={onDelete}

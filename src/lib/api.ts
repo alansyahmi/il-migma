@@ -384,10 +384,18 @@ export async function apiGetTags(): Promise<string[]> {
 
 // ── Single Entry ─────────────────────────────────────────────────────────────
 
-export async function apiGetEntry(id: string, signal?: AbortSignal): Promise<{ entry: Entry }> {
+export async function apiGetEntry(
+    id: string,
+    signal?: AbortSignal,
+    options: { fresh?: boolean } = {},
+): Promise<{ entry: Entry }> {
     const debug = getDebugEntry(id);
+    const query = options.fresh ? `?v=2&fresh=${Date.now()}` : '?v=2';
     try {
-        const res = await apiFetch<{ entry: Entry }>(`/api/entry/${id}`, { signal });
+        const res = await apiFetch<{ entry: Entry }>(`/api/entry/${encodeURIComponent(id)}${query}`, {
+            signal,
+            cache: 'no-store',
+        });
         if (res && res.entry) return res;
         if (debug) return { entry: debug };
         return res;
@@ -557,12 +565,13 @@ export async function adminBulkSubmissions(
 
 export async function adminListEntries(
     token: string,
-    opts: { q?: string; pos?: string; letter?: string; limit?: number; offset?: number; signal?: AbortSignal; skipCount?: boolean } = {}
+    opts: { q?: string; pos?: string; letter?: string; sort?: 'alphabetical' | 'recent'; limit?: number; offset?: number; signal?: AbortSignal; skipCount?: boolean } = {}
 ) {
     const params = new URLSearchParams();
     if (opts.q) params.set('q', opts.q);
     if (opts.pos) params.set('pos', opts.pos);
     if (opts.letter && opts.letter.toLowerCase() !== 'all') params.set('letter', opts.letter);
+    if (opts.sort) params.set('sort', opts.sort);
     if (opts.limit) params.set('limit', String(opts.limit));
     if (opts.offset) params.set('offset', String(opts.offset));
     if (opts.skipCount) params.set('skipCount', 'true');
@@ -581,6 +590,11 @@ export async function adminListEntries(
             if (opts.letter && !matchesMalteseLetter(e.headword, opts.letter)) return false;
             if (!queryNorm) return true;
             return e.headword.toLowerCase().includes(queryNorm) || e.id.toLowerCase().includes(queryNorm);
+        }).sort((a, b) => {
+            if (opts.sort === 'recent') {
+                return (b.created_at || '').localeCompare(a.created_at || '');
+            }
+            return a.headword.localeCompare(b.headword);
         });
         const total = filtered.length;
         const limit = opts.limit ?? 15;
@@ -1166,4 +1180,38 @@ export async function adminBulkImportEntries(
     payload: AdminBulkImportEntriesPayload
 ): Promise<AdminBulkImportEntriesResponse> {
     return adminDbToolsFetch<AdminBulkImportEntriesResponse>(token, 'bulk-import-entries', payload);
+}
+
+export interface AdminExportFilteredEntriesPayload {
+    ids?: string[];
+    q?: string;
+    pos?: string;
+    letter?: string;
+    auditStatus?: string;
+    limit?: number;
+    offset?: number;
+}
+
+export interface AdminExportFilteredEntriesResponse {
+    total_matching: number;
+    total_entries: number;
+    limit: number;
+    offset: number;
+    has_more: boolean;
+    exported_at: string;
+    filters: {
+        ids?: string[];
+        q?: string;
+        pos?: string;
+        letter?: string;
+        auditStatus?: string;
+    };
+    entries: Record<string, any>[];
+}
+
+export async function adminExportFilteredEntries(
+    token: string,
+    payload: AdminExportFilteredEntriesPayload
+): Promise<AdminExportFilteredEntriesResponse> {
+    return adminDbToolsFetch<AdminExportFilteredEntriesResponse>(token, 'export-filtered-entries', payload);
 }

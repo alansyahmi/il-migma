@@ -14,11 +14,12 @@ import { applyVerbMorphologyCompatibility, ensureVerbMorphologyTable } from '../
 import { getEntryIdFamily, normalizeEntryId, normalizeEntryPos } from '../../../src/lib/entryId.ts';
 import { mergeNumeralFamilyEntries } from '../../../src/lib/numeralMorphology.ts';
 import { ensureRootCompatibilityColumns } from '../../lib/rootSchema.js';
+import { malteseLower, malteseLowerSql } from '../../lib/malteseSql.js';
 import { compareEntryPriority } from '../../../src/lib/homographGrouping.ts';
 
 // ── In-Memory Worker Cache (Shared within worker isolate) ─────────────────────
 const entryCache = new Map();
-const ENTRY_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+const ENTRY_CACHE_TTL = 15 * 1000; // Keep public reads briefly warm without masking recent admin edits.
 const MAX_CACHE_ENTRIES = 500;
 
 /** Clear cached representations after an admin write. */
@@ -229,9 +230,11 @@ export async function resolveNumeralFamilyEntries(db, {
     return familyEntries.filter((entry) => String(entry?.id || '').trim() !== currentId);
 }
 
-export async function onRequestGet({ params, env }) {
+export async function onRequestGet({ params, request, env }) {
     let { id } = params;
     if (!id) return json({ error: 'Missing id' }, 400);
+
+    const fresh = new URL(request.url).searchParams.has('fresh');
 
     try {
         id = decodeURIComponent(id).normalize('NFC');
@@ -243,7 +246,7 @@ export async function onRequestGet({ params, env }) {
 
     // Check in-memory isolate cache (0 Turso reads)
     const now = Date.now();
-    const cached = entryCache.get(id) || entryCache.get(normalizedId);
+    const cached = fresh ? null : (entryCache.get(id) || entryCache.get(normalizedId));
     if (cached && (now - cached.timestamp < ENTRY_CACHE_TTL)) {
         return json({ entry: cached.payload }, 200, 'HIT-MEMORY');
     }
@@ -329,8 +332,8 @@ export async function onRequestGet({ params, env }) {
             const straightApos = id.replace(/[\u2018\u2019`´]/g, "'");
             const curlyApos = id.replace(/[\u2018\u2019`´']/g, "’");
             entryRes = await db.execute({
-                sql: buildEntrySelectSql('LOWER(e.headword) IN (LOWER(?), LOWER(?), LOWER(?))') + ENTRY_PRIORITY_ORDER_SQL + ' LIMIT 1',
-                args: [id, straightApos, curlyApos],
+                sql: buildEntrySelectSql(`${malteseLowerSql('e.headword')} IN (?, ?, ?)`) + ENTRY_PRIORITY_ORDER_SQL + ' LIMIT 1',
+                args: [malteseLower(id), malteseLower(straightApos), malteseLower(curlyApos)],
             });
         }
 
@@ -341,13 +344,13 @@ export async function onRequestGet({ params, env }) {
             const altRes = await db.execute({
                 sql: `SELECT af.entry_id, af.headword, af.type, af.notes 
                       FROM alternative_forms af
-                      WHERE LOWER(af.headword) IN (LOWER(?), LOWER(?), LOWER(?)) 
+                      WHERE ${malteseLowerSql('af.headword')} IN (?, ?, ?) 
                       ORDER BY 
                         CASE WHEN af.headword = ? THEN 0 ELSE 1 END,
                         CASE WHEN af.notes IS NOT NULL THEN 0 ELSE 1 END,
                         af.sort_order ASC
                       LIMIT 1`,
-                args: [id, straightApos, curlyApos, id],
+                args: [malteseLower(id), malteseLower(straightApos), malteseLower(curlyApos), id],
             });
             if (altRes.rows.length > 0) {
                 const altRow = altRes.rows[0];
@@ -412,8 +415,8 @@ export async function onRequestGet({ params, env }) {
                 args: [resolvedEntryId],
             }),
             db.execute({
-                sql: buildEntrySelectSql('LOWER(e.headword) = LOWER(?) AND e.id != ?'),
-                args: [entry.headword, resolvedEntryId],
+                sql: buildEntrySelectSql(`${malteseLowerSql('e.headword')} = ? AND e.id != ?`),
+                args: [malteseLower(entry.headword), resolvedEntryId],
             }),
         ]);
         const diminutives = (diminutiveRes.rows || []).map((row) => ({
@@ -771,31 +774,30 @@ export async function onRequestGet({ params, env }) {
         }
 
         // Cache result in worker isolate memory
-        if (entryCache.size >= MAX_CACHE_ENTRIES) {
-            const oldestKey = entryCache.keys().next().value;
-            entryCache.delete(oldestKey);
-        }
-        entryCache.set(id, { payload, timestamp: Date.now() });
-        if (normalizedId && normalizedId !== id) {
-            entryCache.set(normalizedId, { payload, timestamp: Date.now() });
+        if (!fresh) {
+            if (entryCache.size >= MAX_CACHE_ENTRIES) {
+                const oldestKey = entryCache.keys().next().value;
+                entryCache.delete(oldestKey);
+            }
+            entryCache.set(id, { payload, timestamp: Date.now() });
+            if (normalizedId && normalizedId !== id) {
+                entryCache.set(normalizedId, { payload, timestamp: Date.now() });
+            }
         }
 
-        return json({ entry: payload });
+        return json({ entry: payload }, 200, fresh ? 'BYPASS-FRESH' : 'MISS');
     } catch (e) {
         return json({ error: e.message }, 500);
     }
 }
 
 function json(data, status = 200, cacheStatus = 'MISS') {
-    const isSuccess = status >= 200 && status < 300;
     return new Response(JSON.stringify(data), {
         status,
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Cache-Control': isSuccess
-                ? 'public, max-age=120, s-maxage=3600, stale-while-revalidate=86400'
-                : 'no-store, no-cache, must-revalidate',
+            'Cache-Control': 'no-store, no-cache, must-revalidate',
             'X-Entry-Cache': cacheStatus
         },
     });
