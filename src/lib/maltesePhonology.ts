@@ -647,13 +647,53 @@ function buildCacvcDiminutiveForms(roots: string[]) {
     };
 }
 
-function buildGenericDiminutiveForm(roots: string[], gender: DiminutiveVariant): DiminutiveAutoForm | null {
+function isNisbaDiminutiveClass(basePattern?: string | null, headword?: string | null): boolean {
+    const pattern = String(basePattern || '').toLowerCase().trim();
+    const word = String(headword || '').toLowerCase().trim();
+
+    if (!word.endsWith('i')) return false;
+    if (!pattern) return false;
+
+    const normalized = pattern.replace(/[123]/g, 'c').replace(/[àèìòùâêîôû]/g, 'v');
+    return /^c[v]?cc[i]$/.test(normalized) || /^cvcci$/.test(normalized);
+}
+
+function buildNisbaDiminutiveForm(roots: string[], gender: DiminutiveVariant): DiminutiveAutoForm | null {
     if (roots.length < 3) return null;
 
     const [c1, c2, c3] = roots;
+    const dimC2 = c2 === 'j' ? 'w' : c2;
     const ghv = ['għ'].includes(c1) ? 'e' : '';
     const v = ['għ', 'ħ', 'q', 'h'].includes(c2) || ['għ', 'ħ', 'q', 'h'].includes(c3) ? 'a' : 'e';
-    const masculineForm = `${c1}${ghv}${c2}${v}jj${v}${c3}`;
+    const masculineForm = `${c1}${ghv}${dimC2}${v}j${c3}i`;
+
+    if (gender === 'feminine') {
+        return {
+            form: `${masculineForm}ja`,
+            pattern: 'CCvjCija',
+            theoretical: true,
+        };
+    }
+
+    return {
+        form: masculineForm,
+        pattern: 'CCvjCi',
+        theoretical: true,
+    };
+}
+
+function buildGenericDiminutiveForm(roots: string[], gender: DiminutiveVariant, headword?: string): DiminutiveAutoForm | null {
+    if (roots.length < 3) return null;
+
+    const [c1, c2, c3] = roots;
+    const dimC2 = c2 === 'j' ? 'w' : c2;
+    const ghv = ['għ'].includes(c1) ? 'e' : '';
+    const isGutturalC2OrC3 = ['għ', 'ħ', 'q', 'h'].includes(c2) || ['għ', 'ħ', 'q', 'h'].includes(c3);
+    const word = String(headword || '').toLowerCase().trim();
+    const hasAjDiphthong = c2 === 'j' && word.includes('aj');
+    const v1 = isGutturalC2OrC3 || hasAjDiphthong ? 'a' : 'e';
+    const v2 = isGutturalC2OrC3 ? 'a' : 'e';
+    const masculineForm = `${c1}${ghv}${dimC2}${v1}jj${v2}${c3}`;
 
     if (gender === 'feminine') {
         const feminineForm = deriveFeminineFromPattern('', masculineForm) || masculineForm;
@@ -679,7 +719,7 @@ export function generateDiminutiveSoundPlural(word: string, ipaHint?: string | n
     if (!word) return '';
     const collapsedDiminutive = word.trim().toLowerCase().normalize('NFC').replace(/jj/g, 'j').replace(/ww/g, 'w');
     const stem = prepareSuffixAttachmentStem(collapsedDiminutive, ipaHint || undefined);
-    return `${stem}in`;
+    return stem.endsWith('i') ? `${stem}n` : `${stem}in`;
 }
 
 export function generateFeminineDiminutiveSoundPlural(word: string, ipaHint?: string | null): string {
@@ -738,6 +778,11 @@ export function generateDiminutiveForm(
         }
     }
 
+    if (isNisbaDiminutiveClass(basePattern, word)) {
+        const nisbaDim = buildNisbaDiminutiveForm(roots, options.gender || 'masculine');
+        if (nisbaDim) return nisbaDim;
+    }
+
     if (pattern) {
         const expanded = expandPatternWithRoots(pattern, roots);
         if (expanded) {
@@ -746,7 +791,7 @@ export function generateDiminutiveForm(
     }
 
     if (roots.length >= 3) {
-        return buildGenericDiminutiveForm(roots, options.gender || 'masculine');
+        return buildGenericDiminutiveForm(roots, options.gender || 'masculine', word);
     }
 
     if (word) {

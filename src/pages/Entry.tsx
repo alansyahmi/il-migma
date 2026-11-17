@@ -1307,10 +1307,14 @@ function NounMorphologySection({
         const existingRel = allRelatedEntries?.find((r: any) => r.headword === baseForm);
 
         const singularValue = isOppositeVariant && typeof baseForm === 'string' && baseForm.trim() !== '-' ? (
-            <div className="group flex items-center gap-1.5 justify-center md:justify-start">
-                <Link to={`/entry/${encodeURIComponent(existingRel?.id || baseForm.trim())}`} className="hover:underline text-link transition-colors font-serif font-medium">
-                    {baseForm}
-                </Link>
+            <div className="group flex items-center gap-1.5 justify-start">
+                {existingRel?.id ? (
+                    <Link to={`/entry/${encodeURIComponent(existingRel.id)}`} className="hover:underline text-link transition-colors font-serif font-medium">
+                        {baseForm}
+                    </Link>
+                ) : (
+                    <span className="font-serif font-medium text-black">{baseForm}</span>
+                )}
                 {isActualAdmin && (
                     <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
@@ -1660,10 +1664,14 @@ function AdjectiveMorphologySection({
         const existingRel = allRelatedEntries?.find((r: any) => r.headword === baseForm);
 
         const singularValue = isOppositeVariant && typeof baseForm === 'string' && baseForm.trim() !== '-' ? (
-            <div className="group flex items-center gap-1.5 justify-center md:justify-start">
-                <Link to={`/entry/${encodeURIComponent(existingRel?.id || baseForm.trim())}`} className="hover:underline text-link transition-colors font-serif font-medium">
-                    {baseForm}
-                </Link>
+            <div className="group flex items-center gap-1.5 justify-start">
+                {existingRel?.id ? (
+                    <Link to={`/entry/${encodeURIComponent(existingRel.id)}`} className="hover:underline text-link transition-colors font-serif font-medium">
+                        {baseForm}
+                    </Link>
+                ) : (
+                    <span className="font-serif font-medium text-black">{baseForm}</span>
+                )}
                 {isActualAdmin && (
                     <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
@@ -1771,7 +1779,10 @@ function AdjectiveMorphologySection({
                     ),
                 },
                 plural: {
-                    ...buildStackedCell(morphology.plural || null, pluralPattern),
+                    ...buildStackedCell(
+                        morphology.plural ?? morphology.plural_forms ?? morphology.plural_form ?? (entry as any).inflections_pl ?? null,
+                        pluralPattern,
+                    ),
                 },
                 elative: {
                     value: elativeForm,

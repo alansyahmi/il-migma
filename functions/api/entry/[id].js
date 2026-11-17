@@ -701,6 +701,13 @@ export async function onRequestGet({ params, request, env }) {
         // Attach Adjective Morphology struct
         if (normalizedPos === 'adjective' || normalizedPos === 'participle') {
             const adjectiveMorphology = entryPayload.adjective_morphology || {};
+            const resolvedAdjPlural = (
+                Array.isArray(adjectiveMorphology.plural) && adjectiveMorphology.plural.length > 0
+                    ? adjectiveMorphology.plural
+                    : (Array.isArray(adjectiveMorphology.plural_forms) && adjectiveMorphology.plural_forms.length > 0
+                        ? adjectiveMorphology.plural_forms
+                        : (payload.inflections_pl || null))
+            );
             payload.adjective_morphology = {
                 masculine: adjectiveMorphology.masculine || adjectiveMorphology.masculine_form || entryPayload.headword,
                 feminine: adjectiveMorphology.feminine || adjectiveMorphology.feminine_form || null,
@@ -708,8 +715,9 @@ export async function onRequestGet({ params, request, env }) {
                 form_fem: adjectiveMorphology.feminine || adjectiveMorphology.feminine_form || null,
                 pattern: adjectiveMorphology.pattern || entryPayload.cv_pattern || entryPayload.morph_pattern || null,
                 morph_pattern: entryPayload.morph_pattern || entryPayload.cv_pattern || adjectiveMorphology.pattern || null,
-                plural_form: payload.inflections_pl || null,
-                plural_forms: payload.inflections_pl || null,
+                plural: resolvedAdjPlural,
+                plural_form: resolvedAdjPlural,
+                plural_forms: resolvedAdjPlural,
                 has_elative: adjectiveMorphology.has_elative === undefined || adjectiveMorphology.has_elative === null
                     ? null
                     : Boolean(adjectiveMorphology.has_elative),
