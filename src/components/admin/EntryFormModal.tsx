@@ -3237,8 +3237,8 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
             title={isDuplicate ? t('Duplicate Entry', 'Ikkopja Entrata') : isEdit ? t('Edit Entry', 'Editja l-Entrata') : t('New Entry', 'Entrata Ġdida')}
             size="xl"
         >
-            <div className="flex flex-col h-full min-h-0 overflow-hidden">
-                <div className="flex-1 min-h-0 overflow-y-auto pr-2 space-y-8 p-1">
+            <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+                <div className="flex-1 min-h-0 overflow-y-auto pr-1 sm:pr-2 space-y-6 sm:space-y-8 p-1">
                     {isLoadingFull && (
                         <div className="absolute inset-0 z-50 bg-white/50 backdrop-blur-[1px] flex items-center justify-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1034A6]"></div>

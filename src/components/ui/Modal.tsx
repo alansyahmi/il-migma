@@ -46,7 +46,7 @@ export function Modal({ open, onClose, title, children, size = 'md', className, 
     const modalContent = (
         <div
             className={cn(
-                "fixed inset-0 flex min-h-screen items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto",
+                "fixed inset-0 flex items-stretch sm:items-center justify-center p-0 sm:p-4 overflow-hidden",
                 zIndex || "z-50"
             )}
             role="dialog"
@@ -61,8 +61,8 @@ export function Modal({ open, onClose, title, children, size = 'md', className, 
             <div
                 ref={panelRef}
                 className={cn(
-                    'relative w-full bg-white rounded-t-2xl sm:rounded-xl shadow-2xl animate-fade-in flex flex-col max-h-[95dvh] sm:max-h-[90vh]',
-                    'border border-border',
+                    'relative w-full bg-white rounded-none sm:rounded-xl shadow-2xl animate-fade-in flex flex-col h-full sm:h-auto max-h-full sm:max-h-[90vh]',
+                    'border-0 sm:border border-border pb-[env(safe-area-inset-bottom)] sm:pb-0',
                     sizeClasses[size],
                     className,
                 )}
@@ -79,7 +79,7 @@ export function Modal({ open, onClose, title, children, size = 'md', className, 
                         </button>
                     </div>
                 )}
-                <div className="p-4 sm:p-6 overflow-hidden flex-1 flex flex-col min-h-0">{children}</div>
+                <div className="p-3 sm:p-6 overflow-hidden flex-1 flex flex-col min-h-0">{children}</div>
             </div>
         </div>
     );
