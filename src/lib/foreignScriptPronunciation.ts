@@ -107,13 +107,13 @@ function mapArabicConsonant(letter: string) {
         case 'ت':
             return 't';
         case 'ث':
-            return 'θ';
+            return 'ṫ';
         case 'ج':
             return 'ġ';
         case 'ح':
             return 'ħ';
         case 'خ':
-            return 'kh';
+            return 'ḣ';
         case 'د':
             return 'd';
         case 'ذ':
@@ -125,7 +125,7 @@ function mapArabicConsonant(letter: string) {
         case 'س':
             return 's';
         case 'ش':
-            return 'sh';
+            return 'x';
         case 'ص':
             return 'ṣ';
         case 'ض':
@@ -157,7 +157,7 @@ function mapArabicConsonant(letter: string) {
         case 'و':
             return 'w';
         case 'ي':
-            return 'y';
+            return 'j';
         case 'ا':
         case 'أ':
         case 'إ':

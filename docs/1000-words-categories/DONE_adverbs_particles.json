@@ -660,7 +660,7 @@
           "relationship": "From",
           "language": "Persian",
           "term": "بس",
-          "pronunciation": "bas",
+          "pronunciation": "bs",
           "definition": "enough, only"
         }
       ],
@@ -885,7 +885,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثَمَّ",
-          "pronunciation": "θamma",
+          "pronunciation": "ṫamma",
           "definition": "there, in that place"
         }
       ],
@@ -972,7 +972,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أَكْثَر",
-          "pronunciation": "akθar",
+          "pronunciation": "akṫar",
           "definition": "more, most"
         }
       ],
@@ -2110,7 +2110,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مَا هُوَ شَيْء",
-          "pronunciation": "mâ huwa shay'",
+          "pronunciation": "mâ huwa xaj'",
           "definition": "not a thing, it is not"
         }
       ],
@@ -2183,7 +2183,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أَعْجَبَ",
-          "pronunciation": "a'għjaba",
+          "pronunciation": "agħġaba",
           "definition": "to please, delight"
         }
       ],
@@ -2538,7 +2538,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثَمَّ + هٰكَذَا",
-          "pronunciation": "θamma + hâkađâ",
+          "pronunciation": "ṫamma + hâkađâ",
           "definition": "there + thus"
         }
       ],
@@ -2626,7 +2626,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أَكْثَر",
-          "pronunciation": "akθar",
+          "pronunciation": "akṫar",
           "definition": "more, most"
         }
       ],
@@ -2972,7 +2972,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ضَرْبَة + أُخْرَى",
-          "pronunciation": "ḍarbaẗ + ukhrâ",
+          "pronunciation": "ḍarbaẗ + uḣrâ",
           "definition": "a stroke, instance + other"
         }
       ],

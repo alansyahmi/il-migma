@@ -1,0 +1,318 @@
+{
+  "category_id": "misc_remnants",
+  "category_title": "Miscellaneous Remnants (Time, Nature & Verb)",
+  "total_entries": 4,
+  "entries": [
+    {
+      "id": "adv-daqqa",
+      "headword": "daqqa",
+      "pos": "adverb",
+      "gender": null,
+      "root_consonants": "d-q-q",
+      "stem": null,
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 0,
+      "is_inflectable": 0,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: daqqa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دَقَّة",
+          "pronunciation": "daqqaẗ",
+          "definition": "a single knock, stroke, or instance"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "sometimes, at times, once",
+          "text_mt": "Minn żmien għal żmien, f'okkażjoni waħda jew f'xi waqtiet mhux regolari.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Daqqa joħroġ ix-xemx u daqqa tagħmel ix-xita.",
+          "en": "Sometimes the sun comes out and sometimes it rains.",
+          "text_mt": "Daqqa joħroġ ix-xemx u daqqa tagħmel ix-xita.",
+          "text_en": "Sometimes the sun comes out and sometimes it rains."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Spiss jintuża mtenni bħala 'daqqa ... daqqa ...' ('sometimes ... sometimes ...'). Għas-sens ta' 'daqqa ta' sieq' jew 'ħabta', ara n-nom 'daqqa'.",
+        "en": "Frequently paired correlatively as 'daqqa ... daqqa ...' ('now ... now ...', 'sometimes ... sometimes ...'). Distinct from the noun 'daqqa' ('blow, strike, time')."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐʔ.ʔɐ/",
+          "notes": null
+        }
+      ],
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "n-daqqa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [
+        "time"
+      ],
+      "audit_status": "verified",
+      "theme": "Miscellaneous Remnants",
+      "theme_id": "misc_remnants"
+    },
+    {
+      "id": "n-daqqa",
+      "headword": "daqqa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "d-q-q",
+      "stem": null,
+      "cv_pattern": "1v22a",
+      "morph_pattern": "C1vC2C2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: daqqa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دَقَّة",
+          "pronunciation": "daqqaẗ",
+          "definition": "a knock, blow, strike"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "blow, strike, hit, knock",
+          "text_mt": "Ħabta jew tisbita qawwija li tingħata b'idejn, b'oġġett jew b'riġel.",
+          "register": "standard",
+          "nuance": ""
+        },
+        {
+          "text_en": "instance, occasion, turn",
+          "text_mt": "Darba waħda jew avveniment wieħed li jseħħ f'mument partikolari.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Qala' daqqa qawwija f'spalltu waqt il-logħba.",
+          "en": "He took a hard hit on his shoulder during the match.",
+          "text_mt": "Qala' daqqa qawwija f'spalltu waqt il-logħba.",
+          "text_en": "He took a hard hit on his shoulder during the match."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Jintuża wkoll f'espressjonijiet bħal 'f'daqqa waħda' (suddenly) u 'daqqa t'id' (a helping hand).",
+        "en": "Commonly occurs in idioms such as 'f'daqqa waħda' ('suddenly, all at once') and 'daqqa t'id' ('a helping hand')."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐʔ.ʔɐ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "noun_type": null,
+        "dual_form": null,
+        "plural_forms": [
+          {
+            "form": "daqqiet",
+            "pattern": "-iet"
+          }
+        ],
+        "is_collective": 0,
+        "is_singulative": 0,
+        "vowel_set_sg": null,
+        "vowel_set_pl": null,
+        "form_plural_pattern": "-iet",
+        "morph_pattern": "C1vC2C2a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "adv-daqqa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Miscellaneous Remnants",
+      "theme_id": "misc_remnants"
+    },
+    {
+      "id": "n-nixxiegħa",
+      "headword": "nixxiegħa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "n-x-għ",
+      "stem": null,
+      "cv_pattern": "1v22ie3a",
+      "morph_pattern": "C1vC2C2ieC3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: nixxiegħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "نَشَعَ",
+          "pronunciation": "naxagħa",
+          "definition": "to gush, ooze, spring forth"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "spring, stream, fountainhead",
+          "text_mt": "Sors naturali ta' ilma ħelu li jnixxi u joħroġ mill-blat jew mill-art.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fil-wied hemm nixxiegħa ta' ilma frisk li ma tinxifx fis-sajf.",
+          "en": "In the valley there is a spring of cool water that does not dry up in summer.",
+          "text_mt": "Fil-wied hemm nixxiegħa ta' ilma frisk li ma tinxifx fis-sajf.",
+          "text_en": "In the valley there is a spring of cool water that does not dry up in summer."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/nɪʃˈʃɪː.jɐ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "noun_type": null,
+        "dual_form": null,
+        "plural_forms": [
+          {
+            "form": "nixxigħat",
+            "pattern": "-at"
+          }
+        ],
+        "is_collective": 0,
+        "is_singulative": 0,
+        "vowel_set_sg": null,
+        "vowel_set_pl": null,
+        "form_plural_pattern": "-at",
+        "morph_pattern": "C1vC2C2ieC3a"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [
+        "nature"
+      ],
+      "audit_status": "verified",
+      "theme": "Miscellaneous Remnants",
+      "theme_id": "misc_remnants"
+    },
+    {
+      "id": "v-bered",
+      "headword": "bered",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "b-r-d",
+      "stem": null,
+      "cv_pattern": "1e2e3",
+      "morph_pattern": "C1eC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: bered",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "بَرَدَ",
+          "pronunciation": "barada",
+          "definition": "to be or become cold"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to cool down, become cold",
+          "text_mt": "Jitbaxxa fit-temperatura u jitlef is-sħana tiegħu, isir kiesaħ.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Stenna ftit sakemm jiberdu l-kafè u l-ħobż.",
+          "en": "Wait a little until the coffee and bread cool down.",
+          "text_mt": "Stenna ftit sakemm jiberdu l-kafè u l-ħobż.",
+          "text_en": "Wait a little until the coffee and bread cool down."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb qawwi tat-Tieni Koniugazzjoni (imperattiv: 'ibred', imperfett: 'jibred').",
+        "en": "Strong Form I verb (imperfect 'jibred', imperative 'ibred')."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɛ.rɛt/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "bered",
+        "imperfective_3sgm": "jibred",
+        "verbal_noun": "bard",
+        "vowel_set_perf": "e-e",
+        "vowel_set_impf": "i-e",
+        "vowel_set_impv": "i-e"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Miscellaneous Remnants",
+      "theme_id": "misc_remnants"
+    }
+  ]
+}

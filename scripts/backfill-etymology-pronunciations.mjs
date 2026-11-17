@@ -30,7 +30,8 @@ for (const file of files) {
     let fileChanged = false;
     let fileFilled = 0;
 
-    for (const entry of data.entries || []) {
+    const entries = Array.isArray(data) ? data : (data.entries || []);
+    for (const entry of entries) {
         for (const step of entry.etymology_chain || []) {
             totalSteps++;
 

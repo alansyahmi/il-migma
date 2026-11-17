@@ -62,6 +62,7 @@ const CATEGORY_FILES = [
     { id: 'adj_sensory_colours', path: 'docs/1000-words-categories/DONE_adj_sensory_colours.json' },
     { id: 'verbs_daily_social', path: 'docs/1000-words-categories/DONE_verbs_daily_social.json' },
     { id: 'time_calendar', path: 'docs/1000-words-categories/DONE_time_calendar.json' },
+    { id: 'misc_remnants', path: 'docs/1000-words-categories/DONE_misc_remnants.json' },
 ];
 
 const selectedFiles = categoryArg

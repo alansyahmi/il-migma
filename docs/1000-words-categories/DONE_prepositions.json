@@ -2721,7 +2721,7 @@
           "language": "Arabic",
           "term": "بَيْنَ",
           "definition": "between, in the midst of",
-          "pronunciation": "bayna"
+          "pronunciation": "bajna"
         }
       ],
       "etymology_notes": "Inherited from Arabic preposition بَيْنَ (bayna, 'between, among'). Functions as a spatial, temporal, and relational relator connecting two or more entities. In Maltese morphology, personal clitics attach exclusively to the pluralized construct base bejniet-: 1pl bejnietna ('between us'), 2pl bejnietkom ('between you'), 3pl bejniethom ('between them'). Singular personal relations are expressed analytically as bejni u bejn... ('between me and...').",
@@ -3197,7 +3197,7 @@
           "language": "Arabic",
           "term": "إِلَى أَيْنَ",
           "definition": "to where, toward",
-          "pronunciation": "ilâ ayna"
+          "pronunciation": "ilâ ajna"
         }
       ],
       "etymology_notes": "Inherited from Arabic compound phrase إِلَى أَيْنَ (ʾilā ʾayna, 'to where, toward'). In Maltese, the final nasal assimilates with the initial palatal glide of the pronominal suffix to form geminate -jj-: 1sg lejja, 2sg lejk, 3sg.m lejh, 3sg.f lejha, 1pl lejna, 2pl lejkom, 3pl lejhom.",
@@ -5690,7 +5690,7 @@
           "language": "Arabic",
           "term": "فَوْقَ + أَيّ شَيْء",
           "definition": "upon + which thing",
-          "pronunciation": "fawqa + ay shay'"
+          "pronunciation": "fawqa + ay xaj'"
         }
       ],
       "etymology_notes": "Interrogative fusion of fuq with the interrogative enclitic -x (from ayy shayʾ).",
@@ -5962,7 +5962,7 @@
           "language": "Arabic",
           "term": "تَحْتَ + أَيّ شَيْء",
           "definition": "under + which thing",
-          "pronunciation": "taħta + ay shay'"
+          "pronunciation": "taħta + ay xaj'"
         }
       ],
       "etymology_notes": "Interrogative fusion of taħt with the interrogative enclitic -x.",
@@ -6622,7 +6622,7 @@
           "language": "Arabic",
           "term": "بَيْنَ",
           "definition": "between",
-          "pronunciation": "bayna"
+          "pronunciation": "bajna"
         }
       ],
       "etymology_notes": "Pluralized construct base of bejn taking plural pronominal clitics.",

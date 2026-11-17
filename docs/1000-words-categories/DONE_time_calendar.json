@@ -43,7 +43,7 @@
           "language": "Arabic",
           "term": "اَلْإِثْنَيْن",
           "definition": "Monday, literally the two",
-          "pronunciation": "al-iθnayn"
+          "pronunciation": "al-iṫnajn"
         }
       ],
       "etymology_notes": null,
@@ -131,7 +131,7 @@
           "language": "Arabic",
           "term": "اَلثُّلَاثَاء",
           "definition": "Tuesday, the third day",
-          "pronunciation": "al-θulâθâ'"
+          "pronunciation": "al-ṫulâṫâ'"
         }
       ],
       "etymology_notes": null,
@@ -307,7 +307,7 @@
           "language": "Arabic",
           "term": "اَلْخَمِيس",
           "definition": "Thursday, the fifth day",
-          "pronunciation": "al-khamîs"
+          "pronunciation": "al-ḣamîs"
         }
       ],
       "etymology_notes": null,
@@ -399,7 +399,7 @@
           "language": "Arabic",
           "term": "اَلْجُمْعَة",
           "definition": "Friday, literallay \"day of assembly\"",
-          "pronunciation": "al-Ġumgħaẗ"
+          "pronunciation": "al-ġumgħaẗ"
         }
       ],
       "etymology_notes": null,
@@ -745,13 +745,15 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "festa",
-          "definition": "feast, holiday"
+          "definition": "feast, holiday",
+          "pronunciation": "festa"
         },
         {
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "festa",
-          "definition": "feast, holiday"
+          "definition": "feast, holiday",
+          "pronunciation": "festa"
         }
       ],
       "etymology_notes": null,
@@ -986,7 +988,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "يَوْم",
-          "pronunciation": "yawm",
+          "pronunciation": "jawm",
           "definition": "day"
         }
       ],
@@ -1087,7 +1089,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "giurnata",
-          "definition": "day, whole day"
+          "definition": "day, whole day",
+          "pronunciation": "ġurnata"
         }
       ],
       "etymology_notes": null,
@@ -1280,7 +1283,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "اَلْيَوْمَ",
-          "pronunciation": "al-yawma",
+          "pronunciation": "al-jawma",
           "definition": "today"
         }
       ],
@@ -1363,7 +1366,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "اَلْيَوْمَ",
-          "pronunciation": "al-yawma",
+          "pronunciation": "al-jawma",
           "definition": "today"
         }
       ],
@@ -2451,7 +2454,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "كُلَّ يَوْمٍ",
-          "pronunciation": "kulla yawmin",
+          "pronunciation": "kulla jawmin",
           "definition": "every day"
         }
       ],
@@ -3155,7 +3158,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَشِيَّة",
-          "pronunciation": "għashiyyaẗ",
+          "pronunciation": "għaxijjaẗ",
           "definition": "evening, late afternoon"
         }
       ],
@@ -3250,7 +3253,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي + اَلْعَشِيَّة",
-          "pronunciation": "fî + al-għashiyyaẗ",
+          "pronunciation": "fî + al-għaxijjaẗ",
           "definition": "in the evening"
         }
       ],
@@ -3337,7 +3340,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي + اَلْعَشِيَّة",
-          "pronunciation": "fî + al-għashiyyaẗ",
+          "pronunciation": "fî + al-għaxijjaẗ",
           "definition": "in the evening"
         }
       ],
@@ -3437,7 +3440,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي + اَلْعَشِيَّة",
-          "pronunciation": "fî + al-għashiyyaẗ",
+          "pronunciation": "fî + al-għaxijjaẗ",
           "definition": "in the evening"
         }
       ],
@@ -3514,7 +3517,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي + اَلْعَشِيَّة",
-          "pronunciation": "fî + al-għashiyyaẗ",
+          "pronunciation": "fî + al-għaxijjaẗ",
           "definition": "in the evening"
         }
       ],
@@ -3603,7 +3606,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي + اَلْعَشِيَّة",
-          "pronunciation": "fî + al-għashiyyaẗ",
+          "pronunciation": "fî + al-għaxijjaẗ",
           "definition": "in the evening"
         }
       ],
@@ -3680,7 +3683,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "فِي + اَلْعَشِيَّة",
-          "pronunciation": "fî + al-għashiyyaẗ",
+          "pronunciation": "fî + al-għaxijjaẗ",
           "definition": "in the evening"
         }
       ],
@@ -3769,7 +3772,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "لَيْل",
-          "pronunciation": "layl",
+          "pronunciation": "lajl",
           "definition": "night, nighttime"
         }
       ],
@@ -3872,7 +3875,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "لَيْلَة",
-          "pronunciation": "laylaẗ",
+          "pronunciation": "lajlaẗ",
           "definition": "night, single night, evening"
         }
       ],
@@ -3969,7 +3972,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "نِصْف اللَّيْل",
-          "pronunciation": "niṣf al-layl",
+          "pronunciation": "niṣf al-lajl",
           "definition": "midnight"
         }
       ],
@@ -4066,7 +4069,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "نِصْف اللَّيْل",
-          "pronunciation": "niṣf al-layl",
+          "pronunciation": "niṣf al-lajl",
           "definition": "midnight"
         }
       ],
@@ -4229,7 +4232,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "بِـ + اَللَّيْل",
-          "pronunciation": "bi + al-layl",
+          "pronunciation": "bi + al-lajl",
           "definition": "by night, at night"
         }
       ],
@@ -4303,7 +4306,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "jinnaru",
-          "definition": "January"
+          "definition": "January",
+          "pronunciation": "jinnaru"
         },
         {
           "relationship": "Inherited from",
@@ -4386,7 +4390,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "frivaru",
-          "definition": "February"
+          "definition": "February",
+          "pronunciation": "frivaru"
         },
         {
           "relationship": "Inherited from",
@@ -4469,7 +4474,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "marzu",
-          "definition": "March"
+          "definition": "March",
+          "pronunciation": "marzu"
         },
         {
           "relationship": "Inherited from",
@@ -4552,7 +4558,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "aprili",
-          "definition": "April"
+          "definition": "April",
+          "pronunciation": "aprili"
         },
         {
           "relationship": "Inherited from",
@@ -4635,7 +4642,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "maiu",
-          "definition": "May"
+          "definition": "May",
+          "pronunciation": "maiu"
         },
         {
           "relationship": "Inherited from",
@@ -4718,7 +4726,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "giugnu",
-          "definition": "June"
+          "definition": "June",
+          "pronunciation": "ġunju"
         },
         {
           "relationship": "Inherited from",
@@ -4801,7 +4810,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "lugliu",
-          "definition": "July"
+          "definition": "July",
+          "pronunciation": "lulju"
         },
         {
           "relationship": "Inherited from",
@@ -4884,7 +4894,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "austu",
-          "definition": "August"
+          "definition": "August",
+          "pronunciation": "austu"
         },
         {
           "relationship": "Inherited from",
@@ -4967,7 +4978,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "settembri",
-          "definition": "September"
+          "definition": "September",
+          "pronunciation": "settembri"
         },
         {
           "relationship": "Inherited from",
@@ -5050,7 +5062,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "ottobre",
-          "definition": "October"
+          "definition": "October",
+          "pronunciation": "ottobre"
         },
         {
           "relationship": "Inherited from",
@@ -5133,7 +5146,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "nuvembri",
-          "definition": "November"
+          "definition": "November",
+          "pronunciation": "nuvembri"
         },
         {
           "relationship": "Inherited from",
@@ -5216,7 +5230,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "dicembri",
-          "definition": "December"
+          "definition": "December",
+          "pronunciation": "dixembri"
         },
         {
           "relationship": "Inherited from",
@@ -5382,7 +5397,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "صَيْف",
-          "pronunciation": "ṣayf",
+          "pronunciation": "ṣajf",
           "definition": "summer"
         }
       ],
@@ -5465,7 +5480,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "خَرِيف",
-          "pronunciation": "kharîf",
+          "pronunciation": "ḣarîf",
           "definition": "autumn"
         }
       ],
@@ -5552,7 +5567,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شِتْوَة",
-          "pronunciation": "shitwaẗ",
+          "pronunciation": "xitwaẗ",
           "definition": "winter"
         }
       ],
@@ -5793,7 +5808,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "periodo",
-          "definition": "period"
+          "definition": "period",
+          "pronunciation": "periodo"
         },
         {
           "relationship": "Borrowed from",
@@ -5956,7 +5972,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شَهْر",
-          "pronunciation": "shahr",
+          "pronunciation": "xahr",
           "definition": "month"
         }
       ],
@@ -6042,7 +6058,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "staggiuni",
-          "definition": "season"
+          "definition": "season",
+          "pronunciation": "stagġuni"
         },
         {
           "relationship": "Inherited from",
@@ -6211,7 +6228,8 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "minuta",
-          "definition": "minute"
+          "definition": "minute",
+          "pronunciation": "minuta"
         },
         {
           "relationship": "Inherited from",
@@ -6295,7 +6313,8 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "seconda",
-          "definition": "second (of time)"
+          "definition": "second (of time)",
+          "pronunciation": "sekonda"
         },
         {
           "relationship": "Inherited from",

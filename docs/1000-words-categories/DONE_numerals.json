@@ -133,7 +133,7 @@
           "language": "Arabic",
           "term": "اِثْنَيْن",
           "definition": "two",
-          "pronunciation": "iθnajn"
+          "pronunciation": "aṫnajn"
         }
       ],
       "etymology_notes": null,
@@ -225,7 +225,7 @@
           "language": "Arabic",
           "term": "ثَلَاثَة",
           "definition": "three",
-          "pronunciation": "θalâθaẗ"
+          "pronunciation": "ṫalâṫaẗ"
         }
       ],
       "etymology_notes": null,
@@ -421,7 +421,7 @@
           "language": "Arabic",
           "term": "خَمْسَة",
           "definition": "five",
-          "pronunciation": "khamsaẗ"
+          "pronunciation": "ḣamsaẗ"
         }
       ],
       "etymology_notes": null,
@@ -611,7 +611,7 @@
           "language": "Arabic",
           "term": "ثَمَانِيَة",
           "definition": "eight",
-          "pronunciation": "θamânijaẗ"
+          "pronunciation": "ṫamânijaẗ"
         }
       ],
       "etymology_notes": null,
@@ -1006,7 +1006,7 @@
           "language": "Italian",
           "term": "milione",
           "definition": "million",
-          "pronunciation": "miljone"
+          "pronunciation": "milione"
         }
       ],
       "etymology_notes": null,
@@ -1206,7 +1206,7 @@
           "language": "Arabic",
           "term": "ثَّانِي",
           "definition": "second",
-          "pronunciation": "θânî"
+          "pronunciation": "ṫṫânî"
         }
       ],
       "etymology_notes": null,
@@ -1298,7 +1298,7 @@
           "language": "Arabic",
           "term": "ثَالِث",
           "definition": "third",
-          "pronunciation": "θâliθ"
+          "pronunciation": "ṫâliṫ"
         }
       ],
       "etymology_notes": null,
@@ -1527,7 +1527,7 @@
           "relationship": "Borrowed from",
           "language": "Ancient Greek",
           "term": "ζεῦγος",
-          "pronunciation": "zeûgos",
+          "pronunciation": "zevgos",
           "definition": "pair (two things, persons or animals considered as pair); yoke (two animals joined together)"
         }
       ],
@@ -1616,7 +1616,7 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "doppiu",
-          "pronunciation": "doppju",
+          "pronunciation": "doppiu",
           "definition": "double, twofold"
         },
         {
@@ -1712,7 +1712,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مُثَنًّى",
-          "pronunciation": "muθannâ",
+          "pronunciation": "muṫannan",
           "definition": "doubled, twofold, dual"
         }
       ],
@@ -1994,7 +1994,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مُثَلَّث",
-          "pronunciation": "muθallaθ",
+          "pronunciation": "muṫallaṫ",
           "definition": "tripled, threefold, triangular"
         }
       ],
@@ -2176,7 +2176,7 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "quartu",
-          "pronunciation": "quartu",
+          "pronunciation": "kwartu",
           "definition": "fourth part, quarter"
         },
         {
@@ -2383,7 +2383,7 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "quadruplo",
-          "pronunciation": "quadruplo",
+          "pronunciation": "kwadruplo",
           "definition": "quadruple, fourfold"
         },
         {
@@ -2481,7 +2481,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "مُرَبَّع",
-          "pronunciation": "murabba‘",
+          "pronunciation": "murabbagħ",
           "definition": "squared, fourfold, quadratic"
         }
       ],
@@ -2651,7 +2651,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "خَامِس",
-          "pronunciation": "khâmis",
+          "pronunciation": "ḣâmis",
           "definition": "fifth"
         }
       ],
@@ -2847,7 +2847,7 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "quintuplo",
-          "pronunciation": "quintuplo",
+          "pronunciation": "kwintuplo",
           "definition": "fivefold, quintuple"
         },
         {
@@ -3304,7 +3304,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثَمَانٍ",
-          "pronunciation": "θamân",
+          "pronunciation": "ṫamânin",
           "definition": "eight (masculine)"
         }
       ],
@@ -3406,7 +3406,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثُمُن",
-          "pronunciation": "θumun",
+          "pronunciation": "ṫumun",
           "definition": "eighth part, one eighth"
         }
       ],
@@ -3677,7 +3677,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سَبْعَة",
-          "pronunciation": "sabʿa",
+          "pronunciation": "sabgħaẗ",
           "definition": "seven"
         }
       ],
@@ -3779,7 +3779,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سَابِع",
-          "pronunciation": "sâbiʿ",
+          "pronunciation": "sâbigħ",
           "definition": "seventh"
         }
       ],
@@ -3878,7 +3878,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "تِسْعَة",
-          "pronunciation": "tisʿa",
+          "pronunciation": "tisgħaẗ",
           "definition": "nine"
         }
       ],
@@ -3980,7 +3980,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "تَاسِع",
-          "pronunciation": "tâsiʿ",
+          "pronunciation": "tâsigħ",
           "definition": "ninth"
         }
       ],
@@ -4079,7 +4079,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَشَرَة",
-          "pronunciation": "ʿashara",
+          "pronunciation": "għaxaraẗ",
           "definition": "ten"
         }
       ],
@@ -4176,7 +4176,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَاشِر",
-          "pronunciation": "ʿâshir",
+          "pronunciation": "għâxir",
           "definition": "tenth"
         }
       ],
@@ -4669,7 +4669,7 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "dècimu",
-          "pronunciation": "decimu",
+          "pronunciation": "deximu",
           "definition": "tenth part, tenth, tithe"
         },
         {
@@ -4767,7 +4767,7 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "decuplo",
-          "pronunciation": "decuplo",
+          "pronunciation": "dekuplo",
           "definition": "tenfold, decuple"
         },
         {
@@ -4858,7 +4858,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثَلَاث",
-          "pronunciation": "θalāθ",
+          "pronunciation": "ṫalâṫ",
           "definition": "three (masculine/construct)"
         }
       ],
@@ -4947,7 +4947,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أَرْبَع",
-          "pronunciation": "arba'",
+          "pronunciation": "arbagħ",
           "definition": "four (masculine/construct)"
         }
       ],
@@ -5198,7 +5198,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثَلَاثَة",
-          "pronunciation": "θalâθaẗ",
+          "pronunciation": "ṫalâṫaẗ",
           "definition": "three"
         }
       ],
@@ -5370,7 +5370,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "خَمْسَة",
-          "pronunciation": "ḵamsaẗ",
+          "pronunciation": "ḣamsaẗ",
           "definition": "five"
         }
       ],
@@ -5453,7 +5453,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "سَبْعَة",
-          "pronunciation": "sab'aẗ",
+          "pronunciation": "sabgħaẗ",
           "definition": "seven"
         }
       ],
@@ -5536,7 +5536,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "ثَمَانِيَة",
-          "pronunciation": "θamâniyaẗ",
+          "pronunciation": "ṫamânijaẗ",
           "definition": "eight"
         }
       ],
@@ -5620,7 +5620,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "تِسْعَة",
-          "pronunciation": "tis'aẗ",
+          "pronunciation": "tisgħaẗ",
           "definition": "nine"
         }
       ],
@@ -5703,7 +5703,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "عَشَرَة",
-          "pronunciation": "'ašaraẗ",
+          "pronunciation": "għaxaraẗ",
           "definition": "ten"
         }
       ],

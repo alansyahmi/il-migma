@@ -2392,14 +2392,14 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "لِأَيِّمَا",
-          "pronunciation": "li'ayyimâ",
+          "pronunciation": "li'ajjimâ",
           "definition": "which, whichever (li- + ʾayyu + mā)"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "أَيُّ",
-          "pronunciation": "ayyu",
+          "pronunciation": "ajju",
           "definition": "which, what (interrogative base)"
         }
       ],
@@ -2564,14 +2564,14 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شَيْء",
-          "pronunciation": "shay'",
+          "pronunciation": "xaj'",
           "definition": "thing, matter"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "شَيْء",
-          "pronunciation": "shay'",
+          "pronunciation": "xaj'",
           "definition": "thing, entity"
         }
       ],
@@ -3180,14 +3180,14 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "أُخْرَى",
-          "pronunciation": "ukhrâ",
+          "pronunciation": "uḣrâ",
           "definition": "other (feminine singular)"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "أُخْرَى",
-          "pronunciation": "ukhrâ",
+          "pronunciation": "uḣrâ",
           "definition": "another, other (feminine of ʾāḵar)"
         }
       ],
@@ -3453,7 +3453,7 @@
           "relationship": "Borrowed from",
           "language": "Italian",
           "term": "qualunque",
-          "pronunciation": "qualunque",
+          "pronunciation": "kwalunkwe",
           "definition": "whatever, whichever, any"
         },
         {
@@ -3761,7 +3761,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "هِيَ",
-          "pronunciation": "hiya",
+          "pronunciation": "hija",
           "definition": "she, it"
         }
       ],
@@ -4369,14 +4369,14 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "شَيْئًا",
-          "pronunciation": "shay'an",
+          "pronunciation": "xaj'an",
           "definition": "a thing, anything (accusative of shay')"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "شَيْء",
-          "pronunciation": "shay'",
+          "pronunciation": "xaj'",
           "definition": "thing, entity"
         }
       ],
@@ -5005,14 +5005,14 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "آخَر",
-          "pronunciation": "âkhar",
+          "pronunciation": "âḣar",
           "definition": "other, another"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "آخَر",
-          "pronunciation": "âkhar",
+          "pronunciation": "âḣar",
           "definition": "another, other"
         }
       ],
@@ -5244,14 +5244,14 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "هِيَ",
-          "pronunciation": "hiya",
+          "pronunciation": "hija",
           "definition": "she, it"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "هِيَ",
-          "pronunciation": "hiya",
+          "pronunciation": "hija",
           "definition": "third-person feminine singular personal pronoun"
         }
       ],

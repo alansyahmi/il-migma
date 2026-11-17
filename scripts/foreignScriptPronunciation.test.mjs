@@ -27,12 +27,15 @@ const run = () => {
 
     assertEq(
         transliterateArabicToMaltesePronunciation('أَبْيَض'),
-        'abyaḍ',
-        'Arabic words with yod should keep a flat pronunciation string',
+        'abjaḍ',
+        'Arabic words with yod should map to j in Maltese-based Latinisation',
     );
 
-    assertEq(transliterateArabicToMaltesePronunciation('ثَ'), 'θa', 'tha should map to theta');
+    assertEq(transliterateArabicToMaltesePronunciation('ثَ'), 'ṫa', 'tha should map to ṫ');
     assertEq(transliterateArabicToMaltesePronunciation('ذَ'), 'đa', 'dhal should map to đ');
+    assertEq(transliterateArabicToMaltesePronunciation('خَ'), 'ḣa', 'kha should map to ḣ');
+    assertEq(transliterateArabicToMaltesePronunciation('شَ'), 'xa', 'shin should map to x');
+    assertEq(transliterateArabicToMaltesePronunciation('غَ'), 'gha', 'ghayn should map to gh');
     assertEq(transliterateArabicToMaltesePronunciation('غَ'), 'gha', 'ghayn should map to gh');
     assertEq(transliterateArabicToMaltesePronunciation('بَة'), 'baẗ', 'ta marbuta should map to ẗ');
     assertEq(transliterateArabicToMaltesePronunciation('ءَ'), "'a", 'hamza should map to apostrophe');
@@ -42,14 +45,14 @@ const run = () => {
     assertEq(transliterateArabicToMaltesePronunciation('ذَا'), 'đâ', 'dha should map to đâ');
     assertEq(transliterateArabicToMaltesePronunciation('ذِي'), 'đî', 'dhi should map to đî');
     assertEq(transliterateArabicToMaltesePronunciation('ذَو'), 'đaw', 'fatha before waw should form diphthong aw');
-    assertEq(transliterateArabicToMaltesePronunciation('شَيْئًا'), "shay'an", 'hamza on ya carrier with tanwin fath should map to shay\'an');
+    assertEq(transliterateArabicToMaltesePronunciation('شَيْئًا'), "xaj'an", 'hamza on ya carrier with tanwin fath should map to xaj\'an');
     assertEq(transliterateArabicToMaltesePronunciation('أَبَدًا'), 'abadan', 'tanwin fath with terminal alif should produce an');
-    assertEq(transliterateArabicToMaltesePronunciation('آخَر'), 'âkhar', 'madda alif should produce â');
-    assertEq(transliterateArabicToMaltesePronunciation('أُخْرَى'), 'ukhrâ', 'alif with damma should produce u');
+    assertEq(transliterateArabicToMaltesePronunciation('آخَر'), 'âḣar', 'madda alif should produce â');
+    assertEq(transliterateArabicToMaltesePronunciation('أُخْرَى'), 'uḣrâ', 'alif with damma should produce u');
     assertEq(transliterateArabicToMaltesePronunciation('إِنْ كَانَ'), 'in kâna', 'alif with kasra should produce i');
     assertEq(transliterateArabicToMaltesePronunciation('إِذْ ذَا'), 'iđ đâ', 'alif with kasra in idh dha');
     assertEq(transliterateArabicToMaltesePronunciation('إِلَى كَمْ'), 'ilâ kam', 'alif with kasra in ila kam');
-    assertEq(transliterateArabicToMaltesePronunciation('بِأَيِّ شَيْء'), "bi'ayyi shay'", 'medial hamza on alif in bi-ayyi shay');
+    assertEq(transliterateArabicToMaltesePronunciation('بِأَيِّ شَيْء'), "bi'ajji xaj'", 'medial hamza on alif in bi-ajji xaj');
 
     // Arabic alif lam (al-) article handling
     assertEq(transliterateArabicToMaltesePronunciation('اَلْ'), 'al-', 'standalone alif lam with sukūn should produce al-');
@@ -60,7 +63,7 @@ const run = () => {
     assertEq(transliterateArabicToMaltesePronunciation('الْمَكان'), 'al-makân', 'prefixed article before mīm should hyphenate as al-');
     assertEq(transliterateArabicToMaltesePronunciation('الْجُمْعَة'), 'al-ġumgħaẗ', 'prefixed article before jīm should hyphenate as al-');
     assertEq(transliterateArabicToMaltesePronunciation('النَّهَار'), 'al-nahâr', 'prefixed article before sun letter should be written as al-');
-    assertEq(transliterateArabicToMaltesePronunciation('الثُّلَاثَاء'), 'al-θulâθâ\'', 'prefixed article before thā should be written as al-');
+    assertEq(transliterateArabicToMaltesePronunciation('الثُّلَاثَاء'), 'al-ṫulâṫâ\'', 'prefixed article before thā should be written as al-');
     assertEq(transliterateArabicToMaltesePronunciation('اَلَّذِي'), 'allađî', 'relative pronoun should produce solid allađî');
 
     assertEq(transliterateGreekToMaltesePronunciation('Αθήνα'), 'atina', 'Greek theta should flatten to t');

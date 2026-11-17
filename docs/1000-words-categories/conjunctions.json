@@ -378,14 +378,14 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "a vogghia",
-          "pronunciation": "a vogghia",
+          "pronunciation": "a voġġia",
           "definition": "willingly, as much as one wants; even though"
         },
         {
           "relationship": "From",
           "language": "Italian",
           "term": "a voglia",
-          "pronunciation": "a voʎʎa",
+          "pronunciation": "a volja",
           "definition": "as much as you desire"
         }
       ],
@@ -876,7 +876,7 @@
           "relationship": "Compound of",
           "language": "Arabic",
           "term": "بِـ + حَالِ + اَلَّذِي + كَيْ يَكُون",
-          "pronunciation": "bi + ħâli + allađî + kay yakûn",
+          "pronunciation": "bi + ħâli + allađî + kaj jakûn",
           "definition": "in the manner of that which would be"
         }
       ],
@@ -1080,14 +1080,14 @@
           "language": "Arabic",
           "term": "بِأَيِّ شَيْء",
           "definition": "with what thing, by what means (bi- + ʾayyu + šayʾ)",
-          "pronunciation": "bi'ayyi shay'"
+          "pronunciation": "bi'ajji xaj'"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "شَيْء",
           "definition": "thing, matter",
-          "pronunciation": "shay'"
+          "pronunciation": "xaj'"
         }
       ],
       "etymology_notes": "Inherited from Arabic instrumental and interrogative compound بِأَيِّ شَيْء (bi-ʾayyi šayʾ, 'by what thing, in order to'). In Maltese, biex serves as the primary subordinating purposive (final) conjunction introducing intent, goal, or consequence.",
@@ -1322,14 +1322,14 @@
           "relationship": "Contraction of",
           "language": "Arabic",
           "term": "بِـ + قِيَاسِ + كَمْ",
-          "pronunciation": "bi + qiyâsi + kam",
+          "pronunciation": "bi + qijâsi + kam",
           "definition": "by measure of how much (bi-qiyāsi kam)"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "قِيَاس",
-          "pronunciation": "qiyâs",
+          "pronunciation": "qijâs",
           "definition": "measure, comparison, analog"
         }
       ],
@@ -1768,7 +1768,7 @@
           "language": "Arabic",
           "term": "عَلَى أَيِّ شَيْء",
           "definition": "on what thing, for what reason (ʿalā ʾayyi šayʾ)",
-          "pronunciation": "għalâ ayyi shay'"
+          "pronunciation": "għalâ ajji xaj'"
         },
         {
           "relationship": "From",
@@ -1998,14 +1998,14 @@
           "relationship": "Contraction of",
           "language": "Arabic",
           "term": "عَلَى شَأْنِ",
-          "pronunciation": "għalâ sha'ni",
+          "pronunciation": "għalâ xa'ni",
           "definition": "on the matter of, for the sake of (ʿalā šaʾni)"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "شَأْن",
-          "pronunciation": "sha'n",
+          "pronunciation": "xa'n",
           "definition": "matter, affair, concern"
         }
       ],
@@ -2100,7 +2100,7 @@
           "relationship": "Compound of",
           "language": "Arabic",
           "term": "هَكَذَا + كَيْفَ",
-          "pronunciation": "hakađâ + kayfa",
+          "pronunciation": "hakađâ + kajfa",
           "definition": "thus + as, how"
         }
       ],
@@ -2542,7 +2542,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "إِنْ كَانَ + شَيْء",
-          "pronunciation": "in kâna + shay'",
+          "pronunciation": "in kâna + xaj'",
           "definition": "if it was + thing (ʾin kāna + šayʾ)"
         }
       ],
@@ -2968,14 +2968,14 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "كَيْ يَكُون",
-          "pronunciation": "kay yakûn",
+          "pronunciation": "kaj jakûn",
           "definition": "so that it would be, in order that it be (kay yakūn)"
         },
         {
           "relationship": "From",
           "language": "Classical Arabic",
           "term": "كَيْ",
-          "pronunciation": "kay",
+          "pronunciation": "kaj",
           "definition": "purposive and conditional particle"
         }
       ],
@@ -3087,7 +3087,7 @@
           "relationship": "Inherited from",
           "language": "Arabic",
           "term": "كَيْفَ + وَكَلَّ",
-          "pronunciation": "kayfa + wakalla",
+          "pronunciation": "kajfa + wakalla",
           "definition": "as, how + also, likewise"
         }
       ],
@@ -4711,7 +4711,7 @@
           "relationship": "Borrowed from",
           "language": "Sicilian",
           "term": "manchè",
-          "pronunciation": "manke",
+          "pronunciation": "mankhe",
           "definition": "despite, although (from mancari)"
         },
         {
@@ -5137,7 +5137,7 @@
           "language": "Arabic",
           "term": "إِلَى بِأَيِّ شَيْء",
           "definition": "up to in order to (sa- + biex)",
-          "pronunciation": "ilâ bi'ayyi shay'"
+          "pronunciation": "ilâ bi'ajji xaj'"
         }
       ],
       "etymology_notes": "Compound of directional and limitative particle sa + purposive biex. In formal, administrative, and literary Maltese, sabiex functions as the stylistic elevated equivalent of biex.",
