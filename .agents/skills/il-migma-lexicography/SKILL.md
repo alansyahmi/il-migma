@@ -41,8 +41,9 @@ Il-Miġma adopts an **Asymmetrical Monolingual–Bilingual Architecture**:
    * ❌ *Forbidden*: `ta'` defined as `"tiegħi, tiegħek, tiegħu, tagħha..."`
    * ✅ *Standard*: `"Juri sjieda pussessiva marbuta mal-persuna grammatikali meta jingħaqad ma' pronomi mehmuża"`
 
-4. **Zero Forward Slashes Ban**:
+4. **Zero Forward Slashes & Semicolons Ban in Definitions**:
    * Forward slashes (`/`) are strictly banned in all text fields (`text_en`, `text_mt`, `notes`, `nuance`, `etymology_notes`). Use commas, "jew", or "or".
+   * Semicolons (`;`) are strictly banned inside `definitions` (`text_en`, `text_mt`) because `;` is used as the shortcut delimiter for creating a new definition. Use commas, "jew", or "u" instead.
 
 5. **Full Maltese Orthography in IDs**:
    * IDs must use full Maltese orthography (e.g. `prep-taħt`, `prep-għall`, `prep-bħall`, `adv-minn-taħt`, `pron-taħtiex`). Never strip ħ, għ, or diacritics in IDs.

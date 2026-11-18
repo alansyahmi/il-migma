@@ -1,7 +1,7 @@
 {
   "category_id": "verbs_irregular",
   "category_title": "Verbs: Core Irregular & Suppletive Verbs",
-  "total_entries": 6,
+  "total_entries": 8,
   "entries": [
     {
       "id": "v-ta",
@@ -10,8 +10,8 @@
       "gender": null,
       "root_consonants": "għ-t-j",
       "stem": null,
-      "cv_pattern": "1a",
-      "morph_pattern": "C1a",
+      "cv_pattern": "2a",
+      "morph_pattern": "C2a",
       "is_loanword": 0,
       "is_inflectable": 1,
       "source_language": "Arabic",
@@ -189,7 +189,7 @@
       "definitions": [
         {
           "text_en": "to see, look at, perceive",
-          "text_mt": "Jipperċepixxi b'għajnejh; jilmaħ jew jifhem xi ħaġa.",
+          "text_mt": "Jipperċepixxi b'għajnejh, jilmaħ jew jifhem xi ħaġa.",
           "register": "standard",
           "nuance": ""
         }
@@ -262,7 +262,7 @@
           "definition": "to know, recognize"
         }
       ],
-      "etymology_notes": null,
+      "etymology_notes": "Contracted from Arabic يَعْرِفُ (jagħrifu, root għ-r-f, cognate with [[v-għaraf|għaraf]]) via loss of intervocalic għ and r (*jagħraf -> jaf). Lacks a synthetic perfective and imperative, using periphrastic '[[v-kien|kien]] jaf' or 'sar jaf' for the past.",
       "definitions": [
         {
           "text_en": "to know, be aware of, know how to",
@@ -400,8 +400,8 @@
       "gender": null,
       "root_consonants": "q-w-l",
       "stem": null,
-      "cv_pattern": "n1a3",
-      "morph_pattern": "nC1aC3",
+      "cv_pattern": "n1â3",
+      "morph_pattern": "nC1âC3",
       "is_loanword": 0,
       "is_inflectable": 1,
       "source_language": "Arabic",
@@ -420,7 +420,7 @@
           "definition": "to be said"
         }
       ],
-      "etymology_notes": null,
+      "etymology_notes": "Perfective 3rd-person forms (nqal, nqalet, nqalu) descend from Arabic Form VII اِنْقَالَ (inqâla, root q-w-l). Inflected perfective (ingħadt, ingħadna, ingħadtu), imperfective (jingħad), and imperative (ingħad) use the suppletive Form VII stem of root għ-w-d (see [[v-għad|għad]]), mirroring active [[v-qal|qal]] -> jgħid.",
       "definitions": [
         {
           "text_en": "to be said, be spoken, be told",
@@ -470,6 +470,168 @@
       "tags": [
         "!irregular"
       ],
+      "audit_status": "verified",
+      "theme": "Verbs: Core Irregular & Suppletive Verbs",
+      "theme_id": "verbs_irregular"
+    },
+    {
+      "id": "v-għad",
+      "headword": "għad",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-j-d",
+      "stem": null,
+      "cv_pattern": "1â3",
+      "morph_pattern": "C1âC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: għad",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/għad",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَعَادَ",
+          "pronunciation": "agħâda",
+          "definition": "to repeat, say again"
+        }
+      ],
+      "etymology_notes": "Supplies the suppletive imperfective (jgħid), imperative (għid), and 1st and 2nd-person perfective (għidt) of [[v-qal|qal]], as well as the suppletive passive forms of [[v-nqal|nqal]].",
+      "definitions": [
+        {
+          "text_en": "to be said that (chiefly in the expression 'għad li')",
+          "text_mt": "Jintuża l-aktar fl-espressjoni 'għad li' fis-sens li jingħad jew li jkun irrakkontat.",
+          "register": "restricted",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għad li kien se jagħmel ix-xita, imma baqa' bnazzi.",
+          "en": "It was said that it was going to rain, yet it stayed fair.",
+          "text_mt": "Għad li kien se jagħmel ix-xita, imma baqa' bnazzi.",
+          "text_en": "It was said that it was going to rain, yet it stayed fair."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb vojt difettiv li jintuża biss fl-espressjoni 'għad li', filwaqt li l-forom inflettivi tiegħu jservu bħala s-supplittivi ta' 'qal'.",
+        "en": "Hollow verb restricted as a standalone lemma to 'għad li', while its inflected forms supply the suppletive paradigm of 'qal'."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐːt/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "hollow",
+        "transitivity": "intransitive",
+        "perfective_3sgm": "għad",
+        "imperfective_3sgm": "jgħid",
+        "verbal_noun": null,
+        "vowel_set_perf": "a--",
+        "vowel_set_impf": "i--",
+        "vowel_set_impv": "i--"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-qal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [
+        "!irregular"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Core Irregular & Suppletive Verbs",
+      "theme_id": "verbs_irregular"
+    },
+    {
+      "id": "v-għaraf",
+      "headword": "għaraf",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-r-f",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: għaraf",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/għaraf",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَرَفَ",
+          "pronunciation": "għarafa",
+          "definition": "to know, recognize"
+        }
+      ],
+      "etymology_notes": "Regular Form I cognate of the contracted defective verb [[v-jaf|jaf]].",
+      "definitions": [
+        {
+          "text_en": "to recognize, become aware of, identify, find out",
+          "text_mt": "Jidentifika persuna jew ħaġa li diġà jafha, jew jinduna b'fatt jew verità.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għaraftu mill-ewwel kif daħal fil-kamra.",
+          "en": "I recognized him immediately as he entered the room.",
+          "text_mt": "Għaraftu mill-ewwel kif daħal fil-kamra.",
+          "text_en": "I recognized him immediately as he entered the room."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb qawwi tal-ewwel forma (għaraf, jagħraf, agħraf) b'tifsira ta' għarfien jew identifikazzjoni.",
+        "en": "Form I strong verb (għaraf, jagħraf, agħraf) meaning to recognize or become aware of."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐː.rɐf/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "għaraf",
+        "imperfective_3sgm": "jagħraf",
+        "verbal_noun": "għarfien",
+        "active_participle": "għaref",
+        "passive_participle": "magħruf",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-jaf",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
       "audit_status": "verified",
       "theme": "Verbs: Core Irregular & Suppletive Verbs",
       "theme_id": "verbs_irregular"

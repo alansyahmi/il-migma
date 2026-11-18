@@ -200,8 +200,8 @@
       "gender": null,
       "root_consonants": "m-w-r",
       "stem": null,
-      "cv_pattern": "1a3",
-      "morph_pattern": "C1aC3",
+      "cv_pattern": "1â3",
+      "morph_pattern": "C1âC3",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
@@ -212,7 +212,7 @@
       "source_year": 1987,
       "source_page": null,
       "source_publisher": "Midsea Books",
-      "etymology_notes": null,
+      "etymology_notes": "From Arabic مَرَّ (marra, 'to pass') reinterpreted on the hollow root m-w-r (mort, mmur), with geminated -rr- preserved in plural imperfective (mmorru, tmorru, jmorru) and plural imperative (morru).",
       "etymology_chain": [
         {
           "relationship": "Inherited from",

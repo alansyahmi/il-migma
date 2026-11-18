@@ -2176,6 +2176,51 @@ export function TagChips({ entry }: { entry: Entry }) {
     );
 }
 
+function renderLinkedEtymologyNotes(notes: string) {
+    const parts = notes.split(/(\[\[[^|\]]+\|[^\]]+\]\])/g);
+    return parts.map((part, idx) => {
+        const match = part.match(/^\[\[([^|\]]+)\|([^\]]+)\]\]$/);
+        if (!match) return <React.Fragment key={idx}>{part}</React.Fragment>;
+        const [, entryId, label] = match;
+        return (
+            <Link
+                key={`${entryId}-${idx}`}
+                to={`/entry/${encodeURIComponent(entryId.trim())}`}
+                className="text-[#1034A6] font-medium hover:underline"
+            >
+                {label}
+            </Link>
+        );
+    });
+}
+
+function EtymologySideCard({
+    etyItems,
+    notes,
+    term,
+}: {
+    etyItems: any[];
+    notes?: string;
+    term: (key: string) => string;
+}) {
+    if (etyItems.length === 0 && !notes) return null;
+    return (
+        <SideCard title={term('etymology')}>
+            {etyItems.length > 0 && (
+                <EtymologySentence
+                    prefix={term('from')}
+                    items={etyItems}
+                />
+            )}
+            {notes && (
+                <p className={cn('text-xs text-black/65 leading-relaxed', etyItems.length > 0 && 'mt-2.5 pt-2.5 border-t border-black/5')}>
+                    {renderLinkedEtymologyNotes(notes)}
+                </p>
+            )}
+        </SideCard>
+    );
+}
+
 export function SidebarGlossCard({ entry }: { entry: Entry }) {
     const { term } = useLinguisticMode();
     const { language } = useLanguage();
@@ -2674,14 +2719,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         <SidebarGlossCard entry={entry} />
                         <UsageNotesSideCard entry={entry} language={language} term={term} />
 
-                        {etyItems.length > 0 && (
-                            <SideCard title={term('etymology')}>
-                                <EtymologySentence
-                                    prefix={term('from')}
-                                    items={etyItems}
-                                />
-                            </SideCard>
-                        )}
+                        <EtymologySideCard etyItems={etyItems} notes={ety?.notes} term={term} />
 
                         {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
@@ -2936,14 +2974,7 @@ function NounEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                         {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
                         <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                            {etyItems.length > 0 && (
-                                <SideCard title={term('etymology')}>
-                                    <EtymologySentence
-                                        prefix={term('from')}
-                                        items={etyItems}
-                                    />
-                                </SideCard>
-                            )}
+                            <EtymologySideCard etyItems={etyItems} notes={ety?.notes} term={term} />
 
                             {displayAlternativeForms.length > 0 && (
                                 <SideCard title={term('alternative-forms')}>
@@ -3274,14 +3305,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                         <SidebarGlossCard entry={entry} />
                         <UsageNotesSideCard entry={entry} language={language} term={term} />
 
-                        {etyItems.length > 0 && (
-                            <SideCard title={term('etymology')}>
-                                <EtymologySentence
-                                    prefix={term('from')}
-                                    items={etyItems}
-                                />
-                            </SideCard>
-                        )}
+                        <EtymologySideCard etyItems={etyItems} notes={ety?.notes} term={term} />
 
                         {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
@@ -3736,14 +3760,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
 
                         {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
                         <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                            {etyItems.length > 0 && (
-                                <SideCard title={term('etymology')}>
-                                    <EtymologySentence
-                                        prefix={term('from')}
-                                        items={etyItems}
-                                    />
-                                </SideCard>
-                            )}
+                            <EtymologySideCard etyItems={etyItems} notes={ety?.notes} term={term} />
 
                             {displayAlternativeForms.length > 0 && (
                                 <SideCard title={term('alternative-forms')}>
@@ -4626,14 +4643,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
                         <SidebarGlossCard entry={entry} />
                         <UsageNotesSideCard entry={entry} language={language} term={term} />
 
-                        {etyItems.length > 0 && (
-                            <SideCard title={term('etymology')}>
-                                <EtymologySentence
-                                    prefix={term('from')}
-                                    items={etyItems}
-                                />
-                            </SideCard>
-                        )}
+                        <EtymologySideCard etyItems={etyItems} notes={ety?.notes} term={term} />
 
                         {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
@@ -4759,14 +4769,7 @@ function NumeralEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () =
 
                         {/* Mobile Etymology, Related, Source (Hidden on Desktop) */}
                         <div className="block md:hidden space-y-8 pt-8 max-w-[340px] mx-auto w-full">
-                            {etyItems.length > 0 && (
-                                <SideCard title={term('etymology')}>
-                                    <EtymologySentence
-                                        prefix={term('from')}
-                                        items={etyItems}
-                                    />
-                                </SideCard>
-                            )}
+                            <EtymologySideCard etyItems={etyItems} notes={ety?.notes} term={term} />
 
                             {displayAlternativeForms.length > 0 && (
                                 <SideCard title={term('alternative-forms')}>
@@ -4967,14 +4970,7 @@ function AdjectiveEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: ()
                         <SidebarGlossCard entry={entry} />
                         <UsageNotesSideCard entry={entry} language={language} term={term} />
 
-                        {etyItems.length > 0 && (
-                            <SideCard title={term('etymology')}>
-                                <EtymologySentence
-                                    prefix={term('from')}
-                                    items={etyItems}
-                                />
-                            </SideCard>
-                        )}
+                        <EtymologySideCard etyItems={etyItems} notes={ety?.notes} term={term} />
 
                         {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
@@ -5451,14 +5447,7 @@ function ParticipleEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: (
                         <SidebarGlossCard entry={entry} />
                         <UsageNotesSideCard entry={entry} language={language} term={term} />
 
-                        {etyItems.length > 0 && (
-                            <SideCard title={term('etymology')}>
-                                <EtymologySentence
-                                    prefix={term('from')}
-                                    items={etyItems}
-                                />
-                            </SideCard>
-                        )}
+                        <EtymologySideCard etyItems={etyItems} notes={ety?.notes} term={term} />
 
                         {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>
@@ -6251,14 +6240,7 @@ export function FunctionWordEntryView({
                         <SidebarGlossCard entry={entry} />
                         <UsageNotesSideCard entry={entry} language={language} term={term} />
 
-                        {etyItems.length > 0 && (
-                            <SideCard title={term('etymology')}>
-                                <EtymologySentence
-                                    prefix={term('from')}
-                                    items={etyItems}
-                                />
-                            </SideCard>
-                        )}
+                        <EtymologySideCard etyItems={etyItems} notes={ety?.notes} term={term} />
 
                         {displayAlternativeForms.length > 0 && (
                             <SideCard title={term('alternative-forms')}>

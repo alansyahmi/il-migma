@@ -35,7 +35,7 @@
       "definitions": [
         {
           "text_en": "to live, be alive, reside",
-          "text_mt": "Ikollu l-ħajja u jibqa’ ħaj; igħaddi ħajtu jew joqgħod f’post partikolari.",
+          "text_mt": "Ikollu l-ħajja u jibqa’ ħaj, jew jgħaddi ħajtu f’post partikolari.",
           "register": {
             "key": "standard",
             "en": "Standard",
@@ -519,7 +519,7 @@
       "definitions": [
         {
           "text_en": "to die, pass away, perish",
-          "text_mt": "Jitlef ħajtu u jieqaf jgħix; jintemmlu n-nifs u l-eżistenza fiżika.",
+          "text_mt": "Jitlef ħajtu u jieqaf jgħix, bit-tmiem tal-eżistenza fiżika.",
           "register": {
             "key": "standard",
             "en": "Standard",
@@ -807,7 +807,7 @@
       "definitions": [
         {
           "text_en": "to observe, watch closely, notice",
-          "text_mt": "Iħares u jsegwi b’attenzjoni kbira dak li jkun qed jiġri madwaru; jinnota b’reqqa.",
+          "text_mt": "Iħares u jsegwi b’attenzjoni kbira dak li jkun qed jiġri madwaru, u jinnota b’reqqa.",
           "register": {
             "key": "standard",
             "en": "Standard",
@@ -993,8 +993,8 @@
       "gender": null,
       "root_consonants": "x-r-j",
       "stem": null,
-      "cv_pattern": "1tV2a",
-      "morph_pattern": "C1tVC2a",
+      "cv_pattern": "1ta2a",
+      "morph_pattern": "C1taC2a",
       "is_loanword": 0,
       "is_inflectable": 1,
       "is_imala_blocked": 0,
