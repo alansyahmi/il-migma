@@ -853,6 +853,66 @@ function genKiel(verbForm: string): VerbConjugationTable {
     );
 }
 
+function genQal(): VerbConjugationTable {
+    return buildProfiledConjugationTable({
+        perfect: ["għidt", "għidt", "qal", "qalet", "għidna", "għidtu", "qalu"],
+        perfectNeg: ["għidt", "għidt", "qal", "qalit", "għidna", "għidtu", "qalu"],
+        imperfect: ["ngħid", "tgħid", "jgħid", "tgħid", "ngħidu", "tgħidu", "jgħidu"],
+        imperative: ["għid", "għidu"],
+        blocksImala: false,
+    });
+}
+
+function genNqal(): VerbConjugationTable {
+    return buildProfiledConjugationTable({
+        perfect: ["ingħadt", "ingħadt", "nqal", "nqalet", "ingħadna", "ingħadtu", "nqalu"],
+        perfectNeg: ["ingħadt", "ingħadt", "nqal", "nqalit", "ingħadna", "ingħadtu", "nqalu"],
+        imperfect: ["ningħad", "tingħad", "jingħad", "tingħad", "ningħadu", "tingħadu", "jingħadu"],
+        imperative: ["ingħad", "ingħadu"],
+        blocksImala: false,
+    });
+}
+
+function genTa(): VerbConjugationTable {
+    return buildProfiledConjugationTable({
+        perfect: ["tajt", "tajt", "ta", "tat", "tajna", "tajtu", "taw"],
+        perfectNeg: ["tajt", "tajt", "ta", "tat", "tajna", "tajtu", "taw"],
+        imperfect: ["nagħti", "tagħti", "jagħti", "tagħti", "nagħtu", "tagħtu", "jagħtu"],
+        imperative: ["agħti", "agħtu"],
+        blocksImala: true,
+    });
+}
+
+function genHa(): VerbConjugationTable {
+    return buildProfiledConjugationTable({
+        perfect: ["ħadt", "ħadt", "ħa", "ħadet", "ħadna", "ħadtu", "ħadu"],
+        perfectNeg: ["ħadt", "ħadt", "ħa", "ħadit", "ħadna", "ħadtu", "ħadu"],
+        imperfect: ["nieħu", "tieħu", "jieħu", "tieħu", "nieħdu", "tieħdu", "jieħdu"],
+        imperative: ["ħu", "ħudu"],
+        blocksImala: true,
+    });
+}
+
+function genRa(): VerbConjugationTable {
+    return buildProfiledConjugationTable({
+        perfect: ["rajt", "rajt", "ra", "rat", "rajna", "rajtu", "raw"],
+        perfectNeg: ["rajt", "rajt", "ra", "rat", "rajna", "rajtu", "raw"],
+        imperfect: ["nara", "tara", "jara", "tara", "naraw", "taraw", "jaraw"],
+        imperative: ["ara", "araw"],
+        blocksImala: true,
+    });
+}
+
+function genJaf(): VerbConjugationTable {
+    return buildProfiledConjugationTable({
+        perfect: ["-", "-", "-", "-", "-", "-", "-"],
+        perfectNeg: ["-", "-", "-", "-", "-", "-", "-"],
+        imperfect: ["naf", "taf", "jaf", "taf", "nafu", "tafu", "jafu"],
+        imperative: ["-", "-"],
+        blocksImala: true,
+    });
+}
+
 // ── GEMINATED class ───────────────────────────────────────────────────────
 // C2 = C3: dell / jdell (CvCC / jCvCC)
 
@@ -3282,6 +3342,47 @@ function genFormXaDefective(
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
 
+    if (C3 === "j" || C3 === "w") {
+        const stem = `st${pv1 || "a"}${C1}${C2}`;
+        const impfTheme = iv2 || "i";
+        const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
+        const impStem = `st${impV1 || iv1 || "a"}${C1}${C2}`;
+        const impTheme = impV2 || impfTheme;
+        const impfStemFull = `ist${iv1 || "a"}${C1}${C2}`;
+        const plEnd = "u";
+        return buildProfiledConjugationTable({
+            perfect: [
+                `${stem}ejt`,
+                `${stem}ejt`,
+                `${stem}${pv2 || "a"}`,
+                `${stem}iet`,
+                `${stem}ejna`,
+                `${stem}ejtu`,
+                `${stem}ew`,
+            ],
+            perfectNeg: [
+                `${stem}ejt`,
+                `${stem}ejt`,
+                `${stem}${pv2 || "a"}`,
+                `${stem}it`,
+                `${stem}ejna`,
+                `${stem}ejtu`,
+                `${stem}ew`,
+            ],
+            imperfect: [
+                `n${impfStemFull}${impfTheme}`,
+                `t${impfStemFull}${impfTheme}`,
+                `j${impfStemFull}${impfTheme}`,
+                `t${impfStemFull}${impfTheme}`,
+                `n${impfStemFull}${plEnd}`,
+                `t${impfStemFull}${plEnd}`,
+                `j${impfStemFull}${plEnd}`,
+            ],
+            imperative: [`${impStem}${impTheme}`, `${impStem}${plEnd}`],
+            blocksImala: isImalaBlocked || (pv2 === "a" && iv2 === "a"),
+        });
+    }
+
     const perfFull = `st${pv1}${C1}${C2}${pv2}${C3}`;
     const perfSync = `st${pv1}${C1}${C2}${C3}`;
 
@@ -3717,7 +3818,7 @@ export function generateConjugation(
     input: ConjugationInput,
 ): VerbConjugationTable {
     const consonants = input.root.split("-").filter(Boolean);
-    const form = input.form;
+    const form = input.form === "X" ? "Xa" : input.form;
     const strength = (input.strength || "strong").toLowerCase();
     const weakClass = input.weakClass?.toLowerCase();
     const isQuadriliteral = consonants.length === 4;
@@ -3765,6 +3866,11 @@ export function generateConjugation(
         if (citation === "kiel" || (consonants[0] === "'" && consonants[1] === "k" && consonants[2] === "l")) {
             return genKiel(form);
         }
+        if (citation === "qal") return genQal();
+        if (citation === "ta") return genTa();
+        if (citation === "ħa") return genHa();
+        if (citation === "ra") return genRa();
+        if (citation === "jaf" || citation === "af") return genJaf();
         if (strength === "geminated") {
             return genGeminated(
                 consonants,
@@ -4087,6 +4193,8 @@ export function generateConjugation(
         );
     }
     if (form === "VII") {
+        const citation = (input.headword || input.citationForm || "").trim().toLowerCase();
+        if (citation === "nqal") return genNqal();
         if (strength === "geminated") {
             // VerbMT geminated Form VII keeps the n-prefixed full stem
             // (nżamm/nxekk), with -ej- only in suffixed perfect rows.

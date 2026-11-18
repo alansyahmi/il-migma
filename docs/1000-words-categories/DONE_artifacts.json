@@ -272,7 +272,10 @@
         "vowel_set_perf": "a-a",
         "vowel_set_impf": "u-u",
         "vowel_set_impv": "u-u"
-      }
+      },
+      "tags": [
+        "!irregular"
+      ]
     },
     {
       "id": "v-ġie",
@@ -353,7 +356,10 @@
         "vowel_set_perf": "ie-e",
         "vowel_set_impf": "i-i",
         "vowel_set_impv": "e-a"
-      }
+      },
+      "tags": [
+        "!irregular"
+      ]
     },
     {
       "id": "v-ħalla",

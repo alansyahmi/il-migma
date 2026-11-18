@@ -1,0 +1,476 @@
+{
+  "category_id": "verbs_irregular",
+  "category_title": "Verbs: Core Irregular & Suppletive Verbs",
+  "total_entries": 6,
+  "entries": [
+    {
+      "id": "v-ta",
+      "headword": "ta",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-t-j",
+      "stem": null,
+      "cv_pattern": "1a",
+      "morph_pattern": "C1a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ta",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَعْطَى",
+          "pronunciation": "agħṭâ",
+          "definition": "to give"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to give, hand over, grant",
+          "text_mt": "Jgħaddi xi ħaġa lil ħaddieħor bħala rigal, għajnuna jew ħlas.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Tani l-ktieb li kont tlabtu l-ġimgħa l-oħra.",
+          "en": "He gave me the book I had asked him for last week.",
+          "text_mt": "Tani l-ktieb li kont tlabtu l-ġimgħa l-oħra.",
+          "text_en": "He gave me the book I had asked him for last week."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb irregolari ewlieni (ta, tajt, jagħti, agħti) li tilef il-konsonanti tal-bidu fil-perfett.",
+        "en": "Core irregular verb (ta, tajt, jagħti, agħti) with loss of initial radical in the perfective."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "ditransitive",
+        "perfective_3sgm": "ta",
+        "imperfective_3sgm": "jagħti",
+        "verbal_noun": "għotja",
+        "vowel_set_perf": "a--",
+        "vowel_set_impf": "a-i",
+        "vowel_set_impv": "a-i"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [
+        "!irregular"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Core Irregular & Suppletive Verbs",
+      "theme_id": "verbs_irregular"
+    },
+    {
+      "id": "v-ħa",
+      "headword": "ħa",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "ħ-d-w",
+      "stem": null,
+      "cv_pattern": "1a",
+      "morph_pattern": "C1a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَخَذَ",
+          "pronunciation": "aḣađa",
+          "definition": "to take"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to take, receive, obtain",
+          "text_mt": "Jaqbad xi ħaġa b'idejh, jirċievi jew iġorr miegħu.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħadt il-umbrella miegħi għax kien hemm sħab iswed.",
+          "en": "I took the umbrella with me because there were dark clouds.",
+          "text_mt": "Ħadt il-umbrella miegħi għax kien hemm sħab iswed.",
+          "text_en": "I took the umbrella with me because there were dark clouds."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb irregolari mill-Għarbi hamzat 'aḣađa' (ħa, ħadt, jieħu, ħu).",
+        "en": "Irregular verb from Arabic initial-hamza 'aḣađa' (ħa, ħadt, jieħu, impv. ħu)."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈħɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "assimilative",
+        "transitivity": "transitive",
+        "perfective_3sgm": "ħa",
+        "imperfective_3sgm": "jieħu",
+        "verbal_noun": "ħud",
+        "vowel_set_perf": "a--",
+        "vowel_set_impf": "ie-u",
+        "vowel_set_impv": "u--"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [
+        "!irregular",
+        "!Hamzated"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Core Irregular & Suppletive Verbs",
+      "theme_id": "verbs_irregular"
+    },
+    {
+      "id": "v-ra",
+      "headword": "ra",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "w-r-j",
+      "stem": null,
+      "cv_pattern": "1a",
+      "morph_pattern": "C1a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ra",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "رَأَى",
+          "pronunciation": "ra'â",
+          "definition": "to see"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to see, look at, perceive",
+          "text_mt": "Jipperċepixxi b'għajnejh; jilmaħ jew jifhem xi ħaġa.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Rajtu miexi fil-pjazza kmieni dalgħodu.",
+          "en": "I saw him walking in the square early this morning.",
+          "text_mt": "Rajtu miexi fil-pjazza kmieni dalgħodu.",
+          "text_en": "I saw him walking in the square early this morning."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb irregolari b'hamza tan-nofs storika (ra, rajt, jara, ara).",
+        "en": "Irregular medial-hamza verb (ra, rajt, jara, impv. ara)."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "transitive",
+        "perfective_3sgm": "ra",
+        "imperfective_3sgm": "jara",
+        "verbal_noun": "raj",
+        "vowel_set_perf": "a--",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [
+        "!irregular",
+        "!Hamzated"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Core Irregular & Suppletive Verbs",
+      "theme_id": "verbs_irregular"
+    },
+    {
+      "id": "v-jaf",
+      "headword": "jaf",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-r-f",
+      "stem": null,
+      "cv_pattern": "1a3",
+      "morph_pattern": "C1aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: jaf",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَرَفَ",
+          "pronunciation": "għarafa",
+          "definition": "to know, recognize"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to know, be aware of, know how to",
+          "text_mt": "Ikollu għarfien jew ħila dwar xi ħaġa, jew jagħraf persuna jew fatt.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Naf sew fejn tinsab il-librerija l-ġdida.",
+          "en": "I know well where the new library is located.",
+          "text_mt": "Naf sew fejn tinsab il-librerija l-ġdida.",
+          "text_en": "I know well where the new library is located."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb difettiv li għandu biss l-imperfett (naf, taf, jaf, nafu, tafu, jafu); għall-passat jintuża 'kien jaf' jew 'sar jaf'.",
+        "en": "Defective verb having only imperfective forms (naf, taf, jaf, nafu, tafu, jafu); past uses periphrastic 'kien jaf' or 'sar jaf'."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈjɐːf/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "transitive",
+        "perfective_3sgm": null,
+        "imperfective_3sgm": "jaf",
+        "verbal_noun": "għarfien",
+        "vowel_set_perf": null,
+        "vowel_set_impf": "a--",
+        "vowel_set_impv": "a--"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [
+        "!irregular"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Core Irregular & Suppletive Verbs",
+      "theme_id": "verbs_irregular"
+    },
+    {
+      "id": "v-ried",
+      "headword": "ried",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "r-j-d",
+      "stem": null,
+      "cv_pattern": "1ie3",
+      "morph_pattern": "C1ieC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ried",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "أَرَادَ",
+          "pronunciation": "arâda",
+          "definition": "to want, wish, intend"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to want, wish, desire",
+          "text_mt": "Jixtieq jew ikollu r-rieda li jikseb jew jagħmel xi ħaġa.",
+          "register": "standard",
+          "nuance": ""
+        },
+        {
+          "text_en": "to have to, must (impersonal or modal)",
+          "text_mt": "Jeħtieġ jew għandu bżonn jagħmel xi ħaġa.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Irrid nixtri ħobż frisk mingħand il-furnar.",
+          "en": "I want to buy fresh bread from the baker.",
+          "text_mt": "Irrid nixtri ħobż frisk mingħand il-furnar.",
+          "text_en": "I want to buy fresh bread from the baker."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb vojt irregolari (ried, ridt, jrid, rrid); l-imperfett ma jiħux vokali twila 'ie'.",
+        "en": "Irregular hollow verb (ried, ridt, jrid, 1sg rrid) whose imperfective drops the long 'ie' grade."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈrɪːt/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "hollow",
+        "transitivity": "transitive",
+        "perfective_3sgm": "ried",
+        "imperfective_3sgm": "jrid",
+        "verbal_noun": "rieda",
+        "vowel_set_perf": "ie--",
+        "vowel_set_impf": "i--",
+        "vowel_set_impv": "i--"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [
+        "!irregular"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Core Irregular & Suppletive Verbs",
+      "theme_id": "verbs_irregular"
+    },
+    {
+      "id": "v-nqal",
+      "headword": "nqal",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "q-w-l",
+      "stem": null,
+      "cv_pattern": "n1a3",
+      "morph_pattern": "nC1aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: nqal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "اِنْقَالَ",
+          "pronunciation": "inqâla",
+          "definition": "to be said"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to be said, be spoken, be told",
+          "text_mt": "Jiġi espress bil-kliem jew jiġi rrakontat b'mod passiv.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Dak li nqal fil-laqgħa baqa' mistur.",
+          "en": "What was said at the meeting remained hidden.",
+          "text_mt": "Dak li nqal fil-laqgħa baqa' mistur.",
+          "text_en": "What was said at the meeting remained hidden."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Il-forma passiva ta' 'qal' bil-forom supplittivi 'ingħadt', 'jingħad' u 'ingħad'.",
+        "en": "Passive Form VII of 'qal' using the suppletive stem 'ngħad' across inflected forms (ingħadt, jingħad, ingħad)."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈnʔɐːl/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "VII",
+        "class": "weak",
+        "weak_class": "hollow",
+        "transitivity": "intransitive",
+        "perfective_3sgm": "nqal",
+        "imperfective_3sgm": "jingħad",
+        "verbal_noun": null,
+        "vowel_set_perf": "a--",
+        "vowel_set_impf": "a--",
+        "vowel_set_impv": "a--"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-qal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [
+        "!irregular"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Core Irregular & Suppletive Verbs",
+      "theme_id": "verbs_irregular"
+    }
+  ]
+}

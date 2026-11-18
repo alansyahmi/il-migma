@@ -1,0 +1,446 @@
+{
+  "category_id": "verbs_state_existence",
+  "category_title": "Verbs: Existence, State & Modals",
+  "total_entries": 6,
+  "entries": [
+    {
+      "id": "v-kien",
+      "headword": "kien",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "k-w-n",
+      "stem": null,
+      "cv_pattern": "1ie3",
+      "morph_pattern": "C1ieC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: kien",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "كَانَ",
+          "pronunciation": "kâna",
+          "definition": "to be, exist"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to be, exist (copula and auxiliary verb)",
+          "text_mt": "Verb ewlieni li jesprimi l-eżistenza, l-istat jew il-passat flimkien ma' verb ieħor.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ilbieraħ kien hemm temp sabiħ ħafna fil-bajja.",
+          "en": "Yesterday there was very nice weather at the bay.",
+          "text_mt": "Ilbieraħ kien hemm temp sabiħ ħafna fil-bajja.",
+          "text_en": "Yesterday there was very nice weather at the bay."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb vojt ewlieni (k-w-n) bl-imperfett 'jkun' u l-imperattiv 'kun'; jintuża bħala awżiljarju għall-passat u l-futur.",
+        "en": "Core hollow verb (k-w-n) with imperfect 'jkun' and imperative 'kun'; serves as the main copula and tense auxiliary."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɪːn/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "hollow",
+        "transitivity": "intransitive",
+        "perfective_3sgm": "kien",
+        "imperfective_3sgm": "jkun",
+        "verbal_noun": "kewn",
+        "vowel_set_perf": "ie--",
+        "vowel_set_impf": "u--",
+        "vowel_set_impv": "u--"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Existence, State & Modals",
+      "theme_id": "verbs_state_existence"
+    },
+    {
+      "id": "v-seta",
+      "headword": "seta'",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "s-t-għ",
+      "stem": null,
+      "cv_pattern": "1e2a",
+      "morph_pattern": "C1eC2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: seta'",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "اِسْتَطَاعَ",
+          "pronunciation": "istaṭâgħa",
+          "definition": "to be able to, can"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "can, to be able to, may",
+          "text_mt": "Ikollu l-ħila, il-kapaċità jew il-permess li jagħmel xi ħaġa.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Jista' jkun li jaslu tard illejla.",
+          "en": "It may be that they arrive late tonight.",
+          "text_mt": "Jista' jkun li jaslu tard illejla.",
+          "text_en": "It may be that they arrive late tonight."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb modali ewlieni bl-imperfett 'jista'' (3sg.m) u 'jistgħu' (3pl), u l-imperattiv 'ista'' / 'istgħu'.",
+        "en": "Core modal verb with imperfect 'jista'' (3sg.m), 'jistgħu' (3pl), and imperative 'ista'' / 'istgħu'."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛ.tɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong-hybrid",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "seta'",
+        "imperfective_3sgm": "jista'",
+        "verbal_noun": null,
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "i-a",
+        "vowel_set_impv": "i-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [
+        "!irregular"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Existence, State & Modals",
+      "theme_id": "verbs_state_existence"
+    },
+    {
+      "id": "v-deher",
+      "headword": "deher",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "d-h-r",
+      "stem": null,
+      "cv_pattern": "1e2e3",
+      "morph_pattern": "C1eC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: deher",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "ظَهَرَ",
+          "pronunciation": "ẓahara",
+          "definition": "to appear, become visible"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to appear, seem, become visible",
+          "text_mt": "Jintlemaħ mill-għajn, jidher b'ċertu mod jew jagħti l-impressjoni li hu hekk.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Minn hawn jidhru l-gżejjer kollha fit-tarf tal-orizzont.",
+          "en": "From here all the islands appear on the edge of the horizon.",
+          "text_mt": "Minn hawn jidhru l-gżejjer kollha fit-tarf tal-orizzont.",
+          "text_en": "From here all the islands appear on the edge of the horizon."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb qawwi tat-Tieni Koniugazzjoni b''h' siekta fil-morfema tan-nofs (imperfett: 'jidher', plural 'jidhru').",
+        "en": "Strong Form I verb with silent medial 'h' (imperfect 'jidher', 3pl 'jidhru')."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɛːr/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "deher",
+        "imperfective_3sgm": "jidher",
+        "verbal_noun": "duhur",
+        "vowel_set_perf": "e-e",
+        "vowel_set_impf": "i-e",
+        "vowel_set_impv": "i-e"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Existence, State & Modals",
+      "theme_id": "verbs_state_existence"
+    },
+    {
+      "id": "v-beda",
+      "headword": "beda",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "b-d-j",
+      "stem": null,
+      "cv_pattern": "1e2a",
+      "morph_pattern": "C1eC2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: beda",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "بَدَأَ",
+          "pronunciation": "bada'a",
+          "definition": "to begin, start"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to begin, start, commence",
+          "text_mt": "Jagħmel l-ewwel pass ta' azzjoni, xogħol jew proċess ġdid.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-laqgħa bdiet fid-disgħa ta' filgħodu.",
+          "en": "The meeting started at nine in the morning.",
+          "text_mt": "Il-laqgħa bdiet fid-disgħa ta' filgħodu.",
+          "text_en": "The meeting started at nine in the morning."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɛ.dɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "ambitransitive",
+        "perfective_3sgm": "beda",
+        "imperfective_3sgm": "jibda",
+        "verbal_noun": "bidu",
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "i-a",
+        "vowel_set_impv": "i-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [
+        "!Hamzated"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Existence, State & Modals",
+      "theme_id": "verbs_state_existence"
+    },
+    {
+      "id": "v-twettaq",
+      "headword": "twettaq",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "w-t-q",
+      "stem": null,
+      "cv_pattern": "t1e22a3",
+      "morph_pattern": "tC1eC2C2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: twettaq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَوَثَّقَ",
+          "pronunciation": "tawaṫṫaqa",
+          "definition": "to be confirmed, made firm"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to be carried out, fulfilled, realized",
+          "text_mt": "Jseħħ u jitlesta fil-prattika wara li jkun ġie ppjanat jew imwiegħed.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-proġett kollu twettaq skont l-iskeda miftiehma.",
+          "en": "The entire project was carried out according to the agreed schedule.",
+          "text_mt": "Il-proġett kollu twettaq skont l-iskeda miftiehma.",
+          "text_en": "The entire project was carried out according to the agreed schedule."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtwɛt.tɐʔ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "V",
+        "class": "weak",
+        "weak_class": "assimilative",
+        "transitivity": "intransitive",
+        "perfective_3sgm": "twettaq",
+        "imperfective_3sgm": "jitwettaq",
+        "verbal_noun": "twettiq",
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "e-a",
+        "vowel_set_impv": "e-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Existence, State & Modals",
+      "theme_id": "verbs_state_existence"
+    },
+    {
+      "id": "v-tħallas",
+      "headword": "tħallas",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "ħ-l-s",
+      "stem": null,
+      "cv_pattern": "t1a22a3",
+      "morph_pattern": "tC1aC2C2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: tħallas",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَخَلَّصَ",
+          "pronunciation": "taḣallaṣa",
+          "definition": "to be settled, cleared, paid"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to be paid, settled",
+          "text_mt": "Jirċievi l-ħlas mistħoqq għal xogħol jew servizz, inkella jiġi saldat bħala kont jew dejn.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ħaddiema kollha tħallsu fl-aħħar tax-xahar.",
+          "en": "All the workers were paid at the end of the month.",
+          "text_mt": "Il-ħaddiema kollha tħallsu fl-aħħar tax-xahar.",
+          "text_en": "All the workers were paid at the end of the month."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtħɐl.lɐs/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "V",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "tħallas",
+        "imperfective_3sgm": "jitħallas",
+        "verbal_noun": "tħallis",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Existence, State & Modals",
+      "theme_id": "verbs_state_existence"
+    }
+  ]
+}

@@ -364,7 +364,11 @@
       "audit_status": "verified",
       "audit_notes": "Resolved inflected 3pl imperfect placeholder jieklu to canonical irregular Form I lemma v-kiel ('-k-l), paired with genKiel conjugation engine support.",
       "theme": "Verbs: Daily Life & Social Interaction",
-      "theme_id": "verbs_daily_social"
+      "theme_id": "verbs_daily_social",
+      "tags": [
+        "!irregular",
+        "!Hamzated"
+      ]
     },
     {
       "id": "v-serva",

@@ -1,0 +1,540 @@
+{
+  "category_id": "verbs_communication_speech",
+  "category_title": "Verbs: Communication & Speech",
+  "total_entries": 7,
+  "entries": [
+    {
+      "id": "v-qal",
+      "headword": "qal",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "q-w-l",
+      "stem": null,
+      "cv_pattern": "1â3",
+      "morph_pattern": "C1âC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: qal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "قَالَ",
+          "pronunciation": "qâla",
+          "definition": "to say, speak, tell"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to say, tell",
+          "text_mt": "Jesprimi kliem bil-fomm jew bil-miktub; jirrapporta dak li xi ħadd ikun qal.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Qaltilna li se tasal għada filgħodu.",
+          "en": "She told us that she will arrive tomorrow morning.",
+          "text_mt": "Qaltilna li se tasal għada filgħodu.",
+          "text_en": "She told us that she will arrive tomorrow morning."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb irregolari ewlieni (q-w-l) bl-imperfett 'jgħid' u l-imperattiv 'għid'.",
+        "en": "Core suppletive verb (q-w-l) with imperfect 'jgħid' (3pl 'jgħidu') and imperative 'għid'."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈʔɐːl/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "hollow",
+        "transitivity": "transitive",
+        "perfective_3sgm": "qal",
+        "imperfective_3sgm": "jgħid",
+        "verbal_noun": "qawl",
+        "vowel_set_perf": "a--",
+        "vowel_set_impf": "i--",
+        "vowel_set_impv": "i--"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [
+        "!irregular"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Communication & Speech",
+      "theme_id": "verbs_communication_speech"
+    },
+    {
+      "id": "v-fisser",
+      "headword": "fisser",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "f-s-r",
+      "stem": null,
+      "cv_pattern": "1i22e3",
+      "morph_pattern": "C1iC2C2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: fisser",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "فَسَّرَ",
+          "pronunciation": "fassara",
+          "definition": "to explain, interpret"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to explain, clarify",
+          "text_mt": "Jagħmel ħsieb, kunċett jew regola aktar ċari u faċli biex jinftiehmu.",
+          "register": "standard",
+          "nuance": ""
+        },
+        {
+          "text_en": "to mean, signify",
+          "text_mt": "Ikollu tifsira partikolari jew jindika xi ħaġa.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-għalliema fissret il-lezzjoni b'mod ċar ħafna.",
+          "en": "The teacher explained the lesson very clearly.",
+          "text_mt": "L-għalliema fissret il-lezzjoni b'mod ċar ħafna.",
+          "text_en": "The teacher explained the lesson very clearly."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈfɪs.sɛr/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "II",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "fisser",
+        "imperfective_3sgm": "jfisser",
+        "verbal_noun": "tifsir",
+        "vowel_set_perf": "i-e",
+        "vowel_set_impf": "i-e",
+        "vowel_set_impv": "i-e"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Communication & Speech",
+      "theme_id": "verbs_communication_speech"
+    },
+    {
+      "id": "v-tkellem",
+      "headword": "tkellem",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "k-l-m",
+      "stem": null,
+      "cv_pattern": "t1e22e3",
+      "morph_pattern": "tC1eC2C2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: tkellem",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَكَلَّمَ",
+          "pronunciation": "takallama",
+          "definition": "to speak, talk"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to speak, talk",
+          "text_mt": "Jħaddem il-kelma u l-vuċi biex jikkomunika ma' ħaddieħor.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Tkellimna dwar il-pjanijiet tas-sajf waqt il-kafè.",
+          "en": "We talked about summer plans over coffee.",
+          "text_mt": "Tkellimna dwar il-pjanijiet tas-sajf waqt il-kafè.",
+          "text_en": "We talked about summer plans over coffee."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtkɛl.lɛm/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "V",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "tkellem",
+        "imperfective_3sgm": "jitkellem",
+        "verbal_noun": "taħdit",
+        "vowel_set_perf": "e-e",
+        "vowel_set_impf": "e-e",
+        "vowel_set_impv": "e-e"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Communication & Speech",
+      "theme_id": "verbs_communication_speech"
+    },
+    {
+      "id": "v-ftakar",
+      "headword": "ftakar",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "f-k-r",
+      "stem": null,
+      "cv_pattern": "1ta2a3",
+      "morph_pattern": "C1taC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ftakar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "اِفْتَكَرَ",
+          "pronunciation": "iftakara",
+          "definition": "to remember, reflect"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to remember, recall",
+          "text_mt": "Iġib lura f'moħħu xi ħaġa tal-passat jew ma jinsiex xi ħaġa li għandu jagħmel.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fl-aħħar ftakart fejn kont ħallejt iċ-ċwievet.",
+          "en": "Finally I remembered where I had left the keys.",
+          "text_mt": "Fl-aħħar ftakart fejn kont ħallejt iċ-ċwievet.",
+          "text_en": "Finally I remembered where I had left the keys."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈftɐ.kɐr/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "VIII",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "ftakar",
+        "imperfective_3sgm": "jiftakar",
+        "verbal_noun": "tifkir",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Communication & Speech",
+      "theme_id": "verbs_communication_speech"
+    },
+    {
+      "id": "v-staqsa",
+      "headword": "staqsa",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "q-s-j",
+      "stem": null,
+      "cv_pattern": "sta12a",
+      "morph_pattern": "staC1C2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: staqsa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "اِسْتَقْصَى",
+          "pronunciation": "istaqṣâ",
+          "definition": "to inquire, investigate thoroughly"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to ask, inquire",
+          "text_mt": "Jagħmel mistoqsija lil xi ħadd biex jikseb tagħrif jew risposta.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Staqsejt lill-ħabib tiegħi fejn sejjer fil-vaganzi.",
+          "en": "I asked my friend where he is going on holiday.",
+          "text_mt": "Staqsejt lill-ħabib tiegħi fejn sejjer fil-vaganzi.",
+          "text_en": "I asked my friend where he is going on holiday."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈstɐʔ.sɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "Xa",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "transitive",
+        "perfective_3sgm": "staqsa",
+        "imperfective_3sgm": "jistaqsi",
+        "verbal_noun": "stħarriġ",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-i",
+        "vowel_set_impv": "a-i"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Communication & Speech",
+      "theme_id": "verbs_communication_speech"
+    },
+    {
+      "id": "v-kanta",
+      "headword": "kanta",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "-kant-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "source_language": "Sicilian",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: kanta",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "cantari",
+          "definition": "to sing"
+        },
+        {
+          "relationship": "Inherited from",
+          "language": "Latin",
+          "term": "cantāre",
+          "definition": "to sing"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to sing",
+          "text_mt": "Jipproduċi ħsejjes mużikali bil-vuċi, ġeneralment bi kliem u melodija.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kor kanta għanja tradizzjonali fil-kunċert tal-festa.",
+          "en": "The choir sang a traditional song at the feast concert.",
+          "text_mt": "Il-kor kanta għanja tradizzjonali fil-kunċert tal-festa.",
+          "text_en": "The choir sang a traditional song at the feast concert."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɐn.tɐ/",
+          "notes": null
+        }
+      ],
+      "zokk_morphology": {
+        "stem_string": "-kant-",
+        "class_type": "ir",
+        "is_hybrid": false
+      },
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "ambitransitive",
+        "perfective_3sgm": "kanta",
+        "imperfective_3sgm": "jkanta",
+        "verbal_noun": "kant",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-għanna",
+          "relationship_type": "synonym"
+        }
+      ],
+      "tags": [
+        "music"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Communication & Speech",
+      "theme_id": "verbs_communication_speech"
+    },
+    {
+      "id": "v-għanna",
+      "headword": "għanna",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-n-j",
+      "stem": null,
+      "cv_pattern": "1a22a",
+      "morph_pattern": "C1aC2C2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: għanna",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": null,
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "غَنَّى",
+          "pronunciation": "ghannâ",
+          "definition": "to sing"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to sing (especially traditional Maltese folk singing, għana)",
+          "text_mt": "Jinterpreta għana folkloristika Maltija jew jkanta melodija bil-vuċi.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-għannej għanna spirtu pront fil-pjazza tar-raħal.",
+          "en": "The folk singer sang improvised verse in the village square.",
+          "text_mt": "L-għannej għanna spirtu pront fil-pjazza tar-raħal.",
+          "text_en": "The folk singer sang improvised verse in the village square."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐːn.nɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "II",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "ambitransitive",
+        "perfective_3sgm": "għanna",
+        "imperfective_3sgm": "jgħanni",
+        "verbal_noun": "għana",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-i",
+        "vowel_set_impv": "a-i"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-kanta",
+          "relationship_type": "synonym"
+        }
+      ],
+      "tags": [
+        "music",
+        "!rgħajn"
+      ],
+      "audit_status": "verified",
+      "theme": "Verbs: Communication & Speech",
+      "theme_id": "verbs_communication_speech"
+    }
+  ]
+}

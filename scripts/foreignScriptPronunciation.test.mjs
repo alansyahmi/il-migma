@@ -49,6 +49,8 @@ const run = () => {
     assertEq(transliterateArabicToMaltesePronunciation('أَبَدًا'), 'abadan', 'tanwin fath with terminal alif should produce an');
     assertEq(transliterateArabicToMaltesePronunciation('آخَر'), 'âḣar', 'madda alif should produce â');
     assertEq(transliterateArabicToMaltesePronunciation('أُخْرَى'), 'uḣrâ', 'alif with damma should produce u');
+    assertEq(transliterateArabicToMaltesePronunciation('اِسْتَطَاعَ'), 'istaṭâgħa', 'bare initial alif with kasra should produce i');
+    assertEq(transliterateArabicToMaltesePronunciation('اُكْتُبْ'), 'uktub', 'bare initial alif with damma should produce u');
     assertEq(transliterateArabicToMaltesePronunciation('إِنْ كَانَ'), 'in kâna', 'alif with kasra should produce i');
     assertEq(transliterateArabicToMaltesePronunciation('إِذْ ذَا'), 'iđ đâ', 'alif with kasra in idh dha');
     assertEq(transliterateArabicToMaltesePronunciation('إِلَى كَمْ'), 'ilâ kam', 'alif with kasra in ila kam');

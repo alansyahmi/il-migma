@@ -712,8 +712,11 @@ function transliterateArabicWord(word: string) {
                 hadTanwinF = false;
                 continue;
             }
-            push(index === 0 ? 'a' : 'â');
-            lastVowelKind = 'a';
+            const initialVowel = index === 0
+                ? (hasKasra ? 'i' : (hasDamma ? 'u' : 'a'))
+                : 'â';
+            push(initialVowel);
+            lastVowelKind = initialVowel === 'â' ? 'a' : initialVowel;
             lastVowelIndex = output.length - 1;
             hadTanwinF = false;
             continue;

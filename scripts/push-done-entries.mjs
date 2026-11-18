@@ -63,6 +63,9 @@ const CATEGORY_FILES = [
     { id: 'verbs_daily_social', path: 'docs/1000-words-categories/DONE_verbs_daily_social.json' },
     { id: 'time_calendar', path: 'docs/1000-words-categories/DONE_time_calendar.json' },
     { id: 'misc_remnants', path: 'docs/1000-words-categories/DONE_misc_remnants.json' },
+    { id: 'verbs_state_existence', path: 'docs/1000-words-categories/DONE_verbs_state_existence.json' },
+    { id: 'verbs_communication_speech', path: 'docs/1000-words-categories/DONE_verbs_communication_speech.json' },
+    { id: 'verbs_irregular', path: 'docs/1000-words-categories/DONE_verbs_irregular.json' },
 ];
 
 const selectedFiles = categoryArg
