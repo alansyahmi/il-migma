@@ -43,6 +43,18 @@ export async function onRequestGet({ request, env }) {
                 FROM tags
                 ORDER BY val ASC
             `;
+            transform = (rows) => {
+                const seen = new Set();
+                const out = [];
+                for (const r of rows) {
+                    const clean = String(r.val || '').replace(/^[\\!$]+/, '').trim();
+                    const key = clean.toLowerCase();
+                    if (!key || seen.has(key)) continue;
+                    seen.add(key);
+                    out.push(clean);
+                }
+                return out.sort((a, b) => a.localeCompare(b));
+            };
         } else if (type === 'vowel_sets') {
             sql = `
                 SELECT DISTINCT vowel_set_perf as val FROM verb_morphology WHERE val IS NOT NULL AND val != ''

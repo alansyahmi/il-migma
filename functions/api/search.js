@@ -348,9 +348,10 @@ export async function onRequestGet({ request, env }) {
         if (r3) { sql += " AND (json_extract(r.consonant_array, '$[2]') = ? OR e.root_consonants LIKE ?)"; args.push(r3.toLowerCase(), '%-' + r3.toLowerCase() + (r4 ? '-%' : '')); }
         if (r4) { sql += " AND (json_extract(r.consonant_array, '$[3]') = ? OR e.root_consonants LIKE ?)"; args.push(r4.toLowerCase(), '%-' + r4.toLowerCase()); }
         if (tag) {
-            // Support searching for base tag name while matching tags in normalized entry_tags table
-            sql += ` AND EXISTS (SELECT 1 FROM entry_tags et JOIN tags t ON et.tag_id = t.id WHERE et.entry_id = e.id AND LOWER(t.name) = ?)`;
-            args.push(tag.toLowerCase());
+            // Unify prefixed (!, \, $) and unprefixed tag names into a single search identity
+            const baseTag = tag.replace(/^[\\!$]+/, '').toLowerCase();
+            sql += ` AND EXISTS (SELECT 1 FROM entry_tags et JOIN tags t ON et.tag_id = t.id WHERE et.entry_id = e.id AND LOWER(t.name) IN (?, ?, ?, ?))`;
+            args.push(baseTag, `!${baseTag}`, `\\${baseTag}`, `$${baseTag}`);
         }
         if (register) {
             sql += ` AND (

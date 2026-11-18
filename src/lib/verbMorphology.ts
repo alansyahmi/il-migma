@@ -3,6 +3,7 @@ import {
     generateConjugation,
     generateRootForms,
     getAttestedEntries,
+    isIrregularHeadword,
     markGeneratedForms,
     type AttestedEntry,
     type FormMarker,
@@ -478,16 +479,23 @@ export function buildVerbPreviewFromEngine(
     const imperfect = normalizeTextField(storedImperfect || citationRow?.imperfect || rootRow?.imperfect.value);
     const imperative = normalizeTextField(storedImperative || conjugation?.imperative_sg || rootRow?.imperative.value);
     const verbalNoun = normalizeTextField(storedVerbalNoun || rootRow?.verbalNoun.value);
-    const activeParticiple = normalizeTextField(storedActiveParticiple || rootRow?.activeParticiple.value);
-    const passiveParticiple = normalizeTextField(storedPassiveParticiple || rootRow?.passiveParticiple.value);
+    const irregular = isIrregularHeadword(entry?.headword, form);
+    const activeParticiple = normalizeTextField(storedActiveParticiple || (irregular ? '' : rootRow?.activeParticiple.value));
+    const passiveParticiple = normalizeTextField(storedPassiveParticiple || (irregular ? '' : rootRow?.passiveParticiple.value));
+
+    const imperativeStr = String(conjugation?.imperative_sg || '').trim();
+    const hasAttestedImperative = Boolean(
+        storedImperative ||
+        (entry?.id && imperativeStr && imperativeStr !== '-' && !imperativeStr.startsWith('*') && !imperativeStr.startsWith('✦'))
+    );
 
     const marked = {
         perfect: buildPreviewCell(perfect, 'lemma', form, entry, attested, rootRow?.perfect, !!storedPerfect),
         imperfect: buildPreviewCell(imperfect, 'imperfect', form, entry, attested, rootRow?.imperfect, !!storedImperfect),
-        imperative: buildPreviewCell(imperative, 'imperative', form, entry, attested, rootRow?.imperative, !!storedImperative),
+        imperative: buildPreviewCell(imperative, 'imperative', form, entry, attested, rootRow?.imperative, hasAttestedImperative),
         verbalNoun: buildPreviewCell(verbalNoun, 'noun', form, entry, attested, rootRow?.verbalNoun, !!storedVerbalNoun),
-        activeParticiple: buildPreviewCell(activeParticiple, 'active', form, entry, attested, rootRow?.activeParticiple, !!storedActiveParticiple),
-        passiveParticiple: buildPreviewCell(passiveParticiple, 'passive', form, entry, attested, rootRow?.passiveParticiple, !!storedPassiveParticiple),
+        activeParticiple: buildPreviewCell(activeParticiple, 'active', form, entry, attested, irregular ? undefined : rootRow?.activeParticiple, !!storedActiveParticiple),
+        passiveParticiple: buildPreviewCell(passiveParticiple, 'passive', form, entry, attested, irregular ? undefined : rootRow?.passiveParticiple, !!storedPassiveParticiple),
     };
 
     const rootForm = rootRow

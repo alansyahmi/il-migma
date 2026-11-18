@@ -2164,12 +2164,13 @@ export function TagChips({ entry }: { entry: Entry }) {
             {chips
                 .filter(c => !c.isTitle)
                 .map(c => (
-                    <span
+                    <Link
                         key={c.raw}
-                        className="inline-flex items-center px-2.5 py-1 rounded-full bg-black/3 text-[11px] font-sans text-black/70 border border-black/5"
+                        to={`/advanced-search?tag=${encodeURIComponent(c.rawLabel)}`}
+                        className="inline-flex items-center px-2.5 py-1 rounded-full bg-black/3 hover:bg-black/8 text-[11px] font-sans text-black/70 hover:text-black border border-black/5 transition-colors"
                     >
                         {c.label}
-                    </span>
+                    </Link>
                 ))}
         </div>
     );

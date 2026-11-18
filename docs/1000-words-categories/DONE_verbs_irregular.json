@@ -66,6 +66,7 @@
         "perfective_3sgm": "ta",
         "imperfective_3sgm": "jagħti",
         "verbal_noun": "għotja",
+        "passive_participle": "mogħti",
         "vowel_set_perf": "a--",
         "vowel_set_impf": "a-i",
         "vowel_set_impv": "a-i"
@@ -142,6 +143,7 @@
         "perfective_3sgm": "ħa",
         "imperfective_3sgm": "jieħu",
         "verbal_noun": "ħud",
+        "passive_participle": "meħud",
         "vowel_set_perf": "a--",
         "vowel_set_impf": "ie-u",
         "vowel_set_impv": "u--"

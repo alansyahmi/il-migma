@@ -883,6 +883,106 @@ function genNstema(): VerbConjugationTable {
     });
 }
 
+function genMar(): VerbConjugationTable {
+    return buildProfiledConjugationTable({
+        perfect: ["mort", "mort", "mar", "maret", "morna", "mortu", "maru"],
+        perfectNeg: ["mort", "mort", "mar", "marit", "morna", "mortu", "maru"],
+        imperfect: ["mmur", "tmur", "jmur", "tmur", "mmorru", "tmorru", "jmorru"],
+        imperative: ["mur", "morru"],
+        blocksImala: true,
+    });
+}
+
+function genTtiekel(): VerbConjugationTable {
+    return buildProfiledConjugationTable({
+        perfect: ["ttikilt", "ttikilt", "ttiekel", "ttieklet", "ttikilna", "ttikiltu", "ttieklu"],
+        perfectNeg: ["ttikilt", "ttikilt", "ttiekel", "ttieklit", "ttikilna", "ttikiltu", "ttieklu"],
+        imperfect: ["nittiekel", "tittiekel", "jittiekel", "tittiekel", "nittieklu", "tittieklu", "jittieklu"],
+        imperative: ["ttiekel", "ttieklu"],
+        blocksImala: false,
+    });
+}
+
+const IRREGULAR_CONJUGATION_FACTORIES: Record<string, () => VerbConjugationTable> = {
+    "I:kiel": () => genKiel("I"),
+    "I:qal": genQal,
+    "I:ta": genTa,
+    "I:ħa": genHa,
+    "I:ra": genRa,
+    "I:mar": genMar,
+    "I:jaf": genJaf,
+    "I:af": genJaf,
+    "VI:ttiekel": genTtiekel,
+    "VI:ittiekel": genTtiekel,
+    "VII:nqal": genNqal,
+    "VII:nstema'": genNstema,
+    "VII:instema'": genNstema,
+};
+
+const IRREGULAR_ROOT_FORM_OVERRIDES: Record<string, Partial<Record<string, Partial<GeneratedVerbForm>>>> = {
+    "'-k-l": {
+        I: { perfect: "kiel", imperfect: "jiekol", imperative: "kul", passiveParticiple: "mikul", activeParticiple: "iekel", verbalNoun: "ikel" },
+        VI: { perfect: "ttiekel", imperfect: "jittiekel", imperative: "ttiekel", passiveParticiple: "mittiekel" },
+    },
+    "q-w-l": {
+        I: { perfect: "qal", imperfect: "jgħid", imperative: "għid" },
+        VII: { perfect: "nqal", imperfect: "jingħad", imperative: "ingħad" },
+    },
+    "għ-t-j": {
+        I: { perfect: "ta", imperfect: "jagħti", imperative: "agħti", passiveParticiple: "mogħti" },
+    },
+    "'-ħ-d": {
+        I: { perfect: "ħa", imperfect: "jieħu", imperative: "ħu", passiveParticiple: "meħud" },
+    },
+    "ħ-d-w": {
+        I: { perfect: "ħa", imperfect: "jieħu", imperative: "ħu", passiveParticiple: "meħud", activeParticiple: "-", verbalNoun: "ħud" },
+    },
+    "r-'-j": {
+        I: { perfect: "ra", imperfect: "jara", imperative: "ara", passiveParticiple: "-" },
+    },
+    "m-w-r": {
+        I: { perfect: "mar", imperfect: "jmur", imperative: "mur" },
+    },
+    "ġ-j-'": {
+        I: { perfect: "ġie", imperfect: "jiġi", imperative: "ejja" },
+    },
+    "ġ-j-j": {
+        I: { perfect: "ġie", imperfect: "jiġi", imperative: "ejja" },
+    },
+    "s-m-għ": {
+        VII: { perfect: "nstema'", imperfect: "jinstema'", imperative: "instema'" },
+    },
+    "s-t-għ": {
+        I: { perfect: "seta'", imperfect: "jista'", imperative: "ista'" },
+    },
+    "k-w-n": {
+        I: { perfect: "kien", imperfect: "jkun", imperative: "kun" },
+    },
+};
+
+function applyIrregularRootOverrides(forms: GeneratedVerbForm[], rootKey: string): GeneratedVerbForm[] {
+    const overrides = IRREGULAR_ROOT_FORM_OVERRIDES[rootKey];
+    if (!overrides || forms.length === 0) return forms;
+    return forms.map((f) => {
+        const patch = overrides[f.form];
+        return patch ? { ...f, ...patch } : f;
+    });
+}
+
+function resolveFormVIIPrefix(C1: string, citationForm: string = ""): "n" | "nt" {
+    const citation = String(citationForm || "").trim().toLowerCase().replace(/[’]/g, "'");
+    if (C1 !== "t" && (citation.startsWith("nt") || citation.startsWith("int"))) {
+        return "nt";
+    }
+    return "n";
+}
+
+export function isIrregularHeadword(headword?: string, form: string = "I"): boolean {
+    const citation = String(headword || "").trim().toLowerCase().replace(/[’]/g, "'");
+    if (!citation) return false;
+    return Boolean(IRREGULAR_CONJUGATION_FACTORIES[`${form}:${citation}`]);
+}
+
 function genTa(): VerbConjugationTable {
     return buildProfiledConjugationTable({
         perfect: ["tajt", "tajt", "ta", "tat", "tajna", "tajtu", "taw"],
@@ -2182,16 +2282,18 @@ function genFormVII(
     vsetImp: string,
     verbForm: string,
     isImalaBlocked: boolean = false,
+    citationForm: string = "",
 ): VerbConjugationTable {
     const [C1, C2, C3] = C;
+    const pfxVII = resolveFormVIIPrefix(C1, citationForm);
     const { v1: pv1, v2: pv2 } = parseVset(vsetPerf);
     const { v1: iv1, v2: iv2 } = parseVset(vsetImpf);
 
-    const perfFull = `n${C1}${pv1}${C2}${pv2}${C3}`;
-    const perfSync = `n${C1}${pv1}${C2}${C3}`;
+    const perfFull = `${pfxVII}${C1}${pv1}${C2}${pv2}${C3}`;
+    const perfSync = `${pfxVII}${C1}${pv1}${C2}${C3}`;
 
-    const impfStemT1 = `n${C1}${iv1}${C2}${applyAttachedShiftUnlessBlocked(iv2, C3, isImalaBlocked)}${C3}`;
-    const impfStemSync = `n${C1}${iv1}${C2}${C3}`;
+    const impfStemT1 = `${pfxVII}${C1}${iv1}${C2}${applyAttachedShiftUnlessBlocked(iv2, C3, isImalaBlocked)}${C3}`;
+    const impfStemSync = `${pfxVII}${C1}${iv1}${C2}${C3}`;
 
     const impfBase = (i: number) => {
         const pfx = buildPrefix(i, "i-i").replace(/[aeiou]+$/, "");
@@ -2202,14 +2304,14 @@ function genFormVII(
     };
 
     const { v1: impV1, v2: impV2 } = parseVset(vsetImp);
-    const impSg = `n${C1}${impV1}${C2}${impV2}${C3}`;
-    const impPl = `n${C1}${impV1}${C2}${C3}u`;
+    const impSg = `${pfxVII}${C1}${impV1}${C2}${impV2}${C3}`;
+    const impPl = `${pfxVII}${C1}${impV1}${C2}${C3}u`;
 
     return buildConjugationTable(
         {
             perfFull,
             perfSync,
-            perfReduced: `n${C1}${pv1}${C2}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`,
+            perfReduced: `${pfxVII}${C1}${pv1}${C2}${attachedPerfectVowel(pv1, pv2, C3, isImalaBlocked)}${C3}`,
             perf3f: `${perfSync}et`,
             impfBase,
             impfType1: (i) =>
@@ -2494,6 +2596,7 @@ function genFormVIIDefective(
             (!citation && (C2 === "r" || C2 === "h")));
     const useDroppedWNtStem = C1 === "w" && C2 === "ż";
     const useRetainedWNtStem = C1 === "w" && C2 === "r";
+    const pfxVII = resolveFormVIIPrefix(C1, citationForm);
     const useFullNoFinalSync = (C1 === "għ" && C2 === "t" && finalAVariant) || useDroppedWNtStem || useRetainedWNtStem;
 
     const perfFull = useXtStem
@@ -2502,7 +2605,7 @@ function genFormVIIDefective(
             ? `nt${pv1}${C2}${pv2}`
             : useRetainedWNtStem
                 ? `nt${C1}${pv1}${C2}${pv2}`
-                : `n${C1}${pv1}${C2}${pv2}`;
+                : `${pfxVII}${C1}${pv1}${C2}${pv2}`;
     const perfFullNoFinal = pv2 && perfFull.endsWith(pv2)
         ? perfFull.slice(0, -pv2.length)
         : perfFull;
@@ -2510,7 +2613,7 @@ function genFormVIIDefective(
         ? `n${C1}t${C2}`
         : useFullNoFinalSync
             ? perfFullNoFinal
-            : `n${C1}${C2}`;
+            : `${pfxVII}${C1}${C2}`;
     const reducedTheme = finalAVariant ? "aj" : "ej";
     const pluralSuffix = finalAVariant ? "aw" : "ew";
     const feminineSuffix = finalAVariant ? "at" : "iet";
@@ -3871,16 +3974,16 @@ export function generateConjugation(
         }
     }
 
+    const citation = (input.headword || input.citationForm || "").trim().toLowerCase().replace(/[’]/g, "'");
+    const irregularFactory = IRREGULAR_CONJUGATION_FACTORIES[`${form}:${citation}`];
+    if (irregularFactory) {
+        return irregularFactory();
+    }
+
     if (form === "I") {
-        const citation = (input.headword || input.citationForm || "").trim().toLowerCase();
-        if (citation === "kiel" || (consonants[0] === "'" && consonants[1] === "k" && consonants[2] === "l")) {
+        if (consonants[0] === "'" && consonants[1] === "k" && consonants[2] === "l") {
             return genKiel(form);
         }
-        if (citation === "qal") return genQal();
-        if (citation === "ta") return genTa();
-        if (citation === "ħa") return genHa();
-        if (citation === "ra") return genRa();
-        if (citation === "jaf" || citation === "af") return genJaf();
         if (strength === "geminated") {
             return genGeminated(
                 consonants,
@@ -4156,6 +4259,9 @@ export function generateConjugation(
         );
     }
     if (form === "VI") {
+        if (consonants[0] === "'" && consonants[1] === "k" && consonants[2] === "l") {
+            return genTtiekel();
+        }
         if (strength === "geminated") {
             // Form VI geminated follows the t-prefixed geminated surface profile
             // rather than the regular Form III-derived strong fallback.
@@ -4203,9 +4309,6 @@ export function generateConjugation(
         );
     }
     if (form === "VII") {
-        const citation = (input.headword || input.citationForm || "").trim().toLowerCase().replace(/[’]/g, "'");
-        if (citation === "nqal") return genNqal();
-        if (citation === "nstema'" || citation === "instema'") return genNstema();
         if (strength === "geminated") {
             // VerbMT geminated Form VII keeps the n-prefixed full stem
             // (nżamm/nxekk), with -ej- only in suffixed perfect rows.
@@ -4259,6 +4362,7 @@ export function generateConjugation(
             input.vowelSetImperative,
             form,
             input.isImalaBlocked,
+            input.headword || input.citationForm,
         );
     }
     if (form === "VIII")
@@ -5674,31 +5778,20 @@ export function generateRootForms(
         return generateQuadriliteralStrong(C1, C2, C3, C4, pv1, pv2, ipv1, ipv2);
     }
 
+    const rootKey = `${C1}-${C2}-${C3}`;
+    let forms: GeneratedVerbForm[];
     if (strength === "weak" && weakClass === "defective") {
-        return generateTriliteralDefective(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
+        forms = generateTriliteralDefective(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
+    } else if (strength === "weak" && weakClass === "hollow") {
+        forms = generateTriliteralHollow(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
+    } else if (strength === "weak" && weakClass === "assimilative") {
+        forms = generateTriliteralAssimilative(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
+    } else if (strength === "geminated") {
+        forms = generateTriliteralGeminated(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
+    } else {
+        forms = generateTriliteralStrong(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
     }
-    if (strength === "weak" && weakClass === "hollow") {
-        return generateTriliteralHollow(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
-    }
-    if (strength === "weak" && weakClass === "assimilative") {
-        return generateTriliteralAssimilative(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
-    }
-    if (strength === "geminated") {
-        return generateTriliteralGeminated(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
-    }
-    const forms = generateTriliteralStrong(C1, C2, C3, pv1, pv2, ipv1, ipv2, isImalaBlocked);
-    if (C1 === "'" && C2 === "k" && C3 === "l" && forms.length > 0) {
-        forms[0] = {
-            ...forms[0],
-            perfect: "kiel",
-            imperfect: "jiekol",
-            imperative: "kul",
-            passiveParticiple: "mikul",
-            activeParticiple: "iekel",
-            verbalNoun: "ikel",
-        };
-    }
-    return forms;
+    return applyIrregularRootOverrides(forms, rootKey);
 }
 
 export type FormMarker = "plain" | "theoretical" | "auto_generated";
