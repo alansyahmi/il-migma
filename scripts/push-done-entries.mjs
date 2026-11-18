@@ -349,7 +349,7 @@ async function run() {
                     zokk_is_hybrid: zokkIsHybrid,
                     zokk_agentive_suffix: zokkAgentiveSuffix,
                     is_loanword: e.is_loanword ? 1 : 0,
-                    is_inflectable: e.is_inflectable ? 1 : 0,
+                    is_inflectable: e.is_inflectable !== undefined ? (e.is_inflectable ? 1 : 0) : (e.pos === 'verb' ? 1 : 0),
                     source_language: e.source_language || null,
                     source_id: sourceId,
                     source_citation: e.source_citation || null,

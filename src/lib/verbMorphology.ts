@@ -122,6 +122,7 @@ export function shouldMarkVerbConjugationTheoretical(entry: any = {}, morphology
 
     if (tags.includes('THEORETICAL')) return true;
     if (hasExplicitFlag(morphology, 'is_inflectable') && isDisabledFlag(morphology.is_inflectable)) return true;
+    if (hasExplicitFlag(entry, 'is_inflectable') && isDisabledFlag(entry.is_inflectable)) return true;
     if (hasExplicitFlag(entry, 'has_inflection') && isDisabledFlag(entry.has_inflection)) return true;
 
     return false;

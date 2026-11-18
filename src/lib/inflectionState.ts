@@ -40,10 +40,13 @@ function hasExplicitFlag(source: InflectableFlagSource, key: 'has_inflection' | 
 export function resolveEntryInflectableValue(source: InflectableFlagSource): unknown {
     if (hasExplicitFlag(source, 'has_inflection')) return source?.has_inflection;
     if (hasExplicitFlag(source, 'is_inflectable')) return source?.is_inflectable;
-    const morph = (source as any)?.noun_morphology;
-    if (morph && typeof morph === 'object') {
-        if (hasExplicitFlag(morph, 'has_inflection')) return morph.has_inflection;
-        if (hasExplicitFlag(morph, 'is_inflectable')) return morph.is_inflectable;
+    const nestedKeys = ['noun_morphology', 'adjective_morphology', 'adj_morphology', 'participle_morphology'];
+    for (const key of nestedKeys) {
+        const morph = (source as any)?.[key];
+        if (morph && typeof morph === 'object') {
+            if (hasExplicitFlag(morph, 'has_inflection')) return morph.has_inflection;
+            if (hasExplicitFlag(morph, 'is_inflectable')) return morph.is_inflectable;
+        }
     }
     return undefined;
 }
