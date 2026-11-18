@@ -873,6 +873,16 @@ function genNqal(): VerbConjugationTable {
     });
 }
 
+function genNstema(): VerbConjugationTable {
+    return buildProfiledConjugationTable({
+        perfect: ["nstmajt", "nstmajt", "nstema'", "nstemgħet", "nstmajna", "nstmajtu", "nstemgħu"],
+        perfectNeg: ["nstmajt", "nstmajt", "nstema'", "nstemgħit", "nstmajna", "nstmajtu", "nstemgħu"],
+        imperfect: ["ninstema'", "tinstema'", "jinstema'", "tinstema'", "ninstemgħu", "tinstemgħu", "jinstemgħu"],
+        imperative: ["instema'", "instemgħu"],
+        blocksImala: true,
+    });
+}
+
 function genTa(): VerbConjugationTable {
     return buildProfiledConjugationTable({
         perfect: ["tajt", "tajt", "ta", "tat", "tajna", "tajtu", "taw"],
@@ -944,7 +954,7 @@ function genGeminated(
         {
             perfFull,
             perfSync: perfFull,
-            perfReduced: perfFull,
+            perfReduced: `${perfFull}ej`,
             perf3f: `${perfFull}et`,
             impfBase,
             impfType1: (i) => impfBase(i),
@@ -4193,8 +4203,9 @@ export function generateConjugation(
         );
     }
     if (form === "VII") {
-        const citation = (input.headword || input.citationForm || "").trim().toLowerCase();
+        const citation = (input.headword || input.citationForm || "").trim().toLowerCase().replace(/[’]/g, "'");
         if (citation === "nqal") return genNqal();
+        if (citation === "nstema'" || citation === "instema'") return genNstema();
         if (strength === "geminated") {
             // VerbMT geminated Form VII keeps the n-prefixed full stem
             // (nżamm/nxekk), with -ej- only in suffixed perfect rows.

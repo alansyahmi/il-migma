@@ -66,6 +66,7 @@ const CATEGORY_FILES = [
     { id: 'verbs_state_existence', path: 'docs/1000-words-categories/DONE_verbs_state_existence.json' },
     { id: 'verbs_communication_speech', path: 'docs/1000-words-categories/DONE_verbs_communication_speech.json' },
     { id: 'verbs_irregular', path: 'docs/1000-words-categories/DONE_verbs_irregular.json' },
+    { id: 'verbs_cognition_senses', path: 'docs/1000-words-categories/DONE_verbs_cognition_senses.json' },
 ];
 
 const selectedFiles = categoryArg

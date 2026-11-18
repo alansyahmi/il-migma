@@ -1,0 +1,316 @@
+{
+  "category_id": "verbs_cognition_senses",
+  "category_title": "Verbs: Cognition, Perception & Senses",
+  "total_entries": 4,
+  "entries": [
+    {
+      "id": "v-kiber",
+      "headword": "kiber",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "k-b-r",
+      "stem": null,
+      "cv_pattern": "1i2e3",
+      "morph_pattern": "C1iC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: kiber",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/kiber",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "كَبُرَ",
+          "pronunciation": "kabura",
+          "definition": "to grow up, become big, increase"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to grow, grow up, increase in size or age",
+          "text_mt": "Jiżdied fid-daqs, fl-età jew fl-għarfien maż-żmien.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tifel kiber b'saħħtu u sar raġel intelliġenti.",
+          "en": "The child grew up healthy and became an intelligent man.",
+          "text_mt": "It-tifel kiber b'saħħtu u sar raġel intelliġenti.",
+          "text_en": "The child grew up healthy and became an intelligent man."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb qawwi tal-ewwel forma (kiber, jikber) b'tifsira inkoativa ta' żieda fid-daqs jew fl-età.",
+        "en": "Form I strong verb (kiber, jikber) denoting growth in size, age, or extent."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɪ.bɛr/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "kiber",
+        "imperfective_3sgm": "jikber",
+        "verbal_noun": "kobor",
+        "active_participle": "kieber",
+        "passive_participle": null,
+        "vowel_set_perf": "i-e",
+        "vowel_set_impf": "i-e",
+        "vowel_set_impv": "i-e"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Cognition, Perception & Senses",
+      "theme_id": "verbs_cognition_senses"
+    },
+    {
+      "id": "v-ħaseb",
+      "headword": "ħaseb",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "ħ-s-b",
+      "stem": null,
+      "cv_pattern": "1a2e3",
+      "morph_pattern": "C1aC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ħaseb",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ħaseb",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "حَسِبَ",
+          "pronunciation": "ħasiba",
+          "definition": "to think, reckon, consider"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to think, suppose, consider, reflect",
+          "text_mt": "Jifforma ħsieb f'moħħu, jikkunsidra jew jimmaġina li xi ħaġa hija minnha.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħsibt li kont se tasal aktar kmieni llum.",
+          "en": "I thought you were going to arrive earlier today.",
+          "text_mt": "Ħsibt li kont se tasal aktar kmieni llum.",
+          "text_en": "I thought you were going to arrive earlier today."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb qawwi tal-ewwel forma (ħaseb, jaħseb, aħseb) użat ukoll bħala 'ħaseb għal' fis-sens li jipprovdi għal xi ħadd.",
+        "en": "Form I strong verb (ħaseb, jaħseb, aħseb); with 'għal' it can also mean to provide or care for someone."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈħɐ.sɛp/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "ħaseb",
+        "imperfective_3sgm": "jaħseb",
+        "verbal_noun": "ħsieb",
+        "active_participle": "ħieseb",
+        "passive_participle": "maħsub",
+        "vowel_set_perf": "a-e",
+        "vowel_set_impf": "a-e",
+        "vowel_set_impv": "a-e"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Cognition, Perception & Senses",
+      "theme_id": "verbs_cognition_senses"
+    },
+    {
+      "id": "v-ħass",
+      "headword": "ħass",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "ħ-s-s",
+      "stem": null,
+      "cv_pattern": "1a22",
+      "morph_pattern": "C1aC2C2",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ħass",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ħass",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "حَسَّ",
+          "pronunciation": "ħassa",
+          "definition": "to feel, sense, perceive"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to feel, sense, perceive physically or emotionally",
+          "text_mt": "Jipperċepixxi sensazzjoni fiżika jew emozzjonali fil-ġisem jew fir-ruħ.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Wara l-ġirja ħassejt għeja kbira f'saqajja.",
+          "en": "After the run I felt great tiredness in my legs.",
+          "text_mt": "Wara l-ġirja ħassejt għeja kbira f'saqajja.",
+          "text_en": "After the run I felt great tiredness in my legs."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Verb truxx tal-ewwel forma (ħass, ħassejt, jħoss) b'alternanza vokali minn 'a' fil-perfett għal 'o' fl-imperfett.",
+        "en": "Form I geminated verb (ħass, ħassejt, jħoss) shifting from perfective 'a' to imperfective 'o'."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈħɐsː/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "geminated",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "ħass",
+        "imperfective_3sgm": "jħoss",
+        "verbal_noun": "ħass",
+        "active_participle": "ħies",
+        "passive_participle": "maħsus",
+        "vowel_set_perf": "a--",
+        "vowel_set_impf": "o--",
+        "vowel_set_impv": "o--"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Cognition, Perception & Senses",
+      "theme_id": "verbs_cognition_senses"
+    },
+    {
+      "id": "v-nstema",
+      "headword": "nstema'",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "s-m-għ",
+      "stem": null,
+      "cv_pattern": "n1te2a3",
+      "morph_pattern": "nC1teC2aC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: nstema'",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/nstema'",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "اِسْتَمَعَ",
+          "pronunciation": "istamagħa",
+          "definition": "to listen, hear"
+        }
+      ],
+      "etymology_notes": "Maltese Form VII passive of sema' with infixed -t- before the sibilant stem.",
+      "definitions": [
+        {
+          "text_en": "to be heard, be audible, become known",
+          "text_mt": "Jiġi milqugħ bis-smigħ jew isir magħruf minn ħaddieħor b'mod passiv.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fil-bogħod nstema' ħoss ta' qanpiena.",
+          "en": "In the distance the sound of a bell was heard.",
+          "text_mt": "Fil-bogħod nstema' ħoss ta' qanpiena.",
+          "text_en": "In the distance the sound of a bell was heard."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Il-forma passiva ta' 'sema'' (Form VII b'infiss '-t-': nstema', nstmajt, jinstema'). Jista' jinkiteb ukoll 'instema'' fil-bidu ta' frażi.",
+        "en": "Passive Form VII of 'sema'' with an infixed '-t-' (nstema', nstmajt, jinstema'); takes euphonic 'i-' (instema') utterance-initially."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/nɪsˈtɛ.mɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "VII",
+        "class": "strong-hybrid",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "nstema'",
+        "imperfective_3sgm": "jinstema'",
+        "verbal_noun": null,
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "i-a",
+        "vowel_set_impv": "i-a"
+      },
+      "alternative_forms": [
+        "instema'"
+      ],
+      "related_entries": [
+        {
+          "target_entry_id": "v-sema",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Cognition, Perception & Senses",
+      "theme_id": "verbs_cognition_senses"
+    }
+  ]
+}
