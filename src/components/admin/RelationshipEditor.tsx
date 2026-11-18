@@ -5,6 +5,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { getGloss } from '@/lib/utils';
 import { formatStemDisplay } from '@/lib/stemDefaults';
+import { normalizeRootGloss } from '@/lib/adminUtils';
 
 interface RelationshipItem {
     id: string;
@@ -97,24 +98,14 @@ export const RelationshipEditor: React.FC<RelationshipEditorProps> = ({
                 if (res?.root) {
                     const root = res.root as any;
                     const nextItems = [...items];
-                    const glosses = (() => {
-                        try {
-                            const parsed = JSON.parse(root.gloss);
-                            if (Array.isArray(parsed) && typeof parsed[0] === 'object') {
-                                return { en: parsed[0].en, mt: parsed[0].mt };
-                            }
-                        } catch {
-                            return { en: root.gloss || '', mt: '' };
-                        }
-                        return { en: root.gloss || '', mt: '' };
-                    })();
+                    const firstGloss = normalizeRootGloss(root.gloss)[0] || { en: '', mt: '' };
 
                     nextItems[index] = {
                         ...nextItems[index],
-                        id: root.consonants,
+                        id: root.id || root.consonants,
                         headword: root.consonants,
-                        gloss_en: glosses.en,
-                        gloss_mt: glosses.mt,
+                        gloss_en: firstGloss.en,
+                        gloss_mt: firstGloss.mt,
                         pos: 'ROOT',
                     };
                     onChange(nextItems);

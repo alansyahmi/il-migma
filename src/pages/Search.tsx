@@ -10,7 +10,7 @@ import { apiSearch } from '@/lib/api';
 import { useAdminConfig } from '@/lib/adminConfig';
 import { getAttestedEntries } from '@/lib/conjugationEngine';
 import { buildVerbPreviewFromEngine } from '@/lib/verbMorphology';
-import { getSearchCardLocation } from '@/lib/searchCard';
+import { getSearchCardLocation, getSearchCardPattern } from '@/lib/searchCard';
 import { buildStemSearchPreview, type StemSearchPreviewKind } from '@/lib/stemSearchPreview';
 import { SubParts } from '@/components/dictionary/SubParts';
 import { resolveEntryGender } from '@/lib/gender';
@@ -311,6 +311,23 @@ function EntryCard({ result, index }: { result: SearchResult; index: number }) {
                                 </Link>
                             )}
                         </div>
+                        {(() => {
+                            const patternInfo = getSearchCardPattern(result.entry, mode);
+                            if (!patternInfo.label) return null;
+                            return patternInfo.href ? (
+                                <Link
+                                    to={patternInfo.href}
+                                    style={{ color: EGYPTIAN_BLUE }}
+                                    className="block text-xs hover:underline font-sans mt-0.5"
+                                >
+                                    {patternInfo.label}
+                                </Link>
+                            ) : (
+                                <span className="block text-xs text-black/45 font-sans mt-0.5">
+                                    {patternInfo.label}
+                                </span>
+                            );
+                        })()}
                     </div>
                 </div>
 
@@ -460,7 +477,7 @@ export function Search() {
         ...getOptions('verb_class', mode, language)
     ], [getOptions, mode, language, term]);
 
-    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type') || searchParams.has('noun_type') || searchParams.has('source') || searchParams.has('source_language') || searchParams.has('suffix') || searchParams.has('gender') || searchParams.has('form');
+    const isSearchPerformed = searchParams.has('q') || searchParams.has('pos') || searchParams.has('type') || searchParams.has('noun_type') || searchParams.has('source') || searchParams.has('source_language') || searchParams.has('suffix') || searchParams.has('gender') || searchParams.has('form') || searchParams.has('pattern');
     const submitted = searchParams.get('q') ?? '';
     const suggestionQuery = query.trim();
 
@@ -482,6 +499,7 @@ export function Search() {
             const suffixKind = searchParams.get('suffix_kind') || undefined;
             const gender = searchParams.get('gender') || undefined;
             const v = searchParams.get('v') || undefined;
+            const pattern = searchParams.get('pattern') || undefined;
             const forms = readMultiValueParams(searchParams, 'form');
             const pending = searchParams.get('pending') === 'true' || searchParams.get('pending') === null; // default to true if not present to match DEFAULT_FILTERS
             const suggested = searchParams.get('suggested') === 'true';
@@ -503,6 +521,7 @@ export function Search() {
                     offset,
                     random,
                     v,
+                    pattern,
                     forms: forms.length > 0 ? forms : undefined,
                     includePending: pending,
                     includeSuggested: suggested,

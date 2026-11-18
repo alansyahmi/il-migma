@@ -48,17 +48,21 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
 
     // Normalize initial state from raw data
     const initialState = useMemo<RootFormData>(() => {
+        const rawStrength = String(data.strength || 'strong').trim().toLowerCase();
+        const strength = rawStrength === 'doubled' ? 'geminated' : (rawStrength || 'strong');
+        const weakClass = String(data.weak_class || '').trim().toLowerCase();
         return {
             id: data.id || rootIdFromConsonants(data.consonants || ''),
             consonants: data.consonants || '',
             glosses: normalizeRootGloss(data.glosses || data.gloss),
             etymology: normalizeRootEtymologyChain(data.etymology),
             source: data.source || '',
-            strength: data.strength || 'strong',
-            weak_class: data.weak_class || '',
+            notes: data.notes || '',
+            strength,
+            weak_class: weakClass,
             vowel_set_perf: data.vowel_set_perf || 'a-a',
             vowel_set_impf: data.vowel_set_impf || 'i-a',
-            vowel_set_imp: data.vowel_set_imp || 'i-a',
+            vowel_set_imp: data.vowel_set_imp || 'o-o',
             is_imala_blocked: isNew ? false : resolveImalaBlocked({
                 is_imala_blocked: parseImalaBlockedOverride(data.is_imala_blocked),
                 consonants: data.consonants || '',
@@ -114,7 +118,7 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                     }
                 }
             } else {
-                await adminUpdateRoot(token, initialState.consonants, payload);
+                await adminUpdateRoot(token, initialState.id || initialState.consonants, payload);
             }
 
             onSaved(form);
@@ -184,10 +188,11 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                                 value={form.consonants}
                                 onChange={e => {
                                     const val = e.target.value;
+                                    const shouldRecomputeId = isNew || initialState.id === rootIdFromConsonants(initialState.consonants);
                                     setForm({
                                         ...form,
                                         consonants: val,
-                                        id: rootIdFromConsonants(val),
+                                        ...(shouldRecomputeId ? { id: rootIdFromConsonants(val) } : {}),
                                     });
                                 }}
                                 placeholder="e.g. f-għ-l"
@@ -265,10 +270,10 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                         </div>
                         <div>
                             <label className={label}>{t('Vowel Set (Imp)', 'Vokali (Imp)')}</label>
-                            <input className={inp} value={form.vowel_set_imp || 'i-a'} onChange={e => {
+                            <input className={inp} value={form.vowel_set_imp || 'o-o'} onChange={e => {
                                 const val = e.target.value;
                                 setForm({ ...form, vowel_set_imp: val });
-                            }} placeholder="e.g. i-a" />
+                            }} placeholder="e.g. o-o" />
                         </div>
                         <div className="flex flex-col justify-end pb-2">
                             <label className="flex items-center gap-2 cursor-pointer group">
@@ -408,11 +413,20 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                         </div>
                     </Suspense>
 
-                    {/* Source */}
+                    {/* Source & Notes */}
                     <div className="space-y-4">
                         <div>
                             <label className={label}>{t('Source Citation', 'Sors')}</label>
                             <input className={inp} value={form.source} onChange={e => setForm({ ...form, source: e.target.value })} placeholder="e.g. Aquilina2006" />
+                        </div>
+                        <div>
+                            <label className={label}>{t('Notes', 'Noti')}</label>
+                            <textarea
+                                className={inp + " min-h-[72px] resize-y"}
+                                value={form.notes || ''}
+                                onChange={e => setForm({ ...form, notes: e.target.value })}
+                                placeholder={t('Linguistic or editorial notes for this root...', 'Noti lingwistiċi jew editorjali għal dan l-għerq...')}
+                            />
                         </div>
                     </div>
 
@@ -453,8 +467,8 @@ export function RootFormModal({ data, onClose, onSaved, isNew = false, getToken 
                                     try {
                                         const token = (await getToken().catch(() => null)) || 'local-debug';
                                         const payload = buildRootPayload(form);
-                                        await adminCreateRoot(token, payload);
-                                        onSaved(form);
+                                        const created = await adminCreateRoot(token, { ...payload, id: undefined, force: true }) as { id?: string } | undefined;
+                                        onSaved({ ...form, id: created?.id || form.id });
                                     } catch (err: any) {
                                         setError(err.message || 'Failed to duplicate');
                                     } finally {

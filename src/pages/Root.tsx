@@ -34,6 +34,12 @@ const LazyRelationshipEditor = lazy(() =>
 const BLUE = '#1034A6';
 const GOLD = '#A07030';
 
+type MarkedCellItem = {
+    value: string;
+    marker: 'plain' | 'theoretical' | 'auto_generated';
+    entryId?: string;
+};
+
 function MarkedCell({
     data,
     isAdmin,
@@ -41,7 +47,12 @@ function MarkedCell({
     onDelete,
     noLink
 }: {
-    data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string };
+    data: {
+        value: string;
+        marker: 'plain' | 'theoretical' | 'auto_generated';
+        entryId?: string;
+        items?: MarkedCellItem[];
+    };
     isAdmin?: boolean;
     onEdit?: () => void;
     onDelete?: () => void;
@@ -50,44 +61,63 @@ function MarkedCell({
     const { term } = useLinguisticMode();
     const { hideTheoreticalForms } = useHideTheoreticalForms();
     const rawValue = String(data.value || '').trim();
-    const hidden = hideTheoreticalForms && (data.marker !== 'plain' || rawValue.startsWith('*') || rawValue.startsWith('✦'));
-    if (data.value === '-' || hidden) return <span className="opacity-40">-</span>;
+    if (!rawValue || rawValue === '-') return <span className="opacity-40">-</span>;
 
-    const items = rawValue.split(';').map(s => s.trim()).filter(Boolean);
+    const resolvedItems: MarkedCellItem[] = data.items?.length
+        ? data.items
+        : rawValue
+            .split(';')
+            .map(s => s.trim())
+            .filter(Boolean)
+            .map((val, idx) => ({
+                value: val,
+                marker: data.marker,
+                entryId: idx === 0 ? data.entryId : undefined,
+            }));
 
-    const renderItem = (itemValue: string, index: number) => {
-        const displayValue = hideTheoreticalForms ? itemValue.replace(/^[*✦]+\s*/, '').trim() : itemValue;
+    const isItemHidden = (item: MarkedCellItem) => {
+        const val = String(item.value || '').trim();
+        return hideTheoreticalForms && (item.marker !== 'plain' || val.startsWith('*') || val.startsWith('✦'));
+    };
+
+    const visibleItems = resolvedItems.filter(item => item.value && item.value !== '-' && !isItemHidden(item));
+    if (visibleItems.length === 0) return <span className="opacity-40">-</span>;
+
+    const renderItem = (item: MarkedCellItem, index: number) => {
+        const displayValue = hideTheoreticalForms ? item.value.replace(/^[*✦]+\s*/, '').trim() : item.value;
         return (
-            <Fragment key={index}>
+            <Fragment key={`${item.entryId || item.value}-${index}`}>
                 {index > 0 && <span className="text-black/40 font-sans mx-0.5">, </span>}
-                {data.marker === 'plain' && data.entryId && !noLink ? (
-                    <Link to={`/entry/${data.entryId}`} className="text-[#1034A6] hover:underline">
+                {item.marker === 'plain' && item.entryId && !noLink ? (
+                    <Link to={`/entry/${item.entryId}`} className="text-[#1034A6] hover:underline">
                         {displayValue}
                     </Link>
                 ) : (
-                    <span className={data.marker === 'plain' ? 'text-black' : 'opacity-45'}>
-                        {data.marker === 'theoretical' ? '*' : (data.marker === 'auto_generated' ? '✦' : '')}{displayValue}
+                    <span className={item.marker === 'plain' ? 'text-black' : 'opacity-45'}>
+                        {item.marker === 'theoretical' ? '*' : (item.marker === 'auto_generated' ? '✦' : '')}{displayValue}
                     </span>
                 )}
             </Fragment>
         );
     };
 
+    const primaryEntryId = visibleItems.find(i => i.entryId)?.entryId || data.entryId;
+
     return (
         <div className="group flex items-center gap-1.5 flex-wrap">
             <span className="inline-flex items-center flex-wrap">
-                {items.map((item, idx) => renderItem(item, idx))}
+                {visibleItems.map((item, idx) => renderItem(item, idx))}
             </span>
             {isAdmin && onEdit && (
                 <div className="flex items-center gap-1">
                     <button
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit(); }}
                         className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
-                        title={data.entryId ? term('edit-entry') : term('add-entry')}
+                        title={primaryEntryId ? term('edit-entry') : term('add-entry')}
                     >
-                        {data.entryId ? <Edit2 size={12} /> : <Plus size={12} />}
+                        {primaryEntryId ? <Edit2 size={12} /> : <Plus size={12} />}
                     </button>
-                    {data.entryId && onDelete && (
+                    {primaryEntryId && onDelete && (
                         <button
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
                             className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
@@ -138,9 +168,11 @@ export function Root() {
         minHeight: '100vh',
     };
 
-    // Find a primary verb entry (preferably Form I) to extract root metadata and meanings
+    // Find a primary verb entry (preferably Form I, then any verb) to extract root metadata and meanings
     const primaryEntry = useMemo(() => {
-        return rootEntries.find(e => e.pos === 'verb' && e.verb_morphology?.form === 'I') || rootEntries[0];
+        return rootEntries.find(e => e.pos === 'verb' && e.verb_morphology?.form === 'I')
+            || rootEntries.find(e => e.pos === 'verb')
+            || rootEntries[0];
     }, [rootEntries]);
 
     // The root metadata to use for conjugation
@@ -148,11 +180,36 @@ export function Root() {
 
     const vm = primaryEntry?.verb_morphology;
 
+    const strengthRaw = useMemo(() => {
+        const raw = String(rootObj?.strength || vm?.class || 'strong').trim().toLowerCase();
+        return raw === 'doubled' ? 'geminated' : (raw || 'strong');
+    }, [rootObj?.strength, vm?.class]);
+
+    const weakClassRaw = useMemo(() => {
+        const raw = String(rootObj?.weak_class || vm?.weak_class || '').trim().toLowerCase();
+        return raw || undefined;
+    }, [rootObj?.weak_class, vm?.weak_class]);
+
+    const hiddenForms = useMemo(() => {
+        const raw = Array.isArray((dbRoot as any)?.hidden_forms) ? (dbRoot as any).hidden_forms : [];
+        return new Set(
+            raw
+                .map((f: string) => String(f || '').replace(/^form\s+/i, '').trim().toUpperCase())
+                .filter(Boolean)
+        );
+    }, [dbRoot]);
+
     const glossList = useMemo(() => {
-        if (normalized?.glosses) {
-            return normalized.glosses.map(g => (language === 'en' ? g.en : (g.mt || g.en))).filter(Boolean);
-        }
-        return primaryEntry?.definitions?.map(d => d.text_en) || [];
+        const rootGlosses = (normalized?.glosses || [])
+            .map(g => (language === 'mt' ? (g.mt || g.en) : (g.en || g.mt)))
+            .map(s => String(s || '').trim())
+            .filter(Boolean);
+        if (rootGlosses.length > 0) return rootGlosses;
+
+        return (primaryEntry?.definitions || [])
+            .map(d => (language === 'mt' ? (d.text_mt || d.text_en) : (d.text_en || d.text_mt)))
+            .map(s => String(s || '').trim())
+            .filter(Boolean);
     }, [normalized, primaryEntry, language]);
 
     const etymologyItems = useMemo(() => {
@@ -189,8 +246,8 @@ export function Root() {
             rootObj.consonants,
             pvSet,
             ipvSet,
-            (rootObj.strength || 'strong') as VerbStrength,
-            rootObj.weak_class as any,
+            strengthRaw as VerbStrength,
+            weakClassRaw as any,
             imalaBlocked
         );
 
@@ -202,26 +259,46 @@ export function Root() {
             rootEntries,
         );
 
-        // Keep track of which entries are already shown in the table
-        const shownIds = new Set<string>();
-        rowsData.forEach(row => {
-            if (row.perfect.entryId) shownIds.add(row.perfect.entryId);
-            //if (row.imperfect.entryId) shownIds.add(row.imperfect.entryId); // Added imperfect
-            if (row.passiveParticiple.entryId) shownIds.add(row.passiveParticiple.entryId);
-            if (row.activeParticiple.entryId) shownIds.add(row.activeParticiple.entryId);
-            if (row.verbalNoun.entryId) shownIds.add(row.verbalNoun.entryId);
+        const visibleRows = rowsData.filter((row) => {
+            if (!hiddenForms.has(row.form.toUpperCase())) return true;
+            return isActualAdmin && !hideTheoreticalForms;
         });
 
-        return { generatedTable: rowsData, shownIds };
-    }, [rootObj, vm, rootEntries]);
+        // Keep track of which entries are already shown in the table
+        const shownIds = new Set<string>();
+        const collectCellIds = (cell?: { entryId?: string; items?: Array<{ entryId?: string }> }) => {
+            if (!cell) return;
+            if (cell.entryId) shownIds.add(cell.entryId);
+            if (Array.isArray(cell.items)) {
+                cell.items.forEach((item) => {
+                    if (item.entryId) shownIds.add(item.entryId);
+                });
+            }
+        };
+        visibleRows.forEach(row => {
+            collectCellIds(row.perfect);
+            collectCellIds(row.imperfect);
+            collectCellIds(row.imperative);
+            collectCellIds(row.passiveParticiple);
+            collectCellIds(row.activeParticiple);
+            collectCellIds(row.verbalNoun);
+        });
+
+        return { generatedTable: visibleRows, shownIds };
+    }, [rootObj, vm, rootEntries, strengthRaw, weakClassRaw, hiddenForms, isActualAdmin, hideTheoreticalForms]);
 
     // Derived Terms logic (gather from rootEntries)
     const derivedTerms = useMemo(() => {
-        const terms: { term: string, class: string, cv: string, id: string, gloss: string }[] = [];
+        const terms: { term: string; class: string; rawPos: string; cv: string; id: string; gloss: string; source: 'entry' | 'subentry' | 'related' }[] = [];
         const seenIds = new Set<string>();
 
         const getPattern = (e: any) => {
-            const cv = e.root_pattern_form?.pattern?.cv_notation || '-';
+            const cv = e.root_pattern_form?.pattern?.cv_notation
+                || e.cv_pattern
+                || e.noun_morphology?.morph_pattern
+                || e.adjective_morphology?.pattern
+                || e.morph_pattern
+                || '-';
             const wizen = e.root_pattern_form?.pattern?.wizen_notation || cv;
             return mode === 'standard' ? convertCVTo1V(cv) : wizen;
         };
@@ -238,12 +315,14 @@ export function Root() {
                 terms.push({
                     term: e.headword,
                     class: term(e.pos || 'derived'),
+                    rawPos: e.pos || '',
                     cv: getPattern(e),
                     id: e.id,
                     gloss: getGloss({
                         gloss_en: e.definitions?.[0]?.text_en || (e as any).gloss_en || (e as any).text_en,
                         gloss_mt: e.definitions?.[0]?.text_mt || (e as any).gloss_mt
-                    }, language, mode)
+                    }, language, mode),
+                    source: 'entry',
                 });
             }
 
@@ -255,12 +334,14 @@ export function Root() {
                         terms.push({
                             term: sub.headword,
                             class: term(sub.pos || 'derived'),
+                            rawPos: sub.pos || '',
                             cv: getPattern(sub),
                             id: sub.id,
                             gloss: getGloss({
                                 gloss_en: sub.definitions?.[0]?.text_en || (sub as any).gloss_en || (sub as any).text_en,
                                 gloss_mt: sub.definitions?.[0]?.text_mt || (sub as any).gloss_mt
-                            }, language, mode)
+                            }, language, mode),
+                            source: 'subentry',
                         });
                     } else if (shownIds.has(sub.id)) {
                         seenIds.add(sub.id);
@@ -277,16 +358,18 @@ export function Root() {
                     terms.push({
                         term: re.headword,
                         class: term(re.pos || 'related'),
-                        cv: mode === 'standard' ? convertCVTo1V(re.root_pattern_form?.pattern?.cv_notation || re.wizen_pattern || '-') : (re.wizen_pattern || re.root_pattern_form?.pattern?.cv_notation || '-'),
+                        rawPos: re.pos || '',
+                        cv: mode === 'standard' ? convertCVTo1V(re.root_pattern_form?.pattern?.cv_notation || re.cv_pattern || re.wizen_pattern || '-') : (re.wizen_pattern || re.root_pattern_form?.pattern?.cv_notation || re.cv_pattern || '-'),
                         id: re.id,
-                        gloss: getGloss(re, language, mode)
+                        gloss: getGloss(re, language, mode),
+                        source: 'related',
                     });
                 }
             });
         }
 
         return terms;
-    }, [rootEntries, shownIds, rootRelationships.related_entries, mode]);
+    }, [rootEntries, shownIds, rootRelationships.related_entries, mode, language, term]);
 
     const handleDeleteEntry = async (entryId: string) => {
         if (!confirm(term('confirm-delete-entry'))) return;
@@ -376,9 +459,8 @@ export function Root() {
         );
     }
 
-    const strengthRaw = rootObj.strength || 'strong';
     const strengthLabel = term(strengthRaw === 'strong-hybrid' ? 'strong-hybrid' : strengthRaw).toUpperCase();
-    const weakClassLabel = rootObj.weak_class ? term(rootObj.weak_class).toUpperCase() : null;
+    const weakClassLabel = weakClassRaw ? term(weakClassRaw).toUpperCase() : null;
     const consonantParts = Array.isArray(rootObj.consonant_array)
         ? rootObj.consonant_array.filter(Boolean)
         : typeof rootObj.consonant_array === 'string'
@@ -389,13 +471,13 @@ export function Root() {
 
     const rootTypeParts = [
         <Link key={rootLiteralityKey} to={`/search?type=${rootLiteralityKey}`} className="hover:underline">{rootLiteralityLabel}</Link>,
-        (rootObj.strength !== 'geminated' && strengthRaw ? (
+        (strengthRaw !== 'geminated' && strengthRaw ? (
             <Link key="strength" to={`/search?type=${strengthRaw}`} className="hover:underline">{strengthLabel.toUpperCase()}</Link>
         ) : null),
-        (rootObj.weak_class ? (
-            <Link key="weak" to={`/search?type=${rootObj.weak_class}`} className="hover:underline">{weakClassLabel?.toUpperCase()}</Link>
+        (weakClassRaw ? (
+            <Link key="weak" to={`/search?type=${weakClassRaw}`} className="hover:underline">{weakClassLabel?.toUpperCase()}</Link>
         ) : null),
-        (rootObj.strength === 'geminated' ? (
+        (strengthRaw === 'geminated' ? (
             <Link key="geminated" to="/search?type=geminated" className="hover:underline">{term('geminated').toUpperCase()}</Link>
         ) : null),
         ...tags.filter((tag: string) => !isHiddenTag(tag)).map((tag: string) => (
@@ -435,7 +517,7 @@ export function Root() {
     };
 
     const renderVerbCell = (
-        data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string },
+        data: { value: string; marker: 'plain' | 'theoretical' | 'auto_generated'; entryId?: string; items?: MarkedCellItem[] },
         node: ReactNode,
     ) => (hideTheoreticalForms && shouldHideSurface(data, hideTheoreticalForms) ? null : node);
 
@@ -470,17 +552,19 @@ export function Root() {
             <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
                 {/* Left Sidebar */}
                 <div className="w-full md:w-64 shrink-0 space-y-4">
-                    <SideCard title={term('gloss')}>
-                        {glossList.length === 1 ? (
-                            <p className="text-sm text-black">{glossList[0]}</p>
-                        ) : (
-                            <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
-                                {glossList.map((g: string, i: number) => (
-                                    <li key={i}>{g}</li>
-                                ))}
-                            </ol>
-                        )}
-                    </SideCard>
+                    {glossList.length > 0 && (
+                        <SideCard title={term('gloss')}>
+                            {glossList.length === 1 ? (
+                                <p className="text-sm text-black">{glossList[0]}</p>
+                            ) : (
+                                <ol className="list-decimal list-inside space-y-1 text-sm text-black marker:text-black/30">
+                                    {glossList.map((g: string, i: number) => (
+                                        <li key={i}>{g}</li>
+                                    ))}
+                                </ol>
+                            )}
+                        </SideCard>
+                    )}
 
                     {etymologyItems.length > 0 && (
                         <SideCard title={term('etymology')}>
@@ -491,6 +575,12 @@ export function Root() {
                     {sourceText && (
                         <SideCard title={term('sources')}>
                             <span className="text-sm font-medium" style={{ color: GOLD }}>{sourceText}</span>
+                        </SideCard>
+                    )}
+
+                    {dbRoot?.notes && String(dbRoot.notes).trim() && (
+                        <SideCard title={term('notes')}>
+                            <p className="text-sm text-black/75 whitespace-pre-line">{dbRoot.notes}</p>
                         </SideCard>
                     )}
 
@@ -509,8 +599,8 @@ export function Root() {
                             <div>
                                 <p className="text-[10px] uppercase tracking-widest text-black/30 mb-2 font-bold">{term('internal-metadata')}</p>
                                 <div className="text-[11px] font-mono space-y-1 text-black/50">
-                                    <p>{term('strength')}: {rootObj.strength}</p>
-                                    {rootObj.weak_class && <p>{term('weak-class')}: {rootObj.weak_class}</p>}
+                                    <p>{term('strength')}: {strengthRaw}</p>
+                                    {weakClassRaw && <p>{term('weak-class')}: {weakClassRaw}</p>}
                                     <p>{term('vowel-set-perfect')}: {rootObj.vowel_set_perf || 'a-a'}</p>
                                     <p>{term('vowel-set-imperfect')}: {rootObj.vowel_set_impf || 'i-a'}</p>
                                     <p>{term('vowel-set-imperative')}: {rootObj.vowel_set_imp || 'o-o'}</p>
@@ -724,7 +814,7 @@ export function Root() {
                                             <th className="font-semibold pb-2 pr-4">{term('class')}</th>
                                             <th className="font-semibold pb-2">
                                                 {term('cv-pattern')}
-                                                {rootObj.strength === 'geminated' && <span> • {term('geminated').toUpperCase()}</span>}
+                                                {strengthRaw === 'geminated' && <span> • {term('geminated').toUpperCase()}</span>}
                                             </th>
                                         </tr>
                                     </thead>
@@ -745,15 +835,21 @@ export function Root() {
                                                                         const existing = rootEntries.find(re => re.id === termObj.id);
                                                                         if (existing) {
                                                                             setEditEntry({
-                                                                                id: existing.id,
-                                                                                headword: existing.headword,
-                                                                                pos: existing.pos || 'unknown',
+                                                                                ...existing,
+                                                                                _rootConsonants: (existing as any).root_consonants || rootObj?.consonants || '',
+                                                                            } as any);
+                                                                        } else {
+                                                                            setEditEntry({
+                                                                                id: termObj.id,
+                                                                                headword: termObj.term,
+                                                                                pos: termObj.rawPos || 'noun',
                                                                                 created_at: '',
-                                                                                is_loanword: false
-                                                                            });
-                                                                            setInitialFormData(null);
-                                                                            setShowForm(true);
+                                                                                is_loanword: false,
+                                                                                _rootConsonants: rootObj?.consonants || '',
+                                                                            } as any);
                                                                         }
+                                                                        setInitialFormData(null);
+                                                                        setShowForm(true);
                                                                     }}
                                                                     className="p-0.5 rounded hover:bg-black/5 text-black/55 transition-all"
                                                                     title={term('edit-entry')}
@@ -761,7 +857,14 @@ export function Root() {
                                                                     <Edit2 size={12} />
                                                                 </button>
                                                                 <button
-                                                                    onClick={(e) => { e.preventDefault(); handleDeleteEntry(termObj.id); }}
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        if (termObj.source === 'related') {
+                                                                            handleDeleteRootRelationship('related_entries', termObj.id);
+                                                                        } else {
+                                                                            handleDeleteEntry(termObj.id);
+                                                                        }
+                                                                    }}
                                                                     className="p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
                                                                     title={term('delete-entry')}
                                                                 >
@@ -806,57 +909,73 @@ export function Root() {
                                 {((vm?.synonyms && vm.synonyms.length > 0) || (rootRelationships.synonyms?.length > 0)) && (
                                     <div>
                                         <p className="font-semibold text-black mb-1">{term('synonyms')}</p>
-                                        {[...(vm?.synonyms || []), ...(rootRelationships.synonyms || [])].map((s, idx) => (
-                                            <div key={s.id || idx} className="mb-1 flex items-center gap-2 group">
-                                                <Link
-                                                    to={s.pos === 'ROOT' ? `/root/${s.id}` : `/search?q=${s.headword}`}
-                                                    style={{ color: BLUE }}
-                                                    className="hover:underline font-serif"
-                                                >
-                                                    -{s.headword}-
-                                                </Link>
-                                                <span className="text-black/40 italic ml-2">
-                                                    "{getGloss(s, language, mode)}"
-                                                </span>
-                                                {isActualAdmin && !vm?.synonyms?.some((v: any) => v.id === s.id) && (
-                                                    <button
-                                                        onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('synonyms', s.id); }}
-                                                        className="opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 sm:p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                                                        title={term('unlink-synonym')}
+                                        {[
+                                            ...(vm?.synonyms || []).map((item: any) => ({ ...item, _fromRoot: false })),
+                                            ...(rootRelationships.synonyms || []).map((item: any) => ({ ...item, _fromRoot: true })),
+                                        ].map((s, idx) => {
+                                            const href = (s.pos === 'ROOT' || s._fromRoot)
+                                                ? `/root/${s.id || s.headword}`
+                                                : (s.id ? `/entry/${s.id}` : `/search?q=${encodeURIComponent(s.headword)}`);
+                                            return (
+                                                <div key={s.id || idx} className="mb-1 flex items-center gap-2 group">
+                                                    <Link
+                                                        to={href}
+                                                        style={{ color: BLUE }}
+                                                        className="hover:underline font-serif"
                                                     >
-                                                        <Trash2 size={10} />
-                                                    </button>
-                                                )}
-                                            </div>
-                                        ))}
+                                                        {s.headword}
+                                                    </Link>
+                                                    <span className="text-black/40 italic ml-2">
+                                                        "{getGloss(s, language, mode)}"
+                                                    </span>
+                                                    {isActualAdmin && s._fromRoot && (
+                                                        <button
+                                                            onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('synonyms', s.id); }}
+                                                            className="opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 sm:p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                            title={term('unlink-synonym')}
+                                                        >
+                                                            <Trash2 size={10} />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 )}
                                 {((vm?.antonyms && vm.antonyms.length > 0) || (rootRelationships.antonyms?.length > 0)) && (
                                     <div>
                                         <p className="font-semibold text-black mb-1">{term('antonyms')}</p>
-                                        {[...(vm?.antonyms || []), ...(rootRelationships.antonyms || [])].map((a, idx) => (
-                                            <div key={a.id || idx} className="mb-1 flex items-center gap-2 group">
-                                                <Link
-                                                    to={a.pos === 'ROOT' ? `/root/${a.id}` : `/search?q=${a.headword}`}
-                                                    style={{ color: BLUE }}
-                                                    className="hover:underline font-serif"
-                                                >
-                                                    {a.headword}
-                                                </Link>
-                                                <span className="text-black/40 italic ml-2">
-                                                    "{getGloss(a, language, mode)}"
-                                                </span>
-                                                {isActualAdmin && !vm?.antonyms?.some((v: any) => v.id === a.id) && (
-                                                    <button
-                                                        onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('antonyms', a.id); }}
-                                                        className="opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 sm:p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
-                                                        title={term('unlink-antonym')}
+                                        {[
+                                            ...(vm?.antonyms || []).map((item: any) => ({ ...item, _fromRoot: false })),
+                                            ...(rootRelationships.antonyms || []).map((item: any) => ({ ...item, _fromRoot: true })),
+                                        ].map((a, idx) => {
+                                            const href = (a.pos === 'ROOT' || a._fromRoot)
+                                                ? `/root/${a.id || a.headword}`
+                                                : (a.id ? `/entry/${a.id}` : `/search?q=${encodeURIComponent(a.headword)}`);
+                                            return (
+                                                <div key={a.id || idx} className="mb-1 flex items-center gap-2 group">
+                                                    <Link
+                                                        to={href}
+                                                        style={{ color: BLUE }}
+                                                        className="hover:underline font-serif"
                                                     >
-                                                        <Trash2 size={10} />
-                                                    </button>
-                                                )}
-                                            </div>
-                                        ))}
+                                                        {a.headword}
+                                                    </Link>
+                                                    <span className="text-black/40 italic ml-2">
+                                                        "{getGloss(a, language, mode)}"
+                                                    </span>
+                                                    {isActualAdmin && a._fromRoot && (
+                                                        <button
+                                                            onClick={(e) => { e.preventDefault(); handleDeleteRootRelationship('antonyms', a.id); }}
+                                                            className="opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 sm:p-0.5 rounded hover:bg-red-50 text-red-400 hover:text-red-600 transition-all"
+                                                            title={term('unlink-antonym')}
+                                                        >
+                                                            <Trash2 size={10} />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 )}
                             </div>
@@ -998,7 +1117,7 @@ export function Root() {
                         refetch();
                         setShowRootForm(false);
                         if (newData.consonants !== rootObj.consonants) {
-                            window.location.href = `/root/${newData.consonants}`;
+                            window.location.href = `/root/${newData.id || newData.consonants}`;
                         }
                     }}
                     getToken={getToken}
@@ -1011,7 +1130,7 @@ export function Root() {
                     onClose={() => setShowNewRootForm(false)}
                     onSaved={(newData) => {
                         setShowNewRootForm(false);
-                        window.location.href = `/root/${newData.consonants}`;
+                        window.location.href = `/root/${newData.id || newData.consonants}`;
                     }}
                     getToken={getToken}
                     isNew={true}

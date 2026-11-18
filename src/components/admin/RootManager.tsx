@@ -369,7 +369,7 @@ export function RootManager() {
                                         </button>
                                     </td>
                                     <td className="p-4 font-serif font-bold text-link text-lg">
-                                        <Link to={`/root/${root.consonants}`} className="hover:underline">{root.consonants}</Link>
+                                        <Link to={`/root/${root.id || root.consonants}`} className="hover:underline">{root.consonants}</Link>
                                     </td>
                                     <td className="p-4 text-black/80">{renderGloss(root, term)}</td>
                                     <td className="p-4">
@@ -460,7 +460,7 @@ export function RootManager() {
                                     {selectedIds.has(root.id) ? <CheckSquare size={16} /> : <Square size={16} />}
                                 </button>
                                 <div className="flex justify-between items-start mb-3 ml-6 sm:ml-6 sm:group-hover:ml-0 transition-all">
-                                    <Link to={`/root/${root.consonants}`} className="ml-1">
+                                    <Link to={`/root/${root.id || root.consonants}`} className="ml-1">
                                         <h4 className="font-serif text-2xl font-bold text-link group-hover:underline">{root.consonants}</h4>
                                     </Link>
                                     <div className="flex gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">

@@ -43,6 +43,7 @@ export interface RootFormData {
     glosses: RootGloss[];
     etymology: RootEtymology[];
     source: string;
+    notes?: string;
     strength: string;
     weak_class?: string;
     vowel_set_perf?: string;

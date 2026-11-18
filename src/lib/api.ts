@@ -144,6 +144,7 @@ export async function apiSearch(
         root_id?: string;
         v?: string;
         form?: string;
+        pattern?: string;
         wizen?: string;
         verb_type?: string;
         source?: string;
@@ -194,6 +195,7 @@ export async function apiSearch(
             if (form) params.append('form', form);
         });
     } else if (opts.form) params.set('form', opts.form);
+    if (opts.pattern) params.set('pattern', opts.pattern);
     if (opts.wizen) params.set('wizen', opts.wizen);
     if (opts.verb_type) params.set('verb_type', opts.verb_type);
     if (opts.source) params.set('source', opts.source);
@@ -563,7 +565,7 @@ export async function adminBulkSubmissions(
 
 // ── Admin ─────────────────────────────────────────────────────────────────────
 
-export type AdminEntrySortKey = 'headword' | 'status' | 'pos' | 'root' | 'meaning' | 'tags' | 'date';
+export type AdminEntrySortKey = 'headword' | 'status' | 'pos' | 'root' | 'meaning' | 'tags' | 'date' | 'updated_at';
 
 export async function adminListEntries(
     token: string,
@@ -615,6 +617,11 @@ export async function adminListEntries(
             switch (sortBy) {
                 case 'date':
                     return factor * (a.created_at || '').localeCompare(b.created_at || '');
+                case 'updated_at': {
+                    const uA = String(extraA.updated_at || a.created_at || '');
+                    const uB = String(extraB.updated_at || b.created_at || '');
+                    return factor * uA.localeCompare(uB);
+                }
                 case 'pos':
                     return factor * (a.pos || '').localeCompare(b.pos || '');
                 case 'root': {

@@ -35,6 +35,7 @@ const VALID_ENTRY_SORT_KEYS: readonly AdminEntrySortKey[] = [
     'meaning',
     'tags',
     'date',
+    'updated_at',
 ];
 
 const VALID_AUDIT_FILTERS = ['all', 'action-needed', 'partial', 'complete'] as const;
@@ -1174,7 +1175,8 @@ export function EntryManager() {
                                 <option value="root">{term('root') || 'Root'}</option>
                                 <option value="meaning">{term('meaning') || 'Meaning'}</option>
                                 <option value="tags">Tags &amp; Alt</option>
-                                <option value="date">{term('date') || 'Date'}</option>
+                                <option value="date">Added</option>
+                                <option value="updated_at">Updated</option>
                             </select>
                             <button
                                 type="button"
@@ -1354,12 +1356,20 @@ export function EntryManager() {
                                         className="py-2.5 px-3 w-40 min-w-[140px]"
                                     />
                                     <SortableTableHeader
-                                        label={term('date') || 'Date'}
+                                        label="Added"
                                         sortKey="date"
                                         activeSort={sortState}
                                         onSort={handleColumnSort}
                                         defaultDir="desc"
-                                        className="py-2.5 px-3 w-24"
+                                        className="py-2.5 px-3 w-24 whitespace-nowrap"
+                                    />
+                                    <SortableTableHeader
+                                        label="Updated"
+                                        sortKey="updated_at"
+                                        activeSort={sortState}
+                                        onSort={handleColumnSort}
+                                        defaultDir="desc"
+                                        className="py-2.5 px-3 w-24 whitespace-nowrap"
                                     />
                                     <th className="py-2.5 px-3 w-24 text-right sticky right-0 z-10 bg-surface-soft/95 backdrop-blur-sm shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.06)]">
                                         {term('actions') || 'Actions'}
@@ -1756,10 +1766,17 @@ export function EntryManager() {
                                                 )}
                                             </td>
 
-                                            {/* Date */}
-                                            <td className={cn('py-2 px-3', isEditing && 'align-top pt-3.5')}>
-                                                <span className="font-mono text-[10px] text-black/40">
+                                            {/* Added Date */}
+                                            <td className={cn('py-2 px-3 whitespace-nowrap', isEditing && 'align-top pt-3.5')}>
+                                                <span className="font-mono text-[10px] text-black/45" title={entry.created_at || undefined}>
                                                     {entry.created_at ? entry.created_at.slice(0, 10) : '—'}
+                                                </span>
+                                            </td>
+
+                                            {/* Updated Date */}
+                                            <td className={cn('py-2 px-3 whitespace-nowrap', isEditing && 'align-top pt-3.5')}>
+                                                <span className="font-mono text-[10px] text-black/45" title={entry.updated_at || undefined}>
+                                                    {entry.updated_at ? entry.updated_at.slice(0, 10) : '—'}
                                                 </span>
                                             </td>
 

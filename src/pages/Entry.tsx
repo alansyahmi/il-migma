@@ -3158,7 +3158,7 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
     }, [vm, entry]);
 
     // Fetch siblings for accurate theoretical/plain markers
-    const { entries: rootEntries } = useRootData(entry.root_pattern_form?.root?.id);
+    const { entries: rootEntries } = useRootData(entry.root_pattern_form?.root?.id || rootConsonants);
     const derivedRootEntries = useMemo(
         () => (rootEntries.length > 0 ? rootEntries : [entry]),
         [rootEntries, entry]

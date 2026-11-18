@@ -65,6 +65,7 @@ export interface AdminEntry {
     is_loanword: boolean;
     source_language?: string;
     created_at: string;
+    updated_at?: string;
     text_en?: string;
     text_mt?: string;
     verb_vowel_perf?: string;

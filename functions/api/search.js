@@ -127,7 +127,16 @@ export async function onRequestGet({ request, env }) {
 
         const baseJoins = `
             FROM entries e
-            LEFT JOIN roots r ON (r.consonants = e.root_consonants OR r.id = e.root_consonants OR r.id = 'root-' || e.root_consonants OR LOWER(REPLACE(r.consonants, ' ', '')) = LOWER(REPLACE(COALESCE(e.root_consonants, ''), ' ', '')))
+            LEFT JOIN roots r ON r.rowid = (
+                SELECT r2.rowid
+                FROM roots r2
+                WHERE r2.id = e.root_consonants
+                   OR r2.consonants = e.root_consonants
+                   OR r2.id = 'root-' || e.root_consonants
+                   OR LOWER(REPLACE(r2.consonants, ' ', '')) = LOWER(REPLACE(COALESCE(e.root_consonants, ''), ' ', ''))
+                ORDER BY CASE WHEN r2.id = r2.consonants THEN 0 ELSE 1 END, r2.rowid ASC
+                LIMIT 1
+            )
             LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id OR (rpf.root_id = r.id AND rpf.derived_form = e.headword))
             LEFT JOIN patterns pat ON (rpf.pattern_id = pat.id)
             ${ENTRY_MORPHOLOGY_JOINS}
@@ -213,8 +222,19 @@ export async function onRequestGet({ request, env }) {
 
         if (rootId) {
             const cleanRoot = rootId.toLowerCase().replace(/^root-/, '').trim();
-            sql += ` AND (r.id = ? OR r.id = ? OR LOWER(r.consonants) = ? OR LOWER(e.root_consonants) = ? OR LOWER(REPLACE(r.consonants, ' ', '')) = ? OR LOWER(REPLACE(e.root_consonants, ' ', '')) = ?)`;
-            args.push(rootId, `root-${cleanRoot}`, cleanRoot, cleanRoot, cleanRoot, cleanRoot);
+            const baseConsonants = cleanRoot.replace(/-\d+$/, '');
+            sql += ` AND (
+                r.id = ? OR r.id = ?
+                OR LOWER(r.consonants) = ? OR LOWER(e.root_consonants) = ?
+                OR LOWER(REPLACE(r.consonants, ' ', '')) = ? OR LOWER(REPLACE(e.root_consonants, ' ', '')) = ?
+                OR LOWER(e.root_consonants) = ?
+                OR EXISTS (
+                    SELECT 1 FROM roots rx
+                    WHERE (rx.id = ? OR rx.id = ?)
+                      AND LOWER(TRIM(rx.consonants)) = LOWER(TRIM(e.root_consonants))
+                )
+            )`;
+            args.push(rootId, `root-${cleanRoot}`, cleanRoot, cleanRoot, cleanRoot, cleanRoot, baseConsonants, rootId, `root-${cleanRoot}`);
         }
         if (pos) {
             sql += ' AND e.pos = ?';
@@ -225,18 +245,34 @@ export async function onRequestGet({ request, env }) {
                 sql += " AND (e.source_language IS NULL OR e.source_language IN ('Arabic', 'Berber'))";
             } else if (rootType === 'romance') {
                 sql += " AND e.source_language IN ('Sicilian', 'Italian', 'Latin', 'French', 'Spanish')";
-            } else if (pos === 'verb' && (VERB_WEAK_CLASS_FILTERS.has(rootType) || (rootType === 'weak' && VERB_WEAK_CLASS_FILTERS.has(weakClassFilter)))) {
+            } else if (rootType === 'triliteral') {
+                sql += ` AND (
+                    LOWER(COALESCE(vm.type, '')) = 'triliteral'
+                    OR (
+                        TRIM(COALESCE(r.consonants, e.root_consonants, '')) != ''
+                        AND (LENGTH(TRIM(COALESCE(r.consonants, e.root_consonants, ''))) - LENGTH(REPLACE(TRIM(COALESCE(r.consonants, e.root_consonants, '')), '-', ''))) = 2
+                    )
+                )`;
+            } else if (rootType === 'quadriliteral') {
+                sql += ` AND (
+                    LOWER(COALESCE(vm.type, '')) = 'quadriliteral'
+                    OR (
+                        TRIM(COALESCE(r.consonants, e.root_consonants, '')) != ''
+                        AND (LENGTH(TRIM(COALESCE(r.consonants, e.root_consonants, ''))) - LENGTH(REPLACE(TRIM(COALESCE(r.consonants, e.root_consonants, '')), '-', ''))) = 3
+                    )
+                )`;
+            } else if (VERB_WEAK_CLASS_FILTERS.has(rootType) || (rootType === 'weak' && VERB_WEAK_CLASS_FILTERS.has(weakClassFilter))) {
                 const selectedWeakClass = VERB_WEAK_CLASS_FILTERS.has(weakClassFilter) ? weakClassFilter : rootType;
                 sql += ` AND (
                     LOWER(COALESCE(vm.class, e.verb_class, r.strength, '')) = 'weak'
                     AND LOWER(COALESCE(vm.weak_class, e.verb_weak_class, r.weak_class, '')) = ?
                 )`;
                 args.push(selectedWeakClass);
-            } else if (pos === 'verb' && VERB_STRENGTH_FILTERS.has(rootType)) {
+            } else if (VERB_STRENGTH_FILTERS.has(rootType)) {
                 const canonicalVerbClass = rootType === 'doubled' ? 'geminated' : rootType;
                 if (canonicalVerbClass === 'strong-hybrid') {
                     sql += ` AND (
-                        LOWER(COALESCE(vm.class, e.verb_class, '')) = ?
+                        LOWER(COALESCE(vm.class, e.verb_class, r.strength, '')) = ?
                         OR (
                             COALESCE(vm.form, e.verb_form, '') = 'I'
                             AND LOWER(COALESCE(vm.class, e.verb_class, r.strength, '')) = 'strong'
@@ -246,11 +282,11 @@ export async function onRequestGet({ request, env }) {
                     )`;
                     args.push(canonicalVerbClass, "%'", "%’");
                 } else {
-                    sql += ' AND (LOWER(COALESCE(vm.class, e.verb_class, r.strength, \'\')) = ?)';
+                    sql += " AND (LOWER(COALESCE(vm.class, e.verb_class, r.strength, '')) = ?)";
                     args.push(canonicalVerbClass);
                 }
             } else {
-                sql += ' AND (r.strength = ? OR vm.class = ?)';
+                sql += " AND (LOWER(COALESCE(r.strength, '')) = ? OR LOWER(COALESCE(vm.class, '')) = ?)";
                 args.push(rootType, rootType);
             }
         }
@@ -423,7 +459,7 @@ export async function onRequestGet({ request, env }) {
 
         // Lean joins for COUNT query: only join tables that are actually referenced in WHERE conditions
         let countJoins = 'FROM entries e';
-        if (sql.includes('r.')) countJoins += ' LEFT JOIN roots r ON (r.consonants = e.root_consonants OR r.id = e.root_consonants OR r.id = \'root-\' || e.root_consonants OR LOWER(REPLACE(r.consonants, \' \', \'\')) = LOWER(REPLACE(COALESCE(e.root_consonants, \'\'), \' \', \'\')))';
+        if (sql.includes('r.')) countJoins += " LEFT JOIN roots r ON r.rowid = (SELECT r2.rowid FROM roots r2 WHERE r2.id = e.root_consonants OR r2.consonants = e.root_consonants OR r2.id = 'root-' || e.root_consonants OR LOWER(REPLACE(r2.consonants, ' ', '')) = LOWER(REPLACE(COALESCE(e.root_consonants, ''), ' ', '')) ORDER BY CASE WHEN r2.id = r2.consonants THEN 0 ELSE 1 END, r2.rowid ASC LIMIT 1)";
         if (sql.includes('rpf.')) countJoins += ' LEFT JOIN root_pattern_forms rpf ON (e.id = rpf.id OR (rpf.derived_form = e.headword))';
         if (sql.includes('pat.')) countJoins += ' LEFT JOIN patterns pat ON (rpf.pattern_id = pat.id)';
         if (sql.includes('vm.')) countJoins += ' LEFT JOIN verb_morphology vm ON vm.entry_id = e.id';
@@ -451,7 +487,11 @@ export async function onRequestGet({ request, env }) {
                 json_extract(e.definitions, '$[0].text_en') AS definition_en,
                 json_extract(e.definitions, '$[0].text_mt') AS definition_mt,
                 p.ipa, ar.reliability_index,
-                pat.cv_notation, pat.wizen_notation,
+                COALESCE(pat.cv_notation, e.cv_pattern, nm.morph_pattern, am.pattern) AS cv_notation,
+                COALESCE(
+                    pat.wizen_notation,
+                    (SELECT p2.wizen_notation FROM patterns p2 WHERE p2.cv_notation = COALESCE(e.cv_pattern, nm.morph_pattern, am.pattern) LIMIT 1)
+                ) AS wizen_notation,
                 ${ENTRY_MORPHOLOGY_SELECT}
             ${baseJoins}
             LEFT JOIN phonetics p   ON p.entry_id = e.id AND p.dialect = 'Standard'
@@ -510,8 +550,8 @@ export async function onRequestGet({ request, env }) {
                         id: r.root_id || '',
                         consonants: r.root_consonants || '',
                         consonant_array: r.root_consonants ? r.root_consonants.split('-') : [],
-                        strength: r.root_strength || 'strong',
-                        weak_class: r.root_weak_class || undefined,
+                        strength: String(r.root_strength || 'strong').toLowerCase(),
+                        weak_class: r.root_weak_class ? String(r.root_weak_class).toLowerCase() : undefined,
                         vowel_set_perf: r.vowel_set_perf,
                         vowel_set_impf: r.vowel_set_impf,
                         vowel_set_imp: r.vowel_set_imp,
@@ -520,9 +560,9 @@ export async function onRequestGet({ request, env }) {
                         created_at: '',
                         updated_at: ''
                     },
-                    pattern: (r.cv_notation || r.nm_morph_pattern || r.am_pattern) ? {
+                    pattern: (r.cv_notation || r.cv_pattern || r.nm_morph_pattern || r.am_pattern) ? {
                         id: '',
-                        cv_notation: r.cv_notation || r.nm_morph_pattern || r.am_pattern || '',
+                        cv_notation: r.cv_notation || r.cv_pattern || r.nm_morph_pattern || r.am_pattern || '',
                         wizen_notation: r.wizen_notation || '',
                         created_at: ''
                     } : undefined

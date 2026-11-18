@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useLinguisticMode } from '@/contexts/LinguisticModeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useHideTheoreticalForms } from '@/contexts/HideTheoreticalFormsContext';
 import { generateRootForms, getAttestedEntries, markGeneratedForms, type FormMarker, type MarkedVerbForm } from '@/lib/conjugationEngine';
 import { overlayVerbPreviewRowsFromEngine } from '@/lib/verbMorphology';
+import { resolveImalaBlocked } from '@/lib/imala';
 import { apiSearch, apiSearchRoots } from '@/lib/api';
 import { Spinner } from '@/components/ui/Spinner';
 import type { SearchResult } from '@/types';
@@ -15,23 +16,56 @@ import { shouldHideSurface, stripTheoreticalPrefix } from '@/lib/theoreticalForm
 
 const MAX_RADICALS = 4;
 
-function MarkedCell({ data }: { data: { value: string; marker: FormMarker } }) {
+type MarkedCellItem = { value: string; marker: FormMarker; entryId?: string };
+
+function MarkedCell({ data }: { data: { value: string; marker: FormMarker; entryId?: string; items?: MarkedCellItem[] } }) {
     const { term } = useLinguisticMode();
     const { hideTheoreticalForms } = useHideTheoreticalForms();
-    const hidden = shouldHideSurface(data, hideTheoreticalForms);
-    if (hidden || data.value === '-') return <span className="opacity-40">-</span>;
-    const value = hideTheoreticalForms ? stripTheoreticalPrefix(data.value) : data.value;
-    if (data.marker === 'plain') {
-        return (
-            <Link to={`/search?q=${value}`} key={value} className="text-[#1034A6] hover:underline">
-                {value}
-            </Link>
-        );
-    }
-    const mark = data.marker === 'theoretical' ? '*' : '✦';
+    const rawValue = String(data.value || '').trim();
+    if (!rawValue || rawValue === '-') return <span className="opacity-40">-</span>;
+
+    const items: MarkedCellItem[] = data.items?.length
+        ? data.items
+        : rawValue
+            .split(';')
+            .map(s => s.trim())
+            .filter(Boolean)
+            .map((val, idx) => ({
+                value: val,
+                marker: data.marker,
+                entryId: idx === 0 ? data.entryId : undefined,
+            }));
+
+    const visibleItems = items.filter((item) => {
+        if (!item.value || item.value === '-') return false;
+        return !(hideTheoreticalForms && shouldHideSurface(item, hideTheoreticalForms));
+    });
+
+    if (visibleItems.length === 0) return <span className="opacity-40">-</span>;
+
     return (
-        <span className="opacity-55 text-black" title={data.marker === 'theoretical' ? term('theoretical') : term('auto-generated')}>
-            {hideTheoreticalForms ? value : `${mark}${data.value}`}
+        <span className="inline-flex items-center flex-wrap">
+            {visibleItems.map((item, idx) => {
+                const value = hideTheoreticalForms ? stripTheoreticalPrefix(item.value) : item.value;
+                const mark = item.marker === 'theoretical' ? '*' : '✦';
+                return (
+                    <Fragment key={`${item.entryId || value}-${idx}`}>
+                        {idx > 0 && <span className="text-black/40 font-sans mx-0.5">, </span>}
+                        {item.marker === 'plain' ? (
+                            <Link
+                                to={item.entryId ? `/entry/${item.entryId}` : `/search?q=${encodeURIComponent(value)}`}
+                                className="text-[#1034A6] hover:underline"
+                            >
+                                {value}
+                            </Link>
+                        ) : (
+                            <span className="opacity-55 text-black" title={item.marker === 'theoretical' ? term('theoretical') : term('auto-generated')}>
+                                {hideTheoreticalForms ? value : `${mark}${item.value}`}
+                            </span>
+                        )}
+                    </Fragment>
+                );
+            })}
         </span>
     );
 }
@@ -39,15 +73,16 @@ function MarkedCell({ data }: { data: { value: string; marker: FormMarker } }) {
 function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: string[], extraRoots?: any[] }) {
     const { term } = useLinguisticMode();
     const { hideTheoreticalForms } = useHideTheoreticalForms();
-    // Unique matching roots by consonants string
+    // Unique matching roots by ID (preserving homographs)
     const matchingRootsMap = new Map<string, any>();
 
     // 1. Process DB Data
     extraRoots.forEach(r => {
-        if (!matchingRootsMap.has(r.consonants)) {
-            matchingRootsMap.set(r.consonants, {
+        const key = r.id || r.consonants;
+        if (key && !matchingRootsMap.has(key)) {
+            matchingRootsMap.set(key, {
                 rootObj: r,
-                verbs: Array.isArray(r.entries) ? r.entries : [] // Some root rows are DB-only; overlay only when entries are present.
+                verbs: Array.isArray(r.entries) ? r.entries : []
             });
         }
     });
@@ -57,19 +92,35 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
     const rootRows = matchingRoots.map(({ rootObj, verbs }) => {
         const primaryVerb = verbs.find((v: any) => v.verb_morphology?.form === 'I') || verbs[0];
         const vm = primaryVerb?.verb_morphology || { vowel_set_perfect: 'a-a', vowel_set_imperfect: 'i-a' };
+        const rawStrength = String(rootObj.strength || vm.class || 'strong').trim().toLowerCase();
+        const strength = rawStrength === 'doubled' ? 'geminated' : (rawStrength || 'strong');
+        const weakClass = String(rootObj.weak_class || vm.weak_class || '').trim().toLowerCase() || undefined;
+        const pvSet = rootObj.vowel_set_perf || vm.vowel_set_perf || vm.vowel_set_perfect || 'a-a';
+        const ipvSet = rootObj.vowel_set_impf || vm.vowel_set_impf || vm.vowel_set_imperfect || 'i-a';
+        const impSet = rootObj.vowel_set_imp || vm.vowel_set_impv || 'o-o';
+        const imalaBlocked = resolveImalaBlocked({
+            is_imala_blocked: rootObj.is_imala_blocked,
+            consonants: rootObj.consonants,
+            vowel_set_perf: pvSet,
+            vowel_set_impf: ipvSet,
+            vowel_set_imp: impSet,
+        });
 
         const rawGen = generateRootForms(
             rootObj.consonants,
-            rootObj.vowel_set_perf || vm.vowel_set_perfect || 'a-a',
-            rootObj.vowel_set_impf || vm.vowel_set_imperfect || 'i-a',
-            rootObj.strength,
-            rootObj.weak_class
+            pvSet,
+            ipvSet,
+            strength,
+            weakClass,
+            imalaBlocked,
         );
 
         const attested = getAttestedEntries(verbs);
 
         return {
             rootObj,
+            strength,
+            weakClass,
             verbs,
             rowsData: overlayVerbPreviewRowsFromEngine(markGeneratedForms(rawGen, attested), verbs),
         };
@@ -109,21 +160,21 @@ function RootResultView({ rootRadicals, extraRoots = [] }: { rootRadicals: strin
                         </tr>
                     </thead>
                     <tbody>
-                        {rootRows.map(({ rootObj, rowsData }) => {
-                            const strengthLabel = rootObj.strength.toUpperCase();
+                        {rootRows.map(({ rootObj, strength, weakClass, rowsData }) => {
+                            const strengthLabel = strength.toUpperCase();
 
                             return (
                                 <tr key={rootObj.id || rootObj.consonants} className="hover:bg-black/1 transition-colors border-b border-black/5 last:border-0">
                                     <td className="px-4 py-4 whitespace-nowrap">
-                                        <Link to={`/root/${rootObj.consonants}`} className="font-serif font-bold text-xl text-black hover:underline">
+                                        <Link to={`/root/${rootObj.id || rootObj.consonants}`} className="font-serif font-bold text-xl text-black hover:underline">
                                             {rootObj.consonants}
                                         </Link>
                                     </td>
                                     <td className="px-4 py-4 whitespace-nowrap">
                                         <span className="inline-flex items-center text-[10px] bg-black/5 px-2 py-1 rounded text-black/50 font-bold tracking-wider gap-1.5 leading-none">
-                                            {rootObj.strength !== 'geminated' && <span>{strengthLabel}</span>}
-                                            {rootObj.weak_class && <span>• {term(rootObj.weak_class).toUpperCase()}</span>}
-                                            {rootObj.strength === 'geminated' && <span>• {term('geminated').toUpperCase()}</span>}
+                                            {strength !== 'geminated' && <span>{strengthLabel}</span>}
+                                            {weakClass && <span>• {term(weakClass).toUpperCase()}</span>}
+                                            {strength === 'geminated' && <span>• {term('geminated').toUpperCase()}</span>}
                                         </span>
                                     </td>
                                     {visibleFormLabels.map(fl => {

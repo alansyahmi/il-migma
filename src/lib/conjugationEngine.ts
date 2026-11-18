@@ -1098,11 +1098,17 @@ function genDefectiveGħ(
     const perfSync = isGuttural(C1)
         ? `${C1}e${pv1}${C2}${C3}`
         : `${C1}${pv1}${C2}${C3}`;
-    const perfReduced = isGuttural(C1) ? `${C1}e${C2}` : `${C1}${C2}aj`;
+    const dropInitialW = verbForm === "I" && C1 === "w";
+    const impfC1 = dropInitialW ? "" : C1;
+    const perfReduced = isGuttural(C1)
+        ? `${C1}e${C2}`
+        : dropInitialW
+            ? `${C1}${pv1}${C2}aj`
+            : `${C1}${C2}aj`;
 
     const impfBase = (i: number) => {
         const pfx = buildPrefix(i, vsetImpf);
-        return i >= 4 ? `${pfx}${C1}${C2}${C3}u` : `${pfx}${C1}${C2}${iv2}'`;
+        return i >= 4 ? `${pfx}${impfC1}${C2}${C3}u` : `${pfx}${impfC1}${C2}${iv2}'`;
     };
 
     const { v1: impV1 } = parseVset(vsetImp);
@@ -1125,19 +1131,19 @@ function genDefectiveGħ(
             impfType1: (i) => {
                 const pfx = buildPrefix(i, vsetImpf);
                 return i >= 4
-                    ? `${pfx}${C1}${C2}${C3}u`
-                    : `${pfx}${C1}${C2}${iv2}${C3}`;
+                    ? `${pfx}${impfC1}${C2}${C3}u`
+                    : `${pfx}${impfC1}${C2}${iv2}${C3}`;
             },
             impfType2: (i) => {
                 const pfx = buildPrefix(i, vsetImpf);
-                return i >= 4 ? `${pfx}${C1}${C2}${C3}u` : `${pfx}${C1}${C2}${C3}`;
+                return i >= 4 ? `${pfx}${impfC1}${C2}${C3}u` : `${pfx}${impfC1}${C2}${C3}`;
             },
-            impfPlural: (i) => `${buildPrefix(i, vsetImpf)}${C1}${C2}${C3}u`,
+            impfPlural: (i) => `${buildPrefix(i, vsetImpf)}${impfC1}${C2}${C3}u`,
             impSg,
             impPl,
             impSgStems: {
-                impfType1: `${impV1}${C1}${C2}${iv2}${C3}`,
-                impfType2: `${impV1}${C1}${C2}${C3}`,
+                impfType1: `${impV1}${impfC1}${C2}${iv2}${C3}`,
+                impfType2: `${impV1}${impfC1}${C2}${C3}`,
             },
             blocksImala: isImalaBlocked || true,
         },
@@ -5796,14 +5802,21 @@ export function generateRootForms(
 
 export type FormMarker = "plain" | "theoretical" | "auto_generated";
 
+export interface MarkedVerbFormCell {
+    value: string;
+    marker: FormMarker;
+    entryId?: string;
+    items?: Array<{ value: string; marker: FormMarker; entryId?: string }>;
+}
+
 export interface MarkedVerbForm {
     form: GenerativeVerbFormType;
-    perfect: { value: string; marker: FormMarker; entryId?: string };
-    imperfect: { value: string; marker: FormMarker; entryId?: string };
-    imperative: { value: string; marker: FormMarker; entryId?: string };
-    passiveParticiple: { value: string; marker: FormMarker; entryId?: string };
-    activeParticiple: { value: string; marker: FormMarker; entryId?: string };
-    verbalNoun: { value: string; marker: FormMarker; entryId?: string };
+    perfect: MarkedVerbFormCell;
+    imperfect: MarkedVerbFormCell;
+    imperative: MarkedVerbFormCell;
+    passiveParticiple: MarkedVerbFormCell;
+    activeParticiple: MarkedVerbFormCell;
+    verbalNoun: MarkedVerbFormCell;
 }
 
 export interface AttestedEntry {

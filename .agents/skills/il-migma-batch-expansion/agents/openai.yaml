@@ -1,0 +1,3 @@
+interface:
+  display_name: "Il-Migma Batch Expansion"
+  short_description: "Expand audited DONE category batches with Wiktionary/verb.mt-attested verbal nouns, participles, and derived verbs"

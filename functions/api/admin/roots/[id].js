@@ -43,6 +43,17 @@ function internalError(err) {
     return json(body, status);
 }
 
+function normalizeStrengthValue(val) {
+    if (typeof val !== 'string') return val;
+    const lower = val.trim().toLowerCase();
+    return lower === 'doubled' ? 'geminated' : (lower || 'strong');
+}
+
+function normalizeWeakClassValue(val) {
+    if (typeof val !== 'string') return val;
+    return val.trim().toLowerCase();
+}
+
 export async function onRequestGet({ request, env, params }) {
     try {
         if (!(await verifyAdmin(request, env))) return unauthorized();
@@ -55,21 +66,28 @@ export async function onRequestGet({ request, env, params }) {
         const client = getDbClient(env);
         await ensureRootCompatibilityColumns(client);
         const rootRes = await client.execute({
-            sql: `SELECT * FROM roots WHERE id = ? OR LOWER(consonants) = LOWER(?)`,
-            args: [decodedId, decodedId],
+            sql: `SELECT * FROM roots
+                  WHERE id = ? OR LOWER(consonants) = LOWER(?)
+                  ORDER BY CASE WHEN id = ? THEN 0 ELSE 1 END ASC, id ASC
+                  LIMIT 1`,
+            args: [decodedId, decodedId, decodedId],
         });
 
         if (rootRes.rows.length === 0) {
             return json({ error: 'Root not found' }, 404);
         }
 
-        const root = rootRes.rows[0];
+        const root = { ...rootRes.rows[0] };
 
         // Parse hidden_forms if it exists
         try {
             root.hidden_forms = root.hidden_forms ? JSON.parse(root.hidden_forms) : [];
         } catch (e) {
             root.hidden_forms = [];
+        }
+        root.strength = normalizeStrengthValue(String(root.strength || 'strong'));
+        if (root.weak_class) {
+            root.weak_class = normalizeWeakClassValue(String(root.weak_class));
         }
 
         return json({ root });
@@ -91,7 +109,8 @@ export async function onRequestPut({ request, env, params }) {
 
         // Dynamic column discovery
         const tableInfo = await client.execute("PRAGMA table_info(roots)");
-        const columns = tableInfo.rows.map(r => r.name).filter(c => !['id', 'created_at', 'updated_at'].includes(c));
+        const allColumns = tableInfo.rows.map(r => r.name);
+        const columns = allColumns.filter(c => !['id', 'created_at', 'updated_at'].includes(c));
 
         const mapping = {
             'synonyms': body.synonyms !== undefined ? (typeof body.synonyms === 'string' ? body.synonyms : JSON.stringify(body.synonyms)) : undefined,
@@ -101,85 +120,152 @@ export async function onRequestPut({ request, env, params }) {
             'hidden_forms': body.hidden_forms !== undefined ? JSON.stringify(body.hidden_forms) : undefined
         };
 
-        const setClauses = ["updated_at = datetime('now')"];
-        const args = [];
+        const lookupKey = String(body._oldId || decodedId).trim().normalize('NFC');
+        const existingRes = await client.execute({
+            sql: `SELECT id, consonants FROM roots
+                  WHERE id = ? OR LOWER(consonants) = LOWER(?)
+                  ORDER BY CASE WHEN id = ? THEN 0 ELSE 1 END ASC, id ASC
+                  LIMIT 1`,
+            args: [lookupKey, lookupKey, lookupKey],
+        });
 
-        for (const col of columns) {
-            let val;
-            if (col in mapping && mapping[col] !== undefined) {
-                val = mapping[col];
-            } else if (col in body) {
-                val = body[col];
-            } else {
-                continue;
+        let targetId = decodedId;
+
+        if (existingRes.rows.length > 0) {
+            const existingId = String(existingRes.rows[0].id);
+            targetId = existingId;
+
+            const setClauses = ["updated_at = datetime('now')"];
+            const args = [];
+
+            for (const col of columns) {
+                let val;
+                if (col in mapping && mapping[col] !== undefined) {
+                    val = mapping[col];
+                } else if (col in body) {
+                    val = body[col];
+                } else {
+                    continue;
+                }
+
+                // Special handling for consonants rename
+                if (col === 'consonants') {
+                    const newCons = String(val || '').trim().toLowerCase().normalize('NFC');
+                    const arr = JSON.stringify(newCons.split('-').map(c => c.trim().normalize('NFC')).filter(Boolean));
+                    setClauses.push(`consonants = ?`);
+                    args.push(newCons);
+                    setClauses.push(`consonant_array = ?`);
+                    args.push(arr);
+                    continue;
+                }
+
+                if (col === 'consonant_array') continue; // Handled by consonants
+
+                if (col === 'etymology') {
+                    val = JSON.stringify(normalizeRootEtymologyValue(val));
+                } else if (col === 'strength') {
+                    val = normalizeStrengthValue(val);
+                } else if (col === 'weak_class') {
+                    val = normalizeWeakClassValue(val);
+                }
+
+                if (Array.isArray(val) || (val && typeof val === 'object' && col !== 'notes' && col !== 'source')) {
+                    val = JSON.stringify(val);
+                }
+
+                setClauses.push(`${col} = ?`);
+                args.push(n(val));
             }
 
-            // Special handling for consonants rename
-            if (col === 'consonants') {
-                const newCons = val.trim().toLowerCase().normalize('NFC');
-                const arr = JSON.stringify(newCons.split('-').map(c => c.trim().normalize('NFC')));
-                setClauses.push(`consonants = ?`);
-                args.push(newCons);
-                setClauses.push(`consonant_array = ?`);
-                args.push(arr);
-                continue;
+            // Handle ID rename
+            const oldId = body._oldId || existingId;
+            const newId = body.id;
+            const isRenaming = Boolean(oldId && newId && oldId !== newId);
+
+            if (!isRenaming && setClauses.length <= 1) {
+                return json({ error: 'No fields to update' }, 400);
             }
 
-            if (col === 'consonant_array') continue; // Handled by consonants
+            if (isRenaming) {
+                try {
+                    const colNames = allColumns.filter(name => name !== 'id');
 
-            if (col === 'etymology') {
-                val = JSON.stringify(normalizeRootEtymologyValue(val));
+                    await client.execute({
+                        sql: `INSERT INTO roots (id, ${colNames.join(', ')}) SELECT ?, ${colNames.join(', ')} FROM roots WHERE id = ?`,
+                        args: [newId, oldId]
+                    });
+
+                    // Update child tables
+                    await client.execute({ sql: `UPDATE root_pattern_forms SET root_id = ? WHERE root_id = ?`, args: [newId, oldId] });
+                    await client.execute({ sql: `DELETE FROM roots WHERE id = ?`, args: [oldId] });
+                    targetId = newId;
+                } catch (e) {
+                    return json({ error: 'Failed to rename ID: ' + e.message }, 400);
+                }
             }
 
-            setClauses.push(`${col} = ?`);
-            args.push(n(val));
-        }
-
-        if (setClauses.length <= 1) return json({ error: 'No fields to update' }, 400);
-
-        const sql = `UPDATE roots SET ${setClauses.join(', ')} WHERE id = ? OR LOWER(consonants) = LOWER(?)`;
-        args.push(decodedId, decodedId);
-
-        // Handle ID rename 
-        const oldId = body._oldId;
-        const newId = body.id;
-        if (oldId && newId && oldId !== newId) {
-            try {
-                const columnsRes = await client.execute("PRAGMA table_info(roots)");
-                const colNames = columnsRes.rows.map(r => r.name).filter(n => n !== 'id');
-
+            if (setClauses.length > 1) {
                 await client.execute({
-                    sql: `INSERT INTO roots (id, ${colNames.join(', ')}) SELECT ?, ${colNames.join(', ')} FROM roots WHERE id = ?`,
-                    args: [newId, oldId]
+                    sql: `UPDATE roots SET ${setClauses.join(', ')} WHERE id = ?`,
+                    args: [...args, targetId],
                 });
-
-                // Update child tables
-                await client.execute({ sql: `UPDATE root_pattern_forms SET root_id = ? WHERE root_id = ?`, args: [newId, oldId] });
-
-                // Note: reciprocal updates for synonyms/antonyms in other roots are NOT handled here 
-                // but the buildRootPayload logic in modals will eventually sync them on next save of those other roots.
-                // For now, we prioritize consistency of the current root.
-
-                await client.execute({ sql: `DELETE FROM roots WHERE id = ?`, args: [oldId] });
-            } catch (e) {
-                return json({ error: 'Failed to rename ID: ' + e.message }, 400);
             }
         } else {
-            await client.execute({ sql, args });
-        }
+            // Virtual root promotion: insert new root record into roots table
+            const consonantsVal = String(body.consonants || decodedId).trim().toLowerCase().normalize('NFC');
+            if (!consonantsVal) return json({ error: 'consonants required' }, 400);
 
-        // RECIPROCAL UPDATES
+            const insertId = String(body.id || consonantsVal).trim().normalize('NFC');
+            const consonantArray = JSON.stringify(consonantsVal.split('-').map(c => c.trim().normalize('NFC')).filter(Boolean));
+            const nowIso = new Date().toISOString();
+
+            const insertColumns = ['id', 'created_at', 'updated_at', 'consonants', 'consonant_array'];
+            const insertArgs = [insertId, nowIso, nowIso, consonantsVal, consonantArray];
+
+            for (const col of allColumns) {
+                if (insertColumns.includes(col)) continue;
+
+                if (col in mapping) {
+                    insertColumns.push(col);
+                    insertArgs.push(n(mapping[col] !== undefined ? mapping[col] : '[]'));
+                    continue;
+                }
+
+                if (col in body) {
+                    insertColumns.push(col);
+                    let val = body[col];
+                    if (col === 'etymology') {
+                        val = JSON.stringify(normalizeRootEtymologyValue(val));
+                    } else if (col === 'strength') {
+                        val = normalizeStrengthValue(val);
+                    } else if (col === 'weak_class') {
+                        val = normalizeWeakClassValue(val);
+                    }
+                    if (Array.isArray(val) || (val && typeof val === 'object' && col !== 'notes' && col !== 'source')) {
+                        val = JSON.stringify(val);
+                    }
+                    insertArgs.push(n(val));
+                }
+            }
+
+            const placeholders = insertColumns.map(() => '?').join(',');
+            await client.execute({
+                sql: `INSERT INTO roots (${insertColumns.join(', ')}) VALUES (${placeholders})`,
+                args: insertArgs,
+            });
+            targetId = insertId;
+        }
 
         // RECIPROCAL UPDATES
         if (body.synonyms !== undefined || body.antonyms !== undefined) {
-            const currentId = decodedId;
+            const currentId = targetId;
             const newSyns = typeof body.synonyms === 'string' ? JSON.parse(body.synonyms) : (body.synonyms || []);
             const newAnts = typeof body.antonyms === 'string' ? JSON.parse(body.antonyms) : (body.antonyms || []);
 
             // Fetch current root's gloss for reciprocal entries
             const currentRootRes = await client.execute({
-                sql: `SELECT gloss, consonants FROM roots WHERE id = ? OR LOWER(consonants) = LOWER(?)`,
-                args: [currentId, currentId]
+                sql: `SELECT gloss, consonants FROM roots WHERE id = ?`,
+                args: [currentId]
             });
             const currentConsonants = currentRootRes.rows[0]?.consonants || '';
             const currentGlossRaw = currentRootRes.rows[0]?.gloss || '';
@@ -195,38 +281,41 @@ export async function onRequestPut({ request, env, params }) {
                 currentGloss = { en: currentGlossRaw, mt: '' };
             }
 
-            const updateReciprocal = async (targetId, relType, isAdding) => {
-                if (!targetId || targetId === currentId) return;
-                const targetRes = await client.execute({ sql: `SELECT synonyms, antonyms FROM roots WHERE id = ?`, args: [targetId] });
+            const updateReciprocal = async (targetKey, relType, isAdding) => {
+                if (!targetKey || targetKey === currentId) return;
+                const targetRes = await client.execute({
+                    sql: `SELECT id, synonyms, antonyms FROM roots
+                          WHERE id = ? OR LOWER(consonants) = LOWER(?)
+                          ORDER BY CASE WHEN id = ? THEN 0 ELSE 1 END ASC, id ASC
+                          LIMIT 1`,
+                    args: [targetKey, targetKey, targetKey]
+                });
                 if (targetRes.rows.length === 0) return;
 
                 const targetData = targetRes.rows[0];
                 let targetList = targetData[relType] ? (typeof targetData[relType] === 'string' ? JSON.parse(targetData[relType]) : targetData[relType]) : [];
 
-                const exists = targetList.some(item => item.id === currentConsonants || item.headword === currentConsonants);
+                const exists = targetList.some(item => item.id === currentId || item.id === currentConsonants || item.headword === currentConsonants);
 
                 if (isAdding && !exists) {
-                    targetList.push({ id: currentConsonants, headword: currentConsonants, pos: 'ROOT', gloss_en: currentGloss.en, gloss_mt: currentGloss.mt });
+                    targetList.push({ id: currentId || currentConsonants, headword: currentConsonants, pos: 'ROOT', gloss_en: currentGloss.en, gloss_mt: currentGloss.mt });
                 } else if (!isAdding && exists) {
-                    targetList = targetList.filter(item => item.id !== currentConsonants && item.headword !== currentConsonants);
+                    targetList = targetList.filter(item => item.id !== currentId && item.id !== currentConsonants && item.headword !== currentConsonants);
                 } else {
                     return; // No change needed
                 }
 
                 await client.execute({
                     sql: `UPDATE roots SET ${relType} = ?, updated_at = datetime('now') WHERE id = ?`,
-                    args: [JSON.stringify(targetList), targetId]
+                    args: [JSON.stringify(targetList), targetData.id]
                 });
             };
 
-            // Simplified: for now, we just ensure all CURRENT ones have us. 
-            // A more robust way would be comparing with old state to REMOVE from old targets, 
-            // but for "User friendly" UX, ensuring presence is the priority.
             for (const s of newSyns) await updateReciprocal(s.id || s.headword, 'synonyms', true);
             for (const a of newAnts) await updateReciprocal(a.id || a.headword, 'antonyms', true);
         }
 
-        return json({ success: true });
+        return json({ success: true, id: targetId });
     } catch (e) {
         return internalError(e);
     }

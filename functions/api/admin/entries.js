@@ -925,7 +925,11 @@ export function resolveAdminEntriesOrderBy({ sort = 'alphabetical', sortBy = '',
         case 'headword':
             return dir === 'DESC' ? 'e.headword DESC' : 'e.headword ASC';
         case 'date':
+        case 'created_at':
             return rawDir === 'asc' ? 'e.created_at ASC' : 'e.created_at DESC';
+        case 'updated_at':
+        case 'updated':
+            return `COALESCE(e.updated_at, e.created_at) ${dir}, e.headword ASC`;
         case 'pos':
             return `CASE WHEN TRIM(COALESCE(e.pos, '')) = '' THEN 1 ELSE 0 END ASC, LOWER(TRIM(COALESCE(e.pos, ''))) ${dir}, e.headword ASC`;
         case 'root':
@@ -950,6 +954,7 @@ export function buildAdminListQuery({ q = '', pos = '', letter = '', auditStatus
         e.is_loanword, 
         e.source_language, 
         e.created_at,
+        e.updated_at,
         e.root_consonants,
         e.stem,
         e.etymology_chain,
@@ -1194,6 +1199,7 @@ export async function onRequestGet({ request, env }) {
                 is_loanword: Boolean(row.is_loanword),
                 source_language: row.source_language || undefined,
                 created_at: row.created_at,
+                updated_at: row.updated_at || undefined,
                 root_consonants: row.root_consonants || undefined,
                 stem: row.stem || undefined,
                 arabic,

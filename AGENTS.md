@@ -44,6 +44,7 @@ Available skills:
 - il-migma-lexicography — Authoring and refining Il-Migma dictionary entries to Oxford and Miklem standards
 - il-migma-conjugation-engine — Maltese verb morphology and conjugation engine
 - verbmt-fixture-testing — External verb reference validation and fixture testing
+- il-migma-batch-expansion — Expand audited DONE batches with Wiktionary/verb.mt-attested root and stem derivatives
 
 ## MCP Servers
 

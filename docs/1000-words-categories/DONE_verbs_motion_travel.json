@@ -1,0 +1,3719 @@
+{
+  "category_id": "verbs_motion_travel",
+  "category_title": "Verbs: Motion, Travel & Direction",
+  "total_entries": 50,
+  "entries": [
+    {
+      "id": "v-daħal",
+      "headword": "daħal",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: daħal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/daħal",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دَخَلَ",
+          "pronunciation": "daḣala",
+          "definition": "to enter, go in"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to enter, come in, go in, penetrate",
+          "text_mt": "Jgħaddi minn barra għal ġewwa f'post magħluq, jew jissieħeb f'ħidma jew f'għaqda.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Daħal fil-kamra bil-mod biex ma jqajjimx lit-tarbija.",
+          "en": "He entered the room quietly so as not to wake the baby.",
+          "text_mt": "Daħal fil-kamra bil-mod biex ma jqajjimx lit-tarbija.",
+          "text_en": "He entered the room quietly so as not to wake the baby."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Użat ukoll b'mod figurattiv għal min jibda xogħol jew jissieħeb f'għaqda, bħal 'daħal f'xogħol'.",
+        "en": "Also used figuratively for starting work or joining an organization, as in 'daħal f'xogħol'."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐ.ħɐl/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "daħal",
+        "imperfective_3sgm": "jidħol",
+        "verbal_noun": "dħul",
+        "active_participle": "dieħel",
+        "passive_participle": "midħul",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "i-o",
+        "vowel_set_impv": "i-o"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-wasal",
+      "headword": "wasal",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "w-s-l",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: wasal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/wasal",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "وَصَلَ",
+          "pronunciation": "waṣala",
+          "definition": "to arrive, reach"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to arrive, reach a destination, get to",
+          "text_mt": "Jilħaq il-post jew id-destinazzjoni li jkun sejjer lejha wara vjaġġ jew mixja.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-vapur wasal fil-port kmieni filgħodu.",
+          "en": "The ship arrived in port early in the morning.",
+          "text_mt": "Il-vapur wasal fil-port kmieni filgħodu.",
+          "text_en": "The ship arrived in port early in the morning."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɐ.sɐl/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "assimilative",
+        "transitivity": "intransitive",
+        "perfective_3sgm": "wasal",
+        "imperfective_3sgm": "jasal",
+        "verbal_noun": "wasla",
+        "active_participle": null,
+        "passive_participle": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-wassal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-wassal",
+      "headword": "wassal",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "w-s-l",
+      "stem": null,
+      "cv_pattern": "1v22v3",
+      "morph_pattern": "C1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: wassal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/wassal",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "وَصَّلَ",
+          "pronunciation": "waṣṣala",
+          "definition": "to deliver, convey, bring to"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to deliver, bring, convey, give a lift to",
+          "text_mt": "Jieħu persuna jew oġġett sal-post iddestinat, jew jgħaddi messaġġ lil ħaddieħor.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Missieri wassalni l-iskola bil-karozza dalgħodu.",
+          "en": "My father drove me to school this morning.",
+          "text_mt": "Missieri wassalni l-iskola bil-karozza dalgħodu.",
+          "text_en": "My father drove me to school this morning."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɐs.sɐl/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "II",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "wassal",
+        "imperfective_3sgm": "jwassal",
+        "verbal_noun": "twassil",
+        "active_participle": null,
+        "passive_participle": "mwassal",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-wasal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-mexa",
+      "headword": "mexa",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "m-x-j",
+      "stem": null,
+      "cv_pattern": "1v2a",
+      "morph_pattern": "C1vC2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mexa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mexa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَشَى",
+          "pronunciation": "maxâ",
+          "definition": "to walk, go on foot"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to walk, go on foot, proceed, function",
+          "text_mt": "Iċaqlaq riġlejh wieħed wara l-ieħor biex javvanza fuq l-art, jew jaħdem u jibqa' għaddej b'mod regolari.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Imxejna tul ix-xatt għal nofs siegħa sħiħa.",
+          "en": "We walked along the promenade for a full half hour.",
+          "text_mt": "Imxejna tul ix-xatt għal nofs siegħa sħiħa.",
+          "text_en": "We walked along the promenade for a full half hour."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɛ.ʃɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "intransitive",
+        "perfective_3sgm": "mexa",
+        "imperfective_3sgm": "jimxi",
+        "verbal_noun": "mixi",
+        "active_participle": "miexi",
+        "passive_participle": "mimxi",
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "i-i",
+        "vowel_set_impv": "i-i"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-għadda",
+      "headword": "għadda",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-d-j",
+      "stem": null,
+      "cv_pattern": "1v22a",
+      "morph_pattern": "C1vC2C2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: għadda",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/għadda",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "عَدَّى",
+          "pronunciation": "għaddâ",
+          "definition": "to cross, pass, hand over"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to pass, cross, go past, pass an exam, hand over",
+          "text_mt": "Jaqsam minn naħa għal oħra, imur lil hinn minn post jew limitu, jew jirnexxi f'prova u f'eżami.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Għaddejna minn ħdejn il-knisja qabel ma bdejna l-mixja.",
+          "en": "We passed by the church before starting the walk.",
+          "text_mt": "Għaddejna minn ħdejn il-knisja qabel ma bdejna l-mixja.",
+          "text_en": "We passed by the church before starting the walk."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈɐd.dɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "II",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "both",
+        "perfective_3sgm": "għadda",
+        "imperfective_3sgm": "jgħaddi",
+        "verbal_noun": "tgħaddija",
+        "active_participle": null,
+        "passive_participle": "mgħoddi",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-i",
+        "vowel_set_impv": "a-i"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-waqa",
+      "headword": "waqa'",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "w-q-għ",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: waqa'",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/waqa'",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "وَقَعَ",
+          "pronunciation": "waqagħa",
+          "definition": "to fall, drop, happen"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to fall, drop, collapse, tumble",
+          "text_mt": "Jinżel 'l isfel bla ma jkun miżmum u jaħbat mal-art taħt il-piż tiegħu.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tazza waqgħet minn fuq il-mejda u tkissret.",
+          "en": "The glass fell off the table and broke.",
+          "text_mt": "It-tazza waqgħet minn fuq il-mejda u tkissret.",
+          "text_en": "The glass fell off the table and broke."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɐ.ʔɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong-hybrid",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "waqa'",
+        "imperfective_3sgm": "jaqa'",
+        "verbal_noun": "waqgħa",
+        "active_participle": null,
+        "passive_participle": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-laħaq",
+      "headword": "laħaq",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "l-ħ-q",
+      "stem": null,
+      "cv_pattern": "1v2v3",
+      "morph_pattern": "C1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: laħaq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/laħaq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "لَحِقَ",
+          "pronunciation": "laħiqa",
+          "definition": "to catch up with, reach"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to reach, catch up with, attain, make it in time",
+          "text_mt": "Jasal sa punt jew għan mixtieq, jaqbad ma' xi ħadd li jkun quddiemu, jew jasal fil-ħin stabbilit.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Laħaq il-karozza tal-linja fl-aħħar sekonda.",
+          "en": "He caught the bus at the last second.",
+          "text_mt": "Laħaq il-karozza tal-linja fl-aħħar sekonda.",
+          "text_en": "He caught the bus at the last second."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Użat ukoll b'kompliment ta' kariga fis-sens li persuna tieħu ħatra jew pożizzjoni uffiċjali.",
+        "en": "Also used with an office or rank complement to mean attaining a position."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɐ.ħɐʔ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "laħaq",
+        "imperfective_3sgm": "jilħaq",
+        "verbal_noun": "lħiq",
+        "active_participle": null,
+        "passive_participle": "milħuq",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "i-a",
+        "vowel_set_impv": "i-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-segwa",
+      "headword": "segwa",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "-segw-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "source_language": "Italian",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: segwa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/segwa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "seguire",
+          "pronunciation": "seˈɡwi.re",
+          "definition": "to follow"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to follow, pursue, track, keep up with",
+          "text_mt": "Jimxi wara xi ħadd jew xi ħaġa, jisma' u jżomm għajnejh fuq ġrajjiet, jew ikompli kors ta' tagħlim.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Segwejna l-mappa biex insibu t-triq it-tajba.",
+          "en": "We followed the map to find the right road.",
+          "text_mt": "Segwejna l-mappa biex insibu t-triq it-tajba.",
+          "text_en": "We followed the map to find the right road."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈsɛ.ɡwɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "romance",
+        "class": "ir",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "segwa",
+        "imperfective_3sgm": "jsegwi",
+        "verbal_noun": null,
+        "passive_participle": "segwit",
+        "vowel_set_perf": null,
+        "vowel_set_impf": null,
+        "vowel_set_impv": null
+      },
+      "alternative_forms": [],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-rregola",
+      "headword": "rregola",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "-rregol-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "source_language": "Italian",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: rregola",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/rregola",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "regolare",
+          "pronunciation": "re.ɡoˈla.re",
+          "definition": "to regulate, govern, adjust"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to regulate, govern, adjust, control",
+          "text_mt": "Iħaddem miżuri, ordnijiet jew qafas ta' kontroll fuq sistema jew imġiba biex kollox jimxi b'mod xieraq.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-liġi l-ġdida tirregola t-traffiku fiċ-ċentru tal-belt.",
+          "en": "The new law regulates traffic in the city center.",
+          "text_mt": "Il-liġi l-ġdida tirregola t-traffiku fiċ-ċentru tal-belt.",
+          "text_en": "The new law regulates traffic in the city center."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/rːɛˈɡɔ.lɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "romance",
+        "class": "ar",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "rregola",
+        "imperfective_3sgm": "jirregola",
+        "verbal_noun": "rregolar",
+        "passive_participle": "rregolat",
+        "vowel_set_perf": null,
+        "vowel_set_impf": null,
+        "vowel_set_impv": null
+      },
+      "alternative_forms": [
+        "irregola"
+      ],
+      "related_entries": [],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-dħul",
+      "headword": "dħul",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "12v3",
+      "morph_pattern": "C1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: dħul",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/dħul",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دُخُول",
+          "pronunciation": "duḣûl",
+          "definition": "entering, entrance"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "entry, entrance, income, admission",
+          "text_mt": "L-att li wieħed jgħaddi minn barra għal ġewwa, il-permess ta' aċċess f'post, jew il-qligħ finanzjarju li jinġabar.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Id-dħul għall-mużew huwa b'xejn nhar ta' Ħadd.",
+          "en": "Admission to the museum is free on Sundays.",
+          "text_mt": "Id-dħul għall-mużew huwa b'xejn nhar ta' Ħadd.",
+          "text_en": "Admission to the museum is free on Sundays."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdħuːl/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "noun_type": "verbal",
+        "singular_form": "dħul"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-daħal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-daħla",
+      "headword": "daħla",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: daħla",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/daħla",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دَخْلَة",
+          "pronunciation": "daḣlaẗ",
+          "definition": "an entrance, way in"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "entrance, doorway, inlet, driveway",
+          "text_mt": "Il-fetħa, il-bieb jew il-passaġġ li minnu wieħed jgħaddi minn barra għal ġewwa f'bini, proprjetà jew bajja.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Stenna ħdejn id-daħla prinċipali tal-iskola.",
+          "en": "Wait near the main entrance of the school.",
+          "text_mt": "Stenna ħdejn id-daħla prinċipali tal-iskola.",
+          "text_en": "Wait near the main entrance of the school."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐħ.lɐ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "noun_type": "instance",
+        "singular_form": "daħla",
+        "plural_forms": [
+          "daħliet"
+        ]
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-daħal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-dieħel",
+      "headword": "dieħel",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "1ie2v3",
+      "morph_pattern": "C1ieC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: dieħel",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/dieħel",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دَاخِل",
+          "pronunciation": "dâḣil",
+          "definition": "entering, incoming, next"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "entering, incoming, upcoming, next",
+          "text_mt": "Li qed jersaq jew jgħaddi minn barra għal ġewwa, jew iż-żmien li ġej immedjatament wara l-preżent.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Is-sena d-dieħla se nżuru lil qrabatna barra minn Malta.",
+          "en": "Next year we will visit our relatives abroad.",
+          "text_mt": "Is-sena d-dieħla se nżuru lil qrabatna barra minn Malta.",
+          "text_en": "Next year we will visit our relatives abroad."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Użat spiss wara nom ta' żmien bħal 'is-sena d-dieħla' jew 'l-ġimgħa d-dieħla' fis-sens ta' 'li ġejja'.",
+        "en": "Frequently placed after a time noun (as in 'is-sena d-dieħla', 'next year') to express immediate future."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɪː.ħɛl/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "active",
+        "gender": "masculine",
+        "verbal_form": "I",
+        "is_inflectable": 1,
+        "form_masc_pattern": "1ie2v3",
+        "form_fem_pattern": "1ie23a",
+        "form_plural_pattern": "1ie23in"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-daħal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-midħul",
+      "headword": "midħul",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "m12û3",
+      "morph_pattern": "mC1C2ûC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: midħul",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/midħul",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَدْخُول",
+          "pronunciation": "madḣûl",
+          "definition": "entered"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "entered, engaged in, deep inside, familiar with",
+          "text_mt": "Li jkun involut fil-fond jew imħallat sewwa f'biċċa xogħol, f'qasam jew f'komunità.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Huwa midħul sewwa fix-xogħol tal-komunità lokali.",
+          "en": "He is deeply involved in the work of the local community.",
+          "text_mt": "Huwa midħul sewwa fix-xogħol tal-komunità lokali.",
+          "text_en": "He is deeply involved in the work of the local community."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/mɪˈdħuːl/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "passive",
+        "gender": "masculine",
+        "verbal_form": "I",
+        "is_inflectable": 1,
+        "form_masc_pattern": "m12û3",
+        "form_fem_pattern": "m12û3a",
+        "form_plural_pattern": "m12û3in"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-daħal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-wasla",
+      "headword": "wasla",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "w-s-l",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: wasla",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/wasla",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "وَصْلَة",
+          "pronunciation": "waṣlaẗ",
+          "definition": "arrival, connection"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "arrival, coming, reaching a destination",
+          "text_mt": "Il-mument jew l-att li fih vjaġġatur jew mezz ta' trasport jilħaq il-punt iddestinat.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-wasla tat-titjira ttardjat b'nofs siegħa minħabba r-riħ.",
+          "en": "The arrival of the flight was delayed by half an hour due to the wind.",
+          "text_mt": "Il-wasla tat-titjira ttardjat b'nofs siegħa minħabba r-riħ.",
+          "text_en": "The arrival of the flight was delayed by half an hour due to the wind."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɐs.lɐ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "noun_type": "verbal",
+        "singular_form": "wasla",
+        "plural_forms": [
+          "wasliet"
+        ]
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-wasal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-twassil",
+      "headword": "twassil",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "w-s-l",
+      "stem": null,
+      "cv_pattern": "t1v22î3",
+      "morph_pattern": "tC1vC2C2îC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: twassil",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/twassil",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَوْصِيل",
+          "pronunciation": "tawṣîl",
+          "definition": "delivery, conveyance"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "delivery, conveyance, handing over, giving a lift",
+          "text_mt": "It-teħid u l-kunsinna ta' oġġetti, ittri, messaġġi jew persuni sal-post mixtieq.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Is-servizz tat-twassil fid-djar jaħdem kuljum.",
+          "en": "The home delivery service operates every day.",
+          "text_mt": "Is-servizz tat-twassil fid-djar jaħdem kuljum.",
+          "text_en": "The home delivery service operates every day."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/twɐsˈsiːl/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "noun_type": "verbal",
+        "singular_form": "twassil"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-wassal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-mwassal",
+      "headword": "mwassal",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": "w-s-l",
+      "stem": null,
+      "cv_pattern": "m1v22v3",
+      "morph_pattern": "mC1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mwassal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mwassal",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُوَصَّل",
+          "pronunciation": "muwaṣṣal",
+          "definition": "delivered, conveyed"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "delivered, conveyed, brought to a destination",
+          "text_mt": "Li ġie mressaq u mogħti f'idejn ir-riċevitur jew imħolli fid-destinazzjoni tiegħu.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-pakkett wasal id-dar imwassal fil-ħin stabbilit.",
+          "en": "The parcel arrived at home delivered on schedule.",
+          "text_mt": "Il-pakkett wasal id-dar imwassal fil-ħin stabbilit.",
+          "text_en": "The parcel arrived at home delivered on schedule."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmwɐs.sɐl/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "passive",
+        "gender": "masculine",
+        "verbal_form": "II",
+        "is_inflectable": 1,
+        "form_masc_pattern": "m1v22v3",
+        "form_fem_pattern": "m1v223a",
+        "form_plural_pattern": "m1v223in"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-wassal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-mixi",
+      "headword": "mixi",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "m-x-j",
+      "stem": null,
+      "cv_pattern": "1v2i",
+      "morph_pattern": "C1vC2i",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mixi",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mixi",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَشْي",
+          "pronunciation": "maxy",
+          "definition": "walking, gait"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "walking, on foot, pace",
+          "text_mt": "Iċ-ċaqliq tal-bniedem jew tal-annimali fuq saqajhom biex javvanzaw bil-pass minn post għal ieħor.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-mixi kuljum jagħmel tajjeb ħafna għas-saħħa.",
+          "en": "Walking every day is very good for health.",
+          "text_mt": "Il-mixi kuljum jagħmel tajjeb ħafna għas-saħħa.",
+          "text_en": "Walking every day is very good for health."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Użat spiss fl-espressjoni awverbjali 'bil-mixi' biex jindika vjaġġ fuq saqajn mingħajr vettura.",
+        "en": "Commonly used in the adverbial phrase 'bil-mixi' meaning 'on foot'."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɪ.ʃɪ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "noun_type": "verbal",
+        "singular_form": "mixi"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-mexa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-mxija",
+      "headword": "mxija",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "m-x-j",
+      "stem": null,
+      "cv_pattern": "12v3a",
+      "morph_pattern": "C1C2vC3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mxija",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mxija",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مِشْيَة",
+          "pronunciation": "mixjaẗ",
+          "definition": "a walk, manner of walking"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "a walk, stroll, gait, manner of walking",
+          "text_mt": "Passiġġata qasira għall-arja friska, jew il-qagħda u l-istil partikolari ta' kif persuna ċċaqlaq riġlejha.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħarġu għal mixja ħafifa fil-ġnien wara l-ikel.",
+          "en": "They went out for a light stroll in the garden after dinner.",
+          "text_mt": "Ħarġu għal mixja ħafifa fil-ġnien wara l-ikel.",
+          "text_en": "They went out for a light stroll in the garden after dinner."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmʃɪ.jɐ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "noun_type": "instance",
+        "singular_form": "mxija",
+        "plural_forms": [
+          "mxijiet"
+        ]
+      },
+      "alternative_forms": [
+        "mixja"
+      ],
+      "related_entries": [
+        {
+          "target_entry_id": "v-mexa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-miexi",
+      "headword": "miexi",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": "m-x-j",
+      "stem": null,
+      "cv_pattern": "1ie2i",
+      "morph_pattern": "C1ieC2i",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: miexi",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/miexi",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَاشِي",
+          "pronunciation": "mâxî",
+          "definition": "walking, going"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "walking, going on foot, moving forward, progressing",
+          "text_mt": "Li jinsab għaddej fuq saqajh tul triq, jew li qed javvanza u jaħdem b'mod regolari.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ix-xogħol miexi sew u se jitlesta dalwaqt.",
+          "en": "The work is going well and will be finished soon.",
+          "text_mt": "Ix-xogħol miexi sew u se jitlesta dalwaqt.",
+          "text_en": "The work is going well and will be finished soon."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɪː.ʃɪ/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "active",
+        "gender": "masculine",
+        "verbal_form": "I",
+        "is_inflectable": 1,
+        "form_masc_pattern": "1ie2i",
+        "form_fem_pattern": "1ie2ja",
+        "form_plural_pattern": "1ie2jin"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-mexa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-mimxi",
+      "headword": "mimxi",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": "m-x-j",
+      "stem": null,
+      "cv_pattern": "mi12i",
+      "morph_pattern": "miC1C2i",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mimxi",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mimxi",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَمْشِيّ",
+          "pronunciation": "mamxî",
+          "definition": "walked along"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "walked, trodden, traversed",
+          "text_mt": "Triq jew mogħdija li minnha jgħaddu spiss nies fuq saqajhom, jew medda li nqasmet pass pass.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Din it-mogħdija hija mimxija ħafna matul ir-rebbiegħa.",
+          "en": "This footpath is frequently walked during spring.",
+          "text_mt": "Din it-mogħdija hija mimxija ħafna matul ir-rebbiegħa.",
+          "text_en": "This footpath is frequently walked during spring."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɪm.ʃɪ/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "passive",
+        "gender": "masculine",
+        "verbal_form": "I",
+        "is_inflectable": 1,
+        "form_masc_pattern": "mi12i",
+        "form_fem_pattern": "mi12ija",
+        "form_plural_pattern": "mi12ijin"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-mexa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-tgħaddija",
+      "headword": "tgħaddija",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "għ-d-j",
+      "stem": null,
+      "cv_pattern": "t1v22i3a",
+      "morph_pattern": "tC1vC2C2iC3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: tgħaddija",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tgħaddija",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَعْدِيَة",
+          "pronunciation": "tagħdijaẗ",
+          "definition": "passing over, crossing"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "passing, crossing, passage, handing over",
+          "text_mt": "It-trażmissjoni jew il-qsim minn naħa għal oħra, l-iskorrer taż-żmien, jew it-trasferiment ta' ħaġa minn id għal oħra.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tgħaddija tal-liġi saret wara diskussjoni twila.",
+          "en": "The passage of the law took place after a long discussion.",
+          "text_mt": "It-tgħaddija tal-liġi saret wara diskussjoni twila.",
+          "text_en": "The passage of the law took place after a long discussion."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tɐdˈdɪː.jɐ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "noun_type": "verbal",
+        "singular_form": "tgħaddija",
+        "plural_forms": [
+          "tgħaddijiet"
+        ]
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-għadda",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-mgħoddi",
+      "headword": "mgħoddi",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "għ-d-j",
+      "stem": null,
+      "cv_pattern": "m1v22i",
+      "morph_pattern": "mC1vC2C2i",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mgħoddi",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mgħoddi",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُعَدًّى",
+          "pronunciation": "mugħaddan",
+          "definition": "passed, elapsed"
+        }
+      ],
+      "etymology_notes": "Substantivized passive participle of għadda.",
+      "definitions": [
+        {
+          "text_en": "the past, bygone time, elapsed",
+          "text_mt": "Iż-żmien kollu li ntemm qabel il-preżent, jew avveniment li ġara fl-antik.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Irridu nitgħallmu mill-iżbalji tal-mgħoddi.",
+          "en": "We must learn from the mistakes of the past.",
+          "text_mt": "Irridu nitgħallmu mill-iżbalji tal-mgħoddi.",
+          "text_en": "We must learn from the mistakes of the past."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Użat prinċipalment bl-artiklu definit bħala nom ('il-mgħoddi', jiġifieri l-passat).",
+        "en": "Used primarily with the definite article as a noun ('il-mgħoddi', meaning 'the past')."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɔd.dɪ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "noun_type": "nominalized_participle",
+        "singular_form": "mgħoddi"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-għadda",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-waqgħa",
+      "headword": "waqgħa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "w-q-għ",
+      "stem": null,
+      "cv_pattern": "1v23a",
+      "morph_pattern": "C1vC2C3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: waqgħa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/waqgħa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "وَقْعَة",
+          "pronunciation": "waqgħaẗ",
+          "definition": "a fall, blow"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "a fall, drop, tumble, collapse",
+          "text_mt": "In-niżla f'daqqa ta' persuna jew oġġett lejn l-art, jew tnaqqis ħesrem fil-livell jew fil-valur.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ħa waqgħa kerha fuq it-taraġ imma ma weġġax serjament.",
+          "en": "He took a bad fall on the stairs but was not seriously hurt.",
+          "text_mt": "Ħa waqgħa kerha fuq it-taraġ imma ma weġġax serjament.",
+          "text_en": "He took a bad fall on the stairs but was not seriously hurt."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɐʔ.ɐ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "noun_type": "verbal",
+        "singular_form": "waqgħa",
+        "plural_forms": [
+          "waqgħat"
+        ]
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-waqa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-lħiq",
+      "headword": "lħiq",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "l-ħ-q",
+      "stem": null,
+      "cv_pattern": "12v3",
+      "morph_pattern": "C1C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: lħiq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/lħiq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "لَحَاق",
+          "pronunciation": "laħâq",
+          "definition": "catching up, attainment"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "reaching, attainment, catching up with",
+          "text_mt": "Il-wasla sa punt, għan jew persuna li tkun miexja quddiemek, jew il-kisba ta' pożizzjoni u età.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-lħiq tal-miri jitlob ħidma kontinwa u dixxiplina.",
+          "en": "The attainment of goals requires continuous work and discipline.",
+          "text_mt": "Il-lħiq tal-miri jitlob ħidma kontinwa u dixxiplina.",
+          "text_en": "The attainment of goals requires continuous work and discipline."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlħiːʔ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "noun_type": "verbal",
+        "singular_form": "lħiq"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-laħaq",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-milħuq",
+      "headword": "milħuq",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": "l-ħ-q",
+      "stem": null,
+      "cv_pattern": "m12û3",
+      "morph_pattern": "mC1C2ûC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: milħuq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/milħuq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَلْحُوق",
+          "pronunciation": "malħûq",
+          "definition": "reached, overtaken"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "reached, attained, achieved, caught up with",
+          "text_mt": "Li ġie miksub, maqbud jew komplut wara ħidma, negozjat jew vjaġġ.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Wara laqgħa twila, il-ftehim kien finalment milħuq.",
+          "en": "After a long meeting, the agreement was finally reached.",
+          "text_mt": "Wara laqgħa twila, il-ftehim kien finalment milħuq.",
+          "text_en": "After a long meeting, the agreement was finally reached."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/mɪlˈħuːʔ/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "passive",
+        "gender": "masculine",
+        "verbal_form": "I",
+        "is_inflectable": 1,
+        "form_masc_pattern": "m12û3",
+        "form_fem_pattern": "m12û3a",
+        "form_plural_pattern": "m12û3in"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-laħaq",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-segwit",
+      "headword": "segwit",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "-segw-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "source_language": "Italian",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: segwit",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/segwit",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "seguito",
+          "pronunciation": "seˈɡwi.to",
+          "definition": "followed"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "followed, pursued, succeeded by",
+          "text_mt": "Li jiġi direttament wara ġrajja jew persuna oħra f'sensiela, jew li jkun mibni fuq eżempju ta' qablu.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-kunċert kien segwit minn ċelebrazzjoni fil-pjazza.",
+          "en": "The concert was followed by a celebration in the square.",
+          "text_mt": "Il-kunċert kien segwit minn ċelebrazzjoni fil-pjazza.",
+          "text_en": "The concert was followed by a celebration in the square."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/sɛɡˈwiːt/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "passive",
+        "gender": "masculine",
+        "verbal_form": "romance",
+        "is_inflectable": 1
+      },
+      "alternative_forms": [
+        "msegwi"
+      ],
+      "related_entries": [
+        {
+          "target_entry_id": "v-segwa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-rregolat",
+      "headword": "rregolat",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "-rregol-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "source_language": "Italian",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: rregolat",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/rregolat",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "regolato",
+          "pronunciation": "re.ɡoˈla.to",
+          "definition": "regulated, controlled"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "regulated, controlled, well-ordered, adjusted",
+          "text_mt": "Li huwa kkontrollat, ordnat u mmexxi b'liġijiet, limiti jew proċeduri stabbiliti.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Is-suq issa huwa rregolat minn regoli aktar stretti.",
+          "en": "The market is now regulated by stricter rules.",
+          "text_mt": "Is-suq issa huwa rregolat minn regoli aktar stretti.",
+          "text_en": "The market is now regulated by stricter rules."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/rːɛ.ɡɔˈlɐːt/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "passive",
+        "gender": "masculine",
+        "verbal_form": "romance",
+        "is_inflectable": 1
+      },
+      "alternative_forms": [
+        "regolat"
+      ],
+      "related_entries": [
+        {
+          "target_entry_id": "v-rregola",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-daħħal",
+      "headword": "daħħal",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "1v22v3",
+      "morph_pattern": "C1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: daħħal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/daħħal",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "دَخَّلَ",
+          "pronunciation": "daḣḣala",
+          "definition": "to insert, bring in"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to insert, bring in, include, earn, acquire",
+          "text_mt": "Iqiegħed ħaġa ġewwa spazju magħluq, iżid isem jew tagħrif f'lista, jew jaqla' qligħ minn ħidma.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Daħħal iċ-ċavetta fis-serratura u fetaħ il-bieb.",
+          "en": "He inserted the key into the lock and opened the door.",
+          "text_mt": "Daħħal iċ-ċavetta fis-serratura u fetaħ il-bieb.",
+          "text_en": "He inserted the key into the lock and opened the door."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈdɐħ.ħɐl/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "II",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "daħħal",
+        "imperfective_3sgm": "jdaħħal",
+        "verbal_noun": "tdaħħil",
+        "active_participle": null,
+        "passive_participle": "mdaħħal",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-daħal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-ddaħħal",
+      "headword": "ddaħħal",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "t1v22v3",
+      "morph_pattern": "tC1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ddaħħal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ddaħħal",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَدَخُّل",
+          "pronunciation": "tadaḣḣul",
+          "definition": "entering into, interfering"
+        }
+      ],
+      "etymology_notes": "Maltese Form V reflexive-passive of daħħal with t-assimilating to d-.",
+      "definitions": [
+        {
+          "text_en": "to be inserted, be included, meddle, enter oneself",
+          "text_mt": "Jitqiegħed ġewwa post jew jiġi inkluż f'lista, jew jintervjeni b'mod mhux mitlub fi ħwejjeġ li ma jmissux lilu.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-isem il-ġdid ddaħħal fil-lista uffiċjali tal-parteċipanti.",
+          "en": "The new name was included in the official list of participants.",
+          "text_mt": "L-isem il-ġdid ddaħħal fil-lista uffiċjali tal-parteċipanti.",
+          "text_en": "The new name was included in the official list of participants."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Il-prefiss riflessiv 't-' jassimila għal 'd-' quddiem il-konsonanti tal-bidu.",
+        "en": "Reflexive prefix 't-' assimilates to the initial 'd-' of the stem."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈddɐħ.ħɐl/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "V",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "ddaħħal",
+        "imperfective_3sgm": "jiddaħħal",
+        "verbal_noun": null,
+        "active_participle": null,
+        "passive_participle": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-daħħal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-ndaħal",
+      "headword": "ndaħal",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "n1v2v3",
+      "morph_pattern": "nC1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ndaħal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ndaħal",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "اِنْدَخَلَ",
+          "pronunciation": "indaḣala",
+          "definition": "to enter, interfere"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to interfere, meddle, intervene, intrude",
+          "text_mt": "Jintervjeni jew iħabbel rasu fi ħwejjeġ, f'taħdit jew fi kwistjonijiet ta' ħaddieħor mingħajr ma jkun mistieden.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ma ndaħalx fil-konversazzjoni tagħhom u baqa' sieket.",
+          "en": "He did not interfere in their conversation and remained silent.",
+          "text_mt": "Ma ndaħalx fil-konversazzjoni tagħhom u baqa' sieket.",
+          "text_en": "He did not interfere in their conversation and remained silent."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈndɐ.ħɐl/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "VII",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "ndaħal",
+        "imperfective_3sgm": "jindaħal",
+        "verbal_noun": "ndħil",
+        "active_participle": null,
+        "passive_participle": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-daħal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-twassal",
+      "headword": "twassal",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "w-s-l",
+      "stem": null,
+      "cv_pattern": "t1v22v3",
+      "morph_pattern": "tC1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: twassal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/twassal",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَوَصُّل",
+          "pronunciation": "tawaṣṣul",
+          "definition": "arriving, being conveyed"
+        }
+      ],
+      "etymology_notes": "Maltese Form V mediopassive of wassal.",
+      "definitions": [
+        {
+          "text_en": "to be delivered, be conveyed, be brought",
+          "text_mt": "Jiġi mressaq u kkonsenjat f'idejn ir-riċevitur jew imħolli fil-post iddestinat.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-messaġġ twassal lil kull membru tal-kumitat.",
+          "en": "The message was delivered to every member of the committee.",
+          "text_mt": "Il-messaġġ twassal lil kull membru tal-kumitat.",
+          "text_en": "The message was delivered to every member of the committee."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtwɐs.sɐl/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "V",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "twassal",
+        "imperfective_3sgm": "jitwassal",
+        "verbal_noun": null,
+        "active_participle": null,
+        "passive_participle": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-wassal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-mexxa",
+      "headword": "mexxa",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "m-x-j",
+      "stem": null,
+      "cv_pattern": "1v22a",
+      "morph_pattern": "C1vC2C2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mexxa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mexxa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مَشَّى",
+          "pronunciation": "maxxâ",
+          "definition": "to make walk, manage, lead"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to lead, manage, drive, guide, run",
+          "text_mt": "Jiggwida u jidderieġi kumpanija, tim jew vettura lejn id-direzzjoni mixtieqa.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Mexxa l-kumpanija b'għaqal kbir għal ħafna snin.",
+          "en": "He managed the company with great wisdom for many years.",
+          "text_mt": "Mexxa l-kumpanija b'għaqal kbir għal ħafna snin.",
+          "text_en": "He managed the company with great wisdom for many years."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmɛʃ.ʃɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "II",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "transitive",
+        "perfective_3sgm": "mexxa",
+        "imperfective_3sgm": "jmexxi",
+        "verbal_noun": "tmexxija",
+        "active_participle": null,
+        "passive_participle": "mmexxi",
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "e-i",
+        "vowel_set_impv": "e-i"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-mexa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-tmexxa",
+      "headword": "tmexxa",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "m-x-j",
+      "stem": null,
+      "cv_pattern": "t1v22a",
+      "morph_pattern": "tC1vC2C2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: tmexxa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tmexxa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَمَشَّى",
+          "pronunciation": "tamaxxâ",
+          "definition": "to be guided, take a walk"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to be led, be managed, be moved, stroll",
+          "text_mt": "Jiġi ggwidat u kkontrollat minn ħaddieħor, jew idur bil-kalma f'passiġġata.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-proġett tmexxa b'pass sod mill-ewwel jum.",
+          "en": "The project was managed at a steady pace from the first day.",
+          "text_mt": "Il-proġett tmexxa b'pass sod mill-ewwel jum.",
+          "text_en": "The project was managed at a steady pace from the first day."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtmɛʃ.ʃɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "V",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "intransitive",
+        "perfective_3sgm": "tmexxa",
+        "imperfective_3sgm": "jitmexxa",
+        "verbal_noun": null,
+        "active_participle": null,
+        "passive_participle": null,
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "e-a",
+        "vowel_set_impv": "e-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-mexxa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-tgħadda",
+      "headword": "tgħadda",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "għ-d-j",
+      "stem": null,
+      "cv_pattern": "t1v22a",
+      "morph_pattern": "tC1vC2C2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: tgħadda",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tgħadda",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَعَدَّى",
+          "pronunciation": "tagħaddâ",
+          "definition": "to be passed, cross over"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to be passed, be handed over, pass away, elapse",
+          "text_mt": "Jiġi trasferit jew ikkonsenjat minn id għal oħra, jew jintemm u jiskadi maż-żmien.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tagħrif tgħadda lill-istudenti kollha qabel l-eżami.",
+          "en": "The information was passed on to all students before the exam.",
+          "text_mt": "It-tagħrif tgħadda lill-istudenti kollha qabel l-eżami.",
+          "text_en": "The information was passed on to all students before the exam."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtɐd.dɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "V",
+        "class": "weak",
+        "weak_class": "defective",
+        "transitivity": "intransitive",
+        "perfective_3sgm": "tgħadda",
+        "imperfective_3sgm": "jitgħadda",
+        "verbal_noun": null,
+        "active_participle": null,
+        "passive_participle": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-għadda",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-waqqa",
+      "headword": "waqqa'",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "w-q-għ",
+      "stem": null,
+      "cv_pattern": "1v22v3",
+      "morph_pattern": "C1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: waqqa'",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/waqqa'",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "وَقَّعَ",
+          "pronunciation": "waqqagħa",
+          "definition": "to drop, cause to fall"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to drop, knock down, demolish, bring down",
+          "text_mt": "Iħalli oġġett jaħbat mal-art minn għoli, jew iġarraf bini u ħajt.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Waqqa' l-platt bi żball waqt li kien qed inaddaf.",
+          "en": "He dropped the plate by mistake while cleaning.",
+          "text_mt": "Waqqa' l-platt bi żball waqt li kien qed inaddaf.",
+          "text_en": "He dropped the plate by mistake while cleaning."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɐʔ.ʔɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "II",
+        "class": "strong-hybrid",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "waqqa'",
+        "imperfective_3sgm": "jwaqqa'",
+        "verbal_noun": "twaqqigħ",
+        "active_participle": null,
+        "passive_participle": "mwaqqa'",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-waqa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-twaqqa",
+      "headword": "twaqqa'",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "w-q-għ",
+      "stem": null,
+      "cv_pattern": "t1v22v3",
+      "morph_pattern": "tC1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: twaqqa'",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/twaqqa'",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَوَقَّعَ",
+          "pronunciation": "tawaqqagħa",
+          "definition": "to be dropped, fall down"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to be dropped, be demolished, be torn down",
+          "text_mt": "Jinġarraf għall-art jew jitniżżel 'l isfel b'forza.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Il-ħajt l-antik twaqqa' biex titwessa' t-triq.",
+          "en": "The old wall was torn down to widen the road.",
+          "text_mt": "Il-ħajt l-antik twaqqa' biex titwessa' t-triq.",
+          "text_en": "The old wall was torn down to widen the road."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtwɐʔ.ʔɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "V",
+        "class": "strong-hybrid",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "twaqqa'",
+        "imperfective_3sgm": "jitwaqqa'",
+        "verbal_noun": null,
+        "active_participle": null,
+        "passive_participle": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-waqqa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-laħħaq",
+      "headword": "laħħaq",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "l-ħ-q",
+      "stem": null,
+      "cv_pattern": "1v22v3",
+      "morph_pattern": "C1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: laħħaq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/laħħaq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "لَحَّقَ",
+          "pronunciation": "laħħaqa",
+          "definition": "to cause to reach, appoint, supply"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to appoint, promote, keep up with, cope with",
+          "text_mt": "Jaħtar lil xi ħadd f'kariga ogħla, jew ilesti l-ħidma u jaqdi l-obbligi kollha fil-ħin.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Bil-kemm laħħaq max-xogħol kollu ta' dik il-ġimgħa.",
+          "en": "He barely kept up with all the work of that week.",
+          "text_mt": "Bil-kemm laħħaq max-xogħol kollu ta' dik il-ġimgħa.",
+          "text_en": "He barely kept up with all the work of that week."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈlɐħ.ħɐʔ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "II",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "both",
+        "perfective_3sgm": "laħħaq",
+        "imperfective_3sgm": "jlaħħaq",
+        "verbal_noun": "tlaħħiq",
+        "active_participle": null,
+        "passive_participle": "mlaħħaq",
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-laħaq",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-tlaħħaq",
+      "headword": "tlaħħaq",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "l-ħ-q",
+      "stem": null,
+      "cv_pattern": "t1v22v3",
+      "morph_pattern": "tC1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: tlaħħaq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tlaħħaq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَلَحَّقَ",
+          "pronunciation": "talaħħaqa",
+          "definition": "to be appointed, catch up"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "to be appointed, be promoted, cope, keep pace",
+          "text_mt": "Jirċievi ħatra f'kariga ogħla, jew jirnexxilu jżomm pass sħiħ mar-ritmu ta' ħidma u spejjeż.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Wara snin ta' servizz tlaħħaq bħala kap tad-dipartiment.",
+          "en": "After years of service he was promoted as head of the department.",
+          "text_mt": "Wara snin ta' servizz tlaħħaq bħala kap tad-dipartiment.",
+          "text_en": "After years of service he was promoted as head of the department."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈtlɐħ.ħɐʔ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "V",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "tlaħħaq",
+        "imperfective_3sgm": "jitlaħħaq",
+        "verbal_noun": null,
+        "active_participle": null,
+        "passive_participle": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-laħħaq",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-ntlaħaq",
+      "headword": "ntlaħaq",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "l-ħ-q",
+      "stem": null,
+      "cv_pattern": "nt1v2v3",
+      "morph_pattern": "ntC1vC2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ntlaħaq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ntlaħaq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "لَحِقَ",
+          "pronunciation": "laħiqa",
+          "definition": "to reach, attain"
+        }
+      ],
+      "etymology_notes": "Maltese Form VII mediopassive of [[v-laħaq|laħaq]] with infixed -t-.",
+      "definitions": [
+        {
+          "text_en": "to be reached, be attained, be agreed upon",
+          "text_mt": "Jinkiseb jew jintemm b'suċċess bħala mira, punt jew ftehim bejn żewġ partijiet.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Wara taħditiet twal ntlaħaq ftehim ġust għal kulħadd.",
+          "en": "After long talks a fair agreement for everyone was reached.",
+          "text_mt": "Wara taħditiet twal ntlaħaq ftehim ġust għal kulħadd.",
+          "text_en": "After long talks a fair agreement for everyone was reached."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Jieħu 'i-' ewfonika bħala 'intlaħaq' fil-bidu ta' frażi jew wara konsonanti.",
+        "en": "Takes euphonic 'i-' ('intlaħaq') utterance-initially or after a consonant."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈntlɐ.ħɐʔ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "VII",
+        "class": "strong",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "ntlaħaq",
+        "imperfective_3sgm": "jintlaħaq",
+        "verbal_noun": null,
+        "active_participle": null,
+        "passive_participle": null,
+        "vowel_set_perf": "a-a",
+        "vowel_set_impf": "a-a",
+        "vowel_set_impv": "a-a"
+      },
+      "alternative_forms": [
+        "intlaħaq"
+      ],
+      "related_entries": [
+        {
+          "target_entry_id": "v-laħaq",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "v-issegwa",
+      "headword": "issegwa",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "-segw-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "source_language": "Italian",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: issegwa",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/issegwa",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "seguire",
+          "pronunciation": "seˈɡwi.re",
+          "definition": "to follow"
+        }
+      ],
+      "etymology_notes": "Mediostative or passive derivative of [[v-segwa|segwa]] on Romance stem -segw-.",
+      "definitions": [
+        {
+          "text_en": "to be followed, be pursued, ensue",
+          "text_mt": "Jiġi applikat jew imwettaq f'ordni suċċessiva, jew iseħħ direttament wara ħaġa oħra.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Dawn l-istruzzjonijiet għandhom jissegwew bir-reqqa kollha.",
+          "en": "These instructions must be followed with full care.",
+          "text_mt": "Dawn l-istruzzjonijiet għandhom jissegwew bir-reqqa kollha.",
+          "text_en": "These instructions must be followed with full care."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɪsˈsɛ.ɡwɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "romance",
+        "class": "ir",
+        "weak_class": null,
+        "transitivity": "intransitive",
+        "perfective_3sgm": "issegwa",
+        "imperfective_3sgm": "jissegwa",
+        "verbal_noun": null,
+        "vowel_set_perf": null,
+        "vowel_set_impf": null,
+        "vowel_set_impv": null
+      },
+      "alternative_forms": [
+        "ssegwa"
+      ],
+      "related_entries": [
+        {
+          "target_entry_id": "v-segwa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-tdaħħil",
+      "headword": "tdaħħil",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "t1v22î3",
+      "morph_pattern": "tC1vC2C2îC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: tdaħħil",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tdaħħil",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَدْخِيل",
+          "pronunciation": "tadḣîl",
+          "definition": "insertion, inclusion"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "insertion, introduction, inclusion, importation",
+          "text_mt": "It-tqegħid ta' ħaġa ġewwa spazju magħluq, l-introduzzjoni ta' sistema ġdida, jew iż-żieda ta' tagħrif f'reġistru.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tdaħħil tas-sistema l-ġdida ħa diversi ġimgħat.",
+          "en": "The introduction of the new system took several weeks.",
+          "text_mt": "It-tdaħħil tas-sistema l-ġdida ħa diversi ġimgħat.",
+          "text_en": "The introduction of the new system took several weeks."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tdɐħˈħiːl/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "noun_type": "verbal",
+        "singular_form": "tdaħħil"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-daħħal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-mdaħħal",
+      "headword": "mdaħħal",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "m1v22v3",
+      "morph_pattern": "mC1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mdaħħal",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mdaħħal",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُدَخَّل",
+          "pronunciation": "mudaḣḣal",
+          "definition": "inserted, brought in"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "inserted, included, introduced, advanced in age",
+          "text_mt": "Li ġie mqiegħed ġewwa jew miżjud f'reġistru, u b'mod idjomatiku ma' 'fiż-żmien' ifisser xih.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Anki jekk huwa mdaħħal fiż-żmien, baqa' attiv ħafna.",
+          "en": "Even though he is advanced in age, he remained very active.",
+          "text_mt": "Anki jekk huwa mdaħħal fiż-żmien, baqa' attiv ħafna.",
+          "text_en": "Even though he is advanced in age, he remained very active."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Fl-espressjoni 'mdaħħal fiż-żmien' ifisser persuna ta' età kbira jew xiha.",
+        "en": "In the idiom 'mdaħħal fiż-żmien', it means 'elderly' or 'advanced in years'."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmdɐħ.ħɐl/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "passive",
+        "gender": "masculine",
+        "verbal_form": "II",
+        "is_inflectable": 1,
+        "form_masc_pattern": "m1v22v3",
+        "form_fem_pattern": "m1v223a",
+        "form_plural_pattern": "m1v223in"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-daħħal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-ndħil",
+      "headword": "ndħil",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "d-ħ-l",
+      "stem": null,
+      "cv_pattern": "n12î3",
+      "morph_pattern": "nC1C2îC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: ndħil",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/ndħil",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "اِنْدِخَال",
+          "pronunciation": "indiḣâl",
+          "definition": "interference, intrusion"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "interference, meddling, intrusion, intervention",
+          "text_mt": "L-intervent mhux mitlub jew it-tħabbit f'affarijiet privati ta' ħaddieħor bla dritt u bla permess.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ma jogħġobnix l-indħil żejjed fil-ħajja privata tan-nies.",
+          "en": "I do not like excessive meddling in people's private lives.",
+          "text_mt": "Ma jogħġobnix l-indħil żejjed fil-ħajja privata tan-nies.",
+          "text_en": "I do not like excessive meddling in people's private lives."
+        }
+      ],
+      "usage_notes": {
+        "mt": "Jieħu 'i-' ewfonika wara l-artiklu jew konsonanti, bħal 'l-indħil'.",
+        "en": "Takes euphonic 'i-' after the definite article or a consonant, as in 'l-indħil'."
+      },
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈndħiːl/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "noun_type": "verbal",
+        "singular_form": "ndħil"
+      },
+      "alternative_forms": [
+        "indħil"
+      ],
+      "related_entries": [
+        {
+          "target_entry_id": "v-ndaħal",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-tmexxija",
+      "headword": "tmexxija",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": "m-x-j",
+      "stem": null,
+      "cv_pattern": "t1v22i3a",
+      "morph_pattern": "tC1vC2C2iC3a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: tmexxija",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tmexxija",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَمْشِيَة",
+          "pronunciation": "tamxijaẗ",
+          "definition": "management, running, guiding"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "leadership, management, direction, governance",
+          "text_mt": "L-amministrazzjoni, it-tħaddim u d-direzzjoni ta' organizzazzjoni, proġett jew tim ta' nies.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Taħt it-tmexxija l-ġdida l-iskola għamlet progress kbir.",
+          "en": "Under the new leadership the school made great progress.",
+          "text_mt": "Taħt it-tmexxija l-ġdida l-iskola għamlet progress kbir.",
+          "text_en": "Under the new leadership the school made great progress."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tmɛʃˈʃɪː.jɐ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "noun_type": "verbal",
+        "singular_form": "tmexxija",
+        "plural_forms": [
+          "tmexxijiet"
+        ]
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-mexxa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-mmexxi",
+      "headword": "mmexxi",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": "m-x-j",
+      "stem": null,
+      "cv_pattern": "m1v22i",
+      "morph_pattern": "mC1vC2C2i",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mmexxi",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mmexxi",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُمَشًّى",
+          "pronunciation": "mumaxxan",
+          "definition": "led, guided, managed"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "led, managed, directed, guided",
+          "text_mt": "Li huwa gwidat, amministrat u mħaddem taħt il-ħarsien u d-direzzjoni ta' xi ħadd.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "L-uffiċċju huwa mmexxi minn tim żgħir imma effiċjenti.",
+          "en": "The office is run by a small but efficient team.",
+          "text_mt": "L-uffiċċju huwa mmexxi minn tim żgħir imma effiċjenti.",
+          "text_en": "The office is run by a small but efficient team."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmmɛʃ.ʃɪ/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "passive",
+        "gender": "masculine",
+        "verbal_form": "II",
+        "is_inflectable": 1,
+        "form_masc_pattern": "m1v22i",
+        "form_fem_pattern": "m1v22ija",
+        "form_plural_pattern": "m1v22ijin"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-mexxa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-twaqqigħ",
+      "headword": "twaqqigħ",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "w-q-għ",
+      "stem": null,
+      "cv_pattern": "t1v22î3",
+      "morph_pattern": "tC1vC2C2îC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: twaqqigħ",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/twaqqigħ",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَوْقِيع",
+          "pronunciation": "tawqîgħ",
+          "definition": "dropping, demolition"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "demolition, tearing down, dropping, knocking down",
+          "text_mt": "It-tiġrif intenzjonat ta' bini u strutturi, jew it-twaddib ta' ħaġa 'l isfel lejn l-art.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ix-xogħol tat-twaqqigħ tal-ħajt beda kmieni dalgħodu.",
+          "en": "Work on demolishing the wall began early this morning.",
+          "text_mt": "Ix-xogħol tat-twaqqigħ tal-ħajt beda kmieni dalgħodu.",
+          "text_en": "Work on demolishing the wall began early this morning."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/twɐʔˈʔiː/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "noun_type": "verbal",
+        "singular_form": "twaqqigħ"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-waqqa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-mwaqqa",
+      "headword": "mwaqqa'",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": "w-q-għ",
+      "stem": null,
+      "cv_pattern": "m1v22v3",
+      "morph_pattern": "mC1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mwaqqa'",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mwaqqa'",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُوَقَّع",
+          "pronunciation": "muwaqqagħ",
+          "definition": "dropped, demolished"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "dropped, knocked down, demolished",
+          "text_mt": "Li ġie mġarraf mal-art, imkisser jew imniżżel 'l isfel.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Is-siġar mwaqqgħin mir-riħ għalqu t-triq prinċipali.",
+          "en": "The trees knocked down by the wind blocked the main road.",
+          "text_mt": "Is-siġar mwaqqgħin mir-riħ għalqu t-triq prinċipali.",
+          "text_en": "The trees knocked down by the wind blocked the main road."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmwɐʔ.ʔɐ/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "passive",
+        "gender": "masculine",
+        "verbal_form": "II",
+        "is_inflectable": 1,
+        "form_masc_pattern": "m1v22v3",
+        "form_fem_pattern": "m1v223a",
+        "form_plural_pattern": "m1v223in"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-waqqa",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-tlaħħiq",
+      "headword": "tlaħħiq",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": "l-ħ-q",
+      "stem": null,
+      "cv_pattern": "t1v22î3",
+      "morph_pattern": "tC1vC2C2îC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: tlaħħiq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/tlaħħiq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "تَلْحِيق",
+          "pronunciation": "talħîq",
+          "definition": "catching up, promotion"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "promotion, appointment, keeping up with, coping",
+          "text_mt": "Il-ħatra ta' persuna f'kariga ogħla, jew il-kapaċità li wieħed iżomm pass mal-ħidma u l-ispejjeż fil-ħin.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "It-tlaħħiq mal-ispejjeż sar aktar diffiċli din is-sena.",
+          "en": "Keeping up with expenses became harder this year.",
+          "text_mt": "It-tlaħħiq mal-ispejjeż sar aktar diffiċli din is-sena.",
+          "text_en": "Keeping up with expenses became harder this year."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/tlɐħˈħiːʔ/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "noun_type": "verbal",
+        "singular_form": "tlaħħiq"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-laħħaq",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "participle-mlaħħaq",
+      "headword": "mlaħħaq",
+      "pos": "participle",
+      "gender": "masculine",
+      "root_consonants": "l-ħ-q",
+      "stem": null,
+      "cv_pattern": "m1v22v3",
+      "morph_pattern": "mC1vC2C2vC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "source_language": "Arabic",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: mlaħħaq",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/mlaħħaq",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "مُلَحَّق",
+          "pronunciation": "mulaħħaq",
+          "definition": "appointed, brought up to date"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "promoted, appointed, caught up, up to date",
+          "text_mt": "Li ġie maħtur f'grad jew kariga ogħla, jew li żamm ruħu fil-ħin mal-bqija.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Bħala uffiċjal mlaħħaq ġdid, beda x-xogħol b'entużjażmu.",
+          "en": "As a newly promoted officer, he started work with enthusiasm.",
+          "text_mt": "Bħala uffiċjal mlaħħaq ġdid, beda x-xogħol b'entużjażmu.",
+          "text_en": "As a newly promoted officer, he started work with enthusiasm."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈmlɐħ.ħɐʔ/",
+          "notes": null
+        }
+      ],
+      "participle_morphology": {
+        "type": "passive",
+        "gender": "masculine",
+        "verbal_form": "II",
+        "is_inflectable": 1,
+        "form_masc_pattern": "m1v22v3",
+        "form_fem_pattern": "m1v223a",
+        "form_plural_pattern": "m1v223in"
+      },
+      "alternative_forms": [],
+      "related_entries": [
+        {
+          "target_entry_id": "v-laħħaq",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    },
+    {
+      "id": "n-rregolar",
+      "headword": "rregolar",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "-rregol-",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "source_language": "Italian",
+      "source_id": "src-wiktionary",
+      "source_citation": "Wiktionary: rregolar",
+      "source_title": "Wiktionary",
+      "source_year": null,
+      "source_page": "https://en.wiktionary.org/wiki/rregolar",
+      "source_publisher": "Wiktionary",
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "regolare",
+          "pronunciation": "re.ɡoˈla.re",
+          "definition": "to regulate, regulation"
+        }
+      ],
+      "etymology_notes": null,
+      "definitions": [
+        {
+          "text_en": "regulating, regulation, adjustment",
+          "text_mt": "Il-kontroll, ir-ranġar u l-istabbiliment ta' ordni u bilanċ f'sistema jew f'imġiba.",
+          "register": "standard",
+          "nuance": ""
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ir-rregolar tal-ħinijiet għen ħafna lill-ħaddiema.",
+          "en": "Regulating the working hours helped the workers greatly.",
+          "text_mt": "Ir-rregolar tal-ħinijiet għen ħafna lill-ħaddiema.",
+          "text_en": "Regulating the working hours helped the workers greatly."
+        }
+      ],
+      "usage_notes": null,
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/rːɛ.ɡɔˈlɐːr/",
+          "notes": null
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "noun_type": "verbal",
+        "singular_form": "rregolar"
+      },
+      "alternative_forms": [
+        "regolar"
+      ],
+      "related_entries": [
+        {
+          "target_entry_id": "v-rregola",
+          "relationship_type": "related"
+        }
+      ],
+      "tags": [],
+      "audit_status": "verified",
+      "theme": "Verbs: Motion, Travel & Direction",
+      "theme_id": "verbs_motion_travel"
+    }
+  ]
+}

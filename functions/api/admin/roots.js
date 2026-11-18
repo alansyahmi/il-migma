@@ -146,6 +146,11 @@ export async function onRequestPost({ request, env }) {
                 let val = body[col];
                 if (col === 'etymology') {
                     val = JSON.stringify(normalizeRootEtymologyValue(val));
+                } else if (col === 'strength' && typeof val === 'string') {
+                    const lower = val.trim().toLowerCase();
+                    val = lower === 'doubled' ? 'geminated' : (lower || 'strong');
+                } else if (col === 'weak_class' && typeof val === 'string') {
+                    val = val.trim().toLowerCase();
                 }
                 if (Array.isArray(val) || (val && typeof val === 'object' && col !== 'notes' && col !== 'source')) {
                     val = JSON.stringify(val);

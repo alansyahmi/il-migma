@@ -460,10 +460,10 @@ export async function onRequestGet({ params, request, env }) {
             dialect_variants: dialRes.rows,
             root_pattern_form: (entry.resolved_root_consonants) ? {
                 root: {
-                    id: entry.root_id || null,
+                    id: entry.root_id || entry.resolved_root_consonants || null,
                     consonants: entry.resolved_root_consonants,
-                    strength: entry.root_strength || 'strong',
-                    weak_class: entry.root_weak_class || null,
+                    strength: String(entry.root_strength || 'strong').toLowerCase(),
+                    weak_class: entry.root_weak_class ? String(entry.root_weak_class).toLowerCase() : null,
                     vowel_set_perf: entry.root_vowel_set_perf || null,
                     vowel_set_impf: entry.root_vowel_set_impf || null,
                     vowel_set_imp: entry.root_vowel_set_imp || null,

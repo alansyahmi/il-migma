@@ -65,14 +65,17 @@ export const ROOT_HANDLED_FIELDS = [
 
 export function buildRootPayload(form: RootFormData): Record<string, unknown> {
     const etymology = normalizeRootEtymologyChain(form.etymology);
+    const strength = String(form.strength || 'strong').trim().toLowerCase() || 'strong';
+    const weakClass = String(form.weak_class || '').trim().toLowerCase();
     return {
         id: form.id,
         consonants: form.consonants.trim().toLowerCase(),
-        strength: form.strength,
-        weak_class: form.weak_class || '',
+        strength,
+        weak_class: weakClass,
         gloss: JSON.stringify(form.glosses.filter(g => g.en || g.mt)),
         etymology: JSON.stringify(etymology),
         source: form.source,
+        notes: form.notes?.trim() || null,
         vowel_set_perf: form.vowel_set_perf,
         vowel_set_impf: form.vowel_set_impf,
         vowel_set_imp: form.vowel_set_imp,

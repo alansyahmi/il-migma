@@ -67,6 +67,7 @@ const CATEGORY_FILES = [
     { id: 'verbs_communication_speech', path: 'docs/1000-words-categories/DONE_verbs_communication_speech.json' },
     { id: 'verbs_irregular', path: 'docs/1000-words-categories/DONE_verbs_irregular.json' },
     { id: 'verbs_cognition_senses', path: 'docs/1000-words-categories/DONE_verbs_cognition_senses.json' },
+    { id: 'verbs_motion_travel', path: 'docs/1000-words-categories/DONE_verbs_motion_travel.json' },
 ];
 
 const selectedFiles = categoryArg
@@ -129,6 +130,7 @@ async function run() {
     const verbCols = await getTableColumns('verb_morphology');
     const nounCols = await getTableColumns('noun_morphology');
     const adjCols = await getTableColumns('adj_morphology');
+    const ptcpCols = await getTableColumns('participle_morphology');
     const phoneticsCols = await getTableColumns('phonetics');
     let stemsCols = await getTableColumns('stems');
     if (!isDryRun && stemsCols.size === 0) {
@@ -147,7 +149,7 @@ async function run() {
         stemsCols = await getTableColumns('stems');
     }
 
-    console.log(`   ✓ entries (${entryCols.size} cols), verb_morphology (${verbCols.size} cols), adj_morphology (${adjCols.size} cols), phonetics (${phoneticsCols.size} cols), stems (${stemsCols.size} cols). Common gender: ${allowsCommonGender ? 'YES' : 'NO (auto-mapping to neutral)'}`);
+    console.log(`   ✓ entries (${entryCols.size} cols), verb_morphology (${verbCols.size} cols), adj_morphology (${adjCols.size} cols), participle_morphology (${ptcpCols.size} cols), phonetics (${phoneticsCols.size} cols), stems (${stemsCols.size} cols). Common gender: ${allowsCommonGender ? 'YES' : 'NO (auto-mapping to neutral)'}`);
 
     // Verify existing lexical sources in 1 query
     const sourcesRes = await client.execute("SELECT id FROM lexical_sources");
@@ -349,7 +351,7 @@ async function run() {
                     zokk_is_hybrid: zokkIsHybrid,
                     zokk_agentive_suffix: zokkAgentiveSuffix,
                     is_loanword: e.is_loanword ? 1 : 0,
-                    is_inflectable: e.is_inflectable !== undefined ? (e.is_inflectable ? 1 : 0) : (e.pos === 'verb' ? 1 : 0),
+                    is_inflectable: e.is_inflectable !== undefined ? (e.is_inflectable ? 1 : 0) : (['verb', 'participle'].includes(e.pos) ? 1 : 0),
                     source_language: e.source_language || null,
                     source_id: sourceId,
                     source_citation: e.source_citation || null,
@@ -610,6 +612,25 @@ async function run() {
                         vowel_set_pl: am.vowel_set_pl || null,
                         pattern: am.pattern || am.morph_pattern || null,
                     }, adjCols, true);
+                }
+
+                // 8. Sync Participle Morphology (if pos is participle and participle_morphology exists)
+                if ((item.pos === 'participle' || e.pos === 'participle') && e.participle_morphology && ptcpCols.size > 0) {
+                    const pm = e.participle_morphology;
+                    const isInflectableVal = pm.is_inflectable !== undefined
+                        ? (pm.is_inflectable ? 1 : 0)
+                        : (e.is_inflectable !== undefined ? (e.is_inflectable ? 1 : 0) : 1);
+
+                    await runUpsert('participle_morphology', 'entry_id', {
+                        entry_id: entryId,
+                        type: pm.type || e.participle_type || null,
+                        gender: pm.gender || gender || 'masculine',
+                        verbal_form: pm.verbal_form || null,
+                        is_inflectable: isInflectableVal,
+                        form_masc_pattern: pm.form_masc_pattern || null,
+                        form_fem_pattern: pm.form_fem_pattern || null,
+                        form_plural_pattern: pm.form_plural_pattern || null,
+                    }, ptcpCols, true);
                 }
 
                 appliedCount++;
