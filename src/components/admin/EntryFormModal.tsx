@@ -3973,6 +3973,22 @@ export function EntryFormModal({ entry, onClose, onSaved, getToken, initialForm,
                             />
 
                             <div className="pt-2">
+                                <label className={label}>
+                                    {t('Etymology Note', 'Noti dwar l-Etimoloġija')}
+                                </label>
+                                <textarea
+                                    className={inp}
+                                    rows={2}
+                                    value={form.etymology_notes || ''}
+                                    onChange={e => set('etymology_notes', e.target.value)}
+                                    placeholder={t(
+                                        'Optional note on suppletive stems or sound shifts; link entries with [[v-id|label]]',
+                                        'Nota fakultattiva; orbot entrati b’[[v-id|isem]]'
+                                    )}
+                                />
+                            </div>
+
+                            <div className="pt-2">
                                 <label className={label}>{t('Source Citation', 'Sors / Referenza')}</label>
                                 <input
                                     className={inp}
