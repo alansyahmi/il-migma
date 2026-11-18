@@ -3403,15 +3403,21 @@ function VerbEntryView({ entry, onRefetch }: { entry: Entry; onRefetch?: () => v
                                     <span className="capitalize">{term(vm.transitivity || 'both')}</span>
                                 </PropRow>
 
-                                {hasStoredVowelSets && (
-                                    <PropRow label={term("vowel-set")} className="col-span-2 sm:col-span-1 md:col-span-1">
-                                        <div className="space-y-0 text-sm">
-                                            {storedVsetPerf && <p>{term('perfect')} <span className="opacity-55 text-[0.7rem]">{term('(past)')}</span>: <span className="font-mono">{storedVsetPerf}</span></p>}
-                                            {storedVsetImpf && <p>{term('imperfect')} <span className="opacity-55 text-[0.7rem]">{term('(present)')}</span>: <span className="font-mono">{storedVsetImpf}</span></p>}
-                                            {storedVsetImp && <p>{term('imperative')}: <span className="font-mono">{storedVsetImp}</span></p>}
-                                        </div>
-                                    </PropRow>
-                                )}
+                                {hasStoredVowelSets && (() => {
+                                    const fmtVset = (vs: string) =>
+                                        verbWeakClass === 'defective' && vs.includes('-')
+                                            ? `${vs.split('-')[0] || '-'}--`
+                                            : vs;
+                                    return (
+                                        <PropRow label={term("vowel-set")} className="col-span-2 sm:col-span-1 md:col-span-1">
+                                            <div className="space-y-0 text-sm">
+                                                {storedVsetPerf && <p>{term('perfect')} <span className="opacity-55 text-[0.7rem]">{term('(past)')}</span>: <span className="font-mono">{fmtVset(storedVsetPerf)}</span></p>}
+                                                {storedVsetImpf && <p>{term('imperfect')} <span className="opacity-55 text-[0.7rem]">{term('(present)')}</span>: <span className="font-mono">{fmtVset(storedVsetImpf)}</span></p>}
+                                                {storedVsetImp && <p>{term('imperative')}: <span className="font-mono">{fmtVset(storedVsetImp)}</span></p>}
+                                            </div>
+                                        </PropRow>
+                                    );
+                                })()}
 
                                 {/* Admin / Technical Metadata */}
                                 {isAdmin && entry.root_pattern_form?.root && (
