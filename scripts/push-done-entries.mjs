@@ -68,6 +68,7 @@ const CATEGORY_FILES = [
     { id: 'verbs_irregular', path: 'docs/1000-words-categories/DONE_verbs_irregular.json' },
     { id: 'verbs_cognition_senses', path: 'docs/1000-words-categories/DONE_verbs_cognition_senses.json' },
     { id: 'verbs_motion_travel', path: 'docs/1000-words-categories/DONE_verbs_motion_travel.json' },
+    { id: 'verbs_action_creation', path: 'docs/1000-words-categories/DONE_verbs_action_creation.json' },
 ];
 
 const selectedFiles = categoryArg

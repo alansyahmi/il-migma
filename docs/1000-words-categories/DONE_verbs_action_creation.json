@@ -1,0 +1,818 @@
+{
+  "category_id": "verbs_action_creation",
+  "category_title": "Verbs: Physical Action, Labor & Making",
+  "total_entries": 7,
+  "cross_references": [
+    {
+      "rank": 105,
+      "source_headword": "tieħu",
+      "source_gloss": "take",
+      "target_entry_id": "v-ħa",
+      "target_file": "DONE_verbs_irregular.json",
+      "note": "Inflected 3sgf/2sg imperfect of ħa, already audited."
+    },
+    {
+      "rank": 123,
+      "source_headword": "jagħtu",
+      "source_gloss": "give",
+      "target_entry_id": "v-ta",
+      "target_file": "DONE_verbs_irregular.json",
+      "note": "Inflected 3pl imperfect of ta, already audited."
+    },
+    {
+      "rank": 169,
+      "source_headword": "jagħmlu",
+      "source_gloss": "make",
+      "target_entry_id": "v-għamel",
+      "target_file": "DONE_artifacts.json",
+      "note": "Inflected 3pl imperfect of għamel, already audited."
+    },
+    {
+      "rank": 244,
+      "source_headword": "istampa",
+      "source_gloss": "press",
+      "target_entry_id": "n-stampa",
+      "target_file": "DONE_verbs_action_creation.json",
+      "note": "Post-article prosthetic form of stampa (l-istampa)."
+    },
+    {
+      "rank": 614,
+      "source_headword": "kiteb",
+      "source_gloss": "to write",
+      "target_entry_id": "v-kiteb",
+      "target_file": "DONE_verbs_action_creation.json",
+      "note": "Duplicate of rank 162 jiktbu."
+    }
+  ],
+  "entries": [
+    {
+      "id": "n-sett",
+      "headword": "sett",
+      "pos": "noun",
+      "gender": "masculine",
+      "root_consonants": null,
+      "stem": "sett",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "English",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "usage_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "English",
+          "term": "set",
+          "pronunciation": "set",
+          "definition": "a group of matching things"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "set, collection (of matching items)",
+          "text_mt": "Għadd ta' oġġetti tal-istess tip jew li jaqblu ma' xulxin, li jinżammu jew jintużaw flimkien.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Xtrajna sett ġdid ta' platti għall-kċina.",
+          "en": "We bought a new set of plates for the kitchen."
+        },
+        {
+          "mt": "Il-kumitat ħareġ sett ta' regoli ġodda għall-membri.",
+          "en": "The committee issued a new set of rules for the members."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/sɛt/",
+          "notes": null
+        }
+      ],
+      "plural_forms": [
+        {
+          "form": "settijiet",
+          "pattern": "-ijiet"
+        }
+      ],
+      "noun_morphology": {
+        "gender": "masculine",
+        "singular_form": "sett",
+        "plural_forms": [
+          {
+            "form": "settijiet",
+            "pattern": "-ijiet"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "e--",
+        "vowel_set_pl": "e-i-ie",
+        "form_plural_pattern": "-ijiet",
+        "morph_pattern": null
+      },
+      "rank": 52,
+      "source_frequency_rank": 52,
+      "audit_status": "pending",
+      "audit_notes": "Source gives sett with verb gloss 'set'. Reclassified as the masculine noun sett (pl. settijiet), the only Maltese lexeme the surface supports. Not present in the local Wiktionary dump, so attestation of the plural still needs a dictionary check.",
+      "theme": "Verbs: Physical Action, Labor & Making",
+      "theme_id": "verbs_action_creation"
+    },
+    {
+      "id": "n-stampa",
+      "headword": "stampa",
+      "pos": "noun",
+      "gender": "feminine",
+      "root_consonants": null,
+      "stem": "stamp",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Italian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "usage_notes": {
+        "mt": "Mal-artiklu tieħu i- protetika quddiem il-grupp konsonantiku st-: l-istampa, mhux il-stampa.",
+        "en": "With the article it takes a prosthetic i- before the initial cluster st-: l-istampa, not il-stampa."
+      },
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "stampa",
+          "pronunciation": "stampa",
+          "definition": "print, press, printed picture"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "picture, print, printed image",
+          "text_mt": "Xbieha ta' persuna, post jew ħaġa, ippinġuta jew maħruġa fuq karta, ħafna drabi biex titwaħħal jew tinżamm għat-tifkira.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "the press (newspapers and news media)",
+          "text_mt": "Il-gazzetti, ir-rivisti u l-mezzi tax-xandir meqjusa flimkien, kif ukoll il-ġurnalisti li jaħdmu fihom.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "printing, printing press",
+          "text_mt": "Is-sengħa jew il-magna li biha jinħarġu kotba, gazzetti u karti oħra b'ittri u xbihat bil-linka.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Fil-kamra tagħha kellha stampa tal-Madonna mdendla mal-ħajt.",
+          "en": "In her room she had a picture of Our Lady hanging on the wall."
+        },
+        {
+          "mt": "L-istampa lokali rrappurtat l-aħbar fl-ewwel paġna.",
+          "en": "The local press reported the news on the front page."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "istampa",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈstam.pɐ/",
+          "notes": null
+        }
+      ],
+      "plural_forms": [
+        {
+          "form": "stampi",
+          "pattern": "-i"
+        }
+      ],
+      "noun_morphology": {
+        "gender": "feminine",
+        "singular_form": "stampa",
+        "plural_forms": [
+          {
+            "form": "stampi",
+            "pattern": "-i"
+          }
+        ],
+        "feminine_form": null,
+        "masculine_form": null,
+        "is_singulative": 0,
+        "vowel_set_sg": "a-a",
+        "vowel_set_pl": "a-i",
+        "form_plural_pattern": "-i",
+        "morph_pattern": null
+      },
+      "rank": 88,
+      "source_frequency_rank": 88,
+      "audit_status": "verified",
+      "audit_notes": "Source gives stampa with gloss 'press'. Resolved to the feminine Italian loan noun n-stampa (pl. stampi) covering picture, the press and printing, per Wiktionary. Rank 244 istampa is the post-article prosthetic form and is cross-referenced here. The verb stampa (to print) is left for the expansion pass.",
+      "theme": "Verbs: Physical Action, Labor & Making",
+      "theme_id": "verbs_action_creation"
+    },
+    {
+      "id": "v-ipprova",
+      "headword": "ipprova",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": null,
+      "stem": "ipprov",
+      "cv_pattern": null,
+      "morph_pattern": null,
+      "is_loanword": 1,
+      "is_inflectable": 1,
+      "is_imala_blocked": 1,
+      "source_language": "Italian",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "usage_notes": {
+        "mt": "Il-vokali o tal-istem issir u meta ma tkunx taħt l-aċċent: jipprova imma ippruvajt, jippruvaw.",
+        "en": "The stem vowel o is raised to u when unstressed: jipprova but ippruvajt, jippruvaw."
+      },
+      "zokk_class": "ar",
+      "zokk_is_hybrid": 0,
+      "zokk_agentive_suffix": null,
+      "zokk_morphology": {
+        "stem_string": "ipprov",
+        "class_type": "ar",
+        "is_hybrid": false,
+        "agentive_suffix": null
+      },
+      "etymology_chain": [
+        {
+          "relationship": "Borrowed from",
+          "language": "Sicilian",
+          "term": "pruvari",
+          "pronunciation": "pruvari",
+          "definition": "to try, test"
+        },
+        {
+          "relationship": "Borrowed from",
+          "language": "Italian",
+          "term": "provare",
+          "pronunciation": "provare",
+          "definition": "to try, test, prove"
+        },
+        {
+          "relationship": "From",
+          "language": "Latin",
+          "term": "probāre",
+          "pronunciation": "probâre",
+          "definition": "to test, approve, prove"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to try, attempt",
+          "text_mt": "Jagħmel sforz biex iwettaq ħaġa, anki meta ma jkunx ċert li se jirnexxi.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to try out, test, try on",
+          "text_mt": "Juża jew jeżamina ħaġa għal ftit żmien biex jara kif taħdem, kif toqgħod jew jekk togħġbu.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to put to the test, try (through temptation or tribulation)",
+          "text_mt": "Jissottometti persuna għal tentazzjoni jew tbatija biex jitgħarbel kemm hi soda fil-fidi u fil-virtù.",
+          "register": {
+            "key": "ecclesiastical",
+            "en": "Ecclesiastical",
+            "mt": "Ekkleżjastiku",
+            "arabised": "Knisi"
+          }
+        },
+        {
+          "text_en": "to prove",
+          "text_mt": "Juri b'evidenza ċara u b'argumenti sodi li ħaġa hi vera.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Ipprova jiftaħ il-bieb bil-muftieħ l-antik.",
+          "en": "He tried to open the door with the old key."
+        },
+        {
+          "mt": "Ippruvajt il-libsa qabel ma xtrajtha.",
+          "en": "I tried on the dress before I bought it."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [
+        {
+          "headword": "pprova",
+          "type": "orthographic"
+        }
+      ],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ɪpˈprɔ.vɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "romance",
+        "class": "ar",
+        "strength": "ar",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "ipprova",
+        "imperfective_3sgm": "jipprova",
+        "imperative_sg": "ipprova",
+        "passive_participle": null,
+        "active_participle": null,
+        "verbal_noun": null,
+        "vowel_set_perf": null,
+        "vowel_set_impf": null,
+        "vowel_set_impv": null,
+        "is_imala_blocked": 1
+      },
+      "rank": 89,
+      "source_frequency_rank": 89,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jippruvaw to canonical Romance -ar lemma v-ipprova (Wiktionary lemma pprova, kept as alternative form), with Sicilian, Italian and Latin etymology and all four Wiktionary senses. Passive participle and verbal noun left null as unattested in the local Wiktionary dump.",
+      "theme": "Verbs: Physical Action, Labor & Making",
+      "theme_id": "verbs_action_creation"
+    },
+    {
+      "id": "v-bena",
+      "headword": "bena",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "b-n-j",
+      "stem": null,
+      "cv_pattern": "1e2a",
+      "morph_pattern": "C1eC2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "usage_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "بَنَى",
+          "pronunciation": "banâ",
+          "definition": "to build, construct"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to build, construct",
+          "text_mt": "Itella' dar, ħajt jew struttura oħra billi jqiegħed il-ġebel, il-briks jew materjal ieħor flimkien.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to set up, stack",
+          "text_mt": "Iqiegħed oġġetti wieħed fuq l-ieħor b'ordni sabiex jiffurmaw munzell jew saff.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to compose (music)",
+          "text_mt": "Ifassal biċċa mużika billi jgħaqqad flimkien il-melodija u l-armonija tagħha.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Missieri bena d-dar b'idejh fis-snin sittin.",
+          "en": "My father built the house with his own hands in the sixties."
+        },
+        {
+          "mt": "Il-Kavallieri bnew is-swar biex jiddefendu l-belt.",
+          "en": "The Knights built the bastions to defend the city."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈbɛ.nɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "strength": "weak",
+        "weak_class": "defective",
+        "transitivity": "transitive",
+        "perfective_3sgm": "bena",
+        "imperfective_3sgm": "jibni",
+        "imperative_sg": "ibni",
+        "passive_participle": "mibni",
+        "active_participle": null,
+        "verbal_noun": "bini",
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "i-i",
+        "vowel_set_impv": "i-i",
+        "is_imala_blocked": 0
+      },
+      "rank": 97,
+      "source_frequency_rank": 97,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jibnu to canonical Form I defective lemma v-bena (b-n-j), with Wiktionary senses, verbal noun bini, passive participle mibni and engine-verified paradigm.",
+      "theme": "Verbs: Physical Action, Labor & Making",
+      "theme_id": "verbs_action_creation"
+    },
+    {
+      "id": "v-kiseb",
+      "headword": "kiseb",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "k-s-b",
+      "stem": null,
+      "cv_pattern": "1i2e3",
+      "morph_pattern": "C1iC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "usage_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "كَسَبَ",
+          "pronunciation": "kasaba",
+          "definition": "to earn, gain, acquire"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to obtain, acquire, gain (through effort)",
+          "text_mt": "Jasal biex ikollu f'idejh ħaġa li jkun ħadem, studja jew stinka għaliha.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to win (a prize, a contest)",
+          "text_mt": "Joħroġ l-ewwel f'kompetizzjoni u jieħu l-premju, il-punti jew ir-rikonoxximent.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to get, receive",
+          "text_mt": "Jirċievi xi ħaġa li tingħatalu jew li tasal għandu minn sors ieħor.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kiseb il-lawrja fil-liġi wara ħames snin ta' studju.",
+          "en": "He obtained his law degree after five years of study."
+        },
+        {
+          "mt": "It-tim kiseb rebħa importanti fl-aħħar minuti tal-logħba.",
+          "en": "The team won an important victory in the last minutes of the match."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɪ.sɛp/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "strength": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "kiseb",
+        "imperfective_3sgm": "jikseb",
+        "imperative_sg": "ikseb",
+        "passive_participle": "miksub",
+        "active_participle": null,
+        "verbal_noun": null,
+        "vowel_set_perf": "i-e",
+        "vowel_set_impf": "i-e",
+        "vowel_set_impv": "i-e",
+        "is_imala_blocked": 0
+      },
+      "rank": 106,
+      "source_frequency_rank": 106,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jiksbu to canonical Form I strong lemma v-kiseb (k-s-b), with Wiktionary senses, passive participle miksub and engine-verified paradigm. Verbal noun left null as unattested in the local Wiktionary dump.",
+      "theme": "Verbs: Physical Action, Labor & Making",
+      "theme_id": "verbs_action_creation"
+    },
+    {
+      "id": "v-wera",
+      "headword": "wera",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "w-r-j",
+      "stem": null,
+      "cv_pattern": "1e2a",
+      "morph_pattern": "C1eC2a",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "usage_notes": {
+        "mt": "Fl-imperfett u fl-imperattiv l-ewwel radikali w issir vokali u: juri, turi, uri, uru.",
+        "en": "In the imperfect and imperative the first radical w surfaces as the vowel u: juri, turi, uri, uru."
+      },
+      "etymology_chain": [
+        {
+          "relationship": "From",
+          "language": "Arabic",
+          "term": "أَرَى",
+          "pronunciation": "arâ",
+          "definition": "to show, cause to see"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to show, display",
+          "text_mt": "Iressaq xi ħaġa quddiem għajnejn ħaddieħor biex jaraha jew jeżaminaha.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to demonstrate, point out",
+          "text_mt": "Jagħmilha ċara lil ħaddieħor, b'eżempju, b'argument jew b'sinjal, kif inhi ħaġa jew kif għandha ssir.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Wera l-passaport lill-uffiċjal fil-fruntiera.",
+          "en": "He showed the passport to the officer at the border."
+        },
+        {
+          "mt": "L-għalliem wera lill-istudenti kif isolvu l-problema.",
+          "en": "The teacher showed the students how to solve the problem."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈwɛ.rɐ/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "weak",
+        "strength": "weak",
+        "weak_class": "defective",
+        "transitivity": "transitive",
+        "perfective_3sgm": "wera",
+        "imperfective_3sgm": "juri",
+        "imperative_sg": "uri",
+        "passive_participle": "muri",
+        "active_participle": null,
+        "verbal_noun": null,
+        "vowel_set_perf": "e-a",
+        "vowel_set_impf": "u-i",
+        "vowel_set_impv": "u-i",
+        "is_imala_blocked": 0
+      },
+      "rank": 119,
+      "source_frequency_rank": 119,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder juru to canonical Form I defective lemma v-wera (w-r-j), matching the engine's wera defective fixture (juri, uri, wrejt), with passive participle muri.",
+      "theme": "Verbs: Physical Action, Labor & Making",
+      "theme_id": "verbs_action_creation"
+    },
+    {
+      "id": "v-kiteb",
+      "headword": "kiteb",
+      "pos": "verb",
+      "gender": null,
+      "root_consonants": "k-t-b",
+      "stem": null,
+      "cv_pattern": "1i2e3",
+      "morph_pattern": "C1iC2eC3",
+      "is_loanword": 0,
+      "is_inflectable": 1,
+      "is_imala_blocked": 0,
+      "source_language": "Arabic",
+      "source_id": "src-aquilina",
+      "source_citation": "Aquilina, Maltese-English Dictionary; Il-Miklem Malti",
+      "source_title": "Maltese-English Dictionary",
+      "source_year": 1987,
+      "source_page": null,
+      "source_publisher": "Midsea Books",
+      "etymology_notes": null,
+      "usage_notes": null,
+      "etymology_chain": [
+        {
+          "relationship": "Inherited from",
+          "language": "Arabic",
+          "term": "كَتَبَ",
+          "pronunciation": "kataba",
+          "definition": "to write"
+        }
+      ],
+      "definitions": [
+        {
+          "text_en": "to write",
+          "text_mt": "Ifassal ittri, kliem jew sinjali fuq karta jew wiċċ ieħor bil-pinna, bil-lapes jew b'għodda oħra.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to recruit, enlist",
+          "text_mt": "Idaħħal persuni f'armata, f'għaqda jew f'xogħol billi jniżżel isimhom fil-lista.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        },
+        {
+          "text_en": "to register, enrol",
+          "text_mt": "Iniżżel l-isem ta' persuna jew ta' ħaġa f'reġistru uffiċjali.",
+          "register": {
+            "key": "standard",
+            "en": "Standard",
+            "mt": "Standard",
+            "arabised": "Miqjiesi"
+          }
+        }
+      ],
+      "usage_examples": [
+        {
+          "mt": "Kiteb ittra twila lil ommu mill-Awstralja.",
+          "en": "He wrote a long letter to his mother from Australia."
+        },
+        {
+          "mt": "It-tfal jiktbu l-eżerċizzji fil-pitazz.",
+          "en": "The children write the exercises in their copybook."
+        }
+      ],
+      "related_entries": [],
+      "alternative_forms": [],
+      "phonetics": [
+        {
+          "dialect": "Standard",
+          "ipa": "/ˈkɪ.tɛp/",
+          "notes": null
+        }
+      ],
+      "verb_morphology": {
+        "form": "I",
+        "class": "strong",
+        "strength": "strong",
+        "weak_class": null,
+        "transitivity": "transitive",
+        "perfective_3sgm": "kiteb",
+        "imperfective_3sgm": "jikteb",
+        "imperative_sg": "ikteb",
+        "passive_participle": "miktub",
+        "active_participle": null,
+        "verbal_noun": "ktib",
+        "vowel_set_perf": "i-e",
+        "vowel_set_impf": "i-e",
+        "vowel_set_impv": "i-e",
+        "is_imala_blocked": 0
+      },
+      "rank": 162,
+      "source_frequency_rank": 162,
+      "audit_status": "verified",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder jiktbu to canonical Form I strong lemma v-kiteb (k-t-b), with Wiktionary senses, verbal noun ktib, passive participle miktub and engine-verified paradigm. Rank 614 kiteb is a duplicate of this lemma and rank 573 miktub is its passive participle.",
+      "theme": "Verbs: Physical Action, Labor & Making",
+      "theme_id": "verbs_action_creation"
+    }
+  ]
+}
