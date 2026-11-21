@@ -702,10 +702,13 @@
         "vowel_set_impv": "u-i",
         "is_imala_blocked": 0
       },
+      "tags": [
+        "!Historical Form IV"
+      ],
       "rank": 119,
       "source_frequency_rank": 119,
       "audit_status": "verified",
-      "audit_notes": "Resolved inflected 3pl imperfect placeholder juru to canonical Form I defective lemma v-wera (w-r-j), matching the engine's wera defective fixture (juri, uri, wrejt), with passive participle muri.",
+      "audit_notes": "Resolved inflected 3pl imperfect placeholder juru to canonical Form I defective lemma v-wera (w-r-j), matching the engine's wera defective fixture (juri, uri, wrejt), with passive participle muri. Tagged !Historical Form IV since it continues Arabic Form IV أَرَى (r-ʔ-y) but now conjugates as a Form I defective.",
       "theme": "Verbs: Physical Action, Labor & Making",
       "theme_id": "verbs_action_creation"
     },
